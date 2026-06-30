@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tight Spiral Studios — System Map</title>
+<style>
+  :root{
+    --paper:#f3efe6; --paper-2:#e9e3d6; --ink:#1f2421; --ink-soft:#33352f;
+    --label:#5c5b52;
+    --rule:#cdc6b4; --civic:#2f5d62; --crisis:#9c4a2e; --gold:#b8893b;
+    --slip:#fbf9f3; --shadow:rgba(40,36,28,.28); --focus:#1c6e8c; --ok:#3c6e47;
+    --steel:#6b7a7d;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink)}
+  body{font-family:Georgia,'Iowan Old Style',serif;font-size:19px;line-height:1.5;
+    -webkit-text-size-adjust:100%;padding:0 0 64px}
+  .wrap{max-width:720px;margin:0 auto;padding:22px 18px 0}
+  .sans{font-family:ui-sans-serif,system-ui,Arial,sans-serif}
+
+  .eyebrow{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-soft);margin:0 0 10px;font-weight:600}
+  h1{font-size:30px;line-height:1.14;margin:0 0 6px;letter-spacing:-.01em}
+  .lead{font-size:18px;color:var(--ink-soft);margin:0 0 20px}
+
+  /* the housing frame: the OS holds everything */
+  .housing{position:relative;background:var(--paper-2);border:2px solid var(--rule);border-radius:18px;
+    padding:20px 16px 16px;margin:0 0 20px;box-shadow:0 1px 0 #fff inset,0 18px 36px -26px var(--shadow)}
+  .housing-lab{position:absolute;top:-12px;left:18px;background:var(--ink);color:var(--paper);
+    font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;padding:4px 12px;border-radius:20px}
+  .housing-sub{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;color:var(--ink-soft);
+    text-align:center;margin:2px 0 14px}
+
+  /* the gear figure */
+  .stage-fig{width:100%;height:auto;display:block;margin:0 auto}
+  .gear-hit{cursor:pointer}
+  .gear-hit:focus-visible{outline:4px solid var(--focus);outline-offset:3px;border-radius:50%}
+  .gear-label{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;fill:var(--ink)}
+  .gear-sub{font-family:ui-sans-serif,system-ui,Arial,sans-serif;fill:#fff;opacity:.92}
+
+  /* legend / reader for the tapped gear */
+  .reader{background:var(--slip);border:1px solid var(--rule);border-left:6px solid var(--civic);
+    border-radius:10px;padding:16px 18px;margin:0 0 18px;min-height:96px}
+  .reader .rk{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;font-weight:700;
+    letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 6px}
+  .reader h2{font-size:22px;margin:0 0 8px;line-height:1.2}
+  .reader p{margin:0 0 8px;font-size:16.5px;line-height:1.5}
+  .reader p:last-child{margin:0}
+  .reader .role{display:inline-block;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:12.5px;
+    font-weight:700;color:#fff;background:var(--steel);border-radius:6px;padding:3px 9px;margin:0 6px 6px 0}
+  .reader .role.hub{background:var(--crisis)}
+  .reader .role.drive{background:var(--civic)}
+  .reader .role.frame{background:var(--ink)}
+  .reader .role.gov{background:var(--gold)}
+  .reader .role.walled{background:#8a3b3b}
+
+  /* the Scout — walled off, unmeshed */
+  .scout{position:relative;background:var(--paper-2);border:2px dashed #8a3b3b;border-radius:14px;
+    padding:16px 16px 14px;margin:0 0 20px}
+  .scout-lab{position:absolute;top:-11px;left:16px;background:#8a3b3b;color:#fff;
+    font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:11.5px;font-weight:700;letter-spacing:.07em;
+    text-transform:uppercase;padding:4px 11px;border-radius:18px}
+  .scout p{margin:6px 0 0;font-size:15.5px;color:var(--ink-soft)}
+  .wall-note{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:12.5px;color:#8a3b3b;font-weight:700;
+    text-transform:uppercase;letter-spacing:.05em;margin:10px 0 0}
+
+  /* flOw ring-down */
+  .refwrap{margin:0 0 18px}
+  .descend{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;
+    background:transparent;color:var(--civic);border:2px solid var(--rule);border-radius:10px;
+    padding:13px 15px;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:15px;font-weight:600;
+    cursor:pointer;min-height:44px}
+  .descend:hover{border-color:var(--civic)}
+  .descend:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+  .descend .arrow{font-weight:700;font-size:18px;flex:0 0 auto}
+  .ring{margin:10px 0 0}.ring[hidden]{display:none}
+  .ring-paper{background:var(--slip);border:1px solid var(--rule);border-radius:10px;padding:15px 16px;font-size:16px;line-height:1.5}
+  .ring-paper .rlab{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;font-weight:700;
+    letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 8px}
+  .ring-paper p{margin:0 0 8px}.ring-paper p:last-child{margin:0}
+  .climb{display:inline-block;background:transparent;border:none;color:var(--ink-soft);cursor:pointer;
+    font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:14px;padding:8px 4px;margin:6px 0 0;min-height:44px}
+  .climb:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+
+  .train{background:var(--slip);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;margin:0 0 18px}
+  .train .rlab{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;font-weight:700;
+    letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 10px}
+  .train ol{margin:0;padding:0 0 0 4px;list-style:none;counter-reset:s}
+  .train li{counter-increment:s;font-size:15.5px;padding:6px 0 6px 34px;position:relative;border-top:1px dashed var(--rule)}
+  .train li:first-child{border-top:none}
+  .train li::before{content:counter(s);position:absolute;left:0;top:6px;width:24px;height:24px;border-radius:50%;
+    background:var(--civic);color:#fff;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:13px;
+    display:flex;align-items:center;justify-content:center}
+
+  .footer{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:12.5px;color:var(--ink-soft);
+    text-align:center;margin:24px 0 0;line-height:1.5}
+  .footer a{color:var(--civic)}
+  [hidden]{display:none}
+  @media (max-width:430px){body{font-size:18px}h1{font-size:25px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow">Tight Spiral Studios · how the machine turns</p>
+  <h1>The System Map</h1>
+  <p class="lead">The studios are gears. They drive each other. Tap any gear to read what it does — and notice what is <i>not</i> meshed, on purpose.</p>
+
+  <!-- ===================== THE HOUSING (OS) ===================== -->
+  <div class="housing">
+    <span class="housing-lab">The Studio OS — the housing</span>
+    <p class="housing-sub">Every gear mounts in this frame. The OS doesn't turn; it sets the tolerances the turning parts obey.</p>
+
+    <svg class="stage-fig" viewBox="0 0 600 420" role="img" aria-label="Gear train: Human-in-the-Loop Productions at center, meshed with Paper Craft Studios and Super Sketchy Graphics; the Review Panel governs as teeth; the OS is the housing.">
+      <defs>
+        <radialGradient id="hub" cx="50%" cy="42%" r="62%">
+          <stop offset="0%" stop-color="#b8593b"/><stop offset="100%" stop-color="#9c4a2e"/>
+        </radialGradient>
+        <radialGradient id="g2" cx="50%" cy="42%" r="62%">
+          <stop offset="0%" stop-color="#3c7077"/><stop offset="100%" stop-color="#2f5d62"/>
+        </radialGradient>
+        <radialGradient id="g3" cx="50%" cy="42%" r="62%">
+          <stop offset="0%" stop-color="#7e8a8c"/><stop offset="100%" stop-color="#6b7a7d"/>
+        </radialGradient>
+        <filter id="ds" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#28241c" flood-opacity="0.28"/>
+        </filter>
+      </defs>
+
+      <!-- gear path generator done by hand: simple toothed circles -->
+      <!-- SUPER SKETCHY (upper left) -->
+      <g class="gear-hit" tabindex="0" role="button" aria-label="Super Sketchy Graphics gear" data-g="sketchy">
+        <g filter="url(#ds)">
+          <circle cx="150" cy="140" r="66" fill="url(#g3)"/>
+          <g fill="url(#g3)">
+            <rect x="142" y="64" width="16" height="20" rx="3"/><rect x="142" y="196" width="16" height="20" rx="3"/>
+            <rect x="74" y="132" width="20" height="16" rx="3"/><rect x="206" y="132" width="20" height="16" rx="3"/>
+            <rect x="95" y="85" width="18" height="18" rx="3" transform="rotate(45 104 94)"/>
+            <rect x="187" y="85" width="18" height="18" rx="3" transform="rotate(45 196 94)"/>
+            <rect x="95" y="177" width="18" height="18" rx="3" transform="rotate(45 104 186)"/>
+            <rect x="187" y="177" width="18" height="18" rx="3" transform="rotate(45 196 186)"/>
+          </g>
+          <circle cx="150" cy="140" r="22" fill="var(--paper)" opacity=".25"/>
+        </g>
+        <text class="gear-sub" x="150" y="135" text-anchor="middle" font-size="13" font-weight="700">Super Sketchy</text>
+        <text class="gear-sub" x="150" y="152" text-anchor="middle" font-size="11">AI-assisted art</text>
+      </g>
+
+      <!-- PAPER CRAFT (upper right) -->
+      <g class="gear-hit" tabindex="0" role="button" aria-label="Paper Craft Studios gear" data-g="paper">
+        <g filter="url(#ds)">
+          <circle cx="450" cy="140" r="66" fill="url(#g2)"/>
+          <g fill="url(#g2)">
+            <rect x="442" y="64" width="16" height="20" rx="3"/><rect x="442" y="196" width="16" height="20" rx="3"/>
+            <rect x="374" y="132" width="20" height="16" rx="3"/><rect x="506" y="132" width="20" height="16" rx="3"/>
+            <rect x="395" y="85" width="18" height="18" rx="3" transform="rotate(45 404 94)"/>
+            <rect x="487" y="85" width="18" height="18" rx="3" transform="rotate(45 496 94)"/>
+            <rect x="395" y="177" width="18" height="18" rx="3" transform="rotate(45 404 186)"/>
+            <rect x="487" y="177" width="18" height="18" rx="3" transform="rotate(45 496 186)"/>
+          </g>
+          <circle cx="450" cy="140" r="22" fill="var(--paper)" opacity=".25"/>
+        </g>
+        <text class="gear-sub" x="450" y="135" text-anchor="middle" font-size="13" font-weight="700">Paper Craft</text>
+        <text class="gear-sub" x="450" y="152" text-anchor="middle" font-size="11">cut-paper art</text>
+      </g>
+
+      <!-- HUB: HUMAN-IN-THE-LOOP (center, larger, the drive gear) -->
+      <g class="gear-hit" tabindex="0" role="button" aria-label="Human-in-the-Loop Productions, the hub gear" data-g="hitl">
+        <g filter="url(#ds)">
+          <circle cx="300" cy="280" r="92" fill="url(#hub)"/>
+          <g fill="url(#hub)">
+            <rect x="290" y="178" width="20" height="26" rx="4"/><rect x="290" y="356" width="20" height="26" rx="4"/>
+            <rect x="198" y="270" width="26" height="20" rx="4"/><rect x="376" y="270" width="26" height="20" rx="4"/>
+            <rect x="228" y="208" width="22" height="22" rx="4" transform="rotate(45 239 219)"/>
+            <rect x="350" y="208" width="22" height="22" rx="4" transform="rotate(45 361 219)"/>
+            <rect x="228" y="330" width="22" height="22" rx="4" transform="rotate(45 239 341)"/>
+            <rect x="350" y="330" width="22" height="22" rx="4" transform="rotate(45 361 341)"/>
+          </g>
+          <circle cx="300" cy="280" r="30" fill="var(--paper)" opacity=".3"/>
+        </g>
+        <text class="gear-sub" x="300" y="272" text-anchor="middle" font-size="15" font-weight="700">Human-in-the-Loop</text>
+        <text class="gear-sub" x="300" y="291" text-anchor="middle" font-size="13" font-weight="700">Productions</text>
+        <text class="gear-sub" x="300" y="309" text-anchor="middle" font-size="11">the hub · the gate</text>
+      </g>
+
+      <!-- mesh contact marks -->
+      <circle cx="218" cy="205" r="5" fill="var(--gold)"/>
+      <circle cx="382" cy="205" r="5" fill="var(--gold)"/>
+    </svg>
+
+    <p class="housing-sub" style="margin-top:14px">The gold marks are where teeth meet — where one gear's turn drives the next.</p>
+  </div>
+
+  <!-- reader for tapped gear -->
+  <div class="reader" id="reader" aria-live="polite">
+    <p class="rk">Tap a gear</p>
+    <p>Each gear above is a turning part — it transmits force to the ones it meshes with. Tap one to read its job, its role in the train, and what it drives.</p>
+  </div>
+
+  <!-- ===================== THE GOVERNOR (panel) ===================== -->
+  <div class="refwrap">
+    <button class="descend" id="toGov" aria-expanded="false" aria-controls="govRing">
+      <span>What regulates the gears? (the Review Panel)</span><span class="arrow">↓</span>
+    </button>
+    <div class="ring" id="govRing" hidden>
+      <div class="ring-paper">
+        <p class="rlab">The Review Panel — the governor</p>
+        <p>The panel isn't a gear; it's the governor on the train. It doesn't drive the work — it regulates whether the work is allowed to keep turning. Some seats hold a <b>HALT</b> (a hard brake: the AI-Skeptic, the Accessibility Officer, the Trauma-Informed Specialist, the Skeptic-Translator on presentation). Others are advisory — they add drag, not a stop.</p>
+        <p>You convene only the seats the job touches. A studio build pulls Craft seats; a classroom deliverable adds Classroom seats; governance pulls all three. The governor scales to the load.</p>
+      </div>
+      <button class="climb" id="upGov">↑ back to the map</button>
+    </div>
+  </div>
+
+  <!-- ===================== THE TRAIN (pipeline) ===================== -->
+  <div class="train">
+    <p class="rlab">The gear train — the production pipeline</p>
+    <ol>
+      <li>Medium &amp; the one structural surprise</li>
+      <li>Construct — what it measures</li>
+      <li>Task spine + the four freedoms</li>
+      <li>Spec + fidelity checklist</li>
+      <li>Ship the minimum</li>
+      <li>Playtest loop — two ledgers</li>
+      <li>Full work-up</li>
+    </ol>
+  </div>
+
+  <!-- ===================== THE WALL (Scout) ===================== -->
+  <div class="scout">
+    <span class="scout-lab">Not meshed — by design</span>
+    <p style="font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;color:var(--ink);font-size:17px;margin:8px 0 0">The Opportunity Scout</p>
+    <p>Money sits here — and only here. The Scout watches for IP, value, and opportunity, but its gear is <b>deliberately disengaged</b> from the train. No money reasoning ever meshes with a design decision.</p>
+    <p class="wall-note">The wall is the feature. It only engages when the founder explicitly says: convene the Scout.</p>
+  </div>
+
+  <!-- ===================== WHAT ELSE YOU SHOULD SEE ===================== -->
+  <div class="refwrap">
+    <button class="descend" id="toElse" aria-expanded="false" aria-controls="elseRing">
+      <span>What else should I see?</span><span class="arrow">↓</span>
+    </button>
+    <div class="ring" id="elseRing" hidden>
+      <div class="ring-paper">
+        <p class="rlab">Three things the map makes honest</p>
+        <p><b>1. The hub is also an imprint.</b> Human-in-the-Loop Productions is a named entity <i>and</i> the drive gear. It's not a sibling to the art studios — it's the center they mesh to. Every output carries a human gate because the gate is the hub.</p>
+        <p><b>2. The OS frames, the panel governs, the pipeline is the train.</b> Only the studios are gears. Calling everything a gear would be a lie — if everything drives, nothing does.</p>
+        <p><b>3. Confluence is the instrument the hub reads by.</b> The Measurement OS isn't a studio; it's the gauge mounted on the hub — it tells the human gate what the work is actually measuring, so the judgment is informed, not blind.</p>
+      </div>
+      <button class="climb" id="upElse">↑ back up</button>
+    </div>
+  </div>
+
+  <p class="footer">
+    Tight Spiral Studios · <a href="mailto:walshero@gmail.com">walshero@gmail.com</a><br>
+    Human-in-the-loop is a value, not a feature. The hub is the gate.
+  </p>
+
+</div>
+
+<script>
+(function(){
+  function $(id){return document.getElementById(id);}
+
+  var GEARS={
+    hitl:{rk:"The hub · the drive gear",h:"Human-in-the-Loop Productions",
+      roles:[["Hub","hub"],["Drive gear","drive"]],
+      body:["A named imprint and the center of the train at once. The founder as eyes, voice, and judgment — the gate at every stage of the pipeline.",
+            "Every other gear meshes to this one. When it stops, the train stops: nothing ships without the human turn. That's not a bottleneck — it's the value the machine exists to protect."]},
+    paper:{rk:"Art imprint · meshed gear",h:"Tight Spiral Paper Craft Studios",
+      roles:[["Studio gear","drive"]],
+      body:["The cut-paper art system — flat layered shapes, edge-shadow, matte grain. The locked house look for clarity builds.",
+            "Meshes with the hub: it turns when the human gate sends a build that needs to read clearly rather than look photoreal."]},
+    sketchy:{rk:"Art imprint · meshed gear",h:"Super Sketchy Graphics",
+      roles:[["Studio gear","drive"]],
+      body:["The AI-assisted / raster imprint — transparency-first, for hero and photoreal looks. Carries the standing credit line; never passes as hand-made.",
+            "Meshes with the hub on the other side: it turns when a build needs to look a way, not just read. The Medium Gate decides which art gear engages."]}
+  };
+
+  function paint(g){
+    var d=GEARS[g];if(!d)return;
+    var r=$('reader');
+    var roles=d.roles.map(function(x){return '<span class="role '+x[1]+'">'+x[0]+'</span>';}).join('');
+    r.innerHTML='<p class="rk">'+d.rk+'</p><h2>'+d.h+'</h2><p>'+roles+'</p>'+
+      d.body.map(function(p){return '<p>'+p+'</p>';}).join('');
+    r.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+
+  document.querySelectorAll('.gear-hit').forEach(function(el){
+    el.addEventListener('click',function(){paint(el.getAttribute('data-g'));});
+    el.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();paint(el.getAttribute('data-g'));}
+    });
+  });
+
+  // rings
+  function ring(btnId,ringId,upId){
+    var b=$(btnId);
+    b.addEventListener('click',function(){
+      var open=$(ringId).hidden;$(ringId).hidden=!open;b.setAttribute('aria-expanded',String(open));
+      if(open)$(ringId).scrollIntoView({behavior:'smooth',block:'nearest'});
+    });
+    $(upId).addEventListener('click',function(){
+      $(ringId).hidden=true;b.setAttribute('aria-expanded','false');
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  }
+  ring('toGov','govRing','upGov');
+  ring('toElse','elseRing','upElse');
+})();
+</script>
+</body>
+</html>

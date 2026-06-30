@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Confluence Console — Flash Fiction</title>
+<style>
+  /* ===========================================================
+     THE CONFLUENCE CONSOLE
+     80s arcade circuit-board hub. Three stations wired in a river:
+       STATION 1  COMPRESSION  (Sandbags)      cut as ascent
+       STATION 2  IMAGE        (Show the Tell) show, don't name
+       STATION 3  TURN         (The Late Quiet) land late & quiet
+     Copy-paste IN at each station, carry-out OUT. No storage. FERPA-clean.
+     Arcade skin LEADS. Comfort button = one-tap accessible fallback (eyes win).
+     =========================================================== */
+  :root{
+    /* ARCADE skin (default) */
+    --bg:#0d1326;
+    --board:#10204a;
+    --panel:#0a1738;
+    --ink:#fef6d8;           /* warm CRT amber-white — full strength */
+    --ink2:#fef6d8;          /* visibility floor: ink2 == ink */
+    --trace:#39e0c4;         /* circuit trace cyan */
+    --trace-dim:#1c5a52;
+    --hot:#ff7a3c;           /* arcade orange */
+    --line:#fef6d8;
+    --focus:#ffe14d;
+    --good:#7dffb0;
+    --bad:#ff8e6b;
+    --type:18px;
+    --sans:"Trebuchet MS","Gill Sans",system-ui,sans-serif;
+    --serif:Georgia,"Iowan Old Style",serif;
+    --mono:"Courier New",ui-monospace,monospace;
+    --glow:0 0 0 transparent;
+  }
+  /* COMFORT: HIGH CONTRAST — near-black ink on light, no glow, no neon */
+  body.comfort-high{
+    --bg:#f3efe6; --board:#fffdf8; --panel:#fffdf8; --ink:#15120e; --ink2:#15120e;
+    --trace:#2c5e8a; --trace-dim:#9bb6cc; --hot:#8a3d1e; --line:#15120e;
+    --focus:#1546b8; --good:#1f5d34; --bad:#8a3d1e; --glow:0 0 0 transparent;
+  }
+  /* COMFORT: WARM-DARK — amber on charcoal, never #000/#fff */
+  body.comfort-warm{
+    --bg:#22201c; --board:#2c2925; --panel:#2c2925; --ink:#f1e3c8; --ink2:#f1e3c8;
+    --trace:#e0a35c; --trace-dim:#6e5c3c; --hot:#e0a35c; --line:#f1e3c8;
+    --focus:#9cc2ff; --good:#9ad0a0; --bad:#e0a98c; --glow:0 0 0 transparent;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{ background:var(--bg); color:var(--ink); font:var(--type)/1.55 var(--serif); }
+  .wrap{ max-width:680px; margin:0 auto; padding:18px 16px 100px; }
+
+  /* ---- arcade marquee ---- */
+  .marquee{
+    text-align:center; border:3px solid var(--line); border-radius:14px;
+    background:var(--board); padding:0; position:relative; overflow:hidden;
+    box-shadow:var(--glow);
+  }
+  .marquee .bezel{ display:block; width:100%; height:auto; }
+  .marquee .mq-text{ position:relative; z-index:2; padding:16px 16px 18px; }
+  /* SVG art ink follows the theme via currentColor / CSS vars */
+  .art-trace{ stroke:var(--trace); }
+  .art-trace-dim{ stroke:var(--trace-dim); }
+  .art-hot{ fill:var(--hot); }
+  .art-ink{ fill:var(--ink); }
+  .art-board{ fill:var(--board); }
+  /* board backdrop circuitry sits behind the river, low opacity, never behind live text */
+  .board{ position:relative; overflow:hidden; }
+  .board .circuitry{ position:absolute; inset:0; width:100%; height:100%; z-index:0; opacity:.5; pointer-events:none; }
+  .board .legend, .board .river{ position:relative; z-index:1; }
+  body.comfort-high .board .circuitry, body.comfort-warm .board .circuitry{ opacity:.18; }
+  /* chip icon inside each station's chip box */
+  .chip svg{ width:22px; height:22px; display:block; }
+  .chip .num{ position:absolute; font-family:var(--mono); font-weight:700; font-size:.7rem; }
+  .chip{ position:relative; }
+  body:not(.comfort-high):not(.comfort-warm) .marquee{ box-shadow:0 0 24px rgba(57,224,196,.25), inset 0 0 30px rgba(57,224,196,.08); }
+  .marquee h1{
+    font-family:var(--sans); font-weight:800; letter-spacing:.06em;
+    font-size:1.9rem; margin:.1em 0; color:var(--ink); line-height:1.1;
+  }
+  body:not(.comfort-high):not(.comfort-warm) .marquee h1{ text-shadow:0 0 10px rgba(254,246,216,.45); }
+  .marquee .sub{ font-family:var(--sans); text-transform:uppercase; letter-spacing:.2em; font-size:.78rem; color:var(--trace); font-weight:700; }
+  .insert{ font-family:var(--mono); color:var(--hot); font-size:.85rem; margin-top:8px; }
+  body:not(.comfort-high):not(.comfort-warm) .insert{ animation:blink 1.4s steps(2,end) infinite; }
+  @keyframes blink{50%{opacity:.25}}
+  @media (prefers-reduced-motion:reduce){ .insert{animation:none!important} }
+
+  /* ---- the board / river ---- */
+  .board{
+    background:var(--board); border:3px solid var(--line); border-radius:14px;
+    padding:20px 16px; margin:16px 0;
+  }
+  .board .legend{ font-family:var(--sans); text-transform:uppercase; letter-spacing:.16em; font-size:.78rem; font-weight:700; color:var(--trace); margin:0 0 14px; }
+  .river{ display:flex; flex-direction:column; gap:0; }
+  .node{
+    display:flex; align-items:flex-start; gap:14px; padding:4px 0;
+  }
+  .rail{ display:flex; flex-direction:column; align-items:center; width:38px; flex:none; }
+  .chip{
+    width:38px; height:38px; border-radius:9px; border:3px solid var(--trace);
+    background:var(--panel); color:var(--ink); font-family:var(--mono); font-weight:700;
+    display:flex; align-items:center; justify-content:center; font-size:1rem;
+  }
+  .chip.lit{ background:var(--trace); color:var(--bg); }
+  .chip.done{ background:var(--good); border-color:var(--good); color:#0a1738; }
+  .wire{ width:5px; flex:1; min-height:26px; background:var(--trace-dim); margin:3px 0; border-radius:3px; }
+  .wire.live{ background:var(--trace); }
+  body:not(.comfort-high):not(.comfort-warm) .wire.live{ box-shadow:0 0 8px var(--trace); }
+  .nodebtn{
+    flex:1; text-align:left; border:3px solid var(--line); border-radius:12px;
+    background:var(--panel); color:var(--ink); padding:12px 14px; margin:0 0 12px;
+    font:inherit; cursor:pointer; min-height:60px;
+  }
+  .nodebtn:disabled{ opacity:.5; cursor:not-allowed; }
+  .nodebtn .tag{ font-family:var(--sans); text-transform:uppercase; letter-spacing:.14em; font-size:.72rem; color:var(--trace); font-weight:700; }
+  .nodebtn .nm{ font-family:var(--sans); font-weight:800; font-size:1.15rem; display:block; margin:2px 0; }
+  .nodebtn .ds{ font-size:.95rem; }
+  .nodebtn .badge{ font-family:var(--mono); font-size:.8rem; color:var(--good); font-weight:700; }
+
+  /* ---- buttons ---- */
+  button{ font:inherit; }
+  .btn{
+    font-family:var(--sans); font-weight:700; min-height:52px; padding:14px 18px; width:100%;
+    border:3px solid var(--line); border-radius:12px; cursor:pointer;
+    background:var(--panel); color:var(--ink); margin:9px 0; text-align:center;
+  }
+  .btn.hot{ background:var(--hot); color:var(--bg); border-color:var(--hot); }
+  .btn.trace{ background:var(--trace); color:var(--bg); border-color:var(--trace); }
+  *:focus-visible{ outline:4px solid var(--focus); outline-offset:3px; }
+
+  /* ---- comfort corner button ---- */
+  .comfort{
+    position:fixed; top:10px; right:10px; min-height:44px; padding:10px 14px; z-index:30;
+    font-family:var(--sans); font-weight:800; background:var(--hot); color:var(--bg);
+    border:3px solid var(--hot); border-radius:10px; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,.5);
+  }
+
+  /* ---- station screens ---- */
+  .card{ background:var(--panel); border:3px solid var(--line); border-radius:14px; padding:20px 18px; margin:16px 0; }
+  h2{ font-family:var(--sans); font-weight:800; font-size:1.4rem; margin:.1em 0 .3em; color:var(--ink); }
+  .eyebrow{ font-family:var(--sans); text-transform:uppercase; letter-spacing:.14em; font-size:.76rem; font-weight:700; color:var(--trace); margin:0 0 6px; }
+  .tell{ font-size:1.25rem; font-style:italic; line-height:1.4; }
+  label{ display:block; font-family:var(--sans); font-weight:700; margin:12px 0 4px; }
+  textarea{
+    width:100%; min-height:90px; font:400 1rem/1.5 var(--serif);
+    padding:12px; border:3px solid var(--line); border-radius:10px;
+    background:var(--bg); color:var(--ink); resize:vertical;
+  }
+  .pick{ display:block; width:100%; text-align:left; border:3px solid var(--line); border-radius:11px;
+    background:var(--bg); color:var(--ink); padding:13px 15px; margin:9px 0; font:inherit; cursor:pointer; line-height:1.4; min-height:52px; }
+  .pick.correct{ background:var(--good); color:#0a1738; border-color:var(--good); }
+  .pick.wrong{ background:var(--bad); color:#0a1738; border-color:var(--bad); }
+  .pick:disabled{ cursor:default; }
+  .why{ font-size:.97rem; margin-top:10px; }
+  .out{ width:100%; min-height:120px; font:400 .95rem/1.45 var(--mono); padding:12px; border:3px dashed var(--trace);
+    border-radius:10px; background:var(--bg); color:var(--ink); margin-top:10px; }
+  .pill{ display:inline-block; background:var(--trace); color:var(--bg); padding:4px 12px; border-radius:999px;
+    font-size:.82rem; font-weight:800; font-family:var(--sans); margin-bottom:8px; }
+  .quiet{ font-size:.92rem; }
+  .meter{ font-family:var(--mono); font-weight:700; }
+  a{ color:var(--trace); font-weight:700; }
+  .back{ background:transparent; border:3px solid var(--line); }
+</style>
+</head>
+<body>
+<button class="comfort" id="comfort">EYES: Arcade</button>
+<div class="wrap" id="app"></div>
+
+<script>
+/* ============ CARRY-OUT (from Props Room v1, verbatim signature) ============ */
+function carryOut(title, pairs){
+  var lines = ["=== " + title + " ===", ""];
+  pairs.forEach(function(p){
+    var label=p[0], val=(p[1]||"").toString().trim();
+    if(val) lines.push(label + ": " + val);
+  });
+  lines.push(""); lines.push("— Confluence Console · EN195 Flash Fiction");
+  return lines.join("\n");
+}
+function copyOut(text, onDone){
+  if(navigator.clipboard){ navigator.clipboard.writeText(text).then(onDone,onDone); }
+  else { var t=document.createElement("textarea"); t.value=text; document.body.appendChild(t);
+    t.select(); try{document.execCommand("copy");}catch(e){} document.body.removeChild(t); onDone&&onDone(); }
+}
+
+/* ============ STATE (in-memory only; resets each session by design) ============ */
+var done = { compression:false, image:false, turn:false };
+var app = document.getElementById('app');
+
+/* marquee bulbs ring (arcade cabinet lights) */
+function bulbs(){
+  var s='', n=22;
+  for(var k=0;k<n;k++){
+    var x=15 + k*(650/(n-1));
+    s+='<circle cx="'+x.toFixed(0)+'" cy="9" r="3" class="art-hot"/>';
+    s+='<circle cx="'+x.toFixed(0)+'" cy="111" r="3" class="art-hot"/>';
+  }
+  return s;
+}
+/* per-station chip glyph: 1=stacked bars shrinking (compression), 2=eye (image), 3=bent arrow (turn) */
+function chipIcon(which){
+  if(which==='compression') return '<svg viewBox="0 0 24 24" aria-hidden="true"><g stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="9" y1="18" x2="15" y2="18"/></g></svg>';
+  if(which==='image') return '<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 12 C6 5, 18 5, 22 12 C18 19, 6 19, 2 12 Z"/><circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none"/></g></svg>';
+  return '<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5 V13 a4 4 0 0 0 4 4 H17"/><polyline points="13 13 18 17 13 21"/></g></svg>';
+}
+
+/* ---- station 2 data: Show the Tell (Image) ---- */
+var IMAGE_ROUNDS = [
+  { tell:"He was nervous before the interview.", options:[
+    {t:"He was extremely, almost unbearably nervous before the interview.", why:"Louder isn't closer. Intensifiers just shout the same tell."},
+    {t:"He read the same line of the welcome poster four times and couldn't have told you what it said.", why:"This one. The nerves live in attention that won't hold \u2014 specific, behavioral, no feeling-word.", correct:true},
+    {t:"He sat in the lobby, feeling the anxiety build inside him.", why:"Still narrating the feeling. \u201CAnxiety\u201D is the tell wearing a coat."},
+    {t:"His leg bounced, because he was so anxious about the interview.", why:"Good image, then it explains itself. Trust the leg; cut the \u201Cbecause.\u201D"} ]},
+  { tell:"The kitchen felt lonely after she left.", options:[
+    {t:"The kitchen felt very lonely and empty after she left.", why:"Lonely + empty is two tells, not an image."},
+    {t:"He set out one mug instead of two.", why:"Yes. The whole absence lives in one mug. Quiet, concrete, unnamed.", correct:true},
+    {t:"The kitchen was quiet, and he stood there sadly missing her.", why:"\u201CSadly missing her\u201D hands us the conclusion. Let the reader arrive."},
+    {t:"He looked around and noticed how alone he felt now.", why:"Still reporting the feeling from inside his head."} ]},
+  { tell:"She was exhausted by the end of the shift.", options:[
+    {t:"By closing she was tired, worn out, completely drained.", why:"Three synonyms for the tell, lined up. No body we can see."},
+    {t:"She sat on an overturned bucket and didn't get up for the song and a half it took to find her keys in her own coat.", why:"There it is \u2014 oddly precise, faintly funny. \u201CA song and a half\u201D does the work.", correct:true},
+    {t:"She felt the exhaustion settle over her tired shoulders.", why:"\u201CExhaustion\u201D and \u201Ctired\u201D in one breath bury the image."},
+    {t:"At the end of the day she was very tired from working hard.", why:"Flat and general \u2014 could be anyone, anywhere."} ]}
+];
+
+/* ---- station 3 data: The Late Quiet (Turn) ---- */
+var TURN_ROUNDS = [
+  { setup:"A father has spent the whole story promising his daughter he'll fix the porch step before winter. It's the first cold morning. She's moved out now.",
+    options:[
+      {t:"He realized, standing there, that he had failed her in so many ways over the years.", why:"States the meaning outright. The story already earned this \u2014 saying it spends the charge."},
+      {t:"He stepped over the loose board the way she used to, without thinking, and went inside.", why:"The turn. It lands sideways on the board and the inherited habit \u2014 late, quiet, unexplained.", correct:true},
+      {t:"He felt very sad and guilty about the broken promise he never kept.", why:"Names sad, guilty, and the broken promise. Three tells where one gesture would do."},
+      {t:"And so he finally understood the true meaning of being a father.", why:"A bolted-on moral. Big, abstract, and not earned by a porch step."} ]},
+  { setup:"Two estranged brothers meet at their mother's house to divide her things. They've barely spoken. On the table: her reading glasses, a deck of cards, a tin of buttons.",
+    options:[
+      {t:"They hugged and agreed to put the past behind them at last.", why:"Tidy and unearned. The story's tension dissolves instead of turning."},
+      {t:"The younger one picked up the deck and shuffled it once, badly, and the older one almost smiled.", why:"Yes. The whole thawing lives in a bad shuffle and an \u201Calmost.\u201D Concrete, late, quiet.", correct:true},
+      {t:"He felt the old love for his brother return, warming the cold room between them.", why:"Narrates the feeling and over-warms it. Let the cards carry it."},
+      {t:"It was clear that family, in the end, is the only thing that matters.", why:"A greeting-card thesis stapled to the ending."} ]}
+];
+
+/* ============ RENDER: HUB ============ */
+function hub(){
+  window.scrollTo(0,0);
+  var c=done.compression, im=done.image, tu=done.turn;
+  var lit = function(prev){ return prev ? 'lit' : ''; };
+  app.innerHTML =
+  '<div class="marquee">'
+    + '<svg class="bezel" viewBox="0 0 680 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">'
+      + '<defs><radialGradient id="mqglow" cx="50%" cy="40%" r="70%">'
+        + '<stop offset="0%" stop-color="' + 'rgba(57,224,196,0.22)" />'
+        + '<stop offset="100%" stop-color="rgba(57,224,196,0)" /></radialGradient></defs>'
+      + '<rect x="0" y="0" width="680" height="120" class="art-board"/>'
+      + '<rect x="0" y="0" width="680" height="120" fill="url(#mqglow)"/>'
+      // light bulbs around the marquee, arcade-style
+      + bulbs()
+      // a confluence: three streams merging into one channel
+      + '<g fill="none" stroke-width="3" stroke-linecap="round">'
+        + '<path d="M70 30 C 200 30, 250 60, 340 60" class="art-trace"/>'
+        + '<path d="M70 60 C 200 60, 250 60, 340 60" class="art-trace"/>'
+        + '<path d="M70 90 C 200 90, 250 60, 340 60" class="art-trace"/>'
+        + '<path d="M340 60 L 620 60" class="art-trace"/>'
+      + '</g>'
+      + '<circle cx="340" cy="60" r="7" class="art-hot"/>'
+      + '<circle cx="620" cy="60" r="5" class="art-hot"/>'
+    + '</svg>'
+    + '<div class="mq-text">'
+      + '<div class="sub">EN195 \u00B7 Flash Fiction</div>'
+      + '<h1>THE CONFLUENCE CONSOLE</h1>'
+      + '<div class="insert">\u25B8 OPTIONAL PRACTICE \u00B7 EXTRA CREDIT IF YOU FINISH \u00B7 PLAY ANY ORDER</div>'
+    + '</div>'
+  + '</div>'
+
+  + '<div class="board">'
+    + '<svg class="circuitry" viewBox="0 0 680 360" preserveAspectRatio="xMidYMid slice" aria-hidden="true">'
+      + '<g fill="none" stroke-width="2" class="art-trace-dim">'
+        + '<path d="M20 40 H 180 V 120 H 90"/>'
+        + '<path d="M660 60 H 520 V 160 H 600 V 240"/>'
+        + '<path d="M40 200 H 140 V 300 H 260"/>'
+        + '<path d="M640 320 H 480 V 260"/>'
+        + '<path d="M300 20 V 90 H 380"/>'
+      + '</g>'
+      + '<g class="art-trace" fill="currentColor" stroke="none">'
+        + '<circle cx="180" cy="120" r="4"/><circle cx="520" cy="160" r="4"/>'
+        + '<circle cx="140" cy="300" r="4"/><circle cx="480" cy="260" r="4"/>'
+        + '<circle cx="380" cy="90" r="4"/><circle cx="600" cy="240" r="4"/>'
+      + '</g>'
+    + '</svg>'
+    + '<p class="legend">The board \u2014 three moves of the craft, wired in a river</p>'
+    + '<div class="river">'
+      // node 1
+      + '<div class="node"><div class="rail">'
+          + '<div class="chip '+(c?'done':'lit')+'">'+(c?'\u2713':chipIcon('compression'))+'</div>'
+          + '<div class="wire '+(c?'live':'')+'"></div>'
+        + '</div>'
+        + '<button class="nodebtn" data-go="compression">'
+          + '<span class="tag">Station 1 \u00B7 Compression</span>'
+          + '<span class="nm">Sandbags</span>'
+          + '<span class="ds">Cut a passage line by line. Every cut is altitude. Practice the writer\u2019s nerve to drop ballast.</span>'
+          + (c?'<br><span class="badge">\u25C9 POWERED</span>':'')
+        + '</button>'
+      + '</div>'
+      // node 2
+      + '<div class="node"><div class="rail">'
+          + '<div class="chip '+(im?'done':lit(c))+'">'+(im?'\u2713':chipIcon('image'))+'</div>'
+          + '<div class="wire '+(im?'live':'')+'"></div>'
+        + '</div>'
+        + '<button class="nodebtn" data-go="image">'
+          + '<span class="tag">Station 2 \u00B7 Image</span>'
+          + '<span class="nm">Show the Tell</span>'
+          + '<span class="ds">Trade a named feeling for a thing you can see. Show, don\u2019t announce.</span>'
+          + (im?'<br><span class="badge">\u25C9 POWERED</span>':'')
+        + '</button>'
+      + '</div>'
+      // node 3
+      + '<div class="node"><div class="rail">'
+          + '<div class="chip '+(tu?'done':lit(im))+'">'+(tu?'\u2713':chipIcon('turn'))+'</div>'
+        + '</div>'
+        + '<button class="nodebtn" data-go="turn">'
+          + '<span class="tag">Station 3 \u00B7 Turn</span>'
+          + '<span class="nm">The Late Quiet</span>'
+          + '<span class="ds">Find the ending that lands sideways on an object \u2014 late, quiet, unexplained.</span>'
+          + (tu?'<br><span class="badge">\u25C9 POWERED</span>':'')
+        + '</button>'
+      + '</div>'
+    + '</div>'
+  + '</div>'
+
+  + ((c&&im&&tu)
+      ? '<div class="card"><p class="eyebrow">River complete</p><h2>All three stations powered.</h2>'
+        + '<p>You\u2019ve practiced the three moves you\u2019ll go looking for as a reader: compression, image, turn. Carry the run-sheet out for your extra credit.</p>'
+        + '<button class="btn hot" id="finish">Build my run-sheet \u2192</button></div>'
+      : '<div class="card"><p class="quiet">Tap any station to play. Finishing one lights the next on the board \u2014 but you choose the path. Stop whenever you like; nothing is graded here.</p></div>');
+
+  // wire the nodes
+  [].forEach.call(document.querySelectorAll('.nodebtn'), function(b){
+    b.onclick=function(){ route(b.getAttribute('data-go')); };
+  });
+  var f=document.getElementById('finish'); if(f) f.onclick=runsheet;
+}
+
+function route(which){
+  if(which==='compression') stationCompression();
+  if(which==='image') stationImage();
+  if(which==='turn') stationTurn();
+}
+
+/* ============ STATION 1: COMPRESSION (Sandbags) — copy-paste in/out ============ */
+function stationCompression(){
+  window.scrollTo(0,0);
+  app.innerHTML =
+  '<div class="card"><span class="pill">Station 1 \u00B7 Compression</span>'
+    + '<h2>Sandbags</h2>'
+    + '<p class="quiet">Paste a paragraph of your own \u2014 your flash draft, or anything. Cut it without mercy. The console weighs the drop: every word you lose is altitude gained.</p>'
+    + '<label for="src">Your passage (paste in)</label>'
+    + '<textarea id="src" placeholder="Paste a paragraph here..."></textarea>'
+    + '<label for="cut">Your compressed version (cut it down)</label>'
+    + '<textarea id="cut" placeholder="Rewrite it leaner. Drop the ballast."></textarea>'
+    + '<button class="btn trace" id="weigh">Weigh the drop \u2192</button>'
+    + '<div id="result"></div>'
+  + '</div>'
+  + '<button class="btn back" id="back">\u2190 Back to the board</button>';
+  document.getElementById('back').onclick=hub;
+  document.getElementById('weigh').onclick=function(){
+    var a=document.getElementById('src').value.trim();
+    var b=document.getElementById('cut').value.trim();
+    var wa=a?a.split(/\s+/).length:0, wb=b?b.split(/\s+/).length:0;
+    var res=document.getElementById('result');
+    if(!wa||!wb){ res.innerHTML='<p class="why">Paste a passage and a cut version, then weigh.</p>'; return; }
+    var dropped=wa-wb;
+    var pct=wa? Math.round(dropped/wa*100):0;
+    var verdict;
+    if(dropped<=0) verdict="The cut is as heavy as the original. Compression means loss \u2014 find a line to drop.";
+    else if(pct<15) verdict="A little lighter. Now look again: which adjective, which qualifier, which throat-clear can still go?";
+    else if(pct<=45) verdict="Real altitude. You dropped weight without dropping the story. This is the working range.";
+    else verdict="Big drop. Read it aloud \u2014 if it still breathes, you found the strong bones. If it gasps, restore one beam.";
+    res.innerHTML='<p class="meter">FROM '+wa+' WORDS \u2192 TO '+wb+' WORDS \u00B7 DROPPED '+dropped+' ('+pct+'%)</p>'
+      +'<p class="why">'+verdict+'</p>'
+      +'<button class="btn hot" id="power">Power this station \u25C9</button>';
+    document.getElementById('power').onclick=function(){ done.compression=true; hub(); };
+  };
+}
+
+/* ============ STATION 2: IMAGE (Show the Tell) ============ */
+function stationImage(){
+  var i=0,score=0;
+  function round(){
+    window.scrollTo(0,0);
+    if(i>=IMAGE_ROUNDS.length){ done.image=true;
+      app.innerHTML='<div class="card"><span class="pill">Station 2 \u00B7 Image</span>'
+        +'<h2>You found the image '+score+' of '+IMAGE_ROUNDS.length+'.</h2>'
+        +'<p>Now you know the move from the inside. As a reader, when you hit a named feeling, you\u2019ll ask for the picture underneath it.</p>'
+        +'<button class="btn hot" id="b">Back to the board \u25C9</button></div>';
+      document.getElementById('b').onclick=hub; return;
+    }
+    var r=IMAGE_ROUNDS[i], ans=false;
+    app.innerHTML='<div class="card"><span class="pill">Image \u00B7 round '+(i+1)+' of '+IMAGE_ROUNDS.length+'</span>'
+      +'<p class="eyebrow">The tell</p><p class="tell">'+r.tell+'</p></div>'
+      +'<div class="card"><p class="eyebrow">Which one shows it?</p><div id="o"></div><div id="fb"></div></div>'
+      +'<button class="btn back" id="back">\u2190 Back to the board</button>';
+    document.getElementById('back').onclick=hub;
+    var o=document.getElementById('o');
+    r.options.forEach(function(op,idx){
+      var btn=document.createElement('button'); btn.className='pick'; btn.textContent=op.t;
+      btn.onclick=function(){
+        if(ans)return; ans=true;
+        [].forEach.call(document.querySelectorAll('.pick'),function(x,n){ x.disabled=true;
+          if(r.options[n].correct)x.classList.add('correct'); else if(n===idx)x.classList.add('wrong'); });
+        if(op.correct)score++;
+        var fb=document.getElementById('fb');
+        var h='<p class="why"><b>Your pick:</b> '+op.why+'</p>';
+        if(!op.correct){ var cc=r.options.filter(function(z){return z.correct})[0]; h+='<p class="why"><b>The one that shows:</b> '+cc.why+'</p>'; }
+        h+='<button class="btn trace" id="nx">'+(i+1<IMAGE_ROUNDS.length?'Next round':'Finish station')+'</button>';
+        fb.innerHTML=h; document.getElementById('nx').onclick=function(){ i++; round(); };
+      };
+      o.appendChild(btn);
+    });
+  }
+  round();
+}
+
+/* ============ STATION 3: TURN (The Late Quiet) ============ */
+function stationTurn(){
+  var i=0,score=0;
+  function round(){
+    window.scrollTo(0,0);
+    if(i>=TURN_ROUNDS.length){ done.turn=true;
+      app.innerHTML='<div class="card"><span class="pill">Station 3 \u00B7 Turn</span>'
+        +'<h2>You landed the turn '+score+' of '+TURN_ROUNDS.length+'.</h2>'
+        +'<p>The ending that turns sideways onto a thing \u2014 late, quiet, unexplained \u2014 is the one you\u2019ll praise (or miss) in a classmate\u2019s draft. Now you can name it.</p>'
+        +'<button class="btn hot" id="b">Back to the board \u25C9</button></div>';
+      document.getElementById('b').onclick=hub; return;
+    }
+    var r=TURN_ROUNDS[i], ans=false;
+    app.innerHTML='<div class="card"><span class="pill">Turn \u00B7 round '+(i+1)+' of '+TURN_ROUNDS.length+'</span>'
+      +'<p class="eyebrow">The story so far</p><p style="font-size:1.05rem">'+r.setup+'</p></div>'
+      +'<div class="card"><p class="eyebrow">Which last line lands late and quiet?</p><div id="o"></div><div id="fb"></div></div>'
+      +'<button class="btn back" id="back">\u2190 Back to the board</button>';
+    document.getElementById('back').onclick=hub;
+    var o=document.getElementById('o');
+    r.options.forEach(function(op,idx){
+      var btn=document.createElement('button'); btn.className='pick'; btn.textContent='\u201C'+op.t+'\u201D';
+      btn.onclick=function(){
+        if(ans)return; ans=true;
+        [].forEach.call(document.querySelectorAll('.pick'),function(x,n){ x.disabled=true;
+          if(r.options[n].correct)x.classList.add('correct'); else if(n===idx)x.classList.add('wrong'); });
+        if(op.correct)score++;
+        var fb=document.getElementById('fb');
+        var h='<p class="why"><b>Your pick:</b> '+op.why+'</p>';
+        if(!op.correct){ var cc=r.options.filter(function(z){return z.correct})[0]; h+='<p class="why"><b>The turn:</b> '+cc.why+'</p>'; }
+        h+='<button class="btn trace" id="nx">'+(i+1<TURN_ROUNDS.length?'Next round':'Finish station')+'</button>';
+        fb.innerHTML=h; document.getElementById('nx').onclick=function(){ i++; round(); };
+      };
+      o.appendChild(btn);
+    });
+  }
+  round();
+}
+
+/* ============ RUN-SHEET (carry-out) ============ */
+function runsheet(){
+  window.scrollTo(0,0);
+  var stations = [];
+  if(done.compression) stations.push("Compression (Sandbags)");
+  if(done.image) stations.push("Image (Show the Tell)");
+  if(done.turn) stations.push("Turn (The Late Quiet)");
+  app.innerHTML =
+  '<div class="card"><span class="pill">Run-sheet</span>'
+    + '<h2>Carry your run out</h2>'
+    + '<p class="quiet">Optional extra credit. Add a line in your own words about what clicked, press build, copy it, and paste it into your course submission. Nothing is stored or sent \u2014 this just assembles text you carry.</p>'
+    + '<label for="note">What clicked for me (one line, your words)</label>'
+    + '<textarea id="note" placeholder="e.g. I stopped naming feelings and started trusting the object."></textarea>'
+    + '<button class="btn trace" id="build">Build my run-sheet \u2192</button>'
+    + '<textarea class="out" id="out" readonly aria-label="Your run-sheet"></textarea>'
+    + '<button class="btn hot" id="copy">Copy it</button>'
+  + '</div>'
+  + '<button class="btn back" id="back">\u2190 Back to the board</button>';
+  document.getElementById('back').onclick=hub;
+  document.getElementById('build').onclick=function(){
+    var txt=carryOut("EN195 Flash Fiction \u2014 Confluence Console practice",[
+      ["Stations powered", stations.join(", ") || "(none yet)"],
+      ["Moves practiced", "compression \u00B7 image \u00B7 turn"],
+      ["What clicked", document.getElementById('note').value]
+    ]);
+    document.getElementById('out').value=txt;
+  };
+  document.getElementById('copy').onclick=function(){
+    var box=document.getElementById('out'); if(!box.value){ document.getElementById('build').click(); }
+    copyOut(box.value, function(){ var b=document.getElementById('copy'); b.textContent="Copied \u2713"; setTimeout(function(){b.textContent="Copy it";},1600); });
+  };
+}
+
+/* ============ COMFORT: arcade \u2192 high-contrast \u2192 warm-dark ============ */
+var modes=["Arcade","High-contrast","Warm-dark"], mi=0;
+var cb=document.getElementById('comfort');
+cb.onclick=function(){
+  mi=(mi+1)%modes.length;
+  document.body.classList.remove('comfort-high','comfort-warm');
+  if(modes[mi]==="High-contrast")document.body.classList.add('comfort-high');
+  if(modes[mi]==="Warm-dark")document.body.classList.add('comfort-warm');
+  cb.textContent="EYES: "+modes[mi];
+};
+
+hub();
+</script>
+</body>
+</html>

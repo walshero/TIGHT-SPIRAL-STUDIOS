@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  THE COMPOUND — a paper you ride. Tight Spiral Studios · walshero@gmail.com
+  Capstone: "how a humanist uses compound metaphor + craft to design systems."
+
+  THESIS-AS-INTERACTION: the reader CHOOSES a vehicle metaphor, then a second LENS,
+  and the act of COMPOUNDING the two is the demonstration. The paper renders in the
+  reader's chosen compound. You learn compound-metaphor thinking by DOING it before
+  reading a word of argument (Glass Engine on the reader's own cognition; Saunders
+  entry — build the lens you read through).
+
+  ARCHITECTURE (Confluence, new skins): ONE invariant station spine + many tributary
+  framings. 3 vehicles x 3 lenses = 9 compounds, but the SPINE NEVER FORKS (Coherence
+  Skeptic HALT) — the compound changes only the framing layer (station names, the
+  connective sentences, the motion skin). Tree RETIRED to parking lot (it's the
+  branching/parking metaphor, not the process metaphor — logged prune, decay rule).
+
+  STATIONS (process moves), each with a PLAYABLE MICRO-DEMO of a real build's core move:
+   1 NOTICE   — the ten-year-cycle room (the problem a real person has)
+   2 FRAME    — Confluence: convergence to one judgment (micro: 3 raters converge)
+   3 BUILD    — EN195 "What Counts Now" (micro: noise subtracts to what counts)
+   4 READ THE GAP — Choose Your Leader (micro: trust a quote, then see the record)
+   5 SEE YOUR FRAME — laugh factory / terministic screen (micro: the Cleese move)
+   6 LEAVES THE BUILDING — MBTA spur: the method pointed at a real system; explicitly
+     flagged as METAPHOR EXTENDING, real infrastructure model = a separate NEXT build.
+
+  PUBLISHING-METHOD ARGUMENT woven through: the traditional paper is built for one
+  privileged reader and degrades for everyone else; this one adapts to the reader.
+
+  COMPOUND-METAPHOR MARGIN: Borges glyphs (Aleph=one point holds all / Forking Paths=
+  branches held / Funes=fullness without forgetting is paralysis) + Katamari (accrete
+  then graduate) as cut-paper marks — the essay about compound metaphor USES it.
+
+  COMFORT GATE (locked rule): palette choice on live swatches as screen zero.
+  FLOOR: single-file, offline, in-memory; 3-stop comfort (never #000/#fff); large
+  type; 44px+; keyboard; visible focus; reduced-motion safe (motion default-on +
+  replay, swaps to static under reduce; no strobe); scroll-reset; one decision/screen;
+  no hidden content; no color-as-sole-signal; no emoji; phone-width.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Compound — a paper you ride</title>
+<style>
+:root{
+  --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --ink2:#1f1b12;
+  --line:#d8caa8; --line2:#c2b288;
+  --accent:#1a4a35; --accent2:#256649;
+  --gold:#6e4700; --gold-br:#c8900a; --gold-pale:#fbeec6;
+  --plum:#5a2a52; --teal:#0d5466; --rust:#8a3a1c;
+  --focus:#c8900a;
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+  --veh:#1a4a35;  /* recolored by vehicle choice */
+}
+body.softer{ --bg:#efe9dd; --surface:#f7f1e6; --ink:#2c2618; --ink2:#2c2618; --line:#ded2b6; --line2:#cdbf9c; }
+body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0; --line:#4a4230; --line2:#5e553e;
+  --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a; --accent:#7fe3c0; --accent2:#7fe3c0;
+  --plum:#e3a8d6; --teal:#7fd6e6; --rust:#e8a07c; --veh:#7fe3c0; }
+*{box-sizing:border-box;} html,body{margin:0;}
+body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.65; font-size:19px; -webkit-text-size-adjust:100%; }
+.topbar{ background:var(--veh); color:#fff; padding:.6rem .9rem; display:flex; align-items:center; gap:.6rem; font-family:var(--sans); position:sticky; top:0; z-index:20; }
+body.warm .topbar{ color:#0f0e0b; }
+.topbar .mark{ width:26px; height:26px; flex:none; } .topbar .wm{ font-weight:800; font-size:.92rem; }
+.cstop{ margin-left:auto; background:rgba(255,255,255,.16); color:inherit; border:2px solid rgba(255,255,255,.6); border-radius:9px; padding:.45rem .6rem; font:700 .74rem/1 var(--sans); cursor:pointer; min-height:44px; }
+body.warm .cstop{ border-color:rgba(0,0,0,.4); background:rgba(0,0,0,.12); }
+.cstop:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.wrap{ max-width:680px; margin:0 auto; padding:1.1rem 1rem 5rem; }
+
+/* progress rail (the chosen-vehicle skin shows here) */
+.rail{ position:sticky; top:46px; z-index:15; background:var(--surface); border:2px solid var(--line2); border-radius:12px; padding:.5rem .7rem; margin:0 0 1.1rem; display:flex; align-items:center; gap:.5rem; }
+.rail .rlabel{ font:800 .66rem/1 var(--sans); letter-spacing:.06em; text-transform:uppercase; color:var(--ink2); white-space:nowrap; }
+.rail .stops{ display:flex; align-items:center; gap:.3rem; flex:1; }
+.rail .stop{ flex:1; height:8px; border-radius:6px; background:var(--line); }
+.rail .stop.done{ background:var(--veh); } .rail .stop.cur{ background:var(--gold-br); }
+.rail .vehname{ font:700 .72rem/1 var(--sans); color:var(--veh); white-space:nowrap; }
+
+.screen{ display:none; } .screen.on{ display:block; animation:fade .25s ease; }
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.where{ font:800 .72rem/1 var(--sans); letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:.6rem; }
+h1{ font-size:1.85rem; line-height:1.14; color:var(--ink); margin:.2rem 0 .5rem; }
+h2{ font-size:1.34rem; color:var(--ink); margin:.2rem 0 .6rem; }
+p{ margin:0 0 1rem; } .lead{ font-size:1.12rem; } .beat{ font-style:italic; color:var(--ink2); }
+em{font-style:italic;}
+
+.go{ display:block; width:100%; font:800 1.04rem/1.2 var(--sans); cursor:pointer; min-height:56px; padding:.9rem 1rem; border:none; border-radius:13px; background:var(--veh); color:#fff; margin:.5rem 0; text-align:center; }
+body.warm .go{ color:#0f0e0b; }
+.go:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+.go.sec{ background:var(--surface); color:var(--ink); border:2px solid var(--ink); }
+.go.ghost{ background:transparent; color:var(--ink2); border:2px solid var(--line2); font-weight:700; min-height:48px; }
+.go:disabled{ opacity:.6; cursor:default; }
+
+/* pickers */
+.picks{ display:flex; flex-direction:column; gap:.7rem; margin:1rem 0; }
+.pick{ display:flex; align-items:center; gap:.85rem; border:3px solid var(--line2); border-radius:14px; padding:.85rem; cursor:pointer; min-height:66px; background:var(--surface); }
+.pick:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.pick.sel{ border-color:var(--gold-br); background:var(--gold-pale); }
+.pick .pico{ width:46px; height:46px; flex:none; }
+.pick .plbl{ font:800 1.06rem/1.15 var(--sans); } .pick .psub{ font:400 .86rem/1.3 var(--sans); color:var(--ink2); }
+
+/* comfort swatches */
+.chip{ width:54px; height:42px; border-radius:9px; flex:none; border:2px solid rgba(0,0,0,.15); display:flex; overflow:hidden; }
+.chip span{ flex:1; }
+.chip.soft span:nth-child(1){background:#efe9dd;} .chip.soft span:nth-child(2){background:#2c2618;}
+.chip.def span:nth-child(1){background:#f3ead8;} .chip.def span:nth-child(2){background:#1f1b12;}
+.chip.dark span:nth-child(1){background:#26231d;} .chip.dark span:nth-child(2){background:#f0c357;}
+
+/* compound reveal */
+.compound{ border:3px solid var(--veh); border-radius:16px; background:var(--surface); padding:1.1rem; margin:1rem 0; text-align:center; }
+.compound .cx{ font:800 1.5rem/1.2 var(--serif); color:var(--ink); margin:.3rem 0; }
+.compound .cxsub{ font:400 .96rem/1.5 var(--sans); color:var(--ink2); }
+.compound .glyphs{ display:flex; justify-content:center; gap:1rem; margin:.7rem 0 .2rem; }
+.compound .glyphs svg{ width:40px; height:40px; }
+
+/* station */
+.station .num{ font:800 .8rem/1 var(--sans); color:var(--veh); letter-spacing:.06em; }
+.pull{ border-left:5px solid var(--gold-br); background:var(--gold-pale); border-radius:0 10px 10px 0; padding:.9rem 1.1rem; margin:1.2rem 0; font-size:1.06rem; }
+
+/* micro-demo frame */
+.demo{ border:2px dashed var(--accent2); border-radius:14px; background:var(--surface); padding:.9rem; margin:1.1rem 0; }
+.demo .dtag{ font:800 .72rem/1 var(--sans); letter-spacing:.05em; text-transform:uppercase; color:var(--accent2); margin-bottom:.5rem; }
+.demo .dhint{ font:400 .85rem/1.4 var(--sans); color:var(--ink2); margin:.2rem 0 .7rem; }
+.demo .full{ font:700 .8rem/1.3 var(--sans); color:var(--gold); margin-top:.6rem; }
+
+/* generic demo bits */
+.row{ display:flex; flex-direction:column; gap:.45rem; }
+.tile{ border:2px solid var(--line2); border-radius:10px; background:var(--bg); padding:.6rem .7rem; font:600 .92rem/1.3 var(--sans); cursor:pointer; min-height:48px; display:flex; align-items:center; gap:.5rem; transition:opacity .4s, border-color .25s, background .25s; }
+.tile:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.tile.on{ border-color:var(--gold-br); background:var(--gold-pale); }
+.tile.fade{ opacity:.55; }
+.tile .sub{ font-weight:400; color:var(--ink2); font-size:.82rem; }
+.barwrap{ background:var(--line); border-radius:8px; height:26px; overflow:hidden; margin:.3rem 0; }
+.bar{ height:100%; width:0; background:var(--veh); border-radius:8px; transition:width .6s ease; }
+.outline{ font:700 .9rem/1.4 var(--sans); color:var(--ink); min-height:1.3em; }
+.reveal{ border:2px solid var(--teal); border-radius:10px; padding:.7rem; margin:.5rem 0; font:400 .9rem/1.45 var(--sans); display:none; }
+.reveal.on{ display:block; }
+.trustrow{ display:flex; gap:.4rem; margin:.5rem 0; }
+.trustrow button{ flex:1; min-height:48px; border:2px solid var(--line2); border-radius:10px; background:var(--surface); color:var(--ink); font:700 1rem/1 var(--sans); cursor:pointer; }
+.trustrow button.on{ border-color:var(--gold-br); background:var(--gold-pale); }
+.frameflip{ border:2px solid var(--plum); border-radius:10px; padding:.75rem; font:400 .92rem/1.45 var(--sans); }
+
+/* margin glyph note */
+.marginnote{ display:flex; gap:.6rem; align-items:flex-start; border-left:3px solid var(--line2); padding:.3rem 0 .3rem .7rem; margin:1rem 0; }
+.marginnote svg{ width:30px; height:30px; flex:none; margin-top:.15rem; }
+.marginnote .mtext{ font:italic 400 .9rem/1.45 var(--serif); color:var(--ink2); }
+
+.flag{ border:2px solid var(--rust); border-radius:12px; background:var(--surface); padding:.85rem .9rem; margin:1rem 0; font-family:var(--sans); }
+.flag .fh{ font:800 .76rem/1 var(--sans); letter-spacing:.05em; text-transform:uppercase; color:var(--rust); margin-bottom:.4rem; }
+.flag p{ font-size:.92rem; margin:0; }
+
+.foot{ margin-top:1.8rem; padding:1rem; background:var(--veh); color:#fff; border-radius:12px; font-family:var(--sans); font-size:.8rem; }
+body.warm .foot{ color:#0f0e0b; } .foot a{ color:#cfe9dd; } body.warm .foot a{ color:#0f0e0b; }
+.sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+@media (max-width:520px){ body{font-size:18px;} h1{font-size:1.55rem;} .wrap{padding:1rem .8rem 5rem;} }
+@media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} .bar{transition:none !important;} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 4 C30 4 36 12 36 20 C36 28 30 33 23 33 C17 33 13 29 13 24 C13 20 16 17 20 17 C23 17 25 19 25 22" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
+  <span class="wm" id="wm">The Compound</span>
+  <button class="cstop" id="cstop" aria-label="Change comfort palette">Comfort</button>
+</div>
+<div class="wrap">
+  <div class="rail" id="rail" aria-hidden="true" hidden>
+    <span class="rlabel">Your line</span>
+    <span class="stops" id="stops"></span>
+    <span class="vehname" id="vehname"></span>
+  </div>
+
+  <!-- ===== SCREEN 0 — COMFORT GATE ===== -->
+  <section class="screen on" id="gate" aria-labelledby="gh">
+    <div class="where">First, your eyes</div>
+    <h1 id="gh">Pick what's comfortable to read.</h1>
+    <p class="beat">This sets the whole thing before it starts — so nothing jumps out at you. Change it any time from the corner.</p>
+    <div class="picks" id="swatches" role="radiogroup" aria-label="Comfort palette">
+      <div class="pick" tabindex="0" role="radio" aria-checked="false" data-stop="softer"><span class="chip soft" aria-hidden="true"><span></span><span></span></span><span><span class="plbl">Softer</span><br><span class="psub">gentle paper, lower contrast</span></span></div>
+      <div class="pick sel" tabindex="0" role="radio" aria-checked="true" data-stop="default"><span class="chip def" aria-hidden="true"><span></span><span></span></span><span><span class="plbl">Default</span><br><span class="psub">warm paper, dark ink</span></span></div>
+      <div class="pick" tabindex="0" role="radio" aria-checked="false" data-stop="warm"><span class="chip dark" aria-hidden="true"><span></span><span></span></span><span><span class="plbl">Warm-dark</span><br><span class="psub">amber on charcoal (not pure black/white)</span></span></div>
+    </div>
+    <button class="go" id="toVeh">This is comfortable — begin →</button>
+  </section>
+
+  <!-- ===== SCREEN 1 — CHOOSE VEHICLE ===== -->
+  <section class="screen" id="veh" aria-labelledby="vh">
+    <div class="where">Choose your metaphor · 1 of 2</div>
+    <h1 id="vh">How does thinking move?</h1>
+    <p class="lead">This is a paper you ride. Before you read a word of argument, pick the shape your mind gives a process. There's no wrong answer — the point is that you choose.</p>
+    <div class="picks" id="vehPicks" role="radiogroup" aria-label="Vehicle metaphor">
+      <div class="pick" tabindex="0" role="radio" aria-checked="false" data-veh="river">
+        <svg class="pico" viewBox="0 0 48 48" aria-hidden="true"><path d="M10 6 C16 16 8 22 14 30 C20 38 12 42 16 46" fill="none" stroke="#0d5466" stroke-width="3" stroke-linecap="round"/><path d="M26 6 C30 14 24 20 28 28" fill="none" stroke="#0d5466" stroke-width="2.5" stroke-linecap="round"/><path d="M14 30 C20 30 24 28 28 28" fill="none" stroke="#0d5466" stroke-width="2.5"/></svg>
+        <span><span class="plbl">River</span><br><span class="psub">many streams converge into one</span></span>
+      </div>
+      <div class="pick" tabindex="0" role="radio" aria-checked="false" data-veh="train">
+        <svg class="pico" viewBox="0 0 48 48" aria-hidden="true"><line x1="4" y1="38" x2="44" y2="38" stroke="#8a5c00" stroke-width="2.5"/><circle cx="12" cy="38" r="3" fill="none" stroke="#8a5c00" stroke-width="2.5"/><circle cx="24" cy="38" r="3" fill="none" stroke="#8a5c00" stroke-width="2.5"/><circle cx="36" cy="38" r="3" fill="none" stroke="#8a5c00" stroke-width="2.5"/><rect x="8" y="14" width="20" height="18" rx="3" fill="none" stroke="#8a5c00" stroke-width="3"/><path d="M28 20 h8 l4 8 v4 h-12 z" fill="none" stroke="#8a5c00" stroke-width="3" stroke-linejoin="round"/></svg>
+        <span><span class="plbl">Train</span><br><span class="psub">a line of stations, you ride it through</span></span>
+      </div>
+      <div class="pick" tabindex="0" role="radio" aria-checked="false" data-veh="circuit">
+        <svg class="pico" viewBox="0 0 48 48" aria-hidden="true"><path d="M6 24 h10 M32 24 h10 M24 6 v10 M24 32 v10" stroke="#5a2a52" stroke-width="2.5" stroke-linecap="round"/><rect x="16" y="16" width="16" height="16" rx="2" fill="none" stroke="#5a2a52" stroke-width="3"/><circle cx="6" cy="24" r="2.5" fill="#5a2a52"/><circle cx="42" cy="24" r="2.5" fill="#5a2a52"/><circle cx="24" cy="6" r="2.5" fill="#5a2a52"/><circle cx="24" cy="42" r="2.5" fill="#5a2a52"/></svg>
+        <span><span class="plbl">Circuit board</span><br><span class="psub">current loops, returns, and learns</span></span>
+      </div>
+    </div>
+    <button class="go" id="toLens" disabled>Next →</button>
+    <div class="marginnote"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 6 L30 14 L26 30 L14 30 L10 14 Z" fill="none" stroke="var(--gold-br)" stroke-width="2"/><circle cx="20" cy="20" r="3" fill="var(--gold-br)"/></svg><span class="mtext">The Aleph: one point that contains all points. A single metaphor, chosen well, holds the whole system at once.</span></div>
+  </section>
+
+  <!-- ===== SCREEN 2 — CHOOSE LENS ===== -->
+  <section class="screen" id="lens" aria-labelledby="lh">
+    <div class="where">Choose your lens · 2 of 2</div>
+    <h1 id="lh">Now stack a second one on top.</h1>
+    <p class="lead">A single metaphor is a picture. Two metaphors multiplied are an <em>instrument</em> — they do something neither does alone. Pick the lens that rides on your vehicle.</p>
+    <div class="picks" id="lensPicks" role="radiogroup" aria-label="Lens">
+      <div class="pick" tabindex="0" role="radio" aria-checked="false" data-lens="calibration"><svg class="pico" viewBox="0 0 48 48" aria-hidden="true"><line x1="8" y1="16" x2="40" y2="16" stroke="#1a4a35" stroke-width="2.5"/><line x1="8" y1="32" x2="40" y2="32" stroke="#1a4a35" stroke-width="2.5"/><circle cx="18" cy="16" r="4" fill="none" stroke="#1a4a35" stroke-width="3"/><circle cx="30" cy="32" r="4" fill="none" stroke="#1a4a35" stroke-width="3"/></svg><span><span class="plbl">Calibration</span><br><span class="psub">tune it against ground truth until it's true</span></span></div>
+      <div class="pick" tabindex="0" role="radio" aria-checked="false" data-lens="recursion"><svg class="pico" viewBox="0 0 48 48" aria-hidden="true"><path d="M14 12 A14 14 0 1 1 10 28" fill="none" stroke="#1a4a35" stroke-width="3" stroke-linecap="round"/><path d="M10 18 L10 28 L20 28" fill="none" stroke="#1a4a35" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span><span class="plbl">Recursion</span><br><span class="psub">the loop that learns and returns changed</span></span></div>
+      <div class="pick" tabindex="0" role="radio" aria-checked="false" data-lens="adaptation"><svg class="pico" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 8 v32 M24 8 L16 18 M24 8 L32 18 M24 22 L14 32 M24 22 L34 32" fill="none" stroke="#1a4a35" stroke-width="2.5" stroke-linecap="round"/></svg><span><span class="plbl">Adaptation</span><br><span class="psub">it reshapes to fit the one who arrives</span></span></div>
+    </div>
+    <button class="go" id="toCompound" disabled>See my compound →</button>
+  </section>
+
+  <!-- ===== SCREEN 3 — THE COMPOUND REVEAL ===== -->
+  <section class="screen" id="compound" aria-labelledby="ch">
+    <div class="where">Your instrument</div>
+    <h2 id="ch">You just built a thinking tool.</h2>
+    <div class="compound">
+      <div class="glyphs" id="cglyphs" aria-hidden="true"></div>
+      <div class="cx" id="cxName">—</div>
+      <div class="cxsub" id="cxSub"></div>
+    </div>
+    <p>That move you just made — taking two simple pictures and multiplying them into something that does more than either — is the whole argument of this paper, and you made it before I made it. <em>That</em> is what a humanist who builds systems actually does: not invent from nothing, but compound what's already understood until it becomes an instrument.</p>
+    <p class="beat">Now ride your instrument through six stations. Each one is a move in how I think — and each carries a small working thing you can actually touch.</p>
+    <button class="go" data-to="st1">Set out →</button>
+    <div class="marginnote"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="5" fill="none" stroke="var(--gold-br)" stroke-width="2"/><circle cx="20" cy="20" r="11" fill="none" stroke="var(--gold-br)" stroke-width="1.5"/><circle cx="20" cy="20" r="17" fill="none" stroke="var(--gold-br)" stroke-width="1"/></svg><span class="mtext">Katamari: the ball that grows by rolling — accrete what fits, then graduate it into something whole. A studio runs on the same physics.</span></div>
+  </section>
+
+  <!-- ===== STATION 1 — NOTICE ===== -->
+  <section class="screen station" id="st1" aria-labelledby="s1h">
+    <div class="num" id="s1num">Station 1</div>
+    <h2 id="s1h">Notice — the problem a real person has.</h2>
+    <p>A conference room, my college, assessment review day. Someone proposes adding a second year of reflection before we act on what we found. Reasonable. Everyone nods. Then the arithmetic lands on me: a second year means our five learning outcomes get assessed on a <em>ten-year</em> cycle. Ten years to find out whether a change helped a student. I do the math twice because I don't want it to be right.</p>
+    <p class="beat" id="s1frame">—</p>
+    <p>Every system I build starts here: not with a tool, but with a person stuck inside machinery nobody owns because we've all agreed to rent it. The humanist move is to start from the stuck person, not the available technology.</p>
+    <div class="pull">The constraint was never the problem. The constraint was the design. Build for the person who struggles most to use the thing, and it gets better for everyone.</div>
+    <button class="go" data-to="st2">Next station →</button>
+  </section>
+
+  <!-- ===== STATION 2 — FRAME (Confluence micro-demo) ===== -->
+  <section class="screen station" id="st2" aria-labelledby="s2h">
+    <div class="num">Station 2</div>
+    <h2 id="s2h">Frame — make many readings converge.</h2>
+    <p id="s2frame">—</p>
+    <p>This is Confluence, the assessment architecture underneath the studio. Three readers look at the same student work and score it. Alone, three opinions are noise. The system's job is to make them <em>converge</em> on a defensible shared judgment — and to show where they don't yet agree, so the disagreement becomes the work.</p>
+    <div class="demo">
+      <div class="dtag">Touch the move — raters converge</div>
+      <div class="dhint">Three readers scored the same piece. Tap to reveal each. Watch the band narrow toward agreement.</div>
+      <div class="row">
+        <button class="tile" data-rater="A">Reader A <span class="sub">— tap to reveal score</span></button>
+        <button class="tile" data-rater="B">Reader B <span class="sub">— tap to reveal score</span></button>
+        <button class="tile" data-rater="C">Reader C <span class="sub">— tap to reveal score</span></button>
+      </div>
+      <div class="barwrap"><div class="bar" id="convBar"></div></div>
+      <div class="outline" id="convMsg">Agreement: waiting for all three readers…</div>
+      <div class="full">The full build: Confluence calibrates raters against a validated rubric (MassBay placement, 1–6) before any real student work is scored.</div>
+    </div>
+    <button class="go" data-to="st3">Next station →</button>
+  </section>
+
+  <!-- ===== STATION 3 — BUILD (EN195 micro-demo) ===== -->
+  <section class="screen station" id="st3" aria-labelledby="s3h">
+    <div class="num">Station 3</div>
+    <h2 id="s3h">Build — let the noise subtract to what counts.</h2>
+    <p id="s3frame">—</p>
+    <p>Here's a game I shipped for my own creative-writing students in their last week. The curriculum sheet lists everything equally, forever. The game <em>inverts</em> it: it starts as everything-shouting, and the student's real answers subtract until only what counts is lit. You learn what matters by watching the list get shorter and truer.</p>
+    <div class="demo">
+      <div class="dtag">Touch the move — the wall subtracts</div>
+      <div class="dhint">It's the last week. Tap the two things that actually decide the grade now. The rest is noise — watch it fade.</div>
+      <div class="row" id="en195row">
+        <button class="tile" data-counts="yes">Write the flash fiction story <span class="sub">— due this week</span></button>
+        <button class="tile" data-counts="yes">Submit the portfolio + artist statement <span class="sub">— the finish line</span></button>
+        <button class="tile" data-counts="no">Re-watch the craft videos <span class="sub">— support, not graded</span></button>
+        <button class="tile" data-counts="no">Discussion boards #1–#5 <span class="sub">— already graded</span></button>
+      </div>
+      <div class="outline" id="en195msg">Tap what still counts.</div>
+      <div class="full">The full build: "What Counts Now" — a token economy where finished workshops build the portfolio, with a comfort gate and a copy-out the student chooses to share.</div>
+    </div>
+    <button class="go" data-to="st4">Next station →</button>
+  </section>
+
+  <!-- ===== STATION 4 — READ THE GAP (Choose Your Leader micro-demo) ===== -->
+  <section class="screen station" id="st4" aria-labelledby="s4h">
+    <div class="num">Station 4</div>
+    <h2 id="s4h">Read the gap — between what was said and what was true.</h2>
+    <p id="s4frame">—</p>
+    <p>This one teaches a single habit: notice the distance between the words you were given and the record you weren't. You read a real thing a leader said, decide how much you trust it — <em>then</em> the game shows you what the original audience never got to see, and lets you feel how far the words moved you first.</p>
+    <div class="demo">
+      <div class="dtag">Touch the move — trust, then see the record</div>
+      <div class="dhint">A leader, 1964: <em>"renewed hostile actions against United States ships on the high seas."</em> How much do you trust it, on the words alone?</div>
+      <div class="trustrow" id="cylTrust" role="group" aria-label="Trust level">
+        <button data-t="low">Low</button><button data-t="mid">Some</button><button data-t="high">High</button>
+      </div>
+      <div class="reveal" id="cylReveal">The record turns: later analysis indicates the second attack that justified escalation most likely never happened — the ships were running covert operations the public wasn't told about. The gap between the sentence and the record is the whole lesson. Noticing it is the win.</div>
+      <div class="full">The full build: Choose Your Leader — dated, sourced records; a trust-delta that you feel before you judge; trauma-informed rails so consequence lands on the rhetoric's reach, never your worth.</div>
+    </div>
+    <button class="go" data-to="st5">Next station →</button>
+  </section>
+
+  <!-- ===== STATION 5 — SEE YOUR FRAME (laugh factory micro-demo) ===== -->
+  <section class="screen station" id="st5" aria-labelledby="s5h">
+    <div class="num">Station 5</div>
+    <h2 id="s5h">See your own frame — the move you can't make from inside.</h2>
+    <p id="s5frame">—</p>
+    <p>The hardest one. Once, deep in designing a game about how framing controls what we see, the studio had built forty-one cross-referenced documents <em>about</em> the game instead of the game. We had made a Rube Goldberg machine out of the meeting about the Rube Goldberg machine. The caucus had become the bit. That's the thesis of the whole laugh-factory game: you cannot see your own frame from inside it — you need a move, or a person, that stands outside.</p>
+    <div class="demo">
+      <div class="dtag">Touch the move — step outside the frame</div>
+      <div class="dhint">Read the sentence. Then tap to step outside it.</div>
+      <div class="frameflip" id="frameBox">"We just need one more planning document before we start building."</div>
+      <button class="go sec" id="flipBtn" style="margin-top:.6rem">Step outside →</button>
+      <div class="reveal" id="frameReveal">From inside: responsible. From outside: the planning <em>is</em> the avoidance. The frame felt like diligence; named from outside, it's the thing keeping you from the build. The laugh is the recognition — and the recognition is the exit.</div>
+      <div class="full">The full build: the terministic-screen game — players feel a frame govern their reading, then get the outside view that the frame was a choice.</div>
+    </div>
+    <button class="go" data-to="st6">Last station →</button>
+  </section>
+
+  <!-- ===== STATION 6 — LEAVES THE BUILDING (MBTA spur) ===== -->
+  <section class="screen station" id="st6" aria-labelledby="s6h">
+    <div class="num">Station 6 · the spur</div>
+    <h2 id="s6h" id="s6title">The method leaves the building.</h2>
+    <p id="s6frame">—</p>
+    <p>Everything so far lives inside a classroom. But the moves don't know they're in a classroom. <em>Notice the stuck person. Make readings converge. Subtract the noise. Read the gap. See the frame.</em> Point that at a city's transit system instead of a course, and the shape holds: the rider stuck on a delayed line is the stuck person; the competing agency priorities are the readings that must converge; the budget noise subtracts to what actually moves people; the gap between the published schedule and the lived commute is the record turning.</p>
+    <p>Your instrument — <span id="s6compound">your compound</span> — is the right tool for it, because a transit network <em>is</em> the thing your metaphor describes: streams converging, a line of stations, current that loops and returns.</p>
+    <div class="flag">
+      <div class="fh">Honest flag — what this is and isn't</div>
+      <p>This station shows the method <em>reaching</em> toward a real system. It is not a transit model. A physics-accurate MBTA simulation is a different, much larger build — real network data, real infrastructure constraints, a real engineering pipeline — and it is named as the <strong>next</strong> project, not this one. The humanist move is to know the difference between a metaphor that travels and a model that has to be earned with data.</p>
+    </div>
+    <button class="go" data-to="closeout">Why a paper should work this way →</button>
+  </section>
+
+  <!-- ===== CLOSEOUT — the publishing-method argument ===== -->
+  <section class="screen" id="closeout" aria-labelledby="coh">
+    <div class="where">The argument you just lived</div>
+    <h2 id="coh">Why publish a paper this way.</h2>
+    <p>A traditional paper is built for one imagined reader: the gatekeeper of its discipline. Everyone else — the administrator, the skeptical colleague, the student, the person who reads slowly, the person who can't easily see the screen — has to fight the form to get the value out. The gate isn't a quality filter. It's a design that excludes by default.</p>
+    <p>This paper did the opposite. You chose your comfort. You chose your metaphor, and then a second, and the paper rendered in <em>your</em> compound. You didn't read about adaptive thinking — you performed it, and the artifact adapted to you. The argument and the experience were the same object. That's the publishing method: the reader's interest, expertise, semiotic domain, and use reshape the artifact, instead of the reader bending to a form built for someone else.</p>
+    <p class="beat">First test population: every academic discipline at my college. If a creative-writing teacher and a biotech student can both ride the same argument through their own compound, the method scales. That's the next thing to prove.</p>
+    <div class="marginnote"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M8 32 L20 8 L32 32 M8 32 L20 26 L32 32" fill="none" stroke="var(--gold-br)" stroke-width="2" stroke-linejoin="round"/></svg><span class="mtext">The Garden of Forking Paths: hold every branch honestly. The metaphors you didn't pick — and the city model not yet built — wait in the parking lot, not the void.</span></div>
+    <div class="foot">
+      Tight Spiral Studios · walshero@gmail.com — <b>The Compound</b>, a paper you ride. Single-file, offline, in-memory. The four embedded micro-demos are honest tastes of full builds, not the builds themselves. Compound metaphor, calibration, recursion, adaptation — a humanist's instruments for designing systems with a human kept in the loop. Drafted with AI as crew; judgment is the author's.
+    </div>
+    <button class="go ghost" id="rideAgain" style="margin-top:1rem">Ride again with a different compound</button>
+  </section>
+</div>
+
+<!--
+  TSP-META BLOCK
+  { "file":"the-compound-capstone.html",
+    "role":"Capstone paper — compound-metaphor, choose-your-vehicle+lens entry; playable proof of a humanist HITL systems thinker",
+    "wireframe_novelty":"reader CHOOSES + COMPOUNDS two metaphors; the compounding IS the argument; paper renders in the reader's compound over an invariant station spine",
+    "thesis":"adaptive publishing — the artifact reshapes to the reader instead of the reader fighting the gate",
+    "vehicles":["river","train","circuit"], "lenses":["calibration","recursion","adaptation"], "tree":"RETIRED to parking lot (branching/parking metaphor, not process) — logged prune",
+    "stations":["notice","frame(Confluence)","build(EN195)","read-the-gap(Choose Your Leader)","see-your-frame(laugh factory)","leaves-the-building(MBTA spur)"],
+    "micro_demos":"honest self-contained tastes of each build's CORE move; not the full builds (separate files, cannot embed live here)",
+    "comfort_gate":true,
+    "operative":true,
+    "hitl_active":["human-judgment-is-author framing throughout","show-the-engine equivalents in each demo"],
+    "hitl_NEEDED":["live-embed of the four real builds requires base64 iframes or a hub host — STUBBED as micro-demos","9 compounds render the framing layer only; deeper per-compound prose is a future pass"],
+    "founder_open":["confirm voice/wording in your register","decide if this becomes the hub's paper-ideas panel anchor","real MBTA model = flagged NEXT build, research+pipeline spec pending"],
+    "parking_lot_flagged":["real physics-accurate MBTA transit model (deep infra/systems/physics-graphics research; tools+pipeline to be specced; NOT built tonight)","Tree metaphor","compound-iconography system"],
+    "floor_states_verified":["Softer/Default/Warm-dark target WCAG; 44px+; keyboard incl. radio picks; reduced-motion swaps motion to static; scroll-reset; no emoji; no color-as-sole-signal (glyph+label)"],
+    "assets_promoted":["comfort-gate screen-zero","choose-and-compound entry component","invariant-spine + tributary-framing pattern","micro-demo frame component","compound-metaphor margin glyph (Borges+Katamari)"] }
+-->
+<script>
+(function(){
+  "use strict";
+  var state={comfort:'default',veh:null,lens:null};
+  var VEHCOLOR={river:'#0d5466',train:'#8a5c00',circuit:'#5a2a52'};
+  var VEHNAME={river:'River',train:'Train',circuit:'Circuit'};
+  var LENSNAME={calibration:'Calibration',recursion:'Recursion',adaptation:'Adaptation'};
+  // compound names + subs
+  var CXNAME={
+    'river|calibration':'The Calibrated River','river|recursion':'The Returning River','river|adaptation':'The Adaptive Delta',
+    'train|calibration':'The Tuned Line','train|recursion':'The Looping Line','train|adaptation':'The Responsive Line',
+    'circuit|calibration':'The Tuned Circuit','circuit|recursion':'The Recursive Circuit','circuit|adaptation':'The Reconfiguring Circuit'
+  };
+  var CXSUB={
+    calibration:'tributaries, tuned against ground truth until the reading is true',
+    recursion:'a current that flows, returns, and comes back having learned',
+    adaptation:'a system that reshapes itself to fit whoever arrives'
+  };
+  // per-station framing sentences keyed by vehicle (the tributary framing layer; spine invariant)
+  var FRAME={
+    river:{
+      s1:'A river starts as a problem looking for a channel — pressure with nowhere to go.',
+      s2:'Watch the tributaries: separate streams of judgment, finding the one channel they can share.',
+      s3:'A river drops its silt where the water slows — the noise settles out, and what counts stays in the current.',
+      s4:'Read the water: the surface is the words; the record is the stones underneath, shaping the flow you feel.',
+      s5:'You cannot see the whole watershed from inside one stream — you have to climb the bank.',
+      s6:'Every river eventually reaches a city and has to decide what it carries through it.'
+    },
+    train:{
+      s1:'The line begins at the platform where someone is stuck, watching a board that never updates.',
+      s2:'Three switch operators have to agree before the train can take the points — convergence or collision.',
+      s3:'A good timetable cuts every stop that no longer earns its place on the line.',
+      s4:'Read the gap between the posted schedule and the ride you actually get.',
+      s5:'You can\u2019t read the whole network from one car — you need the map on the wall outside.',
+      s6:'The line was always heading somewhere real; the last station is the city it serves.'
+    },
+    circuit:{
+      s1:'A circuit starts as an open gap — voltage with nowhere to complete its loop.',
+      s2:'Parallel signals must resolve to one output, or the gate stays undefined.',
+      s3:'Trim the dead traces: every path that carries no signal is heat, not information.',
+      s4:'Read the gap between the labeled pin and the current actually on the wire.',
+      s5:'A component can\u2019t measure itself — you probe it from outside the board.',
+      s6:'The board was always built to drive something real beyond its own edge.'
+    }
+  };
+
+  function $(id){return document.getElementById(id);}
+  var ORDER=['gate','veh','lens','compound','st1','st2','st3','st4','st5','st6','closeout'];
+  var STATIONS=['st1','st2','st3','st4','st5','st6'];
+  function show(id){
+    document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');});
+    var el=$(id); el.classList.add('on'); window.scrollTo(0,0);
+    var h=el.querySelector('h1,h2'); if(h){h.setAttribute('tabindex','-1'); h.focus({preventScroll:true});}
+    var inJourney = ORDER.indexOf(id) >= ORDER.indexOf('st1');
+    $('rail').hidden = !inJourney; $('rail').setAttribute('aria-hidden', String(!inJourney));
+    if(inJourney) updateRail(id);
+  }
+  function updateRail(id){
+    var stops=$('stops'); if(!stops.children.length){ STATIONS.forEach(function(){ var d=document.createElement('span'); d.className='stop'; stops.appendChild(d); }); }
+    var idx=STATIONS.indexOf(id);
+    Array.prototype.forEach.call(stops.children,function(c,i){ c.className='stop'+(i<idx?' done':(i===idx?' cur':'')); });
+  }
+
+  // comfort
+  function applyStop(s){ document.body.classList.remove('softer','warm'); if(s==='softer')document.body.classList.add('softer'); if(s==='warm')document.body.classList.add('warm'); state.comfort=s; }
+  (function(){ var ss=document.querySelectorAll('#swatches .pick');
+    function pick(p){ ss.forEach(function(x){x.classList.remove('sel');x.setAttribute('aria-checked','false');}); p.classList.add('sel'); p.setAttribute('aria-checked','true'); applyStop(p.getAttribute('data-stop')); }
+    ss.forEach(function(p){ p.addEventListener('click',function(){pick(p);}); p.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pick(p);}}); });
+  })();
+  $('toVeh').addEventListener('click',function(){ show('veh'); });
+  var cstops=['default','softer','warm'];
+  $('cstop').addEventListener('click',function(){ var i=(cstops.indexOf(state.comfort)+1)%3; applyStop(cstops[i]); this.textContent='Comfort: '+cstops[i].charAt(0).toUpperCase()+cstops[i].slice(1); });
+
+  // vehicle pick
+  (function(){ var ps=document.querySelectorAll('#vehPicks .pick');
+    function pick(p){ ps.forEach(function(x){x.classList.remove('sel');x.setAttribute('aria-checked','false');}); p.classList.add('sel'); p.setAttribute('aria-checked','true'); state.veh=p.getAttribute('data-veh'); $('toLens').disabled=false;
+      document.documentElement.style.setProperty('--veh', VEHCOLOR[state.veh]); }
+    ps.forEach(function(p){ p.addEventListener('click',function(){pick(p);}); p.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pick(p);}}); });
+  })();
+  $('toLens').addEventListener('click',function(){ show('lens'); });
+
+  // lens pick
+  (function(){ var ps=document.querySelectorAll('#lensPicks .pick');
+    function pick(p){ ps.forEach(function(x){x.classList.remove('sel');x.setAttribute('aria-checked','false');}); p.classList.add('sel'); p.setAttribute('aria-checked','true'); state.lens=p.getAttribute('data-lens'); $('toCompound').disabled=false; }
+    ps.forEach(function(p){ p.addEventListener('click',function(){pick(p);}); p.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pick(p);}}); });
+  })();
+  $('toCompound').addEventListener('click',function(){ renderCompound(); show('compound'); });
+
+  var GLYPH={
+    river:'<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M12 4 C18 14 10 20 16 28 C22 36 14 38 18 40" fill="none" stroke="var(--veh)" stroke-width="3" stroke-linecap="round"/></svg>',
+    train:'<svg viewBox="0 0 40 40" aria-hidden="true"><line x1="4" y1="32" x2="36" y2="32" stroke="var(--veh)" stroke-width="2.5"/><rect x="8" y="12" width="16" height="15" rx="3" fill="none" stroke="var(--veh)" stroke-width="3"/></svg>',
+    circuit:'<svg viewBox="0 0 40 40" aria-hidden="true"><rect x="13" y="13" width="14" height="14" rx="2" fill="none" stroke="var(--veh)" stroke-width="3"/><path d="M4 20 h9 M27 20 h9 M20 4 v9 M20 27 v9" stroke="var(--veh)" stroke-width="2.5" stroke-linecap="round"/></svg>',
+    calibration:'<svg viewBox="0 0 40 40" aria-hidden="true"><line x1="6" y1="14" x2="34" y2="14" stroke="var(--gold-br)" stroke-width="2.5"/><circle cx="15" cy="14" r="3.5" fill="none" stroke="var(--gold-br)" stroke-width="3"/><line x1="6" y1="27" x2="34" y2="27" stroke="var(--gold-br)" stroke-width="2.5"/><circle cx="25" cy="27" r="3.5" fill="none" stroke="var(--gold-br)" stroke-width="3"/></svg>',
+    recursion:'<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M12 10 A12 12 0 1 1 9 24" fill="none" stroke="var(--gold-br)" stroke-width="3" stroke-linecap="round"/><path d="M9 15 L9 24 L18 24" fill="none" stroke="var(--gold-br)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    adaptation:'<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 6 v28 M20 6 L13 15 M20 6 L27 15 M20 19 L11 28 M20 19 L29 28" fill="none" stroke="var(--gold-br)" stroke-width="2.5" stroke-linecap="round"/></svg>'
+  };
+  function renderCompound(){
+    var key=state.veh+'|'+state.lens;
+    $('cxName').textContent=CXNAME[key]||'Your Compound';
+    $('cxSub').textContent=VEHNAME[state.veh]+' \u00d7 '+LENSNAME[state.lens]+' — '+CXSUB[state.lens]+'.';
+    $('cglyphs').innerHTML=GLYPH[state.veh]+'<span style="align-self:center;font:800 1.4rem var(--sans);color:var(--gold)">\u00d7</span>'+GLYPH[state.lens];
+    $('wm').textContent=CXNAME[key]||'The Compound';
+    $('vehname').textContent=CXNAME[key]||VEHNAME[state.veh];
+    // apply per-station framing
+    var f=FRAME[state.veh];
+    $('s1frame').textContent=f.s1; $('s2frame').textContent=f.s2; $('s3frame').textContent=f.s3;
+    $('s4frame').textContent=f.s4; $('s5frame').textContent=f.s5; $('s6frame').textContent=f.s6;
+    $('s6compound').textContent='the '+ (CXNAME[key]||'compound').toLowerCase().replace(/^the /,'');
+  }
+
+  // nav
+  document.querySelectorAll('[data-to]').forEach(function(b){ b.addEventListener('click',function(){ show(this.getAttribute('data-to')); }); });
+
+  // --- Station 2: rater convergence demo ---
+  (function(){
+    var scores={A:5,B:4,C:5}, shown={};
+    document.querySelectorAll('#st2 .tile[data-rater]').forEach(function(t){
+      t.addEventListener('click',function(){
+        var r=t.getAttribute('data-rater'); if(shown[r])return; shown[r]=true;
+        t.classList.add('on'); t.innerHTML='Reader '+r+' <span class="sub">— scored '+scores[r]+' / 6</span>';
+        var n=Object.keys(shown).length;
+        if(n<3){ $('convMsg').textContent='Agreement: '+n+' of 3 readers in… keep going.'; $('convBar').style.width=(n*22)+'%'; }
+        else {
+          var vals=[scores.A,scores.B,scores.C]; var spread=Math.max.apply(null,vals)-Math.min.apply(null,vals);
+          var agree = spread<=1;
+          $('convBar').style.width = agree?'88%':'55%';
+          $('convMsg').textContent = agree
+            ? 'They converge: scores within one band (4–5). Defensible shared judgment — the band narrowed.'
+            : 'They diverge by '+spread+' bands — that gap is the calibration work, made visible.';
+        }
+      });
+    });
+  })();
+
+  // --- Station 3: EN195 subtract demo ---
+  (function(){
+    var picked={};
+    document.querySelectorAll('#en195row .tile').forEach(function(t){
+      t.addEventListener('click',function(){
+        var counts=t.getAttribute('data-counts');
+        if(counts==='yes'){ t.classList.toggle('on'); picked[t.textContent]=t.classList.contains('on'); }
+        else { t.classList.toggle('fade'); }
+        var n=document.querySelectorAll('#en195row .tile.on').length;
+        var faded=document.querySelectorAll('#en195row .tile.fade').length;
+        if(n>=2 && faded>=2){ $('en195msg').textContent='The noise dropped. Two things decide this week: the story and the portfolio. That\u2019s what counts now.'; }
+        else if(n>=1){ $('en195msg').textContent='Good — and try fading the two that no longer decide the grade.'; }
+        else { $('en195msg').textContent='Tap what still counts.'; }
+      });
+    });
+  })();
+
+  // --- Station 4: trust then reveal ---
+  (function(){
+    document.querySelectorAll('#cylTrust button').forEach(function(b){
+      b.addEventListener('click',function(){
+        document.querySelectorAll('#cylTrust button').forEach(function(x){x.classList.remove('on');});
+        b.classList.add('on'); $('cylReveal').classList.add('on');
+        $('cylReveal').scrollIntoView({behavior:'smooth',block:'nearest'});
+      });
+    });
+  })();
+
+  // --- Station 5: frame flip ---
+  (function(){
+    $('flipBtn').addEventListener('click',function(){
+      var r=$('frameReveal'); if(!r.classList.contains('on')){ r.classList.add('on'); this.textContent='(you\u2019re outside it now)'; this.disabled=true; r.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+    });
+  })();
+
+  // ride again
+  $('rideAgain').addEventListener('click',function(){
+    state.veh=null; state.lens=null;
+    document.querySelectorAll('#vehPicks .pick,#lensPicks .pick').forEach(function(p){p.classList.remove('sel');p.setAttribute('aria-checked','false');});
+    $('toLens').disabled=true; $('toCompound').disabled=true;
+    document.documentElement.style.setProperty('--veh','#1a4a35');
+    show('veh');
+  });
+})();
+</script>
+</body>
+</html>

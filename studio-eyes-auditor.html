@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  STUDIO EYES — the ship-gate enforcer. Tight Spiral Studios · walshero@gmail.com
+  Turns the written visibility/FERPA/floor rules into something that RUNS.
+  No-eyes-required, automated tier-1 audit. Paste a build's full HTML; it returns
+  a binary PASS / HALT with the exact offending lines.
+
+  Born from the 2026-06-29 bail: a written floor with no enforcer still reached the
+  founder's eyes. This is the enforcer. Mandatory Stage-6 gate per the gap audit.
+
+  WHAT IT CATCHES:
+   1 CONTRAST — extracts the :root + comfort-stop palettes, resolves var() text/ground
+     pairs, runs WCAG AA (4.5 body / 3 large). HALT on any failing pair in ANY stop.
+   2 BANNED TOKENS — muted-text used AS text color; green --accent used as TEXT
+     (not border/fill). HALT.
+   3 PII / ROSTER — scans player-facing text for capitalized first+last name pairs
+     and "not received" roster tells. HALT (review).
+   4 EMOJI — any emoji codepoint. HALT.
+   5 TAP TARGETS — buttons/links without a min-height >=44px reachable rule. WARN.
+   6 OFFLINE — fetch(/localStorage/sessionStorage/XMLHttpRequest. HALT (floor).
+   7 SCENE-FIRST / COMFORT GATE — presence heuristic. WARN if absent.
+
+  This file is itself full-contrast (post-fix palette): ink text only, green is
+  structural (bars/borders) never body text, no muted captions, 3-stop comfort.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio Eyes — ship-gate enforcer</title>
+<style>
+:root{ --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --line:#c2b288;
+  --accent:#1a4a35; --gold:#6e4700; --gold-pale:#fbeec6; --gold-br:#c8900a;
+  --pass:#13602f; --halt:#8a1c1c; --warn:#7a4a00;
+  --focus:#c8900a; --serif:Georgia,serif; --sans:system-ui,-apple-system,'Segoe UI',sans-serif; --mono:ui-monospace,'SF Mono',Consolas,monospace; }
+body.softer{ --bg:#efe9dd; --surface:#f7f1e6; --ink:#2c2618; --line:#cdbf9c; }
+body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --line:#5e553e; --accent:#7fe3c0; --gold:#f0c357; --gold-pale:#332c1a; --pass:#7fe3a0; --halt:#f08a8a; --warn:#f0c357; }
+*{box-sizing:border-box;} html,body{margin:0;}
+body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; }
+.topbar{ background:var(--accent); color:#fff; padding:.6rem .9rem; display:flex; align-items:center; gap:.6rem; font-family:var(--sans); position:sticky; top:0; z-index:10; }
+body.warm .topbar{ color:#0f0e0b; }
+.topbar .wm{ font-weight:800; font-size:.95rem; }
+.cstop{ margin-left:auto; background:rgba(255,255,255,.18); color:inherit; border:2px solid rgba(255,255,255,.6); border-radius:9px; padding:.45rem .6rem; font:700 .74rem/1 var(--sans); cursor:pointer; min-height:44px; }
+body.warm .cstop{ border-color:rgba(0,0,0,.4); }
+.cstop:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.wrap{ max-width:760px; margin:0 auto; padding:1.1rem 1rem 4rem; }
+h1{ font-size:1.55rem; color:var(--ink); margin:.2rem 0 .2rem; }
+p.sub{ font-family:var(--sans); font-size:.98rem; margin:0 0 1rem; font-style:italic; }
+label{ display:block; font:800 .85rem/1.3 var(--sans); margin:.8rem 0 .35rem; }
+textarea{ width:100%; min-height:200px; font:400 .82rem/1.45 var(--mono); padding:.7rem; border:2px solid var(--line); border-radius:10px; background:var(--surface); color:var(--ink); resize:vertical; }
+textarea:focus-visible{ outline:3px solid var(--focus); outline-offset:1px; }
+.go{ display:block; width:100%; font:800 1.05rem/1.2 var(--sans); cursor:pointer; min-height:56px; padding:.9rem; border:none; border-radius:13px; background:var(--accent); color:#fff; margin:.8rem 0; }
+body.warm .go{ color:#0f0e0b; }
+.go:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+.verdict{ border-radius:14px; padding:1rem 1.1rem; margin:1.1rem 0; font-family:var(--sans); border:3px solid; }
+.verdict.pass{ border-color:var(--pass); background:var(--surface); }
+.verdict.halt{ border-color:var(--halt); background:var(--surface); }
+.verdict .vh{ font:800 1.4rem/1.1 var(--sans); }
+.verdict.pass .vh{ color:var(--pass); } .verdict.halt .vh{ color:var(--halt); }
+.verdict .vs{ font-size:.95rem; margin-top:.3rem; }
+.check{ border:2px solid var(--line); border-left:6px solid var(--line); border-radius:0 11px 11px 0; background:var(--surface); padding:.7rem .9rem; margin:.6rem 0; font-family:var(--sans); }
+.check.ok{ border-left-color:var(--pass); }
+.check.fail{ border-left-color:var(--halt); }
+.check.warn{ border-left-color:var(--warn); }
+.check .ch{ font:800 .95rem/1.3 var(--sans); }
+.check .cb{ font-size:.88rem; margin-top:.3rem; }
+.check .cb code{ font-family:var(--mono); font-size:.82rem; background:var(--gold-pale); padding:.05rem .3rem; border-radius:4px; }
+.check .line{ font-family:var(--mono); font-size:.78rem; margin:.25rem 0; padding-left:.5rem; border-left:2px solid var(--line); }
+.badge{ display:inline-block; font:800 .72rem/1 var(--sans); padding:.25rem .45rem; border-radius:5px; border:2px solid; margin-left:.4rem; }
+.badge.ok{ color:var(--pass); border-color:var(--pass); }
+.badge.fail{ color:var(--halt); border-color:var(--halt); }
+.badge.warn{ color:var(--warn); border-color:var(--warn); }
+.foot{ margin-top:1.6rem; padding:1rem; background:var(--accent); color:#fff; border-radius:12px; font-family:var(--sans); font-size:.8rem; }
+body.warm .foot{ color:#0f0e0b; }
+@media (max-width:520px){ body{font-size:18px;} h1{font-size:1.35rem;} .wrap{padding:1rem .8rem 4rem;} }
+@media (prefers-reduced-motion: reduce){ *{transition:none!important;} }
+</style>
+</head>
+<body>
+<div class="topbar"><span class="wm">Studio Eyes — ship gate</span><button class="cstop" id="cstop">Comfort</button></div>
+<div class="wrap">
+  <h1>Studio Eyes</h1>
+  <p class="sub">Paste a build's full HTML. It runs the floor checks no eyes should have to. Binary PASS or HALT, with the exact lines.</p>
+  <label for="src">Build HTML</label>
+  <textarea id="src" placeholder="Paste the entire contents of a single-file build here…"></textarea>
+  <button class="go" id="run">Run the gate →</button>
+  <div id="out" aria-live="polite"></div>
+  <div class="foot">Tight Spiral Studios · walshero@gmail.com — Studio Eyes, automated tier-1 ship gate. Catches contrast, banned tokens, PII, emoji, tap targets, offline-floor breaks. Tier-2 (headless screenshot) and tier-3 (human describe-back) sit above this. A PASS here means the mechanical floor holds; the founder's eyes remain the final verdict on feel.</div>
+</div>
+<script>
+(function(){
+  "use strict";
+  var $=function(id){return document.getElementById(id);};
+  var stops=['default','softer','warm'],ci=0;
+  $('cstop').addEventListener('click',function(){ ci=(ci+1)%3; document.body.classList.remove('softer','warm'); if(stops[ci]==='softer')document.body.classList.add('softer'); if(stops[ci]==='warm')document.body.classList.add('warm'); this.textContent='Comfort: '+stops[ci].charAt(0).toUpperCase()+stops[ci].slice(1); });
+
+  // ---- WCAG helpers ----
+  function lum(hex){ hex=hex.replace('#',''); if(hex.length===3)hex=hex.split('').map(function(c){return c+c;}).join(''); var r=parseInt(hex.slice(0,2),16)/255,g=parseInt(hex.slice(2,4),16)/255,b=parseInt(hex.slice(4,6),16)/255; function f(c){return c<=0.03928?c/12.92:Math.pow((c+0.055)/1.055,2.4);} return 0.2126*f(r)+0.7152*f(g)+0.0722*f(b); }
+  function ratio(a,b){ var L1=lum(a),L2=lum(b),hi=Math.max(L1,L2),lo=Math.min(L1,L2); return (hi+0.05)/(lo+0.05); }
+  function isHex(v){ return /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(v); }
+
+  // ---- parse :root and stop palettes ----
+  function parsePalettes(css){
+    // collect default :root vars + body.softer / body.warm overrides
+    var stops={default:{},softer:{},warm:{}};
+    function grab(re, key){ var m=re.exec(css); if(!m)return; var body=m[1]; var vre=/--([\w-]+)\s*:\s*([^;]+);/g, mm; while((mm=vre.exec(body))){ var name=mm[1].trim(), val=mm[2].trim(); stops[key][name]=val; } }
+    grab(/:root\s*\{([^}]*)\}/i,'default');
+    grab(/body\.softer\s*\{([^}]*)\}/i,'softer');
+    grab(/body\.warm\s*\{([^}]*)\}/i,'warm');
+    // resolve: softer/warm inherit default then override
+    ['softer','warm'].forEach(function(k){ var merged={}; for(var n in stops.default)merged[n]=stops.default[n]; for(var n2 in stops[k])merged[n2]=stops[k][n2]; stops[k]=merged; });
+    // resolve var() references one level
+    function resolve(stop){ for(var n in stop){ var v=stop[n]; var rm=/var\(--([\w-]+)\)/.exec(v); if(rm && stop[rm[1]]) stop[n]=stop[rm[1]]; } return stop; }
+    for(var k in stops) stops[k]=resolve(stops[k]);
+    return stops;
+  }
+
+  function run(){
+    var src=$('src').value; var out=$('out');
+    if(!src.trim()){ out.innerHTML='<div class="check warn"><div class="ch">Nothing to check</div><div class="cb">Paste a build first.</div></div>'; return; }
+    var lines=src.split('\n');
+    var checks=[]; // {level:'ok'|'fail'|'warn', title, body, lines:[]}
+    var styleMatch=/<style[^>]*>([\s\S]*?)<\/style>/i.exec(src);
+    var css=styleMatch?styleMatch[1]:'';
+
+    // ===== 1. CONTRAST across stops =====
+    var pal=parsePalettes(css);
+    var textVars=['ink','ink2','gold','accent']; var groundVars=['bg','surface'];
+    var fails=[];
+    ['default','softer','warm'].forEach(function(stopName){
+      var p=pal[stopName]; if(!p||!p.ink) return;
+      textVars.forEach(function(tv){
+        if(!p[tv]||!isHex(p[tv]))return;
+        groundVars.forEach(function(gv){
+          if(!p[gv]||!isHex(p[gv]))return;
+          var r=ratio(p[tv],p[gv]);
+          // accent allowed to be low IF only used as border/fill (checked in §2); here just measure ink/ink2/gold strictly
+          if((tv==='ink'||tv==='ink2') && r<4.5){ fails.push(stopName+': --'+tv+' on --'+gv+' = '+r.toFixed(2)+':1 (needs 4.5)'); }
+          if(tv==='gold' && r<3){ fails.push(stopName+': --gold on --'+gv+' = '+r.toFixed(2)+':1 (needs 3 for large/bold)'); }
+        });
+      });
+    });
+    if(!pal.default.ink){ checks.push({level:'warn',title:'Contrast — palette not auto-detected',body:'Could not find a :root --ink / --bg palette to test. If this build uses a different token scheme, check contrast manually.'}); }
+    else if(fails.length){ checks.push({level:'fail',title:'Contrast FAILS WCAG AA',body:'Text/ground pairs below threshold in one or more comfort stops:',lines:fails}); }
+    else { checks.push({level:'ok',title:'Contrast passes AA in all stops',body:'Every --ink and --gold text pair clears threshold across default / softer / warm.'}); }
+
+    // ===== 2. BANNED TOKENS =====
+    var bt=[];
+    lines.forEach(function(l,i){
+      var low=l.toLowerCase().replace(/\s/g,'');
+      // muted ink2 used as a TEXT color (color:var(--ink2)) AND ink2 != ink in palette
+      if(/color:var\(--ink2\)/.test(low)){
+        // only a violation if ink2 differs from ink in default palette
+        if(pal.default.ink2 && pal.default.ink && pal.default.ink2!==pal.default.ink){ bt.push((i+1)+': muted --ink2 used as text color (and --ink2 != --ink)  ›  '+l.trim().slice(0,80)); }
+      }
+      // green accent used as TEXT color
+      if(/color:var\(--accent\)/.test(low) && !/border|background|stroke|fill/.test(low)){ bt.push((i+1)+': green --accent used as text color  ›  '+l.trim().slice(0,80)); }
+    });
+    if(bt.length){ checks.push({level:'fail',title:'Banned visibility tokens present',body:'These are the 2026-06-29 bail causes — muted text and green-on-paper text:',lines:bt}); }
+    else { checks.push({level:'ok',title:'No banned visibility tokens',body:'No muted-text-as-text and no green-accent-as-text found.'}); }
+
+    // ===== 3. PII / ROSTER =====
+    // strip script + style + comments, look at visible-ish text
+    var visible=src.replace(/<script[\s\S]*?<\/script>/gi,' ').replace(/<style[\s\S]*?<\/style>/gi,' ').replace(/<!--[\s\S]*?-->/g,' ');
+    var pii=[];
+    // "not received" roster tell
+    if(/not received/i.test(visible)){ pii.push('"not received" — a roster/grading tell, likely real student data'); }
+    // capitalized First Last pairs (rough; ignores common headings)
+    var nameRe=/\b([A-Z][a-z]{2,})\s+([A-Z][a-z]{2,})\b/g, m, hits={};
+    var ALLOW=/(Creative|Flash|Comic|Studio|Comfort|Tight|Spiral|Google|Heather|Sellers|Peter|Elbow|Where|Secret|Moving|Practice|Course|Writing|Discussion|Artist|Visual|Critic|Project|Manager|Coherence|Skeptic|Field|Scout|Sound|Period|Bible|Design|Lead|Director|Officer|Specialist|Reader)/;
+    while((m=nameRe.exec(visible))){ var pair=m[1]+' '+m[2]; if(!ALLOW.test(pair)){ hits[pair]=(hits[pair]||0)+1; } }
+    var names=Object.keys(hits).slice(0,12);
+    if(names.length>=3){ pii.push('Possible person-name pairs ('+names.length+'+): '+names.slice(0,6).join(', ')+(names.length>6?'…':'')); }
+    if(pii.length){ checks.push({level:'fail',title:'Possible PII / roster data — REVIEW',body:'FERPA HALT: a player-facing build must carry no identifiable student data. Confirm these are not real people:',lines:pii}); }
+    else { checks.push({level:'ok',title:'No obvious PII / roster data',body:'No "not received" tells and no clustering of person-name pairs detected. (Heuristic — human confirms.)'}); }
+
+    // ===== 4. EMOJI =====
+    var emoji=visible.match(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2190}-\u{21FF}\u{2B00}-\u{2BFF}]/gu);
+    // arrows \u2190-\u21FF are allowed (→ used in buttons); filter those out
+    var realEmoji=visible.match(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu);
+    if(realEmoji && realEmoji.length){ checks.push({level:'fail',title:'Emoji present',body:'No emoji ever (hard floor). Found: '+Array.from(new Set(realEmoji)).join(' ')}); }
+    else { checks.push({level:'ok',title:'No emoji',body:'Clean. (Arrow glyphs like → are allowed.)'}); }
+
+    // ===== 5. OFFLINE FLOOR =====
+    var net=[];
+    // Only flag what looks like a real CALL, not a quoted pattern/string inside a checker.
+    // Strip single/double-quoted string literals + regex-literals first, so a tool that
+    // merely NAMES these tokens (like this auditor) isn't flagged.
+    var codeOnly=src.replace(/<!--[\s\S]*?-->/g,' ')
+                    .replace(/<style[\s\S]*?<\/style>/gi,' ')
+                    .replace(/'(?:[^'\\]|\\.)*'/g,"''")
+                    .replace(/"(?:[^"\\]|\\.)*"/g,'""')
+                    .replace(/\/(?:[^\/\\\n]|\\.)+\/[gimsuy]*/g,'//');
+    [['\\bfetch\\s*\\(','fetch()'],['\\blocalStorage\\s*\\.','localStorage'],['\\bsessionStorage\\s*\\.','sessionStorage'],['\\bnew\\s+XMLHttpRequest','XMLHttpRequest'],['navigator\\.sendBeacon','sendBeacon']].forEach(function(pair){
+      var re=new RegExp(pair[0]); if(re.test(codeOnly)){ net.push(pair[1]); }
+    });
+    // navigator.clipboard is allowed (local copy-out)
+    if(net.length){ checks.push({level:'fail',title:'Offline floor break',body:'Single-file builds must be offline / in-memory. Found: '+net.join(', ')+'. (navigator.clipboard for copy-out is allowed and not flagged.)'}); }
+    else { checks.push({level:'ok',title:'Offline floor holds',body:'No fetch / storage / network calls. (clipboard copy-out is permitted.)'}); }
+
+    // ===== 6. TAP TARGETS =====
+    var hasMin=/min-height\s*:\s*(4[4-9]|[5-9]\d|\d{3,})px/.test(css);
+    if(hasMin){ checks.push({level:'ok',title:'Tap-target rule present',body:'Found a min-height >=44px rule. (Spot-check that all interactive controls inherit it.)'}); }
+    else { checks.push({level:'warn',title:'No 44px tap-target rule detected',body:'Could not find a min-height >=44px rule. Confirm buttons/links meet the 44px floor.'}); }
+
+    // ===== 7. SCENE-FIRST / COMFORT GATE heuristics =====
+    var hasGate=/comfort|swatch|palette/i.test(css)||/comfort/i.test(visible);
+    var firstScreen=/<(section|div)[^>]*class="[^"]*screen[^"]*on/i.test(src);
+    var gateNote=[];
+    if(!hasGate) gateNote.push('No comfort-gate signal found — first paint may surprise the reader (the 2026-06-29 bail pattern).');
+    if(gateNote.length){ checks.push({level:'warn',title:'Comfort Gate / scene-first — review',body:gateNote.join(' ')}); }
+    else { checks.push({level:'ok',title:'Comfort Gate signal present',body:'A palette/comfort control was detected.'}); }
+
+    // ===== VERDICT =====
+    var anyFail=checks.some(function(c){return c.level==='fail';});
+    var html='';
+    html+='<div class="verdict '+(anyFail?'halt':'pass')+'"><div class="vh">'+(anyFail?'HALT':'PASS')+'</div><div class="vs">'+
+      (anyFail?'This build does not clear the floor. Fix every red item before it ships or reaches the founder.':'Mechanical floor holds. The founder\u2019s eyes remain the final verdict on feel.')+'</div></div>';
+    checks.forEach(function(c){
+      var badge=c.level==='ok'?'<span class="badge ok">OK</span>':(c.level==='fail'?'<span class="badge fail">HALT</span>':'<span class="badge warn">CHECK</span>');
+      html+='<div class="check '+c.level+'"><div class="ch">'+c.title+badge+'</div><div class="cb">'+c.body+'</div>';
+      if(c.lines){ c.lines.forEach(function(ln){ html+='<div class="line">'+ln.replace(/</g,'&lt;')+'</div>'; }); }
+      html+='</div>';
+    });
+    out.innerHTML=html;
+    out.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  $('run').addEventListener('click',run);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  THE ASSIGNMENT AUDITOR — on-ramp and feeder to Confluence.
+  Tight Spiral Studios · walshero@gmail.com
+
+  WHAT IT IS: a faculty member drops in an assignment. The tool follows the river of
+  their own logic (what it teaches -> how assessed -> which rubric), lines up the gears,
+  and runs the assignment through the Tight Spiral OS pipeline VISIBLY — every move
+  labeled, panel seats shown, Trauma-Informed HALT informing every seat. Clean data in.
+  It scores against the AAC&U Written Communication VALUE rubric, shows alignment as
+  seven rings radiating from the student artifact, then descends for depth of application
+  — the handoff point to Confluence (where rater-norming/assessment actually lives).
+
+  THE OS IS THE TEACHING POINT: the tool is the method, shown not hidden (Glass Engine).
+
+  FLOOR: single-file, offline, in-memory only, nothing leaves the page. Full-contrast ink
+  on light paper, large type, one decision per screen-ish, 44px+ targets, full keyboard nav,
+  visible focus rings, reduced-motion safe, scroll-reset on screen change, no emoji,
+  no color-as-sole-signal, phone-width tested. Adaptive + collapsible so options don't overwhelm.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Assignment Auditor — on-ramp to Confluence</title>
+<style>
+:root{
+  --pine:#1a4a35; --pine-mid:#256649; --pine-faint:#eef5f1;
+  --river:#13586b; --river-faint:#e4eff2; --river-mid:#1d7d96;
+  --gold:#8a5c00; --gold-pale:#fdf5e0; --gold-br:#c8900a;
+  --ink:#191919; --ink2:#33322c; --bg:#f5f3ee; --surface:#ffffff; --border:#cfccc4;
+  --halt:#8b1a2a; --halt-bg:#fbeef0; --pass:#1a7a4d; --pass-bg:#e6f4ec;
+  --serif:Georgia,'Times New Roman',serif; --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+  --focus:#c8900a;
+}
+*{box-sizing:border-box;}
+body{ margin:0; font-family:var(--sans); background:var(--bg); color:var(--ink);
+  line-height:1.6; font-size:18px; }
+body.contrast{ --bg:#000; --surface:#0a0a0a; --ink:#fff; --ink2:#fff; --border:#fff;
+  --pine:#7fe3c0; --pine-mid:#7fe3c0; --pine-faint:#0a1a14; --river:#7fe3f5; --river-faint:#08171c;
+  --gold:#ffd24a; --gold-pale:#1a1405; --pass:#5fe39a; --halt:#ff9aa8; }
+body.contrast *{ border-color:#fff !important; }
+
+.topbar{ background:var(--pine); color:#fff; padding:.7rem 1.05rem; display:flex;
+  align-items:center; gap:.6rem; }
+.topbar .mark{ width:26px; height:26px; flex:none; }
+.topbar .wm{ font-weight:800; font-size:1rem; }
+.a11y{ margin-left:auto; background:rgba(255,255,255,.15); color:#fff; border:2px solid rgba(255,255,255,.7);
+  border-radius:9px; padding:.5rem .7rem; font:700 .8rem/1 inherit; cursor:pointer; min-height:44px; }
+.a11y:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+.wrap{ max-width:740px; margin:0 auto; padding:1.2rem 1.05rem 4rem; }
+
+/* river progress ribbon */
+.river{ display:flex; align-items:center; gap:.3rem; margin:0 0 1.4rem; font-size:.74rem; font-weight:700; }
+.river .seg{ flex:1; text-align:center; padding:.4rem .2rem; border-radius:7px; background:var(--surface);
+  border:2px solid var(--border); color:var(--ink2); }
+.river .seg.on{ background:var(--river); color:#fff; border-color:var(--river); }
+.river .seg.done{ background:var(--river-faint); color:var(--river); border-color:var(--river-mid); }
+
+h1{ font-family:var(--serif); font-size:1.7rem; line-height:1.18; color:var(--pine); margin:.2rem 0 .4rem; }
+.lede{ font-size:1.06rem; color:var(--ink2); margin:0 0 1.4rem; }
+h2{ font-family:var(--serif); font-size:1.32rem; color:var(--pine); margin:.2rem 0 .7rem; }
+p{ margin:0 0 1rem; }
+
+.card{ background:var(--surface); border:2px solid var(--border); border-radius:13px;
+  padding:1.1rem 1.2rem; margin:0 0 1.1rem; }
+.q-tag{ font-size:.74rem; font-weight:800; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--river); margin-bottom:.3rem; }
+label.q{ display:block; font-weight:700; font-size:1.08rem; margin:.1rem 0 .5rem; }
+.hint{ font-size:.9rem; color:var(--ink2); margin:0 0 .6rem; }
+textarea, input[type=text]{ width:100%; font-family:inherit; font-size:1rem; padding:.7rem .8rem;
+  border:2px solid var(--border); border-radius:9px; background:var(--surface); color:var(--ink); }
+textarea{ min-height:120px; resize:vertical; }
+textarea:focus-visible, input:focus-visible, select:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+select{ width:100%; font-family:inherit; font-size:1rem; padding:.7rem .8rem; border:2px solid var(--border);
+  border-radius:9px; background:var(--surface); color:var(--ink); min-height:48px; }
+
+.btn{ display:inline-flex; align-items:center; justify-content:center; gap:.5rem; font-family:inherit;
+  font-size:1.05rem; font-weight:700; cursor:pointer; min-height:54px; padding:.8rem 1.4rem; border-radius:11px;
+  border:2px solid var(--pine); background:var(--pine); color:#fff; }
+.btn:hover{ background:var(--pine-mid); }
+.btn:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+.btn.ghost{ background:var(--surface); color:var(--pine); }
+.btn.full{ width:100%; }
+.btnrow{ display:flex; gap:.7rem; flex-wrap:wrap; margin-top:.4rem; }
+
+.screen{ display:none; }
+.screen.active{ display:block; }
+
+/* stage cards in the run */
+.stage{ border:2px solid var(--border); border-left-width:7px; border-radius:10px;
+  padding:.9rem 1.05rem; margin:0 0 .8rem; background:var(--surface); }
+.stage .s-tag{ font-size:.72rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--river); }
+.stage h3{ font-family:var(--serif); font-size:1.12rem; margin:.15rem 0 .45rem; }
+.stage.gear{ border-left-color:var(--gold-br); } .stage.gear .s-tag{ color:var(--gold); }
+.stage.seat{ border-left-color:var(--pine-mid); } .stage.seat .s-tag{ color:var(--pine); }
+.stage.halt{ border-left-color:var(--halt); background:var(--halt-bg); } .stage.halt .s-tag{ color:var(--halt); }
+.stage.pass{ border-left-color:var(--pass); } .stage.pass .s-tag{ color:var(--pass); }
+.stage .detail{ font-size:.95rem; color:var(--ink2); }
+.stage .verdict{ font-weight:700; margin-top:.35rem; }
+
+/* gear alignment readout */
+.gears{ display:flex; flex-direction:column; gap:.4rem; margin:.5rem 0; }
+.gear-row{ display:flex; align-items:flex-start; gap:.6rem; padding:.5rem .7rem; border-radius:8px;
+  background:var(--gold-pale); border:1px solid var(--gold-br); font-size:.95rem; }
+.gear-row b{ color:var(--ink); }
+.gear-link{ font-weight:800; color:var(--pass); }
+.gear-link.miss{ color:var(--halt); }
+
+/* RINGS — the seven-ring radiation, SVG */
+.rings-wrap{ text-align:center; margin:.6rem 0 1rem; }
+svg.rings{ max-width:100%; height:auto; }
+.ring-legend{ display:grid; grid-template-columns:1fr; gap:.35rem; margin:.6rem 0; }
+.ring-item{ display:flex; gap:.55rem; align-items:flex-start; font-size:.92rem; padding:.4rem .6rem;
+  border-radius:7px; border:1px solid var(--border); background:var(--surface); }
+.ring-num{ flex:none; width:26px; height:26px; border-radius:50%; background:var(--river); color:#fff;
+  font-weight:800; font-size:.85rem; display:flex; align-items:center; justify-content:center; }
+.ring-item b{ color:var(--ink); }
+
+/* descent rings — collapsible depth */
+.descend{ margin:.3rem 0 0; }
+.descend button.ring-toggle{ width:100%; text-align:left; font-family:inherit; font-size:1rem; font-weight:700;
+  cursor:pointer; min-height:50px; padding:.7rem .9rem; border-radius:9px; border:2px solid var(--river-mid);
+  background:var(--river-faint); color:var(--river); display:flex; align-items:center; gap:.5rem; margin:.4rem 0; }
+.descend button.ring-toggle:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.descend .chev{ transition:transform .2s; font-weight:800; }
+.descend button[aria-expanded="true"] .chev{ transform:rotate(90deg); }
+.descend .ring-body{ display:none; border-left:4px solid var(--river); background:var(--surface);
+  border-radius:0 9px 9px 0; padding:.8rem 1rem; margin:0 0 .6rem; font-size:.96rem; }
+.descend .ring-body.open{ display:block; }
+
+.scorebox{ background:var(--pine-faint); border:2px solid var(--pine-mid); border-radius:11px;
+  padding:1rem 1.1rem; margin:.6rem 0 1rem; }
+.scorebox h3{ margin:.1rem 0 .6rem; font-family:var(--serif); color:var(--pine); }
+.dim{ display:flex; justify-content:space-between; gap:.6rem; padding:.45rem 0; border-bottom:1px solid var(--border); font-size:.96rem; }
+.dim:last-child{ border-bottom:none; }
+.dim .lvl{ font-weight:800; color:var(--river); flex:none; }
+
+.handoff{ background:var(--river-faint); border:2px solid var(--river-mid); border-radius:11px;
+  padding:1rem 1.1rem; margin:1rem 0; }
+.handoff h3{ margin:.1rem 0 .5rem; color:var(--river); font-family:var(--serif); }
+
+.note{ font-size:.86rem; color:var(--ink2); background:var(--gold-pale); border:1px solid var(--gold-br);
+  border-radius:8px; padding:.6rem .8rem; margin:.6rem 0; }
+
+.sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+
+.foot{ margin-top:2rem; padding:1rem 1.05rem; background:var(--pine); color:#fff; border-radius:11px; font-size:.86rem; }
+.foot a{ color:#cfe9dd; }
+
+@media (max-width:520px){
+  body{ font-size:17px; } h1{ font-size:1.45rem; }
+  .river{ font-size:.62rem; } .btnrow .btn{ width:100%; }
+}
+@media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 4 C30 4 36 12 36 20 C36 28 30 33 23 33 C17 33 13 29 13 24 C13 20 16 17 20 17 C23 17 25 19 25 22" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
+  <span class="wm">The Assignment Auditor</span>
+  <button class="a11y" id="contrastBtn">High contrast</button>
+</div>
+
+<div class="wrap">
+
+  <!-- river ribbon -->
+  <div class="river" aria-hidden="true">
+    <div class="seg on" id="r1">Headwaters</div>
+    <div class="seg" id="r2">The run</div>
+    <div class="seg" id="r3">The rings</div>
+    <div class="seg" id="r4">The depth</div>
+  </div>
+  <p class="sr" id="spoken" aria-live="polite">Step 1 of 4: Headwaters — describe the assignment.</p>
+
+  <!-- ============ SCREEN 1 — HEADWATERS (intake) ============ -->
+  <section class="screen active" id="s1">
+    <h1>Start at the headwaters</h1>
+    <p class="lede">Drop in an assignment. The river follows your own logic — what it teaches, how you assess it, which rubric — and lines up the gears before any work is scored. Fine-tune the assessment <em>here</em>, at the source, where it's cheap to change.</p>
+
+    <div class="card">
+      <div class="q-tag">Question 1 — the artifact</div>
+      <label class="q" for="assignment">Paste the assignment (the prompt students receive)</label>
+      <p class="hint">The task as written. The Auditor reads this as the student artifact's source — the center of every ring.</p>
+      <textarea id="assignment" aria-label="The assignment prompt"></textarea>
+    </div>
+
+    <div class="card">
+      <div class="q-tag">Question 2 — what is it teaching?</div>
+      <label class="q" for="teaches">What is this assignment teaching?</label>
+      <p class="hint">The learning outcome in your own words. One clear sentence is enough.</p>
+      <input type="text" id="teaches" aria-label="What it teaches">
+    </div>
+
+    <div class="card">
+      <div class="q-tag">Question 3 — how will you assess it?</div>
+      <label class="q" for="method">How are you assessing it?</label>
+      <select id="method" aria-label="Assessment method">
+        <option value="">Choose a method…</option>
+        <option>Rubric-scored written submission</option>
+        <option>Portfolio entry</option>
+        <option>Peer review / workshop</option>
+        <option>Presentation or oral defense</option>
+        <option>Self-assessment + reflection</option>
+        <option>Other / mixed</option>
+      </select>
+      <label class="q" for="rubric" style="margin-top:.9rem;">Which rubric is the spine?</label>
+      <p class="hint">This MVP lines up against the AAC&amp;U <b>Written Communication</b> VALUE rubric. More dimensions are coming; this one ships first.</p>
+      <select id="rubric" aria-label="Rubric">
+        <option value="wc">AAC&U Written Communication (VALUE)</option>
+        <option value="other" disabled>Critical Thinking — coming soon</option>
+        <option value="other2" disabled>Creative Thinking — coming soon</option>
+      </select>
+    </div>
+
+    <button class="btn full" id="toRun">Follow the river →</button>
+    <div class="note">Nothing leaves this page. No network, no storage, no student data retained — the Auditor runs entirely in memory and forgets everything when you close it.</div>
+  </section>
+
+  <!-- ============ SCREEN 2 — THE RUN (OS pipeline, visible) ============ -->
+  <section class="screen" id="s2">
+    <h1>The run — the OS, shown not hidden</h1>
+    <p class="lede">Your assignment flows through the Tight Spiral pipeline. Every move is labeled. The panel rides along — and the Trauma-Informed seat informs every other seat. This is clean data in: no hidden scoring.</p>
+    <div id="runStages"></div>
+    <div class="btnrow">
+      <button class="btn ghost" id="backTo1">← Back to headwaters</button>
+      <button class="btn" id="toRings">See the rings →</button>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 3 — THE RINGS (out) ============ -->
+  <section class="screen" id="s3">
+    <h1>Out the rings</h1>
+    <p class="lede">The student artifact sits at the center. Meaning radiates outward — each ring a wider system the same work answers to. Where the gears line up, the artifact carries evidence all the way out.</p>
+
+    <div class="rings-wrap" aria-hidden="true">
+      <svg class="rings" viewBox="0 0 320 320" width="320" height="320" role="img">
+        <!-- rings from outer to inner so inner draws on top -->
+        <circle cx="160" cy="160" r="156" fill="none" stroke="#1d7d96" stroke-width="2"/>
+        <circle cx="160" cy="160" r="132" fill="none" stroke="#1d7d96" stroke-width="2"/>
+        <circle cx="160" cy="160" r="108" fill="none" stroke="#1d7d96" stroke-width="2"/>
+        <circle cx="160" cy="160" r="84" fill="none" stroke="#1d7d96" stroke-width="2"/>
+        <circle cx="160" cy="160" r="60" fill="none" stroke="#1d7d96" stroke-width="2"/>
+        <circle cx="160" cy="160" r="36" fill="none" stroke="#256649" stroke-width="2.5"/>
+        <circle cx="160" cy="160" r="14" fill="#1a4a35"/>
+        <text x="160" y="164" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">art</text>
+        <!-- ring numbers along the top axis -->
+        <text x="160" y="30" text-anchor="middle" fill="#13586b" font-size="11" font-weight="bold">7</text>
+        <text x="160" y="54" text-anchor="middle" fill="#13586b" font-size="11" font-weight="bold">6</text>
+        <text x="160" y="78" text-anchor="middle" fill="#13586b" font-size="11" font-weight="bold">5</text>
+        <text x="160" y="102" text-anchor="middle" fill="#13586b" font-size="11" font-weight="bold">4</text>
+        <text x="160" y="126" text-anchor="middle" fill="#13586b" font-size="11" font-weight="bold">3</text>
+        <text x="160" y="150" text-anchor="middle" fill="#13586b" font-size="11" font-weight="bold">2</text>
+      </svg>
+    </div>
+
+    <div class="ring-legend">
+      <div class="ring-item"><span class="ring-num">1</span><div><b>The student artifact</b> — the work itself, at the center. Everything else exists to make this meaningful.</div></div>
+      <div class="ring-item"><span class="ring-num">2</span><div><b>The assignment</b> — what the course asked for. The first ring out: does the task actually elicit the learning?</div></div>
+      <div class="ring-item"><span class="ring-num">3</span><div><b>The course</b> — the container. The assignment is one beat in a sequence.</div></div>
+      <div class="ring-item"><span class="ring-num">4</span><div><b>The department</b> — the discipline's shared standards.</div></div>
+      <div class="ring-item"><span class="ring-num">5</span><div><b>The program</b> — the degree the course belongs to.</div></div>
+      <div class="ring-item"><span class="ring-num">6</span><div><b>The institution</b> — MassBay's ISLOs; where this becomes institutional evidence.</div></div>
+      <div class="ring-item"><span class="ring-num">7</span><div><b>The outer gear</b> — universities reclaiming the design of their own assessment, in a free-thinking production space outside the vendor stack.</div></div>
+    </div>
+
+    <div class="btnrow">
+      <button class="btn ghost" id="backTo2">← Back to the run</button>
+      <button class="btn" id="toDepth">Down for depth →</button>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 4 — THE DEPTH (down) + handoff to Confluence ============ -->
+  <section class="screen" id="s4">
+    <h1>Down for depth of application</h1>
+    <p class="lede">Below the rings, the descent: where the rubric actually <em>applies</em>, and what a second rater would have to agree on. Each ring opens; the deepest one is the handoff to Confluence, where rater-norming lives.</p>
+
+    <div class="scorebox">
+      <h3>Written Communication — alignment read</h3>
+      <p class="hint" style="margin-top:-.3rem;">Not a grade on student work — there is no student work here yet. This is whether the <em>assignment</em> gives each rubric dimension room to be demonstrated. An honest on-ramp catches a missing dimension before a single paper is scored.</p>
+      <div id="dimReadout"></div>
+    </div>
+
+    <div class="descend" id="descendRings"></div>
+
+    <div class="handoff">
+      <h3>The river reaches Confluence</h3>
+      <p style="margin-bottom:.4rem;">The Auditor's job ends here. It has normalized the <b>assignment</b> so the gears line up. What comes next — norming the <b>raters</b> so two readers agree on a score — is Confluence's job. The Auditor is the on-ramp; Confluence is the trunk.</p>
+      <p style="margin-bottom:0;" class="hint">In plain terms: this tool makes the assignment ready to be assessed fairly. Confluence makes the assessors fair to each other.</p>
+    </div>
+
+    <div class="btnrow">
+      <button class="btn ghost" id="backTo3">← Back to the rings</button>
+      <button class="btn" id="restart">Audit another assignment</button>
+    </div>
+  </section>
+
+  <div class="foot">
+    Tight Spiral Studios · walshero@gmail.com — The Assignment Auditor is the on-ramp and feeder to Confluence assessment. Human judgment stays in the loop; the OS shows its work. In-memory only; nothing leaves the page.
+  </div>
+
+</div>
+
+<script>
+function $(id){return document.getElementById(id);}
+function toTop(){ window.scrollTo({top:0,behavior:'auto'}); }
+function say(t){ $('spoken').textContent=t; }
+
+/* ---- AAC&U Written Communication VALUE rubric: the 5 published dimensions ---- */
+var WC_DIMS = [
+  {key:'context', name:'Context of and Purpose for Writing',
+   cue:['audience','purpose','context','reader','assignment','task'],
+   why:'Does the assignment name an audience and purpose, or just ask for "an essay"? A dimension can only be scored if the task invites it.'},
+  {key:'content', name:'Content Development',
+   cue:['evidence','develop','example','explain','analyze','support','detail','idea'],
+   why:'Does the task ask the writer to develop and support ideas, not just report them?'},
+  {key:'genre', name:'Genre and Disciplinary Conventions',
+   cue:['format','citation','genre','style','mla','apa','structure','conventions','organize'],
+   why:'Does the task name the form and conventions the discipline expects?'},
+  {key:'sources', name:'Sources and Evidence',
+   cue:['source','research','cite','evidence','reference','text','reading','quote'],
+   why:'Does the task require engaging sources, or could a strong response use none?'},
+  {key:'syntax', name:'Control of Syntax and Mechanics',
+   cue:['revise','draft','edit','clarity','proofread','grammar','polish','workshop'],
+   why:'Does the task build in revision/clarity, where mechanics are actually demonstrable?'}
+];
+
+var state = { assignment:'', teaches:'', method:'', rubric:'wc', dimHits:{} };
+
+/* ---- screen nav ---- */
+function show(n){
+  ['s1','s2','s3','s4'].forEach(function(id,i){ $(id).classList.toggle('active', i===n-1); });
+  ['r1','r2','r3','r4'].forEach(function(id,i){
+    var seg=$(id); seg.classList.remove('on','done');
+    if(i<n-1) seg.classList.add('done'); else if(i===n-1) seg.classList.add('on');
+  });
+  toTop();
+  var labels=['Headwaters — describe the assignment.','The run — the OS pipeline, shown.','The rings — alignment radiating outward.','The depth — where the rubric applies, and the Confluence handoff.'];
+  say('Step '+n+' of 4: '+labels[n-1]);
+}
+
+/* ---- analyze: which dimensions does the assignment text give room to? ---- */
+function analyze(){
+  var text = (state.assignment+' '+state.teaches+' '+state.method).toLowerCase();
+  state.dimHits = {};
+  WC_DIMS.forEach(function(d){
+    var hit = d.cue.some(function(c){ return text.indexOf(c)>-1; });
+    state.dimHits[d.key] = hit;
+  });
+}
+
+/* ---- build the visible OS run ---- */
+function buildRun(){
+  analyze();
+  var hasText = state.assignment.trim().length>0;
+  var teaches = state.teaches.trim();
+  var method = state.method;
+  var html='';
+
+  // Stage -1 Intake Triage
+  html += stage('seat','Stage −1 · Intake Triage','The front-door gate',
+    hasText
+      ? 'An assignment arrived with text, a stated learning aim'+(teaches?' ("'+esc(teaches)+'")':' (unstated — flagged below)')+', and a method'+(method?' ('+esc(method)+')':' (not chosen)')+'. Sorted: <b>build now</b> — this is exactly the work the Auditor exists to do.'
+      : 'No assignment text was pasted. The river has no headwaters. Go back and add the prompt.',
+    hasText?'pass':'halt');
+
+  if(!hasText){ $('runStages').innerHTML=html; return; }
+
+  // Stage 0 line up the gears
+  var teachesOk = teaches.length>0;
+  var methodOk = method.length>0;
+  var gearHtml = '<div class="gears">'
+    + gearRow('What it teaches', teachesOk?esc(teaches):'— not stated —', teachesOk)
+    + gearRow('How it\'s assessed', methodOk?esc(method):'— not chosen —', methodOk)
+    + gearRow('Rubric spine', 'AAC&U Written Communication', true)
+    + '</div>';
+  html += stage('gear','Stage 0 · Line up the gears','Teaching → assessment → rubric',
+    'Before scoring anything, the three gears must mesh. If the aim or method is missing, the assessment can be tuned <em>now</em>, at the source.'+gearHtml,
+    (teachesOk&&methodOk)?'pass':'gear');
+
+  // Stage 1 name the construct
+  var hitCount = Object.values(state.dimHits).filter(Boolean).length;
+  html += stage('seat','Stage 1 · Name the construct','What is actually being measured',
+    'The construct is <b>written communication</b>, broken into five AAC&U dimensions. The assignment text gives room to <b>'+hitCount+' of 5</b> right now. (Detail in the depth screen.)','seat');
+
+  // Panel convenes — Trauma-Informed informs all
+  html += stage('seat','Stage 2 · The panel convenes','Seats ride along; Trauma-Informed informs every other seat',
+    panelReads(teaches, hitCount), 'seat');
+
+  // Trauma-Informed HALT check
+  var traumaFlag = /trauma|abuse|loss|grief|suicide|violence|assault|death|war/i.test(state.assignment);
+  html += stage(traumaFlag?'halt':'pass',
+    'Stage 2a · Trauma-Informed seat','Standing HALT — informs all seats',
+    traumaFlag
+      ? 'The prompt names potentially heavy material. <b>Not a block — a flag.</b> Confirm the assignment offers choice (an alternative topic), names support, and never requires disclosure of personal trauma to earn a grade. This read rides into every other seat.'
+      : 'No heavy-disclosure demand detected in the prompt. The seat still rides along: keep topic choice open and never make personal disclosure the price of a grade.',
+    traumaFlag?'halt':'pass');
+
+  // Stage 3 emit
+  html += stage('pass','Stage 3 · Emit','Clean data out',
+    'The assignment is normalized: gears named, construct named, dimensions mapped, panel read attached. No hidden math — every move above is labeled. This is what flows downstream to the rings and to Confluence.','pass');
+
+  $('runStages').innerHTML=html;
+}
+
+function panelReads(teaches, hitCount){
+  var reads=[];
+  reads.push('<b>Coherence Skeptic:</b> '+(teaches?'aim stated, so the read holds together.':'aim unstated — a reader seeing only this assignment could not say what it measures. Add one sentence of purpose.'));
+  reads.push('<b>Skeptic-Translator:</b> '+(hitCount>=3?'enough of the rubric is in reach to assess fairly.':'fewer than three dimensions are in reach — a rater would be guessing on the rest.'));
+  reads.push('<b>Accessibility:</b> confirm the prompt is readable at full contrast and the task does not hide instructions mid-page. (Floor, not a guess.)');
+  return '<div class="detail">'+reads.join('<br>')+'</div>';
+}
+
+function gearRow(label, val, ok){
+  return '<div class="gear-row"><b>'+label+':</b>&nbsp;'+val+'&nbsp;<span class="gear-link'+(ok?'':' miss')+'">'+(ok?'meshes':'needs input')+'</span></div>';
+}
+function stage(cls,tag,title,detail,border){
+  return '<div class="stage '+(border||cls)+'"><div class="s-tag">'+tag+'</div><h3>'+title+'</h3><div class="detail">'+detail+'</div></div>';
+}
+function esc(s){ return (s||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+/* ---- depth screen: per-dimension readout + descent rings ---- */
+function buildDepth(){
+  analyze();
+  var dr='';
+  WC_DIMS.forEach(function(d){
+    var hit=state.dimHits[d.key];
+    dr += '<div class="dim"><span>'+d.name+'</span><span class="lvl">'+(hit?'in reach':'not yet')+'</span></div>';
+  });
+  $('dimReadout').innerHTML=dr;
+
+  // descent rings — collapsible, deepest = Confluence handoff
+  var rings=[
+    {t:'Ring 1–2 · Artifact & assignment',b:'At depth, the question is narrow and answerable: does THIS task let a student show '+namedHits()+'? If a dimension reads "not yet," the fix is one line added to the prompt — not a new rubric.'},
+    {t:'Ring 3–4 · Course & department',b:'One assignment is one beat. At this depth the assignment is checked against the course sequence and the department\'s shared standards: is this where the dimension should be taught, or is it being asked too early?'},
+    {t:'Ring 5–6 · Program & institution',b:'Here the artifact becomes evidence. A written-communication dimension demonstrated here can roll up as program evidence and to MassBay\'s ISLO layer — the same artifact answering a wider question.'},
+    {t:'Ring 7 · The outer gear — and the handoff to Confluence',b:'The deepest application: a faculty body, trained on shared principles, auditing its own assessment in a free-thinking space — not renting judgment from a vendor. This is where the Auditor hands off. It has made the assignment ready. <b>Confluence</b> now norms the raters so two readers land on the same score. On-ramp → trunk.'}
+  ];
+  var html='';
+  rings.forEach(function(r,i){
+    html += '<button class="ring-toggle" aria-expanded="false" data-ring="'+i+'"><span class="chev" aria-hidden="true">▸</span>'+r.t+'</button>'
+         + '<div class="ring-body" id="ringBody'+i+'">'+r.b+'</div>';
+  });
+  $('descendRings').innerHTML=html;
+  $('descendRings').querySelectorAll('.ring-toggle').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var i=this.getAttribute('data-ring'); var body=$('ringBody'+i);
+      var open=body.classList.toggle('open');
+      this.setAttribute('aria-expanded',open?'true':'false');
+      if(open) body.scrollIntoView({behavior:'smooth',block:'nearest'});
+    });
+  });
+}
+function namedHits(){
+  var names=WC_DIMS.filter(function(d){return state.dimHits[d.key];}).map(function(d){return d.name.toLowerCase();});
+  if(!names.length) return 'any of the five dimensions';
+  if(names.length===1) return names[0];
+  return names.slice(0,-1).join(', ')+' and '+names[names.length-1];
+}
+
+/* ---- wiring ---- */
+$('toRun').addEventListener('click',function(){
+  state.assignment=$('assignment').value;
+  state.teaches=$('teaches').value;
+  state.method=$('method').value;
+  buildRun(); show(2);
+});
+$('backTo1').addEventListener('click',function(){ show(1); });
+$('toRings').addEventListener('click',function(){ show(3); });
+$('backTo2').addEventListener('click',function(){ show(2); });
+$('toDepth').addEventListener('click',function(){ buildDepth(); show(4); });
+$('backTo3').addEventListener('click',function(){ show(3); });
+$('restart').addEventListener('click',function(){
+  $('assignment').value=''; $('teaches').value=''; $('method').value='';
+  state={assignment:'',teaches:'',method:'',rubric:'wc',dimHits:{}};
+  show(1);
+});
+$('contrastBtn').addEventListener('click',function(){
+  document.body.classList.toggle('contrast');
+  this.textContent=document.body.classList.contains('contrast')?'Normal contrast':'High contrast';
+});
+
+show(1);
+</script>
+</body>
+</html>

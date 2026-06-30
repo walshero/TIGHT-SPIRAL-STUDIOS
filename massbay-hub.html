@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  MASSBAY DEGREE HUB — the player-facing shell that games plug into (v1, 2026-06-28)
+  Front door = the degree directory (the exciting part; the world you're invited into).
+  Real MassBay programs, nested by division, pulled verbatim from the Fact Book
+  enrollment-by-major tables. Liberal Arts: English is the one PLAYABLE tile (links
+  to massbay-english-major.html). Every other program reads "In development" —
+  ROADMAP, not withholding (dignity-first: locks signal where the studio is going).
+  Resource map = "Your crew" — one tap from every screen, framed as ASSETS the
+  student already has (power-ups), organized by plain-language need mapping to the
+  REAL offices. Money/struggle never on the front door.
+  Floors: dignity-first, scene-first (lands in the directory, not a menu of needs),
+  visibility (full-contrast ink), no-emoji, single-file offline, 44px, keyboard,
+  scroll-reset, phone-width. Tight Spiral default palette.
+  VERIFY: program lists are real (Fact Book) but re-check against current
+  massbay.edu before publishing; resource office names from 2023-24 Student Handbook.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MassBay Degrees — Tight Spiral</title>
+<style>
+  :root{
+    --paper-0:#fbf9f3; --paper-1:#f4f1e8; --paper-2:#efe9da; --paper-3:#e6dfcd;
+    --ink-0:#1a1a17; --ink-1:#33322c; --line:#8a8576;
+    --accent:#1a4a35; --accent-ink:#0f2e20; --accent-soft:#dfece4;
+    --cool:#13586b; --cool-soft:#dcebef; --good:#1a5e3a; --warn:#8a3a12; --gold:#8a5c00; --focus:#ffce2b;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{ background:var(--paper-1); color:var(--ink-0);
+    font:500 18px/1.55 "Segoe UI", system-ui, -apple-system, sans-serif; -webkit-text-size-adjust:100%; }
+  body.contrast{ --paper-0:#000; --paper-1:#000; --paper-2:#111; --paper-3:#222;
+    --ink-0:#fff; --ink-1:#fff; --line:#fff; --accent:#fff; --accent-ink:#fff;
+    --accent-soft:#111; --cool:#7fe3f5; --cool-soft:#111; --good:#7ef0a8; --warn:#ffb38a; --gold:#ffd24a; }
+  body.contrast *{ border-color:#fff !important; }
+  body.contrast .btn,body.contrast .tile{ background:#000 !important; color:#fff !important; border:2px solid #fff !important; }
+  body.contrast .btn-p,body.contrast .tile.live{ background:#fff !important; color:#000 !important; }
+
+  .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+
+  .topbar{ background:var(--accent); color:#fff; padding:.7rem 1.05rem; display:flex; align-items:center; justify-content:space-between; gap:.6rem; position:sticky; top:0; z-index:30; }
+  .topbar .mark{ font-weight:800; font-size:1.02rem; }
+  .topbar .mark small{ display:block; font-weight:500; font-size:.72rem; opacity:.92; }
+  .crew-btn{ background:var(--gold); color:#1a1505; border:2px solid #fff; border-radius:11px;
+    padding:.55rem .85rem; font:800 .9rem/1 inherit; cursor:pointer; min-height:44px; }
+  body.contrast .crew-btn{ background:#ffd24a !important; color:#000 !important; }
+
+  .wrap{ max-width:760px; margin:0 auto; padding:1rem 1.05rem 4rem; }
+
+  .hero{ background:var(--accent-soft); border:2px solid var(--accent); border-radius:16px; padding:1.1rem 1.15rem; margin:1rem 0 1.2rem; }
+  .hero h1{ margin:.1rem 0 .3rem; font-size:1.6rem; line-height:1.2; color:var(--accent-ink); }
+  .hero p{ margin:0; font-size:1.05rem; }
+
+  h2{ color:var(--accent-ink); font-size:1.16rem; margin:1.5rem 0 .2rem; }
+  .div-sub{ font-size:.9rem; color:var(--ink-1); margin:0 0 .5rem; }
+
+  .division{ border:2px solid var(--line); border-radius:13px; margin:.7rem 0; overflow:hidden; background:var(--paper-0); }
+  .division>summary{ list-style:none; cursor:pointer; padding:.85rem 1rem; font-weight:800; color:var(--accent-ink);
+    display:flex; justify-content:space-between; align-items:center; min-height:44px; font-size:1.05rem; }
+  .division>summary::-webkit-details-marker{ display:none; }
+  .division>summary:focus-visible{ outline:4px solid var(--focus); outline-offset:-2px; }
+  .division>summary .chev{ font-weight:800; transition:transform .2s; }
+  .division[open]>summary .chev{ transform:rotate(90deg); }
+  .division .count{ font-weight:600; font-size:.82rem; color:var(--ink-1); }
+  .tiles{ padding:.4rem .7rem .8rem; }
+
+  .tile{ display:flex; align-items:center; justify-content:space-between; gap:.6rem; width:100%; text-align:left;
+    background:var(--paper-1); border:2px solid var(--line); border-radius:11px; padding:.7rem .85rem; margin:.35rem 0;
+    min-height:44px; font:600 1rem/1.3 inherit; color:var(--ink-0); cursor:default; }
+  .tile .label{ flex:1; }
+  .tile .status{ font-weight:800; font-size:.76rem; letter-spacing:.04em; text-transform:uppercase; white-space:nowrap; color:var(--ink-1); }
+  .tile.live{ background:var(--accent); color:#fff; border-color:var(--accent); cursor:pointer; }
+  .tile.live .status{ color:#fff; }
+  .tile.live:hover{ background:var(--accent-ink); }
+  .tile.live:focus-visible{ outline:4px solid var(--focus); outline-offset:2px; }
+  .tile.soon{ opacity:.92; }
+  .tile.soon .status{ color:var(--gold); }
+
+  .play-cta{ font-weight:800; }
+
+  /* crew overlay */
+  .overlay{ position:fixed; inset:0; background:rgba(8,20,16,.55); display:none; z-index:50; }
+  .overlay.on{ display:block; }
+  .sheet{ position:absolute; left:0; right:0; bottom:0; max-height:92vh; overflow-y:auto;
+    background:var(--paper-0); border-top:3px solid var(--accent); border-radius:18px 18px 0 0; padding:1.1rem 1.1rem 2rem; }
+  .sheet h2{ margin-top:.2rem; }
+  .sheet .close{ position:sticky; top:0; float:right; background:var(--accent); color:#fff; border:none; border-radius:10px;
+    padding:.5rem .8rem; font:800 .9rem/1 inherit; cursor:pointer; min-height:44px; }
+  .crew-intro{ background:var(--cool-soft); border:2px solid var(--cool); border-radius:12px; padding:.8rem .9rem; margin:.5rem 0 1rem; }
+  .crew-intro strong{ color:var(--cool); }
+  .need{ border:2px solid var(--line); border-radius:12px; margin:.55rem 0; overflow:hidden; background:var(--paper-1); }
+  .need>summary{ list-style:none; cursor:pointer; padding:.8rem .9rem; font-weight:800; min-height:44px;
+    display:flex; justify-content:space-between; align-items:center; color:var(--accent-ink); }
+  .need>summary::-webkit-details-marker{ display:none; }
+  .need>summary:focus-visible{ outline:4px solid var(--focus); outline-offset:-2px; }
+  .need[open]>summary .chev{ transform:rotate(90deg); }
+  .need .chev{ transition:transform .2s; }
+  .need .body{ padding:0 .9rem .85rem; }
+  .need .office{ font-weight:800; color:var(--accent-ink); margin:.3rem 0 .1rem; }
+  .need .office .where{ font-weight:600; color:var(--ink-1); font-size:.9rem; }
+
+  .foot{ background:#15201c; color:#e8e6df; margin-top:2rem; padding:1.1rem; font-size:.86rem; }
+  .foot a{ color:#bfe7cf; } .foot .mark{ font-weight:800; }
+
+  @media (prefers-reduced-motion: reduce){ .chev{ transition:none; } }
+</style>
+</head>
+<body>
+<div id="live" aria-live="polite" class="sr-only"></div>
+
+<div class="topbar">
+  <div class="mark">MassBay Degrees<small>Find your path. Play your way in.</small></div>
+  <button class="crew-btn" id="crewOpen" aria-haspopup="dialog">Your crew</button>
+</div>
+
+<div class="wrap">
+
+  <div class="hero">
+    <h1>Pick a path. Walk it like a game.</h1>
+    <p>Every MassBay degree is here. Find the one that's yours — and where there's a game, play your way through what it actually takes to finish. More are on the way.</p>
+  </div>
+
+  <h2>Explore every MassBay degree</h2>
+  <p class="div-sub">Open a division to see its programs. Tap a glowing tile to play. The rest are in development — a map of what's coming.</p>
+  <div id="directory"></div>
+
+</div>
+
+<!-- CREW OVERLAY -->
+<div class="overlay" id="crewOverlay" role="dialog" aria-modal="true" aria-labelledby="crew-h">
+  <div class="sheet">
+    <button class="close" id="crewClose">Close</button>
+    <h2 id="crew-h">Your crew</h2>
+    <div class="crew-intro">
+      <strong>These are yours.</strong> Every MassBay student gets this team for free — tutors, advisors, specialists, people whose whole job is helping you finish. Using them isn't a backup plan. It's what students who finish actually do. Open whatever fits where you are.
+    </div>
+    <div id="needs"></div>
+  </div>
+</div>
+
+<div class="foot">
+  <div class="mark">Tight Spiral Studios</div>
+  <div style="margin-top:.3rem;">
+    walshero@gmail.com &middot; <a href="tight-spiral-system-map.html">How the studio works</a><br>
+    Programs listed are real MassBay degrees and certificates (from the MassBay Fact Book). Support offices from the 2023&ndash;2024 Student Handbook.
+    <strong>Re-verify program names, availability, and office details against the current massbay.edu before student use.</strong>
+  </div>
+</div>
+
+<script>
+/* ── real MassBay programs, nested by division (Fact Book). English is live. ── */
+var ENGLISH_GAME = "massbay-english-major.html";
+var DIVISIONS = [
+  { name:"Humanities & Social Sciences", sub:"Liberal arts, communication, English, psychology",
+    programs:[
+      {t:"Liberal Arts: English", live:true},
+      {t:"Liberal Arts"}, {t:"Liberal Arts: Communication"},
+      {t:"Liberal Arts: Psychology / Sociology"}, {t:"General Studies"}
+    ]},
+  { name:"Health Sciences", sub:"Nursing, imaging, emergency and allied health",
+    programs:[
+      {t:"Nursing"},{t:"Practical Nursing"},{t:"Radiologic Technology"},{t:"Computed Tomography"},
+      {t:"Surgical Technology"},{t:"Central Processing Technology"},{t:"Emergency Medical Technician"},
+      {t:"Paramedicine"},{t:"Medical Assistant"},{t:"Medical Coding"},
+      {t:"Medical Office Administrative Assistant"},{t:"Phlebotomy"}
+    ]},
+  { name:"Business", sub:"Accounting, management, marketing, hospitality",
+    programs:[
+      {t:"Accounting"},{t:"Accounting: MassTransfer Option"},{t:"Business Administration"},
+      {t:"General Business"},{t:"General Business: Hospitality Management"},
+      {t:"General Business: International Business"},{t:"Entrepreneurship"},
+      {t:"Hospitality Management"},{t:"Interior Design"},{t:"Management"},{t:"Marketing"}
+    ]},
+  { name:"Education", sub:"Early childhood and elementary education transfer",
+    programs:[
+      {t:"Early Childhood Education"},{t:"Infant - Toddler Teacher"},
+      {t:"Liberal Arts: Early Childhood Education Transfer"},
+      {t:"Liberal Arts: Elementary Education Transfer"}
+    ]},
+  { name:"Human Services", sub:"Behavioral health, substance abuse, direct support",
+    programs:[
+      {t:"Human Services"},{t:"Liberal Arts: Human Services"},{t:"Behavioral Health"},
+      {t:"Substance Abuse"},{t:"Human Services Direct Support"}
+    ]},
+  { name:"Legal Studies & Criminal Justice", sub:"Criminal justice, paralegal, political science",
+    programs:[
+      {t:"Criminal Justice"},{t:"Paralegal Studies"},{t:"Liberal Arts: Political Science"}
+    ]},
+  { name:"Computer Science", sub:"CS, cybersecurity, networking, IT, web",
+    programs:[
+      {t:"Computer Science"},{t:"Computer Information Systems"},{t:"Cyber Security"},
+      {t:"Advanced Cyber Security"},{t:"Computer Networking"},{t:"Information Technology"},
+      {t:"Information Systems Management"},{t:"Information Systems Technology"},
+      {t:"Technology Support"},{t:"Web Designer Certificate"},{t:"Web Developer Certificate"}
+    ]},
+  { name:"Engineering", sub:"Electrical, mechanical, design, manufacturing",
+    programs:[
+      {t:"Engineering"},{t:"Electrical & Computer Engineering"},{t:"Mechanical Engineering"},
+      {t:"Engineering Design"},{t:"Computer Aided Design"},{t:"Manufacturing Innovation"},
+      {t:"Manufacturing Technology"}
+    ]},
+  { name:"Science & Math", sub:"Biotechnology, environmental, life sciences, math",
+    programs:[
+      {t:"Biotechnology"},{t:"Biotechnology: Forensic DNA Science"},
+      {t:"Biotechnology: Genomics & Biomanufacturing"},{t:"Environmental Sciences & Safety"},
+      {t:"Life Sciences"},{t:"General Studies: Mathematics"}
+    ]},
+  { name:"Automotive Technology", sub:"Manufacturer-specific and all-brand programs",
+    programs:[
+      {t:"Automotive Technology – BMW"},{t:"Automotive Technology – Chrysler"},
+      {t:"Automotive Technology – GM"},{t:"Automotive Technology – Toyota/Lexus"},
+      {t:"General Studies Auto – All Brand"}
+    ]}
+];
+
+/* ── the crew: plain-language NEED → real office (asset framing, not deficit) ── */
+var CREW = [
+  { need:"I want a sharper draft or essay",
+    offices:[
+      {name:"Reading & Writing Center", where:"Specialists work your draft at any stage — getting started, organizing, revising."},
+      {name:"Academic Achievement Center (AAC)", where:"Free tutoring and peer tutors across subjects, not just writing."}
+    ]},
+  { need:"I want to plan my classes and my path",
+    offices:[
+      {name:"Academic Advising, Coaching & Transfer", where:"Your advisor maps your courses and the transfer path, and knows the real deadlines."}
+    ]},
+  { need:"I want help in a tough course",
+    offices:[
+      {name:"Academic Achievement Center (AAC)", where:"Free tutoring and learning specialists — what strong students use, not a last resort."}
+    ]},
+  { need:"I want to get the cost covered",
+    offices:[
+      {name:"Financial Aid & Student Accounts", where:"Payment plans, FAFSA help, and the Textbook & Student Enrichment Fund for book costs."},
+      {name:"Student Development", where:"Help with food, childcare, and other basics. 781-239-3142."}
+    ]},
+  { need:"I want accommodations set up",
+    offices:[
+      {name:"Accessibility Resources Center", where:"Accommodations for learning and testing are a right. Meet an Accessibility Specialist."}
+    ]},
+  { need:"I want someone to talk to",
+    offices:[
+      {name:"Counseling Services", where:"Free, confidential, short-term counseling for enrolled students. counseling@massbay.edu."}
+    ]},
+  { need:"I want to find my people here",
+    offices:[
+      {name:"Student Engagement (clubs & LEAD)", where:"20+ clubs and the LEAD leadership program. Belonging is built here."}
+    ]},
+  { need:"I want a place to study or borrow tech",
+    offices:[
+      {name:"The Library", where:"Quiet space, research help, loaner computers, and reserve materials."}
+    ]}
+];
+
+/* ── render directory ── */
+var dir=document.getElementById('directory');
+DIVISIONS.forEach(function(d, di){
+  var det=document.createElement('details'); det.className='division';
+  if (di===0) det.open=true;  /* open Humanities so English is visible on landing */
+  var liveCount=d.programs.filter(function(p){return p.live;}).length;
+  var sum=document.createElement('summary');
+  sum.innerHTML='<span><span class="chev" aria-hidden="true">&#8250;</span> '+d.name+'</span>'+
+    '<span class="count">'+(liveCount?liveCount+' to play · ':'')+d.programs.length+' programs</span>';
+  det.appendChild(sum);
+  var sub=document.createElement('div'); sub.className='div-sub'; sub.style.padding='0 1rem .4rem'; sub.textContent=d.sub; det.appendChild(sub);
+  var tiles=document.createElement('div'); tiles.className='tiles';
+  d.programs.forEach(function(p){
+    if (p.live){
+      var a=document.createElement('a'); a.className='tile live'; a.href=ENGLISH_GAME;
+      a.innerHTML='<span class="label">'+p.t+'</span><span class="status play-cta">Play now &rarr;</span>';
+      tiles.appendChild(a);
+    } else {
+      var t=document.createElement('div'); t.className='tile soon';
+      t.innerHTML='<span class="label">'+p.t+'</span><span class="status">In development</span>';
+      tiles.appendChild(t);
+    }
+  });
+  det.appendChild(tiles); dir.appendChild(det);
+});
+
+/* ── render crew ── */
+var needs=document.getElementById('needs');
+CREW.forEach(function(c){
+  var det=document.createElement('details'); det.className='need';
+  var sum=document.createElement('summary');
+  sum.innerHTML='<span>'+c.need+'</span><span class="chev" aria-hidden="true">&#8250;</span>';
+  det.appendChild(sum);
+  var body=document.createElement('div'); body.className='body';
+  c.offices.forEach(function(o){
+    body.innerHTML+='<div class="office">'+o.name+'</div><div class="where">'+o.where+'</div>';
+  });
+  det.appendChild(body); needs.appendChild(det);
+});
+
+/* ── crew overlay open/close ── */
+var ov=document.getElementById('crewOverlay');
+function openCrew(){ ov.classList.add('on'); document.getElementById('crewClose').focus(); document.getElementById('live').textContent='Your crew — support that is yours to use.'; }
+function closeCrew(){ ov.classList.remove('on'); document.getElementById('crewOpen').focus(); }
+document.getElementById('crewOpen').addEventListener('click', openCrew);
+document.getElementById('crewClose').addEventListener('click', closeCrew);
+ov.addEventListener('click', function(e){ if(e.target===ov) closeCrew(); });
+document.addEventListener('keydown', function(e){ if(e.key==='Escape' && ov.classList.contains('on')) closeCrew(); });
+</script>
+</body>
+</html>

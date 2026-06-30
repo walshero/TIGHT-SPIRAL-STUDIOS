@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  SANDBAGS — a flash-fiction compression game. Tight Spiral Studios · walshero@gmail.com
+  EN195 Creative Writing. The last week. The compression move, made physical.
+
+  WIREFRAME NOVELTY (founder-locked, 2026-06-29): cut words do not vanish and are not
+  rescued. Each cut word is a SANDBAG — it falls to the floor as a heap, and shedding it
+  LIFTS THE PIECE. Compression is ASCENT. You don't win by reaching zero; you win by
+  reaching ALTITUDE: the piece floats once it's lean enough to fly. More than one right
+  cut — many lean pieces can lift off. The heap on the ground is the proof of the climb.
+
+  ART DIRECTION (founder call): pre-steampunk circus Dada. A loud Victorian playbill,
+  mismatched woodtype shouting; words you cut tear loose like sandbags and tumble to a
+  collage heap. Cut-paper SVG (Medium Gate: wins — torn edges, letterpress ink, the
+  balloon + sandbags + floor-heap; no raster needed, buildable in-session).
+
+  TRAUMA/DIGNITY FLOOR (panel HALT, cleared on wording only): a cut word is never a
+  failure or a "darling to kill." It is weight THIS flight doesn't need — it may fly
+  another day. No predator/prey, no weakness framing, no violence.
+
+  AFFORDANCE (one spend): the rise FELT, not stated — spring on the meter, weight on
+  the heap. Reduced-motion gets a REPLAY control, not removal (joy-flourish rule).
+
+  COMFORT GATE (locked 2026-06-29): screen ZERO is a live-swatch palette choice BEFORE
+  content renders. First paint is floor-safe.
+
+  VISIBILITY (locked 2026-06-29): --ink2 == --ink (no muted text); accents are
+  STRUCTURAL (bars/borders/fills behind white text), NEVER body text; GREEN-FREE —
+  slate-B placeholder pending the A/B/C palette pick. Gold labels darkened for AA.
+
+  FLOOR: single-file, offline, in-memory; 3-stop comfort (never #000/#fff); large type;
+  44px+ targets; keyboard; visible focus; reduced-motion safe; scroll-reset; one
+  decision per screen; no hidden content; shape+label not color alone; no emoji;
+  phone-width. SOURCE: the bloated draft is written fresh in the studio voice — no
+  public-domain piece is compressed (compressing a classic teaches the wrong lesson;
+  a padded draft teaches "find the lean piece inside the fat one," the real move).
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sandbags — a flash fiction climb</title>
+<style>
+:root{
+  --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --ink2:#1f1b12;
+  --line:#d8caa8; --line2:#c2b288;
+  --accent:#3a4654; --accent2:#2b3540;          /* slate-B placeholder, GREEN-FREE */
+  --gold:#6e4700; --gold-br:#c8900a; --gold-pale:#fbeec6;
+  --rust:#8a3a1c; --sky:#cdd8e2;
+  --focus:#c8900a;
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+  --display:'Times New Roman',Georgia,serif;
+}
+body.softer{ --bg:#efe9dd; --surface:#f7f1e6; --ink:#2c2618; --ink2:#2c2618; --line:#ded2b6; --line2:#cdbf9c; --sky:#d7dee6; }
+body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0; --line:#4a4230; --line2:#5e553e;
+  --accent:#8fa6bd; --accent2:#9fb6cd; --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a;
+  --rust:#e8a07c; --sky:#2c3540; }
+*{box-sizing:border-box;} html,body{margin:0;}
+body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; -webkit-text-size-adjust:100%; }
+
+.topbar{ background:var(--accent); color:#fff; padding:.6rem .9rem; display:flex; align-items:center; gap:.6rem; font-family:var(--sans); position:sticky; top:0; z-index:30; }
+body.warm .topbar{ color:#0f0e0b; }
+.topbar .mark{ width:26px; height:26px; flex:none; } .topbar .wm{ font-weight:800; font-size:.95rem; }
+.cstop{ margin-left:auto; background:rgba(255,255,255,.18); color:inherit; border:2px solid rgba(255,255,255,.6); border-radius:9px; padding:.45rem .65rem; font:700 .76rem/1 var(--sans); cursor:pointer; min-height:44px; }
+body.warm .cstop{ border-color:rgba(0,0,0,.4); background:rgba(0,0,0,.12); }
+.cstop:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+.wrap{ max-width:660px; margin:0 auto; padding:1.1rem 1rem 5rem; }
+.screen{ display:none; } .screen.on{ display:block; animation:fade .25s ease; }
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.where{ font:800 .72rem/1 var(--sans); letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:.6rem; }
+h1{ font-size:1.7rem; line-height:1.16; color:var(--ink); margin:.2rem 0 .5rem; }
+h2{ font-size:1.3rem; color:var(--ink); margin:.2rem 0 .6rem; }
+p{ margin:0 0 .9rem; } .lead{ font-size:1.1rem; } .beat{ font-style:italic; color:var(--ink2); }
+
+.go{ display:block; width:100%; font:800 1.04rem/1.2 var(--sans); cursor:pointer; min-height:56px; padding:.9rem 1rem; border:none; border-radius:13px; background:var(--accent); color:#fff; margin:.45rem 0; text-align:center; }
+body.warm .go{ color:#0f0e0b; }
+.go:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+.go.sec{ background:var(--surface); color:var(--ink); border:2px solid var(--ink); }
+.go.ghost{ background:transparent; color:var(--ink); border:2px solid var(--line2); font-weight:700; min-height:48px; }
+.go:disabled{ opacity:.6; cursor:default; }
+
+/* comfort gate */
+.swatches{ display:flex; flex-direction:column; gap:.7rem; margin:1rem 0; }
+.sw{ display:flex; align-items:center; gap:.8rem; border:3px solid var(--line2); border-radius:14px; padding:.8rem; cursor:pointer; min-height:64px; background:var(--surface); }
+.sw:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.sw .chip{ width:54px; height:42px; border-radius:9px; flex:none; border:2px solid rgba(0,0,0,.15); display:flex; overflow:hidden; }
+.sw .chip span{ flex:1; } .sw .lbl{ font:800 1.02rem/1.2 var(--sans); } .sw .subt{ font:400 .85rem/1.3 var(--sans); color:var(--ink2); }
+.sw.sel{ border-color:var(--gold-br); }
+.chip.soft span:nth-child(1){background:#efe9dd;} .chip.soft span:nth-child(2){background:#2c2618;}
+.chip.def span:nth-child(1){background:#f3ead8;} .chip.def span:nth-child(2){background:#1f1b12;}
+.chip.dark span:nth-child(1){background:#26231d;} .chip.dark span:nth-child(2){background:#f0c357;}
+
+/* the sky + meter */
+.sky{ position:sticky; top:46px; z-index:20; background:var(--sky); border:2px solid var(--line2); border-radius:14px; padding:.55rem .7rem; margin:0 0 .9rem; }
+.sky .skytop{ display:flex; align-items:center; gap:.5rem; }
+.sky .alt{ font:800 .82rem/1 var(--sans); color:var(--ink); }
+.sky .altnum{ font:800 1.05rem/1 var(--sans); color:var(--ink); }
+.sky .track{ position:relative; height:54px; margin:.45rem 0 .15rem; }
+.sky .ground{ position:absolute; left:0; right:0; bottom:0; height:3px; background:var(--ink); border-radius:2px; }
+.sky .ball{ position:absolute; left:50%; transform:translateX(-50%); bottom:2px; width:40px; height:48px; transition:bottom .6s cubic-bezier(.2,1.2,.3,1); }
+.sky .liftmark{ position:absolute; left:0; right:0; border-top:2px dashed var(--gold-br); }
+.sky .liftlabel{ position:absolute; right:2px; font:800 .64rem/1 var(--sans); color:var(--gold); background:var(--sky); padding:0 .2rem; }
+.sky .weight{ font:700 .76rem/1.2 var(--sans); color:var(--ink); }
+
+/* playbill */
+.playbill{ border:3px solid var(--accent2); border-radius:16px; background:var(--surface); padding:.7rem .8rem 1rem; margin:.4rem 0 1rem; }
+.bill-h{ text-align:center; border-bottom:3px double var(--accent2); padding-bottom:.4rem; margin-bottom:.6rem; }
+.bill-h .k{ font:800 .68rem/1 var(--sans); letter-spacing:.18em; text-transform:uppercase; color:var(--accent2); }
+.bill-h .t{ font:800 1.05rem/1.1 var(--display); color:var(--ink); letter-spacing:.02em; }
+.draft{ font-size:1.12rem; line-height:1.95; }
+.w{ display:inline; cursor:pointer; padding:.04em .12em; border-radius:5px; border:2px solid transparent; }
+.w:hover{ border-color:var(--gold-br); }
+.w:focus-visible{ outline:3px solid var(--focus); outline-offset:1px; }
+.w.locked{ cursor:default; font-weight:700; }
+.w.cut{ opacity:.18; text-decoration:line-through; cursor:default; }
+.w.heavy{ /* ballast candidates read normal; weight is felt on cut, not pre-marked */ }
+
+/* the heap */
+.heap{ border:2px solid var(--line2); border-radius:12px; background:var(--surface); padding:.6rem .75rem; margin:0 0 1rem; min-height:58px; }
+.heap .hh{ font:800 .68rem/1 var(--sans); letter-spacing:.06em; text-transform:uppercase; color:var(--ink2); margin-bottom:.35rem; }
+.heap .pile{ display:flex; flex-wrap:wrap; gap:.3rem; }
+.scrap{ display:inline-block; font:600 .82rem/1 var(--sans); padding:.28rem .45rem; border:2px solid var(--line2); border-radius:7px; background:var(--bg); color:var(--ink); }
+@keyframes fall{ 0%{ transform:translateY(-26px) rotate(0); opacity:0; } 55%{ transform:translateY(4px) rotate(-3deg); } 100%{ transform:translateY(0) rotate(-2deg); opacity:1; } }
+.scrap.new{ animation:fall .5s ease; }
+.heap .none{ font:italic 400 .85rem/1.3 var(--serif); color:var(--ink2); }
+
+.hint{ border-left:5px solid var(--gold-br); background:var(--gold-pale); border-radius:0 10px 10px 0; padding:.7rem .9rem; margin:.8rem 0; font:400 .96rem/1.45 var(--sans); }
+.lift-msg{ border:3px solid var(--gold-br); border-radius:14px; background:var(--gold-pale); padding:.85rem 1rem; margin:1rem 0; }
+.lift-msg .lm{ font:800 1.08rem/1.25 var(--sans); color:var(--ink); }
+.controls{ display:flex; gap:.5rem; flex-wrap:wrap; margin:.5rem 0; }
+.controls .go{ flex:1; min-width:150px; }
+
+/* engine + carry-out */
+.engine{ border:2px dashed var(--accent2); border-radius:13px; background:var(--surface); padding:.85rem .9rem; margin:1rem 0; font-family:var(--sans); }
+.engine .eh{ font:800 .78rem/1 var(--sans); letter-spacing:.05em; text-transform:uppercase; color:var(--accent2); margin-bottom:.5rem; }
+.engine table{ width:100%; border-collapse:collapse; font-size:.88rem; } .engine td{ padding:.4rem .3rem; border-bottom:1px solid var(--line); vertical-align:top; } .engine td:first-child{ font-weight:800; width:42%; }
+.engine tr:last-child td{ border-bottom:none; }
+.copyout{ border:2px solid var(--accent2); border-radius:13px; background:var(--surface); padding:.85rem .9rem; margin:1rem 0; }
+.copyout .ch{ font:800 .78rem/1 var(--sans); letter-spacing:.05em; text-transform:uppercase; color:var(--accent2); margin-bottom:.5rem; }
+.copyout label{ display:block; font:700 .85rem/1.3 var(--sans); margin:.6rem 0 .25rem; }
+.copyout textarea{ width:100%; font:400 .9rem/1.5 var(--sans); padding:.6rem; border:2px solid var(--line2); border-radius:9px; background:var(--bg); color:var(--ink); min-height:80px; resize:vertical; }
+.copyout textarea:focus-visible{ outline:3px solid var(--focus); outline-offset:1px; }
+#carry{ width:100%; font:400 .86rem/1.5 var(--sans); padding:.7rem; border:2px solid var(--line2); border-radius:9px; background:var(--bg); color:var(--ink); min-height:160px; resize:vertical; white-space:pre-wrap; margin-top:.5rem; }
+.copied{ font:700 .85rem/1 var(--sans); color:var(--ink); margin:.4rem 0 0; min-height:1.2em; }
+
+.peak{ text-align:center; padding:1.2rem 1rem .3rem; }
+.final-piece{ border:3px double var(--accent2); border-radius:14px; background:var(--surface); padding:1rem 1.1rem; margin:1rem 0; font-size:1.18rem; line-height:1.7; text-align:left; }
+.foot{ margin-top:1.6rem; padding:1rem; background:var(--accent); color:#fff; border-radius:12px; font-family:var(--sans); font-size:.8rem; }
+body.warm .foot{ color:#0f0e0b; } .foot a{ color:#fff; } body.warm .foot a{ color:#0f0e0b; }
+.sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+@media (max-width:520px){ body{font-size:18px;} h1{font-size:1.46rem;} .wrap{padding:1rem .8rem 5rem;} .draft{font-size:1.06rem; line-height:1.85;} }
+@media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+
+/* JOY-FIRST SPLASH */
+:root{ --sky-wash:#e7e0cf; }
+body.warm{ --sky-wash:#222019; }
+.splashstage{ width:100%; max-width:300px; margin:.4rem auto .2rem; }
+.splashsvg{ width:100%; height:auto; display:block; }
+.balloonG{ transform-origin:120px 100px; animation:strain 2.6s ease-in-out infinite; }
+.ropes line{ animation:rope 2.6s ease-in-out infinite; }
+@keyframes strain{ 0%,100%{ transform:translateY(0) rotate(-1deg);} 50%{ transform:translateY(-7px) rotate(1deg);} }
+@keyframes rope{ 0%,100%{ opacity:.6;} 50%{ opacity:.95;} }
+.bagG{ animation:settle 2.6s ease-in-out infinite; }
+@keyframes settle{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(.6px);} }
+.splashh{ text-align:center; font-size:1.66rem; line-height:1.18; margin:.3rem 0 .5rem; }
+.splashp{ text-align:center; margin:0 auto .9rem; max-width:30rem; }
+.splashgo{ max-width:30rem; margin:.4rem auto; }
+.splashtip{ text-align:center; font:600 .86rem/1.4 var(--sans); color:var(--ink); margin:.6rem 0 0; }
+/* comfort button: bigger, higher contrast, unmistakable — never a gray whisper */
+.cstop{ background:var(--gold-br); color:#1f1b12; border:2px solid #1f1b12; font-weight:800; font-size:.82rem; }
+body.warm .cstop{ background:var(--gold-br); color:#1f1b12; border-color:#1f1b12; }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 4 C30 4 36 12 36 20 C36 28 30 33 23 33 C17 33 13 29 13 24 C13 20 16 17 20 17 C23 17 25 19 25 22" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
+  <span class="wm">Sandbags</span>
+  <button class="cstop" id="cstop" aria-label="Change comfort palette">Comfort</button>
+</div>
+
+<div class="wrap">
+
+  <!-- SCREEN 0 — JOY-FIRST SPLASH (novelty first; comfort lives in the corner button) -->
+  <section class="screen on" id="splash" aria-labelledby="splashh">
+    <div class="splashstage" aria-hidden="true">
+      <svg viewBox="0 0 240 300" class="splashsvg" role="img" aria-label="A paper balloon straining upward against taut ropes">
+        <!-- sky wash -->
+        <rect x="0" y="0" width="240" height="300" fill="var(--sky-wash)"/>
+        <!-- the balloon, bobbing/straining -->
+        <g class="balloonG">
+          <path d="M120 30 C160 30 182 62 182 96 C182 132 150 156 132 172 L108 172 C90 156 58 132 58 96 C58 62 80 30 120 30 Z" fill="var(--rust)" stroke="var(--ink)" stroke-width="2.4"/>
+          <path d="M120 30 C132 52 132 150 132 172 M120 30 C108 52 108 150 108 172 M96 34 C92 60 92 150 96 168 M144 34 C148 60 148 150 144 168" stroke="var(--ink)" stroke-width="1.4" fill="none" opacity=".5"/>
+          <rect x="106" y="176" width="28" height="18" rx="3" fill="var(--gold-br)" stroke="var(--ink)" stroke-width="2"/>
+          <path d="M108 176 L112 172 M132 176 L128 172" stroke="var(--ink)" stroke-width="1.6"/>
+        </g>
+        <!-- taut ropes to ground stakes -->
+        <g class="ropes" stroke="var(--ink)" stroke-width="1.6" opacity=".8">
+          <line x1="110" y1="190" x2="60" y2="276"/>
+          <line x1="120" y1="194" x2="120" y2="278"/>
+          <line x1="130" y1="190" x2="180" y2="276"/>
+        </g>
+        <!-- ground + stakes + a couple sandbags already on the dirt -->
+        <line x1="14" y1="278" x2="226" y2="278" stroke="var(--ink)" stroke-width="2.6"/>
+        <g class="bagG">
+          <path d="M52 268 q-6 8 0 10 h16 q6 -2 0 -10 z" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.8"/>
+          <path d="M172 268 q-6 8 0 10 h16 q6 -2 0 -10 z" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.8"/>
+        </g>
+      </svg>
+    </div>
+    <h1 id="splashh" class="splashh">It wants to fly. It can't.<br>It's carrying too much.</h1>
+    <p class="lead splashp">A balloon, roped to the ground by every extra word. You're going to make it fly — not by adding anything, by <b>cutting weight.</b></p>
+    <button class="go splashgo" id="enterBtn">Cut it loose &rarr;</button>
+    <p class="splashtip">Eyes need a different setting? Tap <b>Comfort</b>, top-right — any time.</p>
+  </section>
+
+  <!-- SCREEN 1 — SCENE / ONRAMP -->
+  <section class="screen" id="scene" aria-labelledby="sceneh">
+    <div class="where">The launch field</div>
+    <h1 id="sceneh">Here's how the climb works.</h1>
+    <p>Tap any word in the draft to drop it. Each word you cut drops as a <b>sandbag</b> — and the balloon rises. When the piece is light enough, it lifts off. That's the whole game.</p>
+    <div class="hint" style="background:var(--surface); border-left-color:var(--accent2);"><b>One promise:</b> a word you cut isn't a bad word. It's just weight <i>this</i> flight doesn't need. It can fly another day, in another piece.</div>
+    <button class="go" id="toPlay">Walk up to the balloon &rarr;</button>
+  </section>
+
+  <!-- SCREEN 2 — THE CLIMB -->
+  <section class="screen" id="play" aria-labelledby="playh">
+    <div class="where">The climb</div>
+
+    <div class="sky" id="skybox" aria-hidden="true">
+      <div class="skytop"><span class="alt">Altitude</span><span class="altnum" id="altnum" style="margin-left:auto;">on the ground</span></div>
+      <div class="track" id="track">
+        <div class="liftmark" id="liftmark" style="bottom:44px;"><span class="liftlabel">liftoff</span></div>
+        <div class="ground"></div>
+        <svg class="ball" id="ball" viewBox="0 0 40 48" aria-hidden="true">
+          <path d="M20 2 C31 2 37 11 37 20 C37 29 29 35 24 38 L16 38 C11 35 3 29 3 20 C3 11 9 2 20 2 Z" fill="var(--rust)" stroke="var(--ink)" stroke-width="1.5"/>
+          <path d="M20 2 C24 8 24 32 24 38 M20 2 C16 8 16 32 16 38" stroke="var(--ink)" stroke-width="1" fill="none" opacity=".5"/>
+          <rect x="15" y="40" width="10" height="6" rx="1.5" fill="var(--gold-br)" stroke="var(--ink)" stroke-width="1.2"/>
+          <path d="M16 40 L17 38 M24 40 L23 38" stroke="var(--ink)" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="weight" id="weightline" aria-live="polite">Carrying 41 words. Drop the dead weight.</div>
+    </div>
+
+    <p class="sr" id="liveStat" aria-live="polite"></p>
+
+    <div class="playbill">
+      <div class="bill-h"><div class="k">The draft tied to the balloon</div><div class="t">"Last Stop"</div></div>
+      <div class="draft" id="draft"></div>
+    </div>
+
+    <div class="heap" aria-live="off">
+      <div class="hh">Sandbags on the ground (the climb made visible)</div>
+      <div class="pile" id="pile"><span class="none">nothing dropped yet</span></div>
+    </div>
+
+    <div class="hint" id="hintbox">Tap words you don't need. Watch the balloon. You're aiming for the dashed <b>liftoff</b> line — not for zero.</div>
+
+    <div class="lift-msg" id="liftMsg" hidden>
+      <div class="lm" id="liftText"></div>
+    </div>
+
+    <div class="controls">
+      <button class="go ghost" id="undo">Put the last word back</button>
+      <button class="go" id="toReveal" disabled>See what flew &rarr;</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 3 — REVEAL / PEAK -->
+  <section class="screen" id="reveal" aria-labelledby="revealh">
+    <div class="peak">
+      <div class="where" style="text-align:center;">Liftoff</div>
+      <h1 id="revealh">It flew.</h1>
+      <p class="lead">Here's the piece that was inside the heavy one the whole time — the part light enough to leave the ground.</p>
+    </div>
+    <div class="final-piece" id="finalPiece"></div>
+    <p>You didn't write less. You found the piece that could fly. Everything on the ground was real work — it's how you found this.</p>
+
+    <div class="engine">
+      <div class="eh">Show the engine — what this drill was</div>
+      <table>
+        <tr><td>The move</td><td>Compression: cut to what carries weight, keep what lifts.</td></tr>
+        <tr><td>The flash-fiction craft</td><td>Every word earns its place or it's a sandbag. Implication does the work the cut words were doing.</td></tr>
+        <tr><td>What "liftoff" measured</td><td>Not fewest words — <i>lean enough to fly.</i> Many different cuts lift off. There's no single right answer, which is the point.</td></tr>
+        <tr><td>EN195 link</td><td>This is the Flash Fiction workshop revision move, made physical: the portfolio piece is the one that flies.</td></tr>
+      </table>
+    </div>
+
+    <div class="copyout">
+      <div class="ch">Carry it out — your record (nothing is sent)</div>
+      <p style="font:400 .9rem/1.45 var(--sans); margin:0 0 .3rem;">This builds a clean note you can copy into a Doc, an email, or your portfolio. You choose whether to share it.</p>
+      <label for="learned">One thing cutting taught you about this piece</label>
+      <textarea id="learned" placeholder="e.g. the ending was stronger once I stopped explaining it"></textarea>
+      <label for="kept">A word or line you fought to keep — and why</label>
+      <textarea id="kept" placeholder="e.g. kept 'cold' — it's the only weather the story needs"></textarea>
+      <button class="go" id="buildCarry" style="margin-top:.7rem;">Build my record &rarr;</button>
+      <textarea id="carry" readonly aria-label="Your carry-out record"></textarea>
+      <button class="go sec" id="copyCarry">Copy it</button>
+      <p class="copied" id="copiedMsg" aria-live="polite"></p>
+    </div>
+
+    <div class="controls">
+      <button class="go ghost" id="replay">Fly it again (new draft weight)</button>
+    </div>
+  </section>
+
+  <div class="foot">
+    Tight Spiral Studios · <a href="mailto:walshero@gmail.com">walshero@gmail.com</a> — <b>Sandbags</b>, a flash-fiction climb for EN195.
+    Single file, offline, nothing leaves the page. The draft is original studio text, not a published work.
+    Green-free slate placeholder pending the palette pick. <br>
+    <b>How this was made:</b> the cut-as-ascent mechanic was the founder's image — drop weight, rise. Panel (Cleese conducting) cleared it on the dignity wording: a cut word is weight, never a failure. You are the human in the loop.
+  </div>
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+
+  /* ---------- comfort gate ---------- */
+  var stops=['softer','default','warm'], ci=1;
+  function applyStop(s){ document.body.classList.remove('softer','warm'); if(s==='softer')document.body.classList.add('softer'); if(s==='warm')document.body.classList.add('warm'); }
+  Array.prototype.forEach.call(document.querySelectorAll('.sw'),function(sw){
+    function pick(){ document.querySelectorAll('.sw').forEach(function(x){x.classList.remove('sel'); x.setAttribute('aria-checked','false');}); sw.classList.add('sel'); sw.setAttribute('aria-checked','true'); applyStop(sw.dataset.stop); ci=stops.indexOf(sw.dataset.stop); }
+    sw.addEventListener('click',pick);
+    sw.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); }});
+  });
+  $('cstop').addEventListener('click',function(){ ci=(ci+1)%3; applyStop(stops[ci]); this.textContent='Comfort: '+stops[ci].charAt(0).toUpperCase()+stops[ci].slice(1);
+    document.querySelectorAll('.sw').forEach(function(x){ var on=x.dataset.stop===stops[ci]; x.classList.toggle('sel',on); x.setAttribute('aria-checked',on?'true':'false'); }); });
+
+  /* ---------- screen nav ---------- */
+  function show(id){ document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');}); $(id).classList.add('on'); window.scrollTo(0,0); var h=$(id).querySelector('h1'); if(h){ h.setAttribute('tabindex','-1'); h.focus(); } }
+  $('enterBtn').addEventListener('click',function(){ show('scene'); });
+  $('toPlay').addEventListener('click',function(){ show('play'); });
+
+  /* ---------- the draft ----------
+     Original studio text. The bloated draft (~41 words of carry) holds a lean ~22-word
+     piece inside it. LOCKED words = the spine that must survive (tapping them is inert,
+     they read bold). Everything else is ballast the player may drop. Liftoff is reaching
+     the altitude line, which is hit well before zero — many cut-paths lift off. */
+  /* Locked spine reads as a real piece on its own:
+     "The last bus pulled away as she reached the curb. He promised he'd wait.
+      The taillights got smaller." — 21 words, a complete flash micro-story.
+     Ballast = the padding around it (entire, slowly, just, finally, very edge of the
+     empty, had actually, that, definitely, cold, and smaller). */
+  var DRAFT = [
+    {t:"The",lock:true},{t:"last",lock:true},{t:"bus",lock:true},{t:"of",lock:false},{t:"the",lock:false},{t:"entire",lock:false},{t:"night",lock:false},
+    {t:"pulled",lock:true},{t:"slowly",lock:false},{t:"away",lock:true},{t:"just",lock:false},{t:"as",lock:true},
+    {t:"she",lock:true},{t:"finally",lock:false},{t:"reached",lock:true},{t:"the",lock:true},{t:"very",lock:false},{t:"edge",lock:false},{t:"of",lock:false},{t:"the",lock:false},{t:"empty",lock:false},{t:"curb",lock:true},{t:".",lock:true,glue:true},
+    {t:"He",lock:true},{t:"had",lock:false},{t:"actually",lock:false},{t:"promised",lock:true},{t:"he",lock:true},{t:"would",lock:true},{t:"definitely",lock:false},{t:"wait",lock:true},{t:".",lock:true,glue:true},
+    {t:"The",lock:true},{t:"cold",lock:false},{t:"taillights",lock:true},{t:"got",lock:true},{t:"smaller",lock:true},{t:"and",lock:false},{t:"smaller",lock:false},{t:".",lock:true,glue:true}
+  ];
+  /* lean target = locked words. count carry (non-locked, non-glue punctuation). */
+  var totalCut = DRAFT.filter(function(w){ return !w.lock && !w.glue; }).length;
+  var LIFT_AT = 9; /* drop this many ballast words to reach the liftoff line (of ~14 droppable) */
+  var cut = [];     /* stack of indices cut, for undo */
+
+  function renderDraft(){
+    var box=$('draft'); box.innerHTML='';
+    DRAFT.forEach(function(w,i){
+      var sp=document.createElement('span');
+      sp.className='w'+(w.lock?' locked':'')+(w.cutNow?' cut':'');
+      sp.textContent=(w.glue?'':' ')+w.t;
+      if(!w.lock && !w.cutNow){
+        sp.tabIndex=0; sp.setAttribute('role','button'); sp.setAttribute('aria-label','drop the word '+w.t);
+        sp.addEventListener('click',function(){ dropWord(i); });
+        sp.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); dropWord(i);} });
+      } else if(w.lock){
+        sp.setAttribute('aria-label',w.t+' (part of the piece — stays)');
+      }
+      box.appendChild(sp);
+    });
+  }
+
+  function dropWord(i){
+    if(DRAFT[i].lock||DRAFT[i].cutNow) return;
+    DRAFT[i].cutNow=true; cut.push(i);
+    addScrap(DRAFT[i].t);
+    renderDraft(); updateClimb();
+  }
+  function addScrap(t){
+    var pile=$('pile'); var none=pile.querySelector('.none'); if(none) pile.removeChild(none);
+    var s=document.createElement('span'); s.className='scrap new'; s.textContent=t; pile.appendChild(s);
+    setTimeout(function(){ s.classList.remove('new'); },520);
+  }
+
+  $('undo').addEventListener('click',function(){
+    if(!cut.length) return;
+    var i=cut.pop(); DRAFT[i].cutNow=false;
+    var pile=$('pile'); if(pile.lastChild) pile.removeChild(pile.lastChild);
+    if(!cut.length) pile.innerHTML='<span class="none">nothing dropped yet</span>';
+    renderDraft(); updateClimb();
+  });
+
+  var lifted=false;
+  function updateClimb(){
+    var n=cut.length;
+    var remaining=totalCut-n;
+    /* altitude: 0..44px to the lift line, capped a touch above */
+    var frac=Math.min(n/LIFT_AT,1.15);
+    var px=Math.round(frac*44);
+    $('ball').style.bottom=(2+px)+'px';
+    $('weightline').textContent = (remaining>0)
+      ? ('Carrying '+remaining+' extra word'+(remaining===1?'':'s')+'. '+(n>0?'Lighter already.':'Drop the dead weight.'))
+      : ('Stripped to the spine. It is flying.');
+    $('altnum').textContent = n===0 ? 'on the ground' : (frac>=1 ? 'airborne' : 'rising');
+    $('liveStat').textContent = 'Dropped '+n+' words. '+(frac>=1?'The balloon has lifted off.':'Balloon rising.');
+
+    if(frac>=1 && !lifted){
+      lifted=true;
+      $('liftMsg').hidden=false;
+      $('liftText').textContent='Liftoff. The piece is light enough to fly. You can keep trimming, or fly it as it is.';
+      $('toReveal').disabled=false;
+      $('hintbox').innerHTML='<b>You hit the line.</b> Notice you didn\u2019t need to reach zero \u2014 you needed to reach lean. Stop here, or shed a little more.';
+    }
+    if(frac<1 && lifted){ /* allow dropping back below via undo */
+      lifted=false; $('liftMsg').hidden=true; $('toReveal').disabled=true;
+    }
+  }
+
+  $('toReveal').addEventListener('click',function(){
+    /* assemble the surviving piece in reading order */
+    var out=''; DRAFT.forEach(function(w){ if(!w.cutNow){ out += (w.glue?'':' ')+w.t; } });
+    $('finalPiece').textContent=out.trim();
+    show('reveal');
+  });
+
+  /* ---------- carry-out ---------- */
+  function carryOut(title,pairs){
+    var L=[title,'']; pairs.forEach(function(p){ var v=(p[1]||'').toString().trim(); if(v) L.push(p[0]+': '+v); });
+    L.push(''); L.push('(I chose to share this. Nothing was sent automatically.)'); return L.join('\n');
+  }
+  $('buildCarry').addEventListener('click',function(){
+    var piece=$('finalPiece').textContent;
+    var txt=carryOut('Sandbags — my flash compression',[
+      ['The piece that flew', piece],
+      ['Words dropped', String(cut.length)],
+      ['What cutting taught me', $('learned').value],
+      ['What I kept and why', $('kept').value]
+    ]);
+    $('carry').value=txt;
+  });
+  $('copyCarry').addEventListener('click',function(){
+    var box=$('carry'); if(!box.value){ $('copiedMsg').textContent='Build it first.'; return; }
+    box.removeAttribute('readonly'); box.select(); box.setSelectionRange(0,99999);
+    try{document.execCommand('copy');}catch(e){} box.setAttribute('readonly','');
+    if(navigator.clipboard){ navigator.clipboard.writeText(box.value).then(function(){},function(){}); }
+    $('copiedMsg').textContent='Copied — paste it into a Doc, an email, or your portfolio.';
+  });
+
+  $('replay').addEventListener('click',function(){
+    DRAFT.forEach(function(w){ w.cutNow=false; }); cut=[]; lifted=false;
+    $('pile').innerHTML='<span class="none">nothing dropped yet</span>';
+    $('liftMsg').hidden=true; $('toReveal').disabled=true;
+    $('learned').value=''; $('kept').value=''; $('carry').value=''; $('copiedMsg').textContent='';
+    renderDraft(); updateClimb(); show('play');
+  });
+
+  /* init */
+  renderDraft(); updateClimb();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  STUDIO INTAKE — IN-FILE CHANGELOG
+  Canonical trunk. Edit in place, no branching. Newest first.
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  v1 (2026-06-27) — first build.
+    - JOB: triage one idea in → sorted (build now / park / delegate to AI / eliminate),
+      the instrument behind the OS Stage -1 Intake Triage gate.
+    - WIREFRAME NOVELTY: every screen is a valid exit that already produces a verdict.
+      A provisional sort forms from answer 1 and only refines; stopping early gives a
+      real (lower-confidence) result, never a dead end. Freedom of Effort in the bones.
+    - CONFLUENCE GROUNDING: three named constructs measured before questions
+      (goal-fit, attention cost, judgment load); ranges not single right answers;
+      the tool shows its own reasoning (why this verdict, what would change it).
+    - OUTPUT: human-in-the-loop role split named + explained for THIS idea
+      (founder-only / AI / eliminate), per the label-the-moves floor.
+    - FLOORS: single-file offline, in-memory only, full-contrast, 44px targets,
+      keyboard nav, visible focus, scroll-reset, scene-first open, brand bar + studiofoot.
+-->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Studio Intake — Tight Spiral Studios</title>
+<style>
+  :root{
+    --paper:#f6f2ea; --paper-2:#efe9dc; --ink:#191d1a; --ink-soft:#33352f;
+    --rule:#bdb6a3; --civic:#1f4a4f; --crisis:#7e3a22; --gold:#8a6322;
+    --slip:#fffdf8; --shadow:rgba(40,36,28,.28); --focus:#0f5e7c; --ok:#2f5c39;
+    --build:#2f5c39; --park:#8a6322; --ai:#1f4a4f; --cut:#7e3a22;
+  }
+  *{box-sizing:border-box}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink)}
+  body{font-family:Georgia,'Iowan Old Style',serif;font-size:20px;line-height:1.5;-webkit-text-size-adjust:100%;padding:0 0 60px}
+  .wrap{max-width:640px;margin:0 auto;padding:18px 18px 0}
+
+  /* brand bar */
+  .brandbar{display:flex;align-items:center;gap:10px;margin:0 0 16px}
+  .brandbar .mark{flex:0 0 auto;width:30px;height:30px;display:block}
+  .brandbar .wm{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:15px;letter-spacing:.02em;color:var(--ink)}
+  .brandbar .wm span{color:var(--gold)}
+
+  /* progress + live verdict rail */
+  .rail{display:flex;align-items:center;gap:10px;margin:0 0 16px;flex-wrap:wrap}
+  .rail .pip{width:30px;height:8px;border-radius:4px;background:var(--rule)}
+  .rail .pip.done{background:var(--civic)} .rail .pip.here{background:var(--gold)}
+  .rail .rl{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;color:var(--ink-soft);font-weight:700}
+
+  .card{background:var(--paper-2);border:1px solid var(--rule);border-radius:12px;padding:22px 20px;margin:0 0 16px;
+    box-shadow:0 1px 0 #fff inset,0 14px 30px -22px var(--shadow)}
+  .card[hidden]{display:none}
+
+  .eyebrow{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-soft);margin:0 0 8px;font-weight:700}
+  h1{font-size:27px;line-height:1.16;margin:0 0 8px}
+  h2{font-size:22px;line-height:1.2;margin:0 0 6px}
+  p{margin:0 0 12px}
+  .ask{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:19px;margin:4px 0 14px;color:var(--ink)}
+  .help{font-size:16px;color:var(--ink);margin:0 0 16px;line-height:1.5}
+
+  textarea,input[type=text]{width:100%;font-family:Georgia,serif;font-size:18px;color:var(--ink);background:var(--slip);
+    border:2px solid var(--rule);border-radius:10px;padding:13px 14px;line-height:1.45}
+  textarea{min-height:88px;resize:vertical}
+  textarea:focus,input:focus{outline:4px solid var(--focus);outline-offset:2px;border-color:var(--civic)}
+
+  .opts{display:flex;flex-direction:column;gap:10px;margin:6px 0 0}
+  .opt{display:block;width:100%;text-align:left;background:var(--slip);border:2px solid var(--rule);border-radius:11px;
+    padding:14px 16px;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:16px;font-weight:600;color:var(--ink);
+    cursor:pointer;min-height:44px;line-height:1.4}
+  .opt:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+  .opt.on{background:var(--civic);border-color:var(--civic);color:#fff}
+  .opt .sub{display:block;font-weight:400;font-size:14px;margin-top:3px;opacity:.9}
+
+  .btn-row{margin:18px 0 0;display:flex;gap:10px;flex-wrap:wrap}
+  .btn{flex:1;min-width:150px;text-align:center;background:var(--civic);color:#fff;border:none;border-radius:11px;
+    padding:16px;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:17px;font-weight:700;cursor:pointer;min-height:44px}
+  .btn:disabled{opacity:.45;cursor:default}
+  .btn:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+  .btn.ghost{background:transparent;color:var(--civic);border:2px solid var(--rule)}
+
+  /* freedom-of-effort exit — present on every step */
+  .foe{margin:16px 0 0;border-top:1px dashed var(--rule);padding-top:14px}
+  .foe-line{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:14px;color:var(--ink);margin:0 0 10px;font-weight:600;line-height:1.5}
+  .foe-btn{display:block;width:100%;text-align:center;background:transparent;color:var(--civic);border:2px solid var(--rule);
+    border-radius:10px;padding:13px;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:15px;font-weight:700;cursor:pointer;min-height:44px}
+  .foe-btn:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+
+  /* live provisional verdict chip */
+  .live{background:var(--slip);border:1px solid var(--rule);border-left:6px solid var(--gold);border-radius:9px;
+    padding:12px 14px;margin:0 0 16px;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:14px;line-height:1.5;color:var(--ink)}
+  .live b{font-weight:700}
+  .live .conf{display:inline-block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+    padding:2px 8px;border-radius:10px;background:var(--paper-2);border:1px solid var(--rule);margin-left:4px}
+
+  /* verdict screen */
+  .verdict-band{border-radius:12px;padding:20px;margin:0 0 16px;color:#fff}
+  .verdict-band.build{background:var(--build)} .verdict-band.park{background:var(--park)}
+  .verdict-band.ai{background:var(--ai)} .verdict-band.cut{background:var(--cut)}
+  .verdict-band .vk{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;font-weight:700;
+    letter-spacing:.1em;text-transform:uppercase;opacity:.9;margin:0 0 6px}
+  .verdict-band .vh{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:26px;font-weight:700;margin:0 0 8px;line-height:1.15}
+  .verdict-band .vp{font-size:16px;line-height:1.5;margin:0;color:#fff}
+  .verdict-conf{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:14px;font-weight:600;color:var(--ink);margin:0 0 16px}
+
+  .role{background:var(--slip);border:1px solid var(--rule);border-radius:10px;padding:15px 16px;margin:0 0 12px}
+  .role .rh{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;font-weight:700;letter-spacing:.04em;
+    text-transform:uppercase;margin:0 0 6px}
+  .role.founder .rh{color:var(--civic)} .role.ai-r .rh{color:var(--gold)} .role.cut-r .rh{color:var(--crisis)}
+  .role p{font-size:15px;line-height:1.5;margin:0;color:var(--ink)}
+
+  .reasoning{background:var(--paper-2);border:1px dashed var(--rule);border-radius:10px;padding:14px 16px;margin:0 0 14px}
+  .reasoning .rlab{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:12px;font-weight:700;
+    letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 8px}
+  .reasoning ul{margin:0;padding-left:20px} .reasoning li{font-size:15px;line-height:1.5;margin:0 0 6px}
+  .reasoning .flip{font-size:15px;line-height:1.5;margin:8px 0 0;color:var(--ink)}
+
+  .copybox{width:100%;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;color:var(--ink);
+    background:var(--slip);border:2px solid var(--rule);border-radius:10px;padding:12px;min-height:120px;line-height:1.5}
+
+  /* studio footer */
+  .studiofoot{margin:30px 0 0;padding:22px 20px;background:var(--ink);color:var(--paper);border-radius:12px;text-align:center}
+  .studiofoot .sf-mark{width:34px;height:34px;margin:0 auto 8px;display:block}
+  .ff-studio{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;letter-spacing:.04em;font-size:16px;margin:0 0 8px}
+  .ff-studio span{color:var(--gold)}
+  .ff-line{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:14px;color:#d8ccb4;margin:6px 0;line-height:1.6}
+  .ff-line a{color:var(--paper)}
+  @media (max-width:430px){body{font-size:19px}h1{font-size:24px}.btn{min-width:120px}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="spiral" viewBox="0 0 40 40">
+  <circle cx="20" cy="20" r="17" fill="none" stroke="#1f4a4f" stroke-width="3"/>
+  <circle cx="20" cy="20" r="11" fill="none" stroke="#1f4a4f" stroke-width="3"/>
+  <circle cx="20" cy="20" r="5.5" fill="none" stroke="#8a6322" stroke-width="3"/>
+  <circle cx="20" cy="20" r="2" fill="#8a6322"/>
+</symbol>
+</defs></svg>
+
+<div class="wrap">
+
+  <div class="brandbar">
+    <svg class="mark" aria-hidden="true"><use href="#spiral"/></svg>
+    <span class="wm">Tight Spiral <span>Studios</span> · Intake</span>
+  </div>
+
+  <div class="rail" id="rail" aria-hidden="true"></div>
+  <p class="sr-only" id="railSpoken" aria-live="polite"></p>
+
+  <!-- live provisional verdict (appears after step 1) -->
+  <div class="live" id="live" hidden aria-live="polite"></div>
+
+  <!-- STEP 0 — scene-first: the idea -->
+  <div class="card" id="s0">
+    <p class="eyebrow">One idea in · sorted out</p>
+    <h1>What's the idea?</h1>
+    <label class="ask" for="ideaText">Say it in a sentence — the thing you're tempted to build.</label>
+    <textarea id="ideaText" placeholder="e.g. a calibration game for the ESL placement rubric…" aria-describedby="ideaHelp"></textarea>
+    <p class="help" id="ideaHelp">This sorts one idea four ways: build now, park, hand to AI, or cut. You can stop after any question and still get a real answer — answering more only sharpens it.</p>
+    <div class="btn-row">
+      <button class="btn" id="s0next" disabled>Start sorting</button>
+    </div>
+  </div>
+
+  <!-- STEP 1 — goal-fit -->
+  <div class="card" id="s1" hidden>
+    <p class="eyebrow">Question 1 of 3 · what it's measuring: goal-fit</p>
+    <h2 id="s1idea"></h2>
+    <p class="ask">What does this actually do for the studio?</p>
+    <div class="opts" id="s1opts" role="group" aria-label="goal fit">
+      <button class="opt" data-v="goal">Moves an institutional goal forward<span class="sub">a course, a pitch, an outcome someone is waiting on</span></button>
+      <button class="opt" data-v="load">Cuts recurring load<span class="sub">kills a task you keep redoing by hand</span></button>
+      <button class="opt" data-v="onlyme">Only I can do it, and it matters<span class="sub">needs the founder's voice, eyes, or judgment</span></button>
+      <button class="opt" data-v="curious">Mostly I'm curious / it'd be neat<span class="sub">no goal pulling on it yet</span></button>
+      <button class="opt" data-v="process">It only exists because some process is heavy<span class="sub">a workaround for a step that could be cut</span></button>
+    </div>
+    <div class="foe" id="foe1"></div>
+    <div class="btn-row">
+      <button class="btn ghost" id="s1back">Back</button>
+      <button class="btn" id="s1next" disabled>Next</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 — attention cost / displacement -->
+  <div class="card" id="s2" hidden>
+    <p class="eyebrow">Question 2 of 3 · what it's measuring: attention cost</p>
+    <p class="ask">Is there attention for it now — and what would it displace?</p>
+    <p class="help">A "build now" that can't name what it pushes aside is a parked item in disguise. So if you'd build it now, name the thing that yields.</p>
+    <div class="opts" id="s2opts" role="group" aria-label="attention cost">
+      <button class="opt" data-v="room">There's room — nothing active has to yield<span class="sub">a clear lane right now</span></button>
+      <button class="opt" data-v="displace">I'd build it now and I can name what yields<span class="sub">something specific steps back to make room</span></button>
+      <button class="opt" data-v="cant">I'd want it now but can't name what yields<span class="sub">everything already feels load-bearing</span></button>
+      <button class="opt" data-v="later">Real, but not now<span class="sub">it can wait without cost</span></button>
+    </div>
+    <div id="s2displaceWrap" hidden>
+      <label class="ask" for="displaceText" style="font-size:16px;margin-top:14px">What yields to make room?</label>
+      <input type="text" id="displaceText" placeholder="e.g. the Glass Engine voice pass waits a week"/>
+    </div>
+    <div class="foe" id="foe2"></div>
+    <div class="btn-row">
+      <button class="btn ghost" id="s2back">Back</button>
+      <button class="btn" id="s2next" disabled>Next</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 — judgment load / human-in-the-loop split -->
+  <div class="card" id="s3" hidden>
+    <p class="eyebrow">Question 3 of 3 · what it's measuring: judgment load</p>
+    <p class="ask">How much of this needs you — and how much is mechanical?</p>
+    <p class="help">This sets the human-in-the-loop split: what only you can do, and what an agent can clear so your attention lands on meaning.</p>
+    <div class="opts" id="s3opts" role="group" aria-label="judgment load">
+      <button class="opt" data-v="alljudg">Almost all judgment<span class="sub">taste, voice, the call — little mechanical</span></button>
+      <button class="opt" data-v="mixed">A judgment core wrapped in mechanical work<span class="sub">I decide; an agent can draft, build, source around it</span></button>
+      <button class="opt" data-v="mostmech">Mostly mechanical, small judgment gate<span class="sub">spec it once, an agent runs it, I approve</span></button>
+      <button class="opt" data-v="allmech">Purely mechanical<span class="sub">no judgment — a spec and a result</span></button>
+    </div>
+    <div class="foe" id="foe3"></div>
+    <div class="btn-row">
+      <button class="btn ghost" id="s3back">Back</button>
+      <button class="btn" id="s3next">See where it lands</button>
+    </div>
+  </div>
+
+  <!-- VERDICT -->
+  <div class="card" id="sv" hidden>
+    <div class="verdict-band" id="vBand">
+      <p class="vk" id="vKind"></p>
+      <p class="vh" id="vHead"></p>
+      <p class="vp" id="vPara"></p>
+    </div>
+    <p class="verdict-conf" id="vConf"></p>
+
+    <div class="reasoning">
+      <p class="rlab">Why this verdict</p>
+      <ul id="vWhy"></ul>
+      <p class="flip" id="vFlip"></p>
+    </div>
+
+    <h2 style="font-size:19px;margin-top:18px">Who does what — the loop, named</h2>
+    <div id="vRoles"></div>
+
+    <details style="margin:6px 0 0">
+      <summary style="cursor:pointer;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:15px;color:var(--civic);min-height:44px;display:flex;align-items:center">Copy this as a one-line log entry</summary>
+      <textarea class="copybox" id="vLog" readonly aria-label="log entry"></textarea>
+    </details>
+
+    <div class="btn-row">
+      <button class="btn ghost" id="vRestart">Sort another idea</button>
+    </div>
+  </div>
+
+  <footer class="studiofoot">
+    <svg class="sf-mark" aria-hidden="true"><use href="#spiral"/></svg>
+    <p class="ff-studio">Tight Spiral <span>Studios</span></p>
+    <p class="ff-line">The front door of the Production Pipeline — Stage −1, before anything is built.</p>
+    <p class="ff-line"><a href="tight-spiral-system-map.html">How the studio works</a> · <a href="mailto:walshero@gmail.com">walshero@gmail.com</a></p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  function $(id){return document.getElementById(id);}
+  function show(id){$(id).hidden=false;} function hide(id){$(id).hidden=true;}
+  function top(){window.scrollTo({top:0,behavior:'auto'});}
+
+  var STEPS=['s0','s1','s2','s3'];
+  var state={idea:'',goal:null,attn:null,displace:'',judg:null};
+  var stepIdx=0;
+
+  /* ---------- progress rail ---------- */
+  function paintRail(){
+    var r=$('rail'); r.innerHTML='';
+    for(var i=0;i<4;i++){
+      var p=document.createElement('span');
+      p.className='pip'+(i<stepIdx?' done':(i===stepIdx?' here':''));
+      r.appendChild(p);
+    }
+    var lab=document.createElement('span'); lab.className='rl';
+    lab.textContent = stepIdx===0?'The idea':('Step '+stepIdx+' of 3');
+    r.appendChild(lab);
+    var sp=$('railSpoken'); if(sp)sp.textContent = stepIdx===0?'The idea':('Step '+stepIdx+' of 3');
+  }
+
+  /* ---------- the verdict engine (Confluence-grounded) ----------
+     Three constructs combine into one of four sorts. A provisional
+     verdict forms from goal-fit alone, then refines with attention
+     and judgment. Stopping early returns the best sort the answers
+     so far support, with honest confidence. */
+  function computeVerdict(){
+    var g=state.goal, a=state.attn, j=state.judg;
+    var kind, conf=0;
+
+    // ELIMINATE — strongest signal, can fire from goal alone
+    if(g==='process'){ return {kind:'cut', conf: a? 'high':'medium'}; }
+
+    // base sort from goal-fit (construct 1)
+    var fits = (g==='goal'||g==='load'||g==='onlyme');
+    if(g==='curious'){ kind='park'; } else if(fits){ kind='build'; }
+    else { kind='park'; }
+    conf = 1; // goal answered
+
+    // attention (construct 2) refines
+    if(a){
+      conf=2;
+      if(kind==='build'){
+        if(a==='later'){ kind='park'; }
+        else if(a==='cant'){ kind='park'; } // can't name displacement => parked in disguise
+        // 'room' or 'displace' keep build
+      }
+    }
+
+    // judgment (construct 3) can re-route a 'build' to AI, and finalizes
+    if(j){
+      conf=3;
+      if(kind==='build' && j==='allmech'){ kind='ai'; }
+      else if(kind==='build' && j==='mostmech'){ kind='ai'; }
+      // mixed / alljudg stay build (founder pipeline)
+      if(kind==='park' && (j==='allmech') && (g==='load'||g==='goal')){
+        // a mechanical, goal-serving thing with no attention is still delegable
+        kind='ai';
+      }
+    }
+
+    var confLabel = conf>=3?'high': conf===2?'medium':'low';
+    return {kind:kind, conf:confLabel};
+  }
+
+  var COPY={
+    build:{vk:'Build now',vh:'This enters the pipeline.',
+      vp:'It clears the gate: it pulls on a real goal or cuts real load, there is attention for it, and it needs your judgment. Take it to Stage 0 — name the medium and the one structural surprise.'},
+    park:{vk:'Park it',vh:'Real, but not now.',
+      vp:'Most good ideas land here — that is healthy, not a no. Put it in the parking lot with one line: why it waits, and the condition that would un-park it.'},
+    ai:{vk:'Delegate to AI',vh:'Hand it off — it never needs the founder pipeline.',
+      vp:'It is mechanical enough to spec once and let an agent run, with at most a quick approval at the end. Your attention is the scarce resource; this does not need to spend it.'},
+    cut:{vk:'Eliminate',vh:'Cut it before it costs a panel-minute.',
+      vp:'It exists only because some process is heavy. Fix or remove the process and the need disappears. Do not build a workaround for a step you could delete.'}
+  };
+
+  function whyLines(v){
+    var g=state.goal,a=state.attn,j=state.judg,out=[];
+    var gmap={goal:'It moves an institutional goal.',load:'It cuts recurring load.',onlyme:'It needs the founder specifically.',curious:'No goal is pulling on it yet — curiosity, not need.',process:'It only exists to work around a heavy process.'};
+    if(g)out.push(gmap[g]);
+    if(a){
+      var amap={room:'There is attention now; nothing has to yield.',displace:'There is a lane — and you named what yields'+(state.displace?': '+state.displace+'.':' for it.'),cant:'You would want it now but cannot name what yields — that is the parked-in-disguise signal.',later:'It can wait without cost.'};
+      out.push(amap[a]);
+    }
+    if(j){
+      var jmap={alljudg:'It is almost all judgment — founder work.',mixed:'A judgment core with mechanical work an agent can clear around it.',mostmech:'Mostly mechanical with a small approval gate.',allmech:'Purely mechanical — no judgment to spend.'};
+      out.push(jmap[j]);
+    }
+    return out;
+  }
+
+  function flipLine(kind){
+    if(kind==='build') return 'What would change it: if you cannot name what yields (Q2), or it turns out purely mechanical (Q3), it moves to park or to AI.';
+    if(kind==='park') return 'What would change it: name a goal it serves and a thing that yields, and it becomes a build.';
+    if(kind==='ai') return 'What would change it: if a real judgment call surfaces mid-way, pull it back into the founder pipeline.';
+    if(kind==='cut') return 'What would change it: if the heavy process is actually load-bearing and cannot be removed, the workaround may be a real build — re-sort it.';
+    return '';
+  }
+
+  function rolesFor(kind){
+    // human-in-the-loop split, explained for THIS idea
+    var j=state.judg;
+    var roles=[];
+    if(kind==='build'){
+      roles.push({cls:'founder',h:'Founder — the eyes, the voice, the judgment',p:'The locked calls: what it is, how it should feel, the final read. The human gate at every pipeline stage. This cannot be delegated.'});
+      if(j!=='alljudg') roles.push({cls:'ai-r',h:'AI — the mechanical pre-flight',p:'Drafting against the spec, the code, sourcing, reconciliation, asset generation from a written brief. Clears the mechanical so your attention lands only on meaning.'});
+    } else if(kind==='ai'){
+      roles.push({cls:'ai-r',h:'AI — runs it end to end',p:'Spec it once; an agent executes. No founder pipeline slot needed.'});
+      roles.push({cls:'founder',h:'Founder — a single approval gate',p:'One look at the result to confirm it is right. That is the whole of your involvement.'});
+    } else if(kind==='park'){
+      roles.push({cls:'founder',h:'Founder — names the un-park condition',p:'One line: why it waits and what would bring it back. Then it leaves your attention entirely until that condition is met.'});
+    } else if(kind==='cut'){
+      roles.push({cls:'cut-r',h:'No one — eliminate',p:'The work to do is on the process, not the idea. Remove or fix the heavy step; do not staff a workaround.'});
+    }
+    return roles;
+  }
+
+  function paintLive(){
+    if(!state.goal){ hide('live'); return; }
+    var v=computeVerdict();
+    var lk={build:'Build now',park:'Park it',ai:'Delegate to AI',cut:'Eliminate'}[v.kind];
+    $('live').innerHTML='So far this sorts as <b>'+lk+'</b><span class="conf">'+v.conf+' confidence</span><br>You can stop here and take that, or answer more to sharpen it.';
+    show('live');
+  }
+
+  /* ---------- freedom-of-effort exit on every step ---------- */
+  function paintFOE(hostId){
+    var v = state.goal ? computeVerdict() : null;
+    var host=$(hostId);
+    if(!v){ host.innerHTML=''; return; }
+    var lk={build:'Build now',park:'Park it',ai:'Delegate to AI',cut:'Eliminate'}[v.kind];
+    host.innerHTML='<p class="foe-line">Enough? You don\u2019t owe this survey more than you want to give. Right now it lands on <b>'+lk+'</b> ('+v.conf+' confidence).</p>'+
+      '<button class="foe-btn" type="button">I\u2019m done — show me that result</button>';
+    host.querySelector('.foe-btn').addEventListener('click',function(){ goVerdict(); });
+  }
+
+  /* ---------- navigation ---------- */
+  function goStep(i){
+    stepIdx=i;
+    STEPS.forEach(function(s,k){ $(s).hidden = (k!==i); });
+    hide('sv');
+    paintRail(); paintLive();
+    if(i===1){ $('s1idea').textContent='\u201C'+(state.idea||'your idea')+'\u201D'; paintFOE('foe1'); }
+    if(i===2){ paintFOE('foe2'); }
+    if(i===3){ paintFOE('foe3'); }
+    top();
+  }
+
+  function goVerdict(){
+    var v=computeVerdict();
+    var c=COPY[v.kind];
+    $('vBand').className='verdict-band '+v.kind;
+    $('vKind').textContent=c.vk; $('vHead').textContent=c.vh; $('vPara').textContent=c.vp;
+    var seen = 1 + (state.attn?1:0) + (state.judg?1:0);
+    $('vConf').textContent='Based on '+seen+' of 3 questions — '+v.conf+' confidence.'+(v.conf!=='high'?' Answer the rest to sharpen it, or take this as-is.':'');
+    // why
+    var why=$('vWhy'); why.innerHTML='';
+    whyLines(v).forEach(function(l){ var li=document.createElement('li'); li.textContent=l; why.appendChild(li); });
+    $('vFlip').textContent=flipLine(v.kind);
+    // roles
+    var rh=$('vRoles'); rh.innerHTML='';
+    rolesFor(v.kind).forEach(function(r){
+      var d=document.createElement('div'); d.className='role '+r.cls;
+      d.innerHTML='<p class="rh">'+r.h+'</p><p>'+r.p+'</p>'; rh.appendChild(d);
+    });
+    // log line
+    var lk={build:'BUILD NOW',park:'PARK',ai:'DELEGATE→AI',cut:'ELIMINATE'}[v.kind];
+    var log='['+lk+'] '+(state.idea||'(idea)')+
+      ' — goal:'+(state.goal||'?')+' / attn:'+(state.attn||'?')+(state.displace?' (yields: '+state.displace+')':'')+' / judgment:'+(state.judg||'?')+
+      ' — confidence:'+v.conf;
+    $('vLog').value=log;
+    STEPS.forEach(function(s){ $(s).hidden=true; });
+    show('sv'); paintRail(); top();
+  }
+
+  /* ---------- wire step 0 ---------- */
+  var ideaEl=$('ideaText');
+  ideaEl.addEventListener('input',function(){
+    state.idea=ideaEl.value.trim();
+    $('s0next').disabled = state.idea.length<3;
+  });
+  $('s0next').addEventListener('click',function(){ goStep(1); });
+
+  /* ---------- generic option group wiring ---------- */
+  function wireOpts(groupId,key,nextBtnId,onPick){
+    var g=$(groupId);
+    g.querySelectorAll('.opt').forEach(function(b){
+      b.addEventListener('click',function(){
+        g.querySelectorAll('.opt').forEach(function(x){x.classList.remove('on');});
+        b.classList.add('on');
+        state[key]=b.getAttribute('data-v');
+        $(nextBtnId).disabled=false;
+        if(onPick)onPick(state[key]);
+        paintLive();
+        // refresh the FOE on the current step so its provisional verdict updates
+        if(stepIdx===1)paintFOE('foe1'); if(stepIdx===2)paintFOE('foe2'); if(stepIdx===3)paintFOE('foe3');
+      });
+    });
+  }
+  wireOpts('s1opts','goal','s1next');
+  wireOpts('s2opts','attn','s2next',function(v){
+    var w=$('s2displaceWrap'); w.hidden = (v!=='displace');
+  });
+  wireOpts('s3opts','judg','s3next');
+
+  $('displaceText').addEventListener('input',function(){ state.displace=$('displaceText').value.trim(); });
+
+  $('s1back').addEventListener('click',function(){ goStep(0); });
+  $('s1next').addEventListener('click',function(){ goStep(2); });
+  $('s2back').addEventListener('click',function(){ goStep(1); });
+  $('s2next').addEventListener('click',function(){ goStep(3); });
+  $('s3back').addEventListener('click',function(){ goStep(2); });
+  $('s3next').addEventListener('click',function(){ goVerdict(); });
+
+  $('vRestart').addEventListener('click',function(){
+    state={idea:'',goal:null,attn:null,displace:'',judg:null};
+    ideaEl.value=''; $('s0next').disabled=true;
+    ['s1opts','s2opts','s3opts'].forEach(function(gid){ $(gid).querySelectorAll('.opt').forEach(function(x){x.classList.remove('on');}); });
+    ['s1next','s2next'].forEach(function(b){ $(b).disabled=true; });
+    $('s2displaceWrap').hidden=true; $('displaceText').value='';
+    hide('live');
+    goStep(0);
+  });
+
+  /* ---------- go ---------- */
+  goStep(0);
+})();
+</script>
+</body>
+</html>

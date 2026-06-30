@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  NETWORK STRATEGY SPEC — Tight Spiral Studios · walshero@gmail.com
+  Canonical role: the studio-scaling strategy doc. Decodes how FableVision and
+  Filament built their partner networks, sets the gating finding (ship one game
+  first), and lays the six-studio reference layer as durable shelf material.
+
+  WIREFRAME NOVELTY: the doc leads with its own brake. The headline is NOT a
+  scaling plan — it is the finding that scaling waits until one game is PLAYED.
+  Every network move below is filed UNDER that gate, so the spec cannot be
+  mistaken for a green light.
+
+  FEEDS THE HUBS: carries a TSP-META block (bottom) so the founder cockpit's
+  live-reading layer can parse role / open calls / what it gates, once that
+  hub ships. Co-located so it can't drift.
+
+  FLOOR (locked): Comfort Gate screen-zero (palette picked as LIVE swatches
+  before content). Banned-token rule: --ink2 == --ink, no muted-text, no green
+  text on paper (green only as button/border fill behind full-contrast white).
+  Large type, one idea per line where it counts, 44px targets, keyboard nav,
+  visible focus, reduced-motion safe, scroll-reset, no emoji, no color-as-sole.
+  Single-file, offline, in-memory only.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Network Strategy Spec — Tight Spiral Studios</title>
+<style>
+:root{
+  --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --ink2:#1f1b12;
+  --line:#c2b288; --gold:#6e4700; --focus:#c8900a;
+  --pine:#1a4a35; --pine-fill:#1a4a35; --blue:#1a3d5c;
+  --stop:#8b1a2a; --stop-bg:#f7e7e8;
+  --go:#185f3e; --go-bg:#e6f1ea;
+}
+body.softer{ --bg:#efe9dd; --surface:#f7f1e6; --ink:#26210f; --ink2:#26210f; --line:#cdbf9c; }
+body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0; --line:#5e553e;
+  --gold:#f0c357; --focus:#f0c357; --pine-fill:#3d8a64; --stop-bg:#3a2622; --go-bg:#243a2f; --stop:#f0a8a8; --go:#9fd9b6; }
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{ margin:0; font-family:Georgia,'Times New Roman',serif; background:var(--bg); color:var(--ink);
+  line-height:1.6; font-size:19px; }
+.sans{ font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
+
+/* top bar */
+.topbar{ position:sticky; top:0; z-index:10; background:var(--pine-fill); color:#fff;
+  display:flex; align-items:center; gap:.6rem; padding:.7rem 1rem; border-bottom:3px solid var(--gold); }
+.topbar .wm{ font:700 .95rem/1.2 system-ui,sans-serif; color:#fff; }
+.cstop{ margin-left:auto; background:rgba(255,255,255,.16); color:#fff; border:2px solid rgba(255,255,255,.75);
+  border-radius:9px; padding:.5rem .7rem; font:700 .8rem/1 system-ui,sans-serif; cursor:pointer; min-height:44px; min-width:44px; }
+.cstop:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+.wrap{ max-width:760px; margin:0 auto; padding:1.6rem 1.2rem 4rem; }
+
+/* comfort gate screen-zero */
+#gate{ max-width:760px; margin:0 auto; padding:2rem 1.2rem; }
+#gate h1{ font-size:1.5rem; margin:.2rem 0 .4rem; }
+#gate p{ font-size:1.02rem; }
+.swatches{ display:flex; flex-direction:column; gap:.7rem; margin:1.3rem 0; }
+.sw{ display:flex; align-items:center; gap:1rem; width:100%; text-align:left; cursor:pointer;
+  border:3px solid var(--line); border-radius:12px; padding:1rem 1.1rem; min-height:44px;
+  font:600 1.05rem/1.3 system-ui,sans-serif; }
+.sw:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+.sw .chip{ width:42px; height:42px; border-radius:8px; flex:0 0 auto; border:2px solid rgba(0,0,0,.25); }
+.sw.d{ background:#fffaf0; color:#1f1b12; } .sw.d .chip{ background:#1f1b12; }
+.sw.s{ background:#f7f1e6; color:#26210f; } .sw.s .chip{ background:#26210f; }
+.sw.w{ background:#26231d; color:#f3e4c0; border-color:#5e553e; } .sw.w .chip{ background:#f0c357; }
+
+h1.title{ font-size:1.75rem; line-height:1.25; margin:.4rem 0 .3rem; }
+.kicker{ font:700 .8rem/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); }
+h2{ font-size:1.3rem; margin:2.2rem 0 .5rem; padding-top:1rem; border-top:2px solid var(--line); }
+h3{ font-size:1.08rem; margin:1.3rem 0 .3rem; font-family:system-ui,sans-serif; }
+p{ margin:.6rem 0; }
+strong{ color:var(--ink); }
+a{ color:var(--gold); }
+body.warm a{ color:var(--focus); }
+
+/* the headline brake card */
+.brake{ background:var(--stop-bg); border:3px solid var(--stop); border-radius:14px; padding:1.2rem 1.3rem; margin:1.4rem 0; }
+.brake .lab{ font:800 .8rem/1 system-ui,sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--stop); }
+.brake p{ margin:.5rem 0 0; }
+
+.go{ background:var(--go-bg); border:3px solid var(--go); border-radius:14px; padding:1.1rem 1.2rem; margin:1.2rem 0; }
+.go .lab{ font:800 .8rem/1 system-ui,sans-serif; letter-spacing:.06em; text-transform:uppercase; color:var(--go); }
+
+.card{ background:var(--surface); border:2px solid var(--line); border-radius:12px; padding:1.1rem 1.2rem; margin:1rem 0; }
+.card h3{ margin-top:0; }
+
+ul,ol{ padding-left:1.3rem; } li{ margin:.4rem 0; }
+.lede{ font-size:1.05rem; }
+.tag{ display:inline-block; font:700 .72rem/1 system-ui,sans-serif; padding:.3rem .5rem; border-radius:7px;
+  border:2px solid var(--line); background:var(--bg); color:var(--ink); margin:.15rem .2rem .15rem 0; }
+
+table{ width:100%; border-collapse:collapse; margin:1rem 0; font-size:.95rem; }
+th,td{ text-align:left; padding:.6rem .5rem; border-bottom:1px solid var(--line); vertical-align:top; }
+th{ font-family:system-ui,sans-serif; font-size:.82rem; text-transform:uppercase; letter-spacing:.04em; color:var(--gold); }
+
+.foot{ margin-top:3rem; padding-top:1.2rem; border-top:2px solid var(--line); font-size:.9rem; }
+.studiofoot{ background:var(--pine-fill); color:#fff; border-radius:12px; padding:1.1rem 1.2rem; margin-top:1.4rem; }
+.studiofoot a{ color:#fff; }
+.hidden{ display:none; }
+@media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+</style>
+</head>
+<body>
+
+<!-- ============ COMFORT GATE (screen zero) ============ -->
+<div id="gate">
+  <p class="kicker">Tight Spiral Studios</p>
+  <h1>Pick what's easiest on your eyes</h1>
+  <p>Three palettes, shown as real swatches. No surprise — choose before the document renders. All three meet the contrast floor; the only test that matters is which one your eyes prefer.</p>
+  <div class="swatches" role="group" aria-label="palette choice">
+    <button class="sw d" data-stop="default"><span class="chip" aria-hidden="true"></span><span>Default — ink on warm paper</span></button>
+    <button class="sw s" data-stop="softer"><span class="chip" aria-hidden="true"></span><span>Softer — lower glare, muted paper</span></button>
+    <button class="sw w" data-stop="warm"><span class="chip" aria-hidden="true"></span><span>Warm-dark — amber on charcoal</span></button>
+  </div>
+  <p class="sans" style="font-size:.9rem;">You can change this any time with the Comfort button, top right.</p>
+</div>
+
+<!-- ============ DOCUMENT ============ -->
+<div id="doc" class="hidden">
+  <div class="topbar">
+    <span class="wm">Tight Spiral Studios — Network Strategy Spec</span>
+    <button class="cstop" id="cstop" aria-label="change comfort palette">Comfort</button>
+  </div>
+
+  <div class="wrap">
+    <p class="kicker">Strategic spec · feeds the hubs</p>
+    <h1 class="title">How studios build partner networks — and why ours waits</h1>
+    <p class="lede">A decode of FableVision's and Filament Games' network strategies, filed under the one finding that governs all of it: <strong>scaling waits until a real student plays a real game.</strong></p>
+
+    <!-- THE HEADLINE BRAKE -->
+    <div class="brake">
+      <p class="lab">The finding that leads</p>
+      <p><strong>Do not build a partner network yet.</strong> Both studios' networks are <em>downstream</em> of shipped, played, evidence-backed games. Filament's first grant came five years in, after playable prototypes with real download numbers. FableVision's "mission magnet" only pulls partners because a 30-year award-winning portfolio proves the mission first.</p>
+      <p>Tight Spiral has zero games <em>played by students</em> yet. Choose Your Leader is content-complete; EN195 and the capstone shipped but haven't been run with a class. Every partner door asks the same question — <strong>"what have students done with your game?"</strong> — and today the answer is "nothing yet."</p>
+      <p>The "let's scale" instinct is the optimization-before-implementation trap at the studio level. The plan below is real and worth keeping. It is filed for <strong>after</strong> the gate clears, not before.</p>
+    </div>
+
+    <div class="go">
+      <p class="lab">The one move that unlocks everything below</p>
+      <p>Run <strong>one game</strong> (Choose Your Leader or EN195) with <strong>one MassBay section</strong> this fall. Capture three things: did they engage, what did they learn, what would you change. That single artifact is the key to every door in this spec. It is also Filament's literal Phase I move.</p>
+    </div>
+
+    <!-- MODEL A -->
+    <h2>Model A — FableVision: the mission magnet</h2>
+    <p>FableVision doesn't chase clients; mission-aligned institutions come to them. The pull works because the studio is itself mission-first, so it draws organizations that are also mission-based and works with them to "move the world to a better place."</p>
+    <div class="card">
+      <h3>The mechanics worth stealing</h3>
+      <ul>
+        <li><strong>Named verticals.</strong> Partners cluster into types — publishers, broadcasters, nonprofits, museums, health. They name the cluster, then serve it.</li>
+        <li><strong>A door-opener per vertical.</strong> When a partner-type recurs, they hire someone the community already knows to own it — e.g. a Director of G.L.A.M. (Galleries, Libraries, Archives, Museums) Innovation. Networks scale through <em>named relationship-owners</em>, not broadcast.</li>
+        <li><strong>Deliberately wide contract range.</strong> From small work-for-hire to multi-year federally-funded grants — "everything in between" — so no single deal size is the whole business.</li>
+        <li><strong>Walled-off business engine.</strong> A dedicated business/finance person keeps the studio solvent so creatives stay creative. (This is your Scout-wall rule, validated by a 30-year studio.)</li>
+      </ul>
+    </div>
+    <p><strong>Your version of the verticals (parked until the gate clears):</strong></p>
+    <p>
+      <span class="tag">Community colleges</span>
+      <span class="tag">Writing / English faculty</span>
+      <span class="tag">AI-governance bodies</span>
+      <span class="tag">Accessibility orgs</span>
+    </p>
+
+    <!-- MODEL B -->
+    <h2>Model B — Filament: the grant + RFP + SME engine</h2>
+    <p>Filament's funding spine is non-dilutive federal grants (seven SBIR awards, the first in 2010). The structural truth they prove: <strong>nobody sustains high-quality classroom games on school sales alone</strong> — the survivors subsidize with grants and contract work, lean on app-store sales, or fold games into a larger curricular product.</p>
+    <div class="card">
+      <h3>The mechanics worth stealing</h3>
+      <ul>
+        <li><strong>Grants over equity.</strong> SBIR funds let them test new products "with less financial worry" and without giving up ownership — but it's a real time investment, not free money.</li>
+        <li><strong>Partner-as-playtester.</strong> University researchers gave iterative pedagogical input; independent teachers and experts reviewed at milestones; games got both studio-based and classroom-based usability testing with real students. The network <em>is</em> the validation pipeline.</li>
+        <li><strong>The RFP-through-a-grant path.</strong> An institution wins a grant requiring public outreach, then issues an RFP to known game companies. You become "known" by shipping and showing impact.</li>
+        <li><strong>A clear differentiator, proven with students.</strong> Every winning SBIR pitch starts there — the sentence you can't write yet, and one pilot makes writable.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Your first grant targets (research note, parked)</h3>
+      <ul>
+        <li><strong>NEH</strong> — funds humanities/educational games. Choose Your Leader is a civics/rhetoric humanities game: a near-exact fit.</li>
+        <li><strong>IES / ED SBIR</strong> — funds learning tools; ~10 Phase I and ~5 Phase II awards a year, conservative, wants high likelihood of classroom impact.</li>
+        <li><strong>NSF SBIR</strong> — broader, funds cutting-edge education-science work.</li>
+      </ul>
+      <p class="sans" style="font-size:.9rem;">Each needs a played-game-with-evidence to be credible. Gate applies.</p>
+    </div>
+
+    <!-- CONTRAST -->
+    <h2>The clean contrast</h2>
+    <table>
+      <tr><th>FableVision</th><th>Filament</th></tr>
+      <tr>
+        <td><strong>Inbound.</strong> Mission pulls partners in. Network = relationships, named door-openers, mission alignment.</td>
+        <td><strong>Funded.</strong> Grants + RFPs push projects out. Network = funders, SME validators, playtest partners.</td>
+      </tr>
+      <tr>
+        <td>Took ~30 years and a portfolio.</td>
+        <td>Took ~5 years and playable prototypes before the first grant.</td>
+      </tr>
+    </table>
+    <p>Both rest on the same foundation you don't have yet: <strong>demonstrated learning impact from a shipped game.</strong></p>
+
+    <!-- REFERENCE LAYER -->
+    <h2>The six-studio reference layer</h2>
+    <p>Durable shelf material from this conversation — each studio reduced to its one stolen move. Standing rule: <strong>these studios improve the machine; they never reshape the IP or the floors.</strong> (Same status MIT Game Lab holds: reference seed only.)</p>
+    <table>
+      <tr><th>Studio</th><th>The one move to steal</th></tr>
+      <tr><td><strong>Filament</strong></td><td>Name the production gates Alpha / Beta / Gold, each with one-line exit criteria, with senior cross-discipline review at each.</td></tr>
+      <tr><td><strong>FableVision</strong></td><td>Mission magnet + a named door-opener per vertical; walled-off business engine (validates the Scout rule).</td></tr>
+      <tr><td><strong>Lumino City</strong> (State of Play)</td><td>The "Lume move": ship one self-contained scene to prove the medium before building the cathedral. Physical paper-craft as a differentiator, not just an aesthetic.</td></tr>
+      <tr><td><strong>Journey</strong> (thatgamecompany)</td><td>The Japanese-garden test: design is done when nothing more can be removed. Subtraction as accessibility. Color carries the emotional arc.</td></tr>
+      <tr><td><strong>Metroid</strong> (Metroidbrainia)</td><td>The <strong>knowledge gate</strong>: progression gated on comprehension, not items. The player can't advance until they've understood the move. Teaches by experience, no tutorial box.</td></tr>
+      <tr><td><strong>Amanita Design</strong></td><td>Wordless-world discipline + funding art bets with side commissions. Caution: pure exposure isn't a game until the task bites (Botanicula had no puzzles at first).</td></tr>
+    </table>
+
+    <!-- WHAT FEEDS WHERE -->
+    <h2>What this spec feeds, and how</h2>
+    <div class="card">
+      <ul>
+        <li><strong>Founder hub / cockpit</strong> — this doc is the anchor of the strategy/scaling lane; its meta-block (below) lets the live-reading hub surface the open calls and the gate.</li>
+        <li><strong>System map</strong> — the six-studio reference layer is the "who we learned from" colophon.</li>
+        <li><strong>Patterns file</strong> — two mechanics graduate from here: the <strong>knowledge gate</strong> and the <strong>Japanese-garden subtraction test</strong>. (One-graduated-change cap: add these deliberately, not all six.)</li>
+        <li><strong>OS</strong> — the Alpha/Beta/Gold gate names + exit criteria belong in the pipeline (§6) when opened.</li>
+      </ul>
+    </div>
+
+    <!-- NEXT ACTIONS -->
+    <h2>Next actions — sorted by the gate</h2>
+    <div class="go">
+      <p class="lab">Before the gate (do now)</p>
+      <ul>
+        <li>Pick one game; run it with one MassBay section this fall; capture engage / learn / change.</li>
+        <li>Optional, costs nothing: a peer-to-peer note to Paul Reynolds (FableVision CEO, Boston, BC faculty) — admiration + "could I learn from your model," no pitch.</li>
+      </ul>
+    </div>
+    <div class="brake">
+      <p class="lab">After the gate (parked, do not start)</p>
+      <ul>
+        <li>Map your two-model network plan (mission magnet + grant engine) into a working strategy.</li>
+        <li>Scope a first NEH or IES SBIR application around the played game's evidence.</li>
+        <li>Stand up named verticals and a door-opener-per-vertical plan.</li>
+      </ul>
+    </div>
+
+    <div class="studiofoot sans">
+      <strong>Tight Spiral Studios</strong> · walshero@gmail.com<br>
+      <a href="tight-spiral-system-map.html">How the studio works</a>
+      <p style="font-size:.85rem; margin-top:.6rem;">Sources: FableVision and Filament Games public sites, blogs, SBIR/IES records, and game-design press. Reference studios cited for method only; no IP or floor is reshaped by them.</p>
+    </div>
+  </div>
+</div>
+
+<!--
+  TSP-META BLOCK
+  { "file":"network-strategy-spec.html",
+    "role":"Studio-scaling strategy spec — decodes FableVision (mission magnet) + Filament (grant/RFP/SME) network models; sets the gating finding; holds the six-studio reference layer",
+    "wireframe_novelty":"the doc leads with its own brake — headline is the finding that scaling WAITS, so the spec can't be read as a green light",
+    "headline_finding":"do not build a partner network until one game is PLAYED by real students with captured evidence",
+    "models":{"fablevision":"inbound mission magnet + named door-opener per vertical + walled business engine","filament":"non-dilutive grants (SBIR) + RFP-through-grant + partner-as-playtester"},
+    "reference_layer":["Filament: Alpha/Beta/Gold gates","FableVision: mission magnet + door-opener-per-vertical","Lumino City: Lume move / paper-craft as moat","Journey: Japanese-garden subtraction test","Metroid: knowledge gate","Amanita: wordless-first + exposure must become a task"],
+    "comfort_gate":true,
+    "operative":true,
+    "hitl_active":["headline redirect overrides the stated scaling request — human judgment that ship-first beats scale-first","reference studios held as seed-only, never reshaping IP/floors"],
+    "hitl_NEEDED":["founder confirms the one pilot game + section for fall","founder voice/wording pass","decide which two mechanics actually graduate to patterns file (knowledge gate + garden test proposed)"],
+    "founder_open":["pick CYL or EN195 for the fall pilot","send/skip the Paul Reynolds peer note","open the Alpha/Beta/Gold gate-naming into OS §6","first grant target: NEH vs IES SBIR"],
+    "feeds":["founder-hub strategy lane (anchor)","system-map colophon (reference layer)","patterns file (knowledge gate + garden test)","OS §6 pipeline (Alpha/Beta/Gold)"],
+    "parking_lot_flagged":["full two-model network plan","NEH/IES SBIR application","named verticals + door-opener plan — ALL gated behind one played game"],
+    "floor_states_verified":["Default/Softer/Warm-dark target WCAG AA; --ink2==--ink (no muted text); no green text on paper (green only as fill behind white); 44px+ targets; keyboard nav; visible focus; reduced-motion safe; scroll-reset on gate->doc; no emoji; no color-as-sole-signal (label+border)"],
+    "assets_promoted":["comfort-gate screen-zero (reused)","headline-brake card pattern (lead-with-the-finding)","before/after-the-gate action split","six-studio reference-layer table"] }
+-->
+<script>
+(function(){
+  var stops=['default','softer','warm'];
+  function apply(s){
+    document.body.classList.remove('softer','warm');
+    if(s==='softer')document.body.classList.add('softer');
+    if(s==='warm')document.body.classList.add('warm');
+  }
+  // gate -> doc
+  document.querySelectorAll('.sw').forEach(function(b){
+    b.addEventListener('click',function(){
+      apply(this.getAttribute('data-stop'));
+      document.getElementById('gate').classList.add('hidden');
+      document.getElementById('doc').classList.remove('hidden');
+      window.scrollTo(0,0);
+      var cs=document.getElementById('cstop');
+      cs.dataset.i = stops.indexOf(this.getAttribute('data-stop'));
+      cs.focus();
+    });
+  });
+  // comfort toggle in-doc
+  var cs=document.getElementById('cstop');
+  cs.dataset.i='0';
+  cs.addEventListener('click',function(){
+    var i=(parseInt(this.dataset.i,10)+1)%3; this.dataset.i=i;
+    apply(stops[i]);
+    this.textContent='Comfort: '+stops[i].charAt(0).toUpperCase()+stops[i].slice(1);
+  });
+})();
+</script>
+</body>
+</html>

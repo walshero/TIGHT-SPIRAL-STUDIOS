@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  CHOOSE YOUR LEADER — IN-FILE CHANGELOG
+  Canonical trunk. Edit in place, no branching. Newest first.
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  v4 (2026-06-27) — COLD-OPEN REDESIGN. Review condition: a stranger opens the
+    bare link with zero context. Per cyl-redesign-intake.md. No new content,
+    no engine change, no living-president sourcing, no descent-plane art.
+    - W1 TITLE CARD: one quiet orientation contract before Beat 0 — names what it
+      is, prices the ask (~4 min), and carries the roster-intent line (gating =
+      visible integrity, not thinness). Scene-first preserved: the GAME still
+      opens in a room; the contract is one screen ahead. Shown once per session.
+    - W2 ART REPAIR (the big coherence break): lbj64 + nixon69 rebuilt as TV-lit
+      rooms matching their prompts + JFK's console-TV vocabulary. lbj64 = colder,
+      heavier (near-midnight, institutional). nixon69 = warmer, faded, direct
+      address. Old TR-desk/Lincoln-candle art (mis-keyed in v2) deleted.
+      data-n keys (radio/chair/toy) preserved so prompt+JS wiring is untouched.
+      aria-labels corrected to describe the television.
+    - W4 DE-JARGON: deepest "for instructors" ring rewritten in plain language —
+      no construct_/Maslow descent/ti_rails/instrument on any player surface.
+      The player never does the studio's work (locked floor).
+    - W5 LOOP CLOSE: ending now states, in the game's own voice, what the player
+      just practiced — before any opt-in ring or link out. System-map link kept
+      but demoted to a door, not the explanation.
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    - BRANDING: top brand bar (spiral mark + "Tight Spiral Studios"); dark studiofoot
+      footer matching Confluence (mark, standing line, links). WHY/SEAT: standing branding rule.
+    - ABOUT: footer + end-screen link now point to tight-spiral-system-map.html
+      ("How the studio works") instead of a bare #about — shows the interacting components.
+    - PLAYER-IN-THE-LOOP: optional, skippable "Was this fair?" at the end; acknowledges the
+      player's read is part of the loop; in-memory only, mailto path for real feedback.
+    - DESIGN CHOICE: "Curious about a design choice?" reveal labels why blind-commit-before-record.
+    - HOW IT FITS: inline teaser into the system map (gear-train framing) + link to full map.
+    - COHERENCE SKEPTIC (new standing seat, HALT on all output): fired on the instructor ring —
+      a standalone screenshot of the measurement panel read as incoherent out of context.
+      Advised + fixed: added a frame line naming it as one part of a media-literacy game.
+      DECISION POINT logged here and in OS §10 per the seat's standing duty.
+  v2 (2026-06-27)
+    - ROSTER: cut FDR/1933, TR/1901-09, Lincoln/1865 (three separate non-Cold-War eras).
+      Locked structure to TWO eras: Cold War trio (JFK/1962, LBJ/1964, Nixon/1969) +
+      current-era trio (Obama, Trump, Biden, still GATED). WHY/SEAT: founder call.
+    - CONTENT: LBJ (Gulf of Tonkin) and Nixon (silent-majority/Cambodia) added with
+      real dated/sourced records (web-verified). Ungated — historical.
+    - ART: FDR daylight room deleted; TR evening + Lincoln candlelight rooms re-keyed
+      to lbj64 / nixon69 so the three Cold War scenes don't look identical.
+    - A11Y (ADA HALT cleared): descent verdict now in aria-live region + explicit
+      spoken landing line ("level N of 5… caught/did not catch the gap"); progress
+      rail now announced to screen readers via sr-only live region.
+    - TI (HALT cleared): skippable, full-contrast content note before charged quotes
+      (JFK nuclear, LBJ war/deception) — placed Beat 1, never gates progress.
+    - VOICE (AI-Skeptic HALT): cut two bow-lines that narrated the lesson out loud.
+    - PRESENTATION (Skeptic-Translator): deepest engine ring relabeled "For instructors".
+    - GOVERNANCE (FERPA): "Measurement OS — live" corrected to "in-memory only".
+  v1 — first build: four historical scenes (JFK/FDR/TR/Lincoln) + three gated current.
+-->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Choose Your Leader</title>
+<style>
+  :root{
+    --paper:#f6f2ea; --paper-2:#efe9dc; --ink:#191d1a; --ink-soft:#33352f;
+    --rule:#bdb6a3; --civic:#1f4a4f; --crisis:#7e3a22; --gold:#8a6322;
+    --slip:#fffdf8; --shadow:rgba(40,36,28,.28); --focus:#0f5e7c; --ok:#2f5c39;
+  }
+  *{box-sizing:border-box}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink)}
+  body{font-family:Georgia,'Iowan Old Style',serif;font-size:20px;line-height:1.5;
+    -webkit-text-size-adjust:100%;padding:0 0 60px}
+  .wrap{max-width:640px;margin:0 auto;padding:18px 18px 0}
+
+  /* progress rail across scenes */
+  .rail{display:flex;gap:6px;align-items:center;margin:0 0 16px;flex-wrap:wrap}
+  .rail .pip{width:26px;height:8px;border-radius:4px;background:var(--rule)}
+  .rail .pip.done{background:var(--civic)}
+  .rail .pip.here{background:var(--gold)}
+  .rail .rl{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;color:var(--ink-soft);margin-left:8px;font-weight:600}
+
+  .card{background:var(--paper-2);border:1px solid var(--rule);border-radius:12px;padding:22px 20px;margin:0 0 18px;
+    box-shadow:0 1px 0 #fff inset,0 14px 30px -22px var(--shadow)}
+  .card[hidden]{display:none}
+
+  /* scene-first stage */
+  .stage{width:100%;height:auto;display:block;border-radius:10px;border:1px solid var(--rule)}
+  .scene-prompt{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:17px;font-weight:700;color:var(--ink);
+    margin:14px 0 0;line-height:1.45}
+  .notice-hit{cursor:pointer}
+  .notice-hit:focus-visible{outline:4px solid var(--focus);outline-offset:3px}
+  .notice-line{background:var(--slip);border:1px solid var(--rule);border-left:6px solid var(--gold);
+    border-radius:9px;padding:13px 15px;margin:12px 0 0;font-size:17px;line-height:1.45;color:var(--ink);animation:rise .4s ease both}
+  .notice-line .go{display:block;width:100%;text-align:center;background:var(--civic);color:#fff;border:none;border-radius:10px;
+    padding:15px;margin:12px 0 0;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:17px;font-weight:700;cursor:pointer;min-height:44px}
+  .notice-line .go:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+
+  .scene-cap{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;color:var(--ink-soft);
+    letter-spacing:.06em;text-transform:uppercase;margin:0 0 12px;font-weight:600}
+  .quote{font-size:23px;line-height:1.36;margin:6px 0 14px;position:relative;padding-left:16px}
+  .quote::before{content:"";position:absolute;left:0;top:4px;bottom:4px;width:4px;border-radius:3px;background:var(--crisis)}
+  .heard{font-size:16px;color:var(--ink-soft);margin:0 0 4px}
+  .note-line{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:15px;font-weight:700;color:var(--ink);
+    background:var(--slip);border:1px solid var(--rule);border-left:6px solid var(--civic);border-radius:9px;padding:11px 13px;margin:0 0 14px}
+  .note-line[hidden]{display:none}
+
+  .ask{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:18px;margin:20px 0 14px}
+  .trust{display:flex;gap:10px;margin:6px 0 0}
+  .trust button{flex:1;min-height:64px;border:2px solid var(--rule);background:var(--slip);border-radius:12px;
+    font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:16px;font-weight:700;color:var(--ink);cursor:pointer;padding:6px}
+  .trust button:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+  .trust button.on{background:var(--civic);border-color:var(--civic);color:#fff}
+  .trust-lab{display:flex;justify-content:space-between;font-family:ui-sans-serif,system-ui,Arial,sans-serif;
+    font-size:14px;color:var(--ink-soft);margin:10px 2px 0;font-weight:600}
+
+  .turn{background:var(--slip);border:1px solid var(--rule);border-left:6px solid var(--crisis);border-radius:10px;
+    padding:18px;margin:0 0 16px;animation:rise .5s ease both}
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .turn .tag{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;font-weight:700;letter-spacing:.04em;
+    color:var(--crisis);text-transform:uppercase;margin:0 0 8px}
+  .turn .rec{font-size:19px;line-height:1.45;margin:0 0 8px}
+  .turn .src{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;color:var(--ink-soft);margin:0;font-weight:600}
+  .turn.gated{border-left-color:var(--gold)}
+  .turn.gated .tag{color:var(--gold)}
+
+  .cost-head{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:19px;margin:0 0 6px}
+  .cost-sub{color:var(--ink);font-size:16px;margin:0 0 16px;line-height:1.5}
+  .descent-legend{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:14px;line-height:1.5;color:var(--ink);
+    background:var(--slip);border:1px solid var(--rule);border-radius:9px;padding:11px 13px;margin:0 0 14px;font-weight:600}
+  .tier{display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px dashed var(--rule)}
+  .tier:first-child{border-top:none}
+  .tier .dot{flex:0 0 auto;width:28px;height:28px;border-radius:50%;border:2px solid var(--rule);display:flex;align-items:center;
+    justify-content:center;font-size:14px;background:var(--slip);font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;color:var(--ink)}
+  .tier .name{flex:1;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:16px;color:var(--ink)}
+  .tier.lit .dot{background:var(--gold);border-color:var(--gold);color:#fff}
+  .tier.lit .name{font-weight:700}
+  .tier.here{box-shadow:inset 0 0 0 2px var(--civic);border-radius:8px;padding-left:8px;padding-right:8px}
+
+  .btn-row{margin:20px 0 0}
+  .btn{display:block;width:100%;text-align:center;background:var(--civic);color:#fff;border:none;border-radius:11px;
+    padding:18px;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:18px;font-weight:700;cursor:pointer;min-height:44px}
+  .btn:disabled{opacity:.5;cursor:default}
+  .btn:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+  .btn.ghost{background:transparent;color:var(--civic);border:2px solid var(--rule);margin-top:10px}
+
+  /* end-of-game arc */
+  .arc-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px dashed var(--rule)}
+  .arc-row:first-of-type{border-top:none}
+  .arc-when{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;font-weight:700;color:var(--ink-soft);flex:0 0 86px}
+  .arc-bar{flex:1;height:14px;background:var(--paper);border:1px solid var(--rule);border-radius:7px;position:relative;overflow:hidden}
+  .arc-fill{position:absolute;top:0;bottom:0;left:0;background:var(--civic);border-radius:7px}
+  .arc-noticed{flex:0 0 auto;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:12.5px;font-weight:700}
+  .arc-noticed.yes{color:var(--ok)} .arc-noticed.no{color:var(--crisis)}
+
+  /* tiered-depth engine */
+  .engine{margin:24px 0 0;border-top:2px solid var(--rule);padding-top:16px}
+  .descend{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;background:transparent;
+    color:var(--civic);border:2px solid var(--rule);border-radius:10px;padding:13px 15px;
+    font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:15px;font-weight:600;cursor:pointer;min-height:44px}
+  .descend:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+  .descend .arrow{font-weight:700;font-size:18px;flex:0 0 auto}
+  .ring{margin:10px 0 0}.ring[hidden]{display:none}
+  .ring-paper{background:var(--slip);border:1px solid var(--rule);border-radius:10px;padding:15px 16px;font-size:16px;line-height:1.5;color:var(--ink)}
+  .ring-paper .rlab{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;font-weight:700;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--ink-soft);margin:0 0 8px}
+  .ring-paper p{margin:0 0 8px}.ring-paper p:last-child{margin:0}
+  .ring-paper .num{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;color:var(--civic)}
+  .climb{display:inline-block;background:transparent;border:none;color:var(--ink-soft);cursor:pointer;
+    font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:14px;padding:8px 4px;margin:6px 0 0;min-height:44px;font-weight:600}
+  .climb:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+  .meta{background:#1f2421;color:#eef0e9;border-radius:10px;padding:16px;font-family:ui-monospace,Menlo,Consolas,monospace;
+    font-size:13.5px;line-height:1.6}
+  .meta .k{color:#a9d2aa}.meta .row{margin:0 0 5px}
+  .meta .hd{color:#e0bd6f;text-transform:uppercase;letter-spacing:.08em;font-size:12px;margin:12px 0 6px}
+  .meta .hd:first-child{margin-top:0}
+
+  .footer{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;color:var(--ink-soft);text-align:center;margin:24px 0 0;line-height:1.5}
+  .footer a{color:var(--civic)}
+  .exit{display:block;text-align:center;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:14px;color:var(--ink-soft);
+    margin:16px 0 0;font-weight:600;background:none;border:none;width:100%;cursor:pointer;min-height:44px}
+  .exit:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+
+  /* top brand bar (matches Confluence) */
+  .brandbar{display:flex;align-items:center;gap:10px;margin:0 0 14px}
+  .brandbar .mark{flex:0 0 auto;width:30px;height:30px;display:block}
+  .brandbar .wm{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:15px;letter-spacing:.02em;color:var(--ink)}
+  .brandbar .wm span{color:var(--gold)}
+
+  /* player-in-the-loop feedback */
+  .pil{margin:22px 0 0;border-top:2px solid var(--rule);padding-top:18px}
+  .pil .q{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:17px;margin:0 0 4px;color:var(--ink)}
+  .pil .sub{font-size:15px;color:var(--ink);margin:0 0 14px;line-height:1.5}
+  .pil-row{display:flex;gap:10px;flex-wrap:wrap}
+  .pil-row button{flex:1;min-width:120px;min-height:56px;border:2px solid var(--rule);background:var(--slip);border-radius:11px;
+    font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:15px;font-weight:700;color:var(--ink);cursor:pointer;padding:8px}
+  .pil-row button:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+  .pil-row button.on{background:var(--civic);border-color:var(--civic);color:#fff}
+  .pil-ack{background:var(--slip);border:1px solid var(--rule);border-left:6px solid var(--ok);border-radius:9px;
+    padding:13px 15px;margin:14px 0 0;font-size:15px;line-height:1.5;color:var(--ink);font-weight:600;animation:rise .4s ease both}
+  .pil-ack a{color:var(--civic);font-weight:700}
+  .pil-skip{display:block;background:none;border:none;color:var(--ink-soft);font-weight:600;cursor:pointer;
+    font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:14px;margin:12px auto 0;min-height:44px}
+  .pil-skip:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+
+  /* "a design choice" reveal */
+  .dc{margin:16px 0 0}
+  .dc-btn{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;background:transparent;
+    color:var(--civic);border:2px dashed var(--rule);border-radius:10px;padding:13px 15px;
+    font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:15px;font-weight:700;cursor:pointer;min-height:44px}
+  .dc-btn:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+  .dc-body{margin:10px 0 0}.dc-body[hidden]{display:none}
+  .dc-paper{background:var(--slip);border:1px solid var(--rule);border-radius:10px;padding:15px 16px;font-size:15px;line-height:1.55;color:var(--ink)}
+  .dc-paper .dlab{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.05em;
+    text-transform:uppercase;color:var(--gold);margin:0 0 8px}
+  .dc-paper p{margin:0 0 8px}.dc-paper p:last-child{margin:0}
+
+  /* title card — the cold-open orientation contract (one quiet screen, then the room) */
+  .titlecard{background:var(--paper-2);border:1px solid var(--rule);border-radius:12px;padding:26px 22px;margin:0 0 18px;
+    box-shadow:0 1px 0 #fff inset,0 14px 30px -22px var(--shadow)}
+  .titlecard[hidden]{display:none}
+  .tc-eyebrow{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--crisis);font-weight:700;margin:0 0 10px}
+  .tc-h1{font-family:Georgia,'Iowan Old Style',serif;font-size:30px;line-height:1.12;margin:0 0 14px;color:var(--ink)}
+  .tc-lead{font-size:19px;line-height:1.5;color:var(--ink);margin:0 0 16px}
+  .tc-meta{display:flex;flex-direction:column;gap:11px;margin:0 0 20px}
+  .tc-row{display:flex;gap:12px;align-items:flex-start;background:var(--slip);border:1px solid var(--rule);
+    border-left:6px solid var(--civic);border-radius:9px;padding:13px 15px}
+  .tc-row .tc-k{flex:0 0 auto;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;font-weight:700;
+    letter-spacing:.04em;text-transform:uppercase;color:var(--civic);width:78px;line-height:1.5;padding-top:2px}
+  .tc-row .tc-v{flex:1;font-size:16px;line-height:1.5;color:var(--ink)}
+  .tc-enter{display:block;width:100%;text-align:center;background:var(--civic);color:#fff;border:none;border-radius:11px;
+    padding:18px;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:19px;font-weight:700;cursor:pointer;min-height:44px}
+  .tc-enter:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+
+  /* studio footer (matches Confluence studiofoot) */
+  .studiofoot{margin:30px 0 0;padding:22px 20px;background:var(--ink);color:var(--paper);border-radius:12px;text-align:center}
+  .studiofoot .sf-mark{width:34px;height:34px;margin:0 auto 8px;display:block}
+  .ff-studio{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;letter-spacing:.04em;font-size:16px;margin:0 0 8px}
+  .ff-studio span{color:var(--gold)}
+  .ff-line{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:14px;color:#d8ccb4;margin:6px 0;line-height:1.6}
+  .ff-line a{color:var(--paper)}
+  .ff-tag{font-family:Georgia,serif;font-style:italic;font-size:14px;color:#d8ccb4;margin:10px 0 0}
+  @media (max-width:430px){body{font-size:19px}.quote{font-size:21px}.trust button{font-size:14px}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<filter id="lift" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="2.5" stdDeviation="1.2" flood-color="#000" flood-opacity=".42"/></filter>
+<filter id="liftbig" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="4" stdDeviation="2.5" flood-color="#000" flood-opacity=".4"/></filter>
+<filter id="paper"><feTurbulence type="fractalNoise" baseFrequency="0.05 0.1" numOctaves="3" seed="7" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .05 0" result="g"/><feComposite in="g" in2="SourceGraphic" operator="in" result="c"/><feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="c"/></feMerge></filter>
+<symbol id="spiral" viewBox="0 0 40 40">
+  <circle cx="20" cy="20" r="17" fill="none" stroke="#1f4a4f" stroke-width="3"/>
+  <circle cx="20" cy="20" r="11" fill="none" stroke="#1f4a4f" stroke-width="3"/>
+  <circle cx="20" cy="20" r="5.5" fill="none" stroke="#8a6322" stroke-width="3"/>
+  <circle cx="20" cy="20" r="2" fill="#8a6322"/>
+</symbol>
+</defs></svg>
+<div class="wrap">
+
+  <div class="brandbar">
+    <svg class="mark" aria-hidden="true"><use href="#spiral"/></svg>
+    <span class="wm">Tight Spiral <span>Studios</span></span>
+  </div>
+
+  <div class="rail" id="rail" aria-hidden="true" hidden></div>
+  <p class="sr-only" id="railSpoken" aria-live="polite"></p>
+
+  <!-- TITLE CARD — the cold-open contract. One quiet screen, then the room. -->
+  <div class="titlecard" id="titlecard">
+    <p class="tc-eyebrow">A short media-literacy game</p>
+    <h1 class="tc-h1">Choose Your Leader</h1>
+    <p class="tc-lead">You don't judge the leader. You judge what you were allowed to see. You'll read a real quote from a U.S. president, decide how much you trust it — then see what the original audience couldn't.</p>
+    <div class="tc-meta">
+      <div class="tc-row"><span class="tc-k">Time</span><span class="tc-v">About four minutes. Three moments, same simple move each time.</span></div>
+      <div class="tc-row"><span class="tc-k">The move</span><span class="tc-v">Trust the quote, see the hidden record, then feel how far the words pulled you before you knew.</span></div>
+      <div class="tc-row"><span class="tc-k">The roster</span><span class="tc-v">It opens with three Cold War addresses. Recent-era speeches are held back until each one has a verified, dated, sourced record — so nothing here is made up.</span></div>
+    </div>
+    <button class="tc-enter" id="tcEnter">Begin — step into the first room</button>
+  </div>
+
+  <!-- BEAT 0 — scene-first onramp -->
+  <div class="card" id="beat0" hidden>
+    <div id="stageHost"></div>
+    <p class="scene-prompt" id="scenePrompt"></p>
+    <div id="noticeHost" aria-live="polite"></div>
+  </div>
+
+  <!-- BEAT 1 — constrained field, blind trust -->
+  <div class="card" id="beat1" hidden>
+    <p class="scene-cap" id="capHeard"></p>
+    <p class="note-line" id="noteHeard" hidden></p>
+    <div class="quote" id="quoteText"></div>
+    <p class="heard" id="heardText"></p>
+    <p class="ask">With only this — how much do you trust the leader saying it?</p>
+    <div class="trust" id="trust" role="group" aria-label="trust from low to high">
+      <button data-t="1">Not&nbsp;much</button><button data-t="2">Some</button><button data-t="3">A&nbsp;lot</button><button data-t="4">Fully</button>
+    </div>
+    <div class="trust-lab"><span>I'd hold back</span><span>I'm with them</span></div>
+    <div class="btn-row"><button class="btn" id="toBeat2" disabled>Commit</button></div>
+  </div>
+
+  <!-- BEAT 2 — the record turns -->
+  <div class="card" id="beat2" hidden>
+    <p class="scene-cap" id="capRecord">What you couldn't see at the time</p>
+    <div class="turn" id="turnBox">
+      <p class="tag" id="turnTag">The record</p>
+      <p class="rec" id="recText"></p>
+      <p class="src" id="srcText"></p>
+    </div>
+    <p class="ask" style="margin-top:4px">Now — same words, but you can see the frame. How much do you trust them?</p>
+    <div class="trust" id="trust2" role="group" aria-label="trust after the record">
+      <button data-t="1">Not&nbsp;much</button><button data-t="2">Some</button><button data-t="3">A&nbsp;lot</button><button data-t="4">Fully</button>
+    </div>
+    <div class="trust-lab"><span>I'd hold back</span><span>I'm with them</span></div>
+    <div class="btn-row"><button class="btn" id="toBeat3" disabled>See where it pulled you</button></div>
+  </div>
+
+  <!-- BEAT 3 — the descent -->
+  <div class="card" id="beat3" hidden>
+    <div aria-live="polite">
+      <p class="cost-head" id="costHead"></p>
+      <p class="cost-sub" id="costSub"></p>
+      <p class="sr-only" id="costSpoken"></p>
+    </div>
+    <p class="descent-legend">You start at the top — your own footing. Trusting the frame pulls you down toward where people are easiest to lead. Noticing the gap is the brake.</p>
+    <div class="tier" data-lvl="5"><span class="dot">5</span><span class="name">Your own judgment — becoming who you could be</span></div>
+    <div class="tier" data-lvl="4"><span class="dot">4</span><span class="name">Standing, respect, a voice</span></div>
+    <div class="tier" data-lvl="3"><span class="dot">3</span><span class="name">A people, a side, a we</span></div>
+    <div class="tier" data-lvl="2"><span class="dot">2</span><span class="name">Safety — survive the threat</span></div>
+    <div class="tier" data-lvl="1"><span class="dot">1</span><span class="name">The floor — where consent stops mattering</span></div>
+    <div class="btn-row"><button class="btn" id="toNext">Next</button></div>
+  </div>
+
+  <!-- END — the arc across scenes -->
+  <div class="card" id="ending" hidden>
+    <p class="cost-head" id="endHead">Across every moment, here's how rhetoric moved you.</p>
+    <p class="cost-sub" id="endSub"></p>
+    <div id="arcHost"></div>
+
+    <!-- LOOP CLOSE — the game says, in its own words, what the player just did -->
+    <div class="dc-paper" style="margin:18px 0 4px;border-left:6px solid var(--gold)">
+      <p class="dlab" style="color:var(--gold)">What you just practiced</p>
+      <p>You felt a message move you, then checked it against what was really happening — and noticed the distance between the two. That distance is the whole skill. Not distrusting everyone; noticing when the words are reaching for you. You can do that with any speech, any ad, any headline, starting now.</p>
+    </div>
+
+    <div class="engine" id="engine">
+      <button class="descend" id="toR1" aria-expanded="false" aria-controls="r1"><span>What was this measuring?</span><span class="arrow">↓</span></button>
+      <div class="ring" id="r1" hidden>
+        <div class="ring-paper">
+          <p class="rlab">What it watched</p>
+          <p>Two things: whether you <b>noticed the gap</b> between what was said and what was shown — and what it <b>cost</b> to trust before you saw the whole frame.</p>
+          <p>You noticed the gap in <span class="num" id="r_noticed">—</span> of <span class="num" id="r_total">—</span> moments. The more you caught, the higher you held.</p>
+        </div>
+        <button class="descend" id="toR2" aria-expanded="false" aria-controls="r2"><span>How does it know that?</span><span class="arrow">↓</span></button>
+        <button class="climb" id="upR1">↑ back to the game</button>
+      </div>
+      <div class="ring" id="r2" hidden>
+        <div class="ring-paper">
+          <p class="rlab">How it's computed</p>
+          <p>It never asks you to rate yourself. It watches what you do: the distance between your blind trust and your trust after the record is the measure of gap-noticing. The cost lands last on purpose — you commit before you can see the frame, so the price is real.</p>
+        </div>
+        <button class="descend" id="toR3" aria-expanded="false" aria-controls="r3"><span>For instructors: the measurement underneath</span><span class="arrow">↓</span></button>
+        <button class="climb" id="upR2">↑ back up</button>
+      </div>
+      <div class="ring" id="r3" hidden>
+        <div class="meta">
+          <div class="hd">Choose Your Leader — for instructors</div>
+          <div class="row">A media-literacy game. This panel is the measurement underneath the play — one part of the game, not a standalone readout.</div>
+          <div class="hd">What it measures (this session only — nothing is saved)</div>
+          <div class="row"><span class="k">Did you notice the gap?</span> whether your trust dropped once you saw what the speech left out</div>
+          <div class="row"><span class="k">What it cost:</span> how far the words pulled you before you knew — the five-rung drop</div>
+          <div class="row"><span class="k">How it asks:</span> trust the quote blind → see the record → trust again, each scene</div>
+          <div class="hd">Your session</div>
+          <div class="row"><span class="k">scenes played:</span> <span id="m_played">—</span></div>
+          <div class="row"><span class="k">gaps noticed:</span> <span id="m_noticed">—</span></div>
+          <div class="row"><span class="k">average landing:</span> <span id="m_meantier">—</span> / 5</div>
+          <div class="hd">How it's kept honest</div>
+          <div class="row"><span class="k">sourcing:</span> recent-era speeches stay hidden until each has a verified, dated, sourced record — nothing is invented</div>
+          <div class="row"><span class="k">safety rules:</span> the cost lands on the rhetoric's reach, never on you; noticing is always the win; the deep ending teaches, it never traps</div>
+        </div>
+        <button class="climb" id="upR3">↑ back up</button>
+      </div>
+    </div>
+
+    <!-- PLAYER IN THE LOOP — optional, skippable, in-memory only -->
+    <div class="pil" id="pil">
+      <p class="q">One more thing — was this fair?</p>
+      <p class="sub">You're part of the loop here, not just the subject of it. Your read on whether the game played straight is worth recording. Optional, and nothing leaves this page.</p>
+      <div class="pil-row" id="pilRow" role="group" aria-label="was this fair">
+        <button data-f="fair">It played fair</button>
+        <button data-f="mixed">Fair, but I'd push back</button>
+        <button data-f="unfair">It stacked the deck</button>
+      </div>
+      <div id="pilAckHost" aria-live="polite"></div>
+      <button class="pil-skip" id="pilSkip">Skip this</button>
+    </div>
+
+    <!-- A DESIGN CHOICE — label the move, on the game itself -->
+    <div class="dc">
+      <button class="dc-btn" id="dcBtn" aria-expanded="false" aria-controls="dcBody"><span>Curious about a design choice?</span><span class="arrow">↓</span></button>
+      <div class="dc-body" id="dcBody" hidden>
+        <div class="dc-paper">
+          <p class="dlab">Why you commit before you see the record</p>
+          <p>The game makes you rate your trust with only the quote in front of you — and locks it in — before it shows you the facts. That order is deliberate. If you saw the record first, you'd never feel the pull; you'd just grade the leader with hindsight.</p>
+          <p>Committing blind is what makes the gap real. The distance between your two answers is the whole measurement, and it only means something because the first one cost you something to give.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOW IT FITS — inline teaser into the system map -->
+    <div class="dc">
+      <button class="dc-btn" id="fitBtn" aria-expanded="false" aria-controls="fitBody"><span>How this game fits the studio</span><span class="arrow">↓</span></button>
+      <div class="dc-body" id="fitBody" hidden>
+        <div class="dc-paper">
+          <p class="dlab">One output of a turning system</p>
+          <p>Tight Spiral Studios runs like a gear train. A human gate sits at the center — nothing ships without a person's judgment. Two art workshops mesh to it; a review panel governs the teeth; and money is walled off so it never drives a design call.</p>
+          <p>This game is one thing the train produced. See how the parts mesh — and what's deliberately <i>not</i> connected — on the full map.</p>
+          <p style="margin-top:12px"><a href="tight-spiral-system-map.html" style="color:var(--civic);font-weight:700">Open the System Map →</a></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row"><button class="btn ghost" id="replayAll">Play it again</button></div>
+  </div>
+
+  <button class="exit" id="exitBtn">Leave the game</button>
+
+  <footer class="studiofoot">
+    <svg class="sf-mark" aria-hidden="true"><use href="#spiral"/></svg>
+    <p class="ff-studio">Tight Spiral <span>Studios</span></p>
+    <p class="ff-line">A learning game. You don't judge the leader — you judge what you were allowed to see.</p>
+    <p class="ff-line"><a href="tight-spiral-system-map.html">How the studio works</a> · <a href="mailto:walshero@gmail.com">walshero@gmail.com</a></p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  function $(id){return document.getElementById(id);}
+  function show(id){$(id).hidden=false;} function hide(id){$(id).hidden=true;}
+  function top(){window.scrollTo({top:0,behavior:'auto'});}
+
+  /* ---------------- SCENE DATA ----------------
+     Historical scenes carry real, dated, text-validated records.
+     Living-president scenes are GATED: record marked needs founder verification (Bias-Auditor gate).
+  */
+  var SCENES=[
+    {
+      id:'jfk62', who:'hidden', cap:'October 22, 1962 · the voice from the set',
+      room:'night',
+      prompts:{radio:"The set is the only light in the room. Whatever it says tonight, it says to everyone at once.",
+               chair:"The chair beside you is empty. You're hearing this alone.",
+               toy:"A child's toy on the floor. Whatever's coming, it's coming to this house too."},
+      quote:"We will not prematurely or unnecessarily risk the costs of worldwide nuclear war — but neither will we shrink from that risk at any time it must be faced.",
+      heard:"Three networks. One message. This is all you get.",
+      note:"This moment deals with the threat of nuclear war.",
+      gated:false,
+      record:"The decision to go public had been weighed for six days. Reconnaissance photographs confirming the missiles were dated October 14. The address you just heard was not day one — it was day eight, the version chosen to be said out loud.",
+      src:"Sources: U-2 mission film, Oct 14 1962; ExComm records, Oct 16–22 1962 (declassified)."
+    },
+    {
+      id:'lbj64', who:'hidden', cap:'August 4, 1964 · the address at midnight',
+      room:'night',
+      prompts:{radio:"The set interrupts the late programming. A grave voice, two flags, a bare wall. Whatever it says, it says to everyone at once.",
+               chair:"The chair beside you is empty. You're hearing this alone, near midnight.",
+               toy:"A child's toy on the floor. Whatever's being decided tonight reaches into this house too."},
+      quote:"Repeated acts of violence against the armed forces of the United States must be met not only with alert defense, but with positive reply.",
+      heard:"Unprovoked attacks on our ships, on the high seas. It lands as a nation defending itself.",
+      note:"This moment deals with war and military deception.",
+      gated:false,
+      record:"The second attack the speech relied on most likely never happened — a later NSA study found no attack occurred on August 4. And the ships were not innocent passers-by: they supported covert raids against North Vietnam the public wasn't told about. A war-powers resolution had been drafted months before the incident, waiting for a moment.",
+      src:"Sources: NSA historical study (declassified 2005); Gulf of Tonkin Resolution, Aug 7 1964; OPLAN-34A covert operations record."
+    },
+    {
+      id:'nixon69', who:'hidden', cap:'November 3, 1969 · the silent majority',
+      room:'night',
+      prompts:{radio:"The set glows. A direct appeal, straight down the camera — to you, by name almost.",
+               chair:"An empty chair. The country is split over this war; you'll argue it with someone soon.",
+               toy:"A child's toy. The peace being promised tonight is the world they're meant to grow up into."},
+      quote:"I pledged in my campaign for the Presidency to end the war in a way that we could win the peace… And so tonight, to you, the great silent majority of my fellow Americans, I ask for your support.",
+      heard:"A plan to wind the war down and bring the troops home. It lands as a path out.",
+      gated:false,
+      record:"While that appeal for patience ran, the same administration had been secretly bombing neutral Cambodia since March — a covert campaign the public would not learn of for years. The speech asked for trust in a withdrawal while an undisclosed escalation was already underway.",
+      src:"Sources: Operation Menu (secret bombing of Cambodia, begun Mar 1969); Public Papers of the Presidents, Nixon address Nov 3 1969."
+    },
+    // ---- LIVING PRESIDENTS — GATED. Engine holds them; records NOT fabricated. ----
+    {
+      id:'obama', who:'hidden', cap:'a televised address · recent era', room:'modern', gated:true,
+      prompts:{radio:"The screen glows. The same clip will be replayed and cut a hundred ways by morning.",
+               chair:"An empty chair. Whatever's said tonight, you'll argue about it with someone later.",
+               toy:"A child's toy. This is the world being narrated to them, in real time."},
+      quote:"[QUOTE PENDING — founder selects a real, dated quote]",
+      heard:"You're hearing it live, framed by whoever chose to air it.",
+      record:"[RECORD PENDING — needs a dated, sourced, text-validated fact the live audience couldn't see. Founder verification required before this scene ships.]",
+      src:"Awaiting sourced record (Bias-Auditor gate)."
+    },
+    {
+      id:'trump', who:'hidden', cap:'a televised address · recent era', room:'modern', gated:true,
+      prompts:{radio:"The screen glows. The clip is already being cut for tomorrow.",
+               chair:"An empty chair. You'll defend or attack this before the week is out.",
+               toy:"A child's toy. The country in the speech is the one they wake up in."},
+      quote:"[QUOTE PENDING — founder selects a real, dated quote]",
+      heard:"Live, and framed by the channel that chose to carry it.",
+      record:"[RECORD PENDING — needs a dated, sourced fact outside the frame. Founder verification required.]",
+      src:"Awaiting sourced record (Bias-Auditor gate)."
+    },
+    {
+      id:'biden', who:'hidden', cap:'a televised address · recent era', room:'modern', gated:true,
+      prompts:{radio:"The screen glows. By morning it's a dozen competing headlines.",
+               chair:"An empty chair. Someone you know already has an opinion about this.",
+               toy:"A child's toy. The future being promised is theirs to collect on."},
+      quote:"[QUOTE PENDING — founder selects a real, dated quote]",
+      heard:"Live, through whatever frame carried it to you.",
+      record:"[RECORD PENDING — needs a dated, sourced fact outside the frame. Founder verification required.]",
+      src:"Awaiting sourced record (Bias-Auditor gate)."
+    }
+  ];
+
+  // Ship only ungated scenes by default; gated scenes are excluded from play until sourced.
+  var PLAY = SCENES.filter(function(s){return !s.gated;});
+
+  var idx=0;
+  var results=[]; // {tier, noticed}
+  var state={t1:null,t2:null};
+  var audioCtx=null;
+
+  /* ---------- progress rail ---------- */
+  function paintRail(){
+    var r=$('rail'); r.innerHTML='';
+    PLAY.forEach(function(s,i){
+      var p=document.createElement('span'); p.className='pip'+(i<idx?' done':(i===idx?' here':''));
+      r.appendChild(p);
+    });
+    var lab=document.createElement('span'); lab.className='rl';
+    lab.textContent='Moment '+(idx+1)+' of '+PLAY.length;
+    r.appendChild(lab);
+    var sp=$('railSpoken'); if(sp)sp.textContent='Moment '+(idx+1)+' of '+PLAY.length;
+  }
+
+  /* ---------- scene SVG (room by mood) ---------- */
+  var ROOMS={
+  "jfk62": `<svg viewBox="0 0 600 380" role="img" aria-label="A dark 1962 living room at night. A console television glows warm against a cool dark room. An empty armchair sits in the foreground; a child's wooden pull-toy rests on the rug. Tap what draws your eye.">
+      <defs>
+        
+        
+        
+        <radialGradient id="screenglow" cx="50%" cy="42%" r="62%">
+          <stop offset="0%" stop-color="#FFE6A8" stop-opacity=".85"/>
+          <stop offset="55%" stop-color="#E8B860" stop-opacity=".30"/>
+          <stop offset="100%" stop-color="#E8B860" stop-opacity="0"/></radialGradient>
+        <radialGradient id="floorpool" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#E8B860" stop-opacity=".34"/>
+          <stop offset="100%" stop-color="#E8B860" stop-opacity="0"/></radialGradient>
+        <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#FFF1CC"/><stop offset="100%" stop-color="#E8C87A"/></linearGradient>
+      </defs>
+
+      <!-- cool dark room: back wall + side wall (value range + temperature relief) -->
+      <rect x="0" y="0" width="600" height="300" fill="#26303a" filter="url(#paper)"/>
+      <rect x="0" y="0" width="210" height="300" fill="#202a34" filter="url(#paper)"/>
+      <rect x="207" y="0" width="3" height="300" fill="#161d24"/>
+      <!-- floor -->
+      <rect x="0" y="296" width="600" height="84" fill="#1b2229" filter="url(#paper)"/>
+      <rect x="0" y="296" width="600" height="5" fill="#2c3742"/>
+      <!-- rug, catching the warm spill -->
+      <ellipse cx="330" cy="338" rx="240" ry="40" fill="#2a3a3a" filter="url(#paper)"/>
+
+      <!-- window with faint cold street light, far left (depth + cool relief) -->
+      <rect x="44" y="54" width="120" height="120" fill="#3a4650" filter="url(#liftbig)"/>
+      <rect x="52" y="62" width="104" height="104" fill="#33424c" filter="url(#paper)"/>
+      <rect x="100" y="62" width="4" height="104" fill="#28333c"/>
+      <rect x="52" y="112" width="104" height="4" fill="#28333c"/>
+      <circle cx="128" cy="86" r="11" fill="#d8e4ee" opacity=".5"/>
+
+      <!-- the warm glow spilling from the set -->
+      <ellipse cx="412" cy="170" rx="230" ry="180" fill="url(#screenglow)"/>
+      <ellipse cx="360" cy="338" rx="180" ry="34" fill="url(#floorpool)"/>
+
+      <!-- console TV cabinet — the warm subject, layered cut-paper -->
+      <g class="notice-hit" tabindex="0" role="button" data-n="radio" aria-label="the console television, glowing">
+        <!-- cabinet body + legs -->
+        <rect x="344" y="126" width="166" height="150" rx="6" fill="#6b4a2c" filter="url(#liftbig)"/>
+        <rect x="344" y="126" width="166" height="150" rx="6" fill="#000" opacity="0" filter="url(#paper)"/>
+        <rect x="352" y="270" width="14" height="34" rx="3" fill="#4a3220" filter="url(#lift)"/>
+        <rect x="488" y="270" width="14" height="34" rx="3" fill="#4a3220" filter="url(#lift)"/>
+        <!-- wood grain hint -->
+        <rect x="344" y="126" width="166" height="8" fill="#7d5836" filter="url(#lift)"/>
+        <!-- screen bezel + glowing screen -->
+        <rect x="360" y="142" width="126" height="84" rx="8" fill="#3a2817" filter="url(#lift)"/>
+        <rect x="368" y="150" width="110" height="68" rx="5" fill="url(#screen)" filter="url(#lift)"/>
+        <rect x="368" y="150" width="110" height="68" rx="5" fill="#fff" opacity=".18"/>
+        <!-- a faint figure on the broadcast (the address) -->
+        <ellipse cx="423" cy="196" rx="20" ry="26" fill="#caa46a" opacity=".55"/>
+        <circle cx="423" cy="176" r="11" fill="#caa46a" opacity=".55"/>
+        <!-- speaker grille + dials -->
+        <rect x="372" y="232" width="58" height="30" rx="4" fill="#4a3220" filter="url(#lift)"/>
+        <g fill="#5b3f28"><rect x="378" y="238" width="46" height="3"/><rect x="378" y="245" width="46" height="3"/><rect x="378" y="252" width="46" height="3"/></g>
+        <circle cx="452" cy="240" r="9" fill="#caa46a" filter="url(#lift)"/>
+        <circle cx="452" cy="240" r="4" fill="#3a2817"/>
+        <circle cx="476" cy="240" r="9" fill="#caa46a" filter="url(#lift)"/>
+        <circle cx="476" cy="240" r="4" fill="#3a2817"/>
+      </g>
+
+      <!-- empty armchair, foreground left — cool, in shadow, where you sit -->
+      <g class="notice-hit" tabindex="0" role="button" data-n="chair" aria-label="the empty armchair beside you">
+        <ellipse cx="150" cy="332" rx="92" ry="20" fill="#0f151a" opacity=".5"/>
+        <rect x="80" y="236" width="128" height="104" rx="16" fill="#3a4650" filter="url(#liftbig)"/>
+        <rect x="80" y="224" width="128" height="40" rx="16" fill="#445260" filter="url(#lift)"/>
+        <rect x="66" y="252" width="28" height="86" rx="11" fill="#2f3a44" filter="url(#lift)"/>
+        <rect x="196" y="252" width="28" height="86" rx="11" fill="#2f3a44" filter="url(#lift)"/>
+        <!-- a warm rim where the set-light catches the chair's right edge -->
+        <rect x="200" y="236" width="8" height="104" rx="4" fill="#c89a5a" opacity=".4"/>
+      </g>
+
+      <!-- child's wooden pull-toy on the rug, half in the warm pool -->
+      <g class="notice-hit" tabindex="0" role="button" data-n="toy" aria-label="a child's wooden pull-toy on the rug">
+        <ellipse cx="300" cy="352" rx="40" ry="9" fill="#0f151a" opacity=".45"/>
+        <rect x="270" y="330" width="60" height="20" rx="5" fill="#b5703f" filter="url(#lift)"/>
+        <rect x="270" y="330" width="60" height="6" rx="3" fill="#c98a55"/>
+        <circle cx="282" cy="352" r="9" fill="#7a4a28" filter="url(#lift)"/>
+        <circle cx="282" cy="352" r="3.5" fill="#3a2817"/>
+        <circle cx="318" cy="352" r="9" fill="#7a4a28" filter="url(#lift)"/>
+        <circle cx="318" cy="352" r="3.5" fill="#3a2817"/>
+        <!-- pull string -->
+        <path d="M270 340 q-26 6 -42 -2" fill="none" stroke="#8a6a4a" stroke-width="2.4" stroke-linecap="round"/>
+      </g>
+    </svg>`,
+  "lbj64": `<svg viewBox="0 0 600 360" role="img" aria-label="A 1964 living room near midnight. A console television glows against a cold, tired room — the late program has been interrupted. An empty reading chair; a child's toy on the floor. Tap what draws your eye.">
+      <defs>
+        <radialGradient id="lbjglow" cx="50%" cy="44%" r="60%">
+          <stop offset="0%" stop-color="#EAD9A8" stop-opacity=".72"/>
+          <stop offset="55%" stop-color="#B8923F" stop-opacity=".24"/>
+          <stop offset="100%" stop-color="#B8923F" stop-opacity="0"/></radialGradient>
+        <radialGradient id="lbjpool" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#B8923F" stop-opacity=".26"/>
+          <stop offset="100%" stop-color="#B8923F" stop-opacity="0"/></radialGradient>
+        <linearGradient id="lbjscreen" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#EDE6D2"/><stop offset="100%" stop-color="#C9BE94"/></linearGradient>
+      </defs>
+      <!-- colder, more institutional room than '62: less hope in the walls -->
+      <rect x="0" y="0" width="600" height="300" fill="#222a30" filter="url(#paper)"/>
+      <rect x="0" y="0" width="210" height="300" fill="#1c242a" filter="url(#paper)"/>
+      <rect x="207" y="0" width="3" height="300" fill="#141a1f"/>
+      <rect x="0" y="296" width="600" height="64" fill="#171c21" filter="url(#paper)"/>
+      <rect x="0" y="296" width="600" height="5" fill="#283038"/>
+      <ellipse cx="330" cy="332" rx="240" ry="36" fill="#232f31" filter="url(#paper)"/>
+      <!-- cold window, far left -->
+      <rect x="44" y="58" width="112" height="112" fill="#33424c" filter="url(#liftbig)"/>
+      <rect x="52" y="66" width="96" height="96" fill="#2c3a44" filter="url(#paper)"/>
+      <rect x="96" y="66" width="4" height="96" fill="#222d35"/><rect x="52" y="110" width="96" height="4" fill="#222d35"/>
+      <!-- the cooler glow from the set -->
+      <ellipse cx="412" cy="170" rx="224" ry="176" fill="url(#lbjglow)"/>
+      <ellipse cx="360" cy="332" rx="176" ry="32" fill="url(#lbjpool)"/>
+      <!-- console TV — the broadcast that cut into the night -->
+      <g class="notice-hit" tabindex="0" role="button" data-n="radio" aria-label="the console television, interrupting the late program">
+        <rect x="344" y="128" width="166" height="148" rx="6" fill="#5e4226" filter="url(#liftbig)"/>
+        <rect x="352" y="270" width="14" height="32" rx="3" fill="#412d1b" filter="url(#lift)"/>
+        <rect x="488" y="270" width="14" height="32" rx="3" fill="#412d1b" filter="url(#lift)"/>
+        <rect x="344" y="128" width="166" height="8" fill="#6f4e2e" filter="url(#lift)"/>
+        <rect x="360" y="144" width="126" height="84" rx="8" fill="#2f2114" filter="url(#lift)"/>
+        <rect x="368" y="152" width="110" height="68" rx="5" fill="url(#lbjscreen)" filter="url(#lift)"/>
+        <rect x="368" y="152" width="110" height="68" rx="5" fill="#fff" opacity=".12"/>
+        <!-- a grave figure + two flag-shapes, made of the broadcast (suggest, don't simulate) -->
+        <ellipse cx="423" cy="198" rx="18" ry="24" fill="#9a8a64" opacity=".6"/>
+        <circle cx="423" cy="180" r="10" fill="#9a8a64" opacity=".6"/>
+        <rect x="380" y="166" width="6" height="48" fill="#8d7d58" opacity=".5"/>
+        <rect x="460" y="166" width="6" height="48" fill="#8d7d58" opacity=".5"/>
+        <rect x="372" y="234" width="58" height="28" rx="4" fill="#412d1b" filter="url(#lift)"/>
+        <g fill="#523719"><rect x="378" y="240" width="46" height="3"/><rect x="378" y="247" width="46" height="3"/><rect x="378" y="254" width="46" height="3"/></g>
+        <circle cx="452" cy="240" r="8" fill="#9a8a64" filter="url(#lift)"/><circle cx="452" cy="240" r="3.5" fill="#2f2114"/>
+        <circle cx="476" cy="240" r="8" fill="#9a8a64" filter="url(#lift)"/><circle cx="476" cy="240" r="3.5" fill="#2f2114"/>
+      </g>
+      <!-- empty reading chair — lived-in now, not a showroom chair -->
+      <g class="notice-hit" tabindex="0" role="button" data-n="chair" aria-label="the empty reading chair beside you">
+        <ellipse cx="140" cy="330" rx="84" ry="17" fill="#0d1216" opacity=".5"/>
+        <rect x="78" y="236" width="120" height="100" rx="14" fill="#34404a" filter="url(#liftbig)"/>
+        <rect x="78" y="226" width="120" height="36" rx="14" fill="#3d4a55" filter="url(#lift)"/>
+        <rect x="64" y="250" width="26" height="84" rx="10" fill="#2a343d" filter="url(#lift)"/>
+        <rect x="186" y="250" width="26" height="84" rx="10" fill="#2a343d" filter="url(#lift)"/>
+        <rect x="190" y="236" width="8" height="100" rx="4" fill="#b8923f" opacity=".34"/>
+      </g>
+      <!-- child's toy -->
+      <g class="notice-hit" tabindex="0" role="button" data-n="toy" aria-label="a child's toy on the floor">
+        <ellipse cx="296" cy="350" rx="38" ry="8" fill="#0d1216" opacity=".45"/>
+        <rect x="268" y="332" width="56" height="18" rx="5" fill="#a5623a" filter="url(#lift)"/>
+        <rect x="268" y="332" width="56" height="5" rx="3" fill="#b8784e"/>
+        <circle cx="280" cy="350" r="8" fill="#6e4628" filter="url(#lift)"/><circle cx="280" cy="350" r="3" fill="#2f2114"/>
+        <circle cx="312" cy="350" r="8" fill="#6e4628" filter="url(#lift)"/><circle cx="312" cy="350" r="3" fill="#2f2114"/>
+        <path d="M268 342 q-24 6 -38 -2" fill="none" stroke="#7d5f44" stroke-width="2.2" stroke-linecap="round"/>
+      </g>
+    </svg>`,
+  "nixon69": `<svg viewBox="0 0 600 360" role="img" aria-label="A 1969 living room at night, lit by the warm faded glow of a television set. The address looks straight out of the screen, into the room. An empty chair; a child's toy. Tap what draws your eye.">
+      <defs>
+        <radialGradient id="nixglow" cx="50%" cy="44%" r="62%">
+          <stop offset="0%" stop-color="#F2C98E" stop-opacity=".8"/>
+          <stop offset="52%" stop-color="#C97F3E" stop-opacity=".28"/>
+          <stop offset="100%" stop-color="#C97F3E" stop-opacity="0"/></radialGradient>
+        <radialGradient id="nixpool" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#C97F3E" stop-opacity=".3"/>
+          <stop offset="100%" stop-color="#C97F3E" stop-opacity="0"/></radialGradient>
+        <linearGradient id="nixscreen" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#F6E0BE"/><stop offset="100%" stop-color="#D8AE72"/></linearGradient>
+      </defs>
+      <!-- warmer, faded, decaying — late-60s optimism gone to seed -->
+      <rect x="0" y="0" width="600" height="300" fill="#2b2620" filter="url(#paper)"/>
+      <rect x="0" y="0" width="210" height="300" fill="#251f1a" filter="url(#paper)"/>
+      <rect x="207" y="0" width="3" height="300" fill="#1b1611"/>
+      <rect x="0" y="296" width="600" height="64" fill="#1d1813" filter="url(#paper)"/>
+      <rect x="0" y="296" width="600" height="5" fill="#34291f"/>
+      <ellipse cx="330" cy="332" rx="240" ry="36" fill="#332a20" filter="url(#paper)"/>
+      <!-- warmer window, dimmer -->
+      <rect x="44" y="58" width="112" height="112" fill="#43382c" filter="url(#liftbig)"/>
+      <rect x="52" y="66" width="96" height="96" fill="#3b3025" filter="url(#paper)"/>
+      <rect x="96" y="66" width="4" height="96" fill="#2c231a"/><rect x="52" y="110" width="96" height="4" fill="#2c231a"/>
+      <!-- the warm, slightly unstable glow -->
+      <ellipse cx="408" cy="172" rx="234" ry="182" fill="url(#nixglow)"/>
+      <ellipse cx="360" cy="332" rx="186" ry="34" fill="url(#nixpool)"/>
+      <!-- console TV — the direct appeal down the camera -->
+      <g class="notice-hit" tabindex="0" role="button" data-n="radio" aria-label="the television, the address looking straight into the room">
+        <rect x="342" y="126" width="170" height="152" rx="6" fill="#6a4626" filter="url(#liftbig)"/>
+        <rect x="350" y="272" width="14" height="32" rx="3" fill="#48301b" filter="url(#lift)"/>
+        <rect x="490" y="272" width="14" height="32" rx="3" fill="#48301b" filter="url(#lift)"/>
+        <rect x="342" y="126" width="170" height="8" fill="#7d5530" filter="url(#lift)"/>
+        <rect x="358" y="142" width="138" height="88" rx="8" fill="#33220f" filter="url(#lift)"/>
+        <rect x="366" y="150" width="122" height="72" rx="5" fill="url(#nixscreen)" filter="url(#lift)"/>
+        <rect x="366" y="150" width="122" height="72" rx="5" fill="#fff" opacity=".16"/>
+        <!-- a presence facing straight out — warm smear where a face would be, still withheld -->
+        <ellipse cx="427" cy="196" rx="21" ry="27" fill="#caa066" opacity=".6"/>
+        <circle cx="427" cy="176" r="12" fill="#d4ab70" opacity=".62"/>
+        <!-- faint scan/instability lines -->
+        <g stroke="#e8c692" stroke-width="1" opacity=".2"><line x1="368" y1="168" x2="486" y2="168"/><line x1="368" y1="192" x2="486" y2="192"/><line x1="368" y1="208" x2="486" y2="208"/></g>
+        <rect x="372" y="236" width="60" height="28" rx="4" fill="#48301b" filter="url(#lift)"/>
+        <g fill="#5c3e22"><rect x="378" y="242" width="48" height="3"/><rect x="378" y="249" width="48" height="3"/><rect x="378" y="256" width="48" height="3"/></g>
+        <circle cx="456" cy="240" r="8" fill="#caa066" filter="url(#lift)"/><circle cx="456" cy="240" r="3.5" fill="#33220f"/>
+        <circle cx="480" cy="240" r="8" fill="#caa066" filter="url(#lift)"/><circle cx="480" cy="240" r="3.5" fill="#33220f"/>
+      </g>
+      <!-- empty chair — worn at the corners now -->
+      <g class="notice-hit" tabindex="0" role="button" data-n="chair" aria-label="the empty chair beside you">
+        <ellipse cx="140" cy="330" rx="82" ry="17" fill="#120d09" opacity=".55"/>
+        <rect x="80" y="238" width="116" height="98" rx="13" fill="#3c3024" filter="url(#liftbig)"/>
+        <rect x="80" y="228" width="116" height="34" rx="13" fill="#463829" filter="url(#lift)"/>
+        <rect x="66" y="252" width="26" height="84" rx="10" fill="#2f2419" filter="url(#lift)"/>
+        <rect x="184" y="252" width="26" height="84" rx="10" fill="#2f2419" filter="url(#lift)"/>
+        <rect x="188" y="238" width="8" height="98" rx="4" fill="#d8a862" opacity=".4"/>
+      </g>
+      <!-- child's toy -->
+      <g class="notice-hit" tabindex="0" role="button" data-n="toy" aria-label="a child's toy on the floor">
+        <ellipse cx="296" cy="350" rx="38" ry="8" fill="#120d09" opacity=".5"/>
+        <rect x="268" y="332" width="56" height="18" rx="5" fill="#a96a3c" filter="url(#lift)"/>
+        <rect x="268" y="332" width="56" height="5" rx="3" fill="#bd8050"/>
+        <circle cx="280" cy="350" r="8" fill="#74492a" filter="url(#lift)"/><circle cx="280" cy="350" r="3" fill="#33220f"/>
+        <circle cx="312" cy="350" r="8" fill="#74492a" filter="url(#lift)"/><circle cx="312" cy="350" r="3" fill="#33220f"/>
+        <path d="M268 342 q-24 6 -38 -2" fill="none" stroke="#83613f" stroke-width="2.2" stroke-linecap="round"/>
+      </g>
+    </svg>`,
+};
+  function roomFor(id){ return ROOMS[id] || ROOMS["jfk62"]; }
+
+
+  /* ---------- sensory onramp (first tap wakes the device) ---------- */
+  function wakeDevice(){
+    if('vibrate' in navigator){ try{ navigator.vibrate([22,55,16]); }catch(e){} }
+    try{
+      var AC=window.AudioContext||window.webkitAudioContext;
+      if(AC){ audioCtx=audioCtx||new AC(); if(audioCtx.state==='suspended')audioCtx.resume();
+        var t=audioCtx.currentTime;
+        var buf=audioCtx.createBuffer(1,Math.floor(audioCtx.sampleRate*0.3),audioCtx.sampleRate);
+        var d=buf.getChannelData(0); for(var i=0;i<d.length;i++){d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,2);}
+        var n=audioCtx.createBufferSource(); n.buffer=buf;
+        var nf=audioCtx.createBiquadFilter(); nf.type='bandpass'; nf.frequency.value=1400;
+        var ng=audioCtx.createGain(); ng.gain.value=0.05; n.connect(nf);nf.connect(ng);ng.connect(audioCtx.destination); n.start(t);
+        var o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.type='sine'; o.frequency.setValueAtTime(196,t+0.16);
+        g.gain.setValueAtTime(0.0001,t+0.16); g.gain.exponentialRampToValueAtTime(0.1,t+0.28); g.gain.exponentialRampToValueAtTime(0.0001,t+0.9);
+        o.connect(g); g.connect(audioCtx.destination); o.start(t+0.16); o.stop(t+0.95);
+      }
+    }catch(e){}
+  }
+
+  /* ---------- render a scene from data ---------- */
+  function loadScene(){
+    var s=PLAY[idx];
+    state={t1:null,t2:null};
+    paintRail();
+    // beat 0
+    $('stageHost').innerHTML=roomFor(s.id);
+    $('scenePrompt').textContent="Tap whatever your eye goes to.";
+    $('noticeHost').innerHTML='';
+    var noticedScene=false;
+    document.querySelectorAll('#beat0 .notice-hit').forEach(function(el){
+      function fire(){
+        if(noticedScene)return; noticedScene=true; wakeDevice();
+        var key=el.getAttribute('data-n');
+        $('scenePrompt').textContent="You noticed:";
+        $('noticeHost').innerHTML='<div class="notice-line">'+s.prompts[key]+
+          '<button class="go" id="enterBeat1">Now listen to what it\u2019s saying</button></div>';
+        $('enterBeat1').addEventListener('click',function(){hide('beat0');show('beat1');top();});
+        $('noticeHost').querySelector('.notice-line').scrollIntoView({behavior:'smooth',block:'nearest'});
+      }
+      el.addEventListener('click',fire);
+      el.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();fire();}});
+    });
+    // beat 1
+    $('capHeard').textContent=s.cap;
+    var nl=$('noteHeard');
+    if(s.note){ nl.textContent=s.note; nl.hidden=false; } else { nl.hidden=true; }
+    $('quoteText').textContent='\u201C'+s.quote+'\u201D';
+    $('heardText').textContent=s.heard;
+    resetTrust('trust','toBeat2');
+    // beat 2
+    $('recText').textContent=s.record;
+    $('srcText').textContent=s.src;
+    $('turnBox').classList.toggle('gated',!!s.gated);
+    $('turnTag').textContent=s.gated?'The record — pending':'The record';
+    resetTrust('trust2','toBeat3');
+    // show beat 0
+    hide('beat1');hide('beat2');hide('beat3');hide('ending');show('beat0');top();
+  }
+
+  function resetTrust(groupId,btnId){
+    var g=$(groupId); g.querySelectorAll('button').forEach(function(b){b.classList.remove('on');});
+    $(btnId).disabled=true;
+  }
+  function wireTrust(groupId,btnId,key){
+    var g=$(groupId);
+    g.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('click',function(){
+        g.querySelectorAll('button').forEach(function(x){x.classList.remove('on');});
+        b.classList.add('on'); state[key]=parseInt(b.getAttribute('data-t'),10); $(btnId).disabled=false;
+      });
+    });
+  }
+  wireTrust('trust','toBeat2','t1');
+  wireTrust('trust2','toBeat3','t2');
+
+  $('toBeat2').addEventListener('click',function(){hide('beat1');show('beat2');top();});
+  $('toBeat3').addEventListener('click',function(){landCost();hide('beat2');show('beat3');top();});
+
+  /* ---------- the descent (per scene) + TI rails ---------- */
+  function landCost(){
+    var delta=state.t1-state.t2;
+    var pull=state.t1-1;
+    var brake=Math.max(0,delta);
+    var tier=Math.max(1,Math.min(5,5-pull+brake));
+    var noticed=delta>0;
+    results[idx]={tier:tier,noticed:noticed};
+    paintTier(tier);
+
+    var head,sub;
+    if(tier>=4){
+      head="You kept your own footing.";
+      sub=noticed?"Rhetoric reached for you and you stayed up near your own judgment — because you caught the gap.":"This one didn't reach all the way down to you.";
+    } else if(tier>=2){
+      head="The rhetoric pulled you toward the middle.";
+      sub=noticed?"It pulled — toward belonging, toward one safe message — but you noticed the gap and braked the fall partway. Noticing is the climb.":"Words built for a crowd pulled toward belonging and safety. That's what this rhetoric was reaching for. The brake was there — the gap between what was said and what was shown.";
+    } else {
+      head=noticed?"It pulled you to the floor — and you saw it happen.":"This is how far rhetoric can carry a person.";
+      sub=noticed?"All the way down, where consent stops mattering — but you named the gap on the way.":"Rhetoric that reaches the floor doesn't need your consent anymore. You've felt that pull from the inside now.";
+    }
+    var names={5:"your own judgment",4:"standing and respect",3:"a people, a side, a we",2:"safety, surviving the threat",1:"the floor, where consent stops mattering"};
+    $('costHead').textContent=head; $('costSub').textContent=sub;
+    $('costSpoken').textContent="You landed at level "+tier+" of 5 — "+names[tier]+". You "+(noticed?"caught":"did not catch")+" the gap.";
+    $('toNext').textContent = (idx>=PLAY.length-1) ? "See the whole arc" : "Next moment";
+  }
+  function paintTier(tier){
+    document.querySelectorAll('#beat3 .tier').forEach(function(t){
+      var lvl=parseInt(t.getAttribute('data-lvl'),10);
+      t.classList.toggle('lit',lvl<=tier); t.classList.toggle('here',lvl===tier);
+    });
+  }
+
+  $('toNext').addEventListener('click',function(){
+    if(idx>=PLAY.length-1){ showEnding(); } else { idx++; loadScene(); }
+  });
+
+  /* ---------- ending arc ---------- */
+  function showEnding(){
+    hide('beat3');
+    var host=$('arcHost'); host.innerHTML='';
+    var sumTier=0,noticedCount=0;
+    PLAY.forEach(function(s,i){
+      var r=results[i]||{tier:3,noticed:false};
+      sumTier+=r.tier; if(r.noticed)noticedCount++;
+      var row=document.createElement('div'); row.className='arc-row';
+      row.innerHTML='<span class="arc-when">'+shortCap(s.cap)+'</span>'+
+        '<span class="arc-bar"><span class="arc-fill" style="width:'+(r.tier/5*100)+'%"></span></span>'+
+        '<span class="arc-noticed '+(r.noticed?'yes':'no')+'">'+(r.noticed?'caught it':'missed it')+'</span>';
+      host.appendChild(row);
+    });
+    var mean=(sumTier/PLAY.length);
+    $('endSub').textContent="You caught the gap in "+noticedCount+" of "+PLAY.length+" moments. The bar shows how high you held each time — noticing is what kept you up.";
+    // depth-ring fills
+    $('r_noticed').textContent=noticedCount; $('r_total').textContent=PLAY.length;
+    $('m_played').textContent=PLAY.length; $('m_noticed').textContent=noticedCount;
+    $('m_meantier').textContent=mean.toFixed(1);
+    show('ending'); top();
+  }
+  function shortCap(c){ return c.split('·')[0].trim(); }
+
+  /* ---------- depth rings ---------- */
+  function wireDescend(b,r){var B=$(b),R=$(r);if(!B||!R)return;B.addEventListener('click',function(){var o=R.hidden;R.hidden=!o;B.setAttribute('aria-expanded',String(o));if(o)R.scrollIntoView({behavior:'smooth',block:'nearest'});});}
+  function wireClimb(b,r,p){var B=$(b);if(!B)return;B.addEventListener('click',function(){if($(r))$(r).hidden=true;if(p&&$(p))$(p).setAttribute('aria-expanded','false');top();});}
+  wireDescend('toR1','r1');wireDescend('toR2','r2');wireDescend('toR3','r3');
+  wireClimb('upR1','r1','toR1');wireClimb('upR2','r2','toR2');wireClimb('upR3','r3','toR3');
+  wireDescend('dcBtn','dcBody');
+  wireDescend('fitBtn','fitBody');
+
+  /* ---------- player in the loop (optional, in-memory only) ---------- */
+  (function(){
+    var row=$('pilRow'); if(!row)return;
+    var acks={
+      fair:"Recorded — you read it as fair. That judgment is the loop working: the game makes a claim, you check it.",
+      mixed:"Recorded — fair with a push-back. That's the healthiest read; a frame you can question is one you actually see.",
+      unfair:"Recorded — you felt the deck was stacked. Good. Noticing the game's own hand is the same muscle the game is training."
+    };
+    row.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('click',function(){
+        row.querySelectorAll('button').forEach(function(x){x.classList.remove('on');});
+        b.classList.add('on');
+        var k=b.getAttribute('data-f');
+        $('pilAckHost').innerHTML='<div class="pil-ack">'+acks[k]+
+          ' Nothing left this page. If you want it heard for real, <a href="mailto:walshero@gmail.com?subject=Choose%20Your%20Leader%20feedback">tell the studio</a>.</div>';
+      });
+    });
+    $('pilSkip').addEventListener('click',function(){ $('pil').hidden=true; });
+  })();
+
+  /* ---------- replay + exit ---------- */
+  $('replayAll').addEventListener('click',function(){
+    idx=0; results=[];
+    var pil=$('pil'); if(pil)pil.hidden=false;
+    $('pilAckHost').innerHTML='';
+    $('pilRow').querySelectorAll('button').forEach(function(x){x.classList.remove('on');});
+    ['dcBody','fitBody'].forEach(function(r){if($(r))$(r).hidden=true;});
+    ['dcBtn','fitBtn'].forEach(function(b){if($(b))$(b).setAttribute('aria-expanded','false');});
+    loadScene();
+  });
+  $('exitBtn').addEventListener('click',function(){
+    document.querySelector('.wrap').innerHTML='<div class="card"><p class="cost-head">You left the game.</p><p class="cost-sub">Nothing was saved, nothing tracked. Refresh the page if you want to come back to it.</p></div>';
+  });
+
+  /* ---------- title card → first room (cold-open contract) ---------- */
+  $('tcEnter').addEventListener('click',function(){
+    $('titlecard').hidden=true;
+    $('rail').hidden=false;
+    loadScene();
+  });
+
+  /* ---------- go ---------- */
+  // Hold on the title card; loadScene() fires when the player steps in.
+})();
+</script>
+</body>
+</html>

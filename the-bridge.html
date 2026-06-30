@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  THE BRIDGE — founder cockpit / decision dashboard. Tight Spiral Studios · walshero@gmail.com
+  "Start here." Opens joy-first, takes a short proper input, then renders the one-screen
+  dashboard that drives Matt's next decision and links out to the live files.
+
+  SPLASH RULE (locked 2026-06-29): opens on NOVELTY, not a gray gate. Comfort is the gold
+  corner button — large, high-contrast, names the palette in words. The old palette-gate
+  is retired.
+
+  FLOW: splash (joy) -> proper input form (one move / what's live / what's parked) ->
+  dashboard. The form is the on-ramp INTO the hub, not a wall. Function first; prettier
+  over time (Matt's call: "make it better over time, now we want function").
+
+  LINKS OUT (same-folder filenames; opens in new tab): the five live builds + the
+  Midjourney spec. If a file isn't beside this one, the link still opens; a plain note
+  warns rather than failing silently.
+
+  FERPA: no student data here. Cockpit is for Matt's own decisions only.
+  FLOOR: single-file offline, in-memory, 3-stop comfort (never #000/#fff), large type,
+  44px+, keyboard, visible focus, reduced-motion safe, scroll-reset, no emoji, phone-width.
+  Green-free slate placeholder pending the palette pick.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Bridge — start here</title>
+<style>
+:root{
+  --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --ink2:#1f1b12;
+  --line:#d8caa8; --line2:#c2b288;
+  --accent:#3a4654; --accent2:#2b3540;
+  --gold:#6e4700; --gold-br:#c8900a; --gold-pale:#fbeec6;
+  --rust:#8a3a1c; --sky-wash:#e7e0cf;
+  --focus:#c8900a;
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+body.softer{ --bg:#efe9dd; --surface:#f7f1e6; --ink:#2c2618; --ink2:#2c2618; --line:#ded2b6; --line2:#cdbf9c; --sky-wash:#e2dccd; }
+body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0; --line:#4a4230; --line2:#5e553e; --accent:#8fa6bd; --accent2:#9fb6cd; --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a; --rust:#e8a07c; --sky-wash:#222019; }
+*{box-sizing:border-box;} html,body{margin:0;}
+body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; -webkit-text-size-adjust:100%; }
+
+.topbar{ background:var(--accent); color:#fff; padding:.6rem .9rem; display:flex; align-items:center; gap:.6rem; font-family:var(--sans); position:sticky; top:0; z-index:30; }
+body.warm .topbar{ color:#0f0e0b; }
+.topbar .mark{ width:26px; height:26px; flex:none; } .topbar .wm{ font-weight:800; font-size:.92rem; }
+.cstop{ margin-left:auto; background:var(--gold-br); color:#1f1b12; border:2px solid #1f1b12; border-radius:9px; padding:.45rem .65rem; font:800 .82rem/1 var(--sans); cursor:pointer; min-height:44px; }
+.cstop:focus-visible{ outline:3px solid #1f1b12; outline-offset:2px; }
+
+.wrap{ max-width:680px; margin:0 auto; padding:1.1rem 1rem 5rem; }
+.screen{ display:none; } .screen.on{ display:block; animation:fade .25s ease; }
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.where{ font:800 .72rem/1 var(--sans); letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:.6rem; }
+h1{ font-size:1.62rem; line-height:1.16; color:var(--ink); margin:.2rem 0 .5rem; }
+h2{ font-size:1.18rem; color:var(--ink); margin:.2rem 0 .5rem; }
+p{ margin:0 0 .9rem; } .lead{ font-size:1.06rem; } .beat{ font-style:italic; color:var(--ink2); }
+
+.go{ display:block; width:100%; font:800 1.04rem/1.2 var(--sans); cursor:pointer; min-height:56px; padding:.9rem 1rem; border:none; border-radius:13px; background:var(--accent); color:#fff; margin:.45rem 0; text-align:center; }
+body.warm .go{ color:#0f0e0b; }
+.go:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+.go.ghost{ background:transparent; color:var(--ink); border:2px solid var(--line2); font-weight:700; min-height:48px; }
+
+/* splash joy */
+.splashstage{ width:100%; max-width:300px; margin:.4rem auto .2rem; }
+.splashsvg{ width:100%; height:auto; display:block; }
+.compassG{ transform-origin:120px 120px; animation:spin 7s ease-in-out infinite; }
+@keyframes spin{ 0%,100%{ transform:rotate(-8deg);} 50%{ transform:rotate(8deg);} }
+.needleG{ transform-origin:120px 120px; animation:point 7s ease-in-out infinite; }
+@keyframes point{ 0%{ transform:rotate(0);} 25%{ transform:rotate(14deg);} 60%{ transform:rotate(-10deg);} 100%{ transform:rotate(0);} }
+.splashh{ text-align:center; font-size:1.62rem; line-height:1.18; margin:.3rem 0 .5rem; }
+.splashp{ text-align:center; margin:0 auto .9rem; max-width:30rem; }
+.splashtip{ text-align:center; font:600 .86rem/1.4 var(--sans); color:var(--ink); margin:.6rem 0 0; }
+
+/* form */
+.field{ margin:.8rem 0; }
+.field label{ display:block; font:800 .9rem/1.3 var(--sans); margin-bottom:.3rem; }
+.field .lh{ font:400 .82rem/1.3 var(--sans); color:var(--ink2); margin-bottom:.3rem; }
+.field input, .field textarea{ width:100%; font:400 1rem/1.45 var(--sans); padding:.65rem; border:2px solid var(--line2); border-radius:10px; background:var(--surface); color:var(--ink); min-height:50px; }
+.field textarea{ min-height:62px; resize:vertical; }
+.field input:focus-visible, .field textarea:focus-visible{ outline:3px solid var(--focus); outline-offset:1px; }
+
+/* dashboard */
+.deck{ display:flex; flex-direction:column; gap:.9rem; }
+.card{ border:3px solid var(--line2); border-radius:16px; background:var(--surface); padding:.9rem 1rem; }
+.card.north{ border-color:var(--gold-br); background:var(--gold-pale); }
+.card .ct{ font:800 .72rem/1 var(--sans); letter-spacing:.08em; text-transform:uppercase; color:var(--gold); margin-bottom:.4rem; }
+.card.north .ct{ color:var(--gold); }
+.card .cmove{ font:800 1.2rem/1.25 var(--serif); color:var(--ink); }
+.card .cbody{ font:400 .98rem/1.45 var(--sans); color:var(--ink); }
+.card ul{ margin:.3rem 0 0; padding-left:1.1rem; } .card li{ margin:.25rem 0; }
+
+.links{ display:flex; flex-direction:column; gap:.5rem; margin:.4rem 0 0; }
+.link{ display:flex; align-items:center; gap:.65rem; border:2px solid var(--accent2); border-radius:12px; background:var(--surface); padding:.7rem .8rem; text-decoration:none; color:var(--ink); min-height:58px; }
+.link:hover{ border-color:var(--gold-br); } .link:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.link .li{ width:34px; height:34px; flex:none; }
+.link .lt{ font:800 1rem/1.15 var(--sans); color:var(--ink); }
+.link .ld{ font:400 .84rem/1.3 var(--sans); color:var(--ink2); }
+.link .arr{ margin-left:auto; font:800 1.1rem/1 var(--sans); color:var(--accent2); }
+
+.miss{ font:700 .82rem/1.35 var(--sans); color:var(--rust); margin:.5rem 0 0; }
+.foot{ margin-top:1.4rem; padding:1rem; background:var(--accent); color:#fff; border-radius:12px; font-family:var(--sans); font-size:.8rem; }
+body.warm .foot{ color:#0f0e0b; } .foot a{ color:#fff; } body.warm .foot a{ color:#0f0e0b; }
+.sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+@media (max-width:520px){ body{font-size:18px;} h1{font-size:1.4rem;} .wrap{padding:1rem .8rem 5rem;} }
+@media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 L24 18 L37 20 L24 22 L20 37 L16 22 L3 20 L16 18 Z" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/></svg>
+  <span class="wm">The Bridge · start here</span>
+  <button class="cstop" id="cstop" aria-label="Change comfort palette. Currently Default.">Comfort</button>
+</div>
+
+<div class="wrap">
+
+  <!-- SCREEN 0 — JOY SPLASH -->
+  <section class="screen on" id="splash" aria-labelledby="splashh">
+    <div class="splashstage" aria-hidden="true">
+      <svg viewBox="0 0 240 240" class="splashsvg" role="img" aria-label="A compass needle swinging to find its bearing">
+        <circle cx="120" cy="120" r="92" fill="var(--sky-wash)" stroke="var(--ink)" stroke-width="2.4"/>
+        <g class="compassG" stroke="var(--ink)" stroke-width="1.6" opacity=".5">
+          <line x1="120" y1="38" x2="120" y2="52"/><line x1="120" y1="188" x2="120" y2="202"/>
+          <line x1="38" y1="120" x2="52" y2="120"/><line x1="188" y1="120" x2="202" y2="120"/>
+        </g>
+        <g class="needleG">
+          <path d="M120 56 L132 120 L120 110 L108 120 Z" fill="var(--rust)" stroke="var(--ink)" stroke-width="1.6"/>
+          <path d="M120 184 L108 120 L120 130 L132 120 Z" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.6"/>
+          <circle cx="120" cy="120" r="6" fill="var(--gold-br)" stroke="var(--ink)" stroke-width="1.6"/>
+        </g>
+      </svg>
+    </div>
+    <h1 id="splashh" class="splashh">One screen.<br>One move.</h1>
+    <p class="lead splashp">Tell it three quick things and it points you at the single most valuable move — and puts everything you built one tap away.</p>
+    <button class="go" id="toForm">Find my bearing &rarr;</button>
+    <p class="splashtip">Eyes need a different setting? Tap <b>Comfort</b>, top-right — any time.</p>
+  </section>
+
+  <!-- SCREEN 1 — INPUT FORM -->
+  <section class="screen" id="form" aria-labelledby="formh">
+    <div class="where">Proper input — three things</div>
+    <h1 id="formh">What's true right now?</h1>
+    <div class="field">
+      <label for="move">North — the one move</label>
+      <div class="lh">The single most valuable thing you could do next. Not the project. The move.</div>
+      <input id="move" placeholder="e.g. playtest Sandbags on my phone, end to end">
+    </div>
+    <div class="field">
+      <label for="live">What's live</label>
+      <div class="lh">What's built and working that you don't want to lose track of.</div>
+      <textarea id="live" placeholder="e.g. five flash-fiction files; the river map; the joy splash"></textarea>
+    </div>
+    <div class="field">
+      <label for="parked">What's parked</label>
+      <div class="lh">Held on purpose. Naming it keeps it from nagging you.</div>
+      <textarea id="parked" placeholder="e.g. Midjourney art; the full four-genre semester; the palette pick"></textarea>
+    </div>
+    <button class="go" id="toDash">Show my bridge &rarr;</button>
+  </section>
+
+  <!-- SCREEN 2 — DASHBOARD -->
+  <section class="screen" id="dash" aria-labelledby="dashh">
+    <div class="where">The bridge</div>
+    <h1 id="dashh">Here's your bearing.</h1>
+    <div class="deck">
+
+      <div class="card north">
+        <div class="ct">Do this next — the one move</div>
+        <div class="cmove" id="dMove"></div>
+      </div>
+
+      <div class="card">
+        <div class="ct">Open a build (everything you made, one tap)</div>
+        <div class="links" id="buildLinks"></div>
+        <p class="miss" id="missNote">If a build doesn't open, it needs to live in the same folder as this file.</p>
+      </div>
+
+      <div class="card">
+        <div class="ct">The art lane (when you're ready)</div>
+        <div class="links">
+          <a class="link" href="the-first-image-midjourney-spec.md" target="_blank" rel="noopener">
+            <svg class="li" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 4 C24 4 28 10 28 16 C28 23 22 26 19 28 L15 28 C12 26 6 23 6 16 C6 10 10 4 17 4 Z" fill="none" stroke="var(--ink)" stroke-width="2"/></svg>
+            <span><span class="lt">The First Image (Midjourney spec)</span><br><span class="ld">one balloon, the prompt + pipeline</span></span><span class="arr">&rarr;</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ct">What's live</div>
+        <div class="cbody" id="dLive"></div>
+      </div>
+
+      <div class="card">
+        <div class="ct">Parked — held on purpose, not forgotten</div>
+        <div class="cbody" id="dParked"></div>
+      </div>
+
+      <div class="card">
+        <div class="ct">The one durable move</div>
+        <div class="cbody">Phone-save anything in scratch into the <b>Claude_files</b> Project. The outputs folder doesn't persist — the phone is the save device.</div>
+      </div>
+
+    </div>
+    <button class="go ghost" id="redo" style="margin-top:1rem;">Update my bearing</button>
+  </section>
+
+  <div class="foot">
+    Tight Spiral Studios · <a href="mailto:walshero@gmail.com">walshero@gmail.com</a> — <b>The Bridge.</b> Your start-here cockpit: one move, your builds one tap away, the art lane when ready. Function first; better over time. Single file, offline, nothing stored or sent. Green-free slate placeholder pending the palette pick.
+  </div>
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+
+  var stops=['softer','default','warm'], ci=1;
+  function applyStop(s){ document.body.classList.remove('softer','warm'); if(s==='softer')document.body.classList.add('softer'); if(s==='warm')document.body.classList.add('warm'); }
+  $('cstop').addEventListener('click',function(){ ci=(ci+1)%3; applyStop(stops[ci]);
+    var name=stops[ci].charAt(0).toUpperCase()+stops[ci].slice(1);
+    this.textContent='Comfort: '+name; this.setAttribute('aria-label','Change comfort palette. Currently '+name+'.'); });
+
+  function show(id){ document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');}); $(id).classList.add('on'); window.scrollTo(0,0); var h=$(id).querySelector('h1'); if(h){ h.setAttribute('tabindex','-1'); h.focus(); } }
+  $('toForm').addEventListener('click',function(){ show('form'); });
+  $('redo').addEventListener('click',function(){ show('form'); });
+
+  /* the five live builds */
+  var BUILDS=[
+    { f:'play-the-semester-flash.html', t:'Play the Semester (Flash)', d:'the playable hub — score opens the right tool' },
+    { f:'course-river.html', t:'The Course River', d:'the whole schedule as one navigable river' },
+    { f:'sandbags-joy.html', t:'Sandbags', d:'cut a baggy draft light — the balloon climbs' },
+    { f:'review-bench.html', t:'The Review Bench', d:'peer-workshop trainer — name the moves' },
+    { f:'workshop-wall.html', t:'The Workshop Wall', d:'the six writerly moves, labeled' }
+  ];
+  function linkIcon(){ return '<svg class="li" viewBox="0 0 34 34" aria-hidden="true"><rect x="5" y="7" width="24" height="20" rx="3" fill="none" stroke="var(--ink)" stroke-width="2"/><path d="M5 13 H29" stroke="var(--ink)" stroke-width="2"/></svg>'; }
+  var box=$('buildLinks');
+  BUILDS.forEach(function(b){
+    var a=document.createElement('a'); a.className='link'; a.href=b.f; a.target='_blank'; a.rel='noopener';
+    a.innerHTML=linkIcon()+'<span><span class="lt">'+b.t+'</span><br><span class="ld">'+b.d+'</span></span><span class="arr">&rarr;</span>';
+    box.appendChild(a);
+  });
+
+  function fmtList(text){
+    var t=(text||'').trim();
+    if(!t) return '<span class="beat">(nothing noted — add it next time you update your bearing)</span>';
+    var parts=t.split(/[\n;]+/).map(function(s){return s.trim();}).filter(Boolean);
+    if(parts.length<=1) return parts[0]||'';
+    return '<ul>'+parts.map(function(p){return '<li>'+p+'</li>';}).join('')+'</ul>';
+  }
+
+  $('toDash').addEventListener('click',function(){
+    var mv=$('move').value.trim();
+    if(!mv){ $('move').focus(); $('move').style.borderColor='var(--gold-br)'; return; }
+    $('dMove').textContent=mv;
+    $('dLive').innerHTML=fmtList($('live').value);
+    $('dParked').innerHTML=fmtList($('parked').value);
+    show('dash');
+  });
+})();
+</script>
+</body>
+</html>

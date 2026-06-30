@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  PLAY THE STUDIO — the deepest "want to know more" layer.
+  Tight Spiral Studios · walshero@gmail.com
+
+  THE RECURSIVE MOVE (wireframe novelty): this explains the studio by
+  making you DO the studio. You bring your own one-line idea; it rides
+  the gates with you. You feel three things happen to it, in order,
+  because that is literally how the studio works:
+    1. THE PIPELINE — gates stop the idea until it's ready.
+    2. THE PANEL CATCH — a reviewer flags a real flaw; you see the catch.
+    3. HUMAN IN THE LOOP — the AI proposes; YOU decide; it shows its reasoning.
+  Three moves, ONE spine (an idea moving from spark toward ship). Not a tour.
+
+  DISCIPLINARY BENCH: Chen (flow — it should FEEL like the thing, not
+  study it), Saunders (held-breath entry, no syllabus), Gee (you learn
+  by being situated inside one decision), McLuhan (the medium is the
+  message — a playable explanation of a playable studio).
+
+  REAL TALK (Paul Hernandez, founder's lens): the idea is THEIRS, named
+  in their own words, so the whole thing is anchored in something real
+  to the player, not an abstract example.
+
+  NO JARGON ON THE SURFACE. "Panel / pipeline / human-in-the-loop" are
+  felt, not named, until the very end where they're gently labeled.
+  Accessibility floor: full-contrast ink, one decision per screen, 44px
+  targets, keyboard nav, visible focus, scroll-reset on every screen
+  change, reduced-motion safe, no emoji, no color-as-sole-signal.
+  Single-file, offline, in-memory only.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Play the studio — Tight Spiral Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pine:#1a4a35; --pine-mid:#256649; --pine-lt:#3d8a64; --pine-faint:#f3f8f5;
+  --gold:#8a5c00; --gold-pale:#fdf5e0; --gold-border:#e8c96a; --gold-bright:#c8900a;
+  --blue:#1a3d5c; --blue-pale:#edf4fb;
+  --ink:#1a1a1c; --ink-2:#3a3a3c;
+  --bg:#f7f6f2; --surface:#ffffff; --border:#d8d5d0;
+  --stop:#8b1a2a; --stop-bg:#fbeef0;
+  --go:#1a7a4d; --go-bg:#e6f4ec;
+  --font-serif:'Playfair Display',Georgia,serif;
+  --font-sans:'Source Sans 3',system-ui,sans-serif;
+}
+*{box-sizing:border-box;}
+body{ margin:0; font-family:var(--font-sans); background:var(--bg); color:var(--ink);
+  line-height:1.6; font-size:19px; min-height:100vh; }
+.stage{ max-width:660px; margin:0 auto; padding:1.4rem 1.3rem 3rem; }
+
+/* progress dots — countable, not color-alone */
+.prog{ display:flex; gap:.4rem; justify-content:center; padding:1rem 0 .4rem; }
+.prog .d{ width:11px; height:11px; border-radius:50%; border:2px solid var(--pine-lt); background:transparent; }
+.prog .d.on{ background:var(--pine); border-color:var(--pine); }
+.prog .d.done{ background:var(--pine-lt); border-color:var(--pine-lt); }
+
+.screen{ display:none; }
+.screen.on{ display:block; animation:fade .3s ease both; }
+@keyframes fade{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+
+.eyebrow{ font-size:.76rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--gold); margin-bottom:.5rem; }
+h1{ font-family:var(--font-serif); font-size:2rem; line-height:1.18; margin:.1rem 0 1rem; }
+h2{ font-family:var(--font-serif); font-size:1.55rem; line-height:1.22; margin:.1rem 0 .9rem; color:var(--ink); }
+p{ margin:0 0 1.05rem; font-size:1.05rem; }
+p.big{ font-size:1.18rem; }
+strong{ color:var(--ink); }
+.quiet{ color:var(--ink-2); font-size:.95rem; }
+
+/* the spark — opening scene, scene-first */
+.spark-scene{ position:relative; border-radius:16px; overflow:hidden; margin:0 0 1.6rem;
+  background:radial-gradient(ellipse 60% 50% at 50% 40%, #14323f 0%, transparent 62%),
+             linear-gradient(180deg,#0c1b27 0%,#0f2433 55%,#091622 100%);
+  min-height:230px; display:flex; align-items:center; justify-content:center; }
+.spark-dot{ width:14px; height:14px; border-radius:50%; background:#ffe9a8;
+  box-shadow:0 0 24px 8px rgba(255,221,140,.7), 0 0 60px 24px rgba(255,210,120,.3);
+  animation:pulse 3.4s ease-in-out infinite; }
+@keyframes pulse{ 0%,100%{ transform:scale(1); opacity:.92; } 50%{ transform:scale(1.25); opacity:1; } }
+.spark-cap{ position:absolute; left:0; right:0; bottom:0; padding:1.2rem 1.1rem 1.3rem;
+  background:linear-gradient(0deg, rgba(6,14,22,.94), transparent);
+  color:#eef6fb; font-family:var(--font-serif); font-style:italic; font-size:1.2rem; text-align:center; }
+
+/* idea input */
+.idea-field{ width:100%; font-family:var(--font-sans); font-size:1.1rem; color:var(--ink);
+  padding:.9rem 1rem; border:2px solid var(--border); border-radius:10px; background:var(--surface);
+  margin:0 0 .5rem; min-height:52px; }
+.idea-field:focus-visible{ outline:3px solid var(--gold-bright); outline-offset:2px; border-color:var(--pine-lt); }
+.idea-echo{ background:var(--gold-pale); border:1.5px solid var(--gold-border); border-left:5px solid var(--gold);
+  border-radius:0 10px 10px 0; padding:.9rem 1.1rem; margin:0 0 1.4rem; }
+.idea-echo .lab{ font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); margin-bottom:.3rem; }
+.idea-echo .txt{ font-family:var(--font-serif); font-size:1.25rem; line-height:1.35; color:var(--ink); }
+
+/* a GATE */
+.gate{ border:2px solid var(--blue); background:var(--blue-pale); border-radius:12px;
+  padding:1.1rem 1.2rem; margin:0 0 1.4rem; }
+.gate-top{ display:flex; align-items:center; gap:.6rem; margin-bottom:.6rem; }
+.gate-glyph{ width:30px; height:30px; flex-shrink:0; }
+.gate-name{ font-family:var(--font-serif); font-size:1.15rem; color:var(--blue); }
+.gate p{ font-size:1rem; margin-bottom:.6rem; }
+.gate p:last-child{ margin-bottom:0; }
+
+/* the panel catch — a reviewer slip */
+.slip{ background:var(--surface); border:2px solid var(--stop); border-left:6px solid var(--stop);
+  border-radius:0 10px 10px 0; padding:1rem 1.1rem; margin:0 0 1rem; }
+.slip-who{ display:flex; align-items:center; gap:.5rem; margin-bottom:.4rem; }
+.slip-who .badge{ font-size:.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  background:var(--stop-bg); color:var(--stop); padding:.2rem .55rem; border-radius:4px; }
+.slip-who .name{ font-weight:700; color:var(--ink); }
+.slip p{ margin:0; font-size:1.02rem; }
+
+/* choice buttons */
+.choices{ display:flex; flex-direction:column; gap:.7rem; margin:1.2rem 0 0; }
+.choice{ display:block; width:100%; text-align:left; font-family:var(--font-sans); font-size:1.05rem;
+  font-weight:600; color:var(--ink); background:var(--surface); border:2px solid var(--border);
+  border-radius:10px; padding:.95rem 1.1rem; cursor:pointer; min-height:52px; line-height:1.4;
+  transition:border-color .12s, background .12s, transform .1s; }
+.choice:hover{ border-color:var(--pine-lt); background:var(--pine-faint); transform:translateY(-1px); }
+.choice:focus-visible{ outline:3px solid var(--gold-bright); outline-offset:3px; }
+.choice .ch-lab{ font-weight:700; color:var(--pine); display:block; margin-bottom:.15rem; }
+.choice .ch-sub{ font-weight:400; color:var(--ink-2); font-size:.92rem; }
+
+/* the reasoning reveal */
+.reason{ border-left:4px solid var(--pine); background:var(--pine-faint); border-radius:0 10px 10px 0;
+  padding:1rem 1.2rem; margin:1.2rem 0 0; }
+.reason .lab{ font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--pine); margin-bottom:.4rem; }
+.reason p{ margin:0; font-size:1.02rem; }
+
+/* primary button */
+.btn{ display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+  font-family:var(--font-sans); font-size:1.08rem; font-weight:700; cursor:pointer;
+  min-height:54px; padding:.85rem 1.5rem; border-radius:10px; border:2px solid var(--pine);
+  background:var(--pine); color:#fff; width:100%; margin-top:.5rem; }
+.btn:hover{ background:var(--pine-mid); }
+.btn:focus-visible{ outline:3px solid var(--gold-bright); outline-offset:3px; }
+.btn[disabled]{ opacity:.4; cursor:default; }
+.btn.ghost{ background:var(--surface); color:var(--pine); }
+
+/* end naming card */
+.name-card{ background:var(--surface); border:2px solid var(--border); border-radius:12px;
+  padding:1rem 1.1rem; margin:0 0 .9rem; }
+.name-card .nc-felt{ font-weight:700; color:var(--pine); margin-bottom:.2rem; }
+.name-card .nc-real{ font-size:.95rem; color:var(--ink-2); }
+
+.foot{ margin-top:2rem; padding-top:1.1rem; border-top:2px solid var(--pine); font-size:.9rem; color:var(--ink-2); }
+.foot a{ color:var(--pine-mid); }
+
+@media (max-width:520px){
+  body{ font-size:18px; }
+  h1{ font-size:1.65rem; }
+  .stage{ padding:1.1rem 1rem 2.4rem; }
+}
+@media (prefers-reduced-motion: reduce){
+  .spark-dot{ animation:none; }
+  .screen.on{ animation:none; }
+}
+</style>
+</head>
+<body>
+
+<div class="prog" id="prog" aria-hidden="true"></div>
+
+<div class="stage">
+
+  <!-- ░░ 0 — THE SPARK (scene-first, no syllabus) ░░ -->
+  <section class="screen on" id="s0" aria-labelledby="s0h">
+    <div class="spark-scene" role="img" aria-label="A single warm point of light glowing in the dark.">
+      <span class="spark-dot"></span>
+      <div class="spark-cap">Every game starts as one small light.</div>
+    </div>
+    <h1 id="s0h">Want to see how I work? Bring an idea.</h1>
+    <p class="big">Not a finished one. A half-formed one. The kind you'd jot on a napkin. We'll walk it through my studio together — and you'll feel, instead of read, what I've been building.</p>
+    <button class="btn" id="b0">I've got one</button>
+  </section>
+
+  <!-- ░░ 1 — NAME YOUR IDEA (Real Talk: it's theirs) ░░ -->
+  <section class="screen" id="s1" aria-labelledby="s1h">
+    <div class="eyebrow">Your idea, your words</div>
+    <h2 id="s1h">Finish this sentence.</h2>
+    <p>“I want to make a game that helps someone…”</p>
+    <input class="idea-field" id="ideaInput" type="text" maxlength="90"
+      placeholder="…learn to spot a scam email" aria-label="Finish the sentence: I want to make a game that helps someone…">
+    <p class="quiet">One line. Anything. It rides with you the whole way.</p>
+    <button class="btn" id="b1">Take it in</button>
+  </section>
+
+  <!-- ░░ 2 — THE GATE (pipeline: it stops you) ░░ -->
+  <section class="screen" id="s2" aria-labelledby="s2h">
+    <div class="eyebrow">The first thing that happens to it</div>
+    <h2 id="s2h">It doesn't go straight to building.</h2>
+
+    <div class="idea-echo">
+      <div class="lab">Your idea</div>
+      <div class="txt" id="echo2"></div>
+    </div>
+
+    <div class="gate">
+      <div class="gate-top">
+        <svg class="gate-glyph" viewBox="0 0 30 30" aria-hidden="true">
+          <rect x="4" y="4" width="22" height="22" rx="3" fill="none" stroke="#1a3d5c" stroke-width="2.5"/>
+          <path d="M9 15 L13 19 L21 10" fill="none" stroke="#1a3d5c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="gate-name">A gate, not a green light</span>
+      </div>
+      <p>First question the studio asks isn't “how do we build it?” It's <strong>“should we build this now — and what's the one surprising thing it does?”</strong></p>
+      <p>If an idea can't name something it does that you haven't seen done before, it goes back to wait. Most ideas wait. That's healthy. The gate is how nothing half-baked sneaks into a build.</p>
+    </div>
+
+    <p class="quiet">You just felt the first move: <strong>the work has to earn its way forward.</strong></p>
+    <button class="btn" id="b2">Push it through the gate</button>
+  </section>
+
+  <!-- ░░ 3 — THE PANEL CATCH (a reviewer flags a flaw) ░░ -->
+  <section class="screen" id="s3" aria-labelledby="s3h">
+    <div class="eyebrow">Now the team looks at it</div>
+    <h2 id="s3h">Someone catches a problem.</h2>
+
+    <p>Your idea passed the gate. Before anyone builds, a small team of reviewers reads it — each one watching for a different kind of mistake. One of them speaks up:</p>
+
+    <div class="slip">
+      <div class="slip-who">
+        <span class="badge">Holds a stop</span>
+        <span class="name">The one who guards the first ten seconds</span>
+      </div>
+      <p id="catch3"></p>
+    </div>
+
+    <p>That's a real catch. Not a vague “make it better” — a specific flaw, named by the reviewer whose only job is to watch for it. In my studio there's a whole cast of them: one checks facts, one guards accessibility, one asks “does this even make sense?” A few can stop a build cold until their problem is fixed.</p>
+
+    <p class="quiet">You just felt the second move: <strong>the mistake gets caught early, by someone whose job is to catch it.</strong></p>
+    <button class="btn" id="b3">So who fixes it?</button>
+  </section>
+
+  <!-- ░░ 4 — HUMAN IN THE LOOP (you decide; AI shows reasoning) ░░ -->
+  <section class="screen" id="s4" aria-labelledby="s4h">
+    <div class="eyebrow">The decision</div>
+    <h2 id="s4h">Here's the part that matters most.</h2>
+
+    <p>The AI can <strong>propose</strong> a fix. But it doesn't get to decide. <strong>You do.</strong> The reviewer flagged that your opening is flat. The AI offers two ways to fix it — your call:</p>
+
+    <div class="choices" id="choices4">
+      <button class="choice" data-pick="scene">
+        <span class="ch-lab">Open inside a moment</span>
+        <span class="ch-sub">Drop the player into a scene where they notice something — no instructions first.</span>
+      </button>
+      <button class="choice" data-pick="explain">
+        <span class="ch-lab">Open with a clear explanation</span>
+        <span class="ch-sub">Tell the player what they'll learn and why it matters, then begin.</span>
+      </button>
+    </div>
+
+    <div class="reason" id="reason4" style="display:none;">
+      <div class="lab">Why the studio leans one way</div>
+      <p id="reasonTxt"></p>
+    </div>
+
+    <button class="btn" id="b4" style="display:none;">That's the whole thing — show me</button>
+  </section>
+
+  <!-- ░░ 5 — NAME IT (gently label what they felt) ░░ -->
+  <section class="screen" id="s5" aria-labelledby="s5h">
+    <div class="eyebrow">What just happened</div>
+    <h2 id="s5h">You just ran my studio.</h2>
+
+    <p>You took <em id="echo5"></em> and walked it through the same path everything I make goes through. Three things happened to it — and now they have names:</p>
+
+    <div class="name-card">
+      <div class="nc-felt">The gate stopped it until it earned its way.</div>
+      <div class="nc-real">I call this the pipeline. Every idea proves itself stage by stage before anyone builds.</div>
+    </div>
+    <div class="name-card">
+      <div class="nc-felt">A reviewer caught the flaw you didn't see.</div>
+      <div class="nc-real">I call this the panel — a cast of critics, each guarding one kind of mistake, some with the power to stop a build.</div>
+    </div>
+    <div class="name-card">
+      <div class="nc-felt">You made the call. The AI only proposed and explained.</div>
+      <div class="nc-real">I call this human-in-the-loop. The person stays in charge; the machine shows its reasoning instead of hiding it.</div>
+    </div>
+
+    <p class="big">That's the studio. Not a chatbot writing things for me — a team that catches my mistakes while I keep every decision. I use it to build small, accessible learning games.</p>
+
+    <button class="btn ghost" id="b5">Walk a different idea through</button>
+
+    <div class="foot">
+      Tight Spiral Studios · walshero@gmail.com<br>
+      You played the explanation. That's the point — the studio makes games that teach by letting you do the thing, not read about it.
+    </div>
+  </section>
+
+</div>
+
+<script>
+var SCREENS = ['s0','s1','s2','s3','s4','s5'];
+var idea = '';
+
+/* progress dots */
+(function(){
+  var p = document.getElementById('prog');
+  SCREENS.forEach(function(){ var d=document.createElement('span'); d.className='d'; p.appendChild(d); });
+})();
+function paintProg(i){
+  var dots = document.querySelectorAll('#prog .d');
+  dots.forEach(function(d,k){ d.className = 'd' + (k<i?' done':(k===i?' on':'')); });
+}
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('on'); });
+  document.getElementById(id).classList.add('on');
+  paintProg(SCREENS.indexOf(id));
+  window.scrollTo(0,0);
+  var h = document.querySelector('#'+id+' h1, #'+id+' h2');
+  if(h){ h.setAttribute('tabindex','-1'); h.focus({preventScroll:true}); }
+}
+
+function setIdea(){
+  var v = document.getElementById('ideaInput').value.trim();
+  idea = v || 'learn to spot a scam email';
+  var phrase = 'A game that helps someone ' + idea + '.';
+  document.getElementById('echo2').textContent = phrase;
+  document.getElementById('echo5').textContent = phrase;
+  /* the panel catch is written generically so it fits ANY idea */
+  document.getElementById('catch3').textContent =
+    '“Right now this opens by telling the player they’re about to ' + idea +
+    '. That’s a flat front door — a setup paragraph before anything happens. People reach for the close button. Land them inside a moment first.”';
+}
+
+document.getElementById('b0').addEventListener('click', function(){ show('s1'); setTimeout(function(){document.getElementById('ideaInput').focus();},120); });
+document.getElementById('b1').addEventListener('click', function(){ setIdea(); show('s2'); });
+document.getElementById('ideaInput').addEventListener('keydown', function(e){ if(e.key==='Enter'){ setIdea(); show('s2'); } });
+document.getElementById('b2').addEventListener('click', function(){ show('s3'); });
+document.getElementById('b3').addEventListener('click', function(){ show('s4'); });
+
+/* the human-in-the-loop decision */
+document.querySelectorAll('#choices4 .choice').forEach(function(c){
+  c.addEventListener('click', function(){
+    var pick = this.getAttribute('data-pick');
+    var txt = (pick==='scene')
+      ? 'You chose to open inside a moment — and that’s exactly where the studio leans. People feel before they understand. A scene pulls them in; an explanation asks them to wait. But notice: the AI didn’t decide that. You did. It just showed you why.'
+      : 'You chose to open with an explanation — and the studio would gently push back: people feel before they understand, so a flat setup paragraph is where they leave. But here’s the real point — you made the call, not the machine. It proposed and explained; the decision stayed yours. That’s the whole idea.';
+    document.getElementById('reasonTxt').textContent = txt;
+    document.getElementById('reason4').style.display = 'block';
+    document.getElementById('b4').style.display = 'inline-flex';
+    document.querySelectorAll('#choices4 .choice').forEach(function(x){ x.style.opacity = (x===c)?'1':'.5'; });
+    document.getElementById('reason4').scrollIntoView({behavior:'smooth', block:'nearest'});
+  });
+});
+document.getElementById('b4').addEventListener('click', function(){ show('s5'); });
+document.getElementById('b5').addEventListener('click', function(){
+  document.getElementById('ideaInput').value='';
+  document.getElementById('reason4').style.display='none';
+  document.getElementById('b4').style.display='none';
+  document.querySelectorAll('#choices4 .choice').forEach(function(x){ x.style.opacity='1'; });
+  show('s1'); setTimeout(function(){document.getElementById('ideaInput').focus();},120);
+});
+
+paintProg(0);
+</script>
+</body>
+</html>

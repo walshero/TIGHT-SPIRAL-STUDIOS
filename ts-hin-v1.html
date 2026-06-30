@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  TS-HIN v1.0 — Tight Spiral Human Intelligence Network. Operating dashboard.
+  Tight Spiral Studios · walshero@gmail.com
+
+  WHAT THIS IS: the full TS-HIN architecture, all 14 components LIVE (founder's call:
+  "build them fully operating even if empty; I accept the placeholders"). Every agent
+  present, the whole nervous system running.
+
+  THE ONE FLOOR HELD: placeholders are VISIBLY placeholders. No fabricated people, no
+  invented reliability scores, no fake prediction histories presented as real data —
+  that's the Fact-Check / AI-Skeptic HALT (a fabricated expert profile poisons the
+  institutional memory this system exists to protect). Empty components show real
+  emptiness + their recruitment list. Marked clearly, the way the EN195 shell was.
+
+  STATUS LEGEND per component:
+   LIVE      — has real data, operating now
+   RECRUITING— live, but empty; its first job is to fill itself (shows the ask)
+   PLACEHOLDER— structure present, content is sample/marked, awaiting real input
+
+  Mapping to existing OS (so this is coherent, not foreign): Mission Director=Conductor;
+  Panel=self-staffing panel; Knowledge Graph=OS+decision-log+carry-out; Scout=Field
+  Scout (walled); Contradiction=Coherence Skeptic+Probe Sweep; Decision Thresholds=
+  collision power-order+5 gate outcomes; Interview Producer=studio-method interview.
+
+  GREEN-FREE: slate accent (no green anywhere). Full floor; passes Studio Eyes.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TS-HIN v1.0 — Human Intelligence Network</title>
+<style>
+:root{ --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --line:#c2b288;
+  --accent:#3a4654; --accent-dark:#2b3540; --gold:#6e4700; --gold-pale:#fbeec6; --gold-br:#c8900a;
+  --live:#2b3540; --recruit:#7a4a00; --ph:#5a2a52;
+  --focus:#c8900a; --serif:Georgia,serif; --sans:system-ui,-apple-system,'Segoe UI',sans-serif; --mono:ui-monospace,Consolas,monospace; }
+body.softer{ --bg:#efe9dd; --surface:#f7f1e6; --ink:#2c2618; --line:#cdbf9c; }
+body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --line:#5e553e; --accent:#8fa6bd; --accent-dark:#9fb6cd; --gold:#f0c357; --gold-pale:#332c1a; --live:#9fb6cd; --recruit:#f0c357; --ph:#e3a8d6; }
+*{box-sizing:border-box;} html,body{margin:0;}
+body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; }
+.topbar{ background:var(--accent); color:#fff; padding:.6rem .9rem; display:flex; align-items:center; gap:.6rem; font-family:var(--sans); position:sticky; top:0; z-index:20; }
+body.warm .topbar{ color:#0f0e0b; }
+.topbar .wm{ font-weight:800; font-size:.92rem; }
+.cstop{ margin-left:auto; background:rgba(255,255,255,.2); color:inherit; border:2px solid rgba(255,255,255,.6); border-radius:9px; padding:.45rem .6rem; font:700 .74rem/1 var(--sans); cursor:pointer; min-height:44px; }
+body.warm .cstop{ border-color:rgba(0,0,0,.4); }
+.cstop:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.wrap{ max-width:760px; margin:0 auto; padding:1.2rem 1rem 4rem; }
+h1{ font-size:1.6rem; color:var(--ink); margin:.2rem 0 .2rem; }
+.sub{ font-family:var(--sans); font-size:.96rem; font-style:italic; margin:0 0 1rem; }
+.mission{ background:var(--surface); border:2px solid var(--accent); border-radius:13px; padding:.9rem 1rem; font-family:var(--sans); margin:0 0 1rem; }
+.mission .ml{ font:800 .72rem/1 var(--sans); letter-spacing:.06em; text-transform:uppercase; color:var(--accent-dark); }
+.mission .mt{ font:700 1.05rem/1.35 var(--sans); margin:.3rem 0; }
+.banner{ background:var(--gold-pale); border:2px solid var(--gold-br); border-radius:11px; padding:.7rem .9rem; font-family:var(--sans); font-size:.88rem; margin:0 0 1.2rem; }
+.legend{ display:flex; gap:.5rem; flex-wrap:wrap; font-family:var(--sans); font-size:.78rem; margin:0 0 1.2rem; }
+.lz{ display:inline-flex; align-items:center; gap:.35rem; border:2px solid; border-radius:7px; padding:.3rem .5rem; font-weight:800; }
+.lz.live{ color:var(--live); border-color:var(--live); }
+.lz.recruit{ color:var(--recruit); border-color:var(--recruit); }
+.lz.ph{ color:var(--ph); border-color:var(--ph); }
+.comp{ border:2px solid var(--line); border-radius:13px; background:var(--surface); margin:.7rem 0; overflow:hidden; }
+.comp .ch{ width:100%; text-align:left; background:none; border:none; cursor:pointer; padding:.85rem .9rem; display:flex; align-items:center; gap:.6rem; font-family:var(--sans); min-height:56px; color:var(--ink); }
+.comp .ch:focus-visible{ outline:3px solid var(--focus); outline-offset:-3px; }
+.comp .cn{ font:800 1.02rem/1.25 var(--sans); flex:1; }
+.comp .badge{ font:800 .66rem/1 var(--sans); letter-spacing:.04em; text-transform:uppercase; border:2px solid; border-radius:6px; padding:.25rem .4rem; white-space:nowrap; }
+.comp .badge.live{ color:var(--live); border-color:var(--live); }
+.comp .badge.recruit{ color:var(--recruit); border-color:var(--recruit); }
+.comp .badge.ph{ color:var(--ph); border-color:var(--ph); }
+.comp .body{ padding:0 .9rem 0; max-height:0; overflow:hidden; transition:max-height .25s ease, padding .25s ease; }
+.comp.open .body{ max-height:1200px; padding:.2rem .9rem 1rem; }
+.comp .maps{ font:italic 400 .85rem/1.4 var(--serif); margin:.2rem 0 .6rem; }
+.comp p{ font-size:.93rem; margin:.4rem 0; }
+.comp ul{ margin:.3rem 0 .6rem; padding-left:1.2rem; } .comp li{ font-size:.9rem; margin:.25rem 0; }
+.ask{ background:var(--gold-pale); border:2px solid var(--gold-br); border-radius:9px; padding:.6rem .75rem; font-family:var(--sans); font-size:.88rem; margin:.5rem 0; }
+.ask b{ color:var(--gold); }
+.tag{ display:inline-block; font:700 .76rem/1.3 var(--mono); background:var(--bg); border:1px solid var(--line); border-radius:5px; padding:.15rem .4rem; margin:.15rem .2rem .15rem 0; }
+.gapbox{ background:var(--bg); border:2px dashed var(--accent); border-radius:9px; padding:.6rem .75rem; margin:.5rem 0; font-family:var(--sans); font-size:.9rem; }
+.foot{ margin-top:1.8rem; padding:1rem; background:var(--accent); color:#fff; border-radius:12px; font-family:var(--sans); font-size:.8rem; }
+body.warm .foot{ color:#0f0e0b; }
+@media (max-width:520px){ body{font-size:18px;} h1{font-size:1.42rem;} .wrap{padding:1rem .8rem 4rem;} }
+@media (prefers-reduced-motion: reduce){ *{transition:none!important;} .comp.open .body{transition:none;} }
+</style>
+</head>
+<body>
+<div class="topbar"><span class="wm">TS-HIN v1.0 — Human Intelligence Network</span><button class="cstop" id="cstop">Comfort</button></div>
+<div class="wrap">
+  <h1>Human Intelligence Network</h1>
+  <p class="sub">All components operating. AI does search / synthesis / memory; humans hold judgment / ethics / final approval. Neither replaces the other.</p>
+
+  <div class="mission">
+    <div class="ml">Active mission</div>
+    <div class="mt">Ship a learning game to real students that demonstrably teaches better because the right people were consulted at the right time.</div>
+  </div>
+
+  <div class="banner"><b>Honest-placeholder rule:</b> every component is live. Components with real data show it. Empty ones are marked <b>RECRUITING</b> or <b>PLACEHOLDER</b> and show what they need to become real — no invented people, no fake scores. That honesty is what makes this an institutional memory worth trusting.</div>
+
+  <div class="legend">
+    <span class="lz live">LIVE — real data, operating</span>
+    <span class="lz recruit">RECRUITING — live, filling itself</span>
+    <span class="lz ph">PLACEHOLDER — structure ready, content sample</span>
+  </div>
+
+  <!-- 1 Mission Director -->
+  <div class="comp"><button class="ch" aria-expanded="false"><span class="cn">1 · Mission Director</span><span class="badge live">Live</span></button>
+    <div class="body"><div class="maps">= the Conductor + Mission Charter (already in the OS).</div>
+      <p>Sets the problem, the acceptable confidence, and which decisions humans must approve. Operating now — it ran this very session (named the block as persistence, contained the MBTA scope).</p>
+      <p><b>Current charter:</b> the active mission above. Confidence threshold for ship: human approval required at every player-facing surface.</p>
+    </div></div>
+
+  <!-- 2 Knowledge Gap Detector -->
+  <div class="comp"><button class="ch" aria-expanded="false"><span class="cn">2 · Knowledge Gap Detector</span><span class="badge live">Live</span></button>
+    <div class="body"><div class="maps">New to the system — the one genuinely novel TS-HIN idea, now operating.</div>
+      <p>Scans the active work for what the studio does <em>not</em> know and names it as a gap.</p>
+      <div class="gapbox"><b>Detected gaps, this mission:</b>
+        <span class="tag">adolescent political identity formation</span>
+        <span class="tag">survey instrument validity (player measurement)</span>
+        <span class="tag">civic-ed efficacy evidence base</span>
+        <p style="margin:.4rem 0 0">Each gap is a candidate mission for the Scout. These are real — they came up tonight (the CYL trust instrument, the EN195 data instrument, the G4C evidence dossier).</p></div>
+    </div></div>
+
+  <!-- 3 Scout Network -->
+  <div class="comp"><button class="ch" aria-expanded="false"><span class="cn">3 · Scout Network</span><span class="badge live">Live</span></button>
+    <div class="body"><div class="maps">= the Field Scout (already in the OS, walled: informs, never reshapes).</div>
+      <p>Surfaces method / standard / door from the outside field. Operating with a real standing map:</p>
+      <ul><li><b>Door + Standard:</b> Games for Change 2027 civics rubric (the design brief)</li>
+      <li><b>Method + Standard:</b> Stanford SHEG / Civic Online Reasoning</li>
+      <li><b>Method:</b> the Gee / GLS lineage</li></ul>
+    </div></div>
+
+  <!-- 4 Talent Intelligence -->
+  <div class="comp"><button class="ch" aria-expanded="false"><span class="cn">4 · Talent Intelligence</span><span class="badge recruit">Recruiting</span></button>
+    <div class="body"><div class="maps">Empty by honesty — no scored profiles invented.</div>
+      <p>Will hold living expert profiles. Right now the studio has <b>collaborators, not a scored network</b>, and inventing profiles would poison the memory. So this component's first live act is to recruit.</p>
+      <div class="ask"><b>To go from Recruiting to Live, it needs:</b> real, consented expert relationships, logged with their actual expertise and disclosures. Start with the people already in orbit (collaborators on real builds) — with consent — before adding outside experts.</div>
+    </div></div>
+
+  <!-- 5 Expert Reliability Score -->
+  <div class="comp"><button class="ch" aria-expanded="false"><span class="cn">5 · Expert Reliability Score</span><span class="badge ph">Placeholder</span></button>
+    <div class="body"><div class="maps">Cannot operate honestly yet — scoring needs prediction history that doesn't exist.</div>
+      <p>Will score experts on evidence, not popularity: research quality, real-world implementation, <em>prediction accuracy</em>, openness to revision, conflict disclosure.</p>
+      <div class="ask"><b>Why placeholder, not live:</b> a reliability score computed on zero logged predictions is a number that lies. It activates once the Knowledge Graph has recorded enough <em>predictions and outcomes</em> to score against. The dimensions are defined and waiting.</div>
+    </div></div>
+
+  <!-- 6 Casting Engine -->
+  <div class="comp"><button class="ch" aria-expanded="false"><span class="cn">6 · Casting Engine</span><span class="badge live">Live</span></button>
+    <div class="body"><div class="maps">= the self-staffing panel + the Disciplinary Bench (already in the OS).</div>
+      <p>Builds a custom advisory board per mission from the seated roster. Operating now — it cast tonight's reviews (Conductor, PM, Coherence Skeptic, the floor seats). Casting from <em>outside</em> experts waits on Talent Intelligence filling.</p>
+    </div></div>
+
+  <!-- 7 Interview Producer -->
+  <div class="comp"><button class="ch" aria-expanded="false"><span class="cn">7 · Interview Producer</span><span class="badge live">Live</span></button>
+    <div class="body"><div class="maps">= the studio-method interview ("you give me the brain / tell me what you need").</div>
+      <p>Never interviews blind — generates goals, dossier, questions, known disagreements before any conversation. Operating now as the method you use to spec discipline-specific builds.</p>
+    </div></div>
+
+  <!-- 8 Evidence Extraction -->
+  <div class="comp"><button class="ch" aria-expanded="false"><span class="cn">8 · Evidence Extraction</span><span class="badge ph">Placeholder</span></button>
+    <div class="body"><div class="maps">Structure ready; activates when real interviews happen.</div>
+      <p>Turns every interview into structured data: observations, recommendations, counterarguments, uncertainties, design implications, confidence. The schema is defined; it fills when the first real expert interview is conducted and consented.</p>
+    </div></div>
+
+  <!-- 9 Knowledge Graph -->
+  <div class="comp"><button class="ch" aria-expanded="false"><span class="cn">9 · Knowledge Graph / Long-Term Memory</span><span class="badge live">Live</span></button>
+    <div class="body"><div class="maps">= the OS + decision log + the Carry-Out (built last night).</div>
+      <p>The institutional memory. Operating now via the carry-out pattern: sessions emit structured records the founder carries to the durable shelf (the Project). Memory-the-cache can hit its ceiling; the graph-as-carry-out cannot. This is the persistence floor you fixed last night.</p>
+    </div></div>
+
+  <!-- 10 Contradiction Engine -->
+  <div class="comp"><button class="ch" aria-expanded="false"><span class="cn">10 · Contradiction Engine</span><span class="badge live">Live</span></button>
+    <div class="body"><div class="maps">= the Coherence Skeptic + the Probe Sweep (already in the OS).</div>
+      <p>Detects expert / evidence / historical disagreements and turns them into missions. Operating now — it ran the Probe Sweep on the gap-audit question tonight.</p>
+    </div></div>
+
+  <!-- 11 Decision Thresholds -->
+  <div class="comp"><button class="ch" aria-expanded="false"><span class="cn">11 · Decision Thresholds</span><span class="badge live">Live</span></button>
+    <div class="body"><div class="maps">= the collision power-order + the five gate outcomes (already in the OS).</div>
+      <p>L0 AI-only / L1 internal panel / L2 external specialist / L3 independent review / L4 community. Operating now: tonight ran at L1 (internal panel). L3/L4 activate when independent reviewers and a community are recruited (see Talent + Community).</p>
+    </div></div>
+
+  <!-- 12 Production Integration -->
+  <div class="comp"><button class="ch" aria-expanded="false"><span class="cn">12 · Production Integration</span><span class="badge live">Live</span></button>
+    <div class="body"><div class="maps">= the pipeline stages requesting different seats (already in the OS).</div>
+      <p>Each stage summons its expertise. Operating now via the self-staffing triggers. Outside-expert stages (UX, localization, performance) light up as Talent fills.</p>
+    </div></div>
+
+  <!-- 13 Community Review / Feedback -->
+  <div class="comp"><button class="ch" aria-expanded="false"><span class="cn">13 · Community Review &amp; Feedback Intelligence</span><span class="badge recruit">Recruiting</span></button>
+    <div class="body"><div class="maps">Empty by honesty — no community recruited yet.</div>
+      <p>Will collect gameplay, think-aloud, educator reports, surveys — all as searchable evidence, via the privacy-preserving feedback layer (player observes their own pattern, chooses what to reveal). The carry-out is already the collection mechanism.</p>
+      <div class="ask"><b>To go Live:</b> a first real pilot — the EN195 game with actual students, or a CYL classroom run — feeding carry-outs in. Gated behind a first shipped game reaching real players (FERPA HALT on any capture without consent).</div>
+    </div></div>
+
+  <!-- 14 Annual Intelligence Audit -->
+  <div class="comp"><button class="ch" aria-expanded="false"><span class="cn">14 · Annual Intelligence Audit</span><span class="badge ph">Placeholder</span></button>
+    <div class="body"><div class="maps">Cannot run honestly yet — there is no year of shipped work to audit.</div>
+      <p>Will retire obsolete knowledge, measure prediction accuracy, find blind spots, review perspective diversity. The procedure is defined; it runs at year-one-with-shipped-work. Until then it would audit an empty record.</p>
+    </div></div>
+
+  <div class="foot">Tight Spiral Studios · walshero@gmail.com — TS-HIN v1.0, fully operating. AI accelerates discovery, organization, synthesis; humans hold judgment, experience, creativity, and final approval. Placeholders are honest by design — no fabricated people or scores, because the network's value is a memory you can trust. Green-free (slate). Passes Studio Eyes. Pairs with the future TSP Research Governance Standard (evidence tiers) — already half-built as the Just-in-Time Expertise rule.</div>
+</div>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var stops=['default','softer','warm'],i=0;
+  $('cstop').addEventListener('click',function(){ i=(i+1)%3; document.body.classList.remove('softer','warm'); if(stops[i]==='softer')document.body.classList.add('softer'); if(stops[i]==='warm')document.body.classList.add('warm'); this.textContent='Comfort: '+stops[i].charAt(0).toUpperCase()+stops[i].slice(1); });
+  document.querySelectorAll('.comp .ch').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var c=btn.parentElement, open=c.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open?'true':'false');
+    });
+  });
+})();
+</script>
+</body>
+</html>

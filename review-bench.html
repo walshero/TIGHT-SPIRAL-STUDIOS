@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  THE REVIEW BENCH — a peer-workshop trainer for EN195 flash fiction.
+  Tight Spiral Studios · walshero@gmail.com
+
+  FOUNDER BEARING (Compass, this session): North = a fun way for EN195 students to learn
+  flash fiction by WORKSHOPPING each other's pieces. South = Reader / Reviewer / Writer.
+  East (the guardrail) = "is it applicable to class enough for the detour?" — so the
+  test is BINARY: could this go in front of a real section next week? Built to pass that.
+
+  THE MOVE: the player sits in the REVIEWER seat — the seat beginners are worst at. They
+  read a short flash piece and PLACE NAMED MOVES on it (from the Workshop Wall built this
+  session): tap a line, name the move that's working or the move it needs. Then they see
+  what a strong reviewer flagged — not a "right answer," a defensible read. The Workshop
+  Wall stops being a reference and becomes the reviewer's TOOLKIT. This trains the
+  VOCABULARY; the real peer workshop still happens between humans, in class, after.
+
+  FERPA WALL [HALT, held]: the practice piece is NEUTRAL STUDIO-WRITTEN material, never
+  real student work (warm-up-on-neutral-ground rule). Nothing identifiable touches the
+  tool. When students later workshop each other for real, they bring the vocabulary the
+  game taught — the game trains the move, humans do the workshop.
+
+  DIGNITY: a review is never a verdict on the writer. Every prompt frames the move as
+  what the PIECE is doing or could do, never what the writer failed at. Praise-first
+  option is real, not decorative.
+
+  COMFORT GATE + VISIBILITY (locked 2026-06-29): screen-zero palette choice; --ink2 ==
+  --ink; accents structural only; GREEN-FREE (slate-B placeholder). FLOOR: single-file,
+  offline, in-memory; 3-stop comfort (never #000/#fff); large type; 44px+; keyboard;
+  visible focus; reduced-motion safe; scroll-reset; shape+label not color alone; no
+  emoji; phone-width. Carry-out: emit, don't store.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Review Bench — flash fiction peer workshop</title>
+<style>
+:root{
+  --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --ink2:#1f1b12;
+  --line:#d8caa8; --line2:#c2b288;
+  --accent:#3a4654; --accent2:#2b3540;       /* slate-B placeholder, GREEN-FREE */
+  --gold:#6e4700; --gold-br:#c8900a; --gold-pale:#fbeec6;
+  --rust:#8a3a1c;
+  --focus:#c8900a;
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+body.softer{ --bg:#efe9dd; --surface:#f7f1e6; --ink:#2c2618; --ink2:#2c2618; --line:#ded2b6; --line2:#cdbf9c; }
+body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0; --line:#4a4230; --line2:#5e553e;
+  --accent:#8fa6bd; --accent2:#9fb6cd; --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a; --rust:#e8a07c; }
+*{box-sizing:border-box;} html,body{margin:0;}
+body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; -webkit-text-size-adjust:100%; }
+
+.topbar{ background:var(--accent); color:#fff; padding:.6rem .9rem; display:flex; align-items:center; gap:.6rem; font-family:var(--sans); position:sticky; top:0; z-index:30; }
+body.warm .topbar{ color:#0f0e0b; }
+.topbar .mark{ width:26px; height:26px; flex:none; } .topbar .wm{ font-weight:800; font-size:.95rem; }
+.cstop{ margin-left:auto; background:rgba(255,255,255,.18); color:inherit; border:2px solid rgba(255,255,255,.6); border-radius:9px; padding:.45rem .65rem; font:700 .76rem/1 var(--sans); cursor:pointer; min-height:44px; }
+body.warm .cstop{ border-color:rgba(0,0,0,.4); background:rgba(0,0,0,.12); }
+.cstop:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+.wrap{ max-width:660px; margin:0 auto; padding:1.1rem 1rem 5rem; }
+.screen{ display:none; } .screen.on{ display:block; animation:fade .25s ease; }
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.where{ font:800 .72rem/1 var(--sans); letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:.6rem; }
+h1{ font-size:1.62rem; line-height:1.16; color:var(--ink); margin:.2rem 0 .5rem; }
+h2{ font-size:1.24rem; color:var(--ink); margin:.2rem 0 .6rem; }
+p{ margin:0 0 .9rem; } .lead{ font-size:1.08rem; } .beat{ font-style:italic; color:var(--ink2); }
+
+.go{ display:block; width:100%; font:800 1.04rem/1.2 var(--sans); cursor:pointer; min-height:56px; padding:.9rem 1rem; border:none; border-radius:13px; background:var(--accent); color:#fff; margin:.45rem 0; text-align:center; }
+body.warm .go{ color:#0f0e0b; }
+.go:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+.go.sec{ background:var(--surface); color:var(--ink); border:2px solid var(--ink); }
+.go.ghost{ background:transparent; color:var(--ink); border:2px solid var(--line2); font-weight:700; min-height:48px; }
+.go:disabled{ opacity:.6; cursor:default; }
+
+/* comfort gate */
+.swatches{ display:flex; flex-direction:column; gap:.7rem; margin:1rem 0; }
+.sw{ display:flex; align-items:center; gap:.8rem; border:3px solid var(--line2); border-radius:14px; padding:.8rem; cursor:pointer; min-height:64px; background:var(--surface); }
+.sw:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.sw .chip{ width:54px; height:42px; border-radius:9px; flex:none; border:2px solid rgba(0,0,0,.15); display:flex; overflow:hidden; }
+.sw .chip span{ flex:1; } .sw .lbl{ font:800 1.02rem/1.2 var(--sans); } .sw .subt{ font:400 .85rem/1.3 var(--sans); color:var(--ink2); }
+.sw.sel{ border-color:var(--gold-br); }
+.chip.soft span:nth-child(1){background:#efe9dd;} .chip.soft span:nth-child(2){background:#2c2618;}
+.chip.def span:nth-child(1){background:#f3ead8;} .chip.def span:nth-child(2){background:#1f1b12;}
+.chip.dark span:nth-child(1){background:#26231d;} .chip.dark span:nth-child(2){background:#f0c357;}
+
+/* the piece */
+.piece{ border:3px solid var(--accent2); border-radius:16px; background:var(--surface); padding:.8rem .95rem 1rem; margin:.5rem 0 1rem; }
+.piece .ph{ text-align:center; border-bottom:3px double var(--accent2); padding-bottom:.4rem; margin-bottom:.7rem; }
+.piece .pk{ font:800 .64rem/1 var(--sans); letter-spacing:.14em; text-transform:uppercase; color:var(--accent2); }
+.piece .ptitle{ font:800 1.12rem/1.1 var(--serif); color:var(--ink); }
+.piece .pby{ font:400 .8rem/1.2 var(--sans); color:var(--ink2); margin-top:.15rem; }
+.ln{ display:block; width:100%; text-align:left; font-size:1.06rem; line-height:1.6; padding:.5rem .55rem; margin:.15rem 0; border:2px solid transparent; border-radius:9px; background:transparent; color:var(--ink); cursor:pointer; font-family:var(--serif); }
+.ln:hover{ border-color:var(--gold-br); }
+.ln:focus-visible{ outline:3px solid var(--focus); outline-offset:1px; }
+.ln.tagged{ border-color:var(--accent2); background:var(--gold-pale); }
+.ln .badge{ display:inline-block; font:800 .64rem/1 var(--sans); letter-spacing:.04em; text-transform:uppercase; color:#fff; background:var(--accent2); border-radius:5px; padding:.2rem .38rem; margin-left:.4rem; vertical-align:middle; }
+body.warm .ln .badge{ color:#0f0e0b; }
+
+/* move picker (the toolkit = the Workshop Wall) */
+.picker{ position:fixed; inset:0; background:rgba(20,18,12,.55); display:none; align-items:flex-end; z-index:50; }
+.picker.on{ display:flex; }
+.sheet{ background:var(--bg); width:100%; max-width:660px; margin:0 auto; border-radius:18px 18px 0 0; border:3px solid var(--accent2); border-bottom:none; padding:1rem 1rem 1.4rem; max-height:86vh; overflow:auto; }
+.sheet h2{ margin-top:.2rem; }
+.sheet .q{ font:600 .96rem/1.4 var(--sans); color:var(--ink); margin:0 0 .6rem; }
+.movebtn{ display:flex; align-items:center; gap:.7rem; width:100%; text-align:left; border:2px solid var(--line2); border-radius:12px; background:var(--surface); padding:.7rem .8rem; margin:.4rem 0; cursor:pointer; min-height:60px; }
+.movebtn:hover{ border-color:var(--gold-br); } .movebtn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.movebtn .mi{ width:40px; height:40px; flex:none; }
+.movebtn .mn{ font:800 1rem/1.15 var(--sans); color:var(--ink); }
+.movebtn .md{ font:400 .84rem/1.3 var(--sans); color:var(--ink2); }
+.sheet .cancel{ margin-top:.6rem; }
+
+.tally{ position:sticky; top:46px; z-index:20; background:var(--surface); border:2px solid var(--line2); border-radius:12px; padding:.5rem .7rem; margin:0 0 .9rem; font:700 .86rem/1.3 var(--sans); color:var(--ink); }
+.hint{ border-left:5px solid var(--gold-br); background:var(--gold-pale); border-radius:0 10px 10px 0; padding:.7rem .9rem; margin:.8rem 0; font:400 .95rem/1.45 var(--sans); }
+
+/* compare */
+.cmp{ border:2px solid var(--line2); border-radius:13px; background:var(--surface); padding:.85rem .9rem; margin:.8rem 0; }
+.cmp .lnq{ font:700 1rem/1.4 var(--serif); color:var(--ink); margin:0 0 .3rem; }
+.cmp .you{ font:700 .85rem/1.3 var(--sans); color:var(--ink); }
+.cmp .strong{ font:400 .92rem/1.4 var(--sans); color:var(--ink); margin:.3rem 0 0; }
+.cmp .match{ display:inline-block; font:800 .64rem/1 var(--sans); text-transform:uppercase; letter-spacing:.04em; border:2px solid var(--accent2); color:var(--ink); border-radius:5px; padding:.2rem .4rem; margin-left:.3rem; }
+
+.copyout{ border:2px solid var(--accent2); border-radius:13px; background:var(--surface); padding:.85rem .9rem; margin:1rem 0; }
+.copyout .ch{ font:800 .78rem/1 var(--sans); letter-spacing:.05em; text-transform:uppercase; color:var(--accent2); margin-bottom:.5rem; }
+.copyout label{ display:block; font:700 .85rem/1.3 var(--sans); margin:.6rem 0 .25rem; }
+.copyout textarea{ width:100%; font:400 .92rem/1.5 var(--sans); padding:.6rem; border:2px solid var(--line2); border-radius:9px; background:var(--bg); color:var(--ink); min-height:74px; resize:vertical; }
+.copyout textarea:focus-visible{ outline:3px solid var(--focus); outline-offset:1px; }
+#carry{ width:100%; font:400 .86rem/1.5 var(--sans); padding:.7rem; border:2px solid var(--line2); border-radius:9px; background:var(--bg); color:var(--ink); min-height:160px; resize:vertical; white-space:pre-wrap; margin-top:.5rem; }
+.copied{ font:700 .85rem/1 var(--sans); color:var(--ink); margin:.4rem 0 0; min-height:1.2em; }
+
+.foot{ margin-top:1.6rem; padding:1rem; background:var(--accent); color:#fff; border-radius:12px; font-family:var(--sans); font-size:.8rem; }
+body.warm .foot{ color:#0f0e0b; } .foot a{ color:#fff; } body.warm .foot a{ color:#0f0e0b; }
+.sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+@media (max-width:520px){ body{font-size:18px;} h1{font-size:1.4rem;} .wrap{padding:1rem .8rem 5rem;} .ln{font-size:1.02rem;} }
+@media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M8 30 L20 8 L32 30 Z M14 30 L20 18 L26 30" fill="none" stroke="#fff" stroke-width="2.6" stroke-linejoin="round"/></svg>
+  <span class="wm">The Review Bench</span>
+  <button class="cstop" id="cstop" aria-label="Change comfort palette">Comfort</button>
+</div>
+
+<div class="wrap">
+
+  <!-- SCREEN 0 — COMFORT GATE -->
+  <section class="screen on" id="gate" aria-labelledby="gateh">
+    <div class="where">First, your eyes</div>
+    <h1 id="gateh">Pick what's comfortable to read.</h1>
+    <p class="beat">Sets the whole thing before it starts. Change it any time from the corner.</p>
+    <div class="swatches" id="swatches" role="radiogroup" aria-label="Comfort palette">
+      <div class="sw" tabindex="0" role="radio" aria-checked="false" data-stop="softer"><span class="chip soft" aria-hidden="true"><span></span><span></span></span><span><span class="lbl">Softer</span><br><span class="subt">gentle paper, lower contrast</span></span></div>
+      <div class="sw sel" tabindex="0" role="radio" aria-checked="true" data-stop="default"><span class="chip def" aria-hidden="true"><span></span><span></span></span><span><span class="lbl">Default</span><br><span class="subt">warm paper, dark ink</span></span></div>
+      <div class="sw" tabindex="0" role="radio" aria-checked="false" data-stop="warm"><span class="chip dark" aria-hidden="true"><span></span><span></span></span><span><span class="lbl">Warm-dark</span><br><span class="subt">amber on charcoal (not pure black/white)</span></span></div>
+    </div>
+    <button class="go" id="enterBtn">This is comfortable — sit at the bench &rarr;</button>
+  </section>
+
+  <!-- SCREEN 1 — SCENE / HOW IT WORKS -->
+  <section class="screen" id="scene" aria-labelledby="sceneh">
+    <div class="where">The bench</div>
+    <h1 id="sceneh">You're the reviewer today.</h1>
+    <p class="lead">A classmate hands you a flash piece. The hardest part of workshop isn't being nice or being harsh — it's <b>naming what you see</b>.</p>
+    <p>So you won't write loose comments. You'll read the piece line by line and place a <b>named move</b> on the lines that earn one — the same moves from the Workshop Wall. Then you'll see what a strong reviewer marked, and where you agreed.</p>
+    <div class="hint"><b>The rule of the bench:</b> a review is about the <i>piece</i>, never the writer. You're not grading a person. You're pointing at what the words are doing — and what one small move could do next.</div>
+    <p class="beat">This piece is a sample we wrote for practice — not anyone's real work. You warm up here, then bring these names to your real classmates.</p>
+    <button class="go" id="toReview">Read the piece &rarr;</button>
+  </section>
+
+  <!-- SCREEN 2 — REVIEW -->
+  <section class="screen" id="review" aria-labelledby="reviewh">
+    <div class="where">Mark the moves</div>
+    <div class="tally" id="tally" aria-live="polite">Tap a line, name the move you see. Mark at least 3 to finish.</div>
+    <div class="piece">
+      <div class="ph"><div class="pk">Flash fiction · for practice</div><div class="ptitle">The Spare Key</div><div class="pby">a sample piece — not a classmate's real work</div></div>
+      <div id="lines"></div>
+    </div>
+    <p class="sr" id="liveStat" aria-live="polite"></p>
+    <button class="go" id="toCompare" disabled>See what a strong reviewer marked &rarr;</button>
+  </section>
+
+  <!-- SCREEN 3 — COMPARE / TEACH -->
+  <section class="screen" id="compare" aria-labelledby="compareh">
+    <div class="where">Compare reads</div>
+    <h1 id="compareh">Here's where your eye and a strong reviewer's met.</h1>
+    <p>There's no single right answer in workshop — only reads you can defend. These are the moves a careful reviewer flagged, and what they'd say to the writer. See where you already saw it.</p>
+    <div id="cmpList"></div>
+
+    <div class="hint" id="scoreLine"></div>
+
+    <div class="copyout">
+      <div class="ch">Carry it out — your reviewer's note (nothing is sent)</div>
+      <p style="font:400 .9rem/1.45 var(--sans); margin:0 0 .3rem;">This builds the note you'd hand the writer. Praise first, then one move. Copy it into a Doc or your workshop comments.</p>
+      <label for="praise">One thing this piece already does well</label>
+      <textarea id="praise" placeholder="e.g. the last line trusts the reader — it doesn't explain"></textarea>
+      <label for="onemove">One move you'd suggest (name it)</label>
+      <textarea id="onemove" placeholder="e.g. try the Cut on line 2 — it's carrying weight the story doesn't need"></textarea>
+      <button class="go" id="buildCarry" style="margin-top:.7rem;">Build my reviewer's note &rarr;</button>
+      <textarea id="carry" readonly aria-label="Your reviewer note to carry out"></textarea>
+      <button class="go sec" id="copyCarry">Copy it</button>
+      <p class="copied" id="copiedMsg" aria-live="polite"></p>
+    </div>
+
+    <button class="go ghost" id="again">Review it again</button>
+  </section>
+
+  <div class="foot">
+    Tight Spiral Studios · <a href="mailto:walshero@gmail.com">walshero@gmail.com</a> — <b>The Review Bench</b>, a peer-workshop trainer for EN195 flash fiction. The reviewer names moves on a sample piece, then compares with a strong read. Trains the vocabulary; the real workshop still happens between people. Single file, offline, nothing stored or sent.<br>
+    <b>FERPA:</b> the practice piece is studio-written, never a real student's work. <b>How this was made:</b> founder's Compass set North on "students learn flash fiction by workshopping each other." The Workshop Wall (built this session) became the reviewer's toolkit. Cleese's test: would it go in front of a real section next week? Built to pass it. Green-free slate placeholder pending the palette pick.
+  </div>
+</div>
+
+<!-- MOVE PICKER SHEET -->
+<div class="picker" id="picker" role="dialog" aria-modal="true" aria-labelledby="pickerh">
+  <div class="sheet">
+    <h2 id="pickerh">What's this line doing?</h2>
+    <p class="q" id="pickerLine"></p>
+    <div id="moveBtns"></div>
+    <button class="go ghost cancel" id="cancelPick">Never mind — close</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+
+  /* comfort gate */
+  var stops=['softer','default','warm'], ci=1;
+  function applyStop(s){ document.body.classList.remove('softer','warm'); if(s==='softer')document.body.classList.add('softer'); if(s==='warm')document.body.classList.add('warm'); }
+  Array.prototype.forEach.call(document.querySelectorAll('.sw'),function(sw){
+    function pick(){ document.querySelectorAll('.sw').forEach(function(x){x.classList.remove('sel'); x.setAttribute('aria-checked','false');}); sw.classList.add('sel'); sw.setAttribute('aria-checked','true'); applyStop(sw.dataset.stop); ci=stops.indexOf(sw.dataset.stop); }
+    sw.addEventListener('click',pick);
+    sw.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); }});
+  });
+  $('cstop').addEventListener('click',function(){ ci=(ci+1)%3; applyStop(stops[ci]); this.textContent='Comfort: '+stops[ci].charAt(0).toUpperCase()+stops[ci].slice(1);
+    document.querySelectorAll('.sw').forEach(function(x){ var on=x.dataset.stop===stops[ci]; x.classList.toggle('sel',on); x.setAttribute('aria-checked',on?'true':'false'); }); });
+
+  function show(id){ document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');}); $(id).classList.add('on'); window.scrollTo(0,0); var h=$(id).querySelector('h1'); if(h){ h.setAttribute('tabindex','-1'); h.focus(); } }
+  $('enterBtn').addEventListener('click',function(){ show('scene'); });
+  $('toReview').addEventListener('click',function(){ show('review'); });
+
+  /* ---- the moves (the Workshop Wall toolkit) ---- */
+  var MOVES={
+    cut:{n:'The Cut', d:'a line carrying weight the story doesn\u2019t need', i:'<svg class="mi" viewBox="0 0 40 40" aria-hidden="true"><circle cx="13" cy="28" r="5" fill="none" stroke="var(--ink)" stroke-width="2"/><circle cx="27" cy="28" r="5" fill="none" stroke="var(--ink)" stroke-width="2"/><path d="M16 24 L33 9 M24 24 L7 9" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/></svg>'},
+    imply:{n:'Implication', d:'says less; lets the unsaid do the work', i:'<svg class="mi" viewBox="0 0 40 40" aria-hidden="true"><path d="M4 18 H36" stroke="var(--accent2)" stroke-width="1.6" stroke-dasharray="3 3"/><path d="M14 18 L20 7 L26 18 Z" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.8"/><path d="M10 18 H30 L25 34 H15 Z" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.8"/></svg>'},
+    noun:{n:'The Concrete Noun', d:'carries the feeling in an object you can hold', i:'<svg class="mi" viewBox="0 0 40 40" aria-hidden="true"><circle cx="13" cy="14" r="7" fill="none" stroke="var(--ink)" stroke-width="2.2"/><circle cx="13" cy="14" r="2" fill="var(--rust)"/><path d="M18 19 L33 34 M28 29 L32 25" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round"/></svg>'},
+    turn:{n:'The Late Turn', d:'the change that arrives last and lands', i:'<svg class="mi" viewBox="0 0 40 40" aria-hidden="true"><rect x="6" y="6" width="18" height="28" fill="none" stroke="var(--ink)" stroke-width="1.8"/><path d="M24 8 L34 12 L34 30 L24 34 Z" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.8"/></svg>'},
+    line:{n:'The Unflinching Line', d:'states the hard thing plainly, no hedging', i:'<svg class="mi" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 5 V26" stroke="var(--ink)" stroke-width="1.8"/><path d="M16 26 H24 L20 36 Z" fill="var(--rust)" stroke="var(--ink)" stroke-width="1.6"/></svg>'}
+  };
+
+  /* ---- the sample piece. Original studio text. Each line has a defensible
+     "strong reviewer" read: the move + what they'd say. Some lines are working
+     (praise the move present); some need a move (suggest it). No single right
+     answer — the compare shows a defensible read, not a key. ---- */
+  var PIECE=[
+    {t:"He left the spare key under the third flowerpot, the way he always had for the past several years.",
+     move:'cut', kind:'needs',
+     say:"\u201Cthe way he always had for the past several years\u201D is weight the story doesn\u2019t need \u2014 try the Cut. \u201CHe left the spare key under the third flowerpot\u201D already implies the habit."},
+    {t:"She found it on a Tuesday.",
+     move:'imply', kind:'works',
+     say:"Implication is working. \u201CFound it\u201D \u2014 not him \u2014 tells us he\u2019s gone without saying so. The Tuesday makes it ordinary, which makes it worse."},
+    {t:"The key was cold.",
+     move:'noun', kind:'works',
+     say:"The Concrete Noun carries the whole feeling. \u201CCold\u201D is the only emotion-word the piece needs \u2014 it\u2019s in the object, not narrated."},
+    {t:"She stood there holding it and felt a deep and overwhelming sadness wash over her entire body.",
+     move:'cut', kind:'needs',
+     say:"This line names the feeling the cold key already gave us. Try the Cut, or the Unflinching Line \u2014 trust the reader; you\u2019ve done the work above."},
+    {t:"She put it back.",
+     move:'turn', kind:'works',
+     say:"The Late Turn. Three words, and it only lands because everything above earned it \u2014 she\u2019s not ready to keep it. Don\u2019t touch this line."}
+  ];
+
+  var marks={};   /* index -> move key */
+  var linesBox=$('lines');
+  PIECE.forEach(function(p,i){
+    var b=document.createElement('button');
+    b.className='ln'; b.id='ln'+i; b.type='button';
+    b.setAttribute('aria-label','line '+(i+1)+': '+p.t+' — tap to name a move');
+    b.innerHTML=p.t;
+    b.addEventListener('click',function(){ openPicker(i); });
+    linesBox.appendChild(b);
+  });
+
+  function renderLine(i){
+    var b=$('ln'+i); var p=PIECE[i];
+    b.innerHTML = p.t + (marks[i] ? '<span class="badge">'+MOVES[marks[i]].n+'</span>' : '');
+    b.classList.toggle('tagged', !!marks[i]);
+  }
+  function updateTally(){
+    var n=Object.keys(marks).length;
+    $('tally').textContent = n<3 ? ('Tap a line, name the move you see. Marked '+n+' of at least 3.')
+                                 : ('Marked '+n+'. Good eye. See how a strong reviewer read it, or mark more.');
+    $('toCompare').disabled = n<3;
+    $('liveStat').textContent = 'Marked '+n+' lines.';
+  }
+
+  /* picker sheet */
+  var current=-1;
+  function openPicker(i){
+    current=i; $('pickerLine').textContent='\u201C'+PIECE[i].t+'\u201D';
+    var box=$('moveBtns'); box.innerHTML='';
+    Object.keys(MOVES).forEach(function(k){
+      var m=MOVES[k];
+      var btn=document.createElement('button'); btn.className='movebtn'; btn.type='button';
+      btn.innerHTML=m.i+'<span><span class="mn">'+m.n+'</span><br><span class="md">'+m.d+'</span></span>';
+      btn.addEventListener('click',function(){ marks[i]=k; renderLine(i); updateTally(); closePicker(); });
+      box.appendChild(btn);
+    });
+    /* allow clearing */
+    var clr=document.createElement('button'); clr.className='movebtn'; clr.type='button';
+    clr.innerHTML='<span class="mi" aria-hidden="true"></span><span><span class="mn">Clear this mark</span><br><span class="md">leave the line unmarked</span></span>';
+    clr.addEventListener('click',function(){ delete marks[i]; renderLine(i); updateTally(); closePicker(); });
+    box.appendChild(clr);
+    $('picker').classList.add('on');
+    $('cancelPick').focus();
+  }
+  function closePicker(){ $('picker').classList.remove('on'); if(current>=0){ var b=$('ln'+current); if(b) b.focus(); } current=-1; }
+  $('cancelPick').addEventListener('click',closePicker);
+  $('picker').addEventListener('click',function(e){ if(e.target===this) closePicker(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && $('picker').classList.contains('on')) closePicker(); });
+
+  updateTally();
+
+  /* compare */
+  $('toCompare').addEventListener('click',function(){
+    var box=$('cmpList'); box.innerHTML=''; var agree=0;
+    PIECE.forEach(function(p,i){
+      var yours=marks[i]; var matched = yours===p.move;
+      if(matched) agree++;
+      var d=document.createElement('div'); d.className='cmp';
+      d.innerHTML =
+        '<div class="lnq">\u201C'+p.t+'\u201D</div>'+
+        '<div class="you">Your mark: '+(yours?MOVES[yours].n:'\u2014 (you left it unmarked)')+
+          (matched?'<span class="match">you saw it</span>':'')+'</div>'+
+        '<div class="strong"><b>A strong reviewer:</b> '+MOVES[p.move].n+(p.kind==='works'?' (working) ':' (suggest it) ')+'\u2014 '+p.say+'</div>';
+      box.appendChild(d);
+    });
+    $('scoreLine').innerHTML = '<b>You and the strong reviewer met on '+agree+' of '+PIECE.length+' lines.</b> Where you differed isn\u2019t wrong \u2014 it\u2019s a read you can defend or rethink. That\u2019s workshop.';
+    show('compare');
+  });
+
+  /* carry-out */
+  function carryOut(title,pairs){
+    var L=[title,'']; pairs.forEach(function(p){ var v=(p[1]||'').toString().trim(); if(v) L.push(p[0]+': '+v); });
+    L.push(''); L.push('(A reviewer\u2019s note about the piece, not the writer. I chose to share this.)'); return L.join('\n');
+  }
+  $('buildCarry').addEventListener('click',function(){
+    var txt=carryOut('The Review Bench — my reviewer\u2019s note',[
+      ['Works well', $('praise').value],
+      ['One move to try', $('onemove').value]
+    ]);
+    $('carry').value=txt;
+  });
+  $('copyCarry').addEventListener('click',function(){
+    var box=$('carry'); if(!box.value){ $('copiedMsg').textContent='Build it first.'; return; }
+    box.removeAttribute('readonly'); box.select(); box.setSelectionRange(0,99999);
+    try{document.execCommand('copy');}catch(e){} box.setAttribute('readonly','');
+    if(navigator.clipboard){ navigator.clipboard.writeText(box.value).then(function(){},function(){}); }
+    $('copiedMsg').textContent='Copied — paste it into your workshop comments or a Doc.';
+  });
+  $('again').addEventListener('click',function(){
+    marks={}; PIECE.forEach(function(p,i){ renderLine(i); });
+    $('praise').value=''; $('onemove').value=''; $('carry').value=''; $('copiedMsg').textContent='';
+    updateTally(); show('review');
+  });
+})();
+</script>
+</body>
+</html>

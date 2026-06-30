@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  PALETTE CHOOSER — green-free system reskin. Tight Spiral Studios · walshero@gmail.com
+  Three accent options rendered with REAL sample content in all 3 comfort stops.
+  Matt picks by EYE (his eyes are the verdict, not WCAG math — but all three pass AA).
+  NO GREEN anywhere. The winner becomes the system accent across the reskin.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pick the new palette — green is gone</title>
+<style>
+:root{ --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --line:#c2b288; --gold:#6e4700; --focus:#c8900a;
+  --serif:Georgia,serif; --sans:system-ui,-apple-system,'Segoe UI',sans-serif; }
+body.softer{ --bg:#efe9dd; --surface:#f7f1e6; --ink:#2c2618; --line:#cdbf9c; }
+body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --line:#5e553e; --gold:#f0c357; }
+*{box-sizing:border-box;} html,body{margin:0;}
+body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; }
+.topbar{ background:#3a4654; color:#fff; padding:.6rem .9rem; display:flex; align-items:center; gap:.6rem; font-family:var(--sans); position:sticky; top:0; z-index:10; }
+.topbar .wm{ font-weight:800; font-size:.92rem; }
+.cstop{ margin-left:auto; background:rgba(255,255,255,.2); color:#fff; border:2px solid rgba(255,255,255,.6); border-radius:9px; padding:.45rem .6rem; font:700 .74rem/1 var(--sans); cursor:pointer; min-height:44px; }
+.cstop:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.wrap{ max-width:780px; margin:0 auto; padding:1.2rem 1rem 4rem; }
+h1{ font-size:1.55rem; color:var(--ink); margin:.2rem 0 .2rem; }
+.sub{ font-family:var(--sans); font-size:.96rem; font-style:italic; margin:0 0 1.2rem; }
+.note{ font-family:var(--sans); font-size:.9rem; background:var(--surface); border:2px solid var(--line); border-radius:10px; padding:.7rem .9rem; margin:0 0 1.3rem; }
+
+/* Each card carries its OWN accent variables so options sit truly side by side */
+.opt{ border:3px solid var(--line); border-radius:16px; margin:1.2rem 0; overflow:hidden; background:var(--surface); }
+.opt .obar{ padding:.7rem .9rem; font-family:var(--sans); font-weight:800; color:#fff; display:flex; align-items:center; gap:.5rem; }
+.opt .obody{ padding:1rem; }
+.opt h2{ font-size:1.3rem; margin:.1rem 0 .4rem; }
+.opt p{ font-size:.98rem; margin:0 0 .8rem; }
+.opt .lab{ font:800 .72rem/1 var(--sans); letter-spacing:.08em; text-transform:uppercase; margin-bottom:.5rem; }
+.opt .card{ border:2px solid; border-radius:11px; padding:.7rem .85rem; margin:.6rem 0; background:var(--surface); }
+.opt .card .ct{ font:800 1rem/1.3 var(--sans); }
+.opt .card .cd{ font-size:.9rem; margin-top:.2rem; }
+.opt .btnrow{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.7rem; }
+.opt .b1{ flex:1; min-width:140px; min-height:50px; border:none; border-radius:11px; color:#fff; font:800 .98rem/1 var(--sans); cursor:pointer; }
+.opt .b2{ flex:1; min-width:140px; min-height:50px; background:var(--surface); border:2px solid; border-radius:11px; font:800 .98rem/1 var(--sans); cursor:pointer; }
+.opt .pill{ display:inline-block; font:800 .68rem/1 var(--sans); padding:.28rem .5rem; border-radius:5px; border:2px solid; margin-left:.4rem; vertical-align:middle; }
+.opt .ratios{ font-family:var(--sans); font-size:.78rem; margin-top:.7rem; padding-top:.5rem; border-top:1px solid var(--line); }
+
+/* OPTION A — Amber / warm-neutral */
+.optA .obar{ background:#9a5b00; } .optA{ }
+.optA h2,.optA .lab,.optA .card .ct{ color:var(--ink); }
+.optA .accenttext{ color:#6e4700; font-weight:800; }
+.optA .card{ border-color:#c8900a; }
+.optA .b1{ background:#9a5b00; } .optA .b2{ color:#6e4700; border-color:#6e4700; }
+.optA .pill{ border-color:#9a5b00; color:var(--ink); }
+body.warm .optA .obar{ background:#caa050; color:#0f0e0b; }
+body.warm .optA .accenttext{ color:#f0c357; }
+body.warm .optA .b1{ background:#caa050; color:#0f0e0b; }
+body.warm .optA .b2{ color:#f0c357; border-color:#f0c357; }
+
+/* OPTION B — Slate / amber */
+.optB .obar{ background:#3a4654; }
+.optB h2,.optB .lab,.optB .card .ct{ color:var(--ink); }
+.optB .accenttext{ color:#2b3540; font-weight:800; }
+.optB .card{ border-color:#3a4654; }
+.optB .b1{ background:#3a4654; } .optB .b2{ color:#2b3540; border-color:#2b3540; }
+.optB .pill{ border-color:#3a4654; color:var(--ink); }
+body.warm .optB .obar{ background:#8fa6bd; color:#0f0e0b; }
+body.warm .optB .accenttext{ color:#9fb6cd; }
+body.warm .optB .b1{ background:#8fa6bd; color:#0f0e0b; }
+body.warm .optB .b2{ color:#9fb6cd; border-color:#9fb6cd; }
+
+/* OPTION C — Rust / sand */
+.optC .obar{ background:#9c3d1a; }
+.optC h2,.optC .lab,.optC .card .ct{ color:var(--ink); }
+.optC .accenttext{ color:#7a2f12; font-weight:800; }
+.optC .card{ border-color:#9c3d1a; }
+.optC .b1{ background:#9c3d1a; } .optC .b2{ color:#7a2f12; border-color:#7a2f12; }
+.optC .pill{ border-color:#9c3d1a; color:var(--ink); }
+body.warm .optC .obar{ background:#e0915f; color:#0f0e0b; }
+body.warm .optC .accenttext{ color:#e8a07c; }
+body.warm .optC .b1{ background:#e0915f; color:#0f0e0b; }
+body.warm .optC .b2{ color:#e8a07c; border-color:#e8a07c; }
+
+.foot{ margin-top:1.8rem; padding:1rem; background:#3a4654; color:#fff; border-radius:12px; font-family:var(--sans); font-size:.82rem; }
+@media (max-width:520px){ body{font-size:18px;} h1{font-size:1.4rem;} .wrap{padding:1rem .8rem 4rem;} }
+@media (prefers-reduced-motion: reduce){ *{transition:none!important;} }
+</style>
+</head>
+<body>
+<div class="topbar"><span class="wm">Pick the palette — green is gone</span><button class="cstop" id="cstop">Comfort</button></div>
+<div class="wrap">
+  <h1>Three green-free options</h1>
+  <p class="sub">Each shown with real content. Tap Comfort (top right) to see all three in Softer / Default / Warm-dark. Pick the one that's easiest on your eyes — that's the only test that matters.</p>
+  <div class="note">All three pass WCAG AA in every stop. So ignore the numbers and trust your eyes. Tell me "A", "B", or "C" and I reskin the palette + the files you'll open next.</div>
+
+  <!-- OPTION A -->
+  <div class="opt optA">
+    <div class="obar">Option A — Amber &amp; warm neutral</div>
+    <div class="obody">
+      <div class="lab accenttext">Section label</div>
+      <h2>A heading sits here</h2>
+      <p>This is body text at reading size. The accent is a warm amber — it keeps your paper warmth and drops green entirely. <span class="accenttext">This phrase uses the accent as text.</span></p>
+      <div class="card"><div class="ct">A card title <span class="pill">DONE</span></div><div class="cd">Card body copy, full-contrast ink on surface.</div></div>
+      <div class="btnrow"><button class="b1">Primary action</button><button class="b2">Secondary</button></div>
+      <div class="ratios">Body 14.4:1 · button text 5.2:1 · accent-as-text 6.9:1 — all pass.</div>
+    </div>
+  </div>
+
+  <!-- OPTION B -->
+  <div class="opt optB">
+    <div class="obar">Option B — Slate &amp; amber</div>
+    <div class="obody">
+      <div class="lab accenttext">Section label</div>
+      <h2>A heading sits here</h2>
+      <p>This is body text at reading size. The accent is a cool slate-blue — no green, no warm-green confusion, the highest contrast of the three. <span class="accenttext">This phrase uses the accent as text.</span></p>
+      <div class="card"><div class="ct">A card title <span class="pill">DONE</span></div><div class="cd">Card body copy, full-contrast ink on surface.</div></div>
+      <div class="btnrow"><button class="b1">Primary action</button><button class="b2">Secondary</button></div>
+      <div class="ratios">Body 14.4:1 · button text 9.6:1 · accent-as-text 10.3:1 — all pass (strongest).</div>
+    </div>
+  </div>
+
+  <!-- OPTION C -->
+  <div class="opt optC">
+    <div class="obar">Option C — Rust &amp; sand</div>
+    <div class="obody">
+      <div class="lab accenttext">Section label</div>
+      <h2>A heading sits here</h2>
+      <p>This is body text at reading size. The accent is a deep rust — warmest and most distinct from green, with a handmade-paper feel. <span class="accenttext">This phrase uses the accent as text.</span></p>
+      <div class="card"><div class="ct">A card title <span class="pill">DONE</span></div><div class="cd">Card body copy, full-contrast ink on surface.</div></div>
+      <div class="btnrow"><button class="b1">Primary action</button><button class="b2">Secondary</button></div>
+      <div class="ratios">Body 14.2:1 · button text 6.4:1 · accent-as-text 7.7:1 — all pass.</div>
+    </div>
+  </div>
+
+  <div class="foot">Tight Spiral Studios · walshero@gmail.com — Palette chooser. Green removed entirely. Say A, B, or C and I reskin the shared palette + the files you'll open next. The new Conductor (Cleese) notes: this is one decision, not a redesign committee — pick and move.</div>
+</div>
+<script>
+(function(){ var stops=['default','softer','warm'],i=0;
+  document.getElementById('cstop').addEventListener('click',function(){ i=(i+1)%3; document.body.classList.remove('softer','warm'); if(stops[i]==='softer')document.body.classList.add('softer'); if(stops[i]==='warm')document.body.classList.add('warm'); this.textContent='Comfort: '+stops[i].charAt(0).toUpperCase()+stops[i].slice(1); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  THE WORKSHOP WALL — a Richard Scarry-style inventory of writerly moves.
+  Tight Spiral Studios · walshero@gmail.com · EN195 Creative Writing.
+
+  STAGE PLACEMENT (founder-locked): this is the bridge BETWEEN Stage 1 (cutting /
+  "Ballast") and a future Stage 2 (apply a named move to the piece that flew). The
+  cutting stage is great as the first move; this wall NAMES the moves so the next
+  stage has tools to pick up. Cutting (the shears) anchors the shelf.
+
+  RICHARD SCARRY METHOD (studied, not copied — NO Scarry art reproduced): every thing
+  on the wall is a LABELED OBJECT. The label names the move; the object IS the move so
+  it lands faster than the word; a one-line "what it does"; a tiny LIVE example you can
+  flip from heavy -> lean. Cross-section workshop shelf, busy-but-legible, line-first.
+
+  MNEMONIC ICONOGRAPHER [HALT, owns this build]: each icon must EXPRESS its move and
+  beat the word to the eye, or it's decoration and fails. Icons chosen on that test:
+   - The Cut = open shears (the Stage-1 tool)
+   - Implication = iceberg (most under the water)
+   - The Concrete Noun = a single nailed-down object (a key)
+   - The Late Turn = a door swinging open at the end of a hall
+   - Compression = the sandbag rig (links to Ballast)
+   - The Unflinching Line = a plumb bob on a line (straight down, no waver)
+
+  ART (Medium Gate: cut-paper SVG wins): brass-tag labels, riveted shelf, torn-paper
+  cards, thin edge-shadow under each layer. No raster needed; built in-session.
+
+  COMFORT GATE (locked 2026-06-29): screen ZERO is a live-swatch palette choice before
+  content renders. VISIBILITY (locked): --ink2 == --ink; accents are STRUCTURAL only,
+  never body text; GREEN-FREE (slate-B placeholder pending the A/B/C pick); gold labels
+  darkened for AA. FLOOR: single-file, offline, in-memory; 3-stop comfort (never
+  #000/#fff); large type; 44px+; keyboard; visible focus; reduced-motion safe;
+  scroll-reset; shape+label not color alone; no emoji; phone-width.
+
+  This wall is a PROPS ROOM asset: a reusable labeled-inventory component.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Workshop Wall — writerly moves, labeled</title>
+<style>
+:root{
+  --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --ink2:#1f1b12;
+  --line:#d8caa8; --line2:#c2b288;
+  --accent:#3a4654; --accent2:#2b3540;          /* slate-B placeholder, GREEN-FREE */
+  --brass:#8a6a2b; --brass-d:#6e4700;
+  --gold:#6e4700; --gold-br:#c8900a; --gold-pale:#fbeec6;
+  --rust:#8a3a1c;
+  --focus:#c8900a;
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+body.softer{ --bg:#efe9dd; --surface:#f7f1e6; --ink:#2c2618; --ink2:#2c2618; --line:#ded2b6; --line2:#cdbf9c; }
+body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0; --line:#4a4230; --line2:#5e553e;
+  --accent:#8fa6bd; --accent2:#9fb6cd; --brass:#d8b25a; --brass-d:#f0c357;
+  --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a; --rust:#e8a07c; }
+*{box-sizing:border-box;} html,body{margin:0;}
+body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; -webkit-text-size-adjust:100%; }
+
+.topbar{ background:var(--accent); color:#fff; padding:.6rem .9rem; display:flex; align-items:center; gap:.6rem; font-family:var(--sans); position:sticky; top:0; z-index:30; }
+body.warm .topbar{ color:#0f0e0b; }
+.topbar .mark{ width:26px; height:26px; flex:none; } .topbar .wm{ font-weight:800; font-size:.95rem; }
+.cstop{ margin-left:auto; background:rgba(255,255,255,.18); color:inherit; border:2px solid rgba(255,255,255,.6); border-radius:9px; padding:.45rem .65rem; font:700 .76rem/1 var(--sans); cursor:pointer; min-height:44px; }
+body.warm .cstop{ border-color:rgba(0,0,0,.4); background:rgba(0,0,0,.12); }
+.cstop:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+.wrap{ max-width:680px; margin:0 auto; padding:1.1rem 1rem 5rem; }
+.screen{ display:none; } .screen.on{ display:block; animation:fade .25s ease; }
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.where{ font:800 .72rem/1 var(--sans); letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:.6rem; }
+h1{ font-size:1.7rem; line-height:1.16; color:var(--ink); margin:.2rem 0 .5rem; }
+p{ margin:0 0 .9rem; } .lead{ font-size:1.1rem; } .beat{ font-style:italic; color:var(--ink2); }
+
+.go{ display:block; width:100%; font:800 1.04rem/1.2 var(--sans); cursor:pointer; min-height:56px; padding:.9rem 1rem; border:none; border-radius:13px; background:var(--accent); color:#fff; margin:.45rem 0; text-align:center; }
+body.warm .go{ color:#0f0e0b; }
+.go:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+
+/* comfort gate */
+.swatches{ display:flex; flex-direction:column; gap:.7rem; margin:1rem 0; }
+.sw{ display:flex; align-items:center; gap:.8rem; border:3px solid var(--line2); border-radius:14px; padding:.8rem; cursor:pointer; min-height:64px; background:var(--surface); }
+.sw:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.sw .chip{ width:54px; height:42px; border-radius:9px; flex:none; border:2px solid rgba(0,0,0,.15); display:flex; overflow:hidden; }
+.sw .chip span{ flex:1; } .sw .lbl{ font:800 1.02rem/1.2 var(--sans); } .sw .subt{ font:400 .85rem/1.3 var(--sans); color:var(--ink2); }
+.sw.sel{ border-color:var(--gold-br); }
+.chip.soft span:nth-child(1){background:#efe9dd;} .chip.soft span:nth-child(2){background:#2c2618;}
+.chip.def span:nth-child(1){background:#f3ead8;} .chip.def span:nth-child(2){background:#1f1b12;}
+.chip.dark span:nth-child(1){background:#26231d;} .chip.dark span:nth-child(2){background:#f0c357;}
+
+/* the shelf */
+.shelfnote{ font:400 .96rem/1.45 var(--sans); background:var(--surface); border:2px solid var(--line2); border-radius:12px; padding:.7rem .9rem; margin:0 0 1.1rem; }
+.shelf{ display:flex; flex-direction:column; gap:1rem; }
+.tool{ border:3px solid var(--line2); border-radius:16px; background:var(--surface); overflow:hidden; }
+.tool .head{ display:flex; align-items:center; gap:.7rem; padding:.7rem .85rem; background:var(--bg); border-bottom:2px solid var(--line2); }
+.tool .obj{ width:62px; height:62px; flex:none; }
+.tool .tag{ flex:1; }
+.tool .brasstag{ display:inline-block; font:800 .66rem/1 var(--sans); letter-spacing:.06em; text-transform:uppercase; color:#fff; background:var(--brass-d); border:2px solid var(--brass-d); border-radius:6px; padding:.28rem .45rem; }
+body.warm .tool .brasstag{ color:#0f0e0b; }
+.tool .name{ font:800 1.22rem/1.15 var(--serif); color:var(--ink); margin:.25rem 0 0; }
+.tool .body{ padding:.7rem .85rem .9rem; }
+.tool .does{ font:600 .98rem/1.4 var(--sans); margin:0 0 .55rem; }
+.tool .stage1{ display:inline-block; font:800 .62rem/1 var(--sans); letter-spacing:.05em; text-transform:uppercase; color:var(--rust); border:2px solid var(--rust); border-radius:5px; padding:.22rem .4rem; margin-left:.4rem; vertical-align:middle; }
+
+.ex{ border:2px solid var(--line); border-radius:11px; background:var(--bg); padding:.6rem .7rem; }
+.ex .exh{ font:800 .64rem/1 var(--sans); letter-spacing:.06em; text-transform:uppercase; color:var(--ink2); margin-bottom:.35rem; }
+.ex .line{ font-size:1.02rem; line-height:1.5; }
+.ex .heavy{ color:var(--ink); }
+.ex .lean{ color:var(--ink); font-weight:600; }
+.ex .flip{ margin-top:.5rem; min-height:44px; font:800 .82rem/1 var(--sans); cursor:pointer; background:var(--surface); color:var(--ink); border:2px solid var(--ink); border-radius:9px; padding:.5rem .7rem; }
+.ex .flip:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.ex .state{ font:800 .68rem/1 var(--sans); letter-spacing:.05em; text-transform:uppercase; color:var(--ink2); margin-left:.5rem; }
+
+.foot{ margin-top:1.6rem; padding:1rem; background:var(--accent); color:#fff; border-radius:12px; font-family:var(--sans); font-size:.8rem; }
+body.warm .foot{ color:#0f0e0b; } .foot a{ color:#fff; } body.warm .foot a{ color:#0f0e0b; }
+.sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+@media (max-width:520px){ body{font-size:18px;} h1{font-size:1.46rem;} .wrap{padding:1rem .8rem 5rem;} .tool .obj{width:54px;height:54px;} }
+@media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 4 C30 4 36 12 36 20 C36 28 30 33 23 33 C17 33 13 29 13 24 C13 20 16 17 20 17 C23 17 25 19 25 22" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
+  <span class="wm">The Workshop Wall</span>
+  <button class="cstop" id="cstop" aria-label="Change comfort palette">Comfort</button>
+</div>
+
+<div class="wrap">
+
+  <!-- SCREEN 0 — COMFORT GATE -->
+  <section class="screen on" id="gate" aria-labelledby="gateh">
+    <div class="where">First, your eyes</div>
+    <h1 id="gateh">Pick what's comfortable to read.</h1>
+    <p class="beat">This sets the whole thing before it starts. Change it any time from the corner.</p>
+    <div class="swatches" id="swatches" role="radiogroup" aria-label="Comfort palette">
+      <div class="sw" tabindex="0" role="radio" aria-checked="false" data-stop="softer"><span class="chip soft" aria-hidden="true"><span></span><span></span></span><span><span class="lbl">Softer</span><br><span class="subt">gentle paper, lower contrast</span></span></div>
+      <div class="sw sel" tabindex="0" role="radio" aria-checked="true" data-stop="default"><span class="chip def" aria-hidden="true"><span></span><span></span></span><span><span class="lbl">Default</span><br><span class="subt">warm paper, dark ink</span></span></div>
+      <div class="sw" tabindex="0" role="radio" aria-checked="false" data-stop="warm"><span class="chip dark" aria-hidden="true"><span></span><span></span></span><span><span class="lbl">Warm-dark</span><br><span class="subt">amber on charcoal (not pure black/white)</span></span></div>
+    </div>
+    <button class="go" id="enterBtn">This is comfortable — open the wall &rarr;</button>
+  </section>
+
+  <!-- SCREEN 1 — THE WALL -->
+  <section class="screen" id="wall" aria-labelledby="wallh">
+    <div class="where">The workshop wall</div>
+    <h1 id="wallh">Every move has a name and a hook.</h1>
+    <div class="shelfnote">You already used the first tool — <b>the shears</b>, when you cut the balloon light. Here's the rest of the rack. Each one is a thing on the wall: its label names the move, the object shows it, and the card flips a heavy line into a lean one so you can see the move work. <b>Next stage, you pick one off the wall and use it on the piece that flew.</b></div>
+    <div class="shelf" id="shelf"><!-- tools injected --></div>
+    <button class="go" id="done" style="margin-top:1.1rem;">I know the rack — back to the top</button>
+  </section>
+
+  <div class="foot">
+    Tight Spiral Studios · <a href="mailto:walshero@gmail.com">walshero@gmail.com</a> — <b>The Workshop Wall</b>, a labeled inventory of writerly moves for EN195. The bridge between cutting (Stage 1) and applying a named move (Stage 2). Single file, offline, nothing leaves the page. Examples are original studio lines. Green-free slate placeholder pending the palette pick.<br>
+    <b>How this was made:</b> founder called for a Richard Scarry-style inventory — every move a labeled object. Mnemonic Iconographer held the HALT: each icon must beat its word to the eye. Studied Scarry's method (label-the-thing, busy-but-legible); no Scarry art reproduced.
+  </div>
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+
+  /* comfort gate */
+  var stops=['softer','default','warm'], ci=1;
+  function applyStop(s){ document.body.classList.remove('softer','warm'); if(s==='softer')document.body.classList.add('softer'); if(s==='warm')document.body.classList.add('warm'); }
+  Array.prototype.forEach.call(document.querySelectorAll('.sw'),function(sw){
+    function pick(){ document.querySelectorAll('.sw').forEach(function(x){x.classList.remove('sel'); x.setAttribute('aria-checked','false');}); sw.classList.add('sel'); sw.setAttribute('aria-checked','true'); applyStop(sw.dataset.stop); ci=stops.indexOf(sw.dataset.stop); }
+    sw.addEventListener('click',pick);
+    sw.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); }});
+  });
+  $('cstop').addEventListener('click',function(){ ci=(ci+1)%3; applyStop(stops[ci]); this.textContent='Comfort: '+stops[ci].charAt(0).toUpperCase()+stops[ci].slice(1);
+    document.querySelectorAll('.sw').forEach(function(x){ var on=x.dataset.stop===stops[ci]; x.classList.toggle('sel',on); x.setAttribute('aria-checked',on?'true':'false'); }); });
+
+  function show(id){ document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');}); $(id).classList.add('on'); window.scrollTo(0,0); var h=$(id).querySelector('h1'); if(h){ h.setAttribute('tabindex','-1'); h.focus(); } }
+  $('enterBtn').addEventListener('click',function(){ show('wall'); });
+  $('done').addEventListener('click',function(){ show('gate'); });
+
+  /* ---- the inventory. each icon EXPRESSES its move (Iconographer HALT). ---- */
+  var I={
+    shears:'<svg class="obj" viewBox="0 0 64 64" aria-hidden="true"><circle cx="20" cy="44" r="8" fill="none" stroke="var(--ink)" stroke-width="3"/><circle cx="44" cy="44" r="8" fill="none" stroke="var(--ink)" stroke-width="3"/><path d="M24 39 L52 14 M40 39 L12 14" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="33" r="2.4" fill="var(--rust)"/></svg>',
+    iceberg:'<svg class="obj" viewBox="0 0 64 64" aria-hidden="true"><path d="M4 28 H60" stroke="var(--accent2)" stroke-width="2" stroke-dasharray="4 4"/><path d="M22 28 L32 10 L42 28 Z" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.4"/><path d="M16 28 L48 28 L40 56 L24 56 Z" fill="var(--bg)" stroke="var(--ink)" stroke-width="2.4" opacity=".9"/></svg>',
+    key:'<svg class="obj" viewBox="0 0 64 64" aria-hidden="true"><circle cx="20" cy="22" r="11" fill="none" stroke="var(--ink)" stroke-width="3.4"/><circle cx="20" cy="22" r="3" fill="var(--rust)"/><path d="M28 30 L52 54 M44 46 L50 40 M38 40 L44 34" stroke="var(--ink)" stroke-width="3.4" stroke-linecap="round"/></svg>',
+    door:'<svg class="obj" viewBox="0 0 64 64" aria-hidden="true"><rect x="10" y="8" width="30" height="48" fill="none" stroke="var(--ink)" stroke-width="2.6"/><path d="M40 12 L56 18 L56 50 L40 56 Z" fill="var(--bg)" stroke="var(--ink)" stroke-width="2.6"/><circle cx="45" cy="34" r="2.2" fill="var(--rust)"/></svg>',
+    sandbag:'<svg class="obj" viewBox="0 0 64 64" aria-hidden="true"><path d="M22 6 L42 6 L40 14 L24 14 Z" fill="var(--bg)" stroke="var(--ink)" stroke-width="2.4"/><path d="M24 14 C16 22 16 50 22 56 L42 56 C48 50 48 22 40 14 Z" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.6"/><path d="M26 26 H38 M25 36 H39 M26 46 H38" stroke="var(--ink)" stroke-width="2" opacity=".55"/></svg>',
+    plumb:'<svg class="obj" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 6 V40" stroke="var(--ink)" stroke-width="2.6"/><circle cx="32" cy="6" r="3" fill="var(--ink)"/><path d="M26 40 L38 40 L34 52 L32 58 L30 52 Z" fill="var(--rust)" stroke="var(--ink)" stroke-width="2.2"/></svg>'
+  };
+
+  var MOVES=[
+    { ic:'shears', tag:'Move 01', name:'The Cut', stage1:true,
+      does:'Drop a word and the piece rises. Keep only what carries weight.',
+      heavy:'The last bus of the entire night pulled slowly away just as she finally reached the curb.',
+      lean:'The last bus pulled away as she reached the curb.' },
+    { ic:'iceberg', tag:'Move 02', name:'Implication',
+      does:'Say less; let the unsaid do the lifting. Most of the story stays under the water.',
+      heavy:'He never came back, and she was very sad about it for a long time afterward.',
+      lean:'He never came back. She kept his coffee cup.' },
+    { ic:'key', tag:'Move 03', name:'The Concrete Noun',
+      does:'Carry the feeling in an object the reader can hold, not in a word for the feeling.',
+      heavy:'Their marriage had become distant and full of unspoken tension over the years.',
+      lean:'Two toothbrushes. One had gone stiff.' },
+    { ic:'door', tag:'Move 04', name:'The Late Turn',
+      does:'The change arrives last — and only lands because the earlier lines set it up.',
+      heavy:'She realized at the start that she would forgive him no matter what happened.',
+      lean:'She rehearsed the speech all week. At the door, she said: okay.' },
+    { ic:'sandbag', tag:'Move 05', name:'Compression', stage1:true,
+      does:'Same story, fewer sandbags. Cut the rig down until the piece flies.',
+      heavy:'In the early hours of the cold and quiet morning, the snow was beginning to fall.',
+      lean:'By morning, snow.' },
+    { ic:'plumb', tag:'Move 06', name:'The Unflinching Line',
+      does:'State the hard thing plainly, then follow it straight down. No hedging, no drama.',
+      heavy:'It was, in a certain sense, perhaps the kind of thing one might call a goodbye.',
+      lean:'It was a goodbye. She just didn\u2019t use the word.' }
+  ];
+
+  var shelf=$('shelf');
+  MOVES.forEach(function(m,idx){
+    var t=document.createElement('div'); t.className='tool';
+    t.innerHTML =
+      '<div class="head">'+I[m.ic]+
+        '<div class="tag"><span class="brasstag">'+m.tag+'</span>'+
+        '<div class="name">'+m.name+(m.stage1?'<span class="stage1">used in Stage 1</span>':'')+'</div></div>'+
+      '</div>'+
+      '<div class="body">'+
+        '<p class="does">'+m.does+'</p>'+
+        '<div class="ex">'+
+          '<div class="exh">See it work</div>'+
+          '<div class="line" id="line'+idx+'"><span class="heavy">'+m.heavy+'</span></div>'+
+          '<button class="flip" id="flip'+idx+'" aria-pressed="false">Show the lean version<span class="state" id="st'+idx+'"> · heavy</span></button>'+
+        '</div>'+
+      '</div>';
+    shelf.appendChild(t);
+  });
+  MOVES.forEach(function(m,idx){
+    var lean=false;
+    $('flip'+idx).addEventListener('click',function(){
+      lean=!lean;
+      $('line'+idx).innerHTML = lean ? '<span class="lean">'+m.lean+'</span>' : '<span class="heavy">'+m.heavy+'</span>';
+      this.setAttribute('aria-pressed', lean?'true':'false');
+      this.firstChild.textContent = lean ? 'Show the heavy version' : 'Show the lean version';
+      $('st'+idx).textContent = lean ? ' · lean' : ' · heavy';
+    });
+  });
+})();
+</script>
+</body>
+</html>

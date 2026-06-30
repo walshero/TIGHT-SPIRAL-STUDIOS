@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  THE FOUNDER COMPASS — Tight Spiral Studios · walshero@gmail.com
+  The pivot's one keeper: the founder experience had become work, not play. The cure
+  is NOT a richer interface — it's a smaller one. This is the single load-reducing
+  element from the Founder-Experience spec v0.1. Everything else (World Map, Resources,
+  Advisor-characters) is PARKED until the Compass proves it isn't enough. (Founder's own
+  rule: more-advanced parks until the floor proves it's needed. Cleese held the line on
+  the relapse; founder said go on the Compass-only build.)
+
+  WHAT IT DOES: one screen, four signals, always the same place to land —
+    North = the one mission (the single most valuable move right now)
+    East  = what you're learning by doing it
+    South = who benefits when it's done
+    West  = what just got stronger in the studio
+  You set them; it emits a clean "today" card you CARRY OUT (Props Room carry-out
+  pattern — emit, don't store; the human is the principal). Close the app oriented.
+
+  COMFORT GATE (locked 2026-06-29): screen ZERO is a live-swatch palette choice before
+  content renders. VISIBILITY (locked): --ink2 == --ink; accents structural only, never
+  body text; GREEN-FREE (slate-B placeholder pending the A/B/C pick); gold darkened for
+  AA. FLOOR: single-file, offline, in-memory; 3-stop comfort (never #000/#fff); large
+  type; 44px+; keyboard; visible focus; reduced-motion safe; scroll-reset; one decision
+  per screen; shape+label not color alone; no emoji; phone-width.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Founder Compass</title>
+<style>
+:root{
+  --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --ink2:#1f1b12;
+  --line:#d8caa8; --line2:#c2b288;
+  --accent:#3a4654; --accent2:#2b3540;        /* slate-B placeholder, GREEN-FREE */
+  --gold:#6e4700; --gold-br:#c8900a; --gold-pale:#fbeec6;
+  --focus:#c8900a;
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+body.softer{ --bg:#efe9dd; --surface:#f7f1e6; --ink:#2c2618; --ink2:#2c2618; --line:#ded2b6; --line2:#cdbf9c; }
+body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0; --line:#4a4230; --line2:#5e553e;
+  --accent:#8fa6bd; --accent2:#9fb6cd; --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a; }
+*{box-sizing:border-box;} html,body{margin:0;}
+body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; -webkit-text-size-adjust:100%; }
+
+.topbar{ background:var(--accent); color:#fff; padding:.6rem .9rem; display:flex; align-items:center; gap:.6rem; font-family:var(--sans); position:sticky; top:0; z-index:30; }
+body.warm .topbar{ color:#0f0e0b; }
+.topbar .mark{ width:26px; height:26px; flex:none; } .topbar .wm{ font-weight:800; font-size:.95rem; }
+.cstop{ margin-left:auto; background:rgba(255,255,255,.18); color:inherit; border:2px solid rgba(255,255,255,.6); border-radius:9px; padding:.45rem .65rem; font:700 .76rem/1 var(--sans); cursor:pointer; min-height:44px; }
+body.warm .cstop{ border-color:rgba(0,0,0,.4); background:rgba(0,0,0,.12); }
+.cstop:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+.wrap{ max-width:600px; margin:0 auto; padding:1.1rem 1rem 5rem; }
+.screen{ display:none; } .screen.on{ display:block; animation:fade .25s ease; }
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.where{ font:800 .72rem/1 var(--sans); letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:.6rem; }
+h1{ font-size:1.7rem; line-height:1.16; color:var(--ink); margin:.2rem 0 .5rem; }
+p{ margin:0 0 .9rem; } .lead{ font-size:1.1rem; } .beat{ font-style:italic; color:var(--ink2); }
+
+.go{ display:block; width:100%; font:800 1.04rem/1.2 var(--sans); cursor:pointer; min-height:56px; padding:.9rem 1rem; border:none; border-radius:13px; background:var(--accent); color:#fff; margin:.45rem 0; text-align:center; }
+body.warm .go{ color:#0f0e0b; }
+.go:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+.go.sec{ background:var(--surface); color:var(--ink); border:2px solid var(--ink); }
+.go.ghost{ background:transparent; color:var(--ink); border:2px solid var(--line2); font-weight:700; min-height:48px; }
+
+/* comfort gate */
+.swatches{ display:flex; flex-direction:column; gap:.7rem; margin:1rem 0; }
+.sw{ display:flex; align-items:center; gap:.8rem; border:3px solid var(--line2); border-radius:14px; padding:.8rem; cursor:pointer; min-height:64px; background:var(--surface); }
+.sw:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.sw .chip{ width:54px; height:42px; border-radius:9px; flex:none; border:2px solid rgba(0,0,0,.15); display:flex; overflow:hidden; }
+.sw .chip span{ flex:1; } .sw .lbl{ font:800 1.02rem/1.2 var(--sans); } .sw .subt{ font:400 .85rem/1.3 var(--sans); color:var(--ink2); }
+.sw.sel{ border-color:var(--gold-br); }
+.chip.soft span:nth-child(1){background:#efe9dd;} .chip.soft span:nth-child(2){background:#2c2618;}
+.chip.def span:nth-child(1){background:#f3ead8;} .chip.def span:nth-child(2){background:#1f1b12;}
+.chip.dark span:nth-child(1){background:#26231d;} .chip.dark span:nth-child(2){background:#f0c357;}
+
+/* the four points */
+.point{ border:3px solid var(--line2); border-radius:16px; background:var(--surface); padding:.85rem .9rem; margin:.8rem 0; }
+.point .ph{ display:flex; align-items:center; gap:.6rem; margin-bottom:.45rem; }
+.point .badge{ width:38px; height:38px; flex:none; border:2px solid var(--accent2); border-radius:10px; display:flex; align-items:center; justify-content:center; font:800 1rem/1 var(--sans); color:var(--ink); background:var(--bg); }
+.point .pt{ font:800 1.04rem/1.15 var(--sans); color:var(--ink); }
+.point .ps{ font:400 .86rem/1.3 var(--sans); color:var(--ink2); }
+.point label{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+.point input, .point textarea{ width:100%; font:400 1rem/1.45 var(--sans); padding:.6rem; border:2px solid var(--line2); border-radius:10px; background:var(--bg); color:var(--ink); min-height:50px; }
+.point textarea{ min-height:62px; resize:vertical; }
+.point input:focus-visible, .point textarea:focus-visible{ outline:3px solid var(--focus); outline-offset:1px; }
+.point.north{ border-color:var(--accent2); } .point.north .badge{ background:var(--gold-pale); border-color:var(--gold-br); }
+
+/* the card */
+.card{ border:3px double var(--accent2); border-radius:16px; background:var(--surface); padding:1rem 1.1rem; margin:1rem 0; }
+.card .ch{ font:800 .72rem/1 var(--sans); letter-spacing:.08em; text-transform:uppercase; color:var(--accent2); margin-bottom:.6rem; }
+.card .row{ display:flex; gap:.6rem; padding:.55rem 0; border-bottom:1px solid var(--line); }
+.card .row:last-child{ border-bottom:none; }
+.card .rk{ font:800 .8rem/1.3 var(--sans); color:var(--ink); width:30%; flex:none; }
+.card .rv{ font:400 1rem/1.4 var(--serif); color:var(--ink); }
+.card .mission{ font-size:1.16rem; font-weight:700; }
+#carry{ width:100%; font:400 .86rem/1.5 var(--sans); padding:.7rem; border:2px solid var(--line2); border-radius:9px; background:var(--bg); color:var(--ink); min-height:150px; resize:vertical; white-space:pre-wrap; margin-top:.7rem; }
+.copied{ font:700 .85rem/1 var(--sans); color:var(--ink); margin:.4rem 0 0; min-height:1.2em; }
+.parked{ font:400 .82rem/1.4 var(--sans); background:var(--bg); border:2px dashed var(--line2); border-radius:11px; padding:.7rem .8rem; margin:1rem 0; color:var(--ink2); }
+
+.foot{ margin-top:1.6rem; padding:1rem; background:var(--accent); color:#fff; border-radius:12px; font-family:var(--sans); font-size:.8rem; }
+body.warm .foot{ color:#0f0e0b; } .foot a{ color:#fff; } body.warm .foot a{ color:#0f0e0b; }
+.sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+@media (max-width:520px){ body{font-size:18px;} h1{font-size:1.46rem;} .wrap{padding:1rem .8rem 5rem;} }
+@media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 L24 18 L37 20 L24 22 L20 37 L16 22 L3 20 L16 18 Z" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/></svg>
+  <span class="wm">The Founder Compass</span>
+  <button class="cstop" id="cstop" aria-label="Change comfort palette">Comfort</button>
+</div>
+
+<div class="wrap">
+
+  <!-- SCREEN 0 — COMFORT GATE -->
+  <section class="screen on" id="gate" aria-labelledby="gateh">
+    <div class="where">First, your eyes</div>
+    <h1 id="gateh">Pick what's comfortable to read.</h1>
+    <p class="beat">Sets the whole thing before it starts. Change it any time from the corner.</p>
+    <div class="swatches" id="swatches" role="radiogroup" aria-label="Comfort palette">
+      <div class="sw" tabindex="0" role="radio" aria-checked="false" data-stop="softer"><span class="chip soft" aria-hidden="true"><span></span><span></span></span><span><span class="lbl">Softer</span><br><span class="subt">gentle paper, lower contrast</span></span></div>
+      <div class="sw sel" tabindex="0" role="radio" aria-checked="true" data-stop="default"><span class="chip def" aria-hidden="true"><span></span><span></span></span><span><span class="lbl">Default</span><br><span class="subt">warm paper, dark ink</span></span></div>
+      <div class="sw" tabindex="0" role="radio" aria-checked="false" data-stop="warm"><span class="chip dark" aria-hidden="true"><span></span><span></span></span><span><span class="lbl">Warm-dark</span><br><span class="subt">amber on charcoal (not pure black/white)</span></span></div>
+    </div>
+    <button class="go" id="enterBtn">This is comfortable — find my bearing &rarr;</button>
+  </section>
+
+  <!-- SCREEN 1 — SET THE FOUR POINTS -->
+  <section class="screen" id="set" aria-labelledby="seth">
+    <div class="where">Your bearing</div>
+    <h1 id="seth">Four things. Then one move.</h1>
+    <p class="lead">No task list. You set your bearing, the Compass hands you the single move and a card to carry out. Close it oriented.</p>
+
+    <div class="point north">
+      <div class="ph"><span class="badge" aria-hidden="true">N</span><span><span class="pt">North — the one mission</span><br><span class="ps">the single most valuable move you can make next</span></span></div>
+      <label for="n">North: the one mission</label>
+      <input id="n" placeholder="e.g. playtest Sandbags on my phone, end to end">
+    </div>
+
+    <div class="point">
+      <div class="ph"><span class="badge" aria-hidden="true">E</span><span><span class="pt">East — what you're learning</span><br><span class="ps">the curiosity in it; what doing this teaches you</span></span></div>
+      <label for="e">East: what you're learning</label>
+      <input id="e" placeholder="e.g. whether cut-as-rise actually feels like a climb">
+    </div>
+
+    <div class="point">
+      <div class="ph"><span class="badge" aria-hidden="true">S</span><span><span class="pt">South — who benefits</span><br><span class="ps">the person on the other end when it's done</span></span></div>
+      <label for="s">South: who benefits</label>
+      <input id="s" placeholder="e.g. my EN195 students in the last week of class">
+    </div>
+
+    <div class="point">
+      <div class="ph"><span class="badge" aria-hidden="true">W</span><span><span class="pt">West — what just got stronger</span><br><span class="ps">what's already firmer in the studio (momentum, not guilt)</span></span></div>
+      <label for="w">West: what just got stronger</label>
+      <input id="w" placeholder="e.g. the moves now have names — the Workshop Wall">
+    </div>
+
+    <button class="go" id="setCompass">Set my compass &rarr;</button>
+  </section>
+
+  <!-- SCREEN 2 — THE CARD -->
+  <section class="screen" id="cardScreen" aria-labelledby="cardh">
+    <div class="where">Today's bearing</div>
+    <h1 id="cardh">Here's your move.</h1>
+    <div class="card">
+      <div class="ch">The Founder Compass — today</div>
+      <div class="row"><span class="rk">Do this</span><span class="rv mission" id="cN"></span></div>
+      <div class="row"><span class="rk">You'll learn</span><span class="rv" id="cE"></span></div>
+      <div class="row"><span class="rk">For</span><span class="rv" id="cS"></span></div>
+      <div class="row"><span class="rk">Already stronger</span><span class="rv" id="cW"></span></div>
+    </div>
+    <p class="beat">One mission. One action. One reflection. If more appears, it's the next mission — not this one.</p>
+
+    <button class="go" id="buildCarry">Build the card to carry out &rarr;</button>
+    <textarea id="carry" readonly aria-label="Your compass card to carry out"></textarea>
+    <button class="go sec" id="copyCarry">Copy it</button>
+    <p class="copied" id="copiedMsg" aria-live="polite"></p>
+
+    <button class="go ghost" id="reset" style="margin-top:.8rem;">Reset the bearing</button>
+
+    <div class="parked"><b>Parked, on purpose:</b> the World Map, the Resources, the Advisor-characters from the spec. They're held until the Compass proves it isn't enough. The cure for too much system isn't a bigger one — it's this one screen. (Open them later only if living with the Compass shows a real gap.)</div>
+  </section>
+
+  <div class="foot">
+    Tight Spiral Studios · <a href="mailto:walshero@gmail.com">walshero@gmail.com</a> — <b>The Founder Compass.</b> The one load-reducing element of the founder-experience pivot: four signals, one move, carry it out. Single file, offline, nothing stored or sent. Green-free slate placeholder pending the palette pick.<br>
+    <b>How this was made:</b> the founder named that the studio had become work, not play, and specced a full game-world to fix it. Cleese flagged that a bigger system can't cure too-much-system; the keeper was the Compass. Built that alone; the rest is parked until proven needed.
+  </div>
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+
+  var stops=['softer','default','warm'], ci=1;
+  function applyStop(s){ document.body.classList.remove('softer','warm'); if(s==='softer')document.body.classList.add('softer'); if(s==='warm')document.body.classList.add('warm'); }
+  Array.prototype.forEach.call(document.querySelectorAll('.sw'),function(sw){
+    function pick(){ document.querySelectorAll('.sw').forEach(function(x){x.classList.remove('sel'); x.setAttribute('aria-checked','false');}); sw.classList.add('sel'); sw.setAttribute('aria-checked','true'); applyStop(sw.dataset.stop); ci=stops.indexOf(sw.dataset.stop); }
+    sw.addEventListener('click',pick);
+    sw.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); }});
+  });
+  $('cstop').addEventListener('click',function(){ ci=(ci+1)%3; applyStop(stops[ci]); this.textContent='Comfort: '+stops[ci].charAt(0).toUpperCase()+stops[ci].slice(1);
+    document.querySelectorAll('.sw').forEach(function(x){ var on=x.dataset.stop===stops[ci]; x.classList.toggle('sel',on); x.setAttribute('aria-checked',on?'true':'false'); }); });
+
+  function show(id){ document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');}); $(id).classList.add('on'); window.scrollTo(0,0); var h=$(id).querySelector('h1'); if(h){ h.setAttribute('tabindex','-1'); h.focus(); } }
+  $('enterBtn').addEventListener('click',function(){ show('set'); });
+
+  $('setCompass').addEventListener('click',function(){
+    var n=$('n').value.trim();
+    if(!n){ $('n').focus(); $('n').style.borderColor='var(--gold-br)'; return; }
+    $('cN').textContent=n;
+    $('cE').textContent=$('e').value.trim()||'(set East to name the curiosity)';
+    $('cS').textContent=$('s').value.trim()||'(set South to name who benefits)';
+    $('cW').textContent=$('w').value.trim()||'(set West to name what got stronger)';
+    show('cardScreen');
+  });
+
+  function carryOut(title,pairs){
+    var L=[title,'']; pairs.forEach(function(p){ var v=(p[1]||'').toString().trim(); if(v) L.push(p[0]+': '+v); });
+    L.push(''); L.push('(My bearing. I carried this out myself — nothing stored or sent.)'); return L.join('\n');
+  }
+  $('buildCarry').addEventListener('click',function(){
+    var txt=carryOut('Founder Compass — today',[
+      ['Do this (the one move)', $('cN').textContent],
+      ["You'll learn", $('e').value],
+      ['For', $('s').value],
+      ['Already stronger', $('w').value]
+    ]);
+    $('carry').value=txt;
+  });
+  $('copyCarry').addEventListener('click',function(){
+    var box=$('carry'); if(!box.value){ $('copiedMsg').textContent='Build it first.'; return; }
+    box.removeAttribute('readonly'); box.select(); box.setSelectionRange(0,99999);
+    try{document.execCommand('copy');}catch(e){} box.setAttribute('readonly','');
+    if(navigator.clipboard){ navigator.clipboard.writeText(box.value).then(function(){},function(){}); }
+    $('copiedMsg').textContent='Copied — paste it into a Doc, your calendar, or the Project.';
+  });
+  $('reset').addEventListener('click',function(){
+    ['n','e','s','w'].forEach(function(k){ $(k).value=''; $(k).style.borderColor=''; });
+    $('carry').value=''; $('copiedMsg').textContent='';
+    show('set');
+  });
+})();
+</script>
+</body>
+</html>
