@@ -156,8 +156,24 @@ body.warm .foot{ color:#0f0e0b; }
       // green accent used as TEXT color
       if(/color:var\(--accent\)/.test(low) && !/border|background|stroke|fill/.test(low)){ bt.push((i+1)+': green --accent used as text color  ›  '+l.trim().slice(0,80)); }
     });
-    if(bt.length){ checks.push({level:'fail',title:'Banned visibility tokens present',body:'These are the 2026-06-29 bail causes — muted text and green-on-paper text:',lines:bt}); }
-    else { checks.push({level:'ok',title:'No banned visibility tokens',body:'No muted-text-as-text and no green-accent-as-text found.'}); }
+    // GREEN-BAIL FLOOR (2026-06-30): any green-dominant hex ANYWHERE (structural fill, not just text).
+    // green-dominant = G channel clearly highest and saturated, hue roughly 75-165 degrees.
+    var greenHits=[];
+    var hexRe=/#([0-9a-f]{6})\b/gi, m;
+    lines.forEach(function(l,i){
+      var lr=hexRe; lr.lastIndex=0;
+      while((m=lr.exec(l))!==null){
+        var h=m[1], r=parseInt(h.slice(0,2),16), g=parseInt(h.slice(2,4),16), b=parseInt(h.slice(4,6),16);
+        var mx=Math.max(r,g,b), mn=Math.min(r,g,b);
+        // green dominant, not near-gray, not a faint tint
+        if(g===mx && g>r+18 && g>b+18 && (mx-mn)>40 && mx>70){
+          greenHits.push((i+1)+': green hex #'+h+'  ›  '+l.trim().slice(0,70));
+        }
+      }
+    });
+    if(greenHits.length){ bt.push.apply(bt, greenHits); }
+    if(bt.length){ checks.push({level:'fail',title:'Banned visibility tokens / GREEN present',body:'Bail causes — muted text, green-as-text, and (2026-06-30) GREEN in ANY structural role. Green is a hard floor: RP makes it unreadable signal. Replace with slate/river, gold, rust, or ink:',lines:bt}); }
+    else { checks.push({level:'ok',title:'No banned tokens, no green',body:'No muted-text, no green-as-text, and no green-dominant hex in any role. Floor holds.'}); }
 
     // ===== 3. PII / ROSTER =====
     // strip script + style + comments, look at visible-ish text
