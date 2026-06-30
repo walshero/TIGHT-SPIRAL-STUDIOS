@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  FUNNYBONEY FACTORY — the executable-forge. Tight Spiral Studios · walshero@gmail.com
+  Built 2026-06-30. Single-spine build (SCOPE HALT lifted: one mechanic named).
+
+  THE SPINE (the one idea, the other 7 threads dropped):
+  Coin a short MEMORABLE token ("a spell"). Bind it to a full instruction ("the incantation").
+  A ridiculous 5-link Rube Goldberg machine "executes" it — the comedy of the over-built
+  contraption is the MNEMONIC: the silly chain is unforgettable, so the token sticks. Out the
+  far end falls your command in TWO carry-out shapes: (1) paste into any AI chat, (2) a
+  Shortcut/Zapier-ready trigger line. Build the memory now (lane A); wire the launcher later
+  (lane B). That is "C, staged."
+
+  Hidden moat: the recall-drill (show token, you retype the incantation, it grades your DRIFT)
+  is a calibration/norming move wearing a clown nose. The studio's real edge, disguised as play.
+
+  ART: all original, hand-drawn inline SVG, released CC0. No sourced images, no MidJourney.
+  Every art element carries a visible CC0 tag (see <title> stamps + the footer ledger).
+
+  FLOORS (never broken): NO GREEN any role (RP). Full-contrast ink (--ink2==--ink). No raw
+  text wall. Single-file, offline, no storage, in-memory only. 44px+ targets. Keyboard nav.
+  Visible focus. Reduced-motion respected (the machine has a still fallback + replay). No emoji
+  (SVG only). Comfort = named-palette corner control, never a gate. Phone-width.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Funnyboney Factory — the executable forge</title>
+<style>
+:root{
+  --ink:#1b160f; --ink2:#1b160f; --bg:#f3e8d2; --surface:#fffaf0; --border:#bda77e;
+  --slate:#2d4654; --slate-soft:#e2e9ee;
+  --river:#0f5566; --river-soft:#deebee;
+  --gold:#7a5200; --gold-br:#c08a09; --gold-soft:#fbf0d4;
+  --rust:#8a3216; --rust-soft:#f6e5dc;
+  --plum:#5a2a52; --plum-soft:#eedff0;
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --focus:#c08a09;
+}
+body.softer{ --bg:#ece2cd; --surface:#f7efe0; --border:#b09a72; }
+body.warm{
+  --ink:#f3e6c6; --ink2:#f3e6c6; --bg:#1a1712; --surface:#262019; --border:#5d543d;
+  --slate:#9ab6c8; --slate-soft:#212c33; --river:#84cad9; --river-soft:#1b272c;
+  --gold:#f0c357; --gold-br:#f0c357; --gold-soft:#2c2614; --rust:#eaa183; --rust-soft:#2c1f19;
+  --plum:#d39bc8; --plum-soft:#2a1d28;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{ margin:0; font-family:var(--sans); background:var(--bg); color:var(--ink); line-height:1.6; font-size:18px; }
+
+.topbar{ background:var(--plum); color:#fff; padding:.65rem 1rem; display:flex; align-items:center; gap:.6rem; position:sticky; top:0; z-index:50; }
+.topbar .mark{ width:28px; height:28px; flex:none; }
+.topbar .wm{ font-weight:800; font-size:1rem; }
+.comfort{ margin-left:auto; background:var(--gold-br); color:#1b160f; border:2px solid #fff; border-radius:10px; padding:.55rem .8rem; font:800 .82rem/1 var(--sans); cursor:pointer; min-height:44px; }
+.comfort:focus-visible{ outline:3px solid #fff; outline-offset:2px; }
+
+.wrap{ max-width:860px; margin:0 auto; padding:1.3rem 1rem 5rem; }
+.hero h1{ font-family:var(--serif); font-size:2rem; color:var(--plum); margin:.3rem 0 .25rem; line-height:1.12; }
+.hero .tag{ font-size:1.05rem; margin:0; }
+.hero .sub{ font-size:.95rem; background:var(--gold-soft); border-left:5px solid var(--gold-br); padding:.6rem .85rem; border-radius:0 9px 9px 0; margin:.7rem 0 0; }
+
+.label{ font:800 .76rem/1 var(--sans); letter-spacing:.1em; text-transform:uppercase; color:var(--river); margin:2rem 0 .5rem; padding-bottom:.35rem; border-bottom:2px solid var(--border); }
+
+.card{ background:var(--surface); border:2px solid var(--border); border-radius:14px; padding:1.05rem 1.1rem; }
+label.fld{ display:block; font-weight:800; font-size:.92rem; margin:.2rem 0 .35rem; }
+input[type=text], textarea{ width:100%; font:400 1.02rem/1.4 var(--sans); padding:.6rem .7rem; border:2px solid var(--border); border-radius:10px; background:var(--bg); color:var(--ink); }
+input[type=text]{ min-height:48px; } textarea{ min-height:90px; resize:vertical; }
+input:focus-visible, textarea:focus-visible{ outline:3px solid var(--focus); outline-offset:1px; }
+.hint{ font-size:.84rem; margin:.3rem 0 .9rem; }
+
+.btn{ background:var(--river); color:#fff; border:2px solid var(--river); border-radius:11px; padding:.65rem 1rem; font:800 .95rem/1 var(--sans); cursor:pointer; min-height:48px; }
+.btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.btn.gold{ background:var(--gold-br); border-color:var(--gold-br); color:#1b160f; }
+.btn.plum{ background:var(--plum); border-color:var(--plum); }
+.btn.ghost{ background:transparent; color:var(--river); }
+.btnrow{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.9rem; }
+
+/* the machine stage */
+.stage-machine{ background:var(--surface); border:2px solid var(--border); border-radius:14px; padding:1rem; margin-top:.9rem; }
+.machine-svg{ width:100%; height:auto; display:block; }
+.runline{ font-size:.9rem; min-height:1.4em; margin:.6rem 0 0; font-weight:700; }
+
+/* the chain steps as captions under the machine */
+.chain{ list-style:none; margin:.8rem 0 0; padding:0; display:grid; grid-template-columns:1fr; gap:.45rem; }
+.chain li{ border-left:4px solid var(--border); padding:.45rem .7rem; font-size:.92rem; background:var(--bg); border-radius:0 8px 8px 0; opacity:.4; transition:opacity .3s, border-color .3s; }
+.chain li.fired{ opacity:1; border-left-color:var(--gold-br); }
+.chain li b{ color:var(--plum); }
+
+/* output dock */
+.dock{ margin-top:1rem; display:none; }
+.dock.on{ display:block; }
+.outblock{ border:2px solid var(--border); border-radius:12px; padding:.8rem .9rem; margin:.6rem 0; background:var(--bg); }
+.outblock .h{ font:800 .72rem/1 var(--sans); letter-spacing:.06em; text-transform:uppercase; margin:0 0 .45rem; display:flex; align-items:center; gap:.4rem; }
+.outblock.ai .h{ color:var(--river); } .outblock.wire .h{ color:var(--rust); }
+.outblock pre{ margin:0; white-space:pre-wrap; word-break:break-word; font:600 .92rem/1.4 ui-monospace,'SF Mono',Menlo,Consolas,monospace; }
+.copy{ margin-top:.55rem; background:transparent; border:2px solid var(--border); color:var(--ink); border-radius:9px; padding:.45rem .75rem; font:800 .82rem/1 var(--sans); cursor:pointer; min-height:40px; }
+.copy:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+/* the grimoire of spells */
+.shelf{ display:grid; grid-template-columns:1fr; gap:.6rem; }
+@media(min-width:600px){ .shelf{ grid-template-columns:1fr 1fr; } }
+.spell{ border:2px solid var(--border); border-radius:12px; padding:.75rem .85rem; background:var(--surface); }
+.spell .tok{ font:800 1.05rem/1.1 var(--serif); color:var(--plum); }
+.spell .inc{ font-size:.9rem; margin:.35rem 0 .5rem; }
+.spell .row{ display:flex; gap:.4rem; flex-wrap:wrap; }
+.mini{ background:var(--gold-soft); border:2px solid var(--gold-br); color:#1b160f; border-radius:8px; padding:.35rem .6rem; font:800 .76rem/1 var(--sans); cursor:pointer; min-height:40px; }
+.mini.river{ background:var(--river-soft); border-color:var(--river); color:var(--ink); }
+.mini:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+/* recall drill (the hidden calibration) */
+.drill{ display:none; } .drill.on{ display:block; }
+.verdict{ border-radius:12px; padding:.8rem .9rem; margin-top:.7rem; font-size:.95rem; border:2px solid var(--border); }
+.verdict.tight{ background:var(--gold-soft); border-color:var(--gold-br); }
+.verdict.loose{ background:var(--rust-soft); border-color:var(--rust); }
+
+.footer{ margin-top:2.4rem; font-size:.84rem; border-top:2px solid var(--border); padding-top:1rem; }
+.ledger{ font-size:.8rem; background:var(--slate-soft); border-radius:10px; padding:.7rem .85rem; margin-top:.9rem; }
+.ledger b{ color:var(--slate); }
+.sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+.tagchip{ display:inline-block; font:800 .64rem/1 var(--sans); letter-spacing:.04em; background:var(--slate); color:#fff; border-radius:5px; padding:.22rem .4rem; vertical-align:middle; }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <!-- CC0 · original · Tight Spiral Paper Craft : the spiral mark -->
+  <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><title>Spiral mark — CC0, original, Tight Spiral Paper Craft</title><path d="M20 5 C10 5 5 13 5 20 c0 7 5 13 13 13 6 0 10-4 10-9 0-4-3-7-7-7-3 0-5 2-5 5 0 2 1 3 3 3" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
+  <span class="wm">Funnyboney Factory</span>
+  <button class="comfort" id="comfortBtn" aria-live="polite">Comfort: Default</button>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <h1>The Funnyboney Factory</h1>
+    <p class="tag">Where a serious command is forged by a deeply unserious machine.</p>
+    <p class="sub">You coin a short, daft, <strong>memorable</strong> word. You tell it what to do. Then a ridiculous contraption "runs" it — and because the contraption is unforgettable, so is the word. Out the far end drops your real command, ready to paste into any chatbot, or wire to a Shortcut later. The joke <em>is</em> the memory trick.</p>
+  </div>
+
+  <!-- FORGE -->
+  <div class="label">Forge a spell</div>
+  <div class="card">
+    <label class="fld" for="tok">The token <span style="font-weight:400;">(short, silly, sticky — that's the point)</span></label>
+    <input id="tok" type="text" placeholder="e.g. SNORKEL, BISCUIT, KAZOO" value="KAZOO" maxlength="24">
+    <p class="hint">A word your mouth enjoys. Absurd beats sensible — you'll remember KAZOO long after you've forgotten "run_sweep_v2."</p>
+
+    <label class="fld" for="inc">The incantation <span style="font-weight:400;">(the full command it stands for)</span></label>
+    <textarea id="inc" placeholder="The real instruction you want to fire across chats and systems…">Run a probe sweep: take my question, extract the underlying test, run it against every part of my studio system, and report what it touches before answering the narrow case.</textarea>
+    <p class="hint">This is what KAZOO actually <em>means</em>. Write it once; never type it again.</p>
+
+    <div class="btnrow">
+      <button class="btn gold" id="runBtn" type="button">Run it through the machine</button>
+      <button class="btn ghost" id="saveBtn" type="button">Shelve this spell</button>
+    </div>
+  </div>
+
+  <!-- THE MACHINE -->
+  <div class="stage-machine" id="machineStage" aria-live="polite">
+    <svg class="machine-svg" id="machineSvg" viewBox="0 0 760 220" role="img" aria-label="A ridiculous five-link contraption that executes your spell">
+      <title>Funnyboney machine — CC0, original, Tight Spiral Paper Craft</title>
+      <!-- ground line -->
+      <line x1="10" y1="200" x2="750" y2="200" stroke="var(--border)" stroke-width="2"/>
+
+      <!-- LINK 1: ramp + marble -->
+      <path d="M20 60 L150 120" stroke="var(--slate)" stroke-width="4" stroke-linecap="round"/>
+      <circle id="marble" cx="28" cy="54" r="11" fill="var(--gold-br)" stroke="var(--ink)" stroke-width="2"
+        style="transition:transform 1s cubic-bezier(.5,0,.6,1);"/>
+      <text x="20" y="150" font-size="11" fill="var(--ink)" font-family="var(--sans)">1 · the drop</text>
+
+      <!-- LINK 2: the quill lever -->
+      <g id="quill" style="transform-origin:185px 120px; transition:transform .5s ease;">
+        <line x1="160" y1="120" x2="220" y2="105" stroke="var(--rust)" stroke-width="4" stroke-linecap="round"/>
+        <path d="M218 104 q14 -22 26 -6 q-16 2 -22 12 z" fill="var(--rust)" stroke="var(--ink)" stroke-width="1.5"/>
+      </g>
+      <text x="165" y="150" font-size="11" fill="var(--ink)" font-family="var(--sans)">2 · the quill</text>
+
+      <!-- LINK 3: the inkpot tip -->
+      <g id="inkpot" style="transform-origin:300px 150px; transition:transform .5s ease;">
+        <path d="M280 150 h44 v26 a6 6 0 0 1 -6 6 h-32 a6 6 0 0 1 -6 -6 z" fill="var(--plum)" stroke="var(--ink)" stroke-width="2"/>
+        <rect x="294" y="140" width="16" height="12" fill="var(--plum)" stroke="var(--ink)" stroke-width="2"/>
+      </g>
+      <text x="285" y="150" font-size="11" fill="var(--ink)" font-family="var(--sans)" id="inkLbl" opacity="0">3 · the spill</text>
+      <text x="285" y="198" font-size="11" fill="var(--ink)" font-family="var(--sans)">3 · the inkpot</text>
+
+      <!-- LINK 4: the bell -->
+      <g id="bell" style="transform-origin:450px 70px; transition:transform .4s ease;">
+        <path d="M430 110 q0 -45 20 -45 q20 0 20 45 z" fill="var(--gold)" stroke="var(--ink)" stroke-width="2"/>
+        <circle cx="450" cy="114" r="5" fill="var(--ink)"/>
+      </g>
+      <text x="425" y="150" font-size="11" fill="var(--ink)" font-family="var(--sans)">4 · the bell</text>
+
+      <!-- LINK 5: the scroll cannon -->
+      <g id="cannon">
+        <rect x="560" y="120" width="70" height="44" rx="6" fill="var(--slate)" stroke="var(--ink)" stroke-width="2"/>
+        <circle cx="595" cy="142" r="9" fill="var(--bg)" stroke="var(--ink)" stroke-width="2"/>
+        <g id="scroll" opacity="0" style="transition:transform .6s ease, opacity .3s;">
+          <rect x="650" y="120" width="46" height="30" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="2"/>
+          <line x1="657" y1="129" x2="689" y2="129" stroke="var(--ink)" stroke-width="2"/>
+          <line x1="657" y1="136" x2="689" y2="136" stroke="var(--ink)" stroke-width="2"/>
+          <line x1="657" y1="143" x2="678" y2="143" stroke="var(--ink)" stroke-width="2"/>
+        </g>
+      </g>
+      <text x="560" y="186" font-size="11" fill="var(--ink)" font-family="var(--sans)">5 · the command pops out</text>
+    </svg>
+    <p class="runline" id="runLine">Press "Run it through the machine" and watch your word earn its keep.</p>
+
+    <ol class="chain" id="chainList">
+      <li data-step="1"><b>The drop.</b> Your token rolls down the ramp, full of false confidence.</li>
+      <li data-step="2"><b>The quill.</b> It bonks a quill, which thinks it's being asked to write.</li>
+      <li data-step="3"><b>The spill.</b> The quill knocks the inkpot, which spills with great drama.</li>
+      <li data-step="4"><b>The bell.</b> The splash rings a bell that has waited its whole life for this.</li>
+      <li data-step="5"><b>The cannon.</b> The bell trips the scroll cannon — and out flies your actual command.</li>
+    </ol>
+  </div>
+
+  <!-- OUTPUT DOCK -->
+  <div class="dock" id="dock">
+    <div class="label" style="margin-top:1.2rem;">What fell out of the machine</div>
+    <div class="outblock ai">
+      <p class="h">Lane A — paste into any AI chat <span class="tagchip">ready now</span></p>
+      <pre id="outAI"></pre>
+      <button class="copy" data-copy="outAI">Copy the paste-in block</button>
+    </div>
+    <div class="outblock wire">
+      <p class="h">Lane B — Shortcut / Zapier trigger <span class="tagchip">wire later</span></p>
+      <pre id="outWire"></pre>
+      <button class="copy" data-copy="outWire">Copy the trigger line</button>
+    </div>
+    <p class="hint" style="margin-top:.5rem;">Lane A works today: paste it anywhere. Lane B is the same command pre-shaped as a trigger — drop it into an Apple Shortcut "Text" action or a Zapier step when you're ready to make the token actually <em>fire</em> across systems. Same spell, two ranges.</p>
+  </div>
+
+  <!-- THE GRIMOIRE -->
+  <div class="label">Your grimoire <span style="font-weight:400; text-transform:none; letter-spacing:0;">(shelved spells — this tab only)</span></div>
+  <div class="card">
+    <div class="shelf" id="shelf"></div>
+    <p class="hint" id="shelfEmpty" style="margin-top:.6rem;">No spells shelved yet. Forge one above and press "Shelve this spell."</p>
+  </div>
+
+  <!-- RECALL DRILL (the hidden calibration) -->
+  <div class="label">The memory drill <span style="font-weight:400; text-transform:none; letter-spacing:0;">(does the silly word still hold its command?)</span></div>
+  <div class="card">
+    <p style="margin:.1rem 0 .6rem;">Pick a shelved spell. The factory shows you only the <strong>token</strong>. You type what it means from memory. The machine grades your <em>drift</em> — how far your recall slid from the real incantation. (Quietly, this is a calibration move: you are norming yourself against your own anchor.)</p>
+    <div class="btnrow" id="drillPick"></div>
+    <div class="drill" id="drill">
+      <p style="margin:.6rem 0 .35rem;">The token is: <strong id="drillTok" style="font-family:var(--serif); color:var(--plum); font-size:1.2rem;"></strong></p>
+      <label class="fld" for="drillIn">What does it mean? (no peeking)</label>
+      <textarea id="drillIn" placeholder="Type the incantation from memory…"></textarea>
+      <div class="btnrow">
+        <button class="btn plum" id="gradeBtn" type="button">Grade my recall</button>
+      </div>
+      <div class="verdict" id="drillVerdict" style="display:none;"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>Funnyboney Factory · Tight Spiral Studios · walshero@gmail.com. Single-file, offline, green-free, accessible-first. Stores nothing — your grimoire lives in this tab only; carry your spells out.</p>
+    <div class="ledger">
+      <p style="margin:0 0 .3rem;"><b>Art license ledger (visible by vow):</b></p>
+      <p style="margin:.15rem 0;">Spiral mark — <span class="tagchip">CC0</span> original, Tight Spiral Paper Craft</p>
+      <p style="margin:.15rem 0;">The five-link machine (ramp, quill, inkpot, bell, scroll cannon) — <span class="tagchip">CC0</span> original, Tight Spiral Paper Craft</p>
+      <p style="margin:.3rem 0 0; font-size:.78rem;">All art hand-drawn as inline SVG. No sourced images, no AI image generation. CC0 means: use it for anything, no attribution required — though we left our name on it anyway.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* Comfort */
+  var pals=[{c:"",n:"Default"},{c:"softer",n:"Softer"},{c:"warm",n:"Warm-dark"}], pi=0;
+  var cb=document.getElementById("comfortBtn");
+  cb.addEventListener("click",function(){ document.body.classList.remove("softer","warm"); pi=(pi+1)%pals.length; if(pals[pi].c)document.body.classList.add(pals[pi].c); cb.textContent="Comfort: "+pals[pi].n; });
+
+  var tokIn=document.getElementById("tok"), incIn=document.getElementById("inc");
+  var chain=document.querySelectorAll("#chainList li");
+  var runLine=document.getElementById("runLine");
+
+  function slug(s){ return (s||"").trim().toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"") || "spell"; }
+
+  /* THE MACHINE RUN */
+  var marble=document.getElementById("marble"), quill=document.getElementById("quill"),
+      inkpot=document.getElementById("inkpot"), inkLbl=document.getElementById("inkLbl"),
+      bell=document.getElementById("bell"), scroll=document.getElementById("scroll");
+
+  function resetMachine(){
+    chain.forEach(function(li){ li.classList.remove("fired"); });
+    marble.style.transition="none"; marble.style.transform="none";
+    quill.style.transform="none"; inkpot.style.transform="none"; inkLbl.setAttribute("opacity","0");
+    bell.style.transform="none"; scroll.setAttribute("opacity","0"); scroll.style.transform="none";
+    void marble.getBoundingClientRect();
+  }
+
+  function fire(step){ var li=document.querySelector('#chainList li[data-step="'+step+'"]'); if(li) li.classList.add("fired"); }
+
+  function runMachine(then){
+    resetMachine();
+    var tok=(tokIn.value.trim()||"SPELL").toUpperCase();
+    if(reduce){
+      chain.forEach(function(li){ li.classList.add("fired"); });
+      quill.style.transform="rotate(-12deg)"; inkpot.style.transform="rotate(18deg)"; inkLbl.setAttribute("opacity","1");
+      bell.style.transform="rotate(-8deg)"; scroll.setAttribute("opacity","1");
+      runLine.textContent="“"+tok+"” ran the machine. (Motion reduced — shown all at once.) Your command is below.";
+      if(then) then(); return;
+    }
+    runLine.textContent="“"+tok+"” tumbles in…";
+    marble.style.transition="transform 1s cubic-bezier(.5,0,.6,1)";
+    marble.style.transform="translate(120px,66px)";
+    setTimeout(function(){ fire(1); quill.style.transform="rotate(-14deg)"; fire(2); runLine.textContent="…bonks the quill…"; },1000);
+    setTimeout(function(){ inkpot.style.transform="rotate(20deg)"; inkLbl.setAttribute("opacity","1"); fire(3); runLine.textContent="…tips the inkpot (so dramatic)…"; },1600);
+    setTimeout(function(){ bell.style.transform="rotate(-10deg)"; fire(4); runLine.textContent="…rings the long-suffering bell…"; },2200);
+    setTimeout(function(){ scroll.setAttribute("opacity","1"); scroll.style.transform="translate(40px,40px)"; fire(5); runLine.textContent="…and FIRES your command out the cannon. There it is."; if(then) then(); },2800);
+  }
+
+  /* OUTPUT */
+  var dock=document.getElementById("dock"), outAI=document.getElementById("outAI"), outWire=document.getElementById("outWire");
+  function buildOutputs(){
+    var tok=(tokIn.value.trim()||"SPELL").toUpperCase();
+    var inc=incIn.value.trim()||"(no incantation written yet)";
+    outAI.textContent = "When I say "+tok+", do this:\n"+inc;
+    outWire.textContent = "# Shortcut/Zapier trigger\n# Token: "+tok+"\n# Action: send this text to your AI step\n"+inc;
+    dock.classList.add("on");
+  }
+
+  document.getElementById("runBtn").addEventListener("click",function(){ runMachine(buildOutputs); });
+
+  /* COPY buttons */
+  Array.prototype.forEach.call(document.querySelectorAll(".copy"),function(b){
+    b.addEventListener("click",function(){
+      var t=document.getElementById(b.getAttribute("data-copy")).textContent;
+      if(navigator.clipboard){ navigator.clipboard.writeText(t).then(function(){ var o=b.textContent; b.textContent="Copied"; setTimeout(function(){b.textContent=o;},1400); }); }
+    });
+  });
+
+  /* GRIMOIRE (in-memory only) */
+  var spells=[]; var shelf=document.getElementById("shelf"), shelfEmpty=document.getElementById("shelfEmpty");
+  function renderShelf(){
+    shelf.innerHTML="";
+    if(!spells.length){ shelfEmpty.style.display="block"; renderDrillPick(); return; }
+    shelfEmpty.style.display="none";
+    spells.forEach(function(s,i){
+      var d=document.createElement("div"); d.className="spell";
+      d.innerHTML='<div class="tok">'+s.tok+'</div><div class="inc">'+s.inc+'</div>';
+      var row=document.createElement("div"); row.className="row";
+      var load=document.createElement("button"); load.className="mini river"; load.type="button"; load.textContent="Load to forge";
+      load.addEventListener("click",function(){ tokIn.value=s.tok; incIn.value=s.inc; window.scrollTo(0,0); tokIn.focus(); });
+      var del=document.createElement("button"); del.className="mini"; del.type="button"; del.textContent="Remove";
+      del.addEventListener("click",function(){ spells.splice(i,1); renderShelf(); });
+      row.appendChild(load); row.appendChild(del); d.appendChild(row); shelf.appendChild(d);
+    });
+    renderDrillPick();
+  }
+  document.getElementById("saveBtn").addEventListener("click",function(){
+    var tok=tokIn.value.trim().toUpperCase(), inc=incIn.value.trim();
+    if(!tok || !inc){ runLine.textContent="A spell needs both a token and an incantation before it can be shelved."; return; }
+    spells.push({tok:tok, inc:inc}); renderShelf();
+    runLine.textContent="“"+tok+"” is on the shelf. Carry it out before you close the tab — the factory keeps nothing.";
+  });
+
+  /* RECALL DRILL — the hidden calibration */
+  var drillPick=document.getElementById("drillPick"), drill=document.getElementById("drill"),
+      drillTok=document.getElementById("drillTok"), drillIn=document.getElementById("drillIn"),
+      drillVerdict=document.getElementById("drillVerdict"); var current=null;
+  function renderDrillPick(){
+    drillPick.innerHTML="";
+    if(!spells.length){ var p=document.createElement("p"); p.className="hint"; p.textContent="Shelve a spell first, then drill it here."; drillPick.appendChild(p); drill.classList.remove("on"); return; }
+    spells.forEach(function(s){
+      var b=document.createElement("button"); b.className="mini"; b.type="button"; b.textContent="Drill "+s.tok;
+      b.addEventListener("click",function(){ current=s; drillTok.textContent=s.tok; drillIn.value=""; drillVerdict.style.display="none"; drill.classList.add("on"); drillIn.focus(); });
+      drillPick.appendChild(b);
+    });
+  }
+  function driftScore(a,b){
+    // word-overlap drift: 1 = perfect recall, lower = more drift
+    function words(x){ return x.toLowerCase().replace(/[^a-z0-9\s]/g,"").split(/\s+/).filter(Boolean); }
+    var A=words(a), B=words(b); if(!B.length) return 0;
+    var setB={}; B.forEach(function(w){ setB[w]=1; });
+    var hit=0; var seen={}; A.forEach(function(w){ if(setB[w] && !seen[w]){ hit++; seen[w]=1; } });
+    var uniqB=Object.keys(setB).length;
+    return Math.round(100 * hit / uniqB);
+  }
+  document.getElementById("gradeBtn").addEventListener("click",function(){
+    if(!current) return;
+    var score=driftScore(drillIn.value, current.inc);
+    drillVerdict.style.display="block";
+    if(score>=70){
+      drillVerdict.className="verdict tight";
+      drillVerdict.innerHTML="<strong>Tight ("+score+"% overlap).</strong> The silly word held its command. That's the mnemonic working — "+current.tok+" is locked in. Fire it anywhere.";
+    } else {
+      drillVerdict.className="verdict loose";
+      drillVerdict.innerHTML="<strong>Drifted ("+score+"% overlap).</strong> Your recall slid from the anchor. That gap is the calibration signal — run the machine on "+current.tok+" once more; the contraption is what makes it stick. Here is the true incantation:<br><br>"+current.inc;
+    }
+  });
+
+  renderShelf();
+})();
+</script>
+</body>
+</html>
