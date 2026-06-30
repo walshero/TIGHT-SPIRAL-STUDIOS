@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  THE PROVENANCE LEDGER — Tight Spiral Studios · walshero@gmail.com · built 2026-06-30.
+  Enforces the PROVENANCE FLOOR (OS §3.1): no asset — art OR sound — enters the TSP system
+  without recorded, legal provenance (source, license, attribution, how-it-entered) captured
+  before use. No scraping. No guessed attribution. Money walled ($1-sim for own work).
+
+  TWO JOBS IN ONE (the "C" the founder chose):
+   (1) a WORKING LEDGER — log an asset, it builds the correct attribution string and a
+       provenance record you carry out;
+   (2) PUBLIC PROOF — it shows a visitor exactly how TSP sources legally and ethically,
+       the values made checkable.
+
+  ART: original inline SVG, CC0, tagged. FLOORS: no green, full-contrast ink (--ink2==--ink),
+  no raw-text wall, single-file/offline/no-storage, 44px+, keyboard nav, visible focus,
+  reduced-motion safe, no emoji, named-palette comfort corner, phone-width.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Provenance Ledger — Tight Spiral Studios</title>
+<style>
+:root{
+  --ink:#1a1712; --ink2:#1a1712; --bg:#f3e9d6; --surface:#fffaf0; --border:#bda77e;
+  --slate:#2d4654; --slate-soft:#e2e9ee;
+  --river:#0f5566; --river-soft:#deebee;
+  --gold:#7a5200; --gold-br:#c08a09; --gold-soft:#fbf0d4;
+  --rust:#8a3216; --rust-soft:#f6e5dc;
+  --plum:#5a2a52; --plum-soft:#eedff0;
+  --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --serif:Georgia,'Times New Roman',serif;
+  --focus:#c08a09;
+}
+body.softer{ --bg:#ece2cd; --surface:#f7efe0; --border:#b09a72; }
+body.warm{
+  --ink:#f3e6c6; --ink2:#f3e6c6; --bg:#1a1712; --surface:#262019; --border:#5d543d;
+  --slate:#9ab6c8; --slate-soft:#212c33; --river:#84cad9; --river-soft:#1b272c;
+  --gold:#f0c357; --gold-br:#f0c357; --gold-soft:#2c2614; --rust:#eaa183; --rust-soft:#2c1f19;
+  --plum:#d39bc8; --plum-soft:#2a1d28;
+}
+*{box-sizing:border-box;}
+body{ margin:0; font-family:var(--sans); background:var(--bg); color:var(--ink); line-height:1.6; font-size:18px; }
+.topbar{ background:var(--slate); color:#fff; padding:.65rem 1rem; display:flex; align-items:center; gap:.6rem; position:sticky; top:0; z-index:50; }
+.topbar .mark{ width:26px; height:26px; flex:none; }
+.topbar .wm{ font-weight:800; font-size:1rem; }
+.comfort{ margin-left:auto; background:var(--gold-br); color:#1a1712; border:2px solid #fff; border-radius:10px; padding:.55rem .8rem; font:800 .82rem/1 var(--sans); cursor:pointer; min-height:44px; }
+.comfort:focus-visible{ outline:3px solid #fff; outline-offset:2px; }
+.wrap{ max-width:860px; margin:0 auto; padding:1.3rem 1rem 5rem; }
+.hero h1{ font-family:var(--serif); font-size:1.95rem; color:var(--slate); margin:.3rem 0 .25rem; line-height:1.12; }
+.hero .tag{ font-size:1.04rem; margin:0; }
+.hero .vow{ font-size:.95rem; background:var(--gold-soft); border-left:5px solid var(--gold-br); padding:.6rem .85rem; border-radius:0 9px 9px 0; margin:.7rem 0 0; }
+.label{ font:800 .76rem/1 var(--sans); letter-spacing:.1em; text-transform:uppercase; color:var(--river); margin:2rem 0 .5rem; padding-bottom:.35rem; border-bottom:2px solid var(--border); }
+.card{ background:var(--surface); border:2px solid var(--border); border-radius:14px; padding:1.05rem 1.1rem; }
+label.fld{ display:block; font-weight:800; font-size:.9rem; margin:.5rem 0 .3rem; }
+input[type=text], textarea, select{ width:100%; font:400 1rem/1.4 var(--sans); padding:.55rem .65rem; border:2px solid var(--border); border-radius:10px; background:var(--bg); color:var(--ink); min-height:46px; }
+textarea{ min-height:64px; resize:vertical; }
+select{ min-height:48px; }
+input:focus-visible, textarea:focus-visible, select:focus-visible{ outline:3px solid var(--focus); outline-offset:1px; }
+.two{ display:grid; grid-template-columns:1fr; gap:.2rem; } @media(min-width:600px){ .two{ grid-template-columns:1fr 1fr; gap:1rem; } }
+.hint{ font-size:.82rem; margin:.25rem 0 0; }
+.btn{ background:var(--river); color:#fff; border:2px solid var(--river); border-radius:11px; padding:.65rem 1rem; font:800 .95rem/1 var(--sans); cursor:pointer; min-height:48px; }
+.btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.btn.gold{ background:var(--gold-br); border-color:var(--gold-br); color:#1a1712; }
+.btn.ghost{ background:transparent; color:var(--river); }
+.btnrow{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.9rem; }
+
+/* lane guide cards */
+.lanes{ display:grid; grid-template-columns:1fr; gap:.6rem; } @media(min-width:600px){ .lanes{ grid-template-columns:1fr 1fr; } }
+.lane{ border:2px solid var(--border); border-left-width:6px; border-radius:10px; padding:.7rem .85rem; background:var(--surface); }
+.lane h3{ margin:.05rem 0 .3rem; font:800 1rem/1.2 var(--serif); }
+.lane p{ margin:0; font-size:.88rem; }
+.lane.cc0{ border-left-color:var(--river); } .lane.cc0 h3{ color:var(--river); }
+.lane.ccby{ border-left-color:var(--gold-br); } .lane.ccby h3{ color:var(--gold); }
+.lane.own{ border-left-color:var(--plum); } .lane.own h3{ color:var(--plum); }
+.lane.synth{ border-left-color:var(--slate); } .lane.synth h3{ color:var(--slate); }
+.lane.commission{ border-left-color:var(--rust); } .lane.commission h3{ color:var(--rust); }
+
+/* records */
+.rec{ border:2px solid var(--border); border-left-width:6px; border-radius:10px; padding:.7rem .85rem; margin:.5rem 0; background:var(--surface); }
+.rec .top{ display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
+.rec .nm{ font-weight:800; }
+.rec .lic{ font:800 .68rem/1 var(--sans); letter-spacing:.04em; text-transform:uppercase; padding:.25rem .45rem; border-radius:5px; color:#fff; }
+.rec .meta{ font-size:.85rem; margin:.35rem 0 0; }
+.rec .attr{ font:600 .85rem/1.4 ui-monospace,Menlo,Consolas,monospace; background:var(--bg); border-radius:8px; padding:.45rem .6rem; margin:.45rem 0 0; white-space:pre-wrap; word-break:break-word; }
+.rec .x{ background:transparent; border:2px solid var(--border); color:var(--ink); border-radius:8px; min-width:44px; min-height:36px; cursor:pointer; font-weight:800; margin-left:auto; }
+.rec .x:focus-visible{ outline:3px solid var(--focus); }
+.lic-cc0{ background:var(--river); } .lic-ccby{ background:var(--gold-br); color:#1a1712; }
+.lic-own{ background:var(--plum); } .lic-synth{ background:var(--slate); } .lic-commission{ background:var(--rust); } .lic-pd{ background:var(--river); }
+
+.copyout{ border:2px dashed var(--border); border-radius:12px; padding:.85rem; margin-top:1rem; }
+.copyout pre{ margin:0; white-space:pre-wrap; word-break:break-word; font:600 .85rem/1.45 ui-monospace,Menlo,Consolas,monospace; max-height:300px; overflow:auto; }
+.copy{ margin-top:.55rem; background:transparent; border:2px solid var(--border); color:var(--ink); border-radius:9px; padding:.45rem .75rem; font:800 .82rem/1 var(--sans); cursor:pointer; min-height:40px; }
+.copy:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.footer{ margin-top:2.4rem; font-size:.84rem; border-top:2px solid var(--border); padding-top:1rem; }
+.tagchip{ display:inline-block; font:800 .64rem/1 var(--sans); letter-spacing:.04em; background:var(--slate); color:#fff; border-radius:5px; padding:.22rem .4rem; vertical-align:middle; }
+.sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><title>Spiral mark — CC0, original, Tight Spiral Paper Craft</title><path d="M20 5 C10 5 5 13 5 20 c0 7 5 13 13 13 6 0 10-4 10-9 0-4-3-7-7-7-3 0-5 2-5 5 0 2 1 3 3 3" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
+  <span class="wm">The Provenance Ledger</span>
+  <button class="comfort" id="comfortBtn" aria-live="polite">Comfort: Default</button>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <h1>How every asset earns its place</h1>
+    <p class="tag">Art and sound. Source, license, attribution, and how it entered — recorded before use.</p>
+    <p class="vow"><strong>The Provenance Floor:</strong> nothing enters the system without legal, recorded provenance. No scraping. No guessed attribution. "Found online" is not a license. The founder's own work enters money-walled, at the $1-sim purchase. This page is both the working ledger and the proof of how the studio sources.</p>
+  </div>
+
+  <!-- THE LEGAL LANES (teaching display) -->
+  <div class="label">The legal lanes — every asset comes through one</div>
+  <div class="lanes">
+    <div class="lane synth"><h3>Synthesized in-file</h3><p>Sound built from code (Web Audio). CC0 by construction, zero sourcing, stays offline. The preferred lane for game SFX.</p></div>
+    <div class="lane cc0"><h3>CC0 / Public Domain</h3><p>Own hand-drawn SVG; verified PD sources (Wikimedia PD, Met &amp; Smithsonian Open Access, NYPL, Wellcome; Freesound CC0). No attribution debt.</p></div>
+    <div class="lane ccby"><h3>CC-BY / CC-BY-SA</h3><p>Usable with the required attribution — which this ledger writes for you, correctly, every time.</p></div>
+    <div class="lane own"><h3>Own work — $1 sim</h3><p>Your art or recordings enter at a token internal price. Money walled from the design decision; provenance still recorded.</p></div>
+    <div class="lane commission"><h3>Commissioned</h3><p>Super Sketchy Graphics (AI-assisted), with the standing disclosure line. Or actually-purchased licensed stock.</p></div>
+  </div>
+
+  <!-- THE LEDGER (working tool) -->
+  <div class="label">Log an asset</div>
+  <div class="card">
+    <div class="two">
+      <div>
+        <label class="fld" for="aType">Asset type</label>
+        <select id="aType"><option value="art">Art / image</option><option value="sound">Sound / audio</option><option value="font">Font</option><option value="text">Text</option></select>
+      </div>
+      <div>
+        <label class="fld" for="aLic">License lane</label>
+        <select id="aLic">
+          <option value="synth">Synthesized in-file (CC0 by construction)</option>
+          <option value="cc0">CC0 / Public Domain</option>
+          <option value="pd">Public Domain (verified)</option>
+          <option value="ccby">CC-BY</option>
+          <option value="ccbysa">CC-BY-SA</option>
+          <option value="own">Own work — $1 sim purchase</option>
+          <option value="commission">Commissioned (AI-assisted)</option>
+          <option value="stock">Licensed stock (purchased)</option>
+        </select>
+      </div>
+    </div>
+    <label class="fld" for="aName">What it is</label>
+    <input id="aName" type="text" placeholder="e.g. bonk SFX, inkpot illustration, body font">
+    <div class="two">
+      <div>
+        <label class="fld" for="aAuthor">Creator / source <span id="authNote" style="font-weight:400;"></span></label>
+        <input id="aAuthor" type="text" placeholder="e.g. Jane Doe; or Tight Spiral Studios">
+      </div>
+      <div>
+        <label class="fld" for="aURL">Source URL <span style="font-weight:400;">(where it legally came from)</span></label>
+        <input id="aURL" type="text" placeholder="https:// …  (leave blank for synthesized/own)">
+      </div>
+    </div>
+    <label class="fld" for="aNote">How it entered — the process note <span style="font-weight:400;">(required by the floor)</span></label>
+    <textarea id="aNote" placeholder="e.g. 'Synthesized with Web Audio oscillator in-file' · 'Downloaded from Freesound, CC0 filter on' · 'Recorded by founder, entered at $1 sim'"></textarea>
+    <p class="hint" id="floorNote"></p>
+    <div class="btnrow">
+      <button class="btn gold" id="addBtn" type="button">Record it (floor check runs)</button>
+    </div>
+  </div>
+
+  <!-- RECORDS -->
+  <div class="label">The ledger <span style="font-weight:400; text-transform:none; letter-spacing:0;">(this tab only — carry it out)</span></div>
+  <div id="records"></div>
+  <p class="hint" id="emptyNote">No assets recorded yet. Log one above.</p>
+
+  <div class="copyout" id="carryout" style="display:none;">
+    <p style="margin:0 0 .3rem; font-weight:800; font-size:.85rem;">CARRY-OUT — the full provenance record + a CREDITS block</p>
+    <pre id="carryText"></pre>
+    <button class="copy" data-copy="carryText">Copy the whole ledger</button>
+  </div>
+
+  <div class="footer">
+    <p>The Provenance Ledger · Tight Spiral Studios · walshero@gmail.com. Single-file, offline, green-free. Stores nothing — the ledger lives in this tab; carry it out and keep it with the build.</p>
+    <p style="font-size:.8rem; margin-top:.5rem;"><span class="tagchip">CC0</span> Spiral mark and all page art: original inline SVG, CC0, Tight Spiral Paper Craft. No sourced images, no AI image generation on this page.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var pals=[{c:"",n:"Default"},{c:"softer",n:"Softer"},{c:"warm",n:"Warm-dark"}], pi=0;
+  var cb=document.getElementById("comfortBtn");
+  cb.addEventListener("click",function(){ document.body.classList.remove("softer","warm"); pi=(pi+1)%pals.length; if(pals[pi].c)document.body.classList.add(pals[pi].c); cb.textContent="Comfort: "+pals[pi].n; });
+
+  var aType=document.getElementById("aType"), aLic=document.getElementById("aLic"),
+      aName=document.getElementById("aName"), aAuthor=document.getElementById("aAuthor"),
+      aURL=document.getElementById("aURL"), aNote=document.getElementById("aNote"),
+      floorNote=document.getElementById("floorNote"), authNote=document.getElementById("authNote");
+
+  var LIC = {
+    synth:{label:"Synth · CC0", cls:"lic-synth", needsAttr:false, needsURL:false},
+    cc0:{label:"CC0", cls:"lic-cc0", needsAttr:false, needsURL:false},
+    pd:{label:"Public Domain", cls:"lic-pd", needsAttr:false, needsURL:true},
+    ccby:{label:"CC-BY", cls:"lic-ccby", needsAttr:true, needsURL:true},
+    ccbysa:{label:"CC-BY-SA", cls:"lic-ccby", needsAttr:true, needsURL:true},
+    own:{label:"Own · $1 sim", cls:"lic-own", needsAttr:false, needsURL:false},
+    commission:{label:"Commissioned · AI-assisted", cls:"lic-commission", needsAttr:false, needsURL:false},
+    stock:{label:"Licensed stock", cls:"lic-commission", needsAttr:false, needsURL:true}
+  };
+
+  function updateGuidance(){
+    var l=LIC[aLic.value];
+    authNote.textContent = l.needsAttr ? "(required for this license)" : "(optional)";
+    if(aLic.value==="synth"){ floorNote.textContent="Synthesized in-file: no source needed. Note the method (e.g. 'Web Audio oscillator')."; }
+    else if(aLic.value==="own"){ floorNote.textContent="Own work enters money-walled at the $1 sim. Record it; price never touches the design call."; }
+    else if(l.needsAttr){ floorNote.textContent="This license REQUIRES attribution. Creator and source URL are needed, or it cannot enter (no guessed attribution)."; }
+    else if(l.needsURL){ floorNote.textContent="Record the verified source URL so provenance is checkable."; }
+    else { floorNote.textContent="CC0: usable freely, no attribution debt. A source URL is still good practice."; }
+  }
+  aLic.addEventListener("change", updateGuidance); updateGuidance();
+
+  var records=[]; var recBox=document.getElementById("records"), emptyNote=document.getElementById("emptyNote");
+  var carry=document.getElementById("carryout"), carryText=document.getElementById("carryText");
+
+  function attributionString(r){
+    var l=LIC[r.lic];
+    if(r.lic==="synth") return r.name+" — synthesized in-file (Web Audio), CC0, Tight Spiral Studios.";
+    if(r.lic==="cc0") return r.name+" — CC0 / Public Domain"+(r.author?(", "+r.author):"")+(r.url?(" ("+r.url+")"):"")+".";
+    if(r.lic==="pd") return r.name+" — Public Domain, "+(r.author||"unknown creator")+(r.url?(" ("+r.url+")"):"")+".";
+    if(r.lic==="ccby") return '"'+r.name+'" by '+(r.author||"[creator]")+", "+(r.url||"[source]")+", licensed under CC BY 4.0.";
+    if(r.lic==="ccbysa") return '"'+r.name+'" by '+(r.author||"[creator]")+", "+(r.url||"[source]")+", licensed under CC BY-SA 4.0.";
+    if(r.lic==="own") return r.name+" — original work by "+(r.author||"the founder")+", entered at $1 sim purchase (money walled), Tight Spiral Studios.";
+    if(r.lic==="commission") return r.name+" — commissioned to Super Sketchy Graphics by Tight Spiral Studios, AI-assisted.";
+    if(r.lic==="stock") return r.name+" — licensed stock ("+(r.author||"vendor")+(r.url?(", "+r.url):"")+"), purchased.";
+    return r.name;
+  }
+
+  function render(){
+    recBox.innerHTML="";
+    if(!records.length){ emptyNote.style.display="block"; carry.style.display="none"; return; }
+    emptyNote.style.display="none";
+    records.forEach(function(r,i){
+      var l=LIC[r.lic];
+      var d=document.createElement("div"); d.className="rec"; d.style.borderLeftColor="var(--border)";
+      var top=document.createElement("div"); top.className="top";
+      top.innerHTML='<span class="lic '+l.cls+'">'+l.label+'</span><span class="nm">'+r.name+'</span><span class="meta" style="margin:0;">('+r.type+')</span>';
+      var x=document.createElement("button"); x.className="x"; x.type="button"; x.textContent="×"; x.setAttribute("aria-label","Remove "+r.name);
+      x.addEventListener("click",function(){ records.splice(i,1); render(); });
+      top.appendChild(x); d.appendChild(top);
+      var meta=document.createElement("div"); meta.className="meta";
+      meta.innerHTML="<strong>How it entered:</strong> "+(r.note||"(no process note)");
+      d.appendChild(meta);
+      var attr=document.createElement("div"); attr.className="attr"; attr.textContent=attributionString(r);
+      d.appendChild(attr);
+      recBox.appendChild(d);
+    });
+    // carry-out
+    var lines=["TIGHT SPIRAL — PROVENANCE LEDGER","Recorded "+new Date().toISOString().slice(0,10),""];
+    records.forEach(function(r){
+      lines.push("· "+r.name+"  ["+LIC[r.lic].label+"]  ("+r.type+")");
+      lines.push("    entered: "+(r.note||"(no note)"));
+      lines.push("    credit: "+attributionString(r));
+      lines.push("");
+    });
+    lines.push("--- CREDITS BLOCK (paste into the build footer) ---");
+    records.forEach(function(r){ lines.push(attributionString(r)); });
+    carryText.textContent=lines.join("\n");
+    carry.style.display="block";
+  }
+
+  document.getElementById("addBtn").addEventListener("click",function(){
+    var l=LIC[aLic.value];
+    var name=aName.value.trim();
+    if(!name){ floorNote.textContent="FLOOR: an asset needs a name before it can enter."; return; }
+    if(!aNote.value.trim()){ floorNote.textContent="FLOOR: the process note (how it entered) is required. No asset enters without it."; return; }
+    if(l.needsAttr && (!aAuthor.value.trim() || !aURL.value.trim())){
+      floorNote.textContent="FLOOR HALT: "+l.label+" requires creator AND source URL. No guessed attribution — fill both or change the lane.";
+      return;
+    }
+    records.push({ type:aType.options[aType.selectedIndex].text.toLowerCase(), lic:aLic.value, name:name, author:aAuthor.value.trim(), url:aURL.value.trim(), note:aNote.value.trim() });
+    aName.value=""; aAuthor.value=""; aURL.value=""; aNote.value="";
+    updateGuidance();
+    render();
+  });
+
+  document.querySelectorAll(".copy").forEach(function(b){
+    b.addEventListener("click",function(){
+      var t=document.getElementById(b.getAttribute("data-copy")).textContent;
+      if(navigator.clipboard){ navigator.clipboard.writeText(t).then(function(){ var o=b.textContent; b.textContent="Copied"; setTimeout(function(){b.textContent=o;},1400); }); }
+    });
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

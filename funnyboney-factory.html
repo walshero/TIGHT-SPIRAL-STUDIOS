@@ -127,7 +127,8 @@ input:focus-visible, textarea:focus-visible{ outline:3px solid var(--focus); out
   <!-- CC0 · original · Tight Spiral Paper Craft : the spiral mark -->
   <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><title>Spiral mark — CC0, original, Tight Spiral Paper Craft</title><path d="M20 5 C10 5 5 13 5 20 c0 7 5 13 13 13 6 0 10-4 10-9 0-4-3-7-7-7-3 0-5 2-5 5 0 2 1 3 3 3" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
   <span class="wm">Funnyboney Factory</span>
-  <button class="comfort" id="comfortBtn" aria-live="polite">Comfort: Default</button>
+  <button class="comfort" id="soundBtn" style="margin-left:auto;" aria-pressed="false">Sound: off</button>
+  <button class="comfort" id="comfortBtn" style="margin-left:.4rem;" aria-live="polite">Comfort: Default</button>
 </div>
 
 <div class="wrap">
@@ -258,6 +259,7 @@ input:focus-visible, textarea:focus-visible{ outline:3px solid var(--focus); out
       <p style="margin:0 0 .3rem;"><b>Art license ledger (visible by vow):</b></p>
       <p style="margin:.15rem 0;">Spiral mark — <span class="tagchip">CC0</span> original, Tight Spiral Paper Craft</p>
       <p style="margin:.15rem 0;">The five-link machine (ramp, quill, inkpot, bell, scroll cannon) — <span class="tagchip">CC0</span> original, Tight Spiral Paper Craft</p>
+      <p style="margin:.15rem 0;">Sound effects (drop, bonk, spill, bell, cannon) — <span class="tagchip">CC0</span> synthesized in-file via Web Audio, Tight Spiral Studios. No audio files, no sourcing.</p>
       <p style="margin:.3rem 0 0; font-size:.78rem;">All art hand-drawn as inline SVG. No sourced images, no AI image generation. CC0 means: use it for anything, no attribution required — though we left our name on it anyway.</p>
     </div>
   </div>
@@ -267,6 +269,35 @@ input:focus-visible, textarea:focus-visible{ outline:3px solid var(--focus); out
 (function(){
   "use strict";
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ----- Synthesized sound (Web Audio): CC0 by construction, the Provenance Floor's preferred audio lane.
+     No files, no sourcing, stays offline. Off by default; first tap is the user gesture that unlocks audio. ----- */
+  var soundOn=false, actx=null;
+  var soundBtn=document.getElementById("soundBtn");
+  soundBtn.addEventListener("click",function(){
+    soundOn=!soundOn;
+    soundBtn.textContent="Sound: "+(soundOn?"on":"off");
+    soundBtn.setAttribute("aria-pressed", soundOn?"true":"false");
+    if(soundOn && !actx){ try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ actx=null; } }
+    if(soundOn && actx && actx.state==="suspended"){ actx.resume(); }
+  });
+  function beep(freq, dur, type, vol){
+    if(!soundOn || !actx) return;
+    try{
+      var o=actx.createOscillator(), g=actx.createGain(), t=actx.currentTime;
+      o.type=type||"sine"; o.frequency.setValueAtTime(freq, t);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol||0.18, t+0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+(dur||0.18));
+      o.connect(g); g.connect(actx.destination); o.start(t); o.stop(t+(dur||0.18)+0.02);
+    }catch(e){}
+  }
+  // the five comedy sounds, each synthesized
+  function sfxDrop(){ beep(220,0.18,"sine",0.16); }                 // marble rolls
+  function sfxBonk(){ beep(140,0.12,"square",0.2); }                // quill bonk
+  function sfxSpill(){ beep(90,0.3,"sawtooth",0.14); }              // dramatic spill
+  function sfxBell(){ beep(880,0.5,"sine",0.2); setTimeout(function(){beep(1320,0.4,"sine",0.12);},40); } // bell ring
+  function sfxCannon(){ beep(160,0.08,"square",0.22); setTimeout(function(){beep(520,0.25,"triangle",0.16);},90); } // pop + scroll
 
   /* Comfort */
   var pals=[{c:"",n:"Default"},{c:"softer",n:"Softer"},{c:"warm",n:"Warm-dark"}], pi=0;
@@ -306,11 +337,11 @@ input:focus-visible, textarea:focus-visible{ outline:3px solid var(--focus); out
     }
     runLine.textContent="“"+tok+"” tumbles in…";
     marble.style.transition="transform 1s cubic-bezier(.5,0,.6,1)";
-    marble.style.transform="translate(120px,66px)";
-    setTimeout(function(){ fire(1); quill.style.transform="rotate(-14deg)"; fire(2); runLine.textContent="…bonks the quill…"; },1000);
-    setTimeout(function(){ inkpot.style.transform="rotate(20deg)"; inkLbl.setAttribute("opacity","1"); fire(3); runLine.textContent="…tips the inkpot (so dramatic)…"; },1600);
-    setTimeout(function(){ bell.style.transform="rotate(-10deg)"; fire(4); runLine.textContent="…rings the long-suffering bell…"; },2200);
-    setTimeout(function(){ scroll.setAttribute("opacity","1"); scroll.style.transform="translate(40px,40px)"; fire(5); runLine.textContent="…and FIRES your command out the cannon. There it is."; if(then) then(); },2800);
+    marble.style.transform="translate(120px,66px)"; sfxDrop();
+    setTimeout(function(){ fire(1); quill.style.transform="rotate(-14deg)"; fire(2); sfxBonk(); runLine.textContent="…bonks the quill…"; },1000);
+    setTimeout(function(){ inkpot.style.transform="rotate(20deg)"; inkLbl.setAttribute("opacity","1"); fire(3); sfxSpill(); runLine.textContent="…tips the inkpot (so dramatic)…"; },1600);
+    setTimeout(function(){ bell.style.transform="rotate(-10deg)"; fire(4); sfxBell(); runLine.textContent="…rings the long-suffering bell…"; },2200);
+    setTimeout(function(){ scroll.setAttribute("opacity","1"); scroll.style.transform="translate(40px,40px)"; fire(5); sfxCannon(); runLine.textContent="…and FIRES your command out the cannon. There it is."; if(then) then(); },2800);
   }
 
   /* OUTPUT */
