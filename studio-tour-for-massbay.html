@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  THE STUDIO, PLAYED — a walkable tour of Tight Spiral Studios.
+  Built for two readers: Rebecca Heimel (Dir., Center for Teaching & Learning / Dean)
+  and the MassBay CIO. RESTRICTED — contains studio IP shared in confidence.
+  Single file. Fully offline. In-memory only. No network calls. Playable in airplane mode.
+  Tight Spiral Studios · walshero@gmail.com
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>The Studio, Played — for MassBay (Restricted)</title>
+<style>
+  :root{
+    --paper:#f4efe6; --ink:#1b1712; --line:#c9bfae; --accent:#6e4700;
+    --civic:#1f4a4f; --card:#fbf8f2; --shadow:rgba(30,22,12,.16);
+    --slip:#efe7d6; --warn-bg:#f6e9d4; --warn-line:#8a5a12;
+    --serif:Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  }
+  [data-pal="soft"]{ --paper:#e6ddc9; --ink:#2b2013; --card:#efe7d3; --line:#bcae90; --slip:#ddd2b8; }
+  [data-pal="warm"]{ --paper:#2a2620; --ink:#f3e7cf; --card:#332e26; --line:#5a5040;
+    --accent:#e6b866; --civic:#8fd0d8; --shadow:rgba(0,0,0,.4); --slip:#3a342b;
+    --warn-bg:#3f3320; --warn-line:#e6b866; }
+  *{box-sizing:border-box}
+  html{scroll-behavior:auto}
+  body{margin:0; background:var(--paper); color:var(--ink);
+    font:19px/1.6 var(--sans); padding:0 0 90px; -webkit-text-size-adjust:100%}
+
+  /* ---------- GATE ---------- */
+  .gate{position:fixed; inset:0; z-index:9999; background:var(--paper);
+    display:flex; align-items:center; justify-content:center; padding:20px; overflow:auto}
+  .gate[hidden]{display:none}
+  .gate-card{background:var(--card); border:2px solid var(--accent); border-radius:16px;
+    padding:30px 26px; max-width:500px; box-shadow:0 8px 24px var(--shadow); margin:auto}
+  .gate-card h1{font-family:var(--serif); font-size:1.7rem; margin:0 0 .3em}
+  .gate-card p{margin:.6em 0; font-size:1rem}
+  .gate-card .warn{background:var(--warn-bg); border-left:5px solid var(--warn-line);
+    padding:14px 16px; border-radius:8px; margin:18px 0; font-size:.95rem}
+  .gate-card .recip{margin:16px 0; padding:14px; background:var(--slip);
+    border-radius:10px; font-size:.92rem}
+  .gate-card .recip b{display:block; margin-bottom:6px; color:var(--accent)}
+  .gate-card label{display:flex; gap:12px; align-items:flex-start; margin:14px 0; cursor:pointer; font-size:.95rem}
+  .gate-card input[type=checkbox]{width:26px; height:26px; flex:0 0 auto; margin-top:1px; accent-color:var(--accent)}
+  .gate-card button{min-height:50px; width:100%; margin-top:12px; background:var(--accent);
+    color:var(--paper); border:none; border-radius:12px; font-size:1.05rem; font-weight:700;
+    cursor:pointer; font-family:inherit}
+  .gate-card button:disabled{opacity:.45; cursor:default}
+  .gate-card button:focus-visible{outline:3px solid var(--ink); outline-offset:2px}
+
+  /* ---------- HEADER ---------- */
+  header.top{background:var(--card); border-bottom:3px solid var(--accent); padding:20px}
+  .wrap{max-width:820px; margin:0 auto; padding:0 20px}
+  header.top .wrap{padding:0 20px}
+  .eyebrow{font-size:.78rem; font-weight:800; letter-spacing:.11em; text-transform:uppercase;
+    color:var(--civic); margin:0 0 4px}
+  h1.main{font-family:var(--serif); font-size:1.8rem; margin:.05em 0 .15em; letter-spacing:-.01em}
+  .sub{font-size:1.02rem; margin:0}
+  .comfort{display:flex; gap:8px; margin-top:14px; flex-wrap:wrap}
+  .comfort button{min-height:44px; min-width:44px; padding:8px 15px; background:var(--paper);
+    color:var(--ink); border:2px solid var(--accent); border-radius:8px; font-size:.9rem;
+    cursor:pointer; font-weight:600; font-family:inherit}
+  .comfort button[aria-pressed=true]{background:var(--accent); color:var(--paper)}
+  .comfort button:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+
+  /* ---------- PROGRESS ---------- */
+  .progress{position:sticky; top:0; z-index:50; background:var(--paper);
+    border-bottom:1px solid var(--line); padding:10px 0}
+  .progress .wrap{display:flex; align-items:center; gap:12px}
+  .pbar{flex:1; height:12px; background:var(--slip); border-radius:8px; overflow:hidden;
+    border:1px solid var(--line)}
+  .pfill{height:100%; width:0; background:var(--accent); transition:width .35s ease}
+  .pcount{font-size:.85rem; font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap}
+
+  /* ---------- SECTIONS ---------- */
+  section{background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:22px; margin:16px 0; box-shadow:0 2px 6px var(--shadow)}
+  h2{font-family:var(--serif); font-size:1.35rem; margin:.1em 0 .5em}
+  h3{font-size:1.05rem; margin:1em 0 .3em; color:var(--accent)}
+  p{margin:.55em 0}
+  .lede{font-size:1.06rem}
+  em.turn{font-style:normal; font-weight:700; color:var(--accent)}
+
+  .lens-num{display:inline-flex; align-items:center; justify-content:center;
+    width:34px; height:34px; border-radius:50%; background:var(--civic); color:#fff;
+    font-weight:700; font-size:.95rem; margin-right:10px; flex:0 0 auto}
+  .lens-head{display:flex; align-items:center; margin-bottom:.3em}
+  .lens-head h2{margin:0}
+
+  .card2{background:var(--paper); border:1px solid var(--line); border-radius:10px;
+    padding:14px 16px; margin:12px 0}
+  .prov{font-size:.82rem; color:var(--accent); font-weight:600; margin-top:8px;
+    padding-top:8px; border-top:1px dashed var(--line)}
+
+  .btn{min-height:48px; padding:12px 22px; background:var(--accent); color:var(--paper);
+    border:none; border-radius:11px; font-size:1rem; font-weight:700; cursor:pointer;
+    font-family:inherit; margin:6px 6px 6px 0}
+  .btn.ghost{background:var(--paper); color:var(--accent); border:2px solid var(--accent)}
+  .btn:focus-visible{outline:3px solid var(--ink); outline-offset:2px}
+  .btn:disabled{opacity:.45; cursor:default}
+
+  /* embedded live pieces */
+  .embed-shell{border:2px solid var(--accent); border-radius:12px; overflow:hidden; margin:14px 0;
+    background:var(--paper)}
+  .embed-bar{background:var(--accent); color:var(--paper); padding:8px 14px; font-size:.85rem;
+    font-weight:700; display:flex; justify-content:space-between; align-items:center; gap:10px}
+  .embed-bar .live{font-size:.7rem; background:var(--paper); color:var(--accent);
+    padding:2px 8px; border-radius:20px; font-weight:800}
+  iframe.piece{width:100%; height:520px; border:0; display:block; background:#fff}
+
+  /* interactive lens picker (the Left) */
+  .lens-grid{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:12px 0}
+  @media(min-width:560px){ .lens-grid{grid-template-columns:1fr 1fr 1fr} }
+  .lens-chip{min-height:56px; padding:10px 12px; background:var(--paper); color:var(--ink);
+    border:2px solid var(--line); border-radius:10px; cursor:pointer; text-align:left;
+    font-family:inherit; font-size:.9rem; font-weight:600; line-height:1.3}
+  .lens-chip[aria-pressed=true]{border-color:var(--accent); background:var(--slip)}
+  .lens-chip:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+  .lens-read{background:var(--slip); border-radius:10px; padding:14px 16px; margin-top:10px;
+    min-height:60px; font-size:.95rem}
+
+  .warn-box{background:var(--warn-bg); border-left:5px solid var(--warn-line);
+    padding:14px 16px; border-radius:8px; margin:14px 0; font-size:.95rem}
+
+  .invite{background:var(--civic); color:#fff; border:none}
+  .invite h2, .invite h3{color:#fff}
+  .invite .prov{color:#cfe8ea; border-top-color:rgba(255,255,255,.3)}
+  [data-pal=warm] .invite{background:#123539}
+
+  .ask-list{list-style:none; padding:0; margin:12px 0}
+  .ask-list li{padding:12px 14px 12px 44px; position:relative; background:rgba(255,255,255,.1);
+    border-radius:10px; margin:8px 0}
+  .ask-list li::before{content:""; position:absolute; left:14px; top:16px; width:16px; height:16px;
+    border:3px solid #fff; border-radius:4px}
+
+  .foot{margin-top:24px; padding:20px; background:var(--ink); color:var(--paper);
+    border-radius:12px; font-size:.88rem}
+  [data-pal=warm] .foot{background:#12100c}
+  .foot a{color:var(--accent); font-weight:700}
+  .restricted-strip{position:fixed; bottom:0; left:0; right:0; z-index:60;
+    background:var(--warn-line); color:#fff; text-align:center; font-size:.78rem;
+    font-weight:700; padding:6px 10px; letter-spacing:.02em}
+  a:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+  .skip{position:absolute; left:-999px; top:0; background:var(--accent); color:#fff;
+    padding:10px 16px; z-index:10000; border-radius:0 0 8px 0}
+  .skip:focus{left:0}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#start">Skip to the tour</a>
+
+<!-- ===================== GATE ===================== -->
+<div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-h">
+  <div class="gate-card">
+    <p class="eyebrow" style="color:var(--warn-line)">Restricted · shared in confidence</p>
+    <h1 id="gate-h">Before you open the studio</h1>
+    <p>Matt Walsh built this as a walkable tour of how his studio thinks. It runs entirely on your device — no accounts, no network, nothing sent anywhere.</p>
+
+    <div class="recip">
+      <b>Prepared for two readers</b>
+      Rebecca Heimel — Director, Center for Teaching &amp; Learning<br>
+      The MassBay Chief Information Officer
+    </div>
+
+    <div class="warn">
+      <strong>Please switch on Airplane Mode before you begin</strong>, and leave it on until you finish. Everything here works offline. It is the simplest proof that nothing leaves your phone — and it keeps the material contained.
+    </div>
+
+    <label><input type="checkbox" id="ck-air"> My device is in Airplane Mode.</label>
+    <label><input type="checkbox" id="ck-ip"> I understand this contains studio intellectual property, shared with me in confidence, and I will not forward or distribute the file without Matt's permission.</label>
+
+    <button id="enter" disabled>Enter the studio</button>
+  </div>
+</div>
+
+<!-- ===================== HEADER ===================== -->
+<header class="top" id="start">
+  <div class="wrap">
+    <p class="eyebrow">Tight Spiral Studios · a walkable tour</p>
+    <h1 class="main">The Studio, Played</h1>
+    <p class="sub">How one humanist mind reads a hard problem through eleven lenses — and an invitation to make MassBay the first pilot.</p>
+    <div class="comfort" role="group" aria-label="Reading comfort">
+      <button data-set="soft" aria-pressed="false">Softer</button>
+      <button data-set="default" aria-pressed="true">Default</button>
+      <button data-set="warm" aria-pressed="false">Warm-dark</button>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== PROGRESS ===================== -->
+<div class="progress">
+  <div class="wrap">
+    <div class="pbar"><div class="pfill" id="pfill"></div></div>
+    <span class="pcount" id="pcount">0 of 11 lenses</span>
+  </div>
+</div>
+
+<main class="wrap" id="tour">
+
+  <!-- INTRO -->
+  <section>
+    <p class="lede">Most people meet one problem with one tool. I meet it with a room full of ways of seeing, and I pick the ones the problem is actually asking for.</p>
+    <p>My father is an electrician. I teach writing. I design games and I build assessment. Those aren't separate careers — they're <em class="turn">lenses on the same system</em>. This tour walks you through eleven of them, one at a time, and lets you play the pieces where I've already put them to work. At the end: what I think we could build together at MassBay.</p>
+    <p><strong>The through-line:</strong> for two years my AI-literacy work has mostly been keeping English faculty from losing their minds. With ten days of quiet after the semester, I finally pulled together the pieces I'd been too buried to see — and this is the clearest way I've found to show them.</p>
+    <button class="btn" id="begin">Begin the walk</button>
+  </section>
+
+  <!-- LENS SLOTS injected by script -->
+  <div id="lenses"></div>
+
+  <!-- THE LEFT — interactive -->
+  <section id="the-left" hidden>
+    <div class="lens-head"><span class="lens-num" aria-hidden="true">+</span><h2>The move under all eleven: the Left</h2></div>
+    <p>Here is the part that's hard to explain and easy to feel. Pick a lens below and watch the <em class="turn">same problem</em> — student retention — get read a completely different way. The skill isn't any one lens. It's holding all of them and knowing which to reach for.</p>
+    <div class="lens-grid" id="left-grid" role="group" aria-label="Read retention through a lens"></div>
+    <div class="lens-read" id="left-read" role="status" aria-live="polite">Tap a lens to read retention through it.</div>
+    <p class="prov">This is what I mean by "the Left" — a borrowed idea from Borges, the vantage that sees every domain at once. No single person holds all of it. The system is designed so the right lens is summoned by the problem, not chosen by mood.</p>
+  </section>
+
+  <!-- PIPELINE -->
+  <section id="pipeline" hidden>
+    <div class="lens-head"><span class="lens-num" aria-hidden="true">↻</span><h2>How work actually moves: the pipeline</h2></div>
+    <p>A studio needs a spine or the ideas pile up and rot. Mine borrows from stage-gate engineering (the same discipline that ships cars and drugs) but bends it to protect the one scarce resource: human attention.</p>
+    <p>Every stage runs the same move: <strong>a machine clears the mechanical work → a human makes the judgment → the result is emitted.</strong> The machine never judges. It just clears the desk so my attention lands only on meaning.</p>
+    <h3>Five outcomes at every gate — because go/stop is too blunt</h3>
+    <div class="card2">
+      <strong>Go</strong> — meets the bar, advance.<br>
+      <strong>Conditional go</strong> — advance on one named fix.<br>
+      <strong>Recycle</strong> — send back one stage; the idea's still alive.<br>
+      <strong>Park</strong> — real, but not now; leaves with an un-park condition.<br>
+      <strong>Kill</strong> — stop, and say why.<br>
+      <strong>Pivot</strong> — the one-sentence answer to "what is this?" just changed; re-spine before anything else.
+    </div>
+    <p class="prov">Grounded in Gee's learning loop, stage-gate literature (Cooper), and Osterweil's four freedoms — not generic production orthodoxy. The provenance is part of the point: every rule names where it came from.</p>
+  </section>
+
+  <!-- GAMES: live embeds injected here -->
+  <section id="proof-intro" hidden>
+    <div class="lens-head"><span class="lens-num" aria-hidden="true">▶</span><h2>The proof: play the actual work</h2></div>
+    <p>These aren't screenshots. They're the real pieces, running live on this page, offline. Open one and play it. Then close it and keep walking.</p>
+    <p class="warn-box">Each opens in a sealed frame — nothing leaves this file. If a piece feels long, you've seen the idea after a screen or two; close it and move on.</p>
+  </section>
+
+  <div id="games"></div>
+
+  <!-- META / how it's made -->
+  <section id="meta" hidden>
+    <div class="lens-head"><span class="lens-num" aria-hidden="true">⚙</span><h2>Every piece carries its own receipt</h2></div>
+    <p>You may have noticed the small brown lines: <em>how this was made, where the idea came from, what a human decided.</em> That's not decoration. It's a discipline I call human-in-the-loop-visible: the studio never hides the algorithm, it labels the move.</p>
+    <p>For a college weighing AI, that matters more than any single tool. The question isn't "did a machine help make this?" It's "can you see exactly where, and who was accountable?" Every artifact here answers that on its own face.</p>
+    <p class="prov">This is the same principle I bring to the AI Task Force: label the moves, keep a human at every gate, never let provenance drift into a false promise.</p>
+  </section>
+
+  <!-- INVITATION -->
+  <section class="invite" id="invite" hidden>
+    <p class="eyebrow" style="color:#cfe8ea">The reason I built this for you two</p>
+    <h2>An invitation to make MassBay the first pilot</h2>
+    <p class="lede">I've been building calibration and practice tools that I believe could move the needle on retention — the thing we all actually lose sleep over. I'd rather prove that at home than anywhere else.</p>
+
+    <h3>What I'm proposing, at the smallest honest scale</h3>
+    <ul class="ask-list">
+      <li><strong>A calibration pilot.</strong> Run one course's placement or portfolio scoring through the norming engine (Confluence) — prove inter-rater reliability improves, on real MassBay work, de-identified to FERPA standard.</li>
+      <li><strong>A practice layer for retention.</strong> Build a small set of low-stakes practice materials — the kind of repeated, playful reps that keep a struggling student in the seat through week four.</li>
+      <li><strong>A shared read on the IP.</strong> Rebecca, from the teaching-and-learning side; and from IT/governance — I want your eyes on how this should be protected, licensed, and (if it earns it) scaled.</li>
+    </ul>
+
+    <h3>What I'm asking from each of you</h3>
+    <p><strong>Rebecca:</strong> a read on where this fits the CTL's retention and faculty-development priorities, and whether one course could host the pilot.</p>
+    <p><strong>CIO:</strong> a read on data handling, FERPA lanes, and IP protection — and whether the institution has an appetite to be the proving ground rather than the last adopter.</p>
+
+    <p class="prov">No budget ask in this document. This is an invitation to look and to talk. If it's worth a next step, the next step is one conversation.</p>
+  </section>
+
+  <div class="foot" id="foot" hidden>
+    <strong>The Studio, Played</strong> — prepared for Rebecca Heimel and the MassBay CIO.<br>
+    Tight Spiral Studios · Matt Walsh · walshero@gmail.com<br><br>
+    <em>Restricted.</em> This file contains studio intellectual property shared in confidence. Please don't forward or distribute it without permission. When you're done, you can close it and turn Airplane Mode back off.
+    <hr style="border-color:var(--accent);opacity:.4;margin:12px 0">
+    <em>How this was made:</em> Built in one file, fully offline, by Matt Walsh with Claude as the studio's build hand. Every embedded piece is the real working artifact, sandboxed. Human-in-the-loop: Matt named the eleven lenses, the audience, and the ask; the machine cleared the mechanical and assembled the tour. Nothing here was scraped; all pieces are the studio's own work.
+  </div>
+
+</main>
+
+<div class="restricted-strip">RESTRICTED · for Rebecca Heimel &amp; the MassBay CIO · not for distribution</div>
+
+<script>
+(function(){
+  "use strict";
+  var root=document.documentElement;
+
+  /* ---- GATE ---- */
+  var air=document.getElementById('ck-air'),
+      ip=document.getElementById('ck-ip'),
+      enter=document.getElementById('enter'),
+      gate=document.getElementById('gate');
+  function gateCheck(){ enter.disabled=!(air.checked && ip.checked); }
+  air.addEventListener('change',gateCheck);
+  ip.addEventListener('change',gateCheck);
+  enter.addEventListener('click',function(){
+    gate.hidden=true;
+    document.body.style.overflow='';
+    window.scrollTo(0,0);
+    document.getElementById('begin').focus();
+  });
+
+  /* ---- COMFORT ---- */
+  document.querySelectorAll('.comfort button').forEach(function(b){
+    b.addEventListener('click',function(){
+      var s=b.getAttribute('data-set');
+      if(s==='default') root.removeAttribute('data-pal'); else root.setAttribute('data-pal',s);
+      document.querySelectorAll('.comfort button').forEach(function(x){
+        x.setAttribute('aria-pressed', x===b?'true':'false');
+      });
+    });
+  });
+
+  /* ---- ELEVEN LENSES ---- */
+  var LENSES=[
+    {n:1, t:"Circuitry", d:"My father's trade. A system carries load and fails in specific ways — open or closed, short or ground. I read a broken process the way an electrician reads a dead outlet: where does the current stop, and is the failure safe?"},
+    {n:2, t:"Storytelling &amp; craft", d:"The turn arrives late and quiet; the weight rides on a concrete object, never a lecture. A learning experience is a story with a withheld beat — you don't tell the lesson, you let the player notice it."},
+    {n:3, t:"Trauma-informed design", d:"The person is whole, capable, the author of their own record. A start is never a verdict. Consequence lands on circumstance, never on worth. This is a floor, not a feature — nothing overrides it."},
+    {n:4, t:"Instructional design", d:"Scaffolding, transfer, the tight spiral: notice, adjust, try again with new understanding. The name of the studio is the method."},
+    {n:5, t:"Assessment &amp; calibration", d:"Norming, inter-rater reliability, the rubric as ground truth. The hardest, least glamorous work in education — and the place I think the biggest institutional wins are hiding."},
+    {n:6, t:"Portfolio development", d:"Evidence accumulating into a picture over time. A single score is a snapshot; a portfolio is the film. Retention lives in the film."},
+    {n:7, t:"AI literacy &amp; governance", d:"Two years keeping faculty sane. The work isn't the tool — it's helping people see where the machine helped, who stayed accountable, and what a human still owns."},
+    {n:8, t:"Game design", d:"The mechanic, the loop, the invitation to play. Engagement used to teach, never to trap — the craft of anticipation without the dark patterns."},
+    {n:9, t:"Systems thinking", d:"Feedback, seams, emergence. Engagement leaks where two components cancel; a score capped by its weakest seam, not its average. I look at the joins, not the parts."},
+    {n:10, t:"Magazine design", d:"Layout as rhetoric. The reader's eye moves along a path you built. Visual rhetoric and mnemonic design carry meaning the words can't."},
+    {n:11, t:"The artificial situation", d:"The constructed frame — the sandbox where a real problem can be safely rehearsed. A game is a lie that tells the truth about a system."}
+  ];
+
+  var LEFT_READS={
+    "Circuitry":"Retention is a circuit. A student drops when the current stops — a dead outlet somewhere between week one and week four. The electrician doesn't blame the lamp; he finds where the load fails. Fix the break, not the bulb.",
+    "Storytelling &amp; craft":"A student who leaves has a story with a missing beat — the moment no one noticed they'd stopped understanding. Retention work is restoring the withheld beat before the story ends early.",
+    "Trauma-informed design":"A struggling student is not a deficit to be flagged; they're a whole person mid-story. Frame the common case as normal, resources as assets ('your crew'), and never let an early stumble read as a verdict.",
+    "Instructional design":"Retention is a tight spiral that broke. The loop — notice, adjust, try again — stalled because the 'notice' never reached the student or the teacher in time. Close the loop faster.",
+    "Assessment &amp; calibration":"If two instructors score the same work differently, a student's fate is noise, not signal. Calibrate the raters and you remove the cruelest kind of attrition — the arbitrary kind.",
+    "Portfolio development":"You can't see retention in a midterm. You see it across a portfolio — the film, not the frame. Give the student evidence of their own growth and you give them a reason to stay for the next frame.",
+    "AI literacy &amp; governance":"An AI can flag a wobbling student in week three — but only a human should reach out, and the student should see exactly how they were noticed. Label the move or the help becomes surveillance.",
+    "Game design":"Week four attrition is a difficulty curve failure. The low-stakes, playful rep — the thing that keeps a player in the seat one more turn — is the same thing that keeps a student enrolled one more week.",
+    "Systems thinking":"Retention leaks at the seams — advising to instruction, placement to first assignment. The number is capped by the weakest handoff, not the average effort. Fix the join.",
+    "Magazine design":"A confused student's eye has nowhere to go. Lay the course out like a good spread — one path, clear signposts, the next move always visible — and half the 'I got lost and left' disappears.",
+    "The artificial situation":"Let a student rehearse the hard thing in a sandbox where failing is cheap and reversible. They build the nerve to do it for real. The game is the safe place to fail before the stakes are their GPA."
+  };
+
+  var lensHost=document.getElementById('lenses');
+  LENSES.forEach(function(L){
+    var s=document.createElement('section');
+    s.hidden=true; s.className='lens-slot';
+    s.innerHTML='<div class="lens-head"><span class="lens-num" aria-hidden="true">'+L.n+
+      '</span><h2>'+L.t+'</h2></div><p>'+L.d+'</p>';
+    lensHost.appendChild(s);
+  });
+
+  /* build the Left grid */
+  var lg=document.getElementById('left-grid'), lr=document.getElementById('left-read');
+  LENSES.forEach(function(L){
+    var b=document.createElement('button');
+    b.className='lens-chip'; b.setAttribute('aria-pressed','false');
+    b.innerHTML=L.t;
+    b.addEventListener('click',function(){
+      lg.querySelectorAll('.lens-chip').forEach(function(x){x.setAttribute('aria-pressed','false');});
+      b.setAttribute('aria-pressed','true');
+      lr.innerHTML='<strong>'+L.t+' reads retention as:</strong><br>'+LEFT_READS[L.t];
+    });
+    lg.appendChild(b);
+  });
+
+  /* ---- LIVE EMBEDDED PIECES (real artifacts as sandboxed data-URI iframes) ---- */
+  var PIECES=[
+    {
+      title:"The Timing Belt — a governance protocol",
+      note:"Keeps memory, the working shelf, and the archive turning in phase.",
+      html:'<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{font:17px/1.55 -apple-system,Segoe UI,sans-serif;margin:0;padding:18px;background:#f4efe6;color:#1b1712}h1{font-size:1.3rem;margin:0 0 .3em}.limit{background:#f6e9d4;border-left:5px solid #8a5a12;padding:12px 14px;border-radius:8px;margin:12px 0;font-size:.95rem}ol{padding-left:0;list-style:none;counter-reset:s}li{counter-increment:s;position:relative;padding:10px 10px 10px 46px;border:1px solid #c9bfae;border-radius:9px;margin:8px 0;background:#fbf8f2}li::before{content:counter(s);position:absolute;left:10px;top:10px;width:28px;height:28px;background:#6e4700;color:#f4efe6;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700}b{color:#6e4700}</style></head><body><h1>The Timing Belt</h1><p>A sync copies. A timing belt keeps every part turning <b>in phase</b> so the engine doesn\'t tear itself apart.</p><div class="limit"><b>The honest limit.</b> A single offline file can\'t reach out and write to three places at once. The belt is a protocol a human runs — it finds every place the parts have slipped and names the fix. Promising the wire is the exact false promise it exists to prevent.</div><ol><li><b>Inventory</b> each surface — read, don\'t assume.</li><li><b>Verify</b> every file said to be "done" actually exists.</li><li><b>Find</b> the slips — missing, conflicting, stale, ghosts.</li><li><b>Name</b> the one correcting move, and who makes it.</li><li><b>Emit</b> the ledger so the fix lands instead of evaporating.</li></ol><p style="font-size:.82rem;color:#6e4700;border-top:1px dashed #c9bfae;padding-top:8px"><em>How this was made:</em> named by the founder — "this is a timing belt, not a sync." The no-auto-wire limit is written in so it can\'t drift into a false promise.</p></body></html>'
+    },
+    {
+      title:"The Legibility Optimizer — accessibility as a floor",
+      note:"Tune the reading surface to your own eye. Move a slider; the text changes live.",
+      html:'<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>:root{--sz:20px;--lh:1.6;--ls:.02em}body{font-family:Atkinson Hyperlegible,Segoe UI,system-ui,sans-serif;margin:0;padding:18px;background:#f4efe6;color:#1b1712}h1{font-size:1.3rem;margin:0 0 .5em}.ctrl{margin:12px 0}label{display:block;font-weight:700;font-size:.9rem;margin-bottom:4px}.v{color:#6e4700;font-weight:400}input[type=range]{width:100%;height:44px;accent-color:#6e4700}.reader{max-width:64ch;font-size:var(--sz);line-height:var(--lh);letter-spacing:var(--ls);background:#fbf8f2;border:1px solid #c9bfae;border-radius:10px;padding:18px;margin-top:12px}</style></head><body><h1>Read this at your own setting</h1><div class="ctrl"><label>Text size <span class="v" id="sv">20px</span></label><input type="range" id="sz" min="16" max="34" value="20"></div><div class="ctrl"><label>Line spacing <span class="v" id="lv">1.6</span></label><input type="range" id="lh" min="1.3" max="2.1" step=".05" value="1.6"></div><div class="ctrl"><label>Letter spacing <span class="v" id="lsv">0.02em</span></label><input type="range" id="ls" min="0" max=".12" step=".01" value=".02"></div><div class="reader" id="r">The optimizer is not a comfort add-on. It is part of the accessibility floor. A surface that can\'t be tuned to the individual eye quietly fails some readers — measured in a hundredth of an em, a few points of size, a line-height set once and never revisited. Your eyes are the verdict, not the numbers.</div><script>var R=document.documentElement.style;function b(id,v,f){var e=document.getElementById(id),o=document.getElementById(v);e.oninput=function(){R.setProperty(f,f==="--sz"?e.value+"px":(f==="--ls"?e.value+"em":e.value));o.textContent=f==="--sz"?e.value+"px":(f==="--ls"?e.value+"em":e.value)}}b("sz","sv","--sz");b("lh","lv","--lh");b("ls","lsv","--ls");<\/script></body></html>'
+    },
+    {
+      title:"Choose Your Leader — a noticing game",
+      note:"A taste of the mechanic: judge a leader on a quote alone, then watch the record turn.",
+      html:'<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{font:18px/1.6 Georgia,serif;margin:0;padding:20px;background:#1a1712;color:#f3e7cf}.tv{background:#000;border:6px solid #4a3f2c;border-radius:14px;padding:22px;margin:10px 0}.q{font-size:1.15rem;font-style:italic}.who{font-family:system-ui,sans-serif;font-size:.8rem;color:#c8900a;margin-top:10px;letter-spacing:.05em}.btn{font-family:system-ui,sans-serif;min-height:48px;padding:12px 18px;margin:8px 8px 0 0;border-radius:10px;border:2px solid #c8900a;background:transparent;color:#f3e7cf;font-size:1rem;font-weight:700;cursor:pointer}.btn.on{background:#c8900a;color:#1a1712}.rec{background:#2a2620;border-left:5px solid #c8900a;padding:14px 16px;border-radius:8px;margin-top:14px;font-family:system-ui,sans-serif;font-size:.95rem;display:none}.rec.show{display:block}.p{font-family:system-ui,sans-serif;font-size:.82rem;color:#c8900a;margin-top:14px}</style></head><body><p style="font-family:system-ui,sans-serif;font-size:.8rem;letter-spacing:.05em;color:#c8900a;margin:0 0 6px">1969 · A LIVING ROOM · THE SET IS WARM</p><div class="tv"><p class="q">"And so tonight — to you, the great silent majority of my fellow Americans — I ask for your support."</p><p class="who">— an address, watched live</p></div><p>You\'ve heard only this. How much do you trust the speaker?</p><button class="btn" id="a">I trust this</button><button class="btn" id="b">I\'m not sure</button><div class="rec" id="r"><strong>Now the record turns.</strong> As these words were spoken, a bombing campaign the audience knew nothing about had been running in secret for months. The speech asked for trust in the same breath it withheld the thing that would have broken it.<br><br>You didn\'t judge the leader. You judged <em>what you were allowed to see.</em></div><p class="p">A taste of the full game. The point isn\'t gotcha — it\'s noticing the gap between the word and the world. That noticing is the skill.</p><script>function pick(x){document.getElementById("a").classList.remove("on");document.getElementById("b").classList.remove("on");x.classList.add("on");document.getElementById("r").classList.add("show")}document.getElementById("a").onclick=function(){pick(this)};document.getElementById("b").onclick=function(){pick(this)};<\/script></body></html>'
+    }
+  ];
+
+  var gamesHost=document.getElementById('games');
+  PIECES.forEach(function(P){
+    var sec=document.createElement('section');
+    sec.hidden=true; sec.className='game-slot';
+    var shell=document.createElement('div'); shell.className='embed-shell';
+    var bar=document.createElement('div'); bar.className='embed-bar';
+    bar.innerHTML='<span>'+P.title+'</span><span class="live">LIVE · OFFLINE</span>';
+    var wrapd=document.createElement('div');
+    wrapd.innerHTML='<p style="padding:0 4px;margin:.4em 0 0">'+P.note+'</p>';
+    var openBtn=document.createElement('button');
+    openBtn.className='btn'; openBtn.textContent='Open '+P.title.split(' — ')[0];
+    var mounted=false, frame=null;
+    openBtn.addEventListener('click',function(){
+      if(!mounted){
+        frame=document.createElement('iframe');
+        frame.className='piece'; frame.setAttribute('sandbox','allow-scripts');
+        frame.setAttribute('title',P.title);
+        frame.src='data:text/html;charset=utf-8,'+encodeURIComponent(P.html);
+        shell.appendChild(frame);
+        mounted=true; openBtn.textContent='Close '+P.title.split(' — ')[0];
+      } else {
+        frame.remove(); mounted=false; openBtn.textContent='Open '+P.title.split(' — ')[0];
+      }
+    });
+    shell.appendChild(bar);
+    sec.appendChild(wrapd);
+    sec.appendChild(openBtn);
+    sec.appendChild(shell);
+    gamesHost.appendChild(sec);
+  });
+
+  /* ---- WALK SEQUENCE ---- */
+  var steps=[];
+  document.querySelectorAll('.lens-slot').forEach(function(s){steps.push(s);});
+  steps.push(document.getElementById('the-left'));
+  steps.push(document.getElementById('pipeline'));
+  steps.push(document.getElementById('proof-intro'));
+  document.querySelectorAll('.game-slot').forEach(function(s){steps.push(s);});
+  steps.push(document.getElementById('meta'));
+  steps.push(document.getElementById('invite'));
+  steps.push(document.getElementById('foot'));
+
+  var revealed=0;
+  var pfill=document.getElementById('pfill'), pcount=document.getElementById('pcount');
+  var totalLenses=LENSES.length;
+
+  function updateProgress(){
+    var lensesShown=Math.min(revealed,totalLenses);
+    pcount.textContent=lensesShown+' of '+totalLenses+' lenses';
+    pfill.style.width=(revealed/steps.length*100)+'%';
+  }
+
+  function addNextButton(container){
+    var b=document.createElement('button');
+    b.className='btn'; b.textContent='Next';
+    b.addEventListener('click',function(){
+      b.disabled=true; b.style.display='none';
+      revealNext();
+    });
+    var wrapBtn=document.createElement('div');
+    wrapBtn.appendChild(b);
+    container.appendChild(wrapBtn);
+    return b;
+  }
+
+  function revealNext(){
+    if(revealed>=steps.length) return;
+    var el=steps[revealed];
+    el.hidden=false;
+    revealed++;
+    updateProgress();
+    el.scrollIntoView({behavior:'smooth', block:'start'});
+    if(revealed<steps.length){
+      var nb=addNextButton(el);
+    }
+  }
+
+  document.getElementById('begin').addEventListener('click',function(){
+    this.disabled=true; this.style.display='none';
+    revealNext();
+  });
+
+  updateProgress();
+  window.scrollTo(0,0);
+})();
+</script>
+</body>
+</html>
