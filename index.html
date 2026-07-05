@@ -3,172 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Teaspoon — a game that is a paper · Tight Spiral Productions</title>
+<title>Tight Spiral Productions</title>
 <style>
-  :root{ --step: 1rem; }
-  body.kitchen{ --paper:#f7f2e9; --ink:#2b2620; --dim:#6b6156; --card:#fffaf1; --edge:#d8cdbc; --accent:#8a5a2b; --accent-ink:#fdf6ea; --chip:#ece3d2; --chip-ink:#4a4238; --good:#3f6b3f; }
-  body.dojo{ --paper:#211d18; --ink:#ffd9a0; --dim:#c8a878; --card:#2a251e; --edge:#4a4133; --accent:#ffb95e; --accent-ink:#211d18; --chip:#3a332a; --chip-ink:#ffd9a0; --good:#a8d8a0; }
-  body.confluence{ --paper:#16211f; --ink:#d7ece6; --dim:#8fb3ab; --card:#1d2b28; --edge:#37504b; --accent:#63c7b2; --accent-ink:#121b19; --chip:#243733; --chip-ink:#bfe3da; --good:#a8d8a0; }
-  *{box-sizing:border-box}
-  html{scroll-behavior:auto}
-  body{ margin:0; background:var(--paper); color:var(--ink); font-family:Georgia,'Iowan Old Style',serif; font-size:calc(var(--step) * 1.15); line-height:1.6; transition:background .3s,color .3s; }
-  body.bigger{--step:1.22rem}
-  main{max-width:42rem; margin:0 auto; padding:1.5rem 1.25rem 4rem}
-  h1{font-size:2.1em; line-height:1.15; margin:.5rem 0 .25rem}
-  h2{font-size:1.35em; margin:2.2rem 0 .6rem; border-bottom:2px solid var(--edge); padding-bottom:.3rem}
-  p{margin:.7rem 0}
-  .eyebrow{font-family:'Helvetica Neue',Arial,sans-serif; font-size:.75em; letter-spacing:.14em; text-transform:uppercase; color:var(--dim)}
-  .scene{font-style:italic; color:var(--dim); font-size:1.05em}
-  button{ font:inherit; min-height:44px; min-width:44px; padding:.5rem 1rem; border:2px solid var(--edge); border-radius:.6rem; background:var(--card); color:var(--ink); cursor:pointer; }
-  button.primary{background:var(--accent); color:var(--accent-ink); border-color:var(--accent); font-weight:bold}
-  button:focus-visible, input:focus-visible{outline:3px solid var(--accent); outline-offset:3px}
-  .row{display:flex; flex-wrap:wrap; gap:.6rem; align-items:center; margin:.8rem 0}
-  .kernel{ background:var(--card); border:2px solid var(--edge); border-radius:.8rem; padding:1rem 1.1rem; margin:1rem 0; }
-  .kernel .fact{font-size:1.25em; font-weight:bold}
-  .chips{display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.6rem}
-  .chip{ font-family:'Helvetica Neue',Arial,sans-serif; font-size:.72em; background:var(--chip); color:var(--chip-ink); border-radius:1rem; padding:.25rem .7rem; letter-spacing:.03em; }
-  .chip.hitl{border:1.5px solid var(--good)}
-  input[type=number]{ font:inherit; font-size:1.3em; width:7ch; min-height:44px; padding:.4rem .6rem; border:2px solid var(--edge); border-radius:.6rem; background:var(--card); color:var(--ink); }
-  #convOut{font-size:1.15em; margin-top:.6rem}
-  #convOut strong{color:var(--accent)}
-  .rollup{font-size:1.2em; margin:.5rem 0}
-  .rollup .n{font-weight:bold; font-size:1.3em}
-  #rollNote{color:var(--dim)}
-  #sizzle{ position:fixed; inset:0; pointer-events:none; opacity:0; z-index:9; background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(128,128,128,.35) 2px 3px), repeating-linear-gradient(90deg, transparent 0 3px, rgba(128,128,128,.2) 3px 5px); }
-  #sizzle.on{animation:sizz .38s steps(6) 1}
-  @keyframes sizz{0%{opacity:.9}100%{opacity:0}}
-  @media (prefers-reduced-motion:reduce){ #sizzle.on{animation:none; opacity:0} }
-  .belt{border-top:2px solid var(--edge); margin-top:2.5rem; padding-top:1rem; color:var(--dim); font-size:.92em}
-  .belt b{color:var(--ink)}
-  a{color:var(--accent)}
+:root{--bg:#1a1410;--ink:#f4e4c1;--amber:#e8b04a;--dim:#b89968;--line:#3a2f22;}
+*{box-sizing:border-box;}
+body{background:var(--bg);color:var(--ink);font-family:Georgia,'Times New Roman',serif;line-height:1.6;margin:0;padding:2rem 1.25rem;max-width:44rem;margin:0 auto;}
+h1{font-size:2rem;color:var(--amber);margin:0 0 .25rem;letter-spacing:.5px;}
+.tag{color:var(--dim);font-style:italic;margin:0 0 2rem;font-size:1.05rem;}
+h2{font-size:.85rem;text-transform:uppercase;letter-spacing:2px;color:var(--dim);border-bottom:1px solid var(--line);padding-bottom:.4rem;margin:2.5rem 0 1rem;}
+a.game{display:block;background:#221a12;border:1px solid var(--line);border-radius:10px;padding:1.1rem 1.25rem;margin:.75rem 0;text-decoration:none;color:var(--ink);transition:border-color .15s;}
+a.game:hover,a.game:focus-visible{border-color:var(--amber);outline:2px solid var(--amber);outline-offset:2px;}
+a.game .name{font-size:1.25rem;color:var(--amber);display:block;}
+a.game .desc{color:var(--dim);font-size:.98rem;margin-top:.2rem;}
+footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:var(--dim);font-size:.9rem;}
 </style>
 </head>
-<body class="dojo">
-<div id="sizzle" aria-hidden="true"></div>
-<main>
-  <p class="eyebrow">Tight Spiral Productions · Play. Notice. Design.</p>
-  <h1>The Teaspoon</h1>
-  <p class="eyebrow">A game that is a paper · offline · single file · every fact is a tagged kernel</p>
-  <p class="scene">You are standing in a kitchen, holding a teaspoon. It is the smallest measure on the rack. Everything larger is built from it. Someone once checked exactly what it holds, wrote it down, and signed it — so nobody ever has to guess again.</p>
-  <div class="row" role="group" aria-label="Comfort controls">
-    <button id="sizeBtn" aria-pressed="false">Larger text</button>
-    <span class="eyebrow">Comfort is a knob, never a wall.</span>
-  </div>
-  <h2>Act I — The Kernel</h2>
-  <p>This is a kernel: one fact, small enough to verify completely, tagged with where it came from and who checked it.</p>
-  <div class="kernel">
-    <div class="fact">1 teaspoon = 4.92892 milliliters</div>
-    <div class="chips">
-      <span class="chip">source: NIST SP 811</span>
-      <span class="chip hitl">HITL: human-checked</span>
-      <span class="chip">folded: 2026-07-04</span>
-      <span class="chip">status: canon</span>
-    </div>
-  </div>
-  <p>Use it. The converter below never guesses — it multiplies by the kernel. Same answer at midnight, offline, forever, for the energy cost of one multiplication.</p>
-  <div class="row">
-    <label for="tspIn"><strong>Teaspoons:</strong></label>
-    <input type="number" id="tspIn" value="3" min="0" step="0.5" inputmode="decimal">
-    <button class="primary" id="convBtn">Convert</button>
-  </div>
-  <p id="convOut" aria-live="polite" role="status"></p>
-  <h2>Act II — The Katamari</h2>
-  <p>Kernels compose. Small verified circuits click into larger ones, like a grip and a pivot becoming a throw. Roll the teaspoon and watch bigger measures accrete — each inheriting the verification of its parts. You never check the cup. You checked the teaspoon; the cup follows by arithmetic.</p>
-  <div class="kernel">
-    <p class="rollup">Rolled: <span class="n" id="tspCount">0</span> tsp &nbsp;=&nbsp; <span class="n" id="tbspCount">0</span> tbsp &nbsp;=&nbsp; <span class="n" id="cupCount">0</span> cup</p>
-    <div class="row">
-      <button class="primary" id="rollBtn">Roll one teaspoon</button>
-      <button id="rollTen">Roll ten</button>
-      <button id="rollReset">Empty the bowl</button>
-    </div>
-    <p id="rollNote" aria-live="polite"></p>
-    <div class="chips">
-      <span class="chip">kernel: 3 tsp = 1 tbsp</span>
-      <span class="chip">kernel: 16 tbsp = 1 cup</span>
-      <span class="chip hitl">HITL: human-checked</span>
-    </div>
-  </div>
-  <h2>Act III — The Swap</h2>
-  <p>Now the trick that matters. Swap the skin. The look changes — the kernels do not. A skin is an epistemic frame: a way of reading. Kitchen reads the teaspoon as cooking. Dojo reads it as drilled technique. Confluence reads it as a river feeding a machine. The verified units survive every frame you dress them in. That is what makes them kernels.</p>
-  <div class="row" role="group" aria-label="Skin — epistemic frame">
-    <button id="skinKitchen" aria-pressed="false">Kitchen</button>
-    <button id="skinDojo" aria-pressed="true">Dojo</button>
-    <button id="skinConfluence" aria-pressed="false">Confluence</button>
-  </div>
-  <p id="skinNote" aria-live="polite" class="scene">Current frame: Dojo — amber on charcoal. Small moves, drilled once, trusted in the throw.</p>
-  <h2>Act IV — The Receipts</h2>
-  <p>Why build this way? Because the measurements are in. Each stat below is itself a kernel — tagged, sourced, checkable.</p>
-  <div class="kernel"><div class="fact">95% of enterprise AI pilots: no measurable ROI</div><div class="chips"><span class="chip">source: MIT NANDA, GenAI Divide, 2025</span><span class="chip">caveat: methodology contested</span></div></div>
-  <div class="kernel"><div class="fact">Raw LLM on verifiable legal questions: 58–88% hallucination</div><div class="chips"><span class="chip">source: Dahl et al., J. Legal Analysis 2024</span></div></div>
-  <div class="kernel"><div class="fact">Retrieval-grounded legal tools: 17–33%</div><div class="chips"><span class="chip">source: Magesh et al., JELS 2025</span></div></div>
-  <div class="kernel"><div class="fact">Grounded summarization: under 2%</div><div class="chips"><span class="chip">source: aggregate benchmarks 2025–26</span></div></div>
-  <div class="kernel"><div class="fact">Retrieve-and-present the verified passage: 0%</div><div class="chips"><span class="chip">source: arXiv 2403.12678, 2024</span><span class="chip hitl">the teaspoon, proven</span></div></div>
-  <p><strong>The gradient:</strong> error falls as the answer moves out of the model's memory and into verified units. This page lives at the far end. Nothing here is generated at read time. Everything was checked once and folded.</p>
-  <div class="belt">
-    <p><b>The gears behind this page:</b> memory as index, files as truth; provenance chips on every kernel; a timing-belt fold cycle that dedupes copies and byte-verifies every file at session close. This artifact is itself a product of that belt — even this paper.</p>
-    <p><b>Tethered artifact:</b> the text half is <i>the-teaspoon-paper.md</i> — same kernels, prose frame. Two skins, one truth.</p>
-    <p>Tight Spiral Productions · single-file · no network calls · no tracking · built 2026-07-04</p>
-  </div>
-</main>
-<script>
-(function(){
-  "use strict";
-  window.scrollTo(0,0);
-  var K_TSP_ML = 4.92892;
-  var K_TSP_PER_TBSP = 3;
-  var K_TBSP_PER_CUP = 16;
-  function $(id){return document.getElementById(id);}
-  function convert(){
-    var v = parseFloat($("tspIn").value);
-    if(isNaN(v) || v < 0){ $("convOut").textContent = "Enter a number of teaspoons, zero or more."; return; }
-    var ml = v * K_TSP_ML;
-    var tbsp = v / K_TSP_PER_TBSP;
-    var cup = tbsp / K_TBSP_PER_CUP;
-    $("convOut").innerHTML = v + " tsp = <strong>" + ml.toFixed(2) + " mL</strong> = " + tbsp.toFixed(2) + " tbsp = " + cup.toFixed(3) + " cup. Every number traces to a tagged kernel above.";
-  }
-  $("convBtn").addEventListener("click", convert);
-  $("tspIn").addEventListener("keydown", function(e){ if(e.key==="Enter") convert(); });
-  var tsp = 0;
-  function paintRoll(msg){
-    $("tspCount").textContent = tsp;
-    $("tbspCount").textContent = (tsp / K_TSP_PER_TBSP).toFixed(2).replace(/\.00$/,"");
-    $("cupCount").textContent = (tsp / (K_TSP_PER_TBSP * K_TBSP_PER_CUP)).toFixed(3).replace(/\.000$/,"");
-    $("rollNote").textContent = msg || "";
-  }
-  function milestone(){
-    if(tsp === 3)  return "Three teaspoons just became a tablespoon. First circuit closed.";
-    if(tsp === 48) return "Forty-eight teaspoons: a full cup. You verified none of it — the teaspoon did.";
-    if(tsp > 0 && tsp % 48 === 0) return "Another cup accretes. The katamari grows.";
-    if(tsp > 0 && tsp % 3 === 0)  return "Another tablespoon clicks into place.";
-    return "";
-  }
-  $("rollBtn").addEventListener("click", function(){ tsp += 1; paintRoll(milestone()); });
-  $("rollTen").addEventListener("click", function(){ tsp += 10; paintRoll(milestone() || "Ten small verified things, rolled in."); });
-  $("rollReset").addEventListener("click", function(){ tsp = 0; paintRoll("Bowl emptied. The kernels remain."); });
-  paintRoll("");
-  var frames = {
-    kitchen:    "Current frame: Kitchen — warm paper, morning light, flour on the counter.",
-    dojo:       "Current frame: Dojo — amber on charcoal. Small moves, drilled once, trusted in the throw.",
-    confluence: "Current frame: Confluence — rivers meeting in the dark, gears turning on a timing belt."
-  };
-  var skinBtns = { kitchen:$("skinKitchen"), dojo:$("skinDojo"), confluence:$("skinConfluence") };
-  function setSkin(name){
-    var s = $("sizzle");
-    s.classList.remove("on"); void s.offsetWidth; s.classList.add("on");
-    var big = document.body.classList.contains("bigger");
-    document.body.className = name + (big ? " bigger" : "");
-    for(var k in skinBtns){ skinBtns[k].setAttribute("aria-pressed", String(k===name)); }
-    $("skinNote").textContent = frames[name];
-  }
-  skinBtns.kitchen.addEventListener("click", function(){ setSkin("kitchen"); });
-  skinBtns.dojo.addEventListener("click", function(){ setSkin("dojo"); });
-  skinBtns.confluence.addEventListener("click", function(){ setSkin("confluence"); });
-  $("sizeBtn").addEventListener("click", function(){
-    var on = document.body.classList.toggle("bigger");
-    this.setAttribute("aria-pressed", String(on));
-    this.textContent = on ? "Standard text" : "Larger text";
-  });
-})();
-</script>
+<body>
+<h1>Tight Spiral Productions</h1>
+<p class="tag">Play. Notice. Design.</p>
+
+<h2>Playable now</h2>
+<a class="game" href="behind-this-door.html">
+  <span class="name">Behind This Door</span>
+  <span class="desc">A choice-driven single-room game. Fully offline, keyboard-friendly.</span>
+</a>
+<a class="game" href="warriors-fantasy-arcade.html">
+  <span class="name">Warriors Fantasy Arcade</span>
+  <span class="desc">A quick arcade loop built for two players at one screen.</span>
+</a>
+
+<footer>
+Educational games built accessibility-first — legible on load, offline by default, no logins.<br>
+Tight Spiral Productions
+</footer>
 </body>
 </html>
