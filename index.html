@@ -5,90 +5,71 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>EN195 Creative Writing — Workshop in a Box</title>
 <!--
-  en195.html — Tight Spiral Productions
-  EN195 Creative Writing, Summer 2026 (6-Week-1) — the course as a playable front door.
-  FERPA: contains NO student names, submission links, group rosters, or per-student data.
-  CHANGELOG (C6): v3 2026-07-05 — ONE working file. All games inlined, zero external links.
-                  Sandbags climb + three reader-role games playable in-page. Netlify/Pages ready.
+  index.html — Tight Spiral Productions — EN195 Creative Writing, Summer 2026
+  v4 2026-07-05 — IMAGE-FIRST. Cut-paper SVG. Balloon RISES as you cut drawn sandbags.
+  Syllabus is a drawn river; reader-roles are drawn vignettes. Screen >50% image.
+  Medium Gate: Lane A cut-paper SVG. FERPA-clean. No emoji. One offline file.
 -->
 <style>
   :root{
-    --serif: Georgia, 'Times New Roman', serif;
-    --sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-    --display: 'Trebuchet MS', var(--sans);
-    --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --ink2:#1f1b12;
-    --line:#e3d6b8; --line2:#cdbf9c; --sky:#d7dee6;
-    --accent:#3a4654; --accent2:#2b3540;
-    --gold:#a06b12; --gold-br:#8a5c0e; --gold-pale:#f5ead2;
+    --serif:Georgia,'Times New Roman',serif; --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    --display:'Trebuchet MS',var(--sans);
+    --bg:#eaddc4; --surface:#fff7e8; --ink:#231d12; --ink2:#3a3120; --line2:#c2ad80;
+    --sky1:#bcd4e0; --sky2:#e6eef0; --land:#9db87e; --land2:#7fa063;
+    --gold:#c98a1e; --gold-br:#9a6910; --paper:#e9d9b8; --paperEdge:#cbb583;
+    --water1:#7fb0c4; --water2:#a7cdd9; --balloon:#c85a4a; --balloon2:#b0483a; --accent:#3a4654;
   }
-  body.softer{
-    --bg:#d9d2c4; --surface:#e2dccf; --ink:#241f16; --ink2:#241f16;
-    --line:#c9bfa6; --line2:#b3a684; --sky:#c5cdd6; --gold-pale:#dcd2ba;
-  }
-  body.warm{
-    --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0;
-    --line:#4a4230; --line2:#5e553e; --sky:#2a2e34;
-    --accent:#8fa6bd; --accent2:#9fb6cd; --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a;
-  }
+  body.softer{ --bg:#dccdae; --surface:#efe4cd; --ink:#241f16; --sky1:#aac4d2; --sky2:#d6e0e2; --land:#8fab72; --paper:#dccbaa; }
+  body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#e0d2ad; --line2:#5e553e;
+    --sky1:#26323a; --sky2:#31414a; --land:#3d4a30; --land2:#2f3a25; --gold:#f0c357; --gold-br:#f0c357;
+    --paper:#332c1a; --paperEdge:#4a3f22; --water1:#2c4a55; --water2:#365a66; --balloon:#d8674f; --balloon2:#b85340; --accent:#8fa6bd; }
   *{ box-sizing:border-box; }
-  html{ -webkit-text-size-adjust:100%; }
-  body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; margin:0; padding:0 0 4rem; }
-  .wrap{ max-width:720px; margin:0 auto; padding:0 1rem; }
+  body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.5; font-size:18px; margin:0; padding:0 0 3rem; }
+  .wrap{ max-width:760px; margin:0 auto; padding:0 .8rem; }
+  svg{ display:block; width:100%; height:auto; }
   .comfort{ position:sticky; top:0; z-index:40; background:var(--accent); color:#fff; display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; padding:.5rem .8rem; font-family:var(--sans); }
-  .comfort .lbl{ font:800 .74rem/1 var(--sans); letter-spacing:.04em; text-transform:uppercase; opacity:.92; margin-right:.2rem; }
-  .cbtn{ font:700 .86rem/1 var(--sans); min-height:40px; padding:.5rem .7rem; border:2px solid #fff; border-radius:9px; background:transparent; color:#fff; cursor:pointer; }
+  .comfort .lbl{ font:800 .72rem/1 var(--sans); letter-spacing:.05em; text-transform:uppercase; opacity:.9; }
+  .cbtn{ font:700 .84rem/1 var(--sans); min-height:42px; padding:.5rem .7rem; border:2px solid #fff; border-radius:9px; background:transparent; color:#fff; cursor:pointer; }
   .cbtn[aria-pressed="true"]{ background:#fff; color:var(--accent); }
-  .cbtn:focus-visible, .station:focus-visible, .rolecard:focus-visible, .opt:focus-visible, .bag:focus-visible, a:focus-visible{ outline:3px solid var(--gold); outline-offset:2px; }
-  h1{ font-size:1.85rem; line-height:1.14; color:var(--ink); margin:.4rem 0 .5rem; }
-  h2{ font-size:1.32rem; color:var(--ink); margin:1.6rem 0 .5rem; }
-  h3{ font-size:1.08rem; color:var(--ink); margin:.2rem 0 .4rem; }
-  p{ margin:0 0 .9rem; } .lead{ font-size:1.12rem; } .beat{ font-style:italic; }
-  .kicker{ font:800 .72rem/1 var(--sans); letter-spacing:.16em; text-transform:uppercase; color:var(--gold-br); margin:0 0 .3rem; }
-  .river{ border:3px solid var(--line2); border-radius:16px; background:var(--surface); padding:.9rem 1rem 1.1rem; margin:1rem 0 1.4rem; }
-  .week{ border-left:5px solid var(--gold); padding:.5rem 0 .5rem .8rem; margin:0 0 .2rem; }
-  .week:not(:last-child){ border-bottom:1px dashed var(--line2); padding-bottom:.7rem; }
-  .week .wk{ font:800 .78rem/1 var(--sans); letter-spacing:.05em; text-transform:uppercase; color:var(--accent2); }
-  .week .dt{ font:600 .8rem/1 var(--sans); color:var(--ink2); }
-  .week .wt{ font-weight:700; display:block; margin:.15rem 0; }
-  .stations{ display:grid; gap:.7rem; margin:.6rem 0 1.2rem; }
-  .station{ display:block; text-align:left; width:100%; border:3px solid var(--accent2); border-radius:15px; background:var(--surface); color:var(--ink); padding:.85rem 1rem; cursor:pointer; min-height:66px; font-family:var(--serif); }
-  .station .sn{ font:800 .72rem/1 var(--sans); letter-spacing:.08em; text-transform:uppercase; color:var(--gold-br); }
-  .station .st{ font:800 1.14rem/1.15 var(--display); display:block; margin:.15rem 0; }
-  .station .sd{ font-size:.92rem; color:var(--ink2); }
-  .station[aria-expanded="true"]{ border-color:var(--gold); }
-  .detail{ border:2px solid var(--line2); border-top:none; border-radius:0 0 13px 13px; background:var(--gold-pale); margin:-.5rem 0 .8rem; padding:.8rem 1rem; }
-  .detail[hidden]{ display:none; }
-  .detail ul{ margin:.3rem 0 .3rem 1.1rem; padding:0; } .detail li{ margin:.2rem 0; }
-  .climb{ border:3px solid var(--accent2); border-radius:16px; background:var(--surface); padding:1rem; margin:1rem 0; }
-  .balloon{ text-align:center; border:2px solid var(--gold); border-radius:14px; background:var(--gold-pale); padding:1rem; margin-bottom:.8rem; transition:transform .4s ease; }
-  .balloon .alt{ font:800 .7rem/1 var(--sans); letter-spacing:.1em; text-transform:uppercase; color:var(--gold-br); }
-  .balloon .altnum{ font:800 2rem/1.1 var(--display); color:var(--ink); }
-  .balloon .carry{ font-size:.92rem; color:var(--ink2); margin-top:.3rem; }
-  .climb-inst{ font-size:.92rem; color:var(--ink2); }
-  .bags{ display:grid; gap:.5rem; }
-  .bag{ text-align:left; border:2px solid var(--line2); border-radius:11px; background:var(--bg); color:var(--ink); padding:.7rem .85rem; min-height:52px; cursor:pointer; font-family:var(--serif); font-size:1rem; transition:opacity .3s, transform .3s; }
-  .bag.cut{ opacity:.28; text-decoration:line-through; transform:translateX(-8px); }
-  .bag.kept{ border-color:var(--gold); background:var(--gold-pale); }
-  .flew{ border-left:4px solid var(--gold); background:var(--gold-pale); padding:.8rem 1rem; margin:.6rem 0; font-style:italic; font-size:1.06rem; }
+  .cbtn:focus-visible,.sand:focus-visible,.bend:focus-visible,.vig:focus-visible,.opt:focus-visible,a:focus-visible{ outline:3px solid var(--gold); outline-offset:2px; }
+  h1{ font:800 1.9rem/1.12 var(--display); margin:.5rem 0 .4rem; }
+  h2{ font:800 1.35rem/1.15 var(--display); margin:.3rem 0 .4rem; }
+  h3{ font-size:1.05rem; margin:.2rem 0 .3rem; }
+  p{ margin:0 0 .8rem; } .lead{ font-size:1.1rem; }
+  .kicker{ font:800 .7rem/1 var(--sans); letter-spacing:.16em; text-transform:uppercase; color:var(--gold-br); margin:.2rem 0; }
+  .scene{ border:3px solid var(--line2); border-radius:16px; overflow:hidden; background:var(--surface); margin:.6rem 0 1rem; }
+  .capt{ font-size:.9rem; color:var(--ink2); margin:.3rem 0 1.2rem; }
+  hr.sep{ border:none; border-top:2px solid var(--line2); margin:1.8rem 0; }
+  #balloonG{ transition:transform 1s cubic-bezier(.2,.7,.3,1); }
+  .sand{ cursor:pointer; } .sand .sandbody{ transition:transform .7s ease, opacity .7s ease; }
+  .sand.cut .sandbody{ transform:translateY(260px) rotate(16deg); opacity:0; }
+  .sand.kept .sandbody{ filter:drop-shadow(0 0 6px var(--gold)); }
+  .rope{ transition:opacity .5s; } .sand.cut .rope{ opacity:0; }
+  .altlabel{ font:800 1.1rem/1 var(--display); fill:var(--ink); }
+  .sandword{ font:600 .8rem/1 var(--sans); fill:#fff; pointer-events:none; }
+  .verdict{ font-weight:700; margin:.6rem 0 0; min-height:1.3rem; font-size:.98rem; }
+  .verdict .tag{ font:800 .68rem/1 var(--sans); letter-spacing:.05em; text-transform:uppercase; padding:.15rem .4rem; border-radius:6px; border:2px solid var(--ink); margin-right:.4rem; }
+  .flew{ border-left:4px solid var(--gold); background:var(--paper); padding:.7rem .9rem; margin:.6rem 0; font-style:italic; }
   .reveal[hidden]{ display:none; }
-  .roles{ display:grid; gap:.7rem; margin:.5rem 0 1rem; }
-  .rolecard{ text-align:left; width:100%; border:3px solid var(--line2); border-radius:14px; background:var(--surface); color:var(--ink); padding:.8rem 1rem; cursor:pointer; min-height:60px; font-family:var(--serif); }
-  .rolecard .rn{ font:800 1.04rem/1.1 var(--sans); }
-  .rolecard .rq{ font-size:.9rem; color:var(--ink2); display:block; margin-top:.2rem; }
-  .game{ border:3px dashed var(--accent2); border-radius:15px; background:var(--surface); padding:1rem; margin:1rem 0; }
+  .bend{ cursor:pointer; }
+  .bendcard{ border:2px solid var(--line2); border-radius:12px; background:var(--paper); padding:.7rem .9rem; margin:.5rem 0; }
+  .bendcard[hidden]{ display:none; }
+  .bendcard .wk{ font:800 .72rem/1 var(--sans); letter-spacing:.05em; text-transform:uppercase; color:var(--gold-br); }
+  .bendcard .wt{ font-weight:700; display:block; margin:.15rem 0; }
+  .vigs{ display:grid; grid-template-columns:repeat(3,1fr); gap:.6rem; margin:.6rem 0; }
+  .vig{ border:3px solid var(--line2); border-radius:14px; background:var(--surface); padding:.5rem; cursor:pointer; }
+  .vig[aria-expanded="true"]{ border-color:var(--gold); }
+  .vig .vt{ font:800 .82rem/1.1 var(--sans); text-align:center; margin-top:.3rem; color:var(--ink); }
+  .game{ border:3px dashed var(--line2); border-radius:14px; background:var(--surface); padding:1rem; margin:.6rem 0; }
   .game[hidden]{ display:none; }
-  .game .snippet{ border-left:4px solid var(--gold); background:var(--gold-pale); padding:.7rem .9rem; margin:.5rem 0 1rem; font-style:italic; }
+  .snippet{ border-left:4px solid var(--gold); background:var(--paper); padding:.6rem .8rem; margin:.5rem 0 1rem; font-style:italic; }
   .opts{ display:grid; gap:.5rem; }
   .opt{ text-align:left; border:2px solid var(--line2); border-radius:11px; background:var(--bg); color:var(--ink); padding:.7rem .85rem; cursor:pointer; min-height:52px; font-family:var(--serif); font-size:1rem; }
-  .opt.right{ border-color:var(--gold); background:var(--gold-pale); }
-  .opt.wrong{ opacity:.55; }
-  .verdict{ font-weight:700; margin:.7rem 0 0; min-height:1.4rem; }
-  .verdict .tag{ font:800 .7rem/1 var(--sans); letter-spacing:.06em; text-transform:uppercase; padding:.2rem .4rem; border-radius:6px; border:2px solid var(--ink); margin-right:.4rem; }
-  .note{ font-size:.9rem; color:var(--ink2); border:2px solid var(--line2); border-radius:12px; background:var(--surface); padding:.7rem .9rem; margin:1rem 0; }
-  hr.sep{ border:none; border-top:2px solid var(--line2); margin:2rem 0; }
+  .opt.right{ border-color:var(--gold); background:var(--paper); } .opt.wrong{ opacity:.5; }
   .foot{ font-size:.82rem; color:var(--ink2); margin-top:2rem; border-top:2px solid var(--line2); padding-top:1rem; }
   .foot a{ color:var(--gold-br); }
-  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; animation:none !important; } }
+  @media (max-width:520px){ .vigs{ grid-template-columns:1fr; } }
+  @media (prefers-reduced-motion:reduce){ *{ transition:none !important; } }
 </style>
 </head>
 <body>
@@ -100,81 +81,167 @@
 </div>
 <div class="wrap">
   <p class="kicker">EN195 · Creative Writing · Summer 2026</p>
-  <h1>The whole semester, in one room you can walk.</h1>
-  <p class="lead">A syllabus is data. This is the same course as an <em>interface</em> — the six-week river, the four workshops, and an arcade where you practice the moves that make a workshop reader useful. Everything here is optional practice. Your actual submissions live in Blackboard.</p>
-  <div class="note" role="note"><strong>What this is and isn't.</strong> No grades, no submissions, no rosters — just the map and the practice. When you're ready to hand something in, go to Blackboard. When you want to <em>see</em> how the course fits, or warm up a workshop muscle, stay here.</div>
-  <hr class="sep">
-  <h2>Your course is a river.</h2>
-  <p>It runs one direction, May 26 to July 3, and every workshop is a bend. Text: Sellers, <em>The Practice of Creative Writing</em>, 4th ed. Plan roughly 20 hours a week — six weeks doing fifteen weeks' work.</p>
-  <div class="river" aria-label="Six-week course map">
-    <div class="week"><span class="wk">Week 1</span> <span class="dt">· May 26–31</span><span class="wt">Creative Nonfiction begins.</span>Sellers Intro &amp; Ch.1. Secret World and the first discussion board. You start finding true material.</div>
-    <div class="week"><span class="wk">Week 2</span> <span class="dt">· June 1–7</span><span class="wt">Reading as a writer → Workshop 1 submission.</span>Moving Images. Ch.2. You revise one nonfiction piece and put it up for the group.</div>
-    <div class="week"><span class="wk">Week 3</span> <span class="dt">· June 8–14</span><span class="wt">Workshop 1 responses. Poetry begins.</span>You read your group and comment. Then components of poetry, Where I'm From, free verse.</div>
-    <div class="week"><span class="wk">Week 4</span> <span class="dt">· June 15–21</span><span class="wt">Workshop 2 (Poetry). The 10-minute play begins.</span>Tension, form, three model plays. You draft a play for Workshop 3.</div>
-    <div class="week"><span class="wk">Week 5</span> <span class="dt">· June 22–28</span><span class="wt">Workshop 3 (Play). Flash fiction begins.</span>Vonnegut's shapes, story structure, three flash models. You read as a writer.</div>
-    <div class="week"><span class="wk">Week 6</span> <span class="dt">· June 29–July 3</span><span class="wt">Workshop 4 (Flash). Portfolio &amp; reflection.</span>The final workshop uses reader roles (below). Then your portfolio and artist statement. No final exam.</div>
+  <h1>The whole semester, in one place you can play.</h1>
+
+  <div class="scene" aria-label="A hot-air balloon over a river valley">
+    <svg viewBox="0 0 760 300" role="img" aria-label="Cut-paper landscape: sky, hills, a river, and a balloon">
+      <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--sky1)"/><stop offset="1" stop-color="var(--sky2)"/></linearGradient></defs>
+      <rect width="760" height="300" fill="url(#sky)"/>
+      <g fill="#fff" opacity=".8"><ellipse cx="150" cy="60" rx="46" ry="20"/><ellipse cx="185" cy="52" rx="34" ry="16"/><ellipse cx="600" cy="45" rx="52" ry="22"/><ellipse cx="560" cy="52" rx="34" ry="15"/></g>
+      <path d="M0 210 Q140 150 300 205 T620 190 T760 205 V300 H0 Z" fill="var(--land)"/>
+      <path d="M0 250 Q200 200 420 245 T760 240 V300 H0 Z" fill="var(--land2)"/>
+      <path d="M60 300 C120 250 90 220 170 200 S300 180 340 150 S470 120 520 100 S650 80 700 60" fill="none" stroke="var(--water1)" stroke-width="20" stroke-linecap="round" opacity=".9"/>
+      <path d="M60 300 C120 250 90 220 170 200 S300 180 340 150 S470 120 520 100 S650 80 700 60" fill="none" stroke="var(--water2)" stroke-width="9" stroke-linecap="round"/>
+      <g transform="translate(640 70)"><path d="M0 0 C-22 0 -30 22 -18 40 L18 40 C30 22 22 0 0 0 Z" fill="var(--balloon)"/><path d="M-6 0 C-9 14 -9 28 -6 40 L6 40 C9 28 9 14 6 0 Z" fill="var(--balloon2)"/><rect x="-7" y="46" width="14" height="10" rx="2" fill="var(--paperEdge)"/><line x1="-12" y1="40" x2="-6" y2="46" stroke="var(--ink2)" stroke-width="1.2"/><line x1="12" y1="40" x2="6" y2="46" stroke="var(--ink2)" stroke-width="1.2"/></g>
+    </svg>
   </div>
+  <p class="lead">A syllabus is a list. This is the same course as a <em>place</em> — a river you float down, four workshops along the banks, and a balloon you make rise by cutting the words that don't lift. Everything here is practice. Your real submissions live in Blackboard.</p>
+
   <hr class="sep">
-  <h2>Four workshops. Tap one to see what it asks.</h2>
-  <p>Each workshop is the same shape: you make a thing, you revise one for the group, you read your group as a writer would.</p>
-  <div class="stations">
-    <button class="station" aria-expanded="false" aria-controls="d1"><span class="sn">Workshop 1 · Weeks 2–3</span><span class="st">Creative Nonfiction</span><span class="sd">True material, made into shape. Secret World or Moving Images.</span></button>
-    <div class="detail" id="d1" hidden><p><strong>The move:</strong> take something real and give it form without lying about it.</p><ul><li>Draft two: a <em>Secret World</em> and a <em>Moving Images</em> piece (750–1500 words each).</li><li>Revise <em>one</em> for workshop.</li><li>Read your group: two margin comments + a 100–200 word end note per piece.</li></ul></div>
-    <button class="station" aria-expanded="false" aria-controls="d2"><span class="sn">Workshop 2 · Weeks 3–4</span><span class="st">Poetry</span><span class="sd">Where I'm From, then free verse — meaning over rhyme.</span></button>
-    <div class="detail" id="d2" hidden><p><strong>The move:</strong> compression and image, with the training wheels of rhyme deliberately off.</p><ul><li>Write a <em>Where I'm From</em> poem (150–300 words) and a free-verse poem (no rhyming — required).</li><li>Revise one for workshop.</li><li>Respond to your group's poems following the peer-response guide.</li></ul></div>
-    <button class="station" aria-expanded="false" aria-controls="d3"><span class="sn">Workshop 3 · Weeks 4–5</span><span class="st">The 10-Minute Play</span><span class="sd">Tension on a stage. Title, cast, setting, at-rise.</span></button>
-    <div class="detail" id="d3" hidden><p><strong>The move:</strong> a happy protagonist with every desire met is boring. Build tension.</p><ul><li>Write a 10-minute play (1,000–1,500 words). Read it aloud, time it: 9–11 minutes.</li><li>Include original title, cast of characters, setting, and at-rise.</li><li>Respond to your group: five margin comments + a 100–200 word summary per play.</li></ul></div>
-    <button class="station" aria-expanded="false" aria-controls="d4"><span class="sn">Workshop 4 · Week 6</span><span class="st">Flash Fiction</span><span class="sd">A whole story, self-contained, 750–2000 words. Then reader roles.</span></button>
-    <div class="detail" id="d4" hidden><p><strong>The move:</strong> a complete story that earns its brevity — no chapter one, no "to be continued."</p><ul><li>Write a flash story (750–2000 words), any genre, fully self-contained.</li><li>Final workshop reads differently: you take a <em>reader role</em> on each piece.</li><li>Practice the three roles below before you comment — that's the arcade.</li></ul></div>
+
+  <p class="kicker">The course, as a river · tap a bend</p>
+  <h2>Six weeks, one current.</h2>
+  <div class="scene" aria-label="The six-week course as a winding river">
+    <svg viewBox="0 0 760 220" role="img" aria-label="A drawn river with six numbered bends, one per week">
+      <rect width="760" height="220" fill="var(--surface)"/>
+      <path d="M20 190 C90 190 90 140 160 140 S300 150 340 110 S430 60 520 70 S650 60 740 30" fill="none" stroke="var(--water1)" stroke-width="26" stroke-linecap="round"/>
+      <path d="M20 190 C90 190 90 140 160 140 S300 150 340 110 S430 60 520 70 S650 60 740 30" fill="none" stroke="var(--water2)" stroke-width="12" stroke-linecap="round"/>
+      <g font-family="var(--sans)" font-weight="800">
+        <g class="bend" data-b="1" tabindex="0" role="button" aria-label="Week 1"><circle cx="60" cy="188" r="17" fill="var(--gold)"/><text x="60" y="194" text-anchor="middle" fill="#fff" font-size="15">1</text></g>
+        <g class="bend" data-b="2" tabindex="0" role="button" aria-label="Week 2"><circle cx="160" cy="140" r="17" fill="var(--gold)"/><text x="160" y="146" text-anchor="middle" fill="#fff" font-size="15">2</text></g>
+        <g class="bend" data-b="3" tabindex="0" role="button" aria-label="Week 3"><circle cx="300" cy="140" r="17" fill="var(--gold)"/><text x="300" y="146" text-anchor="middle" fill="#fff" font-size="15">3</text></g>
+        <g class="bend" data-b="4" tabindex="0" role="button" aria-label="Week 4"><circle cx="430" cy="78" r="17" fill="var(--gold)"/><text x="430" y="84" text-anchor="middle" fill="#fff" font-size="15">4</text></g>
+        <g class="bend" data-b="5" tabindex="0" role="button" aria-label="Week 5"><circle cx="560" cy="66" r="17" fill="var(--gold)"/><text x="560" y="72" text-anchor="middle" fill="#fff" font-size="15">5</text></g>
+        <g class="bend" data-b="6" tabindex="0" role="button" aria-label="Week 6"><circle cx="700" cy="42" r="17" fill="var(--gold)"/><text x="700" y="48" text-anchor="middle" fill="#fff" font-size="15">6</text></g>
+      </g>
+    </svg>
   </div>
+  <div class="bendcard" id="bc1" hidden><span class="wk">Week 1 · May 26–31</span><span class="wt">Creative Nonfiction begins.</span>Sellers Intro &amp; Ch.1. Secret World, first discussion board. You start finding true material.</div>
+  <div class="bendcard" id="bc2" hidden><span class="wk">Week 2 · June 1–7</span><span class="wt">Reading as a writer → Workshop 1.</span>Moving Images, Ch.2. Revise one nonfiction piece, put it up for the group.</div>
+  <div class="bendcard" id="bc3" hidden><span class="wk">Week 3 · June 8–14</span><span class="wt">Workshop 1 responses. Poetry begins.</span>Read your group, comment. Then Where I'm From, free verse.</div>
+  <div class="bendcard" id="bc4" hidden><span class="wk">Week 4 · June 15–21</span><span class="wt">Workshop 2 (Poetry). The 10-minute play begins.</span>Tension, form, three model plays. Draft a play for Workshop 3.</div>
+  <div class="bendcard" id="bc5" hidden><span class="wk">Week 5 · June 22–28</span><span class="wt">Workshop 3 (Play). Flash fiction begins.</span>Vonnegut's shapes, three flash models. Read as a writer.</div>
+  <div class="bendcard" id="bc6" hidden><span class="wk">Week 6 · June 29–July 3</span><span class="wt">Workshop 4 (Flash). Portfolio.</span>Final workshop uses reader roles (below). Then portfolio + artist statement. No final exam.</div>
+  <p class="capt">Text: Sellers, <em>The Practice of Creative Writing</em>, 4th ed. Plan ~20 hrs/week — six weeks doing fifteen weeks' work.</p>
+
   <hr class="sep">
+
+  <p class="kicker">The compression climb · cut the dead weight</p>
+  <h2>Make it fly.</h2>
+  <p>A flash piece is a balloon carrying sandbags. Every word that doesn't lift is ballast. <strong>Tap a sandbag to cut it.</strong> Cut the dead weight and the balloon rises. Keep the lines that carry the story.</p>
+  <div class="scene" aria-label="A balloon held down by seven sandbags">
+    <svg viewBox="0 0 760 420" role="img" aria-label="A balloon weighed down by sandbags you can cut">
+      <defs><linearGradient id="sky2g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--sky1)"/><stop offset="1" stop-color="var(--sky2)"/></linearGradient></defs>
+      <rect width="760" height="420" fill="url(#sky2g)"/>
+      <path d="M0 360 Q200 320 400 355 T760 350 V420 H0 Z" fill="var(--land)"/>
+      <g fill="#fff" opacity=".7"><ellipse cx="120" cy="70" rx="44" ry="18"/><ellipse cx="650" cy="90" rx="50" ry="20"/></g>
+      <text class="altlabel" id="altlabel" x="700" y="40" text-anchor="end">0 ft</text>
+      <g id="balloonG" transform="translate(0,0)">
+        <g transform="translate(300 120)">
+          <path d="M80 0 C20 0 -6 70 24 130 L136 130 C166 70 140 0 80 0 Z" fill="var(--balloon)"/>
+          <path d="M60 4 C46 44 46 92 60 130 L74 130 C64 92 64 44 74 6 Z" fill="var(--balloon2)"/>
+          <path d="M100 6 C114 44 114 92 100 130 L86 130 C96 92 96 44 86 6 Z" fill="var(--balloon2)"/>
+          <rect x="60" y="150" width="40" height="26" rx="4" fill="var(--paperEdge)"/>
+          <rect x="60" y="150" width="40" height="9" fill="var(--paper)"/>
+          <line x1="40" y1="130" x2="60" y2="150" stroke="var(--ink2)" stroke-width="1.5"/>
+          <line x1="120" y1="130" x2="100" y2="150" stroke="var(--ink2)" stroke-width="1.5"/>
+        </g>
+      </g>
+      <g id="bags" font-family="var(--sans)">
+        <g class="sand" data-lift="0" tabindex="0" role="button" aria-label="Sandbag: cold, frigid, very, extremely"><line class="rope" x1="360" y1="300" x2="70" y2="330" stroke="var(--ink2)" stroke-width="1.3"/><g class="sandbody"><rect x="40" y="330" width="60" height="40" rx="7" fill="var(--paperEdge)"/><text class="sandword" x="70" y="346" text-anchor="middle">cold, frigid,</text><text class="sandword" x="70" y="360" text-anchor="middle">very, extremely</text></g></g>
+        <g class="sand" data-lift="1" tabindex="0" role="button" aria-label="Sandbag: window, coffee"><line class="rope" x1="366" y1="300" x2="170" y2="330" stroke="var(--ink2)" stroke-width="1.3"/><g class="sandbody"><rect x="140" y="330" width="60" height="40" rx="7" fill="var(--land2)"/><text class="sandword" x="170" y="346" text-anchor="middle">window,</text><text class="sandword" x="170" y="360" text-anchor="middle">coffee</text></g></g>
+        <g class="sand" data-lift="0" tabindex="0" role="button" aria-label="Sandbag: woke early, as usual"><line class="rope" x1="372" y1="300" x2="270" y2="332" stroke="var(--ink2)" stroke-width="1.3"/><g class="sandbody"><rect x="240" y="332" width="60" height="40" rx="7" fill="var(--paperEdge)"/><text class="sandword" x="270" y="348" text-anchor="middle">woke early,</text><text class="sandword" x="270" y="362" text-anchor="middle">as usual</text></g></g>
+        <g class="sand" data-lift="0" tabindex="0" role="button" aria-label="Sandbag: deep, profound, sadness, loss"><line class="rope" x1="380" y1="300" x2="380" y2="332" stroke="var(--ink2)" stroke-width="1.3"/><g class="sandbody"><rect x="350" y="332" width="60" height="40" rx="7" fill="var(--paperEdge)"/><text class="sandword" x="380" y="348" text-anchor="middle">deep, profound,</text><text class="sandword" x="380" y="362" text-anchor="middle">sadness, loss</text></g></g>
+        <g class="sand" data-lift="1" tabindex="0" role="button" aria-label="Sandbag: moving truck, half unloaded"><line class="rope" x1="388" y1="300" x2="490" y2="332" stroke="var(--ink2)" stroke-width="1.3"/><g class="sandbody"><rect x="460" y="332" width="60" height="40" rx="7" fill="var(--land2)"/><text class="sandword" x="490" y="348" text-anchor="middle">moving truck,</text><text class="sandword" x="490" y="362" text-anchor="middle">half unloaded</text></g></g>
+        <g class="sand" data-lift="0" tabindex="0" role="button" aria-label="Sandbag: feels heavy somehow"><line class="rope" x1="394" y1="300" x2="590" y2="330" stroke="var(--ink2)" stroke-width="1.3"/><g class="sandbody"><rect x="560" y="330" width="60" height="40" rx="7" fill="var(--paperEdge)"/><text class="sandword" x="590" y="346" text-anchor="middle">feels heavy</text><text class="sandword" x="590" y="360" text-anchor="middle">somehow</text></g></g>
+        <g class="sand" data-lift="1" tabindex="0" role="button" aria-label="Sandbag: dead husband's coat"><line class="rope" x1="400" y1="300" x2="690" y2="330" stroke="var(--ink2)" stroke-width="1.3"/><g class="sandbody"><rect x="660" y="330" width="64" height="40" rx="7" fill="var(--land2)"/><text class="sandword" x="692" y="346" text-anchor="middle">dead husband's</text><text class="sandword" x="692" y="360" text-anchor="middle">coat</text></g></g>
+      </g>
+    </svg>
+  </div>
+  <p class="verdict" id="cv" role="status" aria-live="polite">Tap a sandbag. The green ones lift — leave those. The tan ones are ballast.</p>
+  <div class="reveal" id="rev" hidden>
+    <h3>It flew.</h3>
+    <p>Here's the piece that was inside the heavy one the whole time — light enough to leave the ground:</p>
+    <blockquote class="flew">She stood at the window with her coffee. The moving truck next door was already half unloaded — and the man carrying the boxes was wearing her dead husband's coat.</blockquote>
+    <p><strong>Compression:</strong> cut to what carries weight, keep what lifts. Implication does the work the cut words were doing. This is the Flash Fiction revision move — the portfolio piece is the one that flies.</p>
+  </div>
+
+  <hr class="sep">
+
+  <p class="kicker">Four workshops along the banks</p>
+  <h2>What each one asks.</h2>
+  <div class="scene" aria-label="Four workshop icons">
+    <svg viewBox="0 0 760 150" role="img" aria-label="Cut-paper icons: notebook, quill, stage, paper airplane">
+      <rect width="760" height="150" fill="var(--surface)"/>
+      <g transform="translate(70 20)"><rect width="90" height="90" rx="8" fill="var(--paperEdge)"/><rect x="10" y="10" width="70" height="70" fill="var(--paper)"/><line x1="22" y1="30" x2="68" y2="30" stroke="var(--ink2)" stroke-width="3"/><line x1="22" y1="45" x2="68" y2="45" stroke="var(--ink2)" stroke-width="3"/><line x1="22" y1="60" x2="55" y2="60" stroke="var(--ink2)" stroke-width="3"/><text x="45" y="130" text-anchor="middle" font-family="var(--sans)" font-weight="800" font-size="13" fill="var(--ink)">Nonfiction</text></g>
+      <g transform="translate(250 18)"><path d="M15 90 C40 70 70 30 85 8 C60 25 30 55 10 78 Z" fill="var(--land2)"/><line x1="15" y1="90" x2="35" y2="66" stroke="var(--ink2)" stroke-width="3"/><text x="47" y="132" text-anchor="middle" font-family="var(--sans)" font-weight="800" font-size="13" fill="var(--ink)">Poetry</text></g>
+      <g transform="translate(430 20)"><rect x="0" y="20" width="94" height="60" rx="4" fill="var(--paper)"/><path d="M0 20 L47 4 L94 20 Z" fill="var(--balloon)"/><rect x="18" y="40" width="18" height="40" fill="var(--land2)"/><rect x="58" y="40" width="18" height="40" fill="var(--gold)"/><text x="47" y="130" text-anchor="middle" font-family="var(--sans)" font-weight="800" font-size="13" fill="var(--ink)">10-min Play</text></g>
+      <g transform="translate(610 24)"><path d="M0 30 L90 0 L40 40 L34 78 L24 46 Z" fill="var(--water1)"/><path d="M40 40 L90 0 L34 78 Z" fill="var(--water2)"/><text x="45" y="130" text-anchor="middle" font-family="var(--sans)" font-weight="800" font-size="13" fill="var(--ink)">Flash</text></g>
+    </svg>
+  </div>
+  <p class="capt">Each workshop is the same shape: make a thing, revise one for the group, read your group like a writer. Tap a river bend above for week-by-week detail. Flash fiction (Workshop 4) uses the reader roles below.</p>
+
+  <hr class="sep">
+
   <p class="kicker">The practice arcade · optional · extra credit</p>
-  <h2>Three reader roles. Practice the move, then read for it.</h2>
-  <p>In Workshop 4 you take a different reader role on each piece. Rehearse each on a short snippet. Comments on gameplay are worth extra credit — see the schedule.</p>
-  <div class="roles">
-    <button class="rolecard" aria-expanded="false" aria-controls="g1"><span class="rn">1 · The Compression Reader</span><span class="rq">Where does the piece earn its brevity — and where could it cut?</span></button>
-    <div class="game" id="g1" hidden aria-label="Compression Reader practice"><h3>Find the line doing the work of three.</h3><p>Read the opening. One line is the real first sentence; the rest is wind-up. Which line could the story <em>start</em> on?</p><div class="snippet">It was a cold morning, the kind of morning that feels colder than it is. She had woken early. She got up and made coffee and stood at the window. The moving truck was already in the driveway next door, and the man unloading it was wearing her dead husband's coat.</div><div class="opts" data-answer="3"><button class="opt" data-i="0">"It was a cold morning, the kind of morning that feels colder than it is."</button><button class="opt" data-i="1">"She had woken early."</button><button class="opt" data-i="2">"She got up and made coffee and stood at the window."</button><button class="opt" data-i="3">"The man unloading it was wearing her dead husband's coat."</button></div><p class="verdict" role="status" aria-live="polite"></p></div>
-    <button class="rolecard" aria-expanded="false" aria-controls="g2"><span class="rn">2 · The Image Reader</span><span class="rq">What can you see, hear, touch — and where does it blur?</span></button>
-    <div class="game" id="g2" hidden aria-label="Image Reader practice"><h3>Spot the abstraction with no picture under it.</h3><p>Three of these put something in front of your eyes. One names a feeling instead of showing it. Which one blurs?</p><div class="opts" data-answer="2"><button class="opt" data-i="0">"The screen door slapped twice behind him and then went still."</button><button class="opt" data-i="1">"She lined the pills up on the counter by color, smallest first."</button><button class="opt" data-i="2">"He felt an overwhelming sense of sadness and profound loss."</button><button class="opt" data-i="3">"The dog's water bowl still had his name on it in nail polish."</button></div><p class="verdict" role="status" aria-live="polite"></p></div>
-    <button class="rolecard" aria-expanded="false" aria-controls="g3"><span class="rn">3 · The Turn Reader</span><span class="rq">Does the ending arrive late and quiet — or does it just stop?</span></button>
-    <div class="game" id="g3" hidden aria-label="Turn Reader practice"><h3>Which ending lands sideways on an object or gesture?</h3><p>A good flash ending turns — it doesn't just halt. One closes on a concrete gesture that carries the whole story. Which one turns?</p><div class="opts" data-answer="1"><button class="opt" data-i="0">"And that was when she finally understood what her mother had meant all along."</button><button class="opt" data-i="1">"He folded the map back along its old creases, even though he already knew the way."</button><button class="opt" data-i="2">"In the end, everything worked out, and they were happy."</button><button class="opt" data-i="3">"It was a night she would never, ever forget for the rest of her life."</button></div><p class="verdict" role="status" aria-live="polite"></p></div>
+  <h2>Three reader roles. Tap one to play.</h2>
+  <div class="vigs">
+    <button class="vig" aria-expanded="false" aria-controls="g1"><svg viewBox="0 0 120 90" role="img" aria-label="Scissors cutting a dotted line"><rect width="120" height="90" fill="var(--paper)"/><line x1="20" y1="45" x2="100" y2="45" stroke="var(--ink2)" stroke-width="4" stroke-dasharray="8 6"/><circle cx="40" cy="32" r="9" fill="none" stroke="var(--balloon)" stroke-width="4"/><circle cx="40" cy="58" r="9" fill="none" stroke="var(--balloon)" stroke-width="4"/><line x1="48" y1="38" x2="80" y2="45" stroke="var(--balloon)" stroke-width="4"/><line x1="48" y1="52" x2="80" y2="45" stroke="var(--balloon)" stroke-width="4"/></svg><div class="vt">The Compression Reader</div></button>
+    <button class="vig" aria-expanded="false" aria-controls="g2"><svg viewBox="0 0 120 90" role="img" aria-label="An eye"><rect width="120" height="90" fill="var(--paper)"/><path d="M20 45 Q60 15 100 45 Q60 75 20 45 Z" fill="none" stroke="var(--ink2)" stroke-width="4"/><circle cx="60" cy="45" r="14" fill="var(--water1)"/><circle cx="60" cy="45" r="6" fill="var(--ink)"/></svg><div class="vt">The Image Reader</div></button>
+    <button class="vig" aria-expanded="false" aria-controls="g3"><svg viewBox="0 0 120 90" role="img" aria-label="A turning path with an arrow"><rect width="120" height="90" fill="var(--paper)"/><path d="M25 70 C25 40 60 55 60 35 S95 20 95 20" fill="none" stroke="var(--gold)" stroke-width="5" stroke-linecap="round"/><path d="M88 14 L98 20 L88 26 Z" fill="var(--gold)"/></svg><div class="vt">The Turn Reader</div></button>
   </div>
-  <hr class="sep">
-  <p class="kicker">The compression climb · the workshop-4 revision move, made physical</p>
-  <h2>Sandbags: cut the dead weight, watch it fly.</h2>
-  <p>A flash piece is a balloon carrying sandbags. Every word that doesn't lift is ballast. Tap a line to cut it. When only the lifting words are left, the piece leaves the ground.</p>
-  <div class="climb" aria-label="Sandbags compression climb">
-    <div class="balloon" id="balloon"><div class="alt">Altitude</div><div class="altnum" id="altnum">0 ft</div><div class="carry" id="carry">Carrying 41 words. Drop the dead weight.</div></div>
-    <p class="climb-inst">Tap the sandbags — the lines that don't lift. Keep the ones that carry weight.</p>
-    <div class="bags" id="bags">
-      <button class="bag" data-lift="0">It was a cold and very frigid winter morning, extremely cold.</button>
-      <button class="bag" data-lift="1">She stood at the window with her coffee.</button>
-      <button class="bag" data-lift="0">She had woken up early that day, earlier than usual for her.</button>
-      <button class="bag" data-lift="0">She felt a deep and profound sense of sadness and loss inside.</button>
-      <button class="bag" data-lift="1">The moving truck next door was already half unloaded.</button>
-      <button class="bag" data-lift="0">It was the kind of morning that just feels heavy somehow.</button>
-      <button class="bag" data-lift="1">The man carrying the boxes was wearing her dead husband's coat.</button>
-    </div>
-    <p class="verdict" id="climbverdict" role="status" aria-live="polite"></p>
-    <div class="reveal" id="climbreveal" hidden><h3>It flew.</h3><p class="beat">Here's the piece that was inside the heavy one the whole time — light enough to leave the ground:</p><blockquote class="flew" id="flewtext"></blockquote><p><strong>Compression:</strong> cut to what carries weight, keep what lifts. Implication does the work the cut words were doing.</p></div>
+  <div class="game" id="g1" hidden aria-label="Compression Reader practice">
+    <h3>Find the line doing the work of three.</h3>
+    <p>One line is the real first sentence; the rest is wind-up. Which line could the story <em>start</em> on?</p>
+    <div class="snippet">It was a cold morning, the kind that feels colder than it is. She had woken early. She made coffee and stood at the window. The moving truck was already next door, and the man unloading it was wearing her dead husband's coat.</div>
+    <div class="opts" data-answer="3"><button class="opt" data-i="0">"It was a cold morning, the kind that feels colder than it is."</button><button class="opt" data-i="1">"She had woken early."</button><button class="opt" data-i="2">"She made coffee and stood at the window."</button><button class="opt" data-i="3">"The man unloading it was wearing her dead husband's coat."</button></div>
+    <p class="verdict" role="status" aria-live="polite"></p>
   </div>
+  <div class="game" id="g2" hidden aria-label="Image Reader practice">
+    <h3>Spot the abstraction with no picture under it.</h3>
+    <p>Three put something in front of your eyes. One names a feeling instead of showing it. Which one blurs?</p>
+    <div class="opts" data-answer="2"><button class="opt" data-i="0">"The screen door slapped twice behind him and went still."</button><button class="opt" data-i="1">"She lined the pills up by color, smallest first."</button><button class="opt" data-i="2">"He felt an overwhelming sense of sadness and profound loss."</button><button class="opt" data-i="3">"The dog's water bowl still had his name on it in nail polish."</button></div>
+    <p class="verdict" role="status" aria-live="polite"></p>
+  </div>
+  <div class="game" id="g3" hidden aria-label="Turn Reader practice">
+    <h3>Which ending lands sideways on a gesture?</h3>
+    <p>A good flash ending turns — it doesn't just halt. One closes on a concrete gesture that carries the story.</p>
+    <div class="opts" data-answer="1"><button class="opt" data-i="0">"And that was when she finally understood what her mother meant."</button><button class="opt" data-i="1">"He folded the map along its old creases, though he knew the way."</button><button class="opt" data-i="2">"In the end, everything worked out, and they were happy."</button><button class="opt" data-i="3">"It was a night she would never, ever forget."</button></div>
+    <p class="verdict" role="status" aria-live="polite"></p>
+  </div>
+
   <hr class="sep">
+
   <h2>Where the river ends: the portfolio.</h2>
   <p>No final exam. In Week 6 you gather your revised pieces and write an artist statement, then submit the portfolio in the Start Here section of Blackboard. Comments and your final grade arrive by email within a week or so of the last day.</p>
-  <p class="beat">That's the whole course. Make things, read like a writer, revise, gather. Congratulations in advance.</p>
-  <div class="foot"><p><strong>EN195 Creative Writing — Workshop in a Box.</strong> A Tight Spiral Productions build. Play. Notice. Design.</p><p>Course structure only — no student information. Submissions, groups, and grades live in Blackboard. A single offline HTML file: works with no internet, on any device, and you can keep it. Questions: <a href="mailto:walshero@gmail.com">walshero@gmail.com</a>.</p></div>
+
+  <div class="foot">
+    <p><strong>EN195 Creative Writing — Workshop in a Box.</strong> A Tight Spiral Productions build. Play. Notice. Design.</p>
+    <p>Course structure only — no student information. Submissions, groups, and grades live in Blackboard. One offline HTML file: works with no internet, on any device, and you can keep it. Questions: <a href="mailto:walshero@gmail.com">walshero@gmail.com</a>.</p>
+  </div>
 </div>
 <script>
 (function(){
   "use strict";
   var body=document.body, cbtns=document.querySelectorAll('.cbtn');
-  cbtns.forEach(function(b){ b.addEventListener('click',function(){ var stop=b.getAttribute('data-stop'); body.classList.remove('softer','warm'); if(stop!=='default')body.classList.add(stop); cbtns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');}); }); });
-  document.querySelectorAll('.station').forEach(function(s){ s.addEventListener('click',function(){ var d=document.getElementById(s.getAttribute('aria-controls')); var open=s.getAttribute('aria-expanded')==='true'; s.setAttribute('aria-expanded',open?'false':'true'); d.hidden=open; }); });
-  document.querySelectorAll('.rolecard').forEach(function(r){ r.addEventListener('click',function(){ var g=document.getElementById(r.getAttribute('aria-controls')); var open=r.getAttribute('aria-expanded')==='true'; r.setAttribute('aria-expanded',open?'false':'true'); g.hidden=open; }); });
-  document.querySelectorAll('.opts').forEach(function(box){ var answer=box.getAttribute('data-answer'); var verdict=box.parentElement.querySelector('.verdict'); box.querySelectorAll('.opt').forEach(function(opt){ opt.addEventListener('click',function(){ var right=opt.getAttribute('data-i')===answer; box.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('right','wrong'); if(o.getAttribute('data-i')===answer)o.classList.add('right'); else o.classList.add('wrong'); }); if(right){ verdict.innerHTML='<span class="tag">Nice</span>That\u2019s the line. Everything before it was throat-clearing \u2014 the story can open right here.'; } else { verdict.innerHTML='<span class="tag">Look again</span>Reasonable \u2014 but the highlighted line carries the weight. Notice what it does that the others don\u2019t.'; } }); }); });
-  var bags=document.getElementById('bags');
-  if(bags){ var total=bags.querySelectorAll('.bag').length; var lifters=bags.querySelectorAll('.bag[data-lift="1"]'); var correctCuts=0; var needCuts=total-lifters.length; var altnum=document.getElementById('altnum'); var carry=document.getElementById('carry'); var balloon=document.getElementById('balloon'); var cv=document.getElementById('climbverdict'); var reveal=document.getElementById('climbreveal'); var flew=document.getElementById('flewtext'); var wordsLeft=41;
-    bags.querySelectorAll('.bag').forEach(function(b){ b.addEventListener('click',function(){ if(b.classList.contains('cut')||b.classList.contains('kept'))return; var lift=b.getAttribute('data-lift')==='1'; if(lift){ b.classList.add('kept'); cv.textContent='That one lifts — keep it. It carries weight the others were only decorating.'; } else { b.classList.add('cut'); correctCuts++; wordsLeft-=6; altnum.textContent=Math.round((correctCuts/needCuts)*1200)+' ft'; carry.textContent='Carrying '+Math.max(wordsLeft,17)+' words. Lighter already.'; balloon.style.transform='translateY(-'+(correctCuts*6)+'px)'; cv.textContent='Cut. That was ballast — implication does its work now.'; } if(correctCuts>=needCuts){ altnum.textContent='1200 ft'; carry.textContent='Liftoff. Only the lifting words are left.'; cv.textContent=''; flew.textContent='She stood at the window with her coffee. The moving truck next door was already half unloaded \u2014 and the man carrying the boxes was wearing her dead husband\u2019s coat.'; reveal.hidden=false; } }); }); }
+  cbtns.forEach(function(b){ b.addEventListener('click',function(){ var s=b.getAttribute('data-stop'); body.classList.remove('softer','warm'); if(s!=='default')body.classList.add(s); cbtns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');}); }); });
+  document.querySelectorAll('.bend').forEach(function(bd){
+    function t(){ var n=bd.getAttribute('data-b'); var card=document.getElementById('bc'+n); document.querySelectorAll('.bendcard').forEach(function(c){ if(c!==card)c.hidden=true; }); card.hidden=!card.hidden; bd.querySelector('circle').setAttribute('fill', card.hidden?'var(--gold)':'var(--balloon)'); if(!card.hidden)card.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+    bd.addEventListener('click',t); bd.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){e.preventDefault();t();} });
+  });
+  var bags=document.getElementById('bags'); var need=bags.querySelectorAll('.sand[data-lift="0"]').length; var done=0;
+  var cv=document.getElementById('cv'), bg=document.getElementById('balloonG'), alt=document.getElementById('altlabel'), rev=document.getElementById('rev');
+  bags.querySelectorAll('.sand').forEach(function(s){
+    function act(){ if(s.classList.contains('cut')||s.classList.contains('kept'))return;
+      if(s.getAttribute('data-lift')==='1'){ s.classList.add('kept'); cv.innerHTML='<span class="tag">Keep</span>That one lifts — it carries the story. Leave it tied on.'; }
+      else { s.classList.add('cut'); done++; alt.textContent=Math.round(done/need*1400)+' ft'; bg.setAttribute('transform','translate(0,-'+(done*34)+')'); cv.innerHTML='<span class="tag">Cut</span>Ballast gone — implication does its work now. The balloon lifts.';
+        if(done>=need){ alt.textContent='1400 ft'; cv.innerHTML='<span class="tag">Liftoff</span>Only the lifting words are left.'; rev.hidden=false; rev.scrollIntoView({behavior:'smooth',block:'nearest'}); } }
+    }
+    s.addEventListener('click',act); s.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){e.preventDefault();act();} });
+  });
+  document.querySelectorAll('.vig').forEach(function(v){ v.addEventListener('click',function(){ var g=document.getElementById(v.getAttribute('aria-controls')); var open=v.getAttribute('aria-expanded')==='true'; v.setAttribute('aria-expanded',open?'false':'true'); g.hidden=open; if(!open)g.scrollIntoView({behavior:'smooth',block:'nearest'}); }); });
+  document.querySelectorAll('.opts').forEach(function(box){ var ans=box.getAttribute('data-answer'), verd=box.parentElement.querySelector('.verdict');
+    box.querySelectorAll('.opt').forEach(function(opt){ opt.addEventListener('click',function(){ var right=opt.getAttribute('data-i')===ans; box.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('right','wrong'); if(o.getAttribute('data-i')===ans)o.classList.add('right'); else o.classList.add('wrong'); }); verd.innerHTML= right?'<span class="tag">Nice</span>That’s the line. Everything before it was throat-clearing — the story can open here.':'<span class="tag">Look again</span>The highlighted line carries the weight. Notice what it does that the others don’t.'; }); }); });
 })();
 </script>
 </body>
