@@ -1,60 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tight Spiral Productions</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EN195 Creative Writing — Workshop in a Box</title>
+<!--
+  en195.html — Tight Spiral Productions
+  EN195 Creative Writing, Summer 2026 (6-Week-1) — the course as a playable front door.
+  FERPA: contains NO student names, submission links, group rosters, or per-student data.
+  CHANGELOG (C6): v3 2026-07-05 — ONE working file. All games inlined, zero external links.
+                  Sandbags climb + three reader-role games playable in-page. Netlify/Pages ready.
+-->
 <style>
-:root{--bg:#1a1410;--ink:#f4e4c1;--amber:#e8b04a;--dim:#b89968;--line:#3a2f22;--panel:#221a12;}
-*{box-sizing:border-box;}
-body{background:var(--bg);color:var(--ink);font-family:Georgia,'Times New Roman',serif;line-height:1.6;margin:0 auto;padding:2.5rem 1.25rem 4rem;max-width:46rem;}
-header{margin-bottom:2.5rem;}
-h1{font-size:2.3rem;color:var(--amber);margin:0 0 .3rem;letter-spacing:.5px;}
-.tag{color:var(--dim);font-style:italic;margin:0;font-size:1.15rem;}
-.intro{color:var(--ink);margin:1.5rem 0 0;font-size:1.05rem;}
-h2{font-size:.85rem;text-transform:uppercase;letter-spacing:2px;color:var(--dim);border-bottom:1px solid var(--line);padding-bottom:.4rem;margin:2.75rem 0 1.25rem;}
-a.game{display:block;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:1.25rem 1.4rem;margin:.85rem 0;text-decoration:none;color:var(--ink);transition:border-color .15s,transform .1s;}
-a.game:hover,a.game:focus-visible{border-color:var(--amber);outline:3px solid var(--amber);outline-offset:3px;transform:translateY(-1px);}
-a.game .name{font-size:1.35rem;color:var(--amber);display:block;margin-bottom:.15rem;}
-a.game .desc{color:var(--dim);font-size:1rem;}
-footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);color:var(--dim);font-size:.92rem;line-height:1.5;}
-footer strong{color:var(--ink);font-weight:normal;}
+  :root{
+    --serif: Georgia, 'Times New Roman', serif;
+    --sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --display: 'Trebuchet MS', var(--sans);
+    --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --ink2:#1f1b12;
+    --line:#e3d6b8; --line2:#cdbf9c; --sky:#d7dee6;
+    --accent:#3a4654; --accent2:#2b3540;
+    --gold:#a06b12; --gold-br:#8a5c0e; --gold-pale:#f5ead2;
+  }
+  body.softer{
+    --bg:#d9d2c4; --surface:#e2dccf; --ink:#241f16; --ink2:#241f16;
+    --line:#c9bfa6; --line2:#b3a684; --sky:#c5cdd6; --gold-pale:#dcd2ba;
+  }
+  body.warm{
+    --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0;
+    --line:#4a4230; --line2:#5e553e; --sky:#2a2e34;
+    --accent:#8fa6bd; --accent2:#9fb6cd; --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a;
+  }
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; margin:0; padding:0 0 4rem; }
+  .wrap{ max-width:720px; margin:0 auto; padding:0 1rem; }
+  .comfort{ position:sticky; top:0; z-index:40; background:var(--accent); color:#fff; display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; padding:.5rem .8rem; font-family:var(--sans); }
+  .comfort .lbl{ font:800 .74rem/1 var(--sans); letter-spacing:.04em; text-transform:uppercase; opacity:.92; margin-right:.2rem; }
+  .cbtn{ font:700 .86rem/1 var(--sans); min-height:40px; padding:.5rem .7rem; border:2px solid #fff; border-radius:9px; background:transparent; color:#fff; cursor:pointer; }
+  .cbtn[aria-pressed="true"]{ background:#fff; color:var(--accent); }
+  .cbtn:focus-visible, .station:focus-visible, .rolecard:focus-visible, .opt:focus-visible, .bag:focus-visible, a:focus-visible{ outline:3px solid var(--gold); outline-offset:2px; }
+  h1{ font-size:1.85rem; line-height:1.14; color:var(--ink); margin:.4rem 0 .5rem; }
+  h2{ font-size:1.32rem; color:var(--ink); margin:1.6rem 0 .5rem; }
+  h3{ font-size:1.08rem; color:var(--ink); margin:.2rem 0 .4rem; }
+  p{ margin:0 0 .9rem; } .lead{ font-size:1.12rem; } .beat{ font-style:italic; }
+  .kicker{ font:800 .72rem/1 var(--sans); letter-spacing:.16em; text-transform:uppercase; color:var(--gold-br); margin:0 0 .3rem; }
+  .river{ border:3px solid var(--line2); border-radius:16px; background:var(--surface); padding:.9rem 1rem 1.1rem; margin:1rem 0 1.4rem; }
+  .week{ border-left:5px solid var(--gold); padding:.5rem 0 .5rem .8rem; margin:0 0 .2rem; }
+  .week:not(:last-child){ border-bottom:1px dashed var(--line2); padding-bottom:.7rem; }
+  .week .wk{ font:800 .78rem/1 var(--sans); letter-spacing:.05em; text-transform:uppercase; color:var(--accent2); }
+  .week .dt{ font:600 .8rem/1 var(--sans); color:var(--ink2); }
+  .week .wt{ font-weight:700; display:block; margin:.15rem 0; }
+  .stations{ display:grid; gap:.7rem; margin:.6rem 0 1.2rem; }
+  .station{ display:block; text-align:left; width:100%; border:3px solid var(--accent2); border-radius:15px; background:var(--surface); color:var(--ink); padding:.85rem 1rem; cursor:pointer; min-height:66px; font-family:var(--serif); }
+  .station .sn{ font:800 .72rem/1 var(--sans); letter-spacing:.08em; text-transform:uppercase; color:var(--gold-br); }
+  .station .st{ font:800 1.14rem/1.15 var(--display); display:block; margin:.15rem 0; }
+  .station .sd{ font-size:.92rem; color:var(--ink2); }
+  .station[aria-expanded="true"]{ border-color:var(--gold); }
+  .detail{ border:2px solid var(--line2); border-top:none; border-radius:0 0 13px 13px; background:var(--gold-pale); margin:-.5rem 0 .8rem; padding:.8rem 1rem; }
+  .detail[hidden]{ display:none; }
+  .detail ul{ margin:.3rem 0 .3rem 1.1rem; padding:0; } .detail li{ margin:.2rem 0; }
+  .climb{ border:3px solid var(--accent2); border-radius:16px; background:var(--surface); padding:1rem; margin:1rem 0; }
+  .balloon{ text-align:center; border:2px solid var(--gold); border-radius:14px; background:var(--gold-pale); padding:1rem; margin-bottom:.8rem; transition:transform .4s ease; }
+  .balloon .alt{ font:800 .7rem/1 var(--sans); letter-spacing:.1em; text-transform:uppercase; color:var(--gold-br); }
+  .balloon .altnum{ font:800 2rem/1.1 var(--display); color:var(--ink); }
+  .balloon .carry{ font-size:.92rem; color:var(--ink2); margin-top:.3rem; }
+  .climb-inst{ font-size:.92rem; color:var(--ink2); }
+  .bags{ display:grid; gap:.5rem; }
+  .bag{ text-align:left; border:2px solid var(--line2); border-radius:11px; background:var(--bg); color:var(--ink); padding:.7rem .85rem; min-height:52px; cursor:pointer; font-family:var(--serif); font-size:1rem; transition:opacity .3s, transform .3s; }
+  .bag.cut{ opacity:.28; text-decoration:line-through; transform:translateX(-8px); }
+  .bag.kept{ border-color:var(--gold); background:var(--gold-pale); }
+  .flew{ border-left:4px solid var(--gold); background:var(--gold-pale); padding:.8rem 1rem; margin:.6rem 0; font-style:italic; font-size:1.06rem; }
+  .reveal[hidden]{ display:none; }
+  .roles{ display:grid; gap:.7rem; margin:.5rem 0 1rem; }
+  .rolecard{ text-align:left; width:100%; border:3px solid var(--line2); border-radius:14px; background:var(--surface); color:var(--ink); padding:.8rem 1rem; cursor:pointer; min-height:60px; font-family:var(--serif); }
+  .rolecard .rn{ font:800 1.04rem/1.1 var(--sans); }
+  .rolecard .rq{ font-size:.9rem; color:var(--ink2); display:block; margin-top:.2rem; }
+  .game{ border:3px dashed var(--accent2); border-radius:15px; background:var(--surface); padding:1rem; margin:1rem 0; }
+  .game[hidden]{ display:none; }
+  .game .snippet{ border-left:4px solid var(--gold); background:var(--gold-pale); padding:.7rem .9rem; margin:.5rem 0 1rem; font-style:italic; }
+  .opts{ display:grid; gap:.5rem; }
+  .opt{ text-align:left; border:2px solid var(--line2); border-radius:11px; background:var(--bg); color:var(--ink); padding:.7rem .85rem; cursor:pointer; min-height:52px; font-family:var(--serif); font-size:1rem; }
+  .opt.right{ border-color:var(--gold); background:var(--gold-pale); }
+  .opt.wrong{ opacity:.55; }
+  .verdict{ font-weight:700; margin:.7rem 0 0; min-height:1.4rem; }
+  .verdict .tag{ font:800 .7rem/1 var(--sans); letter-spacing:.06em; text-transform:uppercase; padding:.2rem .4rem; border-radius:6px; border:2px solid var(--ink); margin-right:.4rem; }
+  .note{ font-size:.9rem; color:var(--ink2); border:2px solid var(--line2); border-radius:12px; background:var(--surface); padding:.7rem .9rem; margin:1rem 0; }
+  hr.sep{ border:none; border-top:2px solid var(--line2); margin:2rem 0; }
+  .foot{ font-size:.82rem; color:var(--ink2); margin-top:2rem; border-top:2px solid var(--line2); padding-top:1rem; }
+  .foot a{ color:var(--gold-br); }
+  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; animation:none !important; } }
 </style>
 </head>
 <body>
-<header>
-<h1>Tight Spiral Productions</h1>
-<p class="tag">Play. Notice. Design.</p>
-<p class="intro">Educational games built accessibility-first — legible on load, fully offline, no logins, no tracking. Made to be opened and played, on any device, by anyone.</p>
-</header>
-
-<h2>Courses</h2>
-
-<a class="game" href="en195.html">
-  <span class="name">EN195 — Play the Semester</span>
-  <span class="desc">The whole course as one arcade: the semester, the schedule, the workshop wall.</span>
-</a>
-
-<h2>The Arcade</h2>
-
-<a class="game" href="choose-your-leader-full.html">
-  <span class="name">Choose Your Leader</span>
-  <span class="desc">Step into a decision and see the shape of leadership from the inside.</span>
-</a>
-
-<a class="game" href="funnyboney-factory.html">
-  <span class="name">Funny Boney's Factory</span>
-  <span class="desc">A build-and-notice game on the factory floor.</span>
-</a>
-
-<a class="game" href="elves-house.html">
-  <span class="name">The Elves' House</span>
-  <span class="desc">A small world to move through and pay attention to.</span>
-</a>
-
-<footer>
-<strong>Tight Spiral Productions</strong> — a solo educational game studio.<br>
-Every title is a single self-contained file: offline by default, keyboard-friendly, legible on load.
-</footer>
+<div class="comfort" role="group" aria-label="Reading comfort">
+  <span class="lbl">Comfort</span>
+  <button class="cbtn" data-stop="default" aria-pressed="true">Default</button>
+  <button class="cbtn" data-stop="softer" aria-pressed="false">Softer</button>
+  <button class="cbtn" data-stop="warm" aria-pressed="false">Warm dark</button>
+</div>
+<div class="wrap">
+  <p class="kicker">EN195 · Creative Writing · Summer 2026</p>
+  <h1>The whole semester, in one room you can walk.</h1>
+  <p class="lead">A syllabus is data. This is the same course as an <em>interface</em> — the six-week river, the four workshops, and an arcade where you practice the moves that make a workshop reader useful. Everything here is optional practice. Your actual submissions live in Blackboard.</p>
+  <div class="note" role="note"><strong>What this is and isn't.</strong> No grades, no submissions, no rosters — just the map and the practice. When you're ready to hand something in, go to Blackboard. When you want to <em>see</em> how the course fits, or warm up a workshop muscle, stay here.</div>
+  <hr class="sep">
+  <h2>Your course is a river.</h2>
+  <p>It runs one direction, May 26 to July 3, and every workshop is a bend. Text: Sellers, <em>The Practice of Creative Writing</em>, 4th ed. Plan roughly 20 hours a week — six weeks doing fifteen weeks' work.</p>
+  <div class="river" aria-label="Six-week course map">
+    <div class="week"><span class="wk">Week 1</span> <span class="dt">· May 26–31</span><span class="wt">Creative Nonfiction begins.</span>Sellers Intro &amp; Ch.1. Secret World and the first discussion board. You start finding true material.</div>
+    <div class="week"><span class="wk">Week 2</span> <span class="dt">· June 1–7</span><span class="wt">Reading as a writer → Workshop 1 submission.</span>Moving Images. Ch.2. You revise one nonfiction piece and put it up for the group.</div>
+    <div class="week"><span class="wk">Week 3</span> <span class="dt">· June 8–14</span><span class="wt">Workshop 1 responses. Poetry begins.</span>You read your group and comment. Then components of poetry, Where I'm From, free verse.</div>
+    <div class="week"><span class="wk">Week 4</span> <span class="dt">· June 15–21</span><span class="wt">Workshop 2 (Poetry). The 10-minute play begins.</span>Tension, form, three model plays. You draft a play for Workshop 3.</div>
+    <div class="week"><span class="wk">Week 5</span> <span class="dt">· June 22–28</span><span class="wt">Workshop 3 (Play). Flash fiction begins.</span>Vonnegut's shapes, story structure, three flash models. You read as a writer.</div>
+    <div class="week"><span class="wk">Week 6</span> <span class="dt">· June 29–July 3</span><span class="wt">Workshop 4 (Flash). Portfolio &amp; reflection.</span>The final workshop uses reader roles (below). Then your portfolio and artist statement. No final exam.</div>
+  </div>
+  <hr class="sep">
+  <h2>Four workshops. Tap one to see what it asks.</h2>
+  <p>Each workshop is the same shape: you make a thing, you revise one for the group, you read your group as a writer would.</p>
+  <div class="stations">
+    <button class="station" aria-expanded="false" aria-controls="d1"><span class="sn">Workshop 1 · Weeks 2–3</span><span class="st">Creative Nonfiction</span><span class="sd">True material, made into shape. Secret World or Moving Images.</span></button>
+    <div class="detail" id="d1" hidden><p><strong>The move:</strong> take something real and give it form without lying about it.</p><ul><li>Draft two: a <em>Secret World</em> and a <em>Moving Images</em> piece (750–1500 words each).</li><li>Revise <em>one</em> for workshop.</li><li>Read your group: two margin comments + a 100–200 word end note per piece.</li></ul></div>
+    <button class="station" aria-expanded="false" aria-controls="d2"><span class="sn">Workshop 2 · Weeks 3–4</span><span class="st">Poetry</span><span class="sd">Where I'm From, then free verse — meaning over rhyme.</span></button>
+    <div class="detail" id="d2" hidden><p><strong>The move:</strong> compression and image, with the training wheels of rhyme deliberately off.</p><ul><li>Write a <em>Where I'm From</em> poem (150–300 words) and a free-verse poem (no rhyming — required).</li><li>Revise one for workshop.</li><li>Respond to your group's poems following the peer-response guide.</li></ul></div>
+    <button class="station" aria-expanded="false" aria-controls="d3"><span class="sn">Workshop 3 · Weeks 4–5</span><span class="st">The 10-Minute Play</span><span class="sd">Tension on a stage. Title, cast, setting, at-rise.</span></button>
+    <div class="detail" id="d3" hidden><p><strong>The move:</strong> a happy protagonist with every desire met is boring. Build tension.</p><ul><li>Write a 10-minute play (1,000–1,500 words). Read it aloud, time it: 9–11 minutes.</li><li>Include original title, cast of characters, setting, and at-rise.</li><li>Respond to your group: five margin comments + a 100–200 word summary per play.</li></ul></div>
+    <button class="station" aria-expanded="false" aria-controls="d4"><span class="sn">Workshop 4 · Week 6</span><span class="st">Flash Fiction</span><span class="sd">A whole story, self-contained, 750–2000 words. Then reader roles.</span></button>
+    <div class="detail" id="d4" hidden><p><strong>The move:</strong> a complete story that earns its brevity — no chapter one, no "to be continued."</p><ul><li>Write a flash story (750–2000 words), any genre, fully self-contained.</li><li>Final workshop reads differently: you take a <em>reader role</em> on each piece.</li><li>Practice the three roles below before you comment — that's the arcade.</li></ul></div>
+  </div>
+  <hr class="sep">
+  <p class="kicker">The practice arcade · optional · extra credit</p>
+  <h2>Three reader roles. Practice the move, then read for it.</h2>
+  <p>In Workshop 4 you take a different reader role on each piece. Rehearse each on a short snippet. Comments on gameplay are worth extra credit — see the schedule.</p>
+  <div class="roles">
+    <button class="rolecard" aria-expanded="false" aria-controls="g1"><span class="rn">1 · The Compression Reader</span><span class="rq">Where does the piece earn its brevity — and where could it cut?</span></button>
+    <div class="game" id="g1" hidden aria-label="Compression Reader practice"><h3>Find the line doing the work of three.</h3><p>Read the opening. One line is the real first sentence; the rest is wind-up. Which line could the story <em>start</em> on?</p><div class="snippet">It was a cold morning, the kind of morning that feels colder than it is. She had woken early. She got up and made coffee and stood at the window. The moving truck was already in the driveway next door, and the man unloading it was wearing her dead husband's coat.</div><div class="opts" data-answer="3"><button class="opt" data-i="0">"It was a cold morning, the kind of morning that feels colder than it is."</button><button class="opt" data-i="1">"She had woken early."</button><button class="opt" data-i="2">"She got up and made coffee and stood at the window."</button><button class="opt" data-i="3">"The man unloading it was wearing her dead husband's coat."</button></div><p class="verdict" role="status" aria-live="polite"></p></div>
+    <button class="rolecard" aria-expanded="false" aria-controls="g2"><span class="rn">2 · The Image Reader</span><span class="rq">What can you see, hear, touch — and where does it blur?</span></button>
+    <div class="game" id="g2" hidden aria-label="Image Reader practice"><h3>Spot the abstraction with no picture under it.</h3><p>Three of these put something in front of your eyes. One names a feeling instead of showing it. Which one blurs?</p><div class="opts" data-answer="2"><button class="opt" data-i="0">"The screen door slapped twice behind him and then went still."</button><button class="opt" data-i="1">"She lined the pills up on the counter by color, smallest first."</button><button class="opt" data-i="2">"He felt an overwhelming sense of sadness and profound loss."</button><button class="opt" data-i="3">"The dog's water bowl still had his name on it in nail polish."</button></div><p class="verdict" role="status" aria-live="polite"></p></div>
+    <button class="rolecard" aria-expanded="false" aria-controls="g3"><span class="rn">3 · The Turn Reader</span><span class="rq">Does the ending arrive late and quiet — or does it just stop?</span></button>
+    <div class="game" id="g3" hidden aria-label="Turn Reader practice"><h3>Which ending lands sideways on an object or gesture?</h3><p>A good flash ending turns — it doesn't just halt. One closes on a concrete gesture that carries the whole story. Which one turns?</p><div class="opts" data-answer="1"><button class="opt" data-i="0">"And that was when she finally understood what her mother had meant all along."</button><button class="opt" data-i="1">"He folded the map back along its old creases, even though he already knew the way."</button><button class="opt" data-i="2">"In the end, everything worked out, and they were happy."</button><button class="opt" data-i="3">"It was a night she would never, ever forget for the rest of her life."</button></div><p class="verdict" role="status" aria-live="polite"></p></div>
+  </div>
+  <hr class="sep">
+  <p class="kicker">The compression climb · the workshop-4 revision move, made physical</p>
+  <h2>Sandbags: cut the dead weight, watch it fly.</h2>
+  <p>A flash piece is a balloon carrying sandbags. Every word that doesn't lift is ballast. Tap a line to cut it. When only the lifting words are left, the piece leaves the ground.</p>
+  <div class="climb" aria-label="Sandbags compression climb">
+    <div class="balloon" id="balloon"><div class="alt">Altitude</div><div class="altnum" id="altnum">0 ft</div><div class="carry" id="carry">Carrying 41 words. Drop the dead weight.</div></div>
+    <p class="climb-inst">Tap the sandbags — the lines that don't lift. Keep the ones that carry weight.</p>
+    <div class="bags" id="bags">
+      <button class="bag" data-lift="0">It was a cold and very frigid winter morning, extremely cold.</button>
+      <button class="bag" data-lift="1">She stood at the window with her coffee.</button>
+      <button class="bag" data-lift="0">She had woken up early that day, earlier than usual for her.</button>
+      <button class="bag" data-lift="0">She felt a deep and profound sense of sadness and loss inside.</button>
+      <button class="bag" data-lift="1">The moving truck next door was already half unloaded.</button>
+      <button class="bag" data-lift="0">It was the kind of morning that just feels heavy somehow.</button>
+      <button class="bag" data-lift="1">The man carrying the boxes was wearing her dead husband's coat.</button>
+    </div>
+    <p class="verdict" id="climbverdict" role="status" aria-live="polite"></p>
+    <div class="reveal" id="climbreveal" hidden><h3>It flew.</h3><p class="beat">Here's the piece that was inside the heavy one the whole time — light enough to leave the ground:</p><blockquote class="flew" id="flewtext"></blockquote><p><strong>Compression:</strong> cut to what carries weight, keep what lifts. Implication does the work the cut words were doing.</p></div>
+  </div>
+  <hr class="sep">
+  <h2>Where the river ends: the portfolio.</h2>
+  <p>No final exam. In Week 6 you gather your revised pieces and write an artist statement, then submit the portfolio in the Start Here section of Blackboard. Comments and your final grade arrive by email within a week or so of the last day.</p>
+  <p class="beat">That's the whole course. Make things, read like a writer, revise, gather. Congratulations in advance.</p>
+  <div class="foot"><p><strong>EN195 Creative Writing — Workshop in a Box.</strong> A Tight Spiral Productions build. Play. Notice. Design.</p><p>Course structure only — no student information. Submissions, groups, and grades live in Blackboard. A single offline HTML file: works with no internet, on any device, and you can keep it. Questions: <a href="mailto:walshero@gmail.com">walshero@gmail.com</a>.</p></div>
+</div>
+<script>
+(function(){
+  "use strict";
+  var body=document.body, cbtns=document.querySelectorAll('.cbtn');
+  cbtns.forEach(function(b){ b.addEventListener('click',function(){ var stop=b.getAttribute('data-stop'); body.classList.remove('softer','warm'); if(stop!=='default')body.classList.add(stop); cbtns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');}); }); });
+  document.querySelectorAll('.station').forEach(function(s){ s.addEventListener('click',function(){ var d=document.getElementById(s.getAttribute('aria-controls')); var open=s.getAttribute('aria-expanded')==='true'; s.setAttribute('aria-expanded',open?'false':'true'); d.hidden=open; }); });
+  document.querySelectorAll('.rolecard').forEach(function(r){ r.addEventListener('click',function(){ var g=document.getElementById(r.getAttribute('aria-controls')); var open=r.getAttribute('aria-expanded')==='true'; r.setAttribute('aria-expanded',open?'false':'true'); g.hidden=open; }); });
+  document.querySelectorAll('.opts').forEach(function(box){ var answer=box.getAttribute('data-answer'); var verdict=box.parentElement.querySelector('.verdict'); box.querySelectorAll('.opt').forEach(function(opt){ opt.addEventListener('click',function(){ var right=opt.getAttribute('data-i')===answer; box.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('right','wrong'); if(o.getAttribute('data-i')===answer)o.classList.add('right'); else o.classList.add('wrong'); }); if(right){ verdict.innerHTML='<span class="tag">Nice</span>That\u2019s the line. Everything before it was throat-clearing \u2014 the story can open right here.'; } else { verdict.innerHTML='<span class="tag">Look again</span>Reasonable \u2014 but the highlighted line carries the weight. Notice what it does that the others don\u2019t.'; } }); }); });
+  var bags=document.getElementById('bags');
+  if(bags){ var total=bags.querySelectorAll('.bag').length; var lifters=bags.querySelectorAll('.bag[data-lift="1"]'); var correctCuts=0; var needCuts=total-lifters.length; var altnum=document.getElementById('altnum'); var carry=document.getElementById('carry'); var balloon=document.getElementById('balloon'); var cv=document.getElementById('climbverdict'); var reveal=document.getElementById('climbreveal'); var flew=document.getElementById('flewtext'); var wordsLeft=41;
+    bags.querySelectorAll('.bag').forEach(function(b){ b.addEventListener('click',function(){ if(b.classList.contains('cut')||b.classList.contains('kept'))return; var lift=b.getAttribute('data-lift')==='1'; if(lift){ b.classList.add('kept'); cv.textContent='That one lifts — keep it. It carries weight the others were only decorating.'; } else { b.classList.add('cut'); correctCuts++; wordsLeft-=6; altnum.textContent=Math.round((correctCuts/needCuts)*1200)+' ft'; carry.textContent='Carrying '+Math.max(wordsLeft,17)+' words. Lighter already.'; balloon.style.transform='translateY(-'+(correctCuts*6)+'px)'; cv.textContent='Cut. That was ballast — implication does its work now.'; } if(correctCuts>=needCuts){ altnum.textContent='1200 ft'; carry.textContent='Liftoff. Only the lifting words are left.'; cv.textContent=''; flew.textContent='She stood at the window with her coffee. The moving truck next door was already half unloaded \u2014 and the man carrying the boxes was wearing her dead husband\u2019s coat.'; reveal.hidden=false; } }); }); }
+})();
+</script>
 </body>
 </html>
