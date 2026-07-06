@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  PLAY THE SEMESTER — EN195 Creative Writing, all four workshops. Tight Spiral Studios · walshero@gmail.com
+
+  WHAT IT IS: the whole six-week river, PLAYABLE. Four workshop stations
+  (Creative Nonfiction, Poetry, 10-minute Play, Flash Fiction), each carrying the
+  real assignments from the live Course Schedule and each opening its practice game.
+  Map-frame spine: you enter a scene, walk the river, tap into the station you want.
+
+  SOURCE OF TRUTH: assignments/dates transcribed from the live EN195 Course Schedule
+  (Google Doc 1_MdiJpjyL5WuAaNvU9AZ5y2zrvLB3HVyFDuvWl11VHU, Summer 2026 703/704,
+  May 26 - July 3). The schedule doc is the record; this is an interface to it.
+  BANNER links out to both the studio index and the live schedule.
+
+  COMFORT (locked 2026-07-06): NO GATE, NO DEFAULT LANE. Cold-open scene-first.
+  Three stops (default / softer / warm-dark) are ONE tap-cycle in the top bar —
+  one tap becomes the next thing. Never #000/#fff. Comfort is a knob, not a wall.
+
+  MATT'S LANGUAGE LEADS. Where the syllabus/schedule speaks (mutual contract,
+  humans-only AI policy, the arcade invite), that voice runs first and verbatim;
+  studio copy is scaffolding beneath it, never a restatement.
+
+  FLOOR: single-file, offline, in-memory; large type; 44px+ targets; keyboard;
+  visible focus; reduced-motion safe; scroll-reset; shape+label not color alone;
+  NO EMOJI; phone-width; screens lead with image/scene.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Play the Semester — EN195</title>
+<style>
+:root{
+  --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --ink2:#1f1b12;
+  --line:#d8caa8; --line2:#c2b288;
+  --accent:#3a4654; --accent2:#2b3540;
+  --water:#4a6b86; --water-d:#2b4256;
+  --gold:#6e4700; --gold-br:#c8900a; --gold-pale:#fbeec6;
+  --rust:#8a3a1c;
+  --focus:#c8900a;
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:ui-monospace,Consolas,monospace;
+}
+body.softer{ --bg:#d9d2c4; --surface:#e2dccf; --ink:#241f16; --ink2:#241f16; --line:#c3b7a3; --line2:#b0a488; }
+body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0; --line:#4a4230; --line2:#5e553e;
+  --accent:#8fa6bd; --accent2:#9fb6cd; --water:#8fb4d0; --water-d:#a9c6dd; --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a; --rust:#e8a07c; }
+*{box-sizing:border-box;} html,body{margin:0;}
+body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; -webkit-text-size-adjust:100%; }
+
+.topbar{ background:var(--accent); color:#fff; padding:.6rem .9rem; display:flex; align-items:center; gap:.55rem; font-family:var(--sans); position:sticky; top:0; z-index:30; flex-wrap:wrap; }
+body.warm .topbar{ color:#0f0e0b; }
+.topbar .mark{ width:26px; height:26px; flex:none; } .topbar .wm{ font-weight:800; font-size:.9rem; }
+.blink{ color:inherit; text-decoration:underline; font:700 .74rem/1 var(--sans); min-height:44px; display:inline-flex; align-items:center; padding:0 .2rem; }
+.blink:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.cstop{ margin-left:auto; background:rgba(255,255,255,.18); color:inherit; border:2px solid rgba(255,255,255,.6); border-radius:9px; padding:.45rem .65rem; font:700 .74rem/1 var(--sans); cursor:pointer; min-height:44px; }
+body.warm .cstop{ border-color:rgba(0,0,0,.4); background:rgba(0,0,0,.12); }
+.cstop:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+.wrap{ max-width:680px; margin:0 auto; padding:1.1rem 1rem 5rem; }
+.screen{ display:none; } .screen.on{ display:block; animation:fade .25s ease; }
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.where{ font:800 .72rem/1 var(--sans); letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:.6rem; }
+h1{ font-size:1.6rem; line-height:1.16; color:var(--ink); margin:.2rem 0 .5rem; }
+h2{ font-size:1.22rem; color:var(--ink); margin:.2rem 0 .6rem; }
+p{ margin:0 0 .9rem; } .lead{ font-size:1.06rem; } .beat{ font-style:italic; color:var(--ink2); }
+.quote{ border-left:5px solid var(--water); padding:.5rem 0 .5rem .9rem; margin:.7rem 0 1rem; font-style:italic; color:var(--ink); }
+
+.go{ display:block; width:100%; font:800 1.04rem/1.2 var(--sans); cursor:pointer; min-height:56px; padding:.9rem 1rem; border:none; border-radius:13px; background:var(--accent); color:#fff; margin:.45rem 0; text-align:center; text-decoration:none; }
+body.warm .go{ color:#0f0e0b; }
+.go:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+.go.sec{ background:var(--surface); color:var(--ink); border:2px solid var(--ink); }
+.go.ghost{ background:transparent; color:var(--ink); border:2px solid var(--line2); font-weight:700; min-height:48px; }
+
+/* ---- COLD-OPEN SCENE: the river ---- */
+.hero{ border:2px solid var(--line2); border-radius:18px; overflow:hidden; background:var(--surface); margin:.2rem 0 1rem; }
+.hero svg{ display:block; width:100%; height:auto; }
+.herocap{ padding:.7rem .9rem .9rem; }
+.herocap .k{ font:800 .7rem/1 var(--sans); letter-spacing:.1em; text-transform:uppercase; color:var(--gold); }
+
+/* ---- STATION CARDS on the river ---- */
+.stations{ display:flex; flex-direction:column; gap:.7rem; margin:.4rem 0 1rem; }
+.stn{ display:flex; align-items:stretch; gap:.8rem; border:3px solid var(--line2); border-radius:16px; background:var(--surface); padding:.75rem; cursor:pointer; width:100%; text-align:left; min-height:88px; }
+.stn:hover{ border-color:var(--gold-br); } .stn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.stn.here{ border-color:var(--gold-br); background:var(--gold-pale); }
+.stn .ill{ width:76px; flex:none; border-radius:11px; overflow:hidden; background:var(--bg); border:1px solid var(--line); }
+.stn .ill svg{ display:block; width:100%; height:100%; }
+.stn .body{ flex:1; min-width:0; }
+.stn .wk{ font:800 .68rem/1 var(--sans); letter-spacing:.08em; text-transform:uppercase; color:var(--gold); }
+.stn .nm{ font:800 1.08rem/1.15 var(--sans); color:var(--ink); margin:.15rem 0; }
+.stn .ds{ font:400 .86rem/1.35 var(--sans); color:var(--ink2); }
+.stn .tag{ display:inline-block; font:800 .68rem/1 var(--sans); text-transform:uppercase; letter-spacing:.05em; padding:.25rem .45rem; border-radius:6px; margin-top:.35rem; }
+.tag.live{ background:var(--gold-br); color:#241a02; } body.warm .tag.live{ color:#241a02; }
+.tag.soon{ background:transparent; border:2px solid var(--line2); color:var(--ink2); }
+
+/* ---- inside a station ---- */
+.assign{ border:2px solid var(--line2); border-radius:14px; background:var(--surface); padding:.85rem .95rem; margin:.6rem 0; }
+.assign .an{ font:800 .95rem/1.25 var(--sans); color:var(--ink); margin-bottom:.15rem; }
+.assign .aw{ font:800 .66rem/1 var(--sans); letter-spacing:.06em; text-transform:uppercase; color:var(--gold); }
+.assign .ad{ font:400 .88rem/1.4 var(--sans); color:var(--ink2); margin-top:.3rem; }
+.assign .due{ font:700 .78rem/1.3 var(--sans); color:var(--rust); margin-top:.35rem; }
+
+.gamecard{ border:3px solid var(--gold-br); border-radius:14px; background:var(--gold-pale); padding:.85rem .95rem; margin:.7rem 0; }
+.gamecard .gt{ font:800 1.04rem/1.2 var(--sans); color:var(--ink); }
+.gamecard .gd{ font:400 .88rem/1.35 var(--sans); color:var(--ink2); margin:.25rem 0 .6rem; }
+.openbtn{ display:block; width:100%; min-height:52px; font:800 .98rem/1 var(--sans); border:none; border-radius:11px; background:var(--accent); color:#fff; cursor:pointer; text-align:center; text-decoration:none; padding:.75rem; }
+body.warm .openbtn{ color:#0f0e0b; }
+.openbtn:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+.soonbox{ border:2px dashed var(--line2); border-radius:14px; background:var(--surface); padding:.85rem .95rem; margin:.7rem 0; }
+.soonbox .st{ font:800 1rem/1.2 var(--sans); color:var(--ink); }
+.soonbox .sd{ font:400 .86rem/1.35 var(--sans); color:var(--ink2); margin-top:.25rem; }
+.miss{ font:700 .82rem/1.35 var(--sans); color:var(--rust); margin:.5rem 0 0; }
+
+.foot{ margin-top:1.6rem; padding:1rem; background:var(--accent); color:#fff; border-radius:12px; font-family:var(--sans); font-size:.8rem; }
+body.warm .foot{ background:#26231d; color:#f3e4c0; }
+.foot a{ color:#fff; text-decoration:underline; } body.warm .foot a{ color:#f3e4c0; text-decoration:underline; font-weight:800; }
+.sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+@media (max-width:520px){ body{font-size:18px;} h1{font-size:1.4rem;} .wrap{padding:1rem .8rem 5rem;} .stn .ill{width:60px;} }
+@media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 12 C14 16 14 8 22 12 C30 16 30 8 36 12 M6 22 C14 26 14 18 22 22 C30 26 30 18 36 22 M6 32 C14 36 14 28 22 32 C30 36 30 28 36 32" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
+  <span class="wm">Play the Semester</span>
+  <a class="blink" href="index.html">Studio</a>
+  <a class="blink" href="https://docs.google.com/document/d/1_MdiJpjyL5WuAaNvU9AZ5y2zrvLB3HVyFDuvWl11VHU/edit" target="_blank" rel="noopener">Schedule</a>
+  <button class="cstop" id="cstop" aria-label="Change comfort palette. Tap to cycle through three reading options.">Comfort: Default</button>
+</div>
+
+<div class="wrap">
+
+  <!-- SCREEN 0 — COLD OPEN: the river (no gate) -->
+  <section class="screen on" id="river" aria-labelledby="riverh">
+    <div class="where">EN195 · Creative Writing · Summer 2026</div>
+    <h1 id="riverh">The whole semester, as a river.</h1>
+
+    <div class="hero" aria-hidden="true">
+      <svg viewBox="0 0 680 300" role="img">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="var(--surface)"/><stop offset="1" stop-color="var(--bg)"/>
+          </linearGradient>
+        </defs>
+        <rect width="680" height="300" fill="url(#sky)"/>
+        <path d="M20 40 C160 70 200 120 340 150" fill="none" stroke="var(--water)" stroke-width="10" stroke-linecap="round" opacity=".55"/>
+        <path d="M20 110 C170 120 210 140 340 150" fill="none" stroke="var(--water)" stroke-width="10" stroke-linecap="round" opacity=".55"/>
+        <path d="M20 190 C170 180 210 160 340 150" fill="none" stroke="var(--water)" stroke-width="10" stroke-linecap="round" opacity=".55"/>
+        <path d="M20 260 C160 230 200 180 340 150" fill="none" stroke="var(--water)" stroke-width="10" stroke-linecap="round" opacity=".55"/>
+        <path d="M340 150 C460 150 520 150 660 150" fill="none" stroke="var(--water-d)" stroke-width="16" stroke-linecap="round"/>
+        <circle cx="120" cy="66" r="11" fill="var(--water-d)"/><circle cx="130" cy="120" r="11" fill="var(--water-d)"/>
+        <circle cx="130" cy="176" r="11" fill="var(--water-d)"/><circle cx="120" cy="228" r="11" fill="var(--gold-br)"/>
+        <circle cx="640" cy="150" r="20" fill="var(--gold-br)"/>
+        <path d="M600 150 q20 -14 40 0 q20 14 40 0" fill="none" stroke="var(--surface)" stroke-width="3"/>
+      </svg>
+    </div>
+
+    <p class="lead">Four workshops feed one portfolio. You are somewhere on it right now. Tap a station to walk in — read what's due, then play the practice that trains it.</p>
+
+    <div class="quote">Consider this course a mutual contract: it describes the processes and policies, the resources available to you, and my expectations for your participation. — from the syllabus</div>
+
+    <div class="stations" role="list">
+      <button class="stn" role="listitem" data-go="w1">
+        <span class="ill"><svg viewBox="0 0 60 88" aria-hidden="true"><rect x="10" y="12" width="40" height="64" rx="3" fill="var(--surface)" stroke="var(--water-d)" stroke-width="2"/><path d="M18 26 H42 M18 34 H42 M18 42 H36 M18 50 H42 M18 58 H32" stroke="var(--water)" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <span class="body"><span class="wk">Workshop 1 · Weeks 1–3</span><span class="nm">Creative Nonfiction</span><span class="ds">The true thing, told with craft. Secret worlds and moving images.</span><span class="tag soon">Read the week</span></span>
+      </button>
+
+      <button class="stn" role="listitem" data-go="w2">
+        <span class="ill"><svg viewBox="0 0 60 88" aria-hidden="true"><path d="M14 20 C30 30 30 46 14 56 M30 16 C48 30 48 50 30 66 M22 72 H40" fill="none" stroke="var(--water-d)" stroke-width="2.4" stroke-linecap="round"/><circle cx="42" cy="24" r="3" fill="var(--gold-br)"/></svg></span>
+        <span class="body"><span class="wk">Workshop 2 · Weeks 3–4</span><span class="nm">Poetry</span><span class="ds">Where I'm From, then free verse. Image, sound, turn — no rhyme required.</span><span class="tag soon">Read the week</span></span>
+      </button>
+
+      <button class="stn" role="listitem" data-go="w3">
+        <span class="ill"><svg viewBox="0 0 60 88" aria-hidden="true"><path d="M8 60 L30 22 L52 60 Z" fill="none" stroke="var(--water-d)" stroke-width="2.4" stroke-linejoin="round"/><rect x="20" y="46" width="20" height="14" fill="var(--surface)" stroke="var(--water)" stroke-width="2"/><path d="M12 68 H48" stroke="var(--water-d)" stroke-width="2.4" stroke-linecap="round"/></svg></span>
+        <span class="body"><span class="wk">Workshop 3 · Weeks 4–5</span><span class="nm">The 10-Minute Play</span><span class="ds">Tension on a small stage. A want, an obstacle, nine to eleven minutes.</span><span class="tag soon">Read the week</span></span>
+      </button>
+
+      <button class="stn here" role="listitem" data-go="w4">
+        <span class="ill"><svg viewBox="0 0 60 88" aria-hidden="true"><ellipse cx="30" cy="30" rx="17" ry="20" fill="var(--surface)" stroke="var(--gold-br)" stroke-width="2.4"/><path d="M30 50 V64 M24 64 H36" stroke="var(--gold-br)" stroke-width="2.4" stroke-linecap="round"/><path d="M22 30 q8 -8 16 0" fill="none" stroke="var(--water)" stroke-width="2"/></svg></span>
+        <span class="body"><span class="wk">Workshop 4 · Week 6 · you are here</span><span class="nm">Flash Fiction</span><span class="ds">The whole story in one breath. Cut the weight, let the piece rise.</span><span class="tag live">Play it now</span></span>
+      </button>
+    </div>
+
+    <p class="beat">The station with the amber marker is where the live class is this week. The others open their reading now; their games arrive as the river reaches them.</p>
+  </section>
+
+  <!-- SCREEN W1 — CREATIVE NONFICTION -->
+  <section class="screen" id="w1" aria-labelledby="w1h">
+    <div class="where">Workshop 1 · Weeks 1–3 · May 26 – June 8</div>
+    <h1 id="w1h">Creative Nonfiction</h1>
+    <p class="lead">The true thing, made to land. You'll build two pieces, then bring one to the group.</p>
+    <div class="quote">This course gives students the opportunity to analyze and experiment in a number of creative writing genres. — course description</div>
+
+    <div class="assign"><div class="aw">Week 1 · due Fri May 29</div><div class="an">1.08 — The Secret World</div><div class="ad">List ten "secret worlds," pick one, write it (750–1500 words). Title the doc, name at the top, post the link.</div></div>
+    <div class="assign"><div class="aw">Week 2 · due Wed June 3</div><div class="an">2.04 — Moving Images</div><div class="ad">List moving images, choose one, write it (750–1500 words). Same submission shape.</div></div>
+    <div class="assign"><div class="aw">Week 2 · due Fri June 5</div><div class="an">2.06 — Workshop 1 submission</div><div class="ad">Revise one of the two (Secret World or Moving Images), title it, share with comment access, post to the Workshop 1 form.</div></div>
+    <div class="assign"><div class="aw">Week 3 · due Mon June 8</div><div class="an">2.09 — Respond to your group</div><div class="ad">At least two margin comments plus a 100–200 word end comment on each nonfiction piece in your group.</div></div>
+
+    <div class="soonbox"><div class="st">Practice: reading nonfiction as a writer</div><div class="sd">The station game for this workshop arrives as the river reaches it. For now, the reading and the assignments above are the work.</div></div>
+    <button class="go ghost" data-back="river">Back to the river</button>
+  </section>
+
+  <!-- SCREEN W2 — POETRY -->
+  <section class="screen" id="w2" aria-labelledby="w2h">
+    <div class="where">Workshop 2 · Weeks 3–4 · June 8 – June 15</div>
+    <h1 id="w2h">Poetry</h1>
+    <p class="lead">Two poems, then the group. The goal isn't to decide what a poem "means" — it's to describe how it's landing.</p>
+    <div class="quote">Your job is to help the writer understand how their poem is being experienced by a thoughtful reader. — Poetry Workshop instructions</div>
+
+    <div class="assign"><div class="aw">Week 3 · due Wed June 10</div><div class="an">3.05 — Where I'm From</div><div class="ad">Read George Ella Lyon's poem and the student samples, then write your own (150–300 words) from the template.</div></div>
+    <div class="assign"><div class="aw">Week 3 · due Thu June 11</div><div class="an">3.06 — Free Verse</div><div class="ad">Write a free verse poem on any topic — and you are required <b>not</b> to rhyme. At least 150 words.</div></div>
+    <div class="assign"><div class="aw">Week 3 · due Fri June 12</div><div class="an">3.08 — Workshop 2 submission</div><div class="ad">Choose one poem, revise it, title it, share with comment access, post to the Workshop 2 board.</div></div>
+    <div class="assign"><div class="aw">Week 4 · due Mon June 15</div><div class="an">4.01 — Respond to your group</div><div class="ad">Read and respond to your group's poems using one of the three reading lenses: Reader Experience, Reading for Craft, or Reading Through Questions.</div></div>
+
+    <div class="soonbox"><div class="st">Practice: the three reading lenses</div><div class="sd">This station's game trains the poetry lenses. It arrives as the river reaches this workshop.</div></div>
+    <button class="go ghost" data-back="river">Back to the river</button>
+  </section>
+
+  <!-- SCREEN W3 — 10-MINUTE PLAY -->
+  <section class="screen" id="w3" aria-labelledby="w3h">
+    <div class="where">Workshop 3 · Weeks 4–5 · June 15 – June 24</div>
+    <h1 id="w3h">The 10-Minute Play</h1>
+    <p class="lead">A small stage, real tension. Write it, time it out loud, bring it to the group.</p>
+    <div class="quote">Happy protagonist + all desires fulfilled = boring. No tension. — Discussion Board #4 prompt</div>
+
+    <div class="assign"><div class="aw">Week 4 · due Tue June 16</div><div class="an">4.02–4.03 — Read for form and tension</div><div class="ad">The Play/Screenplay section of Chapter 10, plus Chapter 6: Tension. Start brainstorming your play.</div></div>
+    <div class="assign"><div class="aw">Week 4 · due Wed June 17</div><div class="an">4.06 — Read three plays</div><div class="ad">The Sculptor's Funeral, Going Viral, Family 2.0 — then Discussion Board #4 on what makes a ten-minute play compelling.</div></div>
+    <div class="assign"><div class="aw">Week 4 · due Mon June 22</div><div class="an">4.08 — Write your play</div><div class="ad">Original title, cast, setting, at-rise. 1,000–1,500 words. Do a timed read-through — aim for the 9–11 minute range. Then post for Workshop 3.</div></div>
+    <div class="assign"><div class="aw">Week 5 · due Wed June 24</div><div class="an">5.02 — Respond to your group</div><div class="ad">At least five margin comments plus a 100–200 word end summary on each play in your group.</div></div>
+
+    <div class="soonbox"><div class="st">Practice: staging tension</div><div class="sd">The staging game for this workshop arrives as the river reaches it.</div></div>
+    <button class="go ghost" data-back="river">Back to the river</button>
+  </section>
+
+  <!-- SCREEN W4 — FLASH FICTION (live, playable) -->
+  <section class="screen" id="w4" aria-labelledby="w4h">
+    <div class="where">Workshop 4 · Week 6 · June 29 – July 3 · you are here</div>
+    <h1 id="w4h">Flash Fiction</h1>
+    <p class="lead">The whole story in one breath — 750 to 2,000 words, self-contained, any genre. Then the final workshop, where you read in three roles.</p>
+    <div class="quote">You can draw generally from real life, but your work must be fiction, and it must be self-contained — no chapter 1, no to-be-continued. — assignment 6.03</div>
+
+    <div class="assign"><div class="aw">Week 6 · due Mon June 29</div><div class="an">6.03 — Write the flash story</div><div class="ad">750–2,000 words. Any genre, realism or speculative. Title it, share with comment access, post for Workshop 4 — then lurk until the comment deadline passes.</div></div>
+    <div class="assign"><div class="aw">Week 6 · workshop</div><div class="an">6.06 — Read in three roles</div><div class="ad">On each of your first three pieces, take a different reader role: the Compression Reader, the Image Reader, the Turn Reader. On the fourth, comment on the workshop itself.</div></div>
+
+    <div class="gamecard">
+      <div class="gt">Sandbags — cut it light</div>
+      <div class="gd">A baggy draft is the right problem. Tap words to cut; each one drops as ballast and the piece lifts. Practices the Compression Reader's move on your own draft.</div>
+      <a class="openbtn" href="sandbags.html" target="_blank" rel="noopener" data-file="sandbags.html">Open Sandbags &rarr;</a>
+    </div>
+    <div class="gamecard">
+      <div class="gt">Flash Ballast — the whole ascent</div>
+      <div class="gd">The compression game as a flight: cut weight, the balloon rises to the last stop. The full Week-6 practice.</div>
+      <a class="openbtn" href="flash-ballast.html" target="_blank" rel="noopener" data-file="flash-ballast.html">Open Flash Ballast &rarr;</a>
+    </div>
+    <div class="gamecard">
+      <div class="gt">The Review Bench — name the moves</div>
+      <div class="gd">Read a sample piece, place named moves on it, compare with a strong reviewer. Trains the Image and Turn roles before you comment for real.</div>
+      <a class="openbtn" href="review-bench.html" target="_blank" rel="noopener" data-file="review-bench.html">Open the Review Bench &rarr;</a>
+    </div>
+
+    <p class="miss" id="w4miss">If a game doesn't open, it needs to be saved in the same folder as this file.</p>
+
+    <div class="quote" style="margin-top:1.2rem;">When I'm not teaching, I'm building things. This EN195 arcade is totally optional. If you're like me, syllabi and documents overwhelm — they're sources of data, but lousy interfaces. Your comments on gameplay are worth 5 points extra credit. — assignment 6.08</div>
+
+    <button class="go ghost" data-back="river">Back to the river</button>
+  </section>
+
+  <div class="foot">
+    Tight Spiral Studios · walshero@gmail.com — <b>Play the Semester</b>, all four EN195 workshops in one file. Assignments and dates are transcribed from the live <a href="https://docs.google.com/document/d/1_MdiJpjyL5WuAaNvU9AZ5y2zrvLB3HVyFDuvWl11VHU/edit" target="_blank" rel="noopener">Course Schedule</a>; that document is the record. Single file, offline, nothing stored or sent.<br>
+    <b>Comfort:</b> three reading stops, one tap each in the top-bar Comfort button — no default privileged, no wall before you start. <b>The real grade lives in the gradebook.</b> Green-free slate placeholder pending the palette pick.
+  </div>
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+
+  var stops=['default','softer','warm'], labels={'default':'Default','softer':'Softer','warm':'Warm-dark'}, ci=0;
+  function applyStop(s){ document.body.classList.remove('softer','warm'); if(s==='softer')document.body.classList.add('softer'); if(s==='warm')document.body.classList.add('warm'); }
+  $('cstop').addEventListener('click',function(){
+    ci=(ci+1)%stops.length; applyStop(stops[ci]);
+    this.textContent='Comfort: '+labels[stops[ci]];
+    this.setAttribute('aria-label','Comfort palette is now '+labels[stops[ci]]+'. Tap to cycle to the next.');
+  });
+
+  function show(id){
+    document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');});
+    $(id).classList.add('on'); window.scrollTo(0,0);
+    var h=$(id).querySelector('h1'); if(h){ h.setAttribute('tabindex','-1'); h.focus(); }
+  }
+  document.querySelectorAll('[data-go]').forEach(function(b){ b.addEventListener('click',function(){ show(b.dataset.go); }); });
+  document.querySelectorAll('[data-back]').forEach(function(b){ b.addEventListener('click',function(){ show(b.dataset.back); }); });
+})();
+</script>
+</body>
+</html>
