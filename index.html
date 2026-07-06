@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
 <title>Tight Spiral Productions</title>
 <style>
 :root{
   --paper:#f4efe6; --ink:#1a1408; --accent:#6e4700; --line:#c9b98f;
   --card:#faf6ee; --gold:#8a5a00;
 }
-body.softer{ --paper:#e6ddc9; --card:#efe7d4; }
+body.softer{ --paper:#e2dccf; --card:#efe7d4; --ink:#241f16; }
 body.warmdark{ --paper:#241c10; --ink:#f5d9a0; --accent:#f5c869; --line:#5a4a2a; --card:#2e2416; --gold:#f5c869; }
 *{box-sizing:border-box;}
 body{
@@ -28,7 +29,7 @@ h2{font-size:26px; margin:30px 0 8px; border-bottom:3px solid var(--line); paddi
   background:var(--ink); color:var(--paper); border:3px solid var(--gold);
   border-radius:10px; cursor:pointer;
 }
-#palette:focus-visible, a:focus-visible{ outline:4px solid var(--gold); outline-offset:3px; }
+#palette:focus-visible, a:focus-visible, summary:focus-visible{ outline:4px solid var(--gold); outline-offset:3px; }
 a.door{
   display:block; background:var(--card); border:2px solid var(--line);
   border-radius:12px; padding:16px 18px; margin:12px 0; min-height:60px;
@@ -37,45 +38,81 @@ a.door{
 a.door:hover{ border-color:var(--gold); }
 a.door .name{ font-size:24px; font-weight:bold; display:block; }
 a.door .what{ font-size:19px; display:block; margin-top:2px; }
+/* HERO — EN195 lit up front */
+a.hero{
+  display:block; background:var(--card); border:4px solid var(--gold);
+  border-radius:16px; padding:26px 22px; margin:14px 0 8px; min-height:120px;
+  color:var(--ink); text-decoration:none;
+  box-shadow:0 4px 0 var(--line);
+}
+a.hero:hover{ box-shadow:0 6px 0 var(--gold); }
+a.hero .name{ font-size:30px; font-weight:bold; display:block; }
+a.hero .what{ font-size:20px; display:block; margin-top:6px; }
+a.hero .now{ display:inline-block; font-size:16px; font-weight:bold;
+  background:#5a3a00; color:#ffffff; padding:4px 12px;
+  border-radius:8px; margin-bottom:10px; letter-spacing:1px; }
+/* CABINET */
+details.cabinet{
+  margin-top:34px; border:3px solid var(--line); border-radius:14px;
+  background:var(--card); overflow:hidden;
+}
+details.cabinet > summary{
+  font-size:24px; font-weight:bold; padding:20px 22px; cursor:pointer;
+  min-height:60px; list-style:none; color:var(--ink);
+}
+details.cabinet > summary::-webkit-details-marker{ display:none; }
+details.cabinet > summary::after{ content:" \25B8"; color:var(--accent); }
+details.cabinet[open] > summary::after{ content:" \25BE"; }
+details.cabinet > summary .hint{ display:block; font-size:18px; font-weight:normal; margin-top:2px; color:var(--accent); }
+.cabinet-body{ padding:0 18px 14px; }
 .foot,footer{
   margin-top:36px; padding:18px; border-radius:12px;
-  background:#241c10; color:#f5d9a0; font-size:18px; line-height:1.6;
+  --footbg:#241c10; --footink:#ffe6b8;
+  background:var(--footbg); color:var(--footink); font-size:18px; line-height:1.6;
 }
-.foot a,footer a{color:#f5d9a0; text-decoration:underline;}
+.foot a,footer a{color:var(--footink); text-decoration:underline;}
 </style>
 </head>
 <body>
 <button id="palette" aria-label="Cycle palette. Current: Default">Palette: Default</button>
 <h1>Tight Spiral Productions</h1>
 <p class="tag">Play. Notice. Design.</p>
-<p class="sub">Every door below opens. Single-file games and tools that teach by playing — offline-capable, accessible-first.</p>
+<p class="sub">Playtesting is open. Start with EN195 below. Everything else is in the cabinet.</p>
 
-<h2>Start here</h2>
-<a class="door" href="tight-spiral-studio-face.html"><span class="name">The Studio</span><span class="what">Who we are and what we make.</span></a>
-<a class="door" href="what-this-is.html"><span class="name">What This Is</span><span class="what">The idea in one sitting.</span></a>
-<a class="door" href="tight-spiral-system-map.html"><span class="name">How the Studio Works</span><span class="what">The gears and components map.</span></a>
+<h2>Play this now</h2>
+<a class="hero" href="en195-hub.html">
+  <span class="now">EN195 &middot; PLAYTEST</span>
+  <span class="name">EN195 &mdash; The Last Week</span>
+  <span class="what">The Creative Writing hub. Four rooms: Ballast, Play the Semester, What Counts Now, the Writing Room. Play it front to back &mdash; then log what snagged you.</span>
+</a>
 
-<h2>Games</h2>
-<!-- Behind This Door: file not yet deployed (404 as of 2026-07-06). Re-enable when behind-this-door.html is live.
-<a class="door" href="behind-this-door.html"><span class="name">Behind This Door</span><span class="what">A street of doors. Notice who lives behind each one — Ireland's writers first.</span></a>
--->
-<a class="door" href="choose-your-leader-full.html"><span class="name">Choose Your Leader</span><span class="what">You don't judge the leader — you judge what you were allowed to see.</span></a>
-<a class="door" href="funnyboney-factory.html"><span class="name">Funny Boney's Factory</span><span class="what">The factory where the bit gets built.</span></a>
-<a class="door" href="elves-house.html"><span class="name">The Elves' House</span><span class="what">A small place with more in it than it says.</span></a>
-<a class="door" href="sandbags-joy.html"><span class="name">Sandbags</span><span class="what">Flash-fiction compression: cut as ascent.</span></a>
-<a class="door" href="flash-ballast.html"><span class="name">Ballast</span><span class="what">The compression move, made physical: cut words fall, the piece rises.</span></a>
+<details class="cabinet">
+  <summary>The Cabinet<span class="hint">Everything else in the studio &mdash; open when you're done with EN195.</span></summary>
+  <div class="cabinet-body">
 
-<h2>The writing room</h2>
-<a class="door" href="workshop-wall.html"><span class="name">Workshop Wall</span><span class="what">Where drafts meet readers.</span></a>
-<a class="door" href="review-bench.html"><span class="name">Review Bench</span><span class="what">Sit with a piece and really read it.</span></a>
-<a class="door" href="en195.html"><span class="name">EN195 — Workshop in a Box</span><span class="what">The whole Creative Writing course as one room you can walk.</span></a>
-<a class="door" href="course-river.html"><span class="name">Course River</span><span class="what">A semester you can navigate instead of scroll.</span></a>
-<a class="door" href="play-the-semester-flash.html"><span class="name">Play the Semester</span><span class="what">The flash-fiction unit as one playable run.</span></a>
-<a class="door" href="en195-last-week.html"><span class="name">What Counts Now</span><span class="what">The last week, made clear.</span></a>
+    <h2>Start here</h2>
+    <a class="door" href="tight-spiral-studio-face.html"><span class="name">The Studio</span><span class="what">Who we are and what we make.</span></a>
+    <a class="door" href="what-this-is.html"><span class="name">What This Is</span><span class="what">The idea in one sitting.</span></a>
+    <a class="door" href="tight-spiral-system-map.html"><span class="name">How the Studio Works</span><span class="what">The gears and components map.</span></a>
+
+    <h2>Games</h2>
+    <a class="door" href="behind-this-door.html"><span class="name">Behind This Door</span><span class="what">A street of doors. Notice who lives behind each one &mdash; Ireland's writers first.</span></a>
+    <a class="door" href="choose-your-leader-full.html"><span class="name">Choose Your Leader</span><span class="what">You don't judge the leader &mdash; you judge what you were allowed to see.</span></a>
+    <a class="door" href="funnyboney-factory.html"><span class="name">Funny Boney's Factory</span><span class="what">The factory where the bit gets built.</span></a>
+    <a class="door" href="elves-house.html"><span class="name">The Elves' House</span><span class="what">A small place with more in it than it says.</span></a>
+    <a class="door" href="sandbags-joy.html"><span class="name">Sandbags</span><span class="what">Flash-fiction compression: cut as ascent.</span></a>
+
+    <h2>The writing room</h2>
+    <a class="door" href="workshop-wall.html"><span class="name">Workshop Wall</span><span class="what">Where drafts meet readers.</span></a>
+    <a class="door" href="review-bench.html"><span class="name">Review Bench</span><span class="what">Sit with a piece and really read it.</span></a>
+    <a class="door" href="course-river.html"><span class="name">Course River</span><span class="what">A semester you can navigate instead of scroll.</span></a>
+
+  </div>
+</details>
 
 <footer class="foot">
-Tight Spiral Productions · walshero@gmail.com<br>
-Built by hand with AI in the loop — the human always has the last touch. How this was made lives inside each piece.
+Tight Spiral Productions &middot; walshero@gmail.com<br>
+Built by hand with AI in the loop &mdash; the human always has the last touch. How this was made lives inside each piece.
 </footer>
 
 <script>
