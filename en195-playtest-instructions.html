@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>EN195 Playtest — How to Play &amp; Log</title>
+<style>
+:root{
+  --paper:#f4efe6; --ink:#1a1408; --accent:#6e4700; --line:#c9b98f;
+  --card:#faf6ee; --gold:#8a5a00;
+  --snag:#7a2318; --fog:#4a3a6e; --spark:#1e5a2e;
+}
+body.softer{ --paper:#e2dccf; --card:#efe7d4; --ink:#241f16; }
+body.warmdark{ --paper:#241c10; --ink:#f5d9a0; --accent:#f5c869; --line:#5a4a2a; --card:#2e2416; --gold:#f5c869; }
+*{box-sizing:border-box;}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:Georgia,'Times New Roman',serif;
+  font-size:22px; line-height:1.55; margin:0; padding:16px 16px 40px;
+  max-width:720px; margin-left:auto; margin-right:auto;
+}
+h1{font-size:32px; line-height:1.2; margin:10px 0 4px;}
+.sub{font-size:19px; margin:0 0 18px; color:var(--accent); font-weight:bold;}
+h2{font-size:25px; margin:28px 0 8px; border-bottom:3px solid var(--line); padding-bottom:6px;}
+#palette{
+  position:sticky; top:8px; float:right; min-height:48px; min-width:48px;
+  font-size:19px; font-weight:bold; padding:10px 16px;
+  background:var(--ink); color:var(--paper); border:3px solid var(--gold);
+  border-radius:10px; cursor:pointer;
+}
+#palette:focus-visible, a:focus-visible{ outline:4px solid var(--gold); outline-offset:3px; }
+.banner{
+  width:100%; border:3px solid var(--line); border-radius:16px;
+  background:var(--card); margin:8px 0 22px; display:block;
+}
+ol.steps{ font-size:22px; padding-left:28px; }
+ol.steps li{ margin:14px 0; }
+.field{
+  display:block; background:var(--card); border:2px solid var(--line);
+  border-radius:12px; padding:14px 16px; margin:10px 0; min-height:56px;
+}
+.field .k{ font-size:23px; font-weight:bold; display:block; }
+.field .v{ font-size:19px; display:block; margin-top:2px; }
+.chips{ margin:16px 0; }
+.chip{
+  display:inline-block; font-size:19px; font-weight:bold; color:#ffffff;
+  background:#3a2a14;
+  padding:10px 18px; border-radius:10px; margin:6px 8px 6px 0; min-height:48px;
+}
+.chip.snag{ background:var(--snag); } .chip.fog{ background:var(--fog); } .chip.spark{ background:var(--spark); }
+.chip .d{ display:block; font-size:15px; font-weight:normal; }
+.rule{
+  background:var(--card); border-left:8px solid var(--gold);
+  border-radius:6px; padding:16px 18px; margin:22px 0; font-size:21px;
+}
+.foot,footer{
+  margin-top:36px; padding:18px; border-radius:12px;
+  --footbg:#241c10; --footink:#ffe6b8;
+  background:var(--footbg); color:var(--footink); font-size:18px; line-height:1.6;
+}
+.foot a,footer a{color:var(--footink); text-decoration:underline;}
+</style>
+</head>
+<body>
+<button id="palette" aria-label="Cycle palette. Current: Default">Palette: Default</button>
+<h1>EN195 Playtest</h1>
+<p class="sub">How to play &middot; How to log what you find</p>
+
+<svg class="banner" viewBox="0 0 700 300" role="img" aria-label="A log card with three tabs labeled Snag, Fog, and Spark, and a hand adding a note.">
+  <rect width="700" height="300" fill="#f4efe6"/>
+  <rect x="60" y="70" width="520" height="180" rx="14" fill="#e6ddc9"/>
+  <rect x="80" y="50" width="520" height="180" rx="14" fill="#faf6ee" stroke="#c9b98f" stroke-width="4"/>
+  <rect x="110" y="30" width="130" height="42" rx="8" fill="#7a2318"/>
+  <text x="175" y="59" font-family="Georgia,serif" font-size="22" fill="#ffffff" text-anchor="middle" font-weight="bold">Snag</text>
+  <rect x="285" y="30" width="130" height="42" rx="8" fill="#4a3a6e"/>
+  <text x="350" y="59" font-family="Georgia,serif" font-size="22" fill="#ffffff" text-anchor="middle" font-weight="bold">Fog</text>
+  <rect x="460" y="30" width="130" height="42" rx="8" fill="#1e5a2e"/>
+  <text x="525" y="59" font-family="Georgia,serif" font-size="22" fill="#ffffff" text-anchor="middle" font-weight="bold">Spark</text>
+  <line x1="110" y1="105" x2="500" y2="105" stroke="#c9b98f" stroke-width="3"/>
+  <line x1="110" y1="140" x2="560" y2="140" stroke="#c9b98f" stroke-width="3"/>
+  <line x1="110" y1="175" x2="470" y2="175" stroke="#c9b98f" stroke-width="3"/>
+  <rect x="500" y="150" width="150" height="16" rx="6" fill="#8a5a00" transform="rotate(28 500 150)"/>
+  <polygon points="628,206 648,214 636,224" fill="#1a1408"/>
+</svg>
+
+<h2>What you're doing</h2>
+<p>Play <strong>EN195 &mdash; The Last Week</strong> first. Everything else in the studio is in the cabinet &mdash; leave it closed for now. Your job isn't to grade the game. It's to <strong>notice where it works and where it fights you</strong>, and write those moments down as they happen.</p>
+
+<h2>How to play</h2>
+<ol class="steps">
+  <li>Open the arcade. Click the big lit tile: <strong>EN195 &mdash; The Last Week</strong>.</li>
+  <li>Play it like a player, not a grader. Click things, wander, get lost, recover.</li>
+  <li>Play a room or a chunk, then <strong>come log what stood out</strong> &mdash; the parts that snagged, fogged, or sparked you. Do this a few times as you go.</li>
+  <li>If something big hits mid-play, jot it however you like &mdash; a phone note, a scrap &mdash; and add it to the log when you pause.</li>
+  <li>One moment per entry. A single line is plenty.</li>
+</ol>
+
+<div class="rule"><strong>The only thing that matters:</strong> log as you go, not all at the end. A few notes per session beats trying to remember everything at once.</div>
+
+<h2>The three kinds of moment</h2>
+<div class="chips">
+  <span class="chip snag">Snag<span class="d">Something broke or blocked me.</span></span>
+  <span class="chip fog">Fog<span class="d">I was confused &mdash; didn't know what to do.</span></span>
+  <span class="chip spark">Spark<span class="d">This worked. Keep it.</span></span>
+</div>
+
+<h2>What each log entry needs</h2>
+<p>Open the <strong>EN195 Playtest Log</strong> in Blackboard and add one entry per moment. Four things:</p>
+<span class="field"><span class="k">Screen</span><span class="v">The exact title text on screen when it happened. Copy it as you see it.</span></span>
+<span class="field"><span class="k">What happened</span><span class="v">One line. Plain words.</span></span>
+<span class="field"><span class="k">Type</span><span class="v">Pick one: Snag, Fog, or Spark.</span></span>
+<span class="field"><span class="k">Fix idea</span><span class="v">Optional. Only if you have one.</span></span>
+
+<h2>Where it goes</h2>
+<p>Everything you log lands in the course Blackboard database and syncs to the gradebook automatically &mdash; you don't email anything or fill out a separate form. Your name and the time attach on their own. Just log what you honestly notice. <strong>A handful of short, specific notes helps more than one long paragraph &mdash; and there's no minimum. Whatever you catch is useful.</strong></p>
+
+<footer class="foot">
+EN195 &middot; Tight Spiral Productions &middot; Play. Notice. Design.<br>
+Questions during the playtest go to your instructor, not into the log.
+</footer>
+
+<script>
+(function(){
+  var b=document.getElementById('palette');
+  var stops=[['Default',''],['Softer','softer'],['Warm-dark','warmdark']];
+  var i=0;
+  b.addEventListener('click',function(){
+    i=(i+1)%stops.length;
+    document.body.className=stops[i][1];
+    b.textContent='Palette: '+stops[i][0];
+    b.setAttribute('aria-label','Cycle palette. Current: '+stops[i][0]);
+  });
+  window.scrollTo(0,0);
+})();
+</script>
+</body>
+</html>
