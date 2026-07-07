@@ -5,10 +5,13 @@
   EN195 Creative Writing. v2 GAME REBUILD 2026-07-06 (founder GATE-1 verdict: "no game").
 
   THE GAME (founder-directed): every word is clickable and every word looks the same.
-  Hidden roles: BALLAST (droppable) vs LOAD-BEARING (the meaning hangs on it).
-  Drop ballast -> the balloon rises. Cut a load-bearing word -> the balloon CRASHES,
-  the word is revealed as what was holding the piece up, and you fly again.
-  Liftoff = enough ballast shed without breaking the meaning. Judgment under risk.
+  THREE HIDDEN ROLES:
+    BALLAST (b:1)  — droppable fluff; the balloon rises.
+    MAYBE   (m:1)  — defensible either way; drops to the heap, no lift, no harm.
+    LOAD-BEARING   — the meaning hangs on it. STRIKE 1: the balloon PLUMMETS but
+    holds, the word stays, and a WHY card explains what it was carrying.
+    STRIKE 2 on any load word: CRASH. Fly again in one tap.
+  Liftoff = enough ballast shed (minus altitude lost to strikes) without a second tear.
 
   SOURCE (sourcing floor, attributed in-game): four pieces by Matt Walsh, verbatim
   excerpts pulled from Google Drive 2026-07-06:
@@ -16,21 +19,23 @@
     "Black Spots on the Crosswalk"  doc 1-5T4gwLGDROu3sXt59eXEPLnSxqUnj21ALjuVvI3o2w
     "Peach Cobbler"                 doc 1G4YQabQySWSNUZMxOLPRn6k43kAYNjowPMgT-KFcg8g
     "Dead Ants"                     doc 15XlmThncqd8XnEqVGjahIIk_aO02iYLQDhAL3IEsbrE
-  HITL LAYER: a few ballast words are studio-inserted padding (marked ins:true in the
-  data) woven into the author's sentences so each excerpt has enough droppable weight.
-  Every load/ballast tag is a studio call awaiting the founder's per-word retune.
-  RETUNE 2026-07-06 (founder crash report on "A"): fair-crash rule — a word is ballast
-  if the sentence survives its cut with meaning intact; crash only when tissue tears.
-  Fluff layer thickened across all four pieces; sentence-initial cuts auto-capitalize.
+  HITL LAYER: inserted padding is marked ins:1; every b / m / why tag is a studio
+  call awaiting the founder's per-word retune. Why-cards are studio craft notes at
+  the 70% voice tier — founder finishes.
+  CHANGELOG:
+    2026-07-06 retune 1 — fair-crash rule; fluff thickened; auto-capitalization.
+    2026-07-06 retune 2 (founder) — MAYBE role added; two-strike engine (plummet
+    then crash); why-cards on load words; fluff thickened again; strike math keeps
+    liftoff reachable after one strike on every piece.
 
-  DIGNITY FLOOR: a crash is never shame — "that word was holding the piece up" and the
-  next flight starts in one tap. A dropped word "may fly another day."
+  DIGNITY FLOOR: neither a strike nor a crash is shame — the word was holding the
+  piece up, and now you know it by feel. A dropped word may fly another day.
 
-  FLOORS: single-file, offline, in-memory. NO GREEN. Landing >50% image. 3-stop comfort
-  knob (never a wall). Explicit dark palette. Fixed-dark chips for white-on-color text.
-  44px+ targets, keyboard on every word (identical aria-labels — the roles never leak),
-  visible focus, reduced-motion instant states, scroll-reset, no emoji. Art: original
-  cut-paper SVG, CC0, Tight Spiral Paper Craft.
+  FLOORS: single-file, offline, in-memory. NO GREEN. Landing >50% image. 3-stop
+  comfort knob (never a wall). Explicit dark palette. Fixed-dark chips for
+  white-on-color text. 44px+ targets, keyboard on every word (identical aria-labels
+  — roles never leak), visible focus, reduced-motion instant states, scroll-reset,
+  no emoji. Art: original cut-paper SVG, CC0, Tight Spiral Paper Craft.
 -->
 <head>
 <meta charset="UTF-8">
@@ -62,8 +67,8 @@ body{ margin:0; font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif
 .liftlabel{ position:absolute; right:8px; top:66px; font:800 .72rem/1 inherit; color:var(--rust); background:var(--card); padding:.15rem .4rem; border-radius:5px; }
 #balloon{ position:absolute; left:50%; bottom:6px; width:140px; margin-left:-70px;
   transition:transform 1s cubic-bezier(.3,.6,.3,1); }
-#balloon.crashing{ transition:transform .55s cubic-bezier(.6,0,.9,.4); }
-@media (prefers-reduced-motion: reduce){ #balloon, #balloon.crashing{ transition:none; } }
+#balloon.falling{ transition:transform .6s cubic-bezier(.6,0,.9,.4); }
+@media (prefers-reduced-motion: reduce){ #balloon, #balloon.falling{ transition:none; } }
 .altrow{ position:absolute; left:8px; top:8px; background:#2b3540; color:#fff; font:800 .74rem/1 inherit; padding:.35rem .55rem; border-radius:7px; }
 .srcrow{ position:absolute; left:8px; bottom:8px; background:var(--card); color:var(--ink); font:700 .72rem/1.3 inherit; padding:.3rem .5rem; border-radius:7px; border:2px solid var(--line); max-width:62%; }
 .manifest{ border-top:3px solid var(--line); background:var(--card); padding:.8rem .9rem .6rem; }
@@ -73,11 +78,15 @@ body{ margin:0; font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif
 .w:hover{ background:var(--gold-pale); }
 .w:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 .w.cut{ display:none; }
-.w.crashword{ background:#7a2f14; color:#fff; cursor:default; }
+.w.strut{ background:#7a2f14; color:#fff; }
+.whycard{ display:none; background:var(--card); border:3px solid #7a2f14; border-radius:12px; padding:.7rem .9rem; margin:.7rem 0 0; font-size:.95rem; }
+.whycard.on{ display:block; }
+.whycard b{ color:var(--rust); }
 .heaprow{ border-top:3px solid var(--line); background:var(--card); padding:.6rem .9rem .8rem; min-height:60px; }
 .htitle{ font:800 .7rem/1 inherit; letter-spacing:.1em; text-transform:uppercase; color:var(--slate); margin:0 0 .35rem; }
 .scrap{ display:inline-block; font-family:Georgia,serif; font-size:.95rem; background:var(--gold-pale); border:2px solid var(--line); border-radius:4px; padding:.1rem .4rem; margin:.15rem .2rem; transform:rotate(-2deg); }
 .scrap:nth-child(even){ transform:rotate(2.5deg); }
+.scrap.mb{ background:var(--card); border-style:dashed; }
 .none{ font-size:.85rem; opacity:.75; }
 .hint{ font-size:.88rem; margin:.6rem .2rem 0; min-height:1.4em; }
 .btnrow{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.8rem; }
@@ -100,7 +109,7 @@ body{ margin:0; font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif
 </div>
 
 <div class="wrap">
-  <p class="prompt" id="prompt">Too heavy to fly. Tap any word this piece can live without. Choose wrong, and it crashes.</p>
+  <p class="prompt" id="prompt">Too heavy to fly. Tap words this piece can live without. Tear the meaning twice, and it crashes.</p>
 
   <div class="plate">
     <div class="skybox" aria-hidden="true">
@@ -121,6 +130,7 @@ body{ margin:0; font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif
     <div class="manifest">
       <p class="mtitle">The cargo manifest — every word is a sandbag; some are holding the piece up</p>
       <div class="draft" id="draft"></div>
+      <div class="whycard" id="whycard" aria-live="polite"></div>
       <p class="hint" id="weightline" aria-live="polite"></p>
     </div>
     <div class="heaprow">
@@ -146,7 +156,7 @@ body{ margin:0; font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif
   </div>
 
   <div class="foot">
-    <p>Sandbags · Tight Spiral Studios · walshero@gmail.com. Single-file, offline, stores nothing. A crash is never shame — that word was holding the piece up, and now you know it by feel. Excerpts from four pieces by Matt Walsh, used by the author. Art: original cut-paper SVG, CC0, Tight Spiral Paper Craft.</p>
+    <p>Sandbags · Tight Spiral Studios · walshero@gmail.com. Single-file, offline, stores nothing. A strike is never shame — that word was holding the piece up, and now you know it by feel. Excerpts from four pieces by Matt Walsh, used by the author. Art: original cut-paper SVG, CC0, Tight Spiral Paper Craft.</p>
   </div>
 </div>
 
@@ -154,7 +164,6 @@ body{ margin:0; font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif
 (function(){
   var $=function(id){return document.getElementById(id);};
   window.scrollTo(0,0);
-  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var stops=[{c:'',n:'Default'},{c:'softer',n:'Softer'},{c:'warm',n:'Warm-dark'}], ci=0;
   $('cstop').addEventListener('click',function(){
@@ -163,35 +172,39 @@ body{ margin:0; font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif
     this.textContent='Comfort: '+stops[ci].n;
   });
 
-  /* PIECES — verbatim Matt Walsh excerpts. b:1 = ballast (safe to drop);
-     no flag = load-bearing (cutting it crashes). ins:1 = studio-inserted padding
-     (the HITL layer — founder retunes). g:1 = glue punctuation, not clickable. */
+  /* PIECES — verbatim Matt Walsh excerpts.
+     b:1 = ballast (lifts). m:1 = maybe (heap, no lift, no harm).
+     no flag = load-bearing (strike 1 plummet, strike 2 crash).
+     ins:1 = studio-inserted padding (HITL). g:1 = glue, not clickable.
+     why = craft note shown on a strike (70% tier, founder finishes). */
+  var GENWHY="the sentence tears without it.";
   var PIECES=[
-   { title:"Ramen at Echigo Kawaguchi", by:"Matt Walsh", liftAt:8, w:[
-    {t:"A",b:1},{t:"heavy",b:1},{t:"rain"},{t:"fell"},{t:",",g:1},{t:"and"},{t:"the"},{t:"villagers"},{t:"slowly",b:1,ins:1},{t:"opened"},{t:"their"},{t:"umbrellas"},{t:".",g:1},
-    {t:"The"},{t:"rainstorm"},{t:"completely",b:1,ins:1},{t:"consumed"},{t:"me"},{t:",",g:1},{t:"but"},{t:"I"},{t:"just",b:1},{t:"stood"},{t:"there"},{t:".",g:1},
-    {t:"I"},{t:"quickly",b:1,ins:1},{t:"ran"},{t:"to"},{t:"a"},{t:"small",b:1,ins:1},{t:"noodle"},{t:"shop"},{t:"with"},{t:"bowls"},{t:"of"},{t:"plastic"},{t:"ramen"},{t:"in"},{t:"the"},{t:"window"},{t:".",g:1},
-    {t:"I"},{t:"sat"},{t:"down",b:1,ins:1},{t:"at"},{t:"the"},{t:"counter"},{t:"with"},{t:"all",b:1,ins:1},{t:"the"},{t:"other",b:1},{t:"salarymen"},{t:".",g:1},
-    {t:"We"},{t:"slurped"},{t:"our"},{t:"noodles"},{t:"together",b:1},{t:"without"},{t:"talking"},{t:"and"},{t:"just",b:1,ins:1},{t:"listened"},{t:"to"},{t:"the"},{t:"rain"},{t:".",g:1} ]},
-   { title:"Black Spots on the Crosswalk", by:"Matt Walsh", liftAt:6, w:[
-    {t:"My"},{t:"father"},{t:"slowly",b:1,ins:1},{t:"reached"},{t:"out",b:1,ins:1},{t:"for"},{t:"my"},{t:"hand"},{t:"as"},{t:"we"},{t:"stepped"},{t:"right",b:1,ins:1},{t:"to"},{t:"the"},{t:"very",b:1,ins:1},{t:"edge"},{t:"of"},{t:"the"},{t:"curb"},{t:",",g:1},
-    {t:"though"},{t:"I"},{t:"thought"},{t:"I"},{t:"was"},{t:"probably",b:1,ins:1},{t:"old"},{t:"enough"},{t:"that"},{t:"perhaps",b:1},{t:"I"},{t:"didn't"},{t:"really",b:1,ins:1},{t:"need"},{t:"to"},{t:".",g:1},
-    {t:"\u201CWhat"},{t:"are"},{t:"those"},{t:"black"},{t:"spots"},{t:"on"},{t:"the"},{t:"crosswalk?\u201D"},{t:"I"},{t:"asked"},{t:"him",b:1},{t:"quietly",b:1,ins:1},{t:".",g:1},
-    {t:"They"},{t:"were"},{t:"quarter"},{t:"and"},{t:"half-dollar"},{t:"sized"},{t:",",g:1},{t:"faceless"},{t:".",g:1} ]},
-   { title:"Peach Cobbler", by:"Matt Walsh", liftAt:7, w:[
+   { title:"Ramen at Echigo Kawaguchi", by:"Matt Walsh", liftAt:9, w:[
+    {t:"A",b:1},{t:"heavy",b:1},{t:"rain",why:"the piece opens and closes on rain — cut the first one and the ending loses its echo."},{t:"fell"},{t:",",g:1},{t:"and"},{t:"the"},{t:"villagers"},{t:"slowly",b:1,ins:1},{t:"opened"},{t:"their"},{t:"umbrellas"},{t:".",g:1},
+    {t:"The"},{t:"rainstorm"},{t:"completely",b:1,ins:1},{t:"consumed"},{t:"me",why:"the storm has to swallow HIM — that is the whole emotional weather."},{t:",",g:1},{t:"but"},{t:"I"},{t:"just",b:1},{t:"stood"},{t:"there",m:1},{t:".",g:1},
+    {t:"I"},{t:"quickly",b:1,ins:1},{t:"ran"},{t:"to"},{t:"a"},{t:"small",b:1,ins:1},{t:"noodle"},{t:"shop"},{t:"with"},{t:"big",b:1,ins:1},{t:"bowls"},{t:"of"},{t:"plastic",why:"the whole image — fake ramen in the window, real hunger at the counter. Cut it and it is just a restaurant."},{t:"ramen"},{t:"in"},{t:"the"},{t:"window"},{t:".",g:1},
+    {t:"I"},{t:"sat"},{t:"down",b:1,ins:1},{t:"at"},{t:"the"},{t:"counter"},{t:"with"},{t:"all",b:1,ins:1},{t:"the"},{t:"other",b:1},{t:"salarymen",why:"one word does the whole scene's sociology — a stranger folded in among the regulars."},{t:".",g:1},
+    {t:"We"},{t:"slurped"},{t:"our",m:1},{t:"noodles"},{t:"together",b:1},{t:"without",why:"the comfort is the silence — 'without talking' is the mercy of the scene."},{t:"talking"},{t:"and"},{t:"just",b:1,ins:1},{t:"listened"},{t:"quietly",b:1,ins:1},{t:"to"},{t:"the"},{t:"rain",why:"the piece ends on the sound it opened with. This word is the landing."},{t:".",g:1} ]},
+   { title:"Black Spots on the Crosswalk", by:"Matt Walsh", liftAt:7, w:[
+    {t:"My",m:1},{t:"father",why:"the piece is a transaction between a child and this one man. He has to be named."},{t:"slowly",b:1,ins:1},{t:"reached"},{t:"out",b:1,ins:1},{t:"for"},{t:"my"},{t:"hand",why:"the entire piece is about whether to take it."},{t:"as"},{t:"we"},{t:"stepped"},{t:"right",b:1,ins:1},{t:"to"},{t:"the"},{t:"very",b:1,ins:1},{t:"edge"},{t:"of"},{t:"the"},{t:"curb",why:"the edge the whole piece stands on — one step from the crosswalk and its black spots."},{t:",",g:1},
+    {t:"though"},{t:"I"},{t:"just",b:1,ins:1},{t:"thought"},{t:"I"},{t:"was"},{t:"probably",b:1,ins:1},{t:"old"},{t:"enough"},{t:"that"},{t:"perhaps",b:1},{t:"I"},{t:"didn't"},{t:"really",b:1,ins:1},{t:"need"},{t:"to"},{t:".",g:1},
+    {t:"\u201CWhat"},{t:"are"},{t:"those",m:1},{t:"black",why:"the title lives here. The spots have to be black."},{t:"spots"},{t:"on"},{t:"the"},{t:"crosswalk?\u201D"},{t:"I"},{t:"asked"},{t:"him",b:1},{t:"quietly",b:1,ins:1},{t:".",g:1},
+    {t:"They"},{t:"were"},{t:"quarter"},{t:"and"},{t:"half-dollar"},{t:"sized"},{t:",",g:1},{t:"faceless",why:"the horror is the blankness. 'Faceless' is why the child gasps."},{t:".",g:1} ]},
+   { title:"Peach Cobbler", by:"Matt Walsh", liftAt:8, w:[
     {t:"We"},{t:"talked"},{t:"about"},{t:"moving"},{t:"again",b:1,ins:1},{t:".",g:1},
-    {t:"My"},{t:"wife"},{t:"even",b:1,ins:1},{t:"made"},{t:"me"},{t:"sleep"},{t:"down",b:1,ins:1},{t:"by"},{t:"the"},{t:"cellar"},{t:"door"},{t:".",g:1},
-    {t:"The"},{t:"kids"},{t:"wanted"},{t:"their"},{t:"toys"},{t:"back",b:1},{t:",",g:1},{t:"but"},{t:"the"},{t:"hives"},{t:"on"},{t:"my"},{t:"hands"},{t:"only",b:1,ins:1},{t:"got"},{t:"much",b:1,ins:1},{t:"worse"},{t:"when"},{t:"I"},{t:"thought"},{t:"about"},{t:"actually",b:1,ins:1},{t:"going"},{t:"over"},{t:".",g:1},
-    {t:"I"},{t:"prayed"},{t:"about"},{t:"it"},{t:".",g:1},{t:"I"},{t:"meditated"},{t:"quietly",b:1,ins:1},{t:".",g:1},{t:"I"},{t:"read"},{t:"a"},{t:"whole",b:1,ins:1},{t:"book"},{t:"on"},{t:"conflict"},{t:"resolution"},{t:".",g:1},
-    {t:"In"},{t:"the"},{t:"end"},{t:",",g:1},{t:"I"},{t:"finally",b:1,ins:1},{t:"baked"},{t:"a"},{t:"peach"},{t:"cobbler"},{t:",",g:1},{t:"and"},{t:"walked"},{t:"it"},{t:"over"},{t:"myself"},{t:".",g:1} ]},
-   { title:"Dead Ants", by:"Matt Walsh", liftAt:6, w:[
-    {t:"We"},{t:"were"},{t:"just",b:1,ins:1},{t:"standing"},{t:"around",b:1,ins:1},{t:"by"},{t:"the"},{t:"old",b:1,ins:1},{t:"payphones"},{t:"across"},{t:"from"},{t:"Sparr's"},{t:",",g:1},{t:"patiently",b:1,ins:1},{t:"waiting"},{t:"for"},{t:"the"},{t:"39"},{t:"bus"},{t:".",g:1},
-    {t:"An"},{t:"ant"},{t:"on"},{t:"the"},{t:"sidewalk"},{t:",",g:1},{t:"and"},{t:"you"},{t:"suddenly",b:1,ins:1},{t:"stepped"},{t:"without"},{t:"thinking"},{t:",",g:1},
-    {t:"slid"},{t:"your"},{t:"sneaker"},{t:"quickly",b:1,ins:1},{t:"across"},{t:"the"},{t:"pavement"},{t:"and"},{t:"completely",b:1,ins:1},{t:"smeared"},{t:"it"},{t:"from"},{t:"existence"},{t:",",g:1},
-    {t:"and"},{t:"then",b:1},{t:"you"},{t:"slowly",b:1,ins:1},{t:"looked"},{t:"at"},{t:"me"},{t:"to"},{t:"see"},{t:"if"},{t:"I"},{t:"had"},{t:"seen"},{t:".",g:1} ]}
+    {t:"My"},{t:"wife"},{t:"even",b:1,ins:1},{t:"made"},{t:"me"},{t:"sleep"},{t:"down",b:1,ins:1},{t:"by"},{t:"the"},{t:"cellar",why:"the funny-sad specific — he guards the one door the neighbors keep coming through."},{t:"door"},{t:".",g:1},
+    {t:"The"},{t:"kids"},{t:"wanted"},{t:"their",m:1},{t:"toys"},{t:"back",b:1},{t:",",g:1},{t:"but"},{t:"the"},{t:"hives",why:"the body keeping score — the conflict has broken out on his skin."},{t:"on"},{t:"my"},{t:"hands"},{t:"only",b:1,ins:1},{t:"got"},{t:"much",b:1,ins:1},{t:"worse"},{t:"when"},{t:"I"},{t:"really",b:1,ins:1},{t:"thought"},{t:"about"},{t:"actually",b:1,ins:1},{t:"going"},{t:"over"},{t:".",g:1},
+    {t:"I"},{t:"simply",b:1,ins:1},{t:"prayed"},{t:"about"},{t:"it"},{t:".",g:1},{t:"I"},{t:"meditated"},{t:"quietly",b:1,ins:1},{t:".",g:1},{t:"I"},{t:"read"},{t:"a"},{t:"whole",b:1,ins:1},{t:"book"},{t:"on"},{t:"conflict"},{t:"resolution"},{t:".",g:1},
+    {t:"In"},{t:"the"},{t:"end"},{t:",",g:1},{t:"I"},{t:"finally",b:1,ins:1},{t:"baked"},{t:"a"},{t:"peach",why:"it is not a cobbler. It is a PEACH cobbler. The specific is the peace offering."},{t:"cobbler"},{t:",",g:1},{t:"and"},{t:"walked"},{t:"it"},{t:"over"},{t:"myself",why:"the entire piece walks to the neighbor's door on this one word."},{t:".",g:1} ]},
+   { title:"Dead Ants", by:"Matt Walsh", liftAt:7, w:[
+    {t:"We"},{t:"were"},{t:"just",b:1,ins:1},{t:"standing"},{t:"around",b:1,ins:1},{t:"by"},{t:"the"},{t:"old",b:1,ins:1},{t:"payphones"},{t:"across"},{t:"from"},{t:"Sparr's",why:"the real name makes the memory real. Proper nouns are load-bearing in memoir."},{t:",",g:1},{t:"patiently",b:1,ins:1},{t:"waiting"},{t:"for"},{t:"the"},{t:"39"},{t:"bus"},{t:".",g:1},
+    {t:"An"},{t:"ant",why:"the smallest life in the piece carries the biggest promise."},{t:"right",b:1,ins:1},{t:"on"},{t:"the"},{t:"sidewalk"},{t:",",g:1},{t:"and"},{t:"you"},{t:"suddenly",b:1,ins:1},{t:"stepped"},{t:"without",why:"the promise breaks 'without thinking' — thoughtlessness, not cruelty, is the story."},{t:"thinking"},{t:",",g:1},
+    {t:"slid"},{t:"your",m:1},{t:"sneaker"},{t:"quickly",b:1,ins:1},{t:"across"},{t:"the"},{t:"pavement"},{t:"and"},{t:"completely",b:1,ins:1},{t:"smeared"},{t:"it"},{t:"from"},{t:"existence",why:"bigger than 'killed it' — the word carries the drunk-philosophical promise it breaks."},{t:",",g:1},
+    {t:"and"},{t:"then",b:1},{t:"you"},{t:"slowly",b:1,ins:1},{t:"looked"},{t:"at"},{t:"me"},{t:"to"},{t:"see"},{t:"if"},{t:"I"},{t:"had"},{t:"seen",why:"the piece ends on being witnessed — the look back is the confession."},{t:".",g:1} ]}
   ];
 
-  var pi=0, W=[], cut=[], lifted=false, crashed=false;
+  var pi=0, W=[], cut=[], lifted=false, crashed=false, strikes=0;
+  var STRIKE_COST=3;
 
   function cap(t){ return t.charAt(0).toUpperCase()+t.slice(1); }
   function sentenceStarts(){
@@ -206,13 +219,14 @@ body{ margin:0; font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif
 
   function loadPiece(i){
     pi=i%PIECES.length;
-    W=PIECES[pi].w.map(function(x){ return {t:x.t, b:!!x.b, g:!!x.g, cutNow:false}; });
-    cut=[]; lifted=false; crashed=false;
+    W=PIECES[pi].w.map(function(x){ return {t:x.t, b:!!x.b, m:!!x.m, g:!!x.g, why:x.why||null, cutNow:false, struck:false}; });
+    cut=[]; lifted=false; crashed=false; strikes=0;
     $('after').classList.remove('on');
-    $('balloon').classList.remove('crashing');
+    $('whycard').classList.remove('on');
+    $('balloon').classList.remove('falling');
     $('srcrow').textContent='from \u201C'+PIECES[pi].title+'\u201D \u00B7 '+PIECES[pi].by;
-    $('prompt').textContent='Too heavy to fly. Tap any word this piece can live without. Choose wrong, and it crashes.';
-    render(); altitude();
+    $('prompt').textContent='Too heavy to fly. Tap words this piece can live without. Tear the meaning twice, and it crashes.';
+    render(); altitude(false);
   }
 
   function render(){
@@ -221,54 +235,85 @@ body{ margin:0; font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif
     W.forEach(function(w,i){
       var sp=document.createElement('span');
       if(w.g){ sp.textContent=w.t; box.appendChild(sp); return; }
-      sp.className='w'+(w.cutNow?' cut':'');
+      sp.className='w'+(w.cutNow?' cut':'')+(w.struck?' strut':'');
       sp.textContent=' '+(caps[i]?cap(w.t):w.t);
       if(!w.cutNow && !crashed && !lifted){
         sp.tabIndex=0; sp.setAttribute('role','button');
         sp.setAttribute('aria-label','drop the word '+w.t);
-        sp.addEventListener('click',function(){ tapWord(i,sp); });
-        sp.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); tapWord(i,sp);} });
+        sp.addEventListener('click',function(){ tapWord(i); });
+        sp.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); tapWord(i);} });
       }
       box.appendChild(sp);
     });
     var p=$('pile'); p.innerHTML='';
     if(!cut.length){ p.innerHTML='<span class="none">nothing dropped yet</span>'; }
-    else cut.forEach(function(i){ var s=document.createElement('span'); s.className='scrap'; s.textContent=W[i].t; p.appendChild(s); });
+    else cut.forEach(function(i){ var s=document.createElement('span'); s.className='scrap'+(W[i].m?' mb':''); s.textContent=W[i].t; p.appendChild(s); });
   }
 
-  function tapWord(i,sp){
+  function lift(){ return Math.max(0, cut.filter(function(i){return W[i].b;}).length - strikes*STRIKE_COST); }
+
+  function tapWord(i){
     if(crashed||lifted) return;
-    if(W[i].b){
-      W[i].cutNow=true; cut.push(i);
-      render(); altitude();
+    var w=W[i];
+    if(w.b){
+      w.cutNow=true; cut.push(i);
+      $('whycard').classList.remove('on');
+      render(); altitude(false);
+    } else if(w.m){
+      w.cutNow=true; cut.push(i);
+      $('whycard').classList.remove('on');
+      render(); altitude(false);
+      $('weightline').textContent='\u201C'+w.t+'\u201D was a maybe \u2014 the piece survives either way. It fell to the heap, but nothing got lighter.';
+      $('liveStat').textContent='Dropped the maybe word '+w.t+'. No lift, no harm.';
     } else {
-      crash(i,sp);
+      strikes++;
+      w.struck=true;
+      showWhy(w);
+      if(strikes>=2){ crash(w); } else { plummet(w); }
     }
   }
 
-  function altitude(){
-    var need=PIECES[pi].liftAt, n=cut.length, frac=Math.min(n/need,1.12);
-    $('balloon').style.transform='translateY('+(-frac*200)+'px)';
-    $('altnum').textContent = n===0 ? 'on the ground' : (frac>=1 ? 'LIFTOFF' : 'rising \u2014 '+n+' of '+need+' bags');
-    $('weightline').textContent = frac>=1 ? 'It flies. The heap below is the proof of the climb.'
-      : (n>0 ? 'Lighter \u2014 but every next cut is riskier.' : 'Every word looks the same. Some are holding the piece up.');
-    $('liveStat').textContent='Dropped '+n+' words. '+(frac>=1?'Liftoff.':'Balloon rising.');
-    if(frac>=1 && !lifted){ lifted=true; liftoffReveal(); }
+  function showWhy(w){
+    var card=$('whycard');
+    card.innerHTML='<b>\u201C'+w.t+'\u201D is a strut.</b> '+(w.why||GENWHY);
+    card.classList.add('on');
   }
 
-  function crash(i,sp){
+  function plummet(w){
+    $('balloon').classList.add('falling');
+    render(); altitude(true);
+    setTimeout(function(){ $('balloon').classList.remove('falling'); },700);
+    $('prompt').textContent='It plummets \u2014 but holds. That word stays. One more tear and it crashes.';
+    $('weightline').textContent='You lost altitude. Climb again \u2014 carefully.';
+    $('liveStat').textContent='Strike. The word '+w.t+' was load-bearing. The balloon dropped hard but holds.';
+  }
+
+  function altitude(falling){
+    var need=PIECES[pi].liftAt, n=lift(), frac=Math.min(n/need,1.12);
+    $('balloon').style.transform='translateY('+(-frac*200)+'px)'+(falling?' rotate(-6deg)':'');
+    $('altnum').textContent = (crashed?'CRASH':(frac>=1?'LIFTOFF':(n===0?(strikes>0?'back on the ground':'on the ground'):'rising \u2014 '+n+' of '+need+' bags')));
+    if(!crashed && !$('whycard').classList.contains('on')){
+      $('weightline').textContent = frac>=1 ? 'It flies. The heap below is the proof of the climb.'
+        : (n>0 ? 'Lighter \u2014 but every next cut is riskier.' : 'Every word looks the same. Some are holding the piece up.');
+    }
+    $('liveStat').textContent='Lift '+n+' of '+need+'. '+(frac>=1?'Liftoff.':'');
+    if(frac>=1 && !lifted && !crashed){ lifted=true; liftoffReveal(); }
+  }
+
+  function crash(w){
     crashed=true;
-    sp.className='w crashword'; sp.removeAttribute('tabindex');
-    $('balloon').classList.add('crashing');
+    $('balloon').classList.add('falling');
     $('balloon').style.transform='translateY(14px) rotate(-9deg)';
     $('altnum').textContent='CRASH';
-    $('prompt').textContent='Down it comes.';
-    $('weightline').textContent='\u201C'+W[i].t+'\u201D was holding the piece up. Cut it, and the meaning tore. Now you know it by feel.';
-    $('liveStat').textContent='Crash. The word '+W[i].t+' was load-bearing.';
-    $('afterLabel').textContent='It crashed \u2014 the word that was holding it up';
-    $('finalPiece').textContent='\u201C'+W[i].t+'\u201D \u2014 it looked like a sandbag. It was a strut. A crash is never shame; the next flight starts lighter in the head.';
+    $('prompt').textContent='Down it comes. Two tears is more than the meaning can hold.';
+    $('weightline').textContent='Now you know two struts by feel. That is not a loss \u2014 that is the lesson.';
+    $('liveStat').textContent='Crash. The word '+w.t+' was load-bearing.';
+    $('afterLabel').textContent='It crashed \u2014 the words that were holding it up';
+    var struck=W.filter(function(x){return x.struck;}).map(function(x){return '\u201C'+x.t+'\u201D';}).join(' and ');
+    $('finalPiece').textContent=struck+' \u2014 they looked like sandbags. They were struts. A crash is never shame; the next flight starts lighter in the head.';
     $('attrLine').textContent='from \u201C'+PIECES[pi].title+'\u201D \u00B7 '+PIECES[pi].by;
     $('after').classList.add('on');
+    render();
   }
 
   function liftoffReveal(){
@@ -277,7 +322,7 @@ body{ margin:0; font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif
     $('prompt').textContent='Liftoff. The lean piece was inside the whole time.';
     $('afterLabel').textContent='It flew \u2014 the piece that was inside';
     $('finalPiece').textContent=text;
-    $('attrLine').textContent='from \u201C'+PIECES[pi].title+'\u201D \u00B7 '+PIECES[pi].by+' \u00B7 dropped '+cut.length+' bags without tearing the meaning.';
+    $('attrLine').textContent='from \u201C'+PIECES[pi].title+'\u201D \u00B7 '+PIECES[pi].by+' \u00B7 '+(strikes===0?'a clean climb \u2014 no torn meaning.':'it flew even after a strike \u2014 that is revision.');
     $('after').classList.add('on');
   }
 
@@ -285,7 +330,8 @@ body{ margin:0; font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif
     if(!cut.length||crashed) return;
     var i=cut.pop(); W[i].cutNow=false;
     if(lifted){ lifted=false; $('after').classList.remove('on'); }
-    render(); altitude();
+    $('whycard').classList.remove('on');
+    render(); altitude(false);
   });
   $('nextPiece').addEventListener('click',function(){ loadPiece(pi+1); });
   $('flyNext').addEventListener('click',function(){ loadPiece(pi+1); window.scrollTo(0,0); });
