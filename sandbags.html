@@ -2,30 +2,32 @@
 <html lang="en">
 <!--
   SANDBAGS — a flash-fiction compression game. Tight Spiral Studios · walshero@gmail.com
-  EN195 Creative Writing. NUNAN-MODE REBUILD 2026-07-06 (replaces comfort-gated build).
+  EN195 Creative Writing. v2 GAME REBUILD 2026-07-06 (founder GATE-1 verdict: "no game").
 
-  NUNAN MODE: no gate, no intro screen. You land AT the balloon — tethered, too heavy,
-  its cargo manifest hanging below with every word of the bloated draft on it. One
-  intuitive tap on any word you don't need: it tears loose, falls to the heap, and the
-  balloon RISES. The first tap teaches the whole game. Language (the reveal, the
-  reflection) comes only after liftoff. Comfort is a corner knob, never a wall.
+  THE GAME (founder-directed): every word is clickable and every word looks the same.
+  Hidden roles: BALLAST (droppable) vs LOAD-BEARING (the meaning hangs on it).
+  Drop ballast -> the balloon rises. Cut a load-bearing word -> the balloon CRASHES,
+  the word is revealed as what was holding the piece up, and you fly again.
+  Liftoff = enough ballast shed without breaking the meaning. Judgment under risk.
 
-  THE SPINE (unchanged, founder-locked 2026-06-29): cut words are SANDBAGS — they fall
-  to a heap, and shedding them LIFTS the piece. Compression is ASCENT. You win by
-  reaching ALTITUDE (the liftoff line), not zero. The heap is the proof of the climb.
-  Locked words = the lean piece that must survive; tapping them is inert.
-  Lean piece inside: "The last bus pulled away as she reached the curb. He promised
-  he would wait. The taillights got smaller." LIFT_AT = 9 of ~14 droppable.
+  SOURCE (sourcing floor, attributed in-game): four pieces by Matt Walsh, verbatim
+  excerpts pulled from Google Drive 2026-07-06:
+    "Ramen at Echigo Kawaguchi"     doc 17IPevuwPsp0Y6MICt88PC_pK0v81Mpi0eNcueY5JbQA
+    "Black Spots on the Crosswalk"  doc 1-5T4gwLGDROu3sXt59eXEPLnSxqUnj21ALjuVvI3o2w
+    "Peach Cobbler"                 doc 1G4YQabQySWSNUZMxOLPRn6k43kAYNjowPMgT-KFcg8g
+    "Dead Ants"                     doc 15XlmThncqd8XnEqVGjahIIk_aO02iYLQDhAL3IEsbrE
+  HITL LAYER: a few ballast words are studio-inserted padding (marked ins:true in the
+  data) woven into the author's sentences so each excerpt has enough droppable weight.
+  Every load/ballast tag is a studio call awaiting the founder's per-word retune.
 
-  DIGNITY FLOOR (unchanged): a cut word is never a failure. It is weight THIS flight
-  doesn't need — it may fly another day. No violence framing.
+  DIGNITY FLOOR: a crash is never shame — "that word was holding the piece up" and the
+  next flight starts in one tap. A dropped word "may fly another day."
 
-  FLOORS: single-file, offline, in-memory. NO GREEN. Landing screen >50% image (the
-  balloon plate leads; the manifest is the game surface). 3-stop comfort knob, dark
-  stop ships its own passing palette (explicit color-scheme; never inherit OS charcoal).
-  Fixed-dark chips for any white-on-color text. 44px+ targets. Keyboard: every word
-  reachable, Enter/Space drops it. Visible focus. Reduced-motion: states shown
-  instantly. Scroll-reset. No emoji. Art: original cut-paper SVG, CC0.
+  FLOORS: single-file, offline, in-memory. NO GREEN. Landing >50% image. 3-stop comfort
+  knob (never a wall). Explicit dark palette. Fixed-dark chips for white-on-color text.
+  44px+ targets, keyboard on every word (identical aria-labels — the roles never leak),
+  visible focus, reduced-motion instant states, scroll-reset, no emoji. Art: original
+  cut-paper SVG, CC0, Tight Spiral Paper Craft.
 -->
 <head>
 <meta charset="UTF-8">
@@ -35,13 +37,12 @@
 <style>
 :root{
   --bg:#f3ead8; --card:#fffaf0; --ink:#1f1b12; --line:#c2b288;
-  --slate:#3a4654; --slate2:#2b3540;
-  --gold:#6e4700; --gold-br:#c8900a; --gold-pale:#fbeec6;
+  --slate:#3a4654; --gold:#6e4700; --gold-br:#c8900a; --gold-pale:#fbeec6;
   --rust:#8a3a1c; --sky:#cdd8e2; --skyhi:#e4ebf1; --focus:#c8900a;
 }
 body.softer{ --bg:#d9d2c4; --card:#e2dccf; --ink:#241f16; --line:#a3906c; --sky:#c0c9d1; --skyhi:#cfd6dc; --gold:#5e3d00; }
 body.warm{ --bg:#1a1712; --card:#262019; --ink:#f3e6c6; --line:#5d543d;
-  --slate:#9ab6c8; --slate2:#7c98aa; --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#2c2614;
+  --slate:#9ab6c8; --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#2c2614;
   --rust:#eaa183; --sky:#20242c; --skyhi:#2a2f3a; }
 *{box-sizing:border-box}
 body{ margin:0; font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
@@ -52,46 +53,39 @@ body{ margin:0; font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif
 .cstop:focus-visible{ outline:3px solid #fff; outline-offset:2px; }
 .wrap{ max-width:760px; margin:0 auto; padding:.8rem .8rem 4rem; }
 .prompt{ text-align:center; font-weight:800; font-size:1.02rem; color:var(--gold); margin:.3rem 0 .5rem; min-height:1.4em; }
-
-/* THE PLATE: sky + balloon + liftoff line, one drawn scene */
 .plate{ background:var(--card); border:3px solid var(--line); border-radius:16px; overflow:hidden; }
-.skybox{ position:relative; background:linear-gradient(var(--skyhi), var(--sky)); height:300px; }
-.liftline{ position:absolute; left:0; right:0; top:70px; border-top:3px dashed var(--rust); }
-.liftlabel{ position:absolute; right:8px; top:72px; font:800 .72rem/1 inherit; color:var(--rust); background:var(--card); padding:.15rem .4rem; border-radius:5px; }
-#balloon{ position:absolute; left:50%; bottom:8px; width:150px; margin-left:-75px;
-  transition:transform 1.1s cubic-bezier(.3,.6,.3,1); }
-@media (prefers-reduced-motion: reduce){ #balloon{ transition:none; } }
+.skybox{ position:relative; background:linear-gradient(var(--skyhi), var(--sky)); height:290px; overflow:hidden; }
+.liftline{ position:absolute; left:0; right:0; top:64px; border-top:3px dashed var(--rust); }
+.liftlabel{ position:absolute; right:8px; top:66px; font:800 .72rem/1 inherit; color:var(--rust); background:var(--card); padding:.15rem .4rem; border-radius:5px; }
+#balloon{ position:absolute; left:50%; bottom:6px; width:140px; margin-left:-70px;
+  transition:transform 1s cubic-bezier(.3,.6,.3,1); }
+#balloon.crashing{ transition:transform .55s cubic-bezier(.6,0,.9,.4); }
+@media (prefers-reduced-motion: reduce){ #balloon, #balloon.crashing{ transition:none; } }
 .altrow{ position:absolute; left:8px; top:8px; background:#2b3540; color:#fff; font:800 .74rem/1 inherit; padding:.35rem .55rem; border-radius:7px; }
-/* the manifest: the draft hangs beneath the balloon as its cargo card */
-.manifest{ border-top:3px solid var(--line); background:var(--card); padding:.8rem .9rem .5rem; }
+.srcrow{ position:absolute; left:8px; bottom:8px; background:var(--card); color:var(--ink); font:700 .72rem/1.3 inherit; padding:.3rem .5rem; border-radius:7px; border:2px solid var(--line); max-width:62%; }
+.manifest{ border-top:3px solid var(--line); background:var(--card); padding:.8rem .9rem .6rem; }
 .mtitle{ font:800 .7rem/1 inherit; letter-spacing:.1em; text-transform:uppercase; color:var(--rust); margin:0 0 .35rem; }
-.draft{ font-family:Georgia,'Times New Roman',serif; font-size:1.28rem; line-height:2.1; }
-.w{ padding:.08em .14em; border-radius:6px; }
-.w.ballast{ background:var(--gold-pale); border:2px solid var(--gold-br); cursor:pointer; margin:0 .06em; }
-.w.ballast:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
-.w.locked{ font-weight:800; }
+.draft{ font-family:Georgia,'Times New Roman',serif; font-size:1.22rem; line-height:2.15; }
+.w{ padding:.1em .12em; border-radius:6px; cursor:pointer; }
+.w:hover{ background:var(--gold-pale); }
+.w:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 .w.cut{ display:none; }
-/* the heap */
-.heaprow{ border-top:3px solid var(--line); background:var(--card); padding:.6rem .9rem .8rem; min-height:64px; }
+.w.crashword{ background:#7a2f14; color:#fff; cursor:default; }
+.heaprow{ border-top:3px solid var(--line); background:var(--card); padding:.6rem .9rem .8rem; min-height:60px; }
 .htitle{ font:800 .7rem/1 inherit; letter-spacing:.1em; text-transform:uppercase; color:var(--slate); margin:0 0 .35rem; }
-body.warm .htitle{ color:var(--slate); }
 .scrap{ display:inline-block; font-family:Georgia,serif; font-size:.95rem; background:var(--gold-pale); border:2px solid var(--line); border-radius:4px; padding:.1rem .4rem; margin:.15rem .2rem; transform:rotate(-2deg); }
 .scrap:nth-child(even){ transform:rotate(2.5deg); }
 .none{ font-size:.85rem; opacity:.75; }
-.hint{ font-size:.88rem; margin:.7rem .2rem 0; }
+.hint{ font-size:.88rem; margin:.6rem .2rem 0; min-height:1.4em; }
 .btnrow{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.8rem; }
 .go{ background:var(--gold-br); color:#1f1b12; border:2px solid #1f1b12; border-radius:11px; padding:.65rem 1rem; font:800 .95rem/1 inherit; cursor:pointer; min-height:48px; }
 .go:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 .go.ghost{ background:transparent; color:var(--ink); border-color:var(--line); }
-.go[disabled]{ opacity:.45; cursor:default; }
-/* after liftoff */
 .after{ display:none; margin-top:1.3rem; }
 .after.on{ display:block; }
-.label{ font:800 .74rem/1 inherit; letter-spacing:.1em; text-transform:uppercase; color:var(--rust); margin:1.4rem 0 .45rem; padding-bottom:.3rem; border-bottom:2px solid var(--line); }
-.final{ font-family:Georgia,serif; font-size:1.3rem; line-height:1.9; background:var(--card); border:3px solid var(--gold-br); border-radius:14px; padding:1rem 1.1rem; }
-textarea{ width:100%; min-height:76px; font:400 1rem/1.5 inherit; padding:.6rem .7rem; border:2px solid var(--line); border-radius:10px; background:var(--card); color:var(--ink); resize:vertical; }
-textarea:focus-visible{ outline:3px solid var(--focus); outline-offset:1px; }
-label.fld{ display:block; font-weight:800; font-size:.9rem; margin:.7rem 0 .3rem; }
+.label{ font:800 .74rem/1 inherit; letter-spacing:.1em; text-transform:uppercase; color:var(--rust); margin:1.2rem 0 .45rem; padding-bottom:.3rem; border-bottom:2px solid var(--line); }
+.final{ font-family:Georgia,serif; font-size:1.25rem; line-height:1.9; background:var(--card); border:3px solid var(--gold-br); border-radius:14px; padding:1rem 1.1rem; }
+.attr{ font-size:.82rem; margin:.5rem .1rem 0; }
 .foot{ margin-top:2rem; font-size:.82rem; border-top:2px solid var(--line); padding-top:.8rem; }
 .sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
 </style>
@@ -103,25 +97,26 @@ label.fld{ display:block; font-weight:800; font-size:.9rem; margin:.7rem 0 .3rem
 </div>
 
 <div class="wrap">
-  <p class="prompt" id="prompt">This balloon is too heavy to fly. Tap a word it doesn't need.</p>
+  <p class="prompt" id="prompt">Too heavy to fly. Tap any word this piece can live without. Choose wrong, and it crashes.</p>
 
   <div class="plate">
     <div class="skybox" aria-hidden="true">
       <div class="altrow" id="altnum">on the ground</div>
       <div class="liftline"></div><span class="liftlabel">liftoff</span>
+      <div class="srcrow" id="srcrow"></div>
       <svg id="balloon" viewBox="0 0 150 200">
-        <title>A cut-paper hot air balloon, tethered and heavy — CC0, original, Tight Spiral Paper Craft</title>
+        <title>A cut-paper hot air balloon — CC0, original, Tight Spiral Paper Craft</title>
         <path d="M75 8 C36 8 18 40 18 72 c0 34 30 52 44 74 h26 c14 -22 44 -40 44 -74 0 -32 -18 -64 -57 -64 z" fill="var(--rust)" stroke="var(--ink)" stroke-width="3"/>
         <path d="M75 8 c-14 0 -22 32 -22 64 0 34 12 52 18 74 h8 c6 -22 18 -40 18 -74 0 -32 -8 -64 -22 -64 z" fill="var(--gold-br)" stroke="var(--ink)" stroke-width="2"/>
         <path d="M62 146 l-10 22 M88 146 l10 22 M75 146 v22" stroke="var(--ink)" stroke-width="2.5"/>
         <rect x="56" y="168" width="38" height="24" rx="4" fill="var(--gold-pale)" stroke="var(--ink)" stroke-width="2.5"/>
         <path d="M60 174 h30 M60 180 h30 M60 186 h30" stroke="var(--ink)" stroke-width="1.5" opacity=".5"/>
-        <g id="bagL"><path d="M46 178 q-3 12 5 16 q8 -2 6 -14 z" fill="var(--slate)" stroke="var(--ink)" stroke-width="2"/><line x1="50" y1="178" x2="56" y2="172" stroke="var(--ink)" stroke-width="2"/></g>
-        <g id="bagR"><path d="M104 178 q3 12 -5 16 q-8 -2 -6 -14 z" fill="var(--slate)" stroke="var(--ink)" stroke-width="2"/><line x1="100" y1="178" x2="94" y2="172" stroke="var(--ink)" stroke-width="2"/></g>
+        <g><path d="M46 178 q-3 12 5 16 q8 -2 6 -14 z" fill="var(--slate)" stroke="var(--ink)" stroke-width="2"/><line x1="50" y1="178" x2="56" y2="172" stroke="var(--ink)" stroke-width="2"/></g>
+        <g><path d="M104 178 q3 12 -5 16 q-8 -2 -6 -14 z" fill="var(--slate)" stroke="var(--ink)" stroke-width="2"/><line x1="100" y1="178" x2="94" y2="172" stroke="var(--ink)" stroke-width="2"/></g>
       </svg>
     </div>
     <div class="manifest">
-      <p class="mtitle">The cargo manifest — every word this flight is carrying</p>
+      <p class="mtitle">The cargo manifest — every word is a sandbag; some are holding the piece up</p>
       <div class="draft" id="draft"></div>
       <p class="hint" id="weightline" aria-live="polite"></p>
     </div>
@@ -134,22 +129,21 @@ label.fld{ display:block; font-weight:800; font-size:.9rem; margin:.7rem 0 .3rem
   <p class="sr" id="liveStat" aria-live="polite"></p>
   <div class="btnrow">
     <button class="go ghost" id="undo" type="button">Put the last word back</button>
+    <button class="go ghost" id="nextPiece" type="button">Try a different piece</button>
   </div>
 
   <div class="after" id="after">
-    <div class="label">It flew — the piece that was inside all along</div>
+    <div class="label" id="afterLabel">It flew</div>
     <div class="final" id="finalPiece"></div>
-    <label class="fld" for="learned">What did the climb teach you?</label>
-    <textarea id="learned" placeholder="e.g. the ending was stronger once I stopped explaining it"></textarea>
-    <label class="fld" for="kept">One word you kept on purpose — and why</label>
-    <textarea id="kept" placeholder="e.g. kept 'taillights' — it's the only image the story needs"></textarea>
-    <div class="btnrow"><button class="go" id="buildCarry" type="button">Build my record</button></div>
-    <label class="fld" for="carry">Your carry-out record (copy it before you close the tab)</label>
-    <textarea id="carry" readonly aria-label="Your carry-out record"></textarea>
+    <p class="attr" id="attrLine"></p>
+    <div class="btnrow">
+      <button class="go" id="flyNext" type="button">Fly the next piece</button>
+      <button class="go ghost" id="replaySame" type="button">Fly this one again</button>
+    </div>
   </div>
 
   <div class="foot">
-    <p>Sandbags · Tight Spiral Studios · walshero@gmail.com. Single-file, offline, stores nothing. A cut word is never a failure — it is weight this flight didn't need. Art: original cut-paper SVG, CC0, Tight Spiral Paper Craft.</p>
+    <p>Sandbags · Tight Spiral Studios · walshero@gmail.com. Single-file, offline, stores nothing. A crash is never shame — that word was holding the piece up, and now you know it by feel. Excerpts from four pieces by Matt Walsh, used by the author. Art: original cut-paper SVG, CC0, Tight Spiral Paper Craft.</p>
   </div>
 </div>
 
@@ -159,7 +153,6 @@ label.fld{ display:block; font-weight:800; font-size:.9rem; margin:.7rem 0 .3rem
   window.scrollTo(0,0);
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* comfort knob (corner control, never a wall) */
   var stops=[{c:'',n:'Default'},{c:'softer',n:'Softer'},{c:'warm',n:'Warm-dark'}], ci=0;
   $('cstop').addEventListener('click',function(){
     document.body.classList.remove('softer','warm');
@@ -167,75 +160,122 @@ label.fld{ display:block; font-weight:800; font-size:.9rem; margin:.7rem 0 .3rem
     this.textContent='Comfort: '+stops[ci].n;
   });
 
-  /* the draft — locked spine + ballast (unchanged from founder-locked build) */
-  var DRAFT = [
-    {t:"The",lock:true},{t:"last",lock:true},{t:"bus",lock:true},{t:"of",lock:false},{t:"the",lock:false},{t:"entire",lock:false},{t:"night",lock:false},
-    {t:"pulled",lock:true},{t:"slowly",lock:false},{t:"away",lock:true},{t:"just",lock:false},{t:"as",lock:true},
-    {t:"she",lock:true},{t:"finally",lock:false},{t:"reached",lock:true},{t:"the",lock:true},{t:"very",lock:false},{t:"edge",lock:false},{t:"of",lock:false},{t:"the",lock:false},{t:"empty",lock:false},{t:"curb",lock:true},{t:".",lock:true,glue:true},
-    {t:"He",lock:true},{t:"had",lock:false},{t:"actually",lock:false},{t:"promised",lock:true},{t:"he",lock:true},{t:"would",lock:true},{t:"definitely",lock:false},{t:"wait",lock:true},{t:".",lock:true,glue:true},
-    {t:"The",lock:true},{t:"cold",lock:false},{t:"taillights",lock:true},{t:"got",lock:true},{t:"smaller",lock:true},{t:"and",lock:false},{t:"smaller",lock:false},{t:".",lock:true,glue:true}
+  /* PIECES — verbatim Matt Walsh excerpts. b:1 = ballast (safe to drop);
+     no flag = load-bearing (cutting it crashes). ins:1 = studio-inserted padding
+     (the HITL layer — founder retunes). g:1 = glue punctuation, not clickable. */
+  var PIECES=[
+   { title:"Ramen at Echigo Kawaguchi", by:"Matt Walsh", liftAt:5, w:[
+    {t:"A"},{t:"heavy",b:1},{t:"rain"},{t:"fell"},{t:",",g:1},{t:"and"},{t:"the"},{t:"villagers"},{t:"opened"},{t:"their"},{t:"umbrellas"},{t:".",g:1},
+    {t:"The"},{t:"rainstorm"},{t:"completely",b:1,ins:1},{t:"consumed"},{t:"me"},{t:",",g:1},{t:"but"},{t:"I"},{t:"just",b:1},{t:"stood"},{t:"there"},{t:".",g:1},
+    {t:"I"},{t:"ran"},{t:"to"},{t:"a"},{t:"noodle"},{t:"shop"},{t:"with"},{t:"bowls"},{t:"of"},{t:"plastic"},{t:"ramen"},{t:"in"},{t:"the"},{t:"window"},{t:".",g:1},
+    {t:"I"},{t:"sat"},{t:"down",b:1,ins:1},{t:"at"},{t:"the"},{t:"counter"},{t:"with"},{t:"the"},{t:"other",b:1},{t:"salarymen"},{t:".",g:1},
+    {t:"We"},{t:"slurped"},{t:"our"},{t:"noodles"},{t:"together",b:1},{t:"without"},{t:"talking"},{t:"and"},{t:"listened"},{t:"to"},{t:"the"},{t:"rain"},{t:".",g:1} ]},
+   { title:"Black Spots on the Crosswalk", by:"Matt Walsh", liftAt:3, w:[
+    {t:"My"},{t:"father"},{t:"reached"},{t:"out",b:1,ins:1},{t:"for"},{t:"my"},{t:"hand"},{t:"as"},{t:"we"},{t:"stepped"},{t:"to"},{t:"the"},{t:"very",b:1,ins:1},{t:"edge"},{t:"of"},{t:"the"},{t:"curb"},{t:",",g:1},
+    {t:"though"},{t:"I"},{t:"thought"},{t:"I"},{t:"was"},{t:"old"},{t:"enough"},{t:"that"},{t:"perhaps",b:1},{t:"I"},{t:"didn't"},{t:"need"},{t:"to"},{t:".",g:1},
+    {t:"\u201CWhat"},{t:"are"},{t:"those"},{t:"black"},{t:"spots"},{t:"on"},{t:"the"},{t:"crosswalk?\u201D"},{t:"I"},{t:"asked"},{t:"him",b:1},{t:".",g:1},
+    {t:"They"},{t:"were"},{t:"quarter"},{t:"and"},{t:"half-dollar"},{t:"sized"},{t:",",g:1},{t:"faceless"},{t:".",g:1} ]},
+   { title:"Peach Cobbler", by:"Matt Walsh", liftAt:3, w:[
+    {t:"We"},{t:"talked"},{t:"about"},{t:"moving"},{t:".",g:1},
+    {t:"My"},{t:"wife"},{t:"made"},{t:"me"},{t:"sleep"},{t:"down",b:1,ins:1},{t:"by"},{t:"the"},{t:"cellar"},{t:"door"},{t:".",g:1},
+    {t:"The"},{t:"kids"},{t:"wanted"},{t:"their"},{t:"toys"},{t:"back",b:1},{t:",",g:1},{t:"but"},{t:"the"},{t:"hives"},{t:"on"},{t:"my"},{t:"hands"},{t:"only",b:1,ins:1},{t:"got"},{t:"worse"},{t:"when"},{t:"I"},{t:"thought"},{t:"about"},{t:"going"},{t:"over"},{t:".",g:1},
+    {t:"I"},{t:"prayed"},{t:"about"},{t:"it"},{t:".",g:1},{t:"I"},{t:"meditated"},{t:"quietly",b:1,ins:1},{t:".",g:1},{t:"I"},{t:"read"},{t:"a"},{t:"book"},{t:"on"},{t:"conflict"},{t:"resolution"},{t:".",g:1},
+    {t:"In"},{t:"the"},{t:"end"},{t:",",g:1},{t:"I"},{t:"baked"},{t:"a"},{t:"peach"},{t:"cobbler"},{t:",",g:1},{t:"and"},{t:"walked"},{t:"it"},{t:"over"},{t:"myself"},{t:".",g:1} ]},
+   { title:"Dead Ants", by:"Matt Walsh", liftAt:3, w:[
+    {t:"We"},{t:"were"},{t:"just",b:1,ins:1},{t:"standing"},{t:"by"},{t:"the"},{t:"old",b:1,ins:1},{t:"payphones"},{t:"across"},{t:"from"},{t:"Sparr's"},{t:",",g:1},{t:"waiting"},{t:"for"},{t:"the"},{t:"39"},{t:"bus"},{t:".",g:1},
+    {t:"An"},{t:"ant"},{t:"on"},{t:"the"},{t:"sidewalk"},{t:",",g:1},{t:"and"},{t:"you"},{t:"stepped"},{t:"without"},{t:"thinking"},{t:",",g:1},
+    {t:"slid"},{t:"your"},{t:"sneaker"},{t:"quickly",b:1,ins:1},{t:"across"},{t:"the"},{t:"pavement"},{t:"and"},{t:"smeared"},{t:"it"},{t:"from"},{t:"existence"},{t:",",g:1},
+    {t:"and"},{t:"then",b:1},{t:"you"},{t:"looked"},{t:"at"},{t:"me"},{t:"to"},{t:"see"},{t:"if"},{t:"I"},{t:"had"},{t:"seen"},{t:".",g:1} ]}
   ];
-  var LIFT_AT=9, cut=[], lifted=false;
 
-  function renderDraft(){
+  var pi=0, W=[], cut=[], lifted=false, crashed=false;
+
+  function loadPiece(i){
+    pi=i%PIECES.length;
+    W=PIECES[pi].w.map(function(x){ return {t:x.t, b:!!x.b, g:!!x.g, cutNow:false}; });
+    cut=[]; lifted=false; crashed=false;
+    $('after').classList.remove('on');
+    $('balloon').classList.remove('crashing');
+    $('srcrow').textContent='from \u201C'+PIECES[pi].title+'\u201D \u00B7 '+PIECES[pi].by;
+    $('prompt').textContent='Too heavy to fly. Tap any word this piece can live without. Choose wrong, and it crashes.';
+    render(); altitude();
+  }
+
+  function render(){
     var box=$('draft'); box.innerHTML='';
-    DRAFT.forEach(function(w,i){
+    W.forEach(function(w,i){
       var sp=document.createElement('span');
-      sp.className='w'+(w.lock?' locked':(w.glue?'':' ballast'))+(w.cutNow?' cut':'');
-      sp.textContent=(w.glue?'':' ')+w.t;
-      if(!w.lock && !w.glue && !w.cutNow){
-        sp.tabIndex=0; sp.setAttribute('role','button'); sp.setAttribute('aria-label','drop the word '+w.t);
-        sp.addEventListener('click',function(){ drop(i); });
-        sp.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); drop(i);} });
-      } else if(w.lock && !w.glue){
-        sp.setAttribute('aria-label',w.t+' (part of the piece — stays)');
+      if(w.g){ sp.textContent=w.t; box.appendChild(sp); return; }
+      sp.className='w'+(w.cutNow?' cut':'');
+      sp.textContent=' '+w.t;
+      if(!w.cutNow && !crashed && !lifted){
+        sp.tabIndex=0; sp.setAttribute('role','button');
+        sp.setAttribute('aria-label','drop the word '+w.t);
+        sp.addEventListener('click',function(){ tapWord(i,sp); });
+        sp.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); tapWord(i,sp);} });
       }
       box.appendChild(sp);
     });
-  }
-  function renderPile(){
     var p=$('pile'); p.innerHTML='';
-    if(!cut.length){ p.innerHTML='<span class="none">nothing dropped yet</span>'; return; }
-    cut.forEach(function(i){ var s=document.createElement('span'); s.className='scrap'; s.textContent=DRAFT[i].t; p.appendChild(s); });
+    if(!cut.length){ p.innerHTML='<span class="none">nothing dropped yet</span>'; }
+    else cut.forEach(function(i){ var s=document.createElement('span'); s.className='scrap'; s.textContent=W[i].t; p.appendChild(s); });
   }
+
+  function tapWord(i,sp){
+    if(crashed||lifted) return;
+    if(W[i].b){
+      W[i].cutNow=true; cut.push(i);
+      render(); altitude();
+    } else {
+      crash(i,sp);
+    }
+  }
+
   function altitude(){
-    var n=cut.length, frac=Math.min(n/LIFT_AT,1.12);
-    var rise=frac*210; /* px of climb toward the liftoff line */
-    $('balloon').style.transform='translateY('+(-rise)+'px)';
-    $('altnum').textContent = n===0 ? 'on the ground' : (frac>=1 ? 'LIFTOFF' : 'rising — '+n+' of '+LIFT_AT+' bags dropped');
-    var remaining=DRAFT.filter(function(w){return !w.lock&&!w.glue&&!w.cutNow;}).length;
+    var need=PIECES[pi].liftAt, n=cut.length, frac=Math.min(n/need,1.12);
+    $('balloon').style.transform='translateY('+(-frac*200)+'px)';
+    $('altnum').textContent = n===0 ? 'on the ground' : (frac>=1 ? 'LIFTOFF' : 'rising \u2014 '+n+' of '+need+' bags');
     $('weightline').textContent = frac>=1 ? 'It flies. The heap below is the proof of the climb.'
-      : 'Carrying '+remaining+' extra word'+(remaining===1?'':'s')+'. '+(n>0?'Lighter already — keep going.':'Tap any highlighted word to drop it.');
-    $('liveStat').textContent='Dropped '+n+' words. '+(frac>=1?'The balloon has lifted off.':'Balloon rising.');
-    if(frac>=1 && !lifted){ lifted=true; reveal(); }
+      : (n>0 ? 'Lighter \u2014 but every next cut is riskier.' : 'Every word looks the same. Some are holding the piece up.');
+    $('liveStat').textContent='Dropped '+n+' words. '+(frac>=1?'Liftoff.':'Balloon rising.');
+    if(frac>=1 && !lifted){ lifted=true; liftoffReveal(); }
   }
-  function drop(i){
-    if(DRAFT[i].lock||DRAFT[i].cutNow) return;
-    DRAFT[i].cutNow=true; cut.push(i);
-    renderDraft(); renderPile(); altitude();
-  }
-  $('undo').addEventListener('click',function(){
-    if(!cut.length) return;
-    var i=cut.pop(); DRAFT[i].cutNow=false;
-    if(lifted && cut.length<LIFT_AT){ lifted=false; $('after').classList.remove('on'); }
-    renderDraft(); renderPile(); altitude();
-  });
 
-  function reveal(){
-    var piece=DRAFT.filter(function(w){return w.lock;}).map(function(w){return (w.glue?'':' ')+w.t;}).join('').trim();
-    $('finalPiece').textContent=piece;
+  function crash(i,sp){
+    crashed=true;
+    sp.className='w crashword'; sp.removeAttribute('tabindex');
+    $('balloon').classList.add('crashing');
+    $('balloon').style.transform='translateY(14px) rotate(-9deg)';
+    $('altnum').textContent='CRASH';
+    $('prompt').textContent='Down it comes.';
+    $('weightline').textContent='\u201C'+W[i].t+'\u201D was holding the piece up. Cut it, and the meaning tore. Now you know it by feel.';
+    $('liveStat').textContent='Crash. The word '+W[i].t+' was load-bearing.';
+    $('afterLabel').textContent='It crashed \u2014 the word that was holding it up';
+    $('finalPiece').textContent='\u201C'+W[i].t+'\u201D \u2014 it looked like a sandbag. It was a strut. A crash is never shame; the next flight starts lighter in the head.';
+    $('attrLine').textContent='from \u201C'+PIECES[pi].title+'\u201D \u00B7 '+PIECES[pi].by;
     $('after').classList.add('on');
-    $('prompt').textContent='Liftoff. Scroll down — the lean piece was inside the whole time.';
   }
-  $('buildCarry').addEventListener('click',function(){
-    var piece=$('finalPiece').textContent;
-    $('carry').value='SANDBAGS — my climb\n\nThe piece that flew:\n'+piece+
-      '\n\nWhat the climb taught me:\n'+($('learned').value.trim()||'(unwritten)')+
-      '\n\nA word I kept on purpose:\n'+($('kept').value.trim()||'(unwritten)')+
-      '\n\nBags dropped: '+cut.length+' — weight this flight did not need. It may fly another day.';
-  });
 
-  renderDraft(); renderPile(); altitude();
+  function liftoffReveal(){
+    var text=W.filter(function(w){return !w.cutNow;}).map(function(w){return (w.g?'':' ')+w.t;}).join('').trim();
+    $('prompt').textContent='Liftoff. The lean piece was inside the whole time.';
+    $('afterLabel').textContent='It flew \u2014 the piece that was inside';
+    $('finalPiece').textContent=text;
+    $('attrLine').textContent='from \u201C'+PIECES[pi].title+'\u201D \u00B7 '+PIECES[pi].by+' \u00B7 dropped '+cut.length+' bags without tearing the meaning.';
+    $('after').classList.add('on');
+  }
+
+  $('undo').addEventListener('click',function(){
+    if(!cut.length||crashed) return;
+    var i=cut.pop(); W[i].cutNow=false;
+    if(lifted){ lifted=false; $('after').classList.remove('on'); }
+    render(); altitude();
+  });
+  $('nextPiece').addEventListener('click',function(){ loadPiece(pi+1); });
+  $('flyNext').addEventListener('click',function(){ loadPiece(pi+1); window.scrollTo(0,0); });
+  $('replaySame').addEventListener('click',function(){ loadPiece(pi); window.scrollTo(0,0); });
+
+  loadPiece(0);
 })();
 </script>
 </body>
