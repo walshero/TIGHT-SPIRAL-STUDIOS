@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  THE VILLAGE — the public face of Tight Spiral Productions. walshero@gmail.com
+  Founder brief (2026-07-08): the studio front door as a village with a model-train line
+  connecting on-ramps, and the TSP gears as the works. Several on-ramps: EN195 playtesters
+  (no clock, easy feedback), Confluence/assessment reviewers, and the game shelf (MassBay + CYL).
+  Every game shown in its HONEST STATE: Intent / Status / Possibility space / Roadblocks.
+
+  This is the OUTWARD face. The inward founder cockpit ("Work Desk") is a separate artifact.
+
+  FLOOR: single-file, offline, in-memory; scene-first (the village is first paint, no wall);
+  color-scheme locked (never inherit OS charcoal); 3-stop comfort as a live corner knob
+  (never #000/#fff, >=0.12 stop separation); large type; 44px+ targets; full keyboard;
+  visible focus; reduced-motion safe (train + gears still under reduced-motion); scroll-reset
+  via in-page anchors; no dead links (unbuilt/blocked games show status, never a broken door);
+  no emoji; phone-width. Cut-paper SVG village = the image floor. Original SVG, CC0.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='19' fill='%230f5566'/%3E%3Cpath d='M20 7C11 7 7 14 7 20c0 6 4 11 11 11 5 0 9-3 9-8 0-4-3-6-6-6-3 0-4 2-4 4 0 1 1 2 2 2' fill='none' stroke='%23f0c357' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<title>Tight Spiral Productions — the studio</title>
+<style>
+:root{
+  color-scheme: light;
+  --bg:#f0e4cc; --surface:#fbf4e4; --ink:#241a10; --ink2:#241a10;
+  --line:#cdb98f; --line2:#b39c72;
+  --slate:#33485a; --slate2:#26384a;
+  --gold:#8a5c00; --gold-br:#c8900a; --gold-pale:#fbeecb;
+  --rust:#8a3a1c; --sky:#cfdce6; --grass:#5f7a4a; --card:#efe1c4;
+  --focus:#c8900a;
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+body.softer{ --bg:#d9d2c4; --surface:#e4ddcd; --ink:#241f16; --ink2:#241f16; --line:#c2b48f; --line2:#a99a74; --sky:#ccd6df; --grass:#586f45; --card:#d8ccb2; }
+body.warm{ --bg:#1a1712; --surface:#241f18; --ink:#f3e6c6; --ink2:#f3e6c6; --line:#4a4230; --line2:#5e553e;
+  --slate:#9ab6c8; --slate2:#b0c6d6; --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#322a18;
+  --rust:#eaa183; --sky:#2a3540; --grass:#93ab7d; --card:#2c261c; }
+*{box-sizing:border-box;} html,body{margin:0;}
+body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; -webkit-text-size-adjust:100%; }
+
+.topbar{ background:var(--slate); color:#fff; padding:.6rem .9rem; display:flex; align-items:center; gap:.6rem; font-family:var(--sans); position:sticky; top:0; z-index:40; }
+body.warm .topbar{ color:#0f0e0b; }
+.topbar .mark{ width:26px; height:26px; flex:none; }
+.topbar .wm{ font-weight:800; font-size:.95rem; letter-spacing:.01em; }
+.cstop{ margin-left:auto; background:rgba(255,255,255,.18); color:inherit; border:2px solid rgba(255,255,255,.6); border-radius:9px; padding:.45rem .65rem; font:700 .76rem/1 var(--sans); cursor:pointer; min-height:44px; }
+body.warm .cstop{ border-color:rgba(0,0,0,.4); background:rgba(0,0,0,.12); }
+.cstop:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+.wrap{ max-width:720px; margin:0 auto; padding:0 1rem 5rem; }
+
+/* HERO VILLAGE */
+.hero{ padding:1.1rem 0 .3rem; text-align:center; }
+.village{ width:100%; max-width:560px; height:auto; display:block; margin:.2rem auto .4rem; }
+.tag{ font:800 .74rem/1 var(--sans); letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin:.2rem 0 .3rem; }
+h1{ font-family:var(--serif); font-size:1.75rem; line-height:1.14; color:var(--ink); margin:.1rem 0 .4rem; }
+.lede{ font-size:1.06rem; max-width:34rem; margin:.2rem auto .2rem; }
+
+/* moving parts */
+@keyframes spin{ to{ transform:rotate(360deg); } }
+@keyframes chug{ 0%{ transform:translateX(0); } 50%{ transform:translateX(5px);} 100%{ transform:translateX(0);} }
+.gearA{ transform-box:fill-box; transform-origin:center; animation:spin 9s linear infinite; }
+.gearB{ transform-box:fill-box; transform-origin:center; animation:spin 6s linear infinite reverse; }
+.train{ animation:chug 2.4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce){ .gearA,.gearB,.train{ animation:none !important; } }
+
+/* ON-RAMP STATIONS */
+.ramps{ display:grid; grid-template-columns:1fr; gap:.7rem; margin:1rem 0 .4rem; }
+.ramp{ display:flex; align-items:center; gap:.9rem; text-align:left; text-decoration:none;
+  border:3px solid var(--line2); border-radius:16px; background:var(--surface); color:var(--ink);
+  padding:.85rem .9rem; min-height:76px; }
+.ramp:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+.ramp .ri{ width:56px; height:56px; flex:none; }
+.ramp .rt{ font:800 1.12rem/1.1 var(--sans); color:var(--ink); display:block; }
+.ramp .rd{ font:400 .9rem/1.35 var(--sans); color:var(--ink2); display:block; margin-top:.2rem; }
+.ramp .rgo{ margin-left:auto; font:800 1.3rem/1 var(--sans); color:var(--gold-br); flex:none; }
+
+.sect{ margin:1.8rem 0 0; }
+.where{ font:800 .72rem/1 var(--sans); letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin-bottom:.4rem; }
+h2{ font-family:var(--serif); font-size:1.4rem; color:var(--ink); margin:.1rem 0 .5rem; }
+p{ margin:0 0 .9rem; }
+.big{ display:block; text-align:center; text-decoration:none; background:var(--gold-br); color:#241a10;
+  border:3px solid #241a10; border-radius:14px; padding:.95rem 1rem; font:800 1.1rem/1.2 var(--sans);
+  min-height:56px; margin:.5rem 0; }
+body.warm .big{ color:#1a1712; }
+.big:focus-visible{ outline:4px solid var(--rust); outline-offset:3px; }
+.big.sec{ background:var(--surface); color:var(--ink); border-color:var(--ink); }
+
+.note{ border-left:5px solid var(--gold-br); background:var(--gold-pale); border-radius:0 12px 12px 0;
+  padding:.75rem .9rem; margin:.7rem 0; font:400 .98rem/1.5 var(--sans); }
+
+/* HONEST GAME CARDS */
+.shelf{ display:grid; grid-template-columns:1fr; gap:.9rem; margin:.6rem 0 0; }
+.gcard{ border:3px solid var(--line2); border-radius:16px; background:var(--surface); overflow:hidden; }
+.gcard .gtop{ display:flex; align-items:center; gap:.8rem; padding:.8rem .9rem .6rem; }
+.gcard .gemb{ width:60px; height:60px; flex:none; }
+.gcard .gname{ font:800 1.2rem/1.1 var(--sans); color:var(--ink); }
+.gcard .gone{ font:400 .9rem/1.35 var(--sans); color:var(--ink2); margin-top:.15rem; }
+.pill{ display:inline-block; font:800 .68rem/1 var(--sans); letter-spacing:.04em; text-transform:uppercase;
+  padding:.32rem .5rem; border-radius:999px; margin-top:.4rem; }
+.pill.live{ background:var(--grass); color:#fff; } body.warm .pill.live{ color:#12160e; }
+.pill.playtest{ background:var(--gold-br); color:#241a10; }
+.pill.build{ background:var(--slate); color:#fff; } body.warm .pill.build{ color:#0f1216; }
+.pill.blocked{ background:var(--rust); color:#fff; } body.warm .pill.blocked{ color:#1a0f0a; }
+.grid4{ padding:.2rem .9rem .3rem; }
+.row{ display:grid; grid-template-columns:auto 1fr; gap:.5rem .7rem; padding:.42rem 0; border-top:2px solid var(--line); align-items:start; }
+.row .k{ font:800 .7rem/1.3 var(--sans); letter-spacing:.03em; text-transform:uppercase; color:var(--gold); white-space:nowrap; }
+.row .v{ font:400 .92rem/1.45 var(--sans); color:var(--ink); }
+.gcard .gdoor{ display:block; text-align:center; text-decoration:none; margin:.5rem .9rem .9rem;
+  padding:.8rem; border-radius:12px; font:800 1rem/1.2 var(--sans); min-height:52px; }
+.gcard .gdoor.play{ background:var(--gold-br); color:#241a10; border:3px solid #241a10; }
+body.warm .gcard .gdoor.play{ color:#1a1712; }
+.gcard .gdoor.shut{ background:var(--card); color:var(--ink2); border:3px dashed var(--line2); cursor:default; }
+.gdoor.play:focus-visible{ outline:4px solid var(--rust); outline-offset:3px; }
+
+.foot{ margin-top:2rem; padding:1rem; background:var(--slate); color:#fff; border-radius:14px; font-family:var(--sans); font-size:.82rem; }
+body.warm .foot{ color:#0f0e0b; } .foot a{ color:#fff; font-weight:700; } body.warm .foot a{ color:#0f0e0b; }
+.sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+.skip{ position:absolute; left:-999px; } .skip:focus{ left:.5rem; top:.5rem; position:fixed; z-index:60; background:var(--gold-br); color:#241a10; padding:.6rem .9rem; border-radius:9px; font:800 .9rem var(--sans); }
+@media (max-width:520px){ body{font-size:18px;} h1{font-size:1.5rem;} .ramp .rt{font-size:1.04rem;} }
+</style>
+</head>
+<body>
+<a class="skip" href="#ramps">Skip to the on-ramps</a>
+<div class="topbar">
+  <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="none" stroke="#fff" stroke-width="2"/><path d="M20 7C11 7 7 14 7 20c0 6 4 11 11 11 5 0 9-3 9-8 0-4-3-6-6-6-3 0-4 2-4 4 0 1 1 2 2 2" fill="none" stroke="#f0c357" stroke-width="3" stroke-linecap="round"/></svg>
+  <span class="wm">Tight Spiral Productions</span>
+  <button class="cstop" id="cstop" aria-label="Change comfort palette">Comfort</button>
+</div>
+
+<div class="wrap">
+
+  <!-- HERO VILLAGE (scene-first, no wall) -->
+  <header class="hero">
+    <svg class="village" viewBox="0 0 560 300" role="img" aria-label="A small village. A model-train line loops through it like a spiral, connecting three buildings — a playtest platform, an assessment depot, and a game shelf. Two big gears turn beside them: the studio works.">
+      <title>The Tight Spiral village — original cut-paper SVG, CC0</title>
+      <!-- sky + ground -->
+      <rect x="0" y="0" width="560" height="300" fill="var(--sky)"/>
+      <path d="M0 214 Q140 190 280 210 T560 206 V300 H0 Z" fill="var(--grass)"/>
+      <path d="M0 250 Q160 236 320 250 T560 246 V300 H0 Z" fill="var(--grass)" opacity=".55"/>
+      <!-- the spiral rail line -->
+      <path d="M56 262 C56 210 150 196 250 210 C360 226 452 214 470 168 C486 128 430 104 372 118 C322 130 316 168 352 178 C384 186 396 160 380 146"
+            fill="none" stroke="var(--ink)" stroke-width="6" stroke-linecap="round" opacity=".85"/>
+      <path d="M56 262 C56 210 150 196 250 210 C360 226 452 214 470 168 C486 128 430 104 372 118 C322 130 316 168 352 178 C384 186 396 160 380 146"
+            fill="none" stroke="var(--gold-br)" stroke-width="2" stroke-dasharray="2 12" stroke-linecap="round"/>
+      <!-- little train on the line -->
+      <g class="train">
+        <rect x="120" y="188" width="40" height="24" rx="5" fill="var(--rust)" stroke="var(--ink)" stroke-width="3"/>
+        <rect x="128" y="176" width="16" height="14" rx="3" fill="var(--rust)" stroke="var(--ink)" stroke-width="3"/>
+        <circle cx="130" cy="214" r="6" fill="var(--ink)"/><circle cx="150" cy="214" r="6" fill="var(--ink)"/>
+        <path d="M136 176 q0 -12 8 -14" fill="none" stroke="var(--surface)" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+      </g>
+      <!-- building 1: playtest platform -->
+      <g>
+        <rect x="30" y="150" width="86" height="64" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>
+        <path d="M26 150 L73 122 L120 150 Z" fill="var(--gold-br)" stroke="var(--ink)" stroke-width="3"/>
+        <rect x="52" y="176" width="42" height="38" rx="3" fill="var(--gold-pale)" stroke="var(--ink)" stroke-width="3"/>
+        <path d="M56 92 q17 -22 34 0" fill="none" stroke="var(--slate)" stroke-width="4" stroke-linecap="round" opacity=".7"/>
+      </g>
+      <!-- building 2: assessment depot -->
+      <g>
+        <rect x="220" y="150" width="96" height="64" rx="4" fill="var(--card)" stroke="var(--ink)" stroke-width="3"/>
+        <rect x="220" y="138" width="96" height="16" rx="3" fill="var(--slate)" stroke="var(--ink)" stroke-width="3"/>
+        <rect x="236" y="170" width="26" height="44" fill="var(--sky)" stroke="var(--ink)" stroke-width="3"/>
+        <rect x="274" y="170" width="26" height="44" fill="var(--sky)" stroke="var(--ink)" stroke-width="3"/>
+        <line x1="249" y1="170" x2="249" y2="214" stroke="var(--ink)" stroke-width="2"/>
+      </g>
+      <!-- building 3: the game shelf -->
+      <g>
+        <rect x="404" y="146" width="118" height="68" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>
+        <line x1="404" y1="170" x2="522" y2="170" stroke="var(--ink)" stroke-width="3"/>
+        <line x1="404" y1="192" x2="522" y2="192" stroke="var(--ink)" stroke-width="3"/>
+        <rect x="412" y="150" width="12" height="18" fill="var(--rust)"/><rect x="428" y="150" width="12" height="18" fill="var(--slate)"/><rect x="444" y="150" width="12" height="18" fill="var(--gold-br)"/>
+        <rect x="412" y="174" width="12" height="16" fill="var(--gold-br)"/><rect x="428" y="174" width="12" height="16" fill="var(--rust)"/><rect x="444" y="174" width="12" height="16" fill="var(--slate)"/>
+        <rect x="480" y="150" width="12" height="18" fill="var(--slate)"/><rect x="496" y="150" width="12" height="18" fill="var(--gold-br)"/>
+      </g>
+      <!-- the studio gears (the works) -->
+      <g transform="translate(474 74)">
+        <g class="gearA"><path d="M0 -30 6 -30 8 -22 14 -25 19 -20 15 -14 21 -12 20 -5 27 -5 27 1 20 3 21 10 15 12 18 18 12 21 8 27 2 25 -1 31 -7 31 -10 25 -16 27 -19 21 -14 18 -18 13 -12 10 -19 7 -21 1 -27 3 -27 -3 -21 -5 -22 -12 -16 -14 -18 -20 -14 -24 -8 -22 -6 -30 Z" fill="var(--slate)" stroke="var(--ink)" stroke-width="2"/><circle r="8" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/></g>
+      </g>
+      <g transform="translate(516 104)">
+        <g class="gearB"><path d="M0 -22 4 -22 6 -16 11 -18 14 -14 11 -10 16 -8 15 -3 20 -3 20 2 15 4 15 9 10 10 12 15 7 16 4 21 -1 19 -3 24 -8 22 -10 18 -16 19 -18 14 -13 12 -16 8 -11 6 -15 3 -20 5 -20 -1 -15 -3 -16 -9 -11 -10 -13 -15 -8 -17 -4 -15 -3 -21 Z" fill="var(--rust)" stroke="var(--ink)" stroke-width="2"/><circle r="6" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/></g>
+      </g>
+    </svg>
+    <p class="tag">Play. Notice. Design.</p>
+    <h1>Tight Spiral Productions</h1>
+    <p class="lede">A one-person studio that builds small games to make learning visible &mdash; the thinking, the measurement, and the rules underneath. Everything here is offline, single-file, and built to be read by anyone. Pick a track.</p>
+  </header>
+
+  <!-- ON-RAMP STATIONS -->
+  <nav class="ramps" id="ramps" aria-label="On-ramps">
+    <a class="ramp" href="#playtest">
+      <svg class="ri" viewBox="0 0 56 56" aria-hidden="true"><rect x="6" y="20" width="44" height="30" rx="4" fill="var(--gold-pale)" stroke="var(--ink)" stroke-width="3"/><path d="M4 20 L28 6 L52 20 Z" fill="var(--gold-br)" stroke="var(--ink)" stroke-width="3"/><path d="M20 50 v-14 h16 v14" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/></svg>
+      <span><span class="rt">The Playtest Platform</span><span class="rd">EN195 players &mdash; there's no clock. Play, notice, tell me what you saw.</span></span>
+      <span class="rgo" aria-hidden="true">&rarr;</span>
+    </a>
+    <a class="ramp" href="#assessment">
+      <svg class="ri" viewBox="0 0 56 56" aria-hidden="true"><rect x="10" y="10" width="36" height="40" rx="3" fill="var(--card)" stroke="var(--ink)" stroke-width="3"/><line x1="18" y1="22" x2="38" y2="22" stroke="var(--slate)" stroke-width="3"/><line x1="18" y1="30" x2="38" y2="30" stroke="var(--slate)" stroke-width="3"/><path d="M18 38 l5 5 9 -11" fill="none" stroke="var(--gold-br)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span><span class="rt">The Assessment Depot</span><span class="rd">For folks reviewing assessment &mdash; how the games carry calibration and scoring.</span></span>
+      <span class="rgo" aria-hidden="true">&rarr;</span>
+    </a>
+    <a class="ramp" href="#shelf">
+      <svg class="ri" viewBox="0 0 56 56" aria-hidden="true"><rect x="8" y="10" width="40" height="40" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/><line x1="8" y1="26" x2="48" y2="26" stroke="var(--ink)" stroke-width="3"/><line x1="8" y1="40" x2="48" y2="40" stroke="var(--ink)" stroke-width="3"/><rect x="13" y="14" width="6" height="9" fill="var(--rust)"/><rect x="22" y="14" width="6" height="9" fill="var(--slate)"/><rect x="31" y="14" width="6" height="9" fill="var(--gold-br)"/><rect x="13" y="30" width="6" height="7" fill="var(--gold-br)"/><rect x="22" y="30" width="6" height="7" fill="var(--slate)"/></svg>
+      <span><span class="rt">The Game Shelf</span><span class="rd">Every game, shown in its honest state &mdash; what it's for, where it is, what's in the way.</span></span>
+      <span class="rgo" aria-hidden="true">&rarr;</span>
+    </a>
+  </nav>
+
+  <!-- PLAYTEST -->
+  <section class="sect" id="playtest" aria-labelledby="ph">
+    <div class="where">On-ramp 1</div>
+    <h2 id="ph">The Playtest Platform</h2>
+    <p>If you're in EN195 and you're here: welcome. There's <b>no time limit</b> and nothing to install. Open a game, poke around, and notice what the game makes you do &mdash; not just whether you liked it.</p>
+    <div class="note"><b>What helps most:</b> where did you get stuck, what surprised you, and what did the game make you notice about writing? A sentence is plenty. Rough is fine.</div>
+    <a class="big" href="#shelf">See the games &rarr;</a>
+    <a class="big sec" href="mailto:walshero@gmail.com?subject=EN195%20playtest%20note&body=Game%20I%20played%3A%20%0AWhere%20I%20got%20stuck%3A%20%0AWhat%20surprised%20me%3A%20%0AWhat%20it%20made%20me%20notice%20about%20writing%3A%20%0A">Send a note about a game</a>
+    <p class="sr">The feedback link opens your email with a short template. Nothing is tracked or sent automatically.</p>
+  </section>
+
+  <!-- ASSESSMENT -->
+  <section class="sect" id="assessment" aria-labelledby="ah">
+    <div class="where">On-ramp 2</div>
+    <h2 id="ah">The Assessment Depot</h2>
+    <p>The studio's other half is calibration and assessment design &mdash; norming, scoring, rater training. The games are how that work gets delivered: a player sees the criteria, makes a judgment, and compares it to an anchor. That's a scoring session wearing a game's clothes.</p>
+    <p>If you're reviewing assessment, the Confluence console is the working example &mdash; the writing-competency scoring instrument built as an interface instead of a binder.</p>
+    <a class="big" href="confluence-console.html">Open the Confluence console &rarr;</a>
+    <div class="note">Reviewing this for a program? The scoring logic, the anchor set, and the score-to-outcome mapping are all visible in the console. Questions go to <a href="mailto:walshero@gmail.com?subject=Confluence%20/%20assessment">walshero@gmail.com</a>.</div>
+  </section>
+
+  <!-- GAME SHELF: honest state cards -->
+  <section class="sect" id="shelf" aria-labelledby="sh">
+    <div class="where">On-ramp 3</div>
+    <h2 id="sh">The Game Shelf</h2>
+    <p>Nothing here pretends to be finished. Each game shows its <b>intent</b>, its <b>status</b>, its <b>possibility space</b>, and its <b>roadblocks</b>. Live doors open; the rest are honest about why they're shut.</p>
+
+    <div class="shelf">
+
+      <!-- THE CONSOLE -->
+      <article class="gcard" aria-labelledby="g-console">
+        <div class="gtop">
+          <svg class="gemb" viewBox="0 0 60 60" aria-hidden="true"><rect x="8" y="12" width="44" height="30" rx="4" fill="var(--slate)" stroke="var(--ink)" stroke-width="3"/><rect x="14" y="18" width="32" height="14" rx="2" fill="var(--sky)"/><rect x="22" y="42" width="16" height="8" fill="var(--ink)"/><circle cx="42" cy="25" r="3" fill="var(--gold-br)"/></svg>
+          <div><div class="gname" id="g-console">The Console</div><div class="gone">Run a social feed's growth desk and feel the dark patterns from the operator's chair.</div><span class="pill live">Live &middot; playable</span></div>
+        </div>
+        <div class="grid4">
+          <div class="row"><span class="k">Intent</span><span class="v">Let a player pull the five levers that hook attention &mdash; and quietly measure them while they do it.</span></div>
+          <div class="row"><span class="k">Status</span><span class="v">Shipped and playable. Five levers, the final flip-seat reveal of the player's own telemetry.</span></div>
+          <div class="row"><span class="k">Possibility</span><span class="v">More levers; a classroom debrief mode; the reveal as a teaching moment on persuasive design.</span></div>
+          <div class="row"><span class="k">Roadblocks</span><span class="v">A voice-and-tone pass so the ending lands as recognition, not a lecture.</span></div>
+        </div>
+        <a class="gdoor play" href="the-console.html">Play The Console &rarr;</a>
+      </article>
+
+      <!-- THE TELL -->
+      <article class="gcard" aria-labelledby="g-tell">
+        <div class="gtop">
+          <svg class="gemb" viewBox="0 0 60 60" aria-hidden="true"><rect x="10" y="14" width="34" height="34" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/><g transform="rotate(-8 40 30)"><rect x="30" y="18" width="22" height="30" rx="3" fill="var(--card)" stroke="var(--gold-br)" stroke-width="3"/><path d="M35 33 h12 M41 27 v12" stroke="var(--gold-br)" stroke-width="2"/></g></svg>
+          <div><div class="gname" id="g-tell">The Tell</div><div class="gone">The workshop as a card game: call the move a prior reader tagged, defend it, then flip to compare.</div><span class="pill playtest">Live &middot; in playtest</span></div>
+        </div>
+        <div class="grid4">
+          <div class="row"><span class="k">Intent</span><span class="v">Make async peer review a game &mdash; commit to a read with evidence before you see anyone else's.</span></div>
+          <div class="row"><span class="k">Status</span><span class="v">Playable vertical slice: one piece, two lenses, preset prior-reader tags, the flip-and-compare.</span></div>
+          <div class="row"><span class="k">Possibility</span><span class="v">A live relay &mdash; your read exports as a code the next player loads, no server. More pieces and decks.</span></div>
+          <div class="row"><span class="k">Roadblocks</span><span class="v">A founder cold-playtest pass before it joins the front door.</span></div>
+        </div>
+        <a class="gdoor play" href="the-tell.html">Play The Tell &rarr;</a>
+      </article>
+
+      <!-- SANDBAGS -->
+      <article class="gcard" aria-labelledby="g-sand">
+        <div class="gtop">
+          <svg class="gemb" viewBox="0 0 60 60" aria-hidden="true"><path d="M30 8 a14 14 0 0 1 14 14 c0 10 -14 22 -14 22 c0 0 -14 -12 -14 -22 a14 14 0 0 1 14 -14 Z" fill="var(--rust)" stroke="var(--ink)" stroke-width="3"/><rect x="24" y="46" width="12" height="8" rx="2" fill="var(--card)" stroke="var(--ink)" stroke-width="3"/></svg>
+          <div><div class="gname" id="g-sand">Sandbags</div><div class="gone">Flash-fiction compression as a balloon climb &mdash; every word you cut is ballast, and the draft rises.</div><span class="pill playtest">Live &middot; opening rebuild</span></div>
+        </div>
+        <div class="grid4">
+          <div class="row"><span class="k">Intent</span><span class="v">Make compression physical: cut the line that does the work of three, watch the draft lift.</span></div>
+          <div class="row"><span class="k">Status</span><span class="v">Playable. The opening is being rebuilt to show the principle first, then a short flash primer.</span></div>
+          <div class="row"><span class="k">Possibility</span><span class="v">Paste your own draft as an unlock; lock the load-bearing words before you cut; a comic near-miss when you cut a spine word.</span></div>
+          <div class="row"><span class="k">Roadblocks</span><span class="v">The new opening plus a coherence sweep before it's promoted.</span></div>
+        </div>
+        <a class="gdoor play" href="sandbags.html">Play Sandbags &rarr;</a>
+      </article>
+
+      <!-- EN195 FLASH UNIT -->
+      <article class="gcard" aria-labelledby="g-en195">
+        <div class="gtop">
+          <svg class="gemb" viewBox="0 0 60 60" aria-hidden="true"><path d="M10 44 Q30 20 50 44" fill="none" stroke="var(--slate)" stroke-width="4" stroke-linecap="round"/><circle cx="10" cy="44" r="4" fill="var(--rust)"/><circle cx="30" cy="30" r="4" fill="var(--gold-br)"/><circle cx="50" cy="44" r="4" fill="var(--grass)"/></svg>
+          <div><div class="gname" id="g-en195">EN195 &mdash; the flash unit</div><div class="gone">The flash-fiction workshop as a small arcade: the river, the wall, the bench, the climb.</div><span class="pill live">Live &middot; for the class</span></div>
+        </div>
+        <div class="grid4">
+          <div class="row"><span class="k">Intent</span><span class="v">Turn a wall of syllabus text into places you can walk &mdash; the week's moves, made playable.</span></div>
+          <div class="row"><span class="k">Status</span><span class="v">Shipped and live for EN195. Multiple rooms behind one door.</span></div>
+          <div class="row"><span class="k">Possibility</span><span class="v">Wire it into a full "play the semester" spine across every workshop.</span></div>
+          <div class="row"><span class="k">Roadblocks</span><span class="v">A dark-mode and comfort-control reskin on a few of the rooms.</span></div>
+        </div>
+        <a class="gdoor play" href="en195.html">Enter EN195 &rarr;</a>
+      </article>
+
+      <!-- CHOOSE YOUR LEADER -->
+      <article class="gcard" aria-labelledby="g-cyl">
+        <div class="gtop">
+          <svg class="gemb" viewBox="0 0 60 60" aria-hidden="true"><path d="M14 46 V26 l16 -12 16 12 V46 Z" fill="var(--card)" stroke="var(--ink)" stroke-width="3"/><path d="M30 14 v-6 M30 8 l7 3 -7 3" fill="none" stroke="var(--gold-br)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><rect x="26" y="34" width="8" height="12" fill="var(--slate)"/></svg>
+          <div><div class="gname" id="g-cyl">Choose Your Leader</div><div class="gone">Step into a leader's chair at a hinge of history &mdash; and see the reasoning under the choice.</div><span class="pill build">In the workshop</span></div>
+        </div>
+        <div class="grid4">
+          <div class="row"><span class="k">Intent</span><span class="v">Decisions across history where the player sees the trade-offs the way the leader did, not the textbook summary.</span></div>
+          <div class="row"><span class="k">Status</span><span class="v">Content-complete draft (v5). Not open to the public yet &mdash; deliberately held.</span></div>
+          <div class="row"><span class="k">Possibility</span><span class="v">A playtest layer; branching sub-decks by era; the reasoning shown as a visible spine.</span></div>
+          <div class="row"><span class="k">Roadblocks</span><span class="v">Scenes involving living political figures need sourced, attributed material before anything ships.</span></div>
+        </div>
+        <div class="gdoor shut" role="note">Held in the workshop &mdash; not public yet</div>
+      </article>
+
+      <!-- FUNNY BONEY'S FACTORY -->
+      <article class="gcard" aria-labelledby="g-fb">
+        <div class="gtop">
+          <svg class="gemb" viewBox="0 0 60 60" aria-hidden="true"><rect x="10" y="24" width="40" height="26" rx="3" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/><rect x="18" y="14" width="8" height="10" fill="var(--slate)" stroke="var(--ink)" stroke-width="3"/><rect x="34" y="14" width="8" height="10" fill="var(--slate)" stroke="var(--ink)" stroke-width="3"/><circle cx="22" cy="37" r="4" fill="var(--gold-br)"/><circle cx="38" cy="37" r="4" fill="var(--rust)"/></svg>
+          <div><div class="gname" id="g-fb">Funny Boney's Factory</div><div class="gone">A humor-build game &mdash; a proof of concept in the FableVision lane.</div><span class="pill build">Greenlit &middot; in the queue</span></div>
+        </div>
+        <div class="grid4">
+          <div class="row"><span class="k">Intent</span><span class="v">A playful factory where the mechanic teaches how a joke is assembled &mdash; setup, turn, and timing.</span></div>
+          <div class="row"><span class="k">Status</span><span class="v">Greenlit as an MVP. Spec written; build not started.</span></div>
+          <div class="row"><span class="k">Possibility</span><span class="v">A partner proof of concept &mdash; all open-license art, no shortcuts.</span></div>
+          <div class="row"><span class="k">Roadblocks</span><span class="v">Sits behind the live builds in the queue; starts once a slot opens.</span></div>
+        </div>
+        <div class="gdoor shut" role="note">Greenlit &mdash; build not started</div>
+      </article>
+
+      <!-- WARRIORS -->
+      <article class="gcard" aria-labelledby="g-war">
+        <div class="gtop">
+          <svg class="gemb" viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="18" fill="var(--gold-br)" stroke="var(--ink)" stroke-width="3"/><path d="M30 12 v36 M12 30 h36" stroke="var(--ink)" stroke-width="2"/><path d="M30 12 a18 18 0 0 1 0 36" fill="none" stroke="var(--rust)" stroke-width="3"/></svg>
+          <div><div class="gname" id="g-war">Warriors Fantasy Arcade</div><div class="gone">A fantasy-sports learning game, built with a co-player at the kitchen table.</div><span class="pill blocked">Placeholder &middot; needs rebuild</span></div>
+        </div>
+        <div class="grid4">
+          <div class="row"><span class="k">Intent</span><span class="v">Use a family fantasy-sports habit as the hook for real reasoning about numbers and choices.</span></div>
+          <div class="row"><span class="k">Status</span><span class="v">Only a placeholder file exists right now &mdash; the working build needs to be rebuilt from its spec.</span></div>
+          <div class="row"><span class="k">Possibility</span><span class="v">A full draft arcade; a template other families could reskin.</span></div>
+          <div class="row"><span class="k">Roadblocks</span><span class="v">Rebuild from the recovered design before it can go live.</span></div>
+        </div>
+        <div class="gdoor shut" role="note">Placeholder &mdash; not yet playable</div>
+      </article>
+
+    </div>
+  </section>
+
+  <div class="foot">
+    <b>Tight Spiral Productions</b> &mdash; a one-person educational game studio. Play. Notice. Design.<br>
+    Everything here is a single offline file; nothing you do is tracked or sent. Art is original cut-paper SVG, released CC0.<br>
+    Questions, or a playtest note anytime (no clock): <a href="mailto:walshero@gmail.com">walshero@gmail.com</a>.
+  </div>
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var stops=['softer','default','warm'], ci=1;
+  function applyStop(s){ document.body.classList.remove('softer','warm'); if(s==='softer')document.body.classList.add('softer'); if(s==='warm')document.body.classList.add('warm'); ci=stops.indexOf(s); }
+  $('cstop').addEventListener('click',function(){ ci=(ci+1)%3; applyStop(stops[ci]); this.textContent='Comfort: '+stops[ci].charAt(0).toUpperCase()+stops[ci].slice(1); });
+  /* smooth anchor scroll with focus for keyboard users */
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      var id=a.getAttribute('href').slice(1); var t=document.getElementById(id);
+      if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth',block:'start'}); t.setAttribute('tabindex','-1'); t.focus({preventScroll:true}); }
+    });
+  });
+})();
+</script>
+</body>
+</html>
