@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  THE TELL — an async workshop game for EN195. Tight Spiral Productions · walshero@gmail.com
+  The Workshop-Four peer-review tool, reborn as a card game.
+
+  THE LOOP (founder's design, from his own Workshop Moves handout): a flash piece carries a
+  face-down tag a PRIOR READER placed. You read, call the move, WRITE YOUR WHY (the evidence),
+  then FLIP to compare. Not right-vs-wrong — two defensible reads side by side. That is the
+  workshop, made async. Commit-before-flip is the engine: you cannot peek, you must reason first.
+
+  TWO DECKS, ONE ENGINE (Filament's 8+8 cut, 2026-07-06, every card swappable):
+   WRITERLY (what move is working): Anchor in Reality, Character Want, Friction/Obstacle,
+     Micro-Tension, World Detail That Matters, Interior Weather, Stakes Signal, Turn/Shift.
+   WORKSHOP (what the piece asks for): Overpacked Suitcase, Floating Camera, Blurry Stakes,
+     Dropped Thread, Emotional Static, Stock Footage Moment, Driving Too Fast, Info Dump.
+  Card source: Matt's "Workshop Moves" doc (Storyscape moves + Observation Tags), his own,
+  attributed. Neutral studio-written piece (FERPA floor: never real student work).
+
+  SCOPE = vertical slice: one piece "The Spare Key" (original studio text, clean), both lenses,
+  preset prior-reader tags baked in (single-file, offline — the Review Bench pattern).
+  PHASE 2: live relay — a read exports as a carry-out the next player loads.
+
+  FLOOR: single-file, offline, in-memory; color-scheme locked (no OS charcoal-on-black);
+  3-stop comfort (never #000/#fff, >=0.12 stop separation); --ink2==--ink; accents structural;
+  large type; 44px+ targets; keyboard; visible focus; reduced-motion safe; scroll-reset; one
+  decision per screen; no hidden traps; no emoji; phone-width. Cut-paper SVG cards = the image.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>The Tell — an async workshop game</title>
+<style>
+:root{
+  color-scheme: light;
+  --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --ink2:#1f1b12;
+  --line:#d8caa8; --line2:#c2b288;
+  --accent:#3a4654; --accent2:#2b3540;
+  --gold:#6e4700; --gold-br:#c8900a; --gold-pale:#fbeec6;
+  --rust:#8a3a1c; --sky:#cdd8e2; --card:#efe4cb;
+  --focus:#c8900a;
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+  --display:'Times New Roman',Georgia,serif;
+}
+body.softer{ --bg:#d9d2c4; --surface:#e2dccf; --ink:#241f16; --ink2:#241f16; --line:#c9bd9f; --line2:#b6a983; --sky:#ccd6df; --card:#d8ccb2; }
+body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0; --line:#4a4230; --line2:#5e553e;
+  --accent:#8fa6bd; --accent2:#9fb6cd; --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a;
+  --rust:#e8a07c; --sky:#2c3540; --card:#332c1e; }
+*{box-sizing:border-box;} html,body{margin:0;}
+body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; -webkit-text-size-adjust:100%; }
+
+.topbar{ background:var(--accent); color:#fff; padding:.6rem .9rem; display:flex; align-items:center; gap:.6rem; font-family:var(--sans); position:sticky; top:0; z-index:30; }
+body.warm .topbar{ color:#0f0e0b; }
+.topbar .mark{ width:26px; height:26px; flex:none; } .topbar .wm{ font-weight:800; font-size:.95rem; }
+.cstop{ margin-left:auto; background:rgba(255,255,255,.18); color:inherit; border:2px solid rgba(255,255,255,.6); border-radius:9px; padding:.45rem .65rem; font:700 .76rem/1 var(--sans); cursor:pointer; min-height:44px; }
+body.warm .cstop{ border-color:rgba(0,0,0,.4); background:rgba(0,0,0,.12); }
+.cstop:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+.wrap{ max-width:660px; margin:0 auto; padding:1.1rem 1rem 5rem; }
+.screen{ display:none; } .screen.on{ display:block; animation:fade .25s ease; }
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.where{ font:800 .72rem/1 var(--sans); letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:.6rem; }
+h1{ font-size:1.7rem; line-height:1.16; color:var(--ink); margin:.2rem 0 .5rem; }
+h2{ font-size:1.3rem; color:var(--ink); margin:.2rem 0 .6rem; }
+p{ margin:0 0 .9rem; } .lead{ font-size:1.1rem; } .beat{ font-style:italic; color:var(--ink2); }
+
+.go{ display:block; width:100%; font:800 1.04rem/1.2 var(--sans); cursor:pointer; min-height:56px; padding:.9rem 1rem; border:none; border-radius:13px; background:var(--accent); color:#fff; margin:.45rem 0; text-align:center; }
+body.warm .go{ color:#0f0e0b; }
+.go:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+.go.sec{ background:var(--surface); color:var(--ink); border:2px solid var(--ink); }
+.go.ghost{ background:transparent; color:var(--ink); border:2px solid var(--line2); font-weight:700; min-height:48px; }
+.go:disabled{ opacity:.55; cursor:default; }
+
+/* comfort gate */
+.swatches{ display:flex; flex-direction:column; gap:.7rem; margin:1rem 0; }
+.sw{ display:flex; align-items:center; gap:.8rem; border:3px solid var(--line2); border-radius:14px; padding:.8rem; cursor:pointer; min-height:64px; background:var(--surface); }
+.sw:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.sw .chip{ width:54px; height:42px; border-radius:9px; flex:none; border:2px solid rgba(0,0,0,.15); display:flex; overflow:hidden; }
+.sw .chip span{ flex:1; } .sw .lbl{ font:800 1.02rem/1.2 var(--sans); } .sw .subt{ font:400 .85rem/1.3 var(--sans); color:var(--ink2); }
+.sw.sel{ border-color:var(--gold-br); }
+.chip.soft span:nth-child(1){background:#d9d2c4;} .chip.soft span:nth-child(2){background:#241f16;}
+.chip.def span:nth-child(1){background:#f3ead8;} .chip.def span:nth-child(2){background:#1f1b12;}
+.chip.dark span:nth-child(1){background:#26231d;} .chip.dark span:nth-child(2){background:#f0c357;}
+
+/* big cut-paper card art (the image floor) */
+.artwrap{ text-align:center; margin:.6rem 0 1rem; }
+.artwrap svg{ width:100%; max-width:340px; height:auto; }
+
+/* lens picker */
+.lens{ display:flex; flex-direction:column; gap:.7rem; margin:1rem 0; }
+.lenscard{ display:flex; align-items:center; gap:.85rem; border:3px solid var(--line2); border-radius:14px; padding:.85rem; cursor:pointer; min-height:76px; background:var(--surface); text-align:left; width:100%; }
+.lenscard:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.lenscard .li{ width:52px; height:52px; flex:none; }
+.lenscard .lt{ font:800 1.05rem/1.15 var(--sans); color:var(--ink); }
+.lenscard .ld{ font:400 .88rem/1.35 var(--sans); color:var(--ink2); }
+
+/* the piece / board */
+.piece{ border:3px solid var(--accent2); border-radius:16px; background:var(--surface); padding:.9rem 1rem 1rem; margin:.4rem 0 1rem; font-size:1.14rem; line-height:1.95; }
+.piece .ph{ text-align:center; border-bottom:3px double var(--accent2); padding-bottom:.4rem; margin:-.2rem 0 .7rem; }
+.piece .ph .k{ font:800 .66rem/1 var(--sans); letter-spacing:.16em; text-transform:uppercase; color:var(--accent2); }
+.piece .ph .t{ font:800 1.05rem/1.1 var(--display); color:var(--ink); }
+.tagspot{ position:relative; display:inline; padding:.02em .18em; border-radius:5px; background:var(--gold-pale); border:2px dashed var(--gold-br); cursor:pointer; font-weight:600; }
+.tagspot:hover{ background:var(--card); }
+.tagspot:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.tagspot .facedown{ display:inline-block; vertical-align:middle; width:18px; height:24px; margin-left:.15em; }
+.tagspot.done{ background:transparent; border-color:var(--line2); border-style:solid; cursor:default; font-weight:700; }
+.tagspot.done .facedown{ display:none; }
+.tagspot .chk{ display:none; font:800 .7rem/1 var(--sans); color:var(--gold); margin-left:.2em; }
+.tagspot.done .chk{ display:inline; }
+
+.progress{ font:700 .8rem/1.3 var(--sans); color:var(--ink2); margin:0 0 .8rem; }
+
+/* the call panel */
+.call{ border:3px solid var(--gold-br); border-radius:16px; background:var(--surface); padding:.9rem 1rem 1rem; margin:1rem 0; }
+.call .ch{ font:800 .72rem/1 var(--sans); letter-spacing:.06em; text-transform:uppercase; color:var(--gold); margin-bottom:.3rem; }
+.call .quote{ font:italic 400 1.05rem/1.6 var(--serif); color:var(--ink); border-left:5px solid var(--gold-br); padding:.2rem 0 .2rem .8rem; margin:.2rem 0 .9rem; }
+.cards{ display:grid; grid-template-columns:1fr 1fr; gap:.5rem; margin:.5rem 0 .9rem; }
+.pick{ border:2px solid var(--line2); border-radius:11px; background:var(--card); padding:.6rem .55rem; cursor:pointer; min-height:64px; text-align:left; font-family:var(--sans); }
+.pick:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.pick .pn{ font:800 .92rem/1.1 var(--sans); color:var(--ink); display:block; }
+.pick .pd{ font:400 .76rem/1.25 var(--sans); color:var(--ink2); display:block; margin-top:.15rem; }
+.pick.sel{ border-color:var(--gold-br); background:var(--gold-pale); }
+.call label{ display:block; font:700 .86rem/1.3 var(--sans); margin:.7rem 0 .25rem; }
+.call textarea{ width:100%; font:400 .95rem/1.5 var(--sans); padding:.6rem; border:2px solid var(--line2); border-radius:9px; background:var(--bg); color:var(--ink); min-height:80px; resize:vertical; }
+.call textarea:focus-visible{ outline:3px solid var(--focus); outline-offset:1px; }
+
+/* the flip / compare */
+.compare{ margin:1rem 0 0; }
+.reads{ display:flex; flex-direction:column; gap:.6rem; margin:.6rem 0; }
+.read{ border:2px solid var(--line2); border-radius:12px; background:var(--surface); padding:.7rem .8rem; }
+.read.you{ border-color:var(--accent2); }
+.read.prior{ border-color:var(--gold-br); background:var(--gold-pale); }
+.read .rl{ font:800 .68rem/1 var(--sans); letter-spacing:.06em; text-transform:uppercase; color:var(--ink2); margin-bottom:.25rem; }
+.read .rc{ font:800 1.05rem/1.15 var(--sans); color:var(--ink); }
+.read .rw{ font:400 .92rem/1.45 var(--sans); color:var(--ink); margin-top:.3rem; }
+.verdict{ border-radius:12px; padding:.8rem .9rem; margin:.7rem 0 0; font:400 .98rem/1.5 var(--sans); }
+.verdict.same{ background:var(--gold-pale); border:2px solid var(--gold-br); }
+.verdict.diff{ background:var(--surface); border:2px solid var(--accent2); }
+.verdict b{ color:var(--ink); }
+
+.controls{ display:flex; gap:.5rem; flex-wrap:wrap; margin:.8rem 0 0; }
+.controls .go{ flex:1; min-width:150px; }
+
+/* carry-out */
+.copyout{ border:2px solid var(--accent2); border-radius:13px; background:var(--surface); padding:.85rem .9rem; margin:1rem 0; }
+.copyout .ch{ font:800 .78rem/1 var(--sans); letter-spacing:.05em; text-transform:uppercase; color:var(--accent2); margin-bottom:.5rem; }
+#carry{ width:100%; font:400 .86rem/1.5 var(--sans); padding:.7rem; border:2px solid var(--line2); border-radius:9px; background:var(--bg); color:var(--ink); min-height:150px; resize:vertical; white-space:pre-wrap; }
+.copied{ font:700 .85rem/1 var(--sans); color:var(--ink); margin:.4rem 0 0; min-height:1.2em; }
+.hint{ border-left:5px solid var(--gold-br); background:var(--gold-pale); border-radius:0 10px 10px 0; padding:.7rem .9rem; margin:.8rem 0; font:400 .96rem/1.45 var(--sans); }
+
+.foot{ margin-top:1.6rem; padding:1rem; background:var(--accent); color:#fff; border-radius:12px; font-family:var(--sans); font-size:.8rem; }
+body.warm .foot{ color:#0f0e0b; } .foot a{ color:#fff; } body.warm .foot a{ color:#0f0e0b; }
+.sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+@media (max-width:520px){ body{font-size:18px;} h1{font-size:1.46rem;} .wrap{padding:1rem .8rem 5rem;} .piece{font-size:1.06rem; line-height:1.85;} .cards{grid-template-columns:1fr;} }
+@media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 4 C30 4 36 12 36 20 C36 28 30 33 23 33 C17 33 13 29 13 24 C13 20 16 17 20 17 C23 17 25 19 25 22" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
+  <span class="wm">The Tell</span>
+  <button class="cstop" id="cstop" aria-label="Change comfort palette">Comfort</button>
+</div>
+
+<div class="wrap">
+
+  <!-- SCREEN 1 — SCENE -->
+  <section class="screen on" id="scene" aria-labelledby="sceneh">
+    <div class="where">The reading room</div>
+    <div class="artwrap" aria-hidden="true">
+      <svg viewBox="0 0 340 200" role="img" aria-label="A face-down card resting on an open page.">
+        <rect x="24" y="30" width="292" height="150" rx="8" fill="var(--surface)" stroke="var(--accent2)" stroke-width="3"/>
+        <line x1="52" y1="60" x2="288" y2="60" stroke="var(--line2)" stroke-width="3"/>
+        <line x1="52" y1="80" x2="288" y2="80" stroke="var(--line2)" stroke-width="3"/>
+        <line x1="52" y1="100" x2="230" y2="100" stroke="var(--line2)" stroke-width="3"/>
+        <line x1="52" y1="140" x2="288" y2="140" stroke="var(--line2)" stroke-width="3"/>
+        <line x1="52" y1="160" x2="200" y2="160" stroke="var(--line2)" stroke-width="3"/>
+        <g transform="rotate(-8 210 118)">
+          <rect x="168" y="86" width="84" height="64" rx="7" fill="var(--card)" stroke="var(--gold-br)" stroke-width="3"/>
+          <rect x="176" y="94" width="68" height="48" rx="4" fill="none" stroke="var(--gold-br)" stroke-width="1.6" stroke-dasharray="4 4"/>
+          <path d="M188 118 L232 118 M210 100 L210 136" stroke="var(--gold-br)" stroke-width="2"/>
+          <circle cx="210" cy="118" r="10" fill="none" stroke="var(--gold-br)" stroke-width="2"/>
+        </g>
+      </svg>
+    </div>
+    <h1 id="sceneh">Somebody read this before you.</h1>
+    <p>They tagged a moment in the piece — named the move they saw working, or the thing it needs. Their tag is <b>face-down.</b> You don't get to see it yet.</p>
+    <p>Your job: read, tap a tagged spot, <b>call the move and say why</b> — your evidence. Then flip, and see what the last reader called.</p>
+    <div class="hint"><b>The point isn't a right answer.</b> Two good readers can tag the same line differently and both be right. The flip shows you a defensible read next to yours — and asks whose evidence is stronger.</div>
+    <button class="go" id="toLens">Pick your lens &rarr;</button>
+  </section>
+
+  <!-- SCREEN 2 — LENS PICK -->
+  <section class="screen" id="lens" aria-labelledby="lensh">
+    <div class="where">Two ways to read</div>
+    <h1 id="lensh">What are you reading for?</h1>
+    <p>Same piece, two lenses. You can play the other one after.</p>
+    <div class="lens">
+      <button class="lenscard" id="lensWriterly">
+        <svg class="li" viewBox="0 0 52 52" aria-hidden="true"><rect x="6" y="6" width="40" height="40" rx="6" fill="var(--card)" stroke="var(--accent2)" stroke-width="3"/><path d="M16 34 L24 18 L32 34 M19 28 L29 28" stroke="var(--accent2)" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+        <span><span class="lt">Writerly moves</span><br><span class="ld">What craft move is working here? The appreciative read.</span></span>
+      </button>
+      <button class="lenscard" id="lensWorkshop">
+        <svg class="li" viewBox="0 0 52 52" aria-hidden="true"><rect x="6" y="6" width="40" height="40" rx="6" fill="var(--card)" stroke="var(--gold-br)" stroke-width="3"/><circle cx="23" cy="23" r="9" fill="none" stroke="var(--gold-br)" stroke-width="3"/><line x1="30" y1="30" x2="40" y2="40" stroke="var(--gold-br)" stroke-width="3" stroke-linecap="round"/></svg>
+        <span><span class="lt">Workshop moves</span><br><span class="ld">What is the piece asking for? The reviewer's read.</span></span>
+      </button>
+    </div>
+  </section>
+
+  <!-- SCREEN 3 — THE BOARD -->
+  <section class="screen" id="board" aria-labelledby="boardh">
+    <div class="where" id="lensLabel">The reading</div>
+    <p class="progress" id="progress" aria-live="polite"></p>
+    <div class="piece">
+      <div class="ph"><div class="k">A neutral studio piece — read it, then tag it</div><div class="t">"The Spare Key"</div></div>
+      <div id="pieceBody"></div>
+    </div>
+    <p class="sr" id="liveStat" aria-live="polite"></p>
+
+    <div id="callHost"></div>
+
+    <div class="controls">
+      <button class="go ghost" id="switchLens">Read it the other way</button>
+      <button class="go" id="toClose" disabled>See your reads &rarr;</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 4 — CLOSE / CARRY-OUT -->
+  <section class="screen" id="close" aria-labelledby="closeh">
+    <div class="where">Your reads</div>
+    <h1 id="closeh">You left three reads on this piece.</h1>
+    <p>That's a workshop comment set — a real one, with evidence. The next reader could get <i>your</i> tags face-down and have to call them.</p>
+    <div class="copyout">
+      <div class="ch">Carry it out — nothing is sent</div>
+      <p style="font:400 .9rem/1.45 var(--sans); margin:0 0 .3rem;">A clean note you can paste into a Doc, an email, or your workshop group.</p>
+      <textarea id="carry" readonly aria-label="Your reads"></textarea>
+      <button class="go sec" id="copyCarry" style="margin-top:.5rem;">Copy it</button>
+      <p class="copied" id="copiedMsg" aria-live="polite"></p>
+    </div>
+    <div class="hint"><b>Coming next (live relay):</b> your read exports as a code the next player loads — the workshop chain becomes real, no server, still one offline file.</div>
+    <div class="controls">
+      <button class="go ghost" id="replayOther">Read it the other way &rarr;</button>
+    </div>
+  </section>
+
+  <div class="foot">
+    Tight Spiral Productions · <a href="mailto:walshero@gmail.com">walshero@gmail.com</a> — <b>The Tell</b>, an async workshop game for EN195.
+    Single file, offline, nothing leaves the page. "The Spare Key" is original studio text, not a published work. Cards are Matt's own Writerly Moves and Observation Tags.
+    <br><b>How this was made:</b> the loop is Matt's Workshop-Moves handout — tag, defend with evidence, compare — turned into a game. The 8+8 deck was Filament's cut, every card swappable. You are the human in the loop.
+  </div>
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+
+  /* ---------- comfort gate ---------- */
+  var stops=['softer','default','warm'], ci=1;
+  function applyStop(s){ document.body.classList.remove('softer','warm'); if(s==='softer')document.body.classList.add('softer'); if(s==='warm')document.body.classList.add('warm'); ci=stops.indexOf(s); }
+  $('cstop').addEventListener('click',function(){ ci=(ci+1)%3; applyStop(stops[ci]); this.textContent='Comfort: '+stops[ci].charAt(0).toUpperCase()+stops[ci].slice(1); });
+
+  /* ---------- screen nav ---------- */
+  function show(id){ document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');}); $(id).classList.add('on'); window.scrollTo(0,0); var h=$(id).querySelector('h1'); if(h){ h.setAttribute('tabindex','-1'); h.focus(); } }
+  $('toLens').addEventListener('click',function(){ show('lens'); });
+
+  /* ---------- decks (Filament's 8+8 cut) ---------- */
+  var DECKS={
+    writerly:[
+      {id:'anchor', n:'Anchor in Reality', d:'who / where / when, made solid'},
+      {id:'want', n:'Character Want', d:'what they are trying to get'},
+      {id:'friction', n:'Friction / Obstacle', d:'something in the way'},
+      {id:'micro', n:'Micro-Tension', d:'a small itch of unease'},
+      {id:'detail', n:'World Detail That Matters', d:'a detail that quietly carries weight'},
+      {id:'weather', n:'Interior Weather', d:'the felt-state made visible'},
+      {id:'stakes', n:'Stakes Signal', d:'why it matters, what could be lost'},
+      {id:'turn', n:'Turn / Shift', d:'the moment it changes direction'}
+    ],
+    workshop:[
+      {id:'suitcase', n:'Overpacked Suitcase', d:'a detail that may not earn its keep'},
+      {id:'camera', n:'Floating Camera', d:'unsure where we are or whose eyes'},
+      {id:'blurry', n:'Blurry Stakes', d:'unsure what is at risk here'},
+      {id:'dropped', n:'Dropped Thread', d:'felt important, then vanished'},
+      {id:'static', n:'Emotional Static', d:'feelings do not match the moment'},
+      {id:'stock', n:'Stock Footage Moment', d:'generic, not specific to this story'},
+      {id:'fast', n:'Driving Too Fast', d:'an important beat feels rushed'},
+      {id:'dump', n:'Info Dump', d:'a block of info stalls momentum'}
+    ]
+  };
+  function cardName(deck,id){ var a=DECKS[deck]; for(var i=0;i<a.length;i++){ if(a[i].id===id) return a[i].n; } return id; }
+
+  /* ---------- the piece: segments; tagged spans carry a span id ---------- */
+  var PIECE=[
+    {t:'The spare key still hung on the nail by the door, '},
+    {span:'A', t:'where it had hung for eleven years'},
+    {t:'. Nobody used it anymore. '},
+    {span:'N', t:'Marcus'},
+    {t:' jangled his own keys in his pocket, '},
+    {span:'B', t:'three of them'},
+    {t:', and did not reach for it.\n\n'},
+    {span:'C', t:'The kitchen smelled like the coffee she used to make'},
+    {t:', though the pot had been cold since morning and he had made it himself, badly. He drank it anyway.\n\nOutside, '},
+    {span:'D', t:'a car slowed at the curb, then moved on'},
+    {t:'. He had stopped looking up when cars slowed. He put his cup in the sink, next to the one that was already there, the one he kept meaning to wash.\n\nThe spare key caught the last of the light. '},
+    {span:'E', t:'He left it where it was.'}
+  ];
+
+  /* preset prior-reader tags, per lens. why = a defensible read, not the only one. */
+  var PRESET={
+    writerly:{
+      A:{card:'detail', why:'The key is a concrete object doing the emotional work \u2014 eleven years on a nail. Change the detail and the loss changes. That is World Detail That Matters.'},
+      C:{card:'weather', why:'The cold coffee she used to make carries the grief without ever naming it \u2014 the feeling lives in the image. Interior Weather.'},
+      E:{card:'turn', why:'The whole piece pivots on a choice: he leaves the key. The quiet decision at the end is the Turn.'}
+    },
+    workshop:{
+      N:{card:'camera', why:'We get "Marcus" once, then only "he." I lose whose eyes I am in \u2014 do we stay with Marcus, or drift? Floating Camera.'},
+      B:{card:'suitcase', why:'"three of them" \u2014 does the count earn its keep, or is it an extra detail I trip on? Overpacked Suitcase.'},
+      D:{card:'blurry', why:'A car slows and moves on. I am not sure what is at risk in this beat \u2014 the stakes stay under the surface. Blurry Stakes.'}
+    }
+  };
+  var LENS_SPANS={ writerly:['A','C','E'], workshop:['N','B','D'] };
+
+  var lens=null, state={};   /* state[span] = {card, why} once flipped */
+
+  function startLens(which){
+    lens=which; state={};
+    $('lensLabel').textContent = which==='writerly' ? 'The reading \u2014 writerly moves' : 'The reading \u2014 workshop moves';
+    renderPiece(); renderProgress(); $('callHost').innerHTML=''; $('toClose').disabled=true;
+    show('board');
+  }
+  $('lensWriterly').addEventListener('click',function(){ startLens('writerly'); });
+  $('lensWorkshop').addEventListener('click',function(){ startLens('workshop'); });
+  $('switchLens').addEventListener('click',function(){ startLens(lens==='writerly'?'workshop':'writerly'); });
+  $('replayOther').addEventListener('click',function(){ startLens(lens==='writerly'?'workshop':'writerly'); });
+
+  var faceDownSVG='<svg class="facedown" viewBox="0 0 18 24" aria-hidden="true"><rect x="1" y="1" width="16" height="22" rx="3" fill="var(--card)" stroke="var(--gold-br)" stroke-width="1.6"/><path d="M5 12 H13 M9 6 V18" stroke="var(--gold-br)" stroke-width="1.4"/></svg>';
+
+  function renderPiece(){
+    var box=$('pieceBody'); box.innerHTML='';
+    var active=LENS_SPANS[lens];
+    PIECE.forEach(function(seg){
+      if(seg.span && active.indexOf(seg.span)>=0){
+        var sp=document.createElement('span');
+        var done=!!state[seg.span];
+        sp.className='tagspot'+(done?' done':'');
+        sp.setAttribute('data-span',seg.span);
+        sp.innerHTML=seg.t+(done?'<span class="chk">read</span>':faceDownSVG);
+        if(!done){
+          sp.tabIndex=0; sp.setAttribute('role','button'); sp.setAttribute('aria-label','A prior reader tagged this. Call the move: '+seg.t);
+          sp.addEventListener('click',function(){ openCall(seg.span, seg.t); });
+          sp.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openCall(seg.span, seg.t); }});
+        } else {
+          sp.setAttribute('aria-label',seg.t+' (already read)');
+        }
+        box.appendChild(sp);
+      } else if(seg.span){
+        /* span not in this lens: render as plain text */
+        box.appendChild(document.createTextNode(seg.t));
+      } else {
+        /* preserve paragraph breaks */
+        var parts=seg.t.split('\n\n');
+        parts.forEach(function(p,i){ box.appendChild(document.createTextNode(p)); if(i<parts.length-1){ box.appendChild(document.createElement('br')); box.appendChild(document.createElement('br')); } });
+      }
+    });
+  }
+
+  function renderProgress(){
+    var active=LENS_SPANS[lens], done=0;
+    active.forEach(function(s){ if(state[s]) done++; });
+    $('progress').textContent='Tagged spots read: '+done+' of '+active.length+'. '+(done<active.length?'Tap a highlighted spot to call it.':'All read \u2014 see your reads below.');
+    $('toClose').disabled = done<active.length;
+    $('liveStat').textContent='You have read '+done+' of '+active.length+' tagged spots.';
+  }
+
+  /* ---------- the call panel ---------- */
+  function openCall(span, quote){
+    var host=$('callHost'); host.innerHTML='';
+    var picked=null;
+    var wrap=document.createElement('div'); wrap.className='call';
+    var cardsHTML='';
+    DECKS[lens].forEach(function(c){
+      cardsHTML+='<button class="pick" data-card="'+c.id+'"><span class="pn">'+c.n+'</span><span class="pd">'+c.d+'</span></button>';
+    });
+    wrap.innerHTML=
+      '<div class="ch">'+(lens==='writerly'?'Call the move that is working':'Call what the piece is asking for')+'</div>'+
+      '<div class="quote">\u201c'+quote+'\u201d</div>'+
+      '<div class="cards" role="group" aria-label="Pick one card">'+cardsHTML+'</div>'+
+      '<label for="why">Your why \u2014 the evidence. What in the words makes you call it this?</label>'+
+      '<textarea id="why" placeholder="Point to the words. e.g. the cold coffee holds the feeling without naming it."></textarea>'+
+      '<div class="controls"><button class="go ghost" id="cancelCall">Not yet</button><button class="go" id="commitCall" disabled>Commit &amp; flip &rarr;</button></div>';
+    host.appendChild(wrap);
+    host.scrollIntoView({block:'center'});
+
+    wrap.querySelectorAll('.pick').forEach(function(b){
+      b.addEventListener('click',function(){
+        wrap.querySelectorAll('.pick').forEach(function(x){x.classList.remove('sel');});
+        b.classList.add('sel'); picked=b.dataset.card; refresh();
+      });
+    });
+    var why=wrap.querySelector('#why');
+    why.addEventListener('input',refresh);
+    function refresh(){ wrap.querySelector('#commitCall').disabled = !(picked && why.value.trim().length>=3); }
+
+    wrap.querySelector('#cancelCall').addEventListener('click',function(){ host.innerHTML=''; });
+    wrap.querySelector('#commitCall').addEventListener('click',function(){
+      state[span]={card:picked, why:why.value.trim()};
+      renderFlip(span, quote, host);
+    });
+  }
+
+  function renderFlip(span, quote, host){
+    var mine=state[span], preset=PRESET[lens][span];
+    var same=(mine.card===preset.card);
+    var v = same
+      ? ('<div class="verdict same"><b>Same read.</b> You and the last reader both saw <b>'+cardName(lens,mine.card)+'</b>. Now the real question: is your evidence as strong as theirs? Whose points harder at the words?</div>')
+      : ('<div class="verdict diff"><b>Two reads.</b> You called <b>'+cardName(lens,mine.card)+'</b>; the last reader called <b>'+cardName(lens,preset.card)+'</b>. Both can be defended \u2014 that is the workshop. Read both whys. Which evidence convinces you, and could the line be doing both at once?</div>');
+    host.innerHTML=
+      '<div class="call compare"><div class="ch">The flip</div>'+
+      '<div class="quote">\u201c'+quote+'\u201d</div>'+
+      '<div class="reads">'+
+        '<div class="read you"><div class="rl">Your call</div><div class="rc">'+cardName(lens,mine.card)+'</div><div class="rw">'+esc(mine.why)+'</div></div>'+
+        '<div class="read prior"><div class="rl">The last reader</div><div class="rc">'+cardName(lens,preset.card)+'</div><div class="rw">'+preset.why+'</div></div>'+
+      '</div>'+ v +
+      '<div class="controls"><button class="go" id="nextSpot">Back to the piece &rarr;</button></div></div>';
+    host.querySelector('#nextSpot').addEventListener('click',function(){
+      host.innerHTML=''; renderPiece(); renderProgress();
+      if(LENS_SPANS[lens].every(function(s){return state[s];})){ buildCarry(); }
+    });
+    renderPiece(); renderProgress();
+    host.scrollIntoView({block:'center'});
+  }
+
+  function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  /* ---------- carry-out ---------- */
+  function buildCarry(){
+    var L=['The Tell \u2014 my reads on \u201cThe Spare Key\u201d','Lens: '+(lens==='writerly'?'Writerly moves':'Workshop moves'),''];
+    LENS_SPANS[lens].forEach(function(s){
+      var seg=PIECE.filter(function(p){return p.span===s;})[0];
+      var mine=state[s], preset=PRESET[lens][s];
+      L.push('\u2014 \u201c'+seg.t+'\u201d');
+      L.push('   My call: '+cardName(lens,mine.card));
+      L.push('   My why: '+mine.why);
+      L.push('   Last reader: '+cardName(lens,preset.card));
+      L.push('');
+    });
+    L.push('(I chose to share this. Nothing was sent automatically.)');
+    $('carry').value=L.join('\n');
+  }
+  $('toClose').addEventListener('click',function(){ buildCarry(); show('close'); });
+
+  $('copyCarry').addEventListener('click',function(){
+    var box=$('carry'); if(!box.value){ $('copiedMsg').textContent='Read all three spots first.'; return; }
+    box.removeAttribute('readonly'); box.select(); box.setSelectionRange(0,99999);
+    try{document.execCommand('copy');}catch(e){} box.setAttribute('readonly','');
+    if(navigator.clipboard){ navigator.clipboard.writeText(box.value).then(function(){},function(){}); }
+    $('copiedMsg').textContent='Copied \u2014 paste it into a Doc, an email, or your workshop group.';
+  });
+
+})();
+</script>
+</body>
+</html>
