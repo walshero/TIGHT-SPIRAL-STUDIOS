@@ -7,176 +7,6 @@
   Newest first. (Backfilled v18–v23 retroactively at v24 — first changelog entry.)
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  v43 (2026-07-10) — STAGE 1: cycle spine + instructor-materials share seam
-    - ADDED: Cycle-management form in the Coordinator panel (own .cmx-* CSS /
-      cmx* JS). Declare a cycle — outcome, semester, courses, owner, deadline —
-      saved to localStorage (confluence_cycles_v1) and listed with per-row
-      remove. This is the spine later reporting hangs off. Local only, no fetch.
-    - ADDED: Supabase instructor-materials post seam in the Materials panel
-      (own .sbx-* CSS / sbx* JS), STUBBED. Instructor IP only (syllabi +
-      assignment prompts). One SBX_CONFIG block (url + anonKey + table) that
-      Matt fills once after provisioning Supabase; until filled, submissions are
-      validated and HELD LOCALLY (confluence_sbx_queue_v1) — nothing is sent.
-      Live path uses Supabase REST insert; RLS (set in the backend, not this
-      file) is the only thing governing the shipped anon key.
-    - FERPA GUARD (hard, sbxFerpaViolation): rejects name+grade patterns,
-      individual grades, and student-record language. Student assessment data
-      never uses this seam. Offline/airplane core untouched — this is an opt-in
-      publish step, dormant by default; the ✈ Offline chip stays accurate until
-      Matt turns it on.
-    - GOVERNANCE (on record): the live share path trips FERPA/Governance and
-      Build-Integrity HALTs; scoping to instructor materials only is what clears
-      both. Student work would be a NECHE/FERPA conversation FIRST, not a build.
-    - DATA (verified this session): course dropdowns and roster already matched
-      the live MassBay English dept list (9 FT faculty, corrected emails, EN202
-      approved title). No invented course data introduced.
-    - HOUSEKEEPING: eyebrow + About version v42→v43.
-
-  v42 (2026-07-10)
-    - ADDED: AY26-27 SLO#3 paste-data seam in Program Review. Faculty collect
-      scores via their existing tools (Form/SurveyMonkey/sheet), paste aggregate
-      results (one line per course: CODE, then rubric numbers 0-5). Parses,
-      saves to localStorage (confluence_cycle_ay2627_slo3), renders average-by-
-      course bars. Own .pcx-* namespace + pcx* JS functions.
-    - FERPA GUARD (hard): parser rejects any token that looks like a name or
-      non-score word and stops with a warning; rejects non-course-code first
-      fields; only accepts numbers 0-5. NO fetch, NO upload — data stays on the
-      device. Airplane-mode preserved. Matches Matt's rule: student data never
-      leaves the device; scores only, never names or artifact text.
-    - DESIGN: minimum-viable, wired to the ONE live cycle (not a general intake)
-      — generalize by cloning per future cycle, not by pre-abstracting.
-    - HOUSEKEEPING: eyebrow + About info-box v41→v42.
-
-  v41 (2026-07-10)
-    - DATA FIX (Assessment-critical): replaced the mangled 6-"ISLO" array with
-      the REAL 5 English program SLOs, verified from MassBay's live published
-      learning-outcomes source (AY25-26 framework). Removed the invented
-      "Information Literacy" pseudo-outcome. Outcomes Irrigation now renders the
-      English program's own 5 SLOs, not a wrong institutional set.
-    - HONESTY FLAG: per-course SLO coverage grid is a reasoned DRAFT seeded from
-      the curriculum, not department-verified. Visible "draft mapping — pending
-      faculty verification" banner added to the Irrigation panel so no one
-      mistakes the grid for confirmed data. Every ARTIFACT cell maps to a real
-      covered plot (audited, zero orphans).
-    - ADDED: "How English Got to Five" — tagged 7→5 SLO consolidation history in
-      Program Review (reuses .cab-* namespace, zero new CSS). Three cabinets:
-      outcome-by-outcome lineage (marked reconstructed, not official), the
-      7-outcome-era rotation (AY16-17→20-21 from dept reports), and the current
-      five + the live AY26-27 cycle (assessing SLO#3).
-    - NOTE: the 7 institutional Graduation Competencies (incl. Technology and
-      Scientific/natural-world, which the old array was missing) are captured in
-      the assessment source-of-truth file as a separate institutional layer;
-      this build renders the ENGLISH program layer per Matt's "show off English."
-    - PROVENANCE: all outcome text sourced live 2026-07-10. No fabrication.
-      FERPA: no real student names in any shipped content (Diego line excluded).
-    - HOUSEKEEPING: eyebrow + About info-box v40→v41.
-
-  v40 (2026-07-07)
-    - RESKIN: ISLO Loom → "Outcomes Irrigation". Weaving metaphor retired,
-      replaced with irrigation-field metaphor per Matt's correction. SVG redraw
-      of the diagram generator: ISLO threads → water channels; course strands →
-      field plots; woven knot → watered plot (rounded-square basin, was ring);
-      open crossing → dry plot; empty-coverage ISLO row → dry dashed channel
-      (QR shown honestly as an unfed channel). Prose, legend, aria-label, and
-      detail seam all reworded to irrigation. Tab label + bottom-nav map label
-      "ISLO Loom" → "Outcomes Irrigation" (both nav locations).
-    - DATA HONESTY (HALT gate honored): ISLOS/COURSES/COVERAGE/ARTIFACT data
-      arrays untouched, byte-identical. Only the render() drawing + selectKnot()
-      wording changed. Every watered/dry plot maps to the SAME real coverage
-      the Loom showed. No fabrication. FERPA local-only artifact seam preserved.
-    - BASE NOTE: built on the verified v39 OUTPUTS file, not the project mount,
-      because the v39 masthead chips had not round-tripped back to the project
-      (mount was still v38). v40 carries v36–v39 forward intact (chips, Aurora
-      default, cabinet, status notes). One round-trip of v40 closes both gaps.
-    - SCOPE: ISLO/irrigation panel + nav labels only. Did NOT touch Overview
-      cSvg defect or Watershed landscape SVG — both stay parked.
-    - HOUSEKEEPING: header eyebrow + About info-box version v39→v40.
-
-  v39 (2026-07-07)
-    - ADDED: two glanceable status chips in the masthead under the title —
-      "✈ Offline" and "● PRE·prototype". Compact, not-color-alone (glyph +
-      pill border), tappable → each opens the About panel where the full
-      airplane-mode and pre-release notes live (v38). Short form up top,
-      long form stays in Licensing. No paragraph text duplicated in header;
-      orientation without clutter. Calls existing nav('about'), zero new JS.
-    - SCOPE: masthead only. Did NOT touch Overview cSvg defect or Watershed
-      landscape SVG — both stay parked. Chain intact.
-    - HOUSEKEEPING: header eyebrow + About info-box version v38→v39.
-
-  v38 (2026-07-07)
-    - ADDED: two status notes in the Licensing & Attribution block —
-      (1) airplane-mode note: file is self-contained, fetches nothing, runs
-      offline/air-gapped, data stays local. (2) pre-release IP note: ownership
-      asserted but no trademark/registration/executed license yet; treat as
-      working prototype. Own .status-* namespace, not-color-alone (glyph +
-      colored left border), zero JS.
-    - SCOPE: About/Licensing panel only. Did NOT touch Overview cSvg defect or
-      Watershed landscape SVG — both stay parked. Chain intact.
-    - HOUSEKEEPING: header eyebrow + About info-box version v37→v38.
-
-  v37 (2026-07-07)
-    - ADDED: "Aurora" skin (joyful clarity — light on the water) and made it
-      the DEFAULT. Dazzle-first per Creative Director direction: saturated
-      luminous gradient accents on a deep confident base, high contrast for
-      orientation, not-color-alone texture preserved. Additive skin: added to
-      skins[] + names{}, CSS override block mirrors xenos coverage, toggle
-      button in BOTH switcher locations, default fallback flipped xenos→aurora
-      in setSkin() + initSkin(). Existing 3 skins untouched, still selectable.
-    - GOVERNANCE APPLIED: accessibility is a toggle floor, not a ceiling on the
-      default. Default may dazzle; motion-off / declutter / high-contrast are
-      buttons. High-contrast a11y floor still wins over Aurora via !important.
-    - SCOPE: skin-system only. Did NOT touch Overview cSvg defect or Watershed
-      landscape SVG — both stay parked. Chain intact.
-    - HOUSEKEEPING: header eyebrow + About info-box version v36→v37.
-
-  v36 (2026-07-07)
-    - ADDED: Panel Review Cabinet in the About panel (after "Built to Last,"
-      before "Where This Began"). Native <details> rows, one per governance
-      panelist, holding this session's verdicts on the Watershed Year landscape
-      as the design record. Own .cab-* namespace, zero new JS, keyboard +
-      focus-visible ring, not-color-alone glyphs (HALT/coherence/note).
-    - ADDED: "The Maker" note at the back of the cabinet — thin pointer to
-      Tight Spiral Studios lineage (shared design DNA), NOT a content merge.
-      Separation rule honored: Confluence stays the canonical Confluence file.
-    - SCOPE: About-panel-only. Did NOT touch the Overview cSvg defect or the
-      Watershed landscape SVG — both stay parked. Chain intact:
-      SVG fix → real SLO order → year-tap pop.
-    - HOUSEKEEPING: header eyebrow + About info-box version v35→v36.
-
-  v35 (2026-07-06)
-    - PROGRAM REVIEW: "Watershed Year" annotated landscape added to the top
-      of the panel, above the existing source→pools→mouth flow. Shows the
-      five-year annual SLO assessment cycle as navigable terrain: five
-      outcome tributaries across five year-columns; each swells to full
-      depth in its focus year (rotation) and runs thin the rest (overlap —
-      all five sampled across all courses every year); gold return-eddies
-      loop year N→N+1 (reflect + intervene); a constant deep channel runs
-      through all five years for Written Communication / EN102 (the ISLO
-      spine that never rotates out).
-    - ANNOTATED, HONEST TERRAIN: opportunity markers (open gates, O1–O3)
-      and barrier markers (shoals, B1–B3) drawn ON the landscape, each
-      keyed to a sourced ledger line. Barriers pulled from real dept docs
-      (AY24-25 Annual Report GenAI mid-cycle change; 1/29/24 Minutes EN102
-      readiness; forthcoming-SLO-report reporting lag) — shown, not hidden.
-    - ADDITIVE ONLY: own .wsy-* namespace (no collision with panel .ws-*);
-      static SVG + text ledger, NO new JS; rides skin via CSS vars;
-      high-contrast + reduced-motion inherited; texture-not-color-alone
-      per tributary (WCAG 1.4.1); ledger doubles as widget-backup + key.
-    - PARKED for a fresh session: year-tap interactivity (tap a year →
-      re-seed the source→pools→mouth flow below to that year's focus SLO;
-      surface real EN102 Written Comm result). Deferred to protect the
-      recovered v34 trunk — live-JS surgery gets its own undegraded chat.
-    - OPEN: five-year SLO rotation order is placeholder 1→5; Matt to
-      correct the real sequence + current year on sight (AY24-25 = SLO4).
-    - HOUSEKEEPING: header eyebrow + About info-box version v34→v35.
-    - KNOWN DEFECT (inherited from v34, NOT introduced by v35): the Overview
-      architecture SVG (id="cSvg", ~line 2734) is missing one closing </svg>.
-      Browsers auto-close at parse so it renders; it is invalid HTML. My v35
-      landscape block is balanced (3 svg open / 3 close). Deferred to a fresh
-      session — single-tag surgery in a 480-viewBox element is not worth the
-      regression risk at the end of a long build. First task next session.
-
-  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   v34 (2026-07-03)
     - OFFLINE HARDENING: Google Fonts fetch removed — system stacks only
       (Georgia serif / system-ui sans / monospace). lumiere cover images
@@ -704,121 +534,6 @@ main { max-width: 960px; margin: 0 auto; padding: 0 1.25rem 5rem; }
 .sec-hd::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 .muted { color: var(--ink-2); font-size: .88rem; }
 .mono { font-family: var(--font-mono); }
-
-/* ━━━ Panel Review Cabinet + Maker note (v36) — own namespace, native <details> ━━━ */
-.cab-wrap { margin-top: 1rem; }
-.cab-intro { color: var(--ink-2); font-size: .9rem; margin: 0 0 1rem; }
-.cab-row { border: 1px solid var(--border); border-radius: 10px; margin: .5rem 0; background: var(--panel, #fff); overflow: hidden; }
-.cab-row > summary {
-  list-style: none; cursor: pointer; padding: .8rem 1rem;
-  display: flex; align-items: center; gap: .7rem;
-  font-family: var(--font-sans); font-weight: 600; font-size: .95rem;
-  color: var(--ink); user-select: none;
-}
-.cab-row > summary::-webkit-details-marker { display: none; }
-.cab-row > summary:focus-visible { outline: 3px solid var(--pine, #256649); outline-offset: -3px; border-radius: 8px; }
-.cab-row[open] > summary { border-bottom: 1px solid var(--border); }
-.cab-glyph {
-  flex: 0 0 auto; width: 26px; height: 26px; border-radius: 6px;
-  display: inline-flex; align-items: center; justify-content: center;
-  font-family: var(--font-mono); font-size: .72rem; font-weight: 800; color: #fff;
-  border: 1.5px solid rgba(0,0,0,.25);
-}
-.cab-glyph.g-halt   { background: #8b1a2a; }   /* stop authority */
-.cab-glyph.g-cohere { background: #1a4a35; }   /* coherence */
-.cab-glyph.g-note   { background: #1a3d5c; }   /* observation */
-.cab-verdict-tag { margin-left: auto; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .04em; color: var(--ink-2); text-transform: uppercase; }
-.cab-body { padding: .3rem 1rem 1rem 3.2rem; }
-.cab-body p { margin: .55rem 0; font-size: .92rem; line-height: 1.55; color: var(--ink); }
-.cab-body .cab-who { font-weight: 700; color: var(--pine, #256649); }
-.cab-chev { margin-left: .3rem; transition: transform .18s ease; font-size: .7rem; color: var(--ink-2); }
-.cab-row[open] .cab-chev { transform: rotate(180deg); }
-@media (prefers-reduced-motion: reduce){ .cab-chev { transition: none; } }
-.cab-maker { border-left: 4px solid var(--pine, #256649); padding: .2rem 0 .2rem 1rem; margin-top: .6rem; }
-.cab-maker p { font-size: .92rem; line-height: 1.6; }
-
-/* ━━━ AY26-27 SLO#3 paste-data seam (v42): local intake, FERPA-guarded, airplane-safe ━━━ */
-.pcx { border:1px solid var(--border); border-left:5px solid #1a6cf2; border-radius:12px; padding:1.1rem 1.2rem; margin:1.4rem 0; background:var(--panel,#fff); }
-.pcx-hd { font-family:var(--font-sans); font-weight:700; font-size:1rem; margin:0 0 .3rem; display:flex; align-items:center; gap:.5rem; }
-.pcx-tag { font-family:var(--font-mono); font-size:.62rem; font-weight:800; background:#1a4a6e; color:#fff; padding:.15rem .45rem; border-radius:5px; letter-spacing:.03em; }
-.pcx-sub { font-size:.88rem; color:var(--ink-2); margin:.2rem 0 .8rem; }
-.pcx-ferpa { display:flex; gap:.5rem; align-items:flex-start; border:1px solid #b0791a; border-left-width:4px; border-radius:8px; padding:.55rem .7rem; margin:.6rem 0; font-size:.82rem; background:rgba(176,121,26,.06); color:var(--ink); }
-.pcx-ferpa .pcx-fg { font-family:var(--font-mono); font-weight:800; color:#b0791a; font-size:.7rem; }
-.pcx-fmt { font-family:var(--font-mono); font-size:.72rem; background:rgba(26,108,242,.06); border:1px dashed #9aa7b4; border-radius:6px; padding:.5rem .6rem; margin:.5rem 0; color:var(--ink-2); white-space:pre-wrap; }
-.pcx textarea { width:100%; box-sizing:border-box; min-height:120px; font-family:var(--font-mono); font-size:.82rem; padding:.6rem .7rem; border:1px solid var(--border); border-radius:8px; resize:vertical; color:var(--ink); background:var(--panel,#fff); }
-.pcx-actions { display:flex; flex-wrap:wrap; gap:.6rem; margin-top:.7rem; align-items:center; }
-.pcx-btn { font-family:var(--font-sans); font-weight:600; font-size:.9rem; padding:.5rem 1rem; border-radius:8px; border:1px solid #1a6cf2; background:#1a6cf2; color:#fff; cursor:pointer; min-height:44px; }
-.pcx-btn.ghost { background:transparent; color:#1a6cf2; }
-.pcx-btn:focus-visible { outline:3px solid #1a6cf2; outline-offset:2px; }
-.pcx-status { font-size:.85rem; margin-top:.7rem; padding:.5rem .7rem; border-radius:8px; display:none; }
-.pcx-status.ok { display:block; background:rgba(26,74,53,.08); border:1px solid #1a6c49; color:var(--ink); }
-.pcx-status.warn { display:block; background:rgba(139,26,42,.08); border:1px solid #8b1a2a; color:var(--ink); }
-.pcx-results { margin-top:.9rem; display:none; }
-.pcx-results.show { display:block; }
-.pcx-bar-row { display:flex; align-items:center; gap:.6rem; margin:.4rem 0; }
-.pcx-bar-lab { font-family:var(--font-mono); font-size:.75rem; width:90px; flex:0 0 auto; color:var(--ink); }
-.pcx-bar-track { flex:1; height:18px; background:rgba(0,0,0,.06); border-radius:4px; overflow:hidden; border:1px solid var(--border); }
-.pcx-bar-fill { height:100%; background:linear-gradient(90deg,#1a6cf2,#38a0e0); border-radius:3px; }
-.pcx-bar-val { font-family:var(--font-mono); font-size:.75rem; font-weight:700; width:52px; text-align:right; flex:0 0 auto; color:var(--ink); }
-
-/* ━━━ Stage 1 (v43): Cycle-management form (.cmx-*) + Supabase instructor-materials post seam (.sbx-*). Additive, own namespaces, reuse pcx grammar. ━━━ */
-.cmx { border:1px solid var(--border); border-left:5px solid #7a4fb0; border-radius:12px; padding:1.1rem 1.2rem; margin:1.4rem 0; background:var(--panel,#fff); }
-.cmx-hd { font-family:var(--font-sans); font-weight:700; font-size:1rem; margin:0 0 .3rem; display:flex; align-items:center; gap:.5rem; }
-.cmx-tag { font-family:var(--font-mono); font-size:.62rem; font-weight:800; background:#4a2e6e; color:#fff; padding:.15rem .45rem; border-radius:5px; letter-spacing:.03em; }
-.cmx-sub { font-size:.88rem; color:var(--ink-2); margin:.2rem 0 .8rem; }
-.cmx-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:.8rem .9rem; margin:.6rem 0; }
-.cmx-field { display:flex; flex-direction:column; gap:.3rem; }
-.cmx-field label { font-family:var(--font-sans); font-weight:600; font-size:.82rem; color:var(--ink); }
-.cmx-field select, .cmx-field input, .cmx-field textarea { width:100%; box-sizing:border-box; font-family:var(--font-sans); font-size:.88rem; padding:.5rem .6rem; border:1px solid var(--border); border-radius:8px; color:var(--ink); background:var(--panel,#fff); min-height:44px; }
-.cmx-field textarea { min-height:70px; resize:vertical; font-family:var(--font-sans); }
-.cmx-actions { display:flex; flex-wrap:wrap; gap:.6rem; margin-top:.7rem; align-items:center; }
-.cmx-btn { font-family:var(--font-sans); font-weight:600; font-size:.9rem; padding:.5rem 1rem; border-radius:8px; border:1px solid #7a4fb0; background:#7a4fb0; color:#fff; cursor:pointer; min-height:44px; }
-.cmx-btn.ghost { background:transparent; color:var(--ink); border-color:var(--border); }
-.cmx-status { font-size:.85rem; margin-top:.7rem; padding:.5rem .7rem; border-radius:8px; display:none; }
-.cmx-status.ok { display:block; background:rgba(74,46,110,.08); border:1px solid #7a4fb0; color:var(--ink); }
-.cmx-status.warn { display:block; background:rgba(139,26,42,.08); border:1px solid #8b1a2a; color:var(--ink); }
-.cmx-list { margin-top:.9rem; display:none; }
-.cmx-list.show { display:block; }
-.cmx-cycle { border:1px solid var(--border); border-left:4px solid #7a4fb0; border-radius:8px; padding:.6rem .8rem; margin:.5rem 0; font-size:.86rem; line-height:1.6; color:var(--ink); background:rgba(74,46,110,.04); }
-.cmx-cycle .cmx-c-out { font-family:var(--font-sans); font-weight:700; }
-.cmx-cycle .cmx-c-meta { font-family:var(--font-mono); font-size:.72rem; color:var(--ink-2); }
-.cmx-cycle .cmx-c-del { float:right; font-family:var(--font-mono); font-size:.7rem; background:transparent; border:1px solid var(--border); border-radius:5px; color:var(--ink-2); cursor:pointer; padding:.2rem .5rem; min-height:32px; }
-
-.sbx { border:1px solid var(--border); border-left:5px solid #0f8a6c; border-radius:12px; padding:1.1rem 1.2rem; margin:1.4rem 0; background:var(--panel,#fff); }
-.sbx-hd { font-family:var(--font-sans); font-weight:700; font-size:1rem; margin:0 0 .3rem; display:flex; align-items:center; gap:.5rem; }
-.sbx-tag { font-family:var(--font-mono); font-size:.62rem; font-weight:800; background:#0a5a46; color:#fff; padding:.15rem .45rem; border-radius:5px; letter-spacing:.03em; }
-.sbx-sub { font-size:.88rem; color:var(--ink-2); margin:.2rem 0 .8rem; }
-.sbx-ferpa { display:flex; gap:.5rem; align-items:flex-start; border:1px solid #b0791a; border-left-width:4px; border-radius:8px; padding:.55rem .7rem; margin:.6rem 0; font-size:.82rem; background:rgba(176,121,26,.06); color:var(--ink); }
-.sbx-ferpa .sbx-fg { font-family:var(--font-mono); font-weight:800; color:#b0791a; font-size:.7rem; }
-.sbx-config { font-family:var(--font-mono); font-size:.74rem; background:rgba(15,138,108,.06); border:1px dashed #0f8a6c; border-radius:6px; padding:.55rem .7rem; margin:.6rem 0; color:var(--ink-2); line-height:1.7; }
-.sbx-config b { color:var(--ink); }
-.sbx-field { display:flex; flex-direction:column; gap:.3rem; margin:.55rem 0; }
-.sbx-field label { font-family:var(--font-sans); font-weight:600; font-size:.82rem; color:var(--ink); }
-.sbx-field select, .sbx-field input, .sbx-field textarea { width:100%; box-sizing:border-box; font-family:var(--font-sans); font-size:.88rem; padding:.5rem .6rem; border:1px solid var(--border); border-radius:8px; color:var(--ink); background:var(--panel,#fff); min-height:44px; }
-.sbx-field textarea { min-height:110px; resize:vertical; }
-.sbx-actions { display:flex; flex-wrap:wrap; gap:.6rem; margin-top:.7rem; align-items:center; }
-.sbx-btn { font-family:var(--font-sans); font-weight:600; font-size:.9rem; padding:.5rem 1rem; border-radius:8px; border:1px solid #0f8a6c; background:#0f8a6c; color:#fff; cursor:pointer; min-height:44px; }
-.sbx-btn.ghost { background:transparent; color:var(--ink); border-color:var(--border); }
-.sbx-btn:disabled { opacity:.5; cursor:not-allowed; }
-.sbx-status { font-size:.85rem; margin-top:.7rem; padding:.5rem .7rem; border-radius:8px; display:none; }
-.sbx-status.ok { display:block; background:rgba(15,138,108,.08); border:1px solid #0f8a6c; color:var(--ink); }
-.sbx-status.warn { display:block; background:rgba(139,26,42,.08); border:1px solid #8b1a2a; color:var(--ink); }
-.sbx-status.pending { display:block; background:rgba(176,121,26,.08); border:1px solid #b0791a; color:var(--ink); }
-
-/* ━━━ Status notes: airplane-mode + pre-release IP (v38) — not-color-alone (glyph + border) ━━━ */
-.status-note { display:flex; align-items:flex-start; gap:.65rem; border:1px solid var(--border); border-left-width:4px; border-radius:8px; padding:.7rem .9rem; margin:.6rem 0; font-size:.9rem; line-height:1.55; color:var(--ink); background:var(--panel,#fff); }
-.status-note .sn-glyph { flex:0 0 auto; font-family:var(--font-mono); font-weight:800; font-size:.78rem; margin-top:.05rem; }
-.status-air { border-left-color:#1a4a6e; }
-.status-air .sn-glyph { color:#1a4a6e; }
-.status-pre { border-left-color:#8a5a12; }
-.status-pre .sn-glyph { color:#8a5a12; }
-.status-note strong { font-weight:700; }
-
-/* ━━━ Masthead status chips (v39): glanceable, tappable → open full note in About ━━━ */
-.mh-chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.4rem; }
-.mh-chip { display:inline-flex; align-items:center; gap:.32rem; padding:.16rem .5rem; border-radius:999px; border:1px solid rgba(255,255,255,.55); background:rgba(255,255,255,.12); color:#fff; font-family:var(--font-mono); font-size:.66rem; font-weight:700; letter-spacing:.02em; cursor:pointer; line-height:1.3; }
-.mh-chip:hover, .mh-chip:focus-visible { background:rgba(255,255,255,.24); outline:2px solid #fff; outline-offset:1px; }
-.mh-chip .mhc-glyph { font-size:.7rem; }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    BOXES
@@ -1354,22 +1069,6 @@ body.skin-lumi .skin-scope .accord-btn{
 body.skin-lumi .skin-scope .accord-btn:hover,
 body.skin-lumi .skin-scope .accord-btn.on{ background:#D4923E; color:#2A1A08; }
 body.skin-lumi .skin-scope .accord-chev{ color:#2A1A08; }
-
-/* ── AURORA skin (v37 default): light on the water — joyful clarity.
-   Dazzle = saturated luminous accents on a deep confident base.
-   Orient = high contrast + not-color-alone. The a11y floor below still wins. ── */
-body.skin-aurora .skin-scope .accord-body{
-  background:#10233A; border:1px solid #38E0B0; border-right:none; color:#EAF6FF;
-}
-body.skin-aurora .skin-scope .accord-btn{
-  background:linear-gradient(100deg,#1B6CF2 0%,#8A3FE0 60%,#E0479E 100%);
-  border:1px solid #EAF6FF; color:#fff; font-weight:700;
-}
-body.skin-aurora .skin-scope .accord-btn:hover,
-body.skin-aurora .skin-scope .accord-btn.on{
-  background:linear-gradient(100deg,#2E7BFF 0%,#9B54F0 60%,#FF5AAE 100%); color:#fff;
-}
-body.skin-aurora .skin-scope .accord-chev{ color:#38E0B0; }
 
 /* ACCESSIBILITY FLOOR — high-contrast mode WINS over every skin.
    When a11y-contrast is on, skins surrender to high-contrast surfaces. */
@@ -2074,6 +1773,16 @@ body.a11y-contrast .ooc-tier,body.a11y-contrast .ooc-note .ooc-note-tag{color:#0
   .splash-rivband .rv-flow{animation:none;}
 }
 
+
+/* OPEN QUESTION note — logged, not resolved. Amber ink on deep ground, passes floor. */
+.oq{ margin:1.1rem 0; padding:.9rem 1rem; border-left:4px solid #c8900a;
+     background:#1c1710; color:#f3e6c4; border-radius:4px; }
+.oq b{ display:block; color:#ffd24a; letter-spacing:.04em;
+       text-transform:uppercase; font-size:.78rem; margin-bottom:.35rem; }
+.oq p{ margin:.3rem 0; color:#f3e6c4; }
+body.a11y-contrast .oq{ background:#000; border-left-color:#ffd24a; color:#fff; }
+body.a11y-contrast .oq p{ color:#fff; }
+
 </style>
 <style>
 /* ━━━ PROGRESS TRACKER — "Your Confluence" (v20) ━━━━━━━━━━━━━━
@@ -2502,55 +2211,53 @@ body.a11y-contrast .cring-trib .trib{ stroke:rgba(200,224,210,.10); }
 
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   ISLO LOOM — the universal outcomes, woven through the curriculum.
-   The six Graduation Competencies (ISLOs) are threads that run
-   through EVERY program. Courses are the strands. Where a course
-   carries an ISLO, the threads cross and a KNOT forms — the knot is
+   THE IRRIGATION MAP — the universal outcomes, flowing through the curriculum.
+   The six Graduation Competencies (ISLOs) are rows that run
+   through EVERY program. Courses are the columns. Where a course
+   carries an ISLO, the rows cross and a KNOT forms — the cell is
    the artifact, where the outcome becomes visible in student work.
    Empty crossings stay open: that is a coverage gap, made visible.
-   Distinct shape (NOT the watershed). Layer 1 = static weave.
-   gold = ISLO (locked). not-color-alone (knot vs open crossing).
+   Distinct shape (NOT the watershed). Layer 1 = static field map.
+   gold = ISLO (locked). not-color-alone (cell vs open crossing).
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-.loom-wrap{ position:relative; margin-top:1rem; }
-.loom-frame{ background:#15110a; border:2px solid var(--gold-border); border-radius:14px;
+.field-wrap{ position:relative; margin-top:1rem; }
+.field-frame{ background:#15110a; border:2px solid var(--gold-border); border-radius:14px;
   padding:.8rem; overflow-x:auto; }
-.loom-svg{ width:100%; min-width:760px; height:auto; display:block; }
-/* threads = the ISLOs, warm gold, always the horizontal axis */
-.loom-thread{ stroke:#c8900a; stroke-width:2.4; opacity:.55; fill:none; }
-/* a DRY channel = an ISLO no English course feeds yet (honest whole-outcome gap) */
-.loom-channel-dry{ stroke:rgba(200,144,10,.5); stroke-width:2.4; fill:none; stroke-dasharray:5 5; opacity:.7; }
-.loom-thread-lab{ fill:#f3e6c4; font-family:var(--font-sans); font-size:12px; font-weight:700; }
-.loom-thread-sub{ fill:rgba(243,230,196,.55); font-family:var(--font-sans); font-size:9.5px; font-weight:600; }
-/* strands = the courses, cool, the vertical axis */
-.loom-strand{ stroke:rgba(160,200,220,.34); stroke-width:1.6; fill:none; }
-.loom-strand-lab{ fill:#cfe3ee; font-family:var(--font-sans); font-size:11px; font-weight:700;
+.field-svg{ width:100%; min-width:760px; height:auto; display:block; }
+/* rows = the ISLOs, warm gold, always the horizontal axis */
+.row-line{ stroke:#c8900a; stroke-width:2.4; opacity:.55; fill:none; }
+.row-lab{ fill:#f3e6c4; font-family:var(--font-sans); font-size:12px; font-weight:700; }
+.row-sub{ fill:rgba(243,230,196,.55); font-family:var(--font-sans); font-size:9.5px; font-weight:600; }
+/* columns = the courses, cool, the vertical axis */
+.col-line{ stroke:rgba(160,200,220,.34); stroke-width:1.6; fill:none; }
+.col-lab{ fill:#cfe3ee; font-family:var(--font-sans); font-size:11px; font-weight:700;
   text-anchor:middle; }
 /* a KNOT = course carries this ISLO = an artifact exists at the crossing */
-.loom-knot{ cursor:pointer; }
-.loom-knot .knot-ring{ fill:#1f1708; stroke:#e8c96a; stroke-width:2; }
-.loom-knot .knot-core{ fill:#e8c96a; }
-.loom-knot:hover .knot-ring,
-.loom-knot:focus-visible .knot-ring{ stroke:#ffe9a8; }
-.loom-knot:hover .knot-core,
-.loom-knot:focus-visible .knot-core{ fill:#ffe9a8; }
-.loom-knot:focus-visible{ outline:none; }
-.loom-knot:focus-visible .knot-glow{ opacity:.9; }
-.loom-knot .knot-glow{ fill:none; stroke:#ffe9a8; stroke-width:1.2; opacity:0; }
+.cell-node{ cursor:pointer; }
+.cell-node .node-ring{ fill:#1f1708; stroke:#e8c96a; stroke-width:2; }
+.cell-node .node-core{ fill:#e8c96a; }
+.cell-node:hover .node-ring,
+.cell-node:focus-visible .node-ring{ stroke:#ffe9a8; }
+.cell-node:hover .node-core,
+.cell-node:focus-visible .node-core{ fill:#ffe9a8; }
+.cell-node:focus-visible{ outline:none; }
+.cell-node:focus-visible .node-glow{ opacity:.9; }
+.cell-node .node-glow{ fill:none; stroke:#ffe9a8; stroke-width:1.2; opacity:0; }
 /* an OPEN crossing = gap = no artifact. countable/structural, not color-alone:
-   a small hollow dash, clearly different shape from a filled knot. */
-.loom-open{ stroke:rgba(180,200,210,.3); stroke-width:1.4; fill:none; stroke-dasharray:2 3; }
-/* the woven over/under illusion: a short thread segment drawn ON TOP at each knot */
-.loom-weave-over{ stroke:#c8900a; stroke-width:3.4; opacity:.85; fill:none; }
+   a small hollow dash, clearly different shape from a filled cell. */
+.cell-dry{ stroke:rgba(180,200,210,.3); stroke-width:1.4; fill:none; stroke-dasharray:2 3; }
+/* the mapped over/under illusion: a short row segment drawn ON TOP at each cell */
+.flow-over{ stroke:#c8900a; stroke-width:3.4; opacity:.85; fill:none; }
 
-.loom-legend{ display:flex; gap:1.2rem; flex-wrap:wrap; margin-top:.7rem; font-size:.8rem; color:var(--ink-2); }
-.loom-legend span{ display:inline-flex; align-items:center; gap:.4rem; }
-.loom-leg-knot{ width:14px; height:14px; border-radius:3px; background:#e8c96a; border:2px solid #8a5c00; flex-shrink:0; }
-.loom-leg-open{ width:14px; height:14px; border:1.4px dashed #999; border-radius:50%; flex-shrink:0; }
+.field-legend{ display:flex; gap:1.2rem; flex-wrap:wrap; margin-top:.7rem; font-size:.8rem; color:var(--ink-2); }
+.field-legend span{ display:inline-flex; align-items:center; gap:.4rem; }
+.leg-wet{ width:14px; height:14px; border-radius:50%; background:#e8c96a; border:2px solid #8a5c00; flex-shrink:0; }
+.leg-dry{ width:14px; height:14px; border:1.4px dashed #999; border-radius:50%; flex-shrink:0; }
 
-/* high-contrast: brighten threads, solidify knots */
-body.a11y-contrast .loom-frame{ background:#000; border-color:#fff; }
-body.a11y-contrast .loom-thread{ stroke:#ffd24a; opacity:.9; }
-body.a11y-contrast .loom-knot .knot-ring{ stroke:#fff; }
+/* high-contrast: brighten rows, solidify cells */
+body.a11y-contrast .field-frame{ background:#000; border-color:#fff; }
+body.a11y-contrast .row-line{ stroke:#ffd24a; opacity:.9; }
+body.a11y-contrast .cell-node .node-ring{ stroke:#fff; }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    RADIAL NAV — "the wheel" (v26)
@@ -2730,40 +2437,6 @@ h3.cg-generic{ display:none; }
 .panel-cg-generic h3.cg-generic{ display:block; }
 .panel-cg-generic h3.cg-massbay{ display:none; }
 
-/* ━━━ WATERSHED YEAR — annotated landscape (v35) ━━━━━━━━━━━━━━━━━━
-   Static SVG map + sourced ledger at the top of Program Review.
-   Additive only: own .wsy-* namespace (no collision with panel .ws-*).
-   Rides skin via CSS vars; high-contrast + reduced-motion inherited.
-   No JS. Texture-not-color-alone (WCAG 1.4.1). Barriers drawn on
-   terrain, each annotation sourced to a department document. */
-.wsy{background:var(--surface);border:1px solid var(--border);border-radius:14px;
-  padding:1.1rem 1.1rem 1.3rem;box-shadow:var(--shadow-md);margin:0 0 1.6rem;}
-.wsy-cap{font-family:var(--font-sans);font-size:.95rem;color:var(--ink-2);
-  max-width:66ch;margin:0 0 1rem;}
-.wsy-svg-frame{width:100%;overflow-x:auto;}
-.wsy-svg{width:100%;min-width:860px;height:auto;display:block;}
-.wsy-legend{display:flex;flex-wrap:wrap;gap:.5rem 1rem;margin-top:1rem;
-  padding-top:.9rem;border-top:1px solid var(--border);font-size:.82rem;}
-.wsy-leg{display:inline-flex;align-items:center;gap:.4rem;color:var(--ink-2);}
-.wsy-swatch{width:24px;height:14px;border-radius:3px;flex-shrink:0;border:1px solid var(--border-2);}
-.wsy-glyph{width:20px;height:20px;flex-shrink:0;}
-.wsy-ledger{margin-top:1.1rem;display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
-@media(max-width:720px){.wsy-ledger{grid-template-columns:1fr;}}
-.wsy-col{background:var(--pine-faint);border:1px solid var(--border);border-radius:10px;padding:.9rem 1.05rem;}
-.wsy-col.wsy-barrier{background:var(--red-pale);border-color:#e7c3c9;}
-.wsy-col h3{font-family:var(--font-serif);font-size:1.02rem;margin-bottom:.5rem;}
-.wsy-col.wsy-opp h3{color:var(--pine);}
-.wsy-col.wsy-barrier h3{color:var(--red);}
-.wsy-col ul{list-style:none;margin:0;padding:0;}
-.wsy-col li{margin:.5rem 0;font-size:.9rem;color:var(--ink-2);padding-left:1.5rem;position:relative;}
-.wsy-col li b{color:var(--ink);}
-.wsy-tag{position:absolute;left:0;top:.15rem;width:1.15rem;height:1.15rem;font-weight:800;font-size:.68rem;
-  display:flex;align-items:center;justify-content:center;border-radius:3px;color:#fff;}
-.wsy-opp .wsy-tag{background:var(--pine);}
-.wsy-barrier .wsy-tag{background:var(--red);}
-.wsy-src{color:var(--ink-3);font-size:.8rem;font-style:italic;}
-@media (prefers-reduced-motion: reduce){ .wsy-svg *{animation:none;} }
-
 </style>
 </head>
 <body>
@@ -2848,8 +2521,7 @@ h3.cg-generic{ display:none; }
     <h2 style="margin-top:1rem;">Visual theme</h2>
     <p class="a11y-sub">Changes the look of the assessment panels. High contrast, above, always wins over the theme.</p>
     <div class="a11y-skin-opts">
-      <button class="a11y-skin-opt" data-skin="skin-aurora" aria-pressed="true" onclick="setSkin('skin-aurora')">Aurora<small>Joyful clarity &middot; light on water</small></button>
-      <button class="a11y-skin-opt" data-skin="skin-xenos" aria-pressed="false" onclick="setSkin('skin-xenos')">Xenos<small>Craft &middot; cut paper</small></button>
+      <button class="a11y-skin-opt" data-skin="skin-xenos" aria-pressed="true" onclick="setSkin('skin-xenos')">Xenos<small>Craft &middot; cut paper</small></button>
       <button class="a11y-skin-opt" data-skin="skin-tron" aria-pressed="false" onclick="setSkin('skin-tron')">Tron<small>System &middot; luminous grid</small></button>
       <button class="a11y-skin-opt" data-skin="skin-lumi" aria-pressed="false" onclick="setSkin('skin-lumi')">Luminocity<small>Growth &middot; warm glow</small></button>
     </div>
@@ -2913,12 +2585,8 @@ h3.cg-generic{ display:none; }
   <div class="mh-top">
     <div class="mh-confluence-mark" aria-hidden="true"><svg viewBox="0 0 34 34" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5 C 11 12, 14 15, 17 17"/><path d="M4 17 L 16 17"/><path d="M5 29 C 11 22, 14 20, 17 17"/><path d="M17 17 C 23 17, 27 17, 30 17"/></svg></div>
     <div class="mh-brand">
-      <span class="mh-eyebrow">MassBay Community College · English Department · v43</span>
+      <span class="mh-eyebrow">MassBay Community College · English Department · v34</span>
       <span class="mh-name">Confluence Calibration: An Assessment Hub</span>
-      <div class="mh-chips">
-        <button type="button" class="mh-chip" onclick="nav('about')" title="Runs fully offline — opens the full note in About" aria-label="Works offline. Open full note in About."><span class="mhc-glyph" aria-hidden="true">&#9992;</span>Offline</button>
-        <button type="button" class="mh-chip" onclick="nav('about')" title="Pre-release prototype, not yet formally protected — opens the full note in About" aria-label="Pre-release prototype. Open full note in About."><span class="mhc-glyph" aria-hidden="true">&#9679;</span>PRE&middot;prototype</button>
-      </div>
     </div>
     <button class="mh-burger" id="menuBtn" onclick="toggleDrawer()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mhDrawer">&#9776;</button>
   </div>
@@ -2928,9 +2596,9 @@ h3.cg-generic{ display:none; }
     <button class="mh-tab" role="tab" aria-selected="false" data-panel="student"    onclick="nav('student',this)">Student View</button>
     <button class="mh-tab" role="tab" aria-selected="false" data-panel="courses"    onclick="nav('courses',this)">Course Map</button>
     <button class="mh-tab" role="tab" aria-selected="false" data-panel="review"     onclick="nav('review',this)">Program Review</button>
-    <button class="mh-tab" role="tab" aria-selected="false" data-panel="loom"       onclick="nav('loom',this)">Outcomes Irrigation</button>
+    <button class="mh-tab" role="tab" aria-selected="false" data-panel="field"       onclick="nav('field',this)">Irrigation Map</button>
     <button class="mh-tab" role="tab" aria-selected="false" data-panel="assessment" onclick="nav('assessment',this)">Assessment</button>
-    <button class="mh-tab" role="tab" aria-selected="false" data-panel="samples"    onclick="nav('samples',this)">Submit</button>
+    
     <button class="mh-tab" role="tab" aria-selected="false" data-panel="norming"    onclick="nav('norming',this)">Norming</button>
     <button class="mh-tab" role="tab" aria-selected="false" data-panel="coordinator" onclick="nav('coordinator',this)">Coordinator Guide</button>
     <button class="mh-tab" role="tab" aria-selected="false" data-panel="directory"  onclick="nav('directory',this)">Faculty</button>
@@ -2944,9 +2612,9 @@ h3.cg-generic{ display:none; }
     <button class="mh-drawer-tab" aria-selected="false" data-panel="student"    onclick="navMobile('student')">Student View</button>
     <button class="mh-drawer-tab" aria-selected="false" data-panel="courses"    onclick="navMobile('courses')">Course Map</button>
     <button class="mh-drawer-tab" aria-selected="false" data-panel="review"     onclick="navMobile('review')">Program Review</button>
-    <button class="mh-drawer-tab" aria-selected="false" data-panel="loom"       onclick="navMobile('loom')">Outcomes Irrigation</button>
+    <button class="mh-drawer-tab" aria-selected="false" data-panel="field"       onclick="navMobile('field')">Irrigation Map</button>
     <button class="mh-drawer-tab" aria-selected="false" data-panel="assessment" onclick="navMobile('assessment')">Assessment Guide</button>
-    <button class="mh-drawer-tab" aria-selected="false" data-panel="samples"    onclick="navMobile('samples')">Submit Sample</button>
+    
     <button class="mh-drawer-tab" aria-selected="false" data-panel="norming"    onclick="navMobile('norming')">Norming</button>
     <button class="mh-drawer-tab" aria-selected="false" data-panel="coordinator" onclick="navMobile('coordinator')">Coordinator Guide</button>
     <button class="mh-drawer-tab" aria-selected="false" data-panel="directory"  onclick="navMobile('directory')">Faculty Directory</button>
@@ -2968,9 +2636,7 @@ h3.cg-generic{ display:none; }
     <button class="bnav-btn" aria-selected="false" data-panel="norming" onclick="navMobile('norming')">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Norming
     </button>
-    <button class="bnav-btn" aria-selected="false" data-panel="samples" onclick="navMobile('samples')">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Submit
-    </button>
+    
     <button class="bnav-btn" aria-selected="false" id="bnavMore" onclick="toggleDrawer()">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>More
     </button>
@@ -3132,7 +2798,7 @@ h3.cg-generic{ display:none; }
     <div class="bio-card"><div class="bio-issue">lumiere Issues 5&ndash;7</div><div class="bio-name">David Earl</div><div class="bio-now">MFA Candidate, UMass Boston &middot; Arrowsmith Press</div><div class="bio-quote">Everything started with lumiere and the creative writing courses Professor Walsh offered.</div></div>
     <div class="bio-card"><div class="bio-issue">lumiere Issues 5&ndash;7</div><div class="bio-name">Faisal Murad</div><div class="bio-now">Teaches writing, UMass Boston</div><div class="bio-quote">Stories are emotions, histories, struggles, tears, laughs, love &mdash; the good things that connect us all.</div></div>
     <div class="bio-card"><div class="bio-issue">lumiere Issue 1, Editor</div><div class="bio-name">Diego Rocha</div><div class="bio-now">Visiting Professor, FSU School of Theatre</div><div class="bio-quote">The first materialized manifestation of my Art was the first issue of Lumiere!</div></div>
-    <div class="bio-card"><div class="bio-issue">lumiere Issues 1&ndash;4</div><div class="bio-name">JayJay Conrad</div><div class="bio-now">Teaching Form Poetry</div><div class="bio-quote">lumiere is the single point where the threads of my life were gathered into a braid. Still Lit.</div></div>
+    <div class="bio-card"><div class="bio-issue">lumiere Issues 1&ndash;4</div><div class="bio-name">JayJay Conrad</div><div class="bio-now">Teaching Form Poetry</div><div class="bio-quote">lumiere is the single point where the rows of my life were gathered into a braid. Still Lit.</div></div>
     <div class="bio-card" style="border-top-color:var(--border-2);background:var(--surface-2);"><div class="bio-issue" style="color:var(--ink-3);">Placeholder</div><div class="bio-name" style="color:var(--ink-3);">Your story here</div><div class="bio-quote" style="color:var(--ink-3);border-left-color:var(--border);">Contact litmag@massbay.edu to share your story.</div></div>
   </div>
 
@@ -3339,165 +3005,6 @@ h3.cg-generic{ display:none; }
   <h2 class="page-title">The Watershed</h2>
   <p class="page-sub">What program review is <em>for</em>, made visible. A program outcome sits at the source. It informs the courses below it. Each course feeds a student through the work they make. Assessment is how we watch the water reach the student — and read what arrives.</p>
 
-  <!-- ═══ 7→5 English SLO history (v41) — tagged program evolution, reuses .cab-* ═══ -->
-  <div class="sec-hd"><h3>How English Got to Five</h3></div>
-  <p class="cab-intro">The program once carried <strong>seven</strong> outcomes; it now carries <strong>five</strong>. That consolidation is itself a program-review story &mdash; fewer, clearer outcomes that faculty can actually assess. Here is the lineage, drawn from the department's own annual reports and MassBay's current published outcomes.</p>
-  <div class="cab-wrap">
-    <details class="cab-row">
-      <summary><span class="cab-glyph g-note" aria-hidden="true">7&rarr;5</span>The consolidation, outcome by outcome<span class="cab-verdict-tag">lineage</span><span class="cab-chev" aria-hidden="true">&#9660;</span></summary>
-      <div class="cab-body">
-        <p><span class="cab-who">Old #1 read complex texts</span> &rarr; <strong>Now #1</strong> Read &amp; engage critically with diverse texts.</p>
-        <p><span class="cab-who">Old #2 draft/revise to polished work + Old #4 collaborate</span> &rarr; <strong>Now #4</strong> Collaborative, process-based approach to research, writing, revision.</p>
-        <p><span class="cab-who">Old #3 well-argued analyses with credible sources</span> &rarr; <strong>Now #3</strong> Critically evaluate &amp; integrate evidence to develop an argument.</p>
-        <p><span class="cab-who">Old #5 digital rhetoric + Old #6 creative/critical thinking</span> &rarr; <strong>Now #2</strong> Write with original thinking &amp; voice.</p>
-        <p><span class="cab-who">Old #6 language &amp; identity + Old #7 evolving civic landscape</span> &rarr; <strong>Now #5</strong> Analyze the evolving roles of language in identity, community, communication.</p>
-        <p style="margin-top:.7rem;font-size:.85rem;color:var(--ink-2);"><em>Consolidation direction is reconstructed from the department's annual reports; the official crosswalk is the department's to confirm.</em></p>
-      </div>
-    </details>
-    <details class="cab-row">
-      <summary><span class="cab-glyph g-cohere" aria-hidden="true">HX</span>What each year assessed (the 7-outcome era)<span class="cab-verdict-tag">history</span><span class="cab-chev" aria-hidden="true">&#9660;</span></summary>
-      <div class="cab-body">
-        <p><span class="cab-who">AY16-17</span> &mdash; evolving civic/professional landscape &middot; lumi&egrave;re literary magazine (EN202)</p>
-        <p><span class="cab-who">AY17-18</span> &mdash; well-argued analyses with credible sources &middot; EN101 source-integration rubric</p>
-        <p><span class="cab-who">AY18-19</span> &mdash; generate/draft/revise to polished drafts &middot; faculty writing survey</p>
-        <p><span class="cab-who">AY19-20</span> &mdash; read complex texts (COVID pivot year; assessment deferred/folded)</p>
-        <p><span class="cab-who">AY20-21</span> &mdash; digital rhetoric &middot; EN120 student websites (Skidmore visual-communication rubric)</p>
-      </div>
-    </details>
-    <details class="cab-row">
-      <summary><span class="cab-glyph g-note" aria-hidden="true">NOW</span>The current five &mdash; and what we're assessing this year<span class="cab-verdict-tag">AY26-27</span><span class="cab-chev" aria-hidden="true">&#9660;</span></summary>
-      <div class="cab-body">
-        <p>The current framework, active AY25-26, is the five outcomes shown in Outcomes Irrigation. <strong>AY25-26</strong> assessed SLO #1 (read &amp; engage critically). <strong>AY26-27</strong> assesses <strong>SLO #3 &mdash; critically evaluate &amp; integrate evidence to develop an argument</strong>: prompt packet, common rubric, artifact collection across the sequence, and a fall scoring session. This is the program-review cycle running right now.</p>
-      </div>
-    </details>
-  </div>
-  <!-- ═══ END: 7→5 history ═══ -->
-
-  <!-- ═══ AY26-27 SLO#3 paste-data seam (v42) ═══ -->
-  <div class="pcx" role="group" aria-labelledby="pcxHd">
-    <div class="pcx-hd" id="pcxHd"><span class="pcx-tag">AY26-27</span> Enter this cycle's scores</div>
-    <p class="pcx-sub">The current cycle assesses <strong>SLO #3 &mdash; critically evaluate &amp; integrate evidence to develop an argument</strong>. Collect scores however your team already does (Google Form, SurveyMonkey, a shared sheet), then paste the aggregate results here. Nothing is fetched; everything you paste is saved only on this device.</p>
-
-    <div class="pcx-ferpa">
-      <span class="pcx-fg" aria-hidden="true">FERPA</span>
-      <span>Paste <strong>aggregate scores only</strong> &mdash; course code and rubric numbers. Never paste student names, IDs, or artifact text. This tool checks for obvious name-like entries and will stop you. Data stays local; it is never uploaded.</span>
-    </div>
-
-    <div class="pcx-fmt">Format: one line per course, comma-separated.
-COURSE, score, score, score, ...
-Example:
-EN101, 3, 2, 4, 3, 2
-EN102, 4, 3, 4, 4
-EN202, 3, 4, 3</div>
-
-    <label for="pcxInput" class="sr-only">Paste aggregate SLO#3 scores</label>
-    <textarea id="pcxInput" placeholder="EN101, 3, 2, 4, 3&#10;EN102, 4, 3, 4, 4" aria-describedby="pcxHd"></textarea>
-
-    <div class="pcx-actions">
-      <button type="button" class="pcx-btn" onclick="pcxIngest()">Save &amp; chart these scores</button>
-      <button type="button" class="pcx-btn ghost" onclick="pcxClear()">Clear saved data</button>
-    </div>
-    <div class="pcx-status" id="pcxStatus" role="status" aria-live="polite"></div>
-
-    <div class="pcx-results" id="pcxResults">
-      <div class="sec-hd" style="margin-top:1rem;"><h3>SLO #3 &mdash; average by course</h3></div>
-      <div id="pcxBars"></div>
-    </div>
-  </div>
-  <!-- ═══ END: paste-data seam ═══ -->
-
-  <!-- ═══ WATERSHED YEAR — annotated landscape (v35) ═══ -->
-  <div class="wsy" role="group" aria-labelledby="wsyHd">
-    <h3 id="wsyHd" class="sec-hd">The Watershed Year — an annotated landscape</h3>
-    <p class="wsy-cap">Five program outcomes, one five-year turn — marked like a map. Each year, one outcome runs at full depth while the other four keep flowing as sampled threads. Open gates are opportunities the design creates; shoals are the real snags, named honestly, so anyone can read the terrain and route around it. One channel never rotates out: Written Communication, read every year in EN102.</p>
-
-    <div class="wsy-svg-frame">
-      <svg class="wsy-svg" viewBox="0 0 980 420" role="img" aria-label="Annotated five-year assessment landscape. Five outcome tributaries run across five year columns, each swelling to full depth in its focus year and running thin the other years. Gold return-eddies loop from each year to the next, showing reflect-and-intervene. Open-gate markers flag opportunities the cycle creates; shoal markers flag real barriers named from department documents. A constant deep channel runs through all five years for Written Communication measured in EN102.">
-        <defs>
-          <pattern id="wsyDot" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#1F7A8C"/><circle cx="2" cy="2" r="1.5" fill="#fff" opacity=".55"/></pattern>
-          <pattern id="wsyDiag" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="#256649"/><rect width="3" height="8" fill="#fff" opacity=".4"/></pattern>
-          <pattern id="wsyGrid" width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" fill="#8a5c00"/><path d="M0 0 H9 M0 0 V9" stroke="#fff" stroke-width="1" opacity=".4"/></pattern>
-          <pattern id="wsyStip" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#1a3d5c"/><circle cx="1.5" cy="1.5" r=".9" fill="#fff" opacity=".5"/><circle cx="4.5" cy="4.5" r=".9" fill="#fff" opacity=".5"/></pattern>
-          <pattern id="wsyWave" width="12" height="8" patternUnits="userSpaceOnUse"><rect width="12" height="8" fill="#8b1a2a"/><path d="M0 4 Q3 1 6 4 T12 4" stroke="#fff" stroke-width="1.1" fill="none" opacity=".5"/></pattern>
-          <marker id="wsyEddy" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#c8900a"/></marker>
-        </defs>
-        <g font-family="var(--font-sans)" font-size="12" text-anchor="middle">
-          <line x1="220" y1="34" x2="220" y2="330" stroke="#e0ddd8"/><line x1="360" y1="34" x2="360" y2="330" stroke="#e0ddd8"/>
-          <line x1="500" y1="34" x2="500" y2="330" stroke="#e0ddd8"/><line x1="640" y1="34" x2="640" y2="330" stroke="#e0ddd8"/>
-          <line x1="780" y1="34" x2="780" y2="330" stroke="#e0ddd8"/>
-          <text x="220" y="24" font-weight="700" fill="#48484a">Year 1</text><text x="360" y="24" font-weight="700" fill="#48484a">Year 2</text>
-          <text x="500" y="24" font-weight="700" fill="#48484a">Year 3</text><text x="640" y="24" font-weight="700" fill="#48484a">Year 4</text>
-          <text x="780" y="24" font-weight="700" fill="#48484a">Year 5</text>
-        </g>
-        <g stroke-linecap="round" fill="none" opacity=".8">
-          <path d="M90 80  H940" stroke="url(#wsyDot)"  stroke-width="4"/>
-          <path d="M90 128 H940" stroke="url(#wsyDiag)" stroke-width="4"/>
-          <path d="M90 176 H940" stroke="url(#wsyGrid)" stroke-width="4"/>
-          <path d="M90 224 H940" stroke="url(#wsyStip)" stroke-width="4"/>
-          <path d="M90 272 H940" stroke="url(#wsyWave)" stroke-width="4"/>
-        </g>
-        <path d="M160 80  C190 80 190 64 220 64 C260 64 260 64 280 64 C300 64 300 80 320 80" fill="url(#wsyDot)"  stroke="#1F7A8C" stroke-width="1.4"/>
-        <path d="M300 128 C330 128 330 112 360 112 C400 112 400 112 420 112 C440 112 440 128 460 128" fill="url(#wsyDiag)" stroke="#256649" stroke-width="1.4"/>
-        <path d="M440 176 C470 176 470 160 500 160 C540 160 540 160 560 160 C580 160 580 176 600 176" fill="url(#wsyGrid)" stroke="#8a5c00" stroke-width="1.4"/>
-        <path d="M580 224 C610 224 610 208 640 208 C680 208 680 208 700 208 C720 208 720 224 740 224" fill="url(#wsyStip)" stroke="#1a3d5c" stroke-width="1.4"/>
-        <path d="M720 272 C750 272 750 256 780 256 C820 256 820 256 840 256 C860 256 860 272 880 272" fill="url(#wsyWave)" stroke="#8b1a2a" stroke-width="1.4"/>
-        <g font-size="10.5" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">
-          <text x="250" y="57" fill="#0d4650">SLO 1 focus</text><text x="390" y="105" fill="#1a4a35">SLO 2 focus</text>
-          <text x="530" y="153" fill="#6b4700">SLO 3 focus</text><text x="670" y="201" fill="#132d45">SLO 4 focus</text>
-          <text x="810" y="249" fill="#6b1420">SLO 5 focus</text>
-        </g>
-        <g fill="none" stroke="#c8900a" stroke-width="2.2" stroke-dasharray="5 4" opacity=".9">
-          <path d="M220 70  C245 100 290 102 320 118" marker-end="url(#wsyEddy)"/>
-          <path d="M360 118 C385 148 430 150 460 166" marker-end="url(#wsyEddy)"/>
-          <path d="M500 166 C525 196 570 198 600 214" marker-end="url(#wsyEddy)"/>
-          <path d="M640 214 C665 244 710 246 740 262" marker-end="url(#wsyEddy)"/>
-        </g>
-        <path d="M90 320 H940" stroke="#1a4a35" stroke-width="9" stroke-linecap="round"/>
-        <path d="M90 320 H940" stroke="#eaf2ee" stroke-width="2.5" stroke-dasharray="2 10" stroke-linecap="round" opacity=".7"/>
-        <text x="100" y="312" font-size="12.5" font-weight="800" fill="#1a4a35" font-family="var(--font-sans)">WRITTEN COMMUNICATION · ISLO · read every year in EN102</text>
-        <g><circle cx="220" cy="320" r="5" fill="#e8c96a" stroke="#1a4a35" stroke-width="1.5"/><circle cx="360" cy="320" r="5" fill="#e8c96a" stroke="#1a4a35" stroke-width="1.5"/><circle cx="500" cy="320" r="5" fill="#e8c96a" stroke="#1a4a35" stroke-width="1.5"/><circle cx="640" cy="320" r="5" fill="#e8c96a" stroke="#1a4a35" stroke-width="1.5"/><circle cx="780" cy="320" r="5" fill="#e8c96a" stroke="#1a4a35" stroke-width="1.5"/></g>
-        <g font-family="var(--font-sans)">
-          <g transform="translate(88,305)"><rect x="-11" y="-11" width="22" height="22" rx="4" fill="#1a4a35"/><text x="0" y="4" font-size="12" font-weight="800" fill="#fff" text-anchor="middle">O1</text></g>
-          <g transform="translate(120,224)"><rect x="-11" y="-11" width="22" height="22" rx="4" fill="#1a4a35"/><text x="0" y="4" font-size="12" font-weight="800" fill="#fff" text-anchor="middle">O2</text></g>
-          <g transform="translate(415,145)"><rect x="-11" y="-11" width="22" height="22" rx="4" fill="#1a4a35"/><text x="0" y="4" font-size="12" font-weight="800" fill="#fff" text-anchor="middle">O3</text></g>
-          <g transform="translate(670,224)"><path d="M0 -12 L12 9 L-12 9 Z" fill="#8b1a2a"/><text x="0" y="6" font-size="10.5" font-weight="800" fill="#fff" text-anchor="middle">B1</text></g>
-          <g transform="translate(430,320)"><path d="M0 -12 L12 9 L-12 9 Z" fill="#8b1a2a"/><text x="0" y="6" font-size="10.5" font-weight="800" fill="#fff" text-anchor="middle">B2</text></g>
-          <g transform="translate(690,248)"><path d="M0 -12 L12 9 L-12 9 Z" fill="#8b1a2a"/><text x="0" y="6" font-size="10.5" font-weight="800" fill="#fff" text-anchor="middle">B3</text></g>
-        </g>
-        <g font-family="var(--font-sans)" font-size="10" fill="#48484a" text-anchor="start">
-          <text x="4" y="83">SLO1 Read</text><text x="4" y="131">SLO2 Voice</text><text x="4" y="179">SLO3 Evidence</text><text x="4" y="227">SLO4 Process</text><text x="4" y="275">SLO5 Language</text>
-        </g>
-      </svg>
-    </div>
-
-    <div class="wsy-legend">
-      <span class="wsy-leg"><span class="wsy-glyph"><svg viewBox="0 0 22 22"><rect x="1" y="1" width="20" height="20" rx="4" fill="#1a4a35"/><text x="11" y="15" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">O</text></svg></span>Open gate · opportunity</span>
-      <span class="wsy-leg"><span class="wsy-glyph"><svg viewBox="0 0 22 22"><path d="M11 2 L21 20 L1 20 Z" fill="#8b1a2a"/><text x="11" y="17" font-size="10" font-weight="800" fill="#fff" text-anchor="middle">B</text></svg></span>Shoal · barrier</span>
-      <span class="wsy-leg"><span class="wsy-swatch" style="background:#c8900a"></span>Return eddy · intervene</span>
-      <span class="wsy-leg"><span class="wsy-swatch" style="background:#1a4a35"></span>Spine · Written Comm / EN102</span>
-    </div>
-
-    <div class="wsy-ledger">
-      <div class="wsy-col wsy-opp">
-        <h3>Open gates — what the terrain makes possible</h3>
-        <ul>
-          <li><span class="wsy-tag">O1</span><b>A permanent measure point.</b> Written Communication is read every year in EN102 — the one channel that never rotates out, so the trend line is unbroken. <span class="wsy-src">[EN102 · ISLO spine]</span></li>
-          <li><span class="wsy-tag">O2</span><b>Early warning from overlap.</b> Because all five outcomes are sampled across all courses every year, a cross-cutting problem surfaces before its focus year arrives. <span class="wsy-src">[AY24-25 Annual Report · rotate annually / sampled]</span></li>
-          <li><span class="wsy-tag">O3</span><b>Findings become fixes.</b> The eddy loops a result back the next year as an intervention, then re-checks — measurement and change overlap. <span class="wsy-src">[dept practice · reflect + intervene]</span></li>
-        </ul>
-      </div>
-      <div class="wsy-col wsy-barrier">
-        <h3>Shoals — where the current catches</h3>
-        <ul>
-          <li><span class="wsy-tag">B1</span><b>Reality can outrun the plan.</b> When GenAI-influenced writing appeared, the department changed the assessment focus mid-cycle. The wheel is not rigid — a strain as well as a strength. <span class="wsy-src">[AY24-25 Annual Report · GenAI course-change]</span></li>
-          <li><span class="wsy-tag">B2</span><b>The under-ready handoff.</b> Students can move into EN102 without having demonstrated key skills — the spine reads a gap the cycle has to route around. <span class="wsy-src">[1/29/24 Dept Minutes · EN102 readiness]</span></li>
-          <li><span class="wsy-tag">B3</span><b>Reporting lag.</b> A year's finding may not be written up when the next year begins — the SLO report can be "forthcoming" while the next cycle already runs. <span class="wsy-src">[AY24-25 Annual Report · forthcoming SLO report]</span></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <!-- ═══ end Watershed Year ═══ -->
-
   <div class="ws-wrap">
     <p class="ws-intro">Pick a program to follow its watershed. The <strong>source</strong> is a Program Learning Outcome. The <strong>pools</strong> below are the courses that carry it. The <strong>mouth</strong> is the student — the representative — and the artifact is what they made. Select a course pool to see how that outcome travels, then walk the stages of the work below.</p>
 
@@ -3574,32 +3081,28 @@ EN202, 3, 4, 3</div>
 </section>
 
 <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-     ISLO LOOM — universal outcomes woven through the curriculum
+     THE IRRIGATION MAP — universal outcomes flowing through the curriculum
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-<section class="panel" id="panel-loom" role="tabpanel" aria-labelledby="tab-loom">
+<section class="panel" id="panel-field" role="tabpanel" aria-labelledby="tab-field">
   <div class="eyebrow">Institutional Outcomes</div>
-  <h2 class="page-title">Outcomes Irrigation</h2>
-  <p class="page-sub">The five English program outcomes run through the major like channels through a field. Courses are the plots the water crosses. Where a course carries an outcome, the channel feeds that plot, and the watered plot is the artifact: the place that outcome becomes visible in real student work. Dry plots are coverage gaps, shown plainly so curriculum mapping can bring water to them.</p>
-  <div class="status-note status-pre" style="border-left-color:#b0791a;">
-    <span class="sn-glyph" aria-hidden="true">[DRAFT]</span>
-    <span><strong>Draft coverage mapping &mdash; pending faculty verification.</strong> The five outcomes are MassBay's current, verified English program SLOs. Which courses carry which outcome is a working draft seeded from the curriculum, not yet department-confirmed. Treat the grid as a starting point for norming, not a final map.</span>
-  </div>
+  <h2 class="page-title">The Irrigation Map</h2><div class="oq" role="note"><b>Open question &mdash; logged, not resolved</b><p><strong>Norming records exist for Spring 2023 and Spring 2026 only.</strong></p><p>No norming is recorded for 2024 or 2025. If that gap is real, the map should render those years dry &mdash; that is the honest picture and it is worth showing. If it is a data-entry gap, the record needs filling. Unresolved: the map currently shows what is recorded, not what was done.</p></div>
+  <p class="page-sub">The six Graduation Competencies are universal — they run through every program like rows through cloth. Courses are the columns they cross. Where a course carries an outcome, the rows cell, and the cell is the artifact: the place that outcome becomes visible in real student work. Open crossings are coverage gaps, shown plainly so curriculum mapping can close them.</p>
 
   <div class="info-box"><strong>Why the ISLO pathway is the spine:</strong> VALUE rubrics and program outcomes are discipline-shaped. The ISLOs are shared by every course in the college, so training and artifact collection built once at this level serve all programs. This is the part of Confluence a partner college could adopt without inheriting any one department's content.</div>
 
-  <div class="loom-wrap">
-    <div class="loom-frame">
-      <svg id="loomSvg" class="loom-svg" viewBox="0 0 920 440" role="img" aria-label="Outcomes irrigation field: five English program outcomes flow as channels across courses. Watered plots mark where a course carries an outcome through a student artifact; dry plots are gaps."></svg>
+  <div class="field-wrap">
+    <div class="field-frame">
+      <svg id="fieldSvg" class="field-svg" viewBox="0 0 920 440" role="img" aria-label="ISLO irrigation map: seven institutional learning outcomes (ISLOs) and five program outcomes (SLOs) mapped across courses. Cells mark where a course carries an outcome through a student artifact."></svg>
     </div>
-    <div class="loom-legend" aria-hidden="true">
-      <span><span class="loom-leg-knot"></span> Watered plot = course carries this SLO (artifact exists)</span>
-      <span><span class="loom-leg-open"></span> Dry plot = coverage gap</span>
+    <div class="field-legend" aria-hidden="true">
+      <span><span class="leg-wet"></span> Cell = course carries this ISLO (artifact exists)</span>
+      <span><span class="leg-dry"></span> Dry cell = outcome not yet coveredage gap</span>
     </div>
   </div>
 
-  <!-- detail panel: a knot, selected, opens its training + artifact pathway (Layer 2/3 land here) -->
-  <div class="ws-detail" id="loomDetail" role="region" aria-live="polite" style="margin-top:1rem;">
-    <strong>Select a watered plot.</strong> Each plot opens how that course carries that institutional outcome — what the outcome means, how to recognize it in student work, and the artifact that demonstrates it. Training content and the artifact-collection pathway build out from here.
+  <!-- detail panel: a cell, selected, opens its training + artifact pathway (Layer 2/3 land here) -->
+  <div class="ws-detail" id="fieldDetail" role="region" aria-live="polite" style="margin-top:1rem;">
+    <strong>Select a cell.</strong> Each cell opens how that course carries that institutional outcome — what the outcome means, how to recognize it in student work, and the artifact that demonstrates it. Training content and the artifact-collection pathway build out from here.
   </div>
 </section>
 
@@ -3609,12 +3112,11 @@ EN202, 3, 4, 3</div>
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
 <section class="panel" id="panel-assessment" role="tabpanel" aria-labelledby="tab-assessment">
   <div class="eyebrow">Annual Assessment</div>
-  <h2 class="page-title">Program Assessment Guide</h2>
+  <h2 class="page-title">Program Assessment Guide</h2><div class="oq" role="note"><b>Open question &mdash; logged, not resolved</b><p><strong>Three scales are in use across this hub; each instrument must declare its own.</strong></p><p>ISLO #5 norming uses 0&ndash;4 plus N/A. The EN101 SLO 5 report uses a 5-point Novice&ndash;Master scale. Artifact intake uses a 200&ndash;600 word band. No rubric content is changed by this note &mdash; the fix is that every instrument states its scale at the point of use, so a scorer never has to infer which one governs.</p></div>
   <p class="page-sub">What we assess, why NECHE requires it, and what you need to do this cycle.</p>
   <div class="skin-toggle" role="group" aria-label="Choose how this program sees its assessment">
     <span class="skin-lab">How does your program want to see its assessment?</span>
-    <button class="skin-opt" data-skin="skin-aurora" aria-pressed="true" onclick="setSkin('skin-aurora')">Aurora &middot; joy</button>
-    <button class="skin-opt" data-skin="skin-xenos" aria-pressed="false" onclick="setSkin('skin-xenos')">Xenos &middot; craft</button>
+    <button class="skin-opt" data-skin="skin-xenos" aria-pressed="true" onclick="setSkin('skin-xenos')">Xenos &middot; craft</button>
     <button class="skin-opt" data-skin="skin-tron" aria-pressed="false" onclick="setSkin('skin-tron')">Tron &middot; system</button>
     <button class="skin-opt" data-skin="skin-lumi" aria-pressed="false" onclick="setSkin('skin-lumi')">Luminocity &middot; growth</button>
   </div>
@@ -3623,7 +3125,7 @@ EN202, 3, 4, 3</div>
   <div class="accord"><button class="accord-btn" onclick="acc(this)" aria-expanded="false" data-tab="PLOs">Current Program Learning Outcomes (5 PLOs) <span class="accord-chev" aria-hidden="true">&#9660;</span></button><div class="accord-body"><p class="muted" style="margin-bottom:.75rem;">Source: massbay.edu 2025–26 Learning Outcomes PDF, retrieved June 2026.</p><ol style="margin-left:1.25rem;line-height:2.1;font-size:.9rem;"><li>Read and engage critically with a diverse range of texts and perspectives</li><li>Write using original thinking and voice to express a central idea, demonstrating purpose and audience awareness</li><li>Critically evaluate and integrate evidence to develop an argument</li><li>Demonstrate a collaborative, process-based approach to research, writing, and revision</li><li>Analyze the evolving roles that language and writing play in our identities, communities, and communications</li></ol></div></div>
   <div class="accord"><button class="accord-btn" onclick="acc(this)" aria-expanded="false" data-tab="Focus">This year's assessment focus <span class="accord-chev" aria-hidden="true">&#9660;</span></button><div class="accord-body"><div class="warn-box"><strong>Confirm with Clarissa Codrington before distributing.</strong> The focus PLO(s) for AY2025–26 have not been confirmed in available documents.</div></div></div>
   <div class="accord"><button class="accord-btn" onclick="acc(this)" aria-expanded="false" data-tab="To do">What faculty in assessed courses need to do <span class="accord-chev" aria-hidden="true">&#9660;</span></button><div class="accord-body"><ol style="margin-left:1.25rem;line-height:2.2;font-size:.9rem;"><li>Complete the <strong>Norming</strong> tab before scoring signature assignments.</li><li>Score the relevant signature assignment using the shared rubric framework.</li><li>Select two de-identified student samples — one strong, one developing.</li><li>Submit via the <strong>Submit</strong> tab by the deadline.</li></ol></div></div>
-  <div class="accord"><button class="accord-btn" onclick="acc(this)" aria-expanded="false" data-tab="ISLOs">Graduation Competencies / ISLOs <span class="accord-chev" aria-hidden="true">&#9660;</span></button><div class="accord-body"><p class="muted" style="margin-bottom:.75rem;">Source: massbay.edu/graduation-competencies. English dept has participated in Written Communication and DEI GC assessments.</p><div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.75rem;"><span class="plo-chip">Written Communication</span><span class="plo-chip">Critical Thinking</span><span class="plo-chip">Diversity, Equity &amp; Inclusion</span><span class="plo-chip">Information Literacy</span><span class="plo-chip">Quantitative Reasoning</span><span class="plo-chip">Personal &amp; Social Responsibility</span></div><p style="font-size:.88rem;">Written Communication GC (AY2023–24): Walsh and Sean McCarthy led 10-faculty interdisciplinary team. DEI GC (Spring 2023): Walsh scored portfolios, filed reflection.</p></div></div>
+  <div class="accord"><button class="accord-btn" onclick="acc(this)" aria-expanded="false" data-tab="ISLOs">Graduation Competencies / ISLOs <span class="accord-chev" aria-hidden="true">&#9660;</span></button><div class="accord-body"><p class="muted" style="margin-bottom:.75rem;">Source: massbay.edu/graduation-competencies. English dept has participated in Written Communication and DEI GC assessments.</p><div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.75rem;"><span class="plo-chip">Communication (ISLO 1)</span><span class="plo-chip">Ethical &amp; Integrative Thinking (ISLO 6)</span><span class="plo-chip">Systems of Power, Equity &amp; Inclusion (ISLO 5)</span><span class="plo-chip">Technological Fluency (ISLO 3)</span><span class="plo-chip">Scientific Reasoning (ISLO 4)</span><span class="plo-chip">Quantitative Reasoning (ISLO 2)</span><span class="plo-chip">Personal &amp; Civic Responsibility (ISLO 7)</span></div><p style="font-size:.88rem;">Written Communication GC (AY2023–24): Walsh and Sean McCarthy led 10-faculty interdisciplinary team. DEI GC (Spring 2023): Walsh scored portfolios, filed reflection.</p></div></div>
   <div class="accord"><button class="accord-btn" onclick="acc(this)" aria-expanded="false" data-tab="EN101">EN101 Source Use Rubric — AY2017–18 (verified verbatim) <span class="accord-chev" aria-hidden="true">&#9660;</span></button><div class="accord-body"><p class="muted" style="margin-bottom:.75rem;">Source: AY2017–18 Program Assessment Report, Matt Walsh. Targets EN101 SLO 5. 5-pt scale, Novice–Master. One outcome rubric, not a general grading rubric.</p><ol style="margin-left:1.25rem;line-height:2;font-size:.88rem;"><li>Uses a variety of resources to identify sources relevant to the assignment's rhetorical situation.</li><li>Uses evaluation strategies to select relevant and credible source material.</li><li>Demonstrates the ability to use a source type to apply a specific rhetorical strategy.</li><li>Identifies specific content from a source; chooses effective methods for including sources.</li><li>Integrates source material clearly and logically; documents all sources using MLA conventions.</li></ol></div></div>
   <div class="accord"><button class="accord-btn" onclick="acc(this)" aria-expanded="false" data-tab="EN202">EN202 Imperfect Ideal Grading Rubric (verified verbatim) <span class="accord-chev" aria-hidden="true">&#9660;</span></button><div class="accord-body"><p class="muted" style="margin-bottom:.75rem;">Source: Drive, modified 2026-05-19. Scale: 1 = does not meet · 2 = partially meets · 3 = meets/exceeds. Note: rubric title still reads "Advanced Writing" — update when title change takes effect Spring 2027.</p><div style="font-size:.88rem;line-height:1.9;columns:2;column-gap:2rem;"><strong>Submission:</strong> on time, meets word count (1500–2500 words)<br><strong>Title &amp; Intro:</strong> relevant title, engaging opening, specific arguable thesis<br><strong>Focus &amp; Organization:</strong> arranged sections, clear topic sentences<br><strong>Development:</strong> primary and secondary sources, MLA citations<br><strong>Conclusion:</strong> separate from body, draws from essay as a whole<br><strong>Revision:</strong> meaningful revision across drafts, mostly error-free</div></div></div>
   </div>
@@ -3631,94 +3133,6 @@ EN202, 3, 4, 3</div>
 
 <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      SUBMIT SAMPLE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-<section class="panel" id="panel-samples" role="tabpanel" aria-labelledby="tab-samples">
-  <div class="eyebrow">Submit Sample</div>
-  <h2 class="page-title">Contribute a Student Work Sample</h2>
-  <p class="page-sub">Submit a de-identified sample as a potential anchor, norming sample, or concern. Tag it to course, program, and ISLO outcomes. Assignment design rationale helps the whole department.</p>
-  <div class="info-box"><strong>Signature assignments are models.</strong> They are designed to create optimal conditions for students to demonstrate specific outcomes — not just any assignment. When submitting, include the assignment design rationale. This builds the department's shared library of exemplars over time.</div>
-  <div class="step-bar" role="list">
-    <div class="step cur" id="stA" role="listitem"><span class="step-num">01</span>Identify</div>
-    <div class="step" id="stB" role="listitem"><span class="step-num">02</span>Tag Outcomes</div>
-    <div class="step" id="stC" role="listitem"><span class="step-num">03</span>Sample &amp; Score</div>
-    <div class="step" id="stD" role="listitem"><span class="step-num">04</span>Rationale</div>
-    <div class="step" id="stE" role="listitem"><span class="step-num">05</span>Review &amp; Send</div>
-  </div>
-  <!-- Step 1 -->
-  <div id="ss1">
-    <div class="warn-box"><strong>De-identify before pasting.</strong> Remove student name, ID, and any identifying details.</div>
-    <div class="field-row">
-      <div class="field"><label for="sName">Your name</label><input type="text" id="sName"></div>
-      <div class="field"><label for="sEmail">Your MassBay email</label><input type="email" id="sEmail" placeholder="you@massbay.edu"></div>
-    </div>
-    <div class="field-row">
-      <div class="field"><label for="sCourse">Course</label><select id="sCourse"><option value="">Select</option><option>EN101</option><option>EN101L</option><option>EN102</option><option>EN120</option><option>EN195</option><option>EN202</option><option>EN210</option><option>ES100</option><option>ES150</option><option>ESL</option></select></div>
-      <div class="field"><label for="sType">Sample type</label><select id="sType"><option value="">Select</option><option value="potential_anchor">Potential anchor — might show how a score applies</option><option value="norming">Norming sample — for calibration discussion</option><option value="concern">Concern / question — something troubling I want the group to see</option><option value="in_progress">Work in progress — sharing for discussion</option></select></div>
-    </div>
-    <div class="field"><label for="sAssign">Signature assignment this sample represents</label><select id="sAssign"><option value="">Select</option><option>EN101 — Field of Interest Essay</option><option>EN101 — Banned/Challenged Book Essay</option><option>EN101 — Exit Essay (portfolio)</option><option>EN102 — Research Argument Essay</option><option>EN195 — Workshop Piece (portfolio)</option><option>EN202 — Lumière Editorial Project</option><option>EN210 — Short Fiction Portfolio Piece</option><option>Other (describe in notes)</option></select></div>
-    <div class="field"><label>Sample quality</label>
-      <div class="radio-set">
-        <label><input type="radio" name="sq" value="strong"> Strong — demonstrates achievement of the tagged outcomes</label>
-        <label><input type="radio" name="sq" value="developing"> Developing — meaningful effort; does not yet meet outcomes</label>
-        <label><input type="radio" name="sq" value="struggling"> Struggling — significant gaps; early development</label>
-      </div>
-    </div>
-    <div class="btn-row"><button class="btn btn-p" onclick="ssGo(2)">Tag outcomes &#8594;</button></div>
-  </div>
-  <!-- Step 2 -->
-  <div id="ss2" style="display:none">
-    <div class="field"><label>Course-level objectives this sample addresses</label><div class="tag-group" id="tagCourse"></div></div>
-    <div class="field"><label>Program Learning Outcomes (PLOs) <span class="muted" style="font-size:.78rem;">Source: massbay.edu 2025–26 PDF</span></label>
-      <div class="tag-group">
-        <span class="tag-chip" onclick="togTag(this,'sel-plo')">PLO 1 — Reading</span>
-        <span class="tag-chip" onclick="togTag(this,'sel-plo')">PLO 2 — Writing &amp; Voice</span>
-        <span class="tag-chip" onclick="togTag(this,'sel-plo')">PLO 3 — Argument</span>
-        <span class="tag-chip" onclick="togTag(this,'sel-plo')">PLO 4 — Collaboration &amp; Process</span>
-        <span class="tag-chip" onclick="togTag(this,'sel-plo')">PLO 5 — Language &amp; Identity</span>
-      </div>
-    </div>
-    <div class="field"><label>Graduation Competency / ISLO</label>
-      <div class="tag-group">
-        <span class="tag-chip" onclick="togTag(this,'sel-iso')">Written Communication</span>
-        <span class="tag-chip" onclick="togTag(this,'sel-iso')">Critical Thinking</span>
-        <span class="tag-chip" onclick="togTag(this,'sel-iso')">Diversity, Equity &amp; Inclusion</span>
-        <span class="tag-chip" onclick="togTag(this,'sel-iso')">Information Literacy</span>
-        <span class="tag-chip" onclick="togTag(this,'sel-iso')">Personal &amp; Social Responsibility</span>
-      </div>
-    </div>
-    <div class="btn-row"><button class="btn btn-g" onclick="ssGo(1)">&#8592; Back</button><button class="btn btn-p" onclick="ssGo(3)">Add sample &#8594;</button></div>
-  </div>
-  <!-- Step 3 -->
-  <div id="ss3" style="display:none">
-    <div class="field"><label for="sText">Paste or describe the de-identified sample <span class="hint">200–600 words</span></label><textarea id="sText" style="min-height:130px;"></textarea></div>
-    <p style="font-size:.85rem;font-weight:600;margin-bottom:.6rem;">Score this sample (optional)</p>
-    <div id="scoreArea"></div>
-    <div class="btn-row"><button class="btn btn-g" onclick="ssGo(2)">&#8592; Back</button><button class="btn btn-p" onclick="ssGo(4)">Add rationale &#8594;</button></div>
-  </div>
-  <!-- Step 4 -->
-  <div id="ss4" style="display:none">
-    <div class="field"><label for="sRationale">Assignment design rationale <span class="hint">Why is this a signature assignment? How does the design create conditions for students to meet the outcomes?</span></label><textarea id="sRationale"></textarea></div>
-    <div class="field"><label for="sReflect">What does this sample reveal about student achievement of the tagged outcomes?</label><textarea id="sReflect"></textarea></div>
-    <div class="field"><label for="sConcern">Concern, question, or note <span class="hint">optional — something that troubles you about this sample or this outcome</span></label><textarea id="sConcern" placeholder="e.g. I'm not sure if this meets PLO 3 or if the assignment design made it impossible to demonstrate..."></textarea></div>
-    <div class="field"><label for="sNotes">Notes for the assessment coordinator <span class="hint">optional</span></label><textarea id="sNotes"></textarea></div>
-    <div class="btn-row"><button class="btn btn-g" onclick="ssGo(3)">&#8592; Back</button><button class="btn btn-p" onclick="ssGo(5)">Review &amp; send &#8594;</button></div>
-  </div>
-  <!-- Step 5 -->
-  <div id="ss5" style="display:none">
-    <div class="sec-hd"><h3>Review &amp; Submit</h3></div>
-    <div id="sReview" style="background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);padding:1rem;font-size:.8rem;font-family:var(--font-mono);white-space:pre-wrap;line-height:1.7;max-height:280px;overflow-y:auto;margin-bottom:1.25rem;"></div>
-    <p class="muted">Clicking Send opens your email client with a pre-filled message.</p>
-    <p class="muted" style="font-size:.78rem;margin-top:.35rem;">Currently routing to <strong>mwalsh@massbay.edu</strong>. Will update to ENchair@massbay.edu at deployment.</p>
-    <div class="btn-row"><button class="btn btn-g" onclick="ssGo(4)">&#8592; Back</button><button class="btn btn-p" onclick="doSubmit()">Send to Assessment Coordinator</button></div>
-    <div class="status-msg" id="ssStatus"></div>
-  </div>
-</section>
-
-<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-     COORDINATOR GUIDE (v26) — how to run an annual SLO assessment in this app.
-     Anchored on the MassBay "Assessment of Learning by Program: Annual Summary
-     and Analysis" form. Program-agnostic toggle at top. Program Review framed
-     as the upstream 5-year container this annual loop feeds.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
 <section class="panel" id="panel-coordinator" role="tabpanel" aria-labelledby="tab-coordinator">
   <div class="eyebrow">For Assessment Coordinators</div>
@@ -3755,47 +3169,6 @@ EN202, 3, 4, 3</div>
   </div>
 
   <!-- THE STEPS -->
-  <!-- ═══ Stage 1 (v43): Cycle-management form — declare an assessment cycle. Local-only, additive. ═══ -->
-  <div class="cmx" role="group" aria-labelledby="cmxHd">
-    <div class="cmx-hd" id="cmxHd"><span class="cmx-tag">CYCLE</span> Declare this year's assessment cycle</div>
-    <p class="cmx-sub">Before the steps below, name the cycle you're running. This is the spine every later report hangs off: which outcome, which courses, which semester, who owns it, and when it's due. Saved on this device only — nothing is fetched or uploaded.</p>
-
-    <div class="cmx-grid">
-      <div class="cmx-field">
-        <label for="cmxOutcome">Outcome under assessment</label>
-        <input id="cmxOutcome" type="text" placeholder="e.g. SLO #3 — evaluate &amp; integrate evidence" />
-      </div>
-      <div class="cmx-field">
-        <label for="cmxSem">Semester / cycle</label>
-        <input id="cmxSem" type="text" placeholder="e.g. AY26-27 · Fall" />
-      </div>
-      <div class="cmx-field">
-        <label for="cmxCourses">Courses in this cycle</label>
-        <input id="cmxCourses" type="text" placeholder="e.g. EN101, EN102, EN202" />
-      </div>
-      <div class="cmx-field">
-        <label for="cmxOwner">Cycle owner (coordinator)</label>
-        <input id="cmxOwner" type="text" placeholder="e.g. Sean McCarthy" />
-      </div>
-      <div class="cmx-field">
-        <label for="cmxDeadline">Report deadline</label>
-        <input id="cmxDeadline" type="date" />
-      </div>
-    </div>
-
-    <div class="cmx-actions">
-      <button type="button" class="cmx-btn" onclick="cmxSave()">Save this cycle</button>
-      <button type="button" class="cmx-btn ghost" onclick="cmxClear()">Clear all saved cycles</button>
-    </div>
-    <div class="cmx-status" id="cmxStatus" role="status" aria-live="polite"></div>
-
-    <div class="cmx-list" id="cmxList">
-      <div class="sec-hd" style="margin-top:1rem;"><h3>Declared cycles (this device)</h3></div>
-      <div id="cmxCycles"></div>
-    </div>
-  </div>
-  <!-- ═══ END: cycle-management form ═══ -->
-
   <div class="sec-hd"><h3>The steps</h3></div>
 
   <div class="accord">
@@ -3959,64 +3332,6 @@ EN202, 3, 4, 3</div>
   <div class="info-box" style="font-size:.85rem;">
     Katie McGrath — Title III Report · SEAM Assessment Data (institutional export required) · EN195 Creative Writing Assignment Rubric (Drive file 1PfEbAFJvDee…) · EN101 assignment rubrics (embedded in individual docs) · Current ESL SLOs · EN120 description and SLOs · Adjunct faculty roster
   </div>
-  <!-- ═══ Stage 1 (v43): Supabase instructor-materials post seam — STUBBED. Instructor IP only (syllabi + prompts). FERPA guard hard-blocks student work. No live keys until Matt provisions Supabase. ═══ -->
-  <div class="sbx" role="group" aria-labelledby="sbxHd">
-    <div class="sbx-hd" id="sbxHd"><span class="sbx-tag">SHARE</span> Contribute a syllabus or assignment prompt</div>
-    <p class="sbx-sub">An optional way to build a shared, department-wide library of <strong>instructor materials</strong> — syllabi and assignment prompts. This is the one place in Confluence that can publish beyond your device, and only for instructor-authored materials. The offline core is untouched; this is an opt-in publish step.</p>
-
-    <div class="sbx-ferpa">
-      <span class="sbx-fg" aria-hidden="true">FERPA</span>
-      <span><strong>Instructor materials only.</strong> Syllabi and assignment prompts are instructor IP, not student records. Do <strong>not</strong> paste student writing, names, grades, or any FERPA-protected content. This form checks for name+grade patterns and student-artifact language and will stop you. Student assessment data never uses this seam.</span>
-    </div>
-
-    <div class="sbx-config">
-      <b>Not yet live.</b> This seam is wired but dormant until the department's shared backend is provisioned. When ready, one config block below is filled once (project URL + public anon key), and row-level security — set in the backend, not in this file — is the only thing that governs who can read and write. Until then, submissions are validated and held locally so the workflow can be tested end-to-end without sending anything.
-    </div>
-
-    <div class="sbx-field">
-      <label for="sbxKind">Material type</label>
-      <select id="sbxKind">
-        <option value="">Select</option>
-        <option>Syllabus</option>
-        <option>Assignment prompt</option>
-      </select>
-    </div>
-    <div class="sbx-field">
-      <label for="sbxCourse">Course</label>
-      <select id="sbxCourse">
-        <option value="">Select</option>
-        <option>EN101</option><option>EN101X with Lab</option><option>EN102</option>
-        <option>EN120</option><option>EN195</option><option>EN196</option>
-        <option>EN202</option><option>EN210</option>
-        <option>ES100</option><option>ES150</option>
-      </select>
-    </div>
-    <div class="sbx-field">
-      <label for="sbxAuthor">Your name (instructor)</label>
-      <input id="sbxAuthor" type="text" placeholder="e.g. Matt Walsh" />
-    </div>
-    <div class="sbx-field">
-      <label for="sbxTitle">Title of this material</label>
-      <input id="sbxTitle" type="text" placeholder="e.g. EN101 Field of Interest Essay — prompt" />
-    </div>
-    <div class="sbx-field">
-      <label for="sbxBody">Paste the syllabus text or assignment prompt</label>
-      <textarea id="sbxBody" placeholder="Instructor-authored material only. No student writing, names, or grades."></textarea>
-    </div>
-
-    <div class="sbx-actions">
-      <button type="button" class="sbx-btn" onclick="sbxSubmit()">Submit for review</button>
-      <button type="button" class="sbx-btn ghost" onclick="sbxClearLocal()">Clear local queue</button>
-    </div>
-    <div class="sbx-status" id="sbxStatus" role="status" aria-live="polite"></div>
-
-    <details style="margin-top:1rem;">
-      <summary style="cursor:pointer;font-weight:600;font-size:.86rem;">Founder moderation view (approve / flag / hide)</summary>
-      <p class="muted" style="margin:.5rem 0;font-size:.82rem;">Locally held submissions awaiting the live backend. Once Supabase is provisioned, this list reads pending rows and writes an approval state.</p>
-      <div id="sbxQueue"></div>
-    </details>
-  </div>
-  <!-- ═══ END: Supabase instructor-materials post seam (stubbed) ═══ -->
 </section>
 
 <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -4059,7 +3374,7 @@ EN202, 3, 4, 3</div>
   <div class="info-box">
     <strong>Built by:</strong> Matt Walsh, Professor of English / lumière Faculty Coordinator<br>
     <strong>Institution:</strong> Massachusetts Bay Community College<br>
-    <strong>Version:</strong> v43 — July 2026<br>
+    <strong>Version:</strong> v34 — July 2026<br>
     <strong>Routing:</strong> mwalsh@massbay.edu (staging) → ENchair@massbay.edu (deployment — not yet created)
   </div>
   <div class="sec-hd"><h3>Open Items Before Deployment</h3></div>
@@ -4105,14 +3420,6 @@ EN202, 3, 4, 3</div>
   <div class="info-box">
     <p><em>Confluence: An Assessment Hub</em> was created by Matt Walsh, Professor of English, Massachusetts Bay Community College.</p>
     <p>&copy; 2026 Matt Walsh, Professor of English, Massachusetts Bay Community College &middot; All rights reserved &middot; Licensing inquiries: <a href="mailto:mwalsh@massbay.edu">mwalsh@massbay.edu</a></p>
-    <div class="status-note status-air">
-      <span class="sn-glyph" aria-hidden="true">[&#9992;]</span>
-      <span><strong>Works with the wifi off.</strong> This is a single self-contained file. It fetches nothing from the network &mdash; no fonts, no scripts, no trackers phone home. Open it on a plane, in a locked-down room, or on an air-gapped machine and it runs exactly the same. Your data stays on your device.</span>
-    </div>
-    <div class="status-note status-pre">
-      <span class="sn-glyph" aria-hidden="true">[PRE]</span>
-      <span><strong>Pre-release prototype &mdash; not yet formally protected.</strong> Ownership is asserted above, but no trademark, registered copyright, or executed licensing agreement is in place yet. Treat this as a working draft under active development, not a shipped licensed product. Formal protection and licensing terms are being prepared; inquiries welcome at the address above.</span>
-    </div>
   </div>
   <div class="sec-hd"><h3>Why It Looks This Way — The Decision Log</h3></div>
   <div class="dlog-scope">
@@ -4283,53 +3590,6 @@ EN202, 3, 4, 3</div>
 
   </div>
   <!-- ═══ END: Built to Last section ═══ -->
-
-  <!-- ═══ Panel Review Cabinet (v36) — design record, native <details>, .cab-* namespace ═══ -->
-  <div class="sec-hd"><h3>Panel Review Cabinet</h3></div>
-  <div class="cab-wrap">
-    <p class="cab-intro">The governance panel's notes on the Watershed Year landscape, kept with the file as the design record &mdash; why the feature is built the way it is, and what still stands parked. Each row opens on click or <span class="mono">Enter</span>.</p>
-
-    <details class="cab-row">
-      <summary><span class="cab-glyph g-note" aria-hidden="true">A&amp;O</span>Assessment &amp; Outcomes Specialist<span class="cab-verdict-tag">reading load</span><span class="cab-chev" aria-hidden="true">&#9660;</span></summary>
-      <div class="cab-body">
-        <p>The metaphor is sound and traces to real outcomes. But the reading load is high: five faint tributaries plus five bulges plus four eddies plus six markers plus two label columns. The eye doesn't know where to land. The house principle &mdash; low reading load, image over text &mdash; is being undercut by density, not by lack of imagery.</p>
-      </div>
-    </details>
-
-    <details class="cab-row">
-      <summary><span class="cab-glyph g-halt" aria-hidden="true">A11Y</span>Accessibility Officer<span class="cab-verdict-tag">concern</span><span class="cab-chev" aria-hidden="true">&#9660;</span></summary>
-      <div class="cab-body">
-        <p><span class="cab-who">Defect 1:</span> The tributaries at thin stroke width and reduced opacity read as faded &mdash; for RP vision that is the first thing to vanish. The constant Written-Communication channel reads; the tributaries don't.</p>
-        <p><span class="cab-who">Defect 2:</span> A forced minimum width pushes the landscape into horizontal scroll on a phone, so the whole picture can't be seen at once at zoom. That's a discoverability failure, not a cosmetic one.</p>
-      </div>
-    </details>
-
-    <details class="cab-row">
-      <summary><span class="cab-glyph g-halt" aria-hidden="true">BI</span>Build Integrity Warden<span class="cab-verdict-tag">gate</span><span class="cab-chev" aria-hidden="true">&#9660;</span></summary>
-      <div class="cab-body">
-        <p>The Overview architecture SVG carries one inherited unclosed tag. It renders, but the markup is invalid. No SVG surgery on the landscape happens in the same session &mdash; that fix lands first, on its own, before any pop work touches the water.</p>
-      </div>
-    </details>
-
-    <details class="cab-row">
-      <summary><span class="cab-glyph g-note" aria-hidden="true">FAC</span>Skeptical Faculty Adopter<span class="cab-verdict-tag">8-second read</span><span class="cab-chev" aria-hidden="true">&#9660;</span></summary>
-      <div class="cab-body">
-        <p>A chair glancing at this for eight seconds sees squiggles. The three things that matter &mdash; this year's focus, the constant EN102 spine, the honestly-drawn barriers &mdash; aren't visually dominant. Pop means hierarchy, not more ink: one tributary sings, four recede.</p>
-      </div>
-    </details>
-
-    <details class="cab-row">
-      <summary><span class="cab-glyph g-cohere" aria-hidden="true">ARC</span>The Archivist<span class="cab-verdict-tag">sequence</span><span class="cab-chev" aria-hidden="true">&#9660;</span></summary>
-      <div class="cab-body">
-        <p>The dependency chain holds and nothing reorders it: <strong>SVG fix &rarr; real SLO rotation order &rarr; year-tap pop.</strong> The emphasis-hierarchy work is the visual prerequisite for the year-tap build &mdash; you can't wire &ldquo;tap a year, light that line&rdquo; until the lit and dim states exist as design. Real SLO data must precede the tap wiring, or the Assessment gate on fabricated data trips.</p>
-      </div>
-    </details>
-
-    <div class="cab-maker">
-      <p><strong>The Maker.</strong> Confluence was built by Matt Walsh, Professor of English and lumi&egrave;re Faculty Coordinator at MassBay Community College. It shares design DNA with <strong>Tight Spiral Studios</strong>, his ludic-pedagogy game and interactive-learning studio: joy-forward framing, texture that never relies on color alone, and accessibility treated as a structural constraint rather than an add-on. Tight Spiral is a separate body of work with its own home; this note is a pointer to the lineage, not a merge of the two.</p>
-    </div>
-  </div>
-  <!-- ═══ END: Panel Review Cabinet ═══ -->
 
   <div class="sec-hd"><h3>Where This Began</h3></div>
   <div class="info-box">
@@ -4502,8 +3762,8 @@ function a11yAnnounce(msg){
   if(r){ r.textContent=''; setTimeout(function(){ r.textContent=msg; }, 30); }
 }
 function setSkin(skin){
-  var skins=['skin-aurora','skin-xenos','skin-tron','skin-lumi'];
-  if(skins.indexOf(skin)<0) skin='skin-aurora';
+  var skins=['skin-xenos','skin-tron','skin-lumi'];
+  if(skins.indexOf(skin)<0) skin='skin-xenos';
   skins.forEach(function(s){ document.body.classList.remove(s); });
   document.body.classList.add(skin);
   // Sync BOTH toggle locations: the Assessment-Guide bar and the Accessibility panel.
@@ -4512,11 +3772,11 @@ function setSkin(skin){
   });
   try { localStorage.setItem('confluence_skin', skin); } catch(e){}
   // Announce to assistive tech if a live region is available.
-  var names={'skin-aurora':'Aurora joyful-clarity theme','skin-xenos':'Xenos craft theme','skin-tron':'Tron system theme','skin-lumi':'Luminocity growth theme'};
+  var names={'skin-xenos':'Xenos craft theme','skin-tron':'Tron system theme','skin-lumi':'Luminocity growth theme'};
   if(typeof a11yAnnounce==='function'){ a11yAnnounce(names[skin]+' applied.'); }
 }
 (function initSkin(){
-  var saved='skin-aurora';
+  var saved='skin-xenos';
   try { var s=localStorage.getItem('confluence_skin'); if(s) saved=s; } catch(e){}
   function apply(){ setSkin(saved); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', apply);
@@ -5041,7 +4301,7 @@ var SC_SCHOLARS = [
   {id:'schneider',name:'Pat Schneider',dates:'1934–2020',role:'Writer & Pedagogue',focus:'Voice, inclusion, writing for the silenced',color:'#6b3a7d',bio:'Author of Writing Alone and With Others (2003, Oxford). Founder of Amherst Writers & Artists. Died 2020. Peter Elbow wrote the foreword. Referenced in Walsh\'s EN101 and EN195 course schedules.',voice:'You are Pat Schneider, founder of Amherst Writers & Artists and author of Writing Alone and With Others. Peter Elbow wrote the foreword to your book. You spent decades working with low-income women, people in prisons and shelters, with anyone told their voice didn\'t belong on a page. You believe every person has a strong, unique voice worth putting into the world. You care deeply about whether the workshop model and assessment architecture protect or threaten the fragile new writer. End with a question for Matt Walsh.'},
   {id:'horvath',name:'Jared Cooney Horvath',dates:'1980s–',role:'Neuroscientist & Educator',focus:'Brain science, memory encoding, instructional design',color:'#1a3d5c',bio:'Author of Stop Talking, Start Influencing (2019). PhD, MEd. Research at Harvard, Harvard Medical School, University of Melbourne. Director of LME Global. Twelve brain science principles including context effects, spaced practice, interleaving, and worked examples.',voice:'You are Jared Cooney Horvath, neuroscientist and educator. You bring brain science to instructional design — not to reduce teaching to mechanisms, but to ask whether design choices match how the brain actually encodes information. You\'ll look at the norming station and ask: is this sequenced correctly for memory? You\'ll look at the rubric display and ask: where are the worked examples? Be specific and practical. End with a question for Matt Walsh.'}
 ];
-var SC_SECTIONS = [{id:'overview',label:'Overview & Philosophy'},{id:'outcomes',label:'Learning Outcomes'},{id:'rubrics',label:'Rubrics & Scoring'},{id:'norming',label:'Norming Practice'},{id:'samples',label:'Sample Submission'},{id:'materials',label:'Materials & Policies'},{id:'history',label:'Assessment History'},{id:'full',label:'Full Top-to-Bottom'}];
+var SC_SECTIONS = [{id:'overview',label:'Overview & Philosophy'},{id:'outcomes',label:'Learning Outcomes'},{id:'rubrics',label:'Rubrics & Scoring'},{id:'norming',label:'Norming Practice'},{id:'materials',label:'Materials & Policies'},{id:'history',label:'Assessment History'},{id:'full',label:'Full Top-to-Bottom'}];
 var scCache = {};
 var scCurrentScholar = null;
 
@@ -5121,185 +4381,6 @@ document.addEventListener('DOMContentLoaded', function() { renderDir(); });
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
   renderDir();
 }
-
-/* ━━━ AY26-27 SLO#3 paste-data seam (v42): local, FERPA-guarded, no fetch ━━━ */
-function pcxStatus(msg, kind){ var s=document.getElementById('pcxStatus'); if(!s)return; s.textContent=msg; s.className='pcx-status '+kind; }
-function pcxIngest(){
-  var ta=document.getElementById('pcxInput'); if(!ta) return;
-  var raw=ta.value.trim();
-  if(!raw){ pcxStatus('Nothing pasted yet. Add one line per course, e.g. EN101, 3, 2, 4', 'warn'); return; }
-  /* FERPA guard: reject anything that looks like a name (alphabetic word that is not a course code
-     and not a bare number). Course codes look like EN101, ES150, etc. */
-  var lines=raw.split(/\r?\n/).map(function(l){return l.trim();}).filter(Boolean);
-  var data={}, flagged=[];
-  for(var i=0;i<lines.length;i++){
-    var parts=lines[i].split(',').map(function(p){return p.trim();}).filter(function(p){return p.length;});
-    if(!parts.length) continue;
-    var course=parts[0].toUpperCase();
-    if(!/^[A-Z]{2,3}\d{2,3}$/.test(course)){ pcxStatus('Line '+(i+1)+': "'+parts[0]+'" is not a course code (expected like EN101). Fix and retry.', 'warn'); return; }
-    var nums=[];
-    for(var j=1;j<parts.length;j++){
-      var tok=parts[j];
-      if(/^[A-Za-z]{2,}/.test(tok) && !/^\d/.test(tok)){ flagged.push(tok); continue; }
-      var n=parseFloat(tok);
-      if(!isNaN(n) && n>=0 && n<=5) nums.push(n);
-    }
-    if(nums.length) data[course]=nums;
-  }
-  if(flagged.length){
-    pcxStatus('Stopped: found text that could be a name or non-score ("'+flagged.slice(0,3).join('", "')+'"). Paste aggregate SCORES only — course codes and rubric numbers, never names or student text.', 'warn');
-    return;
-  }
-  var courses=Object.keys(data);
-  if(!courses.length){ pcxStatus('No valid scores found. Each line: COURSE, then rubric numbers 0–5.', 'warn'); return; }
-  try{ localStorage.setItem('confluence_cycle_ay2627_slo3', JSON.stringify(data)); }catch(e){}
-  pcxRender(data);
-  var total=courses.reduce(function(a,c){return a+data[c].length;},0);
-  pcxStatus('Saved '+total+' scores across '+courses.length+' course'+(courses.length>1?'s':'')+', on this device only. Nothing was uploaded.', 'ok');
-}
-function pcxRender(data){
-  var wrap=document.getElementById('pcxResults'), bars=document.getElementById('pcxBars');
-  if(!wrap||!bars) return;
-  bars.innerHTML='';
-  Object.keys(data).forEach(function(c){
-    var arr=data[c], avg=arr.reduce(function(a,b){return a+b;},0)/arr.length;
-    var pct=Math.max(0,Math.min(100,(avg/5)*100));
-    var row=document.createElement('div'); row.className='pcx-bar-row';
-    row.innerHTML='<span class="pcx-bar-lab">'+c+'</span>'+
-      '<span class="pcx-bar-track"><span class="pcx-bar-fill" style="width:'+pct.toFixed(0)+'%"></span></span>'+
-      '<span class="pcx-bar-val">'+avg.toFixed(2)+' (n='+arr.length+')</span>';
-    bars.appendChild(row);
-  });
-  wrap.className='pcx-results show';
-}
-function pcxClear(){
-  try{ localStorage.removeItem('confluence_cycle_ay2627_slo3'); }catch(e){}
-  var ta=document.getElementById('pcxInput'); if(ta) ta.value='';
-  var wrap=document.getElementById('pcxResults'); if(wrap) wrap.className='pcx-results';
-  pcxStatus('Cleared saved cycle data from this device.', 'ok');
-}
-(function pcxBoot(){
-  try{ var raw=localStorage.getItem('confluence_cycle_ay2627_slo3'); if(raw){ var d=JSON.parse(raw); if(d&&Object.keys(d).length) pcxRender(d); } }catch(e){}
-})();
-
-/* ━━━ Stage 1 (v43): Cycle-management (.cmx) — declare/list/clear assessment cycles. localStorage only, no fetch. ━━━ */
-function cmxStatus(msg, kind){ var s=document.getElementById('cmxStatus'); if(!s)return; s.textContent=msg; s.className='cmx-status '+kind; }
-function cmxSave(){
-  var out=(document.getElementById('cmxOutcome')||{}).value||'';
-  var sem=(document.getElementById('cmxSem')||{}).value||'';
-  var courses=(document.getElementById('cmxCourses')||{}).value||'';
-  var owner=(document.getElementById('cmxOwner')||{}).value||'';
-  var deadline=(document.getElementById('cmxDeadline')||{}).value||'';
-  out=out.trim(); sem=sem.trim(); courses=courses.trim(); owner=owner.trim();
-  if(!out || !sem || !courses){ cmxStatus('Name at least the outcome, the semester, and the courses before saving.', 'warn'); return; }
-  var list=cmxLoad();
-  list.push({ out:out, sem:sem, courses:courses, owner:owner, deadline:deadline, ts:Date.now() });
-  try{ localStorage.setItem('confluence_cycles_v1', JSON.stringify(list)); }catch(e){}
-  ['cmxOutcome','cmxSem','cmxCourses','cmxOwner','cmxDeadline'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
-  cmxRender(list);
-  cmxStatus('Cycle saved on this device only. Nothing was uploaded.', 'ok');
-}
-function cmxLoad(){
-  try{ var raw=localStorage.getItem('confluence_cycles_v1'); if(raw){ var d=JSON.parse(raw); if(Array.isArray(d)) return d; } }catch(e){}
-  return [];
-}
-function cmxRender(list){
-  var wrap=document.getElementById('cmxList'), box=document.getElementById('cmxCycles');
-  if(!wrap||!box) return;
-  box.innerHTML='';
-  if(!list.length){ wrap.className='cmx-list'; return; }
-  list.forEach(function(c, i){
-    var row=document.createElement('div'); row.className='cmx-cycle';
-    var esc=function(t){ var d=document.createElement('div'); d.textContent=t||''; return d.innerHTML; };
-    var meta=[esc(c.sem), esc(c.courses)];
-    if(c.owner) meta.push('owner: '+esc(c.owner));
-    if(c.deadline) meta.push('due: '+esc(c.deadline));
-    row.innerHTML='<button class="cmx-c-del" onclick="cmxDel('+i+')" aria-label="Remove this cycle">remove</button>'+
-      '<span class="cmx-c-out">'+esc(c.out)+'</span><br>'+
-      '<span class="cmx-c-meta">'+meta.join(' &middot; ')+'</span>';
-    box.appendChild(row);
-  });
-  wrap.className='cmx-list show';
-}
-function cmxDel(i){
-  var list=cmxLoad();
-  if(i>=0 && i<list.length){ list.splice(i,1); try{ localStorage.setItem('confluence_cycles_v1', JSON.stringify(list)); }catch(e){} cmxRender(list); cmxStatus('Cycle removed from this device.', 'ok'); }
-}
-function cmxClear(){
-  try{ localStorage.removeItem('confluence_cycles_v1'); }catch(e){}
-  cmxRender([]);
-  cmxStatus('Cleared all saved cycles from this device.', 'ok');
-}
-(function cmxBoot(){ var l=cmxLoad(); if(l.length) cmxRender(l); })();
-
-
-/* ━━━ Stage 1 (v43): Supabase instructor-materials post seam (.sbx) — STUBBED. FERPA-guarded, instructor IP only. No live fetch until Matt provisions Supabase; submissions held locally. ━━━ */
-/* --- ONE CONFIG BLOCK — Matt fills these once after provisioning Supabase. Leave blank to stay in local-hold mode. --- */
-var SBX_CONFIG = { url:'', anonKey:'', table:'instructor_materials' };
-function sbxLive(){ return !!(SBX_CONFIG.url && SBX_CONFIG.anonKey); }
-function sbxStatus(msg, kind){ var s=document.getElementById('sbxStatus'); if(!s)return; s.textContent=msg; s.className='sbx-status '+kind; }
-/* FERPA guard: reject text that looks like student records (name + grade patterns, roster-y content). */
-function sbxFerpaViolation(text){
-  var t=text||'';
-  /* name followed by a letter grade or numeric grade: "Jane Smith  87" / "Jane Smith: B+" */
-  if(/[A-Z][a-z]+\s+[A-Z][a-z]+\s*[:\-,]?\s*(\d{1,3}%?|[A-DF][+\-]?)\b/.test(t)) return 'a name paired with a grade';
-  /* explicit student-record language */
-  if(/\bstudent (name|id|grade|essay|writing|submission|paper|artifact)\b/i.test(t)) return 'student-record language';
-  if(/\b(grade|score)\s*[:=]\s*(\d{1,3}%?|[A-DF][+\-]?)\b/i.test(t)) return 'an individual grade';
-  return '';
-}
-function sbxLoad(){
-  try{ var raw=localStorage.getItem('confluence_sbx_queue_v1'); if(raw){ var d=JSON.parse(raw); if(Array.isArray(d)) return d; } }catch(e){}
-  return [];
-}
-function sbxSubmit(){
-  var kind=(document.getElementById('sbxKind')||{}).value||'';
-  var course=(document.getElementById('sbxCourse')||{}).value||'';
-  var author=(document.getElementById('sbxAuthor')||{}).value||'';
-  var title=(document.getElementById('sbxTitle')||{}).value||'';
-  var body=(document.getElementById('sbxBody')||{}).value||'';
-  kind=kind.trim(); course=course.trim(); author=author.trim(); title=title.trim(); body=body.trim();
-  if(!kind || !course || !title || !body){ sbxStatus('Fill in material type, course, title, and the material text before submitting.', 'warn'); return; }
-  var v=sbxFerpaViolation(body) || sbxFerpaViolation(title);
-  if(v){ sbxStatus('Stopped: this looks like it contains '+v+'. This seam is for instructor materials only — syllabi and prompts. Remove any student names, grades, or student writing and try again.', 'warn'); return; }
-  var rec={ kind:kind, course:course, author:author, title:title, body:body, state:'pending', ts:Date.now() };
-  if(sbxLive()){
-    /* Live path (dormant until SBX_CONFIG filled). Insert into Supabase table via REST; anon key + RLS govern access. */
-    fetch(SBX_CONFIG.url.replace(/\/+$/,'')+'/rest/v1/'+encodeURIComponent(SBX_CONFIG.table), {
-      method:'POST',
-      headers:{ 'Content-Type':'application/json', 'apikey':SBX_CONFIG.anonKey, 'Authorization':'Bearer '+SBX_CONFIG.anonKey, 'Prefer':'return=minimal' },
-      body: JSON.stringify({ kind:kind, course:course, author:author, title:title, body:body, state:'pending' })
-    }).then(function(r){
-      if(r.ok){ sbxStatus('Submitted for review. Thank you — the founder will approve or flag it.', 'ok'); sbxClearForm(); }
-      else { sbxStatus('The backend rejected this submission (status '+r.status+'). Nothing was stored; check with the administrator.', 'warn'); }
-    }).catch(function(){ sbxStatus('Could not reach the backend. Nothing was sent. Your material stays on your device.', 'warn'); });
-    return;
-  }
-  /* Local-hold path: validated, queued on device, nothing sent. */
-  var q=sbxLoad(); q.push(rec); try{ localStorage.setItem('confluence_sbx_queue_v1', JSON.stringify(q)); }catch(e){}
-  sbxRenderQueue(q);
-  sbxClearForm();
-  sbxStatus('Held locally for review (backend not yet live). Validated as instructor material — nothing was uploaded.', 'pending');
-}
-function sbxClearForm(){ ['sbxKind','sbxCourse','sbxAuthor','sbxTitle','sbxBody'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; }); }
-function sbxRenderQueue(q){
-  var box=document.getElementById('sbxQueue'); if(!box) return;
-  box.innerHTML='';
-  if(!q.length){ box.innerHTML='<p class="muted" style="font-size:.82rem;">No submissions held locally.</p>'; return; }
-  var esc=function(t){ var d=document.createElement('div'); d.textContent=t||''; return d.innerHTML; };
-  q.forEach(function(r, i){
-    var row=document.createElement('div'); row.className='cmx-cycle';
-    row.innerHTML='<span class="cmx-c-out">'+esc(r.title)+'</span> <span class="cmx-c-meta">('+esc(r.kind)+' · '+esc(r.course)+(r.author?' · '+esc(r.author):'')+' · '+esc(r.state)+')</span>';
-    box.appendChild(row);
-  });
-}
-function sbxClearLocal(){
-  try{ localStorage.removeItem('confluence_sbx_queue_v1'); }catch(e){}
-  sbxRenderQueue([]);
-  sbxStatus('Cleared the local submission queue from this device.', 'ok');
-}
-(function sbxBoot(){ var q=sbxLoad(); sbxRenderQueue(q); })();
-
 
 
 // ========================================
@@ -5453,7 +4534,7 @@ var NORM_MODE1 = {
       label:'Excerpt A',
       course:'Spring 2026 PLO 1 Assessment',
       intro:'Read the following student essay excerpt and score each dimension using the Reading SLO Rubric.',
-      text:'[Sample essay A -- paste de-identified student essay excerpt here before norming session. Each essay was written using the Spring 2026 Assessment Reading Packet prompt.]',
+      text:'[Sample slot &mdash; in the public build, student work is never pasted here. De-identified samples are handled in the private intake copy of this hub.]',
       anchor: { comprehension:3, analysis:2, interpretation:2 },
       discussion:'Comprehension (3/Proficient): The writer draws clear conclusions about the author\'s message using the text, though lacks deeper contextual inference.\n\nAnalysis (2/Developing): Textual features are identified but evaluation is preliminary -- the writer notes what the text says more than how its features create meaning.\n\nInterpretation within Genre (2/Developing): Partial awareness of genre conventions. The essay treats the texts similarly without consistently adjusting for form or purpose.\n\nCommon calibration point: Readers often split between 2 and 3 on Analysis. The key distinction -- does the writer evaluate how textual features contribute to meaning, or only identify them?'
     },
@@ -5461,7 +4542,7 @@ var NORM_MODE1 = {
       label:'Excerpt B',
       course:'Spring 2026 PLO 1 Assessment',
       intro:'Read the following student essay excerpt and score each dimension using the Reading SLO Rubric.',
-      text:'[Sample essay B -- paste de-identified student essay excerpt here before norming session.]',
+      text:'[Sample slot &mdash; in the public build, student work is never pasted here. De-identified samples are handled in the private intake copy of this hub.]',
       anchor: { comprehension:4, analysis:3, interpretation:3 },
       discussion:'Comprehension (4/Exemplary): The writer uses background knowledge and authorial context to draw complex inferences beyond literal meaning.\n\nAnalysis (3/Proficient): Accurate and supported evaluation of textual features, though lacks full depth and consistency across the essay.\n\nInterpretation within Genre (3/Proficient): Clear understanding that texts function differently by genre. Interpretation accounts for form and context.\n\nThis excerpt is useful as the upper anchor for calibration discussions.'
     },
@@ -5469,7 +4550,7 @@ var NORM_MODE1 = {
       label:'Excerpt C',
       course:'Spring 2026 PLO 1 Assessment',
       intro:'Read the following student essay excerpt and score each dimension using the Reading SLO Rubric.',
-      text:'[Sample essay C -- paste de-identified student essay excerpt here before norming session.]',
+      text:'[Sample slot &mdash; in the public build, student work is never pasted here. De-identified samples are handled in the private intake copy of this hub.]',
       anchor: { comprehension:1, analysis:1, interpretation:0 },
       discussion:'Comprehension (1/Beginning): Basic understanding with minimal conclusions. Interpretations are unsupported or incorrect.\n\nAnalysis (1/Beginning): Surface-level observations. Textual features are identified but their impact on meaning is not discussed.\n\nInterpretation within Genre (0/Absent): Reads all texts similarly without recognizing how form or purpose shape meaning.\n\nThis excerpt is useful as the lower anchor. The key instructional question: what intervention moves a Beginning reader toward Developing?'
     }
@@ -5558,7 +4639,7 @@ var NORM_MODE2 = {
       label:'Portfolio A',
       course:'Placement Norming -- two essays revised over semester + one Exit Assessment',
       intro:'Read the portfolio (two revised essays and one timed Exit Assessment) and assign a single holistic score of 1-6 across all four dimensions.',
-      text:'[Portfolio A -- paste de-identified portfolio text here. Each portfolio contains two essays revised over the course of the semester and one essay written without any professor input (the Exit Assessment).]',
+      text:'[Sample slot &mdash; in the public build, student work is never pasted here. De-identified samples are handled in the private intake copy of this hub.]',
       anchor: { focus:4, development:4, reading:3, language:4 },
       discussion:'Holistic score: 4 (EN101 placement).\n\nFocus and Organization (4): Usually maintains clear focus; paragraphs are relevant to the main point and internally focused.\n\nDevelopment (4): Approaches the topic in a balanced manner with multiple perspectives and factual examples.\n\nReading (3): Uses sources to support ideas but sources are not always adequately explained or introduced.\n\nLanguage (4): Contains some patterns of error but ideas are communicated clearly.\n\nCalibration discussion: What distinguishes this portfolio from a 5? The reading dimension is the key -- a 5 requires sources to be discussed and responded to at some length, introduced and contextualized. This portfolio uses sources but does not yet synthesize them.'
     },
@@ -5566,7 +4647,7 @@ var NORM_MODE2 = {
       label:'Portfolio B',
       course:'Placement Norming -- two essays revised over semester + one Exit Assessment',
       intro:'Read the portfolio and assign a single holistic score of 1-6 across all four dimensions.',
-      text:'[Portfolio B -- paste de-identified portfolio text here.]',
+      text:'[Sample slot &mdash; in the public build, student work is never pasted here. De-identified samples are handled in the private intake copy of this hub.]',
       anchor: { focus:5, development:5, reading:5, language:5 },
       discussion:'Holistic score: 5 (EN102 placement).\n\nFocus and Organization (5): Clear thesis maintained throughout. Paragraphs logically sequenced and almost always internally structured.\n\nDevelopment (5): Detailed examples, evidence of original thinking, anticipates reader objections.\n\nReading (5): Sources well-chosen, discussed at length, introduced and contextualized. Handles MLA with reasonable accuracy.\n\nLanguage (5): Clear, fluent, and controlled. Few sentence boundary problems.\n\nUseful as the upper anchor for calibration discussions at the EN102 threshold.'
     },
@@ -5574,7 +4655,7 @@ var NORM_MODE2 = {
       label:'Portfolio C',
       course:'Placement Norming -- two essays revised over semester + one Exit Assessment',
       intro:'Read the portfolio and assign a single holistic score of 1-6 across all four dimensions.',
-      text:'[Portfolio C -- paste de-identified portfolio text here.]',
+      text:'[Sample slot &mdash; in the public build, student work is never pasted here. De-identified samples are handled in the private intake copy of this hub.]',
       anchor: { focus:3, development:2, reading:2, language:3 },
       discussion:'Holistic score: 2-3 range (EN101X placement).\n\nThis portfolio is useful for practicing the 2/3 boundary -- the most common calibration disagreement.\n\nFocus (3): Usually maintains focus but main point is implied rather than stated.\n\nDevelopment (2): Very little original thinking; uses little specific detail.\n\nReading (2): Sources may be misunderstood or chosen inappropriately.\n\nLanguage (3): Contains errors in usage and mechanics.\n\nKey calibration question: when development is clearly 2 but focus and language are 3, what is the holistic score? Discuss at the norming session.'
     }
@@ -5650,7 +4731,7 @@ var NORM_MODE3 = {
       label:'Artifact A',
       course:'ISLO #5 Norming — Spring 2026',
       intro:'Score this artifact on each of the three ISLO #5 dimensions. The artifact comes from a course that explicitly addressed systems of power and equity.',
-      text:'[ISLO #5 Artifact A — paste de-identified student work here. Artifact should demonstrate engagement with at least one dimension of ISLO #5: systems of power, group/individual interactions, or advocacy.]',
+      text:'[Sample slot &mdash; in the public build, student work is never pasted here. De-identified samples are handled in the private intake copy of this hub.]',
       anchor: { systems:3, interactions:3, advocacy:2 },
       discussion:'Systems of Power (3): The writer effectively analyzes specific historical and institutional structures — identifies who holds power and explains the mechanisms. Does not yet demonstrate personal positionality (which would push to 4).\n\nGroup/Individual Interactions (3): Analyzes the complexity of group dynamics and their impact on both individuals and the broader community. The connections are made with some depth.\n\nAdvocacy (2): The writer begins to engage with difficult questions about equity and inclusion but does not yet select or apply specific strategies. A common finding in Spring 2026: students who scored 3-4 on analysis often scored 1-2 on advocacy.\n\nCalibration note (Walsh 2026): Most artifacts demonstrated strongest performance in Systems of Power and Group/Individual Interactions. Advocacy was the area of greatest need — students are more comfortable identifying and analyzing problems than proposing specific responses.'
     },
@@ -5658,7 +4739,7 @@ var NORM_MODE3 = {
       label:'Artifact B',
       course:'ISLO #5 Norming — Spring 2023',
       intro:'Score this artifact. Note: Walsh scored approximately half of Spring 2023 artifacts as 0. This artifact is from that cohort.',
-      text:'[ISLO #5 Artifact B — paste de-identified student work here. This artifact may demonstrate limited engagement with the ISLO #5 dimensions.]',
+      text:'[Sample slot &mdash; in the public build, student work is never pasted here. De-identified samples are handled in the private intake copy of this hub.]',
       anchor: { systems:0, interactions:1, advocacy:0 },
       discussion:'Systems of Power (0): This artifact does not address any aspects of historical or institutional structures that determine who holds power.\n\nGroup/Individual Interactions (1): The writer recognizes that people interact differently in groups but does not explain or analyze those interactions in depth.\n\nAdvocacy (0): The assignment did not include any discussion of equity, inclusion, or cultural sensitivity.\n\nWalsh Spring 2023 reflection: "I scored nearly half of the artifacts I reviewed as 0. I believe these scores will actually be very helpful to the overall purpose of this initiative: either we aren\'t making the DEI components of our curriculum as explicit as they need to be, or we\'re not holding students accountable." This artifact is useful for discussing when a 0 is appropriate versus when the assignment itself did not provide an opportunity to demonstrate the outcome.'
     }
@@ -6388,7 +5469,7 @@ var RING_DATA = {
   cr1:{ color:'#3d8a64', ey:'Ring 1', title:'Assignment Outcomes', body:'Signature assignments are designed to create the conditions for students to demonstrate specific outcomes. If the assignment design does not create those conditions, we cannot see the outcome in the work.', outcomes:[{n:'Design',t:'The prompt creates conditions for the outcome to appear.'},{n:'Evidence',t:'Students produce work evaluable against the outcome.'},{n:'Feedback',t:'Rubric criteria connect to the stated purpose.'}], goto:'courses', goLabel:'See Course Map' },
   cr2:{ color:'#256649', ey:'Ring 2', title:'Course Learning Objectives', body:'Each course has verified learning objectives sourced from department governance documents.', outcomes:[{n:'EN101',t:'8 verified SLOs: critical reading, source use, MLA, academic writing process.'},{n:'EN102',t:'7 verified SLOs: research, synthesis, argument, documentation.'},{n:'EN195',t:'5 objectives: genre analysis, creative composition, workshop, portfolio.'},{n:'EN202',t:'5 objectives: editorial practice, publication design, audience, ethics.'},{n:'EN120',t:'Digital writing, multimedia composition, ethics, fair use, internet identity. Prereq: EN101.'}], goto:'courses', goLabel:'Open Course Map' },
   cr3:{ color:'#8a5c00', ey:'Ring 3', title:'Program Learning Outcomes', body:'Five program-level outcomes define what students who complete the English program can do. Verified from the MassBay 2025-26 Learning Outcomes PDF.', outcomes:[{n:'PLO 1',t:'Read and engage critically with a diverse range of texts and perspectives.'},{n:'PLO 2',t:'Write using original thinking and voice to express a central idea, demonstrating purpose and audience awareness.'},{n:'PLO 3',t:'Critically evaluate and integrate evidence to develop an argument.'},{n:'PLO 4',t:'Demonstrate a collaborative, process-based approach to research, writing, and revision.'},{n:'PLO 5',t:'Analyze the evolving roles that language and writing play in our identities, communities, and communications.'}], goto:'assessment', goLabel:'Open Assessment Guide' },
-  cr4:{ color:'#1a3d5c', ey:'Ring 4', title:'Graduation Competencies', body:'Six institutional student learning outcomes span all disciplines. The English department has led Written Communication and DEI competency assessments.', outcomes:[{n:'GC 1',t:'Written Communication -- assessed AY2023-24, Walsh and McCarthy, 10-faculty team.'},{n:'GC 2',t:'Critical Thinking'},{n:'GC 3',t:'Diversity, Equity and Inclusion -- assessed Spring 2023.'},{n:'GC 4',t:'Information Literacy'},{n:'GC 5',t:'Quantitative Reasoning'},{n:'GC 6',t:'Personal and Social Responsibility'}], goto:'assessment', goLabel:'See Assessment Guide' },
+  cr4:{ color:'#1a3d5c', ey:'Ring 4', title:'Graduation Competencies', body:'Six institutional student learning outcomes span all disciplines. The English department has led Written Communication and DEI competency assessments.', outcomes:[{n:'ISLO 1',t:'Communication \u2014 explain, persuade, advocate, and argue effectively with a variety of audiences in written and oral communication. Assessed AY2023\u201324 (Walsh and McCarthy, 10-faculty team).'},{n:'ISLO 2',t:'Quantitative Reasoning \u2014 use a variety of mathematical tools and quantitative reasoning to solve problems and analyze complex challenges.'},{n:'ISLO 3',t:'Technological Fluency \u2014 understand and use appropriately a variety of technological tools.'},{n:'ISLO 4',t:'Scientific Reasoning \u2014 use scientific knowledge and methodology to test, validate, and update knowledge about the natural world.'},{n:'ISLO 5',t:'Systems of Power, Equity and Inclusion \u2014 analyze historical, organizational, institutional, political, and global systems of power and the ways group and individual interactions impact self, community, and society; identify skills and strategies for promoting equity, inclusion, and cultural sensitivity. Assessed Spring 2023 and Spring 2026.'},{n:'ISLO 6',t:'Ethical and Integrative Thinking \u2014 engage in ethical reasoning, integrative/systems thinking, and creative thinking to analyze and solve problems from multiple perspectives.'},{n:'ISLO 7',t:'Personal and Civic Responsibility \u2014 take responsibility for one\u2019s actions, self-assess, self-advocate, collaborate, and develop community and civic awareness.'}], goto:'assessment', goLabel:'See Assessment Guide' },
   cr5:{ color:'#4a1a6a', ey:'Ring 5', title:'Community', body:'Writing does not end at the classroom wall. lumiere is MassBay\'s award-winning literary magazine -- 11 issues, NCTE REALM First Class 2024 and 2025.', outcomes:[{n:'lumiere',t:'11 issues. NCTE REALM First Class. CMA Pinnacle Award finalist.'},{n:'CCHA 2025',t:'Peter Kistner First Place Essay, Nick Giancioppo Second Place Fiction, Chelsea Dow Second Place CNF, Gabriela Moreno Third Place Poem.'},{n:'Suubi',t:'Lena Sebugwawo used lumiere skills to create a magazine for children in rural Mubende, Uganda.'},{n:'FSU',t:'Diego Rocha -- thesis film on international festival circuit. Now professor at FSU School of Theatre.'}], goto:'student', goLabel:'See Student View' }
 };
 
@@ -6481,7 +5562,7 @@ async function scFetchReview(scholar, section) {
     scRenderReview(text, scholar);
   } catch(err) {
     var ld2=document.getElementById('scLoading'); if(ld2) ld2.classList.remove('show');
-    var rc2=document.getElementById('scReviewContent'); if(rc2) rc2.innerHTML='<p style="color:var(--red)">Error generating review. Please try again.</p>';
+    var rc2=document.getElementById('scReviewContent'); if(rc2) rc2.innerHTML='<p style="color:var(--red)">Error generating review. Please try again.</p><div class="oq" role="note"><b>Open question &mdash; logged, not resolved</b><p><strong>ISLO #5 rubric carries a dimension that reads as ISLO #6.</strong></p><p>The as-scored rubric includes an ethical/integrative/creative reasoning dimension. In the current ISLO set, that language belongs to ISLO #6; ISLO #5 is systems of power plus equity/inclusion strategies. The Spring 2026 norming (0&ndash;4 plus N/A) scored against the three-dimension version, so the instrument is <em>not</em> being re-cut here &mdash; changing it would invalidate that record. Committee to rule: deliberate local expansion of #5, drift that belongs in #6, or #5 and #6 assessed together by design.</p></div>';
   }
 }
 function scRenderReview(text, scholar) {
@@ -7717,44 +6798,43 @@ window.dlogToggle = function(btn){
 </script>
 
 <script>
-/* ISLO LOOM — Layer 1: render the static weave from coverage data.
+/* THE IRRIGATION MAP — Layer 1: render the static field map from coverage data.
    Coverage is seeded for English courses (where Matt has real mapping);
-   knots are clickable and open a detail seam where per-ISLO training and
+   cells are clickable and open a detail seam where per-ISLO training and
    the artifact-collection pathway build out (Layers 2/3, later passes).
    FERPA: the artifact seam is LOCAL-ONLY — no student text leaves the
-   browser; nothing is transmitted. Knot = artifact EXISTS, not its content. */
+   browser; nothing is transmitted. Cell = artifact EXISTS, not its content. */
 (function(){
   "use strict";
-  /* The 5 current English program SLOs — verified from MassBay's live learning-outcomes
-     source (AY25-26 framework). This panel shows the ENGLISH program's own outcomes.
-     Institutional Graduation Competencies (the 7 ISLOs) are a separate layer. */
   var ISLOS=[
-    {key:"slo1", name:"Read & Engage Critically",        sub:"diverse texts & perspectives"},
-    {key:"slo2", name:"Write with Original Voice",       sub:"central idea, purpose, audience"},
-    {key:"slo3", name:"Evaluate & Integrate Evidence",   sub:"develop an argument"},
-    {key:"slo4", name:"Collaborative, Process-Based",     sub:"research, writing, revision"},
-    {key:"slo5", name:"Evolving Roles of Language",       sub:"identity, community, communication"}
+    {key:"wc", name:"Written Communication",            sub:"express meaning in writing"},
+    {key:"ct", name:"Critical Thinking",                sub:"analyze, evaluate, reason"},
+    {key:"dei",name:"Diversity, Equity & Inclusion",    sub:"engage difference"},
+    {key:"il", name:"Information Literacy",              sub:"find, judge, use sources"},
+    {key:"qr", name:"Quantitative Reasoning",           sub:"reason with number"},
+    {key:"psr",name:"Personal & Social Responsibility", sub:"act with integrity"}
   ];
   var COURSES=["EN101","EN102","EN201","EN202","EN120","EN195"];
-  /* coverage[slo.key] = array of course codes that carry it. Seeded from the real English
-     curriculum; a course NOT listed = open crossing = visible gap (no fabricated coverage). */
+  /* coverage[islo.key] = array of course codes that carry it. Seeded for English;
+     a course NOT listed = open crossing = visible gap (no fabrication of coverage). */
   var COVERAGE={
-    slo1: ["EN101","EN102","EN201","EN202"],       /* reading/engaging critically across the sequence */
-    slo2: ["EN201","EN202","EN120","EN195"],       /* original voice: lit, advanced, digital, creative */
-    slo3: ["EN101","EN102","EN202"],               /* evidence & argument: comp sequence + advanced */
-    slo4: ["EN102","EN202","EN195"],               /* collaborative/process: research, publishing, workshop */
-    slo5: ["EN201","EN120","EN195"]                /* evolving roles of language: lit, digital, creative */
+    wc: ["EN101","EN102","EN201","EN202","EN120","EN195"],
+    ct: ["EN101","EN102","EN201","EN202"],
+    dei:["EN201","EN120"],
+    il: ["EN101","EN102"],
+    qr: [],                       /* English carries QR weakly — shown as a gap row, honestly */
+    psr:["EN102","EN195"]
   };
-  /* artifact label per (slo,course) where a plot exists — what demonstrates it */
+  /* artifact label per (islo,course) where a cell exists — what demonstrates it */
   var ARTIFACT={
-    "slo1|EN101":"Source-based analytic essay","slo1|EN102":"Researched argument",
-    "slo1|EN201":"Close-reading essay","slo1|EN202":"Imperfect Ideal essay",
-    "slo2|EN201":"Interpretive voice piece","slo2|EN202":"Publishing/design portfolio",
-    "slo2|EN120":"Digital identity & voice piece","slo2|EN195":"Workshop portfolio",
-    "slo3|EN101":"Source evaluation & analysis","slo3|EN102":"Annotated bibliography + argument",
-    "slo3|EN202":"Advanced evidence-based argument",
-    "slo4|EN102":"Research process record","slo4|EN202":"Editorial collaboration record","slo4|EN195":"Peer-review workshop record",
-    "slo5|EN201":"Language & identity response","slo5|EN120":"Multimedia rhetoric piece","slo5|EN195":"Creative reflection on voice"
+    "wc|EN101":"Source-based analytic essay","wc|EN102":"Researched argument",
+    "wc|EN201":"Close-reading essay","wc|EN202":"Imperfect Ideal essay",
+    "wc|EN120":"Creative portfolio","wc|EN195":"Workshop portfolio",
+    "ct|EN101":"Analytic essay","ct|EN102":"Researched argument",
+    "ct|EN201":"Interpretive essay","ct|EN202":"Advanced argument",
+    "dei|EN201":"Diverse-texts response","dei|EN120":"Identity & voice piece",
+    "il|EN101":"Source evaluation","il|EN102":"Annotated bibliography",
+    "psr|EN102":"Ethics-of-sources reflection","psr|EN195":"Peer-review record"
   };
 
   var W=920,H=440,left=210,right=40,top=64,bottom=40;
@@ -7765,72 +6845,68 @@ window.dlogToggle = function(btn){
   function el(n,a){ var e=document.createElementNS(NS,n); for(var k in a) e.setAttribute(k,a[k]); return e; }
 
   function render(){
-    var svg=document.getElementById("loomSvg");
+    var svg=document.getElementById("fieldSvg");
     if(!svg) return;
     while(svg.firstChild) svg.removeChild(svg.firstChild);
 
-    /* course columns = field plots (vertical guides) + top labels */
+    /* course columns (vertical) + top labels */
     COURSES.forEach(function(c,j){
       var x=tx(j);
-      svg.appendChild(el("line",{class:"loom-strand",x1:x,y1:top-8,x2:x,y2:H-bottom+8}));
-      var lab=el("text",{class:"loom-strand-lab",x:x,y:top-22}); lab.textContent=c;
+      svg.appendChild(el("line",{class:"col-line",x1:x,y1:top-8,x2:x,y2:H-bottom+8}));
+      var lab=el("text",{class:"col-lab",x:x,y:top-22}); lab.textContent=c;
       svg.appendChild(lab);
     });
 
-    /* ISLO channels (horizontal water lines) + left labels.
-       A channel that feeds no plots (empty coverage) renders DRY (dashed),
-       so a whole-outcome gap reads honestly as a dry channel. */
+    /* ISLO rows (horizontal) + left labels */
     ISLOS.forEach(function(o,i){
-      var y=ty(i), carried=COVERAGE[o.key]||[];
-      var dryChannel = carried.length===0;
-      svg.appendChild(el("line",{class: dryChannel ? "loom-channel-dry" : "loom-thread", x1:left-30,y1:y,x2:W-right,y2:y}));
-      var lab=el("text",{class:"loom-thread-lab",x:14,y:y-2}); lab.textContent=o.name;
+      var y=ty(i);
+      svg.appendChild(el("line",{class:"row-line",x1:left-30,y1:y,x2:W-right,y2:y}));
+      var lab=el("text",{class:"row-lab",x:14,y:y-2}); lab.textContent=o.name;
       svg.appendChild(lab);
-      var sub=el("text",{class:"loom-thread-sub",x:14,y:y+12}); sub.textContent=o.sub;
+      var sub=el("text",{class:"row-sub",x:14,y:y+12}); sub.textContent=o.sub;
       svg.appendChild(sub);
     });
 
-    /* plots: watered basin if the channel feeds it, dry cracked marker if gap */
+    /* crossings: cell if carried, open dash if gap */
     ISLOS.forEach(function(o,i){
       var y=ty(i), carried=COVERAGE[o.key]||[];
       COURSES.forEach(function(c,j){
         var x=tx(j);
         if(carried.indexOf(c)>=0){
-          /* WATERED PLOT: a headgate feed + filled basin, focusable button */
-          var g=el("g",{class:"loom-knot",tabindex:"0",role:"button"});
+          /* mapped cell: over-segment + ring + core, as a focusable button */
+          var g=el("g",{class:"cell-node",tabindex:"0",role:"button"});
           g.setAttribute("aria-label", c+" carries "+o.name+". Artifact: "+(ARTIFACT[o.key+"|"+c]||"student work")+". Select to open the training and collection pathway.");
-          /* short feed segment from channel into the plot (the headgate opening) */
-          g.appendChild(el("line",{class:"loom-weave-over",x1:x-9,y1:y,x2:x+9,y2:y}));
-          g.appendChild(el("circle",{class:"knot-glow",cx:x,cy:y,r:11}));
-          /* basin = rounded square (a watered plot reads as a field cell, not a knot) */
-          g.appendChild(el("rect",{class:"knot-ring",x:x-7,y:y-7,width:14,height:14,rx:3}));
-          g.appendChild(el("rect",{class:"knot-core",x:x-3,y:y-3,width:6,height:6,rx:1.5}));
+          g.appendChild(el("line",{class:"flow-over",x1:x-9,y1:y,x2:x+9,y2:y}));
+          g.appendChild(el("circle",{class:"node-glow",cx:x,cy:y,r:11}));
+          g.appendChild(el("circle",{class:"node-ring",cx:x,cy:y,r:7}));
+          g.appendChild(el("circle",{class:"node-core",cx:x,cy:y,r:3}));
           (function(o,c){
-            function open(){ selectKnot(o,c); }
+            function open(){ selectCell(o,c); }
             g.addEventListener("click",open);
             g.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); open(); } });
           })(o,c);
           svg.appendChild(g);
         } else {
-          /* DRY PLOT = gap: hollow cracked marker, distinct shape (open, dashed) */
-          svg.appendChild(el("circle",{class:"loom-open",cx:x,cy:y,r:5}));
+          /* open crossing = gap: small hollow dashed ring, distinct shape */
+          svg.appendChild(el("circle",{class:"cell-dry",cx:x,cy:y,r:5}));
         }
       });
     });
   }
 
-  function selectKnot(o,c){
-    var d=document.getElementById("loomDetail");
+  function selectCell(o,c){
+    var d=document.getElementById("fieldDetail");
     if(!d) return;
     var art=ARTIFACT[o.key+"|"+c]||"student work";
     d.innerHTML=
       '<strong>'+c+' &times; '+o.name+'</strong><br>'+
-      'This course draws the <strong>'+o.name+'</strong> competency into its field. Students demonstrate it in the <strong>'+art.toLowerCase()+'</strong>.'+
+      'This course carries the <strong>'+o.name+'</strong> competency. Students demonstrate it in the <strong>'+art.toLowerCase()+'</strong>.'+
       '<span class="ws-detail-purpose">Training pathway (next pass): what '+o.name+' means at the institutional level, how to recognize it in this artifact, and a calibrated example. Artifact collection is local-only — nothing about a student leaves this device.</span>';
-    document.querySelectorAll("#loomSvg .loom-knot").forEach(function(k){ k.classList.remove("sel"); });
+    /* mark selection visually */
+    document.querySelectorAll("#fieldSvg .cell-node").forEach(function(k){ k.classList.remove("sel"); });
   }
 
-  function init(){ if(document.getElementById("loomSvg")) render(); }
+  function init(){ if(document.getElementById("fieldSvg")) render(); }
   if(document.readyState==="loading"){ document.addEventListener("DOMContentLoaded",init); }
   else { init(); }
 })();
@@ -7903,7 +6979,7 @@ window.dlogToggle = function(btn){
     {id:"student",    label:"Student View",   glyph:"\u25B3"},
     {id:"courses",    label:"Course Map",     glyph:"\u25A6"},
     {id:"review",     label:"Program Review", glyph:"\u25C8"},
-    {id:"loom",       label:"Outcomes Irrigation", glyph:"\u2261"},
+    {id:"irrigation map",       label:"Irrigation Map",      glyph:"\u2261"},
     {id:"assessment", label:"Assessment",     glyph:"\u25C7"},
     {id:"samples",    label:"Submit",         glyph:"\u25B2"},
     {id:"norming",    label:"Norming",        glyph:"\u25CE"},
