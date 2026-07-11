@@ -1,0 +1,74 @@
+name: Studio Eyes — Accessibility Floor
+
+# THE GATE. Fires on every push. Tight Spiral Productions.
+# Accessibility is a hard floor, not a preference.
+#
+# REPORT MODE (2026-07-11): the eyes RUN and REPORT but do not yet BLOCK.
+# Reason: 104 pre-existing HALTs (real long-tail defects: muted-gray captions,
+# sub-44px tap targets, invisible focus, about.html dead link). Blocking today
+# would freeze the live site over a backlog, not a regression.
+#
+# >>> TO ARM THE TEETH: delete `continue-on-error: true` below. One line. <<<
+#
+# A gate that does not block is not a gate. This is a KNOWN, DATED, SCHEDULED
+# exception — not a policy. (os-block-triple-sweep.md)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:      # fire by hand from the phone
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  floor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install the eyes
+        run: |
+          pip install --quiet playwright
+          playwright install --with-deps chromium
+          npm install --silent axe-core
+
+      - name: RUN STUDIO EYES v4
+        id: sweep
+        run: python3 studio-eyes-sweep.py .
+        continue-on-error: true      # ← DELETE THIS LINE TO ARM THE GATE
+
+      - name: Screenshots — every screen, light + dark, iPhone 390x844
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: studio-eyes-screens
+          path: studio-eyes-shots/
+          retention-days: 30
+
+  deploy:
+    needs: floor
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      - id: deployment
+        uses: actions/deploy-pages@v4
