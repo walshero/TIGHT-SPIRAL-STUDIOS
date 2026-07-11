@@ -1,61 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- TIGHT SPIRAL STUDIOS — cabinet LOCKED 2026-07-06 (last day of class).
-     Index shows EN195 only. Full arcade returns next season.
-     Explicit dark palette (never inherit OS charcoal). CC0 art, original SVG. -->
+<!-- TIGHT SPIRAL PRODUCTIONS — front door.
+     2026-07-11: the cabinet is UNLOCKED. Class is over; the arcade is public.
+     Two doors: The Creative Writing Arcade (anyone) and EN195 (the course).
+     color-scheme LOCKED — the OS does not repaint this. Original SVG, CC0. -->
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="color-scheme" content="light dark">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='19' fill='%230f5566'/%3E%3Cpath d='M20 7C11 7 7 14 7 20c0 6 4 11 11 11 5 0 9-3 9-8 0-4-3-6-6-6-3 0-4 2-4 4 0 1 1 2 2 2' fill='none' stroke='%23f0c357' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
-<title>Tight Spiral Studios — EN195</title>
+<title>Tight Spiral Productions — Play. Notice. Design.</title>
 <style>
-:root{ --ink:#241a10; --bg:#f0e4cc; --card:#faf3e3; --line:#b39c72;
-  --slate:#33485a; --gold:#d09a12; --gold-dk:#8a5c00; --rust:#96381a; --plum:#4e2a4c; }
-@media (prefers-color-scheme: dark){
-  :root{ --ink:#f3e6c6; --bg:#1a1712; --card:#262019; --line:#5d543d;
-    --slate:#9ab6c8; --gold:#f0c357; --gold-dk:#f0c357; --rust:#eaa183; --plum:#d39bc8; }
+:root{ color-scheme: light; }
+:root{
+  --floor:#1a1d21; --floor-2:#22262b;
+  --paper:#e8e2d6; --amber:#ffcf5a;
+  --glow:rgba(255,207,90,.16);
+  --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  --serif:Georgia,"Times New Roman",serif;
 }
-*{box-sizing:border-box}
-body{ margin:0; font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
-  background:var(--bg); color:var(--ink); font-size:19px; line-height:1.5;
-  display:flex; min-height:100vh; align-items:center; justify-content:center; padding:1rem; }
-.card{ max-width:560px; width:100%; background:var(--card); border:3px solid var(--line);
-  border-radius:18px; padding:1.2rem 1.1rem 1.4rem; text-align:center; }
-h1{ font-family:Georgia,serif; font-size:1.35rem; color:var(--plum); margin:.6rem 0 .1rem; }
-p{ margin:.3rem 0 .9rem; font-size:.95rem; }
-svg{ width:100%; max-width:340px; height:auto; display:block; margin:0 auto; }
-a.big{ display:block; background:var(--gold); color:#241a10; border:3px solid #241a10;
-  border-radius:14px; padding:1rem; font-weight:800; font-size:1.15rem;
-  text-decoration:none; min-height:56px; }
-a.big:focus-visible{ outline:4px solid var(--rust); outline-offset:3px; }
-.foot{ font-size:.78rem; margin-top:1rem; color:var(--ink); }
+body[data-stop="softer"]{ --floor:#3a3f45; --floor-2:#464c53; --amber:#ffe093; }
+body[data-stop="warm"]  { --floor:#14100a; --floor-2:#1c1710; --amber:#ffb84d; --glow:rgba(255,184,77,.20); }
+*{box-sizing:border-box;margin:0;padding:0}
+body{ background:var(--floor); color:var(--paper); font-family:var(--sans);
+  min-height:100vh; -webkit-font-smoothing:antialiased; }
+.room{ position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 120% 60% at 50% 0%, var(--glow), transparent 60%),
+    repeating-linear-gradient(115deg, transparent 0 22px, rgba(255,255,255,.012) 22px 44px),
+    linear-gradient(180deg, var(--floor), var(--floor-2) 55%, var(--floor)); }
+.wrap{position:relative; z-index:1; max-width:640px; margin:0 auto; padding:1.2rem 1rem 4rem}
+.art{ margin:0 auto .8rem; max-width:400px }
+.art svg{ width:100%; height:auto; display:block }
+.tube{ display:inline-block; padding:.42rem 1.1rem; margin-bottom:.6rem;
+  border:2px solid var(--amber); border-radius:3px; color:var(--amber);
+  font:700 .66rem/1 var(--sans); letter-spacing:.22em; text-transform:uppercase;
+  box-shadow:0 0 22px var(--glow), inset 0 0 22px var(--glow); }
+.head{ text-align:center }
+h1{ font-family:var(--serif); font-weight:400; font-size:clamp(1.6rem,6vw,2.3rem);
+  line-height:1.06; color:var(--paper); margin-bottom:.4rem; }
+h1 b{ color:var(--amber); font-weight:700 }
+.sub{ font-family:var(--serif); font-style:italic; font-size:1rem; line-height:1.5;
+  color:var(--paper); opacity:.9; max-width:28rem; margin:.5rem auto 0; }
+.doors{ display:flex; flex-direction:column; gap:.9rem; margin-top:1.4rem }
+.door{ display:block; text-decoration:none; color:inherit;
+  background:linear-gradient(175deg,#2b3037,#1e2228);
+  border:1px solid rgba(255,207,90,.22); border-radius:12px; padding:1.1rem 1.15rem;
+  box-shadow:0 10px 30px rgba(0,0,0,.35); min-height:44px;
+  transition:transform .16s ease, border-color .16s ease; }
+.door:hover, .door:focus-visible{ transform:translateY(-3px); border-color:var(--amber) }
+.door:focus-visible{ outline:3px solid var(--amber); outline-offset:3px }
+.door.lead{ border-color:var(--amber); box-shadow:0 12px 36px rgba(0,0,0,.45), 0 0 0 1px rgba(255,207,90,.3) }
+.dh{ display:flex; align-items:baseline; justify-content:space-between; gap:.7rem; margin-bottom:.3rem }
+h2{ font-family:var(--serif); font-size:1.32rem; font-weight:400; color:var(--paper) }
+.tag{ flex:none; padding:.24rem .5rem; background:var(--amber); color:#1a1d21;
+  font:800 .62rem/1 var(--sans); letter-spacing:.08em; border-radius:3px; text-transform:uppercase; }
+.dd{ font-size:.94rem; line-height:1.5; color:var(--paper); opacity:.9 }
+.comfort{ position:fixed; right:.7rem; bottom:.7rem; z-index:20;
+  min-height:44px; min-width:44px; padding:.6rem .9rem;
+  background:var(--amber); color:#1a1d21; border:2px solid #1a1d21;
+  border-radius:24px; cursor:pointer; font:800 .74rem/1 var(--sans);
+  box-shadow:0 6px 20px rgba(0,0,0,.5); }
+.comfort:focus-visible{ outline:3px solid var(--paper); outline-offset:3px }
+.foot{ margin-top:2rem; padding-top:1.1rem; border-top:1px solid rgba(232,226,214,.14);
+  text-align:center; font-size:.88rem; line-height:1.6; color:var(--paper); opacity:.82; }
+.foot b{ color:var(--amber); opacity:1 }
+@media(prefers-reduced-motion:reduce){ *{transition:none!important} }
 </style>
 </head>
-<body>
-<div class="card">
-  <svg viewBox="0 0 300 240" role="img" aria-label="An arcade cabinet, closed, with a big padlock. A note taped on says EN195 room open.">
-    <title>Locked cabinet — CC0, original, Tight Spiral Paper Craft</title>
-    <rect x="70" y="18" width="160" height="200" rx="12" fill="var(--slate)" stroke="var(--ink)" stroke-width="3"/>
-    <rect x="86" y="34" width="128" height="74" rx="6" fill="var(--bg)" stroke="var(--ink)" stroke-width="3"/>
-    <path d="M100 92 q26 -38 52 0 q24 -30 48 0" fill="none" stroke="var(--gold)" stroke-width="4" stroke-linecap="round"/>
-    <rect x="86" y="120" width="128" height="10" rx="5" fill="var(--ink)" opacity=".55"/>
-    <rect x="86" y="140" width="128" height="10" rx="5" fill="var(--ink)" opacity=".55"/>
-    <rect x="122" y="126" width="56" height="46" rx="8" fill="var(--gold)" stroke="var(--ink)" stroke-width="3"/>
-    <path d="M134 126 v-12 a16 16 0 0 1 32 0 v12" fill="none" stroke="var(--ink)" stroke-width="6"/>
-    <circle cx="150" cy="146" r="6" fill="var(--ink)"/>
-    <rect x="146" y="150" width="8" height="12" rx="3" fill="var(--ink)"/>
-    <g transform="rotate(-7 232 190)">
-      <rect x="196" y="172" width="72" height="40" rx="4" fill="var(--card)" stroke="var(--rust)" stroke-width="3"/>
-      <text x="232" y="190" text-anchor="middle" font-size="13" font-weight="800" fill="var(--rust)">EN195</text>
-      <text x="232" y="204" text-anchor="middle" font-size="10" font-weight="700" fill="var(--ink)">room open</text>
-    </g>
-  </svg>
-  <h1>The cabinet is locked for the season.</h1>
-  <p>Last day of class. Two doors stay open:</p>
-  <a class="big" href="en195.html">Enter EN195 — Last Week</a>
-  <a class="big" href="sandbags.html" style="margin-top:.6rem; background:var(--card); color:var(--ink); border-color:var(--line);">Play Sandbags — the flash fiction climb</a>
-  <p class="foot">Tight Spiral Studios · the arcade returns next semester</p>
+<body data-stop="default">
+<div class="room" aria-hidden="true"></div>
+<div class="wrap">
+  <div class="art">
+    <svg viewBox="0 0 300 210" role="img"
+         aria-label="An arcade cabinet, open and lit, its padlock hanging unclasped on the hasp. On the screen, a worn path.">
+      <title>The cabinet is open — original SVG, Tight Spiral Productions</title>
+      <rect x="62" y="16" width="176" height="180" rx="12" fill="#2b3037" stroke="#4a4f57" stroke-width="2.5"/>
+      <rect x="78" y="28" width="144" height="30" rx="5" fill="#3d4148" stroke="#ffcf5a" stroke-width="2"/>
+      <g stroke="#ffcf5a" stroke-width="2.4" stroke-linecap="round">
+        <path d="M96 43 h16"/><path d="M120 43 h30"/><path d="M158 43 h20"/><path d="M186 43 h18"/>
+      </g>
+      <rect x="78" y="66" width="144" height="76" rx="5" fill="#0e1114" stroke="#5a606a" stroke-width="2"/>
+      <path d="M84 128 Q118 124 138 112 T188 92 T216 78" stroke="#3d4148" stroke-width="9" fill="none" stroke-linecap="round"/>
+      <path d="M84 128 Q118 124 138 112 T188 92 T216 78" stroke="#ffcf5a" stroke-width="1.8" fill="none" stroke-dasharray="5 7" opacity=".9"/>
+      <circle cx="204" cy="80" r="3" fill="#ffcf5a"/>
+      <g stroke="rgba(0,0,0,.35)" stroke-width="1">
+        <path d="M78 72 h144"/><path d="M78 82 h144"/><path d="M78 92 h144"/><path d="M78 102 h144"/>
+        <path d="M78 112 h144"/><path d="M78 122 h144"/><path d="M78 132 h144"/>
+      </g>
+      <circle cx="108" cy="166" r="9" fill="#ffcf5a" stroke="#1a1d21" stroke-width="2"/>
+      <circle cx="136" cy="166" r="7" fill="#c9a03f" stroke="#1a1d21" stroke-width="2"/>
+      <rect x="158" y="158" width="8" height="17" rx="4" fill="#5a606a"/>
+      <circle cx="162" cy="156" r="6" fill="#ffcf5a" stroke="#1a1d21" stroke-width="2"/>
+      <g transform="translate(228,120)">
+        <path d="M4 8 V4 a7 7 0 0 1 14 0" fill="none" stroke="#c9a03f" stroke-width="3" stroke-linecap="round"/>
+        <rect x="-4" y="8" width="18" height="15" rx="3" fill="#3d4148" stroke="#ffcf5a" stroke-width="2"/>
+        <circle cx="5" cy="15" r="2.2" fill="#ffcf5a"/>
+      </g>
+      <ellipse cx="150" cy="200" rx="86" ry="7" fill="#ffcf5a" opacity=".08"/>
+    </svg>
+  </div>
+  <header class="head">
+    <div class="tube">Tight Spiral Productions</div>
+    <h1>The cabinet is <b>open</b>.</h1>
+    <p class="sub">Drafts are prototypes. Revision is playtesting.
+       Writers are designers. Come play with the machinery.</p>
+  </header>
+  <nav class="doors">
+    <a class="door lead" href="arcade.html">
+      <div class="dh">
+        <h2>The Creative Writing Arcade</h2>
+        <span class="tag">Open</span>
+      </div>
+      <p class="dd">Five machines that teach a writing move by making you do it.
+         Clich&eacute;s, compression, the tell, the moves, the bench.
+         Free, offline, no account, nothing kept.</p>
+    </a>
+    <a class="door" href="en195.html">
+      <div class="dh">
+        <h2>EN195</h2>
+        <span class="tag">Course</span>
+      </div>
+      <p class="dd">The course room &mdash; schedule, workshop, the semester's shape.
+         For students in the class.</p>
+    </a>
+  </nav>
+  <footer class="foot">
+    <b>Play. Notice. Design.</b><br>
+    Tight Spiral Productions builds single-file games that run offline,
+    keep nothing, and cost nothing. Take them into a classroom if they're useful.
+  </footer>
 </div>
+<button class="comfort" id="cbtn" aria-label="Change comfort setting">Comfort: Default</button>
+<script>
+(function(){
+  var S=['default','softer','warm'], L={'default':'Default','softer':'Softer','warm':'Warm dark'}, i=0;
+  var b=document.getElementById('cbtn');
+  b.addEventListener('click',function(){
+    i=(i+1)%S.length;
+    document.body.setAttribute('data-stop',S[i]);
+    b.textContent='Comfort: '+L[S[i]];
+  });
+})();
+</script>
+<!--
+  PROVENANCE — Tight Spiral Productions front door
+  CHANGELOG
+  2026-07-06  "The cabinet is locked for the season." Padlock closed, EN195 only.
+  2026-07-11  UNLOCKED. Class is over. The Creative Writing Arcade is the public
+              front door; EN195 keeps its own room. The padlock now hangs OPEN on
+              the hasp - same cabinet, same lock, unclasped. On the screen, a worn
+              path: the cowpath.
+  FLOORS: no opening wall - comfort is a corner control - color-scheme locked -
+  pinned ink on .comfort - >50% image on first paint - 44px targets.
+-->
 </body>
 </html>
