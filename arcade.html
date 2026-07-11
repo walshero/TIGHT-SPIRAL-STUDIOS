@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>The Creative Writing Arcade — Tight Spiral Productions</title>
+<style>
+/* STUDIO EYES v4 CLASS-FIX: lock the palette. The OS does not get a vote. */
+:root{ color-scheme: light; }
+
+:root{
+  --floor:#1a1d21;      /* the room */
+  --floor-2:#22262b;
+  --paper:#e8e2d6;      /* the ink */
+  --ink:#241f16;
+  --amber:#ffcf5a;      /* the marquee */
+  --amber-dim:#c9a03f;
+  --glow:rgba(255,207,90,.16);
+  --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  --serif:Georgia,"Times New Roman",serif;
+}
+/* comfort stops — three VISIBLY distinct papers (H5: >=0.12 separation) */
+body[data-stop="softer"]{ --floor:#3a3f45; --floor-2:#464c53; --amber:#ffe093; }
+body[data-stop="warm"]  { --floor:#14100a; --floor-2:#1c1710; --amber:#ffb84d; --glow:rgba(255,184,77,.20); }
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--floor);
+  color:var(--paper);
+  font-family:var(--sans);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── THE ROOM: carpet + haze. This is a place, not a page. ───────────── */
+.room{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 120% 60% at 50% 0%, var(--glow), transparent 60%),
+    repeating-linear-gradient(115deg, transparent 0 22px, rgba(255,255,255,.012) 22px 44px),
+    linear-gradient(180deg, var(--floor) 0%, var(--floor-2) 55%, var(--floor) 100%);
+}
+
+.wrap{position:relative; z-index:1; max-width:760px; margin:0 auto; padding:0 1rem 5rem}
+
+/* ── MARQUEE ─────────────────────────────────────────────────────────── */
+.marquee{ text-align:center; padding:1.3rem 0 1rem }
+.tube{
+  display:inline-block; padding:.42rem 1.1rem; margin-bottom:.7rem;
+  border:2px solid var(--amber); border-radius:3px;
+  color:var(--amber); font:700 .68rem/1 var(--sans);
+  letter-spacing:.22em; text-transform:uppercase;
+  box-shadow:0 0 22px var(--glow), inset 0 0 22px var(--glow);
+}
+h1{
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(1.7rem,6.6vw,2.5rem); line-height:1.04;
+  color:var(--paper); margin-bottom:.5rem;
+}
+h1 b{ color:var(--amber); font-weight:700; display:block }
+.sub{
+  font-family:var(--serif); font-style:italic;
+  font-size:.96rem; line-height:1.45; color:var(--paper); opacity:.9;
+  max-width:30rem; margin:.7rem auto 0;
+}
+.count{
+  margin-top:.75rem; font:700 .7rem/1 var(--sans);
+  letter-spacing:.16em; text-transform:uppercase; color:var(--amber-dim);
+}
+
+/* ── THE CABINETS ────────────────────────────────────────────────────── */
+.floor{ display:flex; flex-direction:column; gap:1.1rem; margin-top:1.1rem }
+
+.cab{
+  display:block; text-decoration:none; color:inherit;
+  background:linear-gradient(175deg, #2b3037, #1e2228);
+  border:1px solid rgba(255,207,90,.20);
+  border-radius:12px; overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+  transition:transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+}
+.cab:hover, .cab:focus-visible{
+  transform:translateY(-3px);
+  border-color:var(--amber);
+  box-shadow:0 14px 40px rgba(0,0,0,.45), 0 0 0 1px var(--amber);
+}
+.cab:focus-visible{ outline:3px solid var(--amber); outline-offset:3px }
+
+/* the screen: every cabinet is >50% image (userPreferences floor) */
+.screen{
+  position:relative; height:200px;
+  background:#0e1114;
+  border-bottom:1px solid rgba(255,207,90,.18);
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+}
+.screen svg{ width:100%; height:100%; display:block }
+.scan{
+  position:absolute; inset:0; pointer-events:none;
+  background:repeating-linear-gradient(0deg, rgba(0,0,0,.30) 0 1px, transparent 1px 3px);
+}
+
+.body{ padding:1rem 1.1rem 1.15rem }
+.no{
+  display:inline-block; min-width:26px; text-align:center;
+  padding:.18rem .42rem; margin-bottom:.5rem;
+  background:var(--amber); color:#1a1d21;
+  font:800 .74rem/1 var(--sans); border-radius:3px;
+}
+h2{ font-family:var(--serif); font-size:1.42rem; font-weight:400; color:var(--paper); margin-bottom:.18rem }
+.after{ font:700 .66rem/1 var(--sans); letter-spacing:.13em; text-transform:uppercase; color:var(--amber-dim); margin-bottom:.55rem }
+.blurb{ font-size:.96rem; line-height:1.5; color:var(--paper); opacity:.92 }
+.verb{
+  margin-top:.7rem; padding-top:.7rem;
+  border-top:1px solid rgba(232,226,214,.14);
+  display:flex; align-items:center; justify-content:space-between; gap:.6rem;
+}
+.does{ font-size:.86rem; color:var(--paper); opacity:.85 }
+.does b{ color:var(--amber) }
+.play{
+  flex:none; padding:.5rem .8rem; min-height:44px;
+  display:flex; align-items:center;
+  background:var(--amber); color:#1a1d21;
+  font:800 .74rem/1 var(--sans); letter-spacing:.06em;
+  border-radius:6px; text-transform:uppercase;
+}
+
+/* ── COMFORT: a live corner control. NEVER a door. ───────────────────── */
+.comfort{
+  position:fixed; right:.7rem; bottom:.7rem; z-index:20;
+  min-height:44px; min-width:44px; padding:.6rem .9rem;
+  background:var(--amber);
+  color:#1a1d21;                 /* PINNED. never `inherit` — that is the 1:1 bug. */
+  border:2px solid #1a1d21;
+  border-radius:24px; cursor:pointer;
+  font:800 .74rem/1 var(--sans);
+  box-shadow:0 6px 20px rgba(0,0,0,.5);
+}
+.comfort:focus-visible{ outline:3px solid var(--paper); outline-offset:3px }
+
+.foot{
+  margin-top:2.6rem; padding-top:1.2rem;
+  border-top:1px solid rgba(232,226,214,.14);
+  text-align:center; font-size:.86rem; line-height:1.6;
+  color:var(--paper); opacity:.8;
+}
+.foot b{ color:var(--amber); opacity:1 }
+
+@media(prefers-reduced-motion:reduce){ *{transition:none!important} }
+</style>
+</head>
+<body data-stop="default">
+
+<div class="room" aria-hidden="true"></div>
+
+<div class="wrap">
+
+  <header class="marquee">
+    <div class="tube">Tight Spiral Productions</div>
+    <h1>The Creative Writing<b>Arcade</b></h1>
+    <p class="sub">Five machines that teach a writing move by making you do it.
+       No lecture. No quiz. You play, and the craft is the mechanic.</p>
+    <div class="count">Five cabinets · Free · Works offline</div>
+  </header>
+
+  <main class="floor">
+
+    <!-- 1 — COWPATHS -->
+    <a class="cab" href="cliche-cowpaths.html">
+      <div class="screen">
+        <svg viewBox="0 0 300 170" fill="none" aria-hidden="true">
+          <rect width="300" height="170" fill="#0e1114"/>
+          <path d="M0 150 Q60 148 90 130 T150 105 T210 78 T300 50" stroke="#3d4148" stroke-width="16" fill="none" stroke-linecap="round"/>
+          <path d="M0 150 Q60 148 90 130 T150 105 T210 78 T300 50" stroke="#ffcf5a" stroke-width="2.5" fill="none" stroke-dasharray="7 9" opacity=".85"/>
+          <path d="M0 160 Q80 156 120 142 T220 118 T300 100" stroke="#2c3037" stroke-width="9" fill="none"/>
+          <path d="M0 132 Q70 130 110 112 T200 88 T300 70" stroke="#262a30" stroke-width="6" fill="none"/>
+          <g fill="#4a4f57">
+            <ellipse cx="52" cy="70" rx="13" ry="9"/><ellipse cx="96" cy="52" rx="10" ry="7"/>
+            <ellipse cx="196" cy="132" rx="11" ry="8"/><ellipse cx="248" cy="118" rx="9" ry="6"/>
+          </g>
+          <circle cx="240" cy="42" r="4" fill="#ffcf5a"/>
+          <circle cx="262" cy="36" r="2.5" fill="#ffcf5a" opacity=".6"/>
+        </svg>
+        <div class="scan"></div>
+      </div>
+      <div class="body">
+        <span class="no">1</span>
+        <h2>Cliché Cowpaths</h2>
+        <div class="after">Three cartridges · Field, Line, City</div>
+        <p class="blurb">The cows never planned the route. They followed the cow in front.
+           Three hundred years later the street still bends. A cliché is the same —
+           nobody chose it, everybody walks it, and now it's paved.</p>
+        <div class="verb">
+          <span class="does"><b>Notice.</b> The worn path under your sentence.</span>
+          <span class="play">Play</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 2 — SANDBAGS -->
+    <a class="cab" href="sandbags.html">
+      <div class="screen">
+        <svg viewBox="0 0 300 170" fill="none" aria-hidden="true">
+          <rect width="300" height="170" fill="#0e1114"/>
+          <ellipse cx="150" cy="46" rx="34" ry="40" fill="#3d4148" stroke="#ffcf5a" stroke-width="2"/>
+          <path d="M150 86 L142 100 M150 86 L158 100" stroke="#ffcf5a" stroke-width="1.6"/>
+          <rect x="132" y="100" width="36" height="24" rx="3" fill="#2c3037" stroke="#ffcf5a" stroke-width="1.6"/>
+          <g fill="#4a4f57" stroke="#5a606a" stroke-width="1">
+            <rect x="108" y="132" width="26" height="17" rx="4"/>
+            <rect x="138" y="132" width="26" height="17" rx="4"/>
+            <rect x="168" y="132" width="26" height="17" rx="4"/>
+            <rect x="123" y="152" width="26" height="16" rx="4"/>
+            <rect x="153" y="152" width="26" height="16" rx="4"/>
+          </g>
+          <path d="M118 128 L124 118 M150 128 L150 118 M182 128 L176 118" stroke="#5a606a" stroke-width="1.2"/>
+          <path d="M30 30 h18 M34 40 h10" stroke="#2c3037" stroke-width="2"/>
+          <path d="M252 30 h18 M256 40 h10" stroke="#2c3037" stroke-width="2"/>
+        </svg>
+        <div class="scan"></div>
+      </div>
+      <div class="body">
+        <span class="no">2</span>
+        <h2>Sandbags</h2>
+        <div class="after">A flash fiction climb</div>
+        <p class="blurb">The balloon won't rise. Every word you cut is ballast over the side.
+           Cut too little and you never leave the ground. Cut the wrong thing and you crash.</p>
+        <div class="verb">
+          <span class="does"><b>Compress.</b> Find what the story can't lose.</span>
+          <span class="play">Play</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 3 — THE TELL -->
+    <a class="cab" href="the-tell.html">
+      <div class="screen">
+        <svg viewBox="0 0 300 170" fill="none" aria-hidden="true">
+          <rect width="300" height="170" fill="#0e1114"/>
+          <rect x="52" y="34" width="70" height="98" rx="6" fill="#2c3037" stroke="#4a4f57" stroke-width="1.6" transform="rotate(-7 87 83)"/>
+          <rect x="115" y="30" width="70" height="98" rx="6" fill="#3d4148" stroke="#ffcf5a" stroke-width="2"/>
+          <rect x="178" y="34" width="70" height="98" rx="6" fill="#2c3037" stroke="#4a4f57" stroke-width="1.6" transform="rotate(7 213 83)"/>
+          <g stroke="#ffcf5a" stroke-width="2" stroke-linecap="round">
+            <path d="M132 56 h36"/><path d="M132 68 h26"/><path d="M132 80 h32"/>
+          </g>
+          <circle cx="150" cy="104" r="9" fill="none" stroke="#ffcf5a" stroke-width="2"/>
+          <circle cx="150" cy="104" r="3" fill="#ffcf5a"/>
+          <path d="M30 150 h240" stroke="#2c3037" stroke-width="2"/>
+        </svg>
+        <div class="scan"></div>
+      </div>
+      <div class="body">
+        <span class="no">3</span>
+        <h2>The Tell</h2>
+        <div class="after">An async workshop game</div>
+        <p class="blurb">Every draft leaks. The writer knows what they meant; the page knows
+           what they said. Read for the gap — the place the story tells on itself.</p>
+        <div class="verb">
+          <span class="does"><b>Read.</b> What the draft admits by accident.</span>
+          <span class="play">Play</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 4 — WORKSHOP WALL -->
+    <a class="cab" href="workshop-wall.html">
+      <div class="screen">
+        <svg viewBox="0 0 300 170" fill="none" aria-hidden="true">
+          <rect width="300" height="170" fill="#0e1114"/>
+          <g fill="#2c3037" stroke="#4a4f57" stroke-width="1.2">
+            <rect x="34" y="28" width="56" height="44" rx="3" transform="rotate(-3 62 50)"/>
+            <rect x="102" y="34" width="56" height="44" rx="3" transform="rotate(2 130 56)"/>
+            <rect x="170" y="26" width="56" height="44" rx="3" transform="rotate(-2 198 48)"/>
+            <rect x="66" y="88" width="56" height="44" rx="3" transform="rotate(3 94 110)"/>
+            <rect x="204" y="88" width="56" height="44" rx="3" transform="rotate(-4 232 110)"/>
+          </g>
+          <rect x="134" y="82" width="60" height="50" rx="3" fill="#3d4148" stroke="#ffcf5a" stroke-width="2"/>
+          <g stroke="#ffcf5a" stroke-width="1.8" stroke-linecap="round">
+            <path d="M146 96 h34"/><path d="M146 106 h24"/><path d="M146 116 h30"/>
+          </g>
+          <g fill="#ffcf5a"><circle cx="62" cy="30" r="3"/><circle cx="130" cy="36" r="3"/><circle cx="198" cy="28" r="3"/><circle cx="94" cy="90" r="3"/><circle cx="232" cy="90" r="3"/><circle cx="164" cy="84" r="3.5"/></g>
+        </svg>
+        <div class="scan"></div>
+      </div>
+      <div class="body">
+        <span class="no">4</span>
+        <h2>The Workshop Wall</h2>
+        <div class="after">Writerly moves, labeled</div>
+        <p class="blurb">A move you can name is a move you can steal. The wall pins the craft
+           where you can see it — and hands you the pin.</p>
+        <div class="verb">
+          <span class="does"><b>Name.</b> The move, so you can use it.</span>
+          <span class="play">Play</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 5 — REVIEW BENCH -->
+    <a class="cab" href="review-bench.html">
+      <div class="screen">
+        <svg viewBox="0 0 300 170" fill="none" aria-hidden="true">
+          <rect width="300" height="170" fill="#0e1114"/>
+          <path d="M150 30 v14" stroke="#4a4f57" stroke-width="3"/>
+          <path d="M78 48 h144" stroke="#ffcf5a" stroke-width="3" stroke-linecap="round"/>
+          <path d="M150 44 v66" stroke="#4a4f57" stroke-width="3"/>
+          <path d="M78 48 l-16 32 h32 z" fill="#2c3037" stroke="#ffcf5a" stroke-width="1.8"/>
+          <path d="M222 48 l-16 32 h32 z" fill="#3d4148" stroke="#ffcf5a" stroke-width="1.8"/>
+          <rect x="66" y="84" width="24" height="4" rx="2" fill="#4a4f57"/>
+          <rect x="210" y="84" width="24" height="4" rx="2" fill="#ffcf5a"/>
+          <rect x="106" y="112" width="88" height="34" rx="4" fill="#2c3037" stroke="#4a4f57" stroke-width="1.4"/>
+          <g stroke="#5a606a" stroke-width="1.6" stroke-linecap="round">
+            <path d="M118 124 h44"/><path d="M118 134 h30"/>
+          </g>
+          <circle cx="150" cy="30" r="4" fill="#ffcf5a"/>
+        </svg>
+        <div class="scan"></div>
+      </div>
+      <div class="body">
+        <span class="no">5</span>
+        <h2>The Review Bench</h2>
+        <div class="after">Flash fiction peer workshop</div>
+        <p class="blurb">Praise is cheap and vague is worse. The bench makes you weigh a draft
+           against something — and say what you'd trade.</p>
+        <div class="verb">
+          <span class="does"><b>Judge.</b> With a reason you can defend.</span>
+          <span class="play">Play</span>
+        </div>
+      </div>
+    </a>
+
+  </main>
+
+  <footer class="foot">
+    <b>Play. Notice. Design.</b><br>
+    Built by Tight Spiral Productions. Every machine runs offline, keeps nothing,
+    and costs nothing. Take them into a classroom if they're useful.
+  </footer>
+
+</div>
+
+<button class="comfort" id="cbtn" aria-label="Change comfort setting">Comfort: Default</button>
+
+<script>
+(function(){
+  var STOPS = ['default','softer','warm'];
+  var LABEL = {'default':'Default','softer':'Softer','warm':'Warm dark'};
+  var i = 0;
+  var b = document.getElementById('cbtn');
+  b.addEventListener('click', function(){
+    i = (i + 1) % STOPS.length;
+    document.body.setAttribute('data-stop', STOPS[i]);
+    b.textContent = 'Comfort: ' + LABEL[STOPS[i]];
+  });
+})();
+</script>
+
+<!--
+  PROVENANCE — The Creative Writing Arcade
+  Tight Spiral Productions. Built 2026-07-11.
+
+  CHANGELOG
+  2026-07-11  Created. The public front door: EN195's games, minus the semester.
+              One arcade, five cabinets. Cowpaths carries three cartridges of its
+              own; it is a cabinet here, not a second arcade (Aleph: do not nest
+              arcades).
+
+  FLOORS HELD
+  - NO OPENING WALL: first paint is the room + the marquee + the cabinets.
+    Comfort is a live corner control, never a door.
+  - H5 STOP SEPARATION: three visibly distinct papers (default / softer / warm).
+  - color-scheme LOCKED: the OS does not repaint this. Pinned ink on .comfort —
+    `color: inherit` is what rendered the Comfort button at 1:1 contrast across
+    18 files. Never again.
+  - Every cabinet screen is >50% image.
+  - 44px minimum on every control.
+-->
+</body>
+</html>
