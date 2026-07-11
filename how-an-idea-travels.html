@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>How an Idea Travels — Tight Spiral Productions</title>
+<style>
+:root{ color-scheme: light; }
+:root{
+  --floor:#1a1d21; --floor-2:#22262b;
+  --paper:#e8e2d6; --amber:#ffcf5a; --amber-dim:#c9a03f;
+  --glow:rgba(255,207,90,.16);
+  --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  --serif:Georgia,"Times New Roman",serif;
+}
+body[data-stop="softer"]{ --floor:#3a3f45; --floor-2:#464c53; --amber:#ffe093; }
+body[data-stop="warm"]  { --floor:#14100a; --floor-2:#1c1710; --amber:#ffb84d; --glow:rgba(255,184,77,.20); }
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{ background:var(--floor); color:var(--paper); font-family:var(--sans);
+  min-height:100vh; -webkit-font-smoothing:antialiased; }
+.room{ position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 120% 50% at 50% 0%, var(--glow), transparent 60%),
+    linear-gradient(180deg, var(--floor), var(--floor-2) 55%, var(--floor)); }
+.wrap{ position:relative; z-index:1; max-width:720px; margin:0 auto; padding:1.4rem 1rem 5rem }
+
+/* ── head ─────────────────────────────────────────────── */
+.head{ text-align:center; margin-bottom:1.2rem }
+.tube{ display:inline-block; padding:.4rem 1rem; margin-bottom:.7rem;
+  border:2px solid var(--amber); border-radius:3px; color:var(--amber);
+  font:700 .64rem/1 var(--sans); letter-spacing:.2em; text-transform:uppercase;
+  box-shadow:0 0 20px var(--glow), inset 0 0 20px var(--glow); }
+h1{ font-family:var(--serif); font-weight:400; font-size:clamp(1.7rem,6.4vw,2.5rem);
+  line-height:1.06; margin-bottom:.4rem }
+h1 b{ color:var(--amber); font-weight:700 }
+.sub{ font-family:var(--serif); font-style:italic; font-size:1rem; line-height:1.5;
+  opacity:.9; max-width:29rem; margin:.4rem auto 0 }
+
+/* ── the trail ────────────────────────────────────────── */
+.trail{ position:relative; margin-top:1.6rem; padding-left:52px }
+/* the worn path itself, running down the left */
+.trail::before{
+  content:""; position:absolute; left:22px; top:8px; bottom:60px; width:5px;
+  background:linear-gradient(180deg, #3d4148, #4a4f57);
+  border-radius:3px;
+}
+.trail::after{
+  content:""; position:absolute; left:24px; top:8px; bottom:60px; width:1px;
+  background:repeating-linear-gradient(180deg, var(--amber) 0 6px, transparent 6px 14px);
+  opacity:.75;
+}
+
+.stop{ position:relative; margin-bottom:1.5rem }
+/* the footprint — a marker ON the path */
+.pin{
+  position:absolute; left:-52px; top:2px;
+  width:44px; height:44px; border-radius:50%;
+  background:var(--amber); color:#1a1d21;
+  border:3px solid #1a1d21;
+  display:flex; align-items:center; justify-content:center;
+  font:800 1rem/1 var(--sans);
+  box-shadow:0 0 0 4px var(--floor), 0 4px 14px rgba(0,0,0,.5);
+}
+.stop.gate .pin{ background:#e8e2d6 }
+
+.card{
+  background:linear-gradient(175deg,#2b3037,#1e2228);
+  border:1px solid rgba(255,207,90,.20);
+  border-radius:12px; overflow:hidden;
+  box-shadow:0 8px 26px rgba(0,0,0,.35);
+}
+.stop.gate .card{ border-color:rgba(232,226,214,.35) }
+
+/* every station is >50% image */
+.pic{ height:150px; background:#0e1114;
+  border-bottom:1px solid rgba(255,207,90,.16); overflow:hidden }
+.pic svg{ width:100%; height:100%; display:block }
+
+.txt{ padding:.9rem 1rem 1rem }
+h2{ font-family:var(--serif); font-size:1.28rem; font-weight:400; margin-bottom:.15rem }
+.who{ font:700 .62rem/1 var(--sans); letter-spacing:.13em; text-transform:uppercase;
+  color:var(--amber-dim); margin-bottom:.5rem }
+.stop.gate .who{ color:#b8b2a6 }
+p{ font-size:.94rem; line-height:1.55; opacity:.92 }
+.why{ margin-top:.6rem; padding-top:.6rem;
+  border-top:1px solid rgba(232,226,214,.14);
+  font-size:.9rem; line-height:1.5 }
+.why b{ color:var(--amber) }
+.stop.gate .why b{ color:#e8e2d6 }
+
+/* the end */
+.arrive{ position:relative; margin-top:.4rem }
+.arrive .pin{ background:#e8e2d6; font-size:1.3rem }
+.out{ text-align:center; padding:1.3rem 1rem;
+  border:2px dashed rgba(255,207,90,.4); border-radius:12px }
+.out h2{ color:var(--amber) }
+
+.comfort{ position:fixed; right:.7rem; bottom:.7rem; z-index:20;
+  min-height:44px; min-width:44px; padding:.6rem .9rem;
+  background:var(--amber); color:#1a1d21; border:2px solid #1a1d21;
+  border-radius:24px; cursor:pointer; font:800 .74rem/1 var(--sans);
+  box-shadow:0 6px 20px rgba(0,0,0,.5); }
+.comfort:focus-visible{ outline:3px solid var(--paper); outline-offset:3px }
+
+.foot{ margin-top:2rem; padding-top:1.1rem;
+  border-top:1px solid rgba(232,226,214,.14);
+  text-align:center; font-size:.88rem; line-height:1.6; opacity:.82 }
+.foot b{ color:var(--amber); opacity:1 }
+.foot a{ color:var(--amber) }
+@media(prefers-reduced-motion:reduce){ *{transition:none!important} }
+</style>
+</head>
+<body data-stop="default">
+<div class="room" aria-hidden="true"></div>
+<div class="wrap">
+
+<header class="head">
+  <div class="tube">Tight Spiral Productions</div>
+  <h1>How an idea <b>travels</b></h1>
+  <p class="sub">Follow one idea from the back of a napkin to a machine a stranger
+     can play. Every station is real. Every gate can stop it.</p>
+</header>
+
+<div class="trail">
+
+  <!-- 1 -->
+  <section class="stop">
+    <div class="pin">1</div>
+    <div class="card">
+      <div class="pic">
+        <svg viewBox="0 0 300 150" aria-hidden="true">
+          <rect width="300" height="150" fill="#0e1114"/>
+          <ellipse cx="150" cy="66" rx="40" ry="34" fill="none" stroke="#ffcf5a" stroke-width="2.5"/>
+          <path d="M150 100 v14" stroke="#ffcf5a" stroke-width="2.5"/>
+          <rect x="138" y="114" width="24" height="10" rx="2" fill="#3d4148" stroke="#ffcf5a" stroke-width="2"/>
+          <g stroke="#ffcf5a" stroke-width="2" stroke-linecap="round">
+            <path d="M150 24 v-10"/><path d="M118 34 l-7-8"/><path d="M182 34 l7-8"/>
+            <path d="M100 66 h-11"/><path d="M200 66 h11"/>
+          </g>
+          <circle cx="150" cy="66" r="7" fill="#ffcf5a"/>
+        </svg>
+      </div>
+      <div class="txt">
+        <h2>The spark</h2>
+        <div class="who">Matt, usually walking</div>
+        <p>An idea shows up. Half a metaphor, a mechanic, a thing a student
+           said that stuck. It goes in the door as a sentence.</p>
+        <div class="why"><b>Why it matters:</b> nothing gets built from a
+           feature request. It gets built from a noticing.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 — GATE -->
+  <section class="stop gate">
+    <div class="pin">2</div>
+    <div class="card">
+      <div class="pic">
+        <svg viewBox="0 0 300 150" aria-hidden="true">
+          <rect width="300" height="150" fill="#0e1114"/>
+          <path d="M150 22 v12" stroke="#5a606a" stroke-width="3"/>
+          <path d="M84 40 h132" stroke="#e8e2d6" stroke-width="3" stroke-linecap="round"/>
+          <path d="M150 36 v58" stroke="#5a606a" stroke-width="3"/>
+          <path d="M84 40 l-15 30 h30 z" fill="#2c3037" stroke="#e8e2d6" stroke-width="1.8"/>
+          <path d="M216 40 l-15 30 h30 z" fill="#3d4148" stroke="#ffcf5a" stroke-width="1.8"/>
+          <text x="84" y="60" font-family="Georgia,serif" font-size="15" fill="#e8e2d6" text-anchor="middle">?</text>
+          <circle cx="216" cy="56" r="6" fill="#ffcf5a"/>
+          <rect x="118" y="98" width="64" height="30" rx="4" fill="#2c3037" stroke="#5a606a" stroke-width="1.4"/>
+          <g stroke="#5a606a" stroke-width="1.6" stroke-linecap="round">
+            <path d="M128 110 h34"/><path d="M128 118 h22"/>
+          </g>
+        </svg>
+      </div>
+      <div class="txt">
+        <h2>The Medium Gate</h2>
+        <div class="who">Gate &middot; fires first, every time</div>
+        <p>Before a single pixel: <em>what medium teaches this best?</em>
+           A game? A card? A room? A sentence on a wall? Efficacy decides —
+           never what's easiest to build.</p>
+        <div class="why"><b>Why it matters:</b> most studios pick the medium
+           first and bend the idea to fit. That's backwards, and you can feel it
+           in the result.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="stop">
+    <div class="pin">3</div>
+    <div class="card">
+      <div class="pic">
+        <svg viewBox="0 0 300 150" aria-hidden="true">
+          <rect width="300" height="150" fill="#0e1114"/>
+          <path d="M60 118 v-16 M96 118 v-30 M132 118 v-22 M168 118 v-36 M204 118 v-26 M240 118 v-18"
+                stroke="#3d4148" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="60" cy="96" r="11" fill="#2c3037" stroke="#5a606a" stroke-width="1.8"/>
+          <circle cx="96" cy="82" r="11" fill="#2c3037" stroke="#5a606a" stroke-width="1.8"/>
+          <circle cx="132" cy="90" r="11" fill="#3d4148" stroke="#ffcf5a" stroke-width="2"/>
+          <circle cx="168" cy="76" r="11" fill="#2c3037" stroke="#5a606a" stroke-width="1.8"/>
+          <circle cx="204" cy="86" r="11" fill="#3d4148" stroke="#ffcf5a" stroke-width="2"/>
+          <circle cx="240" cy="94" r="11" fill="#2c3037" stroke="#5a606a" stroke-width="1.8"/>
+          <path d="M40 122 h220" stroke="#4a4f57" stroke-width="2.5"/>
+          <g fill="#ffcf5a"><circle cx="132" cy="90" r="3"/><circle cx="204" cy="86" r="3"/></g>
+        </svg>
+      </div>
+      <div class="txt">
+        <h2>The panel convenes</h2>
+        <div class="who">Five seats &middot; silent unless one has a real objection</div>
+        <p>Medium. Art direction. Who it's for. First screen. And the Aleph seat,
+           who asks the annoying question: <em>is this one thing, or is it a system?</em></p>
+        <div class="why"><b>Why it matters:</b> the panel runs <em>before</em>
+           the build, not after. Catching a wrong first screen at the sketch
+           stage costs a sentence. Catching it at launch costs the build.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="stop">
+    <div class="pin">4</div>
+    <div class="card">
+      <div class="pic">
+        <svg viewBox="0 0 300 150" aria-hidden="true">
+          <rect width="300" height="150" fill="#0e1114"/>
+          <rect x="94" y="20" width="112" height="112" rx="8" fill="#2b3037" stroke="#4a4f57" stroke-width="2"/>
+          <rect x="106" y="32" width="88" height="52" rx="4" fill="#0e1114" stroke="#ffcf5a" stroke-width="2"/>
+          <path d="M112 74 Q134 70 148 62 T182 46" stroke="#ffcf5a" stroke-width="2" fill="none" stroke-dasharray="4 5"/>
+          <circle cx="128" cy="106" r="8" fill="#ffcf5a" stroke="#1a1d21" stroke-width="2"/>
+          <circle cx="150" cy="106" r="6" fill="#c9a03f" stroke="#1a1d21" stroke-width="2"/>
+          <rect x="170" y="100" width="7" height="14" rx="3" fill="#5a606a"/>
+          <circle cx="173" cy="98" r="5" fill="#ffcf5a" stroke="#1a1d21" stroke-width="2"/>
+          <g stroke="#3d4148" stroke-width="2" stroke-linecap="round">
+            <path d="M50 60 h20 M50 72 h14"/><path d="M230 60 h20 M236 72 h14"/>
+          </g>
+        </svg>
+      </div>
+      <div class="txt">
+        <h2>The build</h2>
+        <div class="who">One file. Offline. No account. Nothing kept.</div>
+        <p>A single HTML file you could email to someone. It runs on a plane.
+           It stores nothing about you. It works on a ten-year-old phone.</p>
+        <div class="why"><b>Why it matters:</b> a tool that needs a login, a
+           server, and a subscription is a tool a teacher can't actually use in
+           March when the wifi is down.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 — GATE -->
+  <section class="stop gate">
+    <div class="pin">5</div>
+    <div class="card">
+      <div class="pic">
+        <svg viewBox="0 0 300 150" aria-hidden="true">
+          <rect width="300" height="150" fill="#0e1114"/>
+          <ellipse cx="150" cy="74" rx="62" ry="38" fill="none" stroke="#e8e2d6" stroke-width="2.5"/>
+          <circle cx="150" cy="74" r="22" fill="#2c3037" stroke="#ffcf5a" stroke-width="2.5"/>
+          <circle cx="150" cy="74" r="9" fill="#ffcf5a"/>
+          <circle cx="156" cy="68" r="3" fill="#0e1114"/>
+          <g stroke="#e8e2d6" stroke-width="2" stroke-linecap="round" opacity=".55">
+            <path d="M150 22 v-8"/><path d="M150 126 v8"/>
+            <path d="M78 74 h-10"/><path d="M222 74 h10"/>
+            <path d="M100 38 l-7-6"/><path d="M200 38 l7-6"/>
+            <path d="M100 110 l-7 6"/><path d="M200 110 l7 6"/>
+          </g>
+        </svg>
+      </div>
+      <div class="txt">
+        <h2>Studio Eyes</h2>
+        <div class="who">Gate &middot; a machine, not a memory</div>
+        <p>Every push, a real browser opens the file on a real phone screen —
+           in light <em>and</em> in the dark. It measures contrast, tap targets,
+           focus rings. It cannot be talked out of it.</p>
+        <div class="why"><b>Why it matters:</b> I have retinitis pigmentosa. If
+           accessibility is a thing someone has to <em>remember</em>, it will get
+           forgotten on a Tuesday. So it isn't a habit here. It's a gate.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 — GATE -->
+  <section class="stop gate">
+    <div class="pin">6</div>
+    <div class="card">
+      <div class="pic">
+        <svg viewBox="0 0 300 150" aria-hidden="true">
+          <rect width="300" height="150" fill="#0e1114"/>
+          <rect x="112" y="18" width="76" height="118" rx="12" fill="#2b3037" stroke="#e8e2d6" stroke-width="2.5"/>
+          <rect x="120" y="32" width="60" height="86" rx="4" fill="#0e1114" stroke="#ffcf5a" stroke-width="1.6"/>
+          <path d="M126 100 Q142 96 152 88 T176 70" stroke="#ffcf5a" stroke-width="1.8" fill="none" stroke-dasharray="4 5"/>
+          <circle cx="150" cy="127" r="5" fill="#5a606a"/>
+          <path d="M226 78 a16 16 0 0 0-16-16 v-8 l-14 12 14 12 v-8 a8 8 0 0 1 8 8 z" fill="#ffcf5a"/>
+          <g stroke="#e8e2d6" stroke-width="2" stroke-linecap="round" opacity=".5">
+            <path d="M62 60 h22"/><path d="M62 74 h14"/><path d="M62 88 h18"/>
+          </g>
+        </svg>
+      </div>
+      <div class="txt">
+        <h2>Cold play</h2>
+        <div class="who">Gate &middot; the founder, on a phone, no warm-up</div>
+        <p>I pick it up cold, like a stranger would, and ask two questions:
+           <em>does it still do its job? did anything surprise me?</em>
+           Nobody else can run this gate for me.</p>
+        <div class="why"><b>Why it matters:</b> the person who built it always
+           knows where to click. That's exactly why they're the wrong person to
+           test it — unless they can forget.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 — ARRIVE -->
+  <section class="stop arrive">
+    <div class="pin">&#9654;</div>
+    <div class="out">
+      <h2>A stranger plays it.</h2>
+      <p style="max-width:26rem;margin:.4rem auto 0">And learns a writing move by
+         <em>doing</em> it — not by being told about it.</p>
+    </div>
+  </section>
+
+</div>
+
+<footer class="foot">
+  <b>Play. Notice. Design.</b><br>
+  Six stations. Three of them are gates that can stop the idea cold. That's the
+  point: <em>most things should not ship.</em><br><br>
+  <a href="index.html">&larr; Back to the front door</a>
+</footer>
+
+</div>
+
+<button class="comfort" id="cbtn" aria-label="Change comfort setting">Comfort: Default</button>
+<script>
+(function(){
+  var S=['default','softer','warm'], L={'default':'Default','softer':'Softer','warm':'Warm dark'}, i=0;
+  var b=document.getElementById('cbtn');
+  b.addEventListener('click',function(){
+    i=(i+1)%S.length;
+    document.body.setAttribute('data-stop',S[i]);
+    b.textContent='Comfort: '+L[S[i]];
+  });
+})();
+</script>
+
+<!--
+  PROVENANCE — How an Idea Travels
+  Tight Spiral Productions. Built 2026-07-11.
+
+  METAPHOR: a PATH, not a railroad and not a wiring diagram. A railroad implies
+  one track and no choice. A wiring diagram is accurate and cold - a schematic,
+  not a place. A path is walked, it can be left, and it has gates on it. It is
+  also the studio's own metaphor: the cowpath.
+
+  NO UNCANNY VALLEY: flat authored SVG, honest line weight, no gradients pretending
+  to be photographs, no faces. Simple joy: the amber, the lit screens, the footprints
+  on the trail.
+
+  FLOORS: color-scheme locked - pinned ink on .comfort - >50% image per station -
+  44px pins double as the numbered markers - no opening wall.
+-->
+</body>
+</html>
