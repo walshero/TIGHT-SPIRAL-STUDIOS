@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="only light">
+<title>Funny Boney's Factory — Playtest</title>
+<!--
+  FUNNY BONEY'S FACTORY  ·  Tight Spiral Productions  ·  v3 (playable)
+  Play. Notice. Design.
+
+  Single file. Offline. No network. No data leaves this page.
+  Built against: funny-boneys-factory-spec.md v2 + tight-spiral-visual-constitution.md
+  This v3 moves the ship gate: playable second screen + beauty + joy, per founder voice ruling 2026-07-06.
+
+  Four car-rulings baked in (founder voice session 2026-07-06):
+   1. INVERT THE STACK  — play/silliness on top, the real-world system underneath (Glass Engine ring).
+   2. EPISTEMIC TOGGLE  — Spellcaster / Coder / Storyteller: one engine, three lenses. A screen, not three builds.
+   3. FAILURE IS DIAGNOSTIC — a flat gag is not "oops," it is information about the audience.
+   4. ADAPTIVE POLLING (the buried thesis) — bad polling gives garbage; adaptive polling gives real signal;
+      real signal lets you design better. Calibration = the COMPUTED gap between predicted and surveyed laughs.
+
+  Floors (constitution): no emoji ever · accessibility is a floor not a wall · comfort is a knob not a gate ·
+  scene-first opening · >50% visual, never a text wall · computed calibration, never self-report.
+  Humor is culturally situated: the audience you poll changes what lands. That is taught, not hidden.
+
+  CHANGELOG
+   v3  2026-07-06  First playable. Core loop fires: BUILD -> SHOW -> POLL -> SEE THE GAP -> RECALIBRATE.
+                  Epistemic toggle live. Glass Engine ring live. Comfort knobs live (three real stops).
+-->
+<style>
+  /* ---- palette: arcade dark-stop B (default), green-free, high-lumen ---- */
+  :root{
+    --bg:#10151c;         /* control-room slate */
+    --surface:#182230;
+    --surface-2:#1f2c3d;
+    --ink:#f2f6fb;        /* 16:1 on --bg */
+    --ink-soft:#b7c4d4;
+    --line:#33465e;
+    --amber:#ffb347;      /* arcade accent */
+    --amber-deep:#e08a1e;
+    --violet:#b98cff;     /* spellcaster lens */
+    --cyan:#5fd0e6;       /* coder lens */
+    --rose:#ff8fa8;       /* storyteller lens */
+    --lens:var(--amber);  /* active lens colour, set by JS */
+    --good:#7fe3a4;       /* signal-clean (not structural green; used only as data ink) */
+    --flat:#8899ac;       /* a flat gag: honest grey, never punishing red */
+    --paper-sep:0;        /* comfort stop marker, for the sweep */
+    --r:14px;
+    --shadow:0 8px 30px rgba(0,0,0,.45);
+    --font: ui-rounded, "Segoe UI", system-ui, -apple-system, sans-serif;
+    --mono: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+  /* comfort stop: SOFTER (a real second stop — >0.12 paper-luminance separation from default) */
+  body.softer{
+    --bg:#20262e; --surface:#2b333d; --surface-2:#343e4a; --line:#4a5666;
+    --ink:#f4f7fb; --ink-soft:#cdd7e2;
+  }
+  /* comfort stop: DAYLIGHT (high-lumen light stop for bright rooms — legible, green-free) */
+  body.daylight{
+    --bg:#e9e3d6; --surface:#f4efe4; --surface-2:#fbf7ee; --line:#c4bba9;
+    --ink:#22201a; --ink-soft:#4c483f; --shadow:0 8px 30px rgba(80,70,50,.18);
+    --amber:#9a5a00; --amber-deep:#7a4600;
+    --violet:#6b3fc0; --cyan:#0f6d82; --rose:#b03050; --good:#1f7a4d; --flat:#6a6255;
+  }
+  body.daylight .part .pred{ color:#7a4600; }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--ink); font-family:var(--font);
+    line-height:1.5; -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  html[data-motion="calm"] *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+
+  button{ font-family:inherit; cursor:pointer; color:inherit; border:none; background:none; }
+  button:focus-visible, a:focus-visible, [tabindex]:focus-visible{
+    outline:3px solid var(--lens); outline-offset:3px; border-radius:6px;
+  }
+  .sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+  /* ---- shell ---- */
+  .stage{ max-width:1040px; margin:0 auto; padding:18px 18px 60px; }
+
+  /* ---- top bar: comfort knobs + lens toggle. never a gate; always reachable ---- */
+  .bar{
+    display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+    padding:10px 12px; margin-bottom:16px;
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+  }
+  .brand{ font-weight:800; letter-spacing:.3px; font-size:1.02rem; margin-right:auto; display:flex; align-items:center; gap:9px;}
+  .brand .glyph{ width:22px; height:22px; }
+  .knobs{ display:flex; gap:6px; flex-wrap:wrap; }
+  .knob{
+    font-size:.74rem; padding:6px 10px; border-radius:999px;
+    background:var(--surface-2); border:1px solid var(--line); color:var(--ink-soft);
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .knob[aria-pressed="true"]{ color:var(--ink); border-color:var(--lens); box-shadow:inset 0 0 0 1px var(--lens); }
+  .knob small{ opacity:.7; font-size:.68rem;}
+
+  /* lens toggle */
+  .lenses{ display:flex; gap:6px; background:var(--surface-2); padding:4px; border-radius:999px; border:1px solid var(--line);}
+  .lens-btn{ font-size:.78rem; font-weight:700; padding:6px 12px; border-radius:999px; color:var(--ink-soft); position:relative;}
+  .lens-btn[data-l="spell"][aria-pressed="true"]{ background:#b98cff; color:#10151c; }
+  .lens-btn[data-l="code"][aria-pressed="true"]{ background:#5fd0e6; color:#10151c; }
+  .lens-btn[data-l="story"][aria-pressed="true"]{ background:#ff8fa8; color:#10151c; }
+  body.daylight .lens-btn[data-l="spell"][aria-pressed="true"]{ background:#6b3fc0; color:#ffffff; }
+  body.daylight .lens-btn[data-l="code"][aria-pressed="true"]{ background:#0f6d82; color:#ffffff; }
+  body.daylight .lens-btn[data-l="story"][aria-pressed="true"]{ background:#b03050; color:#ffffff; }
+
+  /* ---- scene-first opening ---- */
+  .scene{
+    position:relative; background:
+      radial-gradient(120% 90% at 50% 0%, var(--surface-2), var(--surface) 70%);
+    border:1px solid var(--line); border-radius:22px; overflow:hidden;
+    box-shadow:var(--shadow);
+  }
+  .scene svg{ display:block; width:100%; height:auto; }
+
+  .headline{ position:absolute; left:0; right:0; bottom:0; padding:22px 24px 20px;
+    background:linear-gradient(0deg, rgba(0,0,0,.72), rgba(0,0,0,.28));
+    background-color:#1a1206;
+    color:#fff; }
+  body.daylight .headline{ background:linear-gradient(0deg, rgba(20,14,4,.72), rgba(20,14,4,.30)); background-color:#1a1206; }
+  .headline h1{ margin:0 0 4px; font-size:clamp(1.5rem,4.4vw,2.4rem); letter-spacing:.3px; }
+  .headline p{ margin:0; font-size:clamp(.9rem,2.4vw,1.05rem); opacity:.92; max-width:52ch;}
+
+  /* ---- primary controls under the scene ---- */
+  .row{ display:flex; flex-wrap:wrap; gap:12px; margin:16px 0; }
+  .btn{
+    font-weight:800; font-size:1rem; padding:14px 22px; border-radius:12px;
+    background:var(--lens); color:#10151c; box-shadow:0 4px 0 rgba(0,0,0,.3);
+    transition:transform .08s ease, box-shadow .08s ease; min-height:48px;
+  }
+  .btn:active{ transform:translateY(3px); box-shadow:0 1px 0 rgba(0,0,0,.3); }
+  .btn.ghost{ background:var(--surface-2); color:var(--ink); border:1px solid var(--line); box-shadow:none;}
+  body.daylight .btn{ background:#7a4600; color:#ffffff; }
+  body.daylight .btn.ghost{ background:#f4efe4; color:#22201a; }
+  .btn[disabled]{ opacity:.4; cursor:not-allowed; transform:none; box-shadow:0 4px 0 rgba(0,0,0,.3); }
+
+  /* ---- the workbench: choose gag parts (the "build" is choosing what should be funny) ---- */
+  .bench{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:16px; }
+  .bench h2{ margin:.1rem 0 2px; font-size:1.05rem; }
+  .bench .sub{ margin:0 0 14px; color:var(--ink-soft); font-size:.9rem; }
+  .parts{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; }
+  .part{
+    text-align:left; background:var(--surface-2); border:1px solid var(--line);
+    border-radius:12px; padding:12px; display:flex; gap:11px; align-items:flex-start;
+    transition:border-color .1s, transform .1s;
+  }
+  .part:hover{ transform:translateY(-2px); }
+  .part[aria-pressed="true"]{ border-color:var(--lens); box-shadow:inset 0 0 0 1px var(--lens); }
+  .part .ic{ flex:0 0 auto; width:40px; height:40px; }
+  .part .tx{ display:flex; flex-direction:column; gap:2px; }
+  .part .tx b{ font-size:.92rem; }
+  .part .tx span{ font-size:.76rem; color:var(--ink-soft); }
+  .part .pred{ margin-top:5px; font-size:.7rem; color:#ffb347; font-weight:700; letter-spacing:.4px;}
+  body.softer .part .pred{ color:#ffc061; }
+
+  /* ---- the audience picker (humor is situated: WHO you show it to changes what lands) ---- */
+  .aud{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;}
+  .aud-btn{ font-size:.8rem; padding:8px 12px; border-radius:999px; background:var(--surface-2);
+    border:1px solid var(--line); color:var(--ink-soft); }
+  .aud-btn[aria-pressed="true"]{ color:var(--ink); border-color:var(--lens); box-shadow:inset 0 0 0 1px var(--lens);}
+
+  /* ---- the poll result: the SECOND SCREEN. the gap made visible ---- */
+  .result{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:18px; }
+  .gapwrap{ display:grid; grid-template-columns:1fr; gap:16px; }
+  @media(min-width:720px){ .gapwrap{ grid-template-columns:1.2fr .8fr; } }
+
+  .crowd{ display:grid; grid-template-columns:repeat(10,1fr); gap:7px; }
+  .face{ aspect-ratio:1; }
+  .meter{ background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:14px; }
+  .meter h3{ margin:0 0 12px; font-size:.95rem; }
+  .bars{ display:flex; flex-direction:column; gap:12px; }
+  .bar-lab{ display:flex; justify-content:space-between; font-size:.78rem; color:var(--ink-soft); margin-bottom:4px;}
+  .track{ height:16px; background:var(--surface); border:1px solid var(--line); border-radius:999px; overflow:hidden; }
+  .fill{ height:100%; border-radius:999px; transition:width .7s cubic-bezier(.2,.8,.2,1); }
+  .fill.pred{ background:var(--lens); }
+  .fill.actual{ background:var(--good); }
+  .gapnum{ text-align:center; margin-top:6px; }
+  .gapnum .big{ font-size:2.4rem; font-weight:800; line-height:1; }
+  .gapnum .cap{ font-size:.76rem; color:var(--ink-soft); letter-spacing:.5px; text-transform:uppercase;}
+
+  .read{ background:var(--surface-2); border:1px solid var(--line); border-left:4px solid var(--lens);
+    border-radius:10px; padding:13px 15px; font-size:.9rem; }
+  .read b{ color:var(--ink); }
+
+  /* ---- the poll-quality lever: the buried thesis, made a knob ---- */
+  .polling{ margin-top:16px; background:var(--surface); border:1px dashed var(--line); border-radius:var(--r); padding:14px 16px;}
+  .polling h3{ margin:0 0 4px; font-size:.92rem; display:flex; gap:8px; align-items:center;}
+  .polling p{ margin:0 0 12px; color:var(--ink-soft); font-size:.84rem; max-width:66ch;}
+  .pollpick{ display:flex; gap:8px; flex-wrap:wrap; }
+  .pollpick button{ flex:1 1 180px; text-align:left; padding:11px 13px; border-radius:11px;
+    background:var(--surface-2); border:1px solid var(--line); }
+  .pollpick button[aria-pressed="true"]{ border-color:var(--lens); box-shadow:inset 0 0 0 1px var(--lens); }
+  .pollpick b{ display:block; font-size:.86rem; }
+  .pollpick span{ font-size:.74rem; color:var(--ink-soft); }
+
+  /* ---- glass engine ring: the real-world system, hidden until noticed ---- */
+  .ring{ margin:20px 0 0; text-align:center; }
+  .ring button{ font-size:.8rem; color:var(--ink-soft); border:1px solid var(--line);
+    padding:8px 16px; border-radius:999px; background:var(--surface); }
+  .engine{ margin-top:14px; background:var(--surface); border:1px solid var(--line);
+    border-radius:var(--r); padding:18px; display:none; }
+  .engine.open{ display:block; }
+  .engine h3{ margin:0 0 8px; }
+  .engine p{ margin:0 0 10px; color:var(--ink-soft); font-size:.9rem; }
+  .engine .map{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:6px;}
+  .engine .node{ background:var(--surface-2); border:1px solid var(--line); border-radius:12px;
+    padding:10px 14px; font-size:.82rem; max-width:180px;}
+  .engine .arrow{ color:var(--lens); font-weight:800; }
+
+  /* ---- progress rail (Jenova flow made visible: studio vocabulary) ---- */
+  .rail{ display:flex; align-items:center; gap:0; margin:22px 0 4px; }
+  .stop{ flex:1; text-align:center; position:relative; }
+  .stop .dot{ width:16px; height:16px; border-radius:50%; background:var(--surface-2);
+    border:2px solid var(--line); margin:0 auto 6px; }
+  .stop.done .dot{ background:var(--lens); border-color:var(--lens); }
+  .stop.now .dot{ border-color:var(--lens); box-shadow:0 0 0 4px color-mix(in srgb, var(--lens) 30%, transparent);}
+  .stop .lab{ font-size:.7rem; color:var(--ink-soft); }
+  .stop.done .lab, .stop.now .lab{ color:var(--ink); }
+  .stop::after{ content:""; position:absolute; top:8px; left:50%; width:100%; height:2px; background:var(--line); z-index:-1;}
+  .stop:last-child::after{ display:none; }
+
+  .hidden{ display:none !important; }
+  .fade-in{ animation:fade .5s ease both; }
+  @keyframes fade{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+
+  .foot{ margin-top:34px; padding-top:16px; border-top:1px solid var(--line); color:var(--ink-soft); font-size:.78rem; text-align:center;}
+  .foot a{ color:var(--lens); }
+  body.daylight .foot a{ color:#7a4600; }
+  .badge{ display:inline-block; font-size:.68rem; padding:3px 9px; border-radius:999px;
+    background:var(--surface-2); border:1px solid var(--line); color:var(--ink-soft); margin-left:8px;}
+  /* ============ PLAYTEST CAPTURE LAYER ============ */
+  #pt-tab{
+    position:fixed; right:16px; bottom:16px; z-index:60;
+    background:var(--amber); color:#1a1206; border:none; cursor:pointer;
+    font-family:var(--font); font-weight:800; font-size:16px;
+    padding:14px 18px; min-height:52px; border-radius:var(--r);
+    box-shadow:var(--shadow); display:flex; align-items:center; gap:10px;
+  }
+  #pt-tab:focus-visible{ outline:3px solid var(--ink); outline-offset:3px; }
+  .pt-dot{
+    background:#1a1206; color:var(--amber); font-size:14px; font-weight:800;
+    min-width:24px; height:24px; border-radius:12px; display:inline-flex;
+    align-items:center; justify-content:center; padding:0 6px;
+  }
+  #pt-panel{
+    position:fixed; right:0; top:0; bottom:0; z-index:61;
+    width:min(420px, 94vw); background:var(--surface);
+    border-left:2px solid var(--line); box-shadow:var(--shadow);
+    padding:18px; overflow-y:auto; color:var(--ink);
+    font-family:var(--font);
+  }
+  .pt-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:6px; }
+  .pt-head b{ font-size:19px; }
+  .pt-where{ color:var(--ink-soft); font-size:14px; margin-top:4px; }
+  .pt-where span{ color:var(--amber); font-weight:700; }
+  .pt-x{
+    background:var(--surface-2); color:var(--ink); border:1px solid var(--line);
+    border-radius:10px; padding:10px 14px; min-height:44px; cursor:pointer;
+    font-family:var(--font); font-size:15px; font-weight:700;
+  }
+  .pt-x:focus-visible{ outline:3px solid var(--amber); outline-offset:2px; }
+  .pt-hint{ color:var(--ink-soft); font-size:14px; line-height:1.5; margin:10px 0; }
+  .pt-quick{ display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+  .pt-q{
+    background:var(--surface-2); color:var(--ink); border:1px solid var(--line);
+    border-radius:10px; padding:10px 14px; min-height:44px; cursor:pointer;
+    font-family:var(--font); font-size:15px; font-weight:700; flex:1 1 auto;
+  }
+  .pt-q:hover{ border-color:var(--amber); }
+  .pt-q:focus-visible{ outline:3px solid var(--amber); outline-offset:2px; }
+  .pt-lab{ display:block; color:var(--ink); font-size:15px; font-weight:700; margin:12px 0 6px; line-height:1.4; }
+  #pt-panel textarea{
+    width:100%; box-sizing:border-box; background:var(--bg); color:var(--ink);
+    border:1px solid var(--line); border-radius:10px; padding:12px;
+    font-family:var(--font); font-size:16px; line-height:1.5; resize:vertical;
+  }
+  #pt-panel textarea:focus-visible{ outline:3px solid var(--amber); outline-offset:1px; }
+  #pt-panel .btn{ margin-top:10px; width:100%; }
+  .pt-log{ margin:16px 0; display:flex; flex-direction:column; gap:10px; }
+  .pt-item{ background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+  .pt-item-h{ display:flex; justify-content:space-between; align-items:center; gap:8px; }
+  .pt-item-where{ color:var(--ink-soft); font-size:13px; }
+  .pt-item-tx{ color:var(--ink); font-size:15px; line-height:1.5; margin-top:6px; }
+  .pt-tag{ font-size:12px; font-weight:800; padding:3px 8px; border-radius:6px; letter-spacing:.03em; }
+  .pt-tag-LANDED{ background:var(--good); color:#0a2015; }
+  .pt-tag-DELIGHT{ background:var(--amber); color:#1a1206; }
+  .pt-tag-SNAG{ background:var(--rose); color:#2a0812; }
+  .pt-tag-CONFUSED{ background:var(--violet); color:#1a0c2a; }
+  .pt-tag-CUT{ background:var(--flat); color:#0d1218; }
+  .pt-tag-NOTE{ background:var(--surface-2); color:var(--ink); border:1px solid var(--line); }
+  .pt-final{ border-top:1px solid var(--line); margin-top:18px; padding-top:14px; }
+  @media (max-width:520px){ .pt-q{ flex:1 1 100%; } }
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- ============ TOP BAR: comfort knobs (never gates) + lens toggle ============ -->
+  <div class="bar" role="region" aria-label="Comfort and lens controls">
+    <div class="brand">
+      <svg class="glyph" viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="16" r="14" fill="none" stroke="var(--lens)" stroke-width="2"/>
+        <path d="M16 4 A12 12 0 0 1 28 16 A9 9 0 0 1 16 25 A6.5 6.5 0 0 1 9.5 18.5 A4.5 4.5 0 0 1 16 14.5"
+              fill="none" stroke="var(--lens)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      Funny Boney's Factory
+    </div>
+
+    <div class="lenses" role="group" aria-label="Choose your lens">
+      <button class="lens-btn" data-l="spell"  aria-pressed="false" onclick="setLens('spell')">Spellcaster</button>
+      <button class="lens-btn" data-l="code"   aria-pressed="false" onclick="setLens('code')">Coder</button>
+      <button class="lens-btn" data-l="story"  aria-pressed="false" onclick="setLens('story')">Storyteller</button>
+    </div>
+
+    <div class="knobs" role="group" aria-label="Comfort settings">
+      <button class="knob" id="k-stop" aria-pressed="false" onclick="cycleStop()">
+        View: <small id="stop-lab">Arcade</small>
+      </button>
+      <button class="knob" id="k-motion" aria-pressed="false" onclick="toggleMotion()">
+        Motion: <small id="motion-lab">Full</small>
+      </button>
+    </div>
+  </div>
+
+  <!-- ============ SCENE-FIRST OPENING (a machine mid-chain, about to be funny) ============ -->
+  <div class="scene" id="scene">
+    <svg viewBox="0 0 1040 460" role="img" aria-label="A Rube Goldberg machine mid-chain: a marble is about to roll off a ramp, tip a bucket, and drop a rubber chicken onto a springboard aimed at a sleeping cat.">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="var(--surface-2)"/><stop offset="1" stop-color="var(--surface)"/>
+        </linearGradient>
+        <radialGradient id="spot" cx="50%" cy="20%" r="70%">
+          <stop offset="0" stop-color="rgba(255,255,255,.10)"/><stop offset="1" stop-color="rgba(255,255,255,0)"/>
+        </radialGradient>
+      </defs>
+      <rect width="1040" height="460" fill="url(#sky)"/>
+      <rect width="1040" height="460" fill="url(#spot)"/>
+
+      <!-- floor -->
+      <rect x="0" y="410" width="1040" height="50" fill="var(--line)" opacity=".5"/>
+
+      <!-- ramp + marble -->
+      <path d="M60 120 L340 210" stroke="var(--amber)" stroke-width="10" stroke-linecap="round"/>
+      <g id="marble">
+        <circle cx="90" cy="118" r="15" fill="var(--lens)"/>
+        <circle cx="85" cy="112" r="5" fill="#fff" opacity=".7"/>
+      </g>
+
+      <!-- bucket on a pivot -->
+      <g id="bucket">
+        <path d="M360 225 q30 40 60 0 l-6 -46 h-48 z" fill="var(--surface-2)" stroke="var(--line)" stroke-width="3"/>
+        <line x1="345" y1="205" x2="435" y2="205" stroke="var(--line)" stroke-width="4"/>
+      </g>
+      <polygon points="390,250 384,270 396,270" fill="var(--line)"/>
+
+      <!-- rubber chicken hanging -->
+      <g id="chicken">
+        <ellipse cx="470" cy="150" rx="16" ry="26" fill="#f2f6fb" opacity=".92"/>
+        <path d="M470 130 q10 -14 20 -6 q-6 8 -14 10 z" fill="var(--amber)"/>
+        <circle cx="464" cy="138" r="2.5" fill="#10151c"/>
+        <path d="M470 176 q-6 20 4 40" stroke="var(--line)" stroke-width="3" fill="none"/>
+      </g>
+
+      <!-- springboard -->
+      <g id="spring">
+        <rect x="520" y="360" width="120" height="12" rx="4" fill="var(--amber-deep)"/>
+        <path d="M540 360 l0 -20 m20 20 l0 -20 m20 20 l0 -20 m20 20 l0 -20"
+              stroke="var(--line)" stroke-width="3"/>
+      </g>
+
+      <!-- sleeping cat (the audience of one) -->
+      <g id="cat">
+        <ellipse cx="820" cy="392" rx="66" ry="26" fill="var(--surface-2)" stroke="var(--line)" stroke-width="3"/>
+        <path d="M765 384 q-8 -18 6 -22 q4 12 10 14z" fill="var(--surface-2)" stroke="var(--line)" stroke-width="3"/>
+        <path d="M770 380 l4 -8 l6 8" fill="none" stroke="var(--line)" stroke-width="2"/>
+        <path d="M776 392 q6 6 14 0" stroke="var(--line)" stroke-width="2" fill="none"/>
+        <path d="M760 378 q-10 -2 -18 2 M760 384 q-12 1 -20 5" stroke="var(--ink-soft)" stroke-width="1.6"/>
+        <text x="866" y="360" font-size="26" fill="var(--ink-soft)" font-family="var(--mono)">z z</text>
+      </g>
+
+      <!-- motion hints -->
+      <g stroke="var(--lens)" stroke-width="3" fill="none" opacity=".55" stroke-linecap="round">
+        <path d="M108 124 q30 20 60 26"/>
+        <path d="M470 178 q4 30 -2 60" stroke-dasharray="2 9"/>
+      </g>
+    </svg>
+    <div class="headline">
+      <h1>Make the cat laugh.</h1>
+      <p>The marble is about to roll. In a second, something falls. Will it land? You decide what happens next — then you find out what the crowd actually thought.</p>
+    </div>
+  </div>
+
+  <!-- ============ PRIMARY CTA ROW ============ -->
+  <div class="row">
+    <button class="btn" id="cta-start" onclick="goBuild()">Step in</button>
+    <button class="btn ghost" onclick="openHow()">How this plays</button>
+  </div>
+
+  <!-- ============ PROGRESS RAIL (studio vocabulary: the loop, made visible) ============ -->
+  <div class="rail" id="rail" aria-hidden="true">
+    <div class="stop now"  data-s="build"><div class="dot"></div><div class="lab">Build</div></div>
+    <div class="stop"      data-s="show"><div class="dot"></div><div class="lab">Show</div></div>
+    <div class="stop"      data-s="poll"><div class="dot"></div><div class="lab">Poll</div></div>
+    <div class="stop"      data-s="gap"><div class="dot"></div><div class="lab">See the gap</div></div>
+    <div class="stop"      data-s="tune"><div class="dot"></div><div class="lab">Recalibrate</div></div>
+  </div>
+
+  <!-- ============ SCREEN 1: THE BENCH (build = choose what should be funny) ============ -->
+  <section class="bench hidden" id="bench" aria-label="Build your gag">
+    <h2 id="bench-title">Pick the beat you think lands hardest.</h2>
+    <p class="sub" id="bench-sub">You are guessing what a crowd will find funny. That guess is the whole game. Choose one.</p>
+
+    <div class="parts" id="parts" role="group" aria-label="Gag parts"></div>
+
+    <div style="margin-top:16px">
+      <div class="sub" style="margin-bottom:6px"><b style="color:var(--ink)">Who are you showing it to?</b> The same gag lands differently for a different crowd. That is not a bug — it is the point.</div>
+      <div class="aud" id="aud" role="group" aria-label="Choose an audience"></div>
+    </div>
+
+    <div class="row" style="margin-bottom:0">
+      <button class="btn" id="show-btn" disabled onclick="doShow()">Show the crowd</button>
+      <button class="btn ghost" onclick="backToScene()">Back to the scene</button>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 2: THE SECOND SCREEN — the gap made visible ============ -->
+  <section class="result hidden" id="result" aria-label="What the crowd actually thought">
+    <div class="gapwrap">
+      <div>
+        <h2 style="margin:.1rem 0 10px">You showed it. Here is the room.</h2>
+        <div class="crowd" id="crowd" aria-label="The crowd, laughing or not"></div>
+        <div class="read" id="read" style="margin-top:14px"></div>
+      </div>
+
+      <div class="meter">
+        <h3>Predicted vs. actual</h3>
+        <div class="bars">
+          <div>
+            <div class="bar-lab"><span>You predicted</span><span id="pred-pct">0%</span></div>
+            <div class="track"><div class="fill pred" id="pred-fill" style="width:0%"></div></div>
+          </div>
+          <div>
+            <div class="bar-lab"><span>They actually laughed</span><span id="act-pct">0%</span></div>
+            <div class="track"><div class="fill actual" id="act-fill" style="width:0%"></div></div>
+          </div>
+        </div>
+        <div class="gapnum">
+          <div class="big" id="gap-big">0</div>
+          <div class="cap">points off — your calibration gap</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THE BURIED THESIS as a live knob: poll quality changes the truth you get -->
+    <div class="polling" aria-label="How you polled the crowd">
+      <h3>How did you ask them?</h3>
+      <p>Here is the quiet lesson under the whole game: <b style="color:var(--ink)">the way you poll decides what you learn.</b> Ask a lazy question and you get a comforting number that isn't true. Ask well, and the crowd hands you a real signal you can design against. Switch it and watch your gap move.</p>
+      <div class="pollpick" role="group" aria-label="Polling method">
+        <button data-p="thumbs" aria-pressed="true" onclick="setPoll('thumbs')">
+          <b>"Was that funny?" — yes / no</b><span>One blunt question. Cheap. People say yes to be kind. Noisy.</span></button>
+        <button data-p="laughs" aria-pressed="false" onclick="setPoll('laughs')">
+          <b>Count the real laughs</b><span>Measure what bodies did, not what mouths said. Cleaner.</span></button>
+        <button data-p="adaptive" aria-pressed="false" onclick="setPoll('adaptive')">
+          <b>Adaptive: ask, then follow up</b><span>Ask, then ask the surprised ones why. The truest signal — and the most work.</span></button>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:16px; margin-bottom:0">
+      <button class="btn" onclick="recalibrate()">Recalibrate &amp; go again</button>
+      <button class="btn ghost" onclick="carryOut()">Carry this out</button>
+    </div>
+
+    <!-- GLASS ENGINE RING: the real-world system, hidden until noticed -->
+    <div class="ring">
+      <button id="ring-btn" onclick="toggleEngine()" aria-expanded="false">Show the engine underneath</button>
+      <div class="engine" id="engine" role="region" aria-label="What this machine is really teaching">
+        <h3>You thought you were making a cat laugh.</h3>
+        <p>Underneath, you were running the exact loop a designer runs on a hard real-world problem: guess what an audience needs, build it, measure the gap honestly, and let the measurement — not your hunch — drive the next version. Swap "make the cat laugh" for "get water to a dry field with a cheap machine" and the loop is identical.</p>
+        <div class="map">
+          <div class="node">Guess what lands</div>
+          <div class="arrow" aria-hidden="true">-&gt;</div>
+          <div class="node">Build it for a real audience</div>
+          <div class="arrow" aria-hidden="true">-&gt;</div>
+          <div class="node">Measure the gap, honestly</div>
+          <div class="arrow" aria-hidden="true">-&gt;</div>
+          <div class="node">Let the signal redesign it</div>
+        </div>
+        <p style="margin-top:12px; font-size:.82rem">The launch problem this maps to: <b style="color:var(--ink)">robotics and sustainable agriculture</b> — machines that help grow food where it is hard to grow. The laugh was the door. The calibration was the room.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ "HOW THIS PLAYS" panel ============ -->
+  <section class="bench hidden" id="how" aria-label="How this plays">
+    <h2>How this plays</h2>
+    <p class="sub">Five beats, on a loop. The rail up top shows where you are.</p>
+    <div class="parts">
+      <div class="part"><div class="tx"><b>1 · Build</b><span>Guess which beat is funny. The guess is the game.</span></div></div>
+      <div class="part"><div class="tx"><b>2 · Show</b><span>Put it in front of a crowd you choose.</span></div></div>
+      <div class="part"><div class="tx"><b>3 · Poll</b><span>Ask them — and how you ask changes the truth.</span></div></div>
+      <div class="part"><div class="tx"><b>4 · See the gap</b><span>Your guess vs. what actually landed. A number.</span></div></div>
+      <div class="part"><div class="tx"><b>5 · Recalibrate</b><span>Use the gap to guess better next time.</span></div></div>
+    </div>
+    <p class="sub" style="margin-top:14px">A flat gag is never a failure here. It is the crowd telling you something you didn't know. That is worth more than an easy laugh.</p>
+    <div class="row" style="margin-bottom:0"><button class="btn" onclick="closeHow()">Got it — let me play</button></div>
+  </section>
+
+  <!-- ============ PLAYTEST CAPTURE LAYER (rides on top of the live build) ============ -->
+  <button id="pt-tab" onclick="ptOpen()" aria-label="Open playtest notebook">
+    <span class="pt-dot" id="pt-count">0</span> Notebook
+  </button>
+
+  <div id="pt-panel" role="dialog" aria-modal="false" aria-label="Playtest notebook" hidden>
+    <div class="pt-head">
+      <div>
+        <b>Peter's playtest notebook</b>
+        <div class="pt-where">You're on: <span id="pt-phase-lab">the opening</span></div>
+      </div>
+      <button class="pt-x" onclick="ptClose()" aria-label="Close notebook">Close</button>
+    </div>
+
+    <p class="pt-hint">Drop a thought whenever something lands, snags, delights, or confuses you.
+      Every note tags itself to where you are. Nothing is stored or sent — you'll copy the whole
+      report at the end and paste it back to Matt.</p>
+
+    <div class="pt-quick" role="group" aria-label="Quick tags">
+      <button class="pt-q" onclick="ptQuick('LANDED')">This landed</button>
+      <button class="pt-q" onclick="ptQuick('SNAG')">I snagged here</button>
+      <button class="pt-q" onclick="ptQuick('CONFUSED')">Confused me</button>
+      <button class="pt-q" onclick="ptQuick('CUT')">I'd cut this</button>
+      <button class="pt-q" onclick="ptQuick('DELIGHT')">Delight</button>
+    </div>
+
+    <label class="pt-lab" for="pt-note">Or say more:</label>
+    <textarea id="pt-note" rows="3" placeholder="What just happened, and what did you think?"></textarea>
+    <button class="btn" id="pt-add" onclick="ptAdd()">Log this note</button>
+
+    <div class="pt-log" id="pt-log" aria-live="polite"></div>
+
+    <div class="pt-final">
+      <p class="pt-hint">Three questions to close, whenever you're done playing:</p>
+      <label class="pt-lab" for="pt-q1">1 · Did the core loop do its job — did you feel the gap between your guess and the crowd?</label>
+      <textarea id="pt-q1" rows="2"></textarea>
+      <label class="pt-lab" for="pt-q2">2 · What surprised you — good or bad?</label>
+      <textarea id="pt-q2" rows="2"></textarea>
+      <label class="pt-lab" for="pt-q3">3 · If this went in front of kids tomorrow, what's the one thing you'd fix first?</label>
+      <textarea id="pt-q3" rows="2"></textarea>
+      <button class="btn" id="pt-report" onclick="ptReport()">Copy my full report for Matt</button>
+    </div>
+  </div>
+
+  <div class="foot">
+    Tight Spiral Productions · Play. Notice. Design.
+    <span class="badge">Offline · nothing leaves this page</span>
+    <span class="badge" id="build-badge">v3 · playtest for Peter</span>
+    <div style="margin-top:8px">Humor is situated: what's funny depends on who's in the room, how their mind works, and where they're from. This game is honest about that.</div>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   FUNNY BONEY'S FACTORY — engine
+   No network. All state in memory. Nothing persists unless the player
+   chooses "Carry this out" (an emit, not storage).
+   ========================================================================= */
+
+/* ---- LENS DEFINITIONS: one engine, three epistemic frames (car-ruling #2) ----
+   Each lens reskins the SAME underlying moves. The mechanic is identical;
+   the permission structure for how you think about it changes. */
+const LENSES = {
+  spell: {
+    name:"Spellcaster", color:"var(--violet)", dark:"#b98cff", light:"#6b3fc0",
+    benchTitle:"Choose the spell you think will land hardest.",
+    benchSub:"You are guessing which enchantment makes a crowd laugh. That guess is the whole game. Choose one.",
+    verb:"cast",
+    parts:[
+      {b:"Tumbling Charm",  s:"the marble trips over its own feet",         pred:62, ic:"orb"},
+      {b:"Bucket Hex",      s:"a pail forgets which way is up",             pred:48, ic:"bucket"},
+      {b:"Fowl Summons",    s:"a rubber chicken appears from nowhere",       pred:78, ic:"chicken"},
+      {b:"Boing Enchant",   s:"the floor decides to be a trampoline",        pred:55, ic:"spring"},
+    ],
+  },
+  code: {
+    name:"Coder", color:"var(--cyan)", dark:"#5fd0e6", light:"#0f6d82",
+    benchTitle:"Choose the function you think returns the biggest laugh.",
+    benchSub:"You are guessing which routine makes a crowd laugh. That guess is the whole game. Choose one.",
+    verb:"run",
+    parts:[
+      {b:"rollMarble()",   s:"a loop that trips on its own edge case",       pred:62, ic:"orb"},
+      {b:"flipBucket()",   s:"gravity, but the sign is wrong",               pred:48, ic:"bucket"},
+      {b:"spawnChicken()", s:"an object appears with no null-check",          pred:78, ic:"chicken"},
+      {b:"bounce()",       s:"the floor returns true, then true again",       pred:55, ic:"spring"},
+    ],
+  },
+  story: {
+    name:"Storyteller", color:"var(--rose)", dark:"#ff8fa8", light:"#b03050",
+    benchTitle:"Choose the turn you think the crowd won't see coming.",
+    benchSub:"You are guessing which twist makes a crowd laugh. That guess is the whole game. Choose one.",
+    verb:"tell",
+    parts:[
+      {b:"The Clumsy Hero",   s:"our marble trips at the worst moment",      pred:62, ic:"orb"},
+      {b:"The Traitor Pail",  s:"the bucket everyone trusted turns",         pred:48, ic:"bucket"},
+      {b:"The Sudden Chicken",s:"nobody wrote a chicken into this story",     pred:78, ic:"chicken"},
+      {b:"The Floor Rebels",  s:"even the ground has had enough",            pred:55, ic:"spring"},
+    ],
+  }
+};
+
+/* ---- AUDIENCES: humor is situated. WHO you poll changes the true laugh-rate.
+   Each audience has a hidden "taste vector" that rewards different beats.
+   The player never sees these numbers — they discover them by polling. ---- */
+const AUDIENCES = {
+  cat:      { label:"One sleepy cat",     taste:{orb:.4, bucket:.5, chicken:.55, spring:.9} },
+  kids:     { label:"A room of kids",     taste:{orb:.7, bucket:.6, chicken:.95, spring:.8} },
+  grownups: { label:"Tired grown-ups",    taste:{orb:.55, bucket:.75, chicken:.45, spring:.5} },
+  world:    { label:"Strangers online",   taste:{orb:.6, bucket:.5, chicken:.7, spring:.65} },
+};
+
+/* ---- POLL METHODS: the buried thesis (car-ruling #4).
+   quality = how close the surveyed number lands to the TRUE laugh-rate.
+   noise   = how much random slop corrupts it.
+   Bad polling literally lies to you; adaptive polling tells the truth. ---- */
+const POLLS = {
+  thumbs:   { quality:.55, noise:.30, note:"Yes/no is kind and cheap — people nod to be polite, so the number drifts high and jumps around. You are half-guessing." },
+  laughs:   { quality:.80, noise:.14, note:"Counting real laughs measures bodies, not manners. Much closer to the truth, steadier run to run." },
+  adaptive: { quality:.97, noise:.05, note:"Asking, then following up with the surprised faces, gets you the real signal — the truest read, and the most work. This is what good designers actually do." },
+};
+
+/* ---- part icons (tiny authored SVG, skin-tone-neutral, prop-carries-the-role) ---- */
+function partIcon(kind){
+  const c="var(--lens)", l="var(--line)";
+  switch(kind){
+    case "orb": return `<svg viewBox="0 0 40 40"><circle cx="20" cy="22" r="12" fill="${c}"/><circle cx="16" cy="18" r="4" fill="#fff" opacity=".7"/><path d="M6 34 h28" stroke="${l}" stroke-width="3"/></svg>`;
+    case "bucket": return `<svg viewBox="0 0 40 40"><path d="M11 14 h18 l-3 20 h-12 z" fill="var(--surface)" stroke="${c}" stroke-width="2.5"/><path d="M11 14 q9 -8 18 0" fill="none" stroke="${l}" stroke-width="2.5"/></svg>`;
+    case "chicken": return `<svg viewBox="0 0 40 40"><ellipse cx="20" cy="22" rx="10" ry="14" fill="#f2f6fb"/><path d="M20 8 q7 -8 12 -2 q-4 6 -10 6z" fill="${c}"/><circle cx="16" cy="14" r="1.8" fill="#10151c"/></svg>`;
+    case "spring": return `<svg viewBox="0 0 40 40"><rect x="8" y="28" width="24" height="6" rx="2" fill="${c}"/><path d="M12 28 v-8 m6 8 v-8 m6 8 v-8 m6 8 v-8" stroke="${l}" stroke-width="2.5"/></svg>`;
+  }
+  return "";
+}
+
+/* ---- STATE ---- */
+let state = {
+  lens:"spell",
+  part:null,        // chosen gag part key (index)
+  audience:"cat",
+  poll:"thumbs",
+  round:0,
+  lastActualTrue:null,   // the true laugh-rate of last show (0..1), before poll distortion
+  history:[],
+};
+
+/* ---- boot ---- */
+if('scrollRestoration' in history) history.scrollRestoration='manual';
+window.scrollTo(0,0);
+setLens("spell");
+setStop(0);
+
+/* =================== LENS =================== */
+function setLens(l){
+  state.lens = l;
+  applyLensColor();
+  document.querySelectorAll('.lens-btn').forEach(b=>{
+    b.setAttribute('aria-pressed', b.dataset.l===l ? 'true':'false');
+  });
+  renderBench();
+}
+/* --lens carries the ACTIVE lens accent, chosen light-or-dark so accent TEXT
+   stays legible against whichever comfort stop is showing. This is the fix for
+   the "bright accent that only reads on dark" failure class. */
+function applyLensColor(){
+  const daylight = (STOPS[stopIx] && STOPS[stopIx].key==="daylight");
+  const L=LENSES[state.lens];
+  document.documentElement.style.setProperty('--lens', daylight ? L.light : L.dark);
+}
+
+/* =================== COMFORT KNOBS (knobs, never walls) =================== */
+const STOPS = [
+  {key:"arcade",   lab:"Arcade"},
+  {key:"softer",   lab:"Softer"},
+  {key:"daylight", lab:"Daylight"},
+];
+let stopIx = 0;
+function setStop(i){
+  stopIx = ((i%STOPS.length)+STOPS.length)%STOPS.length;
+  const s = STOPS[stopIx];
+  document.body.classList.remove('softer','daylight');
+  if(s.key!=="arcade") document.body.classList.add(s.key);
+  document.getElementById('stop-lab').textContent = s.lab;
+  document.getElementById('k-stop').setAttribute('aria-pressed', stopIx>0?'true':'false');
+  if(typeof applyLensColor==="function") applyLensColor();
+}
+function cycleStop(){ setStop(stopIx+1); }
+
+let motionCalm=false;
+function toggleMotion(){
+  motionCalm=!motionCalm;
+  document.documentElement.setAttribute('data-motion', motionCalm?'calm':'full');
+  document.getElementById('motion-lab').textContent = motionCalm?'Calm':'Full';
+  document.getElementById('k-motion').setAttribute('aria-pressed', motionCalm?'true':'false');
+}
+
+/* =================== NAV =================== */
+function goBuild(){
+  show('bench'); hide('result'); hide('how');
+  document.getElementById('rail').setAttribute('aria-hidden','false');
+  setRail('build');
+  document.getElementById('bench').classList.add('fade-in');
+  document.getElementById('bench').scrollIntoView({behavior: motionCalm?'auto':'smooth', block:'start'});
+}
+function backToScene(){
+  hide('bench'); document.getElementById('scene').scrollIntoView({behavior: motionCalm?'auto':'smooth'});
+}
+function openHow(){ show('how'); hide('bench'); hide('result'); }
+function closeHow(){ hide('how'); goBuild(); }
+
+/* =================== BENCH =================== */
+function renderBench(){
+  const L = LENSES[state.lens];
+  document.getElementById('bench-title').textContent = L.benchTitle;
+  document.getElementById('bench-sub').textContent = L.benchSub;
+
+  // parts
+  const wrap = document.getElementById('parts'); wrap.innerHTML="";
+  L.parts.forEach((p,i)=>{
+    const btn=document.createElement('button');
+    btn.className='part'; btn.setAttribute('aria-pressed', state.part===i?'true':'false');
+    btn.onclick=()=>pickPart(i);
+    btn.innerHTML = `<div class="ic" aria-hidden="true">${partIcon(p.ic)}</div>
+      <div class="tx"><b>${p.b}</b><span>${p.s}</span>
+      <div class="pred">You bet: ${p.pred}% will laugh</div></div>`;
+    wrap.appendChild(btn);
+  });
+
+  // audiences
+  const aud = document.getElementById('aud'); aud.innerHTML="";
+  Object.entries(AUDIENCES).forEach(([k,a])=>{
+    const b=document.createElement('button');
+    b.className='aud-btn'; b.setAttribute('aria-pressed', state.audience===k?'true':'false');
+    b.textContent=a.label; b.onclick=()=>pickAud(k);
+    aud.appendChild(b);
+  });
+  updateShowBtn();
+}
+function pickPart(i){ state.part=i; renderBench(); }
+function pickAud(k){ state.audience=k; renderBench(); }
+function updateShowBtn(){
+  document.getElementById('show-btn').disabled = (state.part===null);
+}
+
+/* =================== SHOW + POLL (compute the gap; never self-report) =================== */
+function computeTrueRate(){
+  // TRUE laugh-rate = how well this gag matches this audience's hidden taste.
+  const L = LENSES[state.lens];
+  const part = L.parts[state.part];
+  const taste = AUDIENCES[state.audience].taste[part.ic]; // 0..1
+  // small stable jitter so repeat shows vary a little but not wildly
+  const j = (Math.sin((state.round+1)*12.9898 + state.part*4.1) * 43758.5453) % 1;
+  const jitter = (Math.abs(j)-0.5)*0.08;
+  return clamp(taste + jitter, 0, 1);
+}
+function surveyThrough(trueRate){
+  // The poll DISTORTS the true rate. Bad polls pull toward a flattering 0.7 and add noise.
+  const P = POLLS[state.poll];
+  const pull = 0.7; // the comforting default a lazy poll drifts toward
+  const biased = trueRate*P.quality + pull*(1-P.quality);
+  const noise = (Math.random()-0.5)*2*P.noise;
+  return clamp(biased + noise, 0, 1);
+}
+
+function doShow(){
+  state.round++;
+  state.lastActualTrue = computeTrueRate();
+  setRail('show');
+  // brief beat, then reveal the room
+  show('result'); hide('bench');
+  document.getElementById('result').classList.remove('fade-in'); void document.getElementById('result').offsetWidth;
+  document.getElementById('result').classList.add('fade-in');
+  setRail('poll');
+  renderResult();
+  document.getElementById('result').scrollIntoView({behavior: motionCalm?'auto':'smooth', block:'start'});
+}
+
+function setPoll(p){
+  state.poll=p;
+  document.querySelectorAll('.pollpick button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.p===p?'true':'false'));
+  renderResult(); // re-poll live so the player SEES the method change the truth
+}
+
+function renderResult(){
+  const L = LENSES[state.lens];
+  const part = L.parts[state.part];
+  const predicted = part.pred/100;                 // what the player bet
+  const trueRate  = state.lastActualTrue;          // hidden truth
+  const surveyed  = surveyThrough(trueRate);       // what the poll reports
+  setRail('gap');
+
+  // crowd of 30 faces, seeded by surveyed rate
+  renderCrowd(surveyed);
+
+  // bars
+  const predPct = Math.round(predicted*100);
+  const actPct  = Math.round(surveyed*100);
+  document.getElementById('pred-pct').textContent = predPct+"%";
+  document.getElementById('act-pct').textContent  = actPct+"%";
+  document.getElementById('pred-fill').style.width = predPct+"%";
+  document.getElementById('act-fill').style.width  = actPct+"%";
+
+  const gap = Math.abs(predPct-actPct);
+  document.getElementById('gap-big').textContent = gap;
+
+  // the read: failure is diagnostic (car-ruling #3), poll quality is named (car-ruling #4)
+  const aud = AUDIENCES[state.audience].label.toLowerCase();
+  let msg;
+  if(actPct < 35){
+    msg = `<b>That landed flat.</b> Not a failure — a fact. For ${aud}, this beat isn't it. You just learned something about them you didn't know. That's worth more than a polite laugh.`;
+  } else if(gap <= 8){
+    msg = `<b>Dead-on read.</b> Your guess and the room almost matched. You're calibrated to ${aud} — for now. Change the crowd and watch it slip.`;
+  } else if(predPct > actPct){
+    msg = `<b>You over-guessed.</b> You thought it was funnier than ${aud} did. The gap is the lesson: your taste isn't their taste.`;
+  } else {
+    msg = `<b>You under-guessed.</b> It landed harder than you bet. ${aud[0].toUpperCase()+aud.slice(1)} found something you didn't expect.`;
+  }
+  msg += `<div style="margin-top:9px; font-size:.82rem; color:var(--ink-soft)">Polling note: ${POLLS[state.poll].note}</div>`;
+  document.getElementById('read').innerHTML = msg;
+}
+
+function renderCrowd(rate){
+  const wrap = document.getElementById('crowd'); wrap.innerHTML="";
+  const N=30, laughing=Math.round(rate*N);
+  for(let i=0;i<N;i++){
+    const laughs = i<laughing;
+    const div=document.createElement('div'); div.className='face';
+    div.innerHTML = faceSVG(laughs);
+    div.style.animationDelay = (i*18)+'ms';
+    if(!motionCalm) div.classList.add('fade-in');
+    wrap.appendChild(div);
+  }
+}
+function faceSVG(laughs){
+  const ink="var(--ink)";
+  const mouth = laughs
+    ? `<path d="M6 12 q6 8 12 0" fill="none" stroke="var(--good)" stroke-width="2.2" stroke-linecap="round"/>`
+    : `<path d="M7 13 h10" stroke="var(--flat)" stroke-width="2.2" stroke-linecap="round"/>`;
+  const eyes = laughs
+    ? `<path d="M7 8 q1.5 -2 3 0 M14 8 q1.5 -2 3 0" stroke="${ink}" stroke-width="1.8" fill="none"/>`
+    : `<circle cx="8.5" cy="8" r="1.3" fill="var(--flat)"/><circle cx="15.5" cy="8" r="1.3" fill="var(--flat)"/>`;
+  return `<svg viewBox="0 0 24 20" width="100%" height="100%"><circle cx="12" cy="11" r="9" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1"/>${eyes}${mouth}</svg>`;
+}
+
+/* =================== GLASS ENGINE RING =================== */
+function toggleEngine(){
+  const e=document.getElementById('engine'), b=document.getElementById('ring-btn');
+  const open=e.classList.toggle('open');
+  b.setAttribute('aria-expanded', open?'true':'false');
+  b.textContent = open ? "Hide the engine" : "Show the engine underneath";
+  if(open) e.scrollIntoView({behavior: motionCalm?'auto':'smooth', block:'nearest'});
+}
+
+/* =================== RECALIBRATE =================== */
+function recalibrate(){
+  // log this round, then return to the bench smarter
+  const L=LENSES[state.lens], part=L.parts[state.part];
+  state.history.push({
+    round:state.round, lens:state.lens, gag:part.b,
+    audience:AUDIENCES[state.audience].label, poll:state.poll,
+    predicted:part.pred, surveyed:Math.round(surveyThrough(state.lastActualTrue)*100)
+  });
+  setRail('tune');
+  setTimeout(()=>{ goBuild(); }, motionCalm?0:250);
+}
+
+/* =================== CARRY-OUT (emit, not store; FERPA-clean) =================== */
+function carryOut(){
+  const L=LENSES[state.lens], part=L.parts[state.part];
+  const surveyed = Math.round(surveyThrough(state.lastActualTrue)*100);
+  const gap = Math.abs(part.pred - surveyed);
+  const card =
+`FUNNY BONEY'S FACTORY — carried machine
+lens: ${L.name}
+gag: ${part.b} (${part.s})
+crowd: ${AUDIENCES[state.audience].label}
+polled by: ${state.poll}
+you predicted: ${part.pred}%   they laughed: ${surveyed}%   gap: ${gap}
+--
+Paste this into a friend's factory to stack it. Nothing was stored; you carried it.`;
+  navigator.clipboard?.writeText(card).then(
+    ()=>flash("Copied. Paste it anywhere to stack it."),
+    ()=>flash("Here it is — select and copy:\n\n"+card)
+  );
+}
+
+/* =================== RAIL =================== */
+function setRail(stage){
+  if(window.PT) PT.phase = stage;
+  const order=["build","show","poll","gap","tune"];
+  const at=order.indexOf(stage);
+  document.querySelectorAll('#rail .stop').forEach(s=>{
+    const ix=order.indexOf(s.dataset.s);
+    s.classList.toggle('done', ix<at);
+    s.classList.toggle('now', ix===at);
+  });
+}
+
+/* =================== helpers =================== */
+function show(id){ document.getElementById(id)?.classList.remove('hidden'); }
+function hide(id){ document.getElementById(id)?.classList.add('hidden'); }
+function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
+function flash(t){ alert(t); }
+
+/* =================== PLAYTEST CAPTURE LAYER =================== */
+const PT = { phase:"opening", notes:[] };
+const PT_PHASE_LAB = {
+  opening:"the opening", build:"Build — guessing the funny beat",
+  show:"Show — putting it to a crowd", poll:"Poll — how you ask",
+  gap:"See the gap — guess vs. reality", tune:"Recalibrate"
+};
+function ptPhaseLabel(){ return PT_PHASE_LAB[PT.phase] || PT.phase; }
+function ptOpen(){
+  document.getElementById('pt-phase-lab').textContent = ptPhaseLabel();
+  document.getElementById('pt-panel').hidden = false;
+  document.getElementById('pt-note').focus();
+}
+function ptClose(){ document.getElementById('pt-panel').hidden = true; }
+function ptStamp(tag, text){
+  PT.notes.push({ phase: ptPhaseLabel(), tag, text, t: new Date().toLocaleTimeString() });
+  ptRender();
+}
+function ptQuick(tag){ ptStamp(tag, ""); flash("Logged: "+tag+" · "+ptPhaseLabel()); }
+function ptAdd(){
+  const box = document.getElementById('pt-note');
+  const v = box.value.trim();
+  if(!v){ box.focus(); return; }
+  ptStamp("NOTE", v);
+  box.value = "";
+  box.focus();
+}
+function ptRender(){
+  document.getElementById('pt-count').textContent = PT.notes.length;
+  document.getElementById('pt-phase-lab').textContent = ptPhaseLabel();
+  const log = document.getElementById('pt-log');
+  log.innerHTML = PT.notes.map((n,i)=>
+    `<div class="pt-item"><div class="pt-item-h"><span class="pt-tag pt-tag-${n.tag}">${n.tag}</span>`+
+    `<span class="pt-item-where">${n.phase} · ${n.t}</span></div>`+
+    (n.text?`<div class="pt-item-tx">${n.text.replace(/</g,'&lt;')}</div>`:'')+`</div>`
+  ).reverse().join('');
+}
+function ptReport(){
+  const q1=document.getElementById('pt-q1').value.trim();
+  const q2=document.getElementById('pt-q2').value.trim();
+  const q3=document.getElementById('pt-q3').value.trim();
+  let out = "FUNNY BONEY'S FACTORY — PLAYTEST NOTES (Peter)\n";
+  out += "v3 playable · "+new Date().toLocaleString()+"\n";
+  out += "==================================================\n\n";
+  out += "NOTES IN ORDER OF PLAY ("+PT.notes.length+")\n";
+  if(PT.notes.length===0){ out += "  (none logged)\n"; }
+  PT.notes.forEach((n,i)=>{
+    out += `  ${i+1}. [${n.tag}] ${n.phase} — ${n.t}\n`;
+    if(n.text) out += `     ${n.text}\n`;
+  });
+  out += "\nCLOSING QUESTIONS\n";
+  out += "1 · Core loop / felt the gap?\n   "+(q1||"(blank)")+"\n";
+  out += "2 · What surprised you?\n   "+(q2||"(blank)")+"\n";
+  out += "3 · One thing to fix first?\n   "+(q3||"(blank)")+"\n";
+  out += "\n-- end of report · nothing was stored; you carried it --";
+  navigator.clipboard?.writeText(out).then(
+    ()=>flash("Report copied. Paste it into a reply to Matt."),
+    ()=>flash("Select and copy this:\n\n"+out)
+  );
+}
+</script>
+</body>
+</html>
