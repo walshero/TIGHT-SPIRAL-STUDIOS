@@ -394,7 +394,7 @@
   --ink-2:      #1c1c1e; /* visibility floor: ink-2 == ink, differentiate by weight/size */
   --ink-3:      #1c1c1e; /* visibility floor: muted-gray captions banned */
   --bg:         #f7f6f2;
-  --surface:    #ffffff;
+  --surface:    #fdfcfa; /* v44: off-white, not pure #fff (halation floor) */
   --surface-2:  #fafaf8;
   --border:     #e0ddd8;
   --border-2:   #d1cec9;
@@ -1877,9 +1877,12 @@ body.a11y-reduce-motion *::after{
 
 /* ─── MODE: High contrast (deepen + brighten within palette) ─── */
 body.a11y-contrast{
-  --bg:#ffffff; --surface:#ffffff; --surface-2:#ffffff;
-  --ink:#000000; --ink-2:#000000; --ink-3:#000000;
-  --border:#000000; --border-2:#1c1c1e;
+  /* HALATION FLOOR (v44): never pure #000 on pure #fff. Max-contrast black-on-white
+     blooms and smears for low-vision readers (RP included) — it measures 21:1 and
+     READS worse than near-black on off-white. This pair is ~18:1 with no bloom. */
+  --bg:#fbfaf7; --surface:#fbfaf7; --surface-2:#f6f5f1;
+  --ink:#0a0a0a; --ink-2:#0a0a0a; --ink-3:#0a0a0a;
+  --border:#0a0a0a; --border-2:#1c1c1e;
   --pine:#0d3322; --pine-mid:#0d3322; --pine-lt:#1a4a35;
 }
 body.a11y-contrast a{ text-decoration:underline; }
@@ -2916,7 +2919,7 @@ h3.cg-generic{ display:none; }
       <span class="mh-eyebrow">MassBay Community College · English Department · v43</span>
       <span class="mh-name">Confluence Calibration: An Assessment Hub</span>
       <div class="mh-chips">
-        <button type="button" class="mh-chip" onclick="nav('about')" title="Runs fully offline — opens the full note in About" aria-label="Works offline. Open full note in About."><span class="mhc-glyph" aria-hidden="true">&#9992;</span>Offline</button>
+        <button type="button" class="mh-chip" onclick="nav('about')" title="Core runs offline. One optional feature (Scholar Review) connects to an API — opens the full note in About." aria-label="Core runs offline; one optional feature connects. Open full note in About."><span class="mhc-glyph" aria-hidden="true">&#9673;</span>Local-first</button>
         <button type="button" class="mh-chip" onclick="nav('about')" title="Pre-release prototype, not yet formally protected — opens the full note in About" aria-label="Pre-release prototype. Open full note in About."><span class="mhc-glyph" aria-hidden="true">&#9679;</span>PRE&middot;prototype</button>
       </div>
     </div>
@@ -4107,7 +4110,7 @@ EN202, 3, 4, 3</div>
     <p>&copy; 2026 Matt Walsh, Professor of English, Massachusetts Bay Community College &middot; All rights reserved &middot; Licensing inquiries: <a href="mailto:mwalsh@massbay.edu">mwalsh@massbay.edu</a></p>
     <div class="status-note status-air">
       <span class="sn-glyph" aria-hidden="true">[&#9992;]</span>
-      <span><strong>Works with the wifi off.</strong> This is a single self-contained file. It fetches nothing from the network &mdash; no fonts, no scripts, no trackers phone home. Open it on a plane, in a locked-down room, or on an air-gapped machine and it runs exactly the same. Your data stays on your device.</span>
+      <span><strong>Local-first: the work runs with the wifi off.</strong> This is a single self-contained file. Everything you actually assess with &mdash; the rubrics, the calibration, the norming, the cycle, your data &mdash; runs entirely on your device. No fonts, scripts, or trackers phone home, and nothing you enter leaves your machine. <strong>One optional feature is the exception:</strong> the <em>Scholar Review</em> panel generates simulated scholar commentary by calling an AI service, so it needs a connection and will not work offline. It is opt-in, it sends only the app&rsquo;s own description of itself &mdash; never your data, never anything about students &mdash; and if you never open it, this file never touches the network. Everything else works on a plane, in a locked-down room, or on an air-gapped machine.</span>
     </div>
     <div class="status-note status-pre">
       <span class="sn-glyph" aria-hidden="true">[PRE]</span>
