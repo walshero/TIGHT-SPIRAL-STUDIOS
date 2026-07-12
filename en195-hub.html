@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  EN195 — THE LAST WEEK · a hub. Tight Spiral Productions · walshero@gmail.com
+
+  WHY THIS EXISTS (2026-07-06): the EN195 pieces were loose doors on the index and
+  flash-ballast.html had NO door at all (orphan). This hub is the single room they
+  live in. Each mode is a CARD THAT TURNS — front = the scene, back = what it is and
+  the way in. "Modes feel like own hubs" (founder note) resolved as: one hub, four
+  cards, each its own scene before any text.
+
+  FLOOR: single-file, offline, in-memory; 3-stop comfort (never #000/#fff); large
+  type; 44px+ targets; keyboard; visible focus; reduced-motion safe; scroll-reset;
+  no emoji; shape+label not color alone; phone-width. Cards are >50% image on face.
+
+  LINKS OUT (opens by filename in the same folder; says so plainly if absent):
+    flash-ballast.html · play-the-semester-flash.html · en195-last-week.html ·
+    workshop-wall.html · review-bench.html
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EN195 — The Last Week</title>
+<style>
+:root{
+  --paper:#f4efe6; --ink:#1a1408; --accent:#6e4700; --line:#c9b98f;
+  --card:#faf6ee; --gold:#8a5a00;
+  --teal:#0d5466; --plum:#5a2a52; --rust:#8a3a1c; --slate:#324a5e;
+}
+body.softer{ --paper:#e6ddc9; --card:#efe7d4; --line:#c2b288; }
+body.warmdark{ --paper:#241c10; --ink:#f5d9a0; --accent:#f5c869; --line:#5a4a2a; --card:#2e2416; --gold:#f5c869;
+  --teal:#7fd6e6; --plum:#e3a8d6; --rust:#e8a07c; --slate:#9bb8cc; }
+*{box-sizing:border-box;}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:Georgia,'Times New Roman',serif;
+  font-size:22px; line-height:1.55; margin:0; padding:16px 16px 44px;
+  max-width:720px; margin-left:auto; margin-right:auto;
+}
+#palette{
+  position:sticky; top:8px; float:right; min-height:48px; min-width:48px;
+  font-size:19px; font-weight:bold; padding:10px 16px;
+  background:var(--ink); color:var(--paper); border:3px solid var(--gold);
+  border-radius:10px; cursor:pointer;
+}
+#palette:focus-visible, a:focus-visible, .card:focus-visible{ outline:4px solid var(--gold); outline-offset:3px; }
+a.back{ display:inline-block; font-size:18px; font-weight:bold; color:var(--accent);
+  text-decoration:none; min-height:44px; padding:10px 4px; }
+h1{font-size:32px; line-height:1.18; margin:8px 0 4px;}
+.tag{font-size:20px; margin:0 0 4px; font-weight:bold; color:var(--accent);}
+.sub{font-size:19px; margin:0 0 22px;}
+
+/* the grid of turnable cards */
+.grid{ display:flex; flex-direction:column; gap:16px; }
+.card{ display:block; width:100%; text-align:left; background:none; border:none;
+  padding:0; cursor:pointer; color:var(--ink); font-family:inherit; }
+.face{ border:3px solid var(--line); border-radius:16px; overflow:hidden;
+  background:var(--card); }
+.card:hover .face, .card.turned .face{ border-color:var(--gold); }
+
+/* SCENE (>50% of the face is image) */
+.scene{ position:relative; height:200px; display:block; }
+.scene svg{ position:absolute; inset:0; width:100%; height:100%; }
+.card .label{ padding:12px 16px 14px; }
+.card .name{ font-size:24px; font-weight:bold; display:block; }
+.card .what{ font-size:18px; display:block; margin-top:2px; line-height:1.4; }
+.card .turn{ font-size:16px; font-weight:bold; color:var(--accent); margin-top:8px; display:block; }
+
+/* BACK of the card (revealed on turn) */
+.back-panel{ display:none; padding:14px 16px 16px; border-top:2px dashed var(--line); }
+.card.turned .back-panel{ display:block; }
+.back-panel p{ margin:0 0 12px; font-size:19px; line-height:1.5; }
+.enter{ display:block; text-align:center; background:var(--accent); color:var(--paper);
+  text-decoration:none; font-size:20px; font-weight:bold; min-height:56px;
+  padding:15px; border-radius:12px; }
+body.warmdark .enter{ color:#241c10; }
+.enter:hover{ filter:brightness(1.08); }
+.missing{ font-size:17px; color:var(--accent); margin-top:8px; display:none; }
+
+.foot,footer{
+  margin-top:36px; padding:18px; border-radius:12px;
+  background:#241c10; color:#f5d9a0; font-size:18px; line-height:1.6;
+}
+.foot a,footer a{color:#f5d9a0; text-decoration:underline;}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important;} }
+@media (max-width:520px){ body{font-size:20px;} h1{font-size:28px;} .scene{height:170px;} }
+</style>
+</head>
+<body>
+<button id="palette" aria-label="Cycle palette. Current: Default">Palette: Default</button>
+<a class="back" href="index.html">&larr; The Studio</a>
+<h1>EN195 — the last week</h1>
+<p class="tag">Creative Writing · Week 6</p>
+<p class="sub">Four ways into the same week. Each card is its own room. Tap a card to see the way in, then walk through.</p>
+
+<div class="grid" id="grid">
+
+  <!-- CARD 1 — BALLAST (the balloon, the orphan, now with a door) -->
+  <div class="card" tabindex="0" role="button" aria-expanded="false" data-file="flash-ballast.html">
+    <div class="face">
+      <div class="scene" aria-hidden="true">
+        <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice">
+          <rect width="320" height="200" fill="var(--card)"/>
+          <line x1="24" y1="176" x2="296" y2="176" stroke="var(--ink)" stroke-width="3"/>
+          <g transform="translate(160 84)">
+            <path d="M0 -56 C34 -56 52 -28 52 0 C52 28 26 46 10 56 L-10 56 C-26 46 -52 28 -52 0 C-52 -28 -34 -56 0 -56 Z" fill="var(--rust)" stroke="var(--ink)" stroke-width="3"/>
+            <path d="M0 -56 C12 -30 12 40 12 56 M0 -56 C-12 -30 -12 40 -12 56" stroke="var(--ink)" stroke-width="2" fill="none" opacity=".5"/>
+            <rect x="-13" y="58" width="26" height="16" rx="3" fill="var(--gold)" stroke="var(--ink)" stroke-width="2.5"/>
+          </g>
+          <rect x="40" y="150" width="26" height="20" rx="3" fill="var(--slate)" stroke="var(--ink)" stroke-width="2"/>
+          <rect x="72" y="156" width="22" height="16" rx="3" fill="var(--slate)" stroke="var(--ink)" stroke-width="2"/>
+          <line x1="200" y1="40" x2="296" y2="40" stroke="var(--gold)" stroke-width="2.5" stroke-dasharray="7 6"/>
+        </svg>
+      </div>
+      <div class="label">
+        <span class="name">Ballast</span>
+        <span class="what">The compression move, made physical. Cut words fall as ballast; the piece rises.</span>
+        <span class="turn">Tap to see the way in &rarr;</span>
+      </div>
+      <div class="back-panel">
+        <p>A bloated draft is roped to a balloon. Tap the words it doesn't need — each one drops to the ground as ballast, and the piece climbs. You win at altitude, not at zero.</p>
+        <a class="enter" href="flash-ballast.html">Walk up to the balloon &rarr;</a>
+        <p class="missing">This game's file isn't here yet. Add flash-ballast.html to this folder.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 2 — PLAY THE SEMESTER -->
+  <div class="card" tabindex="0" role="button" aria-expanded="false" data-file="play-the-semester-flash.html">
+    <div class="face">
+      <div class="scene" aria-hidden="true">
+        <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice">
+          <rect width="320" height="200" fill="var(--card)"/>
+          <path d="M0 150 Q80 120 160 150 T320 150" fill="none" stroke="var(--teal)" stroke-width="4"/>
+          <path d="M0 168 Q80 138 160 168 T320 168" fill="none" stroke="var(--teal)" stroke-width="3" opacity=".55"/>
+          <circle cx="70" cy="70" r="20" fill="none" stroke="var(--teal)" stroke-width="4"/>
+          <rect x="140" y="52" width="38" height="38" rx="4" fill="none" stroke="var(--plum)" stroke-width="4"/>
+          <path d="M250 50 L272 90 L228 90 Z" fill="none" stroke="var(--gold)" stroke-width="4" stroke-linejoin="round"/>
+          <path d="M160 118 l10 7 v10 l-10 7 -10 -7 v-10 Z" fill="var(--rust)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="label">
+        <span class="name">Play the Semester</span>
+        <span class="what">The flash-fiction unit as one playable run. A score unlocks the genre games.</span>
+        <span class="turn">Tap to see the way in &rarr;</span>
+      </div>
+      <div class="back-panel">
+        <p>One genre, end to end. Report where you landed on the flash piece — the score opens Sandbags and the Review Bench. Nothing is stored; nothing leaves the page.</p>
+        <a class="enter" href="play-the-semester-flash.html">Start the run &rarr;</a>
+        <p class="missing">This file isn't here yet. Add play-the-semester-flash.html to this folder.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 3 — WHAT COUNTS NOW -->
+  <div class="card" tabindex="0" role="button" aria-expanded="false" data-file="en195-last-week.html">
+    <div class="face">
+      <div class="scene" aria-hidden="true">
+        <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice">
+          <rect width="320" height="200" fill="var(--card)"/>
+          <rect x="30" y="34" width="120" height="18" rx="4" fill="var(--line)" opacity=".7"/>
+          <rect x="30" y="62" width="150" height="18" rx="4" fill="var(--line)" opacity=".5"/>
+          <rect x="30" y="90" width="90" height="18" rx="4" fill="var(--line)" opacity=".35"/>
+          <rect x="30" y="118" width="130" height="18" rx="4" fill="var(--line)" opacity=".25"/>
+          <g transform="translate(214 60)">
+            <rect x="0" y="0" width="80" height="90" rx="8" fill="var(--card)" stroke="var(--gold)" stroke-width="4"/>
+            <path d="M18 46 l14 16 l30 -36" fill="none" stroke="var(--gold)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+        </svg>
+      </div>
+      <div class="label">
+        <span class="name">What Counts Now</span>
+        <span class="what">Six weeks of noise on the board. This week, only some of it counts.</span>
+        <span class="turn">Tap to see the way in &rarr;</span>
+      </div>
+      <div class="back-panel">
+        <p>Everything the course still lists is shouting the same volume. Claim the work you've finished, tell it about your week, and watch the noise drop until you can see what's left.</p>
+        <a class="enter" href="en195-last-week.html">See what counts &rarr;</a>
+        <p class="missing">This file isn't here yet. Add en195-last-week.html to this folder.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 4 — THE WRITING ROOM (paired: wall + bench) -->
+  <div class="card" tabindex="0" role="button" aria-expanded="false" data-file="workshop-wall.html">
+    <div class="face">
+      <div class="scene" aria-hidden="true">
+        <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice">
+          <rect width="320" height="200" fill="var(--card)"/>
+          <rect x="34" y="40" width="70" height="52" rx="3" fill="var(--card)" stroke="var(--slate)" stroke-width="3" transform="rotate(-4 69 66)"/>
+          <rect x="128" y="36" width="70" height="52" rx="3" fill="var(--card)" stroke="var(--slate)" stroke-width="3" transform="rotate(3 163 62)"/>
+          <rect x="222" y="42" width="70" height="52" rx="3" fill="var(--card)" stroke="var(--slate)" stroke-width="3" transform="rotate(-2 257 68)"/>
+          <line x1="44" y1="56" x2="94" y2="56" stroke="var(--ink)" stroke-width="2" opacity=".5"/>
+          <line x1="44" y1="66" x2="88" y2="66" stroke="var(--ink)" stroke-width="2" opacity=".5"/>
+          <path d="M40 140 h240" stroke="var(--plum)" stroke-width="4" stroke-linecap="round"/>
+          <path d="M60 140 v22 M260 140 v22" stroke="var(--plum)" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="label">
+        <span class="name">The Writing Room</span>
+        <span class="what">Where drafts meet readers, and where you sit and really read one.</span>
+        <span class="turn">Tap to see the way in &rarr;</span>
+      </div>
+      <div class="back-panel">
+        <p>Two rooms, one wall. The Workshop Wall is where drafts go up for readers. The Review Bench is where you slow down and read a single piece the way it deserves.</p>
+        <a class="enter" href="workshop-wall.html">Workshop Wall &rarr;</a>
+        <a class="enter" href="review-bench.html" style="margin-top:10px;">Review Bench &rarr;</a>
+        <p class="missing">One or both files aren't here yet: workshop-wall.html, review-bench.html.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="foot">
+Tight Spiral Productions · walshero@gmail.com<br>
+EN195 Creative Writing · offline-capable, accessible-first. The human always has the last touch.
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  /* palette */
+  var b=document.getElementById('palette');
+  var stops=[['Default',''],['Softer','softer'],['Warm-dark','warmdark']];
+  var pi=0;
+  b.addEventListener('click',function(){
+    pi=(pi+1)%stops.length; document.body.className=stops[pi][1];
+    b.textContent='Palette: '+stops[pi][0];
+    b.setAttribute('aria-label','Cycle palette. Current: '+stops[pi][0]);
+  });
+  /* turn a card: reveal its back panel */
+  function turn(card){
+    var open=card.classList.contains('turned');
+    document.querySelectorAll('.card.turned').forEach(function(c){
+      c.classList.remove('turned'); c.setAttribute('aria-expanded','false');
+    });
+    if(!open){
+      card.classList.add('turned'); card.setAttribute('aria-expanded','true');
+      var m=card.querySelector('.enter');
+      if(m) m.focus({preventScroll:true});
+      card.scrollIntoView({behavior:'smooth',block:'nearest'});
+    }
+  }
+  document.querySelectorAll('.card').forEach(function(card){
+    card.addEventListener('click',function(e){
+      /* let the actual enter-links work without re-turning */
+      if(e.target.closest('.enter')) return;
+      turn(card);
+    });
+    card.addEventListener('keydown',function(e){
+      if(e.target.closest('.enter')) return;
+      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); turn(card); }
+    });
+  });
+  window.scrollTo(0,0);
+})();
+</script>
+</body>
+</html>
