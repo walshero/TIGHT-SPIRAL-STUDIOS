@@ -61,6 +61,16 @@ git -c user.email="walshero@gmail.com" -c user.name="Tight Spiral Studios" commi
 git push -q origin main
 
 # 4. POST-TICK — byte-verify. "success:true" is never proof.
-curl -sL "$RAW" -o /tmp/_verify
-a=$(md5sum "$F" | cut -d' ' -f1); b=$(md5sum /tmp/_verify | cut -d' ' -f1)
-if [ "$a" = "$b" ]; then echo "  VERIFIED  $(wc -c < /tmp/_verify) B live"; else echo "  *** MISMATCH AFTER PUSH ***"; exit 1; fi
+#
+# BUG FOUND 2026-07-11: raw.githubusercontent.com caches for ~5 min. A fresh push reads back
+# as the OLD file and this gate cried "MISMATCH" on a push that had landed perfectly.
+# An auditor that cries wolf is worse than none — that is the whole lesson of today.
+# So: verify against GIT (authoritative, uncached) first; the CDN is advisory only.
+if [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" ]; then
+  echo "  VERIFIED  git: HEAD == origin/main  ($(wc -c < "$F") B pushed)"
+  curl -sL "$RAW" -o /tmp/_verify 2>/dev/null
+  a=$(md5sum "$F" | cut -d' ' -f1); b=$(md5sum /tmp/_verify 2>/dev/null | cut -d' ' -f1)
+  [ "$a" != "$b" ] && echo "  (raw CDN still serving cached copy — normal, clears in ~5 min)"
+else
+  echo "  *** PUSH DID NOT LAND — HEAD != origin/main ***"; exit 1
+fi
