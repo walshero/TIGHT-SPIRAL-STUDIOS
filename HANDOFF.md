@@ -6,8 +6,12 @@
 
 ## THE ONE THING
 
-**Build `resolve_canon` before touching another file. Nothing else in this handoff matters
-until that gate exists.**
+**Build `resolve_canon` — ACROSS ALL FOUR LANES — before touching another file.**
+
+**FOUR lanes, not three:** GitHub repo · **Netlify** · Google Drive · Project shelf.
+I declared a finished game (Dad Energy) LOST after searching three of them. It is **live on
+Netlify at v2.1**. A resolver that knows only some lanes is a fourth silo with better manners.
+See `LANE-REGISTRY.md`.
 
 I spent this entire session doing good work on `confluence-TRUNK.html` **v34**.
 Canon was **v43** — nine versions ahead, in the repo.
