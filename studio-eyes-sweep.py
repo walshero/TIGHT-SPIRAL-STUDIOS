@@ -217,7 +217,7 @@ def dom_ancestor_bgs(sel, dom):
 def sweep(path):
     name = os.path.basename(path)
     src = open(path, errors='replace').read()
-    out = {"H1": [], "H2": [], "H3": [], "H4": [], "H6": [], "WARN": []}
+    out = {"H1": [], "H2": [], "H3": [], "H4": [], "H6": [], "H7": [], "H8": [], "WARN": []}
     DOM = build_dom_index(src)
     # BUG (found 2026-07-11): the sweep read only the FIRST <style> block.
     # Any file with a second style block had those rules INVISIBLE to every
@@ -416,6 +416,33 @@ def sweep(path):
             out["H6"].append(
                 "institutional reference data with no " + " and no ".join(missing) +
                 " — cannot be trusted to be current (TICK 3)")
+
+    # --- H7: OFFLINE FLOOR (locked 2026-07-11) ---
+    #
+    # Dad Energy shipped on the public internet for WEEKS pulling Google Fonts from a CDN.
+    # Single-file-offline is studio law. On a plane, on bad campus wifi, or the day the CDN
+    # changes an API, the file degrades. Nobody caught it: the game lived on a lane nothing
+    # swept, in a silo nothing checked.
+    #
+    # ARITHMETIC, not judgment: count external hosts. Any is a HALT.
+    ext = set()
+    for m in re.finditer(r"""(?:href|src)\s*=\s*["']https?://([^/"'\s]+)""", src):
+        ext.add(m.group(1))
+    for m in re.finditer(r"""fetch\s*\(\s*["']https?://([^/"'\s]+)""", src):
+        ext.add(m.group(1))
+    for h in sorted(ext):
+        out["H7"].append("OFFLINE FLOOR BROKEN - external host " + h + " (single-file-offline is law)")
+
+    # --- H8: THE FILE DISAGREES WITH ITSELF (locked 2026-07-11) ---
+    #
+    # Confluence v44's in-file banner still reads "v43" - the commit changed content without
+    # bumping the banner. A human reading the file is lied to BY THE FILE. The md5 cannot lie;
+    # a hand-typed banner can. Two different version banners in one file means at least one
+    # is wrong.
+    ban = set(re.findall(r"\bv(\d{1,3})\s*\(20\d\d-\d\d-\d\d\)", src))
+    if len(ban) > 1:
+        out["H8"].append("FILE DISAGREES WITH ITSELF - conflicting version banners: v"
+                         + ", v".join(sorted(ban)))
 
     # --- WARN class ---
     if css and ':focus-visible' not in css and ':focus' not in css:
