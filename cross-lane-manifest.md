@@ -11,7 +11,7 @@ os-block-cross-lane-mount.md §12. v1 — 2026-07-10.*
 
 | doc | canonical ID / path | bytes | version | owner-lane | RW/RO by lane |
 |-----|--------------------|-------|---------|-----------|--------------|
-| Confluence trunk | `confluence-TRUNK.html` · Drive **VERIFY** (memory carried v33 `1ndzTmSRubSHpoUagt5Gr2VKAFt6eQJ0X`; shelf shows **528,886 B = v34**) | 528,886 | **v34** | Confluence RW | TSP: RO (pointer only) · Leeder/Capstone: — |
+| Confluence trunk | `confluence-TRUNK.html` · **repo** (canon) · Drive `1034TofDcOWwaukceHcwzsnUlsLO4yggt` = pointer only | 598,114 | **v44** (md5 `8dcf9903`) | Confluence RW | TSP: RO (pointer only) · Leeder/Capstone: — |
 | OS canon | `tight-spiral-studio-os.md` · Drive `1qZBTAbluu0npTtw3NlPPXySTClI6Jnx3` | 161,666 | 2026-07-02 | TSP RW | Confluence: RO (§6.4 only) · others: RO |
 | Visual Constitution | `tight-spiral-visual-constitution.md` | 10,141 | §13, 2026-07-04 | TSP RW | Confluence: RO · Leeder: RO · Capstone: — |
 | Kernel Track | OS `tight-spiral-studio-os.md §6.4` | — | 2026-07-02 | TSP RW | Confluence: RO · Capstone: RO |
@@ -31,17 +31,17 @@ os-block-cross-lane-mount.md §12. v1 — 2026-07-10.*
 
 ---
 
-## OPEN FOUNDER GATE (blocks manifest v1 → v1-verified)
+## CLOSED FOUNDER GATE — Confluence trunk (resolved 2026-07-12)
 
-**Confluence trunk version fork.** Memory's last live probe (2026-07-05) found Drive =
-**v33** (522,533 B, ID `1ndz…`). The shelf copy read this session = **528,886 B**, which
-your locked ruling ties to **v34 / c0b655fc**. Two possibilities:
-- Drive was refreshed to v34 since the 07-05 probe (manifest is correct as written), **or**
-- Drive is still v33 and the v34 pointer needs the real Drive ID once saved.
+**Resolved by repo fetch, not memory.** `raw.githubusercontent.com/.../confluence-TRUNK.html`
+returns **598,114 B, md5 `8dcf9903` = v44**. Both prior candidates (v33 522,533 B and
+v34 528,886 B) are **fossils**. Drive holds a pointer only. The trunk row above is now
+disk-confirmed; the VERIFY flag is lifted.
 
-**Next action:** one Drive probe on the `Confluence — Build Versions` folder
-(`1ylU3uDeC16UZtYo-mqeSGyXFHyGEkztM`) confirms the live ID + byte-count. Until then the
-trunk row is marked **VERIFY**. Everything else in the manifest is disk-confirmed.
+**Lane-size law (why the drift happened):** the Drive bus passes file content as a tool
+parameter (~30–50 KB ceiling). A 598 KB file can never fit — so the most important file
+was the one file the lanes could not move. **Any file >50 KB: canon in the REPO, pointer
+in Drive.**
 
 ---
 
