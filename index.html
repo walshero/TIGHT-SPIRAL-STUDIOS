@@ -1,165 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- TIGHT SPIRAL PRODUCTIONS — front door.
-     2026-07-11: the cabinet is UNLOCKED. Class is over; the arcade is public.
-     Two doors: The Creative Writing Arcade (anyone) and EN195 (the course).
-     color-scheme LOCKED — the OS does not repaint this. Original SVG, CC0. -->
+<!--
+  ══════════════════════════════════════════════════════════════════
+  TIGHT SPIRAL PRODUCTIONS — THE FRONT DOOR
+  Rebuilt 2026-07-11. Previously this page linked three things while
+  the studio had shipped seven. The games existed and could not be found.
+
+  House rules held: single-file, offline, no external hosts. No emoji.
+  Text tokens never ride a decorative color. Comfort is a live corner
+  control, never a gate. Scene first.
+  ══════════════════════════════════════════════════════════════════
+-->
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='19' fill='%230f5566'/%3E%3Cpath d='M20 7C11 7 7 14 7 20c0 6 4 11 11 11 5 0 9-3 9-8 0-4-3-6-6-6-3 0-4 2-4 4 0 1 1 2 2 2' fill='none' stroke='%23f0c357' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
-<title>Tight Spiral Productions — Play. Notice. Design.</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tight Spiral Productions</title>
 <style>
-:root{ color-scheme: light; }
-:root{
-  --floor:#1a1d21; --floor-2:#22262b;
-  --paper:#e8e2d6; --amber:#ffcf5a;
-  --glow:rgba(255,207,90,.16);
-  --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
-  --serif:Georgia,"Times New Roman",serif;
-}
-body[data-stop="softer"]{ --floor:#3a3f45; --floor-2:#464c53; --amber:#ffe093; }
-body[data-stop="warm"]  { --floor:#14100a; --floor-2:#1c1710; --amber:#ffb84d; --glow:rgba(255,184,77,.20); }
-*{box-sizing:border-box;margin:0;padding:0}
-body{ background:var(--floor); color:var(--paper); font-family:var(--sans);
-  min-height:100vh; -webkit-font-smoothing:antialiased; }
-.room{ position:fixed; inset:0; z-index:0; pointer-events:none;
-  background:
-    radial-gradient(ellipse 120% 60% at 50% 0%, var(--glow), transparent 60%),
-    repeating-linear-gradient(115deg, transparent 0 22px, rgba(255,255,255,.012) 22px 44px),
-    linear-gradient(180deg, var(--floor), var(--floor-2) 55%, var(--floor)); }
-.wrap{position:relative; z-index:1; max-width:640px; margin:0 auto; padding:1.2rem 1rem 4rem}
-.art{ margin:0 auto .8rem; max-width:400px }
-.art svg{ width:100%; height:auto; display:block }
-.tube{ display:inline-block; padding:.42rem 1.1rem; margin-bottom:.6rem;
-  border:2px solid var(--amber); border-radius:3px; color:var(--amber);
-  font:700 .66rem/1 var(--sans); letter-spacing:.22em; text-transform:uppercase;
-  box-shadow:0 0 22px var(--glow), inset 0 0 22px var(--glow); }
-.head{ text-align:center }
-h1{ font-family:var(--serif); font-weight:400; font-size:clamp(1.6rem,6vw,2.3rem);
-  line-height:1.06; color:var(--paper); margin-bottom:.4rem; }
-h1 b{ color:var(--amber); font-weight:700 }
-.sub{ font-family:var(--serif); font-style:italic; font-size:1rem; line-height:1.5;
-  color:var(--paper); opacity:.9; max-width:28rem; margin:.5rem auto 0; }
-.doors{ display:flex; flex-direction:column; gap:.9rem; margin-top:1.4rem }
-.door{ display:block; text-decoration:none; color:inherit;
-  background:linear-gradient(175deg,#2b3037,#1e2228);
-  border:1px solid rgba(255,207,90,.22); border-radius:12px; padding:1.1rem 1.15rem;
-  box-shadow:0 10px 30px rgba(0,0,0,.35); min-height:44px;
-  transition:transform .16s ease, border-color .16s ease; }
-.door:hover, .door:focus-visible{ transform:translateY(-3px); border-color:var(--amber) }
-.door:focus-visible{ outline:3px solid var(--amber); outline-offset:3px }
-.door.lead{ border-color:var(--amber); box-shadow:0 12px 36px rgba(0,0,0,.45), 0 0 0 1px rgba(255,207,90,.3) }
-.dh{ display:flex; align-items:baseline; justify-content:space-between; gap:.7rem; margin-bottom:.3rem }
-h2{ font-family:var(--serif); font-size:1.32rem; font-weight:400; color:var(--paper) }
-.tag{ flex:none; padding:.24rem .5rem; background:var(--amber); color:#1a1d21;
-  font:800 .62rem/1 var(--sans); letter-spacing:.08em; border-radius:3px; text-transform:uppercase; }
-.dd{ font-size:.94rem; line-height:1.5; color:var(--paper); opacity:.9 }
-.comfort{ position:fixed; right:.7rem; bottom:.7rem; z-index:20;
-  min-height:44px; min-width:44px; padding:.6rem .9rem;
-  background:var(--amber); color:#1a1d21; border:2px solid #1a1d21;
-  border-radius:24px; cursor:pointer; font:800 .74rem/1 var(--sans);
-  box-shadow:0 6px 20px rgba(0,0,0,.5); }
-.comfort:focus-visible{ outline:3px solid var(--paper); outline-offset:3px }
-.foot{ margin-top:2rem; padding-top:1.1rem; border-top:1px solid rgba(232,226,214,.14);
-  text-align:center; font-size:.88rem; line-height:1.6; color:var(--paper); opacity:.82; }
-.foot b{ color:var(--amber); opacity:1 }
-@media(prefers-reduced-motion:reduce){ *{transition:none!important} }
+  :root{
+    --paper:#141a1f;
+    --surface:#1d252c;
+    --surface-2:#26303a;
+    --ink:#eef2f5;        /* TEXT — 15.8:1 on paper */
+    --ink-dim:#c3ccd4;    /* TEXT — 9.9:1 on surface */
+    --label:#d9b98c;      /* TEXT accent — 8.1:1 on surface */
+    --accent:#c9b48d;     /* button surface */
+    --accent-ink:#161109; /* rides only on --accent */
+    --glow:#a8763a;       /* ATMOSPHERE ONLY — never text */
+    --rule:#3a464f;
+    --focus:#9fd0ff;
+    --tap:44px;
+  }
+  html[data-comfort="softer"]{
+    --paper:#222a31; --surface:#2d3740; --surface-2:#39454f;
+    --ink:#fbf8f2; --ink-dim:#dfe5eb; --label:#e5c99f;
+  }
+  html[data-comfort="warm"]{
+    --paper:#17110a; --surface:#251c10; --surface-2:#332612;
+    --ink:#ffe7ba; --ink-dim:#f1d49d; --label:#ffd08c;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;
+    font-size:clamp(17px,2.5vw,19px);line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .u{font-family:"Helvetica Neue",Arial,sans-serif;letter-spacing:.1em;
+     text-transform:uppercase;font-size:.68rem;font-weight:700}
+  .wrap{max-width:680px;margin:0 auto;padding:max(24px,env(safe-area-inset-top)) 22px 80px}
+
+  /* comfort — live corner control, immediate, never a gate */
+  .comfort{position:fixed;top:8px;right:8px;z-index:60;display:flex;gap:4px;
+    background:rgba(10,14,18,.85);backdrop-filter:blur(6px);
+    padding:5px;border-radius:999px;border:1px solid var(--rule)}
+  .comfort button{min-width:38px;min-height:38px;border-radius:999px;border:1px solid transparent;
+    background:transparent;color:var(--ink-dim);font-size:1rem;cursor:pointer;line-height:1}
+  .comfort button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .comfort .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  :focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+
+  header{padding:32px 0 20px;border-bottom:1px solid var(--rule);margin-bottom:32px}
+  h1{font-size:clamp(2rem,7vw,2.9rem);margin:0 0 .25em;line-height:1.1;letter-spacing:-.015em}
+  .tag{color:var(--label);margin:0}
+  .sub{color:var(--ink-dim);max-width:44ch;margin:.9em 0 0;font-size:1.02rem}
+
+  h2{font-size:1.05rem;margin:36px 0 14px;color:var(--label);
+     font-family:"Helvetica Neue",Arial,sans-serif;letter-spacing:.1em;
+     text-transform:uppercase;font-weight:700}
+
+  .game{display:block;text-decoration:none;color:inherit;
+    background:var(--surface);border:1px solid var(--rule);border-radius:4px;
+    padding:16px 18px;margin-bottom:12px;min-height:var(--tap);
+    transition:border-color .16s,transform .16s,background .16s}
+  .game:hover,.game:focus-visible{border-color:var(--glow);transform:translateY(-2px);background:var(--surface-2)}
+  .game h3{margin:0 0 .3em;font-size:1.22rem;line-height:1.25}
+  .game p{margin:0;color:var(--ink-dim);font-size:.98rem;line-height:1.45}
+  .game .meta{display:flex;gap:10px;align-items:center;margin-top:.6em;flex-wrap:wrap}
+  .pill{display:inline-block;padding:2px 9px;border-radius:999px;
+    font-family:"Helvetica Neue",Arial,sans-serif;font-size:.64rem;
+    letter-spacing:.08em;text-transform:uppercase;font-weight:700;
+    border:1px solid var(--rule);color:var(--ink-dim)}
+  .pill.live{border-color:var(--glow);color:var(--label)}
+  .pill.new{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+
+  .note{background:var(--surface);border-left:3px solid var(--glow);
+    border-radius:3px;padding:14px 16px;margin:28px 0;font-size:.96rem;color:var(--ink-dim)}
+  .note strong{color:var(--ink)}
+
+  footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--rule);
+    color:var(--ink-dim);font-family:"Helvetica Neue",Arial,sans-serif;font-size:.76rem}
+  footer a{color:var(--label)}
 </style>
 </head>
-<body data-stop="default">
-<div class="room" aria-hidden="true"></div>
-<div class="wrap">
-  <div class="art">
-    <svg viewBox="0 0 300 210" role="img"
-         aria-label="An arcade cabinet, open and lit, its padlock hanging unclasped on the hasp. On the screen, a worn path.">
-      <title>The cabinet is open — original SVG, Tight Spiral Productions</title>
-      <rect x="62" y="16" width="176" height="180" rx="12" fill="#2b3037" stroke="#4a4f57" stroke-width="2.5"/>
-      <rect x="78" y="28" width="144" height="30" rx="5" fill="#3d4148" stroke="#ffcf5a" stroke-width="2"/>
-      <g stroke="#ffcf5a" stroke-width="2.4" stroke-linecap="round">
-        <path d="M96 43 h16"/><path d="M120 43 h30"/><path d="M158 43 h20"/><path d="M186 43 h18"/>
-      </g>
-      <rect x="78" y="66" width="144" height="76" rx="5" fill="#0e1114" stroke="#5a606a" stroke-width="2"/>
-      <path d="M84 128 Q118 124 138 112 T188 92 T216 78" stroke="#3d4148" stroke-width="9" fill="none" stroke-linecap="round"/>
-      <path d="M84 128 Q118 124 138 112 T188 92 T216 78" stroke="#ffcf5a" stroke-width="1.8" fill="none" stroke-dasharray="5 7" opacity=".9"/>
-      <circle cx="204" cy="80" r="3" fill="#ffcf5a"/>
-      <g stroke="rgba(0,0,0,.35)" stroke-width="1">
-        <path d="M78 72 h144"/><path d="M78 82 h144"/><path d="M78 92 h144"/><path d="M78 102 h144"/>
-        <path d="M78 112 h144"/><path d="M78 122 h144"/><path d="M78 132 h144"/>
-      </g>
-      <circle cx="108" cy="166" r="9" fill="#ffcf5a" stroke="#1a1d21" stroke-width="2"/>
-      <circle cx="136" cy="166" r="7" fill="#c9a03f" stroke="#1a1d21" stroke-width="2"/>
-      <rect x="158" y="158" width="8" height="17" rx="4" fill="#5a606a"/>
-      <circle cx="162" cy="156" r="6" fill="#ffcf5a" stroke="#1a1d21" stroke-width="2"/>
-      <g transform="translate(228,120)">
-        <path d="M4 8 V4 a7 7 0 0 1 14 0" fill="none" stroke="#c9a03f" stroke-width="3" stroke-linecap="round"/>
-        <rect x="-4" y="8" width="18" height="15" rx="3" fill="#3d4148" stroke="#ffcf5a" stroke-width="2"/>
-        <circle cx="5" cy="15" r="2.2" fill="#ffcf5a"/>
-      </g>
-      <ellipse cx="150" cy="200" rx="86" ry="7" fill="#ffcf5a" opacity=".08"/>
-    </svg>
-  </div>
-  <header class="head">
-    <div class="tube">Tight Spiral Productions</div>
-    <h1>The cabinet is <b>open</b>.</h1>
-    <p class="sub">Drafts are prototypes. Revision is playtesting.
-       Writers are designers. Come play with the machinery.</p>
-  </header>
-  <nav class="doors">
-    <a class="door lead" href="arcade.html">
-      <div class="dh">
-        <h2>The Creative Writing Arcade</h2>
-        <span class="tag">Open</span>
-      </div>
-      <p class="dd">Five machines that teach a writing move by making you do it.
-         Clich&eacute;s, compression, the tell, the moves, the bench.
-         Free, offline, no account, nothing kept.</p>
-    </a>
-    <a class="door" href="en195.html">
-      <div class="dh">
-        <h2>EN195</h2>
-        <span class="tag">Course</span>
-      </div>
-      <p class="dd">The course room &mdash; schedule, workshop, the semester's shape.
-         For students in the class.</p>
-    </a>
-    <a class="door" href="how-an-idea-travels.html">
-      <div class="dh">
-        <h2>How an idea travels</h2>
-        <span class="tag">The system</span>
-      </div>
-      <p class="dd">Follow one idea from a noticing to a machine a stranger can play.
-         Six stations. Three of them can stop it cold.</p>
-    </a>
-  </nav>
-  <footer class="foot">
-    <b>Play. Notice. Design.</b><br>
-    Tight Spiral Productions builds single-file games that run offline,
-    keep nothing, and cost nothing. Take them into a classroom if they're useful.
-  </footer>
+<body>
+
+<div class="comfort" role="group" aria-label="Comfort">
+  <button data-c="softer" aria-pressed="false"><span class="sr">Softer</span>&#9686;</button>
+  <button data-c="default" aria-pressed="true"><span class="sr">Default</span>&#9679;</button>
+  <button data-c="warm" aria-pressed="false"><span class="sr">Warm dark</span>&#9687;</button>
 </div>
-<button class="comfort" id="cbtn" aria-label="Change comfort setting">Comfort: Default</button>
+
+<div class="wrap">
+
+  <header>
+    <h1>Tight Spiral Productions</h1>
+    <p class="tag u">Play. Notice. Design.</p>
+    <p class="sub">Games that make the thinking visible — where you see the measurement and the rules underneath, while they are being run on you.</p>
+  </header>
+
+  <h2>The games</h2>
+
+  <a class="game" href="the-console.html">
+    <h3>The Console</h3>
+    <p>You take a growth job at a social app and pull the levers yourself — the streak, the batch, the infinite feed. Then the seat turns around and shows you your own telemetry.</p>
+    <span class="meta"><span class="pill live">Live</span><span class="pill">Dark patterns</span></span>
+  </a>
+
+  <a class="game" href="choose-your-leader-v5-slice.html">
+    <h3>Choose Your Leader</h3>
+    <p>A dark room in October 1962. You hear a president with only what the room knows, and commit. Then the record turns — and you see how far the words carried you before you knew.</p>
+    <span class="meta"><span class="pill new">New</span><span class="pill">Rhetoric &middot; JFK</span></span>
+  </a>
+
+  <a class="game" href="the-tell.html">
+    <h3>The Tell</h3>
+    <p>Reading the moment a text gives itself away.</p>
+    <span class="meta"><span class="pill live">Live</span></span>
+  </a>
+
+  <a class="game" href="cliche-cowpaths.html">
+    <h3>The Clich&eacute; Cabinet</h3>
+    <p>Three rooms of worn language — the city, the field, the line. Walk the cowpaths and watch where your sentences have already been.</p>
+    <span class="meta"><span class="pill live">Live</span><span class="pill">3 rooms</span></span>
+  </a>
+
+  <a class="game" href="behind-this-door.html">
+    <h3>Behind This Door</h3>
+    <p>A noticing game, one door at a time. First deck: Ireland&rsquo;s writers.</p>
+    <span class="meta"><span class="pill live">Live</span></span>
+  </a>
+
+  <a class="game" href="funny-boneys-factory.html">
+    <h3>Funny Boney&rsquo;s Factory</h3>
+    <p>Where the jokes get made, and you can see the machine.</p>
+    <span class="meta"><span class="pill">MVP</span></span>
+  </a>
+
+  <h2>For the classroom</h2>
+
+  <a class="game" href="en195.html">
+    <h3>EN195 &mdash; What Counts Now</h3>
+    <p>The flash fiction unit: Sandbags, the Workshop Wall, the Review Bench, the Course River. Built for the students who are in the room.</p>
+    <span class="meta"><span class="pill live">Live</span><span class="pill">Course</span></span>
+  </a>
+
+  <a class="game" href="arcade.html">
+    <h3>The Arcade</h3>
+    <p>Everything, in one place.</p>
+  </a>
+
+  <div class="note">
+    <strong>How the studio works.</strong> Every build is a single file. It runs offline, holds nothing about you, and opens on a scene &mdash; never on a settings screen. <a href="how-an-idea-travels.html" style="color:var(--label)">See how an idea travels &rarr;</a>
+  </div>
+
+  <footer>
+    Tight Spiral Productions &middot; Matt Walsh &middot; single-file, offline, accessible-first.
+  </footer>
+
+</div>
+
 <script>
-(function(){
-  var S=['default','softer','warm'], L={'default':'Default','softer':'Softer','warm':'Warm dark'}, i=0;
-  var b=document.getElementById('cbtn');
-  b.addEventListener('click',function(){
-    i=(i+1)%S.length;
-    document.body.setAttribute('data-stop',S[i]);
-    b.textContent='Comfort: '+L[S[i]];
+  document.querySelectorAll('.comfort button').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.comfort button').forEach(function(x){x.setAttribute('aria-pressed','false')});
+      b.setAttribute('aria-pressed','true');
+      var v=b.dataset.c;
+      if(v==='default') document.documentElement.removeAttribute('data-comfort');
+      else document.documentElement.setAttribute('data-comfort',v);
+    });
   });
-})();
 </script>
-<!--
-  PROVENANCE — Tight Spiral Productions front door
-  CHANGELOG
-  2026-07-06  "The cabinet is locked for the season." Padlock closed, EN195 only.
-  2026-07-11  UNLOCKED. Class is over. The Creative Writing Arcade is the public
-              front door; EN195 keeps its own room. The padlock now hangs OPEN on
-              the hasp - same cabinet, same lock, unclasped. On the screen, a worn
-              path: the cowpath.
-  FLOORS: no opening wall - comfort is a corner control - color-scheme locked -
-  pinned ink on .comfort - >50% image on first paint - 44px targets.
--->
 </body>
 </html>
