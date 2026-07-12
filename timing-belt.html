@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Timing Belt — Tight Spiral Studios</title>
+<style>
+  :root{
+    --paper:#f4efe6; --ink:#1b1712; --ink2:#1b1712;
+    --line:#c9bfae; --accent:#6e4700;
+    --card:#fbf8f2; --shadow:rgba(30,22,12,.16);
+    --slip:#efe7d6; --warn-bg:#f6e9d4; --warn-line:#8a5a12;
+  }
+  [data-stop="soft"]{ --paper:#e6ddc9; --ink:#2b2013; --ink2:#2b2013; --card:#efe7d3;
+    --line:#bcae90; --slip:#ddd2b8; }
+  [data-stop="warm"]{ --paper:#2a2620; --ink:#f3e7cf; --ink2:#f3e7cf; --card:#332e26;
+    --line:#5a5040; --accent:#e6b866; --shadow:rgba(0,0,0,.4);
+    --slip:#3a342b; --warn-bg:#3f3320; --warn-line:#e6b866; }
+  *{box-sizing:border-box}
+  html{scroll-behavior:auto}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font:19px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    padding:0 0 80px;
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:0 20px}
+  header.top{
+    background:var(--card); border-bottom:3px solid var(--accent);
+    padding:22px 20px; margin-bottom:8px;
+  }
+  header.top .wrap{padding:0}
+  h1{font-size:1.7rem; margin:.1em 0 .15em; letter-spacing:-.01em}
+  .sub{font-size:1rem; margin:0}
+  .comfort{
+    display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;
+  }
+  .comfort button{
+    min-height:44px; min-width:44px; padding:8px 16px;
+    background:var(--paper); color:var(--ink); border:2px solid var(--accent);
+    border-radius:8px; font-size:.95rem; cursor:pointer; font-weight:600;
+  }
+  .comfort button[aria-pressed="true"]{background:var(--accent); color:var(--paper)}
+  .comfort button:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+  section{
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:20px; margin:16px 0; box-shadow:0 2px 6px var(--shadow);
+  }
+  h2{font-size:1.25rem; margin:.1em 0 .5em; border-bottom:2px solid var(--line); padding-bottom:.3em}
+  h3{font-size:1.05rem; margin:1em 0 .3em}
+  p{margin:.5em 0}
+  .lede{font-size:1.05rem}
+  .limit{
+    background:var(--warn-bg); border-left:5px solid var(--warn-line);
+    padding:14px 16px; border-radius:8px; margin:14px 0;
+  }
+  .limit strong{color:var(--accent)}
+  ol.steps{padding-left:0; list-style:none; counter-reset:step; margin:0}
+  ol.steps > li{
+    counter-increment:step; position:relative; padding:14px 14px 14px 56px;
+    border:1px solid var(--line); border-radius:10px; margin:10px 0; background:var(--paper);
+  }
+  ol.steps > li::before{
+    content:counter(step); position:absolute; left:12px; top:14px;
+    width:32px; height:32px; background:var(--accent); color:var(--paper);
+    border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:1rem;
+  }
+  .li-title{font-weight:700; display:block; margin-bottom:.2em}
+  .surface{
+    display:inline-block; font-size:.82rem; font-weight:700; padding:2px 9px;
+    border:2px solid var(--accent); border-radius:20px; margin:2px 4px 2px 0;
+  }
+  table{width:100%; border-collapse:collapse; margin:10px 0; font-size:.95rem}
+  th,td{border:1px solid var(--line); padding:9px 10px; text-align:left; vertical-align:top}
+  th{background:var(--slip); font-weight:700}
+  .verdict{font-weight:700}
+  label.chk{display:flex; gap:10px; align-items:flex-start; padding:10px 0; cursor:pointer}
+  label.chk input{width:24px; height:24px; margin-top:2px; flex:0 0 auto; accent-color:var(--accent)}
+  textarea{
+    width:100%; min-height:90px; font:inherit; padding:10px; border:2px solid var(--line);
+    border-radius:8px; background:var(--paper); color:var(--ink); resize:vertical;
+  }
+  textarea:focus-visible{outline:3px solid var(--accent); outline-offset:1px}
+  .btn{
+    min-height:44px; padding:12px 22px; background:var(--accent); color:var(--paper);
+    border:none; border-radius:10px; font-size:1rem; font-weight:700; cursor:pointer;
+  }
+  .btn:focus-visible{outline:3px solid var(--ink); outline-offset:2px}
+  .out{
+    white-space:pre-wrap; background:var(--slip); border:1px dashed var(--accent);
+    border-radius:8px; padding:14px; margin-top:12px; font-size:.9rem;
+    font-family:ui-monospace,Menlo,Consolas,monospace; display:none;
+  }
+  .foot{
+    margin-top:24px; padding:18px 20px; background:var(--ink); color:var(--paper);
+    border-radius:12px; font-size:.9rem;
+  }
+  .foot a{color:var(--accent); font-weight:700}
+  a:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <h1>The Timing Belt</h1>
+    <p class="sub">The part that keeps memory, the shelf, and Drive turning <em>in phase</em>.</p>
+    <div class="comfort" role="group" aria-label="Comfort">
+      <button data-set="soft" aria-pressed="false">Softer</button>
+      <button data-set="default" aria-pressed="true">Default</button>
+      <button data-set="warm" aria-pressed="false">Warm-dark</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section>
+    <p class="lede">A sync copies state between two places. A <strong>timing belt</strong> keeps every rotating part turning in phase so the engine doesn't tear itself apart. When it slips, parts collide. That is the studio's failure mode: memory says one thing, the shelf another, Drive a third — out of phase, so work collides and evaporates.</p>
+    <div class="limit">
+      <strong>The honest limit.</strong> A single offline file cannot reach out and write to Drive, the Project shelf, and memory on its own. There is no button that makes a change propagate across all three. The Belt is a <strong>protocol Claude runs against a ledger</strong> — it finds every phase-slip and names the correcting move. It does not auto-wire the surfaces. Promising the wire is the exact confident-but-wrong failure the Belt exists to prevent.
+    </div>
+  </section>
+
+  <section>
+    <h2>The three surfaces</h2>
+    <p>Everything the studio knows lives on one of three surfaces. Phase-slip is when they disagree.</p>
+    <span class="surface">Memory</span> what Claude's memory <em>claims</em> exists — loads every chat, can go stale.<br>
+    <span class="surface">Shelf</span> the Project files (durable, phone-saved — the working truth).<br>
+    <span class="surface">Drive</span> <code>Claude_files</code> — the dated archive, reachable via the Drive connector.
+  </section>
+
+  <section>
+    <h2>Running the Belt — the protocol</h2>
+    <p>When you say <strong>run the belt</strong>, Claude walks these five turns. Each has a fixed job so it can't be done freehand.</p>
+    <ol class="steps">
+      <li><span class="li-title">Inventory each surface</span>
+        List what each surface holds right now — memory's claims, the shelf's files, Drive's files. Read, don't assume.</li>
+      <li><span class="li-title">Byte-check the shelf</span>
+        Every file named "done" gets a real size on disk (the File-Save Verify Floor). Zero-byte = a ghost, not a file.</li>
+      <li><span class="li-title">Find the phase-slips</span>
+        Cross the three lists. Flag: files in one surface missing from another; conflicting versions; stale memory claims; ghosts.</li>
+      <li><span class="li-title">Name the correcting move</span>
+        For each slip, the single move that re-phases it — and <em>who</em> makes it (Claude reads/builds; Matt phone-saves; the Drive push).</li>
+      <li><span class="li-title">Emit the ledger + Carry-Out</span>
+        One reconciled ledger + the paste-into-next-session line, so the fix lands instead of evaporating.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>The ledger template</h2>
+    <p>Every belt run fills this. It is the output, not a decoration.</p>
+    <table>
+      <thead><tr><th>File / item</th><th>Memory</th><th>Shelf</th><th>Drive</th><th>Verdict</th></tr></thead>
+      <tbody>
+        <tr><td><em>example</em></td><td>claims exists</td><td>present, 8 KB</td><td>missing</td><td class="verdict">push to Drive</td></tr>
+        <tr><td colspan="5" style="text-align:center;color:var(--accent)">— one row per item on belt run —</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Verdict vocabulary:</strong> in phase &middot; phone-save needed &middot; push to Drive &middot; version conflict (pick canonical) &middot; ghost (rebuild or delete claim) &middot; stale memory (correct the claim).</p>
+  </section>
+
+  <section>
+    <h2>Pre-flight — run before you say "run the belt"</h2>
+    <p>Tick these so the run isn't wasted. State lives on the page, not in your head; it does not persist across reloads.</p>
+    <label class="chk"><input type="checkbox"> Full OS is loaded (fresh session, project mounted)</label>
+    <label class="chk"><input type="checkbox"> You can reach your phone (the save device) if a phone-save move surfaces</label>
+    <label class="chk"><input type="checkbox"> You know which one file or question triggered the doubt (aim the run)</label>
+    <label class="chk"><input type="checkbox"> You have ~10 min — a full three-surface sweep is real work</label>
+  </section>
+
+  <section>
+    <h2>Emit the Carry-Out</h2>
+    <p>Note anything you want carried into the next session, then generate the paste-in line.</p>
+    <textarea id="note" placeholder="e.g. Belt found founder-directions handoff on shelf but not yet in Drive — push pending. OS reconciliation still owed."></textarea>
+    <p><button class="btn" id="gen">Generate Carry-Out</button></p>
+    <div class="out" id="out" role="status" aria-live="polite"></div>
+  </section>
+
+  <div class="foot">
+    <strong>The Timing Belt</strong> — a Human-in-the-Loop Productions protocol.<br>
+    Tight Spiral Studios &middot; walshero@gmail.com<br>
+    How the studio works: <a href="tight-spiral-system-map.html">tight-spiral-system-map.html</a>
+    <hr style="border-color:var(--accent);opacity:.4;margin:12px 0">
+    <em>How this was made:</em> Built 2026-07-01 from the founder's own naming — "this is a timing belt, not a sync." Claude named the phase-slip diagnosis and the no-auto-wire limit; Matt named the part and the SINK/HARMONY intent. The limit is written into the file so it can't drift into a false promise. Human-in-the-loop move: the founder chose "build the belt first" over running an ad-hoc sweep.
+  </div>
+
+</div>
+
+<script>
+  var root=document.documentElement;
+  document.querySelectorAll('.comfort button').forEach(function(b){
+    b.addEventListener('click',function(){
+      var set=b.getAttribute('data-set');
+      if(set==='default'){root.removeAttribute('data-stop');}
+      else{root.setAttribute('data-stop',set);}
+      document.querySelectorAll('.comfort button').forEach(function(x){
+        x.setAttribute('aria-pressed', x===b ? 'true':'false');
+      });
+    });
+  });
+
+  document.getElementById('gen').addEventListener('click',function(){
+    var note=document.getElementById('note').value.trim();
+    var d=new Date().toISOString().slice(0,10);
+    var out=document.getElementById('out');
+    var txt='TIMING BELT — carry-out ('+d+')\n'
+      +'Paste into the next session to keep phase.\n\n'
+      +'Belt state: '+(note||'(no note entered — run the belt to fill the ledger)')+'\n\n'
+      +'Next: load full OS, run the belt, apply each correcting move, phone-save any flagged file.';
+    out.textContent=txt;
+    out.style.display='block';
+    out.focus && out.focus();
+  });
+
+  window.scrollTo(0,0);
+</script>
+</body>
+</html>

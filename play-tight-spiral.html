@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  PLAY TIGHT SPIRAL — the playable presentation hub.
+  Tight Spiral Studios · walshero@gmail.com · 2026-06-30
+
+  WHAT IT IS: the front door a peer or grant committee opens cold. It states the
+  studio thesis, tells the systems/calibration story, and launches the REAL games
+  as live playables (separate single-file builds — not re-implemented here).
+
+  RHETORICAL SITUATION (drove the look, per the corrected Visibility floor):
+  this is a marquee — a studio announcing itself, with real doors a visitor walks
+  through. So the look is a LIT GALLERY with depth: a bold typographic marquee
+  headline, and game "doors" that light up on focus/hover. Not paper, not the
+  steel of the ledger. The novelty is the door-that-lights: each game is a
+  threshold, and the page rewards reaching toward one.
+
+  LINKS: relative paths. Works as a GitHub Pages site (all files in repo root) OR
+  saved to one folder. If a link 404s, that game isn't pushed yet — flagged in-page.
+
+  FLOOR: high contrast, large type, GREEN-FREE, keyboard, focus rings, 44px+,
+  reachable contrast + text toggles that adapt, never gate. Look chosen fresh.
+
+  FERPA: no student data anywhere. Pure presentation + launch.
+
+  HARVEST: proved the studio's builds present as one playable body of work via a
+  launcher, not a slideshow — the games stay intact and a visitor plays the real
+  thing. Reusable candidate: the "lit door" tile component.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Play Tight Spiral — learning games you can play right now</title>
+<style>
+  /* THEME for THIS marquee: deep ink stage + warm spotlight + ivory type.
+     Green-free by floor. The spotlight is a warm gold-white, used as the "lit"
+     state on doors — boldness spent on the lighting, everything else quiet. */
+  :root{
+    --stage:#1a1726; --stage2:#211d31; --card:#2a2539;
+    --ivory:#f6f1e7; --ivory2:#f6f1e7;          /* ink2 == ink */
+    --dim:#cfc7d6; --rule:#473f5e;
+    --spot:#ffd98a; --spot-br:#ffc24d;           /* warm spotlight */
+    --accent:#c98a3a;                             /* burnt gold structural */
+    --hot:#e2603a;                                /* a single warm signal */
+    --focus:#ffc24d;
+    --display:'Georgia','Iowan Old Style',serif;
+    --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+  }
+  /* toggle: light reading mode (for low light / different eyes) */
+  body.light{
+    --stage:#f3eee4; --stage2:#fbf7ee; --card:#fff;
+    --ivory:#1d1726; --ivory2:#1d1726;
+    --dim:#403a52; --rule:#d8cdbb;
+    --spot:#8a5a12; --spot-br:#6e4700;
+    --accent:#8a5a12; --hot:#b4451f; --focus:#b4540a;
+  }
+  *{box-sizing:border-box;} html,body{margin:0;}
+  body{ font-family:var(--sans); background:var(--stage); color:var(--ivory);
+    line-height:1.55; font-size:19px; -webkit-text-size-adjust:100%; }
+
+  .bar{ display:flex; align-items:center; gap:.7rem; padding:.7rem 1rem;
+    position:sticky; top:0; z-index:40; background:var(--stage2);
+    border-bottom:2px solid var(--rule); flex-wrap:wrap; }
+  .bar .spiral{ width:30px; height:30px; flex:none; }
+  .bar .name{ font:800 1rem/1 var(--sans); letter-spacing:.02em; }
+  .bar .ctrls{ margin-left:auto; display:flex; gap:.5rem; }
+  .tgl{ background:transparent; color:inherit; border:2px solid currentColor;
+    border-radius:9px; padding:.5rem .7rem; font:700 .76rem/1 var(--sans);
+    cursor:pointer; min-height:44px; }
+  .tgl:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+  /* ---- the marquee ---- */
+  .marquee{ max-width:860px; margin:0 auto; padding:2.4rem 1.1rem 1rem; text-align:center; }
+  .eyebrow{ font:800 .82rem/1 var(--sans); letter-spacing:.22em; text-transform:uppercase;
+    color:var(--spot-br); margin-bottom:1rem; }
+  .marquee h1{ font:800 clamp(2.1rem,7vw,3.4rem)/1.05 var(--display); margin:0 0 1rem;
+    letter-spacing:-.01em; }
+  .marquee h1 .lit{ color:var(--spot); }
+  .marquee .thesis{ font:400 clamp(1.05rem,2.6vw,1.3rem)/1.45 var(--sans); color:var(--ivory);
+    max-width:640px; margin:0 auto 1.4rem; }
+  .marquee .sub{ font:600 .95rem/1.5 var(--sans); color:var(--dim); max-width:600px; margin:0 auto; }
+
+  /* ---- the three-line story strip ---- */
+  .story{ max-width:860px; margin:1.8rem auto; padding:0 1.1rem; display:grid;
+    grid-template-columns:1fr; gap:.8rem; }
+  @media(min-width:680px){ .story{ grid-template-columns:repeat(3,1fr); } }
+  .beat{ background:var(--stage2); border:2px solid var(--rule); border-radius:14px; padding:1rem; }
+  .beat .n{ font:800 .9rem/1 var(--sans); color:var(--spot-br); margin-bottom:.4rem; }
+  .beat h3{ font:800 1.05rem/1.2 var(--sans); margin:0 0 .35rem; }
+  .beat p{ font-size:.92rem; margin:0; color:var(--ivory); }
+
+  /* ---- section heads ---- */
+  .sec{ max-width:860px; margin:2.4rem auto 0; padding:0 1.1rem; }
+  .sec .h{ font:800 .8rem/1 var(--sans); letter-spacing:.16em; text-transform:uppercase;
+    color:var(--spot-br); border-bottom:2px solid var(--rule); padding-bottom:.6rem; margin-bottom:1rem; }
+  .sec .lead{ font-size:1rem; color:var(--dim); margin:-.4rem 0 1.2rem; }
+
+  /* ---- the lit doors ---- */
+  .doors{ display:grid; grid-template-columns:1fr; gap:1rem; }
+  @media(min-width:600px){ .doors{ grid-template-columns:1fr 1fr; } }
+  .door{ display:block; text-decoration:none; color:inherit; background:var(--card);
+    border:2px solid var(--rule); border-radius:16px; padding:1.1rem; position:relative;
+    transition:border-color .18s, transform .18s, box-shadow .18s; }
+  .door:hover, .door:focus-visible{ border-color:var(--spot-br);
+    box-shadow:0 0 0 3px rgba(255,194,77,.25), 0 10px 30px rgba(0,0,0,.3);
+    transform:translateY(-3px); outline:none; }
+  @media (prefers-reduced-motion: reduce){ .door{ transition:none; } .door:hover,.door:focus-visible{ transform:none; } }
+  .door .tag{ font:800 .68rem/1 var(--sans); letter-spacing:.08em; text-transform:uppercase;
+    color:var(--accent); margin-bottom:.5rem; }
+  .door h3{ font:800 1.22rem/1.2 var(--display); margin:0 0 .4rem; }
+  .door p{ font-size:.93rem; margin:0 0 .7rem; color:var(--ivory); }
+  .door .play{ font:800 .9rem/1 var(--sans); color:var(--stage); background:var(--spot);
+    border-radius:9px; padding:.55rem .8rem; display:inline-block; min-height:36px; }
+  body.light .door .play{ color:var(--stage2); background:var(--spot); }
+  .door .badge{ position:absolute; top:1.1rem; right:1.1rem; font:700 .68rem/1 var(--sans);
+    color:var(--dim); border:2px solid var(--rule); border-radius:6px; padding:.28rem .45rem; }
+
+  .note{ max-width:860px; margin:1.4rem auto 0; padding:0 1.1rem; }
+  .note .box{ background:var(--stage2); border:2px dashed var(--accent); border-radius:13px;
+    padding:.9rem 1rem; font-size:.9rem; color:var(--ivory); }
+
+  .foot{ max-width:860px; margin:3rem auto 0; padding:1.4rem 1.1rem 3rem; text-align:center;
+    border-top:2px solid var(--rule); color:var(--dim); font:600 .85rem/1.6 var(--sans); }
+</style>
+</head>
+<body>
+<div class="bar" role="banner">
+  <svg class="spiral" viewBox="0 0 40 40" aria-hidden="true">
+    <path d="M20 5 C10 5 5 13 6 21 C7 28 14 32 21 31 C27 30 30 25 29 20 C28 16 24 14 21 15 C18 16 17 19 19 21"
+      fill="none" stroke="var(--spot-br)" stroke-width="2.6" stroke-linecap="round"/>
+  </svg>
+  <span class="name">Tight Spiral Studios</span>
+  <div class="ctrls">
+    <button class="tgl" id="light" aria-pressed="false">Light mode</button>
+    <button class="tgl" id="text" aria-pressed="false">Bigger text</button>
+  </div>
+</div>
+
+<header class="marquee">
+  <div class="eyebrow">Play · Notice · Design</div>
+  <h1>Learning games you can <span class="lit">play right now.</span></h1>
+  <p class="thesis">A one-person studio building single-file, offline learning games — grounded in how people actually learn, and built with a human in every loop.</p>
+  <p class="sub">Everything below is a real, working game. Open one. It runs in your browser, needs no install, and keeps no data on you.</p>
+</header>
+
+<section class="story" aria-label="What makes this different">
+  <div class="beat"><div class="n">The root</div><h3>A humanist who thinks in systems</h3><p>Writing craft, pedagogy, and systems thinking — the edge underneath is assessment and calibration design.</p></div>
+  <div class="beat"><div class="n">The method</div><h3>Notice, don't narrate</h3><p>Games teach by having you do a real task and catch something true — never by depositing a lesson.</p></div>
+  <div class="beat"><div class="n">The spine</div><h3>A human in every loop</h3><p>Each build runs a panel of design minds and a hard accessibility floor. The system even corrects itself, under human control.</p></div>
+</section>
+
+<section class="sec">
+  <div class="h">Play a game</div>
+  <p class="lead">Each opens in its own tab. These are the headline builds.</p>
+  <div class="doors">
+    <a class="door" href="choose-your-leader-full.html" target="_blank" rel="noopener">
+      <span class="tag">Noticing · civic literacy</span>
+      <h3>Choose Your Leader</h3>
+      <p>You don't judge the leader — you judge what you were allowed to see. Trust a quote, then watch the record turn.</p>
+      <span class="play">Play &rarr;</span>
+    </a>
+    <a class="door" href="sandbags.html" target="_blank" rel="noopener">
+      <span class="tag">Craft · creative writing</span>
+      <h3>Sandbags</h3>
+      <p>Compression as ascent: cut a flash-fiction draft word by word and watch the story rise.</p>
+      <span class="play">Play &rarr;</span>
+    </a>
+    <a class="door" href="confluence-console.html" target="_blank" rel="noopener">
+      <span class="tag">Calibration · assessment</span>
+      <h3>Confluence</h3>
+      <p>The calibration engine: rehearse the scoring move against a real rubric before the stakes are real.</p>
+      <span class="play">Open &rarr;</span>
+    </a>
+    <a class="door" href="en195-last-week.html" target="_blank" rel="noopener">
+      <span class="tag">Classroom · live pilot</span>
+      <h3>What Counts Now</h3>
+      <p>A clarity game from a real college creative-writing course — what earns credit in the final week.</p>
+      <span class="play">Play &rarr;</span>
+    </a>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="h">See the system</div>
+  <p class="lead">The studio runs as a designed machine. These show the gears.</p>
+  <div class="doors">
+    <a class="door" href="recursion-ledger.html" target="_blank" rel="noopener">
+      <span class="tag">Governance · live instrument</span>
+      <h3>The Recursion Ledger</h3>
+      <p>How the studio corrects itself: fixes graduate automatically below a wall it can never cross.</p>
+      <span class="play">Open &rarr;</span>
+    </a>
+    <a class="door" href="studio-eyes-auditor.html" target="_blank" rel="noopener">
+      <span class="tag">Quality gate · accessibility</span>
+      <h3>Studio Eyes</h3>
+      <p>The no-eyes-required ship gate every build must pass before it goes public.</p>
+      <span class="play">Open &rarr;</span>
+    </a>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="h">For the classroom</div>
+  <p class="lead">The teaching surface these games were built to serve.</p>
+  <div class="doors">
+    <a class="door" href="course-river.html" target="_blank" rel="noopener">
+      <span class="tag">Navigation</span>
+      <h3>Course River</h3>
+      <p>A navigable river that replaces a thirty-page syllabus.</p>
+      <span class="play">Open &rarr;</span>
+    </a>
+    <a class="door" href="review-bench.html" target="_blank" rel="noopener">
+      <span class="tag">Workshop tool</span>
+      <h3>Review Bench</h3>
+      <p>Where a draft gets the four reader roles turned on it.</p>
+      <span class="play">Open &rarr;</span>
+    </a>
+  </div>
+</section>
+
+<div class="note">
+  <div class="box"><b>If a door doesn't open:</b> that game isn't published to the live site yet. The studio pushes builds at the close of each session — links go live once the file is in the public repo.</div>
+</div>
+
+<footer class="foot">
+  Tight Spiral Studios · Play · Notice · Design<br>
+  Single-file · offline · no tracking · built with a human in every loop
+</footer>
+
+<script>
+"use strict";
+var $=function(id){return document.getElementById(id);};
+$('light').addEventListener('click',function(){
+  var on=document.body.classList.toggle('light');
+  this.setAttribute('aria-pressed',on?'true':'false');
+  this.textContent=on?'Dark mode':'Light mode';
+});
+var big=false;
+$('text').addEventListener('click',function(){
+  big=!big; document.body.style.fontSize=big?'22px':'';
+  this.setAttribute('aria-pressed',big?'true':'false');
+  this.textContent=big?'Standard text':'Bigger text';
+});
+/* respect OS dark/light on first paint without gating */
+try{ if(window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches){
+  document.body.classList.add('light'); $('light').textContent='Dark mode'; $('light').setAttribute('aria-pressed','true');
+}}catch(e){}
+</script>
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cliché City — Tight Spiral Studios</title>
+<style>
+  :root{--ink:#f4f1e8;--paper:#12100f;--paper2:#1c1917;--hot:#ff5a3c;--dim:#8a857b;--gold:#ffcf5a;
+    --corp:#57c7ff;--folk:#ffb14e;--nat:#6ee7a5;--time:#c79bff;--misc:#c8bfae;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--paper);color:var(--ink);font-family:"Georgia","Times New Roman",serif;
+    display:flex;align-items:center;justify-content:center;min-height:100vh;overflow:hidden;}
+  #stage{position:relative;width:min(96vw,1200px);aspect-ratio:3/2;
+    background:radial-gradient(1200px 800px at 50% -10%, #241f1c 0%, var(--paper) 62%);
+    border:2px solid #3a352f;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.6);}
+  canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  #hud{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;gap:8px;
+    padding:12px 20px;pointer-events:none;font-family:"Helvetica Neue",Arial,sans-serif;letter-spacing:.05em;}
+  .hud-item{font-size:clamp(11px,1.4vw,15px);text-transform:uppercase;color:var(--dim);white-space:nowrap}
+  .hud-item b{color:var(--ink);font-size:clamp(16px,2vw,24px);font-family:"Georgia",serif;margin-left:.35em}
+  .hud-item.gold b{color:var(--gold)}.hud-item.nat b{color:var(--nat)}
+  .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    background:linear-gradient(180deg,rgba(10,9,8,.82),rgba(10,9,8,.95));padding:5vh 8vw;z-index:5;}
+  .screen.hidden{display:none}
+  .kicker{font-family:"Helvetica Neue",Arial,sans-serif;text-transform:uppercase;letter-spacing:.4em;font-size:clamp(11px,1.4vw,15px);color:var(--hot);margin-bottom:1.1rem;}
+  h1{font-size:clamp(38px,7.5vw,88px);line-height:.92;font-weight:400;letter-spacing:-.01em;margin-bottom:.35em;}
+  h1 .strike{position:relative;color:var(--dim)}
+  h1 .strike::after{content:"";position:absolute;left:-2%;right:-2%;top:52%;height:5px;background:var(--hot);transform:rotate(-3deg);}
+  .lede{max-width:54ch;font-size:clamp(15px,2vw,21px);line-height:1.5;margin-bottom:1.2em;}
+  .rules{max-width:56ch;font-size:clamp(13px,1.7vw,17px);line-height:1.6;color:var(--dim);margin-bottom:1.4em;font-family:"Helvetica Neue",Arial,sans-serif;}
+  .rules b{color:var(--ink)}
+  .legend{display:flex;gap:1.1em;flex-wrap:wrap;justify-content:center;margin-bottom:1.5em;font-family:"Helvetica Neue",Arial,sans-serif;font-size:clamp(12px,1.5vw,15px);color:var(--dim)}
+  .legend span{display:inline-flex;align-items:center;gap:.4em}
+  .sw{width:14px;height:14px;border-radius:3px;display:inline-block}
+  .controls{font-family:"Helvetica Neue",Arial,sans-serif;display:flex;gap:1.3em;flex-wrap:wrap;justify-content:center;color:var(--dim);font-size:clamp(12px,1.5vw,16px);margin-bottom:1.7em;}
+  .controls b{color:var(--ink)}
+  kbd{display:inline-block;background:var(--paper2);border:1px solid #4a443c;border-bottom-width:3px;border-radius:6px;padding:.15em .5em;font-family:"Helvetica Neue",Arial,sans-serif;color:var(--ink);font-size:.95em;margin:0 .1em;}
+  button{font-family:"Helvetica Neue",Arial,sans-serif;background:var(--hot);color:#1a0d09;border:none;border-radius:999px;padding:.75em 2.1em;font-size:clamp(16px,2vw,20px);font-weight:700;letter-spacing:.04em;cursor:pointer;text-transform:uppercase;box-shadow:0 6px 0 #b93b23;transition:transform .08s ease;}
+  button:hover{transform:translateY(-1px)}button:active{transform:translateY(3px);box-shadow:0 3px 0 #b93b23}
+  .imp{margin-top:.8em;color:var(--nat);font-family:Arial,sans-serif;font-size:13px}
+  .tag{position:absolute;bottom:12px;right:18px;z-index:6;font-family:"Helvetica Neue",Arial,sans-serif;letter-spacing:.28em;text-transform:uppercase;font-size:11px;color:#5a544c;pointer-events:none;}
+  .final{font-size:clamp(20px,3vw,30px);color:var(--gold);margin-bottom:.3em;font-family:"Georgia",serif}
+  .verdict{color:var(--dim);font-style:italic;margin-bottom:1.6em;max-width:46ch}
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="game"></canvas>
+  <div id="hud">
+    <div class="hud-item">Score<b id="score">0</b></div>
+    <div class="hud-item gold">Floors<b id="floors">0</b></div>
+    <div class="hud-item nat">Landmarks<b id="landmarks">0</b></div>
+    <div class="hud-item">Placed<b id="placed">0</b></div>
+  </div>
+
+  <div class="screen" id="startScreen">
+    <div class="kicker">Tight Spiral Studios</div>
+    <h1>Cliché <span class="strike">City</span></h1>
+    <p class="lede">Every cliché you shot in the other two games came here as prefab. Now zone it. Stack the slabs, complete a floor, and raise a skyline out of tired language.</p>
+    <p class="rules">
+      Each slab is one cliché; its length is its word count. <b>Rotate</b> to stand it up and fit tight lots.<br>
+      Fill a whole row to <b>complete a floor</b> — it clears and the city rises. Overflow the top and it's game over.<br>
+      Bonus: clear a floor where every slab is the <b>same district</b> (color) and you raise a <b>landmark</b>.
+    </p>
+    <div class="legend">
+      <span><i class="sw" style="background:#57c7ff"></i>Corporate</span>
+      <span><i class="sw" style="background:#ffb14e"></i>Folksy</span>
+      <span><i class="sw" style="background:#6ee7a5"></i>Nature</span>
+      <span><i class="sw" style="background:#c79bff"></i>Time</span>
+    </div>
+    <div class="controls">
+      <span><b>Move</b> <kbd>&larr;</kbd><kbd>&rarr;</kbd></span>
+      <span><b>Rotate</b> <kbd>&uarr;</kbd> or <kbd>R</kbd></span>
+      <span><b>Place</b> <kbd>Space</kbd> or <kbd>&darr;</kbd></span>
+    </div>
+    <button id="startBtn">Break ground</button>
+    <p class="imp" id="impNote"></p>
+    <p style="margin-top:.6em;color:#5a544c;font-family:Arial,sans-serif;font-size:13px">No timer. Place at your own pace — a ghost shows where each slab lands.</p>
+  </div>
+
+  <div class="screen hidden" id="overScreen">
+    <div class="kicker" id="overKicker">Urban sprawl</div>
+    <h1>Game over</h1>
+    <p class="final" id="finalScore"></p>
+    <p class="verdict" id="verdict"></p>
+    <button id="againBtn">Rezone</button>
+  </div>
+
+  <div class="tag">Studio Eyes · city build</div>
+  <a href="cliche-cabinet.html" style="position:absolute;bottom:12px;left:18px;z-index:6;font-family:'Helvetica Neue',Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase;font-size:11px;color:#7a7266;text-decoration:none">&lsaquo; Cabinet</a>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  // ---------- Districts / classifier ----------
+  const CATS = {
+    corp:{color:"#57c7ff",name:"Corporate", list:["move the needle","synergy","low-hanging fruit","circle back","paradigm shift","take it to the next level","game changer","touch base","raise the bar","cutting edge","think outside the box"]},
+    folk:{color:"#ffb14e",name:"Folksy",    list:["dead as a doornail","par for the course","hit the ground running","a needle in a haystack","leave no stone unturned","back to the drawing board","when push comes to shove"]},
+    nat:{color:"#6ee7a5",name:"Nature",     list:["the calm before the storm","the tip of the iceberg","the grass is always greener","the best of both worlds","every cloud has a silver lining"]},
+    time:{color:"#c79bff",name:"Time",      list:["at the end of the day","in this day and age","only time will tell","last but not least","it is what it is"]}
+  };
+  const MISC_COLOR="#c8bfae";
+  function classify(phrase){
+    const p=phrase.toLowerCase().trim();
+    for(const k in CATS){ if(CATS[k].list.some(x=>x.toLowerCase()===p)) return k; }
+    return "misc";
+  }
+  function catColor(k){ return k==="misc"?MISC_COLOR:CATS[k].color; }
+
+  // ---------- Cliché pool: shared bank + defaults ----------
+  function bankRead(){
+    try{ return JSON.parse(localStorage.getItem("tsp_cliche_bank")||"[]").map(o=>o.t).filter(Boolean); }
+    catch(e){ return []; }
+  }
+  const DEFAULTS=[].concat(CATS.corp.list,CATS.folk.list,CATS.nat.list,CATS.time.list);
+  let importedCount=0;
+  function buildPool(){
+    const bank=bankRead();
+    importedCount=bank.length;
+    // prefer imported phrases, then top up with defaults; keep only 1-5 word slabs
+    const pool=[];
+    const seen=new Set();
+    for(const t of bank.concat(DEFAULTS)){
+      const w=t.split(/\s+/).filter(Boolean);
+      if(w.length<1||w.length>5) continue;
+      pool.push(t);
+    }
+    if(pool.length===0) pool.push(...DEFAULTS);
+    return pool;
+  }
+
+  // ---------- Canvas ----------
+  const canvas=document.getElementById("game"),ctx=canvas.getContext("2d");
+  let W=0,H=0,DPR=1;
+  function resize(){const r=canvas.getBoundingClientRect();DPR=Math.min(window.devicePixelRatio||1,2);W=r.width;H=r.height;
+    canvas.width=Math.round(W*DPR);canvas.height=Math.round(H*DPR);ctx.setTransform(DPR,0,0,DPR,0,0);computeGrid();}
+  window.addEventListener("resize",resize);
+
+  // ---------- Grid ----------
+  const COLS=10, ROWS=13;
+  let cell=40, gx=0, gy=0;      // cell size and grid origin
+  function computeGrid(){
+    const topPad=104, botPad=44, sidePad=24;
+    const availW=W-sidePad*2, availH=H-topPad-botPad;
+    cell=Math.floor(Math.min(availW/COLS, availH/ROWS));
+    const gw=cell*COLS, gh=cell*ROWS;
+    gx=Math.round((W-gw)/2); gy=Math.round(topPad+(availH-gh)/2);
+  }
+
+  const State={START:0,PLAY:1,OVER:2};
+  let state=State.START;
+  let grid=[];                  // grid[r][c] = {cat, word} or null
+  let pool=[], queue=[], current=null;
+  let score=0, floors=0, landmarks=0, placed=0;
+  let particles=[], flashRows=[], flashT=0;
+  const rand=(a,b)=>a+Math.random()*(b-a);
+
+  function emptyGrid(){ grid=[]; for(let r=0;r<ROWS;r++){grid.push(new Array(COLS).fill(null));} }
+
+  function drawPhrase(){ return pool[Math.floor(Math.random()*pool.length)]; }
+  function makePiece(phrase){
+    const words=phrase.split(/\s+/).filter(Boolean);
+    const cat=classify(phrase);
+    return {phrase,words,cat,n:words.length,orient:"h",col:Math.max(0,Math.floor((COLS-words.length)/2)),row:0};
+  }
+  function refillQueue(){ while(queue.length<3) queue.push(makePiece(drawPhrase())); }
+  function spawnCurrent(){
+    current=queue.shift(); refillQueue();
+    current.orient="h";
+    current.col=Math.max(0,Math.min(COLS-current.n,Math.floor((COLS-current.n)/2)));
+    // if it can't even be placed at spawn, game over check happens on drop
+  }
+
+  function pieceWidth(p){ return p.orient==="h"?p.n:1; }
+  function clampCol(){ current.col=Math.max(0,Math.min(COLS-pieceWidth(current),current.col)); }
+
+  function firstFilled(c){ for(let r=0;r<ROWS;r++){ if(grid[r][c]) return r; } return ROWS; }
+
+  // returns array of {r,c} cells where current would land, or null if overflow
+  function landingCells(){
+    const p=current;
+    if(p.orient==="h"){
+      let minTop=ROWS;
+      for(let c=p.col;c<p.col+p.n;c++) minTop=Math.min(minTop,firstFilled(c));
+      const r=minTop-1;
+      if(r<0) return null;
+      const cells=[]; for(let i=0;i<p.n;i++) cells.push({r,c:p.col+i,word:p.words[i]});
+      return cells;
+    } else {
+      const c=p.col, top=firstFilled(c), bottom=top-1;
+      if(bottom<0 || bottom-(p.n-1)<0) return null;
+      const cells=[]; for(let i=0;i<p.n;i++) cells.push({r:bottom-i,c,word:p.words[p.n-1-i]});
+      return cells; // top word at top
+    }
+  }
+
+  function placeCurrent(){
+    const cells=landingCells();
+    if(!cells){ gameOver(); return; }
+    for(const cl of cells) grid[cl.r][cl.c]={cat:current.cat,word:cl.word};
+    placed++;
+    burstAt(cells);
+    resolveClears();
+    updateHUD();
+    if(state===State.PLAY) spawnCurrent();
+  }
+
+  function resolveClears(){
+    let cleared=[];
+    for(let r=0;r<ROWS;r++){
+      if(grid[r].every(x=>x)){ cleared.push(r); }
+    }
+    if(cleared.length===0) return;
+    for(const r of cleared){
+      const cats=new Set(grid[r].map(x=>x.cat));
+      const mono = cats.size===1;
+      score += mono?250:100;
+      floors++;
+      if(mono){ landmarks++; }
+    }
+    // remove cleared rows, shift down
+    const kept=[];
+    for(let r=0;r<ROWS;r++){ if(!cleared.includes(r)) kept.push(grid[r]); }
+    while(kept.length<ROWS) kept.unshift(new Array(COLS).fill(null));
+    grid=kept;
+    flashRows=cleared.slice(); flashT=0.35;
+  }
+
+  function burstAt(cells){
+    for(const cl of cells){
+      const x=gx+cl.c*cell+cell/2, y=gy+cl.r*cell+cell/2, col=catColor(current.cat);
+      for(let i=0;i<4;i++){const a=rand(0,Math.PI*2),s=rand(.4,2);particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:1,color:col});}
+    }
+  }
+
+  // ---------- Input ----------
+  const keys=Object.create(null);
+  window.addEventListener("keydown",e=>{
+    const k=e.key.toLowerCase();
+    if(["arrowup","arrowdown","arrowleft","arrowright"," "].includes(k))e.preventDefault();
+    if(state!==State.PLAY) return;
+    if(k==="arrowleft"){ current.col--; clampCol(); }
+    else if(k==="arrowright"){ current.col++; clampCol(); }
+    else if(k==="arrowup"||k==="r"){ rotate(); }
+    else if(k===" "||k==="arrowdown"){ placeCurrent(); }
+  });
+  function rotate(){
+    current.orient = current.orient==="h"?"v":"h";
+    clampCol();
+  }
+
+  // ---------- Lifecycle ----------
+  function newGame(){
+    pool=buildPool(); queue=[]; refillQueue();
+    emptyGrid(); score=0; floors=0; landmarks=0; placed=0; particles=[]; flashRows=[];
+    spawnCurrent(); updateHUD();
+    state=State.PLAY;
+    show("startScreen",false); show("overScreen",false);
+  }
+  function gameOver(){
+    state=State.OVER;
+    document.getElementById("finalScore").textContent="You raised "+floors+" floors and "+landmarks+" landmark"+(landmarks===1?"":"s")+" — score "+score+".";
+    let v;
+    if(landmarks>=4) v="A skyline of pure cliché, zoned to perfection. Beautiful, and a little terrifying.";
+    else if(floors>=8) v="A working city built entirely from what everyone else already said.";
+    else v="Sprawl got ahead of you. Rotate more, zone tighter, and the floors will come.";
+    document.getElementById("verdict").textContent=v;
+    show("overScreen",true);
+  }
+
+  // ---------- Render ----------
+  function draw(dt){
+    ctx.clearRect(0,0,W,H);
+    if(state===State.START) return;
+    drawGridFrame();
+    // placed cells
+    for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){ if(grid[r][c]) drawCell(r,c,grid[r][c],1); }
+    // row-clear flash
+    if(flashT>0){
+      flashT-=dt;
+      ctx.save(); ctx.globalAlpha=Math.max(0,flashT/0.35)*0.5; ctx.fillStyle="#fff";
+      for(const r of flashRows) ctx.fillRect(gx,gy+r*cell,cell*COLS,cell);
+      ctx.restore();
+    }
+    if(state===State.PLAY && current){
+      // ghost at landing
+      const cells=landingCells();
+      if(cells){ for(const cl of cells) drawCell(cl.r,cl.c,{cat:current.cat,word:cl.word},0.28,true); }
+      // active piece near top rail
+      drawActivePiece();
+    }
+    for(const p of particles){ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.color;ctx.fillRect(p.x-1.5,p.y-1.5,3,3);}
+    ctx.globalAlpha=1;
+    // queue preview
+    drawQueue();
+  }
+
+  function drawGridFrame(){
+    ctx.save();
+    ctx.fillStyle="rgba(0,0,0,.22)"; ctx.fillRect(gx,gy,cell*COLS,cell*ROWS);
+    ctx.strokeStyle="#2c2824"; ctx.lineWidth=1;
+    for(let c=0;c<=COLS;c++){ctx.beginPath();ctx.moveTo(gx+c*cell,gy);ctx.lineTo(gx+c*cell,gy+ROWS*cell);ctx.stroke();}
+    for(let r=0;r<=ROWS;r++){ctx.beginPath();ctx.moveTo(gx,gy+r*cell);ctx.lineTo(gx+COLS*cell,gy+r*cell);ctx.stroke();}
+    // ground line
+    ctx.strokeStyle="#4a423a"; ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(gx,gy+ROWS*cell);ctx.lineTo(gx+COLS*cell,gy+ROWS*cell);ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawCell(r,c,data,alpha,ghost){
+    const x=gx+c*cell, y=gy+r*cell, col=catColor(data.cat);
+    ctx.save();
+    ctx.globalAlpha=alpha;
+    // building block
+    roundRect(x+2,y+2,cell-4,cell-4,5);
+    ctx.fillStyle= ghost ? "rgba(255,255,255,0.04)" : "rgba(22,20,18,.92)";
+    ctx.fill();
+    ctx.lineWidth= ghost?1.2:2; ctx.strokeStyle=col;
+    if(!ghost){ ctx.shadowColor=col; ctx.shadowBlur=8; }
+    ctx.stroke(); ctx.shadowBlur=0;
+    // word text (fit)
+    if(!ghost){
+      ctx.fillStyle=col; ctx.textAlign="center"; ctx.textBaseline="middle";
+      let fs=Math.max(9,Math.min(15,cell*0.34)); ctx.font="600 "+fs+"px Georgia, serif";
+      let label=data.word;
+      while(label.length>2 && ctx.measureText(label).width>cell-8){ fs-=1; ctx.font="600 "+fs+"px Georgia, serif"; if(fs<=8)break; }
+      if(ctx.measureText(label).width>cell-6){ while(label.length>1&&ctx.measureText(label+"·").width>cell-6)label=label.slice(0,-1); label+="·"; }
+      ctx.fillText(label, x+cell/2, y+cell/2+1);
+    }
+    ctx.restore();
+  }
+
+  function drawActivePiece(){
+    const p=current;
+    const railY = gy - cell - 8;
+    ctx.save();
+    ctx.textAlign="center"; ctx.textBaseline="middle";
+    const col=catColor(p.cat);
+    if(p.orient==="h"){
+      for(let i=0;i<p.n;i++){
+        const x=gx+(p.col+i)*cell, y=railY;
+        cellChip(x,y,p.words[i],col);
+      }
+    } else {
+      const x=gx+p.col*cell;
+      const topY=gy-cell*p.n-8;
+      for(let i=0;i<p.n;i++){ cellChip(x, topY+i*cell, p.words[i], col); }
+    }
+    ctx.restore();
+    // label of the whole phrase + district
+    ctx.save();
+    ctx.textAlign="center"; ctx.fillStyle="#9c948a"; ctx.font="12px 'Helvetica Neue',Arial,sans-serif";
+    const dn = p.cat==="misc"?"your import":CATS[p.cat].name;
+    ctx.fillText("“"+p.phrase+"”   ·   "+dn+" district", W/2, gy-cell*(p.orient==="v"?p.n:1)-20);
+    ctx.restore();
+  }
+  function cellChip(x,y,word,col){
+    ctx.save();
+    roundRect(x+2,y+2,cell-4,cell-4,5);
+    ctx.fillStyle="rgba(22,20,18,.95)"; ctx.fill();
+    ctx.lineWidth=2; ctx.strokeStyle=col; ctx.shadowColor=col; ctx.shadowBlur=10; ctx.stroke(); ctx.shadowBlur=0;
+    ctx.fillStyle=col; ctx.textAlign="center"; ctx.textBaseline="middle";
+    let fs=Math.max(9,Math.min(15,cell*0.34)); ctx.font="600 "+fs+"px Georgia, serif";
+    let label=word;
+    if(ctx.measureText(label).width>cell-6){ while(label.length>1&&ctx.measureText(label+"·").width>cell-6)label=label.slice(0,-1); label+="·"; }
+    ctx.fillText(label,x+cell/2,y+cell/2+1);
+    ctx.restore();
+  }
+
+  function drawQueue(){
+    // small preview bottom-left
+    ctx.save();
+    ctx.textAlign="left"; ctx.fillStyle="#6f685e"; ctx.font="11px 'Helvetica Neue',Arial,sans-serif";
+    ctx.fillText("NEXT", gx, gy+ROWS*cell+18);
+    let x=gx+44, y=gy+ROWS*cell+9;
+    for(let q=0;q<Math.min(2,queue.length);q++){
+      const p=queue[q], col=catColor(p.cat);
+      ctx.fillStyle=col; ctx.font="12px Georgia, serif";
+      const t="“"+p.phrase+"”";
+      ctx.fillText(t, x, y+14);
+      const w=ctx.measureText(t).width;
+      x+=w+22;
+    }
+    ctx.restore();
+  }
+
+  function roundRect(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+
+  function updateHUD(){
+    document.getElementById("score").textContent=score;
+    document.getElementById("floors").textContent=floors;
+    document.getElementById("landmarks").textContent=landmarks;
+    document.getElementById("placed").textContent=placed;
+  }
+  function show(id,on){document.getElementById(id).classList.toggle("hidden",!on);}
+
+  // update particles
+  function tick(dt){
+    for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.x+=p.vx;p.y+=p.vy;p.vx*=0.95;p.vy*=0.95;p.life-=dt*1.8;if(p.life<=0)particles.splice(i,1);}
+  }
+
+  document.getElementById("startBtn").onclick=newGame;
+  document.getElementById("againBtn").onclick=newGame;
+
+  // imported note on start screen
+  (function(){
+    const n=bankRead().length;
+    const el=document.getElementById("impNote");
+    if(n>0) el.textContent=n+" clichés imported from Cliché Field & Cliché Line.";
+    else el.textContent="No imports yet — playing Field and Line first stocks this city with your own kills.";
+  })();
+
+  let last=0;
+  function frame(t){ if(!last)last=t; let dt=(t-last)/1000; last=t; if(dt>0.05)dt=0.05; tick(dt); draw(dt); requestAnimationFrame(frame); }
+  resize(); requestAnimationFrame(frame);
+
+  // test hook (harmless, read-only)
+  window.__city={get s(){return state},get grid(){return grid},get cur(){return current},get floors(){return floors},
+    left(){current.col--;clampCol();},right(){current.col++;clampCol();},rot(){rotate();},drop(){placeCurrent();}};
+})();
+</script>
+</body>
+</html>

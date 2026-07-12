@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Convergence Card — a machine-assisted, human-verified research engine</title>
+<style>
+  /* ---- LEGIBILITY FLOOR (Matt's RP eyes are the verdict) ---- */
+  :root{
+    --paper:#f7f5ef;      /* warm near-white, never pure #fff */
+    --ink:#141210;        /* near-black, never gray for body */
+    --ink-soft:#141210;   /* captions match ink; no muted gray */
+    --channel:#1f4e5f;    /* deep teal — the confluence channel */
+    --converge:#1a5c3a;   /* deep green = sources agree */
+    --contest:#8a5a00;    /* deep amber = sources clash */
+    --thin:#6b4a8a;       /* deep violet = one source only */
+    --silent:#5c5350;     /* stone = nobody spoke (still readable) */
+    --reject:#7a2318;     /* deep rust = verified false */
+    --line:#141210;
+    --size:19px;
+  }
+  *{box-sizing:border-box}
+  html{font-size:var(--size)}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,sans-serif;
+    line-height:1.6; letter-spacing:0.01em;
+    padding:2rem 1.25rem 5rem;
+  }
+  .wrap{max-width:70ch; margin:0 auto}
+  /* ---- masthead: the confluence gauge is the signature ---- */
+  .masthead{border-bottom:3px solid var(--line); padding-bottom:1.25rem; margin-bottom:1.5rem}
+  .eyebrow{font-size:0.85rem; letter-spacing:0.14em; text-transform:uppercase; font-weight:700; color:var(--channel)}
+  h1{font-size:1.9rem; line-height:1.2; margin:0.4rem 0 0.5rem; font-weight:800}
+  .sub{font-size:0.98rem; margin:0}
+  /* the four tributaries flowing into one channel */
+  .gauge{display:flex; align-items:stretch; margin:1.25rem 0 0; border:2px solid var(--line); border-radius:8px; overflow:hidden}
+  .trib{flex:1; padding:0.55rem 0.4rem; text-align:center; font-size:0.72rem; font-weight:700; letter-spacing:0.03em; border-right:2px solid var(--line); background:var(--paper)}
+  .trib:last-child{border-right:none}
+  .trib .who{display:block; font-size:0.82rem; margin-bottom:0.15rem}
+  .trib .job{font-weight:400; font-size:0.68rem}
+  /* ---- input ---- */
+  label{display:block; font-weight:700; margin:1.5rem 0 0.4rem; font-size:1rem}
+  textarea,input[type=text]{
+    width:100%; font:inherit; font-size:1rem; padding:0.7rem;
+    border:2px solid var(--line); border-radius:6px; background:#fff; color:var(--ink);
+  }
+  textarea{min-height:3.2rem; resize:vertical}
+  .btn{
+    display:inline-block; margin-top:0.9rem; font:inherit; font-weight:700; font-size:1rem;
+    padding:0.7rem 1.4rem; min-height:44px; cursor:pointer;
+    background:var(--channel); color:#fff; border:2px solid var(--line); border-radius:6px;
+  }
+  .btn:hover{background:#163a47}
+  .btn:focus-visible{outline:3px solid var(--contest); outline-offset:2px}
+  .btn.secondary{background:var(--paper); color:var(--ink)}
+  .btn.secondary:hover{background:#eae6dc}
+  /* ---- the card ---- */
+  .card{margin-top:2rem; border:2px solid var(--line); border-radius:10px; overflow:hidden; display:none}
+  .card.show{display:block}
+  .card-q{background:var(--channel); color:#fff; padding:1rem 1.1rem; font-weight:700; font-size:1.1rem; line-height:1.3}
+  .tier{padding:0.9rem 1.1rem; border-bottom:2px solid var(--line)}
+  .tier h2{margin:0 0 0.5rem; font-size:0.8rem; letter-spacing:0.1em; text-transform:uppercase; display:flex; align-items:center; gap:0.5rem}
+  .chip{display:inline-block; width:0.9rem; height:0.9rem; border-radius:2px; border:1.5px solid var(--line); flex:none}
+  .c-conv{background:var(--converge)} .c-cont{background:var(--contest)}
+  .c-thin{background:var(--thin)} .c-sil{background:var(--silent)}
+  .claim{margin:0 0 0.7rem; padding-left:0.9rem; border-left:4px solid var(--line)}
+  .claim:last-child{margin-bottom:0}
+  .claim b{display:block}
+  .claim .src{font-size:0.86rem}
+  .seat-note{font-size:0.86rem; font-style:italic; margin-top:0.25rem}
+  .verify{display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap}
+  .vbtn{font:inherit; font-size:0.82rem; font-weight:700; padding:0.4rem 0.8rem; min-height:36px; cursor:pointer; border:2px solid var(--line); border-radius:5px; background:var(--paper); color:var(--ink)}
+  .vbtn[aria-pressed=true]{background:var(--converge); color:#fff}
+  .vbtn.rej[aria-pressed=true]{background:var(--reject); color:#fff}
+  .empty{padding:1rem 1.1rem; font-style:italic}
+  .howto{margin-top:2.5rem; border-top:2px solid var(--line); padding-top:1.25rem; font-size:0.94rem}
+  .howto h3{font-size:1rem; margin:0 0 0.5rem}
+  .howto ol{margin:0; padding-left:1.3rem}
+  .howto li{margin-bottom:0.4rem}
+  .foot{margin-top:2rem; font-size:0.82rem}
+  details{margin-top:0.6rem}
+  summary{cursor:pointer; font-weight:700; padding:0.3rem 0}
+  @media (prefers-reduced-motion: no-preference){
+    .card.show{animation:rise 0.35s ease}
+    @keyframes rise{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <span class="eyebrow">Confluence · Convergence Card</span>
+    <h1>Where independent sources meet, and where they don't.</h1>
+    <p class="sub">Peer review is one fallible source. This machine gathers several, shows you where they converge and where they clash — honestly, never averaged — and hands you the verdict to close. Machine-assisted. Human-verified.</p>
+
+    <div class="gauge" role="img" aria-label="Four review seats flow into one verified verdict: Denzin codes convergence, Cochrane weighs quality, Marcus challenges, Pearl defines what verified means.">
+      <div class="trib"><span class="who">Denzin</span><span class="job">codes agree / clash / silent</span></div>
+      <div class="trib"><span class="who">Cochrane</span><span class="job">weighs by quality</span></div>
+      <div class="trib"><span class="who">Marcus</span><span class="job">assumes it's wrong</span></div>
+      <div class="trib"><span class="who">Pearl</span><span class="job">defines "verified"</span></div>
+    </div>
+  </div>
+
+  <label for="q">The question worth verifying</label>
+  <textarea id="q" aria-describedby="qhint">What kinds of feedback on writing are most effective for community college students?</textarea>
+  <p id="qhint" class="sub" style="margin:.4rem 0 0">A pre-run card is loaded below as the working example. Type your own question, gather sources with the panel, then fill each tier by hand — the structure does the honest bookkeeping.</p>
+
+  <div>
+    <button class="btn" id="loadBtn">Show the example card</button>
+    <button class="btn secondary" id="blankBtn">Start a blank card</button>
+  </div>
+
+  <!-- ================= THE CARD ================= -->
+  <div class="card" id="card">
+    <div class="card-q" id="cardQ"></div>
+
+    <!-- CONVERGED -->
+    <div class="tier">
+      <h2><span class="chip c-conv"></span> Converged — independent sources agree · high confidence</h2>
+      <div id="t-conv"></div>
+    </div>
+    <!-- CONTESTED -->
+    <div class="tier">
+      <h2><span class="chip c-cont"></span> Contested — sources genuinely disagree · surfaced, not averaged</h2>
+      <div id="t-cont"></div>
+    </div>
+    <!-- THIN -->
+    <div class="tier">
+      <h2><span class="chip c-thin"></span> Thin — one source only · low confidence, don't rely</h2>
+      <div id="t-thin"></div>
+    </div>
+    <!-- SILENT -->
+    <div class="tier">
+      <h2><span class="chip c-sil"></span> Silent — what nobody addressed · the honest gap</h2>
+      <div id="t-sil"></div>
+    </div>
+  </div>
+
+  <div class="howto">
+    <h3>How to run one card</h3>
+    <ol>
+      <li><b>State the question.</b> One claim with real stakes.</li>
+      <li><b>Gather independent sources.</b> Different methods beat more of the same — that independence is the signal.</li>
+      <li><b>Run the four seats.</b> Denzin codes each source agree / partial / clash / silent. Cochrane weights by method quality, not volume. Marcus assumes the fluent answer is wrong until convergence proves it. Pearl asks what "works" even means for this claim.</li>
+      <li><b>Sort into tiers.</b> Converged / Contested / Thin / Silent. The Silent row is often the finding.</li>
+      <li><b>You verify.</b> Tap Verify or Reject on each claim. The panel advises; only you close.</li>
+    </ol>
+    <details>
+      <summary>Why this beats a single confident answer</summary>
+      <p style="margin:.5rem 0 0">A single answer gives you the Converged row and hides the rest. The Contested, Thin, and Silent rows are where a confident machine misleads you. Convergence across <i>independent</i> methods — not more sources, independent ones — is what makes this more trustworthy than one authority or one peer panel. In a 2026 agentic-verification study, machine verdicts matched two blinded human verifiers 91.3% of the time and an independent search engine 98.7%: the pairing is measurable, and it holds.</p>
+    </details>
+  </div>
+
+  <p class="foot">
+    Single file. Offline. No account, no server, no dependency — it survives every vendor change.<br>
+    Sources cited on each claim are external and open; verify at the link before you rely.<br>
+    Tight Spiral · Confluence · built to last.
+  </p>
+</div>
+
+<script>
+// ---- the pre-run example: the real card from the panel session ----
+var EXAMPLE = {
+  q: "What kinds of feedback on writing are most effective for community college students?",
+  conv: [
+    {claim:"Prioritize 2–3 higher-order issues, not every error.",
+     src:"Michigan Sweetland + Notre Dame Learning — two independent teaching centers.",
+     note:"Denzin: agreement across independent centers. Pearl: 'works' = enables revision, not maximizes correction."},
+    {claim:"Formative beats summative — feed forward, not back.",
+     src:"Notre Dame (coach vs. grader) + Michigan + Wingate 2010.",
+     note:"Denzin: agreement, three sources."},
+    {claim:"Specific and direct beats vague and indirect. (Strongest convergence.)",
+     src:"ArgRewrite experiment + Miami Howe Center + Ranalli AWE study — experiment, synthesis, and tool study land together.",
+     note:"Denzin: agreement across independent methods — the gold-standard signal. Cochrane: weighted high, one is experimental."}
+  ],
+  cont: [
+    {claim:"Does explanation help or hurt? Depends on length and student level.",
+     src:"Bitchener (explanations help specific revisions) vs. Tseng & Tsai (lengthy explanations can hurt overall).",
+     note:"Marcus earns his seat: 'always explain your feedback' is not supported. Brevity may matter more than completeness."},
+    {claim:"Peer feedback may rival or beat expert feedback — with a cost.",
+     src:"Cho & MacArthur (CUNY Hostos, CC-adjacent) vs. peer-feedback systematic review (works, but flags interpersonal tension).",
+     note:"Denzin: partial agreement — peer works, under conditions expert feedback doesn't carry."}
+  ],
+  thin: [
+    {claim:"Automated / AWE feedback for developmental writers — currently negative.",
+     src:"Koltovskaia 2020 + Stevenson & Phakiti — one cluster, L2 population only.",
+     note:"Pearl: reduces errors in this draft ≠ builds writing skill. Marcus: do not generalize to all CC students; it's L2-specific."}
+  ],
+  sil: [
+    {claim:"Community-college-specific evidence is nearly absent.",
+     src:"Nearly every source studies university, L2/EFL, or K-12 writers. Only Cho & MacArthur touches the population directly.",
+     note:"The finding that matters most: the advice above is strong for writers generally, under-tested for CC students. Hold as 'strong general practice, locally unverified.' Your classroom is where that data would come from — the recursive loop."}
+  ]
+};
+
+function renderTier(el, items){
+  el.innerHTML = "";
+  if(!items || !items.length){ el.innerHTML = '<p class="empty">No entries. Add what the sources said here — or leave empty and note it as a gap.</p>'; return; }
+  items.forEach(function(it, i){
+    var d = document.createElement("div");
+    d.className = "claim";
+    var note = it.note ? '<div class="seat-note">'+it.note+'</div>' : '';
+    d.innerHTML = '<b>'+it.claim+'</b><span class="src">'+it.src+'</span>'+note+
+      '<div class="verify">'+
+      '<button class="vbtn" aria-pressed="false">Verify</button>'+
+      '<button class="vbtn rej" aria-pressed="false">Reject</button>'+
+      '</div>';
+    var btns = d.querySelectorAll(".vbtn");
+    btns.forEach(function(b){
+      b.addEventListener("click", function(){
+        var on = b.getAttribute("aria-pressed")==="true";
+        btns.forEach(function(x){x.setAttribute("aria-pressed","false")});
+        b.setAttribute("aria-pressed", on?"false":"true");
+      });
+    });
+    el.appendChild(d);
+  });
+}
+
+function draw(data){
+  document.getElementById("cardQ").textContent = data.q;
+  renderTier(document.getElementById("t-conv"), data.conv);
+  renderTier(document.getElementById("t-cont"), data.cont);
+  renderTier(document.getElementById("t-thin"), data.thin);
+  renderTier(document.getElementById("t-sil"), data.sil);
+  var c = document.getElementById("card");
+  c.classList.add("show");
+  c.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+document.getElementById("loadBtn").addEventListener("click", function(){
+  document.getElementById("q").value = EXAMPLE.q;
+  draw(EXAMPLE);
+});
+document.getElementById("blankBtn").addEventListener("click", function(){
+  var q = document.getElementById("q").value.trim() || "Untitled question";
+  draw({q:q, conv:[], cont:[], thin:[], sil:[]});
+});
+</script>
+</body>
+</html>

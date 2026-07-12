@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  PAPER CRAFT CEILING - Lane A evidence piece.
+  Tight Spiral Studios - walshero@gmail.com
+
+  The question it answers: does the studio need a raster/MJ lane as standing
+  infrastructure, or can hand-cut SVG at full craft carry the house style?
+  This file is the test. One scene, full Paper Craft work-up: layered cut
+  shapes with edge shadows, matte grain, controlled palette with real value
+  range and temperature relief, per-scene lighting with two identifiable
+  sources (a warm bench lamp, a cool moon), physics (things rest ON surfaces),
+  suggest-don't-simulate detail, and a replayable joy flourish.
+
+  FLOORS: single-file offline, in-memory only; near-black ink on light paper;
+  44px targets; keyboard nav; visible focus; reduced-motion respected with
+  flourish default ON + replay; scroll-reset n/a (one screen); no emoji;
+  phone-width tested.
+
+  PROVENANCE: original work, hand-cut SVG in-session by Tight Spiral Paper
+  Craft Studios. No generators, no stock, nothing scraped. Chain complete.
+
+  HARVEST: Lane A's ceiling is high enough that Lane B becomes an on-call
+  contractor, not a subscription.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paper Craft Ceiling</title>
+<style>
+:root{
+  --paper:#f4efe6; --surface:#fdfaf3; --ink:#1a1917; --ink2:#1a1917;
+  --border:#8f8676; --gold:#6e4700; --gold-br:#c8900a;
+  --pine:#1a4a35; --river:#13586b;
+  --serif:Georgia,'Times New Roman',serif; --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+  --focus:#c8900a;
+}
+*{box-sizing:border-box}
+body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans);
+  font-size:19px; line-height:1.6}
+:focus-visible{outline:4px solid var(--focus); outline-offset:3px; border-radius:6px}
+.wrap{max-width:920px; margin:0 auto; padding:1.2rem 1rem 2.5rem}
+h1{font-family:var(--serif); font-size:1.9em; margin:.2em 0 .15em; color:var(--pine)}
+.sub{margin:.1em 0 1em; max-width:66ch}
+.stage{border:3px solid var(--ink); border-radius:14px; overflow:hidden;
+  box-shadow:0 6px 0 rgba(40,32,18,.18); background:#0e1626}
+.stage svg{display:block; width:100%; height:auto}
+.controls{display:flex; gap:.7rem; align-items:center; flex-wrap:wrap; margin:.7rem 0 0}
+button{font:inherit; min-height:44px; cursor:pointer; font-weight:800;
+  background:var(--surface); color:var(--ink); border:3px solid var(--ink);
+  border-radius:10px; padding:.5rem 1rem}
+.cap{font-size:.95rem; margin:.4rem 0 0; max-width:70ch}
+.card{background:var(--surface); border:3px solid var(--ink); border-radius:14px;
+  padding:1rem 1.1rem; margin:1.1rem 0 0; box-shadow:0 5px 0 rgba(40,32,18,.18)}
+.card h2{font-family:var(--serif); font-size:1.3em; margin:.1em 0 .4em; color:var(--pine)}
+.row{display:flex; gap:.7rem; padding:.5rem 0; border-bottom:2px solid var(--border); align-items:baseline}
+.row:last-child{border-bottom:none}
+.row .k{font-weight:800; min-width:11ch}
+p{max-width:70ch}
+.foot{margin-top:1.6rem; font-size:.95rem}
+.foot strong{font-family:var(--serif)}
+
+/* lighting states */
+.lamp-cone,.mote,.steam{transition:opacity .5s}
+.moonbeam{opacity:0; transition:opacity .5s}
+.night .lamp-cone{opacity:0}
+.night .mote{opacity:0}
+.night .moonbeam{opacity:1}
+.night .warmwash{opacity:0}
+.night .coolwash{opacity:.55}
+.coolwash{opacity:0; transition:opacity .5s}
+.warmwash{opacity:.35; transition:opacity .5s}
+
+/* motion */
+.mote{animation:rise 7s linear infinite}
+.mote.m2{animation-duration:9s; animation-delay:2s}
+.mote.m3{animation-duration:11s; animation-delay:4s}
+.mote.m4{animation-duration:8s; animation-delay:1s}
+.steam{animation:drift 5s ease-in-out infinite}
+@keyframes rise{from{transform:translateY(26px); opacity:0}
+  15%{opacity:.9} 85%{opacity:.9} to{transform:translateY(-120px); opacity:0}}
+@keyframes drift{0%,100%{transform:translateX(0) scaleY(1)} 50%{transform:translateX(5px) scaleY(1.12)}}
+@media (prefers-reduced-motion:reduce){.mote,.steam{animation-duration:20s}}
+body.motion-off .mote, body.motion-off .steam{animation:none}
+@media (max-width:480px){h1{font-size:1.5em}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Paper Craft Ceiling</h1>
+  <p class="sub">One scene at the top of Lane A. Everything the raster lane was supposed to buy, cut by hand: layered paper, edge shadows, grain, two light sources, temperature relief, physics. Pull the chain.</p>
+
+  <div class="stage" id="stage">
+  <svg viewBox="0 0 900 560" role="img"
+    aria-label="A cut-paper diorama of the studio at night. Moonlight comes through a window on the left, where a pale moon hangs over two paper clouds. A warm lamp hangs over the workbench on the right, where a kraft-paper figure sits working on a small gear, steam curling from a mug beside them. Paper scraps and scissors rest on the bench. A shelf above holds jars and a paper stack, and the studio spiral hangs on the back wall between the two lights, catching a little of each.">
+    <defs>
+      <filter id="grain" x="-10%" y="-10%" width="120%" height="120%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" result="n" stitchTiles="stitch"/>
+        <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0"/>
+        <feComposite operator="over" in2="SourceGraphic"/>
+      </filter>
+    </defs>
+
+    <!-- night sky through window comes later; base = back wall -->
+    <rect x="0" y="0" width="900" height="560" fill="#4a3b30"/>
+    <rect x="0" y="0" width="900" height="560" fill="#3b3d52" class="coolwash"/>
+    <rect x="0" y="0" width="900" height="560" fill="#6b4f33" class="warmwash"/>
+
+    <!-- floor -->
+    <rect x="0" y="470" width="900" height="90" fill="#8a6a45"/>
+    <rect x="0" y="466" width="900" height="8" fill="#5e4527"/>
+
+    <!-- WINDOW (cool source) -->
+    <g>
+      <rect x="58" y="58" width="212" height="196" fill="#2a1e14" transform="translate(0,5)" opacity=".35"/>
+      <rect x="58" y="58" width="212" height="196" fill="#7c5a36"/>
+      <rect x="72" y="72" width="184" height="168" fill="#16294a"/>
+      <circle cx="120" cy="118" r="26" fill="#eef1e2"/>
+      <circle cx="128" cy="112" r="7" fill="#d7dcc6"/>
+      <circle cx="110" cy="126" r="5" fill="#d7dcc6"/>
+      <path d="M150 170 q22 -14 44 0 q18 -10 36 0 l0 16 l-80 0 z" fill="#33507d"/>
+      <path d="M84 200 q18 -12 38 0 q14 -8 30 0 l0 14 l-68 0 z" fill="#2a4368"/>
+      <rect x="160" y="72" width="10" height="168" fill="#7c5a36"/>
+      <rect x="72" y="150" width="184" height="10" fill="#7c5a36"/>
+    </g>
+    <!-- moonbeam across floor (night state) -->
+    <polygon class="moonbeam" points="90,254 250,254 400,470 140,470" fill="#b9c6dd"/>
+
+    <!-- SHELF with props (mid depth) -->
+    <g>
+      <rect x="560" y="168" width="280" height="14" fill="#2a1e14" transform="translate(0,5)" opacity=".35"/>
+      <rect x="560" y="168" width="280" height="14" rx="4" fill="#7c5a36"/>
+      <rect x="584" y="120" width="44" height="48" rx="6" fill="#b0c4b4"/>
+      <rect x="584" y="120" width="44" height="12" rx="6" fill="#8ba892"/>
+      <rect x="648" y="108" width="58" height="60" fill="#e9dcc0"/>
+      <rect x="648" y="122" width="58" height="6" fill="#cdbb95"/>
+      <rect x="648" y="138" width="58" height="6" fill="#cdbb95"/>
+      <circle cx="756" cy="142" r="26" fill="#c98d5a"/>
+      <path d="M756 142 m0 -1 a1 1 0 0 1 1 1 a4 4 0 0 1 -4 4 a8 8 0 0 1 -8 -8 a12 12 0 0 1 12 -12 a16 16 0 0 1 16 16"
+        fill="none" stroke="#5e3a1a" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <!-- SPIRAL on the wall, between the two lights -->
+    <path d="M430 250 m0 -2 a2 2 0 0 1 2 2 a7 7 0 0 1 -7 7 a13 13 0 0 1 -13 -13 a20 20 0 0 1 20 -20 a28 28 0 0 1 28 28 a37 37 0 0 1 -37 37"
+      fill="none" stroke="#e8d9b8" stroke-width="6" stroke-linecap="round"/>
+    <path d="M430 250 m0 -2 a2 2 0 0 1 2 2 a7 7 0 0 1 -7 7 a13 13 0 0 1 -13 -13 a20 20 0 0 1 20 -20 a28 28 0 0 1 28 28 a37 37 0 0 1 -37 37"
+      fill="none" stroke="#8a6a3a" stroke-width="6" stroke-linecap="round" transform="translate(3,4)" opacity=".4"/>
+
+    <!-- LAMP (warm source) -->
+    <g>
+      <rect x="676" y="0" width="8" height="66" fill="#3a2c1c"/>
+      <path d="M642 66 q38 -26 76 0 l-10 18 l-56 0 z" fill="#b5502e"/>
+      <path d="M642 66 q38 -26 76 0 l-10 18 l-56 0 z" fill="#2a1e14" transform="translate(0,5)" opacity=".3"/>
+      <circle cx="680" cy="86" r="9" fill="#ffe9a8"/>
+      <rect x="676" y="96" width="8" height="22" rx="4" fill="#caa64e"/>
+    </g>
+    <polygon class="lamp-cone" points="662,92 698,92 828,470 520,470" fill="#ffd98a" opacity=".22"/>
+
+    <!-- dust motes riding the lamp light -->
+    <g fill="#ffe9a8">
+      <circle class="mote"    cx="650" cy="300" r="3.2"/>
+      <circle class="mote m2" cx="700" cy="340" r="2.4"/>
+      <circle class="mote m3" cx="742" cy="290" r="2.8"/>
+      <circle class="mote m4" cx="676" cy="380" r="2.2"/>
+    </g>
+
+    <!-- BENCH (foreground) -->
+    <g>
+      <rect x="470" y="392" width="380" height="20" fill="#2a1e14" transform="translate(0,6)" opacity=".35"/>
+      <rect x="470" y="392" width="380" height="20" rx="5" fill="#9c6b36"/>
+      <rect x="470" y="392" width="380" height="6" rx="3" fill="#c08a4c"/>
+      <rect x="492" y="412" width="16" height="88" fill="#7c5528"/>
+      <rect x="812" y="412" width="16" height="88" fill="#7c5528"/>
+    </g>
+
+    <!-- things resting ON the bench, gravity honored -->
+    <g>
+      <!-- the work: a small gear held mid-cut -->
+      <circle cx="608" cy="376" r="20" fill="#dcebe2"/>
+      <path d="M608 352v-8M608 400v8M584 376h-8M632 376h8M591 359l-6-6M625 393l6 6M625 359l6-6M591 393l-6 6"
+        stroke="#1a4a35" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="608" cy="376" r="6" fill="#1a4a35"/>
+      <!-- scraps -->
+      <path d="M676 386 l26 -8 8 12 -30 4 z" fill="#e9dcc0"/>
+      <path d="M712 380 l20 -4 4 14 -22 2 z" fill="#dcebef"/>
+      <!-- scissors, closed, at rest -->
+      <g stroke="#4a4a52" stroke-width="5" stroke-linecap="round">
+        <line x1="760" y1="388" x2="800" y2="372"/>
+        <line x1="760" y1="374" x2="800" y2="386"/>
+      </g>
+      <circle cx="758" cy="390" r="7" fill="none" stroke="#4a4a52" stroke-width="4"/>
+      <circle cx="758" cy="372" r="7" fill="none" stroke="#4a4a52" stroke-width="4"/>
+      <!-- mug with steam -->
+      <rect x="826" y="360" width="30" height="32" rx="6" fill="#b5502e"/>
+      <path d="M856 368 q14 4 0 16" fill="none" stroke="#b5502e" stroke-width="5"/>
+      <path class="steam" d="M840 352 q-6 -10 2 -18 q7 -8 1 -16" fill="none" stroke="#efe7d4" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+    </g>
+
+    <!-- the KRAFT FIGURE, seated, mid-work -->
+    <g>
+      <ellipse cx="548" cy="500" rx="46" ry="10" fill="#5e4527" opacity=".5"/>
+      <rect x="522" y="440" width="52" height="14" rx="6" fill="#7c5528"/>
+      <rect x="528" y="454" width="10" height="46" fill="#7c5528"/>
+      <rect x="558" y="454" width="10" height="46" fill="#7c5528"/>
+      <path d="M548 330 c-22 6 -30 28 -30 62 h60 c0 -34 -8 -56 -30 -62 z" fill="#a8763e"/>
+      <path d="M548 330 c-22 6 -30 28 -30 62 h60 c0 -34 -8 -56 -30 -62 z" fill="#6b431c" transform="translate(2,4)" opacity=".25"/>
+      <circle cx="548" cy="312" r="19" fill="#a8763e"/>
+      <circle cx="548" cy="312" r="19" fill="#6b431c" transform="translate(2,3)" opacity=".2"/>
+      <path d="M566 348 c18 8 28 18 36 26" fill="none" stroke="#a8763e" stroke-width="9" stroke-linecap="round"/>
+      <path d="M530 348 c-8 10 -10 22 -8 34" fill="none" stroke="#a8763e" stroke-width="9" stroke-linecap="round"/>
+      <rect x="522" y="392" width="52" height="52" rx="10" fill="#96692f"/>
+    </g>
+
+    <!-- grain pass over the big paper fields -->
+    <rect x="0" y="0" width="900" height="560" filter="url(#grain)" fill="none" pointer-events="none"/>
+  </svg>
+  </div>
+
+  <div class="controls">
+    <button id="chain" aria-pressed="false">Pull the lamp chain</button>
+    <button id="motion" aria-pressed="false">Pause the motes</button>
+  </div>
+  <p class="cap">Two light sources, one scene. The lamp is warm and local; the moon is cool and wide. Pull the chain and the whole room changes temperature - that is the move a raster lane was supposed to own.</p>
+
+  <div class="card">
+    <h2>Do we need MJ? The scorecard.</h2>
+    <div class="row"><span class="k">Recommended</span><span>No standing MJ lane. Lane A at this ceiling carries the house style. MJ stays what it already is on paper: an on-call contractor for a photoreal-only brief, hired for one month when a specific build's Medium Gate actually sends it there.</span></div>
+    <div class="row"><span class="k">Why</span><span>Hand-cut SVG is buildable in-session, provenance-clean to the last node, infinitely revisable at the line level, license-safe for the all-CC titles, and - as of this file - rich enough for lighting, atmosphere, and mood.</span></div>
+    <div class="row"><span class="k">Tradeoffs</span><span>Lane A will not do photoreal faces, painterly texture, or a fast crowd of fifty distinct figures. Those briefs still exist; they are just rare and nameable.</span></div>
+    <div class="row"><span class="k">Simpler</span><span>Nothing to cancel - there is no subscription. The spec file on the shelf stays as the door.</span></div>
+    <div class="row"><span class="k">Advanced</span><span>When a Lane B brief arrives, buy one month, run the existing spec, close every asset with a human hand, log provenance, let it lapse.</span></div>
+  </div>
+
+  <div class="card">
+    <h2>What this proved</h2>
+    <p>The harvest: Lane A's ceiling is high enough that Lane B becomes an on-call contractor, not infrastructure. Craft moves demonstrated in one file: edge shadows selling the glue, matte grain instead of gradients, real value range with temperature relief, per-scene lighting with two identifiable sources, gravity honored on every bench object, and detail that suggests instead of simulates - three scraps read as a working bench; thirty would read as noise.</p>
+  </div>
+
+  <p class="foot"><strong>Tight Spiral Studios</strong> &middot; walshero@gmail.com &middot; Hand-cut SVG, in-session, no generators. Original work, all rights reserved.</p>
+</div>
+
+<script>
+(function(){
+  var stage=document.getElementById('stage');
+  var chain=document.getElementById('chain');
+  chain.addEventListener('click',function(){
+    var night=stage.classList.toggle('night');
+    chain.setAttribute('aria-pressed',night?'true':'false');
+    chain.textContent=night?'Turn the lamp back on':'Pull the lamp chain';
+  });
+  var mo=document.getElementById('motion');
+  mo.addEventListener('click',function(){
+    var off=document.body.classList.toggle('motion-off');
+    mo.setAttribute('aria-pressed',off?'true':'false');
+    mo.textContent=off?'Let the motes drift':'Pause the motes';
+  });
+})();
+</script>
+</body>
+</html>

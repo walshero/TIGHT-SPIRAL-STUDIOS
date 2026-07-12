@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Group Foreman — EN195 Workshop Yard</title>
+<style>
+:root{
+  --paper:#f4efe6; --ink:#1a1408; --accent:#6e4700; --line:#c9b98f;
+  --card:#faf6ee; --gold:#8a5a00; --brass:#7a5a10;
+  --rail:#5a4a2a; --tie:#c9b98f;
+  --role1:#7a2e1e; --role2:#2d5a1e; --role3:#2a3b6e;
+  --miss:#8a1f1f; --ok:#2d5a1e;
+}
+body.softer{ --paper:#e6ddc9; --card:#efe7d4; }
+body.warmdark{
+  --paper:#241c10; --ink:#f5d9a0; --accent:#f5c869; --line:#5a4a2a;
+  --card:#2e2416; --gold:#f5c869; --brass:#f5c869;
+  --rail:#8a744a; --tie:#5a4a2a;
+  --role1:#f0a58a; --role2:#9fd17e; --role3:#9fb4f0;
+  --miss:#f08a8a; --ok:#9fd17e;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:Georgia,'Times New Roman',serif;
+  font-size:21px; line-height:1.5; margin:0;
+  padding:12px 12px 60px; max-width:760px;
+  margin-left:auto; margin-right:auto;
+}
+h1{font-size:30px; line-height:1.15; margin:6px 0 2px;}
+.tag{font-size:18px; color:var(--accent); font-weight:bold; margin:0 0 10px;}
+button{
+  font-family:inherit; font-size:19px; font-weight:bold;
+  min-height:48px; min-width:48px; padding:10px 16px;
+  background:var(--card); color:var(--ink);
+  border:3px solid var(--brass); border-radius:10px; cursor:pointer;
+}
+button:focus-visible, textarea:focus-visible{
+  outline:4px solid var(--gold); outline-offset:3px;
+}
+button.primary{ background:var(--ink); color:var(--paper); }
+body.warmdark button.primary{ background:#0f0a04; color:#f5d9a0; }
+button[aria-pressed="true"]{ background:var(--brass); color:var(--paper); }
+body.warmdark button[aria-pressed="true"]{ color:#0f0a04; }
+.topbar{display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:space-between;}
+.row{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:10px 0;}
+.dock{
+  background:var(--card); border:2px solid var(--line);
+  border-radius:12px; padding:14px; margin:12px 0;
+}
+.dock p{margin:0 0 8px; font-size:19px;}
+textarea{
+  width:100%; min-height:120px; font-family:inherit; font-size:19px;
+  background:var(--paper); color:var(--ink);
+  border:2px solid var(--brass); border-radius:10px; padding:10px;
+}
+#status{
+  min-height:32px; font-size:20px; font-weight:bold;
+  color:var(--accent); margin:8px 0; padding:2px 4px;
+}
+.platform{
+  background:var(--card); border:2px dashed var(--brass);
+  border-radius:12px; padding:12px; margin:14px 0; min-height:64px;
+}
+.platform h2, .track h2{
+  font-size:22px; margin:0 0 8px; border:none; padding:0;
+}
+.plate{
+  display:inline-block; background:var(--brass); color:var(--paper);
+  border-radius:8px; padding:4px 14px; font-size:20px;
+  letter-spacing:0.06em;
+}
+body.warmdark .plate{ color:#0f0a04; }
+.count{font-size:18px; color:var(--accent); font-weight:bold; margin-left:8px;}
+.track{
+  border-radius:12px; padding:12px 12px 4px; margin:16px 0;
+  border-top:5px solid var(--rail); border-bottom:5px solid var(--rail);
+  background:
+    repeating-linear-gradient(90deg,
+      transparent 0, transparent 26px,
+      var(--tie) 26px, var(--tie) 34px) ;
+  background-color:var(--paper);
+  background-blend-mode:multiply;
+}
+body.warmdark .track{ background-blend-mode:normal; background-color:var(--card); }
+.cars{display:flex; flex-wrap:wrap; gap:10px; padding:8px 0 10px; min-height:56px;}
+.token{
+  background:var(--card); border:3px solid var(--line);
+  border-radius:10px; padding:10px 12px; text-align:left;
+  font-weight:normal; max-width:100%;
+}
+.token.selected{ border-color:var(--gold); border-width:4px; }
+.token .nm{font-weight:bold; font-size:20px; display:block;}
+.token .tt{font-size:17px; display:block; font-style:italic;}
+.token .role{
+  display:inline-block; font-size:15px; font-weight:bold;
+  letter-spacing:0.05em; margin-top:4px; padding:2px 8px;
+  border-radius:6px; border:2px solid currentColor;
+}
+.role.r1{color:var(--role1);} .role.r2{color:var(--role2);} .role.r3{color:var(--role3);}
+.token .flag{
+  display:inline-block; font-size:15px; font-weight:bold;
+  margin-top:4px; margin-left:6px; padding:2px 8px; border-radius:6px;
+}
+.flag.miss{ color:var(--paper); background:var(--miss);}
+.flag.mailed{ color:var(--paper); background:var(--accent);}
+body.warmdark .flag.miss{ color:#0f0a04; }
+body.warmdark .flag.mailed{ color:#0f0a04; }
+.placebtn{
+  border-style:dashed; font-size:17px; min-height:48px;
+}
+.exportbox{
+  width:100%; min-height:160px; font-size:17px; font-family:inherit;
+  background:var(--paper); color:var(--ink);
+  border:2px solid var(--brass); border-radius:10px; padding:10px;
+}
+details{margin:10px 0;}
+summary{
+  font-size:20px; font-weight:bold; cursor:pointer;
+  min-height:48px; display:flex; align-items:center;
+}
+summary:focus-visible{outline:4px solid var(--gold); outline-offset:3px;}
+.dial{display:flex; gap:6px; align-items:center;}
+.dial span{font-size:19px; font-weight:bold;}
+footer{
+  margin-top:30px; padding:14px; border-radius:12px;
+  background:#241c10; color:#f5d9a0; font-size:16px; line-height:1.5;
+}
+@media (prefers-reduced-motion: no-preference){
+  .token{transition:border-color 0.15s;}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div>
+    <h1>Group Foreman</h1>
+    <p class="tag">EN195 Workshop Yard · nothing leaves this page</p>
+  </div>
+  <button id="palette" aria-label="Cycle palette. Current: Default">Palette: Default</button>
+</div>
+
+<div class="dock">
+  <p><strong>Loading dock.</strong> Paste the roster — one writer per line. Name, piece title, Doc link, section. Commas, tabs, or pipes all work.</p>
+  <textarea id="intake" aria-label="Paste roster here, one writer per line"></textarea>
+  <div class="row">
+    <button class="primary" id="loadBtn">Load writers</button>
+    <button id="clearBtn">Clear yard</button>
+  </div>
+</div>
+
+<div class="row" role="group" aria-label="Section">
+  <button id="sec703" aria-pressed="true">Section 703</button>
+  <button id="sec704" aria-pressed="false">Section 704</button>
+</div>
+
+<div class="row">
+  <div class="dial" role="group" aria-label="Team size">
+    <span>Team size:</span>
+    <button class="sizeBtn" data-size="3" aria-pressed="false">3</button>
+    <button class="sizeBtn" data-size="4" aria-pressed="true">4</button>
+    <button class="sizeBtn" data-size="5" aria-pressed="false">5</button>
+  </div>
+  <button class="primary" id="dealBtn">Deal teams</button>
+  <button id="shuffleBtn">Reshuffle</button>
+</div>
+
+<p id="status" role="status" aria-live="polite">The yard is empty. Paste a roster on the dock.</p>
+
+<div class="platform" id="platformBox">
+  <h2><span class="plate">PLATFORM</span><span class="count" id="platCount"></span></h2>
+  <div class="cars" id="platform"></div>
+</div>
+
+<div id="tracks"></div>
+
+<details>
+  <summary>Roster export</summary>
+  <div class="row">
+    <button class="primary" id="copyBtn">Copy roster</button>
+  </div>
+  <textarea class="exportbox" id="exportBox" aria-label="Formatted roster, ready to paste"></textarea>
+</details>
+
+<details>
+  <summary>How to work the yard</summary>
+  <div class="dock">
+    <p>Tap a token to pick it up. Tap a track's Place button to set it down. Deal fills tracks automatically, rotating the three reading roles: Experience, Craft, Questions.</p>
+    <p>Tap a token twice to open its flags: mark a piece missing, mark the writer emailed, or toggle received.</p>
+    <p>Everything lives in this page's memory only. Closing the tab erases the yard. Export the roster before you close.</p>
+  </div>
+</details>
+
+<footer>
+Group Foreman v1 · Tight Spiral Productions, MassBay lane · Single-file, offline, in-memory. No student data is stored or transmitted; the page forgets everything when closed. Built with AI in the loop; the human has the last touch.
+</footer>
+
+<script>
+(function(){
+"use strict";
+var GREEK=["ALPHA","BETA","GAMMA","DELTA","EPSILON","ZETA","ETA","THETA","IOTA","KAPPA"];
+var ROLES=["EXPERIENCE","CRAFT","QUESTIONS"];
+var writers=[]; // {id,name,title,link,section,team(0=platform,1..5),submitted,emailed}
+var nextId=1;
+var activeSection="703";
+var teamSize=4;
+var selectedId=null;
+
+function $(id){return document.getElementById(id);}
+function say(msg){$("status").textContent=msg;}
+
+// ---------- palette ----------
+(function(){
+  var b=$("palette");
+  var stops=[["Default",""],["Softer","softer"],["Warm-dark","warmdark"]];
+  var i=0;
+  b.addEventListener("click",function(){
+    i=(i+1)%stops.length;
+    document.body.className=stops[i][1];
+    b.textContent="Palette: "+stops[i][0];
+    b.setAttribute("aria-label","Cycle palette. Current: "+stops[i][0]);
+  });
+})();
+
+// ---------- parsing ----------
+function parseLine(line){
+  var raw=line.trim();
+  if(!raw) return null;
+  var parts;
+  if(raw.indexOf("\t")>-1) parts=raw.split("\t");
+  else if(raw.indexOf("|")>-1) parts=raw.split("|");
+  else parts=raw.split(",");
+  parts=parts.map(function(p){return p.trim();}).filter(Boolean);
+  if(!parts.length) return null;
+  var w={id:nextId++,name:"",title:"",link:"",section:activeSection,
+         team:0,submitted:true,emailed:false};
+  parts.forEach(function(p,idx){
+    if(/https?:\/\//i.test(p)){ w.link=p; return; }
+    if(/\b70[34]\b/.test(p)&&p.replace(/\D/g,"").length===3){ w.section=p.match(/70[34]/)[0]; return; }
+    if(!w.name){ w.name=p; return; }
+    if(!w.title){ w.title=p; return; }
+  });
+  if(!w.name) return null;
+  // a line ending in "missing" or "not received" flags it
+  if(/missing|not received/i.test(raw)){ w.submitted=false; w.title=w.title.replace(/missing|not received/ig,"").trim(); }
+  return w;
+}
+
+$("loadBtn").addEventListener("click",function(){
+  var lines=$("intake").value.split("\n");
+  var added=0;
+  lines.forEach(function(l){
+    var w=parseLine(l);
+    if(w){ writers.push(w); added++; }
+  });
+  $("intake").value="";
+  render();
+  say(added+" writers loaded. "+countSection(activeSection)+" in section "+activeSection+".");
+});
+
+$("clearBtn").addEventListener("click",function(){
+  if(!writers.length){ say("The yard is already empty."); return; }
+  if(!confirm("Clear every writer from the yard?")) return;
+  writers=[]; selectedId=null; render();
+  say("Yard cleared.");
+});
+
+// ---------- sections ----------
+function setSection(sec){
+  activeSection=sec;
+  $("sec703").setAttribute("aria-pressed", sec==="703");
+  $("sec704").setAttribute("aria-pressed", sec==="704");
+  selectedId=null;
+  render();
+  say("Showing section "+sec+". "+countSection(sec)+" writers.");
+}
+$("sec703").addEventListener("click",function(){setSection("703");});
+$("sec704").addEventListener("click",function(){setSection("704");});
+
+function countSection(sec){
+  return writers.filter(function(w){return w.section===sec;}).length;
+}
+
+// ---------- team size ----------
+Array.prototype.forEach.call(document.querySelectorAll(".sizeBtn"),function(b){
+  b.addEventListener("click",function(){
+    teamSize=parseInt(b.getAttribute("data-size"),10);
+    Array.prototype.forEach.call(document.querySelectorAll(".sizeBtn"),function(x){
+      x.setAttribute("aria-pressed", x===b);
+    });
+    say("Team size set to "+teamSize+".");
+  });
+});
+
+// ---------- deal ----------
+function shuffle(arr){
+  for(var i=arr.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1));
+    var t=arr[i]; arr[i]=arr[j]; arr[j]=t;
+  }
+  return arr;
+}
+function deal(){
+  var pool=writers.filter(function(w){return w.section===activeSection;});
+  if(!pool.length){ say("No writers in section "+activeSection+" to deal."); return; }
+  shuffle(pool);
+  var nTeams=Math.min(5, Math.max(1, Math.ceil(pool.length/teamSize)));
+  pool.forEach(function(w,idx){ w.team=(idx % nTeams)+1; });
+  selectedId=null;
+  render();
+  say("Dealt "+pool.length+" writers onto "+nTeams+" tracks, teams of about "+teamSize+".");
+}
+$("dealBtn").addEventListener("click",deal);
+$("shuffleBtn").addEventListener("click",deal);
+
+// ---------- selection + placement ----------
+function tapToken(w){
+  if(selectedId===w.id){
+    // second tap: cycle flags panel via prompt-free toggles
+    toggleFlags(w);
+    return;
+  }
+  selectedId=w.id;
+  render();
+  say(w.name+" picked up. Tap a track's Place button to set them down.");
+}
+function toggleFlags(w){
+  // simple rotation: received -> missing -> missing+emailed -> received
+  if(w.submitted){ w.submitted=false; w.emailed=false; say(w.name+" marked MISSING."); }
+  else if(!w.emailed){ w.emailed=true; say(w.name+" marked missing and EMAILED."); }
+  else { w.submitted=true; w.emailed=false; say(w.name+" marked RECEIVED."); }
+  render();
+}
+function placeSelected(teamNum){
+  if(selectedId===null){ say("Pick up a token first. Tap any writer."); return; }
+  var w=writers.find(function(x){return x.id===selectedId;});
+  if(!w) return;
+  w.team=teamNum;
+  selectedId=null;
+  render();
+  say(w.name+(teamNum===0?" returned to the platform.":" placed on Track "+teamNum+"."));
+}
+
+// ---------- roles ----------
+function assignRoles(){
+  // rotate roles within each track by position
+  for(var t=1;t<=5;t++){
+    var crew=writers.filter(function(w){return w.section===activeSection && w.team===t;});
+    crew.forEach(function(w,idx){ w._role=ROLES[idx%3]; });
+  }
+  writers.filter(function(w){return w.section===activeSection && w.team===0;})
+    .forEach(function(w){ w._role=null; });
+}
+
+// ---------- render ----------
+function tokenBtn(w){
+  var b=document.createElement("button");
+  b.className="token"+(w.id===selectedId?" selected":"");
+  b.setAttribute("aria-label", w.name+(w.title?", "+w.title:"")+
+    (w._role?", role "+w._role:"")+
+    (w.submitted?"":", piece missing")+
+    (w.emailed?", emailed":"")+
+    (w.id===selectedId?", picked up. Tap again for flags.":". Tap to pick up."));
+  var html='<span class="nm">'+esc(w.name)+'</span>';
+  if(w.title) html+='<span class="tt">'+esc(w.title)+'</span>';
+  if(w._role){
+    var cls=w._role==="EXPERIENCE"?"r1":(w._role==="CRAFT"?"r2":"r3");
+    html+='<span class="role '+cls+'">'+w._role+'</span>';
+  }
+  if(!w.submitted) html+='<span class="flag miss">MISSING</span>';
+  if(w.emailed) html+='<span class="flag mailed">EMAILED</span>';
+  b.innerHTML=html;
+  b.addEventListener("click",function(){tapToken(w);});
+  return b;
+}
+function esc(s){
+  return String(s).replace(/[&<>"]/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];
+  });
+}
+function render(){
+  assignRoles();
+  var plat=$("platform");
+  plat.innerHTML="";
+  var platCrew=writers.filter(function(w){return w.section===activeSection && w.team===0;});
+  platCrew.forEach(function(w){ plat.appendChild(tokenBtn(w)); });
+  $("platCount").textContent=platCrew.length?platCrew.length+" waiting":"";
+  if(selectedId!==null && writers.find(function(x){return x.id===selectedId && x.team!==0;})){
+    var back=document.createElement("button");
+    back.className="placebtn";
+    back.textContent="Place on platform";
+    back.addEventListener("click",function(){placeSelected(0);});
+    plat.appendChild(back);
+  }
+
+  var yard=$("tracks");
+  yard.innerHTML="";
+  for(var t=1;t<=5;t++){
+    (function(t){
+      var box=document.createElement("div");
+      box.className="track";
+      var crew=writers.filter(function(w){return w.section===activeSection && w.team===t;});
+      var h=document.createElement("h2");
+      h.innerHTML='<span class="plate">TRACK '+t+'</span><span class="count">'+
+        (crew.length?crew.length+" aboard":"empty rails")+'</span>';
+      box.appendChild(h);
+      var cars=document.createElement("div");
+      cars.className="cars";
+      crew.forEach(function(w){ cars.appendChild(tokenBtn(w)); });
+      if(selectedId!==null){
+        var pb=document.createElement("button");
+        pb.className="placebtn";
+        pb.textContent="Place here";
+        pb.setAttribute("aria-label","Place picked-up writer on Track "+t);
+        pb.addEventListener("click",function(){placeSelected(t);});
+        cars.appendChild(pb);
+      }
+      box.appendChild(cars);
+      yard.appendChild(box);
+    })(t);
+  }
+  buildExport();
+}
+
+// ---------- export ----------
+function buildExport(){
+  var out=[];
+  var greekIdx=0;
+  ["703","704"].forEach(function(sec){
+    var hasAny=false;
+    for(var t=1;t<=5;t++){
+      var crew=writers.filter(function(w){return w.section===sec && w.team===t;});
+      if(!crew.length) continue;
+      hasAny=true;
+      var name="TEAM "+sec+"-"+(GREEK[greekIdx]||("TRACK"+t));
+      greekIdx++;
+      out.push(name);
+      crew.forEach(function(w,idx){
+        var role=ROLES[idx%3];
+        var line=w.name;
+        if(w.title) line+=" — "+w.title;
+        if(w.link) line+=" — "+w.link;
+        line+=" — "+role.charAt(0)+role.slice(1).toLowerCase()+" reader";
+        if(!w.submitted) line+=" — NOT RECEIVED"+(w.emailed?" (emailed)":"");
+        out.push(line);
+      });
+      out.push("");
+    }
+    var waiting=writers.filter(function(w){return w.section===sec && w.team===0;});
+    if(waiting.length){
+      out.push("UNASSIGNED "+sec+": "+waiting.map(function(w){
+        return w.name+(w.submitted?"":" (missing"+(w.emailed?", emailed":"")+")");
+      }).join("; "));
+      out.push("");
+    }
+    if(hasAny||waiting.length) out.push("-----");
+  });
+  $("exportBox").value=out.join("\n").trim();
+}
+$("copyBtn").addEventListener("click",function(){
+  var box=$("exportBox");
+  box.select();
+  box.setSelectionRange(0,999999);
+  var ok=false;
+  try{ ok=document.execCommand("copy"); }catch(e){}
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(box.value).then(function(){
+      say("Roster copied. Paste it into the class-notes doc.");
+    },function(){ say(ok?"Roster copied.":"Copy blocked — the roster is selected, copy it by hand."); });
+  } else {
+    say(ok?"Roster copied.":"Copy blocked — the roster is selected, copy it by hand.");
+  }
+});
+
+render();
+window.scrollTo(0,0);
+})();
+</script>
+</body>
+</html>

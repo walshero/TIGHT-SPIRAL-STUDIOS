@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cliché Line — Tight Spiral Studios</title>
+<style>
+  :root{--ink:#f4f1e8;--paper:#12100f;--paper2:#1c1917;--hot:#ff5a3c;--cool:#57c7ff;--dim:#8a857b;--gold:#ffcf5a;--wound:#e0384f;--keep:#dfe6ec;--field:#57c7ff;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--paper);color:var(--ink);font-family:"Georgia","Times New Roman",serif;
+    display:flex;align-items:center;justify-content:center;min-height:100vh;overflow:hidden;}
+  #stage{position:relative;width:min(96vw,1200px);aspect-ratio:3/2;
+    background:radial-gradient(1200px 800px at 50% -10%, #241f1c 0%, var(--paper) 62%);
+    border:2px solid #3a352f;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.6);}
+  canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  #hud{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;gap:8px;
+    padding:12px 20px;pointer-events:none;font-family:"Helvetica Neue",Arial,sans-serif;letter-spacing:.05em;}
+  .hud-item{font-size:clamp(11px,1.4vw,15px);text-transform:uppercase;color:var(--dim);white-space:nowrap}
+  .hud-item b{color:var(--ink);font-size:clamp(16px,2vw,24px);font-family:"Georgia",serif;margin-left:.35em}
+  .hud-item.hot b{color:var(--hot)}.hud-item.gold b{color:var(--gold)}.hud-item.cool b{color:var(--cool)}
+  .meterwrap{display:flex;align-items:center;gap:.5em}
+  .meter{width:90px;height:9px;border:1px solid #4a443c;border-radius:5px;overflow:hidden;background:#0c0b0a}
+  .meter i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--wound),var(--gold),var(--cool));transition:width .25s ease}
+  #attrib{position:absolute;left:0;right:0;bottom:0;padding:9px 18px;pointer-events:none;
+    font-family:"Helvetica Neue",Arial,sans-serif;font-size:clamp(10px,1.3vw,13px);color:#6f685e;letter-spacing:.03em;text-align:center;}
+  #attrib b{color:#a49b8d;font-weight:600}
+  .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    background:linear-gradient(180deg,rgba(10,9,8,.80),rgba(10,9,8,.94));padding:5vh 8vw;z-index:5;}
+  .screen.hidden{display:none}
+  .kicker{font-family:"Helvetica Neue",Arial,sans-serif;text-transform:uppercase;letter-spacing:.4em;font-size:clamp(11px,1.4vw,15px);color:var(--hot);margin-bottom:1.1rem;}
+  h1{font-size:clamp(38px,7.5vw,88px);line-height:.92;font-weight:400;letter-spacing:-.01em;margin-bottom:.35em;}
+  h1 .strike{position:relative;color:var(--dim)}
+  h1 .strike::after{content:"";position:absolute;left:-2%;right:-2%;top:52%;height:5px;background:var(--hot);transform:rotate(-3deg);}
+  .lede{max-width:52ch;font-size:clamp(15px,2vw,21px);line-height:1.5;margin-bottom:1.3em;}
+  .rules{max-width:52ch;font-size:clamp(13px,1.7vw,17px);line-height:1.6;color:var(--dim);margin-bottom:1.6em;font-family:"Helvetica Neue",Arial,sans-serif;}
+  .rules .hot{color:var(--hot)}.rules .keepc{color:var(--keep)}.rules .fieldc{color:var(--field)}.rules b{color:var(--ink)}
+  .controls{font-family:"Helvetica Neue",Arial,sans-serif;display:flex;gap:1.4em;flex-wrap:wrap;justify-content:center;color:var(--dim);font-size:clamp(12px,1.5vw,16px);margin-bottom:1.8em;}
+  .controls b{color:var(--ink)}
+  kbd{display:inline-block;background:var(--paper2);border:1px solid #4a443c;border-bottom-width:3px;border-radius:6px;padding:.15em .5em;font-family:"Helvetica Neue",Arial,sans-serif;color:var(--ink);font-size:.95em;margin:0 .1em;}
+  button{font-family:"Helvetica Neue",Arial,sans-serif;background:var(--hot);color:#1a0d09;border:none;border-radius:999px;padding:.75em 2.1em;font-size:clamp(16px,2vw,20px);font-weight:700;letter-spacing:.04em;cursor:pointer;text-transform:uppercase;box-shadow:0 6px 0 #b93b23;transition:transform .08s ease;}
+  button:hover{transform:translateY(-1px)}button:active{transform:translateY(3px);box-shadow:0 3px 0 #b93b23}
+  .tag{position:absolute;bottom:12px;right:18px;z-index:6;font-family:"Helvetica Neue",Arial,sans-serif;letter-spacing:.28em;text-transform:uppercase;font-size:11px;color:#5a544c;pointer-events:none;}
+  .final{font-size:clamp(20px,3vw,30px);color:var(--gold);margin-bottom:.3em;font-family:"Georgia",serif}
+  .verdict{color:var(--dim);font-style:italic;margin-bottom:1.6em;max-width:44ch}
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="game"></canvas>
+  <div id="hud">
+    <div class="hud-item">Cut<b id="score">0</b></div>
+    <div class="hud-item gold">Line<b id="wave">1</b></div>
+    <div class="hud-item cool meterwrap">Control<span class="meter"><i id="ctrlbar"></i></span></div>
+    <div class="hud-item hot">Lives<b id="lives">3</b></div>
+  </div>
+  <div id="attrib"></div>
+
+  <div class="screen" id="startScreen">
+    <div class="kicker">Tight Spiral Studios</div>
+    <h1>Cliché <span class="strike">Line</span></h1>
+    <p class="lede">A real sentence locks behind a force field. You get a few seconds to read it and find the cliché. Then the field drops — and the sentence starts falling toward print.</p>
+    <p class="rules">
+      <span class="fieldc">Field up:</span> read only. You can move, but you <b>cannot fire</b> yet.<br>
+      <span class="fieldc">Field down:</span> the line marches. Cut the <span class="hot">hot</span> cliché before it reaches press.<br>
+      Never shoot a <span class="keepc">pale</span> word — it doesn't die, it <b>stays wounded</b>, and Control drops.
+    </p>
+    <div class="controls">
+      <span><b>Move</b> <kbd>&larr;</kbd><kbd>&rarr;</kbd></span>
+      <span><b>Fire</b> <kbd>Space</kbd> <span style="opacity:.7">(after field drops)</span></span>
+    </div>
+    <button id="startBtn">Hold the line</button>
+    <p style="margin-top:1.1em;color:#5a544c;font-family:Arial,sans-serif;font-size:13px">Read while the field holds. Fire only when it's down.</p>
+  </div>
+
+  <div class="screen hidden" id="waveScreen">
+    <div class="kicker" id="waveKicker">Line held</div>
+    <h1 id="waveTitle">Clean.</h1>
+    <p class="lede" id="waveLine"></p>
+    <button id="nextBtn">Next line</button>
+  </div>
+
+  <div class="screen hidden" id="overScreen">
+    <div class="kicker">Sent to press</div>
+    <h1>Game over</h1>
+    <p class="final" id="finalScore"></p>
+    <p class="verdict" id="verdict"></p>
+    <button id="againBtn">Set it again</button>
+  </div>
+
+  <div class="tag">Studio Eyes · control build</div>
+  <a href="cliche-cabinet.html" style="position:absolute;bottom:12px;left:18px;z-index:6;font-family:'Helvetica Neue',Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase;font-size:11px;color:#7a7266;text-decoration:none">&lsaquo; Cabinet</a>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  // shared cliché bank (feeds Cliché City). Safe if storage is blocked.
+  function bankAdd(phrase){
+    try{
+      const k="tsp_cliche_bank";
+      const cur=JSON.parse(localStorage.getItem(k)||"[]");
+      cur.push({t:phrase,src:"line",at:Date.now()});
+      localStorage.setItem(k,JSON.stringify(cur.slice(-250)));
+    }catch(e){}
+  }
+
+  const LINES=[
+    {attrib:"M. Walsh, “Ludic Pedagogy,” Sabbatical Report, MassBay, 2012",
+     tokens:[{t:"the",keep:1},{t:"recursive",keep:1},{t:"process",keep:1},{t:"is",keep:1},{t:"a",keep:1},{t:"tight",keep:1},{t:"spiral",keep:1},{t:"at the end of the day",cliche:1}]},
+    {attrib:"Herman Melville, Moby-Dick, 1851 (public domain)",
+     tokens:[{t:"Call",keep:1},{t:"me",keep:1},{t:"Ishmael",keep:1},{t:"the calm before the storm",cliche:1}]},
+    {attrib:"Henry David Thoreau, Walden, 1854 (public domain)",
+     tokens:[{t:"I",keep:1},{t:"wished",keep:1},{t:"to",keep:1},{t:"live",keep:1},{t:"deliberately",keep:1},{t:"think outside the box",cliche:1}]},
+    {attrib:"Jane Austen, Pride and Prejudice, 1813 (public domain)",
+     tokens:[{t:"a",keep:1},{t:"single",keep:1},{t:"man",keep:1},{t:"in",keep:1},{t:"possession",keep:1},{t:"when all is said and done",cliche:1},{t:"of",keep:1},{t:"a",keep:1},{t:"good",keep:1},{t:"fortune",keep:1}]},
+    {attrib:"M. Walsh, Sabbatical Report, MassBay, 2012",
+     tokens:[{t:"players",keep:1},{t:"themselves",keep:1},{t:"dictate",keep:1},{t:"the",keep:1},{t:"course",keep:1},{t:"in this day and age",cliche:1},{t:"of",keep:1},{t:"the",keep:1},{t:"game",keep:1}]}
+  ];
+  const EXTRA_CLICHES=["low-hanging fruit","move the needle","paradigm shift","circle back","it is what it is","the elephant in the room","last but not least","game changer"];
+
+  const canvas=document.getElementById("game"),ctx=canvas.getContext("2d");
+  let W=0,H=0,DPR=1;
+  function resize(){const r=canvas.getBoundingClientRect();DPR=Math.min(window.devicePixelRatio||1,2);W=r.width;H=r.height;
+    canvas.width=Math.round(W*DPR);canvas.height=Math.round(H*DPR);ctx.setTransform(DPR,0,0,DPR,0,0);}
+  window.addEventListener("resize",()=>{resize();if(formation)layoutFormation();});
+
+  const State={START:0,PLAY:1,WAVE:2,OVER:3};
+  let state=State.START;
+  let ship=null,bullets=[],particles=[],floaters=[],formation=null;
+  let score=0,lives=3,wave=1,control=100,fireCooldown=0,last=0;
+  const READ_SECS=3.6;
+  const keys=Object.create(null);
+  const rand=(a,b)=>a+Math.random()*(b-a),TAU=Math.PI*2;
+  const PRINT_Y=()=>H-70;
+
+  function buildLine(idx,chapter){
+    const src=LINES[idx];
+    let toks=src.tokens.map(o=>Object.assign({},o));
+    const extra=Math.max(0,chapter-1);
+    for(let e=0;e<extra&&e<2;e++){
+      const pos=1+Math.floor(rand(0,toks.length));
+      toks.splice(pos,0,{t:EXTRA_CLICHES[Math.floor(rand(0,EXTRA_CLICHES.length))],cliche:1});
+    }
+    return {attrib:src.attrib,toks};
+  }
+  function layoutFormation(){
+    if(!formation)return;
+    ctx.font="600 15px Georgia, serif";
+    const padX=14,gap=10,h=34;let total=0;
+    for(const tk of formation.tiles){tk.w=Math.min(ctx.measureText(tk.t).width+padX*2,W*0.34);tk.h=h;total+=tk.w+gap;}
+    total-=gap;
+    formation.scale=Math.min(1,(W-40)/total);
+    formation.width=total*formation.scale;
+    let x=0;for(const tk of formation.tiles){tk.relx=x;x+=(tk.w+gap)*formation.scale;}
+    if(formation.x+formation.width>W-16)formation.x=W-16-formation.width;
+    if(formation.x<16)formation.x=16;
+  }
+  function startLine(idx,chapter){
+    const built=buildLine(idx,chapter);
+    formation={
+      attrib:built.attrib,
+      tiles:built.toks.map(o=>({t:o.t,cliche:!!o.cliche,keep:!!o.keep,state:o.cliche?"target":"ok",flash:0,jitter:0,w:0,h:0,relx:0})),
+      x:40,y:118,dir:1,scale:1,width:0,
+      hspeed:24+chapter*9,dropStep:20+chapter*3,descend:6+chapter*3,
+      phase:"read",readTimer:READ_SECS,fieldFade:0,fieldPulse:0
+    };
+    layoutFormation();
+    formation.x=(W-formation.width)/2;formation.y=118;
+    document.getElementById("attrib").innerHTML="Line under revision — <b>"+escapeHTML(formation.attrib)+"</b>";
+  }
+  function escapeHTML(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+  function remainingCliches(){return formation.tiles.filter(t=>t.cliche&&t.state==="target").length;}
+
+  function resetShip(){ship={x:W/2,y:H-44,speed:6};}
+  window.addEventListener("keydown",e=>{if(["ArrowLeft","ArrowRight"," "].includes(e.key))e.preventDefault();
+    keys[e.key.toLowerCase()]=true;if(e.key===" "&&state===State.PLAY)fire();});
+  window.addEventListener("keyup",e=>{keys[e.key.toLowerCase()]=false;});
+  function fire(){
+    if(!formation||formation.phase!=="live")return;   // no fire while field is up
+    if(fireCooldown>0||bullets.length>=2)return;
+    bullets.push({x:ship.x,y:ship.y-14,vy:-9});fireCooldown=10;
+  }
+
+  function newGame(){score=0;lives=3;wave=1;control=100;bullets=[];particles=[];floaters=[];
+    resetShip();startLine(0,1);updateHUD();state=State.PLAY;
+    show("startScreen",false);show("waveScreen",false);show("overScreen",false);}
+
+  function loseLife(reason){lives--;updateHUD();if(lives<=0)gameOver(reason);else advanceLine();}
+  function advanceLine(){
+    const nextIdx=wave%LINES.length,chapter=1+Math.floor(wave/LINES.length);
+    wave++;bullets=[];resetShip();startLine(nextIdx,chapter);updateHUD();state=State.PLAY;show("waveScreen",false);
+  }
+  function holdLine(){
+    const wounds=formation.tiles.filter(t=>t.keep&&t.state==="wounded").length;
+    const clean=wounds===0;
+    score+=60+(clean?40:0);
+    if(clean)control=Math.min(100,control+8);
+    updateHUD();state=State.WAVE;
+    const kept=formation.tiles.filter(t=>t.keep).map(t=>t.t).join(" ");
+    document.getElementById("waveKicker").textContent=clean?"Clean cut":"Line held (with scars)";
+    document.getElementById("waveTitle").textContent=clean?pick(["Clean.","Sharp.","Nothing wasted."]):pick(["Held.","It'll do.","Bruised but standing."]);
+    const msg=clean?"You lifted the cliché out and left the sentence whole:"
+      :(wounds+(wounds===1?" honest word took a hit. Still readable, but it shows:":" honest words took hits. The sentence survived, scarred:"));
+    document.getElementById("waveLine").innerHTML=msg+"<br><span style='color:#dfe6ec;font-style:italic'>“"+escapeHTML(kept)+"”</span>";
+    show("waveScreen",true);
+  }
+  function pick(a){return a[Math.floor(Math.random()*a.length)];}
+  function gameOver(reason){
+    state=State.OVER;
+    document.getElementById("finalScore").textContent="You cut "+score+" and held "+(wave-1)+" lines.";
+    let v=reason==="cliche"?"A cliché slipped past into print. That's how they survive — one distracted editor at a time.":"The press ran before the line was clean.";
+    if(control<40)v+=" Control ran low; too many honest words caught a bullet.";
+    document.getElementById("verdict").textContent=v;show("overScreen",true);
+  }
+
+  function update(dt){
+    if(state!==State.PLAY)return;
+    if(keys["arrowleft"]||keys["a"])ship.x-=ship.speed;
+    if(keys["arrowright"]||keys["d"])ship.x+=ship.speed;
+    ship.x=Math.max(20,Math.min(W-20,ship.x));
+    if(fireCooldown>0)fireCooldown--;
+    const f=formation;
+    f.fieldPulse+=dt;
+
+    if(f.phase==="read"){
+      f.readTimer-=dt;
+      if(f.readTimer<=0){f.phase="live";f.fieldFade=0.5;}
+      // no march, no fire, no crossing checks during read
+    } else {
+      if(f.fieldFade>0)f.fieldFade-=dt;
+      f.x+=f.dir*f.hspeed*dt;f.y+=f.descend*dt;
+      if(f.x+f.width>W-16){f.x=W-16-f.width;f.dir=-1;f.y+=f.dropStep;}
+      else if(f.x<16){f.x=16;f.dir=1;f.y+=f.dropStep;}
+    }
+
+    for(const tk of f.tiles){if(tk.flash>0)tk.flash-=dt*3;if(tk.jitter>0)tk.jitter-=dt*4;}
+
+    for(let i=bullets.length-1;i>=0;i--){
+      const b=bullets[i];b.y+=b.vy;
+      if(b.y<0){bullets.splice(i,1);continue;}
+      for(const tk of f.tiles){
+        if(tk.state==="cut")continue;
+        const tx=f.x+tk.relx,tw=tk.w*f.scale,ty=f.y;
+        if(b.x>=tx&&b.x<=tx+tw&&b.y<=ty+tk.h&&b.y>=ty){onHit(tk);bullets.splice(i,1);break;}
+      }
+    }
+
+    if(f.phase==="live"){
+      for(const tk of f.tiles){
+        if(tk.cliche&&tk.state==="target"&&f.y+tk.h>=PRINT_Y()){
+          burst(f.x+tk.relx+tk.w*f.scale/2,PRINT_Y(),"#ff5a3c",26);loseLife("cliche");return;
+        }
+      }
+      if(remainingCliches()===0){holdLine();}
+    }
+
+    for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.x+=p.vx;p.y+=p.vy;p.vx*=0.96;p.vy*=0.96;p.life-=dt*1.6;if(p.life<=0)particles.splice(i,1);}
+    for(let i=floaters.length-1;i>=0;i--){const fl=floaters[i];fl.y-=18*dt;fl.life-=dt;if(fl.life<=0)floaters.splice(i,1);}
+  }
+
+  function onHit(tk){
+    if(tk.cliche){
+      tk.state="cut";score+=25;bankAdd(tk.t);
+      const cx=formation.x+tk.relx+tk.w*formation.scale/2;
+      burst(cx,formation.y+tk.h/2,"#ff5a3c",16);
+      floaters.push({x:cx,y:formation.y,text:"cut",color:"#ffcf5a",life:1});updateHUD();
+    } else {
+      if(tk.state!=="wounded"){
+        tk.state="wounded";control=Math.max(0,control-14);score=Math.max(0,score-15);
+        const cx=formation.x+tk.relx+tk.w*formation.scale/2;
+        floaters.push({x:cx,y:formation.y,text:"–15  wounded",color:"#e0384f",life:1.1});updateHUD();
+      }
+      tk.flash=1;tk.jitter=1;
+      const cx=formation.x+tk.relx+tk.w*formation.scale/2;
+      burst(cx,formation.y+tk.h/2,"#e0384f",8);
+    }
+  }
+  function burst(x,y,color,n){for(let i=0;i<n;i++){const a=rand(0,TAU),s=rand(.5,3.2);particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:1,color});}}
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    if(state===State.START)return;
+    const py=PRINT_Y();
+    ctx.save();ctx.setLineDash([6,7]);ctx.strokeStyle="#4a423a";ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(0,py);ctx.lineTo(W,py);ctx.stroke();ctx.setLineDash([]);
+    ctx.font="11px 'Helvetica Neue',Arial,sans-serif";ctx.fillStyle="#6f685e";ctx.textAlign="left";ctx.fillText("PRESS",14,py-6);ctx.restore();
+
+    if(formation){
+      drawForceField();
+      for(const tk of formation.tiles)drawTile(tk);
+    }
+    ctx.fillStyle="#fff";for(const b of bullets)ctx.fillRect(b.x-1.6,b.y-8,3.2,10);
+    for(const p of particles){ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.color;ctx.fillRect(p.x-1.5,p.y-1.5,3,3);}
+    ctx.globalAlpha=1;
+    for(const fl of floaters){ctx.globalAlpha=Math.max(0,fl.life);ctx.fillStyle=fl.color;ctx.font="600 14px 'Helvetica Neue',Arial,sans-serif";ctx.textAlign="center";ctx.fillText(fl.text,fl.x,fl.y-10);}
+    ctx.globalAlpha=1;
+    if(state===State.PLAY)drawShip();
+  }
+
+  function drawForceField(){
+    const f=formation;
+    let alpha=0;
+    if(f.phase==="read")alpha=1;
+    else if(f.fieldFade>0)alpha=Math.max(0,f.fieldFade/0.5);
+    if(alpha<=0)return;
+    const pad=16;
+    const x=f.x-pad,y=f.y-pad,w=f.width+pad*2,h=f.tiles[0].h+pad*2;
+    const glow=0.55+0.35*Math.sin(f.fieldPulse*4);
+    ctx.save();
+    ctx.globalAlpha=alpha;
+    // panel
+    roundRect(x,y,w,h,14);
+    ctx.fillStyle="rgba(60,140,190,0.12)";ctx.fill();
+    // scanlines
+    ctx.save();ctx.clip();
+    ctx.globalAlpha=alpha*0.25;ctx.strokeStyle="#57c7ff";ctx.lineWidth=1;
+    for(let sy=y;sy<y+h;sy+=6){ctx.beginPath();ctx.moveTo(x,sy);ctx.lineTo(x+w,sy);ctx.stroke();}
+    ctx.restore();
+    // border
+    ctx.globalAlpha=alpha;
+    ctx.shadowColor="rgba(87,199,255,"+glow.toFixed(2)+")";ctx.shadowBlur=18;
+    roundRect(x,y,w,h,14);ctx.strokeStyle="#57c7ff";ctx.lineWidth=2.5;ctx.stroke();ctx.shadowBlur=0;
+    // read label + timer
+    if(f.phase==="read"){
+      ctx.globalAlpha=alpha;ctx.textAlign="center";
+      ctx.fillStyle="#9fdcff";ctx.font="700 13px 'Helvetica Neue',Arial,sans-serif";
+      ctx.fillText("FIELD UP — READ THE LINE", x+w/2, y-14);
+      // timer bar under panel
+      const frac=Math.max(0,f.readTimer/READ_SECS);
+      const bw=w*0.8,bx=x+w/2-bw/2,by=y+h+12;
+      ctx.strokeStyle="#3a6377";ctx.lineWidth=1;ctx.strokeRect(bx,by,bw,6);
+      ctx.fillStyle="#57c7ff";ctx.fillRect(bx,by,bw*frac,6);
+    }
+    ctx.restore();
+  }
+
+  function drawTile(tk){
+    if(tk.state==="cut")return;
+    const f=formation;
+    const jx=tk.jitter>0?rand(-2,2):0;
+    const x=f.x+tk.relx+jx,y=f.y,w=tk.w*f.scale,h=tk.h;
+    ctx.save();
+    let stroke,fillText,glow=null;
+    if(tk.cliche){stroke="#ff5a3c";fillText="#ffb199";glow="rgba(255,90,60,.5)";}
+    else if(tk.state==="wounded"){stroke="#e0384f";fillText="#e0384f";glow="rgba(224,56,79,.45)";}
+    else{stroke="#7d8fa0";fillText="#dfe6ec";}
+    if(tk.flash>0)stroke="#fff";
+    roundRect(x,y,w,h,h/2);ctx.fillStyle="rgba(20,18,16,.6)";ctx.fill();
+    if(glow){ctx.shadowColor=glow;ctx.shadowBlur=10;}
+    ctx.lineWidth=tk.cliche?2:1.4;ctx.strokeStyle=stroke;ctx.stroke();ctx.shadowBlur=0;
+    ctx.font="600 "+(15*Math.max(.8,f.scale))+"px Georgia, serif";ctx.textAlign="center";ctx.textBaseline="middle";
+    let label=tk.t;
+    if(ctx.measureText(label).width>w-16){while(label.length>2&&ctx.measureText(label+"…").width>w-16)label=label.slice(0,-1);label+="…";}
+    ctx.fillStyle=fillText;ctx.fillText(label,x+w/2,y+h/2+1);
+    if(tk.state==="wounded"){ctx.strokeStyle="#e0384f";ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(x+8,y+h/2);ctx.lineTo(x+w-8,y+h/2);ctx.stroke();}
+    ctx.restore();
+  }
+  function roundRect(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+
+  function drawShip(){
+    ctx.save();ctx.translate(ship.x,ship.y);
+    ctx.beginPath();ctx.moveTo(0,-16);ctx.lineTo(13,10);ctx.lineTo(4,10);ctx.lineTo(0,2);ctx.lineTo(-4,10);ctx.lineTo(-13,10);ctx.closePath();
+    const canFire=formation&&formation.phase==="live";
+    ctx.fillStyle="#1c1917";ctx.strokeStyle=canFire?"#ffcf5a":"#5a6b74";ctx.lineWidth=2.5;
+    ctx.shadowColor=canFire?"#ffcf5a":"#3a6377";ctx.shadowBlur=canFire?12:6;
+    ctx.fill();ctx.stroke();ctx.shadowBlur=0;ctx.restore();
+  }
+
+  function updateHUD(){
+    document.getElementById("score").textContent=score;
+    document.getElementById("wave").textContent=wave;
+    document.getElementById("lives").textContent=Math.max(0,lives);
+    document.getElementById("ctrlbar").style.width=Math.max(0,control)+"%";
+  }
+  function show(id,on){document.getElementById(id).classList.toggle("hidden",!on);}
+
+  document.getElementById("startBtn").onclick=newGame;
+  document.getElementById("againBtn").onclick=newGame;
+  document.getElementById("nextBtn").onclick=advanceLine;
+
+  function frame(t){if(!last)last=t;let dt=(t-last)/1000;last=t;if(dt>0.05)dt=0.05;update(dt);draw();requestAnimationFrame(frame);}
+  resize();requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

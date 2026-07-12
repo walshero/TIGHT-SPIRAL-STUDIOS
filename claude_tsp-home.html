@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  THE TIGHT SPIRAL — the One Room living landscape. Front door.
+  Tight Spiral Productions · walshero@gmail.com · 2026-07-11
+
+  WHAT IT IS: you land IN a valley (scene-first, no gate). A path winds through it;
+  the studio's real surfaces sit along it as buildings you open. The path is the studio's
+  own metaphor — and you can remake the whole valley three ways: RIVER, RAIL, or CIRCUIT.
+  Same place, three ways of moving through it (the compound engine, applied to the home).
+
+  FLOORS honored: single-file, no network deps (links open the live builds); NO EMOJI
+  (SVG glyphs only); GREEN-FREE in every structural/state role; full-contrast ink==ink2;
+  44px+ targets; keyboard nav + visible focus; reduced-motion safe (motion default-on with
+  a replay-free static fallback); scroll-reset; comfort is a CORNER KNOB (Day/Dusk/Night),
+  never a first-screen gate; phone-width; scene carries the idea (image >50% above the fold).
+  Below the fold: a plain labeled door list, so navigation never depends on the picture.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="hz:canvas-width" content="1000">
+<title>The Tight Spiral — enter the valley</title>
+<style>
+:root{
+  --paper:#f4ecda; --paper2:#fbf5e6; --ink:#221d12; --ink2:#221d12;
+  --hill1:#e7d6ac; --hill2:#d8c08a; --hill3:#c7a86a; --fore:#b98f52;
+  --stone:#8a6a3a; --roof:#8a3a1c; --roof2:#a24a26;
+  --slate:#3a4654; --water:#5a7d99; --water2:#3f5f78;
+  --amber:#c8900a; --amber-d:#6e4700; --amber-pale:#f7e6b8;
+  --lamp:#f0c357; --lit:#ffd97a;
+  --line:#d8c59a; --line2:#c2ab78;
+  --accent:#5a7d99;            /* set by mode: river/rail/circuit */
+  --focus:#b4540a;
+  --serif:Georgia,'Iowan Old Style','Times New Roman',serif;
+  --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+body.dusk{
+  --paper:#ecdcbb; --paper2:#f3e6c8; --ink:#241a10; --ink2:#241a10;
+  --hill1:#e2c69a; --hill2:#d0aa72; --hill3:#b98a52; --fore:#9c6f3c;
+  --water:#4f6f88; --water2:#37536a; --line:#cdb488; --line2:#b89a66;
+}
+body.night{
+  --paper:#1c1a16; --paper2:#242019; --ink:#f2e3bf; --ink2:#f2e3bf;
+  --hill1:#33302a; --hill2:#3f3a30; --hill3:#4b4436; --fore:#564d3b;
+  --stone:#7a6a4a; --roof:#b8532b; --roof2:#c4653a;
+  --slate:#8aa0b8; --water:#4a6a82; --water2:#33505f;
+  --amber:#f0c357; --amber-d:#f0c357; --amber-pale:#332c1a;
+  --lamp:#ffd97a; --lit:#ffe39a; --line:#463f30; --line2:#5a5140;
+  --focus:#f0c357;
+}
+*{box-sizing:border-box;} html,body{margin:0;}
+body{ font-family:var(--sans); background:var(--paper); color:var(--ink);
+  line-height:1.55; font-size:19px; -webkit-text-size-adjust:100%; }
+
+/* ---- top bar ---- */
+.bar{ position:sticky; top:0; z-index:40; display:flex; align-items:center; gap:.6rem;
+  padding:.55rem .9rem; background:var(--paper2); border-bottom:2px solid var(--line2); }
+.bar .mk{ width:30px; height:30px; flex:none; }
+.bar .nm{ font:800 1rem/1 var(--serif); letter-spacing:.01em; }
+.bar .sub{ font:600 .72rem/1 var(--sans); color:var(--ink2); opacity:.85; display:none; }
+@media(min-width:560px){ .bar .sub{ display:inline; } }
+.knob{ margin-left:auto; display:flex; gap:.4rem; }
+.kb{ background:transparent; color:inherit; border:2px solid currentColor; border-radius:10px;
+  padding:.5rem .6rem; font:800 .74rem/1 var(--sans); cursor:pointer; min-height:44px; }
+.kb:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+/* ---- the scene ---- */
+.stage{ position:relative; max-width:1000px; margin:0 auto; }
+.scene{ display:block; width:100%; height:auto; }
+.eyebrow{ position:absolute; left:4.5%; top:5%; z-index:3; font:800 .74rem/1 var(--sans);
+  letter-spacing:.2em; text-transform:uppercase; color:var(--amber-d); }
+.title{ position:absolute; left:4.5%; top:9%; z-index:3; margin:0; max-width:62%;
+  font:800 clamp(1.35rem,3.6vw,2.5rem)/1.05 var(--serif); color:var(--ink);
+  text-shadow:0 1px 0 var(--paper2); }
+.title .thin{ display:block; font:500 clamp(.8rem,1.7vw,1.05rem)/1.3 var(--sans); color:var(--ink2); margin-top:.5rem; }
+
+/* mode switch (how the valley moves) */
+.modes{ display:flex; gap:.4rem; justify-content:center; align-items:center; flex-wrap:wrap;
+  padding:.45rem .5rem; background:var(--paper2); border-bottom:2px solid var(--line2); }
+.modes .ml{ font:800 .68rem/1 var(--sans); letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink2); opacity:.75; margin-right:.2rem; }
+.mode{ border:2px solid transparent; border-radius:9px; background:transparent; color:var(--ink);
+  cursor:pointer; min-height:44px; min-width:44px; padding:.4rem .55rem; font:800 .72rem/1 var(--sans);
+  display:flex; flex-direction:column; align-items:center; gap:.15rem; }
+.mode svg{ width:22px; height:22px; }
+.mode[aria-pressed="true"]{ border-color:var(--amber); background:var(--amber-pale); color:var(--amber-d); }
+body.night .mode[aria-pressed="true"]{ color:var(--lamp); }
+.mode:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+/* doors in the scene */
+#doors a{ cursor:pointer; -webkit-tap-highlight-color:transparent; }
+#doors a{ transition:transform .18s ease; transform-box:fill-box; transform-origin:center bottom; }
+#doors a:hover, #doors a:focus-visible{ transform:translateY(-6px); outline:none; }
+#doors a .win{ transition:fill .18s ease; }
+#doors a:hover .win, #doors a:focus-visible .win{ fill:var(--lit); }
+#doors a:focus-visible .halo{ opacity:1; }
+#doors .halo{ opacity:0; transition:opacity .18s ease; }
+#doors .lbl{ font:800 12px/1 var(--sans); fill:var(--ink); paint-order:stroke; stroke:var(--paper);
+  stroke-width:3px; stroke-linejoin:round; }
+#doors .lbl2{ font:700 10px/1 var(--sans); fill:var(--ink2); paint-order:stroke; stroke:var(--paper); stroke-width:3px; }
+
+/* moving parts (reduced-motion safe) */
+.spin{ transform-box:fill-box; transform-origin:center; animation:spin 60s linear infinite; }
+@keyframes spin{ to{ transform:rotate(360deg);} }
+.drift{ animation:drift 26s ease-in-out infinite alternate; }
+@keyframes drift{ from{ transform:translateX(0);} to{ transform:translateX(48px);} }
+.bob{ animation:bob 4.5s ease-in-out infinite alternate; }
+@keyframes bob{ from{ transform:translateY(0);} to{ transform:translateY(-5px);} }
+.shimmer{ animation:shim 3.2s ease-in-out infinite alternate; }
+@keyframes shim{ from{ opacity:.35;} to{ opacity:.85;} }
+@media (prefers-reduced-motion: reduce){
+  .spin,.drift,.bob,.shimmer{ animation:none !important; }
+}
+
+/* mode-conditional decoration */
+.only-river,.only-rail,.only-circuit{ display:none; }
+.scene.m-river .only-river{ display:inline; }
+.scene.m-rail  .only-rail { display:inline; }
+.scene.m-circuit .only-circuit{ display:inline; }
+
+/* ---- rooms list (below the fold, reliable nav) ---- */
+.rooms{ max-width:1000px; margin:0 auto; padding:1.4rem 1rem 3rem; }
+.rooms h2{ font:800 1.15rem/1.2 var(--serif); margin:.4rem 0 .2rem; }
+.rooms .lead{ font:400 .96rem/1.5 var(--sans); color:var(--ink2); margin:0 0 1rem; max-width:60ch; }
+.lane{ font:800 .72rem/1 var(--sans); letter-spacing:.14em; text-transform:uppercase; color:var(--amber-d);
+  border-bottom:2px solid var(--line2); padding-bottom:.45rem; margin:1.4rem 0 .8rem; }
+body.night .lane{ color:var(--lamp); }
+.grid{ display:grid; grid-template-columns:1fr; gap:.7rem; }
+@media(min-width:560px){ .grid{ grid-template-columns:1fr 1fr; } }
+@media(min-width:840px){ .grid{ grid-template-columns:1fr 1fr 1fr; } }
+.card{ display:flex; gap:.7rem; align-items:flex-start; text-decoration:none; color:inherit;
+  background:var(--paper2); border:2px solid var(--line2); border-radius:14px; padding:.8rem .9rem;
+  min-height:44px; transition:border-color .16s, transform .16s; }
+.card:hover, .card:focus-visible{ border-color:var(--amber); transform:translateY(-2px); outline:none; }
+.card:focus-visible{ box-shadow:0 0 0 3px var(--amber-pale); }
+@media (prefers-reduced-motion: reduce){ .card:hover,.card:focus-visible{ transform:none; } }
+.card .ic{ width:34px; height:34px; flex:none; margin-top:.1rem; }
+.card .ct{ font:800 1rem/1.2 var(--sans); }
+.card .cd{ font:400 .84rem/1.35 var(--sans); color:var(--ink2); margin-top:.15rem; }
+.card .soon{ font:800 .64rem/1 var(--sans); letter-spacing:.05em; text-transform:uppercase;
+  color:var(--roof); border:2px solid var(--roof); border-radius:6px; padding:.2rem .35rem; margin-top:.4rem; display:inline-block; }
+.note{ font:italic 400 .9rem/1.5 var(--serif); color:var(--ink2); margin:1.4rem 0 0; max-width:64ch; }
+.foot{ margin-top:1.6rem; padding-top:1rem; border-top:2px solid var(--line2);
+  font:600 .8rem/1.6 var(--sans); color:var(--ink2); }
+.sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <svg class="mk" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 4 C31 4 37 12 36 21 C35 30 27 35 19 34 C12 33 8 27 9 21 C10 16 15 13 20 14 C24 15 26 19 24 22" fill="none" stroke="var(--amber-d)" stroke-width="3" stroke-linecap="round"/></svg>
+  <span class="nm">The Tight Spiral</span>
+  <span class="sub">Play · Notice · Design</span>
+  <div class="knob">
+    <button class="kb" id="light" aria-label="Change the light: Day, Dusk, or Night">Dusk</button>
+  </div>
+</div>
+
+<div class="modes" role="group" aria-label="How the valley moves">
+  <span class="ml">How it moves</span>
+    <button class="mode" data-mode="river" aria-pressed="true" aria-label="River: streams converge">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3 C9 8 4 11 7 15 C10 19 5 21 7 22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M15 3 C17 7 13 10 15 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      River</button>
+    <button class="mode" data-mode="rail" aria-pressed="false" aria-label="Rail: a line of stations">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="4" y1="20" x2="20" y2="20" stroke="currentColor" stroke-width="2.2"/><line x1="7" y1="17" x2="7" y2="23" stroke="currentColor" stroke-width="2"/><line x1="12" y1="17" x2="12" y2="23" stroke="currentColor" stroke-width="2"/><line x1="17" y1="17" x2="17" y2="23" stroke="currentColor" stroke-width="2"/></svg>
+      Rail</button>
+    <button class="mode" data-mode="circuit" aria-pressed="false" aria-label="Circuit: current that loops and learns">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M3 12 h5 M16 12 h5 M12 3 v5 M12 16 v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      Circuit</button>
+</div>
+
+<div class="stage">
+  <div class="eyebrow">A one-person studio</div>
+  <h1 class="title">A valley you can read at a glance.<span class="thin">Every building is a real, working thing. Open one — or change how the whole place moves.</span></h1>
+
+  <svg class="scene m-river" id="scene" viewBox="0 0 1000 620" role="img" aria-label="A cut-paper valley. A winding path runs through it, and the studio's rooms sit along it as buildings you can open.">
+    <defs>
+      <filter id="lift" x="-20%" y="-20%" width="140%" height="150%">
+        <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#000" flood-opacity="0.22"/>
+      </filter>
+      <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="n"/>
+        <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .04 0"/></filter>
+    </defs>
+
+    <!-- sky -->
+    <rect x="0" y="0" width="1000" height="620" fill="var(--paper)"/>
+    <!-- sun / spiral -->
+    <g class="spin" style="transform-origin:830px 120px;">
+      <circle cx="830" cy="120" r="46" fill="var(--amber-pale)"/>
+      <path d="M830 86 C851 86 863 102 861 120 C859 138 843 148 828 146 C815 144 808 133 810 121 C812 111 821 106 830 108 C837 110 840 117 837 123" fill="none" stroke="var(--amber)" stroke-width="4" stroke-linecap="round"/>
+    </g>
+    <!-- clouds -->
+    <g class="drift" opacity="0.9"><ellipse cx="230" cy="95" rx="60" ry="20" fill="var(--paper2)"/><ellipse cx="285" cy="88" rx="42" ry="17" fill="var(--paper2)"/></g>
+    <g class="drift" style="animation-duration:34s;" opacity="0.75"><ellipse cx="560" cy="70" rx="48" ry="15" fill="var(--paper2)"/></g>
+
+    <!-- layered hills (cut paper) -->
+    <path d="M0 300 C160 250 300 285 460 265 C650 242 820 275 1000 255 L1000 620 L0 620 Z" fill="var(--hill1)" filter="url(#lift)"/>
+    <path d="M0 360 C180 320 340 360 520 340 C700 320 860 356 1000 330 L1000 620 L0 620 Z" fill="var(--hill2)"/>
+    <path d="M0 440 C200 405 360 440 560 425 C760 410 880 442 1000 425 L1000 620 L0 620 Z" fill="var(--hill3)"/>
+    <path d="M0 545 C220 515 420 548 640 535 C820 524 920 548 1000 540 L1000 620 L0 620 Z" fill="var(--fore)"/>
+
+    <!-- THE PATH (river / rail / circuit share a centerline) -->
+    <g>
+      <!-- river -->
+      <path class="only-river" d="M60 250 C200 300 150 360 320 400 C500 442 460 500 660 520 C800 534 900 560 1000 560" fill="none" stroke="var(--water2)" stroke-width="26" stroke-linecap="round" opacity="0.5"/>
+      <path class="only-river" d="M60 250 C200 300 150 360 320 400 C500 442 460 500 660 520 C800 534 900 560 1000 560" fill="none" stroke="var(--water)" stroke-width="18" stroke-linecap="round"/>
+      <path class="only-river shimmer" d="M90 262 C210 305 165 360 330 398 C505 438 470 496 665 516" fill="none" stroke="var(--paper2)" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+      <!-- rail -->
+      <path class="only-rail" d="M60 250 C200 300 150 360 320 400 C500 442 460 500 660 520 C800 534 900 560 1000 560" fill="none" stroke="var(--stone)" stroke-width="16" stroke-linecap="round" opacity="0.4"/>
+      <path class="only-rail" d="M60 250 C200 300 150 360 320 400 C500 442 460 500 660 520 C800 534 900 560 1000 560" fill="none" stroke="var(--amber-d)" stroke-width="4" stroke-dasharray="2 16" stroke-linecap="round"/>
+      <path class="only-rail" d="M64 262 C204 312 154 372 324 412 C504 454 464 512 664 532 C804 546 904 572 1000 572" fill="none" stroke="var(--amber-d)" stroke-width="3" stroke-linecap="round"/>
+      <path class="only-rail" d="M56 238 C196 288 146 348 316 388 C496 430 456 488 656 508 C796 522 896 548 1000 548" fill="none" stroke="var(--amber-d)" stroke-width="3" stroke-linecap="round"/>
+      <!-- circuit -->
+      <path class="only-circuit" d="M60 250 C200 300 150 360 320 400 C500 442 460 500 660 520 C800 534 900 560 1000 560" fill="none" stroke="var(--roof)" stroke-width="5" stroke-linecap="round"/>
+      <g class="only-circuit" fill="var(--amber)">
+        <circle cx="60" cy="250" r="7"/><circle cx="320" cy="400" r="7"/><circle cx="660" cy="520" r="7"/><circle cx="1000" cy="560" r="7"/>
+      </g>
+    </g>
+
+    <!-- the vehicle on the path -->
+    <g class="bob only-river" transform="translate(300 384)"><path d="M-18 6 L18 6 L12 16 L-12 16 Z" fill="var(--roof)"/><path d="M0 6 L0 -12 L14 -2 Z" fill="var(--paper2)" stroke="var(--roof)" stroke-width="1.5"/></g>
+    <g class="bob only-rail" transform="translate(300 384)"><rect x="-20" y="-16" width="34" height="20" rx="3" fill="var(--roof)"/><path d="M14 -10 h8 l6 8 v6 h-14 z" fill="var(--roof2)"/><circle cx="-10" cy="8" r="4" fill="var(--stone)"/><circle cx="6" cy="8" r="4" fill="var(--stone)"/><circle cx="22" cy="8" r="4" fill="var(--stone)"/></g>
+    <g class="bob only-circuit" transform="translate(300 384)"><circle cx="0" cy="0" r="12" fill="var(--lit)" opacity="0.5"/><circle cx="0" cy="0" r="6" fill="var(--amber)"/></g>
+
+    <!-- doors get injected here -->
+    <g id="doors"></g>
+  </svg>
+</div>
+
+<div class="rooms">
+  <h2>The rooms</h2>
+  <p class="lead">The same doors, as a plain list — so you never have to hunt the picture. Everything marked open is live right now.</p>
+  <div id="lanes"></div>
+
+  <p class="note">This is one place, not a menu. A river of writing games, a workbench of tools, the machine that runs the studio, and the magazine the students make. Pick the light that's easy on your eyes; change how the valley moves if the shape helps you think. If a door won't open, it isn't published yet — the studio pushes at the close of each session.</p>
+  <div class="foot">Tight Spiral Productions · walshero@gmail.com — Play · Notice · Design. Single file, no tracking. Built with a human in every loop.</div>
+</div>
+
+<script>
+"use strict";
+var $=function(id){return document.getElementById(id);};
+
+/* ---- comfort: Day / Dusk / Night (corner knob, not a gate) ---- */
+var stops=['day','dusk','night'], labels={day:'Day',dusk:'Dusk',night:'Night'}, next={day:'dusk',dusk:'night',night:'day'};
+var cur='dusk'; document.body.classList.add('dusk');
+$('light').addEventListener('click',function(){
+  document.body.classList.remove('day','dusk','night');
+  cur=next[cur]; if(cur!=='day') document.body.classList.add(cur);
+  this.textContent=labels[cur]; this.setAttribute('aria-label','Light is '+labels[cur]+'. Tap to change.');
+});
+/* honor OS light preference on first paint, without gating */
+try{ if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+  document.body.classList.remove('dusk'); document.body.classList.add('night'); cur='night'; $('light').textContent='Night';
+}}catch(e){}
+
+/* ---- mode: river / rail / circuit ---- */
+var ACC={river:'var(--water)',rail:'var(--amber-d)',circuit:'var(--roof)'};
+document.querySelectorAll('.mode').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.mode').forEach(function(x){x.setAttribute('aria-pressed','false');});
+    b.setAttribute('aria-pressed','true');
+    var m=b.dataset.mode;
+    var s=$('scene'); s.classList.remove('m-river','m-rail','m-circuit'); s.classList.add('m-'+m);
+    document.documentElement.style.setProperty('--accent',ACC[m]);
+  });
+});
+
+/* ---- the doors: real live surfaces, placed along the path ---- */
+var BASE='https://walshero.github.io/TIGHT-SPIRAL-STUDIOS/';
+var DOORS=[
+  {x:120,y:250,type:'lighthouse',t:'Start here',d:'What the studio is',url:BASE+'what-this-is.html',lane:'Find your feet',live:true},
+  {x:250,y:330,type:'wall',t:'Workshop Wall',d:'The writerly moves, labeled',url:BASE+'workshop-wall.html',lane:'The writing river',live:true},
+  {x:360,y:408,type:'bench',t:'Review Bench',d:'Turn four readers on a draft',url:BASE+'review-bench.html',lane:'The writing river',live:true},
+  {x:490,y:352,type:'sign',t:'Course River',d:'A semester you can read at a glance',url:BASE+'course-river.html',lane:'The writing river',live:true},
+  {x:560,y:470,type:'balloon',t:'Sandbags',d:'Cut a draft and watch it rise',url:BASE+'sandbags.html',lane:'The writing river',live:true},
+  {x:690,y:430,type:'arcade',t:'Choose Your Leader',d:'Judge what you were allowed to see',url:BASE+'choose-your-leader-full.html',lane:'The arcade',live:true},
+  {x:800,y:360,type:'factory',t:'Funnyboney Factory',d:'The executable forge',url:BASE+'funnyboney-factory.html',lane:'The arcade',live:true},
+  {x:905,y:300,type:'house',t:"The Elves' House",d:'Five rooms, five mechanisms',url:BASE+'elves-house.html',lane:'The arcade',live:true},
+  {x:150,y:470,type:'gear',t:'System Map',d:'See the gears turn',url:BASE+'tight-spiral-system-map.html',lane:'The machine',live:true},
+  {x:660,y:545,type:'office',t:'Lumière',d:'The magazine the students make',url:'https://www.lumierelitmag.com',lane:'The magazine',live:true,ext:true}
+];
+
+/* building glyphs — flat cut-paper shapes, a thin lift shadow, one lit window */
+function glyph(type){
+  switch(type){
+    case 'lighthouse': return '<rect x="-11" y="-10" width="22" height="8" rx="2" fill="var(--lamp)"/><path d="M-9 -2 L-13 42 L13 42 L9 -2 Z" fill="var(--paper2)" stroke="var(--stone)" stroke-width="2"/><path d="M-11 8 L11 8 M-12 22 L12 22 M-13 36 L13 36" stroke="var(--roof)" stroke-width="4"/><rect class="win" x="-5" y="12" width="10" height="10" rx="2" fill="var(--amber-pale)"/>';
+    case 'wall': return '<rect x="-24" y="-6" width="48" height="34" rx="3" fill="var(--fore)"/><path d="M-24 6 H24 M-8 -6 V6 M8 -6 V6 M-16 6 V28 M0 6 V28 M16 6 V28" stroke="var(--paper)" stroke-width="2.5"/><rect class="win" x="-6" y="-20" width="14" height="16" rx="2" fill="var(--amber-pale)" transform="rotate(-6)"/>';
+    case 'bench': return '<rect x="-22" y="2" width="44" height="7" rx="2" fill="var(--stone)"/><rect x="-22" y="-14" width="44" height="8" rx="2" class="win" fill="var(--amber-pale)"/><rect x="-18" y="9" width="6" height="16" fill="var(--stone)"/><rect x="12" y="9" width="6" height="16" fill="var(--stone)"/>';
+    case 'sign': return '<rect x="-3" y="-2" width="6" height="34" fill="var(--stone)"/><rect x="-22" y="-24" width="44" height="24" rx="3" class="win" fill="var(--amber-pale)" stroke="var(--water2)" stroke-width="2"/><path d="M-16 -12 C-8 -8 -4 -16 4 -12 C10 -9 14 -14 18 -12" fill="none" stroke="var(--water2)" stroke-width="2.4" stroke-linecap="round"/>';
+    case 'balloon': return '<path d="M0 -30 C16 -30 20 -12 8 2 L-8 2 C-20 -12 -16 -30 0 -30 Z" fill="var(--roof2)"/><path d="M0 -30 C10 -30 12 -14 4 0" fill="none" stroke="var(--paper2)" stroke-width="2" opacity="0.6"/><path d="M-6 2 L-4 14 M6 2 L4 14" stroke="var(--stone)" stroke-width="1.5"/><rect class="win" x="-9" y="14" width="18" height="12" rx="3" fill="var(--amber-pale)" stroke="var(--stone)" stroke-width="2"/>';
+    case 'arcade': return '<path d="M-20 -26 L20 -26 L26 40 L-26 40 Z" fill="var(--slate)"/><rect class="win" x="-14" y="-16" width="28" height="20" rx="3" fill="var(--lamp)"/><rect x="-14" y="10" width="28" height="8" rx="2" fill="var(--paper2)"/><circle cx="-6" cy="26" r="4" fill="var(--roof2)"/><circle cx="6" cy="26" r="4" fill="var(--amber)"/>';
+    case 'factory': return '<rect x="-26" y="-2" width="52" height="34" rx="2" fill="var(--stone)"/><path d="M-26 -2 L-14 -18 L-2 -2 M-2 -2 L10 -18 L22 -2" fill="var(--paper2)" stroke="var(--stone)" stroke-width="2"/><rect x="16" y="-30" width="8" height="30" fill="var(--roof)"/><rect class="win" x="-20" y="10" width="12" height="14" rx="1.5" fill="var(--amber-pale)"/><rect class="win" x="2" y="10" width="12" height="14" rx="1.5" fill="var(--amber-pale)"/>';
+    case 'house': return '<rect x="-20" y="-4" width="40" height="34" rx="2" fill="var(--fore)"/><path d="M-24 -4 L0 -26 L24 -4 Z" fill="var(--roof)"/><rect class="win" x="-13" y="4" width="12" height="12" rx="1.5" fill="var(--amber-pale)"/><rect class="win" x="3" y="4" width="12" height="12" rx="1.5" fill="var(--amber-pale)"/><rect x="-5" y="18" width="10" height="12" fill="var(--stone)"/>';
+    case 'gear': return '<circle cx="0" cy="6" r="18" fill="none" stroke="var(--slate)" stroke-width="7"/><g fill="var(--slate)"><rect x="-3" y="-16" width="6" height="8"/><rect x="-3" y="20" width="6" height="8"/><rect x="-24" y="3" width="8" height="6"/><rect x="16" y="3" width="8" height="6"/></g><circle class="win" cx="0" cy="6" r="6" fill="var(--amber-pale)"/>';
+    case 'office': return '<rect x="-18" y="-24" width="36" height="54" rx="2" fill="var(--slate)"/><rect class="win" x="-12" y="-18" width="10" height="10" fill="var(--lamp)"/><rect class="win" x="2" y="-18" width="10" height="10" fill="var(--lamp)"/><rect class="win" x="-12" y="-2" width="10" height="10" fill="var(--amber-pale)"/><rect class="win" x="2" y="-2" width="10" height="10" fill="var(--lamp)"/><rect x="-6" y="16" width="12" height="14" fill="var(--stone)"/><circle cx="0" cy="-30" r="5" fill="var(--lit)"/>';
+    default: return '<rect x="-16" y="-16" width="32" height="32" rx="3" fill="var(--stone)"/>';
+  }
+}
+
+(function buildDoors(){
+  var g=$('doors'); var svgns='http://www.w3.org/2000/svg';
+  DOORS.forEach(function(dr){
+    var a=document.createElementNS(svgns,'a');
+    a.setAttributeNS('http://www.w3.org/1999/xlink','href',dr.url);
+    a.setAttribute('href',dr.url); a.setAttribute('target','_blank'); a.setAttribute('rel','noopener');
+    a.setAttribute('aria-label',dr.t+' — '+dr.d+(dr.live?', opens in a new tab':', not published yet'));
+    var halo='<ellipse class="halo" cx="0" cy="8" rx="34" ry="12" fill="var(--lit)" opacity="0"/>';
+    var body='<g transform="translate('+dr.x+' '+dr.y+')" filter="url(#lift)">'+halo+glyph(dr.type)+'</g>';
+    var ly=dr.y+58;
+    var label='<text class="lbl" x="'+dr.x+'" y="'+ly+'" text-anchor="middle">'+dr.t+'</text>';
+    a.innerHTML=body+label;
+    g.appendChild(a);
+  });
+})();
+
+/* ---- rooms list, grouped by lane ---- */
+(function buildList(){
+  var lanes={}; var order=[];
+  DOORS.forEach(function(d){ if(!lanes[d.lane]){ lanes[d.lane]=[]; order.push(d.lane); } lanes[d.lane].push(d); });
+  var host=$('lanes'); var svg='<svg class="ic" viewBox="0 0 40 40" aria-hidden="true">';
+  order.forEach(function(name){
+    var h=document.createElement('div'); h.className='lane'; h.textContent=name; host.appendChild(h);
+    var grid=document.createElement('div'); grid.className='grid';
+    lanes[name].forEach(function(d){
+      var a=document.createElement('a'); a.className='card'; a.href=d.url;
+      a.target='_blank'; a.rel='noopener';
+      a.innerHTML='<svg class="ic" viewBox="0 0 44 60" aria-hidden="true"><g transform="translate(22 30)">'+glyph(d.type)+'</g></svg>'+
+        '<span><span class="ct">'+d.t+'</span><span class="cd">'+d.d+'</span>'+(d.ext?'<span class="cd" style="opacity:.7">lumierelitmag.com</span>':'')+(d.live?'':'<span class="soon">soon</span>')+'</span>';
+      grid.appendChild(a);
+    });
+    host.appendChild(grid);
+  });
+})();
+</script>
+</body>
+</html>

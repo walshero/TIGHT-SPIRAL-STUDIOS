@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Legibility Optimizer — Tight Spiral Studios</title>
+<style>
+  :root{
+    --paper:#f4efe6; --ink:#1b1712; --accent:#6e4700;
+    --card:#fbf8f2; --line:#c9bfae; --slip:#efe7d6; --shadow:rgba(30,22,12,.16);
+    --r-size:20px;
+    --r-lh:1.6;
+    --r-ls:0.02em;
+    --r-measure:66ch;
+    --r-weight:450;
+    --r-family:'Atkinson Hyperlegible','Segoe UI',system-ui,sans-serif;
+  }
+  [data-pal="soft"]{ --paper:#e6ddc9; --ink:#2b2013; --card:#efe7d3; --line:#bcae90; --slip:#ddd2b8; }
+  [data-pal="warm"]{ --paper:#2a2620; --ink:#f3e7cf; --accent:#e6b866; --card:#332e26;
+    --line:#5a5040; --slip:#3a342b; --shadow:rgba(0,0,0,.4); }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--r-family); padding:0 0 90px;}
+  header.top{background:var(--card); border-bottom:3px solid var(--accent); padding:22px 20px}
+  .wrap{max-width:860px; margin:0 auto; padding:0 20px}
+  h1{font-size:1.7rem; margin:.1em 0 .1em}
+  .sub{margin:0; font-size:1rem}
+  .layout{display:grid; grid-template-columns:1fr; gap:20px; margin-top:20px}
+  @media(min-width:820px){ .layout{grid-template-columns:340px 1fr} }
+  .panel{background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:18px; box-shadow:0 2px 6px var(--shadow); align-self:start}
+  .panel h2{font-size:1.15rem; margin:0 0 .2em; border-bottom:2px solid var(--line); padding-bottom:.3em}
+  .ctrl{margin:16px 0}
+  .ctrl label{display:block; font-weight:700; font-size:.95rem; margin-bottom:6px}
+  .ctrl .val{font-weight:400; color:var(--accent); font-variant-numeric:tabular-nums}
+  .why{font-size:.82rem; margin:4px 0 0; opacity:.9}
+  input[type=range]{width:100%; height:44px; accent-color:var(--accent); cursor:pointer}
+  input[type=range]:focus-visible{outline:3px solid var(--accent); outline-offset:3px}
+  .segset{display:flex; gap:6px; flex-wrap:wrap}
+  .segset button{min-height:44px; min-width:44px; flex:1; padding:8px 10px; font-size:.9rem;
+    background:var(--paper); color:var(--ink); border:2px solid var(--accent); border-radius:8px;
+    cursor:pointer; font-weight:600; font-family:inherit}
+  .segset button[aria-pressed="true"]{background:var(--accent); color:var(--paper)}
+  .segset button:focus-visible{outline:3px solid var(--ink); outline-offset:2px}
+  .reset{min-height:44px; width:100%; margin-top:8px; padding:10px; background:var(--paper);
+    color:var(--accent); border:2px solid var(--accent); border-radius:8px; font-weight:700;
+    cursor:pointer; font-family:inherit}
+  .sample{background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:24px 26px}
+  .sample .reader{
+    max-width:var(--r-measure);
+    font-size:var(--r-size); line-height:var(--r-lh);
+    letter-spacing:var(--r-ls); font-weight:var(--r-weight);
+  }
+  .sample h3{font-size:1.3rem; margin:0 0 .5em}
+  .sample p{margin:0 0 1em}
+  .glyphtest{font-weight:var(--r-weight); letter-spacing:var(--r-ls);
+    font-size:calc(var(--r-size) + 2px); background:var(--slip); padding:10px 14px;
+    border-radius:8px; margin-top:12px; display:inline-block}
+  .foot{margin-top:24px; padding:18px 20px; background:var(--ink); color:var(--paper);
+    border-radius:12px; font-size:.85rem}
+  [data-pal="warm"] .foot{background:#12100c}
+  .foot a{color:var(--accent); font-weight:700}
+  .cite{font-size:.8rem; opacity:.85; margin-top:6px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <h1>The Legibility Optimizer</h1>
+    <p class="sub">Not a tone picker. It tunes the whole reading surface to your eye. Move a control — the text below changes live.</p>
+  </div>
+</header>
+
+<div class="wrap">
+<div class="layout">
+
+  <div class="panel" role="group" aria-label="Reading controls">
+    <h2>Tune the surface</h2>
+
+    <div class="ctrl">
+      <label for="size">Text size <span class="val" id="size-v">20px</span></label>
+      <input type="range" id="size" min="16" max="40" step="1" value="20"
+        aria-describedby="size-why">
+      <p class="why" id="size-why">Low-vision floor is 18–20px; 24px+ often preferred.</p>
+    </div>
+
+    <div class="ctrl">
+      <label for="lh">Line spacing <span class="val" id="lh-v">1.6</span></label>
+      <input type="range" id="lh" min="1.3" max="2.2" step="0.05" value="1.6"
+        aria-describedby="lh-why">
+      <p class="why" id="lh-why">WCAG floor 1.5; low-vision comfort runs 1.5–2 to avoid crowding and find the next line.</p>
+    </div>
+
+    <div class="ctrl">
+      <label for="ls">Letter spacing <span class="val" id="ls-v">0.02em</span></label>
+      <input type="range" id="ls" min="0" max="0.12" step="0.01" value="0.02"
+        aria-describedby="ls-why">
+      <p class="why" id="ls-why">WCAG spacing supports up to 0.12&times; font size; separates crowded letters.</p>
+    </div>
+
+    <div class="ctrl">
+      <label for="measure">Line length <span class="val" id="measure-v">66 char</span></label>
+      <input type="range" id="measure" min="45" max="90" step="1" value="66"
+        aria-describedby="measure-why">
+      <p class="why" id="measure-why">60–80 characters reads most comfortably; shorter is easier to track back.</p>
+    </div>
+
+    <div class="ctrl">
+      <label for="weight">Weight <span class="val" id="weight-v">450</span></label>
+      <input type="range" id="weight" min="400" max="700" step="50" value="450"
+        aria-describedby="weight-why">
+      <p class="why" id="weight-why">Even, moderate stroke reads best; very heavy can close up apertures.</p>
+    </div>
+
+    <div class="ctrl">
+      <label id="pal-label">Palette / contrast</label>
+      <div class="segset" role="group" aria-labelledby="pal-label">
+        <button data-pal="soft" aria-pressed="false">Softer</button>
+        <button data-pal="default" aria-pressed="true">Default</button>
+        <button data-pal="warm" aria-pressed="false">Warm-dark</button>
+      </div>
+      <p class="why">Warm-dark is amber on charcoal — never pure black/white, which glares.</p>
+    </div>
+
+    <button class="reset" id="reset">Reset to research defaults</button>
+  </div>
+
+  <div>
+    <div class="sample">
+      <div class="reader">
+        <h3>Read this at your own setting</h3>
+        <p>The optimizer is not a comfort add-on. It is part of the accessibility floor. A reading surface that cannot be tuned to the individual eye is a surface that quietly fails some readers — measured in a hundredth of an em of letter-spacing, a few points of size, and a line-height value set once and never revisited.</p>
+        <p>Move the controls until this paragraph feels effortless to you. Your eyes are the verdict, not the numbers. When it reads without strain, that is the setting the studio should ship for you — and one day, adapt to automatically.</p>
+        <div class="glyphtest">Illlegible? 1 l I &middot; 0 O o &middot; b d p q &middot; c e o a</div>
+      </div>
+    </div>
+
+    <div class="foot">
+      <strong>The Legibility Optimizer</strong> — a Human-in-the-Loop Productions floor component.<br>
+      Tight Spiral Studios &middot; walshero@gmail.com<br>
+      How the studio works: <a href="tight-spiral-system-map.html">tight-spiral-system-map.html</a>
+      <div class="cite">Defaults grounded in: WCAG 1.4.12 Text Spacing (line 1.5, letter 0.12&times;, word 0.16&times;); low-vision typography research (APH, Braille Institute Atkinson Hyperlegible, Arditi); 60–80 char measure. Prototype 2026-07-01 — ranges are evidence-based, the exact ship defaults are still Matt's-eyes-verdict.</div>
+      <hr style="border-color:var(--accent);opacity:.4;margin:12px 0">
+      <em>How this was made:</em> Built from the founder's correction that the "Comfort" control was mis-scoped as tone — it is a full legibility engine. Claude pulled the readability literature first, then set defaults from it rather than guessing. Human-in-the-loop move: the founder reframed the control and chose to implement now with research-grounded defaults, eyes as final verdict.
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+  var root=document.documentElement;
+  function bind(id,varName,fmt){
+    var el=document.getElementById(id), out=document.getElementById(id+'-v');
+    el.addEventListener('input',function(){
+      var v=el.value; root.style.setProperty(varName, fmt.unit(v));
+      out.textContent=fmt.label(v);
+    });
+  }
+  bind('size','--r-size',{unit:function(v){return v+'px'},label:function(v){return v+'px'}});
+  bind('lh','--r-lh',{unit:function(v){return v},label:function(v){return v}});
+  bind('ls','--r-ls',{unit:function(v){return v+'em'},label:function(v){return v+'em'}});
+  bind('measure','--r-measure',{unit:function(v){return v+'ch'},label:function(v){return v+' char'}});
+  bind('weight','--r-weight',{unit:function(v){return v},label:function(v){return v}});
+
+  document.querySelectorAll('.segset button').forEach(function(b){
+    b.addEventListener('click',function(){
+      var p=b.getAttribute('data-pal');
+      if(p==='default'){root.removeAttribute('data-pal');}
+      else{root.setAttribute('data-pal',p);}
+      document.querySelectorAll('.segset button').forEach(function(x){
+        x.setAttribute('aria-pressed', x===b?'true':'false');
+      });
+    });
+  });
+
+  document.getElementById('reset').addEventListener('click',function(){
+    var d={size:'20',lh:'1.6',ls:'0.02',measure:'66',weight:'450'};
+    for(var k in d){ document.getElementById(k).value=d[k];
+      document.getElementById(k).dispatchEvent(new Event('input')); }
+    root.removeAttribute('data-pal');
+    document.querySelectorAll('.segset button').forEach(function(x){
+      x.setAttribute('aria-pressed', x.getAttribute('data-pal')==='default'?'true':'false');
+    });
+    window.scrollTo(0,0);
+  });
+
+  window.scrollTo(0,0);
+</script>
+</body>
+</html>

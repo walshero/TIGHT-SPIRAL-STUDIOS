@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en" data-stop="default" data-bigtext="off">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tight Spiral Studios — The River</title>
+<!-- TSP-META
+{
+  "file": "studio-river.html",
+  "is": "the studio front door: a moving river past three docks",
+  "stage": "7 — Ship & Canonize",
+  "harvest": "Proved the front door can be a running system: arrival to any shipped thing in two taps, with the whole shelf visible as docks instead of a file list.",
+  "medium_gate": "Lane A cut-paper SVG — animates natively, fully offline, zero sourcing",
+  "hitl": "Layout, copy, dock curation, palette stops, and motion behavior all human-decided; no generated assets in this file",
+  "supersedes": "tight-spiral-studio-face.html as front door (the desk remains live as a room)",
+  "floors": ["visibility ink==ink2", "3-stop palette visibly distinct", "no green structural", "44px targets", "keyboard + focus rings", "reduced-motion respected with replay", "18px+ type", "offline single-file"]
+}
+-->
+<style>
+  /* ============ PALETTE STOPS — every stop passes the floor on its own ============ */
+  html[data-stop="default"] {
+    --paper: #f4efe6;
+    --ink: #1c1712;
+    --ink2: #1c1712;            /* ink2 == ink, always */
+    --card: #fbf7ee;
+    --card-edge: #c9a876;
+    --river-deep: #24586e;
+    --river-mid: #2f7292;
+    --river-foam: #bfdbe8;
+    --pier: #8a6a3d;
+    --gold-bg: #6e4700;
+    --gold-ink: #fff6e0;
+    --focus: #8a5a00;
+    --foot-bg: #241d15;
+    --foot-ink: #f0e6d2;
+  }
+  html[data-stop="softer"] {
+    --paper: #e6ddc9;
+    --ink: #221a10;
+    --ink2: #221a10;
+    --card: #efe6d2;
+    --card-edge: #b4945e;
+    --river-deep: #2b5468;
+    --river-mid: #38708c;
+    --river-foam: #aac6d2;
+    --pier: #7c5f36;
+    --gold-bg: #6e4700;
+    --gold-ink: #fff6e0;
+    --focus: #8a5a00;
+    --foot-bg: #241d15;
+    --foot-ink: #ede2cc;
+  }
+  html[data-stop="warmdark"] {
+    --paper: #2a241c;
+    --ink: #f0dcae;
+    --ink2: #f0dcae;
+    --card: #352d22;
+    --card-edge: #7a6338;
+    --river-deep: #142c38;
+    --river-mid: #1e4454;
+    --river-foam: #6f97a8;
+    --pier: #c9a876;
+    --gold-bg: #e3b458;
+    --gold-ink: #241d15;
+    --focus: #f5c96b;
+    --foot-bg: #17120c;
+    --foot-ink: #f0dcae;
+  }
+
+  html[data-bigtext="on"] { font-size: 115%; }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 1.25rem;           /* 20px base */
+    line-height: 1.6;
+  }
+
+  a, button { color: inherit; }
+
+  a:focus-visible, button:focus-visible {
+    outline: 4px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  .skip {
+    position: absolute; left: -999px; top: 0;
+    background: var(--gold-bg); color: var(--gold-ink);
+    padding: 14px 20px; z-index: 50; font-weight: 700;
+    text-decoration: none;
+  }
+  .skip:focus { left: 12px; top: 12px; }
+
+  /* ============ BRAND BAR ============ */
+  .brandbar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 3px solid var(--card-edge);
+  }
+  .brandbar svg { flex: none; }
+  .brandbar strong { font-size: 1.15rem; letter-spacing: 0.02em; }
+
+  /* ============ CONTROLS (corner, never a gate) ============ */
+  .controls {
+    position: sticky; top: 0; z-index: 40;
+    display: flex; gap: 10px; justify-content: flex-end;
+    padding: 10px 14px;
+    background: var(--paper);
+  }
+  .ctl {
+    min-height: 48px; min-width: 48px;
+    padding: 10px 18px;
+    font-size: 1.05rem; font-weight: 700;
+    background: var(--gold-bg); color: var(--gold-ink);
+    border: none; border-radius: 10px;
+    cursor: pointer;
+  }
+
+  /* ============ HERO: THE RIVER ============ */
+  .hero {
+    position: relative;
+    padding: 40px 20px 0;
+    max-width: 680px; margin: 0 auto;
+    text-align: center;
+  }
+  .hero h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 2.6rem;
+    line-height: 1.15;
+    margin: 0 0 10px;
+    letter-spacing: 0.01em;
+  }
+  .hero p.sub {
+    font-size: 1.25rem;
+    margin: 0 auto 8px;
+    max-width: 34ch;
+  }
+
+  .waterbox {
+    position: relative;
+    height: 150px;
+    overflow: hidden;
+    margin-top: 18px;
+    border-radius: 14px 14px 0 0;
+  }
+  .wave {
+    position: absolute; left: 0; width: 200%;
+    height: 100%;
+    animation: drift 14s linear infinite;
+  }
+  .wave.back { animation-duration: 22s; opacity: 0.85; }
+  .wave.front { animation-duration: 11s; }
+  @keyframes drift {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  .boat {
+    position: absolute; bottom: 52px; left: -80px;
+    animation: sail 26s linear infinite;
+  }
+  @keyframes sail {
+    0%   { transform: translateX(0) rotate(-2deg); }
+    50%  { transform: translateX(48vw) rotate(2deg); }
+    100% { transform: translateX(110vw) rotate(-2deg); }
+  }
+  html.paused .wave, html.paused .boat { animation-play-state: paused; }
+
+  /* ============ DOCKS ============ */
+  main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 10px 20px 60px;
+    position: relative;
+  }
+  /* the current: a slim animated channel connecting the docks */
+  .current {
+    position: absolute; left: 6px; top: 0; bottom: 0;
+    width: 10px; border-radius: 5px;
+    background: repeating-linear-gradient(
+      180deg,
+      var(--river-mid) 0 26px,
+      var(--river-foam) 26px 34px
+    );
+    background-size: 100% 60px;
+    animation: flow 3.5s linear infinite;
+  }
+  @keyframes flow {
+    from { background-position: 0 0; }
+    to   { background-position: 0 60px; }
+  }
+  html.paused .current { animation-play-state: paused; }
+
+  .dock {
+    margin: 44px 0 0 34px;
+  }
+  .dock h2 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.7rem;
+    margin: 0 0 4px;
+    padding-bottom: 6px;
+    border-bottom: 4px solid var(--pier);
+    display: inline-block;
+  }
+  .dock p.docknote {
+    margin: 6px 0 18px;
+    font-size: 1.1rem;
+  }
+
+  .card {
+    display: block;
+    background: var(--card);
+    border: 2px solid var(--card-edge);
+    border-left: 10px solid var(--pier);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin: 0 0 14px;
+    min-height: 64px;
+    text-decoration: none;
+  }
+  .card:hover { border-left-color: var(--river-mid); }
+  .card .t {
+    font-size: 1.3rem;
+    font-weight: 800;
+    display: block;
+  }
+  .card .d {
+    font-size: 1.05rem;
+    font-weight: 400;
+    display: block;
+    margin-top: 2px;
+    color: var(--ink2);   /* == ink; captions differ by size and weight only */
+  }
+
+  /* ============ FOOTER ============ */
+  .studiofoot {
+    background: var(--foot-bg);
+    color: var(--foot-ink);
+    padding: 34px 22px 44px;
+    text-align: center;
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+  .studiofoot a {
+    color: var(--foot-ink);
+    font-weight: 700;
+    text-underline-offset: 3px;
+  }
+  .studiofoot .made {
+    max-width: 52ch; margin: 14px auto 0;
+  }
+
+  .srlive {
+    position: absolute; width: 1px; height: 1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wave, .boat, .current { animation-play-state: paused; }
+  }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#docks">Skip to the docks</a>
+
+<header class="brandbar">
+  <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
+    <path d="M17 17 m0 -1 a1 1 0 0 1 1 1 a2.4 2.4 0 0 1 -2.4 2.4 a4.2 4.2 0 0 1 -4.2 -4.2 a6.6 6.6 0 0 1 6.6 -6.6 a9.4 9.4 0 0 1 9.4 9.4 a12.6 12.6 0 0 1 -12.6 12.6 a15 15 0 0 1 -13.9 -9.4"
+      fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+  </svg>
+  <strong>Tight Spiral Studios</strong>
+</header>
+
+<div class="controls">
+  <button class="ctl" id="motionBtn" type="button">Pause the water</button>
+  <button class="ctl" id="textBtn" type="button" aria-pressed="false">Bigger text</button>
+  <button class="ctl" id="paletteBtn" type="button">Palette: Default</button>
+</div>
+<div class="srlive" aria-live="polite" id="announce"></div>
+
+<section class="hero">
+  <h1>The river runs past every dock.</h1>
+  <p class="sub">Everything the studio has shipped is downstream from here. Step off where you like.</p>
+
+  <div class="waterbox" aria-hidden="true">
+    <svg class="wave back" viewBox="0 0 1200 150" preserveAspectRatio="none">
+      <path d="M0,70 C100,40 200,100 300,70 C400,40 500,100 600,70 C700,40 800,100 900,70 C1000,40 1100,100 1200,70 L1200,150 L0,150 Z"
+        fill="var(--river-deep)"/>
+    </svg>
+    <svg class="boat" width="72" height="52" viewBox="0 0 72 52">
+      <path d="M8 34 L64 34 L54 48 L18 48 Z" fill="var(--card)" stroke="var(--card-edge)" stroke-width="2"/>
+      <path d="M36 6 L36 32 M36 8 L54 26 L36 26 Z" fill="var(--pier)" stroke="var(--pier)" stroke-width="2"/>
+    </svg>
+    <svg class="wave front" viewBox="0 0 1200 150" preserveAspectRatio="none">
+      <path d="M0,100 C80,80 160,120 240,100 C320,80 400,120 480,100 C560,80 640,120 720,100 C800,80 880,120 960,100 C1040,80 1120,120 1200,100 L1200,150 L0,150 Z"
+        fill="var(--river-mid)"/>
+      <path d="M0,104 C80,86 160,122 240,104 C320,86 400,122 480,104 C560,86 640,122 720,104 C800,86 880,122 960,104 C1040,86 1120,122 1200,104"
+        fill="none" stroke="var(--river-foam)" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+  </div>
+</section>
+
+<main id="docks">
+  <div class="current" aria-hidden="true"></div>
+
+  <section class="dock" aria-labelledby="d1">
+    <h2 id="d1">Games on the Shelf</h2>
+    <p class="docknote">Playable, offline, single files. Tap one and it opens.</p>
+
+    <a class="card" href="choose-your-leader-full.html">
+      <span class="t">Choose Your Leader</span>
+      <span class="d">You judge what you were allowed to see.</span>
+    </a>
+    <a class="card" href="sandbags.html">
+      <span class="t">Sandbags</span>
+      <span class="d">Cut weight, gain altitude. Flash fiction compression.</span>
+    </a>
+    <a class="card" href="course-river.html">
+      <span class="t">The Course River</span>
+      <span class="d">A whole course, navigable instead of scrollable.</span>
+    </a>
+    <a class="card" href="workshop-wall.html">
+      <span class="t">Workshop Wall</span>
+      <span class="d">Peer response with the moves made visible.</span>
+    </a>
+    <a class="card" href="review-bench.html">
+      <span class="t">Review Bench</span>
+      <span class="d">Practice the three reader roles before the real thing.</span>
+    </a>
+    <a class="card" href="play-the-semester-flash.html">
+      <span class="t">The Playable Semester</span>
+      <span class="d">The flash fiction unit as one connected run.</span>
+    </a>
+    <a class="card" href="en195-last-week.html">
+      <span class="t">What Counts Now</span>
+      <span class="d">Week-six clarity: what is left, what it earns.</span>
+    </a>
+  </section>
+
+  <section class="dock" aria-labelledby="d2">
+    <h2 id="d2">Papers &amp; Presentations</h2>
+    <p class="docknote">The thinking behind the builds, written down.</p>
+
+    <a class="card" href="the-compound-capstone.html">
+      <span class="t">The Compound Capstone</span>
+      <span class="d">How a humanist designs systems. Adaptive to the reader.</span>
+    </a>
+    <a class="card" href="paper-1-draft.html">
+      <span class="t">Paper One</span>
+      <span class="d">First paper in the series. Draft on the bench.</span>
+    </a>
+    <a class="card" href="what-this-is.html">
+      <span class="t">What This Is</span>
+      <span class="d">The studio explained to someone just arriving.</span>
+    </a>
+    <a class="card" href="tight-spiral-system-map.html">
+      <span class="t">How the Studio Works</span>
+      <span class="d">The gears: every component and how they mesh.</span>
+    </a>
+  </section>
+
+  <section class="dock" aria-labelledby="d3">
+    <h2 id="d3">Tools &amp; Assets</h2>
+    <p class="docknote">The machinery the studio runs on. All live.</p>
+
+    <a class="card" href="the-bridge.html">
+      <span class="t">The Bridge</span>
+      <span class="d">Open a session, close a session. Both ends of the day.</span>
+    </a>
+    <a class="card" href="props-room.html">
+      <span class="t">The Props Room</span>
+      <span class="d">Reusable parts, served before anything is hand-built.</span>
+    </a>
+    <a class="card" href="studio-eyes-auditor.html">
+      <span class="t">Studio Eyes</span>
+      <span class="d">The ship gate. Paste a build, get PASS or HALT.</span>
+    </a>
+    <a class="card" href="palette-chooser.html">
+      <span class="t">Palette Chooser</span>
+      <span class="d">Live swatches for the open A/B/C palette call.</span>
+    </a>
+    <a class="card" href="studio-intake.html">
+      <span class="t">Studio Intake</span>
+      <span class="d">The interview that starts every collaboration.</span>
+    </a>
+    <a class="card" href="tight-spiral-studio-face.html">
+      <span class="t">The Work Desk</span>
+      <span class="d">The old front door, still open. Now it is a room.</span>
+    </a>
+  </section>
+</main>
+
+<footer class="studiofoot">
+  <svg width="30" height="30" viewBox="0 0 34 34" aria-hidden="true">
+    <path d="M17 17 m0 -1 a1 1 0 0 1 1 1 a2.4 2.4 0 0 1 -2.4 2.4 a4.2 4.2 0 0 1 -4.2 -4.2 a6.6 6.6 0 0 1 6.6 -6.6 a9.4 9.4 0 0 1 9.4 9.4 a12.6 12.6 0 0 1 -12.6 12.6 a15 15 0 0 1 -13.9 -9.4"
+      fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+  </svg>
+  <div>Tight Spiral Studios &middot; walshero@gmail.com</div>
+  <div><a href="tight-spiral-system-map.html">How the studio works</a></div>
+  <p class="made">How it was made: designed and curated by a human founder; layout, copy, dock selection, palette stops, and motion behavior are founder decisions. Built as cut-paper SVG, fully offline, in one file. No generated assets. Play. Notice. Design.</p>
+</footer>
+
+<script>
+  // Scroll reset
+  window.scrollTo(0, 0);
+
+  var html = document.documentElement;
+  var announce = document.getElementById('announce');
+
+  // ---- Palette: corner button cycles stops by name; never a gate ----
+  var stops = [
+    { key: 'default',  name: 'Default' },
+    { key: 'softer',   name: 'Softer' },
+    { key: 'warmdark', name: 'Warm dark' }
+  ];
+  var stopIx = 0;
+  var paletteBtn = document.getElementById('paletteBtn');
+  paletteBtn.addEventListener('click', function () {
+    stopIx = (stopIx + 1) % stops.length;
+    html.setAttribute('data-stop', stops[stopIx].key);
+    paletteBtn.textContent = 'Palette: ' + stops[stopIx].name;
+    announce.textContent = 'Palette set to ' + stops[stopIx].name;
+  });
+
+  // ---- Bigger text toggle ----
+  var textBtn = document.getElementById('textBtn');
+  textBtn.addEventListener('click', function () {
+    var on = html.getAttribute('data-bigtext') === 'on';
+    html.setAttribute('data-bigtext', on ? 'off' : 'on');
+    textBtn.setAttribute('aria-pressed', String(!on));
+    textBtn.textContent = on ? 'Bigger text' : 'Regular text';
+    announce.textContent = on ? 'Text set to regular size' : 'Text set to larger size';
+  });
+
+  // ---- Motion: joy defaults ON, replay control always present,
+  //      reduced-motion users start paused and may opt in ----
+  var motionBtn = document.getElementById('motionBtn');
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function setPaused(paused) {
+    html.classList.toggle('paused', paused);
+    motionBtn.textContent = paused ? 'Let it flow' : 'Pause the water';
+    announce.textContent = paused ? 'Water paused' : 'Water flowing';
+  }
+  setPaused(reduced);
+  motionBtn.addEventListener('click', function () {
+    setPaused(!html.classList.contains('paused'));
+  });
+</script>
+
+</body>
+</html>
