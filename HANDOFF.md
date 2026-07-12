@@ -25,6 +25,16 @@ away. Never opened.
 
 ---
 
+## BUILD SPEC IS WRITTEN: see `RESOLVE-CANON-SPEC.md` (in this repo).
+
+## KILL THE HOURLY ALARM FIRST
+Scheduled task **"Studio Integrity Guard — weekly sweep"** has cron `0 * * * *` = **hourly**.
+Six firings, six `BLOCKED` reports, **zero completed checks** — it cannot fetch
+`walshero.github.io` (host not authorized for WebFetch). **It is not a guard that fires too
+often; it is a guard that has never worked, alarming hourly about its own inability to work.**
+**DELETE IT** (Claude app → Settings → Tasks). Rebuild as a GitHub Action — runs inside the repo,
+no WebFetch needed. `floor.yml` is the pattern.
+
 ## THE FIX (one action, one gate)
 
 ### `resolve_canon(name)` — a Zapier code action
