@@ -191,9 +191,16 @@ def audit():
     # exact disease this whole day was spent curing. GIT IS AUTHORITATIVE. Use it.
     repo_files = set()
     try:
-        out_ls = subprocess.run(["git", "ls-tree", "--name-only", "origin/main"],
+        # BUG FOUND 2026-07-13: this ls-tree was NOT recursive (-r missing). It read only the
+        # repo ROOT, so every file living in /studio, /archive, /writerly-moves, /rescued was
+        # invisible — 267 real files seen as 85, and 47 files that ARE deployed were reported
+        # as shelf-only ORPHANS. Same disease as the Contents-API bug it replaced: an audit
+        # that lies, just quieter. A file has a home if it lives ANYWHERE in the tree; match
+        # on BASENAME, not on root-level path.
+        out_ls = subprocess.run(["git", "ls-tree", "-r", "--name-only", "origin/main"],
                                 capture_output=True, text=True, timeout=30)
-        repo_files = {l.strip() for l in out_ls.stdout.splitlines() if l.strip()}
+        repo_paths = {l.strip() for l in out_ls.stdout.splitlines() if l.strip()}
+        repo_files = {os.path.basename(p) for p in repo_paths}
     except Exception:
         pass
     if not repo_files:                      # git unavailable: FAIL LOUD, never guess
