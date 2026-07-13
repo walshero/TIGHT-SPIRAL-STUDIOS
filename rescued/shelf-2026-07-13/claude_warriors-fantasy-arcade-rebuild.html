@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Warriors Fantasy Arcade — Tight Spiral Productions</title>
+<!--
+  WARRIORS FANTASY ARCADE v1 (MVP — mechanic prototype, allowed to look plain, built to be FUN)
+  Tight Spiral Productions · walshero@gmail.com · Play. Notice. Design.
+  Matt vs. Evan. $100 auction. 14-team-league rules baked in. Single-file, offline, in-memory.
+  PRACTICE POOL: player values are game values for calibration training, not real rankings.
+  Update the pool before the real draft. Yahoo live sync = v2 (needs a backend; stubbed).
+  TSP-META at end of file.
+-->
+<style>
+:root{--paper:#faf5ec;--ink:#211d18;--card:#fffdf7;--edge:#d8cfbe;--gold:#a8791f;
+--green:#2e6b46;--red:#8a4030;--blue:#1f5fa8;--dim:#5a5348;}
+body.softer{--paper:#f3ecdd;--ink:#2c2721;--card:#faf4e6;--edge:#d3c8b2;}
+body.warm{--paper:#26221c;--ink:#ecc57a;--card:#2f2a22;--edge:#4a4234;--dim:#c9a967;
+--green:#8fce9f;--red:#e09a7c;--gold:#e0b45c;--blue:#7fb4e8;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:"Iowan Old Style",Palatino,Georgia,serif;
+font-size:18px;line-height:1.5;min-height:100vh}
+.wrap{max-width:600px;margin:0 auto;padding:14px 14px 50px}
+h1{font-size:1.7rem;line-height:1.15}h2{font-size:1.3rem}
+h1:focus,h2:focus{outline:none}
+button{font-family:inherit;font-size:1rem;color:var(--ink);background:var(--card);
+border:2px solid var(--ink);border-radius:10px;min-height:48px;padding:10px 14px;cursor:pointer}
+button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+button.primary{background:var(--ink);color:var(--paper);font-weight:700}
+body.warm button.primary{background:var(--gold);color:#26221c;border-color:var(--gold)}
+button.ghost{border-color:var(--edge);color:var(--dim);background:transparent;min-height:44px}
+button:disabled{opacity:.4;cursor:default}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.bar .money{font-weight:700}
+.podium{background:var(--card);border:2px solid var(--edge);border-radius:14px;padding:14px;margin:10px 0;text-align:center}
+.pname{font-size:1.5rem;font-weight:700}
+.ppos{color:var(--dim);margin-bottom:4px}
+.sleeper{display:inline-block;border:2px solid var(--gold);color:var(--gold);border-radius:6px;
+padding:1px 8px;font-size:.8rem;font-weight:700;letter-spacing:.06em}
+.scout{font-style:italic;color:var(--dim);margin:8px 0;font-size:.95rem}
+.bid{font-size:2.2rem;font-weight:700;margin:6px 0}
+.bidwho{color:var(--dim);font-size:.95rem;margin-bottom:10px}
+.bidrow{display:flex;gap:10px;justify-content:center}
+.bidrow button{flex:1;max-width:130px;font-weight:700}
+.turnline{background:var(--card);border-left:5px solid var(--gold);padding:8px 12px;
+border-radius:0 10px 10px 0;margin:10px 0;font-weight:700}
+.board{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.pcard{background:var(--card);border:2px solid var(--edge);border-radius:10px;padding:8px 10px;
+text-align:left;min-height:56px;font-size:.92rem;line-height:1.3}
+.pcard b{display:block}
+.pcard.gone{opacity:.35;text-decoration:line-through}
+.rosters{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ros{background:var(--card);border:2px solid var(--edge);border-radius:10px;padding:8px 10px;font-size:.88rem}
+.ros h3{font-size:1rem;border-bottom:2px solid var(--edge);padding-bottom:4px;margin-bottom:4px}
+.ros li{list-style:none;display:flex;justify-content:space-between}
+.chatbar{margin:12px 0}
+.chatline{background:var(--card);border:2px dashed var(--edge);border-radius:10px;padding:8px 12px;
+min-height:40px;font-style:italic;margin-bottom:6px}
+.chatbtns{display:flex;gap:8px;flex-wrap:wrap}
+.chatbtns button{flex:1;min-width:120px;font-size:.85rem;min-height:44px}
+.screen{display:none}.screen.on{display:block}
+.grade{background:var(--card);border:2px solid var(--edge);border-radius:12px;padding:12px 14px;margin:10px 0}
+.super{font-weight:700;color:var(--gold)}
+.winner{font-size:1.5rem;font-weight:700;text-align:center;margin:14px 0;color:var(--green)}
+.burst{position:relative;height:60px;overflow:hidden}
+.burst span{position:absolute;width:12px;height:18px;border-radius:2px;opacity:0}
+.burst.go span{animation:fall 1.4s ease-out forwards}
+@keyframes fall{0%{opacity:1;transform:translateY(-30px) rotate(0)}100%{opacity:0;transform:translateY(56px) rotate(200deg)}}
+@media(prefers-reduced-motion:reduce){.burst.go span{animation:none;opacity:.7;transform:none}}
+.foot{font-size:.8rem;color:var(--dim);margin-top:26px;line-height:1.5}
+details{margin:14px 0;border:2px solid var(--edge);border-radius:10px;background:var(--card)}
+summary{padding:10px 14px;cursor:pointer;font-weight:700;min-height:48px;display:flex;align-items:center}
+details .inner{padding:0 14px 12px;font-size:.9rem}
+/* --- persistent nav + scene-first entry (added: scene-first floor) --- */
+.nav{position:fixed;top:14px;left:14px;z-index:60;display:flex;gap:8px}
+body.at-home .nav{display:none}
+.navbtn{font-family:inherit;font-size:.85rem;font-weight:700;min-height:42px;padding:9px 16px;
+border:2px solid var(--ink);border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer}
+.navbtn:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.navbtn:disabled{opacity:.4;cursor:default}
+#entry{position:fixed;inset:0;z-index:50;background:var(--paper);padding:0;overflow:hidden;max-width:none;margin:0}
+#entry .scene{position:absolute;inset:0}
+#entry .scene svg{width:100%;height:100%;display:block}
+.entrycap{position:absolute;left:0;right:0;bottom:0;padding:6vh 7vw 7vh;
+background:linear-gradient(0deg,rgba(20,17,13,.90),rgba(20,17,13,.34) 62%,rgba(20,17,13,0))}
+.entrycap h1{color:#faf5ec;max-width:940px;font-size:2.1rem;line-height:1.2}
+.entrybtn{margin-top:22px;font-family:inherit;font-weight:700;font-size:1.15rem;
+min-width:210px;min-height:56px;padding:14px 30px;border-radius:12px;
+background:var(--gold);color:#26221c;border:2px solid var(--gold);cursor:pointer}
+.entrybtn:focus-visible{outline:3px solid var(--paper);outline-offset:3px}
+</style>
+</head>
+<body class="at-home">
+
+<div class="nav" id="nav" role="navigation" aria-label="Game navigation">
+  <button class="navbtn" id="btn-home" onclick="goHome()">Home</button>
+  <button class="navbtn" id="btn-back" onclick="goBack()">Back</button>
+</div>
+
+<section class="screen on" id="entry" aria-label="Warriors Fantasy Arcade — start the draft">
+  <div class="scene" aria-hidden="false">
+  <svg viewBox="0 0 1280 800" preserveAspectRatio="xMidYMid slice" role="img" aria-label="An auction draft room: a gavel raised over a podium marked one hundred dollars, flanked by two warrior helmets in blue and red, above a row of player cards.">
+    <defs>
+      <radialGradient id="sky" cx="50%" cy="26%" r="82%"><stop offset="0" stop-color="var(--card)"/><stop offset="1" stop-color="var(--paper)"/></radialGradient>
+    </defs>
+    <rect width="1280" height="800" fill="url(#sky)"/>
+    <rect y="612" width="1280" height="188" fill="var(--edge)" opacity=".55"/>
+    <!-- banner -->
+    <rect x="150" y="60" width="980" height="92" rx="14" fill="var(--ink)"/>
+    <text x="640" y="123" text-anchor="middle" font-family="Iowan Old Style,Palatino,Georgia,serif" font-size="52" font-weight="700" letter-spacing="3" fill="var(--paper)">THE DRAFT ROOM</text>
+    <!-- left warrior helmet (blue) -->
+    <g transform="translate(150,300)">
+      <path d="M0 120 A150 150 0 0 1 300 120 L300 250 L248 250 L248 130 A98 98 0 0 0 52 130 L52 250 L0 250 Z" fill="var(--blue)"/>
+      <rect x="138" y="0" width="24" height="250" rx="8" fill="var(--blue)"/>
+      <path d="M150 -46 C188 -34 188 16 150 20 C112 16 112 -34 150 -46 Z" fill="var(--red)"/>
+    </g>
+    <!-- right warrior helmet (red) -->
+    <g transform="translate(830,300)">
+      <path d="M0 120 A150 150 0 0 1 300 120 L300 250 L248 250 L248 130 A98 98 0 0 0 52 130 L52 250 L0 250 Z" fill="var(--red)"/>
+      <rect x="138" y="0" width="24" height="250" rx="8" fill="var(--red)"/>
+      <path d="M150 -46 C188 -34 188 16 150 20 C112 16 112 -34 150 -46 Z" fill="var(--blue)"/>
+    </g>
+    <!-- central podium + $100 -->
+    <rect x="520" y="360" width="240" height="252" rx="10" fill="var(--card)" stroke="var(--ink)" stroke-width="6"/>
+    <rect x="500" y="344" width="280" height="34" rx="8" fill="var(--gold)"/>
+    <text x="640" y="500" text-anchor="middle" font-family="Iowan Old Style,Palatino,Georgia,serif" font-size="78" font-weight="700" fill="var(--ink)">$100</text>
+    <text x="640" y="556" text-anchor="middle" font-family="Iowan Old Style,Palatino,Georgia,serif" font-size="26" fill="var(--dim)" letter-spacing="2">ON THE BLOCK</text>
+    <!-- gavel -->
+    <g transform="translate(640,236) rotate(-24)">
+      <rect x="-24" y="-34" width="120" height="60" rx="12" fill="var(--ink)"/>
+      <rect x="-6" y="-46" width="24" height="84" rx="6" fill="var(--gold)"/>
+      <rect x="30" y="24" width="20" height="150" rx="8" fill="var(--ink)"/>
+    </g>
+    <!-- card row -->
+    <g fill="var(--card)" stroke="var(--edge)" stroke-width="4">
+      <rect x="150" y="648" width="150" height="104" rx="10"/>
+      <rect x="322" y="648" width="150" height="104" rx="10"/>
+      <rect x="494" y="648" width="150" height="104" rx="10"/>
+      <rect x="666" y="648" width="150" height="104" rx="10"/>
+      <rect x="838" y="648" width="150" height="104" rx="10"/>
+      <rect x="1010" y="648" width="150" height="104" rx="10"/>
+    </g>
+    <g fill="var(--gold)"><circle cx="184" cy="682" r="10"/><circle cx="356" cy="682" r="10"/><circle cx="528" cy="682" r="10"/><circle cx="700" cy="682" r="10"/><circle cx="872" cy="682" r="10"/><circle cx="1044" cy="682" r="10"/></g>
+  </svg>
+  </div>
+  <div class="entrycap">
+    <h1>Warriors Fantasy Arcade &mdash; Matt versus Evan, one hundred dollars, one auction board. Feel the gap between list price and true value.</h1>
+    <button class="entrybtn primary" id="startBtn">Start the draft</button>
+  </div>
+</section>
+
+<div class="wrap">
+
+<section class="screen" id="draft" aria-label="Auction draft room">
+  <div class="bar">
+    <span><b>Matt</b> <span class="money" id="mBank">$100</span></span>
+    <button class="ghost" id="cstop">Comfort</button>
+    <span><b>Evan</b> <span class="money" id="eBank">$100</span></span>
+  </div>
+
+  <div class="turnline" id="turnLine">Matt nominates first. Tap a player below to put them on the block.</div>
+
+  <div class="podium" id="podium" hidden>
+    <p class="ppos" id="pdPos"></p>
+    <p class="pname" id="pdName"></p>
+    <p id="pdFlag"></p>
+    <p class="scout" id="pdScout"></p>
+    <p class="bid">$<span id="pdBid">1</span></p>
+    <p class="bidwho" id="pdWho"></p>
+    <div class="bidrow">
+      <button id="bid1">+ $1</button>
+      <button id="bid5">+ $5</button>
+      <button class="primary" id="passBtn">Pass</button>
+    </div>
+  </div>
+
+  <div class="chatbar">
+    <div class="chatline" id="chatLine">The room is quiet. Too quiet.</div>
+    <div class="chatbtns">
+      <button id="talk1">Talk: Nice pick</button>
+      <button id="talk2">Talk: Bold move</button>
+      <button id="talk3">Talk: Enjoy that</button>
+    </div>
+  </div>
+
+  <h2 id="boardHead" tabindex="-1">The Big Board</h2>
+  <div class="board" id="board"></div>
+
+  <div class="rosters">
+    <div class="ros"><h3>Matt's Warriors</h3><ul id="mRos"></ul></div>
+    <div class="ros"><h3>Evan's Warriors</h3><ul id="eRos"></ul></div>
+  </div>
+</section>
+
+<section class="screen" id="end" aria-label="Draft grades">
+  <div class="burst" id="burst" aria-hidden="true"></div>
+  <p class="winner" id="winLine"></p>
+  <h1 tabindex="-1">Draft Grades</h1>
+  <div class="grade" id="grades"></div>
+  <button class="primary" id="replay" style="width:100%">Run it back</button>
+  <details><summary>How this was made</summary><div class="inner">
+    <p>Practice pool — the dollar values are game values for calibration training, not real rankings. Update the pool before your real draft. Sleeper tags hide extra value: the game teaches you to smell the bargain.</p>
+    <p>League rules baked in: $100 cap, and you can never bid more than your budget minus a dollar for every empty roster slot — the same math that saves you on draft night. Yahoo live sync is v2 and needs a backend; this file is fully offline. Built by Claude through the Tight Spiral pipeline; founder and Evan playtest is the open gate.</p>
+  </div></details>
+  <div class="foot">Tight Spiral Productions · walshero@gmail.com · Play. Notice. Design. — <b>Warriors Fantasy Arcade</b> v1. Two players, one phone, one hundred dollars. No audio is recorded anywhere in this game.</div>
+</section>
+
+</div>
+<script>
+(function(){
+"use strict";
+/* PRACTICE POOL — update before the real draft. val=list price feel; tv=hidden true value (drives grades). */
+var POOL=[
+ {n:"Patrick Mahomes",p:"QB",val:38,tv:38,s:0,note:"The market knows. The market always knows."},
+ {n:"Josh Allen",p:"QB",val:36,tv:37,s:0,note:"Throws it far. Sometimes to his own team."},
+ {n:"Jalen Hurts",p:"QB",val:30,tv:31,s:0,note:"The push nobody can stop, including the rules committee."},
+ {n:"Christian McCaffrey",p:"RB",val:44,tv:36,s:0,note:"Priced like a certainty. Nothing is a certainty."},
+ {n:"Bijan Robinson",p:"RB",val:40,tv:42,s:0,note:"Runs like the cart is chasing him."},
+ {n:"Saquon Barkley",p:"RB",val:38,tv:38,s:0,note:"Hurdles men for a living."},
+ {n:"Jahmyr Gibbs",p:"RB",val:34,tv:37,s:0,note:"Fast in a way that feels rude."},
+ {n:"Breece Hall",p:"RB",val:26,tv:29,s:0,note:"The offense may or may not show up with him."},
+ {n:"De'Von Achane",p:"RB",val:24,tv:30,s:1,note:"Track star in shoulder pads. Blink tax applies."},
+ {n:"Kyren Williams",p:"RB",val:20,tv:23,s:0,note:"Boring the way rent checks are boring."},
+ {n:"Rookie RB (upside swing)",p:"RB",val:8,tv:19,s:1,note:"Nobody's heard of him. That's the point."},
+ {n:"Veteran RB (the fall guy)",p:"RB",val:12,tv:7,s:0,note:"Name brand. Check the expiration date."},
+ {n:"Justin Jefferson",p:"WR",val:44,tv:44,s:0,note:"Pay the man. Everyone else does."},
+ {n:"CeeDee Lamb",p:"WR",val:40,tv:39,s:0,note:"Catches everything, including blame in January."},
+ {n:"Ja'Marr Chase",p:"WR",val:40,tv:42,s:0,note:"When he's on, change the channel, it's over."},
+ {n:"Amon-Ra St. Brown",p:"WR",val:34,tv:35,s:0,note:"Runs routes like he's settling a grudge."},
+ {n:"Puka Nacua",p:"WR",val:28,tv:32,s:1,note:"Late-round legend energy, early-round bill."},
+ {n:"Nico Collins",p:"WR",val:22,tv:27,s:1,note:"The quiet kind of enormous."},
+ {n:"Slot WR (target vacuum)",p:"WR",val:10,tv:17,s:1,note:"Eight catches a game and nobody claps."},
+ {n:"Deep-threat WR (boom/bust)",p:"WR",val:9,tv:6,s:0,note:"Two weeks of glory, twelve of silence."},
+ {n:"Travis Kelce",p:"TE",val:22,tv:18,s:0,note:"Still famous. Check the tread."},
+ {n:"Sam LaPorta",p:"TE",val:18,tv:20,s:0,note:"A tight end who is actually open."},
+ {n:"Breakout TE (the leap year)",p:"TE",val:7,tv:14,s:1,note:"Year three. It's always year three."},
+ {n:"Steady TE (the floor)",p:"TE",val:5,tv:8,s:0,note:"Six points every week, for chrissake, like clockwork."}
+];
+var SLOTS=["QB","RB","RB","WR","WR","FLEX"]; // 6 per side, 12 nominations total
+var TALK={
+ talk1:["Nice pick. Genuinely. This hurts.","Fine. FINE.","Okay, that one stung a little."],
+ talk2:["Bold. The kind of bold they write about. Briefly.","A gutsy call. Guts are refundable, right?","Wow. Committing to the bit."],
+ talk3:["Enjoy that contract in week eight.","Enjoy your kicker money on one guy.","Enjoy explaining that one at Thanksgiving."]
+};
+var st;
+function fresh(){ st={bank:{M:100,E:100},ros:{M:[],E:[]},nomTurn:"M",phase:"nominate",
+ onBlock:null,bid:1,leader:null,bidTurn:null,gone:{},log:[]}; }
+function $(id){return document.getElementById(id);}
+function nm(k){return k==="M"?"Matt":"Evan";}
+function slotsLeft(k){return SLOTS.length-st.ros[k].length;}
+function maxBid(k){return st.bank[k]-(slotsLeft(k)-1);} // league math: $1 per remaining slot
+function canSlot(k,pos){ // rules validation: does this player fit an open slot?
+  var need=SLOTS.slice(); st.ros[k].forEach(function(r){
+    var i=need.indexOf(r.p); if(i<0)i=need.indexOf("FLEX"); if(i>=0)need.splice(i,1);});
+  return need.indexOf(pos)>=0 || (need.indexOf("FLEX")>=0 && (pos==="RB"||pos==="WR"||pos==="TE"));
+}
+function money(){ $("mBank").textContent="$"+st.bank.M; $("eBank").textContent="$"+st.bank.E; }
+function rosters(){
+  ["M","E"].forEach(function(k){
+    var ul=$(k==="M"?"mRos":"eRos"); ul.innerHTML="";
+    st.ros[k].forEach(function(r){ var li=document.createElement("li");
+      li.innerHTML="<span>"+r.p+" · "+r.n+"</span><b>$"+r.paid+"</b>"; ul.appendChild(li); });
+    for(var i=st.ros[k].length;i<SLOTS.length;i++){ var li2=document.createElement("li");
+      li2.innerHTML="<span style='color:var(--dim)'>"+SLOTS[i]+" · open</span><b></b>"; ul.appendChild(li2); }
+  });
+}
+function board(){
+  var b=$("board"); b.innerHTML="";
+  POOL.forEach(function(pl,idx){
+    var c=document.createElement("button"); c.className="pcard"+(st.gone[idx]?" gone":"");
+    c.disabled=!!st.gone[idx]||st.phase!=="nominate";
+    c.innerHTML="<b>"+pl.n+"</b>"+pl.p+" · $"+pl.val+(pl.s?' · <span class="sleeper">SLEEPER</span>':"");
+    c.addEventListener("click",function(){nominate(idx);});
+    b.appendChild(c);
+  });
+}
+function say(t){ $("chatLine").textContent=t; }
+function turnline(t){ $("turnLine").textContent=t; }
+function nominate(idx){
+  if(st.phase!=="nominate")return;
+  var pl=POOL[idx], who=st.nomTurn;
+  if(!canSlot(who,pl.p)){ say("The league office clears its throat: "+nm(who)+" has no slot for a "+pl.p+"."); return; }
+  st.onBlock=idx; st.bid=1; st.leader=who; st.bidTurn=(who==="M"?"E":"M"); st.phase="bid";
+  $("podium").hidden=false;
+  $("pdPos").textContent=pl.p+" · list price $"+pl.val;
+  $("pdName").textContent=pl.n;
+  $("pdFlag").innerHTML=pl.s?'<span class="sleeper">SLEEPER</span>':"";
+  $("pdScout").textContent='"'+pl.note+'"';
+  paint();
+  board();
+}
+function paint(){
+  var pl=POOL[st.onBlock];
+  $("pdBid").textContent=st.bid;
+  $("pdWho").textContent=nm(st.leader)+" leads. "+nm(st.bidTurn)+" to act.";
+  turnline(nm(st.bidTurn)+": raise or pass on "+pl.n+".");
+  var mb=maxBid(st.bidTurn), lockOut=!canSlot(st.bidTurn,pl.p);
+  $("bid1").disabled = st.bid+1>mb || lockOut;
+  $("bid5").disabled = st.bid+5>mb || lockOut;
+  if(lockOut) say("No open slot for "+nm(st.bidTurn)+" here — pass is the only move.");
+}
+function raise(amt){
+  var who=st.bidTurn;
+  st.bid+=amt; st.leader=who; st.bidTurn=(who==="M"?"E":"M");
+  if(amt===5) say(nm(who)+" jumps five. The gavel flinches.");
+  paint();
+}
+function pass(){
+  var win=st.leader, pl=POOL[st.onBlock];
+  st.bank[win]-=st.bid; st.gone[st.onBlock]=true;
+  st.ros[win].push({n:pl.n,p:pl.p,paid:st.bid,tv:pl.tv,val:pl.val,s:pl.s});
+  st.log.push({win:win,pl:pl,paid:st.bid});
+  say("SOLD. "+pl.n+" to "+nm(win)+" for $"+st.bid+".");
+  $("podium").hidden=true; st.phase="nominate"; st.onBlock=null;
+  st.nomTurn=(st.nomTurn==="M"?"E":"M");
+  money(); rosters(); board();
+  if(st.ros.M.length===SLOTS.length && st.ros.E.length===SLOTS.length){ finish(); return; }
+  if(st.ros[st.nomTurn].length===SLOTS.length) st.nomTurn=(st.nomTurn==="M"?"E":"M");
+  turnline(nm(st.nomTurn)+" nominates. Tap a player on the Big Board.");
+}
+$("bid1").addEventListener("click",function(){raise(1);});
+$("bid5").addEventListener("click",function(){raise(5);});
+$("passBtn").addEventListener("click",pass);
+Object.keys(TALK).forEach(function(id){
+  $(id).addEventListener("click",function(){ var arr=TALK[id]; say(arr[Math.floor(Math.random()*arr.length)]); });
+});
+document.addEventListener("keydown",function(e){
+  if(st.phase!=="bid")return;
+  if(e.key==="1"&&!$("bid1").disabled){e.preventDefault();raise(1);}
+  if(e.key==="5"&&!$("bid5").disabled){e.preventDefault();raise(5);}
+  if(e.key==="p"||e.key==="P"){e.preventDefault();pass();}
+});
+/* comfort knob */
+var stops=["default","softer","warm"],cur="default";
+$("cstop").addEventListener("click",function(){
+  cur=stops[(stops.indexOf(cur)+1)%3];
+  document.body.classList.remove("softer","warm");
+  if(cur!=="default")document.body.classList.add(cur);
+  this.textContent="Comfort: "+cur.charAt(0).toUpperCase()+cur.slice(1);
+});
+function grade(k){
+  var v=0,paid=0; st.ros[k].forEach(function(r){v+=r.tv;paid+=r.paid;});
+  return {v:v,paid:paid,eff:v-paid};
+}
+function finish(){
+  var gM=grade("M"),gE=grade("E");
+  var win = gM.v===gE.v ? null : (gM.v>gE.v?"M":"E");
+  $("winLine").textContent = win ? nm(win)+" takes the room — "+ (win==="M"?gM.v:gE.v)+" points of true value." : "A dead tie. The league demands a rematch.";
+  var g=$("grades"),html="";
+  ["M","E"].forEach(function(k){
+    var gg=grade(k);
+    html+="<p><b>"+nm(k)+":</b> $"+gg.paid+" spent, "+gg.v+" true value, efficiency "+(gg.eff>=0?"+":"")+gg.eff+"</p>";
+  });
+  var best=null,worst=null,sleep=null;
+  st.log.forEach(function(e){ var d=e.pl.tv-e.paid;
+    if(!best||d>best.d)best={d:d,e:e}; if(!worst||d<worst.d)worst={d:d,e:e};
+    if(e.pl.s&&(!sleep||d>sleep.d))sleep={d:d,e:e}; });
+  if(best)html+='<p><span class="super">Biggest Steal:</span> '+best.e.pl.n+" to "+nm(best.e.win)+" ($"+best.e.paid+", worth "+best.e.pl.tv+")</p>";
+  if(worst)html+='<p><span class="super">The Overpay:</span> '+worst.e.pl.n+" to "+nm(worst.e.win)+" ($"+worst.e.paid+", worth "+worst.e.pl.tv+")</p>";
+  if(sleep)html+='<p><span class="super">Sleeper of the Night:</span> '+sleep.e.pl.n+" — the tag told the truth</p>";
+  html+="<p>The lesson lives in the gap between the list price and the true value. That gap is the whole game — on this screen and on draft night.</p>";
+  g.innerHTML=html;
+  showScreen("end",true);
+  var burst=$("burst"),cols=["#a8791f","#2e6b46","#1f5fa8","#8a4030"];
+  burst.innerHTML=""; for(var i=0;i<14;i++){var sp=document.createElement("span");
+    sp.style.left=(4+i*7)+"%"; sp.style.background=cols[i%4]; sp.style.animationDelay=(i*0.06)+"s"; burst.appendChild(sp);}
+  requestAnimationFrame(function(){burst.classList.add("go");});
+  $("end").querySelector("h1").focus({preventScroll:true});
+}
+$("replay").addEventListener("click",function(){
+  fresh(); money(); rosters(); board();
+  showScreen("draft",false);
+  turnline("Matt nominates first. Tap a player below to put them on the block.");
+  say("The room is quiet. Too quiet.");
+});
+/* screen router: persistent Home + Back (pattern from cliche-field-v6) */
+var SCREENS=["entry","draft","end"], histStack=[];
+function current(){return SCREENS.find(function(s){return $(s).classList.contains("on");});}
+function showScreen(id,push){
+  if(push){var c=current(); if(c&&c!==id)histStack.push(c);}
+  SCREENS.forEach(function(s){$(s).classList.toggle("on",s===id);});
+  document.body.classList.toggle("at-home",id==="entry");
+  var bb=$("btn-back"); if(bb)bb.disabled=histStack.length===0;
+  window.scrollTo(0,0);
+}
+function goHome(){histStack=[];showScreen("entry",false);}
+function goBack(){var p=histStack.pop();showScreen(p||"entry",false);}
+window.goHome=goHome; window.goBack=goBack;
+$("startBtn").addEventListener("click",function(){showScreen("draft",true);});
+fresh(); money(); rosters(); board();
+showScreen("entry",false);
+})();
+</script>
+<!--
+TSP-META
+{ "file":"warriors-fantasy-arcade.html",
+  "role":"Matt-vs-Evan hotseat auction draft trainer; joy-first two-player game; recovered spec from chat 6dfb870e",
+  "spine":"Feel the gap between list price and true value — the calibration skill that wins a real auction.",
+  "wireframe_novelty":"the sleeper tag is honest — hidden true value rewards the nose for bargains; league budget math (bank minus a dollar per open slot) is a live rule, not a tip",
+  "construct":"price calibration; evidence = efficiency score (true value minus spend), computed per pick",
+  "task_spine":"Roles: two GMs at a real auction; Freedoms: fail (overpay teaches), experiment (jump bids), identity (your Warriors), replay free",
+  "medium_gate":"MVP mechanic prototype — plain by pipeline law (stage 4); Lane A craft pass = stage 6 after Matt+Evan playtest",
+  "joy":"deadpan auctioneer copy, trash-talk bar (canned lines, funny both directions), gavel-flinch lines, cut-paper confetti burst with reduced-motion fallback",
+  "league_rules_baked":"$100 cap; 14-team auction context; max-bid = bank - (open slots - 1); positional slot validation on nomination and bidding; keepers +$5 = v2 (needs keeper list)",
+  "hitl_NEEDED":["Matt+Evan playtest (the hinge)","real player pool update before draft night (values are practice values, labeled)","keeper list + Yahoo rules export","Yahoo live sync = v2, needs backend, STUBBED","multi-source rankings import = v2"],
+  "legal_floors":"MA two-party consent: NO audio capture anywhere in this game; FERPA n/a",
+  "floor_states_verified":["single-file offline in-memory","comfort knob in corner (never a wall), 3 stops","44px+ targets","keyboard: 1/5 raise, P pass","visible focus rings","no emoji","reduced-motion honored","scene-first: opens in the draft room, first action is a nomination"],
+  "founder_open":["playtest with Evan","confirm roster shape (6 slots MVP vs full 14-team roster)","decide one-player mode (AI bidders vs solo prep) for v2"] }
+-->
+</body>
+</html>

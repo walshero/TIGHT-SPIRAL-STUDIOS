@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="only dark">
+<title>Cliche Field</title>
+<!--
+  CLICHE FIELD  ·  v6  ·  Tight Spiral Studios
+  The Asteroids ship is gone. You are a rooted, hungry Venus-flytrap alien.
+  EAT what is alive (tractor beam down to the mouth); SMASH what is dead
+  (tendrils slam it to the ground as a gravestone). The good story assembles,
+  visibly, in the transparent belly. Slow. Strategic. Judgment, never reflex.
+
+  Built under the new order (2026-07-12):
+   - Le Guin: the belly IS the carrier bag; eating (gathering) is the core act.
+   - Horvath (PM): self-paced; the decision halts and waits — no clock, no twitch.
+   - Gee: one demand at a time; clichés front-loaded while the reflex is forming.
+   - Zimmerman: every verb has a visible consequence — a belly slot fills, a grave rises.
+   - Props Room: the props carry the role; meaning is in the frame before the text.
+   - Apple / Tableau Gate: scene-first, ONE invitation on entry, majority image, no emoji.
+   - Accessibility is arithmetic: high contrast, large targets, keyboard-first,
+     reduced-motion honored, comfort is a corner knob and never a gate. Green-free.
+  Single file. Offline. Nothing leaves this page.
+-->
+<style>
+  :root{
+    --bg:#0e0a14; --stage:#150f20; --panel:#1c1430; --line:#3a2c56;
+    --ink:#f4eeff; --ink-soft:#c3b6df;
+    --alien:#b98cff; --alien-deep:#7d4fd6; --maw:#ff6fae; --amber:#ffb347;
+    --alive:#57d6ea;           /* alive = cyan glow (green-free floor) */
+    --stone:#8a8496;           /* dead = grave grey */
+    --r:16px; --shadow:0 10px 34px rgba(0,0,0,.5);
+    --font: ui-rounded, "Segoe UI", system-ui, -apple-system, sans-serif;
+    --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  }
+  body.daylight{
+    --bg:#efe9f6; --stage:#e5ddf1; --panel:#f6f1fc; --line:#c9bce4;
+    --ink:#1b1230; --ink-soft:#4a3d68;
+    --alien:#6b3fc0; --alien-deep:#4a2a94; --maw:#b8306e; --amber:#8a4f00;
+    --alive:#0f6d82; --stone:#6a6472; --shadow:0 10px 34px rgba(80,60,120,.2);
+  }
+  *{box-sizing:border-box} html,body{margin:0;padding:0}
+  body{ background:var(--bg); color:var(--ink); font-family:var(--font); line-height:1.5; overflow-x:hidden; }
+  html[data-motion="calm"] *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+  button{ font-family:inherit; cursor:pointer; color:inherit; border:none; background:none; }
+  button:focus-visible,[tabindex]:focus-visible{ outline:3px solid var(--amber); outline-offset:3px; border-radius:8px; }
+  .sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+  .wrap{ max-width:980px; margin:0 auto; padding:14px 14px 40px; position:relative; }
+
+  /* corner comfort knob — small + light on purpose: never a primary invitation */
+  .comfort{ position:absolute; top:16px; right:16px; z-index:40; display:flex; gap:6px; }
+  .cbtn{ font-size:.72rem; font-weight:500; padding:5px 10px; border-radius:999px;
+    background:var(--panel); border:1px solid var(--line); color:var(--ink-soft); }
+  .cbtn[aria-pressed="true"]{ color:var(--ink); border-color:var(--alien); }
+  /* nav: Home + Back on every screen but the home screen itself */
+  .nav{ position:absolute; top:14px; left:14px; z-index:40; display:flex; gap:8px; }
+  body.at-home .nav{ display:none; }
+  .navbtn{ font-size:.82rem; font-weight:700; padding:9px 16px; min-height:42px; border-radius:10px;
+    background:var(--panel); border:1px solid var(--line); color:var(--ink); }
+  .navbtn:active{ transform:translateY(1px); }
+  .navbtn[disabled]{ opacity:.4; cursor:default; }
+
+  /* ---------- the scene (shared by intro + play) ---------- */
+  .stage{ position:relative; width:100%; height:74vh; min-height:520px;
+    background:radial-gradient(120% 80% at 50% 8%, var(--stage), var(--bg) 78%);
+    border:1px solid var(--line); border-radius:22px; overflow:hidden; box-shadow:var(--shadow); }
+  .creature{ position:absolute; inset:0; width:100%; height:100%; }
+  .creature svg{ width:100%; height:100%; display:block; }
+
+  /* intro overlay */
+  .introcap{ position:absolute; left:0; right:0; bottom:0; padding:26px 28px 24px;
+    background:linear-gradient(0deg, rgba(6,4,12,.86), rgba(6,4,12,.15)); }
+  body.daylight .introcap{ background:linear-gradient(0deg, rgba(20,12,40,.8), rgba(20,12,40,.12)); color:#fff; }
+  .introcap h1{ margin:0 0 6px; font-family:var(--serif); font-size:clamp(1.7rem,4.6vw,2.7rem); letter-spacing:.3px; }
+  .introcap p{ margin:0; font-size:clamp(.95rem,2.3vw,1.1rem); max-width:44ch; color:#efe7ff; }
+  body.daylight .introcap p{ color:#f2ecff; }
+
+  .begin-row{ display:flex; justify-content:center; margin:18px 0 0; }
+  .begin{ font-weight:800; font-size:1.15rem; padding:16px 40px; border-radius:14px;
+    background:var(--amber); color:#1a1206; box-shadow:0 5px 0 rgba(0,0,0,.35); min-height:56px; }
+  .begin:active{ transform:translateY(3px); box-shadow:0 2px 0 rgba(0,0,0,.35); }
+
+  /* ---------- play overlays ---------- */
+  .phrase{ position:absolute; left:50%; top:-12%; transform:translateX(-50%);
+    max-width:74%; text-align:center; transition:top 4.6s linear, transform .45s ease, opacity .45s ease;
+    z-index:20; }
+  .phrase .card{ display:inline-block; font-family:var(--serif); font-size:clamp(1.15rem,3.2vw,1.7rem);
+    line-height:1.35; padding:14px 22px; border-radius:14px; background:var(--panel);
+    border:1px solid var(--line); box-shadow:var(--shadow); color:var(--ink); }
+  .phrase.reaching .card{ box-shadow:0 0 0 2px var(--amber), var(--shadow); }
+  .phrase.eaten{ opacity:0; }
+  .phrase.smashed .card{ background:var(--stone); color:#1a1420; border-color:#6f6a7d; }
+
+  /* the tractor beam, shown while a phrase waits at the maw */
+  .beam{ position:absolute; left:50%; top:38%; width:220px; height:0; transform:translateX(-50%);
+    background:linear-gradient(180deg, color-mix(in srgb, var(--maw) 55%, transparent), transparent);
+    clip-path:polygon(38% 0,62% 0,100% 100%,0 100%); opacity:0; transition:opacity .3s, height .3s; z-index:10; }
+  .beam.on{ opacity:.6; height:26%; }
+
+  /* belly: the story assembles here, in fixed narrative order */
+  .belly{ position:absolute; left:50%; transform:translateX(-50%); bottom:16%; width:min(560px,82%);
+    z-index:15; display:flex; flex-direction:column; gap:6px; pointer-events:none; }
+  .slot{ font-family:var(--serif); font-size:clamp(.86rem,2.1vw,1.02rem); line-height:1.3;
+    padding:7px 14px; border-radius:10px; text-align:center;
+    background:color-mix(in srgb, var(--alive) 12%, transparent);
+    border:1px solid color-mix(in srgb, var(--alive) 40%, var(--line));
+    color:var(--ink); opacity:1; transition:opacity .5s, transform .5s; }
+  .slot.empty{ color:var(--ink-soft); background:transparent; border-style:dashed;
+    border-color:var(--line); font-style:italic; opacity:.5; }
+  .slot.fill-anim{ transform:scale(1.04); }
+
+  /* ground + graveyard */
+  .ground{ position:absolute; left:0; right:0; bottom:0; height:13%;
+    background:linear-gradient(0deg, color-mix(in srgb, var(--alien-deep) 30%, var(--bg)), transparent);
+    border-top:2px solid var(--line); z-index:12; }
+  .graves{ position:absolute; left:0; right:0; bottom:2%; z-index:13;
+    display:flex; gap:5px; align-items:flex-end; justify-content:center; flex-wrap:wrap; padding:0 12px; }
+  .grave{ background:var(--stone); color:#151021; border-radius:6px 6px 3px 3px;
+    padding:6px 7px 5px; width:78px; min-height:52px; font-size:.6rem; font-weight:700; text-align:center;
+    line-height:1.12; box-shadow:0 3px 0 rgba(0,0,0,.3); border:1px solid #6f6a7d;
+    display:flex; align-items:center; justify-content:center; }
+
+  /* HUD */
+  .hud{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin:14px 2px 0; }
+  .vigor{ display:flex; align-items:center; gap:7px; font-size:.82rem; color:var(--ink-soft); }
+  .pip{ width:15px; height:15px; border-radius:50%; background:var(--alive);
+    box-shadow:0 0 8px color-mix(in srgb,var(--alive) 60%, transparent); }
+  .pip.spent{ background:transparent; border:2px solid var(--line); box-shadow:none; }
+  .prog{ font-size:.82rem; color:var(--ink-soft); margin-left:auto; }
+
+  .verbs{ display:flex; gap:12px; margin:12px 2px 0; }
+  .verb{ flex:1; font-weight:800; font-size:1.02rem; padding:15px 12px; border-radius:14px;
+    display:flex; flex-direction:column; gap:2px; align-items:center; min-height:60px; }
+  .verb small{ font-weight:600; font-size:.72rem; opacity:.8; }
+  .verb.eat{ background:var(--maw); color:#1a0710; box-shadow:0 4px 0 rgba(0,0,0,.32); }
+  .verb.smash{ background:var(--panel); color:var(--ink); border:1px solid var(--line); }
+  .verb:active{ transform:translateY(2px); }
+  .verb[disabled]{ opacity:.45; cursor:default; transform:none; }
+
+  .say{ min-height:1.4em; margin:12px 2px 0; font-size:.92rem; color:var(--ink-soft); text-align:center; }
+  .say b{ color:var(--ink); }
+
+  /* end screen */
+  .end{ background:var(--panel); border:1px solid var(--line); border-radius:var(--r); padding:22px; margin-top:16px; }
+  .end h2{ margin:.1rem 0 4px; font-family:var(--serif); font-size:1.5rem; }
+  .end .lede{ color:var(--ink-soft); margin:0 0 16px; }
+  .story{ font-family:var(--serif); font-size:1.08rem; line-height:1.62; border-left:3px solid var(--alive);
+    padding:4px 0 4px 16px; margin:0 0 18px; }
+  .story span{ display:block; margin:0 0 6px; }
+  .buried{ font-size:.86rem; color:var(--ink-soft); margin:0 0 16px; }
+  .gen{ background:var(--stage); border:1px solid var(--line); border-radius:12px; padding:16px; }
+  .gen h3{ margin:0 0 6px; font-size:1rem; }
+  .gen p{ margin:0 0 10px; color:var(--ink-soft); font-size:.9rem; }
+  .gen .cliche{ font-family:var(--serif); color:var(--ink); font-style:italic; }
+  .gen textarea{ width:100%; min-height:70px; resize:vertical; font-family:var(--serif); font-size:1rem;
+    padding:11px 13px; border-radius:10px; background:var(--bg); color:var(--ink); border:1px solid var(--line); }
+  .endrow{ display:flex; gap:12px; flex-wrap:wrap; margin-top:14px; }
+  .ebtn{ font-weight:800; font-size:1rem; padding:13px 22px; border-radius:12px; background:var(--amber); color:#1a1206; }
+  .ebtn.ghost{ background:transparent; color:var(--ink); border:1px solid var(--line); }
+  .revcount{ font-size:.82rem; color:var(--ink-soft); margin-top:10px; }
+
+  .foot{ margin-top:24px; text-align:center; color:var(--ink-soft); font-size:.76rem; }
+  .hidden{ display:none !important; }
+</style>
+</head>
+<body class="at-home">
+<div class="wrap">
+
+  <div class="nav" id="nav" role="navigation" aria-label="Game navigation">
+    <button class="navbtn" id="btn-home" onclick="goHome()">Home</button>
+    <button class="navbtn" id="btn-back" onclick="goBack()">Back</button>
+  </div>
+
+  <div class="comfort">
+    <button class="cbtn" id="k-light" aria-pressed="false" onclick="toggleLight()">Daylight</button>
+    <button class="cbtn" id="k-motion" aria-pressed="false" onclick="toggleMotion()">Calm motion</button>
+  </div>
+
+  <!-- ================= INTRO (scene-first · one invitation) ================= -->
+  <section id="intro">
+    <div class="stage">
+      <div class="creature" aria-hidden="true"><svg viewBox="0 0 900 560" preserveAspectRatio="xMidYMid meet" role="img" aria-label="A rooted bioluminescent flytrap creature with an open mouth above a translucent belly and raised tendrils.">
+        <defs>
+          <radialGradient id="body" cx="50%" cy="60%" r="72%"><stop offset="0" stop-color="var(--alien)"/><stop offset="1" stop-color="var(--alien-deep)"/></radialGradient>
+          <linearGradient id="maw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--maw)"/><stop offset="1" stop-color="var(--alien-deep)"/></linearGradient>
+          <radialGradient id="bellyg" cx="50%" cy="42%" r="62%"><stop offset="0" stop-color="color-mix(in srgb, var(--alive) 22%, transparent)"/><stop offset="1" stop-color="color-mix(in srgb, var(--alien-deep) 34%, transparent)"/></radialGradient>
+        </defs>
+        <g stroke="var(--alien-deep)" stroke-width="9" fill="none" stroke-linecap="round" opacity=".85">
+          <path d="M450 470 C 380 520, 260 545, 150 560"/><path d="M450 470 C 520 520, 640 545, 750 560"/>
+          <path d="M450 470 C 430 515, 400 540, 360 560"/><path d="M450 470 C 470 515, 500 540, 540 560"/>
+          <path d="M450 470 C 340 505, 160 535, 60 560"/><path d="M450 470 C 560 505, 740 535, 840 560"/>
+        </g>
+        <g stroke="var(--alien)" stroke-width="12" fill="none" stroke-linecap="round" opacity=".95">
+          <path d="M360 330 C 250 300, 170 220, 190 120"/><path d="M540 330 C 650 300, 730 220, 710 120"/>
+        </g>
+        <g stroke="var(--alien)" stroke-width="9" fill="none" stroke-linecap="round">
+          <path d="M190 120 l -20 -14 M190 120 l 12 -22 M190 120 l 22 2"/><path d="M710 120 l 20 -14 M710 120 l -12 -22 M710 120 l -22 2"/>
+        </g>
+        <ellipse cx="450" cy="380" rx="205" ry="128" fill="url(#bellyg)" stroke="color-mix(in srgb, var(--alive) 45%, var(--line))" stroke-width="2.5"/>
+        <ellipse cx="450" cy="380" rx="150" ry="90" fill="none" stroke="color-mix(in srgb, var(--alive) 22%, transparent)" stroke-width="1.5"/>
+        <path d="M360 400 C 345 330, 360 270, 400 235 L500 235 C 540 270, 555 330, 540 400 Z" fill="url(#body)"/>
+        <circle cx="415" cy="285" r="11" fill="var(--alive)"/><circle cx="415" cy="285" r="4.5" fill="#fff" opacity=".85"/>
+        <circle cx="485" cy="285" r="11" fill="var(--alive)"/><circle cx="485" cy="285" r="4.5" fill="#fff" opacity=".85"/>
+        <path d="M450 250 C 380 235, 330 175, 340 95 C 385 150, 425 195, 450 235 Z" fill="url(#maw)"/>
+        <path d="M450 250 C 520 235, 570 175, 560 95 C 515 150, 475 195, 450 235 Z" fill="url(#maw)"/>
+        <g stroke="var(--maw)" stroke-width="5" stroke-linecap="round">
+          <path d="M345 100 l -10 -22 M372 140 l -8 -24 M400 175 l -6 -22"/><path d="M555 100 l 10 -22 M528 140 l 8 -24 M500 175 l 6 -22"/>
+        </g>
+      </svg></div>
+      <div class="introcap">
+        <h1>Something hungry woke in the language.</h1>
+        <p>It eats what is alive and buries what is dead. You are the one deciding which is which.</p>
+      </div>
+    </div>
+    <div class="begin-row">
+      <button class="begin" id="begin" onclick="startGame()">Wake it</button>
+    </div>
+  </section>
+
+  <!-- ================= PLAY ================= -->
+  <section id="play" class="hidden" aria-label="Cliche Field">
+    <div class="stage" id="stage">
+      <div class="creature" aria-hidden="true"><svg viewBox="0 0 900 560" preserveAspectRatio="xMidYMid meet" role="img" aria-label="A rooted bioluminescent flytrap creature with an open mouth above a translucent belly and raised tendrils.">
+        <defs>
+          <radialGradient id="body" cx="50%" cy="60%" r="72%"><stop offset="0" stop-color="var(--alien)"/><stop offset="1" stop-color="var(--alien-deep)"/></radialGradient>
+          <linearGradient id="maw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--maw)"/><stop offset="1" stop-color="var(--alien-deep)"/></linearGradient>
+          <radialGradient id="bellyg" cx="50%" cy="42%" r="62%"><stop offset="0" stop-color="color-mix(in srgb, var(--alive) 22%, transparent)"/><stop offset="1" stop-color="color-mix(in srgb, var(--alien-deep) 34%, transparent)"/></radialGradient>
+        </defs>
+        <g stroke="var(--alien-deep)" stroke-width="9" fill="none" stroke-linecap="round" opacity=".85">
+          <path d="M450 470 C 380 520, 260 545, 150 560"/><path d="M450 470 C 520 520, 640 545, 750 560"/>
+          <path d="M450 470 C 430 515, 400 540, 360 560"/><path d="M450 470 C 470 515, 500 540, 540 560"/>
+          <path d="M450 470 C 340 505, 160 535, 60 560"/><path d="M450 470 C 560 505, 740 535, 840 560"/>
+        </g>
+        <g stroke="var(--alien)" stroke-width="12" fill="none" stroke-linecap="round" opacity=".95">
+          <path d="M360 330 C 250 300, 170 220, 190 120"/><path d="M540 330 C 650 300, 730 220, 710 120"/>
+        </g>
+        <g stroke="var(--alien)" stroke-width="9" fill="none" stroke-linecap="round">
+          <path d="M190 120 l -20 -14 M190 120 l 12 -22 M190 120 l 22 2"/><path d="M710 120 l 20 -14 M710 120 l -12 -22 M710 120 l -22 2"/>
+        </g>
+        <ellipse cx="450" cy="380" rx="205" ry="128" fill="url(#bellyg)" stroke="color-mix(in srgb, var(--alive) 45%, var(--line))" stroke-width="2.5"/>
+        <ellipse cx="450" cy="380" rx="150" ry="90" fill="none" stroke="color-mix(in srgb, var(--alive) 22%, transparent)" stroke-width="1.5"/>
+        <path d="M360 400 C 345 330, 360 270, 400 235 L500 235 C 540 270, 555 330, 540 400 Z" fill="url(#body)"/>
+        <circle cx="415" cy="285" r="11" fill="var(--alive)"/><circle cx="415" cy="285" r="4.5" fill="#fff" opacity=".85"/>
+        <circle cx="485" cy="285" r="11" fill="var(--alive)"/><circle cx="485" cy="285" r="4.5" fill="#fff" opacity=".85"/>
+        <path d="M450 250 C 380 235, 330 175, 340 95 C 385 150, 425 195, 450 235 Z" fill="url(#maw)"/>
+        <path d="M450 250 C 520 235, 570 175, 560 95 C 515 150, 475 195, 450 235 Z" fill="url(#maw)"/>
+        <g stroke="var(--maw)" stroke-width="5" stroke-linecap="round">
+          <path d="M345 100 l -10 -22 M372 140 l -8 -24 M400 175 l -6 -22"/><path d="M555 100 l 10 -22 M528 140 l 8 -24 M500 175 l 6 -22"/>
+        </g>
+      </svg></div>
+      <div class="beam" id="beam" aria-hidden="true"></div>
+      <div class="belly" id="belly" aria-label="The story in the belly"></div>
+      <div class="ground" aria-hidden="true"></div>
+      <div class="graves" id="graves" aria-label="Buried cliches"></div>
+      <div class="phrase" id="phrase" aria-hidden="true"><div class="card" id="phrase-card"></div></div>
+    </div>
+
+    <div class="hud">
+      <div class="vigor" aria-label="Vigor"><span>Vigor</span><span id="pips"></span></div>
+      <div class="prog" id="prog">Story: 0 of 5 lines</div>
+    </div>
+
+    <div class="verbs">
+      <button class="verb eat" id="v-eat" onclick="decide('eat')">Pull to mouth<small>eat what is alive &mdash; Down arrow</small></button>
+      <button class="verb smash" id="v-smash" onclick="decide('smash')">Smash to ground<small>bury what is dead &mdash; Spacebar</small></button>
+    </div>
+
+    <div class="say" id="say" role="status" aria-live="polite">Read the line. Feed it, or bury it.</div>
+  </section>
+
+  <!-- ================= END ================= -->
+  <section id="end" class="hidden">
+    <div class="end">
+      <h2 id="end-title">The story is whole.</h2>
+      <p class="lede" id="end-lede"></p>
+      <div class="story" id="end-story"></div>
+      <p class="buried" id="end-buried"></p>
+      <div class="gen" id="gen">
+        <h3>One more, in your own words.</h3>
+        <p>You buried this one: <span class="cliche" id="gen-cliche"></span> &mdash; now say what it was trying to say, freshly.</p>
+        <textarea id="gen-input" aria-label="Write a fresh line"></textarea>
+        <div class="revcount" id="revcount"></div>
+      </div>
+      <div class="endrow">
+        <button class="ebtn" onclick="keepLine()">Keep this line</button>
+        <button class="ebtn ghost" onclick="carryOut()">Carry it out</button>
+        <button class="ebtn ghost" onclick="location.reload()">Again</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">Tight Spiral Studios &middot; Offline &middot; nothing leaves this page</div>
+</div>
+
+<script>
+/* ---------- the deck: living lines in story order, cliches front-loaded ---------- */
+const LIVING = [
+  "The kettle clicked off, but nobody came to the kitchen.",
+  "She counted the stairs in the dark, the way she had as a child.",
+  "A lamp was burning in the room that was supposed to be empty.",
+  "He had left the door open on purpose, in case.",
+  "They sat at the same table till morning, saying nothing that mattered and everything that did."
+];
+const CLICHES = [
+  "at the end of the day","think outside the box","it is what it is","low-hanging fruit",
+  "a perfect storm","the tip of the iceberg","when life gives you lemons","back to square one",
+  "the calm before the storm","read between the lines","a needle in a haystack","only time will tell"
+];
+// interleave: cliches early, living lines threaded in order
+function buildDeck(){
+  const d=[]; let li=0, ci=0;
+  const pattern=[ 'c','c','L','c','c','L','c','L','c','c','L','c','c','L','c' ];
+  for(const t of pattern){
+    if(t==='L'){ if(li<LIVING.length) d.push({type:'live', text:LIVING[li], slot:li}); li++; }
+    else { if(ci<CLICHES.length) d.push({type:'cliche', text:CLICHES[ci]}); ci++; }
+  }
+  // any remaining cliches trail the deck
+  while(ci<CLICHES.length) d.push({type:'cliche', text:CLICHES[ci++]});
+  return d;
+}
+
+let S = null;
+function startGame(){
+  S = { deck:buildDeck(), i:0, vigor:3, eaten:0, buried:[], filled:new Array(LIVING.length).fill(false),
+        current:null, resolving:false, over:false };
+  showScreen('play', true);
+  renderPips(); renderBelly(); renderGraves(); updateProg();
+  document.getElementById('phrase').setAttribute('aria-hidden','false');
+  next();
+  document.getElementById('play').scrollIntoView({behavior: motion()?'auto':'smooth', block:'start'});
+}
+
+function next(){
+  S.resolving=false;
+  if(S.eaten>=LIVING.length){ return end(true); }          // story complete
+  if(S.vigor<=0){ return end(false); }                      // gave out
+  if(S.i>=S.deck.length){ return end(S.eaten>=LIVING.length); }
+  S.current = S.deck[S.i++];
+  const p=document.getElementById('phrase'), c=document.getElementById('phrase-card');
+  c.textContent = S.current.text;
+  p.className='phrase';                     // reset
+  // place at top, then drop to the maw
+  p.style.transition='none'; p.style.top='-12%'; p.style.opacity='1'; p.style.transform='translateX(-50%)';
+  // force reflow so the transition takes
+  void p.offsetWidth;
+  p.style.transition = motion() ? 'top .001ms' : 'top 4.6s linear';
+  requestAnimationFrame(()=>{ p.style.top='34%'; });
+  setTimeout(()=>{ p.classList.add('reaching'); document.getElementById('beam').classList.add('on'); },
+            motion()?10:1200);
+  setVerbs(true);
+  say('Read the line. Feed it, or bury it.');
+  document.getElementById('v-eat').focus({preventScroll:true});
+}
+
+function decide(kind){
+  if(!S || S.over || !S.current || S.resolving) return;
+  S.resolving=true; setVerbs(false);
+  const cur=S.current, p=document.getElementById('phrase');
+  document.getElementById('beam').classList.remove('on');
+  p.classList.remove('reaching');
+  // freeze descent where it is
+  const top = getComputedStyle(p).top; p.style.transition='transform .45s ease, opacity .45s ease, top .45s ease'; p.style.top=top;
+
+  if(kind==='eat'){
+    if(cur.type==='live'){
+      // pull into mouth, then fill the belly slot in narrative order
+      p.style.top='40%'; p.style.transform='translateX(-50%) scale(.5)'; p.classList.add('eaten');
+      S.eaten++; S.filled[cur.slot]=true;
+      after(()=>{ fillSlot(cur.slot); say('<b>Alive.</b> It goes into the belly, and the story grows.'); done(); });
+    } else {
+      // indigestion: costs vigor, and the cliche is spat down to a grave anyway
+      S.vigor--; renderPips();
+      p.style.transform='translateX(-50%) scale(1.06)';
+      after(()=>{ toGrave(cur.text); say('<b>Indigestion.</b> That was dead language. It costs you, and it is buried anyway.'); done(); }, 260);
+    }
+  } else { // smash
+    if(cur.type==='cliche'){
+      p.classList.add('smashed'); p.style.top='84%'; p.style.transform='translateX(-50%) rotate(-4deg) scale(.7)';
+      after(()=>{ toGrave(cur.text); say('<b>Buried.</b> A tired phrase, slammed to the ground where you can read its stone.'); done(); });
+    } else {
+      // a living line, wrongly smashed: it comes back around (recirculate)
+      p.classList.add('smashed'); p.style.top='84%'; p.style.transform='translateX(-50%) rotate(3deg) scale(.7)';
+      recirculate(cur);
+      after(()=>{ say('That one was <b>alive</b>. You will get it back &mdash; it comes around again.'); done(); });
+    }
+  }
+}
+
+function done(){ setTimeout(next, motion()?60:360); }
+function after(fn,ms){ setTimeout(fn, motion()?10:(ms||480)); }
+
+function recirculate(card){
+  // reinsert this living line a few steps ahead so the story can still complete
+  const at = Math.min(S.deck.length, S.i + 3);
+  S.deck.splice(at, 0, {type:'live', text:card.text, slot:card.slot});
+}
+
+/* ---------- belly ---------- */
+function renderBelly(){
+  const b=document.getElementById('belly'); b.innerHTML='';
+  for(let k=0;k<LIVING.length;k++){
+    const el=document.createElement('div');
+    el.className='slot empty'; el.id='slot-'+k; el.textContent='a line still out there';
+    b.appendChild(el);
+  }
+}
+function fillSlot(k){
+  const el=document.getElementById('slot-'+k); if(!el) return;
+  el.classList.remove('empty'); el.classList.add('fill-anim'); el.textContent=LIVING[k];
+  setTimeout(()=>el.classList.remove('fill-anim'), 420);
+  updateProg();
+}
+
+/* ---------- graves ---------- */
+function toGrave(text){
+  S.buried.push(text); renderGraves();
+}
+function renderGraves(){
+  const g=document.getElementById('graves'); g.innerHTML='';
+  S.buried.forEach(t=>{ const el=document.createElement('div'); el.className='grave'; el.textContent=t; g.appendChild(el); });
+}
+
+/* ---------- hud ---------- */
+function renderPips(){
+  const p=document.getElementById('pips'); p.innerHTML='';
+  for(let k=0;k<3;k++){ const s=document.createElement('span'); s.className='pip'+(k<S.vigor?'':' spent'); p.appendChild(s); }
+}
+function updateProg(){ document.getElementById('prog').textContent = 'Story: '+S.eaten+' of '+LIVING.length+' lines'; }
+function setVerbs(on){ document.getElementById('v-eat').disabled=!on; document.getElementById('v-smash').disabled=!on; }
+function say(html){ document.getElementById('say').innerHTML=html; }
+
+/* ---------- end ---------- */
+function end(win){
+  if(S) S.over=true;
+  showScreen('end', true);
+  const e=document.getElementById('end');
+  document.getElementById('end-title').textContent = win ? 'The story is whole.' : 'The creature gave out.';
+  document.getElementById('end-lede').textContent = win
+    ? 'Everything alive made it into the belly. Everything dead is standing in the ground behind you.'
+    : 'It ate too much dead language to finish. What you did gather is still yours.';
+  const st=document.getElementById('end-story'); st.innerHTML='';
+  LIVING.forEach((l,k)=>{ if(S.filled[k]){ const sp=document.createElement('span'); sp.textContent=l; st.appendChild(sp); } });
+  if(!st.children.length){ st.innerHTML='<span>Nothing reached the belly this time.</span>'; }
+  document.getElementById('end-buried').textContent =
+    'You buried '+S.buried.length+' cliche'+(S.buried.length===1?'':'s')+'.';
+  const pick = S.buried.length ? S.buried[Math.floor(S.buried.length/2)] : 'it is what it is';
+  document.getElementById('gen-cliche').textContent = '"'+pick+'"';
+  document.getElementById('gen-input').dataset.src = pick;
+  showRevCount();
+  e.scrollIntoView({behavior: motion()?'auto':'smooth', block:'start'});
+}
+
+/* revisions kept in memory only (nothing leaves the page) */
+let REVISIONS=[];
+function keepLine(){
+  const ta=document.getElementById('gen-input'); const v=(ta.value||'').trim();
+  if(!v){ ta.focus(); return; }
+  REVISIONS.push({from:ta.dataset.src, to:v}); ta.value='';
+  showRevCount('Kept. Write another if you like.');
+}
+function showRevCount(msg){
+  const c=document.getElementById('revcount');
+  c.textContent = (msg? msg+'  ':'') + 'Fresh lines written this session: '+REVISIONS.length;
+}
+function carryOut(){
+  const story = LIVING.filter((_,k)=>S.filled[k]).join('\n');
+  const rev = REVISIONS.map(r=>'  "'+r.from+'"  ->  '+r.to).join('\n');
+  const card =
+"CLICHE FIELD — carried out\n\nThe story you fed the belly:\n"+story+
+"\n\nCliches you buried: "+S.buried.length+
+(rev? "\n\nLines you rewrote:\n"+rev : "")+
+"\n\n(Nothing was stored; you carried it.)";
+  if(navigator.clipboard){ navigator.clipboard.writeText(card).then(
+    ()=>showRevCount('Copied to your clipboard.'),
+    ()=>fallbackCopy(card)); } else fallbackCopy(card);
+}
+function fallbackCopy(t){ const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta);
+  ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); showRevCount('Copied.'); }
+
+/* ---------- comfort ---------- */
+function motion(){ return document.documentElement.getAttribute('data-motion')==='calm'; }
+function toggleLight(){ const on=document.body.classList.toggle('daylight');
+  document.getElementById('k-light').setAttribute('aria-pressed', on?'true':'false'); }
+let calm=false;
+function toggleMotion(){ calm=!calm; document.documentElement.setAttribute('data-motion', calm?'calm':'full');
+  document.getElementById('k-motion').setAttribute('aria-pressed', calm?'true':'false'); }
+if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){ toggleMotion(); }
+
+/* ---------- screen router: Home + Back on every screen ---------- */
+let histStack=[];
+function currentScreen(){ return ['intro','play','end'].find(s=>!document.getElementById(s).classList.contains('hidden')); }
+function showScreen(id, push){
+  if(push){ const cur=currentScreen(); if(cur && cur!==id) histStack.push(cur); }
+  ['intro','play','end'].forEach(s=>document.getElementById(s).classList.toggle('hidden', s!==id));
+  document.body.classList.toggle('at-home', id==='intro');
+  const bb=document.getElementById('btn-back'); if(bb) bb.disabled = histStack.length===0;
+}
+function goHome(){ histStack=[]; showScreen('intro', false); }
+function goBack(){ const prev=histStack.pop(); showScreen(prev||'intro', false); }
+showScreen('intro', false);
+
+/* ---------- keyboard: judgment, not twitch ---------- */
+document.addEventListener('keydown', (e)=>{
+  if(document.getElementById('play').classList.contains('hidden')) return;
+  if(e.code==='Space' || e.key===' '){ e.preventDefault(); decide('smash'); }
+  else if(e.code==='ArrowDown' || e.key==='ArrowDown' || e.key==='Enter'){ e.preventDefault(); decide('eat'); }
+});
+</script>
+</body>
+</html>

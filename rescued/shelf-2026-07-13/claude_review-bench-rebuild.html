@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  THE REVIEW BENCH — a peer-workshop trainer for EN195 flash fiction.
+  Tight Spiral Studios · walshero@gmail.com
+
+  FOUNDER BEARING (Compass, this session): North = a fun way for EN195 students to learn
+  flash fiction by WORKSHOPPING each other's pieces. South = Reader / Reviewer / Writer.
+  East (the guardrail) = "is it applicable to class enough for the detour?" — so the
+  test is BINARY: could this go in front of a real section next week? Built to pass that.
+
+  THE MOVE: the player sits in the REVIEWER seat — the seat beginners are worst at. They
+  read a short flash piece and PLACE NAMED MOVES on it (from the Workshop Wall built this
+  session): tap a line, name the move that's working or the move it needs. Then they see
+  what a strong reviewer flagged — not a "right answer," a defensible read. The Workshop
+  Wall stops being a reference and becomes the reviewer's TOOLKIT. This trains the
+  VOCABULARY; the real peer workshop still happens between humans, in class, after.
+
+  FERPA WALL [HALT, held]: the practice piece is NEUTRAL STUDIO-WRITTEN material, never
+  real student work (warm-up-on-neutral-ground rule). Nothing identifiable touches the
+  tool. When students later workshop each other for real, they bring the vocabulary the
+  game taught — the game trains the move, humans do the workshop.
+
+  DIGNITY: a review is never a verdict on the writer. Every prompt frames the move as
+  what the PIECE is doing or could do, never what the writer failed at. Praise-first
+  option is real, not decorative.
+
+  ENTRY REBUILD (2026-07-13): the opening comfort-palette screen was a WALL where a scene
+  should be. It is gone as a gate. The game now opens SCENE-FIRST — an inline-SVG bench at
+  dusk fills the viewport, ONE invitation ("Sit at the bench") reveals the bench unchanged.
+  The 3-stop palette lives in a small corner COMFORT KNOB (top-right pill, weight-normal),
+  reachable at all times, never blocking entry. Persistent Home + Back nav (hidden on the
+  home screen via body.at-home) copies the cliche-field-v6 router pattern.
+
+  VISIBILITY FLOOR (locked 2026-06-29): --ink2 == --ink; accents structural only;
+  GREEN-FREE (slate-B placeholder). Single-file, offline, in-memory; 3-stop comfort
+  (never #000/#fff, one dark + two light reachable); large type; 44px+; keyboard;
+  visible focus; reduced-motion safe; scroll-reset; shape+label not color alone; no
+  emoji; phone-width. Carry-out: emit, don't store.
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Review Bench — flash fiction peer workshop</title>
+<style>
+:root{
+  --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --ink2:#1f1b12;
+  --line:#d8caa8; --line2:#c2b288;
+  --accent:#3a4654; --accent2:#2b3540;       /* slate-B placeholder, GREEN-FREE */
+  --gold:#6e4700; --gold-br:#c8900a; --gold-pale:#fbeec6;
+  --rust:#8a3a1c;
+  --focus:#c8900a;
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+body.softer{ --bg:#efe9dd; --surface:#f7f1e6; --ink:#2c2618; --ink2:#2c2618; --line:#ded2b6; --line2:#cdbf9c; }
+body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0; --line:#4a4230; --line2:#5e553e;
+  --accent:#8fa6bd; --accent2:#9fb6cd; --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a; --rust:#e8a07c; }
+*{box-sizing:border-box;} html,body{margin:0;}
+body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; -webkit-text-size-adjust:100%; }
+
+/* corner nav — Home + Back on every screen but the home screen itself
+   (pattern copied from cliche-field-v6.html) */
+.nav{ position:fixed; top:12px; left:12px; z-index:60; display:flex; gap:8px; }
+body.at-home .nav{ display:none; }
+.navbtn{ font:700 .82rem/1 var(--sans); padding:9px 15px; min-height:42px; border-radius:10px;
+  background:var(--surface); border:2px solid var(--line2); color:var(--ink); cursor:pointer; }
+.navbtn:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+.navbtn[disabled]{ opacity:.45; cursor:default; }
+
+/* corner comfort knob — small + weight-normal on purpose: never a primary invitation,
+   never a gate; reachable at all times, cycles the three comfort stops */
+.comfort{ position:fixed; top:12px; right:12px; z-index:60; }
+.cstop{ font:500 .78rem/1 var(--sans); padding:8px 13px; min-height:34px; border-radius:999px;
+  background:var(--surface); border:2px solid var(--line2); color:var(--ink); cursor:pointer; }
+.cstop:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+.wrap{ max-width:660px; margin:0 auto; padding:1.6rem 1rem 5rem; }
+.screen{ display:none; } .screen.on{ display:block; animation:fade .25s ease; }
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.where{ font:800 .72rem/1 var(--sans); letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:.6rem; }
+h1{ font-size:1.62rem; line-height:1.16; color:var(--ink); margin:.2rem 0 .5rem; }
+h2{ font-size:1.24rem; color:var(--ink); margin:.2rem 0 .6rem; }
+p{ margin:0 0 .9rem; } .lead{ font-size:1.08rem; } .beat{ font-style:italic; color:var(--ink2); }
+
+.go{ display:block; width:100%; font:800 1.04rem/1.2 var(--sans); cursor:pointer; min-height:56px; padding:.9rem 1rem; border:none; border-radius:13px; background:var(--accent); color:#fff; margin:.45rem 0; text-align:center; }
+body.warm .go{ background:#0f2b30; color:#fff; }
+.go:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+.go.sec{ background:var(--surface); color:var(--ink); border:2px solid var(--ink); }
+.go.ghost{ background:transparent; color:var(--ink); border:2px solid var(--line2); font-weight:700; min-height:48px; }
+.go:disabled{ opacity:.6; cursor:default; }
+
+/* ---------- SCENE-FIRST ENTRY (the bench at dusk) ---------- */
+.instage-wrap{ max-width:1160px; margin:0 auto; padding:58px 16px 0; }
+.introstage{ position:relative; width:100%; height:65vh; min-height:480px; max-height:600px;
+  border:3px solid var(--accent2); border-radius:22px; overflow:hidden; background:var(--surface);
+  box-shadow:0 12px 30px rgba(0,0,0,.18); }
+.introstage>svg{ width:100%; height:100%; display:block; }
+.introcap{ position:absolute; left:0; right:0; bottom:0; padding:1.4rem 1.5rem 1.3rem;
+  background:linear-gradient(0deg, rgba(18,14,6,.86), rgba(18,14,6,.55) 46%, rgba(18,14,6,0)); }
+.introcap h1{ margin:0 0 .35rem; color:#fff; font-size:clamp(1.5rem,3.6vw,2.3rem); line-height:1.14; }
+.introcap p{ margin:0; color:#f6efdc; font-size:clamp(.98rem,2.2vw,1.12rem); max-width:52ch; }
+.begin-row{ display:flex; justify-content:center; margin:1.1rem 0 2rem; }
+.begin{ font:800 1.1rem/1.15 var(--sans); padding:1rem 2.6rem; min-height:56px; min-width:210px;
+  border:none; border-radius:14px; background:var(--accent); color:#fff; cursor:pointer;
+  box-shadow:0 5px 0 rgba(0,0,0,.22); }
+body.warm .begin{ background:#0f2b30; }
+.begin:active{ transform:translateY(3px); box-shadow:0 2px 0 rgba(0,0,0,.22); }
+.begin:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+
+/* the piece */
+.piece{ border:3px solid var(--accent2); border-radius:16px; background:var(--surface); padding:.8rem .95rem 1rem; margin:.5rem 0 1rem; }
+.piece .ph{ text-align:center; border-bottom:3px double var(--accent2); padding-bottom:.4rem; margin-bottom:.7rem; }
+.piece .pk{ font:800 .64rem/1 var(--sans); letter-spacing:.14em; text-transform:uppercase; color:var(--accent2); }
+.piece .ptitle{ font:800 1.12rem/1.1 var(--serif); color:var(--ink); }
+.piece .pby{ font:400 .8rem/1.2 var(--sans); color:var(--ink2); margin-top:.15rem; }
+.ln{ display:block; width:100%; text-align:left; font-size:1.06rem; line-height:1.6; padding:.5rem .55rem; margin:.15rem 0; border:2px solid transparent; border-radius:9px; background:transparent; color:var(--ink); cursor:pointer; font-family:var(--serif); }
+.ln:hover{ border-color:var(--gold-br); }
+.ln:focus-visible{ outline:3px solid var(--focus); outline-offset:1px; }
+.ln.tagged{ border-color:var(--accent2); background:var(--gold-pale); }
+.ln .badge{ display:inline-block; font:800 .64rem/1 var(--sans); letter-spacing:.04em; text-transform:uppercase; color:#fff; background:var(--accent2); border-radius:5px; padding:.2rem .38rem; margin-left:.4rem; vertical-align:middle; }
+body.warm .ln .badge{ color:#fff; background:#0f2b30; }
+
+/* move picker (the toolkit = the Workshop Wall) */
+.picker{ position:fixed; inset:0; background:rgba(20,18,12,.55); display:none; align-items:flex-end; z-index:50; }
+.picker.on{ display:flex; }
+.sheet{ background:var(--bg); width:100%; max-width:660px; margin:0 auto; border-radius:18px 18px 0 0; border:3px solid var(--accent2); border-bottom:none; padding:1rem 1rem 1.4rem; max-height:86vh; overflow:auto; }
+.sheet h2{ margin-top:.2rem; }
+.sheet .q{ font:600 .96rem/1.4 var(--sans); color:var(--ink); margin:0 0 .6rem; }
+.movebtn{ display:flex; align-items:center; gap:.7rem; width:100%; text-align:left; border:2px solid var(--line2); border-radius:12px; background:var(--surface); padding:.7rem .8rem; margin:.4rem 0; cursor:pointer; min-height:60px; }
+.movebtn:hover{ border-color:var(--gold-br); } .movebtn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.movebtn .mi{ width:40px; height:40px; flex:none; }
+.movebtn .mn{ font:800 1rem/1.15 var(--sans); color:var(--ink); }
+.movebtn .md{ font:400 .84rem/1.3 var(--sans); color:var(--ink2); }
+.sheet .cancel{ margin-top:.6rem; }
+
+.tally{ position:sticky; top:8px; z-index:20; background:var(--surface); border:2px solid var(--line2); border-radius:12px; padding:.5rem .7rem; margin:0 0 .9rem; font:700 .86rem/1.3 var(--sans); color:var(--ink); }
+.hint{ border-left:5px solid var(--gold-br); background:var(--gold-pale); border-radius:0 10px 10px 0; padding:.7rem .9rem; margin:.8rem 0; font:400 .95rem/1.45 var(--sans); }
+
+/* compare */
+.cmp{ border:2px solid var(--line2); border-radius:13px; background:var(--surface); padding:.85rem .9rem; margin:.8rem 0; }
+.cmp .lnq{ font:700 1rem/1.4 var(--serif); color:var(--ink); margin:0 0 .3rem; }
+.cmp .you{ font:700 .85rem/1.3 var(--sans); color:var(--ink); }
+.cmp .strong{ font:400 .92rem/1.4 var(--sans); color:var(--ink); margin:.3rem 0 0; }
+.cmp .match{ display:inline-block; font:800 .64rem/1 var(--sans); text-transform:uppercase; letter-spacing:.04em; border:2px solid var(--accent2); color:var(--ink); border-radius:5px; padding:.2rem .4rem; margin-left:.3rem; }
+
+.copyout{ border:2px solid var(--accent2); border-radius:13px; background:var(--surface); padding:.85rem .9rem; margin:1rem 0; }
+.copyout .ch{ font:800 .78rem/1 var(--sans); letter-spacing:.05em; text-transform:uppercase; color:var(--accent2); margin-bottom:.5rem; }
+.copyout label{ display:block; font:700 .85rem/1.3 var(--sans); margin:.6rem 0 .25rem; }
+.copyout textarea{ width:100%; font:400 .92rem/1.5 var(--sans); padding:.6rem; border:2px solid var(--line2); border-radius:9px; background:var(--bg); color:var(--ink); min-height:74px; resize:vertical; }
+.copyout textarea:focus-visible{ outline:3px solid var(--focus); outline-offset:1px; }
+#carry{ width:100%; font:400 .86rem/1.5 var(--sans); padding:.7rem; border:2px solid var(--line2); border-radius:9px; background:var(--bg); color:var(--ink); min-height:160px; resize:vertical; white-space:pre-wrap; margin-top:.5rem; }
+.copied{ font:700 .85rem/1 var(--sans); color:var(--ink); margin:.4rem 0 0; min-height:1.2em; }
+
+.foot{ margin-top:1.6rem; padding:1rem; background:var(--accent); color:#fff; border-radius:12px; font-family:var(--sans); font-size:.8rem; }
+body.warm .foot{ background:#0f2b30; color:#fff; } .foot a{ color:#fff; } body.warm .foot a{ color:#fff; }
+body.at-home .foot{ display:none; }
+.sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+@media (max-width:520px){ body{font-size:18px;} h1{font-size:1.4rem;} .wrap{padding:1.3rem .8rem 5rem;} .ln{font-size:1.02rem;} .instage-wrap{padding-top:56px;} }
+@media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+</style>
+</head>
+<body class="at-home">
+
+<div class="nav" id="nav" role="navigation" aria-label="Bench navigation">
+  <button class="navbtn" id="btn-home">Home</button>
+  <button class="navbtn" id="btn-back">Back</button>
+</div>
+
+<div class="comfort">
+  <button class="cstop" id="cstop" aria-label="Change comfort palette — cycles softer, default, warm-dark">Comfort: Default</button>
+</div>
+
+<!-- SCREEN 0 — SCENE-FIRST ENTRY -->
+<section class="screen on" id="introScreen" aria-labelledby="introh">
+  <div class="instage-wrap">
+    <div class="introstage">
+      <svg viewBox="0 0 1200 620" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A warm workshop bench at dusk. One sheet of flash fiction lies under a reading lamp with a single line marked, a pen resting across the page, a mug of coffee steaming beside it, and a seat pulled up close for you.">
+        <defs>
+          <radialGradient id="rb-air" cx="58%" cy="26%" r="92%">
+            <stop offset="0" stop-color="var(--gold-pale)"/>
+            <stop offset="1" stop-color="var(--bg)"/>
+          </radialGradient>
+          <linearGradient id="rb-desk" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="var(--line2)"/>
+            <stop offset="1" stop-color="var(--accent2)"/>
+          </linearGradient>
+          <radialGradient id="rb-glow" cx="50%" cy="50%" r="50%">
+            <stop offset="0" stop-color="var(--gold-br)" stop-opacity="0.5"/>
+            <stop offset="1" stop-color="var(--gold-br)" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect x="0" y="0" width="1200" height="620" fill="url(#rb-air)"/>
+        <ellipse cx="600" cy="340" rx="380" ry="250" fill="url(#rb-glow)"/>
+        <!-- desk surface -->
+        <path d="M0 432 L1200 402 L1200 620 L0 620 Z" fill="url(#rb-desk)"/>
+        <path d="M0 432 L1200 402" stroke="var(--gold-br)" stroke-width="4" opacity="0.5" fill="none"/>
+        <!-- manuscript sheet -->
+        <g transform="rotate(-4 600 360)">
+          <rect x="440" y="150" width="330" height="430" rx="7" fill="var(--surface)" stroke="var(--line2)" stroke-width="3"/>
+          <rect x="482" y="196" width="176" height="16" rx="5" fill="var(--accent2)"/>
+          <g fill="var(--line2)">
+            <rect x="482" y="242" width="252" height="9" rx="4"/>
+            <rect x="482" y="268" width="232" height="9" rx="4"/>
+            <rect x="482" y="294" width="246" height="9" rx="4"/>
+            <rect x="482" y="332" width="196" height="9" rx="4" fill="var(--gold-br)"/>
+            <rect x="482" y="358" width="240" height="9" rx="4"/>
+            <rect x="482" y="384" width="220" height="9" rx="4"/>
+            <rect x="482" y="422" width="238" height="9" rx="4"/>
+            <rect x="482" y="448" width="176" height="9" rx="4"/>
+          </g>
+          <rect x="690" y="324" width="46" height="24" rx="5" fill="var(--rust)"/>
+        </g>
+        <!-- pen across the page -->
+        <g transform="rotate(22 730 474)">
+          <rect x="606" y="468" width="230" height="12" rx="6" fill="var(--accent)"/>
+          <rect x="606" y="468" width="34" height="12" rx="6" fill="var(--rust)"/>
+          <path d="M836 468 l 30 6 l -30 6 z" fill="var(--gold-br)"/>
+        </g>
+        <!-- mug + steam -->
+        <ellipse cx="252" cy="512" rx="74" ry="20" fill="var(--accent2)" opacity="0.35"/>
+        <rect x="198" y="430" width="108" height="86" rx="12" fill="var(--surface)" stroke="var(--accent2)" stroke-width="4"/>
+        <path d="M306 452 q 42 6 42 34 q 0 26 -42 30" fill="none" stroke="var(--accent2)" stroke-width="8"/>
+        <ellipse cx="252" cy="430" rx="52" ry="13" fill="var(--gold)" opacity="0.45"/>
+        <path d="M234 416 q -12 -20 4 -40 q 14 -18 2 -38" fill="none" stroke="var(--line2)" stroke-width="4" opacity="0.55" stroke-linecap="round"/>
+        <path d="M270 416 q -12 -20 4 -40 q 14 -18 2 -38" fill="none" stroke="var(--line2)" stroke-width="4" opacity="0.4" stroke-linecap="round"/>
+        <!-- reading lamp -->
+        <rect x="1058" y="470" width="14" height="140" rx="6" fill="var(--accent2)"/>
+        <ellipse cx="1065" cy="610" rx="58" ry="15" fill="var(--accent2)"/>
+        <path d="M1065 470 q 0 -122 -112 -152" fill="none" stroke="var(--accent2)" stroke-width="12" stroke-linecap="round"/>
+        <path d="M912 300 l 98 18 l -30 66 z" fill="var(--accent)"/>
+        <ellipse cx="956" cy="368" rx="26" ry="9" fill="var(--gold-br)" opacity="0.9"/>
+        <!-- the seat pulled up for you -->
+        <path d="M448 618 q 152 -78 300 0" fill="none" stroke="var(--accent2)" stroke-width="20" stroke-linecap="round" opacity="0.85"/>
+      </svg>
+      <div class="introcap">
+        <h1 id="introh">Someone left their pages on the bench.</h1>
+        <p>A classmate hands you a flash piece. Tonight you read it like a reviewer, and name the moves you see &mdash; then compare with a strong read.</p>
+      </div>
+    </div>
+  </div>
+  <div class="begin-row">
+    <button class="begin" id="begin">Sit at the bench</button>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <!-- SCREEN 1 — HOW IT WORKS -->
+  <section class="screen" id="scene" aria-labelledby="sceneh">
+    <div class="where">The bench</div>
+    <h1 id="sceneh">You're the reviewer today.</h1>
+    <p class="lead">A classmate hands you a flash piece. The hardest part of workshop isn't being nice or being harsh — it's <b>naming what you see</b>.</p>
+    <p>So you won't write loose comments. You'll read the piece line by line and place a <b>named move</b> on the lines that earn one — the same moves from the Workshop Wall. Then you'll see what a strong reviewer marked, and where you agreed.</p>
+    <div class="hint"><b>The rule of the bench:</b> a review is about the <i>piece</i>, never the writer. You're not grading a person. You're pointing at what the words are doing — and what one small move could do next.</div>
+    <p class="beat">This piece is a sample we wrote for practice — not anyone's real work. You warm up here, then bring these names to your real classmates.</p>
+    <button class="go" id="toReview">Read the piece &rarr;</button>
+  </section>
+
+  <!-- SCREEN 2 — REVIEW -->
+  <section class="screen" id="review" aria-labelledby="reviewh">
+    <div class="where">Mark the moves</div>
+    <div class="tally" id="tally" aria-live="polite">Tap a line, name the move you see. Mark at least 3 to finish.</div>
+    <div class="piece">
+      <div class="ph"><div class="pk">Flash fiction · for practice</div><div class="ptitle">The Spare Key</div><div class="pby">a sample piece — not a classmate's real work</div></div>
+      <div id="lines"></div>
+    </div>
+    <p class="sr" id="liveStat" aria-live="polite"></p>
+    <button class="go" id="toCompare" disabled>See what a strong reviewer marked &rarr;</button>
+  </section>
+
+  <!-- SCREEN 3 — COMPARE / TEACH -->
+  <section class="screen" id="compare" aria-labelledby="compareh">
+    <div class="where">Compare reads</div>
+    <h1 id="compareh">Here's where your eye and a strong reviewer's met.</h1>
+    <p>There's no single right answer in workshop — only reads you can defend. These are the moves a careful reviewer flagged, and what they'd say to the writer. See where you already saw it.</p>
+    <div id="cmpList"></div>
+
+    <div class="hint" id="scoreLine"></div>
+
+    <div class="copyout">
+      <div class="ch">Carry it out — your reviewer's note (nothing is sent)</div>
+      <p style="font:400 .9rem/1.45 var(--sans); margin:0 0 .3rem;">This builds the note you'd hand the writer. Praise first, then one move. Copy it into a Doc or your workshop comments.</p>
+      <label for="praise">One thing this piece already does well</label>
+      <textarea id="praise" placeholder="e.g. the last line trusts the reader — it doesn't explain"></textarea>
+      <label for="onemove">One move you'd suggest (name it)</label>
+      <textarea id="onemove" placeholder="e.g. try the Cut on line 2 — it's carrying weight the story doesn't need"></textarea>
+      <button class="go" id="buildCarry" style="margin-top:.7rem;">Build my reviewer's note &rarr;</button>
+      <textarea id="carry" readonly aria-label="Your reviewer note to carry out"></textarea>
+      <button class="go sec" id="copyCarry">Copy it</button>
+      <p class="copied" id="copiedMsg" aria-live="polite"></p>
+    </div>
+
+    <button class="go ghost" id="again">Review it again</button>
+  </section>
+
+  <div class="foot">
+    Tight Spiral Studios · <a href="mailto:walshero@gmail.com">walshero@gmail.com</a> — <b>The Review Bench</b>, a peer-workshop trainer for EN195 flash fiction. The reviewer names moves on a sample piece, then compares with a strong read. Trains the vocabulary; the real workshop still happens between people. Single file, offline, nothing stored or sent.<br>
+    <b>FERPA:</b> the practice piece is studio-written, never a real student's work. <b>How this was made:</b> founder's Compass set North on "students learn flash fiction by workshopping each other." The Workshop Wall (built this session) became the reviewer's toolkit. Cleese's test: would it go in front of a real section next week? Built to pass it. Green-free slate placeholder pending the palette pick.
+  </div>
+</div>
+
+<!-- MOVE PICKER SHEET -->
+<div class="picker" id="picker" role="dialog" aria-modal="true" aria-labelledby="pickerh">
+  <div class="sheet">
+    <h2 id="pickerh">What's this line doing?</h2>
+    <p class="q" id="pickerLine"></p>
+    <div id="moveBtns"></div>
+    <button class="go ghost cancel" id="cancelPick">Never mind — close</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+
+  /* ---- comfort knob (corner pill; cycles the three stops, never a gate) ---- */
+  var stops=['softer','default','warm'], ci=1;
+  var stopLabel={softer:'Softer',default:'Default',warm:'Warm-dark'};
+  function applyStop(s){ document.body.classList.remove('softer','warm'); if(s==='softer')document.body.classList.add('softer'); if(s==='warm')document.body.classList.add('warm'); }
+  function labelStop(){ $('cstop').textContent='Comfort: '+stopLabel[stops[ci]]; }
+  $('cstop').addEventListener('click',function(){ ci=(ci+1)%3; applyStop(stops[ci]); labelStop(); });
+  labelStop();
+
+  /* ---- screen router: Home + Back on every screen but the home screen
+     (pattern copied from cliche-field-v6.html) ---- */
+  var SCREENS=['introScreen','scene','review','compare'];
+  var histStack=[];
+  function currentScreen(){ for(var i=0;i<SCREENS.length;i++){ if($(SCREENS[i]).classList.contains('on')) return SCREENS[i]; } return null; }
+  function showScreen(id,push){
+    if(push){ var cur=currentScreen(); if(cur && cur!==id) histStack.push(cur); }
+    document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');});
+    $(id).classList.add('on');
+    document.body.classList.toggle('at-home', id==='introScreen');
+    var bb=$('btn-back'); if(bb) bb.disabled = histStack.length===0;
+    window.scrollTo(0,0);
+    if(id!=='introScreen'){ var h=$(id).querySelector('h1'); if(h){ h.setAttribute('tabindex','-1'); h.focus(); } }
+  }
+  $('btn-home').addEventListener('click',function(){ histStack=[]; showScreen('introScreen',false); });
+  $('btn-back').addEventListener('click',function(){ var prev=histStack.pop(); showScreen(prev||'introScreen',false); });
+  $('begin').addEventListener('click',function(){ showScreen('scene',true); });
+  $('toReview').addEventListener('click',function(){ showScreen('review',true); });
+
+  /* ---- the moves (the Workshop Wall toolkit) ---- */
+  var MOVES={
+    cut:{n:'The Cut', d:'a line carrying weight the story doesn’t need', i:'<svg class="mi" viewBox="0 0 40 40" aria-hidden="true"><circle cx="13" cy="28" r="5" fill="none" stroke="var(--ink)" stroke-width="2"/><circle cx="27" cy="28" r="5" fill="none" stroke="var(--ink)" stroke-width="2"/><path d="M16 24 L33 9 M24 24 L7 9" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/></svg>'},
+    imply:{n:'Implication', d:'says less; lets the unsaid do the work', i:'<svg class="mi" viewBox="0 0 40 40" aria-hidden="true"><path d="M4 18 H36" stroke="var(--accent2)" stroke-width="1.6" stroke-dasharray="3 3"/><path d="M14 18 L20 7 L26 18 Z" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.8"/><path d="M10 18 H30 L25 34 H15 Z" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.8"/></svg>'},
+    noun:{n:'The Concrete Noun', d:'carries the feeling in an object you can hold', i:'<svg class="mi" viewBox="0 0 40 40" aria-hidden="true"><circle cx="13" cy="14" r="7" fill="none" stroke="var(--ink)" stroke-width="2.2"/><circle cx="13" cy="14" r="2" fill="var(--rust)"/><path d="M18 19 L33 34 M28 29 L32 25" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round"/></svg>'},
+    turn:{n:'The Late Turn', d:'the change that arrives last and lands', i:'<svg class="mi" viewBox="0 0 40 40" aria-hidden="true"><rect x="6" y="6" width="18" height="28" fill="none" stroke="var(--ink)" stroke-width="1.8"/><path d="M24 8 L34 12 L34 30 L24 34 Z" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.8"/></svg>'},
+    line:{n:'The Unflinching Line', d:'states the hard thing plainly, no hedging', i:'<svg class="mi" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 5 V26" stroke="var(--ink)" stroke-width="1.8"/><path d="M16 26 H24 L20 36 Z" fill="var(--rust)" stroke="var(--ink)" stroke-width="1.6"/></svg>'}
+  };
+
+  /* ---- the sample piece. Original studio text. Each line has a defensible
+     "strong reviewer" read: the move + what they'd say. Some lines are working
+     (praise the move present); some need a move (suggest it). No single right
+     answer — the compare shows a defensible read, not a key. ---- */
+  var PIECE=[
+    {t:"He left the spare key under the third flowerpot, the way he always had for the past several years.",
+     move:'cut', kind:'needs',
+     say:"“the way he always had for the past several years” is weight the story doesn’t need — try the Cut. “He left the spare key under the third flowerpot” already implies the habit."},
+    {t:"She found it on a Tuesday.",
+     move:'imply', kind:'works',
+     say:"Implication is working. “Found it” — not him — tells us he’s gone without saying so. The Tuesday makes it ordinary, which makes it worse."},
+    {t:"The key was cold.",
+     move:'noun', kind:'works',
+     say:"The Concrete Noun carries the whole feeling. “Cold” is the only emotion-word the piece needs — it’s in the object, not narrated."},
+    {t:"She stood there holding it and felt a deep and overwhelming sadness wash over her entire body.",
+     move:'cut', kind:'needs',
+     say:"This line names the feeling the cold key already gave us. Try the Cut, or the Unflinching Line — trust the reader; you’ve done the work above."},
+    {t:"She put it back.",
+     move:'turn', kind:'works',
+     say:"The Late Turn. Three words, and it only lands because everything above earned it — she’s not ready to keep it. Don’t touch this line."}
+  ];
+
+  var marks={};   /* index -> move key */
+  var linesBox=$('lines');
+  PIECE.forEach(function(p,i){
+    var b=document.createElement('button');
+    b.className='ln'; b.id='ln'+i; b.type='button';
+    b.setAttribute('aria-label','line '+(i+1)+': '+p.t+' — tap to name a move');
+    b.innerHTML=p.t;
+    b.addEventListener('click',function(){ openPicker(i); });
+    linesBox.appendChild(b);
+  });
+
+  function renderLine(i){
+    var b=$('ln'+i); var p=PIECE[i];
+    b.innerHTML = p.t + (marks[i] ? '<span class="badge">'+MOVES[marks[i]].n+'</span>' : '');
+    b.classList.toggle('tagged', !!marks[i]);
+  }
+  function updateTally(){
+    var n=Object.keys(marks).length;
+    $('tally').textContent = n<3 ? ('Tap a line, name the move you see. Marked '+n+' of at least 3.')
+                                 : ('Marked '+n+'. Good eye. See how a strong reviewer read it, or mark more.');
+    $('toCompare').disabled = n<3;
+    $('liveStat').textContent = 'Marked '+n+' lines.';
+  }
+
+  /* picker sheet */
+  var current=-1;
+  function openPicker(i){
+    current=i; $('pickerLine').textContent='“'+PIECE[i].t+'”';
+    var box=$('moveBtns'); box.innerHTML='';
+    Object.keys(MOVES).forEach(function(k){
+      var m=MOVES[k];
+      var btn=document.createElement('button'); btn.className='movebtn'; btn.type='button';
+      btn.innerHTML=m.i+'<span><span class="mn">'+m.n+'</span><br><span class="md">'+m.d+'</span></span>';
+      btn.addEventListener('click',function(){ marks[i]=k; renderLine(i); updateTally(); closePicker(); });
+      box.appendChild(btn);
+    });
+    /* allow clearing */
+    var clr=document.createElement('button'); clr.className='movebtn'; clr.type='button';
+    clr.innerHTML='<span class="mi" aria-hidden="true"></span><span><span class="mn">Clear this mark</span><br><span class="md">leave the line unmarked</span></span>';
+    clr.addEventListener('click',function(){ delete marks[i]; renderLine(i); updateTally(); closePicker(); });
+    box.appendChild(clr);
+    $('picker').classList.add('on');
+    $('cancelPick').focus();
+  }
+  function closePicker(){ $('picker').classList.remove('on'); if(current>=0){ var b=$('ln'+current); if(b) b.focus(); } current=-1; }
+  $('cancelPick').addEventListener('click',closePicker);
+  $('picker').addEventListener('click',function(e){ if(e.target===this) closePicker(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && $('picker').classList.contains('on')) closePicker(); });
+
+  updateTally();
+
+  /* compare */
+  $('toCompare').addEventListener('click',function(){
+    var box=$('cmpList'); box.innerHTML=''; var agree=0;
+    PIECE.forEach(function(p,i){
+      var yours=marks[i]; var matched = yours===p.move;
+      if(matched) agree++;
+      var d=document.createElement('div'); d.className='cmp';
+      d.innerHTML =
+        '<div class="lnq">“'+p.t+'”</div>'+
+        '<div class="you">Your mark: '+(yours?MOVES[yours].n:'— (you left it unmarked)')+
+          (matched?'<span class="match">you saw it</span>':'')+'</div>'+
+        '<div class="strong"><b>A strong reviewer:</b> '+MOVES[p.move].n+(p.kind==='works'?' (working) ':' (suggest it) ')+'— '+p.say+'</div>';
+      box.appendChild(d);
+    });
+    $('scoreLine').innerHTML = '<b>You and the strong reviewer met on '+agree+' of '+PIECE.length+' lines.</b> Where you differed isn’t wrong — it’s a read you can defend or rethink. That’s workshop.';
+    showScreen('compare',true);
+  });
+
+  /* carry-out */
+  function carryOut(title,pairs){
+    var L=[title,'']; pairs.forEach(function(p){ var v=(p[1]||'').toString().trim(); if(v) L.push(p[0]+': '+v); });
+    L.push(''); L.push('(A reviewer’s note about the piece, not the writer. I chose to share this.)'); return L.join('\n');
+  }
+  $('buildCarry').addEventListener('click',function(){
+    var txt=carryOut('The Review Bench — my reviewer’s note',[
+      ['Works well', $('praise').value],
+      ['One move to try', $('onemove').value]
+    ]);
+    $('carry').value=txt;
+  });
+  $('copyCarry').addEventListener('click',function(){
+    var box=$('carry'); if(!box.value){ $('copiedMsg').textContent='Build it first.'; return; }
+    box.removeAttribute('readonly'); box.select(); box.setSelectionRange(0,99999);
+    try{document.execCommand('copy');}catch(e){} box.setAttribute('readonly','');
+    if(navigator.clipboard){ navigator.clipboard.writeText(box.value).then(function(){},function(){}); }
+    $('copiedMsg').textContent='Copied — paste it into your workshop comments or a Doc.';
+  });
+  $('again').addEventListener('click',function(){
+    marks={}; PIECE.forEach(function(p,i){ renderLine(i); });
+    $('praise').value=''; $('onemove').value=''; $('carry').value=''; $('copiedMsg').textContent='';
+    updateTally(); showScreen('review',true);
+  });
+
+  /* land scene-first */
+  showScreen('introScreen',false);
+})();
+</script>
+</body>
+</html>
