@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Castle Progress — Calibration Widget</title>
+<style>
+  :root{
+    --bg:#0c1623; --panel:#0c1623; --ink:#5CC6FF; --ink-soft:#5E84A6;
+    --line:#1d3550; --flag:#E5532E; --gold:#FFD98A;
+    --cb:#6e4a2c; --cm:#9a6a3c; --cf:#b98248; --ce:#5a3b20;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:transparent;}
+  /* transparent background so it sits on any host page; set --bg via host if wanted */
+  .wrap{width:100%;max-width:560px;margin:0 auto;font-family:"Segoe UI",system-ui,-apple-system,sans-serif;color:var(--ink);}
+  .castle-frame{position:relative;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+  .castle-frame svg{display:block;width:100%;height:auto;}
+  /* progress label + bar (optional, host can hide via data-attr) */
+  .meta{display:flex;justify-content:space-between;align-items:baseline;padding:10px 14px 0;font-size:14px;color:var(--ink-soft);}
+  .meta b{color:var(--ink);font-size:20px;}
+  .bar{height:8px;margin:8px 14px 14px;background:#0a1018;border:1px solid var(--line);border-radius:99px;overflow:hidden;}
+  .bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--ink),var(--gold));border-radius:99px;transition:width .6s cubic-bezier(.34,1.4,.64,1);}
+  .stage-name{font-size:13px;color:var(--ink-soft);padding:0 14px 12px;text-align:center;font-style:italic;}
+  /* the newest castle piece drops in */
+  .bdrop{transform-box:view-box;transform-origin:300px 120px;animation:bdrop .8s cubic-bezier(.34,1.56,.64,1) both;}
+  @keyframes bdrop{0%{transform:translateY(-120px);opacity:0;}50%{opacity:1;}70%{transform:translateY(10px);}85%{transform:translateY(-4px);}100%{transform:translateY(0);opacity:1;}}
+  .flag{transform-box:fill-box;transform-origin:left center;animation:flagsway 2.8s ease-in-out infinite;}
+  @keyframes flagsway{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(4deg);}}
+  /* bulbs flicker on at 100% (fully normed) */
+  .bulb{opacity:0;animation:bulbon .5s ease forwards;}
+  .bulb:nth-of-type(1){animation-delay:.1s;}.bulb:nth-of-type(2){animation-delay:.3s;}
+  .bulb:nth-of-type(3){animation-delay:.5s;}.bulb:nth-of-type(4){animation-delay:.7s;}.bulb:nth-of-type(5){animation-delay:.9s;}
+  @keyframes bulbon{0%{opacity:0;}60%{opacity:1;}70%{opacity:.55;}100%{opacity:1;}}
+  @media (prefers-reduced-motion: reduce){
+    .bar-fill{transition:none;}.bdrop{animation:none;}.flag{animation:none;}.bulb{animation:none;opacity:1;}
+  }
+  .hidden{display:none !important;}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="castle-frame">
+      <svg id="castle" viewBox="0 0 600 230" role="img"
+           aria-label="Calibration progress, shown as a castle being built"></svg>
+    </div>
+    <div class="meta" id="meta">
+      <span id="stageLabel">Not started</span>
+      <b><span id="pct">0</span>%</b>
+    </div>
+    <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="barRole">
+      <div class="bar-fill" id="barFill"></div>
+    </div>
+    <div class="stage-name" id="stageName">Awaiting first benchmark</div>
+  </div>
+
+<script>
+(function(){
+  "use strict";
+  var CB="#6e4a2c",CM="#9a6a3c",CF="#b98248",CE="#5a3b20";
+  function pc(d,fill){return '<path d="'+d+'" fill="'+fill+'" filter="url(#drop)"/>';}
+  function bD(s){return '<g class="bdrop">'+s+'</g>';}
+
+  var DEFS='<defs>'
+    +'<radialGradient id="warm" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#FFD37A" stop-opacity=".7"/><stop offset="100%" stop-color="#FFD37A" stop-opacity="0"/></radialGradient>'
+    +'<radialGradient id="win" cx="50%" cy="45%" r="65%"><stop offset="0%" stop-color="#FFF0C8"/><stop offset="55%" stop-color="#FFC25A"/><stop offset="100%" stop-color="#E8902F"/></radialGradient>'
+    +'<filter id="drop" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#000" flood-opacity=".45"/></filter>'
+    +'<filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3.2"/></filter>'
+    +'</defs>';
+  var GROUND='<rect x="0" y="0" width="600" height="230" fill="#0c1623"/>'
+    +'<ellipse cx="300" cy="206" rx="170" ry="11" fill="#000" opacity=".35" filter="url(#soft)"/>';
+
+  // castle pieces (matches the game's geometry)
+  var base    = pc('M150 196 L150 176 L450 176 L450 196 Z',CE);
+  var keep    = pc('M214 196 L210 116 L300 108 L390 116 L386 196 Z',CM);
+  var towers  = pc('M148 196 L150 92 L150 74 L172 72 L172 88 L196 86 L196 70 L220 68 L222 196 Z',CB)
+              + pc('M380 196 L382 70 L406 68 L406 86 L430 88 L430 72 L452 74 L454 92 L456 196 Z',CB);
+  var wall    = pc('M168 198 L166 150 L300 142 L436 150 L434 198 Z',CF);
+  var gateDark= '<path d="M276 198 L276 164 Q300 140 324 164 L324 198 Z" fill="'+CE+'"/>';
+  var gateLit = '<path d="M276 198 L276 164 Q300 140 324 164 L324 198 Z" fill="url(#win)"/>';
+  var flagpole= '<path d="M300 108 L300 64" stroke="'+CE+'" stroke-width="3" fill="none"/>';
+  var flag    = '<path class="flag" d="M300 66 L338 76 L300 88 Z" fill="#E5532E"/>';
+  function windows(){return '<g>'
+    +'<rect x="150" y="110" width="16" height="22" rx="2" fill="url(#win)"/>'
+    +'<rect x="434" y="110" width="16" height="22" rx="2" fill="url(#win)"/></g>';}
+  function lights(){
+    var pts=[[118,64],[200,48],[300,44],[400,50],[500,46]];
+    var wire='M'+pts[0][0]+' '+pts[0][1];
+    for(var i=1;i<pts.length;i++){var px=(pts[i-1][0]+pts[i][0])/2;wire+=' Q'+px+' '+(pts[i][1]-14)+' '+pts[i][0]+' '+pts[i][1];}
+    var b='<path d="'+wire+'" fill="none" stroke="#3a2a18" stroke-width="2.4"/>';
+    for(var j=0;j<pts.length;j++){b+='<g class="bulb"><circle cx="'+pts[j][0]+'" cy="'+pts[j][1]+'" r="11" fill="url(#warm)"/><circle cx="'+pts[j][0]+'" cy="'+pts[j][1]+'" r="4.2" fill="#FFE39A"/></g>';}
+    return b;
+  }
+
+  // Five stages mapped to progress thresholds. Each names a calibration milestone.
+  // 0: nothing · 1-24: foundation · 25-49: +keep · 50-74: +towers · 75-99: +wall (built, unlit) · 100: lit (normed)
+  var STAGES=[
+    {min:0,  name:"Awaiting first benchmark", label:"Not started"},
+    {min:1,  name:"Foundation laid \u00b7 first scores in",       label:"Getting started"},
+    {min:25, name:"Walls up \u00b7 raters warming to the rubric", label:"Building"},
+    {min:50, name:"Towers \u00b7 benchmarks converging",          label:"Converging"},
+    {min:75, name:"Built \u00b7 nearly normed",                   label:"Almost there"},
+    {min:100,name:"Normed \u00b7 the group agrees",               label:"Calibrated"}
+  ];
+  function stageFor(p){var s=STAGES[0];for(var i=0;i<STAGES.length;i++){if(p>=STAGES[i].min)s=STAGES[i];}return s;}
+
+  var prevStage=-1, svg=document.getElementById("castle");
+
+  // build the castle markup for a given progress, marking the newest piece for the drop-in
+  function castleAt(p,animateNew){
+    var inner=DEFS+GROUND;
+    var stageIdx=0;for(var i=0;i<STAGES.length;i++){if(p>=STAGES[i].min)stageIdx=i;}
+    // stageIdx: 0 none,1 foundation,2 keep,3 towers,4 wall,5 lit
+    function maybe(piece,idxIntroduced){
+      if(stageIdx<idxIntroduced)return '';
+      if(animateNew && stageIdx===idxIntroduced && idxIntroduced>0)return bD(piece);
+      return piece;
+    }
+    inner+=maybe(base,1);
+    inner+=maybe(keep,2);
+    inner+=maybe(towers,3);
+    if(stageIdx>=4){
+      var wallGroup=wall+(stageIdx>=5?windows()+gateLit:gateDark)+flagpole+flag;
+      inner+=(animateNew&&stageIdx===4)?bD(wall+gateDark+flagpole+flag):(stageIdx>=5?wall+windows()+gateLit+flagpole+flag:wall+gateDark+flagpole+flag);
+    }
+    if(stageIdx>=5)inner+=lights();
+    return inner;
+  }
+
+  // PUBLIC API ---------------------------------------------------------------
+  var current=0;
+  function setProgress(p){
+    p=Math.max(0,Math.min(100,Math.round(Number(p)||0)));
+    var st=stageFor(p), stageIdx=STAGES.indexOf(st);
+    var animateNew=(stageIdx!==prevStage);
+    svg.innerHTML=castleAt(p,animateNew);
+    prevStage=stageIdx;
+    current=p;
+    // update meta + bar
+    document.getElementById("pct").textContent=p;
+    document.getElementById("stageLabel").textContent=st.label;
+    document.getElementById("stageName").textContent=st.name;
+    document.getElementById("barFill").style.width=p+"%";
+    var role=document.getElementById("barRole");
+    role.setAttribute("aria-valuenow",p);
+    role.setAttribute("aria-label","Calibration progress: "+st.name);
+    svg.setAttribute("aria-label","Calibration progress "+p+" percent: "+st.name);
+    return p;
+  }
+  function getProgress(){return current;}
+  // expose globally so a host page can call directly
+  window.CastleProgress={set:setProgress,get:getProgress};
+
+  // OPTIONAL: hide the text/bar chrome if host only wants the castle
+  // add ?chrome=off to the iframe src, or postMessage {castle:{chrome:false}}
+  function setChrome(on){
+    ["meta","barRole","stageName"].forEach(function(id){
+      var el=document.getElementById(id); if(el)el.classList.toggle("hidden",!on);
+    });
+  }
+
+  // EMBED SUPPORT: listen for postMessage from the host (Confluence Calibration tool)
+  // host sends: iframe.contentWindow.postMessage({castle:{progress:62}}, '*')
+  window.addEventListener("message",function(e){
+    var d=e&&e.data&&e.data.castle; if(!d)return;
+    if(typeof d.progress!=="undefined")setProgress(d.progress);
+    if(typeof d.chrome!=="undefined")setChrome(!!d.chrome);
+  });
+
+  // INIT: read ?progress= and ?chrome= from URL for quick testing / static embeds
+  function qp(k){try{return new URLSearchParams(location.search).get(k);}catch(e){return null;}}
+  var pq=qp("progress"); var cq=qp("chrome");
+  if(cq==="off")setChrome(false);
+  setProgress(pq!==null?pq:0);
+
+  // tiny demo if opened with ?demo=1 — auto-climbs so you can see all stages
+  if(qp("demo")==="1"){
+    var v=0; setProgress(0);
+    var t=setInterval(function(){v+=12; if(v>100){clearInterval(t);return;} setProgress(v);},900);
+  }
+})();
+</script>
+</body>
+</html>

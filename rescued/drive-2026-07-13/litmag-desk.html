@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Editor's Desk — Lit Mag Feedback</title>
+<style>
+  :root{
+    --paper:#f3ead7;--paper-warm:#e8d9b8;--kraft:#cdb088;--kraft-dark:#a8895f;--ink:#2b2419;
+    --cool-1:#8fb0ab;--cool-2:#5f8a86;--sky:#bcd6df;--accent-red:#c25b4a;--accent-gold:#e0a83d;--accent-leaf:#7d9b54;
+    --slip:#fff8e8;
+    --type-display:"Iowan Old Style","Palatino Linotype","Palatino",Georgia,serif;
+    --type-body:"Verdana","Segoe UI",system-ui,sans-serif;
+    --fs-body:clamp(17px,2.7vw,20px);--focus:#1b6fb3;
+  }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{background:var(--paper);color:var(--ink);font-family:var(--type-body);font-size:var(--fs-body);line-height:1.55;}
+  .wrap{max-width:760px;margin:0 auto;padding:18px 14px 100px;}
+  h1{font-family:var(--type-display);font-size:clamp(26px,6vw,40px);line-height:1.05;margin:.1em 0;}
+  .eyebrow{font-family:"SF Mono",Consolas,monospace;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--cool-2);margin-bottom:6px;}
+  :focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:8px;}
+  .lede{max-width:60ch;font-size:16px;}
+
+  .piece{background:#fffdf6;border-radius:14px;padding:20px 22px;box-shadow:0 4px 0 var(--kraft-dark);margin:14px 0;font-family:var(--type-display);font-size:19px;line-height:1.7;}
+  .piece .title{font-size:23px;font-weight:600;margin-bottom:2px;}
+  .piece .by{font-family:var(--type-body);font-size:13px;color:var(--kraft-dark);margin-bottom:14px;}
+  .piece p{margin:0 0 14px;}
+  .ln{cursor:pointer;border-radius:4px;padding:1px 2px;transition:background .2s;}
+  .ln:hover,.ln:focus-visible{background:#fde6b8;outline:2px solid var(--accent-gold);}
+  .ln.noted{background:#fbe39a;box-shadow:inset 0 -2px 0 var(--accent-gold);}
+
+  .composer{background:var(--paper-warm);border-radius:14px;padding:14px 16px;box-shadow:0 4px 0 var(--kraft-dark);margin:12px 0;}
+  .composer h2{font-family:var(--type-display);font-size:20px;margin:0 0 4px;}
+  .composer .target{font-size:14px;color:var(--kraft-dark);margin-bottom:8px;min-height:1.2em;}
+  textarea{width:100%;font:inherit;padding:12px;border-radius:10px;border:2px solid var(--kraft);min-height:80px;background:#fffdf6;}
+  .tagrow{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;}
+  .tagrow button{appearance:none;cursor:pointer;font:inherit;font-size:13px;border:none;border-radius:999px;padding:8px 12px;min-height:40px;background:#fffdf6;color:var(--ink);box-shadow:0 2px 0 var(--kraft-dark);}
+  .tagrow button[aria-pressed=true]{background:var(--cool-2);color:var(--paper);box-shadow:0 2px 0 #3f615e;}
+  .tagrow .wc[aria-pressed=true]{background:var(--cool-2);}
+  .tagrow .ct[aria-pressed=true]{background:var(--accent-leaf);box-shadow:0 2px 0 #5a7340;}
+  .composer .hint{font-size:13px;color:var(--kraft-dark);}
+  .btn{appearance:none;cursor:pointer;font:inherit;font-weight:600;border:none;border-radius:12px;padding:13px 18px;min-height:50px;background:var(--accent-gold);color:var(--ink);box-shadow:0 4px 0 #b07f20;}
+  .btn:hover,.btn:focus-visible{background:var(--accent-red);color:var(--paper);}
+  .btn.sec{background:#fffdf6;color:var(--ink);box-shadow:0 4px 0 var(--kraft-dark);}
+
+  .slips{margin:14px 0;}
+  .slip{position:relative;background:var(--slip);border-radius:6px;padding:12px 14px 12px 16px;margin:10px 0;
+        box-shadow:0 3px 0 var(--kraft-dark);transform-origin:left top;}
+  .slip.bloom{animation:bloom .5s cubic-bezier(.34,1.4,.5,1);}
+  @keyframes bloom{0%{transform:scale(.6) rotate(-4deg);opacity:0;}100%{transform:scale(1) rotate(-1deg);opacity:1;}}
+  body.reduce .slip.bloom{animation:none;}
+  .slip::before{content:"";position:absolute;left:-7px;top:14px;width:14px;height:14px;border-radius:50%;background:var(--accent-red);box-shadow:0 1px 0 #8a3f33;}
+  .slip .q{font-style:italic;color:var(--kraft-dark);font-size:14px;}
+  .slip .note{margin-top:4px;}
+  .slip .tags{margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;}
+  .slip .chip{font-size:11px;font-family:"SF Mono",monospace;padding:2px 7px;border-radius:999px;color:var(--paper);}
+  .slip .chip.wc{background:var(--cool-2);} .slip .chip.ct{background:var(--accent-leaf);}
+  .slip .del{position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;font-size:16px;color:var(--kraft-dark);min-width:36px;min-height:36px;}
+
+  .map{background:var(--paper-warm);border-radius:14px;padding:14px 16px;box-shadow:0 4px 0 var(--kraft-dark);margin:14px 0;display:none;}
+  .map.show{display:block;}
+  .map h2{font-family:var(--type-display);font-size:20px;margin:0 0 2px;}
+  .map .src{font-size:13px;color:var(--kraft-dark);margin-bottom:10px;}
+  .dim{display:flex;align-items:center;gap:10px;margin:7px 0;font-size:15px;}
+  .dim .swatch{width:14px;height:14px;border-radius:4px;flex:0 0 auto;}
+  .dim .nm{flex:1;}
+  .dim .cnt{font-family:"SF Mono",monospace;font-size:13px;color:var(--kraft-dark);}
+  .dim.hit .nm{font-weight:600;}
+  .dim.hit .swatch.wc{background:var(--cool-2);} .dim.hit .swatch.ct{background:var(--accent-leaf);}
+  .dim .swatch.empty{background:var(--kraft);opacity:.4;}
+  .mapnote{font-size:13px;color:var(--kraft-dark);margin-top:10px;border-top:1px solid var(--kraft);padding-top:8px;}
+
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0;}
+  .count{font-family:"SF Mono",monospace;font-size:14px;color:var(--kraft-dark);}
+  .empty{font-style:italic;color:var(--kraft-dark);font-size:15px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Tight Spiral — editorial desk</p>
+  <h1>The Editor's Desk</h1>
+  <p class="lede">Read the piece. Tap a line that moves you — or doesn't — and leave a note for the
+  writer. Your notes pin to the margin as you go. The outcomes map underneath is for your records;
+  the writer only ever sees the warmth.</p>
+
+  <div class="piece" id="piece">
+    <div class="title">Government Cheese</div>
+    <div class="by">submitted to the magazine</div>
+    <p><span class="ln" tabindex="0" data-i="0">The block came in a brown box with no brand, just the word CHEESE in government letters.</span>
+    <span class="ln" tabindex="0" data-i="1">My mother cut it into squares the size of dominoes and called it a treat so we would believe her.</span></p>
+    <p><span class="ln" tabindex="0" data-i="2">It melted wrong, in strings instead of pools, and it tasted like the inside of a thermos.</span>
+    <span class="ln" tabindex="0" data-i="3">I ate it every day for a year and never once said it was bad, because she was trying, for chrissake, and trying was the whole meal.</span></p>
+    <p><span class="ln" tabindex="0" data-i="4">Years later I bought the expensive kind, the kind with a French name, and stood at the counter and could not make myself open it.</span></p>
+  </div>
+
+  <div class="composer" id="composer" hidden>
+    <h2>Leave a note</h2>
+    <div class="target" id="target"></div>
+    <textarea id="noteText" aria-label="Your note to the writer" placeholder="What you'd say to the writer about this line..."></textarea>
+    <div class="hint">Optional: tag what this note is really about (for your outcomes records — the writer never sees it).</div>
+    <div class="tagrow" id="tagrow"></div>
+    <div class="toolbar">
+      <button class="btn" id="pin">Pin the note</button>
+      <button class="btn sec" id="cancelNote">Cancel</button>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <span class="count" id="count">No notes yet.</span>
+    <button class="btn sec" id="toggleMap" aria-pressed="false">Show the outcomes map</button>
+  </div>
+
+  <div class="slips" id="slips"></div>
+
+  <div class="map" id="map" aria-live="polite">
+    <h2>Outcomes coverage</h2>
+    <div class="src">AAC&amp;U VALUE rubrics — Written Communication and Creative Thinking. For discussing learning, not grading.</div>
+    <div id="mapBody"></div>
+    <div class="mapnote" id="mapNote"></div>
+  </div>
+</div>
+
+<script>
+"use strict";
+if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.body.classList.add('reduce');
+const $=id=>document.getElementById(id);
+
+/* real AAC&U dimensions (grounded, paraphrased into editor-facing language) */
+const DIMS={
+  wc:{ label:'Written Communication', items:{
+    audience:'Context & purpose for the reader',
+    content:'Content development',
+    conventions:'Genre & craft conventions',
+    syntax:'Control of syntax & language'
+  }},
+  ct:{ label:'Creative Thinking', items:{
+    risk:'Taking risks',
+    innovate:'Innovative thinking',
+    transform:'Connecting / transforming'
+  }}
+};
+const TAGS=[
+  {fam:'wc',key:'audience'},{fam:'wc',key:'content'},{fam:'wc',key:'conventions'},{fam:'wc',key:'syntax'},
+  {fam:'ct',key:'risk'},{fam:'ct',key:'innovate'},{fam:'ct',key:'transform'}
+];
+
+const LINES=[...document.querySelectorAll('.ln')].map(el=>el.textContent.trim());
+let notes=[]; // {i, quote, text, tags:[{fam,key}]}
+let activeLine=null, pickTags=[];
+
+document.querySelectorAll('.ln').forEach(el=>{
+  const open=()=>openComposer(+el.dataset.i, el);
+  el.addEventListener('click',open);
+  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){open();e.preventDefault();}});
+});
+
+function openComposer(i){
+  activeLine=i; pickTags=[];
+  $('composer').hidden=false;
+  $('target').textContent='On: "'+truncate(LINES[i],60)+'"';
+  $('noteText').value='';
+  // build tag buttons
+  $('tagrow').innerHTML=TAGS.map(t=>
+    '<button type="button" class="'+t.fam+'" data-fam="'+t.fam+'" data-key="'+t.key+'" aria-pressed="false">'+DIMS[t.fam].items[t.key]+'</button>').join('');
+  $('tagrow').querySelectorAll('button').forEach(b=>{
+    b.onclick=()=>{ const on=b.getAttribute('aria-pressed')==='true'; b.setAttribute('aria-pressed',String(!on));
+      const tag={fam:b.dataset.fam,key:b.dataset.key};
+      if(on) pickTags=pickTags.filter(t=>!(t.fam===tag.fam&&t.key===tag.key)); else pickTags.push(tag); };
+  });
+  $('composer').scrollIntoView({behavior:document.body.classList.contains('reduce')?'auto':'smooth',block:'center'});
+  $('noteText').focus();
+}
+$('cancelNote').onclick=()=>{ $('composer').hidden=true; activeLine=null; };
+$('pin').onclick=()=>{
+  const text=$('noteText').value.trim();
+  if(!text){ $('noteText').focus(); return; }
+  notes.push({i:activeLine, quote:LINES[activeLine], text, tags:pickTags.slice()});
+  document.querySelector('.ln[data-i="'+activeLine+'"]').classList.add('noted');
+  $('composer').hidden=true; activeLine=null;
+  renderSlips(true); renderMap(); updateCount();
+};
+
+function renderSlips(bloomLast){
+  if(notes.length===0){ $('slips').innerHTML='<p class="empty">Your pinned notes will gather here.</p>'; return; }
+  $('slips').innerHTML=notes.map((n,idx)=>{
+    const chips=n.tags.map(t=>'<span class="chip '+t.fam+'">'+DIMS[t.fam].items[t.key]+'</span>').join('');
+    const bloom=(bloomLast&&idx===notes.length-1)?' bloom':'';
+    return '<div class="slip'+bloom+'"><button class="del" data-idx="'+idx+'" aria-label="Remove note">×</button>'
+      +'<div class="q">"'+truncate(n.quote,54)+'"</div>'
+      +'<div class="note">'+escapeHtml(n.text)+'</div>'
+      +(chips?'<div class="tags">'+chips+'</div>':'')+'</div>';
+  }).join('');
+  $('slips').querySelectorAll('.del').forEach(b=>{
+    b.onclick=()=>{ const idx=+b.dataset.idx; const li=notes[idx].i; notes.splice(idx,1);
+      if(!notes.some(n=>n.i===li)) document.querySelector('.ln[data-i="'+li+'"]')?.classList.remove('noted');
+      renderSlips(false); renderMap(); updateCount(); };
+  });
+}
+
+function renderMap(){
+  const counts={};
+  notes.forEach(n=>n.tags.forEach(t=>{counts[t.fam+'.'+t.key]=(counts[t.fam+'.'+t.key]||0)+1;}));
+  let html='';
+  for(const fam of ['wc','ct']){
+    html+='<div style="margin-top:8px;font-family:var(--type-display);font-size:16px">'+DIMS[fam].label+'</div>';
+    for(const key in DIMS[fam].items){
+      const c=counts[fam+'.'+key]||0;
+      html+='<div class="dim'+(c>0?' hit':'')+'"><span class="swatch '+(c>0?fam:'empty')+'"></span>'
+        +'<span class="nm">'+DIMS[fam].items[key]+'</span>'
+        +'<span class="cnt">'+(c>0?c+(c===1?' note':' notes'):'—')+'</span></div>';
+    }
+  }
+  $('mapBody').innerHTML=html;
+  const covered=Object.keys(counts).length, total=TAGS.length;
+  $('mapNote').textContent = notes.length===0
+    ? 'Leave and tag a few notes to see which outcomes your feedback is touching.'
+    : 'Your feedback so far touches '+covered+' of '+total+' tagged dimensions. Gaps are not failings — they just show where the conversation hasn\u2019t gone yet.';
+}
+
+function updateCount(){ $('count').textContent = notes.length===0?'No notes yet.':notes.length+(notes.length===1?' note pinned.':' notes pinned.'); }
+
+$('toggleMap').onclick=()=>{ const m=$('map'); const on=m.classList.toggle('show');
+  $('toggleMap').setAttribute('aria-pressed',String(on)); $('toggleMap').textContent=on?'Hide the outcomes map':'Show the outcomes map';
+  if(on){ renderMap(); m.scrollIntoView({behavior:document.body.classList.contains('reduce')?'auto':'smooth',block:'nearest'}); } };
+
+function truncate(s,n){return s.length>n?s.slice(0,n-1)+'\u2026':s;}
+function escapeHtml(s){return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
+
+renderSlips(false); updateCount();
+</script>
+</body>
+</html>

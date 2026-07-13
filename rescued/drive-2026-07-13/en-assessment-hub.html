@@ -1,0 +1,2145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Department Assessment Hub — MassBay</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  --ink:        #18181b;
+  --ink-soft:   #52525b;
+  --ink-faint:  #a1a1aa;
+  --canvas:     #fafaf9;
+  --surface:    #ffffff;
+  --border:     #e4e4e7;
+  --border-med: #d4d4d8;
+  --pine:       #1e4d3a;
+  --pine-mid:   #2d6a50;
+  --pine-light: #4a9070;
+  --pine-pale:  #eef5f1;
+  --pine-faint: #f4f9f6;
+  --gold:       #b45309;
+  --gold-pale:  #fef3c7;
+  --red:        #9f1239;
+  --red-pale:   #fff1f2;
+  --blue:       #1e3a5f;
+  --blue-pale:  #eff6ff;
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:  0 4px 12px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.05);
+  --r:          4px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  line-height: 1.65;
+  background: var(--canvas);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ─── MASTHEAD ─── */
+.masthead {
+  background: var(--pine);
+  color: #fff;
+  padding: 0 2rem;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  min-height: 56px;
+}
+
+.masthead-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem 0.75rem 0;
+  border-right: 1px solid rgba(255,255,255,0.15);
+  flex-shrink: 0;
+}
+
+.brand-mark {
+  width: 32px; height: 32px;
+  border: 2px solid rgba(255,255,255,0.5);
+  border-radius: 3px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.1rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.brand-text {
+  display: flex; flex-direction: column; line-height: 1.2;
+}
+
+.brand-text .dept {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+}
+
+.brand-text .title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1rem;
+  color: #fff;
+}
+
+/* ─── NAV TABS ─── */
+.nav-tabs {
+  display: flex;
+  align-items: stretch;
+  flex: 1;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-tabs::-webkit-scrollbar { display: none; }
+
+.nav-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0 1.25rem;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: rgba(255,255,255,0.65);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.nav-tab:hover { color: #fff; }
+
+.nav-tab.active {
+  color: #fff;
+  border-bottom-color: #7ec8a0;
+}
+
+.nav-tab .tab-icon {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* ─── FACULTY BAR ─── */
+.faculty-bar {
+  background: var(--pine-pale);
+  border-bottom: 1px solid var(--border);
+  padding: 0.6rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+}
+
+.faculty-bar label {
+  font-weight: 600;
+  color: var(--pine);
+  white-space: nowrap;
+}
+
+.faculty-bar input, .faculty-bar select {
+  padding: 0.3rem 0.65rem;
+  border: 1.5px solid var(--border-med);
+  border-radius: var(--r);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  background: var(--surface);
+  color: var(--ink);
+  min-width: 160px;
+}
+
+.faculty-bar input:focus, .faculty-bar select:focus {
+  outline: none;
+  border-color: var(--pine-mid);
+  box-shadow: 0 0 0 3px rgba(46,106,80,0.12);
+}
+
+.faculty-pill {
+  background: var(--pine);
+  color: #fff;
+  padding: 0.2rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: none;
+}
+
+/* ─── MAIN ─── */
+main { max-width: 980px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+
+/* ─── PANELS ─── */
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* ─── PAGE HEADER ─── */
+.page-hd {
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.page-hd .eyebrow {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--pine-mid);
+  margin-bottom: 0.35rem;
+}
+
+.page-hd h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.9rem;
+  color: var(--ink);
+  line-height: 1.2;
+  margin-bottom: 0.4rem;
+}
+
+.page-hd p {
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  max-width: 640px;
+}
+
+/* ─── CARD GRID ─── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.card-tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pine-mid);
+  margin-bottom: 0.4rem;
+}
+
+.card h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem;
+  margin-bottom: 0.4rem;
+  line-height: 1.3;
+}
+
+.card p {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.card-accent-pine { border-top: 3px solid var(--pine); }
+.card-accent-gold { border-top: 3px solid var(--gold); }
+.card-accent-blue { border-top: 3px solid var(--blue); }
+.card-accent-red  { border-top: 3px solid var(--red); }
+
+/* ─── TIMELINE ─── */
+.timeline { margin-bottom: 2rem; }
+
+.tl-item {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 0 1.25rem;
+  margin-bottom: 0;
+  position: relative;
+}
+
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: 109px;
+  top: 10px;
+  bottom: -10px;
+  width: 1px;
+  background: var(--border);
+}
+
+.tl-item:last-child::before { display: none; }
+
+.tl-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  padding-top: 0.25rem;
+  text-align: right;
+  padding-right: 1rem;
+}
+
+.tl-body {
+  padding-bottom: 1.5rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--border);
+  position: relative;
+}
+
+.tl-body::before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: 8px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--pine);
+  border: 2px solid var(--canvas);
+}
+
+.tl-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+}
+
+.tl-body p {
+  font-size: 0.83rem;
+  color: var(--ink-soft);
+}
+
+.tl-item.active-now .tl-body::before { background: var(--gold); box-shadow: 0 0 0 3px var(--gold-pale); }
+.tl-item.active-now .tl-label { color: var(--gold); }
+
+/* ─── INFO BOX ─── */
+.info-box {
+  background: var(--pine-faint);
+  border: 1px solid #c6dfd4;
+  border-left: 4px solid var(--pine);
+  border-radius: var(--r);
+  padding: 1rem 1.1rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  color: var(--ink);
+}
+
+.warn-box {
+  background: var(--gold-pale);
+  border: 1px solid #fbbf24;
+  border-left: 4px solid var(--gold);
+  border-radius: var(--r);
+  padding: 1rem 1.1rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+/* ─── SECTION DIVIDER ─── */
+.sec-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2rem 0 1.25rem;
+}
+
+.sec-divider h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.15rem;
+  white-space: nowrap;
+}
+
+.sec-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ─── FORM ELEMENTS ─── */
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 600px) { .field-row { grid-template-columns: 1fr; } }
+
+.field { margin-bottom: 1rem; }
+
+.field label {
+  display: block;
+  font-size: 0.83rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: var(--ink);
+}
+
+.field label .hint {
+  font-weight: 400;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  margin-left: 0.4rem;
+}
+
+.field input[type=text],
+.field input[type=email],
+.field textarea,
+.field select {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 1.5px solid var(--border-med);
+  border-radius: var(--r);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.92rem;
+  background: var(--surface);
+  color: var(--ink);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--pine-mid);
+  box-shadow: 0 0 0 3px rgba(46,106,80,0.12);
+}
+
+.field textarea { resize: vertical; min-height: 80px; }
+
+.radio-set { display: flex; flex-direction: column; gap: 0.4rem; }
+
+.radio-set label {
+  font-weight: 400;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.4rem 0.65rem;
+  border: 1px solid transparent;
+  border-radius: var(--r);
+  cursor: pointer;
+  font-size: 0.88rem;
+  transition: background 0.12s;
+}
+
+.radio-set label:hover { background: var(--pine-pale); border-color: var(--pine-light); }
+
+.radio-set input[type=radio] {
+  width: auto;
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+  accent-color: var(--pine);
+}
+
+/* ─── RUBRIC TABLE ─── */
+.rubric-wrap { overflow-x: auto; margin-bottom: 1.5rem; }
+
+.rubric-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  min-width: 600px;
+}
+
+.rubric-table th {
+  background: var(--pine);
+  color: #fff;
+  padding: 0.55rem 0.8rem;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.rubric-table th:first-child { width: 130px; }
+
+.rubric-table td {
+  padding: 0.5rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.45;
+}
+
+.rubric-table tr:nth-child(even) td { background: var(--pine-faint); }
+.rubric-table tr:last-child td { border-bottom: none; }
+
+.score-pill {
+  display: inline-block;
+  padding: 0.1rem 0.45rem;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  margin-right: 0.3rem;
+}
+
+.s4 { background: var(--pine); color: #fff; }
+.s3 { background: #d1fae5; color: #065f46; }
+.s2 { background: var(--gold-pale); color: var(--gold); }
+.s1 { background: var(--red-pale); color: var(--red); }
+
+/* ─── NORMING PANEL ─── */
+.excerpt-box {
+  background: var(--surface);
+  border: 1px solid var(--border-med);
+  border-left: 4px solid var(--pine);
+  border-radius: var(--r);
+  padding: 1.1rem 1.25rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.82rem;
+  line-height: 1.75;
+  margin-bottom: 1.5rem;
+  color: var(--ink);
+}
+
+.excerpt-meta {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--pine-mid);
+  margin-bottom: 0.6rem;
+}
+
+.score-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 580px) { .score-row { grid-template-columns: 1fr 1fr; } }
+
+.score-btn {
+  padding: 0.6rem 0.4rem;
+  border: 2px solid var(--border-med);
+  border-radius: var(--r);
+  background: var(--surface);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.13s;
+  line-height: 1.3;
+}
+
+.score-btn:hover { border-color: var(--pine); background: var(--pine-pale); }
+
+.score-btn.selected-4 { background: var(--pine); color: #fff; border-color: var(--pine); }
+.score-btn.selected-3 { background: #d1fae5; color: #065f46; border-color: #10b981; }
+.score-btn.selected-2 { background: var(--gold-pale); color: var(--gold); border-color: #f59e0b; }
+.score-btn.selected-1 { background: var(--red-pale); color: var(--red); border-color: #f43f5e; }
+
+.norming-excerpt-tabs {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.ex-tab {
+  padding: 0.35rem 0.85rem;
+  background: var(--surface);
+  border: 1.5px solid var(--border-med);
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.12s;
+  color: var(--ink-soft);
+}
+
+.ex-tab:hover { border-color: var(--pine); color: var(--pine); }
+.ex-tab.active { background: var(--pine); color: #fff; border-color: var(--pine); }
+
+/* ─── MATERIALS PANEL ─── */
+.mat-category {
+  margin-bottom: 2rem;
+}
+
+.mat-category h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mat-list { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.mat-item {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-sm);
+}
+
+.mat-item-info { min-width: 0; }
+
+.mat-item-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mat-item-desc {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.mat-badge {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.badge-template { background: var(--pine-pale); color: var(--pine); }
+.badge-policy   { background: var(--blue-pale); color: var(--blue); }
+.badge-rubric   { background: #fef9c3; color: #713f12; }
+.badge-guide    { background: #f3e8ff; color: #6b21a8; }
+
+.mat-btn {
+  padding: 0.35rem 0.8rem;
+  border-radius: var(--r);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid var(--pine);
+  color: var(--pine);
+  background: var(--surface);
+  white-space: nowrap;
+  transition: all 0.12s;
+}
+
+.mat-btn:hover { background: var(--pine); color: #fff; }
+
+/* ─── SUBMISSION PANEL ─── */
+.step-indicator {
+  display: flex;
+  gap: 0;
+  margin-bottom: 2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.step {
+  flex: 1;
+  padding: 0.65rem 0.5rem;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  border-right: 1px solid var(--border);
+  background: var(--canvas);
+}
+
+.step:last-child { border-right: none; }
+.step.done { background: var(--pine-pale); color: var(--pine); }
+.step.current { background: var(--pine); color: #fff; font-weight: 600; }
+
+.step-num {
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  opacity: 0.7;
+  margin-bottom: 0.1rem;
+}
+
+/* ─── BUTTONS ─── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.3rem;
+  border-radius: var(--r);
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.13s;
+  text-decoration: none;
+}
+
+.btn-primary { background: var(--pine); color: #fff; }
+.btn-primary:hover { background: var(--pine-mid); }
+
+.btn-secondary { background: var(--surface); color: var(--pine); border: 1.5px solid var(--pine); }
+.btn-secondary:hover { background: var(--pine-pale); }
+
+.btn-ghost { background: transparent; color: var(--ink-soft); border: 1.5px solid var(--border-med); }
+.btn-ghost:hover { background: var(--canvas); color: var(--ink); }
+
+.btn-sm { padding: 0.4rem 0.9rem; font-size: 0.8rem; }
+
+.btn-row { display: flex; gap: 0.65rem; flex-wrap: wrap; margin-top: 1.25rem; }
+
+/* ─── STATUS ─── */
+.status-msg {
+  padding: 0.8rem 1rem;
+  border-radius: var(--r);
+  font-size: 0.88rem;
+  margin-top: 1rem;
+  display: none;
+}
+
+.status-success { background: var(--pine-pale); border: 1px solid var(--pine-light); color: var(--pine); display: block; }
+.status-error   { background: var(--red-pale); border: 1px solid #fca5a5; color: var(--red); display: block; }
+
+/* ─── OVERVIEW STATS ─── */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 1rem;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+.stat-box .stat-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2rem;
+  color: var(--pine);
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+
+.stat-box .stat-label {
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* ─── ACCORDION ─── */
+.accord-item { border: 1px solid var(--border); border-radius: var(--r); margin-bottom: 0.6rem; overflow: hidden; }
+
+.accord-hd {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  background: var(--canvas);
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s;
+}
+
+.accord-hd:hover { background: var(--pine-pale); }
+.accord-hd.open { background: var(--pine-pale); color: var(--pine); }
+
+.accord-chevron { transition: transform 0.2s; color: var(--ink-soft); font-size: 0.8rem; }
+.accord-hd.open .accord-chevron { transform: rotate(180deg); }
+
+.accord-body { display: none; padding: 1rem; border-top: 1px solid var(--border); background: var(--surface); }
+.accord-body.open { display: block; }
+
+/* ─── UTILITY ─── */
+.mt1 { margin-top: 0.5rem; }
+.mt2 { margin-top: 1rem; }
+.mt3 { margin-top: 1.5rem; }
+.mb2 { margin-bottom: 1rem; }
+
+.text-muted { color: var(--ink-soft); font-size: 0.88rem; }
+
+.chip-row { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.chip {
+  padding: 0.2rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: var(--pine-pale);
+  color: var(--pine);
+}
+
+@media (max-width: 700px) {
+  .masthead { padding: 0 1rem; }
+  main { padding: 1.25rem 1rem 4rem; }
+  .faculty-bar { padding: 0.5rem 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ─── MASTHEAD ─── -->
+<header class="masthead">
+  <div class="masthead-brand">
+    <div class="brand-mark">E</div>
+    <div class="brand-text">
+      <span class="dept">MassBay Community College</span>
+      <span class="title">Assessment Hub</span>
+    </div>
+  </div>
+  <nav class="nav-tabs" role="tablist">
+    <button class="nav-tab active" onclick="showPanel('overview')" role="tab">
+      <span class="tab-icon">&#9632;</span> Overview
+    </button>
+    <button class="nav-tab" onclick="showPanel('assessment')" role="tab">
+      <span class="tab-icon">&#9670;</span> Annual Assessment
+    </button>
+    <button class="nav-tab" onclick="showPanel('submit')" role="tab">
+      <span class="tab-icon">&#9650;</span> Submit Sample
+    </button>
+    <button class="nav-tab" onclick="showPanel('norming')" role="tab">
+      <span class="tab-icon">&#9679;</span> Norming Station
+    </button>
+    <button class="nav-tab" onclick="showPanel('materials')" role="tab">
+      <span class="tab-icon">&#9724;</span> Course Materials
+    </button>
+  </nav>
+</header>
+
+<!-- ─── FACULTY BAR ─── -->
+<div class="faculty-bar" id="facultyBar">
+  <label for="fbName">Faculty:</label>
+  <input type="text" id="fbName" placeholder="Your name" oninput="updatePill()">
+  <label for="fbCourse">Course:</label>
+  <select id="fbCourse" onchange="updatePill()">
+    <option value="">Select course</option>
+    <option>EN095 – Foundations of College Writing</option>
+    <option>EN101 – College Writing I</option>
+    <option>EN102 – College Writing II</option>
+    <option>EN195 – Creative Writing</option>
+    <option>EN202 – Literature &amp; Ideas</option>
+    <option>ESL101 – Academic Reading &amp; Writing I</option>
+    <option>ESL102 – Academic Reading &amp; Writing II</option>
+    <option>ESL110 – Grammar in Context</option>
+  </select>
+  <span class="faculty-pill" id="facultyPill"></span>
+</div>
+
+<main>
+
+<!-- ════════════════════════════════════════════
+     PANEL 1: OVERVIEW
+═════════════════════════════════════════════ -->
+<section class="panel active" id="panel-overview">
+
+  <div class="page-hd">
+    <div class="eyebrow">English Department</div>
+    <h2>Assessment Hub</h2>
+    <p>Your central resource for annual program assessment, sample submission, norming calibration, and course materials. Select a tab above to navigate.</p>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-box">
+      <div class="stat-num">4</div>
+      <div class="stat-label">Courses in Assessment Cycle</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Signature Assignments Tracked</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">May 1</div>
+      <div class="stat-label">Sample Submission Deadline</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">4-pt</div>
+      <div class="stat-label">Shared Rubric Scale</div>
+    </div>
+  </div>
+
+  <div class="sec-divider"><h3>This Year's Cycle</h3></div>
+
+  <div class="info-box">
+    <strong>AY 2025&ndash;2026 Assessment Focus:</strong> EN101 Argumentative Writing (CLO 2) and EN102 Literary Analysis (CLO 1). All sections teaching these courses are asked to submit two scored student work samples by May 1. See the Assessment and Submit tabs for full instructions.
+  </div>
+
+  <div class="card-grid">
+    <div class="card card-accent-pine">
+      <div class="card-tag">Annual Assessment</div>
+      <h3>What We Assess &amp; Why</h3>
+      <p>Program assessment documents student achievement for accreditation, informs curriculum decisions, and supports department improvement — not individual evaluation.</p>
+    </div>
+    <div class="card card-accent-gold">
+      <div class="card-tag">Submit Sample</div>
+      <h3>Submitting Student Work</h3>
+      <p>Two de-identified samples per instructor, scored with the shared rubric. The form guides you through selection, scoring, and email submission.</p>
+    </div>
+    <div class="card card-accent-blue">
+      <div class="card-tag">Norming Station</div>
+      <h3>Calibrate Before You Score</h3>
+      <p>Practice scoring three benchmark excerpts. Compare your scores against the department anchor. Takes about 15 minutes.</p>
+    </div>
+    <div class="card card-accent-red">
+      <div class="card-tag">Course Materials</div>
+      <h3>Syllabi, Policies &amp; Templates</h3>
+      <p>Department-approved templates and policies ready to adapt for your section. Includes MassBay-required language and English Dept. standards.</p>
+    </div>
+  </div>
+
+  <div class="sec-divider"><h3>Assessment Calendar</h3></div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-date">Sept</div>
+      <div class="tl-body">
+        <div class="tl-label">Assessment cycle opens</div>
+        <p>Department Chair announces focus courses and CLOs. Norming session scheduled.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">Oct&ndash;Nov</div>
+      <div class="tl-body">
+        <div class="tl-label">Norming session</div>
+        <p>All faculty teaching assessed courses calibrate using shared excerpts before grading signature assignments.</p>
+      </div>
+    </div>
+    <div class="tl-item active-now">
+      <div class="tl-date">Now</div>
+      <div class="tl-body">
+        <div class="tl-label">Sample collection window open</div>
+        <p>Submit two de-identified, scored student samples via the Submit Sample tab. Deadline: May 1.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">May 1</div>
+      <div class="tl-body">
+        <div class="tl-label">Submission deadline</div>
+        <p>All samples due. Late submissions cannot be included in program data.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">May&ndash;June</div>
+      <div class="tl-body">
+        <div class="tl-label">Data review &amp; reporting</div>
+        <p>Chair compiles results, prepares department assessment report for institutional records.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">Fall</div>
+      <div class="tl-body">
+        <div class="tl-label">Results shared &amp; cycle restarts</div>
+        <p>Findings presented at department meeting. Curriculum implications discussed.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ════════════════════════════════════════════
+     PANEL 2: ANNUAL ASSESSMENT
+═════════════════════════════════════════════ -->
+<section class="panel" id="panel-assessment">
+
+  <div class="page-hd">
+    <div class="eyebrow">Annual Assessment</div>
+    <h2>Program Assessment Guide</h2>
+    <p>What we assess, why it matters, and what you need to do this cycle.</p>
+  </div>
+
+  <div class="sec-divider"><h3>What Is Program Assessment?</h3></div>
+
+  <div class="accord-item">
+    <button class="accord-hd" onclick="toggleAccord(this)">
+      Purpose and scope <span class="accord-chevron">&#9660;</span>
+    </button>
+    <div class="accord-body">
+      <p>Program assessment is the department's systematic process for determining whether students are achieving the learning outcomes we've set for our courses. It is <strong>not</strong> an evaluation of individual instructors. Results are reported at the program level — no individual instructor's class is identified in reports.</p>
+      <p class="mt2">MassBay is accredited by NECHE. Accreditation requires that we document student learning, review results, and use findings to inform curriculum. The English Department participates in a rotating annual cycle covering our core courses.</p>
+    </div>
+  </div>
+
+  <div class="accord-item">
+    <button class="accord-hd" onclick="toggleAccord(this)">
+      AY 2025&ndash;2026: Assessed courses and CLOs <span class="accord-chevron">&#9660;</span>
+    </button>
+    <div class="accord-body">
+      <p>This year's assessment focuses on two courses and their primary writing outcomes:</p>
+      <div class="chip-row mt2">
+        <span class="chip">EN101 — CLO 2: Argument</span>
+        <span class="chip">EN102 — CLO 1: Analysis</span>
+      </div>
+      <p><strong>EN101 CLO 2 — Argumentative Writing:</strong> Students develop and support a focused, evidence-based thesis in a sustained essay.</p>
+      <p class="mt2"><strong>EN102 CLO 1 — Literary/Textual Analysis:</strong> Students analyze literary and expository texts using appropriate critical frameworks.</p>
+      <p class="mt2">The signature assignments for each: EN101 Argumentative Essay (1,000–1,200 words); EN102 Literary Analysis Essay (1,200–1,500 words).</p>
+    </div>
+  </div>
+
+  <div class="accord-item">
+    <button class="accord-hd" onclick="toggleAccord(this)">
+      What you need to do <span class="accord-chevron">&#9660;</span>
+    </button>
+    <div class="accord-body">
+      <p>If you teach EN101 or EN102 this year:</p>
+      <ol style="margin-left:1.25rem; margin-top:0.75rem; line-height:2;">
+        <li>Complete the <strong>Norming Station</strong> before scoring signature assignments.</li>
+        <li>Score the relevant signature assignment using the shared 4-point rubric.</li>
+        <li>Select <strong>two student samples</strong> — one strong, one developing.</li>
+        <li>De-identify each sample (remove student name, ID, and any identifying details).</li>
+        <li>Submit via the <strong>Submit Sample</strong> tab by <strong>May 1</strong>.</li>
+      </ol>
+      <p class="mt2">If you teach EN095, EN195, or ESL courses, you are not in the assessment cycle this year but are welcome to use the norming and materials sections.</p>
+    </div>
+  </div>
+
+  <div class="sec-divider"><h3>Shared Rubrics</h3></div>
+
+  <div class="accord-item">
+    <button class="accord-hd" onclick="toggleAccord(this)">
+      EN101 Argumentative Writing Rubric <span class="accord-chevron">&#9660;</span>
+    </button>
+    <div class="accord-body">
+      <div class="rubric-wrap">
+        <table class="rubric-table">
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th><span class="score-pill s4">4</span> Proficient</th>
+              <th><span class="score-pill s3">3</span> Developing</th>
+              <th><span class="score-pill s2">2</span> Emerging</th>
+              <th><span class="score-pill s1">1</span> Beginning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Thesis</strong></td>
+              <td>Specific, arguable, forecasts structure</td>
+              <td>Clear but underdeveloped or predictable</td>
+              <td>Present but vague or descriptive</td>
+              <td>Absent or merely announces topic</td>
+            </tr>
+            <tr>
+              <td><strong>Evidence</strong></td>
+              <td>Credible, relevant, well-integrated with analysis</td>
+              <td>Present but under-analyzed or loosely integrated</td>
+              <td>Limited or summarized without analysis</td>
+              <td>Missing, invented, or misused</td>
+            </tr>
+            <tr>
+              <td><strong>Organization</strong></td>
+              <td>Logical, purposeful; transitions advance argument</td>
+              <td>Generally clear; some abrupt transitions</td>
+              <td>Discernible but uneven; ideas repeated or dropped</td>
+              <td>Hard to follow; no clear structure</td>
+            </tr>
+            <tr>
+              <td><strong>Conventions</strong></td>
+              <td>Consistent MLA; few minor errors</td>
+              <td>Mostly correct; some citation errors</td>
+              <td>Errors begin to impede reading</td>
+              <td>Pervasive errors; documentation absent</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="accord-item">
+    <button class="accord-hd" onclick="toggleAccord(this)">
+      EN102 Literary Analysis Rubric <span class="accord-chevron">&#9660;</span>
+    </button>
+    <div class="accord-body">
+      <div class="rubric-wrap">
+        <table class="rubric-table">
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th><span class="score-pill s4">4</span> Proficient</th>
+              <th><span class="score-pill s3">3</span> Developing</th>
+              <th><span class="score-pill s2">2</span> Emerging</th>
+              <th><span class="score-pill s1">1</span> Beginning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Claim</strong></td>
+              <td>Interpretive thesis makes a specific, defensible literary argument</td>
+              <td>Claim present but underdeveloped or obvious</td>
+              <td>Descriptive rather than analytical; restates plot</td>
+              <td>No clear interpretive claim</td>
+            </tr>
+            <tr>
+              <td><strong>Textual Evidence</strong></td>
+              <td>Quotes and paraphrases well-chosen and fully analyzed</td>
+              <td>Evidence present; analysis underdeveloped</td>
+              <td>Summary substitutes for analysis</td>
+              <td>Evidence absent, misquoted, or irrelevant</td>
+            </tr>
+            <tr>
+              <td><strong>Critical Framework</strong></td>
+              <td>Applies a coherent interpretive lens; engages secondary sources effectively</td>
+              <td>Some framework awareness; secondary sources present but underused</td>
+              <td>Minimal critical context; relies on personal opinion</td>
+              <td>No critical framework; purely impressionistic</td>
+            </tr>
+            <tr>
+              <td><strong>Style &amp; Mechanics</strong></td>
+              <td>Academic register, clear sentence control; MLA consistent</td>
+              <td>Generally appropriate; some inconsistencies</td>
+              <td>Register slips; errors interfere with clarity</td>
+              <td>Pervasive errors; informal throughout</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-divider"><h3>CLO Reference: All Courses</h3></div>
+
+  <div class="accord-item">
+    <button class="accord-hd" onclick="toggleAccord(this)">
+      EN095 / EN101 / EN102 / EN195 / ESL CLOs <span class="accord-chevron">&#9660;</span>
+    </button>
+    <div class="accord-body">
+      <div class="card-grid">
+        <div class="card card-accent-pine">
+          <div class="card-tag">EN101</div>
+          <p style="font-size:0.82rem; line-height:1.6;">
+            <strong>CLO 1</strong> Read and analyze college-level texts<br>
+            <strong>CLO 2</strong> Develop evidence-based argument<br>
+            <strong>CLO 3</strong> Locate and integrate sources (MLA)<br>
+            <strong>CLO 4</strong> Revise through recursive process<br>
+            <strong>CLO 5</strong> Adopt academic register<br>
+            <strong>CLO 6</strong> Apply conventions at college level
+          </p>
+        </div>
+        <div class="card card-accent-blue">
+          <div class="card-tag">EN102</div>
+          <p style="font-size:0.82rem; line-height:1.6;">
+            <strong>CLO 1</strong> Analyze texts using critical frameworks<br>
+            <strong>CLO 2</strong> Synthesize sources into original argument<br>
+            <strong>CLO 3</strong> Conduct independent library research<br>
+            <strong>CLO 4</strong> Engage counterargument with nuance<br>
+            <strong>CLO 5</strong> Demonstrate revision through drafts<br>
+            <strong>CLO 6</strong> Develop sentence-level academic style
+          </p>
+        </div>
+        <div class="card card-accent-gold">
+          <div class="card-tag">EN195</div>
+          <p style="font-size:0.82rem; line-height:1.6;">
+            <strong>CLO 1</strong> Identify and apply craft elements<br>
+            <strong>CLO 2</strong> Give and receive workshop feedback<br>
+            <strong>CLO 3</strong> Revise creative work to feedback<br>
+            <strong>CLO 4</strong> Read published work as a writer<br>
+            <strong>CLO 5</strong> Curate and reflect on a portfolio
+          </p>
+        </div>
+        <div class="card card-accent-red">
+          <div class="card-tag">ESL</div>
+          <p style="font-size:0.82rem; line-height:1.6;">
+            <strong>CLO 1</strong> Produce extended academic writing<br>
+            <strong>CLO 2</strong> Apply target grammar in context<br>
+            <strong>CLO 3</strong> Use academic vocabulary accurately<br>
+            <strong>CLO 4</strong> Comprehend college-level texts<br>
+            <strong>CLO 5</strong> Apply multi-draft writing process
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ════════════════════════════════════════════
+     PANEL 3: SUBMIT SAMPLE
+═════════════════════════════════════════════ -->
+<section class="panel" id="panel-submit">
+
+  <div class="page-hd">
+    <div class="eyebrow">Submit Sample</div>
+    <h2>Submit a Student Work Sample</h2>
+    <p>Two samples per instructor. Complete each step, then send to the Department Chair via the button at the end.</p>
+  </div>
+
+  <div class="step-indicator" id="stepInd">
+    <div class="step current" id="stepA"><span class="step-num">01</span>Select &amp; Info</div>
+    <div class="step" id="stepB"><span class="step-num">02</span>Score Sample</div>
+    <div class="step" id="stepC"><span class="step-num">03</span>Reflection</div>
+    <div class="step" id="stepD"><span class="step-num">04</span>Second Sample</div>
+    <div class="step" id="stepE"><span class="step-num">05</span>Submit</div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div id="sub-step1">
+    <div class="warn-box">
+      <strong>Before you begin:</strong> De-identify each sample. Remove the student's name, ID number, and any other identifying information from the document before scoring or describing it here.
+    </div>
+
+    <div class="sec-divider"><h3>Sample 1 — Identification</h3></div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>Your name</label>
+        <input type="text" id="subName" placeholder="First and last name">
+      </div>
+      <div class="field">
+        <label>Your MassBay email</label>
+        <input type="email" id="subEmail" placeholder="you@massbay.edu">
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>Course <span class="hint">e.g. EN101</span></label>
+        <select id="subCourse">
+          <option value="">Select course</option>
+          <option>EN101 – College Writing I</option>
+          <option>EN102 – College Writing II</option>
+          <option>EN195 – Creative Writing</option>
+          <option>ESL101</option>
+          <option>ESL102</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Section / CRN <span class="hint">optional</span></label>
+        <input type="text" id="subSection" placeholder="e.g. 01 / 12345">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Signature assignment this sample represents</label>
+      <select id="subAssign">
+        <option value="">Select assignment</option>
+        <option>EN101 Argumentative Essay</option>
+        <option>EN101 Annotated Bibliography</option>
+        <option>EN101 Portfolio (Draft + Revision + Reflection)</option>
+        <option>EN102 Literary Analysis Essay</option>
+        <option>EN102 Research Argument Essay</option>
+        <option>EN195 Creative Portfolio</option>
+        <option>ESL Academic Essay</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Sample quality <span class="hint">honest self-assessment helps analysis</span></label>
+      <div class="radio-set">
+        <label><input type="radio" name="subQual" value="strong"> Strong work — demonstrates proficiency on the assessed CLO</label>
+        <label><input type="radio" name="subQual" value="developing"> Developing — shows meaningful effort but does not yet meet the CLO</label>
+        <label><input type="radio" name="subQual" value="struggling"> Struggling — significant gaps; early in skill development</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Paste or describe the de-identified sample text <span class="hint">200–600 words recommended for analysis</span></label>
+      <textarea id="subText1" style="min-height:140px;" placeholder="Paste the student excerpt here, or describe it if pasting is not possible..."></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="subGoTo(2)">Score this sample &rarr;</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div id="sub-step2" style="display:none;">
+    <div class="sec-divider"><h3>Sample 1 — Score with Shared Rubric</h3></div>
+    <div class="info-box">Use the 4-point scale. <strong>4</strong> = Proficient &nbsp;|&nbsp; <strong>3</strong> = Developing &nbsp;|&nbsp; <strong>2</strong> = Emerging &nbsp;|&nbsp; <strong>1</strong> = Beginning. Click a score for each dimension.</div>
+
+    <div id="scoreDims1"></div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="subGoTo(1)">&larr; Back</button>
+      <button class="btn btn-primary" onclick="subGoTo(3)">Add reflection &rarr;</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div id="sub-step3" style="display:none;">
+    <div class="sec-divider"><h3>Sample 1 — Instructor Reflection</h3></div>
+
+    <div class="field">
+      <label>What assignment context or scaffolding informed this work?</label>
+      <textarea id="subContext1" placeholder="Describe the assignment sequence, any peer review, draft requirements, etc."></textarea>
+    </div>
+
+    <div class="field">
+      <label>What does this sample reveal about student achievement of the CLO?</label>
+      <textarea id="subReflect1" placeholder="What does this work tell us about how students in your section are meeting (or not meeting) the outcome?"></textarea>
+    </div>
+
+    <div class="field">
+      <label>Any notes for the assessment coordinator?</label>
+      <textarea id="subNotes1" placeholder="Anything else the Chair should know about this sample..."></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="subGoTo(2)">&larr; Back</button>
+      <button class="btn btn-primary" onclick="subGoTo(4)">Add second sample &rarr;</button>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div id="sub-step4" style="display:none;">
+    <div class="sec-divider"><h3>Sample 2 — Second Submission</h3></div>
+
+    <div class="info-box">Submit a <strong>second</strong> de-identified sample from the same course and assignment. If you submitted a strong sample above, this one should be developing or struggling — and vice versa.</div>
+
+    <div class="field">
+      <label>Sample quality</label>
+      <div class="radio-set">
+        <label><input type="radio" name="subQual2" value="strong"> Strong</label>
+        <label><input type="radio" name="subQual2" value="developing"> Developing</label>
+        <label><input type="radio" name="subQual2" value="struggling"> Struggling</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Paste or describe Sample 2</label>
+      <textarea id="subText2" style="min-height:140px;" placeholder="Paste the second student excerpt here..."></textarea>
+    </div>
+
+    <div id="scoreDims2"></div>
+
+    <div class="field">
+      <label>Reflection on Sample 2</label>
+      <textarea id="subReflect2" placeholder="What does this second sample illustrate?"></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="subGoTo(3)">&larr; Back</button>
+      <button class="btn btn-primary" onclick="subGoTo(5)">Review &amp; submit &rarr;</button>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div id="sub-step5" style="display:none;">
+    <div class="sec-divider"><h3>Review &amp; Submit</h3></div>
+    <div id="subReviewBox" style="background:var(--canvas); border:1px solid var(--border); border-radius:var(--r); padding:1.1rem; font-size:0.85rem; font-family:'DM Mono',monospace; white-space:pre-wrap; line-height:1.7; margin-bottom:1.5rem; max-height:320px; overflow-y:auto;"></div>
+    <p class="text-muted">Clicking <strong>Send to Department Chair</strong> will open your email client with a pre-filled message containing your submission. Review and send.</p>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="subGoTo(4)">&larr; Back</button>
+      <button class="btn btn-primary" onclick="submitSamples()">Send to Department Chair</button>
+    </div>
+    <div class="status-msg" id="subStatus"></div>
+  </div>
+
+</section>
+
+
+<!-- ════════════════════════════════════════════
+     PANEL 4: NORMING STATION
+═════════════════════════════════════════════ -->
+<section class="panel" id="panel-norming">
+
+  <div class="page-hd">
+    <div class="eyebrow">Norming Station</div>
+    <h2>Calibrate Your Scoring</h2>
+    <p>Score each excerpt independently, then reveal the department anchor score and discussion. Complete all three before submitting samples.</p>
+  </div>
+
+  <div class="norming-excerpt-tabs">
+    <button class="ex-tab active" onclick="showExcerpt(0, this)">Excerpt A</button>
+    <button class="ex-tab" onclick="showExcerpt(1, this)">Excerpt B</button>
+    <button class="ex-tab" onclick="showExcerpt(2, this)">Excerpt C</button>
+    <button class="ex-tab" onclick="showExcerpt(3, this)">Excerpt D (EN102)</button>
+  </div>
+
+  <div id="normingContent"></div>
+
+</section>
+
+
+<!-- ════════════════════════════════════════════
+     PANEL 5: COURSE MATERIALS
+═════════════════════════════════════════════ -->
+<section class="panel" id="panel-materials">
+
+  <div class="page-hd">
+    <div class="eyebrow">Course Materials</div>
+    <h2>Syllabi, Policies &amp; Templates</h2>
+    <p>Department-approved documents ready to personalize. All materials include required MassBay institutional language and English Department standards.</p>
+  </div>
+
+  <div class="info-box">
+    <strong>How to use these materials:</strong> Each document is a starting template. Required language (marked [REQUIRED]) must appear verbatim. Sections marked [ADAPT] can be personalized to your course design, pedagogical approach, and student population.
+  </div>
+
+  <div class="mat-category">
+    <h3>&#9632;&nbsp; Syllabus Templates</h3>
+    <div class="mat-list">
+      <div class="mat-item">
+        <div class="mat-item-info">
+          <div class="mat-item-title">EN101 Syllabus Template</div>
+          <div class="mat-item-desc">Includes all required MassBay and EN Dept. language, CLOs, grading weights, attendance policy</div>
+        </div>
+        <span class="mat-badge badge-template">Template</span>
+        <button class="mat-btn" onclick="openMaterial('syllabus-en101')">View</button>
+      </div>
+      <div class="mat-item">
+        <div class="mat-item-info">
+          <div class="mat-item-title">EN102 Syllabus Template</div>
+          <div class="mat-item-desc">Research writing and literary analysis focus; MLA documentation requirements</div>
+        </div>
+        <span class="mat-badge badge-template">Template</span>
+        <button class="mat-btn" onclick="openMaterial('syllabus-en102')">View</button>
+      </div>
+      <div class="mat-item">
+        <div class="mat-item-info">
+          <div class="mat-item-title">EN195 Syllabus Template</div>
+          <div class="mat-item-desc">Workshop model, portfolio assessment structure, creative community norms</div>
+        </div>
+        <span class="mat-badge badge-template">Template</span>
+        <button class="mat-btn" onclick="openMaterial('syllabus-en195')">View</button>
+      </div>
+      <div class="mat-item">
+        <div class="mat-item-info">
+          <div class="mat-item-title">ESL101 / ESL102 Syllabus Template</div>
+          <div class="mat-item-desc">ESL Coordinator-approved; multilingual learner accommodations language included</div>
+        </div>
+        <span class="mat-badge badge-template">Template</span>
+        <button class="mat-btn" onclick="openMaterial('syllabus-esl')">View</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mat-category">
+    <h3>&#9670;&nbsp; Required Policies</h3>
+    <div class="mat-list">
+      <div class="mat-item">
+        <div class="mat-item-info">
+          <div class="mat-item-title">AI Use Policy — English Department</div>
+          <div class="mat-item-desc">Department-approved language for syllabi; three tiers (prohibited / disclosed / permitted)</div>
+        </div>
+        <span class="mat-badge badge-policy">Policy</span>
+        <button class="mat-btn" onclick="openMaterial('policy-ai')">View</button>
+      </div>
+      <div class="mat-item">
+        <div class="mat-item-info">
+          <div class="mat-item-title">Academic Integrity Policy</div>
+          <div class="mat-item-desc">MassBay-required language plus department guidance on plagiarism in writing courses</div>
+        </div>
+        <span class="mat-badge badge-policy">Policy</span>
+        <button class="mat-btn" onclick="openMaterial('policy-integrity')">View</button>
+      </div>
+      <div class="mat-item">
+        <div class="mat-item-info">
+          <div class="mat-item-title">Attendance &amp; Late Work Policy</div>
+          <div class="mat-item-desc">Department standard; adaptable within stated parameters</div>
+        </div>
+        <span class="mat-badge badge-policy">Policy</span>
+        <button class="mat-btn" onclick="openMaterial('policy-attendance')">View</button>
+      </div>
+      <div class="mat-item">
+        <div class="mat-item-info">
+          <div class="mat-item-title">Accessibility &amp; Accommodations Statement</div>
+          <div class="mat-item-desc">MassBay Disability Services required language; must appear on every syllabus</div>
+        </div>
+        <span class="mat-badge badge-policy">Policy</span>
+        <button class="mat-btn" onclick="openMaterial('policy-access')">View</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mat-category">
+    <h3>&#9724;&nbsp; Assignment Prompts &amp; Rubrics</h3>
+    <div class="mat-list">
+      <div class="mat-item">
+        <div class="mat-item-info">
+          <div class="mat-item-title">EN101 Argumentative Essay Prompt</div>
+          <div class="mat-item-desc">Shared prompt; annotated with suggested adaptations for different topics</div>
+        </div>
+        <span class="mat-badge badge-rubric">Prompt + Rubric</span>
+        <button class="mat-btn" onclick="openMaterial('prompt-en101-arg')">View</button>
+      </div>
+      <div class="mat-item">
+        <div class="mat-item-info">
+          <div class="mat-item-title">EN102 Literary Analysis Essay Prompt</div>
+          <div class="mat-item-desc">Includes text selection guidance and secondary source requirements</div>
+        </div>
+        <span class="mat-badge badge-rubric">Prompt + Rubric</span>
+        <button class="mat-btn" onclick="openMaterial('prompt-en102-lit')">View</button>
+      </div>
+      <div class="mat-item">
+        <div class="mat-item-info">
+          <div class="mat-item-title">Portfolio Assessment Guide</div>
+          <div class="mat-item-desc">Cover letter requirements, revision documentation, reflection prompts for EN101 and EN195</div>
+        </div>
+        <span class="mat-badge badge-rubric">Guide</span>
+        <button class="mat-btn" onclick="openMaterial('guide-portfolio')">View</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mat-category">
+    <h3>&#9679;&nbsp; Department Guides</h3>
+    <div class="mat-list">
+      <div class="mat-item">
+        <div class="mat-item-info">
+          <div class="mat-item-title">MLA Quick Reference (9th ed.)</div>
+          <div class="mat-item-desc">One-page handout; common citation formats, works cited examples</div>
+        </div>
+        <span class="mat-badge badge-guide">Guide</span>
+        <button class="mat-btn" onclick="openMaterial('guide-mla')">View</button>
+      </div>
+      <div class="mat-item">
+        <div class="mat-item-info">
+          <div class="mat-item-title">Workshop Facilitation Guide (EN195)</div>
+          <div class="mat-item-desc">Community agreements, Lerman method overview, response protocols</div>
+        </div>
+        <span class="mat-badge badge-guide">Guide</span>
+        <button class="mat-btn" onclick="openMaterial('guide-workshop')">View</button>
+      </div>
+      <div class="mat-item">
+        <div class="mat-item-info">
+          <div class="mat-item-title">Grade Appeal Process</div>
+          <div class="mat-item-desc">MassBay Academic Affairs procedure; instructor role and timeline</div>
+        </div>
+        <span class="mat-badge badge-guide">Guide</span>
+        <button class="mat-btn" onclick="openMaterial('guide-appeal')">View</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Material viewer modal -->
+  <div id="matModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:200; overflow-y:auto; padding:2rem 1rem;">
+    <div style="max-width:680px; margin:0 auto; background:var(--surface); border-radius:var(--r); box-shadow:var(--shadow-md); overflow:hidden;">
+      <div style="background:var(--pine); color:#fff; padding:1rem 1.25rem; display:flex; justify-content:space-between; align-items:center;">
+        <span id="matModalTitle" style="font-family:'DM Serif Display',serif; font-size:1.1rem;"></span>
+        <button onclick="closeMaterial()" style="background:none; border:none; color:rgba(255,255,255,0.7); font-size:1.3rem; cursor:pointer; line-height:1;">&times;</button>
+      </div>
+      <div id="matModalBody" style="padding:1.5rem; font-size:0.9rem; line-height:1.7;"></div>
+      <div style="padding:1rem 1.5rem; border-top:1px solid var(--border); display:flex; gap:0.6rem;">
+        <button class="btn btn-primary btn-sm" onclick="copyMaterial()">Copy text</button>
+        <button class="btn btn-ghost btn-sm" onclick="closeMaterial()">Close</button>
+        <span id="copyConfirm" style="font-size:0.8rem; color:var(--pine); align-self:center; display:none;">Copied to clipboard</span>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+</main>
+
+<script>
+// ─── NAV ───
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ─── FACULTY BAR ───
+function updatePill() {
+  const name = document.getElementById('fbName').value.trim();
+  const course = document.getElementById('fbCourse').value;
+  const pill = document.getElementById('facultyPill');
+  if (name && course) {
+    pill.textContent = name + ' · ' + course.split('–')[0].trim();
+    pill.style.display = 'inline-block';
+  } else {
+    pill.style.display = 'none';
+  }
+}
+
+// ─── ACCORDION ───
+function toggleAccord(btn) {
+  const body = btn.nextElementSibling;
+  btn.classList.toggle('open');
+  body.classList.toggle('open');
+}
+
+// ─── SUBMISSION STEPS ───
+const rubricDims = {
+  arg: ['Thesis', 'Evidence', 'Organization', 'Conventions'],
+  lit: ['Claim', 'Textual Evidence', 'Critical Framework', 'Style & Mechanics']
+};
+
+let scores1 = {}, scores2 = {};
+
+function buildScoreDims(containerId, scoreObj, dims) {
+  const c = document.getElementById(containerId);
+  if (!c) return;
+  c.innerHTML = '';
+  dims.forEach(dim => {
+    const div = document.createElement('div');
+    div.style.marginBottom = '1.1rem';
+    div.innerHTML = `
+      <div style="font-weight:600; font-size:0.85rem; margin-bottom:0.4rem;">${dim}</div>
+      <div class="score-row">
+        ${[4,3,2,1].map(n => `
+          <button class="score-btn ${scoreObj[dim] == n ? 'selected-'+n : ''}"
+            onclick="selectScore('${containerId}','${dim}',${n},this)"
+            data-dim="${dim}" data-score="${n}">
+            <strong>${n}</strong><br>${['','Beginning','Emerging','Developing','Proficient'][n]}
+          </button>`).join('')}
+      </div>`;
+    c.appendChild(div);
+  });
+}
+
+function selectScore(containerId, dim, score, btn) {
+  const obj = containerId === 'scoreDims1' ? scores1 : scores2;
+  obj[dim] = score;
+  btn.closest('.score-row').querySelectorAll('.score-btn').forEach(b => {
+    b.className = 'score-btn';
+  });
+  btn.classList.add('selected-' + score);
+}
+
+function subGoTo(step) {
+  [1,2,3,4,5].forEach(n => {
+    const el = document.getElementById('sub-step' + n);
+    if (el) el.style.display = (n === step) ? 'block' : 'none';
+    const si = document.getElementById('step' + 'ABCDE'[n-1]);
+    if (si) {
+      si.className = 'step';
+      if (n < step) si.classList.add('done');
+      if (n === step) si.classList.add('current');
+    }
+  });
+  if (step === 2) {
+    const course = document.getElementById('subCourse').value;
+    const dims = course.includes('102') ? rubricDims.lit : rubricDims.arg;
+    buildScoreDims('scoreDims1', scores1, dims);
+  }
+  if (step === 4) {
+    const course = document.getElementById('subCourse').value;
+    const dims = course.includes('102') ? rubricDims.lit : rubricDims.arg;
+    buildScoreDims('scoreDims2', scores2, dims);
+  }
+  if (step === 5) buildReview();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function buildReview() {
+  const g = id => (document.getElementById(id) || {}).value || '(not entered)';
+  const radio = name => { const el = document.querySelector('input[name="'+name+'"]:checked'); return el ? el.value : '(not selected)'; };
+  const sc1 = Object.entries(scores1).map(([k,v]) => `  ${k}: ${v}`).join('\n') || '  (not scored)';
+  const sc2 = Object.entries(scores2).map(([k,v]) => `  ${k}: ${v}`).join('\n') || '  (not scored)';
+  const txt = `ENGLISH DEPARTMENT — ASSESSMENT SAMPLE SUBMISSION
+AY 2025–2026
+
+Faculty: ${g('subName')}
+Email:   ${g('subEmail')}
+Course:  ${g('subCourse')}
+Section: ${g('subSection')}
+Assignment: ${g('subAssign')}
+
+──────────────────────────────
+SAMPLE 1 (${radio('subQual')})
+──────────────────────────────
+Text excerpt:
+${g('subText1')}
+
+Rubric Scores:
+${sc1}
+
+Assignment context:
+${g('subContext1')}
+
+Instructor reflection:
+${g('subReflect1')}
+
+Notes for coordinator:
+${g('subNotes1')}
+
+──────────────────────────────
+SAMPLE 2 (${radio('subQual2')})
+──────────────────────────────
+Text excerpt:
+${g('subText2')}
+
+Rubric Scores:
+${sc2}
+
+Reflection:
+${g('subReflect2')}
+`;
+  document.getElementById('subReviewBox').textContent = txt;
+  return txt;
+}
+
+function submitSamples() {
+  const name = (document.getElementById('subName') || {}).value || '';
+  const email = (document.getElementById('subEmail') || {}).value || '';
+  if (!name || !email) {
+    const s = document.getElementById('subStatus');
+    s.textContent = 'Please enter your name and email in Step 1.';
+    s.className = 'status-msg status-error';
+    return;
+  }
+  const body = buildReview();
+  const subject = encodeURIComponent('EN Assessment Submission — ' + name);
+  window.location.href = 'mailto:mwalsh@massbay.edu?subject=' + subject + '&body=' + encodeURIComponent(body);
+  const s = document.getElementById('subStatus');
+  s.textContent = 'Your email client has opened with a pre-filled submission. Review and send. If nothing opened, email mwalsh@massbay.edu with your submission.';
+  s.className = 'status-msg status-success';
+}
+
+// ─── NORMING ───
+const excerpts = [
+  {
+    label: 'Excerpt A — EN101',
+    course: 'EN101 Argumentative Essay',
+    text: `Social media has become one of the most powerful forces in modern life, shaping how people communicate, consume news, and form opinions. While many celebrate its connective potential, the evidence increasingly suggests that platforms like Instagram and TikTok are engineered to maximize engagement at the expense of user wellbeing. A 2023 study in the Journal of Adolescent Health found that teens who reduced daily social media use by 30 minutes reported significantly lower anxiety scores after four weeks. If platforms were designed with user health as a core metric rather than time-on-app, the social media landscape would look radically different. Regulation modeled on pharmaceutical disclosure requirements — mandating transparency about algorithmic design — offers the most viable path forward without restricting free speech.`,
+    anchor: { Thesis: 4, Evidence: 4, Organization: 3, Conventions: 4 },
+    discussion: `Anchor scores: Thesis 4, Evidence 4, Organization 3, Conventions 4.
+
+Thesis (4): The final two sentences together form a specific, arguable claim that goes beyond "social media is harmful" to propose a mechanism (algorithmic design transparency) and scope (pharmaceutical-style regulation). It forecasts the essay's direction.
+
+Evidence (4): The study citation is specific — named journal, year, measurable outcome. The evidence is integrated into an analytical point, not merely dropped in.
+
+Organization (3): The paragraph moves logically but the opening two sentences are a broad wind-up before the specific argument arrives. A strong paragraph would arrive at the thesis sooner.
+
+Conventions (4): Clean, no citation errors in the excerpt. Academic register is consistent throughout.
+
+Common disagreements: Some instructors score Thesis 3 because the claim appears late. That's defensible — it depends whether you read the claim as requiring earlier placement to score 4. This is worth discussing in your section's norming conversation.`
+  },
+  {
+    label: 'Excerpt B — EN101',
+    course: 'EN101 Argumentative Essay',
+    text: `In today's society, social media affects a lot of people. Many studies say it is bad for mental health, especially for teens. According to a source, 40% of teenagers feel bad after using Instagram. This shows that social media is harmful. Some people argue that social media is good because it connects people, but the negative effects are worse. In conclusion, something needs to be done about social media companies.`,
+    anchor: { Thesis: 2, Evidence: 2, Organization: 2, Conventions: 3 },
+    discussion: `Anchor scores: Thesis 2, Evidence 2, Organization 2, Conventions 3.
+
+Thesis (2): "Something needs to be done" is present but vague and non-arguable. It names no agent, no mechanism, no scope. It describes a problem without making a claim.
+
+Evidence (2): "According to a source" lacks attribution. The statistic is plausible but the analysis stops at "This shows that social media is harmful" — the connection is asserted, not demonstrated.
+
+Organization (2): The paragraph follows a predictable template (intro → evidence → counterargument → conclusion) but the ideas are underdeveloped. The counterargument is dismissed in a single clause without engagement.
+
+Conventions (3): Sentence-level control is adequate — errors don't impede reading. "In today's society" and "a lot of people" are register issues, not errors.
+
+Key instructional question: What feedback would move this student from a 2 thesis to a 3? The rubric descriptor says 3 is "clear but underdeveloped or predictable." This student needs to take a position, not just identify a problem.`
+  },
+  {
+    label: 'Excerpt C — EN101',
+    course: 'EN101 Argumentative Essay',
+    text: `The relationship between social media use and mental health is more complicated than public discourse usually admits. Researchers at MIT's Media Lab have argued that the harm is not uniformly distributed: passive scrolling correlates with lower wellbeing, while active creation and community interaction show neutral or positive effects (Verduyn et al., 2022). This distinction has significant policy implications. Blanket restrictions or age requirements ignore the mechanism of harm and would suppress the very uses — youth journalism, peer support networks, organizing — that have demonstrably positive effects. Targeted regulation, focused specifically on recommendation algorithm transparency and opt-out tools for passive-feed modes, could address the documented harms without the collateral cost.`,
+    anchor: { Thesis: 4, Evidence: 4, Organization: 4, Conventions: 4 },
+    discussion: `Anchor scores: Thesis 4, Evidence 4, Organization 4, Conventions 4 — a strong EN101 sample that could function as a model.
+
+Thesis (4): The paragraph opens by acknowledging complexity, then makes a specific, arguable, forward-pointing claim: targeted regulation of recommendation algorithms and opt-out tools. It distinguishes its position from "blanket restrictions" — that is, it engages counterargument at the thesis level.
+
+Evidence (4): The Verduyn et al. citation is specific with a parenthetical, attributing the finding to a named research group. Critically, the evidence is used analytically — the passive/active distinction is what drives the policy argument, not just support for a pre-formed claim.
+
+Organization (4): The paragraph's movement is purposeful: complexity acknowledged → mechanism identified → policy implication drawn → specific proposal made. Transitions are logical and carry information.
+
+Conventions (4): Academic register throughout; parenthetical citation correctly formatted; sentence variety.
+
+Use this as the high anchor in norming conversations. Ask: what would a revision of Excerpt B need to look like to reach this level?`
+  },
+  {
+    label: 'Excerpt D — EN102',
+    course: 'EN102 Literary Analysis Essay',
+    text: `Flannery O'Connor's use of violent epiphany in "A Good Man Is Hard to Find" is not cruelty for its own sake but a theological mechanism: grace, in O'Connor's Catholic framework, arrives through shock because the characters are too defended by self-satisfaction to receive it otherwise. The Grandmother, whose entire identity is constructed around social performance and gentility, cannot encounter the possibility of her own moral failure until the Misfit strips away every social structure she has used to avoid it. When she finally reaches out to touch him — "Why you're one of my babies" — the gesture is not delusional but genuinely maternal, a moment O'Connor described in her letters as "the action of grace" working through a character who could not have reached it any other way (O'Connor, 1969). The violence does not punish her; it frees her.`,
+    anchor: { Claim: 4, 'Textual Evidence': 4, 'Critical Framework': 4, 'Style & Mechanics': 4 },
+    discussion: `Anchor scores: Claim 4, Textual Evidence 4, Critical Framework 4, Style & Mechanics 4 — an exemplary EN102 analysis paragraph.
+
+Claim (4): The opening sentence does more than identify a technique — it interprets it within a theological argument. "Not cruelty for its own sake but a theological mechanism" positions the analysis against a misreading, making the claim argumentative from the first line.
+
+Textual Evidence (4): The quoted line is selected precisely and analyzed fully. The student doesn't stop at identifying the quotation — they interpret it ("not delusional but genuinely maternal") and bring in secondary evidence from O'Connor's own letters to support the interpretive claim.
+
+Critical Framework (4): The O'Connor letter citation demonstrates independent research and situates the close reading within the author's stated intentions. The Catholic theological framework is named and applied, not merely asserted.
+
+Style & Mechanics (4): Sophisticated sentence structure; the parenthetical citation is correctly formatted; academic register is sustained without becoming stilted. The final short sentence — "The violence does not punish her; it frees her" — is a deliberate stylistic choice that earns its place.
+
+Discussion prompt: Compare this to what a 3 would look like on Claim — a paragraph that correctly identifies the epiphany pattern and quotes the same line, but stops short of the theological interpretation. What is the difference between identifying a technique and analyzing it?`
+  }
+];
+
+let currentExcerpt = 0;
+let normScores = [{},{},{},{}];
+let normRevealed = [false,false,false,false];
+
+function showExcerpt(idx, btn) {
+  currentExcerpt = idx;
+  document.querySelectorAll('.ex-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderNorming();
+}
+
+function renderNorming() {
+  const e = excerpts[currentExcerpt];
+  const scores = normScores[currentExcerpt];
+  const revealed = normRevealed[currentExcerpt];
+  const dims = currentExcerpt === 3 ? rubricDims.lit : rubricDims.arg;
+
+  let dimsHtml = dims.map(dim => `
+    <div style="margin-bottom:1rem;">
+      <div style="font-weight:600; font-size:0.85rem; margin-bottom:0.35rem;">${dim}</div>
+      <div class="score-row">
+        ${[4,3,2,1].map(n => `
+          <button class="score-btn ${scores[dim] == n ? 'selected-'+n : ''}"
+            onclick="setNormScore(${currentExcerpt},'${dim}',${n},this)">
+            <strong>${n}</strong><br>${['','Beginning','Emerging','Developing','Proficient'][n]}
+          </button>`).join('')}
+      </div>
+    </div>`).join('');
+
+  let anchorHtml = '';
+  if (revealed) {
+    const anchorRows = dims.map(d => `<strong>${d}:</strong> ${e.anchor[d]}`).join(' &nbsp;&nbsp; ');
+    anchorHtml = `
+      <div style="background:var(--pine-pale); border:1px solid var(--pine-light); border-radius:var(--r); padding:1.1rem; margin-top:1.5rem;">
+        <div style="font-size:0.72rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--pine); margin-bottom:0.5rem;">Department Anchor Scores</div>
+        <div style="font-size:0.88rem; margin-bottom:0.75rem;">${anchorRows}</div>
+        <div style="font-size:0.83rem; line-height:1.7; white-space:pre-wrap; color:var(--ink);">${e.discussion}</div>
+      </div>`;
+  }
+
+  const allScored = dims.every(d => scores[d]);
+
+  document.getElementById('normingContent').innerHTML = `
+    <div class="excerpt-box">
+      <div class="excerpt-meta">${e.label} &nbsp;|&nbsp; ${e.course}</div>
+      ${e.text}
+    </div>
+    <div class="sec-divider"><h3>Your Scores</h3></div>
+    ${dimsHtml}
+    ${!revealed ? `<button class="btn btn-primary mt2" onclick="revealAnchor()" ${allScored ? '' : 'disabled style="opacity:0.5;cursor:not-allowed;"'}>
+      ${allScored ? 'Reveal anchor scores &amp; discussion' : 'Score all dimensions to reveal anchor'}
+    </button>` : ''}
+    ${anchorHtml}
+  `;
+}
+
+function setNormScore(excerptIdx, dim, score, btn) {
+  normScores[excerptIdx][dim] = score;
+  btn.closest('.score-row').querySelectorAll('.score-btn').forEach(b => b.className = 'score-btn');
+  btn.classList.add('selected-' + score);
+  // Update reveal button state
+  const e = excerpts[excerptIdx];
+  const dims = excerptIdx === 3 ? rubricDims.lit : rubricDims.arg;
+  const allScored = dims.every(d => normScores[excerptIdx][d]);
+  const revBtn = document.querySelector('#normingContent .btn-primary');
+  if (revBtn && !normRevealed[excerptIdx]) {
+    if (allScored) {
+      revBtn.removeAttribute('disabled');
+      revBtn.removeAttribute('style');
+      revBtn.textContent = 'Reveal anchor scores & discussion';
+    }
+  }
+}
+
+function revealAnchor() {
+  normRevealed[currentExcerpt] = true;
+  renderNorming();
+}
+
+// ─── MATERIALS ───
+const materials = {
+  'syllabus-en101': {
+    title: 'EN101 Syllabus Template',
+    body: `<h3 style="font-family:'DM Serif Display',serif; margin-bottom:0.5rem;">EN101: College Writing I</h3>
+<p style="color:var(--ink-soft); font-size:0.82rem; margin-bottom:1rem;">Massachusetts Bay Community College — English Department</p>
+
+<p><strong>[REQUIRED] Credit Hours:</strong> 3 credits. This course meets three hours per week.</p>
+
+<p class="mt2"><strong>[REQUIRED] Course Description:</strong> EN101 introduces students to college-level reading and writing. Students develop skills in academic argument, evidence-based reasoning, research, and revision. Successful completion satisfies the MassBay writing requirement for transfer programs.</p>
+
+<p class="mt2"><strong>[REQUIRED] Course-Level Outcomes (CLOs):</strong></p>
+<ol style="margin-left:1.25rem; line-height:2; font-size:0.88rem;">
+<li>Read, summarize, and analyze college-level texts across genres.</li>
+<li>Develop and support a focused, evidence-based thesis.</li>
+<li>Locate, evaluate, and integrate credible sources using MLA.</li>
+<li>Revise drafts in response to feedback, demonstrating recursive process.</li>
+<li>Adopt appropriate academic register for a college audience.</li>
+<li>Apply grammar and mechanics at a level that does not impede comprehension.</li>
+</ol>
+
+<p class="mt2"><strong>[ADAPT] Grading Weights:</strong> (Adjust within department guidelines — writing must constitute at least 70% of the grade.)<br>
+Essays / Major Writing: 60–70%<br>
+Portfolio / Revision Work: 15–20%<br>
+Participation / Process Work: 10–20%</p>
+
+<p class="mt2"><strong>[REQUIRED] Attendance:</strong> Students are expected to attend all class sessions. Missing more than [ADAPT: insert number, typically 15% of class meetings] may result in a grade of F or W. See MassBay Academic Policies for full attendance policy.</p>
+
+<p class="mt2"><strong>[REQUIRED] Accessibility:</strong> Students with documented disabilities who require accommodations should contact the MassBay Disability Services office. Instructors will provide accommodations in accordance with documentation received from Disability Services. [Full required language: see Accessibility & Accommodations Statement in Course Materials.]</p>
+
+<p class="mt2"><strong>[ADAPT] Required Texts:</strong> [List here — department recommends OER or low-cost texts where possible.]</p>
+
+<p class="mt2"><strong>[ADAPT] Course Schedule:</strong> [Insert your weekly schedule. Department recommends at least one major essay draft and revision cycle per unit.]</p>`
+  },
+  'syllabus-en102': {
+    title: 'EN102 Syllabus Template',
+    body: `<h3 style="font-family:'DM Serif Display',serif; margin-bottom:0.5rem;">EN102: College Writing II</h3>
+<p style="color:var(--ink-soft); font-size:0.82rem; margin-bottom:1rem;">Massachusetts Bay Community College — English Department</p>
+
+<p><strong>[REQUIRED] Prerequisite:</strong> EN101 or placement by assessment.</p>
+<p class="mt2"><strong>[REQUIRED] Course Description:</strong> EN102 develops students' skills in analytical writing, literary and expository text analysis, and independent research. Students produce a sustained research argument and a literary analysis essay using MLA documentation.</p>
+
+<p class="mt2"><strong>[REQUIRED] CLOs:</strong></p>
+<ol style="margin-left:1.25rem; line-height:2; font-size:0.88rem;">
+<li>Analyze literary and expository texts using appropriate critical frameworks.</li>
+<li>Synthesize multiple sources into a sustained, original argument.</li>
+<li>Conduct independent library research; apply MLA documentation.</li>
+<li>Engage counterargument and qualify claims with nuance.</li>
+<li>Demonstrate revision through documented drafts and reflective writing.</li>
+<li>Develop sentence-level control appropriate to academic argument.</li>
+</ol>
+
+<p class="mt2"><strong>[ADAPT] Signature Assignments:</strong><br>
+Literary Analysis Essay (1,200–1,500 words) — assessed for CLO 1<br>
+Research Argument Essay (2,000–2,500 words, minimum 5 sources) — assessed for CLO 2<br>
+Portfolio: drafts + revision + reflection letter</p>
+
+<p class="mt2"><strong>[REQUIRED] MLA Documentation:</strong> All formal writing in this course uses MLA 9th edition. A Works Cited page is required for all essays using sources. [See MLA Quick Reference in Course Materials.]</p>`
+  },
+  'syllabus-en195': {
+    title: 'EN195 Syllabus Template',
+    body: `<h3 style="font-family:'DM Serif Display',serif; margin-bottom:0.5rem;">EN195: Creative Writing</h3>
+<p style="color:var(--ink-soft); font-size:0.82rem; margin-bottom:1rem;">Massachusetts Bay Community College — English Department</p>
+<p><strong>[REQUIRED] Course Description:</strong> EN195 introduces students to the craft of creative writing in poetry, fiction, and/or creative nonfiction. Students write, workshop, and revise original work, and read published work as writers.</p>
+<p class="mt2"><strong>[REQUIRED] CLOs:</strong></p>
+<ol style="margin-left:1.25rem; line-height:2; font-size:0.88rem;">
+<li>Identify and apply elements of craft: image, voice, structure, and form.</li>
+<li>Give and receive constructive feedback in workshop format.</li>
+<li>Revise creative work in response to specific feedback.</li>
+<li>Read published work as a writer; articulate how craft choices produce effect.</li>
+<li>Curate and reflect on a portfolio of original work.</li>
+</ol>
+<p class="mt2"><strong>[ADAPT] Workshop Format:</strong> [Describe your workshop model — Lerman method, traditional model, hybrid, etc. See Workshop Facilitation Guide.]</p>
+<p class="mt2"><strong>[REQUIRED] Final Portfolio:</strong> Students submit a portfolio of at least three revised pieces plus a craft letter of 600–900 words reflecting on their development as writers.</p>
+<p class="mt2"><strong>[ADAPT] Community Agreements:</strong> [Include your workshop community agreements here. Department recommends co-created agreements in the first week.]</p>`
+  },
+  'syllabus-esl': {
+    title: 'ESL101/102 Syllabus Template',
+    body: `<h3 style="font-family:'DM Serif Display',serif; margin-bottom:0.5rem;">ESL101 / ESL102: Academic Reading and Writing</h3>
+<p style="color:var(--ink-soft); font-size:0.82rem; margin-bottom:1rem;">Massachusetts Bay Community College — English Department / ESL Program</p>
+<p><strong>[REQUIRED] ESL Coordinator approval:</strong> All ESL syllabi should be reviewed by the ESL Coordinator before distribution.</p>
+<p class="mt2"><strong>[REQUIRED] Course Description (ESL101):</strong> ESL101 develops academic reading and writing skills for multilingual students. Students practice extended academic writing, grammar in context, and vocabulary development for college coursework.</p>
+<p class="mt2"><strong>[REQUIRED] Language Access:</strong> [Required MassBay language regarding language access services and interpreter availability.]</p>
+<p class="mt2"><strong>[ADAPT] Grammar Focus:</strong> [ESL102 may emphasize specific grammar targets based on your cohort's placement profiles. Coordinate with ESL Coordinator on current diagnostic data.]</p>
+<p class="mt2"><strong>[REQUIRED] Multilingual Learner Accommodations:</strong> Students who require language-based accommodations should contact Disability Services and the ESL Coordinator. Extended time and translation tool use policies must follow the current department guidelines.</p>`
+  },
+  'policy-ai': {
+    title: 'AI Use Policy — English Department',
+    body: `<h3 style="font-family:'DM Serif Display',serif; margin-bottom:1rem;">English Department AI Use Policy</h3>
+<p>The following language is approved for use in English Department syllabi. Select the tier that reflects your course design.</p>
+
+<div style="border:1px solid var(--border); border-radius:var(--r); padding:1rem; margin:1rem 0; border-left:4px solid var(--red);">
+<strong>Tier 1: AI Prohibited</strong>
+<p class="mt2" style="font-size:0.88rem;">In this course, you are expected to produce all written work independently without the use of AI writing tools (including but not limited to ChatGPT, Claude, Gemini, and Copilot). Submitting AI-generated text as your own work constitutes academic dishonesty under the MassBay Academic Integrity Policy and may result in a failing grade on the assignment or in the course. If you are uncertain whether a specific use is permitted, ask before submitting.</p>
+</div>
+
+<div style="border:1px solid var(--border); border-radius:var(--r); padding:1rem; margin:1rem 0; border-left:4px solid var(--gold);">
+<strong>Tier 2: AI Disclosed</strong>
+<p class="mt2" style="font-size:0.88rem;">In this course, limited use of AI tools is permitted when disclosed. If you use an AI tool at any stage of your writing process — for brainstorming, outlining, drafting, or editing — you must disclose this in a note attached to your submission, describing how and where you used it. Submitting AI-generated text without disclosure is academic dishonesty. Your final submission must represent your own thinking, analysis, and expression.</p>
+</div>
+
+<div style="border:1px solid var(--border); border-radius:var(--r); padding:1rem; margin:1rem 0; border-left:4px solid var(--pine);">
+<strong>Tier 3: AI Integrated</strong>
+<p class="mt2" style="font-size:0.88rem;">This course explicitly incorporates AI tools as part of the learning process. Assignments will specify when and how AI tools may be used. When AI is used, you are responsible for critically evaluating, revising, and taking authorial ownership of the final text. Assignments designated as AI-free must be completed without AI assistance.</p>
+</div>
+
+<p style="font-size:0.82rem; color:var(--ink-soft); margin-top:1rem;">Questions about AI policy should be directed to the Department Chair before finalizing your syllabus.</p>`
+  },
+  'policy-integrity': {
+    title: 'Academic Integrity Policy',
+    body: `<h3 style="font-family:'DM Serif Display',serif; margin-bottom:1rem;">Academic Integrity — Required Syllabus Language</h3>
+<p><strong>[REQUIRED]</strong> MassBay Community College is committed to academic integrity. Students are expected to submit only their own original work in this course. Academic dishonesty — including plagiarism, fabrication, facilitation of dishonesty, and unauthorized assistance — will be handled according to the MassBay Academic Integrity Policy.</p>
+<p class="mt2"><strong>In writing courses, academic dishonesty includes:</strong></p>
+<ul style="margin-left:1.25rem; line-height:2; font-size:0.88rem;">
+<li>Submitting work written by another person, in whole or in part</li>
+<li>Using source text without citation or in a way that misrepresents the source</li>
+<li>Submitting AI-generated text without disclosure (see AI Use Policy)</li>
+<li>Submitting the same paper for two courses without instructor permission</li>
+</ul>
+<p class="mt2"><strong>[ADAPT] Instructor consequence language:</strong> [State your specific consequences clearly: e.g., "A first instance of plagiarism will result in a zero on the assignment and a required conference with the instructor. A second instance will result in a failing grade in the course and referral to the Dean of Academic Affairs."]</p>
+<p class="mt2">The MassBay Academic Integrity Policy is available at [massbay.edu/academicintegrity]. Students who are uncertain whether a specific practice is permitted should ask before submitting.</p>`
+  },
+  'policy-attendance': {
+    title: 'Attendance & Late Work Policy',
+    body: `<h3 style="font-family:'DM Serif Display',serif; margin-bottom:1rem;">Attendance &amp; Late Work</h3>
+<p><strong>[REQUIRED] MassBay Attendance Policy:</strong> [Insert current MassBay policy language. Contact the Registrar's office for the current approved text each academic year.]</p>
+<p class="mt2"><strong>[ADAPT] Department Guidance on Attendance:</strong> Writing is a skill developed through sustained practice, discussion, and in-class workshop. Regular attendance is essential. The department recommends the following as a starting framework (adapt within MassBay policy limits):</p>
+<ul style="margin-left:1.25rem; line-height:2; font-size:0.88rem;">
+<li>More than [X] absences may result in a final grade reduction or a grade of F/W</li>
+<li>Arriving more than 15 minutes late or leaving more than 15 minutes early constitutes an absence</li>
+<li>Students are responsible for material covered during any absence</li>
+</ul>
+<p class="mt2"><strong>[ADAPT] Late Work:</strong> [State your policy explicitly. Consider including language about how to request an extension before a deadline, rather than after. Example: "Late work will be accepted up to one week after the deadline at a 10% penalty per day, unless an extension is requested at least 24 hours before the due date."]</p>
+<p class="mt2"><strong>[REQUIRED] Emergency and Extended Absence:</strong> Students experiencing medical emergencies, family crises, or other circumstances requiring extended absence should contact the Dean of Students office and their instructor as soon as possible.</p>`
+  },
+  'policy-access': {
+    title: 'Accessibility & Accommodations Statement',
+    body: `<h3 style="font-family:'DM Serif Display',serif; margin-bottom:1rem;">Accessibility &amp; Accommodations</h3>
+<p><strong>[REQUIRED — use verbatim:]</strong></p>
+<blockquote style="border-left:3px solid var(--pine); padding-left:1rem; margin:1rem 0; font-style:italic; color:var(--ink-soft); font-size:0.9rem; line-height:1.7;">
+Massachusetts Bay Community College is committed to providing equal educational access for students with disabilities. Students who require accommodations should contact the Disability Services office to obtain a letter of accommodation and provide it to their instructor. Accommodations are not retroactive; students are encouraged to contact Disability Services at the beginning of the semester.
+</blockquote>
+<p class="mt2">Disability Services: [Insert current office location, phone, and email — confirm each semester]</p>
+<p class="mt2"><strong>[ADAPT] Instructor accessibility note:</strong> [Optional — many English faculty add a brief note here about their own approach to accessibility. For example: "I am committed to making this course accessible. If you encounter any barriers to your participation — whether or not you have a formal accommodation — please come talk with me."]</p>`
+  },
+  'prompt-en101-arg': {
+    title: 'EN101 Argumentative Essay Prompt',
+    body: `<h3 style="font-family:'DM Serif Display',serif; margin-bottom:1rem;">EN101 Argumentative Essay</h3>
+<p><strong>Length:</strong> 1,000–1,200 words &nbsp;|&nbsp; <strong>Documentation:</strong> MLA 9th ed. &nbsp;|&nbsp; <strong>Sources:</strong> Minimum 3 credible sources</p>
+<p class="mt2"><strong>Assignment:</strong> Write an argument essay that takes a defensible position on a significant issue and supports that position with evidence from credible sources. Your essay should include a clear, arguable thesis; evidence that is integrated and analyzed (not merely quoted); engagement with a counterargument; and MLA documentation.</p>
+<p class="mt2"><strong>[ADAPT] Topic options:</strong> [Choose one approach:]</p>
+<ul style="margin-left:1.25rem; line-height:2; font-size:0.88rem;">
+<li><strong>Open topic:</strong> Students propose their own topic in a brief proposal. Requires approval.</li>
+<li><strong>Thematic unit:</strong> Students write from a shared pool of topic options connected to your course theme (e.g., technology and society; education reform; environment and policy).</li>
+<li><strong>Text-based:</strong> Students argue a position in response to assigned course readings.</li>
+</ul>
+<p class="mt2"><strong>Evaluated CLO:</strong> CLO 2 — Argumentative Writing. Scored with the EN101 Argumentative Writing Rubric (see Assessment tab).</p>
+<p class="mt2"><strong>Process requirements (recommended):</strong></p>
+<ul style="margin-left:1.25rem; line-height:2; font-size:0.88rem;">
+<li>Topic proposal or thesis statement: [due date]</li>
+<li>Annotated bibliography or source notes: [due date]</li>
+<li>Rough draft (for peer review or instructor conference): [due date]</li>
+<li>Final draft: [due date]</li>
+</ul>`
+  },
+  'prompt-en102-lit': {
+    title: 'EN102 Literary Analysis Essay Prompt',
+    body: `<h3 style="font-family:'DM Serif Display',serif; margin-bottom:1rem;">EN102 Literary Analysis Essay</h3>
+<p><strong>Length:</strong> 1,200–1,500 words &nbsp;|&nbsp; <strong>Documentation:</strong> MLA 9th ed. &nbsp;|&nbsp; <strong>Sources:</strong> Minimum 2 secondary sources</p>
+<p class="mt2"><strong>Assignment:</strong> Write an analytical essay that makes a specific interpretive argument about a literary text. Your essay should: identify a literary problem (an element of the text that requires interpretation); make a claim that goes beyond plot summary; support your claim with close reading and textual evidence; situate your argument in relation to critical or contextual sources; and sustain your analysis across the full essay.</p>
+<p class="mt2"><strong>Evaluated CLO:</strong> CLO 1 — Literary and Textual Analysis. Scored with the EN102 Literary Analysis Rubric.</p>
+<p class="mt2"><strong>[ADAPT] Text options:</strong> [Specify whether students choose from an assigned list, select their own text with approval, or analyze a shared class text.]</p>
+<p class="mt2"><strong>Secondary source requirement:</strong> Minimum 2 scholarly or critical sources (peer-reviewed articles, book chapters, or credible critical editions). The MassBay library database provides full access to JSTOR, MLA International Bibliography, and Academic Search Premier.</p>`
+  },
+  'guide-portfolio': {
+    title: 'Portfolio Assessment Guide',
+    body: `<h3 style="font-family:'DM Serif Display',serif; margin-bottom:1rem;">Portfolio Assessment — EN101 &amp; EN195</h3>
+<p>The portfolio documents student growth through the revision process. It is not a best-of collection — it is evidence of the writing process.</p>
+<p class="mt2"><strong>Required components (EN101):</strong></p>
+<ul style="margin-left:1.25rem; line-height:2; font-size:0.88rem;">
+<li>Complete drafts of at least two major essays (rough + final)</li>
+<li>All marked-up drafts showing instructor and peer feedback</li>
+<li>Reflection letter (600–900 words) — see prompt below</li>
+</ul>
+<p class="mt2"><strong>Reflection letter prompt:</strong> In your reflection letter, discuss: (1) how your writing changed from your first to final draft on one essay — be specific, citing actual passages; (2) what you have learned about your own writing process this semester; and (3) what you would still work on if you had more time.</p>
+<p class="mt2"><strong>EN195 Portfolio:</strong> Three revised pieces (in the genre(s) practiced this semester) plus a craft letter of 600–900 words. The craft letter should identify specific craft choices in your work, name at least one published writer whose work influenced a revision, and describe one revision you made that surprised you.</p>
+<p class="mt2"><strong>Assessment:</strong> Portfolios are assessed holistically. The reflection letter carries significant weight — a strong reflection on weak drafts can score higher than weak reflection on strong drafts.</p>`
+  },
+  'guide-mla': {
+    title: 'MLA Quick Reference (9th ed.)',
+    body: `<h3 style="font-family:'DM Serif Display',serif; margin-bottom:1rem;">MLA Quick Reference — 9th Edition</h3>
+<p style="font-size:0.82rem; color:var(--ink-soft);">For full guidance, see the MLA Handbook 9th ed. or Purdue OWL (owl.purdue.edu/owl/research_and_citation/mla_style).</p>
+
+<p class="mt2"><strong>In-text citation format:</strong><br>
+(Author Last Name Page Number) — e.g., (Smith 45)<br>
+No author: (Shortened Title Page) — e.g., ("Climate Change" 12)<br>
+Online source with no page: (Author Last Name) — e.g., (Jones)</p>
+
+<p class="mt2"><strong>Works Cited — common formats:</strong></p>
+<p style="font-family:'DM Mono',monospace; font-size:0.8rem; background:var(--canvas); padding:0.75rem; border-radius:var(--r); line-height:1.9; margin-top:0.5rem;">
+Book:<br>
+Last, First. <em>Title of Book</em>. Publisher, Year.<br><br>
+Article in journal:<br>
+Last, First. "Article Title." <em>Journal Name</em>, vol. #, no. #, Year, pp. #–#.<br><br>
+Website:<br>
+Last, First. "Page Title." <em>Website Name</em>, Day Month Year, URL.<br><br>
+Article in database:<br>
+Last, First. "Article Title." <em>Journal Name</em>, vol. #, no. #, Year, pp. #–#. <em>Database Name</em>, doi or URL.
+</p>
+
+<p class="mt2"><strong>Formatting reminders:</strong></p>
+<ul style="margin-left:1.25rem; line-height:2; font-size:0.88rem;">
+<li>Works Cited is on a new page, titled "Works Cited" (not bold, not underlined)</li>
+<li>Entries are alphabetical by first element (usually author's last name)</li>
+<li>Hanging indent: first line flush left, subsequent lines indented 0.5"</li>
+<li>Double-space throughout; no extra space between entries</li>
+</ul>`
+  },
+  'guide-workshop': {
+    title: 'Workshop Facilitation Guide (EN195)',
+    body: `<h3 style="font-family:'DM Serif Display',serif; margin-bottom:1rem;">Workshop Facilitation Guide</h3>
+<p class="mt2"><strong>Community agreements:</strong> Establish in Week 1, co-created with students. Recommended starting agreements:</p>
+<ul style="margin-left:1.25rem; line-height:2; font-size:0.88rem;">
+<li>Respond to the work on the page, not assumptions about the writer's intent</li>
+<li>Be specific — name the line, the image, the moment</li>
+<li>Hold the work to what it is trying to do, not what you would write</li>
+<li>Assume the writer knows their own experience</li>
+</ul>
+<p class="mt2"><strong>Lerman Critical Response Method (abbreviated):</strong></p>
+<ol style="margin-left:1.25rem; line-height:2; font-size:0.88rem;">
+<li><strong>Statements of meaning:</strong> Respondents share what was meaningful, memorable, or striking. No suggestions yet.</li>
+<li><strong>Artist asks questions:</strong> The writer asks specific questions about their own work. Respondents answer only the questions asked.</li>
+<li><strong>Responders ask questions:</strong> Respondents ask questions (not suggestions in disguise) about the work.</li>
+<li><strong>Permissioned opinions:</strong> Responders ask if they may share an opinion. Writer says yes or no.</li>
+</ol>
+<p class="mt2"><strong>Traditional workshop note:</strong> In traditional workshop, the writer is silent during response and takes notes. This is not required — adapt the model to your classroom culture and students' needs.</p>`
+  },
+  'guide-appeal': {
+    title: 'Grade Appeal Process',
+    body: `<h3 style="font-family:'DM Serif Display',serif; margin-bottom:1rem;">Grade Appeal — MassBay Process</h3>
+<p>Students who believe a final grade was assigned incorrectly may appeal through the following steps. [Note: confirm current process with Academic Affairs each year, as procedures may be updated.]</p>
+<ol style="margin-left:1.25rem; line-height:2.2; font-size:0.88rem;">
+<li><strong>Instructor conference:</strong> Student contacts the instructor within [X days] of grade posting to discuss the grade. Most grade disputes are resolved at this stage.</li>
+<li><strong>Department Chair:</strong> If unresolved, student contacts the Department Chair in writing, with a clear statement of the basis for the appeal.</li>
+<li><strong>Academic Affairs:</strong> If still unresolved, student submits a formal appeal to the Dean of Academic Affairs within [X days] of the Chair's response.</li>
+</ol>
+<p class="mt2"><strong>Instructor role:</strong> Maintain clear, detailed grading records including rubric scores, comments, and any relevant correspondence. You may be asked to provide documentation if a formal appeal is filed.</p>
+<p class="mt2"><strong>Appeals timeline:</strong> Final grade appeals must typically be initiated within [X weeks] of grade posting. Check current MassBay Academic Affairs policy for exact deadlines.</p>`
+  }
+};
+
+function openMaterial(id) {
+  const m = materials[id];
+  if (!m) return;
+  document.getElementById('matModalTitle').textContent = m.title;
+  document.getElementById('matModalBody').innerHTML = m.body;
+  document.getElementById('matModal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMaterial() {
+  document.getElementById('matModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function copyMaterial() {
+  const text = document.getElementById('matModalBody').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const confirm = document.getElementById('copyConfirm');
+    confirm.style.display = 'inline';
+    setTimeout(() => { confirm.style.display = 'none'; }, 2500);
+  });
+}
+
+// Close modal on backdrop click
+document.getElementById('matModal').addEventListener('click', function(e) {
+  if (e.target === this) closeMaterial();
+});
+
+// ─── INIT ───
+renderNorming();
+</script>
+</body>
+</html>

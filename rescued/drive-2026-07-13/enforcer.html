@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Enforcer — Confluence QA</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Source+Sans+3:wght@300;400;500;600&family=Source+Code+Pro:wght@400;500&display=swap');
+
+:root{
+  --ink:#1c1c1e;--ink-2:#48484a;--ink-3:#8e8e93;
+  --bg:#0f1117;--surface:#1c1f26;--surface-2:#252830;
+  --border:#2e3140;--border-2:#3a3d4a;
+  --green:#22c55e;--green-pale:rgba(34,197,94,.08);--green-dim:#15803d;
+  --red:#ef4444;--red-pale:rgba(239,68,68,.08);
+  --yellow:#eab308;--yellow-pale:rgba(234,179,8,.08);
+  --blue:#60a5fa;--blue-pale:rgba(96,165,250,.08);
+  --pine:#3d8a64;
+  --r:4px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Source Sans 3',sans-serif;font-size:.95rem;line-height:1.65;background:var(--bg);color:#e2e8f0;min-height:100vh;}
+
+.hd{background:var(--surface);border-bottom:1px solid var(--border);padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1rem;}
+.hd-badge{background:#1a1a2e;border:1.5px solid #3d3d6e;border-radius:var(--r);padding:.35rem .75rem;font-family:'Source Code Pro',monospace;font-size:.72rem;color:#8888cc;letter-spacing:.08em;text-transform:uppercase;}
+.hd h1{font-family:'Playfair Display',serif;font-size:1.25rem;color:#e2e8f0;flex:1;}
+.hd-sub{font-size:.78rem;color:var(--ink-3);}
+.hd-status{font-family:'Source Code Pro',monospace;font-size:.72rem;padding:.28rem .7rem;border-radius:20px;background:var(--surface-2);border:1px solid var(--border-2);color:var(--ink-3);}
+
+main{max-width:900px;margin:0 auto;padding:1.75rem 1.5rem 4rem;}
+
+/* UPLOAD ZONE */
+.upload-zone{background:var(--surface);border:2px dashed var(--border-2);border-radius:var(--r);padding:2.5rem;text-align:center;margin-bottom:1.5rem;transition:border-color .15s;}
+.upload-zone.drag{border-color:var(--pine);background:rgba(61,138,100,.05);}
+.upload-zone h3{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:.4rem;color:#e2e8f0;}
+.upload-zone p{font-size:.85rem;color:var(--ink-3);margin-bottom:1rem;}
+.upload-btn{padding:.55rem 1.25rem;background:var(--pine);color:#fff;border:none;border-radius:var(--r);font-family:'Source Sans 3',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;}
+.upload-btn:hover{background:#2d6e4e;}
+#fileInput{display:none;}
+
+/* QUICK PASTE */
+.paste-area{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:1.5rem;}
+.paste-hd{padding:.75rem 1rem;border-bottom:1px solid var(--border);font-size:.8rem;font-weight:600;color:var(--ink-3);display:flex;align-items:center;gap:.5rem;}
+.paste-hd code{font-family:'Source Code Pro',monospace;font-size:.75rem;background:var(--surface-2);padding:.1rem .35rem;border-radius:2px;color:#8888cc;}
+textarea.paste-input{width:100%;background:var(--surface-2);border:none;color:#e2e8f0;font-family:'Source Code Pro',monospace;font-size:.78rem;padding:.85rem 1rem;min-height:100px;resize:vertical;border-radius:0 0 var(--r) var(--r);outline:none;}
+
+/* AUDIT CONTROLS */
+.audit-controls{display:flex;gap:.65rem;flex-wrap:wrap;margin-bottom:1.5rem;align-items:center;}
+.audit-btn{padding:.6rem 1.25rem;border-radius:var(--r);border:1.5px solid var(--border-2);background:var(--surface);color:#e2e8f0;font-family:'Source Sans 3',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .12s;min-height:44px;}
+.audit-btn:hover{border-color:var(--pine);color:var(--green);}
+.audit-btn.primary{background:var(--pine);border-color:var(--pine);color:#fff;}
+.audit-btn.primary:hover{background:#2d6e4e;}
+.audit-btn:disabled{opacity:.4;cursor:not-allowed;}
+.check-group{display:flex;gap:.35rem;flex-wrap:wrap;flex:1;}
+.check-chip{padding:.32rem .75rem;border-radius:20px;font-size:.76rem;font-weight:500;cursor:pointer;border:1.5px solid var(--border-2);background:var(--surface-2);color:var(--ink-3);transition:all .12s;user-select:none;}
+.check-chip.on{background:var(--surface);border-color:var(--pine);color:var(--green);}
+
+/* PROGRESS */
+.progress-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.85rem 1rem;margin-bottom:1.25rem;display:none;}
+.progress-wrap.show{display:block;}
+.progress-bar{height:3px;background:var(--border);border-radius:2px;margin-top:.5rem;overflow:hidden;}
+.progress-fill{height:3px;background:var(--green);border-radius:2px;transition:width .3s ease;width:0%;}
+.progress-label{font-family:'Source Code Pro',monospace;font-size:.78rem;color:var(--ink-3);}
+
+/* RESULTS AREA */
+.results{display:flex;flex-direction:column;gap:.65rem;}
+
+.result-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.rc-hd{padding:.7rem 1rem;display:flex;align-items:center;gap:.75rem;cursor:pointer;user-select:none;}
+.rc-hd:hover{background:var(--surface-2);}
+.rc-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0;}
+.ic-pass{background:var(--green-pale);color:var(--green);border:1px solid rgba(34,197,94,.2);}
+.ic-fail{background:var(--red-pale);color:var(--red);border:1px solid rgba(239,68,68,.2);}
+.ic-warn{background:var(--yellow-pale);color:var(--yellow);border:1px solid rgba(234,179,8,.2);}
+.ic-info{background:var(--blue-pale);color:var(--blue);border:1px solid rgba(96,165,250,.2);}
+.rc-title{font-weight:600;font-size:.9rem;flex:1;}
+.rc-count{font-family:'Source Code Pro',monospace;font-size:.72rem;color:var(--ink-3);padding:.12rem .45rem;background:var(--surface-2);border-radius:2px;}
+.rc-chev{color:var(--ink-3);transition:transform .15s;font-size:.75rem;}
+.rc-hd.open .rc-chev{transform:rotate(180deg);}
+
+.rc-body{display:none;border-top:1px solid var(--border);padding:.85rem 1rem;}
+.rc-body.open{display:block;}
+
+/* FINDING ROWS */
+.finding{padding:.5rem .65rem;margin-bottom:.35rem;border-radius:var(--r);border-left:3px solid;font-size:.84rem;line-height:1.55;}
+.finding:last-child{margin-bottom:0;}
+.f-pass{background:var(--green-pale);border-color:var(--green);}
+.f-fail{background:var(--red-pale);border-color:var(--red);}
+.f-warn{background:var(--yellow-pale);border-color:var(--yellow);}
+.f-info{background:var(--blue-pale);border-color:var(--blue);}
+.finding code{font-family:'Source Code Pro',monospace;font-size:.8rem;padding:.1rem .3rem;background:rgba(255,255,255,.06);border-radius:2px;}
+.finding .fix{font-size:.78rem;opacity:.75;margin-top:.2rem;font-style:italic;}
+
+/* ENFORCER NOTE */
+.enforcer-note{background:var(--surface-2);border:1px solid var(--border-2);border-left:3px solid #8888cc;border-radius:var(--r);padding:1rem 1.1rem;font-size:.88rem;line-height:1.7;margin-top:1.25rem;color:#c4c4e8;}
+.enforcer-note strong{color:#a0a0dd;}
+
+/* SUMMARY BAR */
+.summary-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.85rem 1.1rem;display:flex;gap:1.25rem;flex-wrap:wrap;margin-bottom:1.25rem;align-items:center;}
+.sb-stat{text-align:center;}
+.sb-n{font-family:'Playfair Display',serif;font-size:1.4rem;line-height:1;}
+.sb-l{font-size:.68rem;color:var(--ink-3);margin-top:.2rem;text-transform:uppercase;letter-spacing:.06em;}
+.sb-n.red{color:var(--red);}
+.sb-n.yellow{color:var(--yellow);}
+.sb-n.green{color:var(--green);}
+.sb-n.blue{color:var(--blue);}
+.divider{width:1px;background:var(--border);align-self:stretch;}
+.spinner{width:18px;height:18px;border:2px solid var(--border-2);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+
+<header class="hd">
+  <div class="hd-badge">Internal QA</div>
+  <h1>The Enforcer</h1>
+  <div>
+    <div style="font-size:.82rem;color:#8888cc;font-family:'Source Code Pro',monospace;">Backend QA · Confluence Assessment Hub</div>
+    <div class="hd-sub">Audits the app before delivery to Matt Walsh · Not a panelist. A gatekeeper.</div>
+  </div>
+  <div class="hd-status" id="topStatus">Ready</div>
+</header>
+
+<main>
+
+  <div style="background:var(--surface-2);border:1px solid var(--border-2);border-left:3px solid #8888cc;border-radius:var(--r);padding:.85rem 1rem;font-size:.84rem;color:#c4c4e8;margin-bottom:1.5rem;line-height:1.65;">
+    <strong style="color:#a0a0dd;">The Enforcer's mandate:</strong> Every ask gets audited before delivery. Nav links checked. Panel IDs verified. Functions confirmed. Placeholders counted. Accessibility tested. AI-powered structural review. Nothing ships broken.
+  </div>
+
+  <!-- LOAD FILE -->
+  <div class="upload-zone" id="dropZone">
+    <h3>Drop the Confluence HTML file here</h3>
+    <p>Or paste the HTML below · Enforcer will audit the full app</p>
+    <button class="upload-btn" onclick="document.getElementById('fileInput').click()">Choose File</button>
+    <input type="file" id="fileInput" accept=".html" onchange="loadFile(this)">
+  </div>
+
+  <div class="paste-area">
+    <div class="paste-hd">Or paste HTML directly &nbsp;<code>Ctrl+V / Cmd+V</code></div>
+    <textarea class="paste-input" id="htmlPaste" placeholder="Paste Confluence HTML here..." oninput="onPasteInput()"></textarea>
+  </div>
+
+  <!-- AUDIT CONTROLS -->
+  <div class="audit-controls">
+    <button class="audit-btn primary" id="runBtn" onclick="runFullAudit()" disabled>Run Full Audit</button>
+    <div class="check-group">
+      <span class="check-chip on" data-check="nav" onclick="toggleCheck(this)">Nav Links</span>
+      <span class="check-chip on" data-check="panels" onclick="toggleCheck(this)">Panel IDs</span>
+      <span class="check-chip on" data-check="functions" onclick="toggleCheck(this)">JS Functions</span>
+      <span class="check-chip on" data-check="placeholders" onclick="toggleCheck(this)">Placeholders</span>
+      <span class="check-chip on" data-check="hooks" onclick="toggleCheck(this)">Backend Hooks</span>
+      <span class="check-chip on" data-check="a11y" onclick="toggleCheck(this)">Accessibility</span>
+      <span class="check-chip on" data-check="mobile" onclick="toggleCheck(this)">Mobile</span>
+      <span class="check-chip on" data-check="ai" onclick="toggleCheck(this)">AI Review</span>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-label" id="progressLabel">Initializing...</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <!-- SUMMARY + RESULTS -->
+  <div id="summaryArea"></div>
+  <div class="results" id="resultsArea"></div>
+
+</main>
+
+<script>
+let htmlContent = '';
+let activeChecks = new Set(['nav','panels','functions','placeholders','hooks','a11y','mobile','ai']);
+
+// ── FILE LOAD ──
+const dropZone = document.getElementById('dropZone');
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file) readFile(file);
+});
+
+function loadFile(input) {
+  if (input.files[0]) readFile(input.files[0]);
+}
+function readFile(file) {
+  const r = new FileReader();
+  r.onload = e => { htmlContent = e.target.result; onHtmlLoaded(file.name); };
+  r.readAsText(file);
+}
+function onPasteInput() {
+  htmlContent = document.getElementById('htmlPaste').value;
+  if (htmlContent.length > 500) onHtmlLoaded('pasted HTML');
+}
+function onHtmlLoaded(name) {
+  document.getElementById('topStatus').textContent = `Loaded: ${name}`;
+  document.getElementById('topStatus').style.color = 'var(--green)';
+  document.getElementById('runBtn').disabled = false;
+  document.getElementById('runBtn').textContent = 'Run Full Audit';
+}
+function toggleCheck(chip) {
+  chip.classList.toggle('on');
+  const key = chip.dataset.check;
+  if (activeChecks.has(key)) activeChecks.delete(key);
+  else activeChecks.add(key);
+}
+
+// ── AUDIT ENGINE ──
+async function runFullAudit() {
+  if (!htmlContent) return;
+  const btn = document.getElementById('runBtn');
+  btn.disabled = true; btn.textContent = 'Auditing...';
+  document.getElementById('summaryArea').innerHTML = '';
+  document.getElementById('resultsArea').innerHTML = '';
+  showProgress('Starting audit...', 0);
+
+  const checks = [];
+  const total = activeChecks.size;
+  let done = 0;
+
+  function tick(label) {
+    done++;
+    showProgress(label, (done / total) * 100);
+  }
+
+  if (activeChecks.has('nav'))          { checks.push(checkNav());          tick('Checking navigation...'); }
+  if (activeChecks.has('panels'))       { checks.push(checkPanels());       tick('Verifying panel IDs...'); }
+  if (activeChecks.has('functions'))    { checks.push(checkFunctions());     tick('Scanning JS functions...'); }
+  if (activeChecks.has('placeholders')) { checks.push(checkPlaceholders());  tick('Counting placeholders...'); }
+  if (activeChecks.has('hooks'))        { checks.push(checkHooks());         tick('Reviewing backend hooks...'); }
+  if (activeChecks.has('a11y'))         { checks.push(checkAccessibility()); tick('Testing accessibility...'); }
+  if (activeChecks.has('mobile'))       { checks.push(checkMobile());        tick('Reviewing mobile...'); }
+
+  const results = await Promise.all(checks);
+
+  // AI review last
+  if (activeChecks.has('ai')) {
+    showProgress('Running AI structural review...', 90);
+    const aiResult = await runAIReview(results);
+    results.push(aiResult);
+  }
+
+  showProgress('Done.', 100);
+  setTimeout(() => document.getElementById('progressWrap').classList.remove('show'), 800);
+
+  renderResults(results);
+  btn.disabled = false;
+  btn.textContent = 'Re-run Audit';
+}
+
+function showProgress(label, pct) {
+  const w = document.getElementById('progressWrap');
+  w.classList.add('show');
+  document.getElementById('progressLabel').textContent = label;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+// ── INDIVIDUAL CHECKS ──
+
+function checkNav() {
+  const findings = [];
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlContent, 'text/html');
+
+  // Find all declared panel IDs
+  const panels = [...doc.querySelectorAll('[id^="panel-"]')]
+    .map(el => el.id.replace('panel-', ''));
+
+  // Find all nav references
+  const navCalls = [];
+  const onclickEls = doc.querySelectorAll('[onclick]');
+  onclickEls.forEach(el => {
+    const oc = el.getAttribute('onclick') || '';
+    const matches = [...oc.matchAll(/nav\(['"]([^'"]+)['"]/g)];
+    matches.forEach(m => navCalls.push({ target: m[1], el: el.tagName + (el.className ? '.'+el.className.split(' ')[0] : '') }));
+    // Check navMobile and navById too
+    const m2 = [...oc.matchAll(/navMobile\(['"]([^'"]+)['"]/g)];
+    m2.forEach(m => navCalls.push({ target: m[1], el: el.tagName }));
+    const m3 = [...oc.matchAll(/navById\(['"]([^'"]+)['"]/g)];
+    m3.forEach(m => navCalls.push({ target: m[1], el: el.tagName }));
+  });
+
+  // Check for brittle querySelectorAll index calls
+  const brittleMatches = [...htmlContent.matchAll(/querySelectorAll\(['"]\.[^'"]+['"]\)\[\d+\]/g)];
+  if (brittleMatches.length > 0) {
+    findings.push({ type:'fail', msg:`${brittleMatches.length} brittle querySelectorAll index lookup(s) found`, fix:'Replace with navById() or data-panel attribute lookup' });
+  } else {
+    findings.push({ type:'pass', msg:'No brittle querySelectorAll index lookups' });
+  }
+
+  // Check each nav call resolves to a real panel
+  const uniqueTargets = [...new Set(navCalls.map(c => c.target))];
+  let brokenCount = 0;
+  uniqueTargets.forEach(target => {
+    if (!panels.includes(target)) {
+      findings.push({ type:'fail', msg:`Nav target <code>'${target}'</code> has no matching <code>id="panel-${target}"</code>`, fix:`Add panel or remove nav reference` });
+      brokenCount++;
+    }
+  });
+  if (brokenCount === 0 && uniqueTargets.length > 0) {
+    findings.push({ type:'pass', msg:`All ${uniqueTargets.length} nav targets resolve to real panels (${panels.length} panels found)` });
+  }
+
+  // Check desktop tabs, drawer tabs, bottom nav are in sync
+  const tabPanels = [...doc.querySelectorAll('.mh-tab[data-panel]')].map(el => el.dataset.panel);
+  const drawerPanels = [...doc.querySelectorAll('.mh-drawer-tab[data-panel]')].map(el => el.dataset.panel);
+  const bnavPanels = [...doc.querySelectorAll('.bnav-btn[data-panel]')].map(el => el.dataset.panel);
+
+  if (tabPanels.length > 0) {
+    findings.push({ type:'pass', msg:`Desktop nav: ${tabPanels.length} tabs with data-panel attributes` });
+  } else {
+    findings.push({ type:'warn', msg:`Desktop nav tabs lack data-panel attributes — nav sync across surfaces won't work`, fix:'Add data-panel="panelid" to each .mh-tab button' });
+  }
+
+  if (drawerPanels.length > 0) {
+    findings.push({ type:'pass', msg:`Mobile drawer: ${drawerPanels.length} tabs found` });
+  } else {
+    findings.push({ type:'warn', msg:'No mobile drawer tabs found (.mh-drawer-tab)', fix:'Add mobile drawer nav for small screens' });
+  }
+
+  if (bnavPanels.length > 0) {
+    findings.push({ type:'pass', msg:`Bottom nav: ${bnavPanels.length} quick-access buttons found` });
+  } else {
+    findings.push({ type:'info', msg:'No bottom nav found — mobile users rely on drawer only' });
+  }
+
+  // Check for duplicate panel IDs
+  const panelIds = [...doc.querySelectorAll('[id^="panel-"]')].map(el => el.id);
+  const dupes = panelIds.filter((id, i) => panelIds.indexOf(id) !== i);
+  if (dupes.length > 0) {
+    dupes.forEach(d => findings.push({ type:'fail', msg:`Duplicate panel ID: <code>${d}</code>`, fix:'Remove duplicate section' }));
+  } else {
+    findings.push({ type:'pass', msg:`No duplicate panel IDs (${panelIds.length} panels)` });
+  }
+
+  const fails = findings.filter(f => f.type === 'fail').length;
+  const warns = findings.filter(f => f.type === 'warn').length;
+  return { id:'nav', label:'Navigation Links', findings, status: fails > 0 ? 'fail' : warns > 0 ? 'warn' : 'pass' };
+}
+
+function checkPanels() {
+  const findings = [];
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlContent, 'text/html');
+
+  const expectedPanels = ['overview','student','courses','assessment','samples','norming','directory','materials','scholars','about'];
+  const foundPanels = [...doc.querySelectorAll('[id^="panel-"]')].map(el => el.id.replace('panel-',''));
+
+  expectedPanels.forEach(p => {
+    if (foundPanels.includes(p)) {
+      const el = doc.getElementById('panel-' + p);
+      const hasContent = el && el.textContent.trim().length > 50;
+      findings.push({ type: hasContent ? 'pass' : 'warn', msg:`Panel <code>panel-${p}</code> ${hasContent ? 'found with content' : 'found but appears near-empty'}` });
+    } else {
+      findings.push({ type:'fail', msg:`Expected panel <code>panel-${p}</code> not found`, fix:'Add the panel section or update expectedPanels list' });
+    }
+  });
+
+  const unexpected = foundPanels.filter(p => !expectedPanels.includes(p));
+  unexpected.forEach(p => findings.push({ type:'info', msg:`Unexpected panel found: <code>panel-${p}</code> — not in expected list` }));
+
+  const activeCount = [...doc.querySelectorAll('.panel.on')].length;
+  if (activeCount === 1) findings.push({ type:'pass', msg:'Exactly one panel has .on class on load' });
+  else if (activeCount === 0) findings.push({ type:'fail', msg:'No panel has .on class — nothing visible on load', fix:'Add .on class to the overview panel section' });
+  else findings.push({ type:'fail', msg:`${activeCount} panels have .on class — multiple panels visible simultaneously`, fix:'Remove .on from all but one panel' });
+
+  const fails = findings.filter(f => f.type === 'fail').length;
+  return { id:'panels', label:'Panel Structure', findings, status: fails > 0 ? 'fail' : 'pass' };
+}
+
+function checkFunctions() {
+  const findings = [];
+  const requiredFns = ['nav','navById','navMobile','toggleDrawer','closeDrawer','updatePill','acc','buildScholarGrid','scOpenScholar','scCloseModal','scFetchReview','scGenerateAll','buildMiniTest','miniAnswer','stuSubmit','updateNormingGameplay','revealNorm','renderNorm','setNS','showEx'];
+  const optionalFns = ['doSubmit','ssGo','buildScoreArea','buildCourseOutcomeTags','openMat','closeMat','copyMat'];
+
+  requiredFns.forEach(fn => {
+    const regex = new RegExp(`function ${fn}\\s*\\(`);
+    if (regex.test(htmlContent)) {
+      // Check for duplicates
+      const count = (htmlContent.match(new RegExp(`function ${fn}\\s*\\(`, 'g')) || []).length;
+      if (count > 1) findings.push({ type:'fail', msg:`<code>${fn}()</code> defined ${count} times — only last definition runs`, fix:'Remove duplicate function definition' });
+      else findings.push({ type:'pass', msg:`<code>${fn}()</code> defined` });
+    } else {
+      findings.push({ type:'fail', msg:`Required function <code>${fn}()</code> missing`, fix:`Define function ${fn}() in script block` });
+    }
+  });
+
+  optionalFns.forEach(fn => {
+    const regex = new RegExp(`function ${fn}\\s*\\(`);
+    if (!regex.test(htmlContent)) {
+      findings.push({ type:'warn', msg:`Optional function <code>${fn}()</code> not found` });
+    }
+  });
+
+  // Check for known error patterns
+  if (htmlContent.includes('querySelectorAll') && htmlContent.match(/querySelectorAll\([^)]+\)\[\d+\]/)) {
+    findings.push({ type:'fail', msg:'Brittle index-based querySelectorAll found in functions', fix:'Use data-panel selectors instead' });
+  }
+
+  const fails = findings.filter(f => f.type === 'fail').length;
+  return { id:'functions', label:'JavaScript Functions', findings, status: fails > 0 ? 'fail' : 'pass' };
+}
+
+function checkPlaceholders() {
+  const findings = [];
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlContent, 'text/html');
+
+  // Count VERIFY flags
+  const verifyEls = doc.querySelectorAll('.vflag');
+  findings.push({ type: verifyEls.length > 0 ? 'warn' : 'pass', msg:`${verifyEls.length} VERIFY flag(s) in app — items needing confirmation before deployment` });
+
+  // Check for [PLACEHOLDER] text
+  const allText = doc.body ? doc.body.textContent : '';
+  const placeholderCount = (allText.match(/\[PLACEHOLDER/g) || []).length;
+  if (placeholderCount > 0) findings.push({ type:'warn', msg:`${placeholderCount} [PLACEHOLDER] marker(s) found in content` });
+  else findings.push({ type:'pass', msg:'No raw [PLACEHOLDER] text in visible content' });
+
+  // Check for HOOK flags
+  const hookEls = doc.querySelectorAll('.vflag');
+  const hookText = [...hookEls].filter(el => el.textContent.includes('HOOK'));
+  findings.push({ type:'info', msg:`${hookText.length} backend HOOK marker(s) flagged for Mike Lyons` });
+
+  // Check submission email target
+  const mailto = htmlContent.match(/mailto:([^?&"']+)/g) || [];
+  mailto.forEach(m => {
+    const addr = m.replace('mailto:','');
+    findings.push({ type:'info', msg:`Submission routes to: <code>${addr}</code>` });
+    if (addr.includes('mwalsh')) findings.push({ type:'warn', msg:'Submission still routing to personal email — confirm ENchair@ before deployment' });
+  });
+
+  // Check for fabrication warnings
+  if (htmlContent.includes('FABRICATED') || htmlContent.includes('fabricated') || htmlContent.includes('Hallucinations Fixed')) {
+    findings.push({ type:'pass', msg:'Fabrication correction log present in About/Scope panel' });
+  } else {
+    findings.push({ type:'info', msg:'No fabrication log found — confirm About/Scope panel is intact' });
+  }
+
+  return { id:'placeholders', label:'Placeholders & Flags', findings, status:'warn' };
+}
+
+function checkHooks() {
+  const findings = [];
+
+  const hookComments = (htmlContent.match(/\/\/ (DATA_HOOK|HOOK):/g) || []).length;
+  findings.push({ type:'info', msg:`${hookComments} backend integration hook(s) marked with DATA_HOOK/HOOK comments` });
+
+  // localStorage usage check
+  const lsUsage = (htmlContent.match(/localStorage\./g) || []).length;
+  if (lsUsage > 0) findings.push({ type:'warn', msg:`${lsUsage} localStorage usage(s) found — data won't persist across users`, fix:'Mike Lyons: replace with API calls per DATA_HOOK comments' });
+  else findings.push({ type:'pass', msg:'No localStorage dependencies — clean for backend integration' });
+
+  // API key check
+  if (htmlContent.includes('sk-ant-') || htmlContent.match(/apiKey\s*=\s*['"][^'"]{20,}/)) {
+    findings.push({ type:'fail', msg:'API KEY MAY BE EXPOSED IN CLIENT CODE', fix:'Move to server-side proxy immediately' });
+  } else {
+    findings.push({ type:'pass', msg:'No exposed API keys found in HTML source' });
+  }
+
+  // mailto as submission
+  const mailtoCount = (htmlContent.match(/mailto:/g) || []).length;
+  findings.push({ type:'info', msg:`${mailtoCount} mailto: submission route(s) — functional but not trackable until backend added` });
+
+  // Anthropic API calls
+  const apiCalls = (htmlContent.match(/api\.anthropic\.com/g) || []).length;
+  findings.push({ type:'pass', msg:`${apiCalls} Anthropic API call site(s) found — Scholar panel powered` });
+
+  return { id:'hooks', label:'Backend Hooks', findings, status:'info' };
+}
+
+function checkAccessibility() {
+  const findings = [];
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlContent, 'text/html');
+
+  // Images without alt
+  const imgs = doc.querySelectorAll('img:not([alt])');
+  if (imgs.length > 0) findings.push({ type:'fail', msg:`${imgs.length} image(s) missing alt text`, fix:'Add descriptive alt attribute to each img' });
+  else findings.push({ type:'pass', msg:'All images have alt attributes (or none present)' });
+
+  // SVG accessibility
+  const svgs = [...doc.querySelectorAll('svg')];
+  const svgsWithAria = svgs.filter(s => s.hasAttribute('aria-label') || s.querySelector('title'));
+  if (svgs.length > 0 && svgsWithAria.length < svgs.length) {
+    findings.push({ type:'warn', msg:`${svgs.length - svgsWithAria.length} of ${svgs.length} SVG(s) lack aria-label or <title>`, fix:'Add aria-label to decorative SVGs or title element to meaningful ones' });
+  } else if (svgs.length > 0) {
+    findings.push({ type:'pass', msg:`All ${svgs.length} SVG(s) have accessibility labels` });
+  }
+
+  // Buttons without labels
+  const btns = doc.querySelectorAll('button:not([aria-label])');
+  const unlabelledBtns = [...btns].filter(b => !b.textContent.trim());
+  if (unlabelledBtns.length > 0) findings.push({ type:'warn', msg:`${unlabelledBtns.length} button(s) have no text or aria-label`, fix:'Add aria-label to icon-only buttons' });
+  else findings.push({ type:'pass', msg:'All buttons have visible text or aria-label' });
+
+  // Color-only information (check for colored status indicators)
+  if (htmlContent.includes('ic-pass') || htmlContent.includes('ic-fail')) {
+    findings.push({ type:'warn', msg:'Status indicators use color — ensure text labels accompany color coding', fix:'Status icons should have aria-label or visible text alternative' });
+  }
+
+  // Touch target size check
+  const smallBtns = htmlContent.match(/padding:\s*\.2rem|padding:\s*\.15rem|padding:\s*0 \./g) || [];
+  if (smallBtns.length > 5) findings.push({ type:'warn', msg:'Multiple buttons may have touch targets below 44px', fix:'Ensure all interactive elements meet 44×44px minimum on mobile' });
+  else findings.push({ type:'pass', msg:'Touch target sizing appears adequate' });
+
+  // Lang attribute
+  if (htmlContent.includes('<html lang=')) findings.push({ type:'pass', msg:'html lang attribute present' });
+  else findings.push({ type:'fail', msg:'Missing lang attribute on <html>', fix:'Add lang="en" to <html> element' });
+
+  // ARIA roles on nav
+  const navWithRole = doc.querySelector('nav[role]') || doc.querySelector('[role="tablist"]');
+  if (navWithRole) findings.push({ type:'pass', msg:'Nav has ARIA role attribute' });
+  else findings.push({ type:'warn', msg:'Navigation may lack ARIA role', fix:'Add role="tablist" to nav, role="tab" to nav buttons' });
+
+  const fails = findings.filter(f => f.type === 'fail').length;
+  const warns = findings.filter(f => f.type === 'warn').length;
+  return { id:'a11y', label:'Accessibility', findings, status: fails > 0 ? 'fail' : warns > 0 ? 'warn' : 'pass' };
+}
+
+function checkMobile() {
+  const findings = [];
+
+  // Viewport meta
+  if (htmlContent.includes('viewport') && htmlContent.includes('width=device-width')) {
+    findings.push({ type:'pass', msg:'Viewport meta tag present with device-width' });
+  } else {
+    findings.push({ type:'fail', msg:'Missing or incorrect viewport meta tag', fix:'Add <meta name="viewport" content="width=device-width, initial-scale=1.0">' });
+  }
+
+  // Mobile nav
+  if (htmlContent.includes('mh-drawer')) findings.push({ type:'pass', msg:'Mobile drawer nav present' });
+  else findings.push({ type:'fail', msg:'No mobile drawer nav found', fix:'Add collapsible drawer nav for small screens' });
+
+  if (htmlContent.includes('bottom-nav')) findings.push({ type:'pass', msg:'Bottom navigation bar present' });
+  else findings.push({ type:'warn', msg:'No bottom nav bar ��� mobile users limited to drawer only' });
+
+  if (htmlContent.includes('navMobile')) findings.push({ type:'pass', msg:'navMobile() function present — drawer closes on navigation' });
+  else findings.push({ type:'warn', msg:'navMobile() missing — drawer may not close after tab selection' });
+
+  // Media queries
+  const mediaQueries = (htmlContent.match(/@media\s*\(/g) || []).length;
+  findings.push({ type: mediaQueries >= 3 ? 'pass' : 'warn', msg:`${mediaQueries} media query/queries found`, fix: mediaQueries < 3 ? 'Add responsive breakpoints for tablet and mobile' : undefined });
+
+  // Safe area insets
+  if (htmlContent.includes('safe-area-inset')) findings.push({ type:'pass', msg:'Safe area inset support present (notched phones)' });
+  else findings.push({ type:'info', msg:'No safe-area-inset-bottom — bottom nav may overlap home indicator on iPhone' });
+
+  // Text size adjust
+  if (htmlContent.includes('-webkit-text-size-adjust')) findings.push({ type:'pass', msg:'-webkit-text-size-adjust set — prevents iOS font inflation' });
+  else findings.push({ type:'info', msg:'Missing -webkit-text-size-adjust: 100% on body' });
+
+  // Tap highlight
+  if (htmlContent.includes('tap-highlight-color')) findings.push({ type:'pass', msg:'-webkit-tap-highlight-color handled on interactive elements' });
+  else findings.push({ type:'info', msg:'Consider adding -webkit-tap-highlight-color:transparent to buttons' });
+
+  // Scrollbar hidden on mobile nav
+  if (htmlContent.includes('scrollbar-width:none') || htmlContent.includes('scrollbar-width: none')) {
+    findings.push({ type:'warn', msg:'Nav scroll indicator hidden (scrollbar-width:none) — users may not know nav scrolls', fix:'Use scrollbar-width:thin with visible color, or replace with drawer nav' });
+  }
+
+  const fails = findings.filter(f => f.type === 'fail').length;
+  const warns = findings.filter(f => f.type === 'warn').length;
+  return { id:'mobile', label:'Mobile Readiness', findings, status: fails > 0 ? 'fail' : warns > 0 ? 'warn' : 'pass' };
+}
+
+// ── AI STRUCTURAL REVIEW ──
+async function runAIReview(existingResults) {
+  const findings = [];
+
+  // Build a concise summary for the API
+  const fails = existingResults.flatMap(r => r.findings.filter(f => f.type === 'fail')).map(f => f.msg.replace(/<[^>]+>/g,''));
+  const warns = existingResults.flatMap(r => r.findings.filter(f => f.type === 'warn')).map(f => f.msg.replace(/<[^>]+>/g,''));
+
+  // Extract a structural sample of the HTML (first 4000 chars + key sections)
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlContent, 'text/html');
+  const panelIds = [...doc.querySelectorAll('[id^="panel-"]')].map(el => el.id);
+  const tabLabels = [...doc.querySelectorAll('.mh-tab')].map(el => el.textContent.trim());
+  const drawerLabels = [...doc.querySelectorAll('.mh-drawer-tab')].map(el => el.textContent.trim());
+  const scriptLen = (htmlContent.match(/<script[\s\S]*?<\/script>/gi) || []).reduce((a,s) => a + s.length, 0);
+
+  const prompt = `You are The Enforcer, a QA specialist auditing the Confluence Assessment Hub web app before delivery to Matt Walsh, Professor of English at MassBay Community College.
+
+Here is the structural audit data:
+
+PANELS FOUND: ${panelIds.join(', ')}
+DESKTOP NAV TABS: ${tabLabels.join(' | ')}
+MOBILE DRAWER TABS: ${drawerLabels.join(' | ') || 'NONE FOUND'}
+HTML LENGTH: ${htmlContent.length} chars
+SCRIPT LENGTH: ~${scriptLen} chars
+EXISTING FAILURES: ${fails.length > 0 ? fails.slice(0,8).join(' / ') : 'none'}
+EXISTING WARNINGS: ${warns.length > 0 ? warns.slice(0,8).join(' / ') : 'none'}
+
+Your task: provide a concise structural QA review covering:
+1. Nav/panel alignment — do the tabs match the panels? Any mismatches?
+2. Structural integrity — does the panel list look complete for an assessment hub?
+3. Top 2-3 concerns the automated checks may have missed
+4. Verdict: SHIP IT / NEEDS FIXES / DO NOT SHIP — with one sentence of reasoning
+
+Be direct. You are a gatekeeper, not a cheerleader. 150-200 words max. No bullet points — prose.`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 400,
+        system: 'You are The Enforcer: a QA specialist who reviews educational web apps before delivery. You are precise, direct, and unimpressed by polish if the fundamentals are broken. You give verdicts, not suggestions.',
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await resp.json();
+    const text = data.content?.[0]?.text || 'AI review unavailable.';
+
+    // Detect verdict
+    let verdictType = 'info';
+    if (text.includes('DO NOT SHIP')) verdictType = 'fail';
+    else if (text.includes('NEEDS FIXES')) verdictType = 'warn';
+    else if (text.includes('SHIP IT')) verdictType = 'pass';
+
+    findings.push({ type: verdictType, msg: text });
+  } catch(err) {
+    findings.push({ type:'warn', msg:'AI review failed — network error or API unavailable' });
+  }
+
+  return { id:'ai', label:'AI Structural Review (The Enforcer)', findings, status: findings[0]?.type || 'info' };
+}
+
+// ── RENDER ──
+function renderResults(results) {
+  const area = document.getElementById('resultsArea');
+  const summary = document.getElementById('summaryArea');
+  area.innerHTML = '';
+
+  const totalFails = results.flatMap(r => r.findings.filter(f => f.type === 'fail')).length;
+  const totalWarns = results.flatMap(r => r.findings.filter(f => f.type === 'warn')).length;
+  const totalPass = results.flatMap(r => r.findings.filter(f => f.type === 'pass')).length;
+  const totalInfo = results.flatMap(r => r.findings.filter(f => f.type === 'info')).length;
+
+  const overallStatus = totalFails > 0 ? 'DO NOT SHIP' : totalWarns > 3 ? 'NEEDS FIXES' : 'SHIP IT';
+  const statusColor = totalFails > 0 ? 'red' : totalWarns > 3 ? 'yellow' : 'green';
+
+  summary.innerHTML = `<div class="summary-bar">
+    <div class="sb-stat"><div class="sb-n ${statusColor}">${overallStatus}</div><div class="sb-l">Verdict</div></div>
+    <div class="divider"></div>
+    <div class="sb-stat"><div class="sb-n red">${totalFails}</div><div class="sb-l">Failures</div></div>
+    <div class="sb-stat"><div class="sb-n yellow">${totalWarns}</div><div class="sb-l">Warnings</div></div>
+    <div class="sb-stat"><div class="sb-n green">${totalPass}</div><div class="sb-l">Passing</div></div>
+    <div class="sb-stat"><div class="sb-n blue">${totalInfo}</div><div class="sb-l">Info</div></div>
+    <div class="divider"></div>
+    <div style="font-size:.8rem;color:var(--ink-3);flex:1;">${results.length} checks run · ${results.flatMap(r=>r.findings).length} total findings · ${new Date().toLocaleTimeString()}</div>
+  </div>`;
+
+  results.forEach(r => {
+    const card = document.createElement('div');
+    card.className = 'result-card';
+    const statusIcon = r.status === 'pass' ? '✓' : r.status === 'fail' ? '✗' : r.status === 'warn' ? '!' : 'i';
+    const iconClass = r.status === 'pass' ? 'ic-pass' : r.status === 'fail' ? 'ic-fail' : r.status === 'warn' ? 'ic-warn' : 'ic-info';
+    const failCount = r.findings.filter(f => f.type==='fail').length;
+    const warnCount = r.findings.filter(f => f.type==='warn').length;
+    const countLabel = failCount > 0 ? `${failCount} fail` : warnCount > 0 ? `${warnCount} warn` : `${r.findings.filter(f=>f.type==='pass').length} pass`;
+
+    card.innerHTML = `<div class="rc-hd open" onclick="toggleCard(this)">
+      <div class="rc-icon ${iconClass}">${statusIcon}</div>
+      <div class="rc-title">${r.label}</div>
+      <div class="rc-count">${countLabel}</div>
+      <div class="rc-chev">&#9660;</div>
+    </div>
+    <div class="rc-body open">
+      ${r.findings.map(f => `<div class="finding f-${f.type}">
+        ${f.msg}
+        ${f.fix ? `<div class="fix">Fix: ${f.fix}</div>` : ''}
+      </div>`).join('')}
+    </div>`;
+    area.appendChild(card);
+  });
+
+  document.getElementById('topStatus').textContent = `${totalFails} failures · ${totalWarns} warnings`;
+  document.getElementById('topStatus').style.color = totalFails > 0 ? 'var(--red)' : totalWarns > 0 ? 'var(--yellow)' : 'var(--green)';
+}
+
+function toggleCard(hd) {
+  hd.classList.toggle('open');
+  hd.nextElementSibling.classList.toggle('open');
+}
+</script>
+</body>
+</html>

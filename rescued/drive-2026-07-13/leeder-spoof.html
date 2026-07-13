@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leeder Management – A place to call home</title>
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────────────── */
+    :root {
+      --ink:       #1a1a1a;
+      --ink-soft:  #444444;
+      --paper:     #f9f7f4;
+      --cream:     #ede9e1;
+      --gold:      #b89a5e;
+      --gold-dark: #8c7240;
+      --white:     #ffffff;
+      --nav-h:     64px;
+      --radius:    4px;
+      --font-display: 'Georgia', 'Times New Roman', serif;
+      --font-body:    'Helvetica Neue', Arial, sans-serif;
+      --max-w:     1100px;
+      --transition: 0.2s ease;
+    }
+
+    /* ─── RESET ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── NAV ────────────────────────────────────────────────── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--white);
+      border-bottom: 1px solid var(--cream);
+      height: var(--nav-h);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+    }
+    .logo span {
+      color: var(--gold);
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    nav a {
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      transition: color var(--transition);
+    }
+    nav a:hover { color: var(--gold); }
+    .nav-phone {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    /* ─── HERO ───────────────────────────────────────────────── */
+    .hero {
+      background: var(--ink);
+      color: var(--white);
+      padding: 96px 24px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 80px,
+          rgba(184,154,94,0.04) 80px,
+          rgba(184,154,94,0.04) 81px
+        ),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 80px,
+          rgba(184,154,94,0.04) 80px,
+          rgba(184,154,94,0.04) 81px
+        );
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 400;
+      line-height: 1.15;
+      max-width: 700px;
+      margin: 0 auto 24px;
+      letter-spacing: 0.01em;
+    }
+    .hero p {
+      max-width: 540px;
+      margin: 0 auto 40px;
+      color: rgba(255,255,255,0.65);
+      font-size: 1.05rem;
+    }
+    .hero-cta {
+      display: inline-block;
+      padding: 14px 36px;
+      background: var(--gold);
+      color: var(--white);
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: var(--radius);
+      transition: background var(--transition);
+    }
+    .hero-cta:hover { background: var(--gold-dark); }
+
+    /* ─── SECTION WRAPPER ────────────────────────────────────── */
+    section { padding: 72px 24px; }
+    .section-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      max-width: 560px;
+      color: var(--ink-soft);
+      margin-bottom: 48px;
+    }
+
+    /* ─── NEIGHBORHOODS ──────────────────────────────────────── */
+    .neighborhoods-bg { background: var(--white); }
+    .hood-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .hood-card {
+      background: var(--paper);
+      border: 1px solid var(--cream);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      cursor: pointer;
+    }
+    .hood-card:hover {
+      border-color: var(--gold);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+    .hood-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 400;
+      margin-bottom: 10px;
+      color: var(--ink);
+    }
+    .hood-card p {
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      line-height: 1.55;
+      margin-bottom: 20px;
+    }
+    .hood-link {
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+      transition: color var(--transition);
+    }
+    .hood-card:hover .hood-link { color: var(--gold-dark); }
+
+    /* ─── WHY LEEDER ─────────────────────────────────────────── */
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 32px;
+    }
+    .why-item {
+      border-top: 2px solid var(--gold);
+      padding-top: 20px;
+    }
+    .why-item h4 {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 400;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+    .why-item p {
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+
+    /* ─── APPLY BANNER ───────────────────────────────────────── */
+    .apply-bg {
+      background: var(--ink);
+      color: var(--white);
+      text-align: center;
+    }
+    .apply-bg .section-title { color: var(--white); }
+    .apply-bg .section-sub { color: rgba(255,255,255,0.55); margin-left: auto; margin-right: auto; }
+    .apply-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .btn-primary {
+      padding: 14px 36px;
+      background: var(--gold);
+      color: var(--white);
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+    .btn-primary:hover { background: var(--gold-dark); }
+    .btn-ghost {
+      padding: 14px 36px;
+      background: transparent;
+      color: var(--white);
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.35);
+      cursor: pointer;
+      transition: border-color var(--transition), color var(--transition);
+    }
+    .btn-ghost:hover { border-color: var(--white); color: var(--white); }
+
+    /* ─── CONTACT ────────────────────────────────────────────── */
+    .contact-bg { background: var(--cream); }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+    @media (max-width: 680px) {
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+    .contact-detail {
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+    }
+    .contact-detail strong {
+      display: block;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 2px;
+    }
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #d4cfc6;
+      border-radius: var(--radius);
+      background: var(--white);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color var(--transition);
+    }
+    .contact-form input:focus,
+    .contact-form textarea:focus { border-color: var(--gold); }
+    .contact-form textarea { resize: vertical; min-height: 120px; }
+    .contact-form button {
+      align-self: flex-start;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      background: var(--ink);
+      color: rgba(255,255,255,0.45);
+      padding: 32px 24px;
+      text-align: center;
+      font-size: 0.82rem;
+    }
+    footer a { color: var(--gold); }
+    footer a:hover { color: var(--gold-dark); }
+
+    /* ─── TOAST (the reason you're here) ────────────────────── */
+    .toast-rack {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 9999;
+      max-width: 320px;
+    }
+    .toast {
+      background: var(--ink);
+      color: var(--white);
+      padding: 14px 18px 14px 16px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      line-height: 1.4;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      border-left: 3px solid var(--gold);
+      animation: slide-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      position: relative;
+    }
+    .toast.toast-success { border-left-color: #4caf82; }
+    .toast.toast-error   { border-left-color: #c0392b; }
+    .toast.toast-info    { border-left-color: #5b9bd5; }
+    .toast .toast-icon {
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .toast .toast-body { flex: 1; }
+    .toast .toast-title {
+      font-weight: 600;
+      margin-bottom: 2px;
+      font-size: 0.88rem;
+    }
+    .toast .toast-msg {
+      color: rgba(255,255,255,0.65);
+      font-size: 0.82rem;
+    }
+    .toast-close {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.35);
+      cursor: pointer;
+      font-size: 1rem;
+      line-height: 1;
+      padding: 0;
+      flex-shrink: 0;
+      margin-top: 1px;
+      transition: color var(--transition);
+    }
+    .toast-close:hover { color: var(--white); }
+    .toast.toast-fade-out {
+      animation: fade-out 0.3s ease forwards;
+    }
+    @keyframes slide-in {
+      from { opacity: 0; transform: translateX(40px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes fade-out {
+      from { opacity: 1; transform: translateX(0); }
+      to   { opacity: 0; transform: translateX(20px); }
+    }
+
+    /* ─── TOAST DEMO PANEL ───────────────────────────────────── */
+    .toast-demo {
+      position: fixed;
+      top: 80px;
+      left: 20px;
+      background: var(--white);
+      border: 1px solid var(--cream);
+      border-radius: 8px;
+      padding: 18px 20px;
+      z-index: 200;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      min-width: 240px;
+    }
+    .toast-demo h5 {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .toast-demo-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .toast-demo-btns button {
+      padding: 8px 14px;
+      border: 1px solid var(--cream);
+      background: var(--paper);
+      border-radius: var(--radius);
+      font-size: 0.82rem;
+      cursor: pointer;
+      text-align: left;
+      transition: border-color var(--transition), background var(--transition);
+      font-family: var(--font-body);
+      color: var(--ink);
+    }
+    .toast-demo-btns button:hover {
+      border-color: var(--gold);
+      background: var(--white);
+    }
+    .toast-demo-btns button.active {
+      border-color: var(--gold);
+      background: var(--white);
+    }
+    .toast-demo label {
+      font-size: 0.8rem;
+      color: var(--ink-soft);
+      display: block;
+      margin-top: 12px;
+      margin-bottom: 4px;
+    }
+    .toast-demo input[type="text"] {
+      width: 100%;
+      padding: 7px 10px;
+      border: 1px solid #d4cfc6;
+      border-radius: var(--radius);
+      font-size: 0.82rem;
+      color: var(--ink);
+      font-family: var(--font-body);
+    }
+    .toast-demo input[type="range"] {
+      width: 100%;
+      margin-top: 4px;
+      accent-color: var(--gold);
+    }
+    .toast-demo .duration-label {
+      font-size: 0.75rem;
+      color: var(--ink-soft);
+    }
+
+    /* ─── MOBILE ─────────────────────────────────────────────── */
+    @media (max-width: 680px) {
+      .hood-grid { grid-template-columns: 1fr 1fr; }
+      nav { gap: 18px; }
+      .nav-phone { display: none; }
+      .toast-demo { top: auto; bottom: 120px; left: 12px; right: 12px; min-width: unset; }
+      .toast-rack { right: 12px; left: 12px; max-width: unset; bottom: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── HEADER ──────────────────────────────────────────────── -->
+  <header>
+    <div class="nav-inner">
+      <div class="logo">Leeder <span>Management</span></div>
+      <nav>
+        <a href="#neighborhoods">Neighborhoods</a>
+        <a href="#contact">Contact</a>
+        <a href="#apply">Apply</a>
+      </nav>
+      <div class="nav-phone">(617) 232-8700</div>
+    </div>
+  </header>
+
+  <!-- ─── HERO ────────────────────────────────────────────────── -->
+  <div class="hero">
+    <p class="hero-eyebrow">Boston-Area Rentals Since 1970</p>
+    <h1>A place to call home</h1>
+    <p>Thoughtfully maintained apartments in Jamaica Plain, Brookline, Cambridge, and Beacon Hill.</p>
+    <a href="#neighborhoods" class="hero-cta">View Apartments</a>
+  </div>
+
+  <!-- ─── NEIGHBORHOODS ───────────────────────────────────────── -->
+  <section id="neighborhoods" class="neighborhoods-bg">
+    <div class="section-inner">
+      <p class="section-label">Where We Are</p>
+      <h2 class="section-title">Our neighborhoods</h2>
+      <p class="section-sub">Each Leeder property is chosen for its neighborhood as much as its address — walkable, connected, and close to what matters.</p>
+      <div class="hood-grid">
+        <div class="hood-card">
+          <h3>Jamaica Plain</h3>
+          <p>Perkins Square and the Arboretum corridor. Tree-lined streets, the Orange Line, and a genuine neighborhood feel.</p>
+          <span class="hood-link">View listings &rarr;</span>
+        </div>
+        <div class="hood-card">
+          <h3>Brookline</h3>
+          <p>Along Beacon Street, steps from the Green Line. Quiet, walkable, and close to Longwood Medical.</p>
+          <span class="hood-link">View listings &rarr;</span>
+        </div>
+        <div class="hood-card">
+          <h3>Cambridge</h3>
+          <p>Concord Avenue near Fresh Pond. A calmer Cambridge, with easy access to Harvard Square and the Red Line.</p>
+          <span class="hood-link">View listings &rarr;</span>
+        </div>
+        <div class="hood-card">
+          <h3>Beacon Hill</h3>
+          <p>Bowdoin Street at the foot of the Hill. Historic character, Government Center access, and the Common nearby.</p>
+          <span class="hood-link">View listings &rarr;</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── WHY LEEDER ───────────────────────────────────────────── -->
+  <section>
+    <div class="section-inner">
+      <p class="section-label">What We Offer</p>
+      <h2 class="section-title">Original charm. Contemporary standards.</h2>
+      <p class="section-sub">Every apartment is remodeled to modern expectations while keeping the architectural character that makes Boston apartments worth living in.</p>
+      <div class="why-grid">
+        <div class="why-item">
+          <h4>Professionally Managed</h4>
+          <p>A single point of contact for maintenance, leasing, and anything that comes up day to day.</p>
+        </div>
+        <div class="why-item">
+          <h4>Preserved Character</h4>
+          <p>Period details kept where they belong. No generic renovations, no dropped ceilings over original plaster.</p>
+        </div>
+        <div class="why-item">
+          <h4>Accessible Locations</h4>
+          <p>Every property is close to public transit. Most residents find a car optional, not required.</p>
+        </div>
+        <div class="why-item">
+          <h4>Responsive Service</h4>
+          <p>Small enough to know your building. Experienced enough to handle it properly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── APPLY BANNER ────────────────────────────────────────── -->
+  <section id="apply" class="apply-bg">
+    <div class="section-inner" style="text-align:center">
+      <p class="section-label" style="color:var(--gold)">Ready to Apply</p>
+      <h2 class="section-title">Start your application today</h2>
+      <p class="section-sub">The rental application takes about ten minutes. Have a photo ID and references ready.</p>
+      <div class="apply-actions">
+        <button class="btn-primary" onclick="toast('Application', 'Rental application form would open here.', 'success')">Rental Application</button>
+        <button class="btn-ghost" onclick="toast('Questions?', 'Contact form is just below.', 'info')">Contact Us First</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CONTACT ──────────────────────────────────────────────── -->
+  <section id="contact" class="contact-bg">
+    <div class="section-inner">
+      <p class="section-label">Get in Touch</p>
+      <h2 class="section-title">Contact Leeder Management</h2>
+      <div class="contact-grid">
+        <div>
+          <div class="contact-detail">
+            <strong>Office</strong>
+            318 Harvard Street, Rm. 23<br>Brookline, MA 02446
+          </div>
+          <div class="contact-detail">
+            <strong>Phone</strong>
+            (617) 232-8700
+          </div>
+          <div class="contact-detail">
+            <strong>Fax</strong>
+            (617) 232-8701
+          </div>
+          <div class="contact-detail">
+            <strong>Email</strong>
+            mlbuckley@leedermgt.com
+          </div>
+        </div>
+        <div>
+          <form class="contact-form" onsubmit="handleContactSubmit(event)">
+            <input type="text" placeholder="Your name" id="cf-name" />
+            <input type="email" placeholder="Email address" id="cf-email" />
+            <input type="text" placeholder="Apartment interest (optional)" id="cf-apt" />
+            <textarea placeholder="Message"></textarea>
+            <button type="submit" class="btn-primary">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ───────────────────────────────────────────────── -->
+  <footer>
+    <p>&copy; Leeder Management &mdash; 318 Harvard Street, Brookline, MA &mdash; <a href="tel:6172328700">(617) 232-8700</a></p>
+  </footer>
+
+  <!-- ─── TOAST RACK (output) ──────────────────────────────────── -->
+  <div class="toast-rack" id="toast-rack"></div>
+
+  <!-- ─── TOAST LAB PANEL ───────────────────────────────────────── -->
+  <div class="toast-demo" id="toast-lab">
+    <h5>Toast Lab</h5>
+    <div class="toast-demo-btns">
+      <button onclick="toast('Availability updated', 'The Jamaica Plain listing is now live.', 'success')">Success toast</button>
+      <button onclick="toast('Something went wrong', 'Could not submit your application. Please try again.', 'error')">Error toast</button>
+      <button onclick="toast('Heads up', 'The office is closed December 25–26.', 'info')">Info toast</button>
+      <button onclick="toast('Tour confirmed', 'Your showing at 318 Harvard St is set for Thursday at 2pm.', 'default')">Default toast</button>
+      <button onclick="multiToast()">Fire three at once</button>
+    </div>
+    <label for="custom-title">Custom title</label>
+    <input type="text" id="custom-title" value="Custom toast" />
+    <label for="custom-msg">Message</label>
+    <input type="text" id="custom-msg" value="Edit me and fire." />
+    <label>
+      Duration: <span class="duration-label" id="dur-label">4s</span>
+      <input type="range" min="1" max="12" value="4" id="dur-slider"
+        oninput="document.getElementById('dur-label').textContent = this.value + 's'" />
+    </label>
+    <div class="toast-demo-btns" style="margin-top:8px">
+      <button onclick="fireCustom()">Fire custom toast</button>
+    </div>
+  </div>
+
+  <!-- ─── SCRIPTS ──────────────────────────────────────────────── -->
+  <script>
+    // ── Core toast engine ──────────────────────────────────────
+    let toastCount = 0;
+
+    function toast(title, msg, type = 'default', duration = 4000) {
+      const rack = document.getElementById('toast-rack');
+      const id = 'toast-' + (++toastCount);
+
+      const icons = {
+        success: '&#10003;',
+        error:   '&#10005;',
+        info:    '&#9432;',
+        default: '&#9670;'
+      };
+
+      const el = document.createElement('div');
+      el.className = 'toast toast-' + type;
+      el.id = id;
+      el.setAttribute('role', 'status');
+      el.setAttribute('aria-live', 'polite');
+      el.innerHTML = `
+        <span class="toast-icon">${icons[type] || icons.default}</span>
+        <div class="toast-body">
+          <div class="toast-title">${title}</div>
+          ${msg ? `<div class="toast-msg">${msg}</div>` : ''}
+        </div>
+        <button class="toast-close" onclick="dismissToast('${id}')" aria-label="Dismiss">&times;</button>
+      `;
+
+      rack.appendChild(el);
+
+      // auto-dismiss
+      const timer = setTimeout(() => dismissToast(id), duration);
+      el._timer = timer;
+
+      return id;
+    }
+
+    function dismissToast(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      clearTimeout(el._timer);
+      el.classList.add('toast-fade-out');
+      el.addEventListener('animationend', () => el.remove(), { once: true });
+    }
+
+    // ── Multi-fire demo ────────────────────────────────────────
+    function multiToast() {
+      toast('Unit available', '14 Perkins St, JP — 2BR/1BA, available Feb 1.', 'success', 5000);
+      setTimeout(() => toast('Application received', 'We\'ll follow up within one business day.', 'info', 5000), 400);
+      setTimeout(() => toast('ID required', 'Please upload a government-issued photo ID to complete your file.', 'error', 5000), 800);
+    }
+
+    // ── Custom toast from lab panel ────────────────────────────
+    function fireCustom() {
+      const title = document.getElementById('custom-title').value || 'Toast';
+      const msg   = document.getElementById('custom-msg').value || '';
+      const dur   = parseInt(document.getElementById('dur-slider').value, 10) * 1000;
+      toast(title, msg, 'default', dur);
+    }
+
+    // ── Contact form ───────────────────────────────────────────
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('cf-name').value.trim();
+      toast(
+        name ? `Thanks, ${name}` : 'Message sent',
+        'We\'ll be in touch shortly.',
+        'success'
+      );
+    }
+
+    // ── Welcome toast on load ──────────────────────────────────
+    window.addEventListener('load', () => {
+      setTimeout(() => toast('Toast Lab is live', 'Use the panel on the left to test variations.', 'info', 6000), 800);
+    });
+  </script>
+
+</body>
+</html>

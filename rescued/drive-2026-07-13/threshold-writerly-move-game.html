@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<title>Threshold: A Writerly Move Game</title>
+<style>
+  :root {
+    --bg: #0d0d10;
+    --panel: #18181f;
+    --panel2: #222230;
+    --text: #f4f1ea;
+    --muted: #c9c0b2;
+    --line: #3a3744;
+    --gold: #e8c76b;
+    --blue: #8bb8ff;
+    --red: #e06b6b;
+    --green: #8fd18f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: radial-gradient(circle at top, #252538, #0d0d10 62%);
+    color: var(--text);
+    font-family: Georgia, "Times New Roman", serif;
+    min-height: 100vh;
+  }
+  .app {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+  header {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(28px, 7vw, 56px);
+    line-height: .95;
+    letter-spacing: -1px;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-family: system-ui, sans-serif;
+    font-size: 14px;
+    margin-top: 8px;
+  }
+  .pill {
+    font-family: system-ui, sans-serif;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 7px 10px;
+    color: var(--muted);
+    white-space: nowrap;
+    font-size: 13px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1.05fr .95fr;
+    gap: 14px;
+  }
+  @media (max-width: 760px) {
+    .grid { grid-template-columns: 1fr; }
+    header { flex-direction: column; }
+  }
+  .card, .side {
+    background: rgba(24,24,31,.92);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: 0 16px 48px rgba(0,0,0,.25);
+  }
+  .card { padding: 22px; min-height: 460px; }
+  .side { padding: 16px; }
+  .scene-label {
+    font-family: system-ui, sans-serif;
+    color: var(--gold);
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: .08em;
+    font-size: 13px;
+  }
+  .scene-title {
+    font-size: clamp(30px, 8vw, 54px);
+    line-height: .95;
+    margin: 8px 0 14px;
+  }
+  .scene-text {
+    color: #eee8db;
+    font-size: 21px;
+    line-height: 1.35;
+    margin-bottom: 20px;
+  }
+  .choice {
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #222230;
+    color: var(--text);
+    padding: 16px;
+    margin: 12px 0;
+    cursor: pointer;
+    font-size: 17px;
+    line-height: 1.3;
+    font-family: system-ui, sans-serif;
+  }
+  .choice:hover, .choice:focus {
+    border-color: var(--gold);
+    outline: none;
+  }
+  .choice strong { display: block; font-size: 19px; margin-bottom: 5px; }
+  .hint {
+    color: var(--muted);
+    font-family: system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.45;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+    margin-top: 16px;
+  }
+  .meters {
+    display: grid;
+    gap: 12px;
+  }
+  .meter-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: system-ui, sans-serif;
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+  .bar {
+    height: 15px;
+    background: #101016;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .fill {
+    height: 100%;
+    width: 50%;
+    transition: width .25s ease;
+  }
+  #certaintyFill { background: var(--blue); }
+  #possibilityFill { background: var(--gold); }
+  #connectionFill { background: var(--green); }
+  #pressureFill { background: var(--red); }
+  .log {
+    margin-top: 14px;
+    background: #111118;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 12px;
+    max-height: 250px;
+    overflow: auto;
+    font-family: system-ui, sans-serif;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.35;
+  }
+  .log b { color: var(--text); }
+  .small-title {
+    font-family: system-ui, sans-serif;
+    color: var(--gold);
+    font-weight: 800;
+    margin: 14px 0 8px;
+  }
+  .ending {
+    font-size: 20px;
+    line-height: 1.45;
+    background: #111118;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 16px;
+    margin-top: 16px;
+  }
+  .button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .mini {
+    border: 1px solid var(--line);
+    background: #222230;
+    color: var(--text);
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-family: system-ui, sans-serif;
+    cursor: pointer;
+  }
+  .mini:hover { border-color: var(--gold); }
+  .teach {
+    font-family: system-ui, sans-serif;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .teach strong { color: var(--text); }
+  .hidden { display: none; }
+  textarea {
+    width: 100%;
+    min-height: 145px;
+    resize: vertical;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: #101016;
+    color: var(--text);
+    padding: 12px;
+    font-family: system-ui, sans-serif;
+    font-size: 15px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div>
+      <h1>Threshold</h1>
+      <div class="subtitle">A short Writerly Move game about liminal scenes, delayed commitment, and identity change.</div>
+    </div>
+    <div class="pill">10-minute prototype</div>
+  </header>
+
+  <div class="grid">
+    <main class="card">
+      <div id="playScreen">
+        <div class="scene-label">Threshold <span id="turnNum">1</span> of 8</div>
+        <div class="scene-title" id="sceneTitle">The Doorway</div>
+        <div class="scene-text" id="sceneText"></div>
+        <button class="choice" id="stayBtn"></button>
+        <button class="choice" id="commitBtn"></button>
+        <div class="hint" id="feedback">
+          Writerly Move: threshold scenes get tension from the space before a character becomes someone else.
+        </div>
+      </div>
+
+      <div id="endScreen" class="hidden">
+        <div class="scene-label">Ending</div>
+        <div class="scene-title" id="endingTitle"></div>
+        <div class="ending" id="endingText"></div>
+
+        <div class="small-title">Your threshold pattern</div>
+        <textarea id="reflectionText"></textarea>
+
+        <div class="button-row">
+          <button class="mini" onclick="copyReflection()">Copy reflection</button>
+          <button class="mini" onclick="restart()">Play again</button>
+        </div>
+      </div>
+    </main>
+
+    <aside class="side">
+      <div class="meters">
+        <div>
+          <div class="meter-label"><span>Certainty</span><span id="certaintyVal">5</span></div>
+          <div class="bar"><div class="fill" id="certaintyFill"></div></div>
+        </div>
+        <div>
+          <div class="meter-label"><span>Possibility</span><span id="possibilityVal">5</span></div>
+          <div class="bar"><div class="fill" id="possibilityFill"></div></div>
+        </div>
+        <div>
+          <div class="meter-label"><span>Connection</span><span id="connectionVal">5</span></div>
+          <div class="bar"><div class="fill" id="connectionFill"></div></div>
+        </div>
+        <div>
+          <div class="meter-label"><span>Pressure</span><span id="pressureVal">0</span></div>
+          <div class="bar"><div class="fill" id="pressureFill"></div></div>
+        </div>
+      </div>
+
+      <div class="small-title">How to read the game</div>
+      <div class="teach">
+        <strong>Stay</strong> keeps the character suspended. You gain possible futures, but pressure rises.<br><br>
+        <strong>Commit</strong> creates identity and consequence. You gain clarity, but close off other futures.<br><br>
+        The point is not to “win.” The point is to feel how threshold scenes create narrative tension.
+      </div>
+
+      <div class="small-title">Story log</div>
+      <div class="log" id="log"></div>
+    </aside>
+  </div>
+</div>
+
+<script>
+const scenes = [
+  {
+    title: "Graduation Hall",
+    text: "You stand in a robe that makes everyone call you finished. Your family is waving. Your phone buzzes: a train leaves in twenty minutes.",
+    stay: ["Stay in the hall", "You listen to speeches and delay the next version of yourself.", {possibility: 2, certainty: -1, pressure: 1}],
+    commit: ["Leave for the train", "You choose motion before you know where it leads.", {certainty: 2, possibility: -1, connection: -1}]
+  },
+  {
+    title: "Airport Gate",
+    text: "The gate agent calls your group. Your boarding pass says one city. Your notebook describes another life.",
+    stay: ["Let others board first", "You watch who leaves and who hesitates.", {possibility: 2, pressure: 1}],
+    commit: ["Step onto the plane", "The story narrows. That narrowing gives it force.", {certainty: 2, possibility: -2}]
+  },
+  {
+    title: "Empty Apartment",
+    text: "Boxes cover the floor. One room still echoes. You can unpack, or you can sit in the middle and admit the old life is gone.",
+    stay: ["Sit among the boxes", "You let the between-state become visible.", {possibility: 1, connection: 1, pressure: 1}],
+    commit: ["Unpack the first box", "A place begins becoming yours.", {certainty: 2, possibility: -1}]
+  },
+  {
+    title: "Hospital Waiting Room",
+    text: "A doctor walks past without looking at you. The vending machine hums. The person beside you asks if you want coffee.",
+    stay: ["Keep waiting alone", "You remain inside dread and projection.", {possibility: 1, certainty: -1, pressure: 2}],
+    commit: ["Accept the coffee", "Connection gives the scene a direction.", {connection: 2, certainty: 1, possibility: -1}]
+  },
+  {
+    title: "Border Crossing",
+    text: "The officer studies your passport. Behind you is one name. Ahead is another pronunciation of it.",
+    stay: ["Ask a question", "You hold the border open a little longer.", {possibility: 2, pressure: 2}],
+    commit: ["Answer plainly", "You trade ambiguity for passage.", {certainty: 2, possibility: -2}]
+  },
+  {
+    title: "Backstage",
+    text: "The curtain is closed. The audience is only a murmur. Your line is coming, but not yet.",
+    stay: ["Listen from the wings", "The almost-moment charges the actual moment.", {possibility: 2, pressure: 1}],
+    commit: ["Step into the light", "The role becomes real because you enter it.", {certainty: 2, pressure: -1}]
+  },
+  {
+    title: "Divorce Court Hallway",
+    text: "Two signatures could end a decade. Your almost-ex is looking at the same scratched floor tile.",
+    stay: ["Say one true thing", "The old identity and new identity overlap.", {connection: 2, possibility: 1, pressure: 1}],
+    commit: ["Sign without speaking", "The decision is clean. Maybe too clean.", {certainty: 3, possibility: -2, connection: -1}]
+  },
+  {
+    title: "Train Platform",
+    text: "The announcement crackles. The doors open. You can still miss this train.",
+    stay: ["Do not board yet", "You preserve every life except the one that requires action.", {possibility: 2, certainty: -2, pressure: 3}],
+    commit: ["Board", "A threshold ends. A consequence begins.", {certainty: 3, possibility: -2, pressure: -1}]
+  }
+];
+
+let state;
+function clamp(n) { return Math.max(0, Math.min(10, n)); }
+
+function restart() {
+  state = {
+    turn: 0,
+    certainty: 5,
+    possibility: 5,
+    connection: 5,
+    pressure: 0,
+    choices: [],
+    log: []
+  };
+  document.getElementById("endScreen").classList.add("hidden");
+  document.getElementById("playScreen").classList.remove("hidden");
+  render();
+}
+
+function apply(delta) {
+  for (const k of Object.keys(delta)) state[k] = clamp(state[k] + delta[k]);
+}
+
+function choose(type) {
+  const scene = scenes[state.turn];
+  const data = type === "stay" ? scene.stay : scene.commit;
+  apply(data[2]);
+  state.choices.push(type);
+  state.log.push({title: scene.title, type, effect: data[1]});
+  state.turn++;
+
+  if (state.pressure >= 10) {
+    endGame("pressure");
+  } else if (state.turn >= scenes.length) {
+    endGame("complete");
+  } else {
+    render();
+  }
+}
+
+function render() {
+  const scene = scenes[state.turn];
+  document.getElementById("turnNum").textContent = state.turn + 1;
+  document.getElementById("sceneTitle").textContent = scene.title;
+  document.getElementById("sceneText").textContent = scene.text;
+
+  document.getElementById("stayBtn").innerHTML = "<strong>" + scene.stay[0] + "</strong>" + scene.stay[1];
+  document.getElementById("commitBtn").innerHTML = "<strong>" + scene.commit[0] + "</strong>" + scene.commit[1];
+
+  const stays = state.choices.filter(c => c === "stay").length;
+  const commits = state.choices.filter(c => c === "commit").length;
+  let note = "Threshold scenes are strongest when possibility and consequence are both alive.";
+  if (stays > commits + 2) note = "You are extending liminality. Notice how pressure rises when the character refuses a new identity.";
+  if (commits > stays + 2) note = "You are resolving quickly. Notice how certainty rises, but mystery and possibility shrink.";
+  document.getElementById("feedback").textContent = note;
+
+  updateMeters();
+  updateLog();
+}
+
+function updateMeters() {
+  ["certainty","possibility","connection","pressure"].forEach(k => {
+    document.getElementById(k + "Val").textContent = state[k];
+    document.getElementById(k + "Fill").style.width = (state[k]*10) + "%";
+  });
+}
+
+function updateLog() {
+  const log = document.getElementById("log");
+  if (!state.log.length) {
+    log.innerHTML = "No choices yet.";
+    return;
+  }
+  log.innerHTML = state.log.map((entry, i) =>
+    "<p><b>" + (i+1) + ". " + entry.title + "</b><br>" +
+    (entry.type === "stay" ? "Stayed: " : "Committed: ") +
+    entry.effect + "</p>"
+  ).join("");
+}
+
+function endGame(reason) {
+  document.getElementById("playScreen").classList.add("hidden");
+  document.getElementById("endScreen").classList.remove("hidden");
+  updateMeters();
+  updateLog();
+
+  const stays = state.choices.filter(c => c === "stay").length;
+  const commits = state.choices.filter(c => c === "commit").length;
+
+  let title, text;
+  if (reason === "pressure") {
+    title = "Lost in the Threshold";
+    text = "You stayed in possibility so long that pressure overwhelmed the story. This teaches one danger of threshold scenes: delay can create tension, but endless delay becomes paralysis.";
+  } else if (state.certainty >= 8 && state.possibility <= 3) {
+    title = "Clean Passage";
+    text = "You built a decisive character arc. The tradeoff: the story may have closed some ambiguity too soon. In fiction, commitment gives shape, but it also kills alternate futures.";
+  } else if (state.possibility >= 8 && state.certainty <= 3) {
+    title = "Charged Suspension";
+    text = "You preserved mystery and multiple futures. The tradeoff: the character may feel unresolved. In fiction, threshold space is powerful because it delays identity without avoiding consequence forever.";
+  } else if (state.connection >= 8) {
+    title = "Changed by Contact";
+    text = "Your character crossed thresholds through other people. This suggests a strong literary use of the move: liminal scenes reveal who we are by showing who can still reach us.";
+  } else {
+    title = "Balanced Crossing";
+    text = "You kept both possibility and consequence alive. This is often the sweet spot for threshold scenes: the reader feels that several futures are possible, but choices still matter.";
+  }
+
+  document.getElementById("endingTitle").textContent = title;
+  document.getElementById("endingText").textContent = text;
+
+  const reflection =
+`Writerly Move: Threshold Space
+
+Pattern:
+- Stayed in threshold: ${stays} times
+- Committed: ${commits} times
+- Certainty: ${state.certainty}/10
+- Possibility: ${state.possibility}/10
+- Connection: ${state.connection}/10
+- Pressure: ${state.pressure}/10
+
+What the game made me notice:
+Threshold scenes create tension by holding a character between identities. Staying keeps possibility alive, but raises pressure. Committing gives the story shape, but closes off alternate futures.
+
+Writing prompt:
+Write a scene set in one threshold location: a hallway, platform, waiting room, doorway, border, backstage area, empty apartment, or graduation hall. Do not begin with the decision. Begin before the decision, while multiple futures are still possible.
+
+My scene idea:
+[Type here.]`;
+
+  document.getElementById("reflectionText").value = reflection;
+}
+
+function copyReflection() {
+  const t = document.getElementById("reflectionText");
+  t.select();
+  document.execCommand("copy");
+}
+
+document.getElementById("stayBtn").addEventListener("click", () => choose("stay"));
+document.getElementById("commitBtn").addEventListener("click", () => choose("commit"));
+
+restart();
+</script>
+</body>
+</html>

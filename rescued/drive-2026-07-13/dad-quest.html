@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dad Energy: A Father's Day Game</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#0B0F0C;            /* cabinet screen */
+    --panel:#10160F;            /* card surface */
+    --ink:#2BE996;              /* neon green line/text */
+    --ink-soft:#5B8C73;         /* dim green */
+    --tape:#1a2a1f;
+    --marker:#2BE996;           /* primary glow */
+    --marker-deep:#7CF5C0;      /* bright glow */
+    --warn:#FFC857;             /* amber accent */
+    --line:#1d3328;             /* hairline borders */
+    --focus:#FFC857;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--paper);color:var(--ink);font-family:"Source Serif 4",Georgia,serif;
+    font-size:clamp(18px,2.4vw,22px);line-height:1.55;min-height:100vh;
+    display:flex;align-items:flex-start;justify-content:center;padding:clamp(16px,4vw,48px);}
+  .card{background:var(--panel);border:2px solid #1d3328;border-radius:14px;
+    box-shadow:0 0 0 1px rgba(43,233,150,.08), inset 0 0 70px rgba(43,233,150,.05), 0 18px 50px rgba(0,0,0,.5);
+    max-width:700px;width:100%;padding:clamp(24px,5vw,48px);position:relative;overflow:hidden;}
+  .card::after{ /* CRT scanlines over everything */
+    content:"";position:absolute;inset:0;pointer-events:none;z-index:5;border-radius:12px;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.16) 3px,rgba(0,0,0,0) 4px);}
+  .eyebrow{font-family:"Caveat",cursive;font-size:clamp(26px,4vw,34px);color:var(--marker);margin:0 0 2px;line-height:1;position:relative;z-index:6;text-shadow:0 0 8px rgba(43,233,150,.45);}
+  h1{font-weight:700;font-size:clamp(28px,5vw,40px);margin:0 0 18px;letter-spacing:-.01em;position:relative;z-index:6;color:var(--marker-deep);text-shadow:0 0 6px rgba(43,233,150,.4),3px 3px 0 rgba(255,200,87,.25);}
+  .art-block{margin:6px 0 22px;position:relative;z-index:6;}
+  .art{width:100%;border:1px solid var(--line);border-radius:10px 10px 0 0;background:#0d130e;display:block;border-bottom:none;box-shadow:inset 0 0 40px rgba(43,233,150,.06);}
+  .art svg{display:block;width:100%;height:auto;max-height:46vh;}
+  .art-caption{font-family:"Caveat",cursive;font-size:clamp(22px,4.5vw,30px);line-height:1.15;color:var(--marker);text-align:center;
+    background:#0d130e;border:1px solid var(--line);border-top:1px dashed var(--line);border-radius:0 0 10px 10px;padding:8px 14px 12px;margin:0;text-shadow:0 0 8px rgba(43,233,150,.4);}
+  .art-caption.warn{color:var(--warn);text-shadow:0 0 8px rgba(255,200,87,.4);}
+  .meter-wrap{margin:18px 0 26px;position:relative;z-index:6;}
+  .meter-label{display:flex;justify-content:space-between;align-items:baseline;font-size:.8em;color:var(--ink-soft);margin-bottom:6px;letter-spacing:.08em;text-transform:uppercase;}
+  .meter-label b{color:var(--marker-deep);font-family:"Caveat",cursive;font-size:1.5em;text-transform:none;letter-spacing:0;text-shadow:0 0 8px rgba(43,233,150,.5);}
+  .meter{height:16px;background:#0a120c;border-radius:99px;overflow:hidden;border:1px solid var(--line);}
+  .meter-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--marker),var(--marker-deep));border-radius:99px;transition:width .55s ease;box-shadow:0 0 12px rgba(43,233,150,.6);}
+  .meter-fill.climb{transition:width 1.15s cubic-bezier(.34,1.56,.64,1);}
+  @media (prefers-reduced-motion: reduce){.meter-fill,.meter-fill.climb{transition:none;}}
+  .scene{font-size:1.05em;position:relative;z-index:6;color:#CFEFDD;}
+  .scene p{margin:0 0 1em;}
+  .narrator{color:var(--warn);font-style:italic;text-shadow:0 0 6px rgba(255,200,87,.25);}
+  .options{display:flex;flex-direction:column;gap:14px;margin-top:26px;position:relative;z-index:6;}
+  button.choice{font-family:"Source Serif 4",serif;font-size:1em;text-align:left;background:transparent;color:#CFEFDD;
+    border:2px solid var(--ink);border-radius:10px;padding:16px 18px;cursor:pointer;line-height:1.4;transition:transform .08s ease, background .15s ease, box-shadow .15s ease;}
+  button.choice:hover{background:rgba(43,233,150,.10);transform:translateY(-1px);box-shadow:0 0 16px rgba(43,233,150,.2);}
+  button.choice:active{transform:translateY(0);}
+  button.choice:focus-visible,button.next:focus-visible,button.restart:focus-visible{outline:4px solid var(--focus);outline-offset:2px;}
+  .feedback{margin-top:8px;padding:16px 18px;border-left:5px solid var(--marker);background:rgba(43,233,150,.07);border-radius:0 10px 10px 0;font-size:1em;position:relative;z-index:6;color:#CFEFDD;}
+  .feedback.zing{border-left-color:var(--warn);background:rgba(255,200,87,.08);}
+  .feedback .tag{display:block;font-family:"Caveat",cursive;font-size:1.5em;line-height:1;color:var(--marker-deep);margin-bottom:2px;text-shadow:0 0 8px rgba(43,233,150,.4);}
+  .feedback.zing .tag{color:var(--warn);text-shadow:0 0 8px rgba(255,200,87,.4);}
+  .next-row{margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;position:relative;z-index:6;}
+  button.next{font-family:"Source Serif 4",serif;font-weight:700;font-size:1em;letter-spacing:.06em;text-transform:uppercase;background:transparent;color:var(--marker);
+    border:2px solid var(--marker);border-radius:10px;padding:14px 26px;cursor:pointer;transition:background .15s ease;text-shadow:0 0 8px rgba(43,233,150,.4);box-shadow:0 0 14px rgba(43,233,150,.15);}
+  button.next:hover{background:rgba(43,233,150,.14);}
+  .step-count{font-size:.78em;color:var(--ink-soft);margin-top:24px;position:relative;z-index:6;letter-spacing:.08em;text-transform:uppercase;}
+  .ending h1{margin-bottom:6px;}
+  .rank{font-family:"Caveat",cursive;font-size:clamp(34px,6vw,52px);color:var(--marker-deep);line-height:1;margin:4px 0 14px;text-shadow:0 0 12px rgba(43,233,150,.5);}
+  button.restart{font-family:"Source Serif 4",serif;font-weight:700;font-size:1em;letter-spacing:.06em;text-transform:uppercase;background:transparent;color:var(--marker);
+    border:2px solid var(--marker);border-radius:10px;padding:14px 24px;cursor:pointer;margin-top:10px;text-shadow:0 0 8px rgba(43,233,150,.4);}
+  button.restart:hover{background:rgba(43,233,150,.14);}
+  .hint{font-size:.8em;color:var(--ink-soft);margin-top:30px;border-top:1px dashed var(--line);padding-top:14px;position:relative;z-index:6;}
+  .brand{margin-top:18px;text-align:center;font-size:.82em;color:var(--ink-soft);position:relative;z-index:6;}
+  .brand .studio{font-family:"Caveat",cursive;font-size:1.6em;color:var(--marker);display:block;line-height:1;text-shadow:0 0 8px rgba(43,233,150,.4);}
+  .brand a{color:var(--marker-deep);text-decoration:none;border-bottom:1px solid var(--line);}
+  .brand a:focus-visible{outline:4px solid var(--focus);outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;}}
+
+  /* ---- between-scene castle build interstitial ---- */
+  .build-wrap{position:relative;z-index:6;text-align:center;}
+  .build-cap{font-family:"Caveat",cursive;font-size:clamp(24px,5vw,34px);color:var(--marker);
+    text-shadow:0 0 8px rgba(43,233,150,.4);margin:0 0 4px;line-height:1.1;}
+  .build-sub{color:var(--ink-soft);font-size:.82em;letter-spacing:.08em;text-transform:uppercase;margin:0 0 14px;}
+  .build-art{border:1px solid var(--line);border-radius:10px;background:#0d130e;box-shadow:inset 0 0 40px rgba(43,233,150,.06);}
+  .build-art svg{display:block;width:100%;height:auto;max-height:46vh;}
+  /* newest piece draws itself in via stroke-dash; older pieces are already solid */
+  .bnew path,.bnew g{stroke-dasharray:600;stroke-dashoffset:600;animation:draw 1.1s ease forwards;}
+  .bnew .bfill{opacity:0;animation:fadein .5s ease .9s forwards;}
+  @keyframes draw{to{stroke-dashoffset:0;}}
+  @keyframes fadein{to{opacity:1;}}
+  @media (prefers-reduced-motion: reduce){
+    .bnew path,.bnew g{stroke-dashoffset:0;animation:none;}
+    .bnew .bfill{opacity:1;animation:none;}
+  }
+  .build-row{margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;position:relative;z-index:6;}
+  button.replaybtn{font-family:"Source Serif 4",serif;font-weight:700;font-size:.92em;letter-spacing:.06em;text-transform:uppercase;
+    background:transparent;color:var(--ink-soft);border:2px solid var(--line);border-radius:10px;padding:12px 20px;cursor:pointer;}
+  button.replaybtn:hover{background:rgba(43,233,150,.08);color:var(--marker);}
+  button.replaybtn:focus-visible{outline:4px solid var(--focus);outline-offset:2px;}
+
+  /* ---- retro arcade title screen (intro only) ---- */
+  .arcade{
+    background:#0B0F0C;
+    border-radius:12px;
+    margin:-2px 0 0;
+    padding:clamp(28px,7vw,56px) clamp(20px,5vw,40px);
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+    border:2px solid #1a2a1f;
+    box-shadow:inset 0 0 60px rgba(43,233,150,.08);
+  }
+  .arcade::after{ /* CRT scanlines */
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,.18) 3px,rgba(0,0,0,0) 4px);
+    border-radius:12px;
+  }
+  .arcade-tag{
+    font-family:"Caveat",cursive;font-size:clamp(16px,3.4vw,22px);
+    color:#7CF5C0;letter-spacing:.12em;text-transform:uppercase;margin:0 0 10px;
+    text-shadow:0 0 8px rgba(43,233,150,.5);
+  }
+  .arcade-title{
+    font-family:"Source Serif 4",serif;font-weight:700;
+    font-size:clamp(40px,11vw,84px);line-height:.92;margin:0;
+    color:#2BE996;letter-spacing:-.02em;
+    text-shadow:0 0 4px rgba(43,233,150,.6),0 0 22px rgba(43,233,150,.35),4px 4px 0 #B4582A;
+  }
+  .arcade-sub{
+    font-family:"Caveat",cursive;font-size:clamp(24px,5.5vw,38px);
+    color:#FFC857;margin:6px 0 0;line-height:1;
+    text-shadow:0 0 10px rgba(255,200,87,.4);
+  }
+  .arcade-pitch{
+    color:#CFEFDD;font-size:clamp(15px,3.4vw,18px);line-height:1.5;
+    max-width:30em;margin:22px auto 0;position:relative;z-index:1;
+  }
+  .arcade-pitch .dare{color:#FFC857;font-style:italic;}
+  .arcade-start{
+    margin-top:26px;position:relative;z-index:1;
+    font-family:"Source Serif 4",serif;font-weight:700;font-size:clamp(16px,3.6vw,20px);
+    letter-spacing:.16em;text-transform:uppercase;
+    background:transparent;color:#2BE996;border:2px solid #2BE996;border-radius:8px;
+    padding:14px 28px;cursor:pointer;
+    text-shadow:0 0 8px rgba(43,233,150,.5);box-shadow:0 0 16px rgba(43,233,150,.18);
+    animation:presspulse 1.4s ease-in-out infinite;
+  }
+  .arcade-start:hover{background:rgba(43,233,150,.12);}
+  .arcade-start:focus-visible{outline:4px solid #FFC857;outline-offset:3px;}
+  @keyframes presspulse{0%,100%{opacity:1}50%{opacity:.55}}
+  @media (prefers-reduced-motion: reduce){.arcade-start{animation:none;}}
+  .arcade-foot{
+    margin-top:20px;position:relative;z-index:1;
+    font-family:"Caveat",cursive;font-size:clamp(15px,3.2vw,19px);color:#5B8C73;
+  }
+</style>
+</head>
+<body>
+  <main class="card" id="card" role="application" aria-label="Dad Energy, a Father's Day game"></main>
+<script>
+(function(){
+  "use strict";
+  var ink="#2BE996";
+  var _fid=0;
+  // style → [baseFrequency, octaves, displacement scale]; A loosest, B tightest
+  var roughCfg={A:[0.022,2,4.3],B:[0.012,1,1.6],C:[0.015,2,2.6],D:[0.020,2,3.0]};
+  function frame(style,inner){
+    var cfg=roughCfg[style]||roughCfg.B; _fid++; var id="rgh"+_fid;
+    var f='<filter id="'+id+'" x="-6%" y="-6%" width="112%" height="112%"><feTurbulence type="fractalNoise" baseFrequency="'+cfg[0]+'" numOctaves="'+cfg[1]+'" seed="'+((_fid*7)%37)+'" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="'+cfg[2]+'" xChannelSelector="R" yChannelSelector="G"/></filter>';
+    return '<svg viewBox="0 0 600 230" role="img" aria-hidden="true" preserveAspectRatio="xMidYMid meet"><defs>'+f+'</defs><g filter="url(#'+id+')">'+inner+'</g></svg>';
+  }
+  var art={
+    // intro kitchen — style B (clean, composed). Mug + window light.
+    intro:frame('B','<g fill="none" stroke="#2BE996" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M248 196 q-6 -40 -2 -74 q42 -4 86 -1 q5 36 -1 75 q-42 4 -83 0z"/><path d="M334 138 q35 -2 34 22 q-1 24 -34 24" stroke-width="2.2"/></g><g fill="none" stroke="#FFC857" stroke-width="2.2" stroke-linecap="round"><path d="M266 110 q-5 -20 5 -34 M298 110 q-5 -20 5 -34 M330 110 q-5 -20 5 -34"/></g><g fill="none" stroke="#2BE996" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M96 64 q-2 64 0 124 q62 2 122 0 q2 -62 0 -124 q-60 -2 -122 0z"/><path d="M157 66 q-1 60 0 120 M98 126 q60 1 120 0"/></g>'),
+    // s1 pancake "Greg" first glimpse — style B clean, the calm
+    s1:frame('B','<g fill="none" stroke="#2BE996" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M170 150 q-2 -34 130 -36 q132 2 130 36 q-2 30 -130 32 q-128 -2 -130 -32z"/><path d="M196 150 q1 14 0 26 M404 150 q-1 14 0 26" stroke-width="1.8" opacity="0.5"/></g>'),
+    // s1r the empty plate / promise made — style B
+    s1r:frame('B','<g fill="none" stroke="#2BE996" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M150 168 q-2 -22 150 -24 q152 2 150 24 q-2 18 -150 20 q-148 -2 -150 -20z"/><path d="M196 166 q1 -12 104 -13 q103 1 104 13" stroke-width="1.6" opacity="0.45"/></g>'),
+    // s2 minivan — style A scratchy (chaotic, kid in back)
+    s2:frame('A','<g fill="none" stroke="#2BE996" stroke-linecap="round" stroke-linejoin="round"><path d="M118 175 q-3 -52 2 -98 q90 -22 180 -20 q90 2 180 22 q4 46 1 96 q-184 6 -363 0z" stroke-width="3.2"/><path d="M168 80 q-2 36 0 70 M300 78 q1 38 -1 72 M430 82 q3 34 0 70" stroke-width="2"/><path d="M120 178 q-2 14 22 16 q26 1 24 -16" stroke-width="3"/><path d="M414 178 q-2 15 23 16 q27 1 23 -17" stroke-width="3"/></g>'),
+    // s2r the castle she designs (in her head) — style C ink fills (hero-ish)
+    s2r:frame('C','<path d="M168 192 q-2 -40 0 -74 q34 -3 64 -1 q-1 -22 1 -40 q15 -2 30 0 q2 18 0 40 q34 1 64 -1 q-1 -22 1 -40 q15 -1 30 1 q1 17 -1 39 q33 -1 63 1 q2 40 0 74 q-168 5 -347 0z" fill="none" stroke="#2BE996" stroke-width="3" stroke-linejoin="round"/><path d="M256 193 q-2 -26 0 -46 q44 -2 88 1 q1 22 -1 45 q-44 3 -87 0z" fill="#2BE996"/><path d="M300 110 v-34 l34 10 l-32 12" fill="#FFC857" stroke="#FFC857" stroke-width="2" stroke-linejoin="round"/>'),
+    // s3 garage — style D sketchbook (mid-process, construction lines)
+    s3:frame('D','<g fill="none" stroke="#2BE996" stroke-linecap="round" stroke-linejoin="round"><path d="M150 198 q-2 -64 0 -128 q150 -4 300 0 q2 64 0 128" stroke-width="3"/><path d="M150 116 q150 -3 300 0" stroke-width="2.4"/><path d="M300 70 q-2 64 0 128" stroke-width="1.6" opacity="0.5"/><path d="M340 150 l42 30 M382 150 l-40 30" stroke-width="2"/><path d="M120 200 q180 -3 360 0" stroke-width="2.6"/><path d="M156 80 q146 -4 290 1" stroke-width="1.3" opacity="0.4"/></g>'),
+    // s3r cardboard castle built — style C ink fills, the hero
+    s3r:frame('C','<path d="M158 200 q-2 -42 0 -80 q36 -3 66 -1 q-1 -22 1 -40 q15 -2 30 0 q2 18 0 40 q36 1 66 -1 q-1 -22 1 -40 q15 -1 30 1 q1 17 -1 39 q35 -1 65 1 q2 42 0 80 q-176 5 -363 0z" fill="none" stroke="#2BE996" stroke-width="3.2" stroke-linejoin="round"/><path d="M252 201 q-2 -30 0 -52 q48 -2 96 1 q1 25 -1 51 q-48 3 -95 0z" fill="#2BE996"/><path d="M300 122 v-44 l40 12 l-38 14" fill="#FFC857" stroke="#FFC857" stroke-width="2" stroke-linejoin="round"/><path d="M300 78 q-1 22 0 44" stroke="#2BE996" stroke-width="2.4" fill="none"/>'),
+    // s4 bedtime book — style B clean
+    s4:frame('B','<g fill="none" stroke="#2BE996" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M120 186 q180 -56 360 0 q2 -60 0 -116 q-180 -56 -360 0 q-2 58 0 116z"/><path d="M300 70 q-1 58 0 116" stroke-width="2.2"/><path d="M152 96 q70 -24 140 -8 M310 88 q70 -18 140 8" stroke-width="1.8" opacity="0.6"/><path d="M152 128 q70 -24 140 -8 M310 120 q70 -18 140 8" stroke-width="1.8" opacity="0.6"/></g>'),
+    // s4r the legend / stall — style A scratchy (improvised wildly)
+    s4r:frame('A','<g fill="none" stroke="#2BE996" stroke-linecap="round" stroke-linejoin="round"><path d="M200 64 q100 -6 200 1 q1 11 -1 20 q-100 6 -199 -1 q-1 -10 0 -20z" stroke-width="2.8"/><path d="M212 86 q-3 56 1 108 M388 86 q3 54 -1 108" stroke-width="2.4"/><path d="M212 112 q90 38 176 -2" stroke-width="2.2"/><path d="M250 194 q-2 -30 0 -52 q50 -2 100 1 q1 26 -1 51" stroke-width="2.4"/><path d="M300 78 q40 -30 70 -8 q-30 4 -40 26" stroke="#FFC857" stroke-width="2.2"/></g>'),
+    // s5 backyard, lights about to come on — style B clean
+    s5:frame('B','<g fill="none" stroke="#2BE996" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M120 200 q-2 -36 0 -70 l60 -50 l60 50 q2 34 0 70 M180 200 q-1 -24 0 -46 q30 -2 60 0 q1 22 0 46"/><path d="M300 200 q-2 -46 0 -90 l60 -44 l60 44 q2 44 0 90 M360 200 q-1 -26 0 -50 q30 -2 60 0 q1 24 0 50"/></g>'),
+    // s5r the unveiling, string lights — style C ink fills, biggest hero moment
+    s5r:frame('C','<g fill="none" stroke="#2BE996" stroke-linecap="round" stroke-linejoin="round"><path d="M96 202 q2 -34 0 -68 q30 -3 60 -1 q-1 -16 0 -31 q15 -2 30 0 q2 16 0 31 q30 1 60 -1 q-1 -21 1 -41 q15 -1 30 1 q1 21 0 41 q30 0 60 -2 q-2 -15 0 -30 q15 -1 30 1 q1 16 -1 30 q31 -1 61 1 q-2 34 1 69 q-160 4 -322 0z" stroke-width="3.4"/></g><path d="M232 203 q-3 -28 -1 -52 q60 -3 119 1 q1 25 0 49 q-58 4 -118 2z" fill="#2BE996"/><g fill="#2BE996"><circle cx="120" cy="121" r="3.2"/><circle cx="182" cy="96" r="2.6"/><circle cx="262" cy="89" r="3.4"/><circle cx="343" cy="91" r="2.8"/><circle cx="423" cy="97" r="3.2"/><circle cx="478" cy="123" r="2.6"/></g><path d="M120 121 q30 -16 62 -25 q40 -10 80 -7 q42 3 81 2 q30 -1 55 -2" fill="none" stroke="#FFC857" stroke-width="2.4" stroke-linecap="round"/>'),
+    // endings — castle + a small figure, varied registers
+    endL:frame('B','<g fill="none" stroke="#2BE996" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M170 196 q-2 -44 0 -64 q34 -3 64 -1 q-1 -14 1 -26 q12 -2 24 0 q2 12 0 26 q34 1 60 -1 q2 42 0 66 q-110 4 -213 0z"/><circle cx="392" cy="150" r="2.6" fill="#2BE996"/><path d="M380 138 q-2 26 0 52 M404 138 q2 26 0 52" stroke-width="2.2"/></g>'),
+    endM:frame('C','<path d="M158 196 q-2 -50 0 -76 q40 -3 74 -1 q-1 -18 1 -32 q14 -2 28 0 q2 14 0 32 q40 1 74 -1 q2 48 0 78 q-126 5 -251 0z" fill="none" stroke="#2BE996" stroke-width="3" stroke-linejoin="round"/><path d="M248 197 q-2 -26 0 -44 q40 -2 80 1 q1 22 -1 43 q-40 3 -79 0z" fill="#2BE996"/><path d="M300 90 v-26 l30 9 l-28 11" fill="#FFC857" stroke="#FFC857" stroke-width="2" stroke-linejoin="round"/>'),
+    endH:frame('C','<path d="M150 198 q-2 -56 0 -84 q44 -3 80 -1 q-1 -20 1 -36 q15 -2 30 0 q2 16 0 36 q44 1 80 -1 q2 54 0 86 q-136 5 -271 0z" fill="none" stroke="#2BE996" stroke-width="3.2" stroke-linejoin="round"/><path d="M246 199 q-2 -30 0 -52 q54 -2 108 1 q1 26 -1 51 q-54 3 -107 0z" fill="#2BE996"/><path d="M300 114 v-40 l44 14 l-42 14" fill="#FFC857" stroke="#FFC857" stroke-width="2" stroke-linejoin="round"/><g fill="#2BE996"><circle cx="150" cy="118" r="2.8"/><circle cx="226" cy="92" r="2.6"/><circle cx="300" cy="84" r="3"/><circle cx="374" cy="92" r="2.6"/><circle cx="450" cy="118" r="2.8"/></g>')
+  };
+
+  // PROMISE METER: starts at a hopeful baseline, every choice nudges it.
+  // It is the thing actually at stake — can Dad make the castle real?
+  var promise=4;            // starts mid-hope
+  var promiseMax=12;
+
+  var scenes=[
+    {eyebrow:"7:48 a.m. — the kitchen",title:"The Promise",setup:art.intro,setupCap:"the calm, about to end",
+     text:["6:51 a.m. The house is quiet in the way it only is before everyone’s up. Coffee’s on. You have no plans you can’t change and a small person who thinks you can do anything. It lasts about an hour.",
+           "Then she’s at the table. You meant to say “the park” — you had the whole morning planned around the park. But the pancake came out shaped like a thumb, and she named it “Greg” and loved him on sight, and riding that small ridiculous victory, something reckless takes the wheel:",
+           "<span class='narrator'>“Today, kiddo, I’m taking you to see a real castle.”</span>",
+           "There is no castle. There has never been a castle. You have until bedtime."],
+     options:[
+       {label:"Double down. \"A BIG one. With a drawbridge.\" Commit to the bit.",tag:"All in.",zing:true,d:2,cap:"a real castle (allegedly)",
+        fb:"Her eyes go wide as plates. The drawbridge was not strictly necessary, and now it is load-bearing. You have raised the stakes on a building that does not exist. Greg watches from the plate, sensing trouble."},
+       {label:"Stay vague. \"Somewhere special.\" Leave yourself an exit.",tag:"Hedging.",zing:false,d:1,cap:"\"somewhere special\"",
+        fb:"\"Special\" buys you room. She narrows her eyes — she has heard \"special\" before — but accepts the terms. The promise is smaller now, and so is the cliff you've walked off."},
+       {label:"Walk it back gently. \"Well — a castle-ISH adventure.\"",tag:"Soft retreat.",zing:false,d:0,cap:"castle-ish",
+        fb:"\"Castle-ish\" lands with a thud. She is six; she hears the hyphen. The dream dims by exactly one notch, and you feel it dim. Greg says nothing, which is somehow worse."}
+     ]},
+    {eyebrow:"11:30 a.m. — the minivan",title:"The Architect in the Back Seat",setup:art.s2,setupCap:"why is the sky blue?",
+     text:["You are driving toward a castle you do not have. In the back seat, she is already designing it.",
+           "<span class='narrator'>\"Does it have a moat? It needs a moat. And a flag. What COLOR is the flag, Dad?\"</span>",
+           "Every question is a brick you now have to lay."],
+     options:[
+       {label:"Take dictation. \"Blue flag. Deep moat. Noted.\" Build her spec.",tag:"Yes, and.",zing:true,d:2,cap:"blue flag, deep moat",
+        fb:"You repeat each demand back like a contractor who fully intends to deliver. She is thrilled. You are now bound by a verbal contract to produce a moat, in a region with no moats. The spec is growing."},
+       {label:"Redirect. \"What do YOU think a castle needs?\" Let her cook.",tag:"Socratic.",zing:false,d:1,cap:"\"it's the ocean's roof\"",
+        fb:"She designs the whole thing herself and decides the sky is blue \"because it's the ocean's roof.\" Better than your answer. The good news: she's now invested. The bad news: she's now invested."},
+       {label:"Buy time. \"It's a SURPRISE castle. No more questions.\"",tag:"Stalling.",zing:false,d:0,cap:"surprise (gulp)",
+        fb:"\"Surprise\" works on a six-year-old for roughly four minutes. You have purchased four minutes at the cost of raising the word \"surprise,\" which is a promise wearing a hat."}
+     ]},
+    {eyebrow:"2:10 p.m. — the garage",title:"Plan B Has Cardboard",setup:art.s3,setupCap:"step 1 of 41",
+     text:["There is no castle within driving distance, your budget, or the laws of time. So, in the garage, with the door down and the kid distracted, you begin to build one.",
+           "<span class='narrator'>You have: a refrigerator box, duct tape, a glue gun, and rising panic.</span>"],
+     options:[
+       {label:"Engineer it properly. Buttresses. A working drawbridge. Go big.",tag:"Master builder.",zing:true,d:2,cap:"working drawbridge!",
+        fb:"You build a drawbridge that actually lowers. It took two hours and one minor glue-gun burn you will not mention. It is, objectively, the finest thing you have ever made. You cannot tell a single adult about it."},
+       {label:"Keep it simple. One good tower, painted fast. Done is better.",tag:"Done > perfect.",zing:false,d:1,cap:"one good tower",
+        fb:"One tower, one coat of paint, one banner that says CASTLE in case of ambiguity. It will not win awards. It will absolutely fool a six-year-old at dusk, which is the only judge that matters."},
+       {label:"Outsource the labor. \"Wanna help Daddy build a secret thing?\"",tag:"Co-build.",zing:false,d:1,cap:"a secret thing",
+        fb:"You bring her in. The build slows by 400% and improves by every measure that counts. She tapes one flap for twenty minutes and considers herself the chief engineer. She is not wrong. Greg supervises from a shelf."}
+     ]},
+    {eyebrow:"7:55 p.m. — bedtime, almost",title:"Stall",setup:art.s4,setupCap:"\"the short kind. i promise.\"",
+     text:["The castle is nearly ready in the backyard. You just need ten more minutes — and she is, at this exact moment, demanding to go to bed early \"so the castle comes faster.\"",
+           "<span class='narrator'>You must now keep an excited child awake without admitting why.</span>"],
+     options:[
+       {label:"Spin a stalling tale: \"First, the LEGEND of this castle...\"",tag:"Author.",zing:true,d:2,cap:"the legend (improvised)",
+        fb:"You invent four hundred years of castle history on the spot, complete with a dragon \"who turns out to be nice.\" It buys the exact ten minutes you need. The dragon now has a sequel and, somehow, merchandise demands."},
+       {label:"Negotiate. \"Teeth, pajamas, THEN the surprise.\" Buy minutes.",tag:"The deal.",zing:false,d:1,cap:"teeth first",
+        fb:"You convert her impatience into a checklist. Each task is a delay disguised as progress. She brushes with a fury you've never witnessed, which buys you four minutes and a slightly over-brushed child."},
+       {label:"Read at triple speed so she's calm but not asleep.",tag:"Efficiency.",zing:false,d:1,cap:"Zzz (not yet)",
+        fb:"Twelve pages in nineteen seconds. She laughs so hard she forgets to be impatient. You've kept her awake AND happy, a parenting state usually reserved for myth. She will wonder about that duck for the rest of her life."}
+     ]},
+    {eyebrow:"8:20 p.m. — the backyard",title:"The Unveiling",setup:art.s5,setupCap:"close your eyes...",
+     text:["String lights on. Cardboard towers glowing. The thing you promised at breakfast — impossible, unbudgeted, structurally questionable — is standing in the yard. You cover her eyes and walk her out.",
+           "<span class='narrator'>\"Okay,\" you say, voice catching slightly. \"Open them.\"</span>"],
+     options:[
+       {label:"Present it dead serious. \"Your castle, my lady. As promised.\"",tag:"The bow.",zing:false,d:1,cap:"\"as promised\"",
+        fb:"You bow. She gasps the gasp you have been chasing since 7:48 this morning. \"You SAID a castle,\" she whispers, \"and it's REAL.\" You do not correct her. It is, in every way she means, completely real."},
+       {label:"Come clean, gently. \"It's cardboard. I made it for you today.\"",tag:"The truth.",zing:false,d:1,cap:"\"I made it\"",
+        fb:"\"You MADE it?\" she says, and somehow that's bigger than a real castle. The honesty costs you nothing and buys you everything. She wants to know if Greg can live in it. Greg can live in it."},
+       {label:"Let her lead. \"Well? Is it everything you designed?\"",tag:"Hers.",zing:true,d:2,cap:"the architect approves",
+        fb:"She walks the perimeter like an inspector, checks for the moat, finds the moat (a garden hose, coiled hopefully), and declares it \"better than a real one because we know the guy who built it.\" The guy who built it has to sit down for a second."}
+     ]}
+  ];
+
+  // endings keyed to how the promise compounded across the day
+  var endings=[
+    {min:0,rank:"The Honest Improviser",img:art.endL,cap:"close enough, loved fully",
+     blurb:"You over-promised at breakfast and spent the day shrinking it to something you could actually keep. No drawbridge, no moat — but you showed up with a box and your whole afternoon, and she never doubted you for a second. The promise got smaller. The day did not."},
+    {min:6,rank:"Keeper of the Promise",img:art.endM,cap:"you said a castle. you built a castle.",
+     blurb:"You said \"castle\" before you had one, then spent twelve hours making the words true. It's cardboard and string lights and one garden-hose moat, and to her it is the most real thing in the world. You turned a reckless breakfast vow into a thing that actually stands."},
+    {min:9,rank:"Architect of the Whole Day",img:art.endH,cap:"drawbridge included",
+     blurb:"Working drawbridge. Blue flag. A moat she inspected and approved. You promised the impossible over a pancake named Greg and then, brick by cardboard brick, you went and made it real. She will tell this story her whole life. You will never tell anyone how the drawbridge actually worked."}
+  ];
+
+  var step=0,card=document.getElementById("card");
+  function clampP(){if(promise<0)promise=0;if(promise>promiseMax)promise=promiseMax;}
+  function meterHTML(){clampP();var pct=Math.min(100,Math.round((promise/promiseMax)*100));
+    return '<div class="meter-wrap"><div class="meter-label"><span>The Promise</span><b>'+promiseWord()+'</b></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="'+promiseMax+'" aria-valuenow="'+promise+'" aria-label="The Promise is '+promiseWord()+'"><div class="meter-fill" style="width:'+pct+'%"></div></div></div>';}
+  function promiseWord(){if(promise>=9)return "soaring";if(promise>=6)return "holding";if(promise>=3)return "wobbling";return "on thin ice";}
+  function endMeterHTML(){var pct=Math.min(100,Math.round((promise/promiseMax)*100));
+    return '<div class="meter-wrap"><div class="meter-label"><span>The Promise</span><b id="endNum">…</b></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="'+promiseMax+'" aria-valuenow="'+promise+'" aria-label="The Promise: '+promiseWord()+'"><div class="meter-fill climb" id="endFill" style="width:0%"></div></div></div>';}
+  function animateEndMeter(){var fill=document.getElementById("endFill"),num=document.getElementById("endNum");if(!fill||!num)return;
+    var pct=Math.min(100,Math.round((promise/promiseMax)*100));
+    var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if(reduce){fill.style.width=pct+"%";num.textContent=promiseWord();return;}
+    requestAnimationFrame(function(){requestAnimationFrame(function(){fill.style.width=pct+"%";});});
+    setTimeout(function(){num.textContent=promiseWord();},900);}
+  function artBlock(svg,cap,warn){return '<div class="art-block"><div class="art">'+svg+'</div><p class="art-caption'+(warn?' warn':'')+'">'+cap+'</p></div>';}
+
+  // Reset the viewport to the top of the card on every screen change, so the
+  // player always lands on the timestamp/title line, not partway down.
+  function showTop(){
+    try{window.scrollTo(0,0);}catch(e){}
+    if(document.scrollingElement)document.scrollingElement.scrollTop=0;
+    if(card&&card.scrollIntoView)card.scrollIntoView({block:"start"});
+  }
+  function focusTop(el){ if(!el)return; try{el.focus({preventScroll:true});}catch(e){el.focus();} }
+
+  function renderIntro(){
+    card.innerHTML='<div class="arcade"><p class="arcade-tag">Tight Spiral Studios presents</p><h1 class="arcade-title">DAD<br>ENERGY</h1><p class="arcade-sub">a Father’s Day game</p><p class="arcade-pitch">You don’t have to be a dad to play, because Dad Energy isn’t a job title: it’s a <em>mode</em>. <span class="dare">Anyone can have it.</span> <span class="dare">…or can they?</span></p><button class="arcade-start" id="beginBtn">▶ Press start</button><p class="arcade-foot">5 scenes · about 3 minutes · no wrong moves</p></div>';
+    showTop();var b=document.getElementById("beginBtn");b.addEventListener("click",function(){step=0;promise=4;renderScene();});focusTop(b);}
+
+  function renderScene(){var s=scenes[step];
+    card.innerHTML='<p class="eyebrow">'+s.eyebrow+'</p><h1>'+s.title+'</h1>'+artBlock(s.setup,s.setupCap,s.setupWarn)+meterHTML()+'<div class="scene">'+s.text.map(function(t){return '<p>'+t+'</p>';}).join("")+'</div><div class="options" role="group" aria-label="Choose what to do">'+s.options.map(function(o,i){return '<button class="choice" data-i="'+i+'">'+o.label+'</button>';}).join("")+'</div><p class="step-count">Scene '+(step+1)+' of '+scenes.length+'</p>';
+    showTop();var btns=card.querySelectorAll("button.choice");btns.forEach(function(b){b.addEventListener("click",function(){choose(parseInt(b.dataset.i,10));});});if(btns[0])focusTop(btns[0]);}
+
+  function choose(i){var s=scenes[step],opt=s.options[i];promise+=(opt.d||0);clampP();
+    card.innerHTML='<p class="eyebrow">'+s.eyebrow+'</p><h1>'+s.title+'</h1>'+artBlock(s.reveal,opt.cap,opt.warn)+meterHTML()+'<div class="feedback '+(opt.zing?'zing':'')+'"><span class="tag">'+opt.tag+'</span>'+opt.fb+'</div><div class="next-row"><button class="next" id="nextBtn">'+(step<scenes.length-1?"Next":"See how the day landed")+'</button></div><p class="step-count">Scene '+(step+1)+' of '+scenes.length+'</p>';
+    showTop();var nb=document.getElementById("nextBtn");nb.addEventListener("click",advance);focusTop(nb);}
+
+  // map each scene to its reveal drawing
+  scenes[0].reveal=art.s1r;scenes[1].reveal=art.s2r;scenes[2].reveal=art.s3r;scenes[3].reveal=art.s4r;scenes[4].reveal=art.s5r;
+
+  function advance(){
+    // between scenes 1-4, show the castle assembling one more piece, then continue
+    if(step < scenes.length-1){ step++; renderBuild(step); }
+    else { step++; renderEnding(); }
+  }
+
+  // ---- cumulative castle: layers[0..n] drawn; layer n animates in ----
+  // index 0 plays after scene 1, index 3 plays after scene 4. 4 build beats.
+  var G='stroke="#2BE996" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"';
+  var castleLayers=[
+    // 0 — foundation laid (after the promise)
+    {cap:"You start where every castle starts.",sub:"the morning \u00b7 a plan takes shape",
+     svg:'<path d="M90 196 q210 -7 420 0" '+G+'/><path d="M120 196 q-1 -10 0 -18 q180 -5 360 0 q1 9 0 18" '+G+' stroke-width="2.4"/>'},
+    // 1 — walls up (after the car)
+    {cap:"By lunch, it has walls.",sub:"midday \u00b7 the spec keeps growing",
+     svg:'<path d="M90 196 q210 -7 420 0" '+G+'/><path d="M120 196 q-1 -10 0 -18 q180 -5 360 0 q1 9 0 18" '+G+' stroke-width="2.4"/><path d="M132 178 q-2 -44 0 -84 q174 -5 336 0 q2 40 0 84" '+G+'/>'},
+    // 2 — towers + crenellations (after the garage build)
+    {cap:"By afternoon, towers.",sub:"the build \u00b7 it is really happening",
+     svg:'<path d="M90 196 q210 -7 420 0" '+G+'/><path d="M120 196 q-1 -10 0 -18 q180 -5 360 0 q1 9 0 18" '+G+' stroke-width="2.4"/><path d="M132 178 q-2 -44 0 -84 q174 -5 336 0 q2 40 0 84" '+G+'/><path d="M126 96 q-2 -22 0 -40 q26 -2 50 0 q1 18 0 40 M424 96 q2 -22 0 -40 q26 -2 50 0 q1 18 0 40" '+G+'/><path d="M126 56 v-14 h14 v14 m22 0 v-14 h14 v14 M424 56 v-14 h14 v14 m22 0 v-14 h14 v14" '+G+' stroke-width="2.2"/>'},
+    // 3 — flag + drawbridge + the door (after the stall, just before unveiling)
+    {cap:"By dusk, it's a castle.",sub:"almost showtime \u00b7 one promise, kept",
+     svg:'<path d="M90 196 q210 -7 420 0" '+G+'/><path d="M120 196 q-1 -10 0 -18 q180 -5 360 0 q1 9 0 18" '+G+' stroke-width="2.4"/><path d="M132 178 q-2 -44 0 -84 q174 -5 336 0 q2 40 0 84" '+G+'/><path d="M126 96 q-2 -22 0 -40 q26 -2 50 0 q1 18 0 40 M424 96 q2 -22 0 -40 q26 -2 50 0 q1 18 0 40" '+G+'/><path d="M126 56 v-14 h14 v14 m22 0 v-14 h14 v14 M424 56 v-14 h14 v14 m22 0 v-14 h14 v14" '+G+' stroke-width="2.2"/><path class="bfill" d="M252 178 q-2 -30 0 -52 q48 -2 96 1 q1 25 -1 51 q-48 3 -95 0z" fill="#2BE996" stroke="none"/><path d="M300 50 v-30 l34 9 l-32 11" fill="#FFC857" stroke="#FFC857" stroke-width="2" stroke-linejoin="round" class="bfill"/><path d="M300 20 q-1 64 0 158" stroke="#2BE996" stroke-width="2.2" fill="none"/>'}
+  ];
+
+  function renderBuild(sceneIdx){
+    // sceneIdx is the scene we're ABOUT to play (1..4). The build beat is sceneIdx-1 (0..3).
+    var beat=sceneIdx-1; if(beat<0)beat=0; if(beat>castleLayers.length-1)beat=castleLayers.length-1;
+    drawBuild(beat);
+  }
+  function drawBuild(beat){
+    var L=castleLayers[beat];
+    // wrap the whole svg-inner in .bnew so the freshest version animates; simplest reliable approach:
+    card.innerHTML='<div class="build-wrap"><p class="build-cap">'+L.cap+'</p><p class="build-sub">'+L.sub+'</p>'
+      +'<div class="build-art"><svg viewBox="0 0 600 210" role="img" aria-label="The castle, being built" preserveAspectRatio="xMidYMid meet"><g class="bnew">'+L.svg+'</g></svg></div>'
+      +'<div class="build-row"><button class="next" id="contBtn">Continue</button><button class="replaybtn" id="rebuildBtn">\u21ba Replay</button></div></div>';
+    showTop();
+    var c=document.getElementById("contBtn");c.addEventListener("click",renderScene);
+    var r=document.getElementById("rebuildBtn");r.addEventListener("click",function(){drawBuild(beat);});
+    focusTop(c);
+  }
+
+  function renderEnding(){var end=endings[0];for(var k=0;k<endings.length;k++){if(promise>=endings[k].min)end=endings[k];}
+    card.innerHTML='<div class="ending"><p class="eyebrow">8:45 p.m. — the couch</p><h1>The castle held.</h1>'+artBlock(end.img,end.cap,end.capWarn)+endMeterHTML()+'<p class="rank">'+end.rank+'</p><p>'+end.blurb+'</p><p class="narrator">Greg the pancake did not survive the day. He is survived by the castle, and by you.</p><button class="restart" id="again">Play the day again</button></div><p class="hint">There are no wrong moves in here — only different ways a promise comes true. Happy Father'+"'"+'s Day.</p><div class="brand"><span class="studio">Tight Spiral Studios</span>Play. Notice. Design. &nbsp;·&nbsp; <a href="mailto:walshero@gmail.com">walshero@gmail.com</a></div>';
+    showTop();var a=document.getElementById("again");a.addEventListener("click",function(){renderIntro();});focusTop(a);animateEndMeter();}
+
+  renderIntro();
+})();
+</script>
+</body>
+</html>

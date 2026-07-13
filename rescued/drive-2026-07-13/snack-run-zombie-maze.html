@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<title>Snack Run: Zombie Maze</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #070707;
+    color: #f2f2f2;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    height: 100%;
+    overflow: hidden;
+    touch-action: none;
+  }
+  #wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 8px;
+  }
+  h1 {
+    font-size: 20px;
+    margin: 8px 0 0;
+    letter-spacing: 1px;
+  }
+  #hud {
+    display: flex;
+    justify-content: space-between;
+    width: min(94vw, 620px);
+    font-size: 16px;
+    font-weight: 700;
+  }
+  canvas {
+    width: min(94vw, 620px);
+    height: min(94vw, 620px);
+    max-height: 74vh;
+    background: #050505;
+    border: 3px solid #313131;
+    border-radius: 12px;
+    box-shadow: 0 0 24px rgba(160, 0, 0, .35);
+  }
+  #msg {
+    width: min(94vw, 620px);
+    min-height: 42px;
+    text-align: center;
+    font-size: 15px;
+    color: #ddd;
+  }
+  #buttons {
+    display: grid;
+    grid-template-columns: 64px 64px 64px;
+    grid-template-rows: 54px 54px;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  button {
+    background: #181818;
+    color: #fff;
+    border: 2px solid #555;
+    border-radius: 14px;
+    font-size: 24px;
+    font-weight: 800;
+  }
+  button:active { background: #3a0000; }
+  #up { grid-column: 2; }
+  #left { grid-column: 1; grid-row: 2; }
+  #down { grid-column: 2; grid-row: 2; }
+  #right { grid-column: 3; grid-row: 2; }
+  .small {
+    font-size: 12px;
+    opacity: .8;
+  }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <h1>SNACK RUN: ZOMBIE MAZE</h1>
+  <div id="hud">
+    <div>Level: <span id="level">1</span></div>
+    <div>Snacks: <span id="score">0</span>/<span id="total">0</span></div>
+    <div>Lives: <span id="lives">3</span></div>
+  </div>
+  <canvas id="game" width="560" height="560"></canvas>
+  <div id="msg">Collect all snacks. Avoid the zombies. Arrow keys, WASD, or buttons.</div>
+  <div id="buttons">
+    <button id="up">↑</button>
+    <button id="left">←</button>
+    <button id="down">↓</button>
+    <button id="right">→</button>
+  </div>
+  <div class="small">Tap screen after game over to restart.</div>
+</div>
+
+<script>
+(() => {
+  const canvas = document.getElementById("game");
+  const ctx = canvas.getContext("2d");
+  const scoreEl = document.getElementById("score");
+  const totalEl = document.getElementById("total");
+  const livesEl = document.getElementById("lives");
+  const levelEl = document.getElementById("level");
+  const msgEl = document.getElementById("msg");
+
+  const tile = 40;
+  const cols = 14;
+  const rows = 14;
+
+  const rawMap = [
+    "##############",
+    "#............#",
+    "#.####.###.#.#",
+    "#.#........#.#",
+    "#.#.##.###.#.#",
+    "#......#.....#",
+    "###.##.#.###.#",
+    "#....#.......#",
+    "#.##.####.##.#",
+    "#.#..........#",
+    "#.#.##.###.#.#",
+    "#....#.....#.#",
+    "#............#",
+    "##############"
+  ];
+
+  let level = 1;
+  let lives = 3;
+  let snacks = [];
+  let totalSnacks = 0;
+  let score = 0;
+  let gameOver = false;
+  let won = false;
+  let frightenedFlash = 0;
+
+  const player = {
+    x: 1, y: 1,
+    px: 1, py: 1,
+    dir: {x: 0, y: 0},
+    next: {x: 0, y: 0},
+    speed: 6
+  };
+
+  let zombies = [];
+
+  function isWall(x, y) {
+    if (x < 0 || y < 0 || x >= cols || y >= rows) return true;
+    return rawMap[y][x] === "#";
+  }
+
+  function resetLevel() {
+    player.x = 1; player.y = 1; player.px = 1; player.py = 1;
+    player.dir = {x: 0, y: 0};
+    player.next = {x: 0, y: 0};
+    snacks = [];
+    score = 0;
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < cols; x++) {
+        if (rawMap[y][x] === "." && !(x === 1 && y === 1)) snacks.push({x, y, eaten: false});
+      }
+    }
+    totalSnacks = snacks.length;
+    const zombieCount = Math.min(2 + Math.floor(level / 2), 6);
+    const starts = [
+      {x:12,y:12},{x:12,y:1},{x:1,y:12},{x:7,y:7},{x:10,y:5},{x:5,y:9}
+    ];
+    zombies = starts.slice(0, zombieCount).map((s, i) => ({
+      x: s.x, y: s.y, px: s.x, py: s.y,
+      dir: {x: 0, y: 0},
+      speed: Math.min(2.2 + level * .28 + i * .08, 4.9),
+      stepCooldown: i * 8
+    }));
+    updateHud();
+    msgEl.textContent = level === 1
+      ? "Level 1 is gentle. Learn the maze. The zombies wake up slowly."
+      : "The zombies are getting faster.";
+  }
+
+  function updateHud() {
+    scoreEl.textContent = score;
+    totalEl.textContent = totalSnacks;
+    livesEl.textContent = lives;
+    levelEl.textContent = level;
+  }
+
+  function setDir(dx, dy) {
+    if (gameOver || won) {
+      level = 1; lives = 3; gameOver = false; won = false;
+      resetLevel();
+      return;
+    }
+    player.next = {x: dx, y: dy};
+  }
+
+  window.addEventListener("keydown", e => {
+    const k = e.key.toLowerCase();
+    if (k === "arrowup" || k === "w") setDir(0, -1);
+    if (k === "arrowdown" || k === "s") setDir(0, 1);
+    if (k === "arrowleft" || k === "a") setDir(-1, 0);
+    if (k === "arrowright" || k === "d") setDir(1, 0);
+  });
+
+  [["up",0,-1],["down",0,1],["left",-1,0],["right",1,0]].forEach(([id,dx,dy]) => {
+    document.getElementById(id).addEventListener("touchstart", e => { e.preventDefault(); setDir(dx,dy); });
+    document.getElementById(id).addEventListener("click", () => setDir(dx,dy));
+  });
+  canvas.addEventListener("click", () => {
+    if (gameOver || won) {
+      level = 1; lives = 3; gameOver = false; won = false; resetLevel();
+    }
+  });
+
+  let touchStart = null;
+  canvas.addEventListener("touchstart", e => {
+    e.preventDefault();
+    const t = e.touches[0];
+    touchStart = {x: t.clientX, y: t.clientY};
+  });
+  canvas.addEventListener("touchmove", e => {
+    e.preventDefault();
+    if (!touchStart) return;
+    const t = e.touches[0];
+    const dx = t.clientX - touchStart.x;
+    const dy = t.clientY - touchStart.y;
+    if (Math.abs(dx) + Math.abs(dy) > 28) {
+      if (Math.abs(dx) > Math.abs(dy)) setDir(dx > 0 ? 1 : -1, 0);
+      else setDir(0, dy > 0 ? 1 : -1);
+      touchStart = {x: t.clientX, y: t.clientY};
+    }
+  });
+
+  function movePlayer() {
+    if (!isWall(player.x + player.next.x, player.y + player.next.y)) {
+      player.dir = {...player.next};
+    }
+    if (!isWall(player.x + player.dir.x, player.y + player.dir.y)) {
+      player.x += player.dir.x;
+      player.y += player.dir.y;
+    }
+    for (const s of snacks) {
+      if (!s.eaten && s.x === player.x && s.y === player.y) {
+        s.eaten = true;
+        score++;
+        frightenedFlash = 10;
+        updateHud();
+      }
+    }
+    if (score >= totalSnacks) {
+      level++;
+      if (level > 5) {
+        won = true;
+        msgEl.textContent = "You survived all five nights. Tap to play again.";
+      } else {
+        resetLevel();
+      }
+    }
+  }
+
+  function zombieOptions(z) {
+    return [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}]
+      .filter(d => !isWall(z.x + d.x, z.y + d.y));
+  }
+
+  function moveZombies(frame) {
+    for (const z of zombies) {
+      z.stepCooldown--;
+      const delay = Math.max(16 - Math.floor(z.speed * 2), 6);
+      if (z.stepCooldown > 0) continue;
+      z.stepCooldown = delay;
+
+      const options = zombieOptions(z);
+      let choice = options[Math.floor(Math.random() * options.length)];
+
+      const chaseChance = Math.min(.22 + level * .11, .75);
+      if (Math.random() < chaseChance) {
+        options.sort((a, b) => {
+          const da = Math.abs((z.x+a.x)-player.x) + Math.abs((z.y+a.y)-player.y);
+          const db = Math.abs((z.x+b.x)-player.x) + Math.abs((z.y+b.y)-player.y);
+          return da - db;
+        });
+        choice = options[0];
+      }
+
+      z.x += choice.x;
+      z.y += choice.y;
+    }
+  }
+
+  function checkCollision() {
+    for (const z of zombies) {
+      if (z.x === player.x && z.y === player.y) {
+        lives--;
+        updateHud();
+        if (lives <= 0) {
+          gameOver = true;
+          msgEl.textContent = "The zombies got you. Tap to restart.";
+        } else {
+          msgEl.textContent = "Bitten. Back to the entrance.";
+          player.x = 1; player.y = 1; player.dir = {x:0,y:0}; player.next = {x:0,y:0};
+          zombies.forEach((zz, i) => {
+            const starts = [{x:12,y:12},{x:12,y:1},{x:1,y:12},{x:7,y:7},{x:10,y:5},{x:5,y:9}];
+            zz.x = starts[i].x; zz.y = starts[i].y;
+          });
+        }
+      }
+    }
+  }
+
+  function drawWall(x, y) {
+    ctx.fillStyle = "#111";
+    ctx.fillRect(x*tile, y*tile, tile, tile);
+    ctx.strokeStyle = "#403030";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x*tile+3, y*tile+3, tile-6, tile-6);
+  }
+
+  function drawPlayer() {
+    const cx = player.x*tile + tile/2;
+    const cy = player.y*tile + tile/2;
+    ctx.fillStyle = "#f5d74b";
+    ctx.beginPath();
+    ctx.arc(cx, cy, 14, 0.25*Math.PI, 1.75*Math.PI);
+    ctx.lineTo(cx, cy);
+    ctx.fill();
+    ctx.fillStyle = "#111";
+    ctx.beginPath();
+    ctx.arc(cx+3, cy-7, 2.5, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  function drawZombie(z, i) {
+    const cx = z.x*tile + tile/2;
+    const cy = z.y*tile + tile/2;
+    ctx.save();
+    ctx.shadowColor = "rgba(255,0,0,.7)";
+    ctx.shadowBlur = 14;
+    ctx.fillStyle = i % 2 ? "#5d8b48" : "#75965e";
+    ctx.beginPath();
+    ctx.arc(cx, cy-2, 15, Math.PI, 0);
+    ctx.lineTo(cx+15, cy+15);
+    ctx.lineTo(cx+7, cy+9);
+    ctx.lineTo(cx, cy+16);
+    ctx.lineTo(cx-7, cy+9);
+    ctx.lineTo(cx-15, cy+15);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = "#ffeded";
+    ctx.beginPath(); ctx.arc(cx-5, cy-4, 3, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx+5, cy-4, 3, 0, Math.PI*2); ctx.fill();
+
+    ctx.fillStyle = "#9b0000";
+    ctx.beginPath(); ctx.arc(cx-5, cy-4, 1.5, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx+5, cy-4, 1.5, 0, Math.PI*2); ctx.fill();
+
+    ctx.strokeStyle = "#220000";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(cx-6, cy+7);
+    ctx.lineTo(cx-2, cy+4);
+    ctx.lineTo(cx+2, cy+7);
+    ctx.lineTo(cx+6, cy+4);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const pulse = Math.sin(Date.now()/180) * 8 + 20;
+    ctx.fillStyle = `rgba(80,0,0,${0.10 + pulse/500})`;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < cols; x++) {
+        if (rawMap[y][x] === "#") drawWall(x, y);
+      }
+    }
+
+    for (const s of snacks) {
+      if (!s.eaten) {
+        ctx.fillStyle = frightenedFlash > 0 ? "#fff" : "#e7c878";
+        ctx.beginPath();
+        ctx.arc(s.x*tile+tile/2, s.y*tile+tile/2, 4, 0, Math.PI*2);
+        ctx.fill();
+      }
+    }
+
+    drawPlayer();
+    zombies.forEach(drawZombie);
+
+    if (gameOver || won) {
+      ctx.fillStyle = "rgba(0,0,0,.72)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = won ? "#f5d74b" : "#e63b3b";
+      ctx.font = "bold 36px system-ui";
+      ctx.textAlign = "center";
+      ctx.fillText(won ? "YOU SURVIVED" : "GAME OVER", canvas.width/2, canvas.height/2 - 10);
+      ctx.fillStyle = "#fff";
+      ctx.font = "18px system-ui";
+      ctx.fillText("Tap or press any direction to restart", canvas.width/2, canvas.height/2 + 28);
+    }
+  }
+
+  let frame = 0;
+  function loop() {
+    frame++;
+    if (!gameOver && !won) {
+      if (frame % Math.max(10 - Math.floor(level/2), 5) === 0) movePlayer();
+      moveZombies(frame);
+      checkCollision();
+      if (frightenedFlash > 0) frightenedFlash--;
+    }
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  resetLevel();
+  loop();
+})();
+</script>
+</body>
+</html>

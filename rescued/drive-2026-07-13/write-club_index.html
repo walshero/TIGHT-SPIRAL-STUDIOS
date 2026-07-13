@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MassBay Write Club</title>
+<style>
+  :root{
+    --ink:#0e1726;--ink-2:#16223a;--ink-3:#1f3050;--line:#33476e;
+    --paper:#f4efe3;--paper-dim:#b9c3d6;--ember:#ffb347;--ember-deep:#ff7a3d;
+    --sky:#7fd1ff;--good:#7ee0a8;--radius:18px;--tap:64px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--ink);color:var(--paper);font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;font-size:20px;line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh;}
+  h1,h2,h3{font-weight:700;line-height:1.15;margin:0;}
+  .wrap{max-width:920px;margin:0 auto;padding:24px 20px 80px;}
+  .skip{position:absolute;left:-9999px;top:0;background:var(--ember);color:#1a1205;padding:14px 20px;border-radius:0 0 12px 0;font-weight:700;z-index:50;}
+  .skip:focus{left:0;}
+  header{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px;padding-bottom:8px;border-bottom:2px solid var(--line);}
+  .mark{font-family:Georgia,serif;font-size:30px;letter-spacing:.5px;}
+  .mark .em{color:var(--ember);}
+  .tag{color:var(--paper-dim);font-family:system-ui,sans-serif;font-size:15px;font-style:italic;}
+  nav{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 8px;}
+  .tab{appearance:none;border:2px solid var(--line);background:var(--ink-2);color:var(--paper);font:inherit;font-size:18px;min-height:var(--tap);padding:0 22px;border-radius:14px;cursor:pointer;display:inline-flex;align-items:center;gap:10px;}
+  .tab:hover{border-color:var(--sky);}
+  .tab[aria-selected="true"]{background:var(--ember);color:#1a1205;border-color:var(--ember);font-weight:700;}
+  .tab .ic{font-size:22px;}
+  :focus-visible{outline:4px solid var(--sky);outline-offset:3px;border-radius:6px;}
+  .panel{display:none;margin-top:26px;}
+  .panel.active{display:block;}
+  .panel-head{font-family:system-ui,sans-serif;font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:var(--ember);margin-bottom:6px;}
+  .panel h2{font-size:28px;margin-bottom:18px;}
+  .lantern{position:relative;background:radial-gradient(120% 140% at 50% 0%,var(--ink-2),var(--ink));border:2px solid var(--line);border-radius:var(--radius);padding:40px 28px;text-align:center;overflow:hidden;min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;}
+  .glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(60% 55% at 50% 42%,rgba(255,140,60,.30),transparent 70%);opacity:0;transition:opacity .9s ease;}
+  .lantern.lit .glow{opacity:1;}
+  .prompt-text{position:relative;font-size:34px;line-height:1.3;max-width:680px;min-height:1.3em;transition:opacity .35s ease,transform .35s ease;}
+  .prompt-text.swap{opacity:0;transform:translateY(8px);}
+  .prompt-meta{position:relative;font-family:system-ui,sans-serif;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--paper-dim);min-height:1em;}
+  .draw-btn{position:relative;appearance:none;border:none;cursor:pointer;font:inherit;font-weight:700;font-size:22px;color:#1a1205;background:linear-gradient(135deg,var(--ember),var(--ember-deep));min-height:var(--tap);padding:0 38px;border-radius:16px;box-shadow:0 6px 0 #c9551f;transition:transform .08s ease;display:inline-flex;align-items:center;gap:12px;}
+  .draw-btn:active{transform:translateY(4px);box-shadow:0 2px 0 #c9551f;}
+  .ember-anim{font-size:26px;display:inline-block;}
+  .lantern.lit .ember-anim{animation:flicker 1.6s ease-in-out infinite;}
+  @keyframes flicker{0%,100%{transform:scale(1) rotate(-3deg);opacity:.95;}50%{transform:scale(1.12) rotate(3deg);opacity:1;}}
+  .spark-controls{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:22px;}
+  .ghost-btn{appearance:none;border:2px solid var(--line);background:var(--ink-2);color:var(--paper);font:inherit;font-size:17px;min-height:54px;padding:0 22px;border-radius:14px;cursor:pointer;display:inline-flex;align-items:center;gap:10px;}
+  .ghost-btn:hover{border-color:var(--sky);}
+  .timer-box{margin-top:26px;text-align:center;}
+  .timer-display{font-family:system-ui,sans-serif;font-variant-numeric:tabular-nums;font-size:64px;font-weight:700;letter-spacing:.02em;color:var(--paper);line-height:1;}
+  .timer-display.running{color:var(--good);}
+  .timer-label{font-family:system-ui,sans-serif;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--paper-dim);margin-top:6px;}
+  .card{background:var(--ink-2);border:2px solid var(--line);border-radius:var(--radius);padding:22px 22px;margin-bottom:16px;}
+  .card h3{font-size:22px;margin-bottom:4px;}
+  .card .when{font-family:system-ui,sans-serif;color:var(--sky);font-size:16px;}
+  .card .note{color:var(--paper-dim);margin-top:8px;font-size:18px;}
+  .card .by{font-family:system-ui,sans-serif;font-size:14px;color:var(--paper-dim);margin-top:10px;letter-spacing:.04em;}
+  label{display:block;font-family:system-ui,sans-serif;font-size:15px;letter-spacing:.04em;color:var(--paper-dim);margin:16px 0 6px;}
+  input,textarea,select{width:100%;font:inherit;font-size:19px;color:var(--paper);background:var(--ink-3);border:2px solid var(--line);border-radius:12px;padding:14px 16px;min-height:var(--tap);}
+  textarea{min-height:160px;line-height:1.5;resize:vertical;}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .primary-btn{appearance:none;border:none;cursor:pointer;font:inherit;font-weight:700;font-size:20px;color:#1a1205;background:var(--ember);min-height:var(--tap);padding:0 30px;border-radius:14px;margin-top:22px;display:inline-flex;align-items:center;gap:10px;}
+  .primary-btn:hover{background:#ffc266;}
+  .empty{border:2px dashed var(--line);border-radius:var(--radius);padding:30px;text-align:center;color:var(--paper-dim);font-size:19px;}
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(120%);background:var(--good);color:#06231a;font-weight:700;font-family:system-ui,sans-serif;padding:16px 26px;border-radius:14px;transition:transform .3s ease;z-index:60;box-shadow:0 10px 30px rgba(0,0,0,.4);max-width:90vw;text-align:center;}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  .footnote{margin-top:34px;color:var(--paper-dim);font-family:system-ui,sans-serif;font-size:14px;border-top:2px solid var(--line);padding-top:16px;line-height:1.6;}
+  a{color:var(--sky);}
+  @media (max-width:560px){body{font-size:19px;}.prompt-text{font-size:27px;}.timer-display{font-size:52px;}.row{grid-template-columns:1fr;}.tab{flex:1 1 auto;justify-content:center;}}
+  @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important;}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="wrap">
+  <header>
+    <span class="mark">MassBay <span class="em">Write Club</span></span>
+    <span class="tag">Low stakes. Good creative company. It's okay to come and draw birds.</span>
+  </header>
+  <nav role="tablist" aria-label="Sections">
+    <button class="tab" id="tab-spark" role="tab" aria-selected="true" aria-controls="panel-spark"><span class="ic" aria-hidden="true">&#10022;</span> The Spark</button>
+    <button class="tab" id="tab-meet" role="tab" aria-selected="false" aria-controls="panel-meet"><span class="ic" aria-hidden="true">&#9719;</span> Meetings</button>
+    <button class="tab" id="tab-share" role="tab" aria-selected="false" aria-controls="panel-share"><span class="ic" aria-hidden="true">&#9998;</span> Share Work</button>
+    <button class="tab" id="tab-talk" role="tab" aria-selected="false" aria-controls="panel-talk"><span class="ic" aria-hidden="true">&#10077;</span> Project Talk</button>
+  </nav>
+  <main id="main">
+    <section class="panel active" id="panel-spark" role="tabpanel" aria-labelledby="tab-spark">
+      <p class="panel-head">Writing prompts are everywhere</p>
+      <h2>Draw a spark, then write.</h2>
+      <div class="lantern" id="lantern">
+        <div class="glow" aria-hidden="true"></div>
+        <p class="prompt-text" id="promptText" aria-live="polite">Press the button to light a prompt.</p>
+        <p class="prompt-meta" id="promptMeta"></p>
+        <button class="draw-btn" id="drawBtn"><span class="ember-anim" aria-hidden="true">&#10022;</span> Light a prompt</button>
+      </div>
+      <div class="spark-controls">
+        <button class="ghost-btn" id="anotherBtn"><span aria-hidden="true">&#8635;</span> Another</button>
+        <button class="ghost-btn" id="addToTalkBtn"><span aria-hidden="true">&#10077;</span> Take this to Project Talk</button>
+        <button class="ghost-btn" id="filterBtn" aria-pressed="false"><span aria-hidden="true">&#128722;</span> Most recent only</button>
+      </div>
+      <div class="timer-box">
+        <div class="timer-display" id="timer" aria-live="off">30:00</div>
+        <div class="timer-label">Free-write timer</div>
+        <div class="spark-controls">
+          <button class="ghost-btn" id="timerToggle"><span aria-hidden="true">&#9654;</span> Start</button>
+          <button class="ghost-btn" id="timerReset"><span aria-hidden="true">&#9632;</span> Reset</button>
+          <button class="ghost-btn" id="timer5">+5 min</button>
+        </div>
+      </div>
+      <p class="footnote">We spend the first few minutes generating prompts, write for 30&ndash;40 minutes, and leave time to share. Sharing is optional &mdash; encouraged, never required. We don't introduce, explain, or apologize for our work. We share the prompt, read it out loud, and notice what we found compelling.<br><br><strong>Prompts drawn from the club's living prompt doc.</strong> <a href="https://discord.gg/x32Zq25w7Y">Join the Discord &rarr;</a></p>
+    </section>
+    <section class="panel" id="panel-meet" role="tabpanel" aria-labelledby="tab-meet">
+      <p class="panel-head">When we gather</p><h2>Meetings</h2>
+      <div id="meetList"></div>
+      <div class="card"><h3>Add a meeting</h3>
+        <div class="row"><div><label for="mTitle">What is it</label><input id="mTitle" type="text" placeholder="Weekly free-write"></div><div><label for="mDate">Date</label><input id="mDate" type="date"></div></div>
+        <div class="row"><div><label for="mTime">Time</label><input id="mTime" type="time" value="14:00"></div><div><label for="mPlace">Where</label><input id="mPlace" type="text" placeholder="Library, Room 219 / Discord"></div></div>
+        <label for="mNote">Notes (optional)</label><input id="mNote" type="text" placeholder="Bring something to write with.">
+        <button class="primary-btn" id="addMeet"><span aria-hidden="true">&#65291;</span> Add meeting</button>
+      </div>
+    </section>
+    <section class="panel" id="panel-share" role="tabpanel" aria-labelledby="tab-share">
+      <p class="panel-head">Read it out loud</p><h2>Share Work</h2>
+      <div id="shareList"></div>
+      <div class="card"><h3>Post a piece</h3>
+        <div class="row"><div><label for="sName">Your name</label><input id="sName" type="text" placeholder="Optional"></div><div><label for="sPrompt">Prompt you used</label><input id="sPrompt" type="text" placeholder="Optional"></div></div>
+        <label for="sTitle">Title</label><input id="sTitle" type="text" placeholder="Untitled is fine">
+        <label for="sBody">The piece</label><textarea id="sBody" placeholder="Paste or write here. New work, no apologies."></textarea>
+        <button class="primary-btn" id="addShare"><span aria-hidden="true">&#65291;</span> Post piece</button>
+      </div>
+    </section>
+    <section class="panel" id="panel-talk" role="tabpanel" aria-labelledby="tab-talk">
+      <p class="panel-head">What we're building</p><h2>Project Talk</h2>
+      <div id="talkList"></div>
+      <div class="card"><h3>Start a thread</h3>
+        <div class="row"><div><label for="tName">Your name</label><input id="tName" type="text" placeholder="Optional"></div><div><label for="tTopic">Topic</label><input id="tTopic" type="text" placeholder="The novel, the chapbook, the play&hellip;"></div></div>
+        <label for="tBody">What's on your mind</label><textarea id="tBody" placeholder="Where you're stuck, what you want, what you're trying."></textarea>
+        <button class="primary-btn" id="addTalk"><span aria-hidden="true">&#65291;</span> Post thread</button>
+      </div>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+const PROMPT_SETS = [
+  {date:"June 18", items:["I just wanna be soft, and juicy","Courage, grace under pressure","It's hard to say what you want sometimes, as a man. S'why we end up seizing things, maybe."]},
+  {date:"June 11", items:["A salad made of the most unusual ingredients","Stuck in a time loop","She realized she was wrong, but she was dug in too far, so she changed the goalposts.","How we got our special handshake","My grandmother let me do anything. Anything at all. Except go in Uncle Johnny's room in the attic.","We made a bet that I regretted immediately.","Once I borrowed it, I knew I could never give it back.","They changed the menu.","He thought that people were able to fold their minds like origami","I could have sworn you said we had broken up","A haunted skyscraper","A haunted house deep under water","My dog stopped liking me","A band but the members are the undead","How do you know when it's over","Almost hitting pedestrians over and over","If you eat the seeds, a tree is gonna grow in your stomach","Graveside rituals"]},
+  {date:"June 4", items:["My real-estate agent thinks you're cute","Convenience store assumptions","The rental with trick questions","Addicted to something unexpected","What would my doppelganger do?","Saying yes to an apartment without ever seeing it in person","We went to a movie together once.","Finding things you forgot about","Giant salamanders are the essence of divinity","Mourning doves and their dusky pink slippers","Accidentally eating something you thought you were allergic to and nothing happens","Look at that pigeon"]},
+  {date:"May 7", items:["I had been so sure of it.","Job applicant is completely honest.","We broke up because of a tarot reading but it actually was accurate","A letter of apology","My ex's new one","We'll burn that bridge when we come to it.","The Kiss Off","Your parents and your partner's parents actually already knew each other","A poster from a concert makes you realize something.","Fight about splitting the check. (It's not about the check.)","Disagree about what day our anniversary is","Is it serial killing if it's just one person, though?","Whelp\u2026 we found the Megalodon","That is the worst place to use italics"]},
+  {date:"April 30", items:["Low stakes is really high stakes","Illustrations that change the past","Working on a pickup line","Headphones connected to someone else's thoughts","The proof was not in fact in the pudding","Spider eats a tick, gets a taste for human blood","You were accidentally streaming your therapy session over the PA","I told you the boat was too small"]},
+  {date:"April 23", items:["Love poems devoted to an unusual subject","Pretending not to know someone","Trial run of my first escape room","A camping trip with a twist","A room full of critics","Both my parents are ___","Three-legged race with the boss","Convenience store love story","Something stolen from a sibling","Shopping list for a hero's quest","Playing a new game that is going to change everything.","Princess of the world"]},
+  {date:"April 16", items:["Really bad love poems","Guerilla advertising for my cousin's taco truck","Business breakup, itemized grievances","\"We'll fix it in post\"","A backpack with a jet engine","A watch that is accurate 75% of the time","Holding on to a mistake","Focus group for a new product","History from the perspective of an ancient tree","When your boss really wants to be your friend","Disco full of criminals","I'm afraid of you being yourself because you'll get hurt"]},
+  {date:"April 9", items:["Family has gone missing","Escape room gone wrong","\"How did you get that scar?\"","Gardening, but each veggie is a person from the gardener's life","A system for winning the lottery","My one and only day working the car wash","Planning a trip with someone you're about to break up with","An interview for a job you don't want","A year too late","Creepy old dock","300 years in the pit","Where am I and what happened to my pants","Let me tell you about this dream that I had","The apocalypse from the perspective of a cat","Last person on earth","Learning how to walk again","I don't think that tree is supposed to be doing that","The UN deliberating on how to organize trial proceedings for the first murder ever committed in space"]},
+  {date:"April 2", items:["The clubhouse renovations are very controversial","An adult who is way too serious about winning the 5th grade soccer game","Sacrificing a friendship to get ahead","I can't seem to get the chalk outline of the body out of the carpet","A gun under every pillow","Restaurant receives a weird request in the DoorDash order notes","Likes to collect the strangest things","Problems with authority","\"There's only one way to do this\"","I lied about the easy thing","This order has something funny about it.","An extra bar of barometric pressure"]},
+  {date:"March 26", items:["Draw birds that never existed","Is that meat?","The new kid's neighborhood initiation","Straws that inhale memories","\"This isn't a store. It's my house.\"","The driving lesson","A retracted invitation","Nose bleed at the worst times","GPS won't reroute","Who needs seven phones?","A playground designed to determine each child's career path","That is not our cat","What was that you just threw in the casket?","I am looking for a specific piece of dust I lost","Shattered bottle of wine on a restaurant table"]},
+  {date:"March 12", items:["The right size for the wrong person","Good Lifeguard, Bad Lifeguard","Jerusalem Syndrome","The latest cult","A carpentry gig","Housesitting for people you haven't met","Civilization living in a big whale","Locked in the grocery store overnight","Bingo night but the MC never calls out a number (people are winning?)","Retirement home drama","That book doesn't exist but it is overdue at the library","What the dogs do when you aren't home","Accidentally win a Survivor-style reality TV show"]},
+  {date:"March 5", items:["Sad pigs in a blanket","Social club rules, revised","A special kind of restaurant","A promise she's trying so hard to keep","Worst playdate ever","Taking credit for someone else's work","Instant ramen with magical properties","A two-\"story\" apartment","The place I dreamed about for twenty years","I'm not an actual priest","I can time travel, but just a few seconds at a time","I think I'm on the wrong plane"]},
+  {date:"February 26", items:["This factory must run properly.","The shortcut with consequences.","I don't know how I got this job","Sunshine on a wooden floor","Learning how to tell a lie","A secret meeting spot","The snow always brings me back to that day with the knife","What do you see in this painting?","But what is the point of making counterfeit pennies?","That's not the way my copy of the book ends.","Things you'll find when the snow melts away","A drawer of mismatched socks","Wellness check by a friendly stalker"]},
+  {date:"February 19", items:["The last seat on the plane","The untold story","Wrong about something inconsequential","An unwanted bath","The longer you ride the wrong train, the more expensive the return trip","Tree worship","Tarot cards wrongly interpreted","Becomes someone else's story","That old voice"]},
+  {date:"February 12", items:["The secret pet","Trying not to get the job","The man with the broken wheel","An allergy becomes a superpower","Revenge not as planned","Beets for soup","Are you sure I don't need to cook this?","You look as though you might have gone down another rabbit hole last night","We could fix the car or just rent a house here"]},
+  {date:"February 5", items:["The hidden rules","Shower song #12","War games inside a Google Doc","Something they were wrong about all along","That's not my husband","That's one big egg","\"But you'll give it back, right?\"","The french fry that fell out of the carseat","It only hurts when you look at me","A time you connected with nature","The wrong hair dye","Is it really shoplifting when the expiration date is so close?"]},
+  {date:"January 29", items:["Cooped up in the snowstorm","\"Found\" money","This isn't a usual kind of pet store.","I refuse to admit I was wrong about that.","The unpublished final book.","He's been playing that character for so long he's forgotten who he is.","The recipe, lost for many years, rediscovered.","The notes scribbled in this textbook are getting concerning.","A wine critic tries out a dive bar.","The items at a pawn shop tell a story.","Are you sure you can't hear that music?","But how can you open a karate studio if you don't know anything about karate?","Figure drawing class from the model's perspective","The emu war from the emu's perspective"]},
+  {date:"December", items:["The last seat on the bus","We're not sending them a Christmas card","Taking the wrong load home from the laundromat","I rounded the corner and saw the flowers I had just given her in the trash","You just have to pretend it tastes good","Recipe with a consequential substitution","Thought you were someone else","Jealous of the ex's ex","A town made out of recycled goods","\"You promised never to tell.\"","A list of other people's priorities","Crying in the candy aisle","Buying my stuff back from the thrift store","A body shaped by work"]},
+  {date:"November", items:["Finding your father's bucket list","Everything I write in my journal happens","The thing in that cage looks an awful lot like me","Grocery list that includes the shopper's true needs","A fish watches its tank get cleaned","The innocuous lie","Forgotten item in a hotel room","What if humans had shells like turtles","Something is speaking to me through my dreams","Escalator to the wrong floor","It was my mother's recipe.","Volunteer crisis hotline operator","A diner regular starts a new life","Can't swim but can breathe underwater","My hair is talking to me","Someone has just what you've been looking for, but they don't use currency","Endless staircase but it's actually an escalator","Would you still love me if I was a worm?","A mannequin comes to life","What if you woke up in the last movie you watched","He died with the movie paused on this frame","It's a fashion bandage"]},
+  {date:"October", items:["A Halloween costume you cannot take off","Worst apology ever","\"You can't get there from here.\"","Part-time job working at a phobia factory","Breaking the piggy bank for a big purchase","Buyer's remorse","A children's picture book with a real bad message","Stolen birthday","I thought the cat belonged to you","No one can speak except for me","Shoes that won't stay tied","I swear I didn't mean to come here. It was my self-driving car","Solitary hiccup syndrome","I opened that present you gave me twenty years ago","And that's why we traded dogs","The last frozen lasagna","An unexpected stop on a long journey","A borrowed item that's too good to return","Unclaimed lotto ticket","A greeting card with the printed greeting scratched out.","Job interview with a former lover.","A shop that sells back your memories.","But why are you under my bed?","There is a dimension leak. But it is only big enough for ants to fit through.","I'm sorry, I was raised by AI.","A calendar that works backwards","A kitchen with broken appliances","Digging for China with a spoon","A business idea too good to fail","An argument where both people are wrong","Text message sent to the WRONG person","I told you not to eat that.","That is when I stopped locking my doors altogether","A flower that is the source of all life.","I missed my turn again, but this time by 200 miles","White strawberries","Something frozen in a block of ice","Getting the band back together","A secret handshake with special properties","Trees can talk?","Shipwrecked and stranded with your worst enemy","Forgetting your own name","Being the last speaker of a rare language"]}
+];
+const ALL = [];
+PROMPT_SETS.forEach(set => set.items.forEach(t => ALL.push({text:t, date:set.date})));
+let recentOnly = false, deck = [], lastPrompt = null;
+function buildDeck(){
+  const pool = recentOnly ? PROMPT_SETS[0].items.map(t=>({text:t,date:PROMPT_SETS[0].date})) : ALL.slice();
+  deck = pool.slice();
+  for(let i=deck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]];}
+}
+buildDeck();
+function nextPrompt(){
+  if(deck.length===0) buildDeck();
+  let p = deck.pop();
+  if(p && lastPrompt && p.text===lastPrompt.text && deck.length){ deck.unshift(p); p = deck.pop(); }
+  lastPrompt = p; return p;
+}
+const lantern=document.getElementById('lantern'),promptText=document.getElementById('promptText'),promptMeta=document.getElementById('promptMeta');
+function showPrompt(){
+  const p=nextPrompt();
+  promptText.classList.add('swap');
+  setTimeout(()=>{promptText.textContent='\u201c'+p.text+'\u201d';promptMeta.textContent='from '+p.date;promptText.classList.remove('swap');lantern.classList.add('lit');},180);
+}
+document.getElementById('drawBtn').addEventListener('click',showPrompt);
+document.getElementById('anotherBtn').addEventListener('click',showPrompt);
+document.getElementById('filterBtn').addEventListener('click',function(){
+  recentOnly=!recentOnly;this.setAttribute('aria-pressed',recentOnly);
+  this.innerHTML=recentOnly?'<span aria-hidden="true">&#128722;</span> All sessions':'<span aria-hidden="true">&#128722;</span> Most recent only';
+  buildDeck();toast(recentOnly?'Drawing from the latest session only.':'Drawing from every session.');
+});
+document.getElementById('addToTalkBtn').addEventListener('click',function(){
+  if(!lastPrompt){toast('Light a prompt first.');return;}
+  addTalk('','Prompt: \u201c'+lastPrompt.text+'\u201d','Anyone want to take this one somewhere?');switchTab('talk');toast('Added to Project Talk.');
+});
+let total=30*60,remain=total,tick=null;
+const timerEl=document.getElementById('timer');
+function fmt(s){const m=Math.floor(s/60),x=s%60;return m+':'+(x<10?'0':'')+x;}
+function paint(){timerEl.textContent=fmt(remain);}
+document.getElementById('timerToggle').addEventListener('click',function(){
+  if(tick){clearInterval(tick);tick=null;timerEl.classList.remove('running');this.innerHTML='<span aria-hidden="true">&#9654;</span> Start';}
+  else{tick=setInterval(()=>{remain--;paint();if(remain<=0){clearInterval(tick);tick=null;timerEl.classList.remove('running');document.getElementById('timerToggle').innerHTML='<span aria-hidden="true">&#9654;</span> Start';toast('Time. Leave space to share \u2014 only if you want to.');}},1000);timerEl.classList.add('running');this.innerHTML='<span aria-hidden="true">&#10074;&#10074;</span> Pause';}
+});
+document.getElementById('timerReset').addEventListener('click',()=>{if(tick){clearInterval(tick);tick=null;}remain=total;paint();timerEl.classList.remove('running');document.getElementById('timerToggle').innerHTML='<span aria-hidden="true">&#9654;</span> Start';});
+document.getElementById('timer5').addEventListener('click',()=>{total+=300;remain+=300;paint();});
+paint();
+const tabs=['spark','meet','share','talk'];
+function switchTab(name){tabs.forEach(t=>{const tab=document.getElementById('tab-'+t),panel=document.getElementById('panel-'+t);const on=(t===name);tab.setAttribute('aria-selected',on);panel.classList.toggle('active',on);});}
+tabs.forEach(t=>document.getElementById('tab-'+t).addEventListener('click',()=>switchTab(t)));
+document.querySelector('nav').addEventListener('keydown',e=>{const order=tabs.map(t=>document.getElementById('tab-'+t));const i=order.indexOf(document.activeElement);if(i<0)return;if(e.key==='ArrowRight'){order[(i+1)%order.length].focus();}if(e.key==='ArrowLeft'){order[(i-1+order.length)%order.length].focus();}});
+const meetings=[],meetList=document.getElementById('meetList');
+function renderMeet(){if(!meetings.length){meetList.innerHTML='<div class="empty">No meetings yet. Add the next gathering below.</div>';return;}meetList.innerHTML='';meetings.slice().sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).forEach(m=>{const d=document.createElement('div');d.className='card';const when=m.date?new Date(m.date+'T'+(m.time||'00:00')).toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'}):'';d.innerHTML='<h3>'+esc(m.title)+'</h3><p class="when">'+when+(m.time?' \u00b7 '+to12(m.time):'')+(m.place?' \u00b7 '+esc(m.place):'')+'</p>'+(m.note?'<p class="note">'+esc(m.note)+'</p>':'');meetList.appendChild(d);});}
+function to12(t){let[h,m]=t.split(':').map(Number);const ap=h>=12?'PM':'AM';h=h%12||12;return h+':'+(m<10?'0':'')+m+' '+ap;}
+document.getElementById('addMeet').addEventListener('click',()=>{const title=val('mTitle');if(!title){toast('Give the meeting a name.');return;}meetings.push({title,date:val('mDate'),time:val('mTime'),place:val('mPlace'),note:val('mNote')});['mTitle','mPlace','mNote'].forEach(id=>document.getElementById(id).value='');renderMeet();toast('Meeting added.');});
+renderMeet();
+const pieces=[],shareList=document.getElementById('shareList');
+function renderShare(){if(!pieces.length){shareList.innerHTML='<div class="empty">No pieces yet. New work, read out loud, no apologies.</div>';return;}shareList.innerHTML='';pieces.slice().reverse().forEach(p=>{const d=document.createElement('div');d.className='card';d.innerHTML='<h3>'+esc(p.title||'Untitled')+'</h3>'+(p.prompt?'<p class="when">Prompt: '+esc(p.prompt)+'</p>':'')+'<p class="note" style="white-space:pre-wrap">'+esc(p.body)+'</p>'+'<p class="by">\u2014 '+esc(p.name||'Anonymous')+'</p>';shareList.appendChild(d);});}
+document.getElementById('addShare').addEventListener('click',()=>{const body=val('sBody');if(!body){toast('Add the piece itself.');return;}pieces.push({name:val('sName'),prompt:val('sPrompt'),title:val('sTitle'),body});['sName','sPrompt','sTitle','sBody'].forEach(id=>document.getElementById(id).value='');renderShare();toast('Piece posted.');});
+renderShare();
+const threads=[],talkList=document.getElementById('talkList');
+function addTalk(name,topic,body){threads.push({name,topic,body});renderTalk();}
+function renderTalk(){if(!threads.length){talkList.innerHTML='<div class="empty">No threads yet. What are you building?</div>';return;}talkList.innerHTML='';threads.slice().reverse().forEach(t=>{const d=document.createElement('div');d.className='card';d.innerHTML='<h3>'+esc(t.topic||'Untitled thread')+'</h3>'+'<p class="note" style="white-space:pre-wrap">'+esc(t.body)+'</p>'+'<p class="by">\u2014 '+esc(t.name||'Anonymous')+'</p>';talkList.appendChild(d);});}
+document.getElementById('addTalk').addEventListener('click',()=>{const body=val('tBody');if(!body){toast('Add a little about it.');return;}addTalk(val('tName'),val('tTopic'),body);['tName','tTopic','tBody'].forEach(id=>document.getElementById(id).value='');toast('Thread posted.');});
+renderTalk();
+function val(id){return document.getElementById(id).value.trim();}
+function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+let toastTimer;
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2600);}
+</script>
+</body>
+</html>

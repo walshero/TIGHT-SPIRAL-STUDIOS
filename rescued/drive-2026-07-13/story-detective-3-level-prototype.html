@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Story Detective: Writerly Moves Prototype</title>
+<style>
+:root{
+  --bg:#101014;--panel:#1d1d27;--panel2:#272735;--text:#f3f0e8;--muted:#c9c2b5;
+  --line:#424255;--gold:#e7c46a;--bad:#e87979;--good:#85d68a;--blue:#8eb8ff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at top,#28283a,#101014 60%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+.app{max-width:1100px;margin:0 auto;padding:14px}
+header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}
+h1{font-family:Georgia,serif;font-size:clamp(30px,7vw,56px);line-height:.95;margin:0}
+.sub{color:var(--muted);font-size:14px;margin-top:6px;max-width:720px}
+.pill{border:1px solid var(--line);border-radius:999px;padding:7px 10px;color:var(--muted);white-space:nowrap;font-size:13px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.tab{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer}
+.tab.active{border-color:var(--gold);color:var(--gold)}
+.card{background:rgba(29,29,39,.94);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 16px 44px rgba(0,0,0,.28);margin-bottom:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}header{flex-direction:column}}
+h2,h3{margin:0 0 10px}
+h2{font-family:Georgia,serif;font-size:30px}
+.note{color:var(--muted);line-height:1.45}
+.fragment{background:#12121a;border:1px solid var(--line);border-radius:14px;padding:12px;margin:8px 0;cursor:pointer;line-height:1.35}
+.fragment.selected{border-color:var(--gold);background:#2b2632}
+.fragment.used{opacity:.45}
+.board{min-height:155px;background:#12121a;border:1px dashed var(--line);border-radius:14px;padding:10px;margin-top:8px}
+.board h4{margin:0 0 8px;color:var(--gold)}
+.small{font-size:13px;color:var(--muted)}
+button{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:11px 13px;cursor:pointer;font-weight:700}
+button:hover{border-color:var(--gold)}
+button.primary{background:#332d1b;border-color:var(--gold);color:var(--gold)}
+button.danger{border-color:#704040}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.feedback{border-top:1px solid var(--line);margin-top:12px;padding-top:12px;line-height:1.45}
+.good{color:var(--good)}.bad{color:var(--bad)}.gold{color:var(--gold)}.blue{color:var(--blue)}
+.move{background:#12121a;border:1px solid var(--line);border-radius:14px;padding:12px;margin:8px 0}
+.move b{color:var(--gold)}
+.hidden{display:none}
+select,textarea,input{width:100%;background:#111118;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:11px;font-size:15px}
+textarea{min-height:120px;resize:vertical;line-height:1.4}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:600px){.kpi{grid-template-columns:1fr 1fr}}
+.box{background:#12121a;border:1px solid var(--line);border-radius:14px;padding:10px;text-align:center}
+.box strong{display:block;font-size:22px;color:var(--gold)}
+.resultScene{font-family:Georgia,serif;font-size:20px;line-height:1.45;background:#12121a;border:1px solid var(--line);border-radius:14px;padding:14px}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div>
+    <h1>Story Detective</h1>
+    <div class="sub">A Writerly Moves prototype. The goal is not memorizing terms. The goal is learning to see what a piece of writing is doing to the reader.</div>
+  </div>
+  <div class="pill">3-level test build</div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="showLevel(1)">Level 1: Sort Evidence</button>
+  <button class="tab" onclick="showLevel(2)">Level 2: Strongest Signal</button>
+  <button class="tab" onclick="showLevel(3)">Level 3: Story Surgery</button>
+</div>
+
+<section id="level1" class="level">
+  <div class="card">
+    <h2>Level 1: Sort Evidence</h2>
+    <p class="note">Select fragments and place them on the evidence boards. You are grouping by reader effect, not by topic. When a board has three fragments, test it.</p>
+    <div class="kpi">
+      <div class="box"><span>Unlocked</span><strong id="unlockCount">0</strong></div>
+      <div class="box"><span>Attempts</span><strong id="attemptCount">0</strong></div>
+      <div class="box"><span>Score</span><strong id="score1">0</strong></div>
+      <div class="box"><span>Goal</span><strong>3</strong></div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <h3>Story fragments</h3>
+      <div id="fragmentList"></div>
+    </div>
+    <div class="card">
+      <h3>Evidence boards</h3>
+      <div class="row">
+        <button onclick="placeSelected(0)">Place on Board A</button>
+        <button onclick="placeSelected(1)">Place on Board B</button>
+        <button onclick="placeSelected(2)">Place on Board C</button>
+      </div>
+      <div id="boards"></div>
+      <div class="row">
+        <button class="primary" onclick="testBoards()">Test boards</button>
+        <button onclick="resetLevel1()">Reset Level 1</button>
+      </div>
+      <div class="feedback" id="feedback1">Build three groups. The game will reveal the Writerly Move only after your evidence is coherent.</div>
+    </div>
+  </div>
+</section>
+
+<section id="level2" class="level hidden">
+  <div class="card">
+    <h2>Level 2: Strongest Signal</h2>
+    <p class="note">Real scenes often contain multiple Writerly Moves. Pick the strongest signal, then compare your reasoning to the game’s explanation.</p>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <h3>Case file <span id="caseNum">1</span> of 6</h3>
+      <div class="resultScene" id="caseText"></div>
+      <h3 style="margin-top:16px">Which move is doing the most work?</h3>
+      <div id="caseChoices"></div>
+    </div>
+    <div class="card">
+      <h3>Detective notes</h3>
+      <div class="feedback" id="feedback2">Choose the dominant reader effect.</div>
+      <div class="kpi" style="margin-top:12px">
+        <div class="box"><span>Correct</span><strong id="score2">0</strong></div>
+        <div class="box"><span>Cases</span><strong id="done2">0</strong></div>
+      </div>
+      <div class="row"><button onclick="resetLevel2()">Restart Level 2</button></div>
+    </div>
+  </div>
+</section>
+
+<section id="level3" class="level hidden">
+  <div class="card">
+    <h2>Level 3: Story Surgery</h2>
+    <p class="note">Now move from detection to writing. Choose a Writerly Move to add to a flat scene. Compare the revision and the reader effect.</p>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <h3>Flat scene</h3>
+      <div class="resultScene" id="flatScene">Mara arrived at the train station. She looked around and waited for her train.</div>
+      <h3 style="margin-top:16px">Add a move</h3>
+      <select id="surgeryMove">
+        <option>Threshold Space</option>
+        <option>Curiosity Gap</option>
+        <option>Character Want</option>
+        <option>First Domino</option>
+        <option>Honne and Tatemae</option>
+        <option>Echo Ending</option>
+      </select>
+      <div class="row">
+        <button class="primary" onclick="performSurgery()">Revise scene</button>
+        <button onclick="newFlatScene()">New flat scene</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Revised scene</h3>
+      <div class="resultScene" id="revisedScene">Choose a move to revise the scene.</div>
+      <h3 style="margin-top:16px">Reader effect</h3>
+      <div class="feedback" id="readerEffect">The game will explain how the move changes what the reader experiences.</div>
+      <h3 style="margin-top:16px">Copyable reflection</h3>
+      <textarea id="reflection">Play the level, then copy this reflection.</textarea>
+      <div class="row"><button onclick="copyReflection()">Copy reflection</button></div>
+    </div>
+  </div>
+</section>
+
+<div class="card">
+  <h3>Unlocked casebook</h3>
+  <div id="casebook" class="note">No moves unlocked yet.</div>
+</div>
+
+</div>
+
+<script>
+const moves = {
+  "Threshold Space": {
+    effect:"suspended possibility before identity changes",
+    signs:"waiting rooms, doors, gates, hallways, arrivals, departures, almost-decisions"
+  },
+  "Curiosity Gap": {
+    effect:"reader wants missing information",
+    signs:"strange objects, unfinished messages, withheld causes, partial clues"
+  },
+  "Character Want": {
+    effect:"forward motion through desire",
+    signs:"practice, pursuit, repeated effort, fixation, sacrifice"
+  },
+  "First Domino": {
+    effect:"a small action starts a chain of consequences",
+    signs:"minor mistakes, tiny lies, missed messages, accidental choices"
+  },
+  "Honne and Tatemae": {
+    effect:"tension between public face and private truth",
+    signs:"polite speech masking fear, smiles over resentment, coded dialogue"
+  },
+  "Echo Ending": {
+    effect:"resonance because the ending transforms an earlier image",
+    signs:"returning objects, repeated lines, altered meanings, circular structure"
+  }
+};
+
+const fragments = [
+  {t:"She stood outside the interview room after they called her name.", m:"Threshold Space"},
+  {t:"The boarding line moved, but he kept one hand on the letter in his pocket.", m:"Threshold Space"},
+  {t:"At the hospital doorway, she was not yet a widow and not quite a wife.", m:"Threshold Space"},
+  {t:"The envelope was already open when he found it.", m:"Curiosity Gap"},
+  {t:"The voicemail ended with, 'Whatever you do, don't tell Mom.'", m:"Curiosity Gap"},
+  {t:"Every drawer in the motel room was empty except one.", m:"Curiosity Gap"},
+  {t:"He practiced the apology in the mirror until sunrise.", m:"Character Want"},
+  {t:"Mina refreshed the admissions page every nine minutes.", m:"Character Want"},
+  {t:"The runner kept going after the blood soaked through his sock.", m:"Character Want"},
+  {t:"One missed email put the whole wedding in motion.", m:"First Domino"},
+  {t:"The child told one small lie about the broken window.", m:"First Domino"},
+  {t:"The cashier handed back the wrong receipt, and Tom kept it.", m:"First Domino"}
+];
+
+let selected = null;
+let boardData = [[],[],[]];
+let used = new Set();
+let unlocked = new Set();
+let attempts = 0;
+let score1 = 0;
+
+function showLevel(n){
+  document.querySelectorAll(".level").forEach(x=>x.classList.add("hidden"));
+  document.getElementById("level"+n).classList.remove("hidden");
+  document.querySelectorAll(".tab").forEach((x,i)=>x.classList.toggle("active",i===n-1));
+}
+
+function renderFragments(){
+  const list=document.getElementById("fragmentList");
+  list.innerHTML="";
+  fragments.forEach((f,i)=>{
+    const d=document.createElement("div");
+    d.className="fragment"+(selected===i?" selected":"")+(used.has(i)?" used":"");
+    d.textContent=f.t;
+    d.onclick=()=>{ if(!used.has(i)){ selected=i; renderFragments(); } };
+    list.appendChild(d);
+  });
+}
+
+function renderBoards(){
+  const b=document.getElementById("boards");
+  b.innerHTML="";
+  boardData.forEach((arr,bi)=>{
+    const div=document.createElement("div");
+    div.className="board";
+    div.innerHTML="<h4>Board "+String.fromCharCode(65+bi)+"</h4>"+(arr.length?arr.map(idx=>"<div class='small'>• "+fragments[idx].t+"</div>").join(""):"<div class='small'>Empty</div>");
+    b.appendChild(div);
+  });
+}
+
+function placeSelected(bi){
+  if(selected===null) return;
+  if(boardData[bi].length>=3){ alert("This board already has three fragments."); return; }
+  boardData[bi].push(selected);
+  used.add(selected);
+  selected=null;
+  renderFragments(); renderBoards();
+}
+
+function testBoards(){
+  attempts++;
+  let newly=[];
+  boardData.forEach(arr=>{
+    if(arr.length!==3) return;
+    const ms=arr.map(i=>fragments[i].m);
+    const same=ms.every(m=>m===ms[0]);
+    if(same && !unlocked.has(ms[0])){
+      unlocked.add(ms[0]); newly.push(ms[0]); score1++;
+    }
+  });
+  document.getElementById("attemptCount").textContent=attempts;
+  document.getElementById("score1").textContent=score1;
+  document.getElementById("unlockCount").textContent=unlocked.size;
+  if(newly.length){
+    document.getElementById("feedback1").innerHTML="<span class='good'><b>Strong pattern discovered:</b></span> "+newly.join(", ")+". You grouped by reader effect, not surface topic.";
+  } else {
+    document.getElementById("feedback1").innerHTML="<span class='bad'><b>Mixed signal.</b></span> At least one board combines different reader effects. Try grouping by what the reader feels: desire, mystery, suspended identity, or consequence chain.";
+  }
+  updateCasebook();
+}
+
+function resetLevel1(){
+  selected=null; boardData=[[],[],[]]; used=new Set(); attempts=0; score1=0; unlocked=new Set();
+  document.getElementById("attemptCount").textContent=0;
+  document.getElementById("score1").textContent=0;
+  document.getElementById("unlockCount").textContent=0;
+  document.getElementById("feedback1").textContent="Build three groups. The game will reveal the Writerly Move only after your evidence is coherent.";
+  renderFragments(); renderBoards(); updateCasebook();
+}
+
+const cases = [
+  {text:"He smiled through the faculty meeting while his resignation letter burned a square in his jacket pocket.", answer:"Honne and Tatemae", why:"The public face and private truth create the main tension."},
+  {text:"The train doors opened. Lina could still go home, still board, still become the person she had been pretending to be.", answer:"Threshold Space", why:"The scene lives before commitment, with several identities still possible."},
+  {text:"The note said only: 'Look under the floorboards before Sunday.'", answer:"Curiosity Gap", why:"The missing context drives the reader forward."},
+  {text:"Ben wanted the solo badly enough to fake a sore throat for his best friend.", answer:"Character Want", why:"Desire is causing ethically charged action."},
+  {text:"The dropped key slid under the vending machine, and the night changed shape around it.", answer:"First Domino", why:"A small accident starts a larger chain."},
+  {text:"At the end, she found the same blue marble in her son's hand that her father had carried through the war.", answer:"Echo Ending", why:"A returning object gathers new meaning at the end."}
+];
+let cIndex=0, score2=0;
+
+function renderCase(){
+  if(cIndex>=cases.length){
+    document.getElementById("caseText").textContent="Level complete.";
+    document.getElementById("caseChoices").innerHTML="";
+    document.getElementById("feedback2").innerHTML="<span class='gold'><b>Finished.</b></span> You scored "+score2+"/"+cases.length+".";
+    return;
+  }
+  const c=cases[cIndex];
+  document.getElementById("caseNum").textContent=cIndex+1;
+  document.getElementById("caseText").textContent=c.text;
+  const choices=Object.keys(moves);
+  const box=document.getElementById("caseChoices");
+  box.innerHTML="";
+  choices.forEach(m=>{
+    const btn=document.createElement("button");
+    btn.textContent=m;
+    btn.onclick=()=>guessCase(m);
+    box.appendChild(btn);
+  });
+  document.getElementById("done2").textContent=cIndex;
+  document.getElementById("score2").textContent=score2;
+}
+function guessCase(m){
+  const c=cases[cIndex];
+  if(m===c.answer){
+    score2++;
+    unlocked.add(m);
+    document.getElementById("feedback2").innerHTML="<span class='good'><b>Correct.</b></span> "+c.why;
+  } else {
+    document.getElementById("feedback2").innerHTML="<span class='bad'><b>Not quite.</b></span> Strongest signal: <b>"+c.answer+"</b>. "+c.why;
+    unlocked.add(c.answer);
+  }
+  cIndex++;
+  updateCasebook();
+  setTimeout(renderCase,1800);
+}
+function resetLevel2(){cIndex=0;score2=0;renderCase();document.getElementById("feedback2").textContent="Choose the dominant reader effect."}
+
+const flatScenes = [
+  "Mara arrived at the train station. She looked around and waited for her train.",
+  "Jon went to the reunion. He saw people from high school.",
+  "A student walked to the professor's office to talk about changing majors.",
+  "Nina opened the bakery before sunrise.",
+  "Caleb came home and found a box on the table."
+];
+let flatIndex=0;
+function newFlatScene(){
+  flatIndex=(flatIndex+1)%flatScenes.length;
+  document.getElementById("flatScene").textContent=flatScenes[flatIndex];
+  document.getElementById("revisedScene").textContent="Choose a move to revise the scene.";
+  document.getElementById("readerEffect").textContent="The game will explain how the move changes what the reader experiences.";
+}
+function performSurgery(){
+  const base=document.getElementById("flatScene").textContent;
+  const m=document.getElementById("surgeryMove").value;
+  const revisions={
+    "Threshold Space":"Mara stood beneath the station clock while passengers streamed around her. Her ticket was in her hand, but so was the voicemail from home. The train waited with its doors open.",
+    "Curiosity Gap":"Mara arrived at the train station and found her own name written on the departure board. No city. No platform. Just her name, blinking in yellow light.",
+    "Character Want":"Mara arrived three hours early because missing this train would mean staying another year in a life she had already outgrown.",
+    "First Domino":"Mara arrived at the train station, reached for her ticket, and pulled out someone else's passport instead.",
+    "Honne and Tatemae":"Mara texted her mother, 'Everything is fine,' then deleted the photo of the one-way ticket before anyone could ask where she was really going.",
+    "Echo Ending":"Mara arrived at the train station holding the same red suitcase her father had carried when he left. By nightfall, she would understand why he had never unpacked it."
+  };
+  document.getElementById("revisedScene").textContent=revisions[m];
+  document.getElementById("readerEffect").innerHTML="<b>"+m+"</b>: "+moves[m].effect+". <br><br><span class='small'>Signs: "+moves[m].signs+".</span>";
+  unlocked.add(m); updateCasebook();
+  document.getElementById("reflection").value =
+`Writerly Move practiced: ${m}
+
+Flat scene:
+${base}
+
+Revised scene:
+${revisions[m]}
+
+Reader effect:
+${moves[m].effect}
+
+What changed:
+The revision does not just add detail. It changes the reader's job. The reader now tracks ${moves[m].effect}.`;
+}
+function copyReflection(){
+  const t=document.getElementById("reflection");
+  t.select(); document.execCommand("copy");
+}
+
+function updateCasebook(){
+  const cb=document.getElementById("casebook");
+  if(!unlocked.size){cb.textContent="No moves unlocked yet.";return;}
+  cb.innerHTML=[...unlocked].map(m=>"<div class='move'><b>"+m+"</b><br>Reader effect: "+moves[m].effect+"<br><span class='small'>Signs: "+moves[m].signs+"</span></div>").join("");
+}
+
+resetLevel1(); renderCase();
+</script>
+</body>
+</html>

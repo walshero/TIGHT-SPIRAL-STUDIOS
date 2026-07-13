@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  THE TRUE LENS — A Confluence Experiment    ·    IN-FILE CHANGELOG
+  Tight Spiral Studios. Canonical trunk. Edit in place, no branching. Newest first.
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  v1 (2026-06-26) — first ship. THE EXPERIMENT.
+    - WHAT: Runs the Confluence lens on one real recorded conversation
+      (the "Talking With People" dialogue, 2026-06-26). The player tags
+      threads with six primitive lenses; the tags COMPOUND into a confluence
+      map; the reveal is that the conversation enacted the studio philosophy
+      while it happened. Branching activity + concept map + interaction.
+    - THE COMPOUND METAPHOR made literal: six primitive lenses (radicals)
+      that refract across the talk and combine into larger meanings —
+      the metaphor prism, built like radicals compounding into characters.
+    - Five movements: HEADWATERS (orient) -> READ THE WATER (tag threads) ->
+      CONFLUENCE (watch tags compound) -> THE PRISM (see primitives refract) ->
+      DOWNSTREAM (the revelation + the loop).
+    - SOURCE SAFETY: uses only de-identified philosophy through-lines and
+      paraphrased thread-gist. NO clinical anecdotes, NO names beyond the
+      founder, NO stealth political material. The human gate already ran.
+    - PATTERNS APPLIED: confluence/river house-language (Confluence identity),
+      texture-not-color-alone, never-color-alone status, no-spatial-pointers
+      copy, overlay-never-clips-controls, reduced-motion + focus-visible +
+      scroll-reset floor, in-file changelog, joy clause (flourish on by default
+      w/ replay), 0-5 specificity scale borrowed as tag-confidence.
+    - SEAT: Director (the whole) + Learning Scientist (the lens is real) +
+      RP/ADA (floor) + AI-Skeptic (labels the moves, shows the engine) + PM (ships).
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The True Lens — A Confluence Experiment</title>
+<style>
+  :root{
+    /* CONFLUENCE house water-palette — value range + temperature relief, anti-mud */
+    --deep:    #0e3a4a;   /* deep channel */
+    --river:   #13586b;   /* main current */
+    --shallow: #2f8aa0;   /* bright water */
+    --foam:    #d7ecf0;   /* foam / light field */
+    --bank:    #f4f1e8;   /* sandy bank — page field */
+    --silt:    #fbf8f1;   /* lightest surface */
+    --ink:     #16242a;
+    --ink-soft:#4a5e66;
+    --rule:    #d8cfbf;
+    --shadow:  rgba(20,40,50,.30);
+
+    /* the six PRIMITIVE LENS colors — each also gets a texture (never color alone) */
+    --L-drift:  #b5651d;  /* DRIFT — warm, wandering */
+    --L-catch:  #1a7a5e;  /* CATCH — green, the rein-in */
+    --L-human:  #8a3a6b;  /* HUMAN-IN-LOOP — the contextual mind */
+    --L-label:  #2f6fb0;  /* LABEL-THE-MOVE — transparent blue */
+    --L-free:   #b39112;  /* FREEDOM — gold */
+    --L-task:   #5a4fa0;  /* TASK-SPINE — the discipline's real work */
+
+    --focus:   #b5651d;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bank); color:var(--ink);
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    font-size:19px; line-height:1.55; -webkit-text-size-adjust:100%;
+  }
+  body.contrast{ --bank:#000; --silt:#000; --foam:#000; --ink:#fff; --ink-soft:#eee; --rule:#fff; --river:#5cc4e0; --shadow:rgba(0,0,0,.9); }
+  body.contrast *{ border-color:#fff !important; }
+
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+
+  /* ---------- top bar ---------- */
+  .bar{
+    position:sticky; top:0; z-index:40; background:var(--deep); color:var(--foam);
+    display:flex; align-items:center; gap:14px; padding:12px 18px;
+    box-shadow:0 2px 0 rgba(0,0,0,.25);
+  }
+  .bar .brand{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:800;
+    letter-spacing:.04em;font-size:16px}
+  .bar .brand small{display:block;font-weight:500;font-size:12px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--shallow);opacity:.95}
+  .bar .spacer{flex:1}
+  .bar button{
+    font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:15px;font-weight:700;
+    background:var(--river); color:#fff; border:2px solid transparent; border-radius:10px;
+    padding:10px 14px; min-height:44px; cursor:pointer;
+  }
+  .bar button:focus-visible{outline:3px solid var(--foam);outline-offset:2px}
+
+  /* ---------- progress ribbon (river) ---------- */
+  .ribbon{display:flex;background:var(--deep);padding:0 12px 12px}
+  .ribbon .seg{flex:1;height:8px;margin:0 3px;border-radius:6px;background:rgba(255,255,255,.18)}
+  .ribbon .seg.on{background:var(--shallow)}
+  .ribbon .seg.done{background:var(--foam)}
+
+  /* ---------- stage ---------- */
+  main{max-width:920px;margin:0 auto;padding:28px 20px 90px}
+  .screen{display:none}
+  .screen.active{display:block;animation:rise .5s ease both}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  .eyebrow{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;font-weight:800;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--river);margin:0 0 8px}
+  body.contrast .eyebrow{color:var(--river)}
+  h1{font-size:clamp(30px,6vw,46px);line-height:1.05;margin:0 0 14px;letter-spacing:-.01em}
+  h2{font-size:clamp(24px,4.5vw,32px);line-height:1.12;margin:0 0 12px}
+  p.lead{font-size:21px;color:var(--ink-soft);margin:0 0 18px}
+  p{margin:0 0 16px}
+
+  .card{
+    background:var(--silt); border:1px solid var(--rule); border-radius:14px;
+    padding:22px 22px; margin:0 0 18px; box-shadow:0 10px 30px -22px var(--shadow);
+  }
+
+  .btn{
+    font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:18px;font-weight:800;
+    background:var(--river);color:#fff;border:none;border-radius:12px;
+    padding:16px 22px;min-height:52px;cursor:pointer;display:inline-flex;align-items:center;gap:10px;
+  }
+  .btn:hover{background:var(--deep)}
+  .btn:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+  .btn.ghost{background:transparent;color:var(--river);border:2px solid var(--river)}
+  body.contrast .btn.ghost{color:var(--foam);border-color:var(--foam)}
+  .btn.gold{background:var(--L-free);color:#1a1405}
+  .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:8px}
+  .row .grow{flex:1}
+
+  /* ---------- the six primitive lenses (legend + chips) ---------- */
+  .prism-key{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;margin:6px 0 4px}
+  .lenschip{
+    display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;
+    background:var(--silt);border:2px solid var(--rule);font-family:ui-sans-serif,system-ui,Arial,sans-serif;
+    font-size:14px;font-weight:700;line-height:1.2;
+  }
+  .glyph{flex:0 0 auto;width:30px;height:30px;border-radius:8px;display:grid;place-items:center}
+  .glyph svg{width:30px;height:30px;display:block}
+
+  /* ---------- READ THE WATER: tagging a thread ---------- */
+  .thread{
+    background:var(--silt);border:1px solid var(--rule);border-left:8px solid var(--shallow);
+    border-radius:12px;padding:20px;margin:0 0 16px;box-shadow:0 8px 22px -18px var(--shadow);
+  }
+  .thread .meta{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:12px;font-weight:800;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px}
+  .thread .gist{font-size:20px;line-height:1.5;margin-bottom:6px}
+  .thread .gist em{color:var(--river);font-style:italic}
+  .quiet{font-size:15px;color:var(--ink-soft);font-family:ui-sans-serif,system-ui,Arial,sans-serif}
+
+  .pick-label{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:800;font-size:15px;
+    margin:14px 0 8px;display:block}
+  .pickgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+  .pick{
+    text-align:left;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:15px;font-weight:700;
+    background:var(--silt);border:2px solid var(--rule);border-radius:10px;padding:12px;min-height:60px;
+    cursor:pointer;display:flex;align-items:center;gap:9px;color:var(--ink);line-height:1.2;
+  }
+  .pick:hover{border-color:var(--river)}
+  .pick:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+  .pick.sel{border-width:3px;box-shadow:inset 0 0 0 2px var(--silt)}
+  .pick .glyph{width:26px;height:26px}
+  .pick .glyph svg{width:26px;height:26px}
+
+  .verdict{margin-top:14px;padding:14px 16px;border-radius:10px;background:var(--foam);
+    border-left:6px solid var(--river);font-size:17px;display:none}
+  body.contrast .verdict{background:#111}
+  .verdict.show{display:block;animation:rise .4s ease both}
+  .verdict .agree{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:800;font-size:14px;
+    text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+
+  .status{display:inline-flex;align-items:center;gap:6px;font-family:ui-sans-serif,system-ui,Arial,sans-serif;
+    font-size:13px;font-weight:800;padding:3px 10px;border-radius:999px;border:2px solid var(--rule)}
+  .status .s{width:0;height:0}
+
+  /* ---------- CONFLUENCE MAP (SVG) ---------- */
+  .mapwrap{background:var(--silt);border:1px solid var(--rule);border-radius:14px;padding:10px;margin:0 0 16px;
+    box-shadow:0 10px 30px -22px var(--shadow)}
+  svg.map{width:100%;height:auto;display:block}
+  .legendline{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:14px;color:var(--ink-soft);
+    margin:8px 4px 2px}
+
+  /* ---------- PRISM refraction ---------- */
+  .refract{display:grid;gap:12px}
+  .ref-row{background:var(--silt);border:1px solid var(--rule);border-radius:12px;padding:16px 18px;
+    box-shadow:0 8px 22px -18px var(--shadow)}
+  .ref-row h3{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:15px;letter-spacing:.06em;
+    text-transform:uppercase;margin:0 0 6px;display:flex;align-items:center;gap:9px}
+  .ref-row .combine{font-size:15px;color:var(--ink-soft);font-family:ui-sans-serif,system-ui,Arial,sans-serif;
+    margin-top:8px;padding-top:8px;border-top:1px dashed var(--rule)}
+  .ref-row .combine b{color:var(--river)}
+
+  /* ---------- DOWNSTREAM reveal ---------- */
+  .reveal{background:linear-gradient(160deg,var(--deep),var(--river));color:var(--foam);
+    border-radius:16px;padding:30px 26px;margin:0 0 18px;box-shadow:0 16px 40px -26px var(--shadow)}
+  body.contrast .reveal{background:#000;border:2px solid #fff}
+  .reveal h2{color:#fff}
+  .reveal p{color:var(--foam)}
+  .reveal .big{font-size:23px;line-height:1.45;font-family:"Iowan Old Style",Palatino,Georgia,serif}
+  .reveal .turn{display:block;margin-top:14px;font-size:20px;color:#fff;font-weight:700}
+
+  .footer{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;color:var(--ink-soft);
+    text-align:center;margin-top:26px;line-height:1.6}
+  .footer a{color:var(--river)}
+
+  /* settings panel — overlay never clips its own controls */
+  .panel{position:fixed;inset:0;background:rgba(8,24,30,.62);z-index:90;display:none;
+    align-items:center;justify-content:center;padding:18px}
+  .panel.open{display:flex}
+  .panel .inner{background:var(--silt);color:var(--ink);border-radius:16px;max-width:440px;width:100%;
+    max-height:90vh;display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--rule)}
+  .panel .scroll{overflow-y:auto;padding:22px}
+  .panel h2{margin-top:0}
+  .panel .footrow{padding:14px 22px;border-top:1px solid var(--rule);background:var(--silt);position:sticky;bottom:0}
+  .toggle{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 0;border-top:1px solid var(--rule)}
+  .toggle:first-of-type{border-top:none}
+  .toggle .lbl{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:16px}
+  .sw{width:58px;height:34px;border-radius:999px;background:var(--rule);border:none;position:relative;cursor:pointer;flex:0 0 auto}
+  .sw::after{content:"";position:absolute;top:3px;left:3px;width:28px;height:28px;border-radius:50%;background:#fff;transition:left .18s}
+  .sw[aria-checked=true]{background:var(--river)}
+  .sw[aria-checked=true]::after{left:27px}
+  .sw:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none!important;transition:none!important}
+    html{scroll-behavior:auto}
+  }
+  body.noflourish .flourish{animation:none!important}
+</style>
+</head>
+<body>
+<div class="sr-only" id="live" aria-live="polite"></div>
+
+<header class="bar">
+  <div class="brand">THE TRUE LENS<small>Tight Spiral · A Confluence Experiment</small></div>
+  <div class="spacer"></div>
+  <button id="settingsBtn" aria-haspopup="dialog">Display</button>
+</header>
+<div class="ribbon" id="ribbon" aria-hidden="true">
+  <div class="seg on" data-seg="0"></div>
+  <div class="seg" data-seg="1"></div>
+  <div class="seg" data-seg="2"></div>
+  <div class="seg" data-seg="3"></div>
+  <div class="seg" data-seg="4"></div>
+</div>
+
+<main>
+<!-- ============ 0 · HEADWATERS ============ -->
+<section class="screen active" id="s0" aria-labelledby="h0">
+  <p class="eyebrow">Movement One · Headwaters</p>
+  <h1 id="h0">A conversation is a confluence.</h1>
+  <p class="lead">Two people talked for an hour. The talk wandered, doubled back, drifted off and got pulled home again. Most of it would read like noise on a transcript.</p>
+  <p>But the studio has a lens. The same instrument that scores a student's comment, or weighs what a leader's words actually <em>do</em> — point it at the conversation itself, and something surfaces: the talk wasn't <em>about</em> the philosophy. It was <strong>performing</strong> it, live, while it happened.</p>
+  <p>This is the experiment. You'll run the lens by hand. You tag the threads; the tags compound; the pattern reveals itself. That move — notice, watch it converge, see the shape, go again — is the tight spiral. You're about to do one.</p>
+
+  <div class="card">
+    <p class="eyebrow" style="margin-bottom:10px">The six primitive lenses — your prism</p>
+    <p class="quiet" style="margin-bottom:12px">A handful of simple parts. Like radicals that compound into a written character, these few refract across the whole talk and combine into larger meanings. Learn them once here; you'll use them to read the water.</p>
+    <div class="prism-key" id="prismKey"></div>
+  </div>
+  <div class="row">
+    <button class="btn" onclick="goto(1)">Read the water</button>
+    <span class="quiet">Five short movements. No accounts, nothing saved, nothing sent.</span>
+  </div>
+</section>
+
+<!-- ============ 1 · READ THE WATER (tagging) ============ -->
+<section class="screen" id="s1" aria-labelledby="h1b">
+  <p class="eyebrow">Movement Two · Read the water</p>
+  <h2 id="h1b">Tag each thread with the lens that fits.</h2>
+  <p class="lead">Here are real threads from the talk, paraphrased and de-identified. For each, pick the primitive lens that names what's <em>happening underneath the words</em>. Then the lens shows you where strong readers converged.</p>
+  <div id="threads"></div>
+  <div class="row">
+    <button class="btn ghost" onclick="goto(0)">Back to the lenses</button>
+    <span class="grow"></span>
+    <button class="btn" id="toConfluence" onclick="goto(2)" disabled>See it converge</button>
+  </div>
+  <p class="quiet" id="tagCount" style="margin-top:10px">0 of 6 threads tagged.</p>
+</section>
+
+<!-- ============ 2 · CONFLUENCE (compounding) ============ -->
+<section class="screen" id="s2" aria-labelledby="h2b">
+  <p class="eyebrow">Movement Three · Confluence</p>
+  <h2 id="h2b">Watch the threads meet.</h2>
+  <p class="lead">Each thread you tagged is a tributary. Apart, they look like wandering talk. Drawn on one map, they pour into the same channel — and the channel has a name.</p>
+  <div class="mapwrap">
+    <svg class="map" id="confluenceMap" viewBox="0 0 760 460" role="img"
+      aria-label="A river map. Six tributaries, one per tagged thread, flow downward and merge into a single channel labeled Human-in-the-loop. Each tributary is colored and textured by its lens.">
+    </svg>
+  </div>
+  <p class="legendline">Each tributary carries its lens color and texture. Where they merge is what the conversation was really about all along.</p>
+  <div class="row">
+    <button class="btn ghost" onclick="goto(1)">Re-tag a thread</button>
+    <span class="grow"></span>
+    <button class="btn" onclick="goto(3)">Hold it to the prism</button>
+  </div>
+</section>
+
+<!-- ============ 3 · THE PRISM (refraction / compound) ============ -->
+<section class="screen" id="s3" aria-labelledby="h3b">
+  <p class="eyebrow">Movement Four · The prism</p>
+  <h2 id="h3b">One light, refracted six ways — then recombined.</h2>
+  <p class="lead">This is the compound metaphor itself. The six lenses aren't six topics. They're refractions of one commitment, and they combine the way radicals combine: two simple parts making a meaning neither holds alone.</p>
+  <div class="refract" id="refract"></div>
+  <div class="row" style="margin-top:16px">
+    <button class="btn ghost" onclick="goto(2)">Back to the map</button>
+    <span class="grow"></span>
+    <button class="btn gold" onclick="goto(4)">Go downstream</button>
+  </div>
+</section>
+
+<!-- ============ 4 · DOWNSTREAM (reveal + loop) ============ -->
+<section class="screen" id="s4" aria-labelledby="h4b">
+  <p class="eyebrow">Movement Five · Downstream</p>
+  <h2 id="h4b">What the lens revealed.</h2>
+  <div class="reveal">
+    <p class="big">The conversation never explained the studio's philosophy. It <strong>enacted</strong> it. A friend gave one piece of contextual judgment a system could not generate — and in that moment became the first human in the loop. The talk drifted; it got caught and parked; the move was labeled out loud, never hidden. Every tributary you tagged poured into the same channel.</p>
+    <span class="turn">The lens didn't summarize the talk. It showed the talk was already the thing.</span>
+  </div>
+  <div class="card">
+    <p class="eyebrow" style="margin-bottom:8px">And that's the spiral</p>
+    <p style="margin-bottom:0">You noticed (you tagged). It converged (the map). You saw the shape (the prism). Now you'd go again — read a second conversation, and the lens is sharper because you've used it once. That recursion <em>is</em> Tight Spiral. You didn't read about the method. You ran one turn of it.</p>
+  </div>
+  <div class="row">
+    <button class="btn" onclick="goto(0); scrollTop()">Run it again</button>
+    <button class="btn ghost flourish" id="replayBtn">Replay the confluence</button>
+  </div>
+  <p class="footer">
+    Tight Spiral Studios · <a href="mailto:walshero@gmail.com">walshero@gmail.com</a><br>
+    Source: an internal "Talking With People" dialogue, de-identified. This experiment uses only the durable philosophy through-lines — no names beyond the founder, no private material.
+  </p>
+</section>
+</main>
+
+<!-- settings panel -->
+<div class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="panelH">
+  <div class="inner">
+    <div class="scroll">
+      <h2 id="panelH">Display</h2>
+      <p class="quiet">Set what's easiest on your eyes. Choices apply right away.</p>
+      <div class="toggle">
+        <span class="lbl">High contrast</span>
+        <button class="sw" id="swContrast" role="switch" aria-checked="false" aria-label="High contrast"></button>
+      </div>
+      <div class="toggle">
+        <span class="lbl">Calm mode (less movement)</span>
+        <button class="sw" id="swCalm" role="switch" aria-checked="false" aria-label="Calm mode, less movement"></button>
+      </div>
+    </div>
+    <div class="footrow">
+      <button class="btn" id="panelClose" style="width:100%">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   THE TRUE LENS — engine. Labels every move; hides nothing.
+   ============================================================ */
+
+/* --- the six primitive lenses (radicals of the prism) --- */
+const LENS = {
+  drift: { name:"DRIFT",          color:"var(--L-drift)", tex:"tx-diag",
+           blurb:"the talk wanders off the original question" },
+  catch: { name:"CATCH",          color:"var(--L-catch)", tex:"tx-dot",
+           blurb:"the wander gets named and parked — back to business" },
+  human: { name:"HUMAN-IN-LOOP",  color:"var(--L-human)", tex:"tx-cross",
+           blurb:"a person supplies judgment the system can't" },
+  label: { name:"LABEL-THE-MOVE", color:"var(--L-label)", tex:"tx-grid",
+           blurb:"the mechanism is shown, never hidden" },
+  free:  { name:"FREEDOM",        color:"var(--L-free)",  tex:"tx-ring",
+           blurb:"commit what you can, no obligation, no guilt" },
+  task:  { name:"TASK-SPINE",     color:"var(--L-task)",  tex:"tx-vert",
+           blurb:"do the real work of a discipline, not a quiz of it" },
+};
+const LK = Object.keys(LENS);
+
+/* --- SVG texture defs (texture, never color alone) --- */
+function texDefs(){
+  return `<defs>
+    <pattern id="tx-diag" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0,7 L7,0" stroke="#fff" stroke-width="1.5" opacity=".55"/></pattern>
+    <pattern id="tx-dot" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="3.5" cy="3.5" r="1.4" fill="#fff" opacity=".6"/></pattern>
+    <pattern id="tx-cross" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M4,1 V7 M1,4 H7" stroke="#fff" stroke-width="1.3" opacity=".6"/></pattern>
+    <pattern id="tx-grid" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0,0 H7 M0,0 V7" stroke="#fff" stroke-width=".9" opacity=".5"/></pattern>
+    <pattern id="tx-ring" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="4.5" cy="4.5" r="2.4" fill="none" stroke="#fff" stroke-width="1.2" opacity=".6"/></pattern>
+    <pattern id="tx-vert" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M3,0 V6" stroke="#fff" stroke-width="1.5" opacity=".55"/></pattern>
+  </defs>`;
+}
+/* small glyph chip for a lens (used in legend + picks) */
+function glyph(key, size){
+  const L = LENS[key]; size = size||30;
+  return `<span class="glyph" style="background:${L.color}">
+    <svg viewBox="0 0 30 30" aria-hidden="true">${texDefs()}
+      <rect x="0" y="0" width="30" height="30" fill="url(#${L.tex})"/>
+    </svg></span>`;
+}
+
+/* --- the six real threads (paraphrased, de-identified) --- */
+/* best = the lens strong readers converge on; note = why */
+const THREADS = [
+  { id:0, where:"On AI vs. the brain",
+    gist:"\u201CIt can do the parts. It does not have a brain. We have context and situated meaning.\u201D The tool is powerful, but the person holds the thing it can\u2019t.",
+    best:"human",
+    note:"This is the spine under everything: the human stays the principal because they carry situated meaning. Strong readers don\u2019t tag it FREEDOM or LABEL \u2014 those are downstream of this." },
+  { id:1, where:"Catching himself mid-tangent",
+    gist:"\u201CThe longer I go from the original question, the more I drift.\u201D So he built a move into the work: <em>would you like me to put that in the parking lot and get back to business?</em>",
+    best:"catch",
+    note:"The drift is real \u2014 but the tag is the CATCH, because the insight is the discipline that reins it in. Naming the drift is what makes it generative instead of a sink." },
+  { id:2, where:"The interview method",
+    gist:"\u201CI have the context. You give me the brain. Tell me what people need to <em>learn</em> to be good at your job. Give me an anecdote I can learn from.\u201D",
+    best:"task",
+    note:"He\u2019s pulling the discipline\u2019s real work from a practitioner \u2014 the task spine \u2014 not collecting content. The product is judgment a discipline would recognize as its own." },
+  { id:3, where:"On hidden algorithms",
+    gist:"\u201CI hate this bullshit with hidden algorithms. So I label the move.\u201D The studio shows the engine; the art says AI-assisted out loud.",
+    best:"label",
+    note:"Transparency as the moral floor. The same ethic wearing different clothes across the whole catalog \u2014 here it\u2019s named flat." },
+  { id:4, where:"On committing to the work",
+    gist:"\u201CCommit to as much as you can, full transparency about that, no obligation or guilt.\u201D One of the four freedoms \u2014 and it governs the collaboration itself, not just the gameplay.",
+    best:"free",
+    note:"FREEDOM OF EFFORT, applied to people, not just players. It\u2019s why the human-in-the-loop model can be humane instead of extractive." },
+  { id:5, where:"Naming the friend\u2019s contribution",
+    gist:"\u201CThat feedback you just gave me is a value I can\u2019t generate. It\u2019s contextualized. You\u2019ll now be attributed as a human-in-the-loop designer.\u201D",
+    best:"human",
+    note:"The philosophy stops being abstract here: a real person supplied the judgment the system couldn\u2019t, and got named for it. HUMAN-IN-LOOP, made literal in the moment." },
+];
+
+const picks = {};           // threadId -> chosen lens key
+let mapDrawn = false;
+
+/* ---------- build HEADWATERS legend ---------- */
+function buildPrismKey(){
+  document.getElementById('prismKey').innerHTML = LK.map(k=>{
+    const L = LENS[k];
+    return `<div class="lenschip">${glyph(k,30)}<span>${L.name}<br><span style="font-weight:500;color:var(--ink-soft)">${L.blurb}</span></span></div>`;
+  }).join('');
+}
+
+/* ---------- build READ THE WATER threads ---------- */
+function buildThreads(){
+  const wrap = document.getElementById('threads');
+  wrap.innerHTML = THREADS.map(t=>{
+    const opts = LK.map(k=>(
+      `<button class="pick" data-t="${t.id}" data-k="${k}" onclick="pick(${t.id},'${k}')" aria-pressed="false">
+         ${glyph(k,26)}<span>${LENS[k].name}</span></button>`
+    )).join('');
+    return `<div class="thread" id="thread${t.id}" style="border-left-color:var(--shallow)">
+      <div class="meta">Thread ${t.id+1} of 6 · ${t.where}</div>
+      <div class="gist">${t.gist}</div>
+      <span class="pick-label">Which lens names what\u2019s happening underneath?</span>
+      <div class="pickgrid">${opts}</div>
+      <div class="verdict" id="verdict${t.id}"></div>
+    </div>`;
+  }).join('');
+}
+
+/* ---------- pick a lens for a thread ---------- */
+function pick(tid, k){
+  picks[tid] = k;
+  // visual selection state
+  document.querySelectorAll(`.pick[data-t="${tid}"]`).forEach(b=>{
+    const on = b.dataset.k===k;
+    b.classList.toggle('sel', on);
+    b.setAttribute('aria-pressed', on?'true':'false');
+    if(on) b.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue(LENS[k].color.replace('var(','').replace(')','')) || 'var(--river)';
+    else b.style.borderColor = '';
+  });
+  // recolor the thread's left border to the chosen lens
+  document.getElementById('thread'+tid).style.borderLeftColor = LENS[k].color;
+
+  // verdict — labels the move: agree or "strong readers converged elsewhere"
+  const t = THREADS.find(x=>x.id===tid);
+  const v = document.getElementById('verdict'+tid);
+  const agree = (k===t.best);
+  v.innerHTML =
+    `<div class="agree" style="color:${agree?'var(--L-catch)':'var(--L-drift)'}">${agree?'Same channel as strong readers':'A different read \u2014 here\u2019s where readers converged'}</div>
+     <div>${agree
+        ? 'You tagged it <b>'+LENS[k].name+'</b>. '+t.note
+        : 'You tagged it <b>'+LENS[k].name+'</b>. Strong readers tagged it <b>'+LENS[t.best].name+'</b>: '+t.note+' Your read isn\u2019t wrong \u2014 it\u2019s a tributary that still pours into the same channel.'}</div>`;
+  v.classList.add('show');
+
+  // count + gate
+  const n = Object.keys(picks).length;
+  document.getElementById('tagCount').textContent = n+' of 6 threads tagged.';
+  const btn = document.getElementById('toConfluence');
+  btn.disabled = (n<6);
+  if(n>=6){ btn.textContent='See it converge'; announce('All six tagged. The confluence is ready.'); }
+}
+
+/* ---------- CONFLUENCE MAP ---------- */
+function drawMap(){
+  const svg = document.getElementById('confluenceMap');
+  const calm = document.body.classList.contains('noflourish') ||
+               window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // tributary start x positions across the top
+  const xs = [70,190,310,450,570,690];
+  let tribs = '';
+  THREADS.forEach((t,i)=>{
+    const k = picks[t.id] || t.best;
+    const L = LENS[k];
+    const x0 = xs[i];
+    // each tributary curves down to the central trunk at (380, 300)
+    const cx = 380, cy = 300;
+    const d = `M ${x0} 40 C ${x0} 150, ${cx} 150, ${cx} ${cy}`;
+    const dash = calm ? '' : `stroke-dasharray="900" stroke-dashoffset="900" style="animation:flow 1.1s ${0.12*i}s ease forwards"`;
+    tribs +=
+      `<path d="${d}" fill="none" stroke="${L.color}" stroke-width="9" opacity=".5" stroke-linecap="round"/>
+       <path d="${d}" fill="none" stroke="url(#${L.tex})" stroke-width="9" stroke-linecap="round" ${dash}/>
+       <circle cx="${x0}" cy="40" r="13" fill="${L.color}"/>
+       <text x="${x0}" y="22" text-anchor="middle" font-family="ui-sans-serif,Arial,sans-serif" font-size="11" font-weight="800" fill="var(--ink)">${L.name.split('-')[0]}</text>`;
+  });
+  const trunk =
+    `<path d="M380 300 C 380 360, 380 380, 380 440" fill="none" stroke="var(--deep)" stroke-width="22" stroke-linecap="round"/>
+     <path d="M380 300 C 380 360, 380 380, 380 440" fill="none" stroke="url(#tx-vert)" stroke-width="22" stroke-linecap="round"/>
+     <circle cx="380" cy="300" r="22" fill="var(--deep)"/>
+     <text x="380" y="412" text-anchor="middle" font-family="ui-sans-serif,Arial,sans-serif" font-size="17" font-weight="800" fill="#fff">HUMAN-IN-THE-LOOP</text>
+     <text x="380" y="434" text-anchor="middle" font-family="ui-sans-serif,Arial,sans-serif" font-size="12" fill="var(--foam)">the channel every thread pours into</text>`;
+  const anim = `<style>@keyframes flow{to{stroke-dashoffset:0}}</style>`;
+  svg.innerHTML = texDefs() + anim + tribs + trunk;
+  mapDrawn = true;
+}
+
+/* ---------- PRISM refraction ---------- */
+const REFRACT = [
+  { a:"human", b:"label",
+    title:"HUMAN-IN-LOOP \u00D7 LABEL-THE-MOVE",
+    body:"Keep the person in charge \u2014 and prove it by showing the mechanism. A human in the loop you can\u2019t see is just a hidden algorithm with extra steps.",
+    out:"= honest authorship. The engine is visible <i>and</i> a person is steering it." },
+  { a:"drift", b:"catch",
+    title:"DRIFT \u00D7 CATCH",
+    body:"The wandering is where the new connections live. The catch is what keeps wandering from becoming drowning. Neither alone is the method.",
+    out:"= generative discipline. The parking lot turns a tangent into an asset instead of a sink." },
+  { a:"task", b:"human",
+    title:"TASK-SPINE \u00D7 HUMAN-IN-LOOP",
+    body:"Ask a practitioner what people must <i>learn</i> to be good at the job, then keep that practitioner in the loop to judge whether the build got it right.",
+    out:"= a discipline-specific tool that actually transfers, because its spine came from lived judgment." },
+  { a:"free", b:"human",
+    title:"FREEDOM \u00D7 HUMAN-IN-LOOP",
+    body:"Humans in the loop at every stage \u2014 and freedom of effort governing how they join: commit what you can, full transparency, no guilt.",
+    out:"= collaboration that\u2019s humane instead of extractive. The values bake the build." },
+];
+function buildPrism(){
+  document.getElementById('refract').innerHTML = REFRACT.map(r=>(
+    `<div class="ref-row">
+       <h3>${glyph(r.a,24)}${glyph(r.b,24)}<span>${r.title}</span></h3>
+       <p style="margin:0">${r.body}</p>
+       <div class="combine"><b>${r.out}</b></div>
+     </div>`
+  )).join('');
+}
+
+/* ---------- navigation ---------- */
+function goto(n){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+n).classList.add('active');
+  // ribbon
+  document.querySelectorAll('.ribbon .seg').forEach((seg,i)=>{
+    seg.classList.toggle('on', i===n);
+    seg.classList.toggle('done', i<n);
+  });
+  if(n===2) drawMap();
+  if(n===3) buildPrism();
+  scrollTop();
+  const titles=['Headwaters','Read the water','Confluence','The prism','Downstream'];
+  announce('Movement '+(n+1)+': '+titles[n]);
+}
+function scrollTop(){ window.scrollTo({top:0, behavior: prefersCalm()?'auto':'smooth'}); }
+function prefersCalm(){ return document.body.classList.contains('noflourish') ||
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+function announce(m){ document.getElementById('live').textContent=m; }
+
+/* ---------- settings ---------- */
+const panel=document.getElementById('panel');
+function openPanel(){panel.classList.add('open');document.getElementById('panelClose').focus();}
+function closePanel(){panel.classList.remove('open');document.getElementById('settingsBtn').focus();}
+document.getElementById('settingsBtn').onclick=openPanel;
+document.getElementById('panelClose').onclick=closePanel;
+panel.addEventListener('click',e=>{if(e.target===panel)closePanel();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&panel.classList.contains('open'))closePanel();});
+function bindSwitch(id, fn){
+  const el=document.getElementById(id);
+  el.addEventListener('click',()=>{
+    const on=el.getAttribute('aria-checked')==='true'; el.setAttribute('aria-checked',(!on).toString()); fn(!on);
+  });
+}
+bindSwitch('swContrast',on=>{document.body.classList.toggle('contrast',on);announce(on?'High contrast on':'High contrast off');});
+bindSwitch('swCalm',on=>{document.body.classList.toggle('noflourish',on);announce(on?'Calm mode on':'Calm mode off');});
+
+document.getElementById('replayBtn').onclick=()=>{ goto(2); };
+
+/* ---------- init ---------- */
+buildPrismKey();
+buildThreads();
+announce('The True Lens. Movement one: Headwaters.');
+</script>
+</body>
+</html>

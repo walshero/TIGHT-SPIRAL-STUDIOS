@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>Writerly Moves Training Quiz</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #FFFFFF;
+        color: #111;
+        margin: 0;
+        padding: 0;
+        line-height: 1.5;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 20px;
+    }
+    h1 {
+        font-size: 1.8em;
+        margin-bottom: 0.5em;
+    }
+    p {
+        margin-bottom: 1em;
+    }
+    button {
+        font-size: 1em;
+        padding: 0.5em 1em;
+        margin: 0.5em 0;
+        cursor: pointer;
+        border: 2px solid #111;
+        background-color: #f8f8f8;
+        color: #111;
+    }
+    button:hover {
+        background-color: #e0e0e0;
+    }
+    .option-button {
+        display: block;
+        width: 100%;
+        text-align: left;
+    }
+    .correct {
+        background-color: #c4eac4;
+        border-color: #2d862d;
+    }
+    .incorrect {
+        background-color: #f6c4c4;
+        border-color: #a00;
+    }
+    .hidden {
+        display: none;
+    }
+    .icon-container svg {
+        width: 80px;
+        height: 80px;
+    }
+    .card-title { font-weight: bold; font-size: 1.2em; margin-top:0.5em; }
+    .explanation { margin-top: 0.5em; }
+</style>
+</head>
+<body>
+<h1>Writerly Moves Training Quiz</h1>
+<div id='intro'>
+    <p>Welcome to the Writerly Moves Training Quiz! This short game draws on the "Writing Short Fiction: Mapping the Storyscape with Writerly Moves" workshop.  You will see a brief description of a writerly move—one of the core techniques from the Writerly Moves deck.  Choose the correct move name from the options.  After you answer, you&#39;ll see more details and a simple icon representing the move. There are 11 questions total.  Good luck and keep the moves in mind as you write!</p>
+    <button id='startBtn'>Start Quiz</button>
+</div>
+<div id='quiz' class='hidden'>
+    <div id='question-container'>
+        <p id='question-text'></p>
+        <div id='options'></div>
+    </div>
+    <div id='feedback' class='hidden'>
+        <div class='icon-container' id='icon-area'></div>
+        <div id='answer-details'></div>
+        <button id='nextBtn'>Next</button>
+    </div>
+</div>
+<div id='results' class='hidden'>
+    <p id='final-score'></p>
+    <button id='restartBtn'>Play Again</button>
+</div>
+<script>
+    const moves = [{"name": "Anchor in Reality", "description": "Grounds us in who/where/when and keeps the world solid.", "what": "Provides concrete setting, physical action, and sensory detail.", "test": "Could the reader draw the room, street, or bus stop from this?", "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' aria-hidden='true' role='img'>\n    <title>Anchor in Reality icon</title>\n    <desc>A simple anchor symbolizing grounding</desc>\n    <circle cx='50' cy='15' r='8' stroke='black' stroke-width='3' fill='none'/>\n    <line x1='50' y1='23' x2='50' y2='60' stroke='black' stroke-width='3'/>\n    <line x1='50' y1='60' x2='35' y2='80' stroke='black' stroke-width='3'/>\n    <line x1='50' y1='60' x2='65' y2='80' stroke='black' stroke-width='3'/>\n    <path d='M35 80 A15 15 0 0 0 65 80' stroke='black' stroke-width='3' fill='none'/>\n</svg>"}, {"name": "Character Want", "description": "Shows what the character is trying to get (immediate or long-term).", "what": "Reveals desires, plans, wishes, and goals.", "test": "After this line, do we know what the character wants in this moment?", "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' aria-hidden='true' role='img'>\n    <title>Character Want icon</title>\n    <desc>A figure reaching for a star</desc>\n    <circle cx='50' cy='20' r='6' stroke='black' stroke-width='2' fill='none'/>\n    <line x1='50' y1='26' x2='50' y2='50' stroke='black' stroke-width='2'/>\n    <line x1='50' y1='30' x2='40' y2='40' stroke='black' stroke-width='2'/>\n    <line x1='50' y1='30' x2='60' y2='40' stroke='black' stroke-width='2'/>\n    <line x1='50' y1='50' x2='40' y2='70' stroke='black' stroke-width='2'/>\n    <line x1='50' y1='50' x2='60' y2='70' stroke='black' stroke-width='2'/>\n    <polygon points='80,10 83,16 90,17 85,22 87,28 80,25 73,28 75,22 70,17 77,16' stroke='black' stroke-width='2' fill='none'/>\n</svg>"}, {"name": "Friction / Obstacle", "description": "Puts something in the way of what the character wants.", "what": "Creates obstacles from other people, rules, logistics, or inner conflict.", "test": "Does this make the character\u2019s path less simple?", "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' aria-hidden='true' role='img'>\n    <title>Friction or Obstacle icon</title>\n    <desc>An arrow encountering a block</desc>\n    <line x1='10' y1='50' x2='60' y2='50' stroke='black' stroke-width='3'/>\n    <polygon points='55,47 60,50 55,53' fill='black'/>\n    <rect x='60' y='40' width='25' height='20' stroke='black' stroke-width='3' fill='none'/>\n</svg>"}, {"name": "Micro-Tension", "description": "Adds a small itch of unease, curiosity, or conflict inside the scene.", "what": "Introduces subtext, questions, or small disagreements.", "test": "Does this make the reader lean forward even if nothing big happens?", "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' aria-hidden='true' role='img'>\n    <title>Micro-Tension icon</title>\n    <desc>Two points connected by a zigzag line</desc>\n    <circle cx='25' cy='50' r='7' stroke='black' stroke-width='2' fill='none'/>\n    <circle cx='75' cy='50' r='7' stroke='black' stroke-width='2' fill='none'/>\n    <polyline points='32,50 40,45 50,55 60,45 68,50' stroke='black' stroke-width='2' fill='none'/>\n</svg>"}, {"name": "World Detail That Matters", "description": "Offers a specific detail that quietly carries meaning (class, mood, history).", "what": "Highlights objects, gestures, or environments with emotional weight.", "test": "If you changed this detail, would it slightly change how we read the scene?", "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' aria-hidden='true' role='img'>\n    <title>World Detail That Matters icon</title>\n    <desc>A small detail emphasized by radiating lines</desc>\n    <rect x='40' y='40' width='20' height='20' stroke='black' stroke-width='2' fill='none'/>\n    <line x1='50' y1='25' x2='50' y2='40' stroke='black' stroke-width='2'/>\n    <line x1='50' y1='60' x2='50' y2='75' stroke='black' stroke-width='2'/>\n    <line x1='25' y1='50' x2='40' y2='50' stroke='black' stroke-width='2'/>\n    <line x1='60' y1='50' x2='75' y2='50' stroke='black' stroke-width='2'/>\n    <line x1='35' y1='35' x2='45' y2='45' stroke='black' stroke-width='2'/>\n    <line x1='55' y1='45' x2='65' y2='35' stroke='black' stroke-width='2'/>\n    <line x1='35' y1='65' x2='45' y2='55' stroke='black' stroke-width='2'/>\n    <line x1='55' y1='55' x2='65' y2='65' stroke='black' stroke-width='2'/>\n</svg>"}, {"name": "Backstory Snap", "description": "Briefly looks backward to explain, complicate, or re-color the present.", "what": "Provides a quick flashback attached to what is happening now.", "test": "Is this flashback short and clearly tied to the current moment?", "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' aria-hidden='true' role='img'>\n    <title>Backstory Snap icon</title>\n    <desc>A curved arrow pointing backward</desc>\n    <path d='M70 70 C50 30, 30 30, 30 50' stroke='black' stroke-width='3' fill='none'/>\n    <polyline points='30,50 25,45 35,45' stroke='black' stroke-width='3' fill='none'/>\n</svg>"}, {"name": "Interior Weather", "description": "Shows what is going on inside your character\u2014thoughts, feelings, judgment.", "what": "Displays internal commentary, fear, shame, rationalizing, surprise.", "test": "Could we guess the character\u2019s emotional state from this alone?", "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' aria-hidden='true' role='img'>\n    <title>Interior Weather icon</title>\n    <desc>A head outline containing cloud-like shapes</desc>\n    <circle cx='50' cy='50' r='32' stroke='black' stroke-width='3' fill='none'/>\n    <circle cx='45' cy='45' r='8' stroke='black' stroke-width='2' fill='none'/>\n    <circle cx='60' cy='50' r='6' stroke='black' stroke-width='2' fill='none'/>\n    <circle cx='40' cy='60' r='7' stroke='black' stroke-width='2' fill='none'/>\n</svg>"}, {"name": "Relationship Beat", "description": "Changes or reveals something in a relationship between characters.", "what": "Highlights a new truth, shift in power, or a moment of connection or distance.", "test": "Is how they are with each other different before vs. after this?", "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' aria-hidden='true' role='img'>\n    <title>Relationship Beat icon</title>\n    <desc>Two figures connected by a heart</desc>\n    <circle cx='30' cy='50' r='10' stroke='black' stroke-width='2' fill='none'/>\n    <circle cx='70' cy='50' r='10' stroke='black' stroke-width='2' fill='none'/>\n    <path d='M40 50 Q50 35 60 50 Q50 65 40 50 Z' stroke='black' stroke-width='2' fill='none'/>\n</svg>"}, {"name": "Setting the Stakes", "description": "Shows why this situation matters and what could be gained or lost.", "what": "Introduces consequences, threats, promises, deadlines, or ultimatums.", "test": "Does this help answer: So what if this goes wrong/right?", "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' aria-hidden='true' role='img'>\n    <title>Setting the Stakes icon</title>\n    <desc>A balanced scale representing stakes</desc>\n    <line x1='50' y1='20' x2='50' y2='65' stroke='black' stroke-width='3'/>\n    <line x1='30' y1='40' x2='70' y2='40' stroke='black' stroke-width='3'/>\n    <polyline points='30,40 20,55 40,55 30,40' stroke='black' stroke-width='2' fill='none'/>\n    <polyline points='70,40 60,55 80,55 70,40' stroke='black' stroke-width='2' fill='none'/>\n</svg>"}, {"name": "Turn / Shift", "description": "The situation or understanding changes direction.", "what": "Introduces a reveal, reversal, decision, new info, or emotional flip.", "test": "If you cut this moment, would the story basically stay the same?", "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' aria-hidden='true' role='img'>\n    <title>Turn or Shift icon</title>\n    <desc>An arrow turning a corner</desc>\n    <polyline points='20,70 70,70 70,20' stroke='black' stroke-width='3' fill='none'/>\n    <polygon points='67,23 70,20 73,23 70,20' stroke='black' stroke-width='2' fill='black'/>\n</svg>"}, {"name": "Notable Pattern", "description": "Plants or repeats an image, phrase, or motif that ties the story together.", "what": "Establishes a recurring object, gesture, song, weather, or color.", "test": "Does it echo through the piece in a way that feels important?", "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' aria-hidden='true' role='img'>\n    <title>Notable Pattern icon</title>\n    <desc>Repeating shapes forming a pattern</desc>\n    <circle cx='25' cy='50' r='8' stroke='black' stroke-width='2' fill='none'/>\n    <circle cx='50' cy='50' r='8' stroke='black' stroke-width='2' fill='none'/>\n    <circle cx='75' cy='50' r='8' stroke='black' stroke-width='2' fill='none'/>\n    <line x1='25' y1='62' x2='75' y2='62' stroke='black' stroke-width='2'/>\n</svg>"}];
+    let questions = [];
+    let currentIndex = 0;
+    let score = 0;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function startQuiz() {
+        questions = shuffle(moves.slice());
+        currentIndex = 0;
+        score = 0;
+        document.getElementById('intro').classList.add('hidden');
+        document.getElementById('quiz').classList.remove('hidden');
+        document.getElementById('results').classList.add('hidden');
+        showQuestion();
+    }
+
+    function showQuestion() {
+        const q = questions[currentIndex];
+        // Use HTML for the prompt to avoid newline issues
+        document.getElementById('question-text').innerHTML = q.description + '<br><br>What move is this?';
+        const optionsContainer = document.getElementById('options');
+        optionsContainer.innerHTML = '';
+        const otherMoves = moves.filter(m => m.name !== q.name);
+        const shuffledOthers = shuffle(otherMoves).slice(0,3);
+        const optionNames = shuffle([q, ...shuffledOthers]);
+        optionNames.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-button';
+            btn.innerText = opt.name;
+            btn.addEventListener('click', () => selectAnswer(opt.name === q.name, q, opt.name));
+            optionsContainer.appendChild(btn);
+        });
+        document.getElementById('feedback').classList.add('hidden');
+    }
+
+    function selectAnswer(isCorrect, question, chosenName) {
+        const buttons = document.querySelectorAll('.option-button');
+        buttons.forEach(btn => btn.disabled = true);
+        buttons.forEach(btn => {
+            if (btn.innerText === question.name) {
+                btn.classList.add('correct');
+            } else if (btn.innerText === chosenName) {
+                btn.classList.add('incorrect');
+            }
+        });
+        if (isCorrect) {
+            score++;
+        }
+        const feedbackDiv = document.getElementById('feedback');
+        feedbackDiv.classList.remove('hidden');
+        const iconArea = document.getElementById('icon-area');
+        iconArea.innerHTML = question.icon;
+        document.getElementById('answer-details').innerHTML = `
+            <div class='card-title'>${question.name}</div>
+            <div class='explanation'><strong>Description:</strong> ${question.description}</div>
+            <div class='explanation'><strong>What it does:</strong> ${question.what}</div>
+            <div class='explanation'><strong>Test:</strong> ${question.test}</div>
+        `;
+    }
+
+    function nextQuestion() {
+        currentIndex++;
+        if (currentIndex < questions.length) {
+            showQuestion();
+        } else {
+            endQuiz();
+        }
+    }
+
+    function endQuiz() {
+        document.getElementById('quiz').classList.add('hidden');
+        document.getElementById('results').classList.remove('hidden');
+        document.getElementById('final-score').innerText = `You answered ${score} out of ${questions.length} correctly.`;
+    }
+
+    document.getElementById('startBtn').addEventListener('click', startQuiz);
+    document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+    document.getElementById('restartBtn').addEventListener('click', startQuiz);
+</script>
+</body>
+</html>

@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  THE LATE SIGN — IN-FILE CHANGELOG
+  Canonical trunk. Edit in place, no branching. Bump the version on ship. Newest first.
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  v1 (2026-06-24) — first ship.
+    - WHAT: Task-based game on Move B ("the turn you earned"). Three skins
+      (Nursing / Cyber / Human Services) share one COMBO engine: the meaningful
+      late change is only legible if the player did the upstream baseline step.
+    - WHY / SEAT: Nunan Task Spine (§7) + Outcome Microtag (§8). Built from the
+      interdisciplinary design session, Team 2. Glass Engine "show the engine"
+      toggle reused for instructor-facing microtags.
+    - FLOORS: single-file offline, in-memory only, no network, no emoji.
+      Trauma-Informed: Human Services skin keeps exit loud, every read valid,
+      content note before the distress scene. Health skin: suggest-don't-simulate,
+      no graphic body detail. Accessibility floor honored throughout.
+    - HOUSEKEEPING: version string v1.
+-->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>The Late Sign</title>
+<style>
+  :root{
+    --paper:#f4ecdd; --paper2:#ece0cb; --ink:#2c2620; --ink-soft:#6b5f4f;
+    --kraft:#cbb389; --kraft-d:#a8895c; --edge:rgba(60,44,24,.28);
+    --accent:#2f6d70; --accent-d:#1f4f52; --warm:#c2683b; --gold:#e7a93b;
+    --ok:#3f7d52; --flag:#b06a2c; --surface:#fffaf0; --border:#d8c7a6;
+    --focus:#1f4f52; --tap:44px;
+  }
+  body.hc{
+    --paper:#fff; --paper2:#fff; --ink:#000; --ink-soft:#222; --surface:#fff;
+    --accent:#004d50; --border:#000; --edge:rgba(0,0,0,.5); --focus:#000;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:var(--paper); color:var(--ink);
+    font:18px/1.6 ui-sans-serif,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    -webkit-text-size-adjust:100%;
+  }
+  body.big{ font-size:21px; }
+  .wrap{ max-width:680px; margin:0 auto; padding:18px 18px 64px; }
+
+  /* paper grain on big surfaces */
+  .sheet{
+    position:relative; background:var(--surface);
+    border:1px solid var(--border); border-radius:6px;
+    padding:22px 20px; margin:16px 0;
+    box-shadow:0 2px 0 var(--edge), 0 10px 26px rgba(60,44,24,.10);
+  }
+  .sheet::before{ /* thin cut-paper edge-shadow tell */
+    content:""; position:absolute; left:6px; right:6px; bottom:-4px; height:8px;
+    background:var(--edge); filter:blur(3px); border-radius:50%; z-index:-1;
+  }
+
+  h1{ font-size:1.9rem; line-height:1.15; margin:.2rem 0 .3rem; letter-spacing:-.01em; }
+  h2{ font-size:1.32rem; line-height:1.2; margin:.1rem 0 .6rem; }
+  .eyebrow{ font-size:.82rem; letter-spacing:.12em; text-transform:uppercase;
+            color:var(--ink-soft); font-weight:700; margin:0 0 .3rem; }
+  p{ margin:.5rem 0; }
+  .soft{ color:var(--ink-soft); }
+  .small{ font-size:.92rem; }
+
+  /* buttons — big tap targets, visible focus */
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:.4rem;
+    min-height:var(--tap); padding:.7rem 1.15rem; margin:.25rem .35rem .25rem 0;
+    font:inherit; font-weight:650; cursor:pointer;
+    background:var(--accent); color:#fff; border:2px solid var(--accent-d);
+    border-radius:10px; box-shadow:0 2px 0 var(--edge);
+  }
+  .btn.secondary{ background:var(--surface); color:var(--ink); border-color:var(--border); }
+  .btn.ghost{ background:transparent; color:var(--accent-d); border-color:transparent;
+              box-shadow:none; text-decoration:underline; }
+  .btn:disabled{ opacity:.45; cursor:not-allowed; }
+  .btn:focus-visible, a:focus-visible, .choice:focus-visible, .opt:focus-visible{
+    outline:3px solid var(--gold); outline-offset:2px;
+  }
+  body.hc .btn:focus-visible{ outline:3px solid #000; }
+
+  .row{ display:flex; flex-wrap:wrap; align-items:center; gap:.3rem; }
+  .spacer{ flex:1 1 auto; }
+
+  /* top control bar */
+  .topbar{ display:flex; flex-wrap:wrap; gap:.3rem; align-items:center;
+           padding:8px 0 2px; }
+  .topbar .btn{ min-height:40px; padding:.45rem .8rem; font-size:.9rem;
+                margin:.15rem .25rem .15rem 0; }
+  .exit{ background:var(--surface); color:var(--warm); border-color:var(--warm); }
+
+  /* skin chooser cards */
+  .choice{
+    display:block; width:100%; text-align:left; cursor:pointer;
+    background:var(--surface); color:var(--ink);
+    border:2px solid var(--border); border-radius:12px;
+    padding:16px 16px; margin:12px 0; min-height:var(--tap);
+    box-shadow:0 2px 0 var(--edge);
+  }
+  .choice:hover{ border-color:var(--accent); }
+  .choice .role{ font-weight:750; font-size:1.1rem; }
+  .choice .desc{ color:var(--ink-soft); font-size:.95rem; margin-top:.2rem; }
+
+  /* monitoring log entries */
+  .log{ margin:12px 0; }
+  .entry{
+    display:flex; gap:.6rem; align-items:flex-start;
+    border:1px solid var(--border); border-left:6px solid var(--kraft-d);
+    border-radius:8px; background:var(--paper2);
+    padding:12px 14px; margin:8px 0;
+  }
+  .entry.baseline-done{ border-left-color:var(--accent); }
+  .entry .t{ font-weight:750; min-width:3.4rem; }
+  .entry .v{ flex:1 1 auto; }
+  .entry .tag{ font-size:.8rem; color:var(--ink-soft); }
+  .entry.turn{ border-left-color:var(--warm); background:#f8ecdd; }
+
+  /* the upstream baseline action */
+  .opt{
+    display:block; width:100%; text-align:left; cursor:pointer;
+    background:var(--surface); color:var(--ink);
+    border:2px solid var(--border); border-radius:10px;
+    padding:13px 15px; margin:8px 0; min-height:var(--tap);
+    box-shadow:0 1px 0 var(--edge);
+  }
+  .opt:hover{ border-color:var(--accent); }
+  .opt[aria-pressed="true"]{ border-color:var(--accent); background:#eaf2f1; }
+  body.hc .opt[aria-pressed="true"]{ background:#ddd; }
+  .opt .lead{ font-weight:700; }
+  .opt .sub{ color:var(--ink-soft); font-size:.92rem; margin-top:.15rem; }
+
+  /* status word+glyph+color, never color alone */
+  .status{ display:inline-flex; align-items:center; gap:.35rem; font-weight:700;
+           font-size:.95rem; }
+  .status .g{ font-size:1rem; }
+  .st-ok{ color:var(--ok); }
+  .st-miss{ color:var(--warm); }
+  .st-info{ color:var(--accent-d); }
+
+  /* the "show the engine" microtag readout — instructor facing */
+  .engine{
+    border:2px dashed var(--accent); border-radius:10px;
+    background:#eef5f4; padding:14px 16px; margin:14px 0;
+  }
+  body.hc .engine{ background:#f0f0f0; border-color:#000; }
+  .engine h3{ margin:.1rem 0 .5rem; font-size:1.05rem; }
+  .tagchain{ font-size:.9rem; margin:.5rem 0; padding:.5rem .6rem;
+             background:var(--surface); border:1px solid var(--border); border-radius:8px; }
+  .tagchain .lvl{ font-weight:750; color:var(--accent-d); }
+  .tagchain .cell{ font-style:italic; }
+  .aacu{ display:inline-block; font-weight:750; border:1px solid var(--accent-d);
+         border-radius:6px; padding:.05rem .4rem; margin-left:.3rem; font-size:.82rem; }
+
+  /* content note panel */
+  .note{ border:1px solid var(--flag); background:#fbf2e6; border-radius:10px;
+         padding:14px 16px; margin:14px 0; }
+  body.hc .note{ background:#fff; border-color:#000; }
+
+  /* result banner */
+  .result{ border-radius:12px; padding:18px 18px; margin:16px 0;
+           border:2px solid var(--border); background:var(--surface); }
+  .result.win{ border-color:var(--ok); background:#eef6ef; }
+  .result.partial{ border-color:var(--flag); background:#fbf2e6; }
+  body.hc .result.win, body.hc .result.partial{ background:#fff; border-color:#000; }
+
+  .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+            overflow:hidden; clip:rect(0,0,0,0); border:0; }
+
+  .progressline{ font-size:.85rem; color:var(--ink-soft); margin:.2rem 0 0; }
+
+  /* gentle flourish, replayable; not gated behind reduced-motion */
+  @keyframes settle{ from{ transform:translateY(8px); opacity:0; } to{ transform:none; opacity:1; } }
+  .anim{ animation:settle .5s ease both; }
+  @media (prefers-reduced-motion: reduce){ .anim{ animation-duration:.001s; } }
+</style>
+</head>
+<body>
+<div class="wrap" id="app" role="main">
+
+  <div class="topbar" aria-label="Display and exit controls">
+    <button class="btn secondary" id="bigBtn" onclick="toggleBig()" aria-pressed="false">Larger text</button>
+    <button class="btn secondary" id="hcBtn" onclick="toggleHC()" aria-pressed="false">High contrast</button>
+    <span class="spacer"></span>
+    <button class="btn exit" onclick="goHome()">Exit to start</button>
+  </div>
+
+  <div id="screen" aria-live="polite"></div>
+
+</div>
+
+<script>
+/* ─────────────────────────────────────────────────────────────────────────
+   THE LATE SIGN — engine
+   Move B, "the turn you earned": the meaningful late change is only legible if
+   the player performed the upstream baseline step. Same engine, three skins.
+   In-memory only. No network. Microtags are instructor-facing, hidden in play.
+   ───────────────────────────────────────────────────────────────────────── */
+
+var SKINS = {
+  nursing: {
+    role: "Nurse on shift",
+    desc: "Watch a patient through the evening. The change that matters comes late and quiet.",
+    contentNote: null,
+    setting: "Room 4, evening rounds.",
+    /* the upstream choice: establish a baseline, or skip it */
+    baseline: {
+      prompt: "It is early in your shift. What do you do first?",
+      good: { lead: "Take and record a full baseline set of vitals.",
+              sub: "Slower now. Gives you something to compare against later." },
+      skip: { lead: "Note that the patient looks comfortable and move on.",
+              sub: "Faster. You have four other rooms." }
+    },
+    log: [
+      { t:"18:00", v:"Patient resting. Conversant. Asks when dinner is." },
+      { t:"19:30", v:"Dinner eaten. Watching television. No complaints." },
+      { t:"21:00", v:"Quiet. Says they are just tired." },
+      /* the late sign */
+      { t:"22:15", v:"Heart rate 96, up from the baseline you took at 18:00 (then 72). Skin slightly cool. Patient still says they feel fine.", turn:true }
+    ],
+    turnQ: {
+      prompt: "It is 22:15. Reading the last entry against your baseline — what is the move?",
+      options: [
+        { id:"act", lead:"Reassess fully and escalate: the trend, not the number, is the warning.",
+          sub:"The patient feels fine, but the rise from baseline is the early sign.", correct:true },
+        { id:"wait", lead:"Patient reports feeling fine. Recheck at the next scheduled round.",
+          sub:"Nothing alarming in isolation.", correct:false },
+        { id:"chart", lead:"Chart the number and continue rounds.",
+          sub:"It is within normal range on its own.", correct:false }
+      ]
+    },
+    earned: "Because you took the 18:00 baseline, the 22:15 rise reads as a trend you can act on. The number alone looks normal; against your baseline it is the early sign of decompensation.",
+    unearned: "You skipped the baseline, so at 22:15 you have a single number with nothing to compare it to. 96 looks normal in isolation. The early warning is invisible — not because it wasn't there, but because you had no setup to make it legible.",
+    tags: {
+      baseline: { islo:"ISLO-4", plo:"Nursing-PLO: clinical reasoning",
+                  slo:"NUR-SLO-2: establish baseline, assess → reassess",
+                  cell:"setup makes the payoff legible", aacu:3 },
+      turn:     { islo:"ISLO-2", plo:"Nursing-PLO: interpret clinical data",
+                  slo:"NUR-SLO-3: prioritize intervention from a trend",
+                  cell:"the earned turn — act on the trend, not the isolated value", aacu:4 }
+    }
+  },
+
+  cyber: {
+    role: "Security analyst",
+    desc: "Monitor a system overnight. The breach announces itself late, quiet, in a line that looks like noise.",
+    contentNote: null,
+    setting: "Overnight monitoring shift.",
+    baseline: {
+      prompt: "Start of shift. What do you do first?",
+      good: { lead: "Capture a baseline of normal traffic and typical login patterns.",
+              sub: "A few minutes now. Establishes what 'normal' looks like tonight." },
+      skip: { lead: "Skim the dashboard. It's green. Settle in.",
+              sub: "Nothing flashing. Save the effort." }
+    },
+    log: [
+      { t:"01:00", v:"Routine logins from known internal addresses. Normal volume." },
+      { t:"02:30", v:"Backup job runs as scheduled. Expected traffic spike, then quiet." },
+      { t:"03:45", v:"A handful of failed logins, then success. Looks ordinary." },
+      { t:"04:10", v:"One successful login from an internal account — at an hour, and from a location, outside the baseline pattern you captured at 01:00. Volume normal. No alert fired.", turn:true }
+    ],
+    turnQ: {
+      prompt: "04:10. Reading the last entry against your baseline — what is the move?",
+      options: [
+        { id:"act", lead:"Treat it as a likely compromise: isolate the account and begin incident response.",
+          sub:"It is in-policy on its face, but it breaks the baseline pattern.", correct:true },
+        { id:"wait", lead:"No alert fired and volume is normal. Note it and watch.",
+          sub:"Probably someone working late.", correct:false },
+        { id:"close", lead:"Successful internal login is expected behavior. Move on.",
+          sub:"Nothing technically violated.", correct:false }
+      ]
+    },
+    earned: "Because you captured the 01:00 baseline, the 04:10 login reads as anomalous against a known-normal pattern. No alert fired — the signal was quiet and late, and only your baseline made it visible.",
+    unearned: "You skipped the baseline, so at 04:10 you see a successful internal login with normal volume and no alert. On its face it is fine. The intrusion is invisible — there was nothing to read it against.",
+    tags: {
+      baseline: { islo:"ISLO-3", plo:"Cyber-PLO: threat reasoning over a system",
+                  slo:"CYB-SLO-2: establish behavioral baseline",
+                  cell:"setup makes the payoff legible", aacu:3 },
+      turn:     { islo:"ISLO-3", plo:"Cyber-PLO: incident response",
+                  slo:"CYB-SLO-4: detect & respond to anomalous access",
+                  cell:"the earned turn — late signal in noise", aacu:4 }
+    }
+  },
+
+  humanservices: {
+    role: "Human services worker",
+    desc: "Follow one child's week at an after-school program. A shift in behavior arrives quietly, in the last day.",
+    contentNote: "This scenario involves a child showing signs of distress. There is no graphic content. You can leave at any time with the Exit control, and the reflection at the end is optional.",
+    setting: "After-school program, one child's week.",
+    baseline: {
+      prompt: "It's Monday, your first day with this group. What do you do first?",
+      good: { lead: "Spend the first day just noticing — how this child usually greets, plays, eats, says goodbye.",
+              sub: "No conclusions yet. You're learning what ordinary looks like for them." },
+      skip: { lead: "Jump into running activities. You'll get to know everyone as you go.",
+              sub: "There's a lot to do and the day is short." }
+    },
+    log: [
+      { t:"Mon", v:"Arrives, says hi to two friends, picks the drawing table. Eats all of snack." },
+      { t:"Tue", v:"Same group, same table. Chatty. Asks to take a drawing home." },
+      { t:"Wed", v:"Quieter at snack but still draws with the others." },
+      { t:"Thu", v:"Sits at the drawing table alone today. Doesn't greet the two friends. Leaves snack untouched. Says they're fine when asked — but this is not how Monday looked.", turn:true }
+    ],
+    turnQ: {
+      prompt: "Thursday. Reading the last entry against what you noticed on Monday — what is the move?",
+      options: [
+        { id:"act", lead:"Gently check in and loop in your supervisor: the change from this child's own baseline is worth attention.",
+          sub:"No single thing is alarming. The shift from their normal is the signal.", correct:true },
+        { id:"wait", lead:"They said they're fine. Kids have off days. Wait and see.",
+          sub:"Nothing here is dramatic on its own.", correct:false },
+        { id:"general", lead:"Compare them to the other kids — they seem within the normal range for the group.",
+          sub:"Other children are quiet sometimes too.", correct:false }
+      ]
+    },
+    earned: "Because you spent Monday noticing this child's own ordinary, Thursday's quiet — alone, no greeting, untouched snack — reads as a real shift from their baseline. Each piece is small; against Monday, together, they're a signal worth a gentle response.",
+    unearned: "You skipped the first-day noticing, so on Thursday you have a quiet child who says they're fine. Without their Monday baseline, you're left comparing them to the group — and against the group, a quiet kid looks unremarkable. The shift is invisible because you never established what their normal was.",
+    tags: {
+      baseline: { islo:"ISLO-7", plo:"HumServ-PLO: observe & respond relationally",
+                  slo:"HMS-SLO-1: establish an individual baseline (theory of mind)",
+                  cell:"setup makes the payoff legible", aacu:3 },
+      turn:     { islo:"ISLO-6", plo:"HumServ-PLO: ethical response from the person's perspective",
+                  slo:"HMS-SLO-3: read a shift, withhold judgment, respond with care",
+                  cell:"the earned turn — read against their own normal, not the group", aacu:4 }
+    }
+  }
+};
+
+/* ── state (in-memory only) ─────────────────────────────────────────────── */
+var state = { skin:null, baselineDone:null, turnChoice:null, showEngine:false };
+
+/* ── helpers ────────────────────────────────────────────────────────────── */
+function el(html){ var d=document.createElement("div"); d.innerHTML=html.trim(); return d.firstChild; }
+function scrn(){ return document.getElementById("screen"); }
+function reset(){ scrn().innerHTML=""; window.scrollTo(0,0); } // scroll-reset on every screen change
+function focusFirst(){
+  var h = scrn().querySelector("h1,h2");
+  if(h){ h.setAttribute("tabindex","-1"); h.focus(); }
+}
+
+/* ── display toggles ────────────────────────────────────────────────────── */
+function toggleBig(){
+  document.body.classList.toggle("big");
+  var b=document.getElementById("bigBtn"), on=document.body.classList.contains("big");
+  b.setAttribute("aria-pressed", on); b.textContent = on ? "Normal text" : "Larger text";
+}
+function toggleHC(){
+  document.body.classList.toggle("hc");
+  var b=document.getElementById("hcBtn"), on=document.body.classList.contains("hc");
+  b.setAttribute("aria-pressed", on); b.textContent = on ? "Standard contrast" : "High contrast";
+}
+
+/* ── screens ────────────────────────────────────────────────────────────── */
+function goHome(){
+  state = { skin:null, baselineDone:null, turnChoice:null, showEngine:false };
+  reset();
+  var s = scrn();
+  s.appendChild(el(
+    '<div class="sheet anim">'+
+      '<p class="eyebrow">Tight Spiral Studios — a task-based game</p>'+
+      '<h1>The Late Sign</h1>'+
+      '<p class="soft">The change that matters often arrives late, and quiet. You can only catch it if you did the quiet work earlier that makes it readable.</p>'+
+      '<p>Pick a role. Each one runs the same shape, in a different field.</p>'+
+    '</div>'
+  ));
+  var pick = el('<div class="sheet"><h2>Choose your role</h2><div id="picks"></div>'+
+    '<p class="small soft">This is a practice scenario. Nothing you do is recorded or sent anywhere.</p></div>');
+  s.appendChild(pick);
+  var picks = pick.querySelector("#picks");
+  Object.keys(SKINS).forEach(function(key){
+    var sk = SKINS[key];
+    var b = el('<button class="choice"><span class="role">'+sk.role+'</span>'+
+               '<span class="desc">'+sk.desc+'</span></button>');
+    b.addEventListener("click", function(){ startSkin(key); });
+    picks.appendChild(b);
+  });
+  focusFirst();
+}
+
+function startSkin(key){
+  state.skin = key; state.baselineDone=null; state.turnChoice=null;
+  var sk = SKINS[key];
+  if(sk.contentNote){ contentNote(sk); } else { baselineScreen(); }
+}
+
+function contentNote(sk){
+  reset();
+  var s=scrn();
+  s.appendChild(el(
+    '<div class="sheet anim">'+
+      '<p class="eyebrow">'+sk.role+'</p>'+
+      '<h2>Before you begin</h2>'+
+      '<div class="note"><p>'+sk.contentNote+'</p></div>'+
+    '</div>'
+  ));
+  var row = el('<div class="row"></div>');
+  var go = el('<button class="btn">Begin when you are ready</button>');
+  go.addEventListener("click", baselineScreen);
+  var back = el('<button class="btn ghost">Choose a different role</button>');
+  back.addEventListener("click", goHome);
+  row.appendChild(go); row.appendChild(back);
+  s.appendChild(row);
+  focusFirst();
+}
+
+function baselineScreen(){
+  var sk = SKINS[state.skin];
+  reset();
+  var s=scrn();
+  s.appendChild(el(
+    '<div class="sheet anim">'+
+      '<p class="eyebrow">'+sk.role+' — '+sk.setting+'</p>'+
+      '<h2>'+sk.baseline.prompt+'</h2>'+
+      '<p class="progressline">Step 1 of 3 — the upstream choice</p>'+
+    '</div>'
+  ));
+  var box = el('<div class="sheet"></div>');
+  var good = el('<button class="opt"><span class="lead">'+sk.baseline.good.lead+'</span>'+
+                '<span class="sub">'+sk.baseline.good.sub+'</span></button>');
+  good.addEventListener("click", function(){ state.baselineDone=true; logScreen(); });
+  var skip = el('<button class="opt"><span class="lead">'+sk.baseline.skip.lead+'</span>'+
+                '<span class="sub">'+sk.baseline.skip.sub+'</span></button>');
+  skip.addEventListener("click", function(){ state.baselineDone=false; logScreen(); });
+  box.appendChild(good); box.appendChild(skip);
+  s.appendChild(box);
+  focusFirst();
+}
+
+function logScreen(){
+  var sk = SKINS[state.skin];
+  reset();
+  var s=scrn();
+  s.appendChild(el(
+    '<div class="sheet anim">'+
+      '<p class="eyebrow">'+sk.role+'</p>'+
+      '<h2>The shift goes by</h2>'+
+      '<p class="soft">'+(state.baselineDone
+         ? "You have your baseline. Watch the entries come in."
+         : "No baseline taken. Watch the entries come in.")+'</p>'+
+      '<p class="progressline">Step 2 of 3 — read the log</p>'+
+    '</div>'
+  ));
+  var logbox = el('<div class="sheet"><div class="log"></div></div>');
+  var logEl = logbox.querySelector(".log");
+  sk.log.forEach(function(e){
+    var cls = "entry" + (e.turn ? " turn" : "") + (state.baselineDone && !e.turn ? " baseline-done" : "");
+    var marker = "";
+    if(e.turn){ marker = '<div class="tag"><span class="status st-info"><span class="g" aria-hidden="true">◆</span>The late entry</span></div>'; }
+    logEl.appendChild(el('<div class="'+cls+'"><span class="t">'+e.t+'</span>'+
+      '<span class="v">'+e.v+ (marker?("<br>"+marker):"") +'</span></div>'));
+  });
+  s.appendChild(logbox);
+  var row = el('<div class="row"></div>');
+  var next = el('<button class="btn">Read the late entry and decide</button>');
+  next.addEventListener("click", turnScreen);
+  row.appendChild(next);
+  s.appendChild(row);
+  focusFirst();
+}
+
+function turnScreen(){
+  var sk = SKINS[state.skin];
+  reset();
+  var s=scrn();
+  s.appendChild(el(
+    '<div class="sheet anim">'+
+      '<p class="eyebrow">'+sk.role+'</p>'+
+      '<h2>'+sk.turnQ.prompt+'</h2>'+
+      '<p class="progressline">Step 3 of 3 — the move</p>'+
+    '</div>'
+  ));
+  var box = el('<div class="sheet"></div>');
+  sk.turnQ.options.forEach(function(o){
+    var b = el('<button class="opt"><span class="lead">'+o.lead+'</span>'+
+               '<span class="sub">'+o.sub+'</span></button>');
+    b.addEventListener("click", function(){ state.turnChoice=o; resultScreen(); });
+    box.appendChild(b);
+  });
+  s.appendChild(box);
+  focusFirst();
+}
+
+function resultScreen(){
+  var sk = SKINS[state.skin];
+  var chose = state.turnChoice;
+  var actedRight = chose.correct;
+  var legible = state.baselineDone; // could the turn even be read?
+  reset();
+  var s=scrn();
+
+  /* The honest result has TWO axes: did you set up the baseline, and did you act.
+     The teaching point lives in the interaction, not in a score. */
+  var headline, cls, body;
+  if(legible && actedRight){
+    headline = "You caught the late sign."; cls="win";
+    body = sk.earned + " You did the upstream work, and you read the trend instead of the isolated value. That is the move.";
+  } else if(legible && !actedRight){
+    headline = "The sign was readable — and you let it pass."; cls="partial";
+    body = sk.earned + " But you treated the late entry as normal in isolation. The baseline made the trend visible; the move is to act on the trend.";
+  } else if(!legible && actedRight){
+    headline = "Right instinct — but you were guessing."; cls="partial";
+    body = sk.unearned + " You happened to choose to act, but without the baseline you had no real evidence to stand on. The instinct is good; the case isn't yet defensible.";
+  } else {
+    headline = "The late sign went by unread."; cls="partial";
+    body = sk.unearned;
+  }
+
+  s.appendChild(el(
+    '<div class="result '+cls+' anim">'+
+      '<p class="eyebrow">'+sk.role+' — result</p>'+
+      '<h2 style="margin-top:0">'+headline+'</h2>'+
+      '<p>'+body+'</p>'+
+    '</div>'
+  ));
+
+  /* the wireframe novelty, stated plainly once */
+  s.appendChild(el(
+    '<div class="sheet">'+
+      '<p class="small soft"><strong>The shape of this game:</strong> the payoff is gated by setup you chose to do or skip. Meaning you didn\u2019t establish can\u2019t land \u2014 in a patient, a system, a child, or a story.</p>'+
+    '</div>'
+  ));
+
+  /* instructor-facing microtag engine — hidden in play, toggle to reveal */
+  var engineWrap = el('<div class="sheet"></div>');
+  var toggle = el('<button class="btn secondary" aria-expanded="false">Show the engine</button>');
+  var engine = el('<div class="engine" hidden></div>');
+  buildEngine(engine, sk);
+  toggle.addEventListener("click", function(){
+    var open = engine.hasAttribute("hidden");
+    if(open){ engine.removeAttribute("hidden"); toggle.textContent="Hide the engine"; toggle.setAttribute("aria-expanded","true"); }
+    else { engine.setAttribute("hidden",""); toggle.textContent="Show the engine"; toggle.setAttribute("aria-expanded","false"); }
+  });
+  engineWrap.appendChild(el('<p class="small soft">For instructors: see how each move maps to learning outcomes. Students do not see this during play.</p>'));
+  engineWrap.appendChild(toggle);
+  engineWrap.appendChild(engine);
+  s.appendChild(engineWrap);
+
+  /* optional reflection — invited, skippable, never gates progress */
+  s.appendChild(el(
+    '<div class="sheet">'+
+      '<h2>Optional: one line for yourself</h2>'+
+      '<p class="soft">If you want \u2014 not required \u2014 what is one place in your own work where doing the quiet setup first would let you catch something later?</p>'+
+      '<textarea aria-label="Optional reflection, kept only on this screen" rows="3" style="width:100%;font:inherit;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--ink)"></textarea>'+
+      '<p class="small soft">This stays on your screen only. Nothing is saved or sent.</p>'+
+    '</div>'
+  ));
+
+  var row = el('<div class="row"></div>');
+  var again = el('<button class="btn">Try this role the other way</button>');
+  again.addEventListener("click", function(){ startSkin(state.skin); });
+  var other = el('<button class="btn secondary">Try a different role</button>');
+  other.addEventListener("click", goHome);
+  row.appendChild(again); row.appendChild(other);
+  s.appendChild(row);
+
+  focusFirst();
+}
+
+function buildEngine(container, sk){
+  container.appendChild(el('<h3>How the moves map to outcomes</h3>'));
+  container.appendChild(el('<p class="small soft">Anchored to MassBay graduation competencies (ISLO). Chain: institutional &larr; program &larr; course &larr; the cell the move demonstrates. AAC&U VALUE level shown by performance.</p>'));
+
+  /* baseline move */
+  var b = sk.tags.baseline;
+  var bStatus = state.baselineDone
+    ? '<span class="status st-ok"><span class="g" aria-hidden="true">\u2713</span> performed</span>'
+    : '<span class="status st-miss"><span class="g" aria-hidden="true">\u25CB</span> skipped</span>';
+  container.appendChild(el(
+    '<div class="tagchain">'+
+      '<div><strong>Move 1 \u2014 establish the baseline</strong> &nbsp; '+bStatus+'</div>'+
+      '<div><span class="lvl">'+b.islo+'</span> &larr; '+b.plo+' &larr; '+b.slo+'</div>'+
+      '<div class="cell">demonstrates: '+b.cell+'<span class="aacu">AAC&U '+b.aacu+'</span></div>'+
+    '</div>'
+  ));
+
+  /* turn move */
+  var t = sk.tags.turn;
+  var tStatus = (state.turnChoice && state.turnChoice.correct)
+    ? '<span class="status st-ok"><span class="g" aria-hidden="true">\u2713</span> made the move</span>'
+    : '<span class="status st-miss"><span class="g" aria-hidden="true">\u25CB</span> not yet</span>';
+  container.appendChild(el(
+    '<div class="tagchain">'+
+      '<div><strong>Move 2 \u2014 act on the earned turn</strong> &nbsp; '+tStatus+'</div>'+
+      '<div><span class="lvl">'+t.islo+'</span> &larr; '+t.plo+' &larr; '+t.slo+'</div>'+
+      '<div class="cell">demonstrates: '+t.cell+'<span class="aacu">AAC&U '+t.aacu+'</span></div>'+
+    '</div>'
+  ));
+
+  /* the dependency, stated */
+  container.appendChild(el(
+    '<p class="small"><strong>The dependency is the point:</strong> Move 2 is only legible if Move 1 was performed. '+
+    (state.baselineDone
+      ? 'Here the baseline was taken, so the turn could be read \u2014 the evidence chain is intact.'
+      : 'Here the baseline was skipped, so the turn could not be read \u2014 acting on it would have been a guess, not evidence.')+
+    '</p>'
+  ));
+
+  container.appendChild(el(
+    '<p class="small soft"><strong>FERPA:</strong> these tags ride a practice move and are demo-only. With real students, each move-record becomes an education record \u2014 it stays in this file and is exported only on your command. Nothing is transmitted.</p>'
+  ));
+}
+
+/* boot */
+goHome();
+</script>
+</body>
+</html>
