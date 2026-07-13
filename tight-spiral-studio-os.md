@@ -30,6 +30,21 @@
  reading the shelf would silently violate law it could not see. This lands the file
  so the tooling can see it. The merge is a scheduled build session, not done here.
 
+ STANDING FLOOR - SIGHT BEFORE STEPS (locked 2026-07-12, founder)
+ The agent does NOT give navigation instructions for a screen it has not seen.
+ Ask for a screenshot, or say "I cannot see that screen." No guessing at button
+ positions. No "it should be below." If the image is not in hand, the instruction
+ does not ship. This is Studio Eyes pointed at INTERFACES, not just files.
+
+ WHY: the founder has retinitis pigmentosa; menu-hunting is the specific cost.
+ The rule already existed in his preferences ("do not assume I can easily find
+ interface elements... mention where buttons are located"). On 2026-07-12 the agent
+ read it, acknowledged it aloud when the founder invoked it mid-session, and then
+ kept guessing anyway - burning ~20 minutes sending him through a GitHub permissions
+ menu that GitHub was actively suppressing. One screenshot solved it in one turn.
+ The check was not missing. The agent did not run it. That is the disease this whole
+ file documents: rich in rules, thin in enforcers.
+
  NOTHING BELOW THIS COMMENT WAS EDITED. Byte-identical to the founder's copy
  (166,146 B, md5 5424fff7ba5b1f7e2c...). Verified against two independent lanes.
 ================================================================================
