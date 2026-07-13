@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Laughter Foundry — Spec and Conversation Log</title>
+<style>
+  :root{
+    --paper:#F2EEE3;
+    --ink:#1F2421;
+    --ink-2:#48484a;
+    --brass:#C8860D;
+    --cool:#3E5C6E;
+    --miss:#8a8275;
+    --line:#cfc7b6;
+    --surface:#fbf9f3;
+    --r:10px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:17px;
+    line-height:1.6;
+  }
+  .wrap{max-width:820px;margin:0 auto;padding:1.25rem 1.1rem 5rem;}
+  header.top{
+    position:sticky;top:0;z-index:10;
+    background:var(--ink);color:var(--paper);
+    padding:.7rem 1.1rem;
+    display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;justify-content:space-between;
+  }
+  header.top .eyebrow{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:#cdbf9a;}
+  header.top .title{font-size:22px;font-weight:700;width:100%;}
+  nav.jump{display:flex;flex-wrap:wrap;gap:.4rem;width:100%;margin-top:.35rem;}
+  nav.jump a{
+    color:var(--ink);background:var(--paper);
+    text-decoration:none;font-size:15px;font-weight:600;
+    padding:.45rem .7rem;border-radius:var(--r);
+    border:2px solid transparent;
+    min-height:44px;display:inline-flex;align-items:center;
+  }
+  nav.jump a:hover{border-color:var(--brass);}
+  nav.jump a:focus-visible{outline:3px solid var(--brass);outline-offset:2px;}
+  h1{font-size:28px;line-height:1.25;margin:1.6rem 0 .4rem;}
+  h2{font-size:22px;margin:2.2rem 0 .5rem;padding-top:.4rem;border-top:2px solid var(--line);}
+  h3{font-size:19px;margin:1.4rem 0 .35rem;color:var(--cool);}
+  p{margin:.55rem 0;}
+  .lede{font-size:18px;}
+  .meta{color:var(--ink-2);font-size:15px;margin-top:.2rem;}
+  ul,ol{margin:.5rem 0 .8rem;padding-left:1.3rem;}
+  li{margin:.3rem 0;}
+  code{background:#e9e3d4;padding:.1rem .35rem;border-radius:5px;font-size:15px;}
+  .pill{
+    display:inline-block;background:var(--brass);color:#fff;
+    font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    padding:.2rem .55rem;border-radius:999px;
+  }
+  .card{
+    background:var(--surface);border:1px solid var(--line);
+    border-radius:var(--r);padding:1rem 1.1rem;margin:1rem 0;
+  }
+  table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:16px;}
+  th,td{text-align:left;padding:.55rem .6rem;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{background:var(--ink);color:var(--paper);font-size:15px;}
+  .halt{color:#7a1f1f;font-weight:700;}
+  .turn{
+    border-left:4px solid var(--line);
+    padding:.2rem 0 .2rem 1rem;margin:1.2rem 0;
+  }
+  .turn.user{border-left-color:var(--cool);}
+  .turn.asst{border-left-color:var(--brass);}
+  .who{
+    font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  }
+  .turn.user .who{color:var(--cool);}
+  .turn.asst .who{color:var(--brass);}
+  .turn .body{margin-top:.25rem;}
+  .qa{background:#efeadd;border-radius:var(--r);padding:.6rem .8rem;margin:.5rem 0;font-size:16px;}
+  .qa b{color:var(--cool);}
+  footer{margin-top:3rem;padding-top:1rem;border-top:2px solid var(--line);color:var(--ink-2);font-size:15px;}
+  a.skip{position:absolute;left:-999px;}
+  a.skip:focus{left:1rem;top:.5rem;position:fixed;background:#fff;color:var(--ink);padding:.5rem .8rem;border-radius:8px;z-index:50;}
+  @media (max-width:540px){
+    body{font-size:16px;}
+    h1{font-size:25px;}
+  }
+</style>
+</head>
+<body>
+<a href="#main" class="skip">Skip to content</a>
+<header class="top">
+  <span class="eyebrow">Tight Spiral Studios — design record</span>
+  <span class="title">The Laughter Foundry</span>
+  <nav class="jump" aria-label="Jump to section">
+    <a href="#spec">Locked spec</a>
+    <a href="#standards">Standards</a>
+    <a href="#panel">Review panel</a>
+    <a href="#hitl">Human-in-the-loop</a>
+    <a href="#log">Conversation log</a>
+  </nav>
+</header>
+
+<main class="wrap" id="main">
+
+  <p class="meta">Captured 2026-06-28. Single-file, offline, portable. This is the record so nothing from the design conversation is lost — the locked build spec first, the full exchange below it.</p>
+
+  <p class="lede"><strong>One line.</strong> A Busytown-style cutaway workshop where 3rd graders build, run, and report on laugh-machines. The building <em>is</em> the task; an adapted Confluence engine quietly maps evidence to Grade 3 CCSS ELA and Math standards. Kid and teacher see different things.</p>
+
+  <div class="card">
+    <span class="pill">Thesis for FableVision</span>
+    <p style="margin-top:.6rem;">A human-in-the-loop <em>game-production method</em> in which playing the game is itself the production and validation act. The artifact carries both the playable proof-of-concept and a shareable dossier showing the method that made it. Reader model: FableVision knows embedded assessment and ludic pedagogy cold (they built <em>Lure of the Labyrinth</em>), so the dossier skips theory 101 and shows what is distinct here — the panel/HALT production process, accessibility as a design driver, and the evidence-tagging assessment engine. Addressed to FableVision broadly; no individual named in the shareable file.</p>
+  </div>
+
+  <h1 id="spec">The locked build spec</h1>
+
+  <h2>One file, three surfaces</h2>
+  <p>Switched from one always-visible top control (no menu hunting — the low-vision floor). Scroll resets to top on every switch.</p>
+  <ol>
+    <li><strong>Play</strong> — Busytown task-cycle game, kid view. No scores or standard codes shown.</li>
+    <li><strong>Read</strong> — teacher evidence map, gated toggle, device-local, FERPA-clean (nicknames only, nothing leaves the browser).</li>
+    <li><strong>Dossier</strong> — design plan and TSP principles for FableVision, plain language, clipboard/download export.</li>
+  </ol>
+
+  <h2>The game — Busytown + Labyrinth + Nunan TBLT</h2>
+  <h3>Three influences, load-bearing</h3>
+  <ul>
+    <li><strong>Lure of the Labyrinth.</strong> Standards live inside the puzzle. The machine will not run until parts mesh, and meshing them is the math/reading. No child sees a "problem"; they see a stuck contraption. Struggle is the assessment data.</li>
+    <li><strong>Richard Scarry / Busytown.</strong> A dense, labeled cutaway world. Every part is named, captioned, doing a visible job. The catalog is a browseable page (the studio's visual-rhetoric and mnemonic standard).</li>
+    <li><strong>Nunan, task-based language teaching.</strong> Pre-task, task cycle, language focus. Build the machine (task), interview the tester (report-back), reflect on what landed and why (language focus / metacognition).</li>
+  </ul>
+
+  <h3>The task cycle, four phases</h3>
+  <ul>
+    <li><strong>Browse (pre-task).</strong> The cutaway Foundry catalog. Three named laugh-parts, tier-2 vocabulary. Line-art, single weight, legible small. No assessment yet.</li>
+    <li><strong>Build (the task).</strong> Assemble a working chain. Gears mesh only at correct ratios; a release is timed by fraction of track; the run-timer is set in intervals. Wrong math means it will not run — the Labyrinth invisible gate.</li>
+    <li><strong>Test and interview (report-back).</strong> Run it on a real tester; conduct the adapted Confluence interview. The tester quotes the moment; the player logs the response and writes a reason.</li>
+    <li><strong>Reflect (language focus).</strong> Read the response bar graph; write an opinion-with-reasons about what to change. Metacognition, never graded to the child.</li>
+  </ul>
+
+  <h2 id="standards">Standards spine — CCSS Grade 3</h2>
+  <p>Pre-2025 national consensus standards (CCSS adopted 2010). Each task surfaces evidence for named codes so the Cartographer seat can audit the map.</p>
+  <table>
+    <thead><tr><th>Strand</th><th>Code</th><th>Where it lives in play</th></tr></thead>
+    <tbody>
+      <tr><td>Math</td><td><code>3.OA.3 / 3.OA.8</code></td><td>Gears: ratios and two-step reasoning to make the chain turn.</td></tr>
+      <tr><td>Math</td><td><code>3.NF.1</code></td><td>Fractions: time a release at 1/2 or 1/4 of the track.</td></tr>
+      <tr><td>Math</td><td><code>3.MD.1</code></td><td>Time intervals: set the machine run-timer.</td></tr>
+      <tr><td>Math</td><td><code>3.MD.B</code></td><td>Scaled bar graph: the divergence panel kids read and build from tester data.</td></tr>
+      <tr><td>ELA</td><td><code>RL.3.1</code></td><td>Interview: tester refers to the moment, quotes evidence.</td></tr>
+      <tr><td>ELA</td><td><code>W.3.1</code></td><td>Opinion with reasons: rationale required on every prediction and tag.</td></tr>
+      <tr><td>ELA</td><td><code>SL.3.1</code></td><td>Collaborative discussion: the live interview.</td></tr>
+      <tr><td>ELA</td><td><code>L.3.6</code></td><td>Grade-appropriate vocabulary: named laugh-mechanisms as tier-2 words.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Confluence engine, adapted</h2>
+  <table>
+    <thead><tr><th>Confluence concept</th><th>Foundry adaptation</th><th>Captures</th></tr></thead>
+    <tbody>
+      <tr><td>Evidence-required tagging (provenance HALT)</td><td>Every proficiency tag needs a quoted span — the child's words or the tester's quote</td><td><code>RL.3.1</code>, <code>W.3.1</code></td></tr>
+      <tr><td>Lens-swapping</td><td>Audience lens (younger kid / peer / grown-up) re-reads the same machine</td><td><code>RL.3.3</code></td></tr>
+      <tr><td>Score buttons + anchor/drift</td><td>Proficiency markers Not Yet / Emerging / Meets — never numeric, teacher view only</td><td>assessment layer</td></tr>
+      <tr><td>No-wrong-moves</td><td>A machine that bombs is evidence, not a fail — "didn't land for this lens"</td><td>low-affect assessment</td></tr>
+      <tr><td>Calibration / divergence readout</td><td>Scaled bar graph of responses the kids interpret</td><td><code>3.MD.B</code></td></tr>
+      <tr><td>FERPA HALT</td><td>Nicknames only; nothing leaves the device</td><td>privacy floor</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Two views</h2>
+  <ul>
+    <li><strong>Kid view.</strong> The Busytown world, named parts, self-progress as parts mastered. No scores, no standard codes, no Not-Yet/Meets language. Just: this machine ran, this part is yours now.</li>
+    <li><strong>Teacher view.</strong> Gated toggle. Evidence map: standard code, the quoted evidence span the child produced, the proficiency marker. Unmapped standards shown honestly — the Cartographer principle: name what is not yet demonstrated.</li>
+  </ul>
+
+  <h2 id="panel">The panel that reviewed this build</h2>
+  <p>Classroom Deliverable convening. A line has to survive every hard power seated.</p>
+  <table>
+    <thead><tr><th>Seat</th><th>Power</th><th>Its question to the Foundry</th></tr></thead>
+    <tbody>
+      <tr><td>Accessibility / ADA Officer</td><td class="halt">HALT</td><td>Keyboard-only all the way? Survives 200% zoom and phone width with nothing hidden? Every control discoverable without hunting?</td></tr>
+      <tr><td>FERPA / Governance Steward</td><td class="halt">HALT if real data</td><td>Does any identifiable student data touch this? Stays a no-data demo — ship it; the moment it ingests a real roster, stop.</td></tr>
+      <tr><td>Assessment &amp; Outcomes Specialist</td><td>advisory, rigorous</td><td>Does the activity assess the named standard, or just gesture at it? What does evidence of learning look like here?</td></tr>
+      <tr><td>Learning Scientist</td><td>advisory</td><td>Is the lesson played, not narrated? Four Freedoms intact? Difficulty in the flow channel?</td></tr>
+      <tr><td>Game-Feel Designer</td><td>advisory</td><td>Does the choice feel like it landed? Where does momentum stall on a phone, low vision?</td></tr>
+      <tr><td>TLDR Kids</td><td class="halt">BAIL</td><td>Too long, can I tap yet, where is the funny?</td></tr>
+      <tr><td>Project Manager</td><td class="halt">SCOPE HALT</td><td>Is this still the minimum viable version, or are we polishing something unshipped?</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="hitl">Human-in-the-loop, made concrete</h2>
+  <table>
+    <thead><tr><th>Only the human</th><th>AI drafted</th><th>TA runs next</th><th>Eliminated</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Taste and spine calls; whether the dossier sounds right; the pedagogy and standards judgment; final eyes on art.</td>
+        <td>The spec scaffold, the evidence-map structure, this record, the validated file build.</td>
+        <td>Sourcing open-license attributed practice passages; file hygiene; Drive placement; a classroom pilot checklist.</td>
+        <td>Theory-101 padding for a reader who built Labyrinth; scope sprawl; re-litigating settled floors.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Hard floors honored (TSP, non-negotiable)</h2>
+  <ul>
+    <li>No emoji, ever. Accessibility is the design floor, not a feature.</li>
+    <li>Single-file, offline. Large type, one decision per screen, big targets, keyboard nav with visible focus, scroll-to-top, nothing hidden at phone width or 200% zoom, never color-alone.</li>
+    <li>Type scale: body 16 minimum, card body 17, headers 22, titles 28.</li>
+    <li>Cut-paper line-art; the Reads-As test. Attribution on any literary text.</li>
+    <li>Python bracket-balance and non-ASCII validation before any large file ships.</li>
+  </ul>
+
+  <h2>Parked for v2 (named, not built)</h2>
+  <ul>
+    <li>The animated Contraption Line — machines chain into one Busytown street.</li>
+    <li>An AI-generated narrative summary of the class's collective divergence data.</li>
+    <li>Deeper standard coverage beyond the eight anchors.</li>
+  </ul>
+
+  <h1 id="log">Conversation log</h1>
+  <p class="meta">The exchange that produced the spec above, in order. Lightly cleaned for reading; decisions preserved verbatim in substance.</p>
+
+  <div class="turn user"><div class="who">Matt</div><div class="body">
+    <p>Create a game that makes kids laugh and shows them that not everyone laughs at the same things. Give them the tools to make pieces for a Rube Goldberg machine of working parts, all designed to induce different types of laughter. Players test their machines on others, measure responses by interview using an adapted suite of Confluence tools that allows for funny-norming and scoring of machines that can be shared and assembled into a huge narrative storyline.</div></div>
+
+  <div class="turn asst"><div class="who">Claude</div><div class="body">
+    <p>Checked the Confluence tooling in the project to adapt the real scoring/interview engine rather than invent one. Proposed <strong>The Laughter Foundry</strong>: a Rube Goldberg builder where every part is a laugh mechanism, machines run on real people, responses are scored by an adapted Confluence interview suite, and shared machines chain into a collective story. Ported the Confluence DNA — lens-swapping (who's laughing), evidence-required tagging (quote what made them laugh), three-phase norming (predict / test / reconcile), no-wrong-moves scoring. Core insight matches the design goal: not everyone laughs at the same things.</p></div></div>
+
+  <div class="turn user"><div class="who">Matt</div><div class="body">
+    <p>Just the specs.</p></div></div>
+
+  <div class="turn asst"><div class="who">Claude</div><div class="body">
+    <p>Delivered a build spec: laugh-part library (Setup / Trigger / Connector families, metaphorical names), the adapted interview suite mapped to the real Confluence instruments, offline machine-code sharing into a shared Contraption Line, and the baked-in lesson — the win condition is to map divergence, not to make everyone laugh. Recommendation: build phases 1–4 plus interview and export now; defer the animated chain to v2.</p></div></div>
+
+  <div class="turn user"><div class="who">Matt</div><div class="body">
+    <p>Rec.</p></div></div>
+
+  <div class="turn asst"><div class="who">Claude</div><div class="body">
+    <p>Began the build: read the frontend-design skill, set a workshop-blueprint token system (paper ground, machine-ink line-art, brass spark accent, Space Grotesk display), and opened a Python-validated construction pass.</p></div></div>
+
+  <div class="turn user"><div class="who">Matt</div><div class="body">
+    <p>Inspired by Lure of the Labyrinth metaphor-learning, Richard Scarry's catalog world-building, and David Nunan's task-based learning theory — this game uses relevant Confluence tools to assess how players demonstrate 3rd-grade proficiencies across relevant Dept of Education standards. Pre-Trump era if needed.</p></div></div>
+
+  <div class="turn asst"><div class="who">Claude</div><div class="body">
+    <p>Reframed the build from comedy toy to task-based assessment instrument. Mapped the three influences (Labyrinth = content inside the puzzle; Scarry = labeled cutaway catalog; Nunan = pre-task / task cycle / language focus) and anchored to CCSS ELA + Math Grade 3 with NGSS as a federal-era national consensus option. Asked three setup questions.</p>
+    <div class="qa"><b>Standards spine?</b> &rarr; CCSS ELA + Math (Grade 3)<br>
+    <b>What do the tools measure?</b> &rarr; Demonstrated proficiency per standard, evidence-tagged<br>
+    <b>Who reads the output?</b> &rarr; Both, separate views</div></div></div>
+
+  <div class="turn asst"><div class="who">Claude</div><div class="body">
+    <p>Issued spec v2: the four-phase task cycle, eight CCSS Grade 3 anchors with codes, the Confluence engine adapted to standards-norming, and the two-view split (kid sees no scores; teacher sees the evidence map). Asked whether to keep the full eight anchors or trim for an easier first-pilot audit.</p></div></div>
+
+  <div class="turn user"><div class="who">Matt</div><div class="body">
+    <p>Yes, but show the game plan and key TSP org principles in the game file itself, accessible for sharing with Peter. I'm designing this as proof of concept for human-in-the-loop game production by playing.</p></div></div>
+
+  <div class="turn asst"><div class="who">Claude</div><div class="body">
+    <p>Pulled the real TSP Studio OS to embed the actual framework — Gee's tight-spiral loop, Osterweil's Four Freedoms, flow, the four failure modes, the panel/HALT structure, the eyes-voice-judgment throughline. Issued spec v3: the artifact carries both the playable POC and a shareable dossier written for the named reader.</p></div></div>
+
+  <div class="turn user"><div class="who">Matt</div><div class="body">
+    <p>Do you know Peter?</p></div></div>
+
+  <div class="turn asst"><div class="who">Claude</div><div class="body">
+    <p>Said no — Peter was not in any project context; only inferable as the dossier's intended reader. Asked who he is and how much he already knows, since the dossier needs a reader model.</p>
+    <div class="qa"><b>Who is Peter?</b> &rarr; LGN colleague now at FableVision. "Guess!"<br>
+    <b>How much does he know?</b> &rarr; New to TSP and the theory</div></div></div>
+
+  <div class="turn asst"><div class="who">Claude</div><div class="body">
+    <p>Guessed Peter Stidwill — Learning Games Network co-founder, now FableVision; LGN made <em>Lure of the Labyrinth</em>, the cited influence. Noted that "new to the theory" really means new to the studio's synthesis, not to ludic pedagogy, so the dossier should skip Gee 101 and show what is distinct. Asked to verify before baking a name into a shared file.</p>
+    <div class="qa"><b>Did I guess right?</b> &rarr; Yes, Peter Stidwill<br>
+    <b>How should the file refer to him?</b> &rarr; Address FableVision broadly</div></div></div>
+
+  <div class="turn asst"><div class="who">Claude</div><div class="body">
+    <p>Locked the final spec: dossier addressed to FableVision broadly, no individual named; reader model assumes embedded-assessment fluency; the distinct pitch is the panel/HALT production process, accessibility as a design driver, and the evidence-tagging engine. Confirmed scope is the minimum viable POC, with the animated Contraption Line and AI narrative parked for v2.</p></div></div>
+
+  <div class="turn user"><div class="who">Matt</div><div class="body">
+    <p>Export memory of convo as HTML. / Drop spec and convo as one file so nothing is lost here.</p></div></div>
+
+  <div class="turn asst"><div class="who">Claude</div><div class="body">
+    <p>This file — the locked spec and the full conversation log in one portable, offline, accessible HTML record.</p></div></div>
+
+  <footer>
+    <p>Tight Spiral Studios. Play. Notice. Design. Single-file and portable by design — keep it current by folding updates in rather than starting new files. The two hard floors win when anything conflicts: no emoji, accessibility is a design floor.</p>
+    <p>Status: spec locked, build not yet written. Next action is the human's go to build the artifact.</p>
+  </footer>
+
+</main>
+</body>
+</html>
