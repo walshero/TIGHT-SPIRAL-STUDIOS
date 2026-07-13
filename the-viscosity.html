@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>The Viscosity</title>
+<!--
+  THE VISCOSITY  —  Tight Spiral Productions  —  vertical slice, 2026-07-12
+
+  ONE CLAIM: being low on the hierarchy is not "I can't see it."
+             It is "I can see it and I cannot get there."
+
+  So the descent is not a graphic of falling. It is the honeycomb STRETCHING.
+  The cells never dim. They never blur. Legibility is a floor, not a dial.
+  They just get FAR, and the crossing costs, and the task waits.
+
+  Ruled out by design: perceptual viscosity (dimming/blurring the far cells).
+  It is the truest metaphor for scarcity and this studio does not ship it.
+  Reducing legibility as a mechanic is a floor violation. Spatial only.
+
+  Exposure model (VA/VRET literature, 2026-07-12 search):
+    - graduated, never flooding: the player ADVANCES each rung. No autoplay drop.
+    - the player controls the pace: stopping on a rung is an ENDING, not a failure.
+    - there is a person after: the arc hands back to the room, never to a score.
+
+  Theory in the design, named only in ABOUT, never in the scene:
+    Herman & Chomsky (filters) · Gitlin (frame) · Hall (decode)
+    Festinger (dissonance) · Maslow (descent) · Hartman (what the record won't hold)
+
+  Single file. Offline. No external hosts. No opening wall.
+-->
+<style>
+  /* ── TOKEN-ROLE LAW ───────────────────────────────────────────────
+     A token is ATMOSPHERE or TEXT. Never both.
+     --ink/--label/--dim-ink  = text only.
+     --paper/--cell/--line/--warm = surface & decoration only.
+     Text never rides a literal. The gate must be able to see it.     */
+  :root{
+    --paper:#F2EEE3; --cell:#E4DDCC; --cell-far:#DAD2BE;
+    --line:#B9AE96;  --ink:#191C1A;  --label:#3A4340;
+    --warm:#C8860D;  --warm-ink:#141210;
+    --cool:#2F4A5A;  --cool-ink:#F2EEE3;
+    --floor:#CFC5AE;
+    --step:34px;
+  }
+  html[data-c="soft"]{
+    --paper:#DCD5C6; --cell:#CEC5B2; --cell-far:#C4BAA4;
+    --line:#9C9078; --ink:#221E16; --label:#3E382C;
+    --floor:#BEB29A;
+  }
+  html[data-c="dark"]{
+    --paper:#171512; --cell:#221F1A; --cell-far:#2B2721;
+    --line:#4E463A; --ink:#F0DFC0; --label:#CBB894;
+    --warm:#D79A22; --warm-ink:#171512;
+    --cool:#8FB4C6; --cool-ink:#171512;
+    --floor:#2E2921;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font:17px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    overscroll-behavior:none;
+  }
+  .wrap{max-width:820px;margin:0 auto;padding:.7rem .8rem 5rem;}
+
+  /* corner comfort — live control, immediately, never a gate */
+  .corner{position:fixed;top:.5rem;right:.5rem;z-index:40;display:flex;gap:.3rem;}
+  .corner button{
+    min-width:46px;min-height:46px;border:2px solid var(--line);
+    background:var(--cell);color:var(--ink);border-radius:10px;
+    font-size:15px;font-weight:700;cursor:pointer;
+  }
+  .corner button[aria-pressed="true"]{background:var(--warm);color:var(--warm-ink);border-color:var(--warm);}
+  button:focus-visible,a:focus-visible,[tabindex]:focus-visible{
+    outline:4px solid var(--warm);outline-offset:3px;
+  }
+
+  h1{font-size:25px;line-height:1.2;margin:.2rem 0 .1rem;}
+  .sub{color:var(--label);font-size:16px;margin:0 0 .7rem;}
+  .rung-name{font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--label);}
+
+  /* ── THE HONEYCOMB ─────────────────────────────────────────────── */
+  .comb{
+    position:relative;width:100%;height:376px;
+    background:var(--floor);border:2px solid var(--line);border-radius:14px;
+    overflow:hidden;touch-action:none;
+  }
+  .comb:focus-visible{outline:4px solid var(--warm);outline-offset:3px;}
+  .cellbox{
+    position:absolute;transform:translate(-50%,-50%);
+    width:132px;padding:.5rem .55rem;
+    background:var(--cell);border:2px solid var(--line);border-radius:12px;
+    transition:left .55s cubic-bezier(.3,.7,.3,1),top .55s cubic-bezier(.3,.7,.3,1);
+  }
+  .cellbox.far{background:var(--cell-far);}
+  .cellbox b{display:block;font-size:15px;line-height:1.25;}
+  .cellbox .need{display:block;font-size:14px;color:var(--label);margin-top:.15rem;}
+  .cellbox.done{border-color:var(--warm);border-width:3px;}
+  .you{
+    position:absolute;transform:translate(-50%,-50%);
+    width:26px;height:26px;border-radius:50%;
+    background:var(--cool);border:3px solid var(--paper);
+    transition:left .16s linear,top .16s linear;
+  }
+  .hint{color:var(--label);font-size:15px;margin:.45rem 0 0;}
+
+  /* ── STAIR / ELEVATOR ──────────────────────────────────────────── */
+  .stair{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:96px;height:96px;border-radius:12px;
+    background:var(--cell);border:3px dashed var(--line);
+    display:flex;align-items:center;justify-content:center;text-align:center;
+  }
+  .stair span{font-size:14px;font-weight:700;color:var(--label);line-height:1.2;}
+
+  .row{display:flex;gap:.5rem;flex-wrap:wrap;margin:.8rem 0 0;}
+  .btn{
+    min-height:48px;padding:.6rem 1rem;border-radius:11px;cursor:pointer;
+    font-size:16px;font-weight:700;border:2px solid var(--line);
+    background:var(--cell);color:var(--ink);
+  }
+  .btn.go{background:var(--warm);color:var(--warm-ink);border-color:var(--warm);}
+  .btn.cool{background:var(--cool);color:var(--cool-ink);border-color:var(--cool);}
+
+  .panel{
+    background:var(--cell);border:2px solid var(--line);border-radius:12px;
+    padding:.85rem .9rem;margin:.8rem 0;
+  }
+  .panel h2{font-size:19px;margin:0 0 .35rem;}
+  .panel p{margin:.4rem 0;}
+  .src{font-size:15px;color:var(--label);}
+  .quiet{color:var(--label);font-size:15px;}
+  hr{border:0;border-top:2px solid var(--line);margin:1.1rem 0;}
+  .hide{display:none;}
+  a{color:var(--ink);}
+  footer{margin-top:1.4rem;padding-top:.7rem;border-top:2px solid var(--line);color:var(--label);font-size:15px;}
+  @media (prefers-reduced-motion:reduce){
+    .cellbox,.you{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="corner">
+  <button id="cSoft"  aria-pressed="false" title="Softer">Aa</button>
+  <button id="cDark"  aria-pressed="false" title="Warm dark">Dk</button>
+</div>
+
+<main class="wrap">
+
+<!-- SCENE FIRST. No preference gate. No lens pick. The floor is legible on load. -->
+<h1>The train set</h1>
+<p class="sub">He is building it in the back room. It has been three years. He needs one part.</p>
+
+<p class="rung-name" id="rungName">Floor: Esteem</p>
+
+<div class="comb" id="comb" tabindex="0" role="application"
+     aria-label="Honeycomb floor. Arrow keys or WASD to move. Enter to act in a cell.">
+  <div class="stair" id="stair"><span>STAIRS<br>&amp; the book</span></div>
+  <div class="you" id="you"></div>
+</div>
+
+<p class="hint" id="hint">Arrow keys or WASD to move. Tap a cell to walk to it. Enter to act.</p>
+
+<div class="row">
+  <button class="btn cool" id="descend">Take the stairs down</button>
+  <button class="btn" id="bookBtn">Read the book by the stairs</button>
+</div>
+
+<!-- THE NOTICING BEAT — written after each rung change, never before -->
+<div class="panel hide" id="notice" role="status" aria-live="polite"></div>
+
+<!-- THE BOOK — Easter egg. Optional. Never a gate. -->
+<div class="panel hide" id="book">
+  <h2>The book by the stairs</h2>
+  <p>A worn paperback someone left on the landing. Somebody underlined this part.</p>
+  <p><em>A need, once it is met, stops being a motive. The person moves up and forgets it was ever a question. A need that is <strong>not</strong> met does not wait politely. It moves to the front and it stays there, and everything above it goes quiet — not because it stopped mattering, but because there is no room.</em></p>
+  <p class="src">Paraphrase, not quotation. Maslow, <em>A Theory of Human Motivation</em>, 1943 — public domain (US, pre-1964 without renewal). Full text: Psychological Review 50(4).</p>
+  <p class="quiet">Nothing in the book unlocks anything. It is here because it was on the landing.</p>
+  <button class="btn" id="bookClose">Put it back</button>
+</div>
+
+<!-- THE STOP — an ENDING, not a failure. Graduated exposure: the player controls the pace. -->
+<div class="panel hide" id="stop">
+  <h2>You stopped here.</h2>
+  <p id="stopWhere"></p>
+  <p>That is a real ending. You are not required to go all the way down to have understood something.</p>
+  <p class="quiet">The point was never to reach the bottom. It was to notice the floor.</p>
+  <button class="btn go" id="stopBack">Go back in</button>
+</div>
+
+<hr>
+
+<div class="panel" id="about">
+  <h2>About</h2>
+  <p>Every cell in the honeycomb is the same cell on every floor. The workplace does not change. The room with the train set does not change. The people you do not understand do not change.</p>
+  <p><strong>What changes is how far away they are.</strong></p>
+  <p class="quiet">The cells never dim and never blur. Reducing legibility as a mechanic is a floor violation in this studio, and it is also a lie: scarcity does not make the good life invisible. It leaves it in plain view and puts it out of reach.</p>
+  <p class="src"><strong>Theory in the design, not in the scene:</strong> Maslow (the floors); Festinger (what a person does when the record and the answer disagree); Gitlin (what coverage does to a story in motion); Herman &amp; Chomsky (why the coverage arrives pre-shaped); Hall (dominant, negotiated, oppositional — the reader is not passive); Hartman (what the record still refuses to hold). None of them are quoted here. Their books are not open-license. They are the instrument, not the content.</p>
+  <p class="src"><strong>Exposure model:</strong> graduated, never flooding; the player sets the pace; stopping is an ending. Drawn from VA/VRET practice, where immersion is the treatment and pacing is the patient's.</p>
+  <p class="src"><strong>Slice status:</strong> one floor set, three cells, one task. LBJ 1964 and the record-turn are specified and next.</p>
+</div>
+
+<footer>
+  Tight Spiral Productions — Play. Notice. Design.<br>
+  Single file. Offline. Nothing leaves this page.
+</footer>
+
+</main>
+
+<script>
+"use strict";
+
+/* ── THE FLOORS ────────────────────────────────────────────────────
+   Maslow, top to bottom. viscosity = how far the honeycomb stretches.
+   The cells do not change. The DISTANCE changes. That is the whole game. */
+const FLOORS = [
+  { name:"Esteem",        v:0.00, note:"You have room. The parts are a bus ride away and the bus is a bus ride." },
+  { name:"Belonging",     v:0.28, note:"Same rooms. You notice you are checking the clock in them." },
+  { name:"Safety",        v:0.62, note:"Nothing in the honeycomb moved. You are further from all of it." },
+  { name:"Physiological", v:1.00, note:"The train set is still there. It is still exactly where it was." }
+];
+
+/* ── THE CELLS ─────────────────────────────────────────────────────
+   Same three, every floor. Angles fixed. Only RADIUS grows. */
+const CELLS = [
+  { id:"work",  ang:-90, label:"The workplace",     need:"Ask for the shift you need",     act:"You ask. It costs something to ask." },
+  { id:"other", ang: 30, label:"People not like you", need:"Sit with someone unfamiliar",  act:"You sit down. It is slower than you thought." },
+  { id:"train", ang:150, label:"The back room",     need:"The part for the train set",      act:"You pick up the part. It fits." }
+];
+
+const R_NEAR = 92, R_FAR = 168;   // spatial viscosity: the stretch
+const CX = 50, CY = 50;           // percent, center of the comb
+
+let floor = 0;
+let pos   = { x:CX, y:CY+22 };
+let done  = {};
+let bookRead = false;
+
+const comb   = document.getElementById("comb");
+const youEl  = document.getElementById("you");
+const hint   = document.getElementById("hint");
+const notice = document.getElementById("notice");
+const rungEl = document.getElementById("rungName");
+const descend= document.getElementById("descend");
+
+/* build the cells once */
+const cellEls = CELLS.map(c=>{
+  const d=document.createElement("div");
+  d.className="cellbox";
+  d.innerHTML="<b>"+c.label+"</b><span class='need'>"+c.need+"</span>";
+  d.dataset.id=c.id;
+  d.setAttribute("role","button");
+  d.tabIndex=0;
+  comb.appendChild(d);
+  return d;
+});
+
+function radius(){ return R_NEAR + (R_FAR-R_NEAR)*FLOORS[floor].v; }
+
+function cellPos(c){
+  const r = radius();
+  const a = c.ang*Math.PI/180;
+  // convert px radius to % of the comb box
+  const w = comb.clientWidth  || 360;
+  const h = comb.clientHeight || 376;
+  return { x: CX + (Math.cos(a)*r)/w*100,
+           y: CY + (Math.sin(a)*r)/h*100 };
+}
+
+function layout(){
+  CELLS.forEach((c,i)=>{
+    const p = cellPos(c);
+    cellEls[i].style.left = p.x+"%";
+    cellEls[i].style.top  = p.y+"%";
+    cellEls[i].classList.toggle("far", FLOORS[floor].v >= 0.6);
+    cellEls[i].classList.toggle("done", !!done[c.id]);
+  });
+  youEl.style.left = pos.x+"%";
+  youEl.style.top  = pos.y+"%";
+  rungEl.textContent = "Floor: " + FLOORS[floor].name;
+  descend.textContent = (floor < FLOORS.length-1)
+    ? "Take the stairs down" : "There is no floor below this one";
+  descend.disabled = (floor >= FLOORS.length-1);
+}
+
+/* ── MOVEMENT ──────────────────────────────────────────────────────
+   Step size shrinks as the floor drops: a small motor cost, never enough
+   to feel like a broken control. The real cost is DISTANCE, not lag. */
+function stepSize(){ return 3.4 - 1.5*FLOORS[floor].v; }
+
+function move(dx,dy){
+  const s = stepSize();
+  pos.x = Math.max(4, Math.min(96, pos.x + dx*s));
+  pos.y = Math.max(5, Math.min(95, pos.y + dy*s));
+  youEl.style.left = pos.x+"%";
+  youEl.style.top  = pos.y+"%";
+  checkNear();
+}
+
+let nearCell = null;
+function checkNear(){
+  nearCell = null;
+  CELLS.forEach((c,i)=>{
+    const p = cellPos(c);
+    const d = Math.hypot(p.x-pos.x, p.y-pos.y);
+    if (d < 11) nearCell = c;
+  });
+  hint.textContent = nearCell
+    ? ("You are at: " + nearCell.label + ". Press Enter.")
+    : "Arrow keys or WASD to move. Tap a cell to walk to it. Enter to act.";
+}
+
+function act(){
+  if(!nearCell) return;
+  const c = nearCell;
+  done[c.id] = true;
+  layout();
+  const cost = FLOORS[floor].v;
+  let line = c.act;
+  if (cost >= 0.6) line += " It took most of what you had.";
+  else if (cost >= 0.25) line += " It took longer than it used to.";
+  show(notice, "<h2>"+c.label+"</h2><p>"+line+"</p>");
+}
+
+document.addEventListener("keydown",e=>{
+  const k=e.key.toLowerCase();
+  if(["arrowup","w"].includes(k)){ move(0,-1); e.preventDefault(); }
+  else if(["arrowdown","s"].includes(k)){ move(0,1); e.preventDefault(); }
+  else if(["arrowleft","a"].includes(k)){ move(-1,0); e.preventDefault(); }
+  else if(["arrowright","d"].includes(k)){ move(1,0); e.preventDefault(); }
+  else if(k==="enter"){ if(nearCell){ act(); e.preventDefault(); } }
+});
+
+/* tap-to-walk: phone equivalent. Walk, don't teleport — the crossing is the point. */
+cellEls.forEach((el,i)=>{
+  const go=()=>walkTo(CELLS[i]);
+  el.addEventListener("click",go);
+  el.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ go(); e.preventDefault(); } });
+});
+
+let walking=null;
+function walkTo(c){
+  if(walking) clearInterval(walking);
+  const p=cellPos(c);
+  walking=setInterval(()=>{
+    const dx=p.x-pos.x, dy=p.y-pos.y;
+    const d=Math.hypot(dx,dy);
+    if(d<1.2){ clearInterval(walking); walking=null; checkNear(); return; }
+    const s=Math.min(stepSize(), d);
+    pos.x+=dx/d*s; pos.y+=dy/d*s;
+    youEl.style.left=pos.x+"%";
+    youEl.style.top =pos.y+"%";
+    checkNear();
+  }, 46);
+}
+
+/* ── THE DESCENT — graduated. The player advances it. Never autoplay. ── */
+descend.addEventListener("click",()=>{
+  if(floor >= FLOORS.length-1) return;
+  floor++;
+  done = {};                      // the tasks reset. the rooms didn't.
+  pos  = { x:CX, y:CY+22 };
+  layout();
+  checkNear();
+  const f = FLOORS[floor];
+  show(notice,
+    "<h2>"+f.name+"</h2>"+
+    "<p>"+f.note+"</p>"+
+    "<p class='quiet'>Nothing in the honeycomb moved. Walk back to the back room and see.</p>"+
+    "<p><button class='btn' id='stopBtn'>I want to stop here</button></p>");
+  const sb=document.getElementById("stopBtn");
+  if(sb) sb.addEventListener("click",()=>{
+    document.getElementById("stopWhere").textContent =
+      "You stopped on " + FLOORS[floor].name + ". The train set is unfinished. That is also true of most train sets.";
+    hide(notice); show(document.getElementById("stop"));
+  });
+});
+
+document.getElementById("stopBack").addEventListener("click",()=>{
+  hide(document.getElementById("stop"));
+  comb.focus();
+});
+
+/* the book */
+const bookEl=document.getElementById("book");
+document.getElementById("bookBtn").addEventListener("click",()=>{ bookRead=true; show(bookEl); });
+document.getElementById("bookClose").addEventListener("click",()=>{ hide(bookEl); comb.focus(); });
+
+/* comfort — live corner control, available immediately, never a gate */
+const root=document.documentElement;
+function comfort(mode,btn){
+  const on = root.getAttribute("data-c")===mode;
+  root.setAttribute("data-c", on ? "" : mode);
+  document.querySelectorAll(".corner button").forEach(b=>b.setAttribute("aria-pressed","false"));
+  if(!on) btn.setAttribute("aria-pressed","true");
+  layout();
+}
+document.getElementById("cSoft").addEventListener("click",e=>comfort("soft",e.currentTarget));
+document.getElementById("cDark").addEventListener("click",e=>comfort("dark",e.currentTarget));
+
+function show(el,html){ if(html!==undefined) el.innerHTML=html; el.classList.remove("hide"); }
+function hide(el){ el.classList.add("hide"); }
+
+window.addEventListener("resize",layout);
+layout();
+checkNear();
+</script>
+</body>
+</html>
