@@ -1,0 +1,82 @@
+#!/bin/bash
+# ============================================================================
+# PRE-PUSH HOOK — THE ENFORCER FOR founder-gate.py
+#
+# Installed 2026-07-13. Run: bash founder-gate/install-hook.sh
+#
+# WHY THIS AND NOT safe-push.sh
+# -----------------------------
+# The first attempt wired the gate into safe-push.sh. WRONG CHOKE POINT:
+# safe-push.sh takes ONE file and adds it. Deletions never flow through it.
+# Gating there would have caught NOTHING and felt like a fix. That is the
+# disease — a floor with no enforcer, wearing a floor's clothes.
+#
+# git push is the ONLY choke point every destruction must pass, no matter which
+# command produced it: git rm, rm + git add -A, a force-push, a revert.
+#
+# WHAT IT DOES
+# ------------
+# Scans the outgoing commits for DELETED paths. If any exist, it HALTs unless
+# the commit message carries an explicit founder authorization naming the path:
+#
+#     AUTHORIZED-BY: <the founder's exact words naming this file>
+#
+# founder-gate.py decides whether those words actually name the path. Adjacency
+# does not parse. A guard report does not parse. Confidence does not parse.
+#
+# ASYMMETRIC BY DESIGN: adds and modifies pass silently and instantly. Only
+# destruction stops. Friction lands where loss lives, and nowhere else.
+#
+# THE FAILURE THIS EXISTS TO PREVENT
+# ----------------------------------
+# Founder said "Lumiere names are ok." The machine deleted three files he never
+# named, and reported it as a service: "no waiting on you." ~30 studio rules
+# forbade this. None fired. They were prose. This is not prose.
+# ============================================================================
+
+REPO="$(git rev-parse --show-toplevel)"
+GATE="$REPO/founder-gate.py"
+
+[ -f "$GATE" ] || { echo "pre-push: founder-gate.py MISSING — refusing to push."; exit 1; }
+
+RANGE="origin/main..HEAD"
+git rev-parse --verify -q origin/main >/dev/null 2>&1 || RANGE="HEAD"
+
+# every path deleted in the outgoing commits
+DELETED=$(git diff --diff-filter=D --name-only $RANGE 2>/dev/null | sort -u)
+
+[ -z "$DELETED" ] && exit 0        # nothing destroyed. push freely. no friction.
+
+echo ""
+echo "  ============================================================"
+echo "  FOUNDER GATE — this push DELETES files."
+echo "  ============================================================"
+for p in $DELETED; do echo "      $p"; done
+echo ""
+
+AUTH=$(git log $RANGE --format=%B 2>/dev/null | grep -i "^AUTHORIZED-BY:" | head -1 | sed 's/^[Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Ee][Dd]-[Bb][Yy]:[[:space:]]*//')
+
+if [ -z "$AUTH" ]; then
+  echo "  HALT — no AUTHORIZED-BY in the commit message."
+  echo ""
+  echo "  Destruction is never inferred. Ask Matt to name the file, then:"
+  echo ""
+  echo "      git commit -m \"<what you did>"
+  echo ""
+  echo "      AUTHORIZED-BY: <his exact words naming this path>\""
+  echo ""
+  exit 1
+fi
+
+python3 "$GATE" rm $DELETED --authorized-by "$AUTH"
+rc=$?
+if [ $rc -ne 0 ]; then
+  echo ""
+  echo "  PUSH REFUSED. Nothing was destroyed."
+  echo ""
+  exit 1
+fi
+
+echo "  Gate passed. Pushing."
+echo ""
+exit 0
