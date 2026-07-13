@@ -25,6 +25,9 @@
   Humor is culturally situated: the audience you poll changes what lands. That is taught, not hidden.
 
   CHANGELOG
+   v4  2026-07-13  TOKEN-ROLE LAW across playtest layer. Split --lens/--lens-ink,
+                  --amber/--amber-ink, and lifted focus rings off --ink onto --focus.
+                  Gate HALTed v3 on three dual-role tokens. 0-HALT.
    v3  2026-07-06  First playable. Core loop fires: BUILD -> SHOW -> POLL -> SEE THE GAP -> RECALIBRATE.
                   Epistemic toggle live. Glass Engine ring live. Comfort knobs live (three real stops).
 -->
@@ -42,7 +45,10 @@
     --violet:#b98cff;     /* spellcaster lens */
     --cyan:#5fd0e6;       /* coder lens */
     --rose:#ff8fa8;       /* storyteller lens */
-    --lens:var(--amber);  /* active lens colour, set by JS */
+    --lens:var(--amber);      /* DECORATION ONLY */
+    --lens-ink:var(--amber);  /* TEXT ONLY */
+    --amber-ink:#ffb347;      /* TEXT ONLY twin of --amber */
+    --focus:#f2f6fb;          /* DECORATION ONLY: focus rings (was --ink, dual-role) */
     --good:#7fe3a4;       /* signal-clean (not structural green; used only as data ink) */
     --flat:#8899ac;       /* a flat gag: honest grey, never punishing red */
     --paper-sep:0;        /* comfort stop marker, for the sweep */
@@ -211,7 +217,7 @@
   .engine .map{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:6px;}
   .engine .node{ background:var(--surface-2); border:1px solid var(--line); border-radius:12px;
     padding:10px 14px; font-size:.82rem; max-width:180px;}
-  .engine .arrow{ color:var(--lens); font-weight:800; }
+  .engine .arrow{ color:var(--lens-ink); font-weight:800; }
 
   /* ---- progress rail (Jenova flow made visible: studio vocabulary) ---- */
   .rail{ display:flex; align-items:center; gap:0; margin:22px 0 4px; }
@@ -230,7 +236,7 @@
   @keyframes fade{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
 
   .foot{ margin-top:34px; padding-top:16px; border-top:1px solid var(--line); color:var(--ink-soft); font-size:.78rem; text-align:center;}
-  .foot a{ color:var(--lens); }
+  .foot a{ color:var(--lens-ink); }
   body.daylight .foot a{ color:#7a4600; }
   .badge{ display:inline-block; font-size:.68rem; padding:3px 9px; border-radius:999px;
     background:var(--surface-2); border:1px solid var(--line); color:var(--ink-soft); margin-left:8px;}
@@ -242,9 +248,9 @@
     padding:14px 18px; min-height:52px; border-radius:var(--r);
     box-shadow:var(--shadow); display:flex; align-items:center; gap:10px;
   }
-  #pt-tab:focus-visible{ outline:3px solid var(--ink); outline-offset:3px; }
+  #pt-tab:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
   .pt-dot{
-    background:#1a1206; color:var(--amber); font-size:14px; font-weight:800;
+    background:#1a1206; color:var(--amber-ink); font-size:14px; font-weight:800;
     min-width:24px; height:24px; border-radius:12px; display:inline-flex;
     align-items:center; justify-content:center; padding:0 6px;
   }
@@ -258,7 +264,7 @@
   .pt-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:6px; }
   .pt-head b{ font-size:19px; }
   .pt-where{ color:var(--ink-soft); font-size:14px; margin-top:4px; }
-  .pt-where span{ color:var(--amber); font-weight:700; }
+  .pt-where span{ color:var(--amber-ink); font-weight:700; }
   .pt-x{
     background:var(--surface-2); color:var(--ink); border:1px solid var(--line);
     border-radius:10px; padding:10px 14px; min-height:44px; cursor:pointer;
@@ -294,6 +300,22 @@
   .pt-tag-CONFUSED{ background:var(--violet); color:#1a0c2a; }
   .pt-tag-CUT{ background:var(--flat); color:#0d1218; }
   .pt-tag-NOTE{ background:var(--surface-2); color:var(--ink); border:1px solid var(--line); }
+  /* DAYLIGHT FIX (2026-07-13). The chip inks above are near-black, tuned against
+     the ARCADE stop where --good/--amber/--rose/--violet are bright. Daylight
+     redefines those tokens darker, so dark-ink-on-dark-chip collapsed to
+     2.7-3.4:1 — real, measured, below floor. Studio Eyes ground=own, no false
+     positive. Daylight chips carry white ink instead. */
+  body.daylight .pt-tag-LANDED,
+  body.daylight .pt-tag-DELIGHT,
+  body.daylight .pt-tag-SNAG,
+  body.daylight .pt-tag-CONFUSED,
+  body.daylight .pt-tag-CUT{ color:#ffffff; }
+  /* --amber-ink must darken in daylight or it floats on light paper. */
+  body.daylight{ --amber-ink:#7a4600; }
+  /* #pt-tab rides --amber, a MID-TONE: in daylight it fails both ways (dark ink
+     3.4:1, white ink 1.3:1). No ink saves a bad chip. Fix the CHIP: daylight
+     gives it a deep surface + white ink. Contrast is arithmetic, not taste. */
+  body.daylight #pt-tab{ background:#7a4600; color:#ffffff; }
   .pt-final{ border-top:1px solid var(--line); margin-top:18px; padding-top:14px; }
   @media (max-width:520px){ .pt-q{ flex:1 1 100%; } }
 </style>

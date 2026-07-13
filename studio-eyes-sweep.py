@@ -324,6 +324,21 @@ def sweep(path):
                             if k == sel: continue
                             if sel_key_class(k) != base_cls: continue
                             if 'body.' in k: continue          # stop-specific, not base
+                            # BUG 7 (2026-07-13, Funny Boney's). Same key-class does NOT
+                            # mean same element. Two guards, or the sweep invents HALTs
+                            # and trains the studio to break working files:
+                            #
+                            # (a) STATE BOUNDARY. '.lens-btn' declares the UNPRESSED text
+                            #     colour; '.lens-btn[aria-pressed=true]' paints the PRESSED
+                            #     background. They never coexist. Grounding base text on a
+                            #     state background reported hand-tuned 12:1 buttons as 1.4:1.
+                            if ('[' in k) != ('[' in sel): continue
+                            if (':' in k) != (':' in sel):  continue
+                            # (b) COMPOUND vs DESCENDANT. '.part .pred' (a caption div) and
+                            #     '.fill.pred' (a progress-bar fill) collide on key-class
+                            #     'pred' and are unrelated elements. A compound selector
+                            #     (.a.b, no space) cannot ground a descendant one (.a .b).
+                            if (' ' in k.strip()) != (' ' in sel.strip()): continue
                             c = bg_of(k)
                             if c:
                                 own_bg, grounded_by = c, f'base:{k}'
