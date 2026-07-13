@@ -67,12 +67,37 @@ def fetch(url, timeout=20):
         return None
 
 
+_TREE = {}          # basename -> full repo path. Built once, from git.
+
+def _build_tree():
+    """BUG FOUND 2026-07-13 (the second lie): in_repo() used to fetch REPO_RAW/<name> —
+    ROOT-LEVEL ONLY, and over the CDN. Anything living in /studio, /archive, /rescued,
+    /writerly-moves 404'd, so in_repo said 'absent' and audit() called it an ORPHAN.
+    47 deployed files were listed as homeless. It also asked the network for something
+    the clone already has on disk, and the raw CDN caches ~5min and will lie anyway.
+    GIT IS AUTHORITATIVE, AND IT IS RECURSIVE. Read the tree, once, and match basename."""
+    global _TREE
+    if _TREE:
+        return _TREE
+    out = subprocess.run(["git", "ls-tree", "-r", "--name-only", "origin/main"],
+                         capture_output=True, text=True, timeout=30)
+    for p in out.stdout.splitlines():
+        p = p.strip()
+        if p:
+            _TREE.setdefault(os.path.basename(p), p)   # first wins; root paths sort first
+    return _TREE
+
+
 def in_repo(name):
-    b = fetch(f"{REPO_RAW}/{name}")
-    if not b:
+    path = _build_tree().get(name)
+    if not path:
         return None
-    return {"lane": "repo", "bytes": len(b), "md5": md5(b),
-            "address": f"{REPO_RAW}/{name}", "blob": b}
+    blob = subprocess.run(["git", "show", f"origin/main:{path}"],
+                          capture_output=True, timeout=30).stdout
+    if not blob:
+        return None
+    return {"lane": "repo", "bytes": len(blob), "md5": md5(blob),
+            "address": f"{REPO_RAW}/{path}", "blob": blob}
 
 
 def in_netlify(name):
