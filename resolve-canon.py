@@ -185,18 +185,31 @@ def check(name, local_path):
 
 def audit():
     """Every file, every lane. Where is the studio drifting RIGHT NOW?"""
-    names = set()
-    b = fetch(REPO_API)
-    if b:
-        for e in json.loads(b):
-            if e["type"] == "file":
-                names.add(e["name"])
+    # BUG FOUND 2026-07-11: this used the GitHub CONTENTS API, which is rate-limited for
+    # unauthenticated callers. When it 403'd, the repo file list came back EMPTY and every
+    # shelf file was reported as an orphan — 111 instead of 48. An audit that lies is the
+    # exact disease this whole day was spent curing. GIT IS AUTHORITATIVE. Use it.
+    repo_files = set()
+    try:
+        out_ls = subprocess.run(["git", "ls-tree", "--name-only", "origin/main"],
+                                capture_output=True, text=True, timeout=30)
+        repo_files = {l.strip() for l in out_ls.stdout.splitlines() if l.strip()}
+    except Exception:
+        pass
+    if not repo_files:                      # git unavailable: FAIL LOUD, never guess
+        print("HALT — cannot read the repo file list (no git). An audit without canon is a")
+        print("       list of lies. Run this from a clone of the repo.")
+        return 2
+
+    names = set(repo_files)
     if os.path.isdir(SHELF):
         names |= set(os.listdir(SHELF))
 
     orphans, drift, singles, stubs = [], [], [], []
     for n in sorted(names):
         if n.startswith("."):
+            continue
+        if n not in repo_files and not os.path.exists(os.path.join(SHELF, n)):
             continue
         r = resolve(n, probe_netlify=False)
         if r["verdict"] == "NOT_FOUND":
