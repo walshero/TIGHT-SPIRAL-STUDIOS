@@ -379,6 +379,36 @@ def sweep(path):
                         own_bg = bg_of(toks[k-1])
                         if own_bg: grounded_by = f'sel:{toks[k-1]}'; break
 
+            # 4: BODY. The bottom of the cascade.
+            #
+            # BUG 7 (found 2026-07-14, by canary). The walk checked the selector,
+            # the base rule, DOM ancestors, BEM prefixes, and descendant strings —
+            # and NEVER CHECKED `body`. So an element sitting DIRECTLY on the page
+            # background (the single most common case in a single-file page) found
+            # no ancestor, fell to 'page?', and was downgraded to a WARN.
+            #
+            # The canary was `.note { color: var(--ghost) }` on `body { background:
+            # var(--paper) }` — white-on-white, 1.1:1, declared three lines apart in
+            # plain CSS. The sweep MEASURED it correctly at 1.1:1 INVISIBLE and then
+            # filed it as an unproven suspicion. A brand-new file with unreadable
+            # text passed the floor.
+            #
+            # `body` is not a GUESS. It is the cascade. If nothing between the
+            # element and the root paints a background, the body paints it. That is
+            # not an assumption about a JS-injected node — it is how CSS works.
+            #
+            # The honesty rule (below) is RIGHT and stays. But it was firing on
+            # grounds that were never actually unknowable, which turned real HALTs
+            # into warnings. TICK 4 warned about exactly this: "a gate that stops
+            # false-positiving by becoming blind is not repaired; it is broken in
+            # the other direction." It was. This is that repair.
+            if not own_bg:
+                for cand in ('body', 'html', ':root'):
+                    own_bg = bg_of(cand)
+                    if own_bg:
+                        grounded_by = 'body'
+                        break
+
             # HONESTY RULE (2026-07-11). If no ancestor could be resolved, the
             # element's true background is UNKNOWN — most often a JS-injected node
             # sitting on a painted container the static tree cannot show us.
