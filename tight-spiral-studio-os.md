@@ -2298,5 +2298,37 @@ Every wrapper states in-file: base build name + version, "playtest layer added [
 *Skill-file candidate after one more proven build (three total). Until then: this block is the spec; read it before building the next playtest layer.*
 
 ---
+## 16. The Art Lane — generate, refinish, embed (locked 2026-07-14)
+
+*Scriptorium named the verb: **direct a generator, then refinish the output by hand.**
+The studio adopts the verb and fixes the source.*
+
+**16.1 — THE LICENSE WALL (hard, lane-scoped).** Generated art enters a build only from a
+source with clean commercial provenance. **Adobe Firefly qualifies** (licensed training
+corpus, commercial indemnification, connected as a live tool). **Midjourney does not** —
+unresolved license status. The Funny Boney's ruling ("all-CC, no MJ anywhere") generalizes:
+**any lane headed for institutional use, a named collaborator, or publication is MJ-free.**
+Scriptorium (ChatGPT→MJ→refinish) remains a legitimate *sketch* pipeline for
+exploration-only lanes, clearly marked, never shipped.
+
+**16.2 — THE THREE-PASS SHAPE (every generated asset):**
+1. **DIRECT** — the shot is written from the period bible / art direction BEFORE the first
+   pixel. The prompt is the Production Designer's call, not the machine's taste.
+2. **REFINISH** — the raw generation never ships. The pass is where the floors live:
+   grain and color science per the bible, the withheld figure composited by hand,
+   contrast computed on the composite, alt-text written from the final image.
+3. **EMBED** — base64 into the single file. **The offline floor forbids external HOSTS,
+   not assets.** A fat file is still one file. Budget: a room ≤ 400KB after compression;
+   over that, the Compositor rules on necessity.
+
+**16.3 — GENERATED ART IS NEVER THE SOLE CARRIER.** Inherited from the period bible:
+grain, color, and atmosphere carry mood, never meaning. Every fact in the art also lives
+in text or structure. Alt-text describes the FINAL composite.
+
+**16.4 — PROVENANCE TAG.** Every embedded generated asset carries an HTML comment at the
+embed site: generator, date, prompt summary, refinish steps. The Borges disclosure
+question is answered in the file itself.
+
+---
 
 *End of Studio OS. This document supersedes scattered notes and the earlier standalone panel file — it is the single source of truth. Keep it portable (Markdown), keep it current (fold updates in rather than starting new files), and when in doubt: the two hard walls win (no emoji; safety — trauma-informed + FERPA — protects other people and never softens), and everything sensory (contrast, motion, palette, type) ships in its best-practice default with a reachable toggle, never as a wall that stops the work (§5.6, revised 2026-06-30).*

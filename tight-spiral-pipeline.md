@@ -60,6 +60,11 @@ The player does a discipline-real task (Nunan; rank by transfer: Roles > Move-Th
 ### 3. Spec + Fidelity checklist
 Lock parameters, draw the wireframe, and **sign the Fidelity checklist** the agent runs at every playtest pre-flight (construct intact, evidence on the move, freedoms present, accessibility floor, Visibility floor, scene-first floor, no-jargon-on-surface gate, house voice). Signed before the heat.
 
+### 3.5. The Art Lane (when the Medium Gate chose photographic/generated)
+Direct → generate (Firefly only; OS §16 license wall) → refinish (floors live here) →
+embed (base64, ≤400KB/room) → gate the COMPOSITE through Studio Eyes. The raw generation
+never ships. MJ never enters a shipping lane.
+
 ### 4. MVP build (the hinge)
 Build the smallest thing that does the named job. Mechanic Prototype: art minimal, allowed to look plain. Defeats optimization-before-implementation — nothing downstream runs until the minimum ships.
 
