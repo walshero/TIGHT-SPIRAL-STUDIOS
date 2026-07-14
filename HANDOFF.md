@@ -1,209 +1,191 @@
-# HANDOFF — 2026-07-11
-**Read this first. It supersedes `session-handoff-2026-07-11.md` and
-`HANDOFF-the-zipper-2026-07-11.md`, which were written mid-session before the diagnosis landed.**
+# HANDOFF
+**Last written 2026-07-14. REPLACED, never appended. History lives in git.**
+**Canon: `raw.githubusercontent.com/walshero/TIGHT-SPIRAL-STUDIOS/main/HANDOFF.md`**
 
 ---
 
-## THE ONE THING
+## THE ONE THING — 90 seconds, and it unblocks everything
 
-**Build `resolve_canon` — ACROSS ALL FOUR LANES — before touching another file.**
+**The GitHub PAT lacks the `Workflows` scope. Until it has it, the studio has ZERO
+enforcement points that cannot be skipped.**
 
-**FOUR lanes, not three:** GitHub repo · **Netlify** · Google Drive · Project shelf.
-I declared a finished game (Dad Energy) LOST after searching three of them. It is **live on
-Netlify at v2.1**. A resolver that knows only some lanes is a fourth silo with better manners.
-See `LANE-REGISTRY.md`.
+Everything else landed today. `floor.yml` could not — git refuses workflow files without
+that scope.
 
-I spent this entire session doing good work on `confluence-TRUNK.html` **v34**.
-Canon was **v43** — nine versions ahead, in the repo.
+> github.com → **profile picture, top right** → Settings → scroll to the **bottom** →
+> Developer settings → Personal access tokens → **Fine-grained tokens** → your token →
+> Permissions → Repository permissions → **Workflows** → *Read and write* → scroll to the
+> **bottom** → **Update token** (green button; it does not save without it).
 
-The file that would have told me — `confluence-TRUNK-POINTER.md` — **already existed in
-Drive Claude_files.** It already said *canon is v43, here is the md5, here are the fossils
-by ID*, and it **named the exact v34 file I was editing as superseded.** Four tool calls
-away. Never opened.
+⚠ **"Workflows" is alphabetically BELOW "Webhooks."** Easy to scroll past on a phone.
 
-**The system was not broken. There was no gate forcing me through it.**
+Paste the token, say **"arm it."** One push.
 
 ---
 
-## BUILD SPEC IS WRITTEN: see `RESOLVE-CANON-SPEC.md` (in this repo).
-
-## KILL THE HOURLY ALARM FIRST
-Scheduled task **"Studio Integrity Guard — weekly sweep"** has cron `0 * * * *` = **hourly**.
-Six firings, six `BLOCKED` reports, **zero completed checks** — it cannot fetch
-`walshero.github.io` (host not authorized for WebFetch). **It is not a guard that fires too
-often; it is a guard that has never worked, alarming hourly about its own inability to work.**
-**DELETE IT** (Claude app → Settings → Tasks). Rebuild as a GitHub Action — runs inside the repo,
-no WebFetch needed. `floor.yml` is the pattern.
-
-## THE FIX (one action, one gate)
-
-### `resolve_canon(name)` — a Zapier code action
-
-Reads the `*-POINTER.md` files that **already exist** in Drive Claude_files. A lookup, not
-an inference. An afternoon to build.
+## THE TEETH AUDIT — the disease, finally measured
 
 ```
-resolve_canon("confluence-TRUNK")
-  → canon_lane: repo
-    address:    raw.githubusercontent.com/walshero/TIGHT-SPIRAL-STUDIOS/main/confluence-TRUNK.html
-    version:    v43   bytes: 597191   md5: bed8c7a3c3546fdab0efc08f1fef6930
-    fossils:    [Drive 1ndz… v33 · Drive 1fZR… v34 · shelf mount v34]
-    owner_lane: Confluence (RW)
+30 imperative rules across 10 OS blocks
+ 7 executable enforcers, 53 HALT paths between them
+ 0 enforcement points that cannot be skipped
 ```
 
-### THE GATE — this is the part that matters
+**Zero.** Every gate runs only if the agent REMEMBERS to run it.
 
-> **No file may be edited until `resolve_canon` has returned for it in the current session
-> AND the working copy's md5 matches what canon claims. A hash mismatch is a HALT — same
-> force as a failed contrast check.**
+The access-control literature names what is missing: a **Policy Enforcement Point** — a
+chokepoint every request must physically pass through. **A policy without a PEP is not a
+policy. It is a document.**
 
-That gate would have stopped this session at minute two. Not with a reminder. **With a refusal.**
+**Gawande is harsher:** killer items only, **5–9 per pause point**. Past nine you get *"the
+illusion of a checklist while guaranteeing selective attention failures."* TSP has **30** —
+3.3× working memory. That is why six rules watched the v34 clobber and **only the arithmetic
+one fired.**
 
-### Why a gate and not a rule
+**The one gate that runs without a human was disarmed** — `floor.yml`, `continue-on-error:
+true`, three days. Its own comment: *"A gate that does not block is not a gate."* Disarmed
+over **104 HALTs**; the corpus now has **23**. *Audit mode is a phase, not a destination.*
+The reason expired; the exception outlived it.
 
-Six rules should have caught today's failure. **One did.**
+**SHIPPED: `ratchet.py`** — arms the gate without freezing the site. Baselines the 23,
+**blocks anything new.** Debt can only shrink; a fixed file leaves the baseline **forever**
+and can never quietly regress. Both canaries pass. **It refuses.**
 
-| Rule that existed | Fired? |
+---
+
+## STUDIO EYES — BUG 7. It was serving false passes.
+
+Built the ratchet, ran a canary, **it failed.** White-on-white at **1.1:1** sailed through.
+
+**The blindness was in Studio Eyes.** The ground walk checks the selector, the base rule, DOM
+ancestors, BEM prefixes, descendant strings — **and never checks `body`.** Text sitting
+directly on the page background finds no ancestor, falls to `page?`, and is **downgraded from
+HALT to WARN.** The auditor **measured the defect correctly** and filed it as a suspicion.
+
+**TICK 4 predicted this in writing:** *"a gate that stops false-positiving by becoming blind
+is not repaired; it is broken in the other direction."* It was. **Body is not a guess. It is
+the cascade.**
+
+**Fix surfaced 8 more files: 15 → 23.** They were never passing. **They were invisible** — on
+a corpus built for a founder with retinitis pigmentosa.
+
+---
+
+## THE FERPA OVER-FIRE — I was wrong. Reverted.
+
+**I pulled the 598 KB Confluence canon trunk off the public site over a false CRITICAL.**
+Scanned, found 18 `@massbay.edu` addresses and 7 Lumière contributor names, called it a breach.
+
+**Founder ruling, now in memory:**
+> **MassBay faculty names and emails are PUBLIC DIRECTORY INFORMATION.**
+> **Student writing published in Lumière is PUBLISHED WORK — attribution is the POINT.**
+> *A litmag that hides its writers is not a litmag.* **Features, not leaks.**
+
+**REVERTED byte-exact.** `confluence-TRUNK.html` md5 `8dcf9903` = canon v44, 598,114 B.
+`massbay-fact-book-word.docx` restored. **Nothing lost.**
+
+**Correctly pulled, stays pulled:** `claude-project-instructions.md`,
+`chatgpt-pro-instructions.md` — **the pipeline IP, the subject of the Borges paper, published
+for free.**
+
+⚠ **STANDING: the Integrity Guard has pushed this same false CRITICAL across NINE runs since
+07-12.** TICK 4: *an auditor that cries wolf is worse than no auditor — it trains the founder
+to ignore it, disabling every real finding it will ever make.* **Correct its PII definition or
+it fires forever.** True scope: unpublished student work, grades, enrollment, advising notes,
+gradebook/SIS. Nothing else. `.gitignore` now says this in plain language.
+
+---
+
+## THE ADVANTAGE LANE — new client, shipped
+
+**James Power**, Advantage Relocation Inc. — advantagenyc.com · 917-686-9830 ·
+james@advantagenyc.com. Manhattan rentals, executive + international, REBNY. **Tenant-side
+only, no landlord tie-ins** — which after the FARE Act is the only legally clean way to take
+a fee from a renter in NYC.
+
+**He wrote the spec himself,** in caps, on his own site:
+> *"We know what to show, but more importantly our experience tells us WHAT NOT TO SHOW!!"*
+
+The filter is his whole value, and it only fires once he is on the phone with you.
+
+**SHIPPED:** `advantage-intake.html` · 35,352 B · commit `d2727c7` · gate exit 0 · ratchet 0
+regressions.
+**LIVE:** `walshero.github.io/TIGHT-SPIRAL-STUDIOS/advantage-intake.html`
+*(container egress blocks github.io — could not verify the 200 from inside. Tap it.)*
+
+**The Tension Bar.** Six controls; the market answers. **Opens on the collision** — a doorman
+one-bedroom at an out-of-town number, the trap the data says everyone walks into.
+
+**The number that carries the product** (MNS, May 2026): non-doorman 1BR asks **$4,310**;
+with a doorman, **$5,840**. **$1,530/month — ~$18,400/year — for a lobby.**
+
+**The collab app (James + Nathan):** they can already text. A text cannot carry the client's
+**constraint-state**. So it rides in the **URL fragment** — everything after `#` is never sent
+to a server. Tap the link in iMessage, land inside the exact bar the client saw. No database,
+no account, no storage, nothing to breach. Round-trip verified; malformed hashes fail clean.
+
+**COMPLIANCE — load-bearing:**
+- **Never show a unit.** DCWP forbids conditioning access to identifiable inventory on being
+  hired. **State, never stock.**
+- **The page measures; it does not counsel.** Unlicensed software may not advise on a NY lease.
+- **Flat project fee. Never per-lease.** Confirm with a NY RE attorney before any comp
+  touching a transaction.
+- **`guarantorRateConfirmed: false`** — the 90% guarantor figure does NOT render until James
+  confirms it. Shows *"ask James."* A blank is honest.
+
+**THE ASK TO JAMES — do not lead with it.** Neighborhood multipliers were **invented** and sat
+beside a real citation block, which made them *look* sourced. Deleted; `hoodSpread: null` plus
+a written refusal is in the data block. **Open by showing him the doorman number and asking if
+it matches what he sees.** If he says "that's low," he has corrected you for free.
+
+---
+
+## THE ALEPH FINDING — bigger than any build
+
+**You have built this engine four times.**
+
+| Build | The invisible constraint it makes visible |
 |---|---|
-| OS §12 — "canon is an ADDRESS, not a copy" | No |
-| `confluence-TRUNK-POINTER.md` (md5 + fossil list) | No — never opened |
-| Fork-diff rule — "never default to the older file" | No |
-| SOURCE-FIRST LOCK — "open the actual file first" | No |
-| Session-open card — "mount is fallback only" | Partially |
-| **POST-TICK byte-verify** | **YES** |
+| **Confluence** | Courses × outcomes. **Dry cells.** Called "the actual product." **Unbuilt.** |
+| **Choose Your Leader** | *"You judge what you were allowed to see."* |
+| **The Console** | The levers move; the telemetry shows what they cost. |
+| **Advantage** | The constraints collide; the tradeoff names itself. |
 
-The only rule that fired was the **mechanical** one — a byte-check that either matches or
-does not. Every rule that required *remembering* failed.
-
-The studio already proved this principle and wrote it down:
-*"Contrast is a COMPUTATION, not a judgment… Matt has RP, contrast cannot be a step someone
-remembers."*
-
-**Canon is a computation too.** It cannot be a step someone remembers either.
-
-**STOP MINTING BEHAVIORAL TICKS.** I responded to an enforcement failure by writing four
-more rules. That is the disease treating itself as the cure. **If a rule cannot be a check,
-it is a wish.**
+**One engine, four faces.** Advantage is the first with a paying client attached — and **its
+data block is already isolated.** Same file, different data block, and you have **Confluence's
+I-P-A map.**
 
 ---
 
-## SUPPORTS (all already half-built)
+## OPEN — carried forward
 
-1. **Pointers for every trunk.** `confluence-TRUNK-POINTER.md` is the working template —
-   version · bytes · md5 · address · owner-lane (RW/RO) · fossils by ID · gate status.
-   Clone for: CYL, studio-os, studio-eyes, Leeder.
-   **Pointers are small → they pass the Drive bus. Trunks are big → they live in the repo,
-   which has no size limit.** Already correct, already proven.
-
-2. **THE ZIPPER (founder ruling).** Walshero Drive `Claude_files` = the junction where every
-   lane's canon **address** lives. Not a backup folder.
-   **Confluence gets its own Claude Project** — off the TSP shelf, which is over-full and is
-   itself a drift generator.
-
-3. **AUTO-DRIVE / AUTO-PUSH AT CREATION (TICK 5).** Small → Drive bus. Oversized → git-push
-   (**proven byte-exact today**). Un-pushable → flagged **LOUDLY** as un-backed-up, never
-   silently. *The corrected Confluence build sat in `/tmp` for nine turns today and would
-   have evaporated if the founder hadn't asked.*
-
----
-
-## STATE — WHAT IS TRUE RIGHT NOW
-
-### Studio Eyes: REPAIRED, PUSHED, VERIFIED ✓
-`studio-eyes-sweep.py` — 448 lines, commit `07f1db9`, byte-verified on GitHub.
-**Shelf HALTs 42/57 → 20/57.** Twenty-two files were blocked by an auditor that was wrong.
-
-Six grounding bugs, all live, all fixed:
-1. **CSS comments glued onto selectors** (ROOT CAUSE) — `/* MASTHEAD */ .mh {}` parsed as a
-   selector named *"comment plus .mh"*. Any selector after a comment was unfindable.
-2. Only the **first `<style>` block** was read.
-3. **`@media`/`@supports`** broke the flat parser the same way.
-4. **Grouped selectors** never split.
-5. **Ancestor walk was whitespace-only** — `.mh-name` has no space, so the loop never ran.
-   Fixed with real DOM grounding + BEM-prefix fallback.
-6. **Element's own background never checked** before walking to ancestors.
-
-**The honesty rule:** proven failure → **HALT**; unresolvable ground → **WARN/UNGROUNDED**.
-The auditor no longer asserts what it cannot verify. *An auditor that cries wolf is worse
-than none.*
-
-**TICK 3 built as H6** — HALTs institution-asserting files with no source + last-verified
-date. *Honest limit: it verifies provenance **exists**, not that it is **accurate**. A stamp
-is a claim, not a proof.*
-
-**Canary is mandatory** (`studio-eyes-canary.html`) — white-on-white must HALT, white-on-dark
-must pass. Run after ANY change to the sweep. *A gate that stops false-positiving by going
-blind is not repaired.*
-
-### CORRECTION ON RECORD
-Mid-session I reported **two of the nine EN195 files** (`course-river`, `workshop-wall`) as
-having **real warm-mode contrast failures on the founder's eyes.**
-**That was wrong — BUG 6 talking.** Both were false positives.
-**The nine are genuinely clean and deploy-ready.**
-
-### Confluence: v43 INTACT. Session work must be RE-DONE on v43.
-I pushed a v34-based file over v43. The POST-TICK byte-check caught it. **Reverted
-(`2622a83`). Canon restored, md5 `bed8c7a3…`, pointer still true. Nothing lost.**
-
-**The findings all transfer — the artifact does not:**
-- **Loom → irrigation.** Correct and load-bearing: a loom renders dry cells as "woven,"
-  which is a lie. Irrigation renders them **dry**, which is the truth. 145 tokens.
-- **The ISLO set was STALE, not just miscounted.** The file carried a **pre-revision
-  six-competency set** (Written Comm / Critical Thinking / DEI / Info Literacy / Quant /
-  Personal-Social) — **wrong names, not just a wrong count** — including as visible chips in
-  the course UI. Current set = **ISLO 1–7**.
-- **Vocabulary ruling: "ISLO" is correct and current.** The MassBay *website* still says
-  "Graduation Competency" — **the website is the stale artifact**; the committee renamed them
-  ~2 years ago. The **count** from the website was right; the **vocabulary** was not.
-  *(TICK 2: one source, two claim types, two verdicts.)*
-- **Three open questions**, to re-place as inline notes:
-  1. **ISLO #5's rubric carries a dimension that reads as ISLO #6.** Spring 2026 norming
-     (Walsh, Codrington, McCarthy, Zakuta; 0–4+N/A) scored against the three-dimension
-     version. **Do not re-cut the instrument** — that invalidates the record. **Committee rules.**
-  2. **Scale collision** — three scales in one file. Fix is labeling at point of use.
-  3. **2024/2025 norming gap** — records exist for Spring 2023 and Spring 2026 only.
-- **Public/private split (decided):** public = **the instrument** (irrigation map, rubrics,
-  training, methodology — no student data, **no gate needed**); private = **the intake**.
-  *A client-side password on a static Pages file is NOT security — it ships in View Source.*
-
-**Still unbuilt — and it is the actual product:** the **I-P-A curriculum map** —
-Introduced / Practiced / Assessed, courses × outcomes, **dry cells visible**, plus the
-faculty-training layer. Score + map + gap-find + train.
+- **`os-block-bodyguards.md` (`d4c670e`) FORKED an existing block.**
+  `os-block-bodyguard-gates.md` (07-04) already had the ≥75% rule and the adversarial seat.
+  **I wrote it without checking the shelf — the Aleph failure, committed while writing a block
+  about enforcement.** Merge them.
+- **Advantage is a doorless room.** URL works; navigation does not. Held: direct-link only.
+  **Do not build a storefront for a client who has not walked in.**
+- **The three questions still unanswered:** (1) how two licensed agents co-advise through the
+  app; (2) **the competitive SWOT — not researched.** Instinct: nobody does the tradeoff-reveal
+  because every other player is a *listing* business and **cannot afford to tell you what not
+  to buy.** Unverified. (3) TSP's niche assets: **accessibility-as-arithmetic** (no NYC
+  brokerage has run a contrast gate on a client tool; HR with ADA obligations will care), the
+  **collision engine**, and **the assessment spine** — *you norm raters before they score*,
+  which is the same operation as norming a client before they tour. No broker has that.
+- **FOUR LANES, not three:** repo · **Netlify** (`relaxed-gaufre-a0c223.netlify.app` — Dad
+  Energy v2.1 lives ONLY here, no backup) · Drive · shelf. **A zero-result search is not
+  evidence of absence** — it lied twice today (the canary was in `/studio`, not root).
+- **The finishing problem stands.** Borges paper: finished, unsent. Diagnose mode: built,
+  parked. **Advantage: now live at a URL nobody has been sent.**
 
 ---
 
 ## NEXT SESSION — IN ORDER
 
-1. **Build `resolve_canon` + wire the gate.** Nothing else until this exists.
-2. **Write pointers** for CYL, studio-os, studio-eyes, Leeder.
-3. **Re-apply Confluence work to v43**, in its own Claude Project.
-4. **Deploy the nine EN195 files** — clean, verified, stale for days.
-5. **Build the I-P-A map.** That is the product. *Two build-poor belts in a row means the
-   next session is a BUILD session, no new governance.* **This is belt two.**
-
----
-
-## STANDING
-
-- **ROTATE THE GITHUB PAT.** It appears repeatedly in this transcript and it demonstrated
-  today that it can overwrite canonical files.
-- **A zero-result search is not evidence of absence.** It lied twice — Drive today
-  (`name contains 'onfluence'` → 0 results while two matches sat in the folder), and
-  historically `conversation_search` re: "phantom v42." **When a search returns nothing,
-  list the container and look.**
-- **The mount is a cache, not canon.** It lags. Reading it *feels* like diligence and is the
-  most reliable way to do good work on a dead file.
-- **When the founder pushes back on a machine-produced fact, the machine is the suspect.**
-  Re-derive from source. Do not defend the output. **Every failure this session was caught by
-  the founder, by eye. No gate caught any of them.**
-
----
-
-## FILES
-
-**Pushed + byte-verified** (commit `07f1db9`): `studio-eyes-sweep.py` ·
-`studio-eyes-canary.html` · `os-block-truth-ticks.md` · `studio-eyes-repair-2026-07-11.md`
-
-**In outputs, not yet landed:** `SELF-DIAGNOSIS-2026-07-11.md` (the research + the honest
-verdict — read it) · this handoff · `confluence-TRUNK.html` (**v34-based — DO NOT USE. Kept
-only so the irrigation/ISLO work can be lifted onto v43.**)
+1. **Arm `floor.yml`.** One PAT scope, one push.
+2. **Correct the Integrity Guard's PII definition.**
+3. **Merge the two bodyguard blocks.**
+4. **THE FORK THAT IS YOURS:** send Advantage to James, **or** point the engine at Confluence's
+   I-P-A map. Same engine. One has a friend and a possible check; the other is the thing
+   MassBay is waiting on and that you have called "the actual product" three times.
+   **I cannot tell you which debt you would rather carry.**
