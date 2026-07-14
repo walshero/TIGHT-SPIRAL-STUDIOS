@@ -134,6 +134,26 @@ textarea:focus-visible{outline:3px solid var(--cool);outline-offset:2px}
 .send:focus-visible{outline:3px solid var(--paper-ink);outline-offset:3px}
 .hire-alt{margin:14px 0 0;font-size:14px;opacity:.82}
 
+/* the collab lane — for the two people who work this together */
+.lane{margin-top:34px;padding:20px 20px 22px;border:1.5px solid var(--rule);
+  background:var(--limestone-2);border-radius:2px}
+.lane-h{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--brass-ink);margin:0 0 8px;font-weight:700}
+.lane-b{margin:0 0 15px;font-size:15px;color:var(--ink-2);max-width:62ch}
+.lane-btn{font-family:var(--sans);font-size:15.5px;font-weight:600;padding:12px 20px;
+  background:var(--slab);color:var(--paper-ink);border:0;border-radius:2px;cursor:pointer}
+.lane-btn:hover{background:var(--slab-2)}
+.lane-btn:focus-visible{outline:3px solid var(--cool);outline-offset:3px}
+.lane-out{margin:12px 0 0;font-size:14.5px;color:var(--cool-ink);font-weight:600}
+.linkbox{width:100%;margin-top:7px;font-family:var(--mono);font-size:13px;padding:9px;
+  border:1.5px solid var(--rule);border-radius:2px;background:var(--limestone);color:var(--ink)}
+
+/* the handoff banner — only renders when a shared link was opened */
+.handoff{margin-top:26px;padding:14px 17px;border-left:4px solid var(--cool);
+  background:var(--limestone-2);border-radius:0 2px 2px 0}
+.handoff p{margin:0;font-size:15px;color:var(--ink-2)}
+.handoff b{color:var(--ink)}
+
 .stale{margin-top:26px;padding:13px 16px;border:1.5px solid var(--alert);
   background:var(--limestone-2);border-radius:2px}
 .stale p{margin:0;font-size:15px;color:var(--alert-ink);font-weight:600}
@@ -182,6 +202,7 @@ textarea:focus-visible{outline:3px solid var(--cool);outline-offset:2px}
 </section>
 
 <main class="wrap">
+<div id="handoff-slot"></div>
 <div class="deck">
 
   <div class="field">
@@ -270,6 +291,15 @@ textarea:focus-visible{outline:3px solid var(--cool);outline-offset:2px}
 </section>
 
 <div id="stale-slot"></div>
+
+<section class="lane">
+  <p class="lane-h">For James and Nathan</p>
+  <p class="lane-b">Copy this reading as a link. Paste it into a text and it opens the exact bar
+    the client saw &mdash; same terms, same distance, same verdict. Nothing goes to a server;
+    the state travels inside the link itself.</p>
+  <button class="lane-btn" id="copy">Copy this reading as a link</button>
+  <p class="lane-out" id="copy-out"></p>
+</section>
 
 <div class="src">
   <p><b>Where these numbers come from.</b> Median and average asking rents: Corcoran,
@@ -437,28 +467,33 @@ textarea:focus-visible{outline:3px solid var(--cool);outline-offset:2px}
           "% above your number. <b>That is the market talking, not you.</b> At "+DATA.vacancy+
           " vacancy, landlords are not negotiating it away. So something moves, and you get to "+
           "pick which. ";
+      /* THE LICENSE WALL. The page reports ARITHMETIC. It does not COUNSEL.
+         "The cheapest thing to move is the doorman" is a recommendation, and an
+         unlicensed piece of software may not recommend a course of action on a
+         New York lease. "The doorman is the largest single line in the gap" is
+         the same insight and it is a MEASUREMENT. The client draws the
+         conclusion. James — who is licensed — gives the advice. */
       if(S.door==="yes"){
-        t += "<b>The cheapest thing to move is the doorman.</b> It is carrying about "+
-             money(b.prem)+" a month of that distance &mdash; close to "+money(b.prem*12)+
-             " a year. Drop it and watch the bar.";
+        t += "<b>The doorman is the largest single line in that gap.</b> It accounts for about "+
+             money(b.prem)+" a month of it &mdash; close to "+money(b.prem*12)+
+             " a year. Switch it off and watch the bar.";
       } else if(S.beds==="2br"){
-        t += "<b>The second bedroom is carrying most of it.</b> A one-bedroom is asking about "+
-             money(DATA.rent["2br"].nd - DATA.rent["1br"].nd)+" a month less.";
+        t += "<b>The second bedroom is the largest single line in that gap.</b> A one-bedroom is "+
+             "asking about "+money(DATA.rent["2br"].nd - DATA.rent["1br"].nd)+" a month less.";
       } else {
-        t += "<b>At this point the map is the only lever left.</b> Tell us below where you are "+
-             "picturing and why. That is usually where the room is.";
+        t += "<b>Size and doorman are already at their floor.</b> What is left is the map. Tell us "+
+             "below where you are picturing, and why &mdash; that is usually where the room is.";
       }
     }
     else if(B > b.hi*1.18){
       box.classList.add("clear");
       h.textContent = "You have room";
       t = "You are sitting above what these are asking. In a market at "+DATA.vacancy+
-          " vacancy, that is leverage, and leverage is rare. <b>Spend it on the apartment, not "+
-          "on a bigger apartment</b> &mdash; the higher floor, the light, the building that "+
-          "answers the phone at 8 a.m.";
+          " vacancy, that is unusual &mdash; most people arrive under it. "+
+          "<b>Room to move is the rarest thing on this page.</b>";
       if(S.door!=="yes"){
-        t += " A doorman runs about "+money(b.prem)+" a month more. At your number that is a "+
-             "live choice rather than a stretch.";
+        t += " For reference, a doorman adds about "+money(b.prem)+" a month to the ask. "+
+             "At your number that is inside the band rather than outside it.";
       }
     }
     else {
@@ -492,13 +527,30 @@ textarea:focus-visible{outline:3px solid var(--cool);outline-offset:2px}
     }
 
     if(S.payer==="intl"){
-      var guar = target*12*DATA.guarantorRateOfAnnualRent;
-      extra = guar;
-      rows.push(["No US credit history &mdash; a guarantor service, about "+
-                 Math.round(DATA.guarantorRateOfAnnualRent*100)+"% of a year&rsquo;s rent",
-                 "about "+money(guar), true]);
-      rows.push(["&nbsp;&nbsp;<i>or</i> a landlord who wants prepaid rent instead",
-                 "up to "+money(target*3), true]);
+      /* HOLLOW-CLAIM GATE. The 90% guarantor rate is a common market figure and
+         it is NOT CONFIRMED with James. An unconfirmed number rendered in
+         monospace with a dollar sign is a lie a client will believe — a renter
+         from Milan reads "about $54,000" and plans around it.
+
+         So: if it is not confirmed, THE NUMBER DOES NOT RENDER. A blank is
+         honest. A confident wrong figure is the Confluence failure wearing a
+         dollar sign. Confirm the rate with James, flip the flag, and the
+         arithmetic comes back on. */
+      if(DATA.guarantorRateConfirmed){
+        var guar = target*12*DATA.guarantorRateOfAnnualRent;
+        extra = guar;
+        rows.push(["No US credit history &mdash; a guarantor service, about "+
+                   Math.round(DATA.guarantorRateOfAnnualRent*100)+"% of a year&rsquo;s rent",
+                   "about "+money(guar), true]);
+        rows.push(["&nbsp;&nbsp;<i>or</i> a landlord who wants prepaid rent instead",
+                   "up to "+money(target*3), true]);
+      } else {
+        rows.push(["No US credit history &mdash; you will likely need a guarantor service, "+
+                   "or a landlord willing to take prepaid rent",
+                   "ask James", true]);
+        rows.push(["&nbsp;&nbsp;<i>This is the single biggest surprise for people moving from "+
+                   "abroad, and the number is worth getting right before you fly.</i>", "", false]);
+      }
     }
 
     rows.push(["<b>Cash before you hold the keys</b>",
@@ -524,6 +576,84 @@ textarea:focus-visible{outline:3px solid var(--cool);outline-offset:2px}
     }
   }
 
+  /* ==================================================================
+     THE COLLAB LINK — the whole reason this is software and not a phone call.
+
+     James and Nathan can already text. What a text CANNOT carry is the client's
+     CONSTRAINT-STATE. "Wants a 2BR doorman around $6k, Tribeca-ish" flattens six
+     controls into one sentence, and whoever reads it cannot see the SHAPE of the
+     collision. They rebuild the entire read from scratch, from a paraphrase.
+
+     So the state rides in the URL fragment. Tap the link in iMessage and land
+     inside the exact bar the client saw — same band, same distance, same verdict.
+
+     WHY THE FRAGMENT SPECIFICALLY:
+       - Everything after '#' is NEVER SENT TO A SERVER. It does not appear in
+         request logs, referrer headers, or analytics. It lives only in the phones
+         that hold the link.
+       - No database. No account. No storage API. Nothing to breach, nothing to
+         retain, and nothing that turns a two-person brokerage into a data
+         controller with obligations it never asked for.
+       - The file stays single, offline, and openable on a plane.
+
+     THE DCWP WALL: this link carries STATE, never STOCK. Six controls and a note.
+     No unit, no address, no listing, ever. The moment software routes inventory
+     between agents and back to a client, it stops being an instrument and starts
+     conditioning access on the relationship — the exact thing the FARE Act
+     forbids. State only.
+     ================================================================== */
+  function encodeState(){
+    var w = document.getElementById("where").value.trim();
+    var q = [S.budget, S.beds, S.door, S.when, S.payer].join("|");
+    if(w) q += "|" + w.slice(0,240);          /* a note, not a dossier */
+    return btoa(unescape(encodeURIComponent(q)));
+  }
+
+  function setGroup(id,val){
+    var kids = document.getElementById(id).querySelectorAll(".opt");
+    for(var i=0;i<kids.length;i++){
+      kids[i].setAttribute("aria-pressed",
+        kids[i].getAttribute("data-v")===val ? "true" : "false");
+    }
+  }
+
+  function decodeState(){
+    var h = window.location.hash;
+    if(!h || h.length < 2) return false;
+    try{
+      var p = decodeURIComponent(escape(atob(h.slice(1)))).split("|");
+      if(p.length < 5) return false;
+
+      /* Validate everything. A malformed hash must fail to a clean default,
+         never to a half-loaded state that looks authoritative and is wrong. */
+      var bud = parseInt(p[0],10);
+      if(isNaN(bud) || bud < LO || bud > HI)            return false;
+      if(!DATA.rent[p[1]])                              return false;
+      if(["yes","flex","no"].indexOf(p[2])   < 0)       return false;
+      if(["30","60","90"].indexOf(p[3])      < 0)       return false;
+      if(["corp","self","intl"].indexOf(p[4])< 0)       return false;
+
+      S.budget=bud; S.beds=p[1]; S.door=p[2]; S.when=p[3]; S.payer=p[4];
+      if(p[5]) document.getElementById("where").value = p.slice(5).join("|");
+
+      slider.value = S.budget;
+      document.getElementById("budget-read").textContent = money(S.budget);
+      setGroup("beds",S.beds); setGroup("door",S.door);
+      setGroup("when",S.when); setGroup("payer",S.payer);
+      return true;
+    } catch(e){ return false; }
+  }
+
+  /* Only shown when a link was opened. A client on a cold load never sees the
+     internal lane exists. */
+  function showHandoff(){
+    document.getElementById("handoff-slot").innerHTML =
+      '<div class="handoff"><p><b>Opened from a shared link.</b> These are the terms the client '+
+      'set, exactly as they saw them &mdash; same band, same distance, same reading. Nothing was '+
+      'sent to a server; the state travelled inside the link.</p></div>';
+  }
+
+  /* wiring */
   var slider=document.getElementById("budget");
   slider.addEventListener("input", function(){
     S.budget = +slider.value;
@@ -568,8 +698,31 @@ textarea:focus-visible{outline:3px solid var(--cool);outline-offset:2px}
       "&body="+encodeURIComponent(body);
   });
 
+  /* THE COPY-LINK CONTROL — the collab lane. Not a share button for the client;
+     a handoff for the two people who work this together. */
+  document.getElementById("copy").addEventListener("click", function(){
+    var url = window.location.href.split("#")[0] + "#" + encodeState();
+    var out = document.getElementById("copy-out");
+    function done(msg){ out.textContent = msg; }
+
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(
+        function(){ done("Link copied. Paste it into a text — it opens this exact reading."); },
+        function(){ fallback(); }
+      );
+    } else { fallback(); }
+
+    function fallback(){
+      /* No clipboard API (older iOS in a webview, http context). Show the link
+         and let them long-press it. An error is a moment for direction, not mood. */
+      out.innerHTML = 'Copy this link:<br><input class="linkbox" readonly value="'+
+        url.replace(/"/g,"&quot;")+'" onclick="this.select()">';
+    }
+  });
+
   if(window.scrollTo) window.scrollTo(0,0);
   staleCheck();
+  if(decodeState()) showHandoff();     /* a shared link overrides the default state */
   paint();
 })();
 </script>
