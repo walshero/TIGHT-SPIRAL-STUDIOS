@@ -2329,6 +2329,26 @@ in text or structure. Alt-text describes the FINAL composite.
 embed site: generator, date, prompt summary, refinish steps. The Borges disclosure
 question is answered in the file itself.
 
+### 16.5 — The Representation Wing (seated 2026-07-14, founder hire)
+
+*Convened for the three-homes build and standing for every scene after. These are not
+advisory flounders — two hold HALTs. The wing exists because the stock-search failure
+proved the point: stock photographs the present, and the comfortable present at that.
+The other Americas of any era must be DIRECTED, or they will be defaulted — and a
+default is always somebody's stereotype.*
+
+| seat | owns | power |
+|---|---|---|
+| **Social Historian of the American Home** | Material culture per era, region, class, race — what is actually IN the room: the furniture, the appliances, the wear, the pride. Reads every DIRECT prompt before it fires. | **HALT** on anachronism or stereotype |
+| **Representation Reader** | The dignity read: is this home rendered as a LIFE or as a lesson? Poverty is not squalor; difference is not deficit. Sits with Trauma-Informed. | **HALT** on caricature |
+| **Media Historian (1962 information diets)** | Who actually got news HOW — three networks vs. kitchen radio vs. weekly paper vs. the barbershop and the church. The fog of each home is sourced, not imagined. | Sourcing sign-off per home |
+| **The Colorist (period)** | Kodachrome vs. Ektachrome vs. newsprint gray — each home's palette derives from its media diet, per the period bible's color science. | Advisory to DP |
+
+**Standing rule:** no DIRECT prompt for a home fires until the Historian and the Reader
+have both passed it. The withheld-figure law holds in every home — the rooms carry
+lives, never faces. Representation lives in the material culture, and material culture
+is checkable: that is what makes this a gate and not a vibe.
+
 ---
 
 *End of Studio OS. This document supersedes scattered notes and the earlier standalone panel file — it is the single source of truth. Keep it portable (Markdown), keep it current (fold updates in rather than starting new files), and when in doubt: the two hard walls win (no emoji; safety — trauma-informed + FERPA — protects other people and never softens), and everything sensory (contrast, motion, palette, type) ships in its best-practice default with a reachable toggle, never as a wall that stops the work (§5.6, revised 2026-06-30).*
