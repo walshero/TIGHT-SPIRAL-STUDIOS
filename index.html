@@ -1,184 +1,641 @@
 <!DOCTYPE html>
 <html lang="en">
-<!--
-  ══════════════════════════════════════════════════════════════════
-  TIGHT SPIRAL PRODUCTIONS — THE FRONT DOOR
-  Rebuilt 2026-07-11. Previously this page linked three things while
-  the studio had shipped seven. The games existed and could not be found.
-
-  House rules held: single-file, offline, no external hosts. No emoji.
-  Text tokens never ride a decorative color. Comfort is a live corner
-  control, never a gate. Scene first.
-  ══════════════════════════════════════════════════════════════════
--->
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Tight Spiral Productions</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tight Spiral Productions — instruments that make the constraint visible</title>
+<meta name="description" content="An instrument shop. We build things that show you the rules while they are being run on you. Games, assessment tools, and client instruments — all single-file, all offline, all accessibility-gated.">
+
+<!-- tsp:source        studio corpus, git ls-tree origin/main 2026-07-14 (33 files, counted not remembered)
+     tsp:last-verified 2026-07-14
+     tsp:canon         raw.githubusercontent.com/walshero/TIGHT-SPIRAL-STUDIOS/main/index.html
+     tsp:floor         single-file · offline · zero external hosts · contrast-gated · no emoji
+     PLAYTEST INTAKE writes to Supabase. That is the ONE network call on this page and it
+     fires ONLY when a person taps send. Nothing is collected by loading this page. -->
+
 <style>
-  :root{
-    --paper:#141a1f;
-    --surface:#1d252c;
-    --surface-2:#26303a;
-    --ink:#eef2f5;        /* TEXT — 15.8:1 on paper */
-    --ink-dim:#c3ccd4;    /* TEXT — 9.9:1 on surface */
-    --label:#d9b98c;      /* TEXT accent — 8.1:1 on surface */
-    --accent:#c9b48d;     /* button surface */
-    --accent-ink:#161109; /* rides only on --accent */
-    --glow:#a8763a;       /* ATMOSPHERE ONLY — never text */
-    --rule:#3a464f;
-    --focus:#9fd0ff;
-    --tap:44px;
-  }
-  html[data-comfort="softer"]{
-    --paper:#222a31; --surface:#2d3740; --surface-2:#39454f;
-    --ink:#fbf8f2; --ink-dim:#dfe5eb; --label:#e5c99f;
-  }
-  html[data-comfort="warm"]{
-    --paper:#17110a; --surface:#251c10; --surface-2:#332612;
-    --ink:#ffe7ba; --ink-dim:#f1d49d; --label:#ffd08c;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0;background:var(--paper);color:var(--ink);
-    font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;
-    font-size:clamp(17px,2.5vw,19px);line-height:1.55;
-    -webkit-font-smoothing:antialiased;
-  }
-  .u{font-family:"Helvetica Neue",Arial,sans-serif;letter-spacing:.1em;
-     text-transform:uppercase;font-size:.68rem;font-weight:700}
-  .wrap{max-width:680px;margin:0 auto;padding:max(24px,env(safe-area-inset-top)) 22px 80px}
+:root{
+  /* GROUND */
+  --paper:      #fbfaf7;   /* never pure white — it blooms on an RP retina */
+  --paper-2:    #f1eee6;
+  --rule:       #d8d2c4;
 
-  /* comfort — live corner control, immediate, never a gate */
-  .comfort{position:fixed;top:8px;right:8px;z-index:60;display:flex;gap:4px;
-    background:rgba(10,14,18,.85);backdrop-filter:blur(6px);
-    padding:5px;border-radius:999px;border:1px solid var(--rule)}
-  .comfort button{min-width:44px;min-height:44px;border-radius:999px;border:1px solid transparent;
-    background:transparent;color:var(--ink-dim);font-size:1rem;cursor:pointer;line-height:1}
-  .comfort button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-  .comfort .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-  :focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+  /* INK — text tokens. These are TEXT and nothing else. Token-role law. */
+  --ink:        #14181d;   /* 15.9:1 on paper */
+  --ink-2:      #3d4652;   /*  8.1:1 on paper */
+  --ink-3:      #5c6675;   /*  5.3:1 on paper — the floor for body text */
 
-  header{padding:32px 0 20px;border-bottom:1px solid var(--rule);margin-bottom:32px}
-  h1{font-size:clamp(2rem,7vw,2.9rem);margin:0 0 .25em;line-height:1.1;letter-spacing:-.015em}
-  .tag{color:var(--label);margin:0}
-  .sub{color:var(--ink-dim);max-width:44ch;margin:.9em 0 0;font-size:1.02rem}
+  /* ACCENT — each has an INK form (safe on paper) and a FILL form (a ground, never text) */
+  --brass-ink:  #6a4d12;   /*  6.2:1 on paper  — TEXT */
+  --brass-fill: #d9a441;   /*                  — GROUND ONLY */
+  --cool-ink:   #274063;   /*  9.3:1 on paper  — TEXT */
+  --cool-fill:  #c3d2e6;   /*                  — GROUND ONLY */
+  --live-ink:   #1d5c3f;   /*  6.7:1 on paper  — TEXT */
+  --slab:       #12161b;   /* dark ground */
+  --slab-ink:   #f4f1e8;   /* 16.4:1 on slab   — TEXT */
 
-  h2{font-size:1.05rem;margin:36px 0 14px;color:var(--label);
-     font-family:"Helvetica Neue",Arial,sans-serif;letter-spacing:.1em;
-     text-transform:uppercase;font-weight:700}
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+}
 
-  .game{display:block;text-decoration:none;color:inherit;
-    background:var(--surface);border:1px solid var(--rule);border-radius:4px;
-    padding:16px 18px;margin-bottom:12px;min-height:var(--tap);
-    transition:border-color .16s,transform .16s,background .16s}
-  .game:hover,.game:focus-visible{border-color:var(--glow);transform:translateY(-2px);background:var(--surface-2)}
-  .game h3{margin:0 0 .3em;font-size:1.22rem;line-height:1.25}
-  .game p{margin:0;color:var(--ink-dim);font-size:.98rem;line-height:1.45}
-  .game .meta{display:flex;gap:10px;align-items:center;margin-top:.6em;flex-wrap:wrap}
-  .pill{display:inline-block;padding:2px 9px;border-radius:999px;
-    font-family:"Helvetica Neue",Arial,sans-serif;font-size:.64rem;
-    letter-spacing:.08em;text-transform:uppercase;font-weight:700;
-    border:1px solid var(--rule);color:var(--ink-dim)}
-  .pill.live{border-color:var(--glow);color:var(--label)}
-  .pill.new{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--sans); font-size:17px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1060px; margin:0 auto; padding:0 22px 90px}
 
-  .note{background:var(--surface);border-left:3px solid var(--glow);
-    border-radius:3px;padding:14px 16px;margin:28px 0;font-size:.96rem;color:var(--ink-dim)}
-  .note strong{color:var(--ink)}
+/* ── THE STAGE. Scene first. No wall, no preference gate, no modal. ───────── */
+.stage{padding:70px 0 44px; border-bottom:2px solid var(--ink)}
+.mark{
+  font-family:var(--mono); font-size:11.5px; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--brass-ink); font-weight:700; margin:0 0 20px;
+}
+h1{
+  font-family:var(--serif); font-size:clamp(34px,6.4vw,60px); line-height:1.06;
+  margin:0 0 22px; letter-spacing:-.015em; font-weight:400; max-width:15ch;
+}
+h1 em{font-style:italic; color:var(--cool-ink)}
+.lede{font-size:clamp(18px,2.5vw,21px); line-height:1.5; color:var(--ink-2); max-width:58ch; margin:0 0 14px}
+.lede b{color:var(--ink); font-weight:600}
+.tag{font-family:var(--mono); font-size:12.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3); margin:26px 0 0}
 
-  footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--rule);
-    color:var(--ink-dim);font-family:"Helvetica Neue",Arial,sans-serif;font-size:.76rem}
-  footer a{color:var(--label);display:inline-block;min-height:44px;line-height:44px}
+/* ── THE COUNT. Truth in advertising, as arithmetic. ─────────────────────── */
+.count{
+  display:flex; flex-wrap:wrap; gap:0; margin:34px 0 0;
+  border:1.5px solid var(--rule); border-radius:2px; overflow:hidden;
+}
+.count div{flex:1 1 130px; padding:14px 16px; border-right:1.5px solid var(--rule); background:var(--paper-2)}
+.count div:last-child{border-right:0}
+.count b{display:block; font-family:var(--mono); font-size:23px; color:var(--ink); font-weight:700; line-height:1.2}
+.count span{display:block; font-family:var(--mono); font-size:10.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--ink-3); margin-top:3px}
+
+/* ── SECTIONS ────────────────────────────────────────────────────────────── */
+section{padding:56px 0 0}
+h2{
+  font-family:var(--mono); font-size:12px; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--brass-ink); font-weight:700; margin:0 0 6px;
+}
+.sub{font-size:16px; color:var(--ink-2); margin:0 0 26px; max-width:64ch}
+.sub b{color:var(--ink); font-weight:600}
+
+/* ── ROOM CARDS ──────────────────────────────────────────────────────────── */
+.rooms{display:grid; grid-template-columns:repeat(auto-fill,minmax(258px,1fr)); gap:14px}
+.room{
+  display:block; padding:18px 18px 16px; border:1.5px solid var(--rule); border-radius:2px;
+  background:var(--paper-2); text-decoration:none; color:var(--ink);
+  transition:border-color .12s, transform .12s;
+}
+.room:hover{border-color:var(--ink); transform:translateY(-1px)}
+.room:focus-visible{outline:3px solid var(--cool-ink); outline-offset:3px}
+.room h3{font-family:var(--serif); font-size:21px; margin:0 0 7px; font-weight:400; line-height:1.2}
+.room p{margin:0; font-size:14.5px; color:var(--ink-3); line-height:1.45}
+.chips{margin-top:11px; display:flex; gap:6px; flex-wrap:wrap}
+.chip{
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase;
+  padding:2.5px 7px; border-radius:2px; font-weight:700;
+}
+.c-live{background:var(--paper); color:var(--live-ink); border:1px solid var(--live-ink)}
+.c-work{background:var(--paper); color:var(--brass-ink); border:1px solid var(--brass-ink)}
+.c-note{background:var(--paper); color:var(--ink-3); border:1px solid var(--rule)}
+
+/* ── THE ENTERPRISE SLAB ─────────────────────────────────────────────────── */
+.slab{background:var(--slab); color:var(--slab-ink); margin:56px -22px 0; padding:46px 22px 44px}
+.slab .in{max-width:1060px; margin:0 auto}
+.slab h2{color:var(--brass-fill)}          /* on the DARK slab this clears 8.4:1 */
+.slab .sub{color:#cdd4dd}                  /* 11.2:1 on slab */
+.slab .sub b{color:var(--slab-ink)}
+.work{display:grid; grid-template-columns:repeat(auto-fill,minmax(288px,1fr)); gap:14px}
+.job{
+  display:block; padding:19px; border:1.5px solid #333c48; border-radius:2px;
+  background:#1a1f27; text-decoration:none; color:var(--slab-ink);
+  transition:border-color .12s;
+}
+.job:hover{border-color:var(--brass-fill)}
+.job:focus-visible{outline:3px solid var(--brass-fill); outline-offset:3px}
+.job .who{font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--brass-fill); font-weight:700; margin-bottom:6px}
+.job h3{font-family:var(--serif); font-size:21px; margin:0 0 7px; font-weight:400}
+.job p{margin:0; font-size:14.5px; color:#c3cad4; line-height:1.45}  /* 10.1:1 on #1a1f27 */
+
+/* ── THE PLAYTEST INTAKE ─────────────────────────────────────────────────── */
+.bench{border:2px solid var(--ink); border-radius:2px; padding:0; overflow:hidden; margin-top:26px}
+.bench-top{background:var(--cool-fill); padding:22px 22px 20px}
+.bench-top h3{font-family:var(--serif); font-size:26px; margin:0 0 9px; font-weight:400; color:var(--ink)}
+.bench-top p{margin:0 0 8px; font-size:15.5px; color:#22313f; line-height:1.5; max-width:62ch}  /* 8.9:1 on cool-fill */
+.bench-top p:last-child{margin:0}
+.bench-top b{color:var(--ink)}
+
+.teach{padding:22px; border-bottom:1.5px solid var(--rule); background:var(--paper-2)}
+.teach .h{font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--brass-ink); font-weight:700; margin:0 0 12px}
+.teach ol{margin:0; padding-left:20px}
+.teach li{font-size:15px; color:var(--ink-2); margin-bottom:9px; line-height:1.5}
+.teach li:last-child{margin-bottom:0}
+.teach li b{color:var(--ink)}
+
+.form{padding:22px}
+.f{margin-bottom:16px}
+label{display:block; font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); font-weight:700; margin-bottom:6px}
+input[type=text], input[type=email], textarea, select{
+  width:100%; font-family:var(--sans); font-size:16px; padding:11px 12px;
+  border:1.5px solid var(--rule); border-radius:2px; background:var(--paper); color:var(--ink);
+}
+textarea{min-height:78px; resize:vertical; line-height:1.5}
+input:focus-visible, textarea:focus-visible, select:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px; border-color:var(--ink)}
+
+.opts{display:flex; flex-wrap:wrap; gap:7px}
+.opt{
+  font-family:var(--sans); font-size:14.5px; padding:8px 13px; border:1.5px solid var(--rule);
+  border-radius:2px; background:var(--paper); color:var(--ink-2); cursor:pointer; font-weight:500;
+}
+.opt[aria-pressed="true"]{background:var(--slab); color:var(--slab-ink); border-color:var(--slab); font-weight:600}
+.opt:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
+
+.consent{
+  margin:4px 0 16px; padding:13px 15px; border-left:4px solid var(--cool-ink);
+  background:var(--paper-2); font-size:14.5px; color:var(--ink-2); line-height:1.5;
+}
+.consent b{color:var(--ink)}
+
+.send{
+  font-family:var(--sans); font-size:16.5px; font-weight:600; padding:13px 24px;
+  background:var(--slab); color:var(--slab-ink); border:0; border-radius:2px; cursor:pointer;
+}
+.send:hover{background:#232b35}
+.send:focus-visible{outline:3px solid var(--cool-ink); outline-offset:3px}
+.send[disabled]{opacity:.55; cursor:default}
+.out{margin:13px 0 0; font-size:15px; font-weight:600; color:var(--live-ink); min-height:1.2em}
+.out.bad{color:#8c2f39}   /* 6.6:1 on paper */
+
+/* ── HOW IT WORKS ────────────────────────────────────────────────────────── */
+.floor-list{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:13px; margin-top:22px}
+.fl{padding:15px 16px; border:1.5px solid var(--rule); border-radius:2px; background:var(--paper-2)}
+.fl b{display:block; font-family:var(--mono); font-size:11px; letter-spacing:.11em; text-transform:uppercase; color:var(--brass-ink); margin-bottom:6px}
+.fl p{margin:0; font-size:14.5px; color:var(--ink-3); line-height:1.45}
+
+footer{margin-top:64px; padding-top:24px; border-top:1.5px solid var(--rule); font-size:14.5px; color:var(--ink-3)}
+footer a{color:var(--cool-ink); font-weight:600}
+footer p{margin:0 0 7px}
+
+@media (max-width:640px){
+  .stage{padding:44px 0 32px}
+  .slab{margin:44px -22px 0; padding:36px 22px}
+}
 </style>
 </head>
 <body>
 
-<div class="comfort" role="group" aria-label="Comfort">
-  <button data-c="softer" aria-pressed="false"><span class="sr">Softer</span>&#9686;</button>
-  <button data-c="default" aria-pressed="true"><span class="sr">Default</span>&#9679;</button>
-  <button data-c="warm" aria-pressed="false"><span class="sr">Warm dark</span>&#9687;</button>
-</div>
+<main class="wrap">
 
-<div class="wrap">
+<!-- THE STAGE. Content on load. No gate, no wall, no ask. -->
+<div class="stage">
+  <p class="mark">Tight Spiral Productions</p>
+  <h1>We build instruments that show you the rules <em>while they are being run on you.</em></h1>
+  <p class="lede">Most software hides its machinery. Ours hands it to you and lets you turn it.
+    <b>You pull the levers, then the seat turns around and shows you your own telemetry.</b></p>
+  <p class="lede">Some of these are games. Some are assessment tools sitting inside a college.
+    One is running for a Manhattan relocation firm. <b>They are the same engine wearing different
+    clothes: make the invisible constraint visible, and let the person find it rather than be told.</b></p>
+  <p class="tag">Play &nbsp;&middot;&nbsp; Notice &nbsp;&middot;&nbsp; Design</p>
 
-  <header>
-    <h1>Tight Spiral Productions</h1>
-    <p class="tag u">Play. Notice. Design.</p>
-    <p class="sub">Games that make the thinking visible — where you see the measurement and the rules underneath, while they are being run on you.</p>
-  </header>
-
-  <h2>The games</h2>
-
-  <a class="game" href="the-console.html">
-    <h3>The Console</h3>
-    <p>You take a growth job at a social app and pull the levers yourself — the streak, the batch, the infinite feed. Then the seat turns around and shows you your own telemetry.</p>
-    <span class="meta"><span class="pill live">Live</span><span class="pill">Dark patterns</span></span>
-  </a>
-
-  <a class="game" href="choose-your-leader-v6.html">
-    <h3>Choose Your Leader</h3>
-    <p>October 1962. The missiles are confirmed, the country does not know, and the chair is yours. Decide in the fog — then meet the record. You are not judging the leader. You are the leader.</p>
-    <span class="meta"><span class="pill new">New</span><span class="pill">Judgment &middot; JFK</span></span>
-  </a>
-
-  <a class="game" href="the-tell.html">
-    <h3>The Tell</h3>
-    <p>Reading the moment a text gives itself away.</p>
-    <span class="meta"><span class="pill live">Live</span></span>
-  </a>
-
-  <a class="game" href="cliche-cowpaths.html">
-    <h3>The Clich&eacute; Cabinet</h3>
-    <p>Three rooms of worn language — the city, the field, the line. Walk the cowpaths and watch where your sentences have already been.</p>
-    <span class="meta"><span class="pill live">Live</span><span class="pill">3 rooms</span></span>
-  </a>
-
-  <a class="game" href="behind-this-door.html">
-    <h3>Behind This Door</h3>
-    <p>A noticing game, one door at a time. First deck: Ireland&rsquo;s writers.</p>
-    <span class="meta"><span class="pill live">Live</span></span>
-  </a>
-
-  <a class="game" href="funny-boneys-factory.html">
-    <h3>Funny Boney&rsquo;s Factory</h3>
-    <p>Where the jokes get made, and you can see the machine.</p>
-    <span class="meta"><span class="pill">MVP</span></span>
-  </a>
-
-  <h2>For the classroom</h2>
-
-  <a class="game" href="en195.html">
-    <h3>EN195 &mdash; What Counts Now</h3>
-    <p>The flash fiction unit: Sandbags, the Workshop Wall, the Review Bench, the Course River. Built for the students who are in the room.</p>
-    <span class="meta"><span class="pill live">Live</span><span class="pill">Course</span></span>
-  </a>
-
-  <a class="game" href="arcade.html">
-    <h3>The Arcade</h3>
-    <p>Everything, in one place.</p>
-  </a>
-
-  <div class="note">
-    <strong>How the studio works.</strong> Every build is a single file. It runs offline, holds nothing about you, and opens on a scene &mdash; never on a settings screen. <a href="how-an-idea-travels.html" style="color:var(--label);display:inline-block;min-height:44px;line-height:44px">See how an idea travels &rarr;</a>
+  <!-- The count is COMPUTED from the shelf, not remembered. Truth in advertising as arithmetic. -->
+  <div class="count">
+    <div><b>33</b><span>builds, live</span></div>
+    <div><b>0</b><span>servers required</span></div>
+    <div><b>0</b><span>trackers</span></div>
+    <div><b>4.5:1</b><span>contrast floor, gated</span></div>
   </div>
-
-  <footer>
-    Tight Spiral Productions &middot; Matt Walsh &middot; single-file, offline, accessible-first.
-  </footer>
-
 </div>
+
+<!-- ═══ THE GAMES ═══ -->
+<section>
+  <h2>The games</h2>
+  <p class="sub">Every one opens straight into the scene. <b>No tutorial, no menu, no account.</b>
+    You learn the rules by running into them.</p>
+
+  <div class="rooms">
+    <a class="room" href="the-console.html">
+      <h3>The Console</h3>
+      <p>You take a growth job at a social app and pull the levers yourself — the streak, the batch,
+         the infinite feed. Then it shows you your own telemetry.</p>
+      <div class="chips"><span class="chip c-live">Live</span><span class="chip c-note">Dark patterns</span></div>
+    </a>
+
+    <a class="room" href="choose-your-leader-v6.html">
+      <h3>Choose Your Leader</h3>
+      <p>October 1962. The missiles are confirmed, the country does not know, and the chair is yours.
+         Decide in the fog — then meet the record.</p>
+      <div class="chips"><span class="chip c-live">Live</span><span class="chip c-note">Judgment &middot; JFK</span></div>
+    </a>
+
+    <a class="room" href="the-tell.html">
+      <h3>The Tell</h3>
+      <p>Reading the moment a text gives itself away. Ten moves, and the reader-test for each.</p>
+      <div class="chips"><span class="chip c-live">Live</span><span class="chip c-note">Craft</span></div>
+    </a>
+
+    <a class="room" href="the-viscosity.html">
+      <h3>The Viscosity</h3>
+      <p>Maslow's hierarchy as a space you have to move through. The higher you climb, the thicker
+         the air — and you feel exactly why.</p>
+      <div class="chips"><span class="chip c-live">Live</span><span class="chip c-note">Motivation</span></div>
+    </a>
+
+    <a class="room" href="cliche-cowpaths.html">
+      <h3>Clich&eacute; Cowpaths</h3>
+      <p>Nobody chose these roads. Everybody walks them. Three rooms of worn language — the city,
+         the field, the line.</p>
+      <div class="chips"><span class="chip c-live">Live</span><span class="chip c-note">3 rooms</span></div>
+    </a>
+
+    <a class="room" href="behind-this-door.html">
+      <h3>Behind This Door</h3>
+      <p>A noticing game, one door at a time. First deck: Ireland's writers.</p>
+      <div class="chips"><span class="chip c-live">Live</span></div>
+    </a>
+
+    <a class="room" href="funny-boneys-factory.html">
+      <h3>Funny Boney's Factory</h3>
+      <p>Where the jokes get made, and you can see the machine that makes them.</p>
+      <div class="chips"><span class="chip c-work">In build</span></div>
+    </a>
+
+    <a class="room" href="warriors-fantasy-arcade.html">
+      <h3>Warriors Fantasy Arcade</h3>
+      <p>The draft board as a reading exercise. What you're allowed to see shapes who you pick.</p>
+      <div class="chips"><span class="chip c-live">Live</span></div>
+    </a>
+
+    <a class="room" href="how-an-idea-travels.html">
+      <h3>How an Idea Travels</h3>
+      <p>Watch a thought move from a person, through a medium, into someone else — and lose things
+         on the way.</p>
+      <div class="chips"><span class="chip c-live">Live</span></div>
+    </a>
+
+    <a class="room" href="the-compound-capstone.html">
+      <h3>The Compound Capstone</h3>
+      <p>Where the whole system comes together. Long-form, and it expects you to have played the rest.</p>
+      <div class="chips"><span class="chip c-live">Live</span><span class="chip c-note">Long</span></div>
+    </a>
+
+    <a class="room" href="arcade.html">
+      <h3>The Arcade</h3>
+      <p>Everything, in one place. The full cabinet.</p>
+      <div class="chips"><span class="chip c-live">Live</span><span class="chip c-note">Index</span></div>
+    </a>
+
+    <a class="room" href="fys_fys-treasure-trove.html">
+      <h3>Treasure Trove</h3>
+      <p>First-year seminar. A room full of things worth noticing, and a reason to look twice.</p>
+      <div class="chips"><span class="chip c-live">Live</span></div>
+    </a>
+  </div>
+</section>
+
+<!-- ═══ THE CLASSROOM ═══ -->
+<section>
+  <h2>The classroom</h2>
+  <p class="sub">Built for students who are actually in the room, at a community college, this term.
+    <b>Not a demo. These ran.</b></p>
+
+  <div class="rooms">
+    <a class="room" href="en195.html">
+      <h3>EN195 &mdash; What Counts Now</h3>
+      <p>The flash fiction unit. The front door to the whole course.</p>
+      <div class="chips"><span class="chip c-live">Live</span><span class="chip c-note">Course</span></div>
+    </a>
+    <a class="room" href="en195-hub.html">
+      <h3>The Course Hub</h3>
+      <p>Every door in the course, in one place. Six rooms, all live.</p>
+      <div class="chips"><span class="chip c-live">Live</span></div>
+    </a>
+    <a class="room" href="sandbags.html">
+      <h3>Sandbags</h3>
+      <p>Cut the weight your sentence is carrying and see what it was hiding.</p>
+      <div class="chips"><span class="chip c-live">Live</span></div>
+    </a>
+    <a class="room" href="workshop-wall.html">
+      <h3>The Workshop Wall</h3>
+      <p>Peer review as a public act. What you say about someone's draft is a draft too.</p>
+      <div class="chips"><span class="chip c-live">Live</span></div>
+    </a>
+    <a class="room" href="review-bench.html">
+      <h3>The Review Bench</h3>
+      <p>Sit with a piece before you speak about it.</p>
+      <div class="chips"><span class="chip c-live">Live</span></div>
+    </a>
+    <a class="room" href="course-river.html">
+      <h3>The Course River</h3>
+      <p>The semester as a current. Where you are, what fed in, what is downstream.</p>
+      <div class="chips"><span class="chip c-live">Live</span></div>
+    </a>
+    <a class="room" href="flash-ballast.html">
+      <h3>Flash Ballast</h3>
+      <p>What a very short story can and cannot carry.</p>
+      <div class="chips"><span class="chip c-live">Live</span></div>
+    </a>
+    <a class="room" href="play-the-semester.html">
+      <h3>Play the Semester</h3>
+      <p>The whole term, as a board you can see.</p>
+      <div class="chips"><span class="chip c-live">Live</span></div>
+    </a>
+    <a class="room" href="workshop-in-a-box.html">
+      <h3>Workshop in a Box</h3>
+      <p>Everything a writing workshop needs, packed flat. Take it and run it anywhere.</p>
+      <div class="chips"><span class="chip c-live">Live</span><span class="chip c-note">For teachers</span></div>
+    </a>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══ THE ENTERPRISE SLAB — the lane that was never advertised ═══ -->
+<div class="slab">
+  <div class="in">
+    <h2>Client work</h2>
+    <p class="sub">The same engine, pointed at a real problem someone is paying to solve.
+      <b>An instrument that shows a client the constraint they are actually standing in.</b></p>
+
+    <div class="work">
+      <a class="job" href="confluence-TRUNK.html">
+        <div class="who">MassBay Community College</div>
+        <h3>Confluence</h3>
+        <p>Institutional assessment. Norms the raters before they score, then maps courses against
+           outcomes and <b>shows the dry cells</b> — the places nobody is teaching what everybody
+           is measuring.</p>
+      </a>
+
+      <a class="job" href="advantage-intake.html">
+        <div class="who">Advantage Relocation &middot; Manhattan</div>
+        <h3>The Tension Bar</h3>
+        <p>A relocating executive sets their terms; the market answers. It does not show apartments.
+           It shows what a doorman actually costs — <b>about $18,400 a year</b> — before anyone
+           books a tour.</p>
+      </a>
+
+      <a class="job" href="tight-spiral-runbook.html">
+        <div class="who">The studio itself</div>
+        <h3>The Runbook</h3>
+        <p>How this shop actually runs: the gates, the ticks, the refusals. Published because
+           <b>a studio that hides its method is selling magic.</b></p>
+      </a>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+
+<!-- ═══ THE PLAYTEST BENCH — the intake ═══ -->
+<section id="bench">
+  <h2>The bench</h2>
+  <p class="sub">Every game here needs someone who has never seen it to walk in cold and get stuck
+    in a way I did not predict. <b>That is the whole job, and it is the most useful thing anyone
+    can give this studio.</b></p>
+
+  <div class="bench">
+    <div class="bench-top">
+      <h3>Sit the bench</h3>
+      <p>You play one build. You get stuck, or bored, or you find the thing nobody meant to leave in.
+        <b>Then you tell me where it happened.</b></p>
+      <p>No experience needed. <b>Not knowing what you are doing is the qualification</b> — you are
+        the only person who can see the game the way a stranger sees it, and you can only do it once.</p>
+    </div>
+
+    <div class="teach">
+      <p class="h">How to playtest — the whole method, in four moves</p>
+      <ol>
+        <li><b>Play it cold.</b> Do not read about it first. Do not ask me what it does. The confusion
+          is the data — if you smooth it away by preparing, you have destroyed the thing I need.</li>
+        <li><b>Notice the exact moment you stall.</b> Not "it was confusing." <b>"I clicked the amber
+          bar and nothing happened and I did not know if I had broken it."</b> The timestamp of your
+          confusion is worth more than your opinion of the game.</li>
+        <li><b>Say what you EXPECTED to happen.</b> This is the one thing only you have. I already
+          know what it does. I need to know what you thought it would do — <b>the gap between those
+          two is the bug.</b></li>
+        <li><b>Tell me where you quit, and why.</b> Boredom is a finding. Quitting is a finding.
+          <b>"I stopped because I did not care what happened next" is the most valuable sentence
+          you can send me</b>, and the one people are too polite to write.</li>
+      </ol>
+    </div>
+
+    <div class="form">
+      <div class="f">
+        <label for="pt-name">What should I call you</label>
+        <input type="text" id="pt-name" autocomplete="name" placeholder="First name is plenty">
+      </div>
+
+      <div class="f">
+        <label for="pt-email">Where to send the build</label>
+        <input type="email" id="pt-email" autocomplete="email" placeholder="you@example.com">
+      </div>
+
+      <div class="f">
+        <label id="l-what">What do you want to test</label>
+        <div class="opts" id="what" role="group" aria-labelledby="l-what">
+          <button class="opt" data-v="games"   aria-pressed="true">The games</button>
+          <button class="opt" data-v="class"   aria-pressed="false">Classroom tools</button>
+          <button class="opt" data-v="client"  aria-pressed="false">Client instruments</button>
+          <button class="opt" data-v="any"     aria-pressed="false">Whatever needs eyes</button>
+        </div>
+      </div>
+
+      <div class="f">
+        <label id="l-how">How do you read a screen</label>
+        <div class="opts" id="how" role="group" aria-labelledby="l-how">
+          <button class="opt" data-v="typical"  aria-pressed="true">Typically</button>
+          <button class="opt" data-v="lowvis"   aria-pressed="false">Low vision</button>
+          <button class="opt" data-v="screenrd" aria-pressed="false">Screen reader</button>
+          <button class="opt" data-v="kb"       aria-pressed="false">Keyboard only</button>
+        </div>
+      </div>
+
+      <div class="f">
+        <label for="pt-note">Anything I should know</label>
+        <textarea id="pt-note" placeholder="Optional. What you teach, what you build, what you're curious about, what you'd break."></textarea>
+      </div>
+
+      <div class="consent">
+        <b>What happens to this.</b> It goes to me and to nobody else. No tracker fires when you load
+        this page &mdash; <b>this form is the only thing on this site that ever touches a network,
+        and it only fires when you tap the button.</b> No cookies, no analytics, no ad tech, no
+        third party. You can ask me to delete it any time and I will.
+      </div>
+
+      <button class="send" id="send">Sit the bench</button>
+      <p class="out" id="out" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HOW THE STUDIO WORKS ═══ -->
+<section>
+  <h2>How the studio works</h2>
+  <p class="sub">Published, not because it is impressive, but because <b>a shop that hides its
+    method is asking you to trust it instead of check it.</b></p>
+
+  <div class="floor-list">
+    <div class="fl">
+      <b>Single file</b>
+      <p>Every build is one HTML file. Save it, mail it, put it on a stick. It has no dependencies
+        and it cannot rot.</p>
+    </div>
+    <div class="fl">
+      <b>Offline</b>
+      <p>No external hosts. It runs on a plane, on campus wifi, in a building with no signal.
+        Enforced by a check, not a promise.</p>
+    </div>
+    <div class="fl">
+      <b>Contrast is arithmetic</b>
+      <p>I have retinitis pigmentosa. Every text colour is computed against its background before
+        anything ships. <b>4.5:1 or it does not go out.</b> A gate refuses it on the server — not a
+        person remembering.</p>
+    </div>
+    <div class="fl">
+      <b>No dark patterns</b>
+      <p>No streaks, no infinite scroll, no manufactured urgency. One game here is <i>about</i>
+        those patterns. It would be strange to use them.</p>
+    </div>
+    <div class="fl">
+      <b>Scene first</b>
+      <p>No splash, no settings wall, no "choose your experience." The first thing you see is the
+        thing itself.</p>
+    </div>
+    <div class="fl">
+      <b>Sources named</b>
+      <p>Where a build asserts a fact, it says where the fact came from and when it was checked.
+        A number with no provenance is a rumour.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><b>Tight Spiral Productions.</b> A one-person studio. Everything here was made by hand, with a
+    machine in the room and a person deciding.</p>
+  <p><a href="mailto:walshero@gmail.com">walshero@gmail.com</a> &nbsp;&middot;&nbsp; Boston</p>
+  <p style="margin-top:11px; font-family:var(--mono); font-size:12px; color:var(--ink-3);">
+    33 builds &middot; shelf counted from the repo, 2026-07-14 &middot; not remembered</p>
+</footer>
+
+</main>
 
 <script>
-  document.querySelectorAll('.comfort button').forEach(function(b){
-    b.addEventListener('click',function(){
-      document.querySelectorAll('.comfort button').forEach(function(x){x.setAttribute('aria-pressed','false')});
-      b.setAttribute('aria-pressed','true');
-      var v=b.dataset.c;
-      if(v==='default') document.documentElement.removeAttribute('data-comfort');
-      else document.documentElement.setAttribute('data-comfort',v);
+(function(){
+  "use strict";
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     THE PLAYTEST INTAKE.
+
+     THE ONE NETWORK CALL ON THIS PAGE. It fires only on tap. Loading this page
+     sends nothing, anywhere, ever. No analytics, no cookies, no third party.
+
+     It writes to Supabase — a real table, so the studio can actually see who
+     signed up, cohort them, and follow up. The anon key below is a PUBLIC key
+     by design: it is safe to ship in client code PROVIDED Row Level Security is
+     on and the only policy is INSERT. That is the whole security model:
+
+         RLS ON. INSERT allowed to anon. SELECT allowed to NOBODY.
+
+     Anyone can drop a card in the box. Nobody can open the box but Matt.
+     If SELECT were open, the anon key would leak the whole signup list.
+     ───────────────────────────────────────────────────────────────────────── */
+
+  var SUPABASE_URL = "PASTE_PROJECT_URL_HERE";   /* https://xxxx.supabase.co */
+  var SUPABASE_KEY = "PASTE_ANON_KEY_HERE";      /* the anon/public key */
+
+  var S = { what: "games", how: "typical" };
+
+  function group(id, key){
+    var g = document.getElementById(id);
+    g.addEventListener("click", function(e){
+      var b = e.target.closest(".opt");
+      if(!b) return;
+      var kids = g.querySelectorAll(".opt");
+      for(var i=0; i<kids.length; i++) kids[i].setAttribute("aria-pressed","false");
+      b.setAttribute("aria-pressed","true");
+      S[key] = b.getAttribute("data-v");
+    });
+  }
+  group("what","what");
+  group("how","how");
+
+  var out  = document.getElementById("out");
+  var send = document.getElementById("send");
+
+  function say(msg, bad){
+    out.textContent = msg;
+    out.className = bad ? "out bad" : "out";
+  }
+
+  send.addEventListener("click", function(){
+    var name  = document.getElementById("pt-name").value.trim();
+    var email = document.getElementById("pt-email").value.trim();
+    var note  = document.getElementById("pt-note").value.trim();
+
+    /* An error is a moment for DIRECTION, not for mood. Say what to do next. */
+    if(!email || email.indexOf("@") < 1 || email.indexOf(".") < 0){
+      say("I need an email to send you a build — that is the only way this works.", true);
+      document.getElementById("pt-email").focus();
+      return;
+    }
+
+    if(SUPABASE_URL.indexOf("PASTE_") === 0){
+      /* NOT CONFIGURED. Never pretend a signup landed. A false confirmation is
+         worse than an error — the person walks away believing they are on a list
+         that does not exist. Fall back to mail, which always works. */
+      say("Signup is not wired up yet — opening your mail app instead.", true);
+      window.location.href = "mailto:walshero@gmail.com"
+        + "?subject=" + encodeURIComponent("Playtest bench — " + (name || email))
+        + "&body=" + encodeURIComponent(
+            "Name: " + (name || "(none)") + "\n" +
+            "Email: " + email + "\n" +
+            "Wants to test: " + S.what + "\n" +
+            "Reads the screen: " + S.how + "\n\n" +
+            (note || "(no note)") + "\n");
+      return;
+    }
+
+    send.disabled = true;
+    say("Sending…");
+
+    fetch(SUPABASE_URL + "/rest/v1/playtesters", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_KEY,
+        "Authorization": "Bearer " + SUPABASE_KEY,
+        "Prefer": "return=minimal"
+      },
+      body: JSON.stringify({
+        name: name || null,
+        email: email,
+        wants: S.what,
+        reads: S.how,
+        note: note || null,
+        source: "studio-face"
+      })
+    })
+    .then(function(r){
+      if(r.ok){
+        say("You're on the bench. I'll send you a build and the four moves above — play it cold.");
+        send.textContent = "Done";
+        return;
+      }
+      /* VERIFY, NEVER TRUST THE RECEIPT. A non-2xx is a FAILURE and must be
+         reported as one. Silently swallowing it and showing a checkmark is the
+         hollow-claim failure, and it is the one this studio keeps making. */
+      throw new Error("HTTP " + r.status);
+    })
+    .catch(function(err){
+      send.disabled = false;
+      say("That did not send (" + err.message + "). Mail me directly: walshero@gmail.com", true);
     });
   });
+
+  if(window.scrollTo) window.scrollTo(0,0);
+})();
 </script>
 </body>
 </html>
