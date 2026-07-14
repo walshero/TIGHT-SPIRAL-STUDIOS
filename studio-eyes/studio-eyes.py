@@ -341,6 +341,57 @@ def audit_page(page, path, mode_label):
         halts.append(f"OPENING_WALL first paint shows {fs['gates']} preference control(s) "
                      f"{fs['gateTxt']} and NO scene. Comfort is a corner control, never a gate.")
 
+    # -- 6. >50% IMAGE (founder standing floor — NEVER ENFORCED UNTIL 2026-07-13)
+    #
+    # The postmortem named this gap out loud: ">50% IMAGE — a stated founder floor.
+    # Unchecked." So it was a wish. Every game shipped without anyone measuring it,
+    # and Choose Your Leader v5 shipped a text wall as a result.
+    #
+    # SCOPE (caught by the canary, 2026-07-13): this floor is a GAME floor. The
+    # golden canary p07 is a 3-line fixture with zero art and it must still pass —
+    # it exists to test contrast, not scenery. A spec, a hub, a report, and a test
+    # fixture are not games and are not graded as broken ones. Tableau Sweep #1 made
+    # exactly this mistake, grading a spec-log as a failed game.
+    #
+    # A surface declares itself a game with:  <meta name="tsp:surface" content="game">
+    # Absent that tag, the floor still runs on anything that ALREADY carries scene
+    # art (>=1 media element) — because a game with a picture in it is a game.
+    #
+    # ARITHMETIC, not judgment: on the FIRST SCREEN, sum the area of every
+    # scene-carrying element — svg/img/canvas/video/picture, or any element painting
+    # a background-image or gradient — and divide by the viewport. Under 50% HALTs.
+    img = page.evaluate("""() => {
+      const vw = innerWidth, vh = innerHeight, VP = vw * vh;
+      const seen = [], hits = [];
+      for (const el of document.querySelectorAll('*')) {
+        const r = el.getBoundingClientRect();
+        if (r.width < 8 || r.height < 8) continue;
+        if (r.top > vh || r.bottom < 0 || r.left > vw || r.right < 0) continue;
+        const cs = getComputedStyle(el);
+        if (cs.display === 'none' || cs.visibility === 'hidden' || +cs.opacity === 0) continue;
+        const tag = el.tagName.toLowerCase();
+        const painted = cs.backgroundImage && cs.backgroundImage !== 'none';
+        const isMedia = ['svg','img','canvas','video','picture'].includes(tag);
+        if (!isMedia && !painted) continue;
+        if (seen.some(s => s.contains(el))) continue;   // no double-count of children
+        seen.push(el);
+        const w = Math.min(r.right, vw) - Math.max(r.left, 0);
+        const h = Math.min(r.bottom, vh) - Math.max(r.top, 0);
+        hits.push({ tag, area: Math.max(0, w) * Math.max(0, h) });
+      }
+      const m = document.querySelector('meta[name="tsp:surface"]');
+      return { pct: VP ? (hits.reduce((a,b)=>a+b.area,0) / VP) * 100 : 0,
+               n: hits.length,
+               surface: m ? m.content : '',
+               top: hits.sort((a,b)=>b.area-a.area).slice(0,3).map(h=>h.tag) };
+    }""")
+    is_game = img['surface'] == 'game' or (not img['surface'] and img['n'] > 0)
+    if is_game and img['pct'] < 50:
+        halts.append(f"IMAGE_FLOOR [{mode_label}] first screen is {img['pct']:.0f}% image "
+                     f"(floor 50). {img['n']} scene element(s): {', '.join(img['top']) or 'none'}. "
+                     f"Scene-first is a floor, not a preference — a first paint that is mostly "
+                     f"prose is a document with buttons.")
+
     return halts, d
 
 def audit(path, no_net=True):
