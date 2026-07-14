@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  CHOOSE YOUR LEADER — v6 · "The Chair"  ·  JFK, October 22, 1962
+  Tight Spiral Productions · walshero@gmail.com · single-file, offline, nothing stored.
+
+  SPINE (v6, founder-locked): "You're in the chair. Decide in the fog, then meet the record."
+  v5 was the RECEIVER'S game — you rated a broadcast. v6 is the DECIDER'S game.
+  Media literacy is not deleted; it becomes THE FOG — what the room let you see.
+
+  DESIGN DNA (founder call, 2026-07-02, applied here):
+    Samorost   — you tap the WORLD, not menus.
+    Labyrinth  — near-zero words. C6: under 50 player-facing words per screen.
+    Lumino     — one handcrafted scene IS the game.
+    Metroid    — the world REMEMBERS. Commit, and the room changes behind you.
+
+  FLOOR COLLISION, RESOLVED (founder, verbatim): "Samorost hides its hotspots; your eyes
+  and this studio don't." Every hotspot: bold outline, 44px+, keyboard-tabbable, AND
+  mirrored as a plain text button below the scene. Zero visual hunting.
+  ENGAGEMENT PROPOSES, FLOORS DISPOSE.
+
+  WITHHELD (period + sound bible): no face, ever — the chair must stay ANYONE'S.
+  No voice likeness, ever — you hear THAT someone speaks to the country, never WHO.
+  A faked voice reintroduces the bias the game strips, same as a face would.
+
+  MEASUREMENT (spec §7.1 — HALT): one decision cannot validly carry four independent
+  skill scores. NO SKILL NUMBER SHIPS. The mirror shows the player their own reasoning
+  SHAPE. It is legible, never scored. Founder + Measurement bench own the model.
+
+  SOURCING: all record content dated + attributed. Nothing fabricated.
+-->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="tsp:surface" content="game">
+<title>Choose Your Leader — October 22, 1962</title>
+<style>
+  :root{
+    /* Inherited from v5's verified palette. TOKEN-ROLE LAW: a token is text OR
+       atmosphere, never both. Every text token below clears 4.5:1 on its ground. */
+    --paper:#12161c;         /* the dark room */
+    --wall:#1b2530;          /* cool mid-century wall in shadow */
+    --wall-lit:#26333f;      /* wall catching screen-light */
+    --ink:#eef1f4;           /* TEXT — 16:1 on paper */
+    --ink-dim:#c4ccd4;       /* TEXT dim — 9.5:1 on wall */
+    --label:#d8b98a;         /* TEXT accent — warm sand, 8.3:1. NOT the glow. */
+    --screen:#c9d4dc;        /* 1962 B&W phosphor. Cool. Never warm, never pure white. */
+    --screen-hot:#dfe8ee;
+    --glow:#b8863a;          /* ATMOSPHERE ONLY — screen-rim, edge-light. NEVER text. */
+    --glow-soft:#7a5f2c;
+    --accent:#c7b28a;        /* button field; dark ink rides on it */
+    --accent-ink:#171208;
+    --chair:#0d1116;
+    --rule:#39434e;
+    --hot:#e8a583;           /* TEXT — the weight of a call */
+    --cool:#8fd4cc;          /* TEXT ONLY — the caught gap */
+    --cool-dec:#6bb6ae;      /* DECORATION ONLY — the caught gap, as a border */
+    --ring:#e0c9a4;          /* DECORATION ONLY — the hotspot outline. Never a word. */
+    --focus:#9fd0ff;
+    --tap:44px;
+  }
+  /* COMFORT STOPS — live corner control, never an opening wall. */
+body.softer{ --paper:#8d97a3; --wall:#9ea8b4; --wall-lit:#b0bac5; --chair:#77818d;
+             --ink:#0f1317; --ink-dim:#2b3238; --rule:#5e6874;
+             --screen:#2a333c; --screen-hot:#1c242c;
+             --label:#4a3410; --cool:#12554d; --cool-dec:#1d6f65;
+             --hot:#7a2f10; --ring:#5a4218;
+             --accent:#2f2a20; --accent-ink:#f6f3ec; --focus:#12447a; }  body.daylight{
+    --paper:#e8e4dc; --wall:#d6d2c8; --wall-lit:#c4c0b4; --ink:#14181d; --ink-dim:#2c3views;
+    --ink-dim:#33393f; --label:#5a4520; --chair:#b8b4a8; --rule:#9a968c;
+    --screen:#3a4650; --screen-hot:#4d5b67; --hot:#8a3d1c; --cool:#1c5a52;
+    --cool-dec:#2a7a70; --ring:#6b4a18;
+    --accent:#3a3226; --accent-ink:#f0ece2;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:var(--paper); color:var(--ink);
+    font:16px/1.55 Georgia,"Times New Roman",serif;
+    display:flex; flex-direction:column;
+    -webkit-text-size-adjust:100%;
+  }
+  @media (prefers-reduced-motion: reduce){ *{animation:none!important;transition:none!important} }
+
+  /* ---------- THE SCENE. It is the game. >50% of every first paint. ---------- */
+  .room{ position:relative; flex:1 1 auto; min-height:58vh; }
+  .room svg{ display:block; width:100%; height:100%; }
+
+  /* HOTSPOTS — loud on purpose. Samorost hides them; we do not. */
+  .spot{ cursor:pointer; }
+  .spot .hit{ fill:transparent; stroke:var(--ring); stroke-width:2.5; stroke-dasharray:5 4; }
+  .spot:hover .hit, .spot:focus-visible .hit{ stroke:var(--focus); stroke-width:4; stroke-dasharray:none; }
+  .spot:focus-visible{ outline:3px solid var(--focus); outline-offset:2px }
+  .spot[data-done="1"] .hit{ stroke:var(--cool-dec); stroke-dasharray:none; stroke-width:3; }
+
+  /* ---------- THE PANEL. Text lives here, under the scene, never over it. ---------- */
+  .panel{ flex:0 0 auto; background:var(--wall); border-top:2px solid var(--rule); padding:1rem 1.1rem 1.2rem; }
+  .eyebrow{ color:var(--label); font:600 .78rem/1.3 system-ui,sans-serif; letter-spacing:.09em; text-transform:uppercase; margin:0 0 .35rem; }
+  .say{ margin:0 0 .8rem; color:var(--ink); max-width:38em; }
+  .say em{ color:var(--ink-dim); font-style:italic; }
+
+  /* The chips ARE the hotspots, mirrored as plain buttons. Zero hunting. */
+  .chips{ display:flex; flex-wrap:wrap; gap:.5rem; }
+  .chip, .btn{
+    min-height:var(--tap); min-width:var(--tap);
+    display:inline-flex; align-items:center; justify-content:center;
+    padding:.6em 1.05em; border-radius:2px; cursor:pointer;
+    font:600 .96rem/1.2 system-ui,sans-serif; text-align:center;
+  }
+  .chip{ background:transparent; color:var(--ink); border:2px solid var(--rule); }
+  .chip:hover{ border-color:var(--ring); }
+  .chip[data-done="1"]{ border-color:var(--cool-dec); color:var(--cool); }
+  .btn{ background:var(--accent); color:var(--accent-ink); border:2px solid var(--accent); font-weight:700; }
+  .btn:hover{ filter:brightness(1.08) }
+  .btn[disabled]{ opacity:.45; cursor:not-allowed }
+  :focus-visible{ outline:3px solid var(--focus); outline-offset:3px }
+
+  /* comfort corner — a control, never a gate */
+  .corner{ position:absolute; top:.5rem; right:.5rem; display:flex; gap:.4rem; z-index:5 }
+  .corner button{
+    min-height:var(--tap); min-width:var(--tap);
+    background:var(--chair); color:var(--ink); border:2px solid var(--rule);
+    border-radius:2px; font:600 .85rem/1 system-ui,sans-serif; cursor:pointer;
+  }
+  .corner button[aria-pressed="true"]{ border-color:var(--ring); color:var(--label) }
+
+  .card{ border-left:3px solid var(--glow-soft); padding:.15rem 0 .15rem .8rem; margin:0 0 .8rem; }
+  .card .src{ color:var(--ink-dim); font:.8rem/1.4 system-ui,sans-serif; }
+  .rec{ border-left-color:var(--cool-dec) }
+  .mirror{ border-left-color:var(--ring) }
+  .hot{ color:var(--hot) } .cool{ color:var(--cool) }
+  .sr{ position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap }
+</style>
+</head>
+<body>
+
+<div class="room">
+  <div class="corner">
+    <button id="comfort" aria-pressed="false" aria-label="Comfort: change contrast">Aa</button>
+    <button id="snd" aria-pressed="false" aria-label="Room sound: off">Sound</button>
+  </div>
+  <svg id="scene" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"
+       role="img" aria-labelledby="sceneTitle">
+    <title id="sceneTitle">The room where the call gets made. October 1962. A desk, a map, a
+      telephone, a photograph, and an empty chair. Nothing here tells you what to do.</title>
+
+    <!-- the room: cool, orderly, believed-in. Kodachrome, per the period bible. -->
+    <rect width="400" height="300" fill="var(--wall)"/>
+    <rect y="196" width="400" height="104" fill="var(--paper)"/>
+    <rect x="0" y="30" width="400" height="168" fill="var(--wall-lit)" opacity=".38"/>
+    <!-- window: it is late. nobody has gone to bed. -->
+    <rect x="286" y="44" width="86" height="94" fill="var(--chair)"/>
+    <line x1="329" y1="44" x2="329" y2="138" stroke="var(--wall)" stroke-width="2"/>
+    <line x1="286" y1="91" x2="372" y2="91" stroke="var(--wall)" stroke-width="2"/>
+    <!-- desk -->
+    <rect x="42" y="180" width="250" height="12" fill="var(--chair)"/>
+    <rect x="56" y="192" width="10" height="52" fill="var(--chair)"/>
+    <rect x="268" y="192" width="10" height="52" fill="var(--chair)"/>
+
+    <!-- THE CHAIR. Empty. It stays anyone's. No face, ever. -->
+    <g id="s-chair" class="spot" tabindex="0" role="button"
+       aria-label="The empty chair behind the desk">
+      <rect x="150" y="126" width="60" height="56" rx="4" fill="var(--chair)"/>
+      <rect x="146" y="176" width="68" height="8" rx="2" fill="var(--chair)"/>
+      <rect class="hit" x="141" y="120" width="78" height="70" rx="4"/>
+    </g>
+
+    <!-- THE MAP — the fog lives here -->
+    <g id="s-map" class="spot" tabindex="0" role="button" aria-label="A map spread on the desk">
+      <rect x="60" y="160" width="86" height="22" fill="var(--screen)" opacity=".72"/>
+      <path d="M70 176 q14 -9 26 -2 t28 -5" stroke="var(--chair)" stroke-width="1.5" fill="none"/>
+      <rect class="hit" x="56" y="154" width="94" height="32"/>
+    </g>
+
+    <!-- THE TELEPHONE — the call -->
+    <g id="s-phone" class="spot" tabindex="0" role="button" aria-label="The telephone on the desk">
+      <rect x="222" y="162" width="46" height="18" rx="3" fill="var(--chair)"/>
+      <rect x="228" y="154" width="34" height="9" rx="4" fill="var(--chair)"/>
+      <rect class="hit" x="217" y="149" width="56" height="36"/>
+    </g>
+
+    <!-- THE SET — the only warm light in the room. The country is out there. -->
+    <g id="s-set" class="spot" tabindex="0" role="button" aria-label="The television set, switched off">
+      <rect x="24" y="74" width="92" height="72" rx="4" fill="var(--chair)"/>
+      <rect id="glass" x="33" y="82" width="74" height="52" rx="3" fill="var(--paper)"/>
+      <rect class="hit" x="19" y="69" width="102" height="82" rx="4"/>
+    </g>
+
+    <!-- THE PHOTOGRAPH — the country, and who pays -->
+    <g id="s-photo" class="spot" tabindex="0" role="button" aria-label="A framed photograph on the wall">
+      <rect x="180" y="52" width="52" height="42" fill="var(--chair)"/>
+      <rect x="186" y="58" width="40" height="30" fill="var(--wall-lit)"/>
+      <rect class="hit" x="175" y="47" width="62" height="52"/>
+    </g>
+  </svg>
+</div>
+
+<div class="panel">
+  <p class="eyebrow" id="eyebrow">The room · October 22, 1962</p>
+  <div id="say"></div>
+  <div class="chips" id="chips"></div>
+</div>
+
+<p class="sr" role="status" aria-live="polite" id="live"></p>
+
+<script>
+"use strict";
+/* ---------------------------------------------------------------------------
+   THE MODEL. Five things in the room. You tap the world, not a menu.
+   No number is ever shown to the player. The mirror is LEGIBLE, never SCORED
+   (spec §7.1 — one decision cannot carry four independent skill reads).
+   --------------------------------------------------------------------------- */
+const S = { seen:{}, unknown:null, call:null, beat:"room" };
+
+/* BEAT 0 — THE ROOM. Nothing tells you what to do. Tap what your eye goes to.
+   C6: every screen under 50 player-facing words. */
+const LOOK = {
+  "s-map":   { t:"The map",        s:"Cuba. Eight days ago a U-2 photographed the sites. The country does not know yet." },
+  "s-phone": { t:"The telephone",  s:"It has not rung tonight. Moscow has not called. Neither have you." },
+  "s-set":   { t:"The set",        s:"Off. Three networks. Whatever you say, everyone hears at once, and only once." },
+  "s-photo": { t:"The photograph", s:"A street. People on it who will not be asked." },
+  "s-chair": { t:"The chair",      s:"Empty. Six days of argument have happened in this room. Nobody has decided." }
+};
+
+/* BEAT 1 — THE FOG. Era-plausible unknowns only: what a 1962 President genuinely
+   did not know, in 1962's vocabulary. Naming the decisive gap IS the win — at any
+   outcome (trauma rail 2). */
+const FOG = [
+  { id:"war",   t:"Will Moscow read a blockade as an act of war?" },
+  { id:"live",  t:"Are the missiles already operational?" },
+  { id:"panic", t:"Will the public steady, or panic?" },
+  { id:"allies",t:"Will the allies hold if we act alone?" }
+];
+
+/* BEAT 2 — THE CALL. The postures actually on the ExComm table, in period vocabulary.
+   NONE is marked correct. Mad Men rule: 1962's certainties, 1962's blindness. */
+const CALL = [
+  { id:"strike",   t:"Air-strike the sites",                   p:"Force" },
+  { id:"blockade", t:"Naval “quarantine”, demand withdrawal",  p:"Pressure, short of war" },
+  { id:"channel",  t:"Open a back-channel. Buy time.",         p:"Patience" },
+  { id:"invade",   t:"Invade Cuba",                            p:"Force" },
+  { id:"wait",     t:"Say nothing publicly yet",               p:"Concealment" }
+];
+
+/* BEAT 4 — THE CONSEQUENCE. Sourced. Honest. Never a grade, never a gotcha.
+   The Cuban Missile Crisis was a genuine problem-solving triumph and reads as one. */
+const MET = {
+  strike:  "An air-strike was pressed hard in the room. Later study found it would likely have killed Soviet troops on the island — and that some warheads were already there. The chain it started cannot be known, only feared.",
+  blockade:"The quarantine held. Moscow turned its ships. Thirteen days ended without a shot — the closest the era came, and it ended in a room, not a field.",
+  channel: "A back-channel did run, and it carried the thing the country was not told: the Jupiter missiles in Turkey came out too. The trade was real. It stayed secret for decades.",
+  invade:  "An invasion was on the table. The island held far more Soviet troops than U.S. intelligence believed, and local commanders had authority they were not known to have.",
+  wait:    "Silence was the posture for six days, and it bought the room its argument. It could not hold: a leak was days away, and the country would have learned it from a newspaper."
+};
+
+const $  = s => document.querySelector(s);
+const el = (t,c,x) => { const n=document.createElement(t); if(c)n.className=c; if(x)n.innerHTML=x; return n; };
+const say = h => { $("#say").innerHTML = h; };
+const live = t => { $("#live").textContent = t; };
+
+function chips(list){
+  const c = $("#chips"); c.innerHTML = "";
+  list.forEach(o => {
+    const b = el("button", o.cls || "chip", o.t);
+    if (o.done) b.dataset.done = "1";
+    b.onclick = o.go;
+    c.appendChild(b);
+  });
+}
+
+/* ---- BEAT 0 : the room. Tap the world. ---- */
+function room(){
+  S.beat = "room";
+  $("#eyebrow").textContent = "The room · October 22, 1962";
+  const n = Object.keys(S.seen).length;
+  say(n === 0
+    ? `<p class="say">It is late. Nobody has gone to bed.<br><em>Look around the room.</em></p>`
+    : `<p class="say"><em>Look at what you want. Sit down when you are ready.</em></p>`);
+  const c = Object.entries(LOOK).map(([id,o]) => ({
+    t:o.t, done:S.seen[id], go:()=>look(id)
+  }));
+  c.push({ t:"Sit down", cls:"btn", go:fog });
+  chips(c);
+}
+
+function look(id){
+  S.seen[id] = 1;
+  const g = document.getElementById(id); if (g) g.dataset.done = "1";
+  const o = LOOK[id];
+  $("#eyebrow").textContent = o.t;
+  say(`<p class="say">${o.s}</p>`);
+  live(o.t + ". " + o.s);
+  const c = Object.entries(LOOK).map(([k,v]) => ({ t:v.t, done:S.seen[k], go:()=>look(k) }));
+  c.push({ t:"Sit down", cls:"btn", go:fog });
+  chips(c);
+  click();
+}
+
+/* ---- BEAT 1 : the fog. Which unknown is decisive? (problem-solving read) ---- */
+function fog(){
+  S.beat = "fog";
+  setOn(true);                       // you are in the chair now. the set is on.
+  $("#eyebrow").textContent = "The fog";
+  say(`<p class="say">You are in the chair. Six days of argument, and the room is
+       waiting on you.<br><em>What do you most need to know?</em></p>`);
+  live("You are in the chair. What do you most need to know?");
+  chips(FOG.map(f => ({ t:f.t, go:()=>{ S.unknown=f.id; call(); } })));
+}
+
+/* ---- BEAT 2 : the call. No option is correct. (leadership read) ---- */
+function call(){
+  S.beat = "call";
+  $("#eyebrow").textContent = "The call";
+  const f = FOG.find(x=>x.id===S.unknown);
+  say(`<p class="say">You do not get to know it. <em>${f.t}</em> — nobody in this room
+       can tell you tonight.<br><br>You still have to decide.</p>`);
+  live("You still have to decide.");
+  chips(CALL.map(c => ({ t:c.t, go:()=>{ S.call=c.id; record(); } })));
+}
+
+/* ---- BEAT 3 : the record turns. The room CHANGES behind you (Metroid). ---- */
+function record(){
+  S.beat = "record";
+  $("#eyebrow").textContent = "The record turns";
+  say(`<div class="card rec">
+        <p class="say">The address you gave was <strong>day eight</strong>, not day one.
+        The missiles were photographed on October 14. The quarantine was chosen after
+        six days of weighing — the country heard a decision and could not see the argument.</p>
+        <p class="src">Declassified record; ExComm tapes. What the room could not see when it decided.</p>
+      </div>`);
+  live("The record turns. The address was day eight, not day one.");
+  chips([{ t:"Meet it", cls:"btn", go:mirror }]);
+}
+
+/* ---- BEAT 4 : the both-and. Consequence AND mirror. Never a grade. ---- */
+function mirror(){
+  S.beat = "mirror";
+  $("#eyebrow").textContent = "What it met · what you did";
+  const chose = CALL.find(c=>c.id===S.call);
+  const caught = S.unknown === "war";     // the gap that actually mattered
+  const looked = Object.keys(S.seen).length;
+
+  say(`
+    <div class="card rec">
+      <p class="say"><strong class="cool">What it met.</strong> ${MET[S.call]}</p>
+      <p class="src">Sourced. This is what that posture met — not a verdict on you.</p>
+    </div>
+    <div class="card mirror">
+      <p class="say"><strong>What you did.</strong> You looked at
+        <strong>${looked}</strong> ${looked===1?"thing":"things"} in the room, held
+        <em>${FOG.find(f=>f.id===S.unknown).t.toLowerCase().replace(/\?$/,"")}</em> as the
+        thing you most needed, and chose <strong class="hot">${chose.p.toLowerCase()}</strong>.</p>
+      <p class="say">${caught
+        ? `<span class="cool">That was the gap that mattered.</span> Whether Moscow would read
+           pressure as war is the question the thirteen days actually turned on. You named it
+           before you moved.`
+        : `The gap the thirteen days turned on was <em>whether Moscow would read pressure as
+           war.</em> You moved on something else. That is not a wrong answer — it is where
+           your attention went, and now you can see it.`}</p>
+      <p class="src">No score. The game never rates you — it shows you the shape of your own
+        reasoning. What you can see, you can change.</p>
+    </div>`);
+  live("The record. And the mirror.");
+  chips([{ t:"Again", cls:"btn", go:again }]);
+}
+
+function again(){
+  S.seen={}; S.unknown=null; S.call=null;
+  document.querySelectorAll(".spot").forEach(s=>s.dataset.done="0");
+  setOn(false); room();
+}
+
+/* ---- the room remembers: the set comes on when you take the chair ---- */
+function setOn(on){
+  $("#glass").setAttribute("fill", on ? "var(--screen)" : "var(--paper)");
+  $("#glass").setAttribute("opacity", on ? ".92" : "1");
+}
+
+/* ---- SOUND. Off by default. Never autoplays. Every sound has a visible event.
+       The room hums; the VOICE IS WITHHELD — never a likeness. (sound bible) ---- */
+let AC=null, hum=null, on=false;
+function ac(){ if(!AC){ try{ AC = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ AC=null; } } return AC; }
+function room_tone(){
+  const a=ac(); if(!a||hum) return;
+  const o=a.createOscillator(), g=a.createGain();       // 60Hz mains hum of a tube set
+  o.type="sine"; o.frequency.value=60; g.gain.value=0.012;
+  const w=a.createOscillator(), wg=a.createGain();      // flyback whine, halved to be gentle
+  w.type="sine"; w.frequency.value=7860; wg.gain.value=0.003;
+  o.connect(g).connect(a.destination); w.connect(wg).connect(a.destination);
+  o.start(); w.start(); hum={o,w};
+}
+function click(){
+  if(!on) return; const a=ac(); if(!a) return;
+  const o=a.createOscillator(), g=a.createGain();
+  o.type="square"; o.frequency.value=120; g.gain.value=0.05;
+  o.connect(g).connect(a.destination);
+  const t=a.currentTime; o.start(t);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+0.07); o.stop(t+0.08);
+}
+$("#snd").onclick = e => {
+  on = !on; e.currentTarget.setAttribute("aria-pressed", on);
+  e.currentTarget.setAttribute("aria-label", "Room sound: " + (on?"on":"off"));
+  if(on){ room_tone(); } else if(hum){ hum.o.stop(); hum.w.stop(); hum=null; }
+};
+
+/* ---- comfort: a live corner control. NEVER an opening wall. ---- */
+const STOPS=["","softer","daylight"]; let stop=0;
+$("#comfort").onclick = e => {
+  stop=(stop+1)%3; document.body.className=STOPS[stop];
+  e.currentTarget.setAttribute("aria-pressed", stop>0);
+  live("Comfort: " + (STOPS[stop]||"default"));
+};
+
+/* ---- the world is tappable. and every hotspot is ALSO a plain button below. ---- */
+document.querySelectorAll(".spot").forEach(g=>{
+  const go = ()=>{ if(S.beat==="room") look(g.id); };
+  g.addEventListener("click", go);
+  g.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
+});
+
+room();
+</script>
+</body>
+</html>
