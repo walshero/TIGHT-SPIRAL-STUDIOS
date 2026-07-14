@@ -376,6 +376,53 @@ Read it plainly: you start at the top (5). The pull subtracts how far the rhetor
 
 ---
 
+## 11. The Reference-Game Harvest (folded 2026-07-14 — six games, six thefts)
+
+*Each pattern below is named after the game that proved it and stated as a CHECK the
+studio can run, per §15's law. These evolve CYL v6 directly and every decision-game after.*
+
+**11.1 — THE STAMP (Papers, Please).** A commitment must have a PHYSICAL VERB — a stamp,
+a knock, a receiver lifted — never only a selected radio button. The check: *point to the
+gesture that commits.* If the answer is "they tapped Continue," the beat isn't built.
+v6 application: the baby KNOCKS the phone off the hook. That is the stamp.
+
+**11.2 — THE QUOTA (Papers, Please).** Consequence lands hardest when the player carries
+a COST INTO the next decision, not a verdict OUT of the last one. Pope's rent-and-family
+screen is why stamps hurt. v6 application: what you overheard in home one is the fog you
+CARRY into the chair — the cost is what you didn't hear.
+
+**11.3 — THE OTHER SIDE OF THE DESK (Republia Times).** Any media-literacy beat gains an
+order of magnitude when the player has ALSO played the desk that produces the frame.
+Check: does the game let you build the front page you will later be fooled by?
+v6 horizon: a five-minute "you are the editor" prologue is the cheapest deep move on the
+board — one screen, the child's paper route in reverse.
+
+**11.4 — THE BATCH REVEAL (Obra Dinn).** Never confirm one commitment at a time; confirm
+in threes. Single confirmation trains guess-and-check; batch confirmation forces the
+player to HOLD uncertainty — which is the actual skill. Check: can the player brute-force
+a beat by toggling one answer? If yes, batch it.
+v6 application: the record turns ONCE, on everything you committed across the whole house.
+
+**11.5 — THE SEARCH IS THE BIAS (Her Story).** The ORDER a player explores becomes their
+frame, and the game should SHOW them that order at the end. Check: does the mirror replay
+the player's own path? v6 application: the mirror names which rooms you visited and which
+you never entered. 'You never went where the radio was' IS the media-literacy read —
+no lecture required.
+
+**11.6 — THE CONSTRAINT WEARS THE CROWN (Obra Dinn's 1-bit).** A hard limitation declared
+LOUDLY reads as vision; the same limitation hidden reads as budget. The studio's
+single-file/offline/B&W-broadcast floors should be VISIBLE AS AESTHETIC, never apologized
+for. Check: does the game's look claim its constraint on purpose?
+
+**11.7 — THE SYSTEM HAS WEATHER (Twilight Struggle).** Era pressure must arrive through
+EVENTS THE PLAYER CANNOT FULLY CONTROL, not only through set dressing. The fog is
+weather, not wallpaper. v6 horizon: the prelude cards become drawn events — which
+headline reached YOUR house is partly the era's dice, exactly as it was.
+
+**THE ANTI-PATTERN, named (iCivics-class):** any game that grades a POSTURE as a right
+answer. The trauma rails already forbid it; the harvest confirms it from the other
+direction — every great game above scores the PROCESS visible, never the position taken.
+
 ## Boundary — what stays in Confluence and does NOT graduate here
 
 These are Confluence-specific and must not be pulled into general builds (they'd drag project machinery into games that don't need it):
