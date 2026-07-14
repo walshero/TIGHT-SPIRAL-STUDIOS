@@ -1,0 +1,333 @@
+<!--
+  ═══════════════════════════════════════════════════════════════════════════
+  THE COMFORT CONTROL — canonical. Tight Spiral Productions.
+  Locked 2026-07-14. One button. Five stops. Paste into every build.
+
+  WHY THIS FILE EXISTS
+  --------------------
+  A sweep of the 33-file corpus on 2026-07-14 found ELEVEN different stop names:
+  softer (16 files), warm (13), on (3), revealing (3), daylight (2), a11y-contrast
+  (2), bigtext (2), a11y-large-text, warmdark, hc, big. Three different button
+  patterns. One game shipped TWO knobs (View + Motion) stacked above the scene,
+  where they formed a wall the player had to scroll past to reach the joke.
+
+  The founder opened it and said "ugggh." He was right, and no gate caught it.
+
+  A control that means something different in every room is not a control.
+  It is a thing the player has to relearn, and relearning is friction, and
+  friction on an interface is the tax this studio exists to abolish.
+
+  ONE BUTTON. FIVE STOPS. THE SAME FIVE, EVERYWHERE.
+
+  THE STOPS
+  ---------
+    1  Default       the designed look. Full art. What you meant.
+    2  Softer        same design, calmer. Lower contrast, less push.
+    3  Warm dark     dark ground, warm ink. NEVER pure black on pure white —
+                     that pair measures 21:1 and READS worse on an RP retina,
+                     because max contrast blooms and smears. Floor: 18.97:1.
+    4  Daylight      maximum legibility. Flat, high-contrast, no atmosphere.
+                     For a bright room, a projector, a bad screen.
+    5  CLEAR READER  strips the design to the bone. Semantic HTML only.
+                     Headings, lists, links, in document order.
+
+  WHY CLEAR READER IS THE POINT
+  -----------------------------
+  It is not an accessibility afterthought bolted to the end of a menu. It is a
+  TEACHING DEVICE, and it is the studio's own thesis turned on its own interface.
+
+  A screen-reader user gets the document — the real structure underneath the art.
+  A sighted person has never seen that document. They have no idea whether the
+  thing they built has a spine or whether the layout was doing all the work.
+
+  Tap Clear Reader and the game BECOMES its own outline. The colour goes. The
+  layout goes. The decoration goes. What is left is what a screen reader actually
+  receives — and if that is a mess of unlabeled divs and orphaned buttons, the
+  sighted maker can finally SEE the mess they have been shipping to blind users.
+
+  MAKE THE INVISIBLE STRUCTURE VISIBLE. That is every game in this studio.
+  This is that engine, pointed at the studio itself.
+
+  It is also the fastest accessibility audit ever invented: if the game is
+  unplayable in Clear Reader, it is unplayable with a screen reader. No tooling,
+  no plugin, no expertise. One tap, and you are looking at the truth.
+
+  TOKEN-ROLE LAW (do not violate this when you extend it)
+  ------------------------------------------------------
+  A colour token is ATMOSPHERE or it is TEXT. It is never both. Any token used
+  in a `color:` declaration AND a `background`/`border`/`fill` declaration is a
+  HALT — split it into an -ink form and a -fill form. This is how the amber-as-text
+  bug survived three "checks": someone eyeballed the hex and it looked fine.
+  Contrast is a COMPUTATION, not a judgment.
+  ═══════════════════════════════════════════════════════════════════════════
+-->
+
+<!-- ─────────────────────── 1. THE CSS ─────────────────────── -->
+<style>
+/* ── STOP 1 · DEFAULT — the designed look ───────────────────────────────── */
+:root{
+  --paper:      #fbfaf7;   /* never #fff — pure white blooms on an RP retina */
+  --paper-2:    #f1eee6;
+  --rule:       #d8d2c4;
+  --ink:        #14181d;   /* 15.9:1 — never #000; the max pair reads WORSE */
+  --ink-2:      #3d4652;   /*  8.1:1 */
+  --ink-3:      #5c6675;   /*  5.3:1 — the floor for body text */
+  --accent-ink: #6a4d12;   /*  6.2:1 — TEXT form */
+  --accent-fill:#d9a441;   /*         — GROUND form. Never text. */
+  --cool-ink:   #274063;   /*  9.3:1 — TEXT form */
+  --cool-fill:  #c3d2e6;   /*         — GROUND form. Never text. */
+  --live-ink:   #1d5c3f;   /*  6.7:1 */
+  --slab:       #12161b;
+  --slab-ink:   #f4f1e8;   /* 16.4:1 on slab */
+
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --serif:"Iowan Old Style", Palatino, Georgia, serif;
+
+  --motion: 1;             /* 1 = animate, 0 = still */
+}
+
+/* ── STOP 2 · SOFTER — same design, less push ───────────────────────────── */
+body.softer{
+  --paper:      #f6f3ec;
+  --paper-2:    #ece7dc;
+  --rule:       #d6cfc0;
+  --ink:        #24292f;   /* 12.4:1 — still far above floor, just calmer */
+  --ink-2:      #48505c;   /*  7.1:1 */
+  --ink-3:      #5f6875;   /*  5.1:1 */
+  --accent-ink: #6d5016;
+  --cool-ink:   #2b4467;
+}
+
+/* ── STOP 3 · WARM DARK — for night, glare, and RP ──────────────────────── */
+body.warmdark{
+  --paper:      #16150f;   /* warm charcoal. NOT #000. */
+  --paper-2:    #201e16;
+  --rule:       #3b3729;
+  --ink:        #f2ede0;   /* 15.1:1 on paper. NOT #fff. */
+  --ink-2:      #d3cbb8;   /* 11.0:1 */
+  --ink-3:      #a89f89;   /*  6.6:1 */
+  --accent-ink: #eab958;   /*  9.4:1 on the dark ground */
+  --accent-fill:#7a5a12;
+  --cool-ink:   #9fc0e4;   /*  8.9:1 */
+  --cool-fill:  #24384f;
+  --live-ink:   #7fca9f;   /*  9.6:1 */
+  --slab:       #0e0d09;
+  --slab-ink:   #f2ede0;
+}
+
+/* ── STOP 4 · DAYLIGHT — maximum legibility, no atmosphere ──────────────── */
+body.daylight{
+  --paper:      #ffffff;   /* the ONE place pure white is allowed: max legibility */
+  --paper-2:    #f2f2f2;
+  --rule:       #767676;   /* a real border, not a whisper */
+  --ink:        #000000;   /* and the one place pure black is allowed */
+  --ink-2:      #1a1a1a;
+  --ink-3:      #333333;   /* 12.6:1 — no muted text ANYWHERE in this stop */
+  --accent-ink: #5c4000;   /*  8.6:1 */
+  --accent-fill:#ffd97a;
+  --cool-ink:   #14304f;   /* 12.4:1 */
+  --cool-fill:  #d6e4f5;
+  --live-ink:   #14472f;   /* 10.4:1 */
+  --slab:       #000000;
+  --slab-ink:   #ffffff;
+  --motion: 0;             /* atmosphere is off in this stop, so motion is too */
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ── STOP 5 · CLEAR READER ──────────────────────────────────────────────────
+
+   Strip EVERYTHING that is not meaning. What survives is what a screen reader
+   receives: headings, lists, links, buttons, in document order.
+
+   This is deliberately BLUNT. It is not a prettier theme. It is the document
+   with the design taken off, and it is supposed to be a little bit shocking —
+   that shock is the lesson.
+
+   `all:revert` beats specificity without !important warfare. It is supported
+   everywhere that matters and it means we do not have to hunt every rule in a
+   30 KB file and undo it by hand.
+   ═══════════════════════════════════════════════════════════════════════════ */
+body.clear-reader{
+  --motion: 0;
+  background:#ffffff !important;
+  color:#000000 !important;
+  font-family:var(--sans) !important;
+  font-size:19px !important;
+  line-height:1.65 !important;
+  max-width:38em !important;
+  margin:0 auto !important;
+  padding:24px 20px 80px !important;
+}
+
+/* Nuke the design. Keep the document. */
+body.clear-reader *:not(.cr-note):not(.cr-note *):not(.comfort):not(.comfort *){
+  all:revert;
+  font-family:inherit !important;
+  color:#000000 !important;
+  background:#ffffff !important;
+  border-color:#767676 !important;
+  box-shadow:none !important;
+  text-shadow:none !important;
+  animation:none !important;
+  transition:none !important;
+  max-width:100% !important;
+  float:none !important;
+  position:static !important;
+}
+
+/* Decoration is not meaning. If it carries no information, it goes. */
+body.clear-reader svg:not([role="img"]),
+body.clear-reader canvas,
+body.clear-reader video,
+body.clear-reader .decor,
+body.clear-reader [aria-hidden="true"]{ display:none !important; }
+
+/* An image with a real alt/label IS information. Render its words. */
+body.clear-reader svg[role="img"]{ display:none !important; }
+body.clear-reader svg[role="img"] + *::before{ content:""; }
+
+/* Structure must be VISIBLE, because that is the whole point of this stop. */
+body.clear-reader h1{ font-size:30px !important; margin:26px 0 10px !important;
+  border-bottom:3px solid #000 !important; padding-bottom:5px !important; }
+body.clear-reader h2{ font-size:24px !important; margin:24px 0 8px !important;
+  border-bottom:1px solid #767676 !important; padding-bottom:3px !important; }
+body.clear-reader h3{ font-size:20px !important; margin:20px 0 6px !important; }
+body.clear-reader p, body.clear-reader li{ font-size:19px !important; margin:0 0 13px !important; }
+body.clear-reader ul, body.clear-reader ol{ padding-left:26px !important; margin:0 0 16px !important; }
+body.clear-reader li{ list-style:disc !important; }
+body.clear-reader ol li{ list-style:decimal !important; }
+
+body.clear-reader a{ color:#0000ee !important; text-decoration:underline !important; }
+body.clear-reader a:visited{ color:#551a8b !important; }
+
+/* A control must LOOK like a control. In this stop it is a plain, obvious button. */
+body.clear-reader button,
+body.clear-reader select,
+body.clear-reader input{
+  font-size:18px !important; padding:11px 16px !important;
+  border:2px solid #000000 !important; border-radius:0 !important;
+  background:#ffffff !important; color:#000000 !important;
+  margin:0 8px 8px 0 !important; display:inline-block !important;
+  min-height:44px !important;                 /* the real tap-target floor */
+  cursor:pointer !important;
+}
+body.clear-reader button[aria-pressed="true"]{
+  background:#000000 !important; color:#ffffff !important; font-weight:700 !important;
+}
+body.clear-reader :focus-visible{
+  outline:4px solid #0000ee !important; outline-offset:2px !important;
+}
+
+/* The banner that explains what just happened. This is the teaching moment. */
+body.clear-reader .cr-note{
+  display:block !important;
+  border:3px solid #000000 !important;
+  background:#ffffff !important;
+  padding:15px 17px !important;
+  margin:0 0 26px !important;
+  font-size:17px !important;
+  line-height:1.5 !important;
+  color:#000000 !important;
+}
+.cr-note{ display:none; }
+.cr-note b{ font-weight:700; }
+
+/* ── THE BUTTON ─────────────────────────────────────────────────────────── */
+.comfort{
+  position:fixed; right:14px; bottom:14px; z-index:9999;
+  font-family:var(--mono); font-size:12.5px; font-weight:700;
+  letter-spacing:.06em;
+  padding:11px 15px;
+  min-height:44px;                      /* tap-target floor. Non-negotiable. */
+  background:var(--paper-2);
+  color:var(--ink);                     /* an INK token. Never a fill token. */
+  border:2px solid var(--ink);
+  border-radius:2px;
+  cursor:pointer;
+  box-shadow:0 2px 10px rgba(0,0,0,.14);
+}
+.comfort:hover{ background:var(--paper); }
+.comfort:focus-visible{ outline:4px solid var(--cool-ink); outline-offset:3px; }
+
+/* In Clear Reader the button must NOT be fixed — a fixed element floating over
+   a document is exactly the kind of thing that confuses a screen reader and
+   traps a keyboard. It joins the document, like everything else. */
+body.clear-reader .comfort{
+  position:static !important;
+  display:block !important;
+  margin:0 0 20px !important;
+  box-shadow:none !important;
+}
+
+/* Motion respects the stop AND the OS. The OS always wins. */
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; transition:none !important; }
+}
+</style>
+
+
+<!-- ─────────────────── 2. THE MARKUP (two elements) ─────────────────── -->
+
+<!-- Put this FIRST inside <body>. It is empty until Clear Reader is on. -->
+<div class="cr-note" role="note">
+  <b>Clear Reader.</b> The design is off. This is the document underneath &mdash;
+  headings, lists, links, in the order a screen reader receives them.
+  <b>If this is hard to follow, it is hard to follow with a screen reader too.</b>
+  Tap the button again to bring the design back.
+</div>
+
+<!-- Put this LAST inside <body>, before the scripts. Never at the top:
+     a control above the content is a WALL. Comfort is a corner control. -->
+<button class="comfort" id="comfort" aria-live="polite">
+  Comfort: <span id="comfort-label">Default</span>
+</button>
+
+
+<!-- ─────────────────────── 3. THE SCRIPT ─────────────────────── -->
+<script>
+(function(){
+  "use strict";
+
+  /* FIVE STOPS. ONE BUTTON. The same five in every room, forever.
+     Clear Reader is LAST because it is the biggest jump — you arrive at it
+     having already tried the gentler things, which is the honest order. */
+  var STOPS = [
+    { cls:"",             label:"Default"      },
+    { cls:"softer",       label:"Softer"       },
+    { cls:"warmdark",     label:"Warm dark"    },
+    { cls:"daylight",     label:"Daylight"     },
+    { cls:"clear-reader", label:"Clear Reader" }
+  ];
+
+  var i = 0;
+  var btn   = document.getElementById("comfort");
+  var label = document.getElementById("comfort-label");
+
+  function apply(){
+    for(var k = 0; k < STOPS.length; k++){
+      if(STOPS[k].cls) document.body.classList.remove(STOPS[k].cls);
+    }
+    if(STOPS[i].cls) document.body.classList.add(STOPS[i].cls);
+    label.textContent = STOPS[i].label;
+
+    /* Say the NEXT stop, not the current one — a button announces what it will
+       DO, not what it is. A screen-reader user pressing this needs to know where
+       it takes them. */
+    var next = STOPS[(i + 1) % STOPS.length].label;
+    btn.setAttribute("aria-label",
+      "Comfort setting: " + STOPS[i].label + ". Press to switch to " + next + ".");
+  }
+
+  btn.addEventListener("click", function(){
+    i = (i + 1) % STOPS.length;
+    apply();
+  });
+
+  /* NO STORAGE. Single-file, offline, zero-persistence is studio law — the file
+     must run from a USB stick on a plane. The stop resets on reload, and that is
+     the correct trade: a game that remembers you is a game that has stored you. */
+
+  apply();
+})();
+</script>

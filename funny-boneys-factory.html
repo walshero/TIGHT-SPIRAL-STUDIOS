@@ -90,9 +90,16 @@
   /* ---- top bar: comfort knobs + lens toggle. never a gate; always reachable ---- */
   .bar{
     display:flex; flex-wrap:wrap; gap:10px; align-items:center;
-    padding:10px 12px; margin-bottom:16px;
+    padding:10px 12px; margin-top:22px; margin-bottom:16px;
     background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+  
+    /* SITS BELOW THE SCENE (2026-07-14). It used to sit ABOVE it, where it was a wall:
+       a player met a brand mark, three lens buttons and two dropdowns before they met
+       the cat. Now it is what its own comment always claimed — a LIVE control, always
+       reachable, never a gate. Deliberately RECESSIVE: the scene is the loud thing. */
+    opacity:.9;
   }
+  .bar:hover, .bar:focus-within { opacity:1; }
   .brand{ font-weight:800; letter-spacing:.3px; font-size:1.02rem; margin-right:auto; display:flex; align-items:center; gap:9px;}
   .brand .glyph{ width:22px; height:22px; }
   .knobs{ display:flex; gap:6px; flex-wrap:wrap; }
@@ -243,34 +250,29 @@
 <body>
 <div class="stage">
 
-  <!-- ============ TOP BAR: comfort knobs (never gates) + lens toggle ============ -->
-  <div class="bar" role="region" aria-label="Comfort and lens controls">
-    <div class="brand">
-      <svg class="glyph" viewBox="0 0 32 32" aria-hidden="true">
-        <circle cx="16" cy="16" r="14" fill="none" stroke="var(--lens)" stroke-width="2"/>
-        <path d="M16 4 A12 12 0 0 1 28 16 A9 9 0 0 1 16 25 A6.5 6.5 0 0 1 9.5 18.5 A4.5 4.5 0 0 1 16 14.5"
-              fill="none" stroke="var(--lens)" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-      Funny Boney's Factory
-    </div>
+  <!-- ============ SCENE FIRST. LITERALLY FIRST. ============================
+       BUG (found 2026-07-14, by the founder's eye, not by any gate):
+       the control bar was ABOVE the scene in the DOM. A player opened this game
+       and met a brand mark, three lens buttons, and two dropdowns — "View: Arcade,
+       Motion: Full" — BEFORE they met the cat. The joke was below the fold.
 
-    <div class="lenses" role="group" aria-label="Choose your lens">
-      <button class="lens-btn" data-l="spell"  aria-pressed="false" onclick="setLens('spell')">Spellcaster</button>
-      <button class="lens-btn" data-l="code"   aria-pressed="false" onclick="setLens('code')">Coder</button>
-      <button class="lens-btn" data-l="story"  aria-pressed="false" onclick="setLens('story')">Storyteller</button>
-    </div>
+       The CSS comment on .bar already said "never a gate; always reachable."
+       The comment on .scene already said "scene-first opening." BOTH WERE TRUE
+       AS INTENTIONS AND FALSE AS FACTS, because the DOM order contradicted them.
+       A settings panel you must scroll past IS a gate. It does not stop being one
+       because it is pretty, or because a comment says it isn't.
 
-    <div class="knobs" role="group" aria-label="Comfort settings">
-      <button class="knob" id="k-stop" aria-pressed="false" onclick="cycleStop()">
-        View: <small id="stop-lab">Arcade</small>
-      </button>
-      <button class="knob" id="k-motion" aria-pressed="false" onclick="toggleMotion()">
-        Motion: <small id="motion-lab">Full</small>
-      </button>
-    </div>
-  </div>
+       The studio retired this pattern on 2026-06-29 and wrote it into law:
+       NO OPENING WALL — the first screen is the scene, never a preference gate.
+       This file kept shipping the retired pattern for six weeks, and Studio Eyes
+       waved it through every time, because Studio Eyes only knows ARITHMETIC.
+       It can prove a colour is unreadable. It has no idea whether a game opens
+       on a joke or on a control panel. That is a real limit of the auditor and
+       it is worth naming: a 0-HALT is not a verdict that something is GOOD.
 
-  <!-- ============ SCENE-FIRST OPENING (a machine mid-chain, about to be funny) ============ -->
+       "Make the cat laugh." is a great first line. It should be the first thing
+       you see. Now it is.
+       ==================================================================== -->
   <div class="scene" id="scene">
     <svg viewBox="0 0 1040 460" role="img" aria-label="A Rube Goldberg machine mid-chain: a marble is about to roll off a ramp, tip a bucket, and drop a rubber chicken onto a springboard aimed at a sleeping cat.">
       <defs>
@@ -342,6 +344,42 @@
   <div class="row">
     <button class="btn" id="cta-start" onclick="goBuild()">Step in</button>
     <button class="btn ghost" onclick="openHow()">How this plays</button>
+  </div>
+
+  <!-- ============ THE CONTROLS — BELOW the scene, on purpose ==================
+       These used to sit ABOVE the scene, which made them a wall. Comfort and lens
+       are LIVE CONTROLS, not a preference gate: they are always reachable, they
+       never block, and they do not stand between a person and the joke.
+
+       The rule (locked 2026-06-29, re-enforced here): the first screen is the
+       SCENE. Comfort is a corner control. You change the lens BECAUSE you have
+       seen something and want to see it differently — not before you have seen
+       anything at all, when the choice is meaningless.
+       ==================================================================== -->
+  <div class="bar" role="region" aria-label="Comfort and lens controls">
+    <div class="brand">
+      <svg class="glyph" viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="16" r="14" fill="none" stroke="var(--lens)" stroke-width="2"/>
+        <path d="M16 4 A12 12 0 0 1 28 16 A9 9 0 0 1 16 25 A6.5 6.5 0 0 1 9.5 18.5 A4.5 4.5 0 0 1 16 14.5"
+              fill="none" stroke="var(--lens)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      Funny Boney's Factory
+    </div>
+
+    <div class="lenses" role="group" aria-label="Choose your lens">
+      <button class="lens-btn" data-l="spell"  aria-pressed="false" onclick="setLens('spell')">Spellcaster</button>
+      <button class="lens-btn" data-l="code"   aria-pressed="false" onclick="setLens('code')">Coder</button>
+      <button class="lens-btn" data-l="story"  aria-pressed="false" onclick="setLens('story')">Storyteller</button>
+    </div>
+
+    <div class="knobs" role="group" aria-label="Comfort settings">
+      <button class="knob" id="k-stop" aria-pressed="false" onclick="cycleStop()">
+        View: <small id="stop-lab">Arcade</small>
+      </button>
+      <button class="knob" id="k-motion" aria-pressed="false" onclick="toggleMotion()">
+        Motion: <small id="motion-lab">Full</small>
+      </button>
+    </div>
   </div>
 
   <!-- ============ PROGRESS RAIL (studio vocabulary: the loop, made visible) ============ -->
