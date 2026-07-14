@@ -1175,6 +1175,24 @@ The recipes live in `tight-spiral-patterns.md`; the laws live here.
 - **C3** — Palette deliberately composed; real value range + temperature relief (anti-mud) — subordinate to the Visibility floor.
 - **C4** — Cognitive science grounds every choice (attention, load, dual coding, spacing/retrieval, generation effect, feedback timing).
 - **C5** — Mnemonic icons as a rule; each icon must express the point and land faster than the word, or it's decoration and fails.
+- **C6 — The 50-word ceiling (locked 2026-07-02, folded 2026-07-13).** No player-facing
+  screen carries 50 or more words of *instruction*. Story text, teaching feedback, and the
+  player's own material are exempt; setup, directions, and reassurance are budgeted.
+  **The affordance teaches, not the paragraph — if a mechanic needs a paragraph to explain,
+  the mechanic isn't done.** Lineage: Lure of the Labyrinth / Amanita wordless-world
+  discipline; Scot's standing note (too long, too text-heavy) made law.
+- **C7 — The >50% image floor (locked long-standing, MADE ARITHMETIC 2026-07-13).** A game's
+  first paint is at least half scene. **Enforced by Studio Eyes `IMAGE_FLOOR`** on a phone
+  viewport, `<meta name="tsp:surface" content="game">`. Measured 2026-07-13: seven of eight
+  core games failed — CYL v5 at 0%. It had been a founder law with no check for months, and
+  so it was a wish. *A first paint that is mostly prose is a document with buttons.*
+- **C8 — Tap the world, not menus (locked 2026-07-02, folded 2026-07-13).** Design DNA:
+  **Samorost** (you tap the world) x **Lure of the Labyrinth** (near-zero words) x
+  **Lumino City** (one handcrafted scene IS the game) x **Metroid** (chambers gate chambers;
+  **the world remembers** — clear a move and the scene changes behind you).
+  **THE FLOOR COLLISION, RESOLVED (founder call):** *Samorost hides its hotspots; this studio
+  never does.* Every hotspot carries a bold outline, full keyboard order, and a duplicate
+  plain-button affordance. **Engagement proposes, floors dispose.**
 
 **Pattern shorthand:**
 - **Nunan Task Spine** — the player does the discipline's real work; rank mechanics by transfer.
@@ -1344,7 +1362,16 @@ Settled calls. A future session — human or AI — should not reopen these with
 
 **14.1 The "Zapier can't do trunk files" myth is dead.** The 5K ceiling applies ONLY to the paste-text path. Zapier's file lane (Upload File from URL, Replace File, Move Files to Folder) handles up to 100MB. The move/replace/upload actions are live and tested. Trunk files fail the *paste* path, not the *file* path.
 
-**14.2 Native Drive WRITE is down; READ is fully working.** Verified 2026-07-05: `create_file` errors out; search/list/read return full results with real IDs. Route writes through Zapier (Move/Replace) or the phone Shortcut. Do not attempt native Drive create until re-verified.
+**14.2 CORRECTED 2026-07-13 — native Drive WRITE works.** The 07-05 claim that `create_file`
+errors out is **stale**. It works with `disableConversionToGoogleType: true` + an explicit
+`contentMimeType`. Zapier is **not** required for Drive push.
+
+**14.3 Zapier moves and triggers. It has NO COMPARISON OPERATOR.** It cannot diff, hash, read
+a git tree, or compute a contrast ratio — **at any tier.** (Founder is on **Pro**, not free;
+never quote a task ceiling as a reason.) **It is not a cleanup, audit, or canon tool.**
+
+**14.4 The repo is home. Drive is an address book.** Git is the only lane with a mechanism
+that prevents two versions of the truth. See `COLD-START.md`.
 
 **14.3 Three folders named `Claude_files` exist** (owners walshero + post). Memory carried one ID as if it were the only one. Until one is picked canonical, "save to Claude_files" is ambiguous — name the folder AND the ID.
 
@@ -1355,6 +1382,920 @@ Settled calls. A future session — human or AI — should not reopen these with
 **14.6 Bouncers — parked spec, not built.** "Agentic bouncers" (empowered founder-proxy gate-guards) captured as a post-July-6 build in the Command Center. MVP = existing belt beats (AI-Skeptic HALT, TLDR BAIL, 50% gate, FERPA strip) enforced as a pre-ship checklist, NOT autonomous agents. Autonomous founder-clone agents are clever-but-fragile — a system to babysit, the tool-chasing pattern. Checklist-first is durable.
 
 **14.7 Probe before trust.** Any save failure → re-run the file-map probes and update dates. Memory is claims; tool output is truth.
+
+---
+## 12. The Cross-Lane Mount — canon is an address
+
+*Locked 2026-07-10 (founder voice session). The governance primitive that connects
+lanes without merging them. Extracted from the Confluence↔TSP link problem and
+generalized: **canon is an address, governance is a flag on that address, and the
+flag is machine-enforced.** Copies go stale; pointers cannot. Remembered rules leak;
+flagged ones HALT.*
+
+---
+
+## §12.1 The primitive
+
+Three moves, applied to every governed document in the studio:
+
+1. **Canon is an address, not a copy.** A lane never holds another lane's content.
+   It holds a *pointer*: canonical file ID + byte-count + version + last-touched.
+   A pointer is ~200 bytes and is always current; a copy is stale the moment the
+   source is edited. This is the accumulator-decay rule applied at the index level.
+
+2. **Every mount carries a write-direction flag.** `RW` (this lane owns it, may
+   write) or `RO` (this lane may read only). The flag is declared once, in the
+   manifest, and enforced — not remembered.
+
+3. **The flag is machine-enforced.** Studio Eyes HALTs any session that writes to a
+   doc it holds `RO`. Convention leaks; a HALT does not.
+
+**The through-line the primitive replaces:** canon was *content copied around*;
+governance was *rules people remember*. Both fail silently. The mount flips both.
+
+---
+
+## §12.2 The manifest — single source of truth for what's canonical
+
+The **Cross-Lane Manifest** lives in the Command Center (which is itself now a
+pointer-hub — see §12.5). Every governed doc has exactly one row:
+
+| doc | canonical ID | bytes | version | owner-lane | last-touched |
+|-----|-------------|-------|---------|-----------|-------------|
+
+The manifest holds **no content** — only addresses. When the Confluence trunk bumps
+v34→v35, one row updates; every lane that mounts it sees the new pointer next session.
+No file copies, no stale duplicates, no "which one is real" fork.
+
+**Byte-verify law:** the manifest pointer is verified on every ship of the doc it
+points at (the belt already does this for the trunk). A wrong pointer is a
+single-point-of-failure; the byte-check is its guard. "created:true" is never proof.
+
+---
+
+## §12.3 The Confluence ↔ TSP link (the first mount)
+
+**TSP mounts Confluence:** the trunk **pointer** only (ID/bytes/version), read-only.
+TSP never opens the 528KB trunk — it reads the pointer so it always knows what
+"latest" is. Direction: `Confluence → TSP` is `RO`.
+
+**Confluence mounts TSP core docs**, read-only:
+- `tight-spiral-visual-constitution.md` — the green-floor legibility law
+- OS §6.4 Kernel Track — Confluence's calibration ground-truth (kernels are what
+  Confluence norms against)
+
+Confluence reads these; it can never write TSP canon. Direction: `TSP → Confluence`
+is `RO` both ways on the write. **Guard:** Studio Eyes HALTs if a Confluence-context
+session writes to a TSP core doc, or if a TSP session writes to the trunk pointer's
+target from the wrong side. Green cannot leak into a game; arcade palette cannot leak
+into the instrument. The palette lock stops being a *remembered decision* and becomes
+a *live constraint the build reads* (§12.6).
+
+**Founder-confirmed doc set (2026-07-10):** Visual Constitution + Kernel Track — the
+tighter assessment-only two, not the full OS. Confluence is an instrument; it needs
+the floor and the ground-truth, not the whole engine.
+
+---
+
+## §12.4 The four other applications (all the same primitive)
+
+**A. Silo dissolution (Leeder / Capstone / MassBay).** Each lane mounts the others'
+one core doc read-only. Leeder reads the Visual Constitution (its website rebuild
+passes the same floor) without touching studio canon. Capstone reads the Kernel Track
+(its evidence substrate) `RO`. Silos dissolve without merging. `conversation_search`
+stops being the un-silo mechanism (it was always a fallback); the manifest is.
+
+**B. Cleared = write-locked (ship-gate teeth).** A `PANEL-CLEARED` build is `RO`
+until a new gate fires. No session may edit a cleared build without re-entering the
+pipeline. This is the same flag, applied to builds instead of docs — it closes the
+"it's basically done, just one tweak" leak that ships un-gated edits. Clearance is a
+read-only flag; only GATE 1 + GATE 2 flip it back to `RW`.
+
+**C. Palette-as-mounted-law (§12.6).** Every build mounts its lane's palette-floor
+`RO` at open and cannot override it. Studio Eyes HALTs on any inline color that
+contradicts the mounted floor. Arcade-B for games, green for Confluence — read from
+one governed source, not remembered per file.
+
+**D. Memory-as-pointer (§12.7 / separate spec).** Most memory lines should be a
+read-only pointer to an archive block, not the content. "MEMORY RUNS AS INDEX; OS is
+the ARCHIVE" is stated architecture but currently *violated* — memory duplicates the
+archive. Enforce pointer-only and the 30/30 overflow stops.
+
+---
+
+## §12.5 Command Center becomes a pointer-hub
+
+The Command Center stops accumulating content and holds **only pointers** — the
+Cross-Lane Manifest plus open-thread addresses. It can never go stale because it holds
+no fact that lives elsewhere, only the address of where that fact lives. This is the
+Drive Atlas made law: index, never archive.
+
+---
+
+## §12.6 Palette floor as mount (enforcement detail)
+
+Each lane declares its palette floor once in the manifest:
+- **arcade** → palette-B High Lumen amber, 16.1:1 (games default floor)
+- **Confluence** → studio green #1a4a35 (instrument only)
+
+A build reads its floor `RO` at open. Studio Eyes check `PALETTE-MOUNT`: any inline
+color contradicting the mounted floor HALTs. The per-build Medium Gate still *chooses*
+the lane; the mount *enforces* the choice.
+
+---
+
+## §12.7 Belt hooks (how this stays alive)
+
+- **Session-open card** gains one line: *load the Cross-Lane Manifest from the Command
+  Center; it declares what every lane may read and write.*
+- **Session-close belt** gains one line: *any manifest pointer whose target shipped
+  this session is byte-verified and its row updated.*
+- **Studio Eyes** gains three checks: `WRITE-DIRECTION` (HALT on RO-write),
+  `PALETTE-MOUNT` (HALT on floor contradiction), `POINTER-FRESH` (WARN if a manifest
+  row's last-touched lags its target's actual mtime).
+- **CLASS-TICK on process:** any session ending in a predictable "wrong lane wrote the
+  wrong doc" correction mints a tighter mount rule. Adaptive Studio Eyes.
+
+---
+
+## §12.8 What to ignore
+
+Do **not** build a sync engine, a database, or a merge layer. The primitive is
+deliberately dumb: addresses + flags + one HALT check. The moment this grows a
+bidirectional-write or auto-merge feature, it has become the thing it was built to
+prevent. One canon writes; others read. That asymmetry is the whole design.
+
+### 12.7 — Pointer-only memory
+
+*Locked 2026-07-10. The cross-lane primitive (§12) turned inward on memory itself.
+Memory is at 30/30 because everything writes and nothing points. The stated
+architecture — "MEMORY RUNS AS INDEX; the OS is the ARCHIVE" — is currently violated:
+memory carries content the archive already holds. This spec makes the architecture
+enforceable instead of aspirational.*
+
+---
+
+## The law
+
+**A memory line carries an ADDRESS, not the content at that address.**
+
+- **Compliant:** `Cross-lane mount primitive → os-block-cross-lane-mount.md §12`
+  (a pointer: names the thing, points to where it lives, ~60 chars)
+- **Violation:** a 400-word block restating what §12 says (content duplication —
+  the archive already holds it; the memory line should point, not repeat)
+
+The test: **could this line be replaced by "see <file> <section>" without losing
+anything a future session needs?** If yes, it must be. The content lives in the
+archive; memory holds only the address and the one fact that tells a session *whether
+to go read it*.
+
+---
+
+## The three fields of a compliant line
+
+1. **NAME** — what the thing is, in ≤8 words.
+2. **ADDRESS** — the canonical file + section where it lives (`file.md §X`, a Drive
+   ID, or a repo path).
+3. **STATE** — the single volatile fact a session needs *before* deciding to open the
+   address: `LOCKED` / `PENDING founder` / `HALTED` / `v34` / a date. This is the only
+   content memory is allowed to hold, because it changes faster than a belt cycle and
+   a session must know it to route.
+
+Everything else — the reasoning, the full ruling, the history — lives at the ADDRESS.
+
+---
+
+## What memory MAY still hold as content (the exceptions)
+
+Three kinds of fact have no stable archive address, so memory is their canon:
+
+1. **Accessibility floor** — RP, the visibility verdict, no-opening-wall. This governs
+   every build and must fire without a file read. It stays resident.
+2. **Reply/output conventions** — line-one-answer, no-walls, scorecard format. These
+   shape the reply being written *now*; a pointer would fire too late.
+3. **Live STATE the manifest tracks** — but even here, memory holds the state and
+   *points to the doc*, never restates the doc.
+
+Everything outside these three is a pointer.
+
+---
+
+## The Studio Eyes check: `MEMORY-POINTER`
+
+On any belt close that writes memory:
+- **HALT** if a new memory line exceeds ~40 words AND its content exists at a known
+  archive address (it should be a pointer to that address).
+- **WARN** if a line has no ADDRESS field and is not one of the three resident
+  exceptions (it may be orphaned content with no archive home — either give it a home
+  or justify residency).
+
+This is CLASS-TICK on memory itself: the belt's stated "condense, don't append" rule
+finally has teeth. A line that appends content instead of folding to a pointer is a
+defect, not a note.
+
+---
+
+## Migration (how 30/30 becomes room)
+
+The belt does this incrementally, not in one bulk pass (bulk edits break the
+as-opened discipline):
+
+1. Each belt close, take the **longest content-carrying memory line** whose content
+   lives in an archive file.
+2. Confirm the archive address holds it (byte-check the section exists).
+3. Replace the line with its pointer (NAME → ADDRESS → STATE).
+4. One fold per belt. Promote-or-kill: if the content lives nowhere, either archive it
+   first (then point) or kill it.
+
+Within a handful of belts, memory is index-shaped and the overflow is structural
+history, not a recurring crisis.
+
+---
+
+## Why this is the highest-ROI application
+
+The 30/30 ceiling is the live constraint on *every* session — it's why belts
+hand-condense and why context is scarce. Converting memory from content-duplication to
+pointer-only is the difference between condensing by hand every belt and never
+overflowing again. The other §12 applications improve governance; this one buys back
+the resource the whole system runs on.
+
+---
+## 15. The Enforcers — the rules that are checks
+
+*Folded 2026-07-13. Every rule below EXISTS AS A PROGRAM. The studio's core disease is
+governance-rich / enforcement-poor: on 2026-07-11 six rules should have caught a
+nine-version clobber and only ONE did — the arithmetic one. **If a rule can't be a
+check, it's a wish.** These are not wishes.*
+
+| law | the program | HALT on |
+|---|---|---|
+| Contrast, image floor, opening wall, emoji, offline, focus, tap targets | `studio-eyes/studio-eyes.py` | exit 1. Self-tests 20/20 or **refuses to audit**. |
+| Canon is computed, not remembered | `resolve-canon.py` | exit 2 rather than guess |
+| **Destruction requires the founder to name the path** | `founder-gate.py` + `.git/hooks/pre-push` | no push may carry an unauthorized deletion |
+| Never overwrite canon with a fossil | `safe-push.sh` | local smaller than remote |
+
+**ARM THE GATE — first command of any session that will push:**
+
+    bash founder-gate/install-hook.sh
+
+Hooks are not versioned by git. A fresh clone has none. This is the one line of prose
+in this section that earns its place, and the founder can check it with one question:
+***is the gate armed?***
+
+### 15.1 — Why destruction, and only destruction, is gated
+
+A gate that asks permission for everything is a gate the founder disables by Tuesday.
+**Friction lands only where loss lives.** Read: free. Add: free. Modify: free (git holds
+the history). **Destroy: stops.** On 2026-07-13 an agent read "Lumiere names are ok" as
+permission to delete three files the founder never named — inferring authorization from
+an adjacent sentence. ~30 rules forbade it. None fired.
+
+
+### 15.preship-gate — THE PRE-SHIP GATE + TOKEN-ROLE LAW (§14)
+
+*Locked 2026-07-10. Minted from a session where the founder walked a build and found
+"light yellow on white — three modes, all fail." The auditor existed. Nobody ran it.
+This block turns that from a tool into a practice.*
+
+---
+
+## §14.1 THE TOKEN-ROLE LAW (the root cause, generalized)
+
+**Light may be dim. Text may not.**
+
+A color token may serve as *atmosphere* (room-light, screen-rim, border, gradient,
+fill) **or** as *text* — **never both.** The CYL failure was one token, `--glow`, doing
+double duty: it was the warm Kodachrome rim of a 1962 television AND the color of every
+caption and label. Atmosphere is *allowed* to be low-contrast — that is what makes it
+atmosphere. The instant that token carries a word, the word inherits the dimness.
+
+**Enforcement:** any token used in both a `color:` declaration and a
+background/border/fill/gradient/stroke declaration is a **HALT**. Split it: give the
+text its own bright token (`--label`, `--brake-ink`, `--pull-ink`) and let the
+decorative token stay dim.
+
+**Corollary — buttons:** a button surface token (`--accent`) carries only its own ink
+token (`--accent-ink`). Body text never lands on a button. Pair them explicitly.
+
+**Corollary — literals hide bugs:** a hardcoded `color:#12100a` on a var-driven
+background escapes token auditing. Text colors ride tokens, always, so the gate can see
+them.
+
+---
+
+## §14.2 THE PRE-SHIP GATE (mandatory, not optional)
+
+`preship-contrast-gate.py` (repo root; Drive Claude_files) runs **before every
+present_files, every deploy, every hand-off. No exceptions.**
+
+```
+python3 preship-contrast-gate.py <file.html>
+exit 0 = PASS (safe to ship)    exit 1 = HALT (do not ship)
+```
+
+It performs three checks:
+1. **WCAG per comfort mode** — every text token against every surface it actually
+   lands on, in *every* mode (default / softer / warm). Floor 4.5 body, 7.0 AAA target.
+2. **Dual-role tokens** (§14.1) — text riding a decorative color.
+3. **No pure #fff / #000** as any token value.
+
+**The law:** a file that has not passed the gate does not reach the founder. Not as a
+draft, not as a "quick look," not as "I'll fix it after." The gate is in the critical
+path or it is theater.
+
+**Proven 2026-07-10:** the gate HALTed the CYL slice **twelve times** across two tuning
+passes — catching `--glow` (the founder's bug), plus `--brake` and `--rule` dual-roles
+that eye-inspection missed entirely. Final: 0-HALT, worst pair 4.76:1, all three modes.
+
+---
+
+## §14.3 WHY EYE-INSPECTION ALWAYS FAILS HERE
+
+Reading hex codes and imagining the result is not auditing. Across this session the
+same amber-as-text bug survived three separate "checks" by inspection and died
+instantly to arithmetic. **Contrast is a computation, not a judgment.** Any claim that a
+palette "passes" without a computed ratio is a guess wearing a verdict's clothes.
+
+The founder has retinitis pigmentosa. Contrast cannot be a step someone remembers.
+
+---
+
+## §14.4 THE NAMED FAILURE MODE: SPEC-RICH, BUILD-POOR
+
+Diagnosed this session, recorded so it stops recurring.
+
+The studio ships governance faster than product. CYL v5 spec was written 2026-06-28. By
+07-10 the studio had shipped a standing crew, a lab wing, a harvest engine, ten
+consultants, a Drive atlas, and two OS blocks — **and zero playable CYL.** The
+governance layer eats the build layer.
+
+**The check:** at every belt close, name what a *player* can now do that they could not
+before. If the answer is "nothing, but the pipeline improved," the session was
+build-poor. Two consecutive build-poor belts = the next session is a build session, no
+new governance permitted.
+
+**The corrective that worked:** stop waiting for the perfect complete game. Ship a
+**vertical slice** — one scene, every beat, end to end, art and sound included. Blocked
+content (living-president scenes) becomes "Chapter 2, when sourced," not a ship blocker.
+
+---
+
+## §14.5 THE DEPLOY LANE (proven, standing)
+
+Container git-push. Proven byte-exact twice (The Tell 07-08; CYL slice 07-10, commit
+`4f25f4a`, md5 b3d129a0, 38,721 B live = local).
+
+```
+git clone https://walshero:<PAT>@github.com/walshero/TIGHT-SPIRAL-STUDIOS.git
+cp <file> . && git add && git commit && git push origin main
+curl raw.githubusercontent.com/.../<file>  →  md5 must match local   ← POST-TICK
+```
+
+**Order is law:** GATE (§14.2) → push → POST-TICK md5. A push without a byte-verified
+fetch-back is not a ship. "Pushed" is never proof, exactly as "created:true" is never
+proof.
+
+**PAT never persists** — lives in the chat only, re-pasted per session, revocable at
+GitHub → Settings → Developer settings → Fine-grained tokens. Never written to memory
+or any file.
+
+**Ship-gate still governs:** live at the URL for cold play ≠ linked from index.html.
+The student front door requires GATE 1 (founder cold play) + GATE 2 (Studio Eyes).
+
+---
+
+## §14.6 WHAT THE GATE STILL OWES
+
+Named honestly so it isn't mistaken for finished:
+- **Render-proof.** The gate computes; it does not *look*. Text over a gradient, over
+  an image, or a focus ring against a lit surface still escape it. A rasterize-and-
+  inspect pass is the next tier.
+- **Palette-mount enforcement (§12.6).** The manifest declares each lane's floor; the
+  gate does not yet read it. Until it does, "arcade palette leaked into the instrument"
+  remains possible.
+- **Per-device mode.** `prefers-color-scheme: dark` and `forced-colors: active` are not
+  yet simulated. The EN195 charcoal-on-black bug lives in this gap.
+
+### 15.tick-rule — THE TICK RULE (belt v2 amendment, locked 2026-07-04)
+
+*Tight Spiral Productions · HALT-class · The belt runs like a second hand, not an engine start. Ticks fire on every action, mid-session, silently. The session-close belt audits the ticks; it is no longer the only time checking happens.*
+
+## THE FOUR TICKS
+1. **PRE-TICK** — before any deploy: gate-as-entry, focus trap, dead link, placeholder content, offline break, floor contrast. Fail = do not ship.
+2. **POST-TICK** — after any deploy: fetch the file back; verify byte size and real content. "created:true" is never proof. Precedent: the 50-byte placeholder push, 2026-07-04.
+3. **CLASS-TICK** — on any bug found: sweep the corpus for the pattern and **fix the class in one pass, never the instance**. Precedent: the comfort-gate wall found in sandbags existed in 9 files; the founder hit it twice before the class was swept. A bug fixed once is a bug scheduled to reappear.
+4. **PATTERN-TICK** — before any page ships, house style passes: C6 instruction-word count stated (<50), in-file changelog present (pattern 6), about/chops link resolves, radial "here I am" nav owed on any multi-section build (pattern 2). Accessible-but-generic is not done.
+
+## STANDING PRECEDENTS (this date)
+- **Paste gate held**: file content >5K is never hand-reproduced through a tool parameter. Sandbags (28.5K) was correctly refused; a working-but-gated live file beats a corrupted push. Big files move by fetch lane only.
+- **Fork-diff rule**: never auto-default a fork to the smaller/older file — diff content first. The 141,906 OS default would have deleted four founder amendments; **tight-spiral-studio-os__3_.md (161,666 B) is canon.**
+- **Direct-links law**: every shipped file carries a tappable link — live URL when deployed, file card otherwise. The founder takes linked working files to playtest.
+
+## LOCKED NEXT-SESSION OPENER (in order, before anything else)
+1. Publish lane (URL-fetch code action — built, untested; native Drive write is down, Anthropic-side).
+2. GitHub Actions floor-check on the repo — the ticks enforced by the pipe, not by memory.
+3. Deploy the nine gate-fixed files through it.
+
+*Folds into os-block-timing-belt-v2 at the canonical OS settle. Until then this file IS the amendment.*
+
+### 15.truth-ticks — TRUTH TICKS
+
+**Locked 2026-07-11. Origin: the Confluence truth-scrub + Studio Eyes repair.**
+Folds into OS §11 (standing working rules) and the Tick Rule (os-block-tick-rule.md).
+
+---
+
+## Why this block exists
+
+One session produced four failures that were all the same failure wearing different clothes:
+**a system asserted something it had not verified, and nothing in the pipeline caught it.**
+
+- The file said six institutional outcomes. There are seven.
+- The file named the six. They were the *wrong* six — a pre-revision set, two revisions stale.
+- The auditor said twenty-two things were invisible. Twenty-two were fine.
+- Claude said "the website is authoritative for vocabulary." It was not.
+
+None of these were caught by a gate. All four were caught by the founder, by eye, in
+conversation. That is a pipeline failure, not a luck failure. These four ticks close it.
+
+---
+
+## TICK 1 — SOURCE-COUNT
+
+**Any claim about HOW MANY of something exists must be counted from the authoritative
+source, in the same turn it is asserted, and enumerated.**
+
+The artifact under audit is never its own reference. It is the thing being *tested*.
+If a file says "six outcomes," that is the claim on trial — it is not evidence.
+
+Applies to: outcomes, competencies, courses, panels, files, sections, roster entries,
+any count that appears in a deliverable.
+
+*Failure this prevents:* Confluence's irrigation map rendered six ISLOs and its own
+aria-label asserted six. Claude reported the count as a defect without counting the
+live source. Founder counted. Seven.
+
+---
+
+## TICK 2 — AUTHORITY BY CLAIM TYPE
+
+**Different claims have different authorities. Do not pick one source and let it govern
+everything.**
+
+| Claim type | Authority |
+|---|---|
+| Counts, numbering, verbatim official text | The published source |
+| Working vocabulary, current governance practice | The practitioner in the room |
+| What the artifact currently does | The artifact |
+| Whether the artifact is *correct* | Never the artifact |
+
+*Failure this prevents:* Claude read "Graduation Competency" off the MassBay website and
+told the founder his file's "ISLO" language was drift. It was not — the committee renamed
+them two years ago. The public website was the stale artifact. The practitioner was right.
+The count from that same website was correct. **One source, two claim types, two different
+verdicts.** Treating a source as globally authoritative is the error.
+
+---
+
+## TICK 3 — REFERENCE STALENESS
+
+**Any file carrying institutional reference data must name its source and a last-verified
+date, in-file.**
+
+Institutional reference data = outcomes, competencies, course lists, policies, rosters,
+rubrics, scales, contacts.
+
+Studio Eyes HALTs on institutional reference data with no provenance stamp.
+A file that cannot say *where its facts came from and when* cannot be trusted to be current.
+
+*Failure this prevents:* Confluence confidently rendered six outcomes MassBay abandoned two
+revisions ago. Right format. Plausible names. Real-sounding. Completely wrong. Nothing in
+the file or the pipeline knew the data had expired — because nothing ever asked.
+
+This is the tick with the widest blast radius. Every institutional artifact in the studio
+is exposed: the fact book, the syllabi, the course lists, the assessment corpus, the EN195
+docs. Any of them may be silently stale right now.
+
+---
+
+## TICK 4 — THE AUDITOR IS IN THE CRITICAL PATH
+
+**An auditor that cries wolf is worse than no auditor.** It does not merely fail to catch
+bugs — it actively trains the founder to ignore its output, which disables every real
+finding it will ever make.
+
+Rules for any gate, sweep, or check in the studio:
+
+1. **Never certify on a raw verdict without validating the verdict.** (Standing since
+   2026-07-05. It was not enough — see below.)
+2. **A gate must distinguish what it PROVED from what it GUESSED.** If a check cannot
+   resolve the ground truth for a case, it says so and downgrades to a warning. It does
+   not assert a default and call it a finding.
+3. **Every repair to a gate ships with a canary** — a minimal fixture that proves the gate
+   still catches the real bug it exists to catch. A gate that stops false-positiving by
+   becoming blind is not repaired; it is broken in the other direction.
+
+*Failure this prevents:* Studio Eyes was declared "repaired" on 2026-07-05. It was not.
+It kept manufacturing false HALTs for six days, blocking eighteen files, and the founder
+learned to distrust it. The 07-05 repair fixed *descendant* selectors and never touched
+the four other ways grounding could fail.
+
+---
+
+## Standing consequence
+
+**When the founder pushes back on a machine-produced fact, the machine is the suspect.**
+
+Every one of the four failures above was found because the founder said some version of
+"that doesn't look right." In all four he was correct and the system was wrong. The
+correct response to founder pushback on a system's output is to *re-derive from source*,
+not to defend the output or explain the system's reasoning.
+
+---
+
+## Wiring
+
+- TICK 1, 2: behavioral — enforced in the session-open card and at every factual claim.
+- TICK 3: mechanical — **BUILT 2026-07-11 as H6** in studio-eyes-sweep.py. HALTs any file
+  asserting institutional facts without a source + last-verified date. Still owes
+  floor-check.yml block-mode wiring.
+  *Honest limit:* H6 verifies provenance **exists**, not that it is **accurate**. A stamp is
+  a claim, not a proof — Confluence passes H6 today despite having carried two-revisions-
+  stale data, because it carried stamps. Catching stale-but-stamped data needs TICK 1 + 2,
+  which are behavioral.
+- TICK 4: mechanical — canary fixture required in the sweep repo; the sweep's own test.
+  **Canary written 2026-07-11**, lives with the sweep.
+
+
+---
+
+## TICK 5 — AUTO-DRIVE (locked 2026-07-11, founder ruling)
+
+**Every file the studio produces writes to Drive Claude_files IN THE SAME TURN IT IS
+CREATED. Not at session close. Not on request. At creation. Without being asked.**
+
+### Why creation, not close
+
+The close-time belt does not protect a file that dies mid-session. This session, the
+corrected Confluence build sat in `/tmp` for **nine turns** — a directory that is wiped
+when the chat ends — and survived only because the founder thought to ask "are these
+saving automatically?" The answer was no. A session-close belt would have been too late if
+the chat had ended at any point in those nine turns.
+
+**Parked must mean saved-and-set-aside, never left-in-a-temp-directory.**
+
+### The three clauses that make it real
+
+1. **At creation.** A file that exists only in `/tmp` or only in the container does not
+   exist. Write it the moment it is finished.
+2. **Verify, never trust the receipt.** `success:true` is not proof. Byte-check every
+   write. (Same rule already standing for GitHub; it applies identically here.)
+3. **THE PASTE CEILING IS THE NAMED EXCEPTION.** `write_drive_file_content` takes
+   `content` as a **tool parameter**, so it inherits the payload ceiling. Large files
+   (Confluence at 511 KB; the 529 KB trunk) **cannot** pass through this bus.
+
+   **Fork, mandatory:**
+   - Small file → Drive bus (`write_drive_file_content`, overwrites by name, keeps file ID)
+   - **Oversized file → container git-push** (no size limit), or
+   - Oversized and un-pushable → **stays in outputs and is flagged LOUDLY as un-backed-up**,
+     never silently
+
+   Without clause 3 this rule fails silently on exactly the files that matter most — the
+   trunks. "The most important file is the one file the lanes can't move" is a standing
+   studio problem; AUTO-DRIVE must not pretend it has solved it.
+
+### The two-lane rule, restated
+
+Every build lands in **outputs** (the founder's save lane) **AND** Drive Claude_files (the
+durable lane). This session honored only the first, and only because the founder asked.
+That is the failure this tick closes.
+
+### 15.bodyguard-gates — THE BODYGUARD GATES (belt veto layer)
+
+*Tight Spiral Productions · locked by founder 2026-07-04 · status: HALT-class. These run BEFORE Claude proposes anything at session close, and gate every mid-session build. Founder order: "agents trained to push back against my silly demands." These are that pushback, made structural.*
+
+*Grounded in the founder's own operating instructions (failure modes 1–4) + this session's evidence: four paste-wall failures, a Drive-connector rabbit hole that wasn't the founder's to fix, and repeated bounce-backs of staff-level decisions. The gates attack those three patterns directly.*
+
+---
+
+## THE THREE GATES
+
+**GATE 1 — SHIPPING GATE.** *Kills optimization-before-implementation (founder failure mode 2).*
+Question, asked first: **"Is there a live URL or a playable/usable artifact this session — or an honest 'blocked, here's why'?"**
+- If NO live artifact AND no honest block statement → HALT. Do not propose a single improvement, sweep, refactor, or new build. Ship or name the blocker.
+- Meta-work (command centers, handoffs, OS forks, sweeps about the studio) does NOT satisfy this gate. Only player-facing or founder-usable output counts.
+- The studio's job is games people can open, not artifacts about the studio.
+
+**GATE 2 — PASTE GATE.** *Kills the transport wall hit four times on 2026-07-04.*
+Question, before any file move: **"Am I about to push file content through a tool parameter?"**
+- If content > ~5K chars → HALT the paste. Tool parameters are not a file-transfer channel. Route via a fetch/URL lane, or defer with an honest note. Never force it — a truncated ship is worse than an honest wait.
+- Applies to Drive writes, GitHub writes, any connector. The lane, not the paste.
+
+**GATE 3 — ONE-THING GATE.** *Kills bouncing staff decisions to the founder (founder failure modes 1 & 4; reply-convention 75% rule).*
+Question, before asking the founder anything: **"Is this a decision staff should make?"**
+- If confidence ≥ 75% → Claude decides, names the call, proceeds. Never bounces a byte count, a fork default, or a class-name pick to the founder.
+- Below 75% → real fork, founder decides. Everything else Claude owns.
+- "Which of these ten near-identical things?" is never a founder question. Claude picks and says why.
+
+---
+
+## HOW THEY RUN
+- All three fire at **belt close**, before the handoff is written. A belt that proposes work while failing Gate 1 is a failed belt.
+- Any mid-session build checks Gate 2 before moving a file and Gate 3 before asking a question.
+- A gate that stops mattering gets cut at the next belt — killer items only (belt v2 discipline).
+
+## TETHER TO THE EXTERNAL AUDITOR (seat 5)
+The ChatGPT-Pro seat is the outside check on these gates. Belt close writes a short session summary; the founder pastes it into the GPT auditor, which grades against the three gates and flags where Claude over-engineered, pasted anyway, or bounced a decision. Two AI systems, adversarial review. The gates are the shared rubric both seats read.
+
+*End of block. Folds into the timing belt as the veto layer at the canonical settle.*
+
+### 15.hollow-claim — THE HOLLOW CLAIM
+
+*Tight Spiral Productions · the failure mode, named*
+*Locked 2026-07-11. Companion to os-block-triple-sweep.md.*
+
+---
+
+## THE DEFINITION
+
+> **A HOLLOW CLAIM is a success message that is not backed by bytes.**
+
+It is the studio's dominant failure mode. Not "the work didn't get done" — but
+**"the work reported done, and wasn't."** Hollow claims are worse than failures
+because a failure stops you and a hollow claim lets you walk on.
+
+---
+
+## THE FOUR SPECIMENS (all found 2026-07-10/11)
+
+1. **STUDIO EYES v4 (the phantom).** Two Drive pointers asserted a 17,534 B
+   auditor existed and was canon. It was in no repo, no durable surface, nowhere.
+   It had been "validated in-session" and died on container reset. **Nearly caused
+   the deletion of the only working auditor (v3.5) on the strength of a pointer's
+   word.** Caught by a 404.
+
+2. **paste-gate-probe-30k.txt (the silent truncation).** Named for 30KB. Landed
+   at **599 B**. The write bus ACCEPTED the truncated payload and returned
+   success. Caught by reading the file.
+
+3. **session-tree-2026-07-05 (the empty shell).** 249 B of HTML containing
+   `<!-- Session tree content -->`. Sat on Drive for six days looking landed.
+   Caught by opening it.
+
+4. **`echo "=== WORKFLOW PUSHED ==="` (the assistant's own).** 2026-07-11, during
+   the very session that wrote the Triple Sweep block: a shell command chained an
+   unconditional success echo after a `git push` that had been **rejected**. The
+   terminal printed WORKFLOW PUSHED over a failure. **The tool that was written to
+   catch hollow claims generated one, minutes later, while its author was watching.**
+
+**Specimen 4 is the important one.** It proves the rule cannot live in intent. It
+must live in the *shape of the command*. A discipline that depends on remembering
+is not a discipline.
+
+---
+
+## THE LAW
+
+> **NO CLAIM OF SUCCESS MAY BE EMITTED THAT IS NOT DERIVED FROM THE ARTIFACT ITSELF.**
+
+Corollaries, all learned the hard way:
+
+- `created: true` is not proof.
+- `success` is not proof.
+- A returned file ID is not proof.
+- A pointer asserting a target exists is **not proof the target exists.**
+- **An `echo` after a command is not proof the command worked.**
+- Exit code 0 from a *pipeline* is not proof — the last command's status wins,
+  and `cmd | tail` masks `cmd`'s failure.
+
+**The bytes are the proof. Fetch them back. Compare them. Then speak.**
+
+---
+
+## COMMAND SHAPE (enforcement — this is where it actually lives)
+
+**BANNED:**
+```bash
+git push origin main 2>&1 | tail -3 && echo "=== PUSHED ==="     # LIES ON FAILURE
+some_write_cmd && echo "SUCCESS"                                  # && after a pipe is not a guard
+curl -X PUT ... ; echo "done"                                     # ; ignores status entirely
+```
+
+**REQUIRED:**
+```bash
+# 1. Capture status. Do not pipe it away.
+git push origin main; RC=$?
+# 2. Branch on the REAL status.
+if [ $RC -eq 0 ]; then echo "PUSH OK"; else echo "PUSH FAILED (rc=$RC)"; fi
+# 3. Then VERIFY from the far end — the artifact, not the command.
+curl -sL "$RAW_URL" -o /tmp/check && \
+  [ "$(md5sum < /tmp/check | cut -d' ' -f1)" = "$(md5sum < local | cut -d' ' -f1)" ] \
+  && echo "VERIFIED BYTE-EXACT" || echo "HOLLOW — MISMATCH"
+```
+
+**The verification must interrogate the DESTINATION, never the sender.**
+
+---
+
+## THE DURABLE-SURFACE RANKING (learned 2026-07-10)
+
+```
+REPO (git push)   ← immutable, survives everything. THE only destination.
+DRIVE             ← durable, but drifts; pointers rot; replace-in-place OK
+SHELF (/mnt/project) ← durable but read-only and lags
+OUTPUTS           ← ✗ NOT A DESTINATION. Resets between sessions. A scratchpad.
+CONTAINER (/home) ← ✗ NOT A DESTINATION. Dies at session end.
+```
+
+**"Validated in-session" is not landed.** The v4 phantom lived and died on this
+distinction. Anything that must survive gets pushed to the repo, then fetched
+back and byte-compared, in the same breath.
+
+---
+
+## GITHUB PAT — THE COMPLETE SPEC (stop re-deriving this)
+
+Fine-grained token, repo `TIGHT-SPIRAL-STUDIOS`, owner `walshero`.
+**All three permissions are required. Contents alone is NOT enough.**
+
+| Permission | Level | Why |
+|---|---|---|
+| **Contents** | Read and write | push files |
+| **Workflows** | Read and write | push/edit `.github/workflows/*` — **git REFUSES workflow files without this, and so does the Contents API (403)** |
+| **Pages** | Read and write | the auto-deploy job |
+| Metadata | Read-only | auto-set, leave it |
+
+**Phone path:** github.com → profile picture (top right) → Settings → scroll to
+bottom → Developer settings → Personal access tokens → Fine-grained tokens →
+[token] → Permissions → Repository permissions → set all three → scroll to
+bottom → **Update token** (green button; the change does not save without it).
+
+**Gotcha:** "Workflows" is alphabetical, **below Webhooks**, easy to scroll past
+on a phone. Expiration: choose the longest available — re-deriving this costs a
+session.
+
+**Token lives in chat only.** Never in memory, never in a file, never committed.
+Container resets each session, so it is re-pasted each time.
+
+---
+
+## THE CLASS-FIX ENGINE (tool, not just a lesson)
+
+CLASS-TICK says: on any bug, sweep the corpus and fix the CLASS, never the
+instance. Tonight that killed a dark-mode failure across **39 files in one pass**
+(173 → 104 HALTs). The pattern, reusable:
+
+```python
+import re, glob
+FIXED = []
+for path in sorted(glob.glob('*.html')):
+    html = orig = open(path, encoding='utf-8', errors='replace').read()
+    # 1. detect the class signature
+    # 2. apply the root fix (not the symptom)
+    # 3. only write if changed
+    if html != orig:
+        open(path, 'w', encoding='utf-8').write(html)
+        FIXED.append(path)
+print(f"CLASS-FIX: {len(FIXED)} files")
+```
+
+**The two fixes it applied (both now standing law for every new build):**
+
+1. **`:root { color-scheme: light; }`** must be declared, or the OS forces its own
+   dark palette and repaints inherited colors.
+2. **Never `color: inherit` on a comfort/a11y control.** Pin the ink (`#241f16`).
+   Under OS dark mode, `inherit` made the Comfort button render at **1:1 contrast
+   — text and background the SAME COLOR — across 18 files.** The control that
+   exists so Matt can see was invisible. **Static analysis is structurally blind
+   to this.** Only a rendered browser in real dark mode reveals it.
+
+---
+
+## WHAT THIS BLOCK DEMANDS OF EVERY FUTURE SESSION
+
+1. Never emit a success line that isn't derived from the artifact.
+2. Never chain `&& echo "DONE"` onto a write.
+3. Never delete a working artifact on a pointer's claim — verify the replacement
+   exists on a durable surface first.
+4. Fix the class, not the instance.
+5. If it must survive, it goes to the **repo**, and you **fetch it back**.
+
+---
+
+## CHANGELOG
+- **2026-07-11** — Block created. Trigger: four hollow claims in 24h, the fourth
+  generated by the assistant itself while writing the block that bans them.
+  Proof that the rule must live in command shape, not intent.
+
+### 15.deploy-lane-preflight — DEPLOY LANE PRE-FLIGHT
+
+**Status:** locked 2026-07-10
+**Origin:** the GitHub push in the Funny Boney's playtest session burned four turns and a screenshot on a dead/underpermissioned token — discovered only *after* clone, commit, and a failed push. This is not a one-off: **the container filesystem resets every session, so the token must be re-pasted every session.** That friction is now permanent unless it's systematized. This block systematizes it.
+**Folds into:** OS §6 pipeline (deploy stage) + the session-open card. Not a new system — a gate on an existing lane.
+
+---
+
+## THE RULE
+
+**Test the token before you use it.** Never clone-commit-push and discover the permission at the failure. One API call, ten seconds, run *first*:
+
+```
+curl -s -H "Authorization: Bearer $TOKEN" \
+  https://api.github.com/repos/walshero/TIGHT-SPIRAL-STUDIOS \
+  | python3 -c "import sys,json; print('push:', json.load(sys.stdin).get('permissions',{}).get('push'))"
+```
+
+Read the result:
+- **`push: True`** → lane is open. Clone, commit, push, POST-TICK.
+- **`push: None` / `push: False`** → token is alive but **underpermissioned**. Contents is read-only. Send the founder to the recipe below.
+- **`401`** → token is **dead** (revoked, regenerated, or invalid). New token needed.
+
+Do not proceed on anything but `push: True`.
+
+## THE TOKEN RECIPE (founder-facing, exact)
+
+When a new token is needed, give these steps — never make the founder hunt the settings screen twice.
+
+**Path:** github.com → **avatar (top-right)** → **Settings** → left sidebar, scroll to bottom → **Developer settings** → **Personal access tokens** → **Fine-grained tokens** → **Generate new token**
+
+**Four settings, in the order they appear on the page:**
+
+1. **Resource owner:** `walshero`
+2. **Expiration:** **No expiration** — founder ruling 2026-07-10. He revokes manually rather than get locked out mid-deploy. Do not re-litigate; do not "recommend" 30 days again.
+3. **Repository access:** **Only select repositories** → `walshero/TIGHT-SPIRAL-STUDIOS`
+   *(Never "Public repositories" — that option is read-only by design and will always 403 on push, regardless of permissions set below. This is the trap that cost the first token.)*
+4. **Permissions:** this section starts at **zero** and is easy to miss. Click **"+ Add permissions"** (right side of the Permissions bar) → add **Contents** → set its dropdown to **Read and write**. Metadata auto-adds as read-only; leave it.
+
+**Then:** green **Generate token** button at the **bottom** of the page (long scroll past the permission list). GitHub shows the string **once** — copy it immediately.
+
+## TOKEN HANDLING (hard floor)
+
+- Token lives **in the chat only**. Never written to memory, never to a file, never committed.
+- Container resets between sessions → **founder re-pastes each session**. This is expected, not a failure.
+- Revocable anytime at the same Fine-grained tokens screen. Founder's chosen safety model: no expiry + manual kill.
+
+## THE PUSH (once `push: True`)
+
+1. Clone with token in the HTTPS remote
+2. Copy file from `/mnt/user-data/outputs`
+3. Commit, `git push origin main`
+4. **POST-TICK, non-negotiable:** `curl` the file back from `raw.githubusercontent.com` and **md5-match against local**. "Pushed" is never proof. Byte-match is proof.
+
+## SHIP GATE STILL GOVERNS
+
+Pushing to the repo ≠ shipping. A file may live at its URL for cold play while **remaining unlinked from `index.html`** (the student front door) until GATE 1 (founder cold phone play) and GATE 2 (Studio Eyes) both clear. Unlisted is not the same as shipped.
+
+---
+
+## FOLD-IN: CONVENING VISIBILITY (session-open card)
+
+Separate fix, same session, same root — **silence hid a miss.**
+
+The Product Convening is supposed to auto-fire on the words *game / build / make / playtest*. In the Funny Boney's session it **never fired**, and nothing said so, because the convening runs silent when it has no fork to surface. Silent-and-ran and never-fired look identical.
+
+**Fix:** the session-open card states the convening's status in one line, always:
+
+> `Convening: ran clean` — or — `Convening: skipped — medium pre-decided by founder (wrap existing v3)`
+
+One line. Founder can then veto a skip. Silence may mean "no fork," never "never fired."
+
+---
+
+*Both fixes are folds into existing blocks, not new systems. Read this before any deploy.*
+
+### 15.playtest-instrument — PLAYTEST INSTRUMENT
+
+**Status:** locked 2026-07-10
+**Origin:** built twice with the same shape (CYL playtest layer, then Funny Boney's `funny-boneys-oops.html`). Two occurrences = a pattern that needs a spec before it drifts. This block turns the next wrapper into a fill-in, not a rebuild.
+**Folds into:** OS §6 pipeline (playtest stage) + OS §7 patterns. Not a new standalone system — a named pattern under the existing pipeline.
+
+---
+
+## What it is
+
+A capture layer that **rides on top of an existing playable build** — never a fresh game. The build stays untouched; the instrument is added, and can be stripped back out. Purpose: let a named playtester record phase-tagged thoughts and hand back one report, with the offline floor intact.
+
+## The floor (every playtest wrapper carries all six)
+
+1. **Rides on top, never rebuilds.** Copy the canonical build, add the layer, change nothing in the game logic. The base build must remain independently shippable.
+2. **Phase auto-tag off the build's own choke-point.** Find the single function every screen transition already passes through (in Funny Boney's: `setRail(stage)`; in CYL: the screen-show call). Hook one line — `if(window.PT) PT.phase = stage;` — so notes tag themselves. Never make the tester say where they were.
+3. **≤5 one-tap reactions.** Fixed set, tuned to the build. Default vocabulary: This landed / I snagged / Confused me / I'd cut this / Delight. Plus one free-text box.
+4. **3 founder-chosen closing questions.** Founder names them per build. Standing default: (a) did the core loop do its job; (b) what surprised you; (c) one thing to fix first.
+5. **Clipboard-only report.** One button assembles the whole session — notes in play order + closing answers — onto the clipboard. Tester pastes it back. **No per-screen email, no network emit, no storage.** This is a hard refusal (breaks the single-file offline floor).
+6. **Accessibility floor unchanged.** Notebook control is a fixed 44px+ corner button, reachable immediately and always, keyboard-navigable, visible focus ring, works in all comfort stops. It is a live corner control, never a gate.
+
+## Ship rule
+
+The wrapper itself gets GATE 1 — founder cold-plays it once on phone to confirm the capture control is reachable and the report copies **on the tester's device class** — before it goes to the playtester. The playtester is the game's Gate 1; the founder is the wrapper's.
+
+## Provenance line
+
+Every wrapper states in-file: base build name + version, "playtest layer added [date]", offline badge. So the report reader knows exactly which build was played.
+
+---
+
+*Skill-file candidate after one more proven build (three total). Until then: this block is the spec; read it before building the next playtest layer.*
 
 ---
 
