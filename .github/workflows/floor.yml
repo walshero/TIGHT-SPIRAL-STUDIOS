@@ -8,7 +8,11 @@ name: Studio Eyes — Accessibility Floor
 # sub-44px tap targets, invisible focus, about.html dead link). Blocking today
 # would freeze the live site over a backlog, not a regression.
 #
-# >>> TO ARM THE TEETH: delete `continue-on-error: true` below. One line. <<<
+# >>> ARMED 2026-07-14. The teeth are real. <<<
+# Disarmed 2026-07-11 over 104 pre-existing HALTs. The corpus now has 23 — the reason
+# expired and the exception outlived it. Audit mode is a PHASE, not a DESTINATION.
+# It RATCHETS: the 23 are baselined and do not block; anything NEW that fails DOES.
+# Debt can only shrink. Fix a file and it leaves the baseline forever.
 #
 # A gate that does not block is not a gate. This is a KNOWN, DATED, SCHEDULED
 # exception — not a policy. (os-block-triple-sweep.md)
@@ -44,10 +48,12 @@ jobs:
           playwright install --with-deps chromium
           npm install --silent axe-core
 
-      - name: RUN STUDIO EYES v4
-        id: sweep
+      - name: STUDIO EYES — full report (never blocks; the whole picture)
         run: python3 studio-eyes-sweep.py .
-        continue-on-error: true      # ← DELETE THIS LINE TO ARM THE GATE
+        continue-on-error: true
+
+      - name: THE RATCHET — ARMED 2026-07-14. Blocks REGRESSIONS. This one refuses.
+        run: python3 ratchet.py
 
       - name: Screenshots — every screen, light + dark, iPhone 390x844
         if: always()
