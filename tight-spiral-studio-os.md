@@ -2349,6 +2349,38 @@ have both passed it. The withheld-figure law holds in every home — the rooms c
 lives, never faces. Representation lives in the material culture, and material culture
 is checkable: that is what makes this a gate and not a vibe.
 
+### 16.6 — The Build Wing: idea to playable (seated 2026-07-14, founder hire)
+
+*Five seats, traced from where builds actually stalled this week — not an org chart.
+Each seat exists because a named failure happened without it.*
+
+| seat | owns | power | the failure that seated it |
+|---|---|---|---|
+| **Playable Gate** (Game-Feel Designer, mandate upgraded) | One question, cold, on a phone, pre-ship: *did anything happen when I touched it?* | **HALT** | v6 passed every floor and landed "cold and weird" |
+| **Previs** | The shot BEFORE the code — one image of first paint, founder-approved, then built | blocks build start | the television; the three-rectangle room |
+| **First-Contact Director** | Seconds 0–10. The arrival moment. *Make them fall in love before the plot.* | choreography sign-off | sound coded, beautiful, never heard |
+| **Release Steward** | SHIPPED = REACHABLE: gated + linked from index + byte-verified, one script at ship | **arithmetic HALT** | v6 shipped unreachable; viscosity unlinked |
+| **Cadence Keeper** | The build-debt ledger. Every close names what a PLAYER can now do that they couldn't. | names the debt aloud | four archaeology sessions, one game |
+
+### 16.7 — THE FOUNDER'S EYES CLAUSE (hard law, founder-dictated 2026-07-14)
+
+**Machines gate arithmetic. The founder gates art.**
+
+Studio Eyes computes floors: contrast, image area, tap targets, token roles. It CANNOT
+see that a room is cold, that a joke lands, that a shot is right. On 2026-07-13 the
+auditor passed CYL v6 at 0-HALT and the founder — with retinitis pigmentosa — caught
+"cold and weird" in one play. **The floors are necessary and they are not taste.**
+
+Therefore:
+- **No art deliverable is APPROVED by any machine gate, ever.** Passing Studio Eyes means
+  a file is ALLOWED to reach the founder. It does not mean the art is done.
+- **Previs images, generated rooms, palettes, and first-contact choreography ship to the
+  founder's eyes for the call.** Rendered, side by side, on a phone. His verdict is the
+  gate. "Crappy as they are" — his words — they are the only taste organ the studio has,
+  and the record shows they outperform the instruments.
+- No seat, wing, or gate may characterize founder art review as a bottleneck. It is
+  the product.
+
 ---
 
 *End of Studio OS. This document supersedes scattered notes and the earlier standalone panel file — it is the single source of truth. Keep it portable (Markdown), keep it current (fold updates in rather than starting new files), and when in doubt: the two hard walls win (no emoji; safety — trauma-informed + FERPA — protects other people and never softens), and everything sensory (contrast, motion, palette, type) ships in its best-practice default with a reachable toggle, never as a wall that stops the work (§5.6, revised 2026-06-30).*
