@@ -111,6 +111,7 @@ body.still .meter-fill{transition:none}
 .knob-switch::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;transition:left .25s}
 .knob.armed .knob-switch::after{left:27px}
 .act-hint{color:var(--dim);font-size:15px;margin-top:12px;min-height:22px;font-weight:700}
+.act-hint .lever-tag{color:var(--ink);font-weight:800}
 .act-hint.good{color:var(--green)}
 .flip-wrap{width:100%;max-width:340px;margin:12px auto 0;perspective:1000px;transition:opacity .3s}
 .flip-wrap.locked{opacity:.3;pointer-events:none}
@@ -141,6 +142,7 @@ body.still .flip{transition:none}
 .tiny{color:var(--dim);font-size:11px;margin-top:20px;letter-spacing:.04em}
 .job-meter{width:100%;max-width:320px;margin:8px auto 30px}
 .job-line{color:var(--ink);font-size:clamp(17px,4.8vw,21px);font-weight:800;margin-bottom:14px}
+.job-how{color:var(--ink);font-size:clamp(14px,3.9vw,16px);font-weight:600;margin-top:14px;line-height:1.4}
 </style>
 </head>
 <body>
@@ -152,13 +154,14 @@ body.still .flip{transition:none}
 
 <section class="screen on" id="sc-hire" aria-label="Your job">
   <div class="logo">flok<span class="dot">.</span></div>
-  <div class="hire-badge"><span class="pulse-dot" aria-hidden="true"></span>You run growth.</div>
+  <div class="hire-badge"><span class="pulse-dot" aria-hidden="true"></span>You've been hired to run growth.</div>
   <div class="job-meter">
-    <div class="job-line">Your job: push this past the line.</div>
+    <div class="job-line">One number matters: how much people use flok. That's the meter.</div>
     <div class="meter" aria-hidden="true">
       <div class="meter-fill" style="width:30%"></div>
       <div class="meter-target" style="left:70%"></div>
     </div>
+    <div class="job-how">Get it past the line the way real apps do &mdash; with tricks that are hard to look away from.</div>
   </div>
   <button class="big-btn" type="button" onclick="startTraining()">Clock in</button>
   <p class="tiny">Offline &middot; nothing leaves this page &middot; the feed is invented</p>
@@ -226,19 +229,19 @@ body.still .flip{transition:none}
 </div>
 <script>
 const LEVERS=[
- {id:"vrr",name:"Surprise likes",type:"tap",verb:"Post",target:72,hint:"Tap Post.",
+ {id:"vrr",name:"Surprise likes",tag:"a reward trick",type:"tap",verb:"Post",target:72,bridge:"Your first tool: reward people at random and they keep checking back.",hint:"Tap Post to try it.",
   fact:"Unpredictable rewards drive the most persistent checking \u2014 the same schedule that makes slot machines compulsive.",
   cite:"Skinner, Science and Human Behavior (1953)"},
- {id:"scroll",name:"Infinite scroll",type:"scroll",target:70,hint:"Scroll the feed.",
+ {id:"scroll",name:"Infinite scroll",tag:"a no-stop trick",type:"scroll",target:70,hint:"Scroll the feed.",
   fact:"Take away the bottom of the page and people keep going past the point they meant to stop. The missing stop-cue is the trick.",
   cite:"Stopping-cue research; Harris, U.S. Senate (2019)"},
- {id:"streak",name:"Don't-lose-it streak",type:"send",verb:"Send streak alert",target:66,hint:"Send it.",
+ {id:"streak",name:"Don't-lose-it streak",tag:"a loss trick",type:"send",verb:"Send streak alert",target:66,hint:"Send it.",
   fact:"Losing hurts more than gaining feels good. 'Don't break your streak' turns that into a daily pull.",
   cite:"Kahneman & Tversky, Prospect Theory (1979)"},
- {id:"notify",name:"Red-dot alerts",type:"release",verb:"Release notifications",target:68,hint:"Release a batch.",
+ {id:"notify",name:"Red-dot alerts",tag:"an interrupt trick",type:"release",verb:"Release notifications",target:68,hint:"Release a batch.",
   fact:"A waiting red dot fires anticipatory dopamine. Constant interruption also lowers attention and raises stress.",
   cite:"Montag et al. (2019); Mark et al. (2016)"},
- {id:"social",name:"'Seen' receipts",type:"flip",verb:"'Seen' receipts",target:64,hint:"Flip it on.",
+ {id:"social",name:"'Seen' receipts",tag:"a guilt trick",type:"flip",verb:"'Seen' receipts",target:64,hint:"Flip it on.",
   fact:"Once someone knows you saw their message, not replying feels like something you're doing to them. Reciprocity does the rest.",
   cite:"Cialdini, Influence (2001)"}
 ];
@@ -295,7 +298,9 @@ function paintTrain(){
   document.getElementById('flip').classList.remove('flipped');
   document.getElementById('flipWrap').classList.add('locked');
   document.getElementById('advanceBtn').classList.remove('ready');
-  const h=document.getElementById('actHint');h.textContent=L.hint;h.classList.remove('good');
+  const h=document.getElementById('actHint');
+  h.innerHTML='<b class="lever-tag">'+L.name+' &mdash; '+L.tag+'.</b> '+(L.bridge?L.bridge+' ':'')+L.hint;
+  h.classList.remove('good');
   document.body.classList.remove('seen-on');
   document.getElementById('streakBanner').classList.remove('on');
   setBell(0,false);
