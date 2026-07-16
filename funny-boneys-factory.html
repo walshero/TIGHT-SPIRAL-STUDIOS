@@ -729,7 +729,6 @@ let state = {
 if('scrollRestoration' in history) history.scrollRestoration='manual';
 window.scrollTo(0,0);
 setLens("spell");
-setStop(0);
 
 /* =================== LENS =================== */
 function setLens(l){
@@ -744,28 +743,16 @@ function setLens(l){
    stays legible against whichever comfort stop is showing. This is the fix for
    the "bright accent that only reads on dark" failure class. */
 function applyLensColor(){
-  const daylight = (STOPS[stopIx] && STOPS[stopIx].key==="daylight");
+  /* FIXED 2026-07-15: read the daylight state from the LIVE comfort control
+     (Block A toggles a .daylight class on <body>), not from a second STOPS
+     array. Two comfort systems had been pasted into one file; the second one's
+     `const STOPS` was read on load BEFORE it was declared (temporal dead zone)
+     -> "Cannot access 'STOPS' before initialization", a crash on every load.
+     The playthrough agent caught it. One source of truth for daylight now. */
+  const daylight = document.body.classList.contains("daylight");
   const L=LENSES[state.lens];
   document.documentElement.style.setProperty('--lens', daylight ? L.light : L.dark);
 }
-
-/* =================== COMFORT KNOBS (knobs, never walls) =================== */
-const STOPS = [
-  {key:"arcade",   lab:"Arcade"},
-  {key:"softer",   lab:"Softer"},
-  {key:"daylight", lab:"Daylight"},
-];
-let stopIx = 0;
-function setStop(i){
-  stopIx = ((i%STOPS.length)+STOPS.length)%STOPS.length;
-  const s = STOPS[stopIx];
-  document.body.classList.remove('softer','daylight');
-  if(s.key!=="arcade") document.body.classList.add(s.key);
-  document.getElementById('stop-lab').textContent = s.lab;
-  document.getElementById('k-stop').setAttribute('aria-pressed', stopIx>0?'true':'false');
-  if(typeof applyLensColor==="function") applyLensColor();
-}
-function cycleStop(){ setStop(stopIx+1); }
 
 let motionCalm=false;
 function toggleMotion(){
