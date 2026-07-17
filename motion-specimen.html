@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en" data-comfort="default">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Motion Specimen · Tight Spiral Studios</title>
+<style>
+/* ── STUDIO TOKENS (canon, from index.html) ───────────────────────── */
+:root{
+  --paper:#fbfaf7; --paper-2:#f1eee6;
+  --ink:#14181d; --ink-2:#3d4652; --ink-3:#5c6675;
+  --brass-ink:#6a4d12; --brass-fill:#d9a441;
+  --cool-ink:#274063; --cool-fill:#c3d2e6;
+  --rule:#c9c3b6;
+  --mono:ui-monospace,"SF Mono",Menlo,monospace;
+  --serif:Georgia,"Times New Roman",serif;
+  /* motion grammar — one source of easing truth */
+  --ease-settle:cubic-bezier(.16,.84,.44,1);   /* editorial come-to-rest */
+  --ease-reveal:cubic-bezier(.22,1,.36,1);     /* delayed disclosure */
+  --t-settle:620ms; --t-reveal:520ms; --t-cross:480ms; --t-sisyphus:5200ms;
+}
+/* SOFTER — lower-contrast paper, same ink relationships */
+html[data-comfort="softer"]{
+  --paper:#f4f1ea; --paper-2:#ece8de;
+  --ink:#1f2530; --ink-2:#454e5b; --ink-3:#616b79;
+  --rule:#cfc9bc;
+}
+/* WARM-DARK — opaque charcoal ground; TEXT is cool near-white at full strength.
+   amber/brass is GROUND + motion-fill ONLY, never color: (RP hue floor). */
+html[data-comfort="warm"]{
+  --paper:#12161b; --paper-2:#1a1f26;
+  --ink:#f4f1e8; --ink-2:#d9d3c4; --ink-3:#bcb6a6;   /* all cool near-white, never amber */
+  --brass-ink:#e6c67a;        /* used ONLY on dark ground as accent text, 8.9:1 on --paper */
+  --cool-ink:#a9c3e6;         /* cool accent on dark */
+  --rule:#333b45;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+/* OPACITY TOOTH: html + body both paint the ground opaque, full viewport.
+   nothing transparent can let a white browser sheet show through. */
+html{background:var(--paper)}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:var(--serif); line-height:1.5;
+  min-height:100dvh; padding:0 0 120px;
+  transition:background var(--t-cross) var(--ease-settle), color var(--t-cross) var(--ease-settle);
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important; transition:none!important}
+}
+
+/* ── FIXED CORNER NAV (nav floor: back + home reachable on every screen) ── */
+.corner{position:fixed; z-index:40; font-family:var(--mono); font-size:13px}
+.corner button{
+  min-width:44px; min-height:44px; padding:0 14px; border:1.5px solid var(--ink);
+  background:var(--paper); color:var(--ink); font:inherit; cursor:pointer;
+  border-radius:2px; transition:background 160ms,color 160ms}
+.corner button:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
+.nav-left{top:14px; left:14px; display:flex; gap:8px}
+.comfort{top:14px; right:14px; display:flex; gap:6px; align-items:center}
+.comfort span{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); margin-right:2px}
+.comfort button[aria-pressed="true"]{background:var(--ink); color:var(--paper)}
+
+/* ── SECTIONS: each paints its own opaque ground ─────────────────── */
+section{background:var(--paper); padding:88px 22px 44px; max-width:760px; margin:0 auto;
+  border-bottom:2px solid var(--rule)}
+.eyebrow{font-family:var(--mono); font-size:12.5px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--brass-ink); font-weight:700; margin:0 0 18px}
+h1{font-size:clamp(30px,6vw,46px); line-height:1.08; margin:0 0 16px; color:var(--ink); font-weight:700}
+h1 em{font-style:italic; color:var(--cool-ink)}
+h2{font-size:clamp(21px,3.5vw,27px); margin:0 0 12px; color:var(--ink)}
+p{font-size:clamp(16px,2.2vw,18px); color:var(--ink-2); max-width:60ch; margin:0 0 14px}
+p b{color:var(--ink); font-weight:600}
+.note{font-family:var(--mono); font-size:12.5px; color:var(--ink-3); letter-spacing:.03em; margin-top:20px}
+
+/* ── MOTION 1 · SISYPHUS LETTERHEAD (the signature loop) ─────────── */
+.sisyphus{display:flex; align-items:flex-end; gap:0; height:120px; margin:8px 0 4px;
+  border-bottom:2px solid var(--ink); position:relative; overflow:hidden}
+.hill{position:absolute; inset:0; background:
+  linear-gradient(to top right, transparent 48%, var(--brass-fill) 48.4%, var(--brass-fill) 50%, transparent 50.4%);
+  opacity:.55}
+.boulder{width:26px; height:26px; border-radius:50%; background:var(--ink);
+  position:absolute; bottom:0; left:0;
+  animation:roll var(--t-sisyphus) var(--ease-settle) infinite}
+@keyframes roll{
+  0%{ bottom:0; left:0; transform:rotate(0) }
+  70%{ bottom:64%; left:66%; transform:rotate(900deg) }
+  76%{ bottom:66%; left:68%; transform:rotate(940deg) }
+  82%{ bottom:20%; left:40%; transform:rotate(1180deg) }   /* the slip back */
+  100%{ bottom:0; left:0; transform:rotate(1440deg) }
+}
+
+/* ── MOTION 2 · SETTLE-ON-LOAD (editorial ease-in, comes to rest) ── */
+.settle{opacity:0; transform:translateY(16px)}
+.settle.in{animation:settle var(--t-settle) var(--ease-settle) forwards}
+@keyframes settle{to{opacity:1; transform:none}}
+.settle.d1{animation-delay:80ms} .settle.d2{animation-delay:180ms}
+.settle.d3{animation-delay:300ms} .settle.d4{animation-delay:440ms}
+
+/* ── MOTION 4 · REVEAL (delayed disclosure, Console-style) ───────── */
+.reveal-wrap{margin:22px 0 6px}
+.reveal-btn{min-height:44px; padding:12px 20px; border:1.5px solid var(--ink);
+  background:var(--paper); color:var(--ink); font-family:var(--mono); font-size:14px;
+  cursor:pointer; border-radius:2px}
+.reveal-btn:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
+.reveal-body{max-height:0; overflow:hidden; opacity:0;
+  transition:max-height var(--t-reveal) var(--ease-reveal), opacity var(--t-reveal) var(--ease-reveal)}
+.reveal-body.open{max-height:400px; opacity:1; margin-top:16px}
+.reveal-body p{margin:0 0 10px}
+.mono-line{font-family:var(--mono); font-size:13px; color:var(--brass-ink); letter-spacing:.05em}
+
+.legend{max-width:760px; margin:36px auto 0; padding:0 22px}
+.legend dt{font-family:var(--mono); font-size:13px; color:var(--ink); font-weight:700; margin-top:14px; letter-spacing:.05em}
+.legend dd{margin:4px 0 0; font-size:15px; color:var(--ink-2)}
+</style>
+</head>
+<body>
+
+<nav class="corner nav-left" aria-label="Navigation">
+  <button onclick="history.length>1?history.back():location.reload()" aria-label="Back">‹ Back</button>
+  <button onclick="location.href='index.html'" aria-label="Home">Home</button>
+</nav>
+
+<nav class="corner comfort" aria-label="Comfort">
+  <span>Comfort</span>
+  <button data-set="softer" aria-pressed="false">Softer</button>
+  <button data-set="default" aria-pressed="true">Default</button>
+  <button data-set="warm" aria-pressed="false">Warm-dark</button>
+</nav>
+
+<!-- SCREEN 1 · the signature, settling in -->
+<section aria-label="Motion specimen, part one">
+  <p class="eyebrow settle d1 in">Tight Spiral Studios · Motion Specimen</p>
+  <h1 class="settle d2 in">One grammar of <em>motion</em>, four moves, three grounds.</h1>
+  <p class="settle d3 in">This page is a reference, not a game. Every future build pulls its easing
+    from here instead of reinventing a curve per file — the way <b>the contrast gate</b> is one
+    source of color truth, this is one source of <b>motion</b> truth.</p>
+
+  <div class="sisyphus settle d4 in" aria-hidden="true">
+    <div class="hill"></div>
+    <div class="boulder"></div>
+  </div>
+  <p class="note">Move 1 · Sisyphus letterhead — the studio signature. It rolls up, slips, begins again. Loops on <code>--t-sisyphus</code>.</p>
+</section>
+
+<!-- SCREEN 2 · settle + reveal -->
+<section aria-label="Motion specimen, part two">
+  <p class="eyebrow">The four moves</p>
+  <h2>Settle-on-load</h2>
+  <p>Content does not appear — it <b>comes to rest</b>. A short rise on <code>--ease-settle</code>,
+    staggered by 80–120ms so a screen reads top-to-bottom the way an eye moves. That is the whole
+    editorial voice: things settle, they do not pop.</p>
+
+  <h2 style="margin-top:34px">Reveal</h2>
+  <p>Delayed disclosure — the Console move. A control, then a considered pause, then the thing it hid.
+    The pause is the meaning; instant reveal throws it away.</p>
+  <div class="reveal-wrap">
+    <button class="reveal-btn" aria-expanded="false" onclick="toggleReveal(this)">Show what was measured →</button>
+    <div class="reveal-body">
+      <p class="mono-line">worst pair · 5.57:1 · AA</p>
+      <p>The reveal timing is <code>--t-reveal</code> on <code>--ease-reveal</code> — the same
+        curve the telemetry screens use to hand you a number after you've committed to seeing it.</p>
+    </div>
+  </div>
+  <p class="note">Move 2 · Settle-on-load. Move 4 · Reveal. Both certified by the gate on this paper ground.</p>
+</section>
+
+<!-- SCREEN 3 · the crossfade IS this screen; changing comfort demonstrates move 3 -->
+<section aria-label="Motion specimen, part three">
+  <p class="eyebrow">Move 3 · Comfort-stop crossfade</p>
+  <h2>Tap a comfort stop, top-right.</h2>
+  <p>The ground and ink cross-fade on <code>--t-cross</code> rather than snapping. Softer and
+    Default are gate-certified. <b>Warm-dark is hand-verified against the render-proof floor:</b>
+    the ground paints opaque so no white browser sheet shows through, and every glyph of text is
+    <b>cool near-white at full strength</b> — amber lives only in the hill and the ground, never
+    as a letter. That is the fix for the screen the gate once passed at 13:1 and a retina read at 1.17:1.</p>
+  <p class="note">This whole page is the demonstration of move 3 — you are standing inside it.</p>
+</section>
+
+<dl class="legend" aria-label="Motion legend">
+  <dt>--ease-settle</dt><dd>editorial come-to-rest; load, settle, comfort crossfade.</dd>
+  <dt>--ease-reveal</dt><dd>delayed disclosure; the Console/telemetry hand-off.</dd>
+  <dt>--t-sisyphus 5200ms</dt><dd>the signature loop; roll, slip, begin again.</dd>
+  <dt>reduced-motion</dt><dd>honored — all animation and transition off under the OS setting.</dd>
+</dl>
+
+<script>
+// Move 2 — settle-on-load (already applied via .in on first paint for above-the-fold;
+// IntersectionObserver settles the rest as they enter, so nothing pops)
+const io=new IntersectionObserver((es)=>{
+  es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+},{threshold:.15});
+document.querySelectorAll('.settle:not(.in)').forEach(el=>io.observe(el));
+
+// Move 4 — reveal
+function toggleReveal(btn){
+  const body=btn.nextElementSibling, open=body.classList.toggle('open');
+  btn.setAttribute('aria-expanded', open); btn.textContent = open ? 'Hide ←' : 'Show what was measured →';
+}
+
+// Move 3 — comfort crossfade (live corner control, never a gate)
+const root=document.documentElement;
+document.querySelectorAll('.comfort button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    root.setAttribute('data-comfort', b.dataset.set);
+    document.querySelectorAll('.comfort button').forEach(x=>x.setAttribute('aria-pressed', x===b));
+  });
+});
+</script>
+</body>
+</html>
