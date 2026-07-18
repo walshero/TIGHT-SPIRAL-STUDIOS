@@ -17,6 +17,9 @@
     --card:#fbf8f2;
     --shadow:rgba(20,15,10,.12);
     --win:#1d574f;
+    --near:#1d574f;
+    --mid:#7c3b1e;
+    --far:#5a4a2a;
   }
   body.softer{
     --paper:#efe9dd;
@@ -37,6 +40,9 @@
     --card:#211a13;
     --shadow:rgba(0,0,0,.5);
     --win:#6fc9b8;
+    --near:#6fc9b8;
+    --mid:#e2955f;
+    --far:#d6b56a;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -76,7 +82,8 @@
   nav.tabs button:focus-visible{outline:3px solid var(--gold);outline-offset:-3px}
 
   section[hidden]{display:none}
-  h2{font-size:22px;margin:0 0 14px;font-weight:800}
+  h2{font-size:22px;margin:0 0 6px;font-weight:800}
+  .lede{color:var(--ink-soft);font-size:15px;margin:0 0 16px}
 
   .day{background:var(--card);border:2px solid var(--line);
     border-radius:15px;padding:16px 16px 14px;margin:0 0 14px;
@@ -93,6 +100,8 @@
   .flag{margin-top:9px;background:var(--paper);border-left:5px solid var(--gold);
     padding:9px 11px;border-radius:0 9px 9px 0;font-size:15px;color:var(--ink)}
   .flag b{color:var(--rail)}
+  .slotfit{margin-top:9px;font-size:14px;color:var(--ink-soft)}
+  .slotfit b{color:var(--river)}
 
   .who{display:flex;gap:8px;margin:0 0 14px}
   .who button{flex:1;font:inherit;font-weight:700;min-height:48px;
@@ -123,18 +132,43 @@
   .idea .vote .n{font-weight:800;font-size:20px;font-variant-numeric:tabular-nums;color:var(--win)}
   .empty{color:var(--ink-soft);text-align:center;padding:26px 10px;font-style:italic}
 
-  .dist{background:var(--card);border:2px solid var(--line);border-radius:13px;
-    padding:0;margin:0 0 14px;overflow:hidden;box-shadow:0 2px 7px var(--shadow)}
-  .dist .h{background:var(--river);color:var(--paper);padding:11px 14px;font-weight:800}
-  .dist .b{padding:6px 0}
-  .dist .r{display:flex;justify-content:space-between;gap:10px;
-    padding:9px 14px;border-bottom:1px solid var(--line)}
-  .dist .r:last-child{border-bottom:none}
-  .dist .r .place{font-weight:700}
-  .dist .r .place small{display:block;font-weight:400;color:var(--ink-soft);font-size:14px}
-  .dist .r .mi{text-align:right;color:var(--river);font-weight:800;
-    font-variant-numeric:tabular-nums;white-space:nowrap}
-  .dist .r .mi small{display:block;color:var(--ink-soft);font-weight:400;font-size:14px}
+  .addschool{display:flex;flex-direction:column;gap:9px;margin:0 0 8px}
+  .addschool .fields{display:flex;gap:9px}
+  .addschool input[type=text]{font:inherit;font-size:17px;padding:11px;
+    border:2px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink)}
+  .addschool input.name{flex:1}
+  .addschool input.mins{width:118px;text-align:center}
+  .addschool input:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
+  .addschool .hint{font-size:13px;color:var(--ink-soft);margin:0}
+  .addschool .add{font:inherit;font-weight:700;min-height:48px;border:none;
+    border-radius:12px;background:var(--rail);color:#fff;cursor:pointer}
+  .addschool .add:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+  .school{background:var(--card);border:2px solid var(--line);border-radius:13px;
+    padding:13px 14px;margin:0 0 11px;box-shadow:0 2px 7px var(--shadow)}
+  .school .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .school .nm{font-weight:800;font-size:19px}
+  .school .nm small{display:block;font-weight:400;color:var(--ink-soft);font-size:14px;margin-top:1px}
+  .school .time{text-align:right;white-space:nowrap}
+  .school .time .val{font-weight:800;font-size:19px;font-variant-numeric:tabular-nums}
+  .band{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.04em;
+    text-transform:uppercase;padding:2px 9px;border-radius:20px;border:2px solid;margin-top:5px}
+  .band.near{color:var(--near);border-color:var(--near)}
+  .band.mid{color:var(--mid);border-color:var(--mid)}
+  .band.far{color:var(--far);border-color:var(--far)}
+  .school .fits{margin-top:10px;font-size:14px;color:var(--ink);
+    background:var(--paper);border-left:5px solid var(--gold);
+    padding:8px 11px;border-radius:0 9px 9px 0}
+  .school .fits b{color:var(--river)}
+  .school .rm{margin-top:10px}
+  .school .rm button{font:inherit;font-size:14px;font-weight:700;min-height:40px;
+    padding:5px 13px;border:2px solid var(--ink);border-radius:10px;
+    background:var(--paper);color:var(--ink);cursor:pointer}
+  .school .rm button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  .legend{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 16px;font-size:13px;color:var(--ink-soft)}
+  .legend span{display:inline-flex;align-items:center;gap:5px}
+  .legend i{width:13px;height:13px;border-radius:50%;border:2px solid;display:inline-block}
+  .legend i.near{border-color:var(--near)} .legend i.mid{border-color:var(--mid)} .legend i.far{border-color:var(--far)}
 
   .swap{margin-top:20px;padding:15px;border:2px dashed var(--line);
     border-radius:14px;background:var(--card)}
@@ -148,8 +182,7 @@
   .swap input[type=file]{position:absolute;width:1px;height:1px;opacity:0}
   .note{font-size:14px;color:var(--ink-soft);text-align:center;margin-top:22px;line-height:1.45}
 
-  body.night .dist .h{color:#17120d}
-  body.night .compose .add{color:#17120d}
+  body.night .compose .add,body.night .addschool .add{color:#17120d}
 </style>
 </head>
 <body>
@@ -180,6 +213,7 @@
 
   <section id="plan" aria-label="The plan">
     <h2>The four days</h2>
+    <p class="lede">Flying Boston to Asheville, based at the cabin the whole trip.</p>
 
     <div class="day">
       <div class="lbl"><b>Friday</b><span>Sept 4 &middot; get there</span></div>
@@ -191,7 +225,8 @@
     <div class="day">
       <div class="lbl"><b>Saturday</b><span>Sept 5 &middot; the train</span></div>
       <div class="row"><div class="t">10:30 AM</div><div class="d">Nantahala Gorge train, departs Bryson City<small>~4.5 hr round trip &middot; 1 hr layover at the Nantahala Outdoor Center</small></div></div>
-      <div class="row"><div class="t">~3:00 PM</div><div class="d">Back in Bryson City &middot; afternoon open<small>Good window for a short drive or a college look</small></div></div>
+      <div class="row"><div class="t">~3:00 PM</div><div class="d">Back in Bryson City &middot; afternoon open<small>Good window for a short drive or a nearby campus</small></div></div>
+      <div class="slotfit" id="satFit"></div>
     </div>
 
     <div class="day">
@@ -201,9 +236,29 @@
 
     <div class="day">
       <div class="lbl"><b>Monday</b><span>Sept 7 &middot; Labor Day, fly home</span></div>
-      <div class="row"><div class="t">AM</div><div class="d">Drive to Asheville, fly out<small>Possible short stop on the way if timing holds</small></div></div>
+      <div class="row"><div class="t">AM</div><div class="d">Drive to Asheville, fly out<small>A close campus on the way out could fit</small></div></div>
       <div class="flag"><b>Heads up:</b> Monday is Labor Day. Admissions offices are usually closed, so a guided campus visit that morning likely won't happen. A self-guided walk still works.</div>
+      <div class="slotfit" id="monFit"></div>
     </div>
+  </section>
+
+  <section id="schools" aria-label="Colleges" hidden>
+    <h2>Colleges</h2>
+    <p class="lede">Add a school and the minutes from the cabin. It sorts by drive and shows which day it fits.</p>
+    <div class="legend" aria-hidden="true">
+      <span><i class="near"></i>Under 1 hr</span>
+      <span><i class="mid"></i>1 to 2.5 hr</span>
+      <span><i class="far"></i>Farther</span>
+    </div>
+    <div class="addschool">
+      <div class="fields">
+        <input class="name" type="text" id="schName" placeholder="School name" aria-label="School name">
+        <input class="mins" type="text" id="schMins" inputmode="numeric" placeholder="minutes" aria-label="Drive minutes from cabin">
+      </div>
+      <p class="hint">Minutes one way from the Ash cabin. Confirm the number before you commit a morning to it.</p>
+      <button class="add" id="addSch" type="button">Add school</button>
+    </div>
+    <div id="schoolList"></div>
   </section>
 
   <section id="ideas" aria-label="Ideas" hidden>
@@ -213,36 +268,14 @@
       <button id="whoEvan" type="button" aria-pressed="false">Evan</button>
     </div>
     <div class="compose">
-      <textarea id="ideaText" placeholder="What do you want to do? A drive, a stop, a college, a place to eat..."></textarea>
+      <textarea id="ideaText" placeholder="A drive, a stop, a place to eat, a campus to see..."></textarea>
       <button class="add" id="addIdea" type="button">Add idea</button>
     </div>
     <div id="ideaList"></div>
   </section>
 
-  <section id="dist" aria-label="Drive distances" hidden>
-    <h2>From the cabin</h2>
-    <div class="dist">
-      <div class="h">Colleges Evan wants to see</div>
-      <div class="b">
-        <div class="r"><div class="place">Appalachian State<small>Boone, NC</small></div><div class="mi">2.5 hr<small>each way &middot; self-guided only Mon</small></div></div>
-        <div class="r"><div class="place">Western Carolina<small>Cullowhee, NC</small></div><div class="mi">45 min<small>closest four-year</small></div></div>
-        <div class="r"><div class="place">UNC Asheville<small>Asheville, NC</small></div><div class="mi">1.5 hr<small>near the airport</small></div></div>
-      </div>
-    </div>
-    <div class="dist">
-      <div class="h">Trip anchors</div>
-      <div class="b">
-        <div class="r"><div class="place">Bryson City<small>train + dinner</small></div><div class="mi">20 min</div></div>
-        <div class="r"><div class="place">Asheville (AVL)<small>the airport</small></div><div class="mi">90 min</div></div>
-        <div class="r"><div class="place">Great Smoky Mtns NP<small>Oconaluftee entrance</small></div><div class="mi">50 min</div></div>
-        <div class="r"><div class="place">Cherokee, NC<small>Museum of the Cherokee</small></div><div class="mi">45 min</div></div>
-      </div>
-    </div>
-    <p class="note">Drive times are estimates to sketch the days, not turn-by-turn. Confirm before you commit a morning to one.</p>
-  </section>
-
   <div class="swap" id="swapBox" hidden>
-    <p>Trading the board with Evan: save it, send the file (text, email, AirDrop), and the other person loads it back in.</p>
+    <p>Trading the board with Evan: save it, send the file (text, email, AirDrop), and the other person loads it back in. Schools and ideas both travel.</p>
     <div class="btns">
       <button id="saveBoard" type="button">Save board</button>
       <label tabindex="0">Load a board
@@ -255,9 +288,9 @@
 </div>
 
 <nav class="tabs" role="tablist" aria-label="Sections">
-  <button id="tPlan"  role="tab" aria-selected="true"  aria-controls="plan">Plan</button>
-  <button id="tIdeas" role="tab" aria-selected="false" aria-controls="ideas">Ideas</button>
-  <button id="tDist"  role="tab" aria-selected="false" aria-controls="dist">Distances</button>
+  <button id="tPlan"    role="tab" aria-selected="true"  aria-controls="plan">Plan</button>
+  <button id="tSchools" role="tab" aria-selected="false" aria-controls="schools">Colleges</button>
+  <button id="tIdeas"   role="tab" aria-selected="false" aria-controls="ideas">Ideas</button>
 </nav>
 
 <script>
@@ -277,7 +310,7 @@
     document.getElementById(k).addEventListener("click",function(){setMode(k);});
   });
 
-  var tabs=[["tPlan","plan"],["tIdeas","ideas"],["tDist","dist"]];
+  var tabs=[["tPlan","plan"],["tSchools","schools"],["tIdeas","ideas"]];
   var swapBox=document.getElementById("swapBox");
   function show(sec){
     tabs.forEach(function(p){
@@ -285,13 +318,87 @@
       document.getElementById(p[0]).setAttribute("aria-selected",sel?"true":"false");
       document.getElementById(p[1]).hidden=!sel;
     });
-    swapBox.hidden = (sec!=="ideas");
+    swapBox.hidden = (sec==="plan");
     window.scrollTo(0,0);
   }
   tabs.forEach(function(p){
     document.getElementById(p[0]).addEventListener("click",function(){show(p[1]);});
   });
   document.getElementById("homeBtn").addEventListener("click",function(){show("plan");});
+
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+
+  var schools=[
+    {nm:"Appalachian State", loc:"Boone, NC",     mins:150},
+    {nm:"Western Carolina",  loc:"Cullowhee, NC",  mins:45},
+    {nm:"UNC Asheville",     loc:"Asheville, NC",  mins:90},
+    {nm:"UNC Charlotte",     loc:"Charlotte, NC",  mins:150},
+    {nm:"NC State",          loc:"Raleigh, NC",    mins:255}
+  ];
+
+  function bandOf(m){ if(m<60)return "near"; if(m<=150)return "mid"; return "far"; }
+  function fmt(m){
+    if(m<60)return m+" min";
+    var h=Math.floor(m/60), r=m%60;
+    if(r===0)return h+" hr";
+    if(r===30)return h+".5 hr";
+    return h+" hr "+r+" min";
+  }
+  function fitsText(m){
+    if(m<60)return {ok:true, txt:"Fits Saturday afternoon or Monday on the way out."};
+    if(m<=90)return {ok:true, txt:"Tight but doable Saturday afternoon. Monday only self-guided (holiday)."};
+    if(m<=150)return {ok:false, txt:"About "+fmt(m)+" each way &mdash; would eat most of an open day. Saturday only if you skip the drive."};
+    return {ok:false, txt:"Too far for a day-trip from the cabin ("+fmt(m)+" each way)."};
+  }
+
+  var schoolList=document.getElementById("schoolList");
+  function renderSchools(){
+    schools.sort(function(a,b){return a.mins-b.mins;});
+    if(!schools.length){
+      schoolList.innerHTML='<div class="empty">No schools yet. Add one above.</div>';
+    } else {
+      schoolList.innerHTML=schools.map(function(s,i){
+        var b=bandOf(s.mins), f=fitsText(s.mins);
+        var locLine = s.loc ? '<small>'+esc(s.loc)+'</small>' : '';
+        var bandLbl = (b==="near"?"under 1 hr":b==="mid"?"1&ndash;2.5 hr":"farther");
+        return '<div class="school"><div class="top">'+
+          '<div class="nm">'+esc(s.nm)+locLine+'</div>'+
+          '<div class="time"><span class="val">'+fmt(s.mins)+'</span>'+
+          '<div><span class="band '+b+'">'+bandLbl+'</span></div></div>'+
+          '</div>'+
+          '<div class="fits"><b>'+(f.ok?"Fits a slot":"Tough fit")+'.</b> '+f.txt+'</div>'+
+          '<div class="rm"><button type="button" data-rm="'+i+'">Remove</button></div>'+
+          '</div>';
+      }).join("");
+    }
+    renderSlotFit();
+  }
+  schoolList.addEventListener("click",function(e){
+    var b=e.target.closest("button[data-rm]"); if(!b)return;
+    schools.splice(+b.getAttribute("data-rm"),1); renderSchools();
+  });
+  function addSchool(){
+    var n=document.getElementById("schName"), m=document.getElementById("schMins");
+    var nm=n.value.trim(), mins=parseInt(m.value,10);
+    if(!nm)return;
+    if(isNaN(mins)||mins<0){ m.focus(); return; }
+    schools.push({nm:nm, loc:"", mins:mins});
+    n.value=""; m.value=""; n.focus(); renderSchools();
+  }
+  document.getElementById("addSch").addEventListener("click",addSchool);
+  document.getElementById("schMins").addEventListener("keydown",function(e){ if(e.key==="Enter")addSchool(); });
+
+  function renderSlotFit(){
+    var sat=document.getElementById("satFit"), mon=document.getElementById("monFit");
+    var near=schools.filter(function(s){return s.mins<=90;}).sort(function(a,b){return a.mins-b.mins;});
+    if(near.length){
+      sat.innerHTML='<b>Closest campus for the Saturday window:</b> '+esc(near[0].nm)+' ('+fmt(near[0].mins)+' each way).';
+      mon.innerHTML='<b>Monday self-guided option:</b> '+esc(near[0].nm)+' if it is on the way to Asheville.';
+    } else {
+      sat.innerHTML='<b>No campus under 90 min yet.</b> Add one on the Colleges tab to see what fits here.';
+      mon.innerHTML='';
+    }
+  }
 
   var who="Dad";
   document.getElementById("whoDad").addEventListener("click",function(){setWho("Dad");});
@@ -300,18 +407,16 @@
     document.getElementById("whoDad").setAttribute("aria-pressed",w==="Dad"?"true":"false");
     document.getElementById("whoEvan").setAttribute("aria-pressed",w==="Evan"?"true":"false");
   }
-
   var ideas=[
     {by:"Dad", text:"Drive the Blue Ridge Parkway stretch near Cherokee on Saturday after the train.", votes:1},
-    {by:"Evan",text:"Self-guided walk around Western Carolina — it's only 45 minutes.", votes:1}
+    {by:"Evan",text:"Look at Western Carolina Saturday afternoon &mdash; it's the closest one.", votes:1}
   ];
   var list=document.getElementById("ideaList");
-  function esc(s){return s.replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
-  function render(){
+  function renderIdeas(){
     if(!ideas.length){list.innerHTML='<div class="empty">No ideas yet. Add the first one above.</div>';return;}
     list.innerHTML=ideas.map(function(it,i){
       var cls=it.by==="Dad"?"dad":"evan";
-      return '<div class="idea"><div class="top"><span class="by '+cls+'">'+it.by+
+      return '<div class="idea"><div class="top"><span class="by '+cls+'">'+esc(it.by)+
         '</span></div><p>'+esc(it.text)+'</p><div class="vote">'+
         '<button type="button" data-i="'+i+'">Like</button>'+
         '<span class="n" aria-label="'+it.votes+' likes">'+it.votes+'</span></div></div>';
@@ -319,16 +424,15 @@
   }
   list.addEventListener("click",function(e){
     var b=e.target.closest("button[data-i]"); if(!b)return;
-    ideas[+b.getAttribute("data-i")].votes++; render();
+    ideas[+b.getAttribute("data-i")].votes++; renderIdeas();
   });
   document.getElementById("addIdea").addEventListener("click",function(){
     var t=document.getElementById("ideaText"); var v=t.value.trim();
-    if(!v)return; ideas.unshift({by:who,text:v,votes:0}); t.value=""; render();
+    if(!v)return; ideas.unshift({by:who,text:v,votes:0}); t.value=""; renderIdeas();
   });
-  render();
 
   document.getElementById("saveBoard").addEventListener("click",function(){
-    var blob=new Blob([JSON.stringify({v:1,ideas:ideas},null,2)],{type:"application/json"});
+    var blob=new Blob([JSON.stringify({v:2,schools:schools,ideas:ideas},null,2)],{type:"application/json"});
     var a=document.createElement("a"); a.href=URL.createObjectURL(blob);
     a.download="trail-notes-board.json"; a.click();
     setTimeout(function(){URL.revokeObjectURL(a.href);},1000);
@@ -338,11 +442,15 @@
     var r=new FileReader();
     r.onload=function(){
       try{var d=JSON.parse(r.result);
-        if(d&&Array.isArray(d.ideas)){ideas=d.ideas;render();}
+        if(d&&Array.isArray(d.schools))schools=d.schools;
+        if(d&&Array.isArray(d.ideas))ideas=d.ideas;
+        renderSchools(); renderIdeas();
       }catch(err){alert("That file didn't read as a saved board. Try the .json you saved from here.");}
     };
     r.readAsText(f);
   });
+
+  renderSchools(); renderIdeas();
 })();
 </script>
 </body>
