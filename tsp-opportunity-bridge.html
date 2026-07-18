@@ -81,6 +81,29 @@
   a.src:focus{outline:3px solid var(--link);outline-offset:2px}
   .foot{font-size:15px;margin:26px 0 0 0;padding-top:14px;border-top:2px solid var(--line);opacity:.92}
   .verdict{font-size:16px;font-weight:700;margin:2px 0 0 0}
+
+  /* ── LANE GLYPHS + STATUS MARKERS. Decision-surface signal. ── */
+  .lane-head{display:flex;align-items:center;gap:12px;margin:6px 0 14px 0}
+  .lane-glyph{width:40px;height:40px;flex:0 0 auto;color:var(--ink)}
+  .lane-glyph svg{display:block;width:100%;height:100%}
+  .lane-note{margin:0;flex:1 1 auto}
+  /* status dot: sits on the card, reads state at a glance */
+  .row{position:relative}
+  .status{position:absolute;top:14px;right:14px;display:flex;align-items:center;gap:6px;
+    font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+  .status .dot{width:13px;height:13px;border-radius:50%;flex:0 0 auto;border:2px solid var(--ink)}
+  .status.go .dot{background:var(--go);border-color:var(--go)}
+  .status.go{color:var(--go)}
+  .status.wait .dot{background:transparent;border-color:var(--wait)}
+  .status.wait{color:var(--wait)}
+  .status.block .dot{background:transparent;border-color:var(--hot);
+    background-image:linear-gradient(45deg,transparent 44%,var(--hot) 44%,var(--hot) 56%,transparent 56%)}
+  .status.block{color:var(--hot)}
+  .row h3{padding-right:96px}   /* clear space for the status marker */
+  /* sample-B per-opportunity mark */
+  .opp-mark{width:30px;height:30px;float:left;margin:2px 12px 4px 0;color:var(--ink);opacity:.85}
+  .opp-mark svg{display:block;width:100%;height:100%}
+
 </style>
 </head>
 <body>
@@ -132,10 +155,10 @@
 
 <!-- ============ CONFERENCES ============ -->
 <section id="p-conf" role="tabpanel" aria-labelledby="t-conf">
-  <p class="lane-note"><b>Deep lane.</b> Venues where a finished TSP game gets played, judged, and seen by the serious-games field.</p>
+  <div class="lane-head"><div class="lane-glyph"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="6" y="14" width="14" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="9" y1="18" x2="17" y2="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="9" y1="22" x2="14" y2="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 30 L26 16 L32 12 L32 30" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="23" y1="30" x2="35" y2="30" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="29" cy="9" r="1.6" fill="currentColor"/></svg></div><p class="lane-note"><b>Deep lane.</b> Venues where a finished TSP game gets played, judged, and seen by the serious-games field.</p></div>
 
-  <div class="row">
-    <h3>GALA Serious Games Competition 2026</h3>
+  <div class="row"><div class="status block"><span class="dot"></span>Blocked</div>
+    <div class="opp-mark"><svg viewBox="0 0 30 30" aria-hidden="true"><path d="M10 6 h10 v5 a5 5 0 0 1 -10 0 z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 8 h-3 a3 3 0 0 0 3 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 8 h3 a3 3 0 0 1 -3 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="15" y1="16" x2="15" y2="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="11" y="20" width="8" height="4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3>GALA Serious Games Competition 2026</h3>
     <p class="who">Games and Learning Alliance &middot; L&rsquo;Aquila, Italy</p>
     <div class="meta">
       <span class="chip due">Submit by Aug 2, 2026</span>
@@ -148,7 +171,7 @@
     <p><a class="src" href="https://www.grants.gov/" target="_blank" rel="noopener">Confirm on GALA / EasyChair before submitting &rarr;</a></p>
   </div>
 
-  <div class="row">
+  <div class="row"><div class="status wait"><span class="dot"></span>Waiting</div>
     <h3>ECGBL 2026 &mdash; European Conference on Game-Based Learning</h3>
     <p class="who">Academic Conferences International &middot; Darmstadt, Germany</p>
     <div class="meta">
@@ -162,10 +185,10 @@
 
 <!-- ============ GRANTS ============ -->
 <section id="p-grant" role="tabpanel" aria-labelledby="t-grant" hidden>
-  <p class="lane-note"><b>Deep lane.</b> Money you are genuinely eligible for as MassBay faculty. <b>One caution across the whole federal tier:</b> a May 2026 court ruling restored ~1,400 terminated NEH grants, but FY26 humanities budgets are cut and unstable &mdash; treat federal awards as real but at risk of mid-cycle disruption.</p>
+  <div class="lane-head"><div class="lane-glyph"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="10" y="7" width="20" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="14" y1="14" x2="26" y2="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="14" y1="19" x2="26" y2="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="14" y1="24" x2="22" y2="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="27" cy="28" r="5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M27 28 l-2 5 l2 -1.5 l2 1.5 z" fill="currentColor"/></svg></div><p class="lane-note"><b>Deep lane.</b> Money you are genuinely eligible for as MassBay faculty. <b>One caution across the whole federal tier:</b> a May 2026 court ruling restored ~1,400 terminated NEH grants, but FY26 humanities budgets are cut and unstable &mdash; treat federal awards as real but at risk of mid-cycle disruption.</p></div>
 
-  <div class="row">
-    <h3>NEH Digital Projects for the Public</h3>
+  <div class="row"><div class="status go"><span class="dot"></span>Ready</div>
+    <div class="opp-mark"><svg viewBox="0 0 30 30" aria-hidden="true"><rect x="9" y="8" width="12" height="3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="8" y="22" width="14" height="3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="11" x2="12" y2="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="15" y1="11" x2="15" y2="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="18" y1="11" x2="18" y2="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3>NEH Digital Projects for the Public</h3>
     <p class="who">National Endowment for the Humanities &middot; federal</p>
     <div class="meta">
       <span class="chip due">Next deadline Sep 1, 2026</span>
@@ -177,7 +200,7 @@
     <p><a class="src" href="https://www.neh.gov/grants/public/digital-projects-the-public" target="_blank" rel="noopener">neh.gov &mdash; Digital Projects for the Public &rarr;</a></p>
   </div>
 
-  <div class="row">
+  <div class="row"><div class="status block"><span class="dot"></span>Blocked</div>
     <h3>NEH Digital Humanities Advancement Grants (DHAG)</h3>
     <p class="who">NEH Office of Digital Humanities &middot; federal &middot; partnered with IMLS</p>
     <div class="meta">
@@ -191,8 +214,8 @@
     <p><a class="src" href="https://www.neh.gov/grants/odh/digital-humanities-advancement-grants" target="_blank" rel="noopener">neh.gov &mdash; DHAG &rarr;</a></p>
   </div>
 
-  <div class="row">
-    <h3>Teach Access Faculty Grants</h3>
+  <div class="row"><div class="status go"><span class="dot"></span>Ready</div>
+    <div class="opp-mark"><svg viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="8" r="2.4" fill="currentColor"/><line x1="15" y1="11" x2="15" y2="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="9" y1="14" x2="21" y2="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="15" y1="19" x2="11" y2="25" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="15" y1="19" x2="19" y2="25" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3>Teach Access Faculty Grants</h3>
     <p class="who">Teach Access &middot; national &middot; accessibility-in-curriculum</p>
     <div class="meta">
       <span class="chip wait">Paused 2025 &mdash; watch for reopen</span>
@@ -204,7 +227,7 @@
     <p><a class="src" href="https://www.teachaccess.org/initiatives/grants/" target="_blank" rel="noopener">teachaccess.org &mdash; Grants &rarr;</a></p>
   </div>
 
-  <div class="row">
+  <div class="row"><div class="status wait"><span class="dot"></span>Waiting</div>
     <h3>Mass Humanities Project Grants</h3>
     <p class="who">Mass Humanities &middot; Massachusetts state council (NEH pass-through)</p>
     <div class="meta">
@@ -217,7 +240,7 @@
     <p><a class="src" href="https://masshumanities.org/grants/" target="_blank" rel="noopener">masshumanities.org &mdash; Grants &rarr;</a></p>
   </div>
 
-  <div class="row">
+  <div class="row"><div class="status go"><span class="dot"></span>Ready</div>
     <h3>Mass Cultural Council &mdash; Project / Local Cultural Council</h3>
     <p class="who">Mass Cultural Council &middot; state + 329 local councils</p>
     <div class="meta">
@@ -233,9 +256,9 @@
 
 <!-- ============ IP (scaffold) ============ -->
 <section id="p-ip" role="tabpanel" aria-labelledby="t-ip" hidden>
-  <p class="lane-note"><b>Scaffold lane.</b> Not mined this pass &mdash; the shape only, so nothing falls through. Say <b>&ldquo;deepen IP&rdquo;</b> when you want real research here.</p>
+  <div class="lane-head"><div class="lane-glyph"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="14" cy="16" r="6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="18" y1="20" x2="32" y2="34" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="27" y1="29" x2="31" y2="25" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="30" y1="32" x2="34" y2="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><p class="lane-note"><b>Scaffold lane.</b> Not mined this pass &mdash; the shape only, so nothing falls through. Say <b>&ldquo;deepen IP&rdquo;</b> when you want real research here.</p></div>
 
-  <div class="row">
+  <div class="row"><div class="status go"><span class="dot"></span>Ready</div>
     <h3>The pipeline as protectable method</h3>
     <p class="who">Tight Spiral Productions &middot; internal</p>
     <div class="meta"><span class="chip wait">Scaffold</span><span class="chip ready">Asset: Borges paper</span></div>
@@ -243,7 +266,7 @@
     <p class="next"><b>Next action &rarr;</b> Decide the protection posture: trade-secret (keep pipeline docs private) vs. published-method (paper as timestamped authorship). Open question, not yet resolved.</p>
   </div>
 
-  <div class="row">
+  <div class="row"><div class="status wait"><span class="dot"></span>Waiting</div>
     <h3>Writerly Moves as licensable product</h3>
     <p class="who">TSP &middot; internal</p>
     <div class="meta"><span class="chip wait">Scaffold &mdash; parked</span></div>
@@ -251,7 +274,7 @@
     <p class="next"><b>Next action &rarr;</b> Resolve the taxonomy question in a founder review session before any external conversation. Do not license a product with an unsettled core.</p>
   </div>
 
-  <div class="row">
+  <div class="row"><div class="status wait"><span class="dot"></span>Waiting</div>
     <h3>&ldquo;Tight Spiral&rdquo; / &ldquo;Confluence&rdquo; naming</h3>
     <p class="who">TSP &middot; internal</p>
     <div class="meta"><span class="chip wait">Scaffold</span></div>
@@ -262,9 +285,9 @@
 
 <!-- ============ BUSINESS (scaffold) ============ -->
 <section id="p-biz" role="tabpanel" aria-labelledby="t-biz" hidden>
-  <p class="lane-note"><b>Scaffold lane.</b> Shape only. Say <b>&ldquo;deepen business&rdquo;</b> for real research on publishing venues and revenue paths.</p>
+  <div class="lane-head"><div class="lane-glyph"><svg viewBox="0 0 40 40" aria-hidden="true"><line x1="8" y1="32" x2="34" y2="32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><rect x="10" y="24" width="5" height="8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><rect x="18" y="18" width="5" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><rect x="26" y="10" width="5" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 20 L16 16 L24 12 L31 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 3"/></svg></div><p class="lane-note"><b>Scaffold lane.</b> Shape only. Say <b>&ldquo;deepen business&rdquo;</b> for real research on publishing venues and revenue paths.</p></div>
 
-  <div class="row">
+  <div class="row"><div class="status go"><span class="dot"></span>Ready</div>
     <h3>Borges paper &mdash; 14-venue submission plan</h3>
     <p class="who">TSP &middot; written, sitting</p>
     <div class="meta"><span class="chip ready">Asset ready</span><span class="chip wait">Not sent</span></div>
@@ -272,7 +295,7 @@
     <p class="next"><b>Next action &rarr;</b> Send Tier 1 (Chronicle of Higher Ed) this month. It has been sitting in a folder. One email moves three lanes.</p>
   </div>
 
-  <div class="row">
+  <div class="row"><div class="status wait"><span class="dot"></span>Waiting</div>
     <h3>FableVision / Funny Boney&rsquo;s</h3>
     <p class="who">TSP &times; FableVision (Reynolds / Goldberger)</p>
     <div class="meta"><span class="chip wait">Scaffold</span><span class="chip wait">Gated by Cleese letter</span></div>
@@ -280,7 +303,7 @@
     <p class="next"><b>Next action &rarr;</b> Get Funny Boney&rsquo;s to a standard you consider shippable. That unlocks both the letter and the FableVision conversation.</p>
   </div>
 
-  <div class="row">
+  <div class="row"><div class="status wait"><span class="dot"></span>Waiting</div>
     <h3>Leeder Management lane</h3>
     <p class="who">TSP services &middot; Howard Leeder</p>
     <div class="meta"><span class="chip wait">Scaffold</span><span class="chip amt">Flat-fee model</span></div>
@@ -290,9 +313,9 @@
 </section>
 
 <section id="p-comm" role="tabpanel" aria-labelledby="t-comm" hidden>
-  <p class="lane-note"><b>New deep lane.</b> Where a solo studio actually lands paid game work &mdash; not government bid portals (wrong fit: they want registered vendors, insurance, past-performance, a bids team). The real pattern: an institution wins a grant that <i>requires</i> public outreach, then puts out an RFP to known game makers. Your job is to be known before the RFP exists.</p>
+  <div class="lane-head"><div class="lane-glyph"><svg viewBox="0 0 40 40" aria-hidden="true"><line x1="7" y1="20" x2="33" y2="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 12 L9 20 L17 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M23 12 L31 20 L23 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><rect x="17" y="16" width="6" height="8" fill="currentColor"/></svg></div><p class="lane-note"><b>New deep lane.</b> Where a solo studio actually lands paid game work &mdash; not government bid portals (wrong fit: they want registered vendors, insurance, past-performance, a bids team). The real pattern: an institution wins a grant that <i>requires</i> public outreach, then puts out an RFP to known game makers. Your job is to be known before the RFP exists.</p></div>
 
-  <div class="row">
+  <div class="row"><div class="status go"><span class="dot"></span>Ready</div>
     <h3>The mechanism (read this first)</h3>
     <p class="who">How learning games actually get commissioned</p>
     <div class="meta"><span class="chip ready">Strategy, not a deadline</span></div>
@@ -300,7 +323,7 @@
     <p class="next"><b>Next action &rarr;</b> Make TSP discoverable: a one-page &ldquo;commission a game&rdquo; capabilities sheet + the public arcade. Then seed three local relationships (see below). Contract work comes months after people learn what you do.</p>
   </div>
 
-  <div class="row">
+  <div class="row"><div class="status block"><span class="dot"></span>Blocked</div>
     <h3>Games for Change &mdash; Awards + Festival network</h3>
     <p class="who">G4C &middot; the leading serious-games nonprofit &middot; NYC</p>
     <div class="meta">
@@ -314,7 +337,7 @@
     <p><a class="src" href="https://www.gamesforchange.org/" target="_blank" rel="noopener">gamesforchange.org &rarr;</a></p>
   </div>
 
-  <div class="row">
+  <div class="row"><div class="status go"><span class="dot"></span>Ready</div>
     <h3>The grant-holder RFP (your real bid lane)</h3>
     <p class="who">Universities, museums, libraries, foundations with an outreach mandate</p>
     <div class="meta">
@@ -325,7 +348,7 @@
     <p class="next"><b>Next action &rarr;</b> Set a standing watch (I refresh on command) on: Games for Change job/RFP board, Idealist (&ldquo;interactive&rdquo; + &ldquo;educational&rdquo;), and UK Find-a-Tender CPV <b>37524100 Educational games</b>. Cherry-pick 1&ndash;2 that fit; ignore the rest. Do NOT chase SAM.gov / procurement portals &mdash; wrong fit for a solo maker.</p>
   </div>
 
-  <div class="row">
+  <div class="row"><div class="status go"><span class="dot"></span>Ready</div>
     <h3>FableVision &mdash; the door already open</h3>
     <p class="who">TSP &times; FableVision (Reynolds / Goldberger) &middot; Boston</p>
     <div class="meta">
@@ -336,7 +359,7 @@
     <p class="next"><b>Next action &rarr;</b> Ship Funny Boney&rsquo;s to a standard you&rsquo;d put in front of Peter. That single move converts a relationship into a commission pipeline. This is the highest-ROI action on the entire board.</p>
   </div>
 
-  <div class="row">
+  <div class="row"><div class="status go"><span class="dot"></span>Ready</div>
     <h3>Local overflow &mdash; the Boston indie network</h3>
     <p class="who">Boston Indie Game Collective &middot; MIT / Ed Arcade lineage &middot; MassBay</p>
     <div class="meta"><span class="chip amt">Overflow contracts</span><span class="chip ready">Osterweil connection live</span></div>
