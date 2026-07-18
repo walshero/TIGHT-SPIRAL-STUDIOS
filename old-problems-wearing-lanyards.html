@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Old Problems Wearing Lanyards · Tight Spiral Studios</title>
+<!--
+  PROVENANCE (OS §16.4). All art on this page is AUTHORED in-session as inline SVG
+  (Lane A · cut-paper) — no generated, licensed, or external assets; zero network hosts
+  (OFFLINE floor). Palette composed fresh for this build's rhetoric (the blind librarian,
+  ink, the lamp in the dark) — NOT the studio's amber default (the amateur tell). Green-free.
+  Message source: "The Blind Librarian's Pipeline" (borges-pipeline-paper.md, master v1).
+  Guest panel convened for delivery: Hitchcock (suspense — give the audience the bomb),
+  Eagleman (perception is constructed; the brain builds the world in the dark),
+  Turkle (alone together — what total systems do to attention and to each other).
+  Seats held open: Borges Left (spine), Funes (memory-with-a-gate), the Aleph (one question).
+-->
+<style>
+/* ============================================================================
+   TOKEN-ROLE LAW (OS §14.1): every token is EITHER text OR decoration, never both.
+   :root declares color-scheme light; warm-dark is opt-in via [data-comfort].
+   ========================================================================== */
+:root{
+  color-scheme: light;
+
+  /* — TEXT tokens (only ever used as `color:` on real text) — */
+  --ink:#17140f;        /* body / headings                                   */
+  --ink-2:#3f382c;      /* secondary prose                                   */
+  --ink-3:#655b49;      /* muted / captions (holds AA)                       */
+  --accent-ink:#22406b; /* library-ink indigo: eyebrows, links, accent text  */
+  --btn-ink:#f6f2e8;    /* text ON a filled button                           */
+  --stamp-true:#22406b; /* VERIFIED label (indigo) — never carried by color alone */
+  --stamp-false:#8a2f22;/* FABRICATED label (oxblood, NOT green)             */
+
+  /* — DECORATION tokens (only ever fills / strokes / shadows, never text) — */
+  --paper:#f3eee2;      /* opaque ground (OPACITY TOOTH)                      */
+  --paper-2:#e7dfcd;    /* deeper page / shadowed shelf                      */
+  --rule:#cbc0a8;       /* hairlines                                         */
+  --line:#8a7d61;       /* SVG structural stroke                             */
+  --lamp:#d7a43a;       /* amber — LAMP FILL ONLY, never a letter (RP floor) */
+  --lamp-2:#f0d38a;     /* pale amber glow fill                              */
+  --shadow:rgba(20,15,8,.20);   /* cut-paper edge-shadow ("glued on top")    */
+  --btn-bg:#22406b;     /* filled-button ground                              */
+
+  /* — motion grammar (one source of easing truth) — */
+  --ease-settle:cubic-bezier(.16,.84,.44,1);
+  --ease-reveal:cubic-bezier(.22,1,.36,1);
+  --t-settle:640ms; --t-reveal:520ms; --t-cross:460ms;
+
+  --serif:Georgia,"Times New Roman",serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+
+/* SOFTER — lower contrast, same ink relationships, ≥0.12 luminance from default.
+   Class-based comfort (canonical studio pattern; machine-testable by the sweep). */
+body.softer{
+  --ink:#221d15; --ink-2:#453d30; --ink-3:#645a48; --accent-ink:#294874;
+  --paper:#e3d9c8; --paper-2:#d6cbb6; --rule:#c3b79e; --line:#8f8264;
+  --lamp:#cf9d33; --lamp-2:#e6c877; --shadow:rgba(20,15,8,.22);
+}
+
+/* WARM-DARK — opaque charcoal ground; TEXT is cool near-white at full strength.
+   amber (--lamp) is GROUND + fill ONLY, never a letter (HUE FLOOR FOR RP). */
+body.warm{
+  --ink:#f1efe7; --ink-2:#d6d0c1; --ink-3:#b4ad9c;
+  --accent-ink:#a9c3e6;                 /* cool accent text, never amber      */
+  --btn-ink:#eef2f8;  --btn-bg:#2a3a52;
+  --stamp-true:#a9c3e6; --stamp-false:#e0907f;
+  --paper:#14120e; --paper-2:#1e1a13; --rule:#383225; --line:#6f6650;
+  --lamp:#e6b64e; --lamp-2:#8a6a24; --shadow:rgba(0,0,0,.55);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+/* OPACITY TOOTH: html + body + every section paint an opaque ground, full viewport,
+   so no white browser sheet can show through in any comfort mode (incl. overscroll). */
+html{background:#f3eee2}
+html.softer{background:#e3d9c8}
+html.warm{background:#14120e}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:var(--serif); line-height:1.55; font-size:18px;
+  min-height:100dvh; padding:0 0 100px;
+  transition:background var(--t-cross) var(--ease-settle), color var(--t-cross) var(--ease-settle);
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important; transition:none!important}
+}
+
+/* ── FIXED CORNER NAV (nav floor: back + home reachable on every screen) ── */
+.corner{position:fixed; z-index:60; font-family:var(--mono); font-size:12.5px}
+.corner button{
+  min-width:44px; min-height:44px; padding:0 13px; border:1.5px solid var(--ink);
+  background:var(--paper); color:var(--ink); font:inherit; cursor:pointer;
+  border-radius:2px; transition:background 160ms,color 160ms}
+.corner button:focus-visible{outline:3px solid var(--accent-ink); outline-offset:2px}
+.nav-left{top:12px; left:12px; display:flex; gap:8px}
+.comfort{top:12px; right:12px; display:flex; gap:6px; align-items:center; flex-wrap:wrap; justify-content:flex-end; max-width:60vw}
+.comfort .lbl{font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3)}
+.comfort button[aria-pressed="true"]{background:var(--ink); color:var(--paper)}
+
+/* Eagleman "dim the room" — constructed-perception overlay (decorative, off by default) */
+.vignette{position:fixed; inset:0; z-index:50; pointer-events:none; opacity:0;
+  background:radial-gradient(120% 90% at 50% 42%, transparent 30%, rgba(6,5,3,.55) 78%, rgba(4,3,2,.9) 100%);
+  transition:opacity var(--t-cross) var(--ease-settle)}
+body.narrowed .vignette{opacity:1}
+
+/* ── SECTION / SCENE SYSTEM — image-dominant (image-ratio floor ≥50%) ──────── */
+section{background:var(--paper); border-bottom:2px solid var(--rule)}
+/* scenes are image-dominant: an opaque painted box, min ~58vh, art centered inside
+   (meet, never letterboxed to page bg — the box itself paints --paper-2). */
+.scene{display:block; width:100%; height:auto; min-height:58vh; background:var(--paper-2)}
+.stage{position:relative; max-width:1000px; margin:0 auto}
+.wrap{max-width:760px; margin:0 auto; padding:26px 22px 46px}
+.pad-top{padding-top:84px}
+
+.eyebrow{font-family:var(--mono); font-size:12px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--accent-ink); font-weight:700; margin:0 0 8px; display:flex; align-items:center; gap:9px}
+.fuse{width:44px; height:8px; flex:none}
+h1{font-size:clamp(30px,6.4vw,50px); line-height:1.06; margin:0 0 16px; color:var(--ink); font-weight:700; letter-spacing:-.01em}
+h1 em,h2 em{font-style:italic; color:var(--accent-ink)}
+h2{font-size:clamp(22px,4vw,31px); line-height:1.12; margin:0 0 14px; color:var(--ink); font-weight:700}
+.lede{font-size:clamp(18px,2.4vw,21px); color:var(--ink); max-width:62ch}
+p{font-size:clamp(16px,2.1vw,18px); color:var(--ink-2); max-width:64ch; margin:0 0 16px}
+p b{color:var(--ink); font-weight:600}
+.foretell{color:var(--ink); font-weight:600}
+.aside{font-family:var(--mono); font-size:13.5px; line-height:1.6; color:var(--ink-3);
+  border-left:2px solid var(--lamp); padding:4px 0 4px 14px; margin:22px 0 6px; max-width:60ch}
+.aside b{color:var(--ink-2)}
+.pull{font-size:clamp(19px,3vw,25px); line-height:1.3; color:var(--ink); font-weight:600;
+  border-top:2px solid var(--rule); border-bottom:2px solid var(--rule); padding:20px 0; margin:26px 0}
+.src{font-family:var(--mono); font-size:12px; color:var(--ink-3); letter-spacing:.03em; margin-top:6px}
+
+/* interaction controls */
+.act{display:flex; gap:10px; flex-wrap:wrap; margin:20px 0 4px}
+.btn{min-height:48px; padding:12px 20px; border:1.5px solid var(--btn-bg); border-radius:3px;
+  background:var(--btn-bg); color:var(--btn-ink); font-family:var(--mono); font-size:14px; font-weight:600;
+  cursor:pointer; transition:transform 140ms var(--ease-settle), opacity 140ms}
+.btn.ghost{background:var(--paper); color:var(--ink)}
+.btn:focus-visible{outline:3px solid var(--accent-ink); outline-offset:2px}
+.btn:active{transform:translateY(1px)}
+.btn[disabled]{opacity:.5; cursor:default}
+.told{font-family:var(--mono); font-size:13px; color:var(--ink-3); margin:14px 0 0; min-height:1.2em; letter-spacing:.02em}
+.told b{color:var(--accent-ink)}
+
+/* settle-on-load */
+.settle{opacity:0; transform:translateY(16px)}
+.settle.in{animation:settle var(--t-settle) var(--ease-settle) forwards}
+@keyframes settle{to{opacity:1; transform:none}}
+.d1{animation-delay:60ms}.d2{animation-delay:170ms}.d3{animation-delay:300ms}.d4{animation-delay:440ms}
+
+/* fuse burn (Hitchcock — decorative, reduced-motion off) */
+.spark{animation:crawl 3.2s linear infinite}
+@keyframes crawl{0%{transform:translateX(0)}100%{transform:translateX(30px)}}
+
+/* garden ghost path */
+.ghost{opacity:0; transition:opacity 700ms var(--ease-reveal)}
+.ghost.on{opacity:.5}
+.taken{opacity:.28; transition:opacity 500ms}
+.taken.dim{opacity:.9}
+
+/* library stamps */
+.stamp{opacity:0; transform:scale(.6) rotate(-8deg); transform-origin:center;
+  transition:opacity 360ms var(--ease-settle), transform 360ms var(--ease-settle)}
+.stamp.on{opacity:1; transform:none}
+
+/* funes wall / aleph flood / map grow — driven by classes toggling CSS custom props */
+.reveal{max-height:0; overflow:hidden; opacity:0;
+  transition:max-height var(--t-reveal) var(--ease-reveal), opacity var(--t-reveal) var(--ease-reveal)}
+.reveal.open{max-height:440px; opacity:1; margin-top:14px}
+
+/* colophon */
+.colophon{max-width:820px; margin:0 auto; padding:40px 22px 20px}
+.seats{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:16px; margin:22px 0}
+.seat{border:1.5px solid var(--rule); border-radius:6px; padding:15px 16px; background:var(--paper-2)}
+.seat h3{font-family:var(--mono); font-size:12.5px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--accent-ink); margin:0 0 6px}
+.seat p{font-size:14.5px; color:var(--ink-2); margin:0}
+.foot{font-family:var(--mono); font-size:12px; color:var(--ink-3); line-height:1.7; margin-top:24px}
+a{color:var(--accent-ink)}
+.visually-hidden{position:absolute!important; width:1px;height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+</style>
+</head>
+<body>
+
+<!-- shared cut-paper filters: edge-shadow ("glued on top") + paper grain -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <filter id="lift" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="2.5" stdDeviation="2.4" flood-color="#140f08" flood-opacity="0.28"/>
+  </filter>
+  <filter id="liftbig" x="-30%" y="-30%" width="160%" height="160%">
+    <feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="#140f08" flood-opacity="0.34"/>
+  </filter>
+  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.045 0"/></filter>
+  <radialGradient id="glow" cx="50%" cy="42%" r="60%">
+    <stop offset="0%" stop-color="var(--lamp-2)" stop-opacity="0.95"/>
+    <stop offset="55%" stop-color="var(--lamp)" stop-opacity="0.28"/>
+    <stop offset="100%" stop-color="var(--lamp)" stop-opacity="0"/>
+  </radialGradient>
+</defs></svg>
+
+<div class="vignette" aria-hidden="true"></div>
+
+<nav class="corner nav-left" aria-label="Navigation">
+  <button onclick="history.length>1?history.back():location.href='index.html'" aria-label="Back">‹ Back</button>
+  <button onclick="location.href='index.html'" aria-label="Home">Home</button>
+</nav>
+
+<nav class="corner comfort" aria-label="Reading comfort">
+  <span class="lbl">Comfort</span>
+  <button data-set="softer" aria-pressed="false">Softer</button>
+  <button data-set="default" aria-pressed="true">Default</button>
+  <button data-set="warm" aria-pressed="false">Warm-dark</button>
+  <button data-set="dim" id="dimBtn" aria-pressed="false" title="Narrow the field of view">Dim the room</button>
+</nav>
+
+
+<!-- ═══════════════════ COLD OPEN — the books and the dark, one gesture ═══════════════════ -->
+<section aria-label="Opening scene: a librarian receives a million books at the moment he can no longer read one">
+  <div class="stage">
+  <svg class="scene" viewBox="0 0 1000 620" role="img"
+       aria-label="A dark library at night. Tall shelves recede into shadow. A single lantern throws warm light over a standing figure — a cane at rest against the shelf, spectacles folded on a book — who is being handed a great stack of volumes. Half the scene is in darkness.">
+    <rect x="0" y="0" width="1000" height="620" fill="var(--paper-2)"/>
+    <rect x="0" y="0" width="1000" height="620" fill="url(#glow)"/>
+    <!-- shelving, receding, layered cut paper -->
+    <g stroke="var(--line)" stroke-width="2">
+      <rect x="40" y="70" width="150" height="470" fill="var(--paper)" filter="url(#lift)"/>
+      <rect x="205" y="95" width="135" height="445" fill="var(--paper-2)" filter="url(#lift)"/>
+      <rect x="660" y="95" width="140" height="445" fill="var(--paper-2)" filter="url(#lift)"/>
+      <rect x="812" y="70" width="150" height="470" fill="var(--paper)" filter="url(#lift)"/>
+    </g>
+    <!-- shelf books (neutral spines) -->
+    <g fill="var(--paper-2)" stroke="var(--line)" stroke-width="1.4">
+      <g>
+        <rect x="52" y="96" width="16" height="70"/><rect x="70" y="90" width="14" height="76"/>
+        <rect x="86" y="100" width="18" height="66"/><rect x="106" y="92" width="13" height="74"/>
+        <rect x="121" y="98" width="17" height="68"/><rect x="140" y="94" width="14" height="72"/><rect x="156" y="100" width="20" height="66"/>
+      </g>
+      <use href="#shelfrow" x="0" y="120"/><use href="#shelfrow" x="0" y="240"/><use href="#shelfrow" x="0" y="360"/>
+      <g id="shelfrow">
+        <rect x="52" y="96" width="16" height="70"/><rect x="70" y="90" width="14" height="76"/>
+        <rect x="86" y="100" width="18" height="66"/><rect x="106" y="92" width="13" height="74"/>
+        <rect x="121" y="98" width="17" height="68"/><rect x="140" y="94" width="14" height="72"/>
+      </g>
+    </g>
+    <!-- lantern -->
+    <g filter="url(#liftbig)">
+      <rect x="366" y="300" width="52" height="66" rx="4" fill="var(--lamp)" stroke="var(--line)" stroke-width="2"/>
+      <rect x="376" y="312" width="32" height="42" rx="3" fill="var(--lamp-2)"/>
+      <rect x="384" y="284" width="16" height="18" fill="var(--paper)" stroke="var(--line)" stroke-width="2"/>
+      <line x1="392" y1="270" x2="392" y2="284" stroke="var(--line)" stroke-width="2"/>
+    </g>
+    <!-- the figure: identity by PROP (cane + folded spectacles + book), skin-tone-neutral kraft form -->
+    <g filter="url(#liftbig)">
+      <ellipse cx="520" cy="250" rx="34" ry="40" fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"/> <!-- head -->
+      <path d="M470 540 Q470 350 520 336 Q570 350 570 540 Z" fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"/> <!-- gown -->
+      <path d="M486 300 Q560 300 556 300" fill="none"/>
+    </g>
+    <!-- cane at rest -->
+    <line x1="612" y1="330" x2="596" y2="536" stroke="var(--line)" stroke-width="5" stroke-linecap="round" filter="url(#lift)"/>
+    <!-- the stack of books being handed over -->
+    <g filter="url(#liftbig)" stroke="var(--line)" stroke-width="2">
+      <rect x="600" y="300" width="120" height="22" rx="2" fill="var(--paper)"/>
+      <rect x="606" y="322" width="120" height="22" rx="2" fill="var(--paper-2)"/>
+      <rect x="600" y="344" width="120" height="22" rx="2" fill="var(--paper)"/>
+      <rect x="608" y="366" width="120" height="22" rx="2" fill="var(--paper-2)"/>
+    </g>
+    <!-- darkness reclaiming the right third -->
+    <rect x="720" y="0" width="280" height="620" fill="#0c0a06" opacity="0.30"/>
+  </svg>
+  </div>
+
+  <div class="wrap">
+    <p class="eyebrow settle d1 in">Tight Spiral Studios · an art piece
+      <svg class="fuse" viewBox="0 0 44 8" aria-hidden="true"><line x1="2" y1="4" x2="42" y2="4" stroke="var(--line)" stroke-width="2" stroke-dasharray="3 3"/><circle class="spark" cx="4" cy="4" r="3.4" fill="var(--lamp)"/></svg>
+    </p>
+    <h1 class="settle d2 in">Old problems<br>wearing <em>lanyards</em>.</h1>
+    <p class="lede settle d3 in">In 1955, as his blindness became nearly total, Jorge Luis Borges was made
+      director of a library of a million books — handed the volumes and the darkness in the same gesture.
+      He kept working for thirty years, composing in his head.</p>
+    <p class="settle d4 in">The studio that built this piece is run by a professor with retinitis pigmentosa,
+      who makes games a blind student can play as <b>the game</b> — not an accommodation bolted on.
+      He did not set out to imitate Borges. But every load-bearing rule that made the pipeline work
+      turned out to have been solved, as a <b>problem</b>, in a handful of short stories from the 1940s.</p>
+    <p class="foretell settle d4 in">Here is the whole argument, so you carry it through every room:
+      the hard problems of the AI era are not new. They are old problems at new speed. This piece
+      gives you five of them — the way Hitchcock gives you the bomb under the table, so you sit in
+      the knowing.</p>
+    <p class="src settle d4 in">Scroll. Five rooms. Each one you already understand.</p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════ ROOM 1 · THE GARDEN — total branching ═══════════════════ -->
+<section aria-label="Room one, the Garden of Forking Paths: branching state">
+  <div class="stage">
+  <svg class="scene" viewBox="0 0 1000 520" role="img"
+       aria-label="A top-down garden of hedges. A single path arrives and forks into two. Beyond the fork the two paths keep splitting, a lattice of every route held at once.">
+    <rect width="1000" height="520" fill="var(--paper-2)" filter="url(#grain)"/>
+    <!-- hedges as layered paper blobs -->
+    <g fill="var(--paper)" stroke="var(--line)" stroke-width="2" filter="url(#lift)">
+      <path d="M60 40 q90 -20 150 10 q40 60 -10 110 q-100 30 -150 -20 Z"/>
+      <path d="M780 30 q120 -10 170 40 q20 70 -50 100 q-110 20 -140 -40 Z"/>
+      <path d="M40 350 q90 -30 140 20 q30 70 -30 110 q-110 20 -140 -40 Z"/>
+      <path d="M790 330 q130 -20 180 40 q10 80 -70 110 q-120 10 -150 -50 Z"/>
+    </g>
+    <!-- the trunk path + the two branches, splitting onward -->
+    <g fill="none" stroke="var(--line)" stroke-width="14" stroke-linecap="round" opacity="0.5">
+      <path d="M500 520 L500 330"/>
+      <path d="M500 330 L300 210 M300 210 L190 120 M300 210 L360 90"/>
+      <path d="M500 330 L700 210 M700 210 L810 120 M700 210 L640 90"/>
+      <path d="M500 330 L500 200 M500 200 L440 90 M500 200 L560 90"/>
+    </g>
+    <!-- the chosen branches, painted on top -->
+    <path id="pathL" class="taken" d="M500 330 L300 210 L190 120" fill="none" stroke="var(--accent-ink)" stroke-width="10" stroke-linecap="round"/>
+    <path id="pathR" class="taken" d="M500 330 L700 210 L810 120" fill="none" stroke="var(--accent-ink)" stroke-width="10" stroke-linecap="round"/>
+    <!-- ghost of the road not taken -->
+    <path id="ghostL" class="ghost" d="M500 330 L300 210 L190 120" fill="none" stroke="var(--lamp)" stroke-width="10" stroke-linecap="round" stroke-dasharray="4 12"/>
+    <path id="ghostR" class="ghost" d="M500 330 L700 210 L810 120" fill="none" stroke="var(--lamp)" stroke-width="10" stroke-linecap="round" stroke-dasharray="4 12"/>
+    <circle cx="500" cy="330" r="12" fill="var(--paper)" stroke="var(--ink)" stroke-width="3"/>
+  </svg>
+  </div>
+
+  <div class="wrap">
+    <h2 class="settle"><span class="eyebrow">The Garden · total branching</span>Every next, held at once.</h2>
+    <p class="settle">"The Garden of Forking Paths" (1941) describes a novel that is also a labyrinth —
+      a book in which every time a character faces alternatives, the story takes <b>all of them at once</b>.
+      It is the opening selection of digital media's standard anthology. Which is the field's way of
+      saying: this is where we begin.</p>
+    <p class="settle foretell">You already know the trap: you will want to ask "what happens next?"
+      The design question is never that. It is <b>"what structure holds all the nexts at once?"</b></p>
+    <div class="act settle">
+      <button class="btn" id="gL">Take the left path</button>
+      <button class="btn ghost" id="gR">Take the right path</button>
+    </div>
+    <p class="told" id="gTold" aria-live="polite">Choose. The garden keeps what you don't.</p>
+    <p class="settle" style="margin-top:18px">The engineering answer is the one Zork's authors found at MIT
+      in the late 1970s: <b>the world is data</b>. Rooms and consequences live in a structure; the prose
+      that describes them is a separate layer that reads the structure aloud. Story logic first, as a law —
+      before a single expensive pixel. The studio's newest game ships as a playable, medium-agnostic
+      <b>scene graph</b> before any art lane opens, so the blind player's version <em>is</em> the game.</p>
+    <p class="aside"><b>Turkle, from the corner seat:</b> a branch you were shown and did not take is still
+      a road you now carry. Total systems are generous with roads and stingy with the hour you have to walk one.</p>
+    <p class="src">borges-pipeline-paper.md · "the world is data" · scene-graph-before-pixels is studio law</p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════ ROOM 2 · THE LIBRARY OF BABEL — total text ═══════════════════ -->
+<section aria-label="Room two, the Library of Babel: generation without verification">
+  <div class="stage">
+  <svg class="scene" viewBox="0 0 1000 540" role="img"
+       aria-label="A honeycomb of hexagonal library galleries receding into the distance, every cell identical, holding every possible book. Two catalog cards sit in the foreground, identically bound.">
+    <rect width="1000" height="540" fill="var(--paper-2)"/>
+    <!-- hexagon galleries -->
+    <g fill="var(--paper)" stroke="var(--line)" stroke-width="2" opacity="0.9">
+      <g id="hex"><polygon points="60,0 90,17 90,52 60,69 30,52 30,17" fill="var(--paper)" filter="url(#lift)"/></g>
+    </g>
+    <g stroke="var(--line)" stroke-width="1.6" fill="var(--paper)">
+      <!-- generated grid of hexes via transforms -->
+      <g id="hgrid"></g>
+    </g>
+    <rect width="1000" height="540" fill="url(#glow)" opacity="0.5"/>
+    <!-- two identical catalog cards -->
+    <g filter="url(#liftbig)">
+      <rect x="150" y="330" width="300" height="170" rx="6" fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"/>
+      <line x1="176" y1="372" x2="424" y2="372" stroke="var(--line)" stroke-width="2"/>
+      <line x1="176" y1="404" x2="424" y2="404" stroke="var(--rule)" stroke-width="2"/>
+      <line x1="176" y1="432" x2="380" y2="432" stroke="var(--rule)" stroke-width="2"/>
+      <line x1="176" y1="460" x2="410" y2="460" stroke="var(--rule)" stroke-width="2"/>
+      <g id="stampA" class="stamp"><circle cx="300" cy="415" r="46" fill="none" stroke="var(--stamp-true)" stroke-width="5"/></g>
+    </g>
+    <g filter="url(#liftbig)">
+      <rect x="550" y="330" width="300" height="170" rx="6" fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"/>
+      <line x1="576" y1="372" x2="824" y2="372" stroke="var(--line)" stroke-width="2"/>
+      <line x1="576" y1="404" x2="824" y2="404" stroke="var(--rule)" stroke-width="2"/>
+      <line x1="576" y1="432" x2="780" y2="432" stroke="var(--rule)" stroke-width="2"/>
+      <line x1="576" y1="460" x2="810" y2="460" stroke="var(--rule)" stroke-width="2"/>
+      <g id="stampB" class="stamp"><path d="M660 375 l80 80 M740 375 l-80 80" stroke="var(--stamp-false)" stroke-width="6" stroke-linecap="round"/></g>
+    </g>
+  </svg>
+  </div>
+
+  <div class="wrap">
+    <h2 class="settle"><span class="eyebrow">The Library of Babel · total text</span>Everything exists; nothing can be trusted.</h2>
+    <p class="settle">"The Library of Babel" (1941) imagines a universe that is a library of every possible
+      book — every true book, every false one, every refutation, and every catalog of the others,
+      true and false, identically bound. The librarians are not empowered by this totality. They are
+      ruined by it. The cost has merely moved from <b>writing</b> to <b>verifying</b>.</p>
+    <p class="settle foretell">I know a more precise description of nobody's working life in 2026.
+      One of these two cards is a lie. They are bound the same. You cannot tell by looking — that is
+      the whole point. Only one move settles it.</p>
+    <div class="act settle">
+      <button class="btn" id="verify">Verify against the source</button>
+    </div>
+    <p class="told" id="vTold" aria-live="polite">Two catalog cards. One describes a rubric the department has never possessed.</p>
+    <p class="settle" style="margin-top:18px">Early in the studio's assessment work, an AI-drafted document
+      confidently described a four-point argumentative rubric the department has never had. It was caught
+      the only way such things are caught: <b>checked against the actual documents, byte for byte.</b>
+      So the studio runs on a discipline the librarians never got — <b>nothing is real until verified in
+      application.</b> Files carry checksums. Claims carry provenance: what source, what license, verified
+      when, by whom. A confident answer inside an expert domain is a trigger to consult, not to proceed.</p>
+    <p class="aside"><b>Provenance is the content.</b> Where and from whom a thing was learned is not
+      metadata — it is the primary unit of meaning, and the alternative to scraped, de-attributed text.
+      The library is infinite. The shelf you can trust is the one you built.</p>
+    <p class="src">borges-pipeline-paper.md · "nothing is real until verified in application" · HOLLOW-CLAIM law</p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════ ROOM 3 · FUNES — total memory ═══════════════════ -->
+<section aria-label="Room three, Funes the Memorious: memory without thought">
+  <div class="stage">
+  <svg class="scene" viewBox="0 0 1000 540" role="img"
+       aria-label="A figure sits half-buried under an avalanche of tiny leaves and scraps — every particular ever perceived, kept. The pile is so dense no single thing can be read.">
+    <rect width="1000" height="540" fill="var(--paper-2)"/>
+    <!-- the buried figure -->
+    <g filter="url(#liftbig)">
+      <ellipse cx="500" cy="250" rx="30" ry="36" fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"/>
+      <path d="M452 470 Q452 300 500 288 Q548 300 548 470 Z" fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"/>
+    </g>
+    <!-- the avalanche of particulars -->
+    <g id="leaves" fill="var(--paper)" stroke="var(--line)" stroke-width="1.1"></g>
+    <!-- the single kept kernel (hidden until 'forget') -->
+    <g id="kernel" opacity="0">
+      <circle cx="500" cy="430" r="30" fill="var(--lamp)" stroke="var(--line)" stroke-width="2.5" filter="url(#liftbig)"/>
+      <path d="M500 414 Q516 430 500 452 Q484 430 500 414 Z" fill="var(--paper)"/>
+    </g>
+  </svg>
+  </div>
+
+  <div class="wrap">
+    <h2 class="settle"><span class="eyebrow">Funes · total memory</span>He remembered everything, and could think nothing.</h2>
+    <p class="settle">"Funes the Memorious" (1942) gives us a young man who, after a fall, remembers
+      <b>everything</b> — every leaf on every tree, every time he perceived it. Borges's cruel and
+      correct observation: possessing total recall, Funes is thereby incapable of thought. Thinking
+      requires abstraction, and abstraction requires <b>forgetting</b> — the collapse of a million
+      particulars into one usable idea.</p>
+    <p class="settle foretell">Above him is everything, kept. You can't read a word of it — that is
+      what "kept everything" looks like. There is exactly one button worth pressing.</p>
+    <div class="act settle">
+      <button class="btn" id="forget">Forget</button>
+      <button class="btn ghost" id="unforget" disabled>Keep it all</button>
+    </div>
+    <p class="told" id="fTold" aria-live="polite">Total recall. No thought. The archive no one can navigate.</p>
+    <p class="settle" style="margin-top:18px">Every knowledge system that fails in higher education — and
+      every one this founder has over-built — failed the Funes way. The complete archive no one can
+      navigate. The documentation so faithful it duplicates the labor of reading the thing it documents.
+      The AI transcript saved in full because deleting feels like loss. The studio's answer is a principle
+      held as core: knowledge lives as <b>kernels</b> — the small set of load-bearing truths beneath any
+      standard — identified, verified, indexed, folded to maximum density.</p>
+    <p class="aside"><b>The kernel is what you keep. Funes is what happens when you keep everything else too.</b>
+      The accessibility standard was revised out of a guideline last year; the kernel beneath it — the
+      physics of contrast, the research on legible letterforms — did not move.</p>
+    <p class="src">borges-pipeline-paper.md · kernels-not-archives · "thinking requires forgetting"</p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════ ROOM 4 · THE ALEPH — total vision ═══════════════════ -->
+<section aria-label="Room four, the Aleph: seeing everything, asking one thing">
+  <div class="stage">
+  <svg class="scene" viewBox="0 0 1000 540" role="img"
+       aria-label="A cellar stair descends to a single luminous point on the floor that contains all other points. When looked into, it floods with everything at once.">
+    <rect width="1000" height="540" fill="var(--paper-2)"/>
+    <!-- cellar stairs -->
+    <g fill="var(--paper)" stroke="var(--line)" stroke-width="2" filter="url(#lift)">
+      <polygon points="0,60 300,60 220,120 0,120"/>
+      <polygon points="0,120 220,120 160,180 0,180"/>
+      <polygon points="0,180 160,180 110,240 0,240"/>
+      <polygon points="0,240 110,240 70,300 0,300"/>
+    </g>
+    <!-- the point -->
+    <circle cx="560" cy="380" r="120" fill="url(#glow)"/>
+    <circle id="alephPt" cx="560" cy="380" r="16" fill="var(--lamp)" stroke="var(--ink)" stroke-width="2" filter="url(#liftbig)"/>
+    <!-- the flood: everything at once (hidden until looked into) -->
+    <g id="flood" opacity="0"></g>
+  </svg>
+  </div>
+
+  <div class="wrap">
+    <h2 class="settle"><span class="eyebrow">The Aleph · total vision</span>See everything. Ask one thing.</h2>
+    <p class="settle">"The Aleph" (1945) is a point in a Buenos Aires basement that contains all other
+      points — look into it and you see the whole universe at once, from every angle. The man who owns
+      the basement, a mediocre poet, uses this total vision to write an <b>interminable</b> poem
+      describing the entire planet, acre by acre. Borges's narrator sees it too, is shattered — and then,
+      the part that matters, <b>goes back upstairs and gets on with his life.</b></p>
+    <p class="settle foretell">You can look in. It will show you everything the studio holds, all at once.
+      And then it will let you ask it exactly <b>one</b> question. The discipline is the whole gift.</p>
+    <div class="act settle">
+      <button class="btn" id="look">Look into the Aleph</button>
+      <button class="btn ghost" id="upstairs" disabled>Back upstairs</button>
+    </div>
+    <p class="told" id="aTold" aria-live="polite">A point on the cellar floor. It holds every file, every build, every stalled lane.</p>
+    <div class="reveal" id="aQ">
+      <p style="margin:0"><b>The one permitted question:</b> <em>Why aren't builds moving?</em>
+        Not "how do we perfect the system." Not the interminable poem. One diagnostic question — then upstairs.
+        (The honest answer, this quarter: the studio does not have a building problem. It has a
+        <b>finishing</b> problem. The essay this piece delivers is done, and unsent.)</p>
+    </div>
+    <p class="aside"><b>Eagleman, on the stairs:</b> a nervous system given everything at once does not
+      perceive more — it seizes. Perception is what's left after the brain throws most of the signal away.
+      The Aleph disciplined to one question is just a brain that learned to attend.</p>
+    <p class="src">borges-pipeline-paper.md · the close-of-session Aleph ritual · one question, then back upstairs</p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════ ROOM 5 · THE MAP — total documentation ═══════════════════ -->
+<section aria-label="Room five, On Exactitude in Science: documentation the size of the territory">
+  <div class="stage">
+  <svg class="scene" viewBox="0 0 1000 520" role="img"
+       aria-label="Cartographers unroll a map. Pursuing perfection they let it grow until it covers the empire point for point, one to one — and the next generation abandons it to the weather.">
+    <rect width="1000" height="520" fill="var(--paper-2)"/>
+    <!-- the empire (small, beneath) -->
+    <g fill="var(--paper)" stroke="var(--line)" stroke-width="2" filter="url(#lift)">
+      <path d="M120 360 q80 -40 180 -20 q120 -60 260 -10 q120 -30 220 30 q40 80 -60 110 q-260 40 -520 10 q-120 -20 -80 -100 Z"/>
+    </g>
+    <!-- the growing 1:1 map (scales up on demand) -->
+    <g id="mapG" transform="translate(500 300) scale(0.42)">
+      <rect x="-420" y="-190" width="840" height="380" rx="8" fill="var(--paper)" stroke="var(--accent-ink)" stroke-width="4" filter="url(#liftbig)" opacity="0.96"/>
+      <g stroke="var(--line)" stroke-width="1.4" opacity="0.7" fill="none">
+        <path d="M-380 -120 q200 -30 400 10 q220 -20 340 30"/>
+        <path d="M-380 0 q220 40 420 -10 q180 30 340 -20"/>
+        <path d="M-380 110 q200 -30 400 20 q220 -10 340 20"/>
+        <line x1="-200" y1="-190" x2="-200" y2="190"/><line x1="60" y1="-190" x2="60" y2="190"/><line x1="280" y1="-190" x2="280" y2="190"/>
+      </g>
+    </g>
+    <!-- the one-page index (hidden until abandoned) -->
+    <g id="indexCard" opacity="0" filter="url(#liftbig)">
+      <rect x="410" y="200" width="180" height="120" rx="6" fill="var(--paper)" stroke="var(--line)" stroke-width="2.5"/>
+      <line x1="430" y1="230" x2="570" y2="230" stroke="var(--line)" stroke-width="3"/>
+      <line x1="430" y1="256" x2="560" y2="256" stroke="var(--rule)" stroke-width="2"/>
+      <line x1="430" y1="278" x2="545" y2="278" stroke="var(--rule)" stroke-width="2"/>
+      <line x1="430" y1="300" x2="558" y2="300" stroke="var(--rule)" stroke-width="2"/>
+    </g>
+  </svg>
+  </div>
+
+  <div class="wrap">
+    <h2 class="settle"><span class="eyebrow">On Exactitude · total documentation</span>A map the exact size of the empire.</h2>
+    <p class="settle">Borges needed a paragraph for "On Exactitude in Science" (1946): an empire's
+      cartographers, chasing perfection, produce a map the exact size of the empire, point for point.
+      The following generations find it useless and <b>abandon it to the weather.</b></p>
+    <p class="settle foretell">Watch it happen. The more faithful the map becomes, the more worthless.
+      You will want to perfect it. Then you will want to let it rot. Both instincts are correct.</p>
+    <div class="act settle">
+      <button class="btn" id="perfect">Perfect the map</button>
+      <button class="btn ghost" id="abandon" disabled>Abandon it to the weather</button>
+    </div>
+    <p class="told" id="mTold" aria-live="polite">One to one is perfect, and perfectly useless.</p>
+    <p class="settle" style="margin-top:18px">The studio's cross-session index is <b>one page</b>. It is one
+      page on purpose, and keeping it one page is treated as maintenance of the same seriousness as fixing
+      a bug — because the alternative, faithfully recorded, is the map rotting in the desert with the
+      animals living in it. Every institution owns at least one such map.</p>
+    <p class="aside"><b>Turkle again:</b> the record that documents everything is often the one nobody reads —
+      the meeting captured in full and replayed by no one. Fidelity is not the same as being known.</p>
+    <p class="src">borges-pipeline-paper.md · the one-page index · "the map the size of the empire"</p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════ THE TURN ═══════════════════ -->
+<section aria-label="The turn: five old problems wearing lanyards">
+  <div class="stage">
+  <svg class="scene" viewBox="0 0 1000 420" role="img"
+       aria-label="Five failure modes stand in a row, each an old thing wearing a new conference lanyard: total branching, total text, total memory, total vision, total documentation.">
+    <rect width="1000" height="420" fill="var(--paper-2)"/>
+    <g id="lanyards"></g>
+  </svg>
+  </div>
+
+  <div class="wrap pad-top">
+    <h2 class="settle">The turn.</h2>
+    <p class="settle">It would be tidy to say Borges predicted computing. He did not, and the claim isn't
+      needed. What he did was catalog, with terrible precision, the failure modes of <b>total systems</b>:
+      total branching, total text, total memory, total vision, total documentation. Those are exactly the
+      systems the industry now sells — and the failure modes arrive <b>bundled with the license.</b></p>
+    <p class="pull settle">A humanist's training — the slow reading of old texts about knowledge, memory,
+      and labyrinths — is a working inventory of which problems are genuinely new (few) and which are old
+      problems at new speed (most). Not ethics as a garnish. Pattern recognition running about eighty
+      years ahead of the product cycle.</p>
+    <p class="settle">Borges ran a national library he could not read, and did it by knowing, better than
+      the sighted, how libraries actually fail. This studio's newest game is authored for the ear before
+      the eye, by a designer whose eyes are the reason the floors exist. <b>The person who cannot take the
+      interface for granted is the one who finds out what the system is actually made of.</b></p>
+    <p class="lede settle" style="margin-top:22px">For chrissake — we have been assigning these stories for
+      decades. We might also believe them.</p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════ COLOPHON — the panel, seated ═══════════════════ -->
+<section aria-label="Colophon: the panel and the provenance">
+  <div class="colophon">
+    <p class="eyebrow">How this piece was convened</p>
+    <h2>A spine, three guests, two standing seats.</h2>
+    <p>The message is not invented here — it is the studio's finished, unsent essay,
+      <em>The Blind Librarian's Pipeline</em>, made into rooms you can stand in. To deliver it, the
+      pipeline convened a small disciplinary panel. Two of the three guests are new to the studio's bench.</p>
+
+    <div class="seats">
+      <div class="seat"><h3>Borges Left · the spine</h3><p>Holds the whole corpus from one point.
+        The five stories are the five rooms; the argument is his.</p></div>
+      <div class="seat"><h3>Hitchcock · suspense</h3><p>Give the audience the bomb under the table.
+        Every room states its failure first, so you sit in the knowing rather than the surprise.</p></div>
+      <div class="seat"><h3>Eagleman · perception</h3><p>The brain builds the world in the dark and by
+        throwing signal away. "Dim the room," top-right, is his — and the reason the piece works by ear.</p></div>
+      <div class="seat"><h3>Turkle · connection</h3><p>The corner asides. What total systems do to
+        attention, and to each other: alone together, faithful and unread.</p></div>
+      <div class="seat"><h3>Funes · memory-with-a-gate</h3><p>Total recall, indexed and refusing to
+        assert what it has not verified. Kept this piece honest to source.</p></div>
+      <div class="seat"><h3>The Aleph · one question</h3><p>The whole system seen at once, permitted a
+        single diagnostic. Here it answered: a finishing problem, not a building one.</p></div>
+    </div>
+
+    <p class="foot">
+      Art: authored in-session as inline SVG (Lane A · cut-paper), no generated or external assets.<br>
+      Skin: palette composed fresh for this build's rhetoric — green-free, three comfort stops, RP hue
+      floor on warm-dark (amber is lamplight, never a letter). Not the studio's default look by habit.<br>
+      Floors held: single-file offline · scene-first · image-dominant · token-role separation ·
+      44px targets · visible focus · reduced-motion honored · opaque grounds in every comfort mode.<br>
+      Figures are skin-tone-neutral kraft forms; identity is carried by the prop, not the body.<br>
+      Message source: borges-pipeline-paper.md (master v1, 2026-07-03). Tight Spiral Studios · walshero@gmail.com
+    </p>
+  </div>
+</section>
+
+<p class="visually-hidden" id="a11y-status" aria-live="polite"></p>
+
+<script>
+// scroll-reset-to-top on every load (studio floor)
+if('scrollRestoration' in history) history.scrollRestoration='manual';
+window.scrollTo(0,0);
+
+var reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+// ── settle-on-load via IntersectionObserver (nothing pops) ──
+(function(){
+  document.querySelectorAll('.settle.in').forEach(function(){}); // above-fold already in
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.12});
+  document.querySelectorAll('.settle:not(.in)').forEach(function(el){ io.observe(el); });
+})();
+
+// ── comfort stops + Eagleman "dim the room" ──
+var root=document.documentElement, body=document.body;
+document.querySelectorAll('.comfort button').forEach(function(b){
+  b.addEventListener('click',function(){
+    var set=b.dataset.set;
+    if(set==='dim'){
+      var on=body.classList.toggle('narrowed');
+      b.setAttribute('aria-pressed', on?'true':'false');
+      status(on?'Field of view narrowed. The piece still works by ear.':'Field of view restored.');
+      return;
+    }
+    // class-based comfort on html + body: default = no stop class
+    ['softer','warm'].forEach(function(c){ root.classList.remove(c); body.classList.remove(c); });
+    if(set==='softer'||set==='warm'){ root.classList.add(set); body.classList.add(set); }
+    document.querySelectorAll('.comfort button:not(#dimBtn)').forEach(function(x){
+      x.setAttribute('aria-pressed', x===b?'true':'false');
+    });
+  });
+});
+function status(msg){ var s=document.getElementById('a11y-status'); if(s) s.textContent=msg; }
+
+// ── procedural cut-paper fills (kept as decoration; aria on the parent <svg>) ──
+function el(tag,attrs){ var e=document.createElementNS('http://www.w3.org/2000/svg',tag);
+  for(var k in attrs) e.setAttribute(k,attrs[k]); return e; }
+
+// Library of Babel — hex grid receding
+(function(){
+  var g=document.getElementById('hgrid'); if(!g) return;
+  var rows=[{y:20,n:7,s:1,o:.95},{y:70,n:6,s:.8,o:.7},{y:110,n:5,s:.62,o:.5},{y:140,n:4,s:.48,o:.36}];
+  rows.forEach(function(r){
+    var span=1000/r.n;
+    for(var i=0;i<r.n;i++){
+      var cx=span*i+span/2, w=42*r.s, h=34*r.s;
+      var p=el('polygon',{points:[cx-w,r.y, cx,r.y-h, cx+w,r.y, cx+w,r.y+h, cx,r.y+2*h, cx-w,r.y+h].join(' '),
+        fill:'var(--paper)', stroke:'var(--line)', 'stroke-width':1.4, opacity:r.o});
+      g.appendChild(p);
+    }
+  });
+})();
+
+// Funes — avalanche of particulars (deterministic scatter, no Math.random)
+(function(){
+  var g=document.getElementById('leaves'); if(!g) return;
+  var seed=1;
+  function rnd(){ seed=(seed*9301+49297)%233280; return seed/233280; }
+  for(var i=0;i<260;i++){
+    var x=rnd()*1000, y=40+rnd()*380, s=3+rnd()*6, rot=rnd()*360;
+    var leaf=el('path',{d:'M0 0 Q'+s+' '+(-s)+' '+(2*s)+' 0 Q'+s+' '+s+' 0 0 Z',
+      transform:'translate('+x.toFixed(1)+','+y.toFixed(1)+') rotate('+rot.toFixed(0)+')', opacity:0.9});
+    g.appendChild(leaf);
+  }
+})();
+
+// Aleph — the flood of everything (file/build names, real DOM text = no baked text)
+(function(){
+  var g=document.getElementById('flood'); if(!g) return;
+  var names=['confluence-TRUNK','the-tell','choose-your-leader','funny-boneys','en195-hub','sandbags',
+    'workshop-in-a-box','play-the-semester','the-console','trail-notes','review-bench','the-viscosity',
+    'behind-this-door','recursion-ledger','studio-eyes','borges-paper','Diagnose-mode','four-Tell-cards',
+    'meta-machine','lumiere→Suubi','kernel-index','the-map','provenance-floor','timing-belt'];
+  var seed=7; function rnd(){ seed=(seed*9301+49297)%233280; return seed/233280; }
+  names.forEach(function(nm,i){
+    var x=180+rnd()*760, y=90+rnd()*380;
+    var t=el('text',{x:x.toFixed(0), y:y.toFixed(0), 'font-family':'ui-monospace,Menlo,monospace',
+      'font-size':(10+rnd()*7).toFixed(0), fill:'var(--ink-3)', opacity:0.85,
+      transform:'rotate('+((rnd()*30)-15).toFixed(0)+' '+x.toFixed(0)+' '+y.toFixed(0)+')'});
+    t.textContent=nm; g.appendChild(t);
+  });
+})();
+
+// The turn — five lanyards (old glyphs wearing new tags)
+(function(){
+  var g=document.getElementById('lanyards'); if(!g) return;
+  var labels=['branching','text','memory','vision','documentation'];
+  labels.forEach(function(lb,i){
+    var cx=110+i*195;
+    // old "column" form
+    var col=el('rect',{x:cx-34,y:120,width:68,height:210,rx:6,fill:'var(--paper)',
+      stroke:'var(--line)','stroke-width':2,filter:'url(#lift)'});
+    g.appendChild(col);
+    var cap=el('rect',{x:cx-44,y:104,width:88,height:22,rx:4,fill:'var(--paper-2)',stroke:'var(--line)','stroke-width':2});
+    g.appendChild(cap);
+    // the lanyard (amber = decoration only)
+    g.appendChild(el('path',{d:'M'+(cx-16)+' 126 L'+(cx-8)+' 200 M'+(cx+16)+' 126 L'+(cx+8)+' 200',
+      stroke:'var(--lamp)','stroke-width':4,fill:'none','stroke-linecap':'round'}));
+    var badge=el('rect',{x:cx-24,y:200,width:48,height:32,rx:4,fill:'var(--paper)',stroke:'var(--accent-ink)','stroke-width':2.5,filter:'url(#lift)'});
+    g.appendChild(badge);
+    var tx=el('text',{x:cx,y:360,'text-anchor':'middle','font-family':'ui-monospace,Menlo,monospace',
+      'font-size':13,fill:'var(--ink-2)'}); tx.textContent='total '+lb; g.appendChild(tx);
+  });
+})();
+
+// ── Room interactions ──
+// Garden: choose a path; the garden keeps the road not taken
+function chooseGarden(side){
+  var takenId = side==='L' ? 'pathL' : 'pathR';
+  var ghostId = side==='L' ? 'ghostR' : 'ghostL';
+  document.getElementById(takenId).classList.add('dim');
+  document.getElementById(ghostId).classList.add('on');
+  document.getElementById('gTold').innerHTML = side==='L'
+    ? 'You walked left. <b>The garden kept the right</b> — the structure holds the path you refused.'
+    : 'You walked right. <b>The garden kept the left</b> — the structure holds the path you refused.';
+}
+var gl=document.getElementById('gL'), gr=document.getElementById('gR');
+if(gl) gl.addEventListener('click',function(){chooseGarden('L');});
+if(gr) gr.addEventListener('click',function(){chooseGarden('R');});
+
+// Library: verify → one card VERIFIED, one FABRICATED
+var vb=document.getElementById('verify');
+if(vb) vb.addEventListener('click',function(){
+  document.getElementById('stampA').classList.add('on');
+  document.getElementById('stampB').classList.add('on');
+  document.getElementById('vTold').innerHTML='Checked byte-for-byte against the department’s actual documents. '+
+    'Left card: <b>VERIFIED</b>. Right card: <b>FABRICATED</b> — a four-point rubric that never existed. '+
+    'Identically bound. Only the source told them apart.';
+  vb.disabled=true;
+});
+
+// Funes: forget → the wall collapses to one kernel
+var fb=document.getElementById('forget');
+if(fb) fb.addEventListener('click',function(){
+  var leaves=document.getElementById('leaves'), kernel=document.getElementById('kernel');
+  if(reduce){ leaves.style.opacity=0; kernel.style.opacity=1; }
+  else{
+    leaves.style.transition='opacity 700ms cubic-bezier(.16,.84,.44,1)'; leaves.style.opacity=0;
+    kernel.style.transition='opacity 700ms 300ms cubic-bezier(.22,1,.36,1)'; kernel.style.opacity=1;
+  }
+  document.getElementById('fTold').innerHTML='A million particulars collapsed into <b>one usable kernel</b>. '+
+    'That collapse is thought. Funes could not do it.';
+  fb.disabled=true;
+});
+
+// Aleph: look → flood everything, then permit ONE question; upstairs → collapse
+var lk=document.getElementById('look'), up=document.getElementById('upstairs');
+if(lk) lk.addEventListener('click',function(){
+  var flood=document.getElementById('flood'), q=document.getElementById('aQ');
+  flood.style.transition=reduce?'none':'opacity 600ms cubic-bezier(.22,1,.36,1)'; flood.style.opacity=1;
+  document.getElementById('alephPt').setAttribute('r','120');
+  document.getElementById('aTold').innerHTML='You see all of it at once — every file, every stalled lane. '+
+    'It is too much to be useful. So it grants you <b>one question.</b>';
+  q.classList.add('open'); lk.disabled=true; up.disabled=false;
+});
+if(up) up.addEventListener('click',function(){
+  var flood=document.getElementById('flood'), q=document.getElementById('aQ');
+  flood.style.opacity=0; document.getElementById('alephPt').setAttribute('r','16');
+  q.classList.remove('open');
+  document.getElementById('aTold').textContent='Back upstairs. The total view is real — and only useful disciplined to one purpose.';
+  up.disabled=true; lk.disabled=false;
+});
+
+// Map: perfect → grow to 1:1 (fills, useless); abandon → collapse to one-page index
+var pf=document.getElementById('perfect'), ab=document.getElementById('abandon');
+if(pf) pf.addEventListener('click',function(){
+  var m=document.getElementById('mapG');
+  m.style.transition=reduce?'none':'transform 900ms cubic-bezier(.16,.84,.44,1), opacity 900ms';
+  m.setAttribute('transform','translate(500 260) scale(1.02)'); m.style.opacity='0.5';
+  document.getElementById('mTold').innerHTML='Point for point, one to one. <b>Perfect — and perfectly useless.</b> '+
+    'It now covers the very thing it was meant to help you see.';
+  pf.disabled=true; ab.disabled=false;
+});
+if(ab) ab.addEventListener('click',function(){
+  var m=document.getElementById('mapG'), idx=document.getElementById('indexCard');
+  m.style.opacity='0'; idx.style.transition=reduce?'none':'opacity 700ms 250ms cubic-bezier(.22,1,.36,1)'; idx.style.opacity='1';
+  document.getElementById('mTold').innerHTML='Abandoned to the weather. What survives is <b>one page</b>, '+
+    'kept one page on purpose.';
+  ab.disabled=true;
+});
+</script>
+</body>
+</html>
