@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Old Problems Wearing Lanyards · Tight Spiral Studios</title>
+<title>Old Problems at New Speed · Tight Spiral Studios</title>
 <!--
   PROVENANCE (OS §16.4). All art on this page is AUTHORED in-session as inline SVG
   (Lane A · cut-paper) — no generated, licensed, or external assets; zero network hosts
@@ -275,7 +275,7 @@ a{color:var(--accent-ink)}
     <p class="eyebrow settle d1 in">Tight Spiral Studios · an art piece
       <svg class="fuse" viewBox="0 0 44 8" aria-hidden="true"><line x1="2" y1="4" x2="42" y2="4" stroke="var(--line)" stroke-width="2" stroke-dasharray="3 3"/><circle class="spark" cx="4" cy="4" r="3.4" fill="var(--lamp)"/></svg>
     </p>
-    <h1 class="settle d2 in">Old problems<br>wearing <em>lanyards</em>.</h1>
+    <h1 class="settle d2 in">Old problems<br>at <em>new speed</em>.</h1>
     <p class="lede settle d3 in">In 1955, as his blindness became nearly total, Jorge Luis Borges was made
       director of a library of a million books — handed the volumes and the darkness in the same gesture.
       He kept working for thirty years, composing in his head.</p>
@@ -562,12 +562,12 @@ a{color:var(--accent-ink)}
 
 
 <!-- ═══════════════════ THE TURN ═══════════════════ -->
-<section aria-label="The turn: five old problems wearing lanyards">
+<section aria-label="The turn: five old problems at new speed">
   <div class="stage">
   <svg class="scene" viewBox="0 0 1000 420" role="img"
-       aria-label="Five failure modes stand in a row, each an old thing wearing a new conference lanyard: total branching, total text, total memory, total vision, total documentation.">
+       aria-label="Five old forms stand in a row — columns cut from paper — each now streaking past at new speed: total branching, total text, total memory, total vision, total documentation.">
     <rect width="1000" height="420" fill="var(--paper-2)"/>
-    <g id="lanyards"></g>
+    <g id="turnrow"></g>
   </svg>
   </div>
 
@@ -715,24 +715,30 @@ function el(tag,attrs){ var e=document.createElementNS('http://www.w3.org/2000/s
   });
 })();
 
-// The turn — five lanyards (old glyphs wearing new tags)
+// The turn — five old forms (paper columns) now streaking past at new speed
 (function(){
-  var g=document.getElementById('lanyards'); if(!g) return;
+  var g=document.getElementById('turnrow'); if(!g) return;
   var labels=['branching','text','memory','vision','documentation'];
   labels.forEach(function(lb,i){
     var cx=110+i*195;
-    // old "column" form
-    var col=el('rect',{x:cx-34,y:120,width:68,height:210,rx:6,fill:'var(--paper)',
+    // the speed streaks behind the old form (amber = decoration only, never a letter)
+    for(var s=0;s<4;s++){
+      var sy=150+s*46;
+      g.appendChild(el('line',{x1:cx-96,y1:sy,x2:cx-40,y2:sy,
+        stroke:'var(--lamp)','stroke-width':3,'stroke-linecap':'round',opacity:0.30+0.12*s}));
+    }
+    // the old form: a column (classical, unchanged) + capital, leaning into the motion
+    var col=el('rect',{x:cx-30,y:130,width:60,height:200,rx:5,fill:'var(--paper)',
       stroke:'var(--line)','stroke-width':2,filter:'url(#lift)'});
     g.appendChild(col);
-    var cap=el('rect',{x:cx-44,y:104,width:88,height:22,rx:4,fill:'var(--paper-2)',stroke:'var(--line)','stroke-width':2});
+    // fluting on the column shaft (reads as "old")
+    for(var f=0;f<3;f++){ g.appendChild(el('line',{x1:cx-15+f*15,y1:140,x2:cx-15+f*15,y2:320,
+      stroke:'var(--line)','stroke-width':1.2,opacity:0.6})); }
+    var cap=el('rect',{x:cx-40,y:114,width:80,height:20,rx:3,fill:'var(--paper-2)',stroke:'var(--line)','stroke-width':2,filter:'url(#lift)'});
     g.appendChild(cap);
-    // the lanyard (amber = decoration only)
-    g.appendChild(el('path',{d:'M'+(cx-16)+' 126 L'+(cx-8)+' 200 M'+(cx+16)+' 126 L'+(cx+8)+' 200',
-      stroke:'var(--lamp)','stroke-width':4,fill:'none','stroke-linecap':'round'}));
-    var badge=el('rect',{x:cx-24,y:200,width:48,height:32,rx:4,fill:'var(--paper)',stroke:'var(--accent-ink)','stroke-width':2.5,filter:'url(#lift)'});
-    g.appendChild(badge);
-    var tx=el('text',{x:cx,y:360,'text-anchor':'middle','font-family':'ui-monospace,Menlo,monospace',
+    var base=el('rect',{x:cx-40,y:330,width:80,height:16,rx:3,fill:'var(--paper-2)',stroke:'var(--line)','stroke-width':2});
+    g.appendChild(base);
+    var tx=el('text',{x:cx,y:374,'text-anchor':'middle','font-family':'ui-monospace,Menlo,monospace',
       'font-size':13,fill:'var(--ink-2)'}); tx.textContent='total '+lb; g.appendChild(tx);
   });
 })();
