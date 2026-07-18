@@ -1,0 +1,167 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TSP Spiral Studio</title>
+<style>
+:root{--paper:#fbfaf7;--ink:#0a0a0a;--line:#d8d3c8;--charcoal:#1c1a17;--teal:#0f5f5a;--orange:#c05a1e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+font:400 17px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+padding:16px 16px 96px}
+h1{font-size:20px;margin:0 0 12px}
+.stage{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:640px;margin:0 auto 18px}
+.pane{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;
+border:1px solid var(--line);border-radius:14px;padding:22px}
+.light{background:var(--paper)} .dark{background:var(--charcoal)}
+.pane svg{width:100%;height:auto;max-width:190px}
+.panel{max-width:640px;margin:0 auto;display:grid;gap:14px}
+.ctrl{display:grid;grid-template-columns:130px 1fr 54px;align-items:center;gap:10px}
+.ctrl label{font-size:15px}
+.ctrl output{font-size:15px;text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;height:38px;accent-color:var(--teal)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.swatch{display:flex;gap:8px;align-items:center}
+.swatch input[type=color]{width:52px;height:44px;border:1px solid var(--line);border-radius:8px;padding:2px;background:none}
+.toggle{display:flex;align-items:center;gap:8px;font-size:15px}
+.toggle input{width:26px;height:26px;accent-color:var(--teal)}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--paper);border-top:1px solid var(--line);
+padding:12px 16px;display:flex;gap:10px;justify-content:center}
+button{min-height:48px;padding:0 20px;font-size:16px;border-radius:12px;border:1px solid var(--ink);
+background:var(--ink);color:var(--paper);cursor:pointer}
+button.ghost{background:var(--paper);color:var(--ink)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.meta{max-width:640px;margin:10px auto 0;font-size:13px;color:#3a352c;text-align:center}
+details{max-width:640px;margin:14px auto 0}
+summary{font-size:15px;cursor:pointer;min-height:44px;display:flex;align-items:center}
+</style></head><body>
+<h1>TSP Spiral Studio</h1>
+<div class="stage">
+  <div class="pane light" id="paneL"></div>
+  <div class="pane dark" id="paneD"></div>
+</div>
+<div class="meta" id="meta"></div>
+
+<div class="panel">
+  <div class="ctrl"><label for="turns">Inner winds</label><input type="range" id="turns" min="0.5" max="4" step="0.1" value="1.8"><output id="oturns"></output></div>
+  <div class="ctrl"><label for="thick">Thickness</label><input type="range" id="thick" min="2" max="26" step="0.5" value="17.6"><output id="othick"></output></div>
+  <div class="ctrl"><label for="outer">Outer radius</label><input type="range" id="outer" min="50" max="90" step="1" value="74"><output id="oouter"></output></div>
+  <div class="ctrl"><label for="gap">Wind gap</label><input type="range" id="gap" min="0" max="40" step="1" value="0"><output id="ogap"></output></div>
+  <div class="ctrl"><label for="tickN">Tick count</label><input type="range" id="tickN" min="0" max="60" step="1" value="32"><output id="otickN"></output></div>
+  <div class="ctrl"><label for="tickL">Tick length</label><input type="range" id="tickL" min="4" max="40" step="1" value="28"><output id="otickL"></output></div>
+  <div class="ctrl"><label for="tickW">Tick weight</label><input type="range" id="tickW" min="1" max="8" step="0.5" value="4"><output id="otickW"></output></div>
+  <div class="ctrl"><label for="offset">Ink offset</label><input type="range" id="offset" min="0" max="8" step="0.2" value="2.6"><output id="ooffset"></output></div>
+  <div class="ctrl"><label for="dot">Center dot</label><input type="range" id="dot" min="0" max="14" step="0.5" value="5"><output id="odot"></output></div>
+
+  <div class="row">
+    <div class="swatch"><input type="color" id="c1" value="#0f5f5a" aria-label="Main ink"><span>Main</span></div>
+    <div class="swatch"><input type="color" id="c2" value="#c05a1e" aria-label="Under ink and ticks"><span>Accent</span></div>
+    <label class="toggle"><input type="checkbox" id="closed" checked>Closed outer circle</label>
+    <label class="toggle"><input type="checkbox" id="twoink" checked>Two-ink offset</label>
+    <label class="toggle"><input type="checkbox" id="ticksOn" checked>Ticks</label>
+    <label class="toggle"><input type="checkbox" id="dotOn" checked>Center dot</label>
+  </div>
+</div>
+
+<details>
+  <summary>Presets</summary>
+  <div class="row" style="margin-top:10px">
+    <button class="ghost" data-preset="mark">Compact mark</button>
+    <button class="ghost" data-preset="open">Open spiral</button>
+    <button class="ghost" data-preset="dense">Dense ticks</button>
+  </div>
+</details>
+
+<div class="bar">
+  <button id="dl">Download SVG</button>
+  <button class="ghost" id="copy">Copy SVG</button>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const P={turns:'turns',thick:'thick',outer:'outer',gap:'gap',tickN:'tickN',tickL:'tickL',tickW:'tickW',offset:'offset',dot:'dot'};
+const V=id=>parseFloat($(id).value);
+
+function spiralPts(){
+  const cx=100,cy=100;
+  const R=V('outer'), inner=V('turns'), gap=V('gap');
+  const closed=$('closed').checked;
+  const rEnd=6;
+  const pts=[];
+  if(closed){
+    for(let i=0;i<=240;i++){const a=-Math.PI/2+2*Math.PI*i/240;pts.push([cx+R*Math.cos(a),cy+R*Math.sin(a)]);}
+  }
+  // inner wind: start from R (or from top if no closed ring), shrink to rEnd
+  const startR=R;
+  const steps=Math.max(60,Math.round(inner*160));
+  for(let i=(closed?1:0);i<=steps;i++){
+    const f=i/steps;
+    const a=-Math.PI/2+2*Math.PI*inner*f;
+    // gap widens the early winds
+    const r=startR+(rEnd-startR)*f - gap*Math.sin(Math.PI*f)*0.5;
+    pts.push([cx+r*Math.cos(a),cy+r*Math.sin(a)]);
+  }
+  return pts;
+}
+function dpath(p){let d="M"+p[0][0].toFixed(1)+" "+p[0][1].toFixed(1);for(let i=1;i<p.length;i++)d+="L"+p[i][0].toFixed(1)+" "+p[i][1].toFixed(1);return d;}
+function ticks(pts){
+  if(!$('ticksOn').checked)return"";
+  const n=V('tickN'),len=V('tickL'),sw=V('tickW'),col=$('c2').value;
+  if(n<1)return"";
+  const sl=[0];for(let i=1;i<pts.length;i++)sl.push(sl[i-1]+Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]));
+  const tot=sl[sl.length-1];let out="";
+  for(let k=1;k<=n;k++){
+    const tgt=tot*k/(n+1);let j=1;while(j<sl.length&&sl[j]<tgt)j++;
+    const[x,y]=pts[j];const dx=pts[j][0]-pts[j-1][0],dy=pts[j][1]-pts[j-1][1];
+    const L=Math.hypot(dx,dy)||1;const nx=-dy/L,ny=dx/L,h=len/2;
+    out+=`<line x1="${(x-nx*h).toFixed(1)}" y1="${(y-ny*h).toFixed(1)}" x2="${(x+nx*h).toFixed(1)}" y2="${(y+ny*h).toFixed(1)}" stroke="${col}" stroke-width="${sw}" stroke-linecap="round"/>`;
+  }
+  return out;
+}
+function buildSVG(darkMode){
+  const pts=spiralPts(),D=dpath(pts);
+  const SW=V('thick'),off=V('offset'),dot=V('dot');
+  let c1=$('c1').value,c2=$('c2').value;
+  if(darkMode){
+    c1 = c1.toLowerCase()==='#0f5f5a' ? '#4fd6cf' : lighten(c1);
+    c2 = c2.toLowerCase()==='#c05a1e' ? '#e0863f' : lighten(c2);
+  }
+  let sp="";
+  if($('twoink').checked&&off>0){
+    sp+=`<g transform="translate(${off},${(off*1.1).toFixed(1)})"><path d="${D}" fill="none" stroke="${c2}" stroke-width="${SW}" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+  }
+  sp+=`<path d="${D}" fill="none" stroke="${c1}" stroke-width="${SW}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const tk=ticks(pts).replaceAll($('c2').value, darkMode?c2:$('c2').value);
+  const tkFinal = darkMode ? ticks(pts).replaceAll($('c2').value,c2) : ticks(pts);
+  const dotEl=($('dotOn').checked&&dot>0)?`<circle cx="100" cy="100" r="${dot}" fill="${c2}"/>`:"";
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Tight Spiral studio mark">${sp}${tkFinal}${dotEl}</svg>`;
+}
+function lighten(hex){
+  const n=parseInt(hex.slice(1),16);let r=(n>>16)&255,g=(n>>8)&255,b=n&255;
+  r=Math.round(r+(255-r)*0.55);g=Math.round(g+(255-g)*0.55);b=Math.round(b+(255-b)*0.55);
+  return "#"+[r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+function render(){
+  for(const k in P){const o=$('o'+P[k]);if(o)o.textContent=$(P[k]).value;}
+  $('paneL').innerHTML=buildSVG(false);
+  $('paneD').innerHTML=buildSVG(true);
+  const bytes=new Blob([buildSVG(false)]).size;
+  $('meta').textContent=`Light-mode SVG · ${bytes.toLocaleString()} bytes`;
+}
+document.querySelectorAll('input').forEach(el=>el.addEventListener('input',render));
+$('dl').addEventListener('click',()=>{
+  const blob=new Blob([buildSVG(false)],{type:'image/svg+xml'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='tsp-spiral.svg';a.click();
+});
+$('copy').addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText(buildSVG(false));$('copy').textContent='Copied';setTimeout(()=>$('copy').textContent='Copy SVG',1200);}catch(e){}
+});
+document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>{
+  const p=b.dataset.preset;
+  if(p==='mark'){set({turns:1.8,thick:17.6,outer:74,gap:0,tickN:32,tickL:28,tickW:4});$('closed').checked=true;}
+  if(p==='open'){set({turns:2.6,thick:9,outer:80,gap:14,tickN:0,tickL:16,tickW:3});$('closed').checked=true;}
+  if(p==='dense'){set({turns:2.2,thick:12,outer:78,gap:6,tickN:48,tickL:20,tickW:3});$('closed').checked=true;}
+  render();
+}));
+function set(o){for(const k in o)$(k).value=o[k];}
+render();
+</script>
+</body></html>
