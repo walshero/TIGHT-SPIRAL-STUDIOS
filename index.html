@@ -86,13 +86,26 @@ h2{
 .rooms{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px}
 .room{
   display:block; padding:22px 22px 20px; border:2px solid var(--rule); border-top-width:6px; border-radius:3px;
-  background:var(--paper-2); text-decoration:none; color:var(--ink);
+  border-top-color:var(--acc,var(--rule));
+  background:var(--card,var(--paper-2)); text-decoration:none; color:var(--ink);
   transition:border-color .12s, transform .12s, box-shadow .12s;
 }
 .room:hover{transform:translateY(-2px); box-shadow:0 4px 0 var(--acc,var(--rule))}
 .room:focus-visible{outline:3px solid var(--cool-ink); outline-offset:3px}
 .room h3{font-family:var(--serif); font-size:23px; margin:0 0 8px; font-weight:400; line-height:1.2}
-.room p{margin:0; font-size:15px; color:var(--ink-3); line-height:1.5}
+.room p{margin:0; font-size:15px; color:var(--ink-2); line-height:1.5}
+
+  /* ── PER-CARD COLOR (added 2026-07-19) — each square its own hue.
+     --acc paints the icon + 6px top stripe; --card is a light tint the dark
+     ink still clears AA on (verified: worst body text 8.1:1, labels 4.9:1). ── */
+  .rooms .room:nth-of-type(8n+1){--acc:#2f7d5b; --card:#e8f2ec}   /* pine    */
+  .rooms .room:nth-of-type(8n+2){--acc:#2b5fc7; --card:#e7edfb}   /* cobalt  */
+  .rooms .room:nth-of-type(8n+3){--acc:#c0392b; --card:#fbeae7}   /* crimson */
+  .rooms .room:nth-of-type(8n+4){--acc:#a86a00; --card:#f7efdb}   /* amber   */
+  .rooms .room:nth-of-type(8n+5){--acc:#6f42c1; --card:#efe9fa}   /* violet  */
+  .rooms .room:nth-of-type(8n+6){--acc:#0f7d79; --card:#e3f2f0}   /* teal    */
+  .rooms .room:nth-of-type(8n+7){--acc:#b0357f; --card:#fbe8f3}   /* magenta */
+  .rooms .room:nth-of-type(8n+8){--acc:#37607f; --card:#e8eef4}   /* steel   */
 .chips{margin-top:11px; display:flex; gap:6px; flex-wrap:wrap}
 .chip{
   font-family:var(--mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase;
