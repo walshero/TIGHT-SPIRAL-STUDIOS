@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  CHOOSE YOUR LEADER — v5 · "The Receiver's Game"  ·  three eras, one reflex
+  Tight Spiral Productions · walshero@gmail.com · single-file, offline, nothing stored.
+
+  SPINE (v5, founder-locked, carried out in full 2026-07-18):
+    "You don't judge the leader. You judge what you were allowed to see."
+    Rate blind trust → the record turns → rate again → see how far the words pulled you.
+
+  RELATION TO v6: v6 is the DECIDER'S game (you're in the chair, decide in the fog).
+    v5 is the RECEIVER'S game (you're in the room, a broadcast reaches you). Both ship.
+    v6 remains at choose-your-leader-v6.html. This is its companion, not its replacement.
+
+  BEAT STRUCTURE (spec §2, full):
+    TITLE → BEAT -1 MEDIA PRELUDE → BEAT 0 SCENE → BEAT 1 BLIND REACTION →
+    BEAT 2 THE RECORD → BEAT 1' RE-REACT (identical wording) → BEAT 3 VISUAL DESCENT →
+    ARC → GLASS ENGINE RINGS → FOOTER (bound to mission).
+
+  ============================ SHIP GATES — READ ==============================
+  MEASUREMENT DESIGN IS A HARD SHIP GATE (spec §1.4 / OS §10). This build carries
+  the reframed instrument (directional more/less/neutral shown to the player,
+  resolved onto a 7-point capture underneath, scored IPSATIVELY against the
+  player's own per-scene baseline). The descent math is RE-DERIVED from the new
+  inputs (not the v4 4-point recipe). But it has NOT passed a live survey
+  methodologist + psychometrician + persuasion-scholar review. Therefore:
+    data-ship-gate="MEASUREMENT_PENDING" on <html>.
+  DO NOT use for graded assessment / ISLO evidence until that seat signs off.
+  The Glass Engine ring surfaces this gate to any reviewer, in plain language.
+
+  IMAGE LANE (spec §1.1 / §3.3 — dual, PD-first, Ideogram-fill):
+  Every room + prelude card is a NAMED, SWAPPABLE asset slot carrying a
+  data-art-* schema (src / license / author / source / date). The shell renders
+  a sourced PLACEHOLDER (period-toned SVG, alt-text = the rhetoric the image
+  holds) until a real asset drops. Where PD exists, the manifest names the exact
+  Library of Congress / National Archives target; where it does not, the slot is
+  flagged for Ideogram (photo-real environment, NEVER a real face, always tagged).
+  A real face never ships. A voice likeness never ships. The chair stays anyone's.
+
+  ACCESSIBILITY FLOORS (hard, RP-aware): single-file, offline, in-memory only;
+  full-contrast text (token-role law — a token is TEXT or ATMOSPHERE, never both);
+  one decision per screen; 44px targets; keyboard nav; visible focus; scroll-reset
+  on every screen change; reduced-motion respected; no color-as-sole-signal;
+  no emoji; comfort is a live corner control, NEVER an opening wall; scene-first;
+  BACK + HOME reachable on every screen (nav floor).
+
+  SOURCING: all record content dated + attributed. Nothing fabricated. The three
+  Cold War records are verified (JFK '62, LBJ '64, Nixon '69). Living presidents
+  stay GATED — coded, excluded from play, records not fabricated.
+-->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="tsp:surface" content="game">
+<meta name="tsp:mission" content="Train the reflex to notice the gap between what a leader said and what was true at the time.">
+<title>Choose Your Leader — The Receiver's Game</title>
+<style>
+  :root{
+    --paper:#12161c;
+    --wall:#1b2530;
+    --wall-lit:#26333f;
+    --ink:#eef1f4;
+    --ink-dim:#c4ccd4;
+    --label:#d8b98a;
+    --screen:#c9d4dc;
+    --screen-hot:#dfe8ee;
+    --glow:#b8863a;
+    --glow-soft:#7a5f2c;
+    --accent:#c7b28a;
+    --accent-ink:#171208;
+    --chair:#0d1116;
+    --rule:#39434e;
+    --hot:#e8a583;
+    --cool:#8fd4cc;
+    --cool-dec:#6bb6ae;
+    --ring:#e0c9a4;
+    --focus:#9fd0ff;
+    --tap:44px;
+    --era-tint:#26333f;
+  }
+  body.era-64{ --wall:#20262b; --wall-lit:#2c343b; --era-tint:#2c343b; --glow:#a8792f; }
+  body.era-69{ --wall:#241f1c; --wall-lit:#312a24; --era-tint:#312a24; --glow:#9a6a2a; --screen:#cdd0cb; }
+
+  body.softer{ --paper:#8d97a3; --wall:#9ea8b4; --wall-lit:#b0bac5; --chair:#77818d;
+               --ink:#0f1317; --ink-dim:#2b3238; --rule:#5e6874;
+               --screen:#2a333c; --screen-hot:#1c242c;
+               --label:#4a3410; --cool:#0e463f; --cool-dec:#1d6f65;
+               --hot:#7a2f10; --ring:#5a4218;
+               --accent:#2f2a20; --accent-ink:#f6f3ec; --focus:#12447a; --era-tint:#b0bac5; }
+  body.daylight{ --paper:#e8e4dc; --wall:#d6d2c8; --wall-lit:#c4c0b4; --ink:#14181d;
+               --ink-dim:#33393f; --label:#5a4520; --chair:#b8b4a8; --rule:#9a968c;
+               --screen:#3a4650; --screen-hot:#4d5b67; --hot:#8a3d1c; --cool:#1c5a52;
+               --cool-dec:#2a7a70; --ring:#6b4a18;
+               --accent:#3a3226; --accent-ink:#f0ece2; --era-tint:#c4c0b4; }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:var(--paper); color:var(--ink);
+    font:16px/1.55 Georgia,"Times New Roman",serif;
+    display:flex; flex-direction:column;
+    -webkit-text-size-adjust:100%;
+  }
+  @media (prefers-reduced-motion: reduce){ *{animation:none!important;transition:none!important} }
+
+  .room{ position:relative; flex:1 1 auto; min-height:56vh; }
+  .room svg.scene{ display:block; width:100%; height:100%; }
+  .plate{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:none; }
+  .plate[data-loaded="1"]{ display:block }
+  .plate[data-loaded="1"] ~ svg.scene .bg{ display:none }
+
+  .spot{ cursor:pointer }
+  .spot .hit{ fill:transparent; stroke:var(--ring); stroke-width:2.5; stroke-dasharray:5 4; }
+  .spot:hover .hit,.spot:focus-visible .hit{ stroke:var(--focus); stroke-width:4; stroke-dasharray:none; }
+  .spot:focus-visible{ outline:3px solid var(--focus); outline-offset:2px }
+  .spot[data-done="1"] .hit{ stroke:var(--cool-dec); stroke-dasharray:none; stroke-width:3; }
+
+  .panel{ flex:0 0 auto; background:var(--wall); border-top:2px solid var(--rule);
+          padding:1rem 1.1rem 1.3rem; }
+  .eyebrow{ color:var(--label); font:600 .78rem/1.3 system-ui,sans-serif;
+            letter-spacing:.09em; text-transform:uppercase; margin:0 0 .4rem; }
+  .say{ margin:0 0 .9rem; color:var(--ink); max-width:40em; }
+  .say em{ color:var(--ink-dim); font-style:italic }
+  .say strong{ color:var(--label); font-weight:700 }
+  .quote{ font:italic 400 1.15rem/1.5 Georgia,serif; color:var(--ink);
+          border-left:3px solid var(--glow-soft); padding:.2rem 0 .2rem 1rem; margin:.2rem 0 1rem; max-width:36em; }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:.55rem }
+  .chip,.btn{
+    min-height:var(--tap); min-width:var(--tap);
+    display:inline-flex; align-items:center; justify-content:center;
+    padding:.6em 1.05em; border-radius:2px; cursor:pointer;
+    font:600 .96rem/1.2 system-ui,sans-serif; text-align:center;
+  }
+  .chip{ background:transparent; color:var(--ink); border:2px solid var(--rule) }
+  .chip:hover{ border-color:var(--ring) }
+  .chip[aria-pressed="true"]{ border-color:var(--cool-dec); color:var(--cool); background:rgba(0,0,0,.12) }
+  .chip[data-done="1"]{ border-color:var(--cool-dec); color:var(--cool) }
+  .btn{ background:var(--accent); color:var(--accent-ink); border:2px solid var(--accent); font-weight:700 }
+  .btn:hover{ filter:brightness(1.08) }
+  .btn[disabled]{ opacity:.45; cursor:not-allowed }
+  :focus-visible{ outline:3px solid var(--focus); outline-offset:3px }
+
+  .corner{ position:absolute; top:.5rem; right:.5rem; display:flex; gap:.4rem; z-index:5 }
+  .nav{ position:absolute; top:.5rem; left:.5rem; display:flex; gap:.4rem; z-index:5 }
+  .corner button,.nav button{
+    min-height:var(--tap); min-width:var(--tap);
+    background:var(--chair); color:var(--ink); border:2px solid var(--rule);
+    border-radius:2px; font:600 .85rem/1 system-ui,sans-serif; cursor:pointer;
+  }
+  .corner button[aria-pressed="true"]{ border-color:var(--ring); color:var(--label) }
+
+  .cards{ display:flex; flex-wrap:wrap; gap:.7rem; margin:.2rem 0 1rem }
+  .mcard{ flex:1 1 8.5rem; min-width:8.5rem; max-width:12rem; border:2px solid var(--rule);
+          border-radius:2px; overflow:hidden; background:var(--wall-lit) }
+  .mcard .frame{ position:relative; aspect-ratio:4/3; background:var(--era-tint) }
+  .mcard .frame svg{ position:absolute; inset:0; width:100%; height:100% }
+  .mcard .frame img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:none }
+  .mcard .frame img[data-loaded="1"]{ display:block }
+  .mcard .cap{ padding:.5rem .6rem; }
+  .mcard .cap b{ display:block; color:var(--ink); font:600 .82rem/1.25 system-ui,sans-serif; margin-bottom:.2rem }
+  .mcard .src{ color:var(--ink-dim); font:.72rem/1.35 system-ui,sans-serif }
+
+  .card{ border-left:3px solid var(--glow-soft); padding:.15rem 0 .15rem .8rem; margin:0 0 .9rem; max-width:40em }
+  .card .src{ color:var(--ink-dim); font:.8rem/1.4 system-ui,sans-serif; margin-top:.3rem }
+  .rec{ border-left-color:var(--cool-dec) }
+
+  .descent{ margin:.3rem 0 1rem }
+  .rung{ position:relative; display:flex; align-items:center; gap:.7rem;
+         border:2px solid var(--rule); border-radius:2px; padding:.55rem .7rem; margin:.35rem 0;
+         background:var(--wall-lit); }
+  .rung .ico{ flex:0 0 2.2rem; height:2.2rem; }
+  .rung .ico svg{ width:100%; height:100% }
+  .rung .lab b{ display:block; color:var(--ink); font:600 .92rem/1.2 system-ui,sans-serif }
+  .rung .lab span{ color:var(--ink-dim); font:.8rem/1.35 system-ui,sans-serif }
+  .rung.you{ border-color:var(--ring); border-width:3px; background:rgba(0,0,0,.14) }
+  .rung.you::after{ content:"YOU"; position:absolute; right:.55rem; top:.4rem;
+    color:var(--label); font:700 .68rem/1 system-ui,sans-serif; letter-spacing:.08em;
+    background:var(--paper); padding:.15rem .3rem; border-radius:2px }
+  .braked{ color:var(--cool) } .pulled{ color:var(--hot) }
+
+  .arcrow{ display:flex; align-items:center; gap:.6rem; border-bottom:1px solid var(--rule); padding:.5rem 0 }
+  .arcrow b{ color:var(--ink); font:600 .9rem system-ui,sans-serif; flex:0 0 6.5rem }
+  .arcrow span{ color:var(--ink-dim); font:.82rem system-ui,sans-serif }
+  details.ring{ border:1px solid var(--rule); border-radius:2px; margin:.4rem 0; padding:.2rem .6rem }
+  details.ring summary{ cursor:pointer; color:var(--label); font:600 .9rem system-ui,sans-serif; padding:.4rem 0 }
+  details.ring[open] summary{ color:var(--ink) }
+  .ring p,.ring li{ color:var(--ink-dim); font:.85rem/1.5 system-ui,sans-serif }
+  .gateflag{ color:var(--hot); font-weight:700 }
+
+  footer{ background:var(--chair); color:var(--ink-dim); font:.8rem/1.5 system-ui,sans-serif;
+          padding:.9rem 1.1rem; border-top:2px solid var(--rule) }
+  footer b{ color:var(--label) }
+  .sr{ position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap }
+</style>
+</head>
+<body>
+
+<div class="room">
+  <div class="nav">
+    <button id="back" aria-label="Back">Back</button>
+    <button id="home" aria-label="Home: start over">Home</button>
+  </div>
+  <div class="corner">
+    <button id="comfort" aria-pressed="false" aria-label="Comfort: change contrast">Aa</button>
+    <button id="snd" aria-pressed="false" aria-label="Room sound: off">Sound</button>
+  </div>
+
+  <img class="plate" id="plate" alt=""
+       data-slot="room.jfk62"
+       data-art-src=""
+       data-art-license=""
+       data-art-author=""
+       data-art-source=""
+       data-art-date="">
+
+  <svg class="scene" id="scene" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"
+       role="img" aria-labelledby="sceneTitle">
+    <title id="sceneTitle">A room lit by a single broadcast. The country is about to be told something.</title>
+    <g id="art"></g>
+  </svg>
+</div>
+
+<div class="panel">
+  <p class="eyebrow" id="eyebrow">&nbsp;</p>
+  <div class="say" id="say"></div>
+  <div id="slot"></div>
+</div>
+
+<footer id="foot"></footer>
+<p class="sr" role="status" aria-live="polite" id="live"></p>
+
+<script>
+"use strict";
+const SCENES = [
+  {
+    id:"jfk62", era:"era-62", gated:false,
+    when:"October 22, 1962",
+    leader:"the President",
+    slot:"room.jfk62",
+    prelude:[
+      { slot:"prelude.jfk62.a", head:"U-2 flights confirm missile sites in Cuba",
+        src:"CIA reconnaissance, declassified \u00B7 Oct 1962", pd:true },
+      { slot:"prelude.jfk62.b", head:"Grocers report a run on canned goods",
+        src:"Contemporary press, Oct 1962", pd:true },
+      { slot:"prelude.jfk62.c", head:"Schools drill children under their desks",
+        src:"Civil Defense footage, public domain", pd:true },
+      { slot:"prelude.jfk62.d", head:"Three networks. One address. Tonight.",
+        src:"Broadcast listings, Oct 22 1962", pd:true }
+    ],
+    room:"A living room lit only by a television set. It is nearly 7 p.m. Nobody has gone to bed.",
+    notice:[
+      { id:"set",   t:"The television",  s:"Warming up. Three networks carry the same signal. Whatever is said, everyone hears at once — and only once." },
+      { id:"paper", t:"The evening paper", s:"Folded on the arm of the chair. It went to press before any of this was known." },
+      { id:"phone", t:"The telephone",   s:"It has not rung. No one you know has more than you do right now." },
+      { id:"child", t:"The doorway",     s:"A child is meant to be asleep and is not. They are listening too." }
+    ],
+    quote:"We will not prematurely or unnecessarily risk the costs of worldwide nuclear war in which even the fruits of victory would be ashes in our mouth — but neither will we shrink from that risk at any time it must be faced.",
+    reach:"A calm voice, straight to camera, in your living room. It sounds like a man telling you the truth as it happens.",
+    record:{
+      body:"The address that sounded like a first reaction was day eight of six days of secret deliberation. The calm was rehearsed. A naval \u201Cquarantine\u201D had already been chosen; an air-strike and an invasion had been argued and set aside in a room the country never saw.",
+      src:"ExComm records; Kennedy Library. Declassified 1990s."
+    }
+  },
+  {
+    id:"lbj64", era:"era-64", gated:false,
+    when:"August 4, 1964",
+    leader:"the President",
+    slot:"room.lbj64",
+    prelude:[
+      { slot:"prelude.lbj64.a", head:"Reports of a second attack on U.S. destroyers in the Gulf of Tonkin",
+        src:"Wire services, Aug 4 1964", pd:true },
+      { slot:"prelude.lbj64.b", head:"An election season; the incumbent runs as the steady hand",
+        src:"Campaign press, 1964", pd:true },
+      { slot:"prelude.lbj64.c", head:"Late-night bulletin interrupts programming",
+        src:"Broadcast logs, Aug 4 1964", pd:true }
+    ],
+    room:"A den, past midnight. The set is still on. A bulletin has cut into the late movie.",
+    notice:[
+      { id:"set",   t:"The bulletin",   s:"An announcer, grave, reading copy handed to him minutes ago. He knows only what he was given." },
+      { id:"map",   t:"The wall map",   s:"The Gulf of Tonkin is a name most people are learning tonight for the first time." },
+      { id:"clock", t:"The clock",      s:"Late. Decisions that will outlast the night are being made while most of the country sleeps." },
+      { id:"radio", t:"The radio",      s:"Another version of the same story, arriving a half-beat behind the television." }
+    ],
+    quote:"Repeated acts of violence against the Armed Forces of the United States must be met not only with alert defense, but with positive reply. That reply is being given as I speak to you tonight.",
+    reach:"Firm, resolute, in the small hours. It asks nothing of you but to trust that the reply is just.",
+    record:{
+      body:"The second attack the speech leaned on most likely never happened; a later NSA study found the evidence for it did not hold. The destroyers had been supporting covert raids the public was not told about. The war-powers resolution the address led to had been drafted months before the night it invoked.",
+      src:"NSA historical study (Hanyok), declassified 2005; Pentagon Papers."
+    }
+  },
+  {
+    id:"nixon69", era:"era-69", gated:false,
+    when:"November 3, 1969",
+    leader:"the President",
+    slot:"room.nixon69",
+    prelude:[
+      { slot:"prelude.nixon69.a", head:"Hundreds of thousands march against the war",
+        src:"Moratorium coverage, Oct\u2013Nov 1969", pd:true },
+      { slot:"prelude.nixon69.b", head:"Casualty figures read aloud on the evening news",
+        src:"Network news, 1969", pd:true },
+      { slot:"prelude.nixon69.c", head:"The President will address the nation on Vietnam",
+        src:"Broadcast advisory, Nov 3 1969", pd:true }
+    ],
+    room:"A living room, early color television. The picture is a little unstable; the colors bleed at the edges.",
+    notice:[
+      { id:"set",   t:"The color set",  s:"New in the house. The picture warms and drifts. The voice is steady even when the image is not." },
+      { id:"chair", t:"The armchair",   s:"Someone who has lost patience with the war sits here, and is being asked for more of it." },
+      { id:"paper", t:"The newspaper",  s:"Casualty counts on an inside page, printed too small to feel." },
+      { id:"window",t:"The window",     s:"Outside, the street is quiet tonight. Elsewhere it has not been." }
+    ],
+    quote:"And so tonight — to you, the great silent majority of my fellow Americans — I ask for your support. The more support I can have from the American people, the sooner that pledge can be redeemed.",
+    reach:"Intimate, direct, naming you as the reasonable center. It flatters your patience and asks it to hold.",
+    record:{
+      body:"While the speech asked for patience on a gradual withdrawal, the same administration had been secretly bombing neutral Cambodia since March \u2014 a covert campaign hidden from the public, and from much of the government, for years.",
+      src:"Operation Menu records; later Congressional inquiry."
+    }
+  },
+  { id:"gate-a", gated:true, when:"[PENDING]", quote:"[QUOTE PENDING]", record:{ body:"[RECORD PENDING]", src:"" } },
+  { id:"gate-b", gated:true, when:"[PENDING]", quote:"[QUOTE PENDING]", record:{ body:"[RECORD PENDING]", src:"" } },
+  { id:"gate-c", gated:true, when:"[PENDING]", quote:"[QUOTE PENDING]", record:{ body:"[RECORD PENDING]", src:"" } }
+];
+const PLAY = SCENES.filter(s => !s.gated);
+
+const RUNGS = [
+  { n:5, lab:"Your own judgment", sub:"You kept your footing. The message didn't override you.", ico:"eye" },
+  { n:4, lab:"Standing, a voice",  sub:"Lightly moved, still mostly your own.",                  ico:"figure" },
+  { n:3, lab:"A people, a we",     sub:"Pulled toward belonging \u2014 us, one safe message.",   ico:"link" },
+  { n:2, lab:"Safety",             sub:"Pulled toward fear and protection.",                     ico:"shield" },
+  { n:1, lab:"The floor",          sub:"Where consent stops mattering. How far rhetoric can reach.", ico:"anchor" }
+];
+
+const SCALE = [
+  { k:1, band:"less", t:"Much less" },
+  { k:2, band:"less", t:"Less" },
+  { k:3, band:"less", t:"A little less" },
+  { k:4, band:"neutral", t:"Neutral" },
+  { k:5, band:"more", t:"A little more" },
+  { k:6, band:"more", t:"More" },
+  { k:7, band:"more", t:"Much more" }
+];
+
+const S = { i:0, beat:"title", blind:{}, post:{}, seen:{} };
+let AC=null, SND=false;
+
+const $  = s => document.querySelector(s);
+const el = (t,c,x)=>{ const n=document.createElement(t); if(c)n.className=c; if(x!=null)n.innerHTML=x; return n; };
+const say = h => { $("#say").innerHTML = h; };
+const eyebrow = t => { $("#eyebrow").textContent = t; };
+const live = t => { $("#live").textContent = t; };
+const slot = () => { const s=$("#slot"); s.innerHTML=""; return s; };
+const scene = () => PLAY[S.i];
+const reset = () => window.scrollTo(0,0);
+
+function icon(k){
+  const c='stroke="currentColor" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"';
+  const P={
+    eye:`<circle cx="12" cy="12" r="3.2" ${c}/><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12z" ${c}/>`,
+    figure:`<circle cx="12" cy="6" r="2.6" ${c}/><path d="M12 9v7M8 20l4-4 4 4M9 12h6" ${c}/>`,
+    link:`<circle cx="7" cy="12" r="2.4" ${c}/><circle cx="17" cy="12" r="2.4" ${c}/><path d="M9.4 12h5.2" ${c}/>`,
+    shield:`<path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z" ${c}/>`,
+    anchor:`<circle cx="12" cy="5" r="2.2" ${c}/><path d="M12 7v13M5 13a7 7 0 0014 0M8 12H5m14 0h-3" ${c}/>`
+  };
+  return `<svg viewBox="0 0 24 24" role="img" aria-hidden="true">${P[k]||""}</svg>`;
+}
+
+function paintRoom(sc){
+  const plate = $("#plate");
+  plate.dataset.slot = sc.slot||"";
+  plate.dataset.loaded = "0";
+  plate.alt = sc.room||"";
+  $("#sceneTitle").textContent = sc.room||"";
+  const glow = sc.era==="era-69" ? "#9a6a2a" : sc.era==="era-64" ? "#a8792f" : "#b8863a";
+  $("#art").innerHTML = `
+    <g class="bg">
+      <rect x="0" y="0" width="400" height="300" fill="var(--paper)"/>
+      <rect x="0" y="0" width="400" height="300" fill="var(--era-tint)" opacity="0.5"/>
+      <rect x="150" y="96" width="100" height="72" rx="3" fill="var(--screen)"/>
+      <rect x="150" y="96" width="100" height="72" rx="3" fill="none" stroke="${glow}" stroke-width="3" opacity="0.7"/>
+      <ellipse cx="200" cy="132" rx="150" ry="90" fill="${glow}" opacity="0.10"/>
+      <path d="M120 250 q0 -40 40 -40 h0 q40 0 40 40 v20 h-80z" fill="var(--chair)" opacity="0.9" transform="translate(80,-6)"/>
+      <line x1="0" y1="210" x2="400" y2="210" stroke="var(--rule)" stroke-width="1" opacity="0.5"/>
+    </g>`;
+}
+
+function go(beat){ S.beat=beat; reset(); render(); }
+
+function render(){
+  const S_ = slot();
+  const back=$("#back"), home=$("#home");
+  back.style.visibility = (S.beat==="title") ? "hidden" : "visible";
+
+  if(S.beat==="title") return title(S_);
+  const sc = scene();
+  if(sc.era){ document.body.classList.remove("era-62","era-64","era-69"); if(sc.era!=="era-62") document.body.classList.add(sc.era); }
+  paintRoom(sc);
+
+  if(S.beat==="prelude") return prelude(sc,S_);
+  if(S.beat==="room")    return room(sc,S_);
+  if(S.beat==="blind")   return rate(sc,S_,"blind");
+  if(S.beat==="record")  return record(sc,S_);
+  if(S.beat==="post")    return rate(sc,S_,"post");
+  if(S.beat==="descent") return descent(sc,S_);
+  if(S.beat==="arc")     return arc(S_);
+}
+
+function title(S_){
+  document.body.classList.remove("era-62","era-64","era-69");
+  eyebrow("Choose Your Leader");
+  $("#sceneTitle").textContent = "Three rooms, three broadcasts. One reflex to build.";
+  $("#art").innerHTML = `
+    <g class="bg"><rect width="400" height="300" fill="var(--paper)"/>
+    <rect x="150" y="96" width="100" height="72" rx="3" fill="var(--screen)"/>
+    <rect x="150" y="96" width="100" height="72" rx="3" fill="none" stroke="var(--glow)" stroke-width="3" opacity="0.7"/>
+    <ellipse cx="200" cy="132" rx="160" ry="96" fill="var(--glow)" opacity="0.10"/></g>`;
+  say(`<strong>You don't judge the leader. You judge what you were allowed to see.</strong><br><br>
+    A real president says a real thing. You decide how much it moves you \u2014 then the record turns,
+    and you see what the room wasn't shown. Three moments, about ten minutes.
+    <br><br><em>This game uses optional sound (off until you turn it on) and full-contrast text.
+    Comfort and sound are in the top-right, always. Back and Home are in the top-left, always.</em>`);
+  const b = el("button","btn","Enter the first room"); b.onclick=()=>{ S.i=0; go("prelude"); };
+  S_.append(b);
+}
+
+function prelude(sc,S_){
+  eyebrow(`What was in the air \u00B7 ${sc.when}`);
+  say(`Before the broadcast, this is what the country already knew and feared.`);
+  const wrap = el("div","cards");
+  sc.prelude.forEach(c=>{
+    const card = el("div","mcard");
+    card.innerHTML = `
+      <div class="frame">
+        <img data-slot="${c.slot}" data-art-src="" data-art-license="" data-art-source="${c.src}" alt="${c.head}">
+        <svg viewBox="0 0 120 90" aria-hidden="true">
+          <rect width="120" height="90" fill="var(--era-tint)"/>
+          <rect x="10" y="12" width="100" height="52" fill="var(--wall)" opacity="0.6"/>
+          <line x1="16" y1="72" x2="104" y2="72" stroke="var(--glow-soft)" stroke-width="2"/>
+          <line x1="16" y1="80" x2="80" y2="80" stroke="var(--rule)" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="cap"><b>${c.head}</b><span class="src">${c.src}${(c.pd && !/public domain/i.test(c.src))?" \u00B7 public domain":""}</span></div>`;
+    wrap.append(card);
+  });
+  S_.append(wrap);
+  const b = el("button","btn","Now the room"); b.onclick=()=>go("room");
+  S_.append(b);
+}
+
+function room(sc,S_){
+  eyebrow(`The room \u00B7 ${sc.when}`);
+  if(!S.seen[sc.id]) S.seen[sc.id]={};
+  say(sc.room + `<br><br><em>Tap whatever your eye goes to.</em>`);
+  const chips = el("div","chips");
+  sc.notice.forEach(n=>{
+    const c = el("button","chip",n.t);
+    if(S.seen[sc.id][n.id]) c.dataset.done="1";
+    c.onclick=()=>{ S.seen[sc.id][n.id]=1; c.dataset.done="1";
+      say(`<strong>${n.t}.</strong> ${n.s}`); click(); reveal(); };
+    chips.append(c);
+  });
+  S_.append(chips);
+  const cont = el("button","btn","The set speaks"); cont.disabled=true; cont.id="cont";
+  cont.onclick=()=>go("blind"); S_.append(cont);
+  function reveal(){ if(Object.keys(S.seen[sc.id]).length>=1) $("#cont").disabled=false; }
+}
+
+function rate(sc,S_,phase){
+  const first = phase==="blind";
+  eyebrow(first ? `The broadcast \u00B7 ${sc.when}` : `Same words \u00B7 now you've seen the record`);
+  say(`<div class="quote">\u201C${sc.quote}\u201D</div>
+    <em>${sc.reach}</em><br><br>
+    <strong>You know this leader. You hear this. Does it move you to trust them more, less, or stay neutral?</strong>`);
+  const chips = el("div","chips");
+  SCALE.forEach(o=>{
+    const c = el("button","chip",o.t); c.setAttribute("aria-pressed","false");
+    c.onclick=()=>{
+      [...chips.children].forEach(x=>x.setAttribute("aria-pressed","false"));
+      c.setAttribute("aria-pressed","true");
+      (first?S.blind:S.post)[sc.id]=o.k; click();
+      $("#cont").disabled=false;
+    };
+    chips.append(c);
+  });
+  S_.append(chips);
+  const cont = el("button","btn", first?"Turn the record over":"See where it pulled you");
+  cont.id="cont"; cont.disabled=true;
+  cont.onclick=()=> first ? go("record") : go("descent");
+  S_.append(cont);
+}
+
+function record(sc,S_){
+  eyebrow(`The record \u00B7 ${sc.when}`);
+  say(`What the room could not see:`);
+  const card = el("div","card rec");
+  card.innerHTML = `<div>${sc.record.body}</div><div class="src">${sc.record.src}</div>`;
+  S_.append(card);
+  const b = el("button","btn","Hear the same words again"); b.onclick=()=>go("post");
+  S_.append(b);
+}
+
+function computeLanding(sc){
+  const b = S.blind[sc.id] ?? 4, p = S.post[sc.id] ?? b;
+  const pull  = Math.max(0, b - 4);
+  const brake = Math.max(0, b - p);
+  const tier  = Math.min(5, Math.max(1, 5 - pull + Math.min(pull, Math.ceil(brake/2))));
+  const noticed = p < b;
+  return { tier, noticed, pull, brake };
+}
+function descent(sc,S_){
+  const r = computeLanding(sc);
+  eyebrow(`Where the words pulled you \u00B7 ${sc.when}`);
+  say(r.noticed
+    ? `You trusted them <span class="cool">less</span> once you saw the record. That drop is the brake. Naming the gap is the whole skill.`
+    : (r.pull>0
+        ? `The words moved you toward trust, and the record didn't pull you back. This is how far rhetoric can carry a person \u2014 not a verdict on you.`
+        : `You held. The message didn't override your judgment.`));
+  const d = el("div","descent");
+  RUNGS.forEach(rung=>{
+    const row = el("div","rung"+(rung.n===r.tier?" you":""));
+    row.innerHTML = `<div class="ico ${rung.n<=2?'pulled':(rung.n>=4?'cool':'')}">${icon(rung.ico)}</div>
+      <div class="lab"><b>${rung.lab}</b><span>${rung.sub}</span></div>`;
+    d.append(row);
+  });
+  S_.append(d);
+  const last = S.i>=PLAY.length-1;
+  const b = el("button","btn", last?"See the whole arc":"The next room");
+  b.onclick=()=>{ if(last){ go("arc"); } else { S.i++; go("prelude"); } };
+  S_.append(b);
+}
+
+function arc(S_){
+  document.body.classList.remove("era-62","era-64","era-69");
+  eyebrow("The whole arc");
+  $("#sceneTitle").textContent="Every room at once.";
+  $("#art").innerHTML=`<g class="bg"><rect width="400" height="300" fill="var(--paper)"/>
+    <ellipse cx="200" cy="150" rx="170" ry="100" fill="var(--glow)" opacity="0.08"/></g>`;
+  say(`Where you held, and where you caught the gap.`);
+  PLAY.forEach(sc=>{
+    const r=computeLanding(sc);
+    const row=el("div","arcrow");
+    row.innerHTML=`<b>${sc.when.split(",")[0]}</b>
+      <span>${r.noticed?`<span class="cool">caught the gap</span>`:`<span class="pulled">carried</span>`}
+      \u2014 landed at rung ${r.tier} of 5</span>`;
+    S_.append(row);
+  });
+  glassEngine(S_);
+  const again=el("button","btn","Play again"); again.onclick=()=>{ S.blind={}; S.post={}; S.seen={}; S.i=0; go("title"); };
+  S_.append(again);
+}
+
+function glassEngine(S_){
+  const r1=el("details","ring");
+  r1.innerHTML=`<summary>What was this measuring?</summary>
+    <p>The distance between two commitments: how far the words moved you before the record,
+    and whether that moved back once you saw what the room couldn't. Noticing the gap is the skill \u2014
+    not distrust. Calibration, not suspicion.</p>`;
+  const r2=el("details","ring");
+  r2.innerHTML=`<summary>How the rung was computed</summary>
+    <p>Each rating is captured on a 7-point directional scale (three words shown to you, seven steps
+    underneath). Your landing is compared only to <em>your own</em> blind rating for that scene \u2014
+    never to another player. Pull lowers the rung; noticing the gap brakes the fall.</p>`;
+  const r3=el("details","ring");
+  r3.innerHTML=`<summary>Is this ready for a classroom grade?</summary>
+    <p class="gateflag">Not yet. This instrument and its descent math are provisional.</p>
+    <p>Before any graded or ISLO use, the model passes a Measurement Design review \u2014 a survey
+    methodologist (scale validity, identical pre/post wording), a psychometrician (is the score a
+    coherent construct?), and a persuasion scholar (does it measure how rhetoric actually moves trust?).
+    Ship gate: <b>MEASUREMENT_PENDING</b>. Until then it teaches; it does not grade.</p>`;
+  const r4=el("details","ring");
+  r4.innerHTML=`<summary>Sourcing &amp; what's withheld</summary>
+    <p>Every record is dated and attributed; nothing is fabricated. You never see a real face or hear a
+    voice likeness \u2014 the chair stays anyone's. Living-president scenes are coded but gated until each
+    has a verified, dated, founder-approved record.</p>`;
+  [r1,r2,r3,r4].forEach(x=>S_.append(x));
+}
+
+const ORDER=["title","prelude","room","blind","record","post","descent","arc"];
+$("#back").onclick=()=>{
+  if(S.beat==="title") return;
+  if(S.beat==="prelude"){
+    if(S.i>0){ S.i--; return go("descent"); }
+    return go("title");
+  }
+  const i=ORDER.indexOf(S.beat);
+  if(i>0) go(ORDER[i-1]); else go("title");
+};
+$("#home").onclick=()=>{ if(confirm("Start over? This clears your session.")){ S.blind={};S.post={};S.seen={};S.i=0; go("title"); } };
+
+const STOPS=["","softer","daylight"];
+let stop=0;
+$("#comfort").onclick=()=>{ stop=(stop+1)%3; document.body.classList.remove("softer","daylight");
+  if(STOPS[stop]) document.body.classList.add(STOPS[stop]);
+  $("#comfort").setAttribute("aria-pressed", stop?"true":"false");
+  live("Comfort: "+(["default","softer","warm daylight"][stop])); };
+
+function acx(){ if(!AC){ try{ AC=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ AC=null; } } return AC; }
+function click(){ if(!SND) return; const a=acx(); if(!a) return;
+  const o=a.createOscillator(),g=a.createGain(); o.type="sine"; o.frequency.value=520;
+  g.gain.setValueAtTime(0.0001,a.currentTime); g.gain.exponentialRampToValueAtTime(0.05,a.currentTime+0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001,a.currentTime+0.12); o.connect(g).connect(a.destination);
+  o.start(); o.stop(a.currentTime+0.13); }
+$("#snd").onclick=()=>{ SND=!SND; $("#snd").setAttribute("aria-pressed",SND?"true":"false");
+  $("#snd").setAttribute("aria-label","Room sound: "+(SND?"on":"off")); $("#snd").textContent=SND?"Sound on":"Sound";
+  live("Sound "+(SND?"on":"off")); if(SND) click(); };
+
+$("#foot").innerHTML = `<b>Choose Your Leader.</b> Train the reflex to notice the gap between what a leader
+  said and what was true at the time. \u00B7 Tight Spiral Productions \u00B7 single-file, offline, nothing stored.`;
+
+go("title");
+</script>
+</body>
+</html>
