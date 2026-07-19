@@ -25,6 +25,18 @@
   Humor is culturally situated: the audience you poll changes what lands. That is taught, not hidden.
 
   CHANGELOG
+   v6  2026-07-19  COLD-OPEN REBUILD (founder eye: "fails splash. no text or minimal").
+                  The old opening was a wide 2.26:1 strip carrying a four-line
+                  instruction paragraph in an OPAQUE headline box. On a phone the
+                  strip collapsed to a ~160px band and the box painted over the whole
+                  scene: the first screen was a wall of text and the machine was
+                  invisible. Studio Eyes waved it through - it measures contrast, not
+                  whether a splash is a picture or a paragraph. Fix: the scene is now
+                  a near-square (760x680) WORDLESS poster that fills the phone with
+                  the machine and holds one lean line - "Make the cat laugh." The
+                  paragraph is gone; the "How this plays" panel already carries it.
+                  Image first, words last, per constitution s7 (50% text) + s7.1
+                  (splash fills the first screen, idea above the fold).
    v5  2026-07-18  NAV FLOOR. Added standing HOME control (bottom-left, mirrors
                   the Comfort corner bottom-right). Was BACK-only -> HALT under the
                   founder nav rule (2026-07-16, the Barcelona-v2 miss). Home hidden
@@ -127,22 +139,30 @@
   body.daylight .lens-btn[data-l="code"][aria-pressed="true"]{ background:#0f6d82; color:#ffffff; }
   body.daylight .lens-btn[data-l="story"][aria-pressed="true"]{ background:#b03050; color:#ffffff; }
 
-  /* ---- scene-first opening ---- */
+  /* ---- scene-first opening: a WORDLESS SPLASH ----
+     2026-07-19 rebuild (founder eye: "fails splash. no text or minimal").
+     The old opening was a wide 2.26:1 strip. On a phone it collapsed to a
+     ~160px band, and the headline block (an OPAQUE box carrying a four-line
+     paragraph) painted straight over the art. The result was a text box, not
+     a scene: the joke was invisible and the first screen was reading, not
+     looking. So this is now a near-square POSTER that fills the phone with
+     picture, holds one lean line of caption, and lets the machine carry the
+     idea. Image first, words last. */
   .scene{
-    position:relative; background:
+    position:relative; width:min(100%, 620px); margin-inline:auto; background:
       radial-gradient(120% 90% at 50% 0%, var(--surface-2), var(--surface) 70%);
     border:1px solid var(--line); border-radius:22px; overflow:hidden;
     box-shadow:var(--shadow);
   }
   .scene svg{ display:block; width:100%; height:auto; }
 
-  .headline{ position:absolute; left:0; right:0; bottom:0; padding:22px 24px 20px;
-    background:linear-gradient(0deg, rgba(0,0,0,.72), rgba(0,0,0,.28));
-    background-color:#1a1206;
+  /* A lean caption band — a thin fade at the foot of the poster, never an
+     opaque box. Only the art sits behind it; it can no longer swallow a scene. */
+  .headline{ position:absolute; left:0; right:0; bottom:0; padding:16px 22px 16px;
+    background:linear-gradient(0deg, rgba(6,9,13,.86) 8%, rgba(6,9,13,.52) 55%, rgba(6,9,13,0) 100%);
     color:#fff; }
-  body.daylight .headline{ background:linear-gradient(0deg, rgba(20,14,4,.72), rgba(20,14,4,.30)); background-color:#1a1206; }
-  .headline h1{ margin:0 0 4px; font-size:clamp(1.5rem,4.4vw,2.4rem); letter-spacing:.3px; }
-  .headline p{ margin:0; font-size:clamp(.9rem,2.4vw,1.05rem); opacity:.92; max-width:52ch;}
+  body.daylight .headline{ background:linear-gradient(0deg, rgba(16,11,3,.88) 8%, rgba(16,11,3,.5) 55%, rgba(16,11,3,0) 100%); }
+  .headline h1{ margin:0; font-size:clamp(1.5rem,6vw,2.3rem); letter-spacing:.3px; line-height:1.05; }
 
   /* ---- primary controls under the scene ---- */
   .row{ display:flex; flex-wrap:wrap; gap:12px; margin:16px 0; }
@@ -412,69 +432,80 @@ again to bring the design back.</div>
        you see. Now it is.
        ==================================================================== -->
   <div class="scene" id="scene">
-    <svg viewBox="0 0 1040 460" role="img" aria-label="A Rube Goldberg machine mid-chain: a marble is about to roll off a ramp, tip a bucket, and drop a rubber chicken onto a springboard aimed at a sleeping cat.">
+    <!-- WORDLESS SPLASH. A near-square poster (760x680) so it fills a phone with
+         picture instead of prose. The whole gag reads top-to-bottom down a centre
+         column: marble rolls the ramp -> tips a bucket -> a rubber chicken drops ->
+         a springboard flings it -> at a sleeping cat, the audience of one. The
+         viewBox background is painted edge to edge, so there is no matting and no
+         empty band at any width. No instructions live here on purpose: the machine
+         IS the instruction. -->
+    <svg viewBox="0 0 760 680" role="img" aria-label="A tall Rube Goldberg machine mid-chain: a marble is about to roll down a ramp, tip a bucket, drop a rubber chicken onto a springboard, and fling it toward a sleeping cat below.">
       <defs>
         <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stop-color="var(--surface-2)"/><stop offset="1" stop-color="var(--surface)"/>
         </linearGradient>
-        <radialGradient id="spot" cx="50%" cy="20%" r="70%">
-          <stop offset="0" stop-color="rgba(255,255,255,.10)"/><stop offset="1" stop-color="rgba(255,255,255,0)"/>
+        <radialGradient id="spot" cx="50%" cy="14%" r="72%">
+          <stop offset="0" stop-color="rgba(255,255,255,.12)"/><stop offset="1" stop-color="rgba(255,255,255,0)"/>
         </radialGradient>
       </defs>
-      <rect width="1040" height="460" fill="url(#sky)"/>
-      <rect width="1040" height="460" fill="url(#spot)"/>
+      <rect width="760" height="680" fill="url(#sky)"/>
+      <rect width="760" height="680" fill="url(#spot)"/>
 
-      <!-- floor -->
-      <rect x="0" y="410" width="1040" height="50" fill="var(--line)" opacity=".5"/>
+      <!-- floor the cat rests on -->
+      <rect x="0" y="588" width="760" height="92" fill="var(--line)" opacity=".5"/>
 
-      <!-- ramp + marble -->
-      <path d="M60 120 L340 210" stroke="var(--amber)" stroke-width="10" stroke-linecap="round"/>
+      <!-- 1 · ramp + marble, top-left, about to roll -->
+      <path d="M120 118 L360 214" stroke="var(--amber)" stroke-width="13" stroke-linecap="round"/>
       <g id="marble">
-        <circle cx="90" cy="118" r="15" fill="var(--lens)"/>
-        <circle cx="85" cy="112" r="5" fill="#fff" opacity=".7"/>
+        <circle cx="150" cy="110" r="19" fill="var(--lens)"/>
+        <circle cx="143" cy="102" r="6.5" fill="#fff" opacity=".72"/>
       </g>
 
-      <!-- bucket on a pivot -->
+      <!-- 2 · bucket on a pivot, tipping right, spilling -->
+      <polygon points="388,268 380,292 396,292" fill="var(--line)"/>
       <g id="bucket">
-        <path d="M360 225 q30 40 60 0 l-6 -46 h-48 z" fill="var(--surface-2)" stroke="var(--line)" stroke-width="3"/>
-        <line x1="345" y1="205" x2="435" y2="205" stroke="var(--line)" stroke-width="4"/>
+        <line x1="342" y1="222" x2="446" y2="222" stroke="var(--line)" stroke-width="5"/>
+        <path d="M356 224 q32 44 66 0 l-7 -50 h-52 z" fill="var(--surface-2)" stroke="var(--line)" stroke-width="3.5"/>
       </g>
-      <polygon points="390,250 384,270 396,270" fill="var(--line)"/>
+      <g fill="var(--amber)" opacity=".9">
+        <circle cx="452" cy="250" r="5"/><circle cx="470" cy="272" r="4"/><circle cx="462" cy="234" r="3.5"/>
+      </g>
 
-      <!-- rubber chicken hanging -->
+      <!-- 3 · rubber chicken, dropping through the middle -->
       <g id="chicken">
-        <ellipse cx="470" cy="150" rx="16" ry="26" fill="#f2f6fb" opacity=".92"/>
-        <path d="M470 130 q10 -14 20 -6 q-6 8 -14 10 z" fill="var(--amber)"/>
-        <circle cx="464" cy="138" r="2.5" fill="#10151c"/>
-        <path d="M470 176 q-6 20 4 40" stroke="var(--line)" stroke-width="3" fill="none"/>
+        <ellipse cx="470" cy="326" rx="19" ry="30" fill="#f2f6fb" opacity=".94"/>
+        <path d="M470 302 q12 -16 23 -7 q-7 9 -16 11 z" fill="var(--amber)"/>
+        <circle cx="463" cy="311" r="2.8" fill="#10151c"/>
+        <path d="M470 356 q-7 12 3 26" stroke="var(--line)" stroke-width="3" fill="none"/>
       </g>
 
-      <!-- springboard -->
+      <!-- 4 · springboard, centre-lower, cocked to fling -->
       <g id="spring">
-        <rect x="520" y="360" width="120" height="12" rx="4" fill="var(--amber-deep)"/>
-        <path d="M540 360 l0 -20 m20 20 l0 -20 m20 20 l0 -20 m20 20 l0 -20"
-              stroke="var(--line)" stroke-width="3"/>
+        <rect x="300" y="430" width="150" height="14" rx="5" fill="var(--amber-deep)"/>
+        <path d="M320 444 l0 22 m26 -22 l0 22 m26 -22 l0 22 m26 -22 l0 22 m26 -22 l0 22"
+              stroke="var(--line)" stroke-width="3.5"/>
       </g>
 
-      <!-- sleeping cat (the audience of one) -->
+      <!-- 5 · sleeping cat, the audience of one, bottom-centre -->
       <g id="cat">
-        <ellipse cx="820" cy="392" rx="66" ry="26" fill="var(--surface-2)" stroke="var(--line)" stroke-width="3"/>
-        <path d="M765 384 q-8 -18 6 -22 q4 12 10 14z" fill="var(--surface-2)" stroke="var(--line)" stroke-width="3"/>
-        <path d="M770 380 l4 -8 l6 8" fill="none" stroke="var(--line)" stroke-width="2"/>
-        <path d="M776 392 q6 6 14 0" stroke="var(--line)" stroke-width="2" fill="none"/>
-        <path d="M760 378 q-10 -2 -18 2 M760 384 q-12 1 -20 5" stroke="var(--ink-soft)" stroke-width="1.6"/>
-        <text x="866" y="360" font-size="26" fill="var(--ink-soft)" font-family="var(--mono)">z z</text>
+        <ellipse cx="400" cy="556" rx="88" ry="32" fill="var(--surface-2)" stroke="var(--line)" stroke-width="3.5"/>
+        <path d="M330 547 q-10 -24 8 -28 q6 15 13 18z" fill="var(--surface-2)" stroke="var(--line)" stroke-width="3.5"/>
+        <path d="M337 542 l5 -10 l8 10" fill="none" stroke="var(--line)" stroke-width="2.4"/>
+        <path d="M344 558 q8 8 18 0" stroke="var(--line)" stroke-width="2.6" fill="none"/>
+        <path d="M324 542 q-13 -3 -23 3 M324 549 q-15 1 -25 6" stroke="var(--ink-soft)" stroke-width="1.8"/>
+        <text x="470" y="514" font-size="30" fill="var(--ink-soft)" font-family="var(--mono)">z z</text>
       </g>
 
-      <!-- motion hints -->
-      <g stroke="var(--lens)" stroke-width="3" fill="none" opacity=".55" stroke-linecap="round">
-        <path d="M108 124 q30 20 60 26"/>
-        <path d="M470 178 q4 30 -2 60" stroke-dasharray="2 9"/>
+      <!-- motion hints: the chain, drawn as arcs from link to link -->
+      <g stroke="var(--lens)" stroke-width="3.5" fill="none" opacity=".5" stroke-linecap="round">
+        <path d="M172 118 q40 26 78 40"/>
+        <path d="M470 360 q6 30 -2 58" stroke-dasharray="2 10"/>
+        <path d="M392 426 q10 -30 34 -50" stroke-dasharray="2 10"/>
+        <path d="M300 476 q40 58 96 66" stroke-dasharray="2 12"/>
       </g>
     </svg>
     <div class="headline">
       <h1>Make the cat laugh.</h1>
-      <p>The marble is about to roll. In a second, something falls. Will it land? You decide what happens next — then you find out what the crowd actually thought.</p>
     </div>
   </div>
 
