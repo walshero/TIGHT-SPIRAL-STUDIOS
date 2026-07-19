@@ -106,11 +106,19 @@ def image_floor(html):
 def nav_floor(html):
     halts = []
     body = re.sub(r'<(script|style)[\s\S]*?</\1>', ' ', html, flags=re.I)
-    screens = len(re.findall(r'class="[^"]*\b(?:stage|screen|slide)\b', body, re.I))
-    if screens < 2:
+    # A "screen" is any authored view: stage/screen/slide/scene classes, OR a
+    # panel toggled by the .hidden convention (show()/hide() single-container apps).
+    screens = len(re.findall(r'class="[^"]*\b(?:stage|screen|slide|scene)\b', body, re.I))
+    toggled = len(re.findall(r'\bclass="[^"]*\bhidden\b', body, re.I))
+    view_count = max(screens, toggled + 1 if toggled else 0)
+    if view_count < 2:
         return halts
-    has_back = bool(re.search(r'\bback\b', html, re.I) and re.search(r'id=["\']backBtn|aria-label="[^"]*back|>\s*&larr;\s*back|>\s*back', html, re.I))
-    has_home = bool(re.search(r'id=["\']homeBtn|aria-label="[^"]*(?:start|home)|>\s*home\b', html, re.I))
+    has_back = bool(re.search(
+        r'id=["\']backBtn|class="[^"]*\bback(nav|btn)?\b|aria-label="[^"]*\bback\b'
+        r'|onclick="[^"]*(?:goBack|backTo)|>\s*(?:&larr;\s*)?back\b', html, re.I))
+    has_home = bool(re.search(
+        r'id=["\']homeBtn|class="[^"]*\bhome(nav|btn)?\b|aria-label="[^"]*\b(?:home|start)\b'
+        r'|onclick="[^"]*(?:goHome|toHome|homeScreen)|>\s*home\b', html, re.I))
     if not has_back:
         halts.append('H-NAV-BACK multi-screen product has no BACK control (founder rule: back + home on ALL products).')
     if not has_home:
@@ -157,7 +165,7 @@ def run(path):
     warns += ifw
     name = os.path.basename(path)
     print()
-    print('  STUDIO EYES - PRE-SHIP GATE v3 - ' + name)
+    print('  STUDIO EYES - PRE-SHIP GATE v3.1 - ' + name)
     print('  ' + '-' * 58)
     print('  modes: ' + ', '.join(sorted(modes)))
     print('  text tokens: ' + (', '.join(sorted(text_use)) or '(none)'))
