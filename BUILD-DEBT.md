@@ -42,6 +42,7 @@ Format: `DATE | SHIP or GOV | what a player can now do (or what governance was a
 ```
 2026-07-19 | GOV | added BUILD-DEBT.md ratio rule. DEBT +1. Next session owes a build.
 2026-07-19 | SHIP | preship-gate-v4.py render-proof teeth: the gate now catches the class where a screen passes at 13:1 and renders unreadable on Matt's retina (opacity floor + RP warm-hue floor). A builder can no longer ship a gold-on-unpainted screen the old gate green-lit. Canaried: your-rp-world HALTs, viscosity SHIPs. DEBT paid.
+2026-07-19 | SHIP | choose-your-leader-v6.html (the assessment flagship, worst file in the corpus sweep) now renders legible in all three comfort modes: default label cooled off gold, softer+daylight teal/rust darkened to clear 4.5, a malformed daylight hex removed. Gate v4 SHIP, worst pair 4.87, verified on the repo copy after push. A student can now read the CYL scene in every comfort stop.
 ```
 
 ---
