@@ -63,6 +63,13 @@ body.still *{animation:none!important;transition:none!important}
   background:var(--panel-2);color:var(--dim);border:1px solid var(--edge)}
 .rank-pip.done{background:var(--phos-deep);color:var(--phos);border-color:var(--phos-deep)}
 .rank-pip.now{background:var(--phos);color:#04211e;border-color:var(--phos)}
+.brief{width:100%;max-width:340px;margin:0 auto 14px;background:var(--panel);
+  border:1px solid var(--edge);border-left:4px solid var(--amber);border-radius:14px;
+  padding:13px 16px;text-align:left}
+.brief-role{color:var(--amber);font-size:11px;font-weight:800;letter-spacing:.14em;
+  text-transform:uppercase;margin-bottom:6px}
+.brief-role span{color:var(--dim);font-variant-numeric:tabular-nums}
+.brief-task{color:var(--ink);font-size:15px;font-weight:700;line-height:1.4}
 .train-phone{width:100%;max-width:300px;margin:0 auto 14px}
 .phone{background:var(--feed-bg);color:var(--feed-ink);border-radius:26px;border:1px solid #d3d8e2;
   overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.55);position:relative}
@@ -164,9 +171,9 @@ body.still .flip{transition:none}
 
 <section class="screen on" id="sc-hire" aria-label="Your job">
   <div class="logo">flok<span class="dot">.</span></div>
-  <div class="hire-badge"><span class="pulse-dot" aria-hidden="true"></span>You've been hired to run growth.</div>
+  <div class="hire-badge"><span class="pulse-dot" aria-hidden="true"></span>Now hiring: Growth Operator</div>
   <div class="job-meter">
-    <div class="job-line">One number matters: how much people use flok. That's the meter.</div>
+    <div class="job-line">Your job: make people use flok more. One number matters — how much they use it. That's the meter.</div>
     <div class="meter" aria-hidden="true">
       <div class="meter-fill" style="width:30%"></div>
       <div class="meter-target" style="left:70%"></div>
@@ -179,6 +186,10 @@ body.still .flip{transition:none}
 
 <section class="screen" id="sc-train" aria-label="Training">
   <div class="ranks" id="rankStrip" aria-hidden="true"></div>
+  <div class="brief" id="brief" aria-live="polite">
+    <div class="brief-role">Growth Operator &middot; Assignment <span id="briefNum">1 / 5</span></div>
+    <div class="brief-task" id="briefTask"></div>
+  </div>
   <div class="train-phone">
     <div class="phone">
       <div class="phone-top">
@@ -227,7 +238,7 @@ body.still .flip{transition:none}
   <div class="big-glyph" aria-hidden="true">&#9680;</div>
   <p class="reveal-line">While you trained the machine, it measured you.</p>
   <div class="tele">
-    <div class="tele-row"><span class="what">Times you tapped Post</span><span class="num" id="tTaps">0</span></div>
+    <div class="tele-row"><span class="what">Times you tapped Boost</span><span class="num" id="tTaps">0</span></div>
     <div class="tele-row warn"><span class="what">Rewards you actually got</span><span class="num" id="tRewards">0</span></div>
     <div class="tele-row"><span class="what">Screens you scrolled past the end</span><span class="num" id="tScreens">0</span></div>
     <div class="tele-row warn"><span class="what">Alerts you fired at the cohort</span><span class="num" id="tAlerts">0</span></div>
@@ -239,19 +250,29 @@ body.still .flip{transition:none}
 </div>
 <script>
 const LEVERS=[
- {id:"vrr",name:"Surprise likes",tag:"a reward trick",type:"tap",verb:"Post",target:72,bridge:"Your first tool: reward people at random and they keep checking back.",hint:"Tap Post to try it.",
+ {id:"vrr",name:"Surprise likes",tag:"a reward trick",type:"tap",verb:"Boost",target:72,
+  task:"Reward users at random. Drop a surprise like on somebody's post when they least expect it \u2014 unpredictable payoffs are the strongest hook.",
+  bridge:"Your first tool: hand out likes at random and people keep checking back.",hint:"Tap Boost to drop a surprise like on a post.",
   fact:"Unpredictable rewards drive the most persistent checking \u2014 the same schedule that makes slot machines compulsive.",
   cite:"Skinner, Science and Human Behavior (1953)"},
- {id:"scroll",name:"Infinite scroll",tag:"a no-stop trick",type:"scroll",target:70,hint:"Scroll the feed.",
+ {id:"scroll",name:"Infinite scroll",tag:"a no-stop trick",type:"scroll",target:70,
+  task:"Take the floor out of the feed. Load more the instant users near the end so there's never a natural place to stop.",
+  hint:"Scroll the feed \u2014 it never ends.",
   fact:"Take away the bottom of the page and people keep going past the point they meant to stop. The missing stop-cue is the trick.",
   cite:"Stopping-cue research; Harris, U.S. Senate (2019)"},
- {id:"streak",name:"Don't-lose-it streak",tag:"a loss trick",type:"send",verb:"Send streak alert",target:66,hint:"Send it.",
+ {id:"streak",name:"Don't-lose-it streak",tag:"a loss trick",type:"send",verb:"Send streak alert",target:66,
+  task:"Weaponize loss. Warn users their streak will die unless they come back today.",
+  hint:"Send the streak alert.",
   fact:"Losing hurts more than gaining feels good. 'Don't break your streak' turns that into a daily pull.",
   cite:"Kahneman & Tversky, Prospect Theory (1979)"},
- {id:"notify",name:"Red-dot alerts",tag:"an interrupt trick",type:"release",verb:"Release notifications",target:68,hint:"Release a batch.",
+ {id:"notify",name:"Red-dot alerts",tag:"an interrupt trick",type:"release",verb:"Release notifications",target:68,
+  task:"Interrupt on purpose. Release a batch of red-dot alerts to pull users back into the app mid-task.",
+  hint:"Release a batch.",
   fact:"A waiting red dot fires anticipatory dopamine. Constant interruption also lowers attention and raises stress.",
   cite:"Montag et al. (2019); Mark et al. (2016)"},
- {id:"social",name:"'Seen' receipts",tag:"a guilt trick",type:"flip",verb:"'Seen' receipts",target:64,hint:"Flip it on.",
+ {id:"social",name:"'Seen' receipts",tag:"a guilt trick",type:"flip",verb:"'Seen' receipts",target:64,
+  task:"Turn silence into guilt. Switch on read-receipts so ignoring a message feels like something users are doing to a friend.",
+  hint:"Flip it on.",
   fact:"Once someone knows you saw their message, not replying feels like something you're doing to them. Reciprocity does the rest.",
   cite:"Cialdini, Influence (2001)"}
 ];
@@ -302,6 +323,8 @@ function paintTrain(){
   const L=LEVERS[step];hit=false;
   document.getElementById('rankStrip').innerHTML=RANK_TITLES.map(function(t,i){
     return '<span class="rank-pip '+(i<step?'done':(i===step?'now':''))+'">'+t+'</span>';}).join('');
+  document.getElementById('briefNum').textContent=(step+1)+' / '+LEVERS.length;
+  document.getElementById('briefTask').textContent=L.task;
   document.getElementById('meterTarget').style.left=L.target+'%';
   document.getElementById('factText').textContent=L.fact;
   document.getElementById('factCite').textContent=L.cite;
@@ -328,13 +351,15 @@ function paintTrain(){
 function doTap(){
   T.taps++;
   const rewarded=REWARD_TAPS.has(T.taps);
+  // Every Boost lands on a post — light its heart so it reads as acting ON the feed, not posting.
+  const feed=document.getElementById('feed');
+  const hearts=feed.querySelectorAll('.heart');
+  const pick=hearts[T.taps%hearts.length];
+  if(pick){pick.classList.remove('lit');void pick.offsetWidth;pick.classList.add('lit');
+    const n=pick.parentElement.querySelector('.likeN');
+    if(n)n.textContent=parseInt(n.textContent,10)+(rewarded?(5+T.rewards*3):1);}
   if(rewarded){
     T.rewards++;bump(16);
-    const feed=document.getElementById('feed');
-    const hearts=feed.querySelectorAll('.heart');
-    const pick=hearts[T.rewards%hearts.length];
-    if(pick){pick.classList.remove('lit');void pick.offsetWidth;pick.classList.add('lit');
-      const n=pick.parentElement.querySelector('.likeN');if(n)n.textContent=parseInt(n.textContent,10)+ (5+T.rewards*3);}
     const b=document.getElementById('burst');b.classList.remove('go');void b.offsetWidth;b.classList.add('go');
   }else{bump(7);}
 }
