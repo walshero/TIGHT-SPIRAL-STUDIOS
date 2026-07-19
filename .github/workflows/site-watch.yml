@@ -1,0 +1,96 @@
+name: Site Watch — liveness + freshness alarm
+
+# WHY THIS EXISTS (2026-07-19)
+# ----------------------------
+# The Pages 403 outage lasted five days because the only signal was a yellow
+# "a check is failing" — never "the site is DOWN." Then it recurred as a silent
+# FREEZE: a regression merged to main failed floor, deploy was skipped, and the
+# live site just quietly stopped updating. Nobody knew until they looked by eye.
+#
+# This watcher makes both states LOUD. It probes the real Pages URL and opens a
+# GitHub issue (which notifies the founder) when:
+#   DOWN  — the URL does not return HTTP 200, or
+#   STALE — main has a commit that never reached the live deploy (floor is red /
+#           the deploy is frozen), read from the version.json the deploy stamps.
+# When the site recovers, it comments and closes the issue automatically.
+#
+# It is the alarm the studio was missing. Arithmetic, not vibes: HTTP code and a
+# 40-char sha compare. It cannot cry wolf about contrast; it only watches uptime.
+
+on:
+  schedule:
+    - cron: '13,43 * * * *'      # every 30 min (GitHub may delay scheduled runs)
+  workflow_run:
+    workflows: ["Studio Eyes — Accessibility Floor"]
+    types: [completed]           # re-check right after every deploy attempt
+  workflow_dispatch:             # fire by hand from the phone
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: site-watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    env:
+      URL: "https://walshero.github.io/TIGHT-SPIRAL-STUDIOS/"
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      EVENT: ${{ github.event_name }}
+    steps:
+      - name: Probe the live site and raise/clear the alarm
+        run: |
+          set -uo pipefail
+          sleep 20   # let the CDN settle after a fresh deploy
+
+          gh label create site-watch -c B60205 -d "Live-site liveness/freshness alarm" --force >/dev/null 2>&1 || true
+
+          code=$(curl -sS -o /tmp/body -w '%{http_code}' --max-time 30 -L "$URL" || echo 000)
+          bytes=$(wc -c < /tmp/body 2>/dev/null || echo 0)
+          live=$(curl -sS --max-time 30 -L "${URL}version.json" 2>/dev/null | grep -oiE '[0-9a-f]{40}' | head -1 || true)
+          head=$(gh api "repos/$REPO/commits/main" --jq '.sha' 2>/dev/null || true)
+          headdate=$(gh api "repos/$REPO/commits/main" --jq '.commit.committer.date' 2>/dev/null || true)
+          echo "http=$code bytes=$bytes live=${live:-none} head=${head:-?} event=$EVENT"
+
+          problems=""
+
+          # --- LIVENESS (every trigger) ---
+          if [ "$code" != "200" ]; then
+            problems="${problems}- **DOWN** — the Pages URL returned HTTP \`$code\` (expected 200).\n"
+          elif [ "${bytes:-0}" -lt 500 ]; then
+            problems="${problems}- **DOWN** — HTTP 200 but the body was only ${bytes} bytes (looks like an error stub).\n"
+          fi
+
+          # --- FRESHNESS (skip on workflow_run to avoid racing the deploy that
+          #     just triggered us; skip if main HEAD is < 10 min old, still in flight) ---
+          if [ "$EVENT" != "workflow_run" ] && [ -n "$live" ] && [ -n "$head" ] && [ "$live" != "$head" ]; then
+            age=999999
+            if [ -n "$headdate" ]; then age=$(( $(date -u +%s) - $(date -u -d "$headdate" +%s) )); fi
+            if [ "$age" -ge 600 ]; then
+              problems="${problems}- **STALE** — live deploy is \`${live:0:7}\` but main is \`${head:0:7}\` (merged ${age}s ago, never deployed). floor is likely failing; new work is not shipping.\n"
+            fi
+          fi
+
+          existing=$(gh issue list --state open --label site-watch --json number --jq '.[0].number' 2>/dev/null || true)
+
+          if [ -n "$problems" ]; then
+            body=$(printf 'Site Watch found a problem at %s UTC.\n\n%b\nURL: %s\nRun: %s/%s/actions/runs/%s\n' \
+              "$(date -u +%FT%TZ)" "$problems" "$URL" "${GITHUB_SERVER_URL:-https://github.com}" "$REPO" "${GITHUB_RUN_ID:-?}")
+            if [ -n "$existing" ]; then
+              gh issue comment "$existing" --body "$body" || true
+            else
+              gh issue create --title "🔴 Site Watch: the live site needs attention" --label site-watch --body "$body" || true
+            fi
+            echo "::error::Site Watch alarm raised — see the site-watch issue."
+            exit 1
+          fi
+
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$(printf '✅ Recovered at %s UTC — HTTP %s, live \`%s\`. Auto-closing.' "$(date -u +%FT%TZ)" "$code" "${live:0:7}")" || true
+            gh issue close "$existing" || true
+          fi
+          echo "Site OK — HTTP $code, live=${live:-unknown}."

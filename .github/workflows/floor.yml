@@ -73,6 +73,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      - name: Stamp the deployment (lets Site Watch tell live from stale)
+        run: |
+          printf '{"sha":"%s","ref":"%s","run":"%s","built":"%s"}\n' \
+            "$GITHUB_SHA" "$GITHUB_REF_NAME" "$GITHUB_RUN_ID" "$(date -u +%FT%TZ)" > version.json
       - uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
