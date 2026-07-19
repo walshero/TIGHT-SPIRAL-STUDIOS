@@ -5,13 +5,13 @@
 # v4 ADDS, per the 2026-07-16 handoff (a screen passed at 13:1, rendered at 1.17:1):
 #   TOOTH 5  opacity_floor  - a full-screen surface must PAINT an opaque bg in
 #                             EVERY comfort mode, or light text can land on the
-#                             white in-app-browser sheet showing through. This is
-#                             the class that was structurally invisible to v3.
+#                             white in-app-browser sheet showing through.
 #   TOOTH 6  hue_floor      - RP reader: warm-mode TEXT must be COOL near-white at
 #                             full strength. Amber/gold is fill/accent only, never
 #                             color:. WCAG can pass 13:1 while the retina fails.
-# The gate stops trusting the token the author HOPED applied; it reasons about
-# whether the surface under that text is proven opaque.
+# v4.1 REFINES flip_check with a contrast guard (see inline) so a correctly-
+#   inverted mid-tone palette no longer trips a false H-FLIP. When a check flags
+#   good work, the check is the suspect.
 import re, sys, os
 AA_BODY = 4.5
 AAA     = 7.0
@@ -96,7 +96,25 @@ def flip_check(modes, text_use, surface_use):
                 opp = 'dark' if tb=='light' else 'light'
                 has_opp = any(band(tok[s])==opp for s in surface_use if s in tok)
                 if not has_opp:
-                    halts.append('H-FLIP [' + mode + '] text token ' + tv + ' is ' + tb + ' here but no ' + opp + ' surface exists in this mode - it will render ' + tb + '-on-' + tb + ' (the yellow-on-white class). Give ' + mode + ' a full inverse palette.')
+                    # CONTRAST GUARD (v4.1): band-matching is coarse. A mid-tone
+                    # ground (lum 0.18-0.5) is banded 'mid' and ignored, so a
+                    # correctly-inverted palette (dark text on lum-0.3 paper)
+                    # trips a false flip. Before HALTing, ask the real question:
+                    # does this text token actually FAIL contrast on every surface
+                    # in this mode? If it clears 4.5 on any surface present, it is
+                    # not stranded - suppress. Only genuinely unreadable = HALT.
+                    trgb = hex2rgb(tok[tv])
+                    clears = False
+                    if trgb:
+                        for s in surface_use:
+                            if s in tok:
+                                srgb = hex2rgb(tok[s])
+                                if srgb and ratio(trgb, srgb) >= AA_BODY:
+                                    clears = True
+                                    break
+                    if clears:
+                        continue  # correctly inverted, not a flip bug
+                    halts.append('H-FLIP [' + mode + '] text token ' + tv + ' is ' + tb + ' here but clears no surface in this mode - it will render ' + tb + '-on-' + tb + ' (the yellow-on-white class). Give ' + mode + ' a full inverse palette.')
     return halts
 def image_floor(html):
     halts, warns = [], []
@@ -136,18 +154,7 @@ def nav_floor(html):
     if not has_home:
         halts.append('H-NAV-HOME multi-screen product has no HOME control (founder rule: back + home on ALL products).')
     return halts
-
-# ---- TOOTH 5: OPACITY FLOOR ---------------------------------------------
-# The bug this exists for: warm ink #f6ecda passed at 13:1 on --paper #151210,
-# but --paper never painted opaque over the viewport, so the near-white ink
-# landed on the white iOS in-app sheet at 1.17:1. INVISIBLE.
-# The check: for any mode whose TEXT is light (near-white), the mode must prove
-# a full-viewport OPAQUE dark surface is painted by body (or a full-cover
-# ancestor). If body's background in that mode is missing, transparent, or a
-# gradient/image only (no opaque solid fallback), the light text is a HALT -
-# it is one un-painted div away from landing on white.
 def _body_bg_decls(css):
-    # returns {mode: raw background value string} for body and body.<mode>
     out = {}
     m = re.search(r'(?:^|[}\s])body\s*\{([^}]*)\}', css)
     if m:
@@ -161,18 +168,14 @@ def _body_bg_decls(css):
                 out[mode] = bm.group(1).strip()
     return out
 def _resolve_bg_rgb(valstr, tok):
-    # resolve a background value to an opaque rgb if it is a solid color;
-    # return None if transparent / gradient-only / unresolvable / has alpha.
     if not valstr:
         return None
     v = valstr.strip()
     if 'gradient' in v.lower():
-        # gradient with no solid fallback color does not guarantee opaque cover
-        # (and even opaque gradients aren't a flat surface to measure text on)
         return None
     if re.search(r'\b(transparent|none)\b', v, re.I):
         return None
-    if re.search(r'rgba?\([^)]*,\s*0?\.\d+\s*\)', v):  # explicit alpha < 1
+    if re.search(r'rgba?\([^)]*,\s*0?\.\d+\s*\)', v):
         return None
     mv = re.search(r'var\((--[\w-]+)', v)
     if mv:
@@ -183,13 +186,6 @@ def _resolve_bg_rgb(valstr, tok):
         return hex2rgb(mh.group(0))
     return None
 def opacity_floor(css, modes, text_use, surface_use):
-    # The real class: a mode paints LIGHT body text but the VIEWPORT surface
-    # (body's own background) is not a proven-opaque DARK color. Then the light
-    # ink can land on the white in-app sheet = the 13:1-passes-1.17:1-renders bug.
-    # Precision guard (anti-cry-wolf): a light text token that always sits on an
-    # explicit dark surface token (e.g. --paper used only as band-ink on --ink)
-    # is NOT this bug - it is only a HALT when the light text has NO dark surface
-    # partner anywhere in the mode AND the body bg itself isn't proven dark-opaque.
     halts = []
     LIGHT = 0.5
     bg_decls = _body_bg_decls(css)
@@ -197,7 +193,6 @@ def opacity_floor(css, modes, text_use, surface_use):
         raw = bg_decls.get(mode, bg_decls.get('default'))
         bg_rgb = _resolve_bg_rgb(raw, tok)
         body_is_dark_opaque = bg_rgb is not None and _lum(bg_rgb) < 0.5
-        # dark surface tokens available in this mode (partners text can sit on)
         dark_surfaces = [s for s in surface_use
                          if s in tok and hex2rgb(tok[s]) and _lum(hex2rgb(tok[s])) < 0.5]
         for tv in sorted(text_use):
@@ -205,8 +200,6 @@ def opacity_floor(css, modes, text_use, surface_use):
             rgb = hex2rgb(hx) if hx else None
             if not (rgb and _lum(rgb) >= LIGHT):
                 continue
-            # light text is safe if EITHER the body paints dark-opaque OR the mode
-            # offers a dark surface token this text can legitimately land on.
             if body_is_dark_opaque or dark_surfaces:
                 continue
             if bg_rgb is None:
@@ -214,33 +207,20 @@ def opacity_floor(css, modes, text_use, surface_use):
             else:
                 halts.append('H-OPACITY [' + mode + '] light text ' + tv + ' on a LIGHT body background (lum ' + format(_lum(bg_rgb), '.2f') + ') with no dark surface partner - light-on-light. Fix the surface for ' + mode + '.')
     return halts
-
-# ---- TOOTH 6: RP HUE FLOOR ----------------------------------------------
-# Founder's retina, not WCAG. Warm/amber/gold as TEXT smears for an RP reader
-# even at 13:1. Warm-mode text must be cool near-white; amber is fill/accent
-# only. Flags any text token whose hue is warm (R dominant, B starved) AND
-# light. Cool near-white (R~=G~=B) passes; gold (R>G>B, low B) HALTs.
 def hue_floor(css, modes, text_use):
-    # Founder's retina, not WCAG. Warm/amber/gold as TEXT smears for an RP reader
-    # even at 13:1. Warm-mode text must be cool near-white; amber is fill/accent
-    # only. HALT on warm near-white used as BODY-size text; WARN (not HALT) when
-    # the same token is only used at large display size (>=32px) or on icon
-    # glyphs - large amber numerals/glyphs are accent, the role the floor permits.
     halts, warns = [], []
-    # for each text token, find the largest font-size it is ever set at (px).
     def max_px_for(tok_name):
         biggest = 0.0
         for m in re.finditer(r'([^{}]+)\{([^}]*)\}', css):
             body = m.group(2)
             if 'color:var(' + tok_name not in body.replace(' ', ''):
-                # tolerate spaces: re-check loosely
                 if not re.search(r'color\s*:\s*var\(\s*' + re.escape(tok_name), body):
                     continue
             fs = re.search(r'font-size\s*:\s*([\d.]+)px', body)
             if fs:
                 biggest = max(biggest, float(fs.group(1)))
             else:
-                biggest = max(biggest, 0.0)  # inherited/unknown -> treat as body
+                biggest = max(biggest, 0.0)
         return biggest
     for mode, tok in modes.items():
         for tv in sorted(text_use):
@@ -263,7 +243,6 @@ def hue_floor(css, modes, text_use):
                 else:
                     halts.append('H-HUE [' + mode + '] ' + msg + ' Cool this token (raise blue toward R=G=B) or demote it to a decoration token.')
     return halts, warns
-
 def run(path):
     html = open(path, encoding='utf-8', errors='replace').read()
     css  = ''.join(re.findall(r'<style[^>]*>(.*?)</style>', html, re.S))
@@ -303,8 +282,8 @@ def run(path):
     ifh, ifw = image_floor(html)
     halts += ifh
     warns += ifw
-    halts += opacity_floor(css, modes, text_use, surface_use)   # TOOTH 5
-    hfh, hfw = hue_floor(css, modes, text_use)      # TOOTH 6
+    halts += opacity_floor(css, modes, text_use, surface_use)
+    hfh, hfw = hue_floor(css, modes, text_use)
     halts += hfh
     warns += hfw
     name = os.path.basename(path)
