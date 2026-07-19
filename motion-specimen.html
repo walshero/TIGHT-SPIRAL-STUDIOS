@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-comfort="default">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -19,15 +19,16 @@
   --ease-reveal:cubic-bezier(.22,1,.36,1);     /* delayed disclosure */
   --t-settle:620ms; --t-reveal:520ms; --t-cross:480ms; --t-sisyphus:5200ms;
 }
-/* SOFTER — lower-contrast paper, same ink relationships */
-html[data-comfort="softer"]{
+/* SOFTER — lower-contrast paper, same ink relationships.
+   Class-based comfort (canonical studio pattern; machine-testable by the sweep). */
+body.softer{
   --paper:#f4f1ea; --paper-2:#ece8de;
   --ink:#1f2530; --ink-2:#454e5b; --ink-3:#616b79;
   --rule:#cfc9bc;
 }
 /* WARM-DARK — opaque charcoal ground; TEXT is cool near-white at full strength.
    amber/brass is GROUND + motion-fill ONLY, never color: (RP hue floor). */
-html[data-comfort="warm"]{
+body.warm{
   --paper:#12161b; --paper-2:#1a1f26;
   --ink:#f4f1e8; --ink-2:#d9d3c4; --ink-3:#bcb6a6;   /* all cool near-white, never amber */
   --brass-ink:#e6c67a;        /* used ONLY on dark ground as accent text, 8.9:1 on --paper */
@@ -38,7 +39,9 @@ html[data-comfort="warm"]{
 html,body{margin:0}
 /* OPACITY TOOTH: html + body both paint the ground opaque, full viewport.
    nothing transparent can let a white browser sheet show through. */
-html{background:var(--paper)}
+html{background:#fbfaf7}
+html.softer{background:#f4f1ea}
+html.warm{background:#12161b}
 body{
   background:var(--paper); color:var(--ink);
   font-family:var(--serif); line-height:1.5;
@@ -198,11 +201,18 @@ function toggleReveal(btn){
   btn.setAttribute('aria-expanded', open); btn.textContent = open ? 'Hide ←' : 'Show what was measured →';
 }
 
+// scroll-reset-to-top on load (studio floor)
+if('scrollRestoration' in history) history.scrollRestoration='manual';
+window.scrollTo(0,0);
+
 // Move 3 — comfort crossfade (live corner control, never a gate)
-const root=document.documentElement;
+// class-based comfort on html + body: default = no stop class (machine-testable by the sweep)
+const root=document.documentElement, bodyEl=document.body;
 document.querySelectorAll('.comfort button').forEach(b=>{
   b.addEventListener('click',()=>{
-    root.setAttribute('data-comfort', b.dataset.set);
+    const set=b.dataset.set;
+    ['softer','warm'].forEach(c=>{ root.classList.remove(c); bodyEl.classList.remove(c); });
+    if(set==='softer'||set==='warm'){ root.classList.add(set); bodyEl.classList.add(set); }
     document.querySelectorAll('.comfort button').forEach(x=>x.setAttribute('aria-pressed', x===b));
   });
 });
