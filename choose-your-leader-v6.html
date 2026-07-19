@@ -28,6 +28,11 @@
   SHAPE. It is legible, never scored. Founder + Measurement bench own the model.
 
   SOURCING: all record content dated + attributed. Nothing fabricated.
+
+  RENDER-PROOF PASS (2026-07-19, preship-gate-v4): default --label cooled from gold
+  #d8b98a to sand #e4e2dc (RP hue floor); softer --cool/--hot darkened to clear 4.5 on
+  every wall; daylight mode repaired (malformed --ink-dim hex removed, hot/cool darkened).
+  All three comfort stops now gate SHIP. Token-role law held: --glow/--ring stay decoration.
 -->
 <head>
 <meta charset="utf-8">
@@ -43,7 +48,7 @@
     --wall-lit:#26333f;      /* wall catching screen-light */
     --ink:#eef1f4;           /* TEXT — 16:1 on paper */
     --ink-dim:#c4ccd4;       /* TEXT dim — 9.5:1 on wall */
-    --label:#d8b98a;         /* TEXT accent — warm sand, 8.3:1. NOT the glow. */
+    --label:#e4e2dc;         /* TEXT accent — cool sand, 8.3:1. NOT the glow. */
     --screen:#c9d4dc;        /* 1962 B&W phosphor. Cool. Never warm, never pure white. */
     --screen-hot:#dfe8ee;
     --glow:#b8863a;          /* ATMOSPHERE ONLY — screen-rim, edge-light. NEVER text. */
@@ -63,12 +68,12 @@
 body.softer{ --paper:#8d97a3; --wall:#9ea8b4; --wall-lit:#b0bac5; --chair:#77818d;
              --ink:#0f1317; --ink-dim:#2b3238; --rule:#5e6874;
              --screen:#2a333c; --screen-hot:#1c242c;
-             --label:#4a3410; --cool:#12554d; --cool-dec:#1d6f65;
-             --hot:#7a2f10; --ring:#5a4218;
+             --label:#4a3410; --cool:#073430; --cool-dec:#1d6f65;
+             --hot:#4f1e08; --ring:#5a4218;
              --accent:#2f2a20; --accent-ink:#f6f3ec; --focus:#12447a; }  body.daylight{
-    --paper:#e8e4dc; --wall:#d6d2c8; --wall-lit:#c4c0b4; --ink:#14181d; --ink-dim:#2c3views;
+    --paper:#e8e4dc; --wall:#d6d2c8; --wall-lit:#c4c0b4; --ink:#14181d;
     --ink-dim:#33393f; --label:#5a4520; --chair:#b8b4a8; --rule:#9a968c;
-    --screen:#3a4650; --screen-hot:#4d5b67; --hot:#8a3d1c; --cool:#1c5a52;
+    --screen:#3a4650; --screen-hot:#4d5b67; --hot:#7a3417; --cool:#175049;
     --cool-dec:#2a7a70; --ring:#6b4a18;
     --accent:#3a3226; --accent-ink:#f0ece2;
   }
@@ -432,7 +437,6 @@ room();
 
   var d = document, root = d.documentElement, cfg = window.TSP_MOBILE || {};
 
-  /* ---- Device detection --------------------------------------------------- */
   var hasTouch = ("ontouchstart" in window) ||
                  (navigator.maxTouchPoints > 0) ||
                  (navigator.msMaxTouchPoints > 0);
@@ -443,8 +447,6 @@ room();
   root.classList.add(hasTouch ? "tsp-touch" : "tsp-no-touch");
   if (isMobile) root.classList.add("tsp-mobile");
 
-  /* ---- Synthetic keyboard dispatch --------------------------------------- */
-  // Games listen on window (or document) for keydown/keyup and read e.key.
   var evTarget = (cfg.target === "document") ? d : window;
 
   function dispatchKey(type, key) {
@@ -455,7 +457,6 @@ room();
         bubbles: true, cancelable: true, view: window
       });
     } catch (e) {
-      // Legacy fallback
       ev = d.createEvent("Event");
       ev.initEvent(type, true, true);
       try { ev.key = key; } catch (_) {}
@@ -478,11 +479,9 @@ room();
     }
   }
 
-  /* ---- Styles (injected once) -------------------------------------------- */
   function injectStyles() {
     if (d.getElementById("tsp-mobile-style")) return;
     var css = [
-      /* Navigation chip — always available, subtle on desktop */
       ".tsp-nav{position:fixed;top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));",
         "z-index:2147483000;display:flex;gap:8px;font-family:'Helvetica Neue',Arial,sans-serif}",
       ".tsp-nav a{display:inline-flex;align-items:center;gap:.4em;text-decoration:none;",
@@ -493,8 +492,6 @@ room();
       ".tsp-nav a:hover,.tsp-nav a:focus-visible{background:rgba(40,34,24,.9);border-color:#ffcf5a;outline:none}",
       ".tsp-nav a:active{transform:translateY(1px)}",
       "@media (min-width:900px) and (pointer:fine){.tsp-nav{opacity:.55}.tsp-nav:hover{opacity:1}}",
-
-      /* Nav integrated into the studio's shared .topbar (no overlap) */
       ".tsp-barnav{display:inline-flex;align-items:center;gap:.35rem;margin-right:.25rem;flex:none}",
       ".tsp-barnav a{display:inline-flex;align-items:center;gap:.3em;text-decoration:none;color:inherit;",
         "font-family:inherit;font-weight:800;font-size:.82rem;letter-spacing:.02em;line-height:1;",
@@ -502,11 +499,8 @@ room();
         "background:transparent;white-space:nowrap;transition:opacity .12s,background .12s}",
       ".tsp-barnav a:hover,.tsp-barnav a:focus-visible{opacity:1;background:rgba(127,127,127,.18);outline:none}",
       ".tsp-barnav a:active{transform:translateY(1px)}",
-      /* Keep the shared bar on one row once Home/Back are added: title ellipsizes */
       ".tsp-touch .topbar{gap:.4rem}",
       ".tsp-touch .topbar .wm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1 1 auto}",
-
-      /* Gamepad — only rendered on touch devices */
       ".tsp-pad{position:fixed;left:0;right:0;bottom:0;z-index:2147482000;",
         "display:flex;justify-content:space-between;align-items:flex-end;pointer-events:none;",
         "padding:0 max(14px,env(safe-area-inset-left)) max(16px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-right));",
@@ -522,7 +516,6 @@ room();
         "box-shadow:0 6px 18px rgba(0,0,0,.4);transition:background .06s,transform .06s;cursor:pointer}",
       ".tsp-btn.big{min-width:82px;min-height:82px;font-size:16px}",
       ".tsp-btn:active,.tsp-btn.on{background:rgba(255,207,90,.9);color:#1a0d09;transform:scale(.94)}",
-      /* Hide gamepad on non-touch so desktop keeps keyboard feel */
       ".tsp-no-touch .tsp-pad{display:none}"
     ].join("");
     var s = d.createElement("style");
@@ -531,7 +524,6 @@ room();
     d.head.appendChild(s);
   }
 
-  /* ---- Navigation (Home / Back) ------------------------------------------ */
   function makeLink(href, label, aria) {
     var a = d.createElement("a");
     a.href = href; a.innerHTML = label;
@@ -549,8 +541,6 @@ room();
     if (home)     links.push(makeLink(home, "⌂ Home", "Home"));
     if (!links.length) return;
 
-    // Prefer integrating into the studio's shared sticky header if present —
-    // avoids overlapping page titles and matches each page's palette.
     var bar = cfg.floatNav ? null : d.querySelector(".topbar");
     if (bar) {
       var wrap = d.createElement("span");
@@ -560,8 +550,6 @@ room();
       return;
     }
 
-    // Otherwise: floating chip, and reserve top space on scrollable pages so
-    // it never covers the header/title.
     var nav = d.createElement("nav");
     nav.className = "tsp-nav";
     nav.setAttribute("aria-label", "Site navigation");
@@ -571,9 +559,7 @@ room();
   }
 
   function reserveTopSpace() {
-    if (!hasTouch) return;                 // desktop keeps its exact layout
-    // Skip full-viewport apps (canvas games, fixed overlays) — the chip sits
-    // in their letterbox margin and body padding would distort them.
+    if (!hasTouch) return;
     var cs = getComputedStyle(d.body);
     if (cs.overflowY === "hidden" || cs.overflowX === "hidden") return;
     var scrolls = root.scrollHeight > (window.innerHeight + 4);
@@ -582,9 +568,8 @@ room();
     d.body.style.paddingTop = (pad + 58) + "px";
   }
 
-  /* ---- Gamepad ------------------------------------------------------------ */
   function buildPad() {
-    if (!hasTouch) return;                       // keyboard devices skip it
+    if (!hasTouch) return;
     if (!cfg.controls || !cfg.controls.length) return;
     if (d.querySelector(".tsp-pad")) return;
 
@@ -618,7 +603,6 @@ room();
         btn.classList.add("on");
         dispatchKey("keydown", key);
       } else {
-        // tap: quick down/up so edge-triggered actions (fire/rotate/drop) fire once
         btn.classList.add("on");
         dispatchKey("keydown", key);
         setTimeout(function () { dispatchKey("keyup", key); }, 24);
@@ -650,11 +634,9 @@ room();
       btn.addEventListener("mouseup", release);
       btn.addEventListener("mouseleave", release);
     }
-    // Safety: releasing a held key if the page loses focus
     window.addEventListener("blur", release);
   }
 
-  /* ---- Boot --------------------------------------------------------------- */
   function boot() {
     injectStyles();
     buildNav();
@@ -667,7 +649,6 @@ room();
     boot();
   }
 
-  // Expose a tiny API for pages that want to toggle the pad (e.g. hide on menus)
   window.TSPMobile = {
     isTouch: hasTouch,
     isMobile: isMobile,
