@@ -157,9 +157,21 @@
     html { scroll-behavior: auto; }
     .chev { transition: none; }
   }
+
+  /* comfort knob — corner control (studio floor 1), never a gate */
+  .comfort-knob{ position: fixed; top: 10px; right: 10px; z-index: 60;
+    font: 700 13px/1 ui-monospace, Menlo, Consolas, monospace; padding: 9px 12px;
+    border: 2px solid var(--ink); border-radius: 9px; background: var(--card); color: var(--ink);
+    cursor: pointer; min-height: 40px; }
+  .comfort-knob:focus-visible{ outline: 3px solid var(--focus); outline-offset: 2px; }
+  @media print { .comfort-knob { display: none; } }
+  /* softer: gentler, lower-glare paper. Guarded so it never lightens the dark scheme. */
+  body.softer{ --paper:#efe7d6; --line:#ccc2ad; }
+  @media (prefers-color-scheme: dark){ body.softer{ --paper:#171512; --line:#4a4438; } }
 </style>
 </head>
 <body>
+<button class="comfort-knob" id="comfortBtn" aria-label="Switch comfort mode" aria-live="polite">Comfort: Default</button>
 <div class="wrap">
 
   <header class="masthead">
@@ -558,6 +570,18 @@ Re-present the file. Tell me what changed and what you fixed that I didn't menti
 </script>
 
 <!-- TSP shared mobile nav + device adaptation -->
+<script>
+(function(){
+  var cbtn=document.getElementById("comfortBtn");
+  if(!cbtn) return;
+  var m=["Default","Softer"], i=0;
+  cbtn.addEventListener("click",function(){
+    i=(i+1)%m.length;
+    document.body.classList.toggle("softer", i===1);
+    cbtn.textContent="Comfort: "+m[i];
+  });
+})();
+</script>
 <script>window.TSP_MOBILE = { home:"index.html" };</script>
 <!-- TSP-MOBILE (inlined from tsp-mobile.js — single-file-offline law) -->
 <script>

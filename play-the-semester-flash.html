@@ -147,6 +147,10 @@ body.warm .foot{ color:#0f0e0b; }
 .sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
 @media (max-width:520px){ body{font-size:18px;} h1{font-size:1.4rem;} .wrap{padding:1rem .8rem 5rem;} }
 @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+.app-nav{ display:flex; gap:.5rem; margin:0 0 1rem; flex-wrap:wrap; }
+.app-nav button{ font:700 .8rem/1 var(--sans); letter-spacing:.02em; padding:.55rem .9rem; min-height:44px; border:2px solid var(--line2); border-radius:9px; background:var(--surface); color:var(--ink); cursor:pointer; }
+.app-nav button:disabled{ opacity:.42; cursor:default; }
+.app-nav button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 </style>
 </head>
 <body>
@@ -157,6 +161,11 @@ body.warm .foot{ color:#0f0e0b; }
 </div>
 
 <div class="wrap">
+
+  <div class="app-nav">
+    <button id="backBtn" aria-label="Go back one screen" disabled>&larr; Back</button>
+    <button id="homeBtn" aria-label="Return to the start">Home</button>
+  </div>
 
   <!-- SCREEN 0 — COMFORT GATE -->
   <section class="screen on" id="gate" aria-labelledby="gateh">
@@ -343,6 +352,259 @@ B3, none"></textarea>
     html+='</div>';
     out.innerHTML=html;
   });
+
+  /* gate-visible in-app Back + Home (studio nav floor) */
+  (function(){
+    var first='gate', hist=[first];
+    var back=document.getElementById('backBtn'), home=document.getElementById('homeBtn');
+    if(!back||!home) return;
+    var _show=show;
+    show=function(id,rec){ _show(id); if(rec!==false){ hist.push(id); } back.disabled=hist.length<=1; };
+    back.addEventListener('click',function(){ if(hist.length>1){ hist.pop(); show(hist[hist.length-1],false); } });
+    home.addEventListener('click',function(){ hist=[first]; show(first,false); back.disabled=true; });
+    back.disabled=true;
+  })();
+})();
+</script>
+
+<!-- TSP shared mobile nav + device adaptation -->
+<script>window.TSP_MOBILE = { home:"index.html", back:"play-the-semester.html" };</script>
+<!-- TSP-MOBILE (inlined from tsp-mobile.js — single-file-offline law) -->
+<script>
+/* Tight Spiral Studios — shared mobile controls + Home/Back nav.
+   Source & docs: tsp-mobile.js. Edit there, then re-inline. */
+(function () {
+  "use strict";
+
+  var d = document, root = d.documentElement, cfg = window.TSP_MOBILE || {};
+
+  /* ---- Device detection --------------------------------------------------- */
+  var hasTouch = ("ontouchstart" in window) ||
+                 (navigator.maxTouchPoints > 0) ||
+                 (navigator.msMaxTouchPoints > 0);
+  var coarse   = !!(window.matchMedia && matchMedia("(pointer: coarse)").matches);
+  var narrow   = Math.min(screen.width || 9999, screen.height || 9999) < 820;
+  var isMobile = hasTouch && (coarse || narrow);
+
+  root.classList.add(hasTouch ? "tsp-touch" : "tsp-no-touch");
+  if (isMobile) root.classList.add("tsp-mobile");
+
+  /* ---- Synthetic keyboard dispatch --------------------------------------- */
+  var evTarget = (cfg.target === "document") ? d : window;
+
+  function dispatchKey(type, key) {
+    var ev;
+    try {
+      ev = new KeyboardEvent(type, {
+        key: key, code: codeFor(key),
+        bubbles: true, cancelable: true, view: window
+      });
+    } catch (e) {
+      ev = d.createEvent("Event");
+      ev.initEvent(type, true, true);
+      try { ev.key = key; } catch (_) {}
+    }
+    evTarget.dispatchEvent(ev);
+  }
+
+  function codeFor(key) {
+    switch (key) {
+      case "ArrowLeft":  return "ArrowLeft";
+      case "ArrowRight": return "ArrowRight";
+      case "ArrowUp":    return "ArrowUp";
+      case "ArrowDown":  return "ArrowDown";
+      case " ":          return "Space";
+      case "Enter":      return "Enter";
+      case "Shift":      return "ShiftLeft";
+      default:
+        if (key && key.length === 1) return "Key" + key.toUpperCase();
+        return "";
+    }
+  }
+
+  /* ---- Styles (injected once) -------------------------------------------- */
+  function injectStyles() {
+    if (d.getElementById("tsp-mobile-style")) return;
+    var css = [
+      ".tsp-nav{position:fixed;top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));",
+        "z-index:2147483000;display:flex;gap:8px;font-family:'Helvetica Neue',Arial,sans-serif}",
+      ".tsp-nav a{display:inline-flex;align-items:center;gap:.4em;text-decoration:none;",
+        "padding:.5em .85em;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:.04em;",
+        "color:#f4f1e8;background:rgba(20,18,15,.66);border:1px solid rgba(255,207,90,.45);",
+        "-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);line-height:1;",
+        "box-shadow:0 4px 14px rgba(0,0,0,.35);transition:background .15s,border-color .15s,transform .08s}",
+      ".tsp-nav a:hover,.tsp-nav a:focus-visible{background:rgba(40,34,24,.9);border-color:#ffcf5a;outline:none}",
+      ".tsp-nav a:active{transform:translateY(1px)}",
+      "@media (min-width:900px) and (pointer:fine){.tsp-nav{opacity:.55}.tsp-nav:hover{opacity:1}}",
+      ".tsp-barnav{display:inline-flex;align-items:center;gap:.35rem;margin-right:.25rem;flex:none}",
+      ".tsp-barnav a{display:inline-flex;align-items:center;gap:.3em;text-decoration:none;color:inherit;",
+        "font-family:inherit;font-weight:800;font-size:.82rem;letter-spacing:.02em;line-height:1;",
+        "padding:.4em .7em;border-radius:999px;border:1px solid currentColor;opacity:.85;",
+        "background:transparent;white-space:nowrap;transition:opacity .12s,background .12s}",
+      ".tsp-barnav a:hover,.tsp-barnav a:focus-visible{opacity:1;background:rgba(127,127,127,.18);outline:none}",
+      ".tsp-barnav a:active{transform:translateY(1px)}",
+      ".tsp-touch .topbar{gap:.4rem}",
+      ".tsp-touch .topbar .wm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1 1 auto}",
+      ".tsp-pad{position:fixed;left:0;right:0;bottom:0;z-index:2147482000;",
+        "display:flex;justify-content:space-between;align-items:flex-end;pointer-events:none;",
+        "padding:0 max(14px,env(safe-area-inset-left)) max(16px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-right));",
+        "font-family:'Helvetica Neue',Arial,sans-serif;touch-action:none}",
+      ".tsp-cluster{display:flex;gap:12px;pointer-events:none;align-items:flex-end;flex-wrap:wrap;max-width:46vw}",
+      ".tsp-cluster.right{justify-content:flex-end}",
+      ".tsp-btn{pointer-events:auto;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;",
+        "touch-action:none;min-width:62px;min-height:62px;padding:0 14px;border-radius:16px;",
+        "display:flex;align-items:center;justify-content:center;text-align:center;",
+        "font-size:15px;font-weight:700;letter-spacing:.03em;color:#f4f1e8;",
+        "background:rgba(24,20,15,.6);border:1.5px solid rgba(255,207,90,.5);",
+        "-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);",
+        "box-shadow:0 6px 18px rgba(0,0,0,.4);transition:background .06s,transform .06s;cursor:pointer}",
+      ".tsp-btn.big{min-width:82px;min-height:82px;font-size:16px}",
+      ".tsp-btn:active,.tsp-btn.on{background:rgba(255,207,90,.9);color:#1a0d09;transform:scale(.94)}",
+      ".tsp-no-touch .tsp-pad{display:none}"
+    ].join("");
+    var s = d.createElement("style");
+    s.id = "tsp-mobile-style";
+    s.textContent = css;
+    d.head.appendChild(s);
+  }
+
+  /* ---- Navigation (Home / Back) ------------------------------------------ */
+  function makeLink(href, label, aria) {
+    var a = d.createElement("a");
+    a.href = href; a.innerHTML = label;
+    a.setAttribute("aria-label", aria);
+    return a;
+  }
+
+  function buildNav() {
+    if (cfg.nav === false) return;
+    if (d.querySelector(".tsp-nav, .tsp-barnav")) return;
+
+    var home = cfg.home === undefined ? "index.html" : cfg.home;
+    var links = [];
+    if (cfg.back) links.push(makeLink(cfg.back, "‹ Back", "Back"));
+    if (home)     links.push(makeLink(home, "⌂ Home", "Home"));
+    if (!links.length) return;
+
+    var bar = cfg.floatNav ? null : d.querySelector(".topbar");
+    if (bar) {
+      var wrap = d.createElement("span");
+      wrap.className = "tsp-barnav";
+      links.forEach(function (l) { wrap.appendChild(l); });
+      bar.insertBefore(wrap, bar.firstChild);
+      return;
+    }
+
+    var nav = d.createElement("nav");
+    nav.className = "tsp-nav";
+    nav.setAttribute("aria-label", "Site navigation");
+    links.forEach(function (l) { nav.appendChild(l); });
+    d.body.appendChild(nav);
+    reserveTopSpace();
+  }
+
+  function reserveTopSpace() {
+    if (!hasTouch) return;
+    var cs = getComputedStyle(d.body);
+    if (cs.overflowY === "hidden" || cs.overflowX === "hidden") return;
+    var scrolls = root.scrollHeight > (window.innerHeight + 4);
+    if (!scrolls) return;
+    var pad = parseFloat(cs.paddingTop) || 0;
+    d.body.style.paddingTop = (pad + 58) + "px";
+  }
+
+  /* ---- Gamepad ------------------------------------------------------------ */
+  function buildPad() {
+    if (!hasTouch) return;
+    if (!cfg.controls || !cfg.controls.length) return;
+    if (d.querySelector(".tsp-pad")) return;
+
+    var pad = d.createElement("div");
+    pad.className = "tsp-pad";
+    var left  = d.createElement("div"); left.className  = "tsp-cluster left";
+    var right = d.createElement("div"); right.className = "tsp-cluster right";
+    pad.appendChild(left); pad.appendChild(right);
+
+    cfg.controls.forEach(function (c) {
+      var btn = d.createElement("button");
+      btn.type = "button";
+      btn.className = "tsp-btn" + (c.big ? " big" : "");
+      btn.innerHTML = c.label || "";
+      btn.setAttribute("aria-label", c.aria || c.label || c.key);
+      bindButton(btn, c);
+      (c.side === "left" ? left : right).appendChild(btn);
+    });
+
+    d.body.appendChild(pad);
+  }
+
+  function bindButton(btn, c) {
+    var key = c.key, held = false;
+
+    function press(e) {
+      if (e) { e.preventDefault(); e.stopPropagation(); }
+      if (c.hold) {
+        if (held) return;
+        held = true;
+        btn.classList.add("on");
+        dispatchKey("keydown", key);
+      } else {
+        btn.classList.add("on");
+        dispatchKey("keydown", key);
+        setTimeout(function () { dispatchKey("keyup", key); }, 24);
+        setTimeout(function () { btn.classList.remove("on"); }, 90);
+      }
+    }
+    function release(e) {
+      if (e) e.preventDefault();
+      if (c.hold && held) {
+        held = false;
+        btn.classList.remove("on");
+        dispatchKey("keyup", key);
+      }
+    }
+
+    if (window.PointerEvent) {
+      btn.addEventListener("pointerdown", function (e) {
+        try { btn.setPointerCapture(e.pointerId); } catch (_) {}
+        press(e);
+      });
+      btn.addEventListener("pointerup", release);
+      btn.addEventListener("pointercancel", release);
+      btn.addEventListener("lostpointercapture", release);
+    } else {
+      btn.addEventListener("touchstart", press, { passive: false });
+      btn.addEventListener("touchend", release);
+      btn.addEventListener("touchcancel", release);
+      btn.addEventListener("mousedown", press);
+      btn.addEventListener("mouseup", release);
+      btn.addEventListener("mouseleave", release);
+    }
+    window.addEventListener("blur", release);
+  }
+
+  /* ---- Boot --------------------------------------------------------------- */
+  function boot() {
+    injectStyles();
+    buildNav();
+    buildPad();
+  }
+
+  if (d.readyState === "loading") {
+    d.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+
+  window.TSPMobile = {
+    isTouch: hasTouch,
+    isMobile: isMobile,
+    press: function (key) { dispatchKey("keydown", key); dispatchKey("keyup", key); },
+    showPad: function (v) {
+      var p = d.querySelector(".tsp-pad");
+      if (p) p.style.display = v === false ? "none" : "";
+    }
+  };
 })();
 </script>
 </body>

@@ -160,6 +160,21 @@
   .studio-nav button:focus-visible{outline:4px solid var(--focus);outline-offset:2px;}
   .studio-nav button[disabled]{opacity:.32;cursor:default;}
   @media (max-width:480px){.studio-nav button{font-size:14px;padding:0 11px;}}
+
+  /* comfort knob — corner control (studio floor 1). Cycles to a calmer, low-glow mode. */
+  .comfort-knob{position:fixed;top:12px;right:12px;z-index:50;
+    font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;font-weight:700;line-height:1;
+    padding:9px 12px;border:2px solid var(--ink);border-radius:10px;
+    background:var(--panel);color:var(--ink);cursor:pointer;min-height:44px;}
+  .comfort-knob:focus-visible{outline:4px solid var(--focus);outline-offset:2px;}
+  /* softer = calm mode: drop the neon glow and the pulse (visual-comfort tuning, palette unchanged) */
+  body.softer .eyebrow, body.softer h1, body.softer .art-caption, body.softer .rank,
+  body.softer .meter-label b, body.softer .feedback .tag, body.softer button.next,
+  body.softer button.restart, body.softer .build-cap, body.softer .brand .studio,
+  body.softer .arcade-title, body.softer .arcade-sub, body.softer .arcade-tag,
+  body.softer .arcade-start{text-shadow:none !important;box-shadow:none !important;}
+  body.softer .meter-fill{box-shadow:none !important;}
+  body.softer *{animation:none !important;}
   </style>
 </head>
 <body>
@@ -167,6 +182,7 @@
     <button id="navBack" type="button" aria-label="Back one screen">← Back</button>
     <button id="navHome" type="button" aria-label="Back to start">⌂ Home</button>
   </nav>
+  <button class="comfort-knob" id="comfortBtn" aria-label="Switch comfort mode" aria-live="polite">Comfort: Default</button>
   <main class="card" id="card" role="application" aria-label="Dad Energy, a Father's Day game"></main>
 <script>
 (function(){
@@ -369,6 +385,18 @@
     showTop();var a=document.getElementById("again");a.addEventListener("click",function(){renderIntro();});focusTop(a);animateEndMeter();}
 
   renderIntro();syncNav();
+})();
+</script>
+<script>
+(function(){
+  var cbtn=document.getElementById("comfortBtn");
+  if(!cbtn) return;
+  var m=["Default","Calm"], i=0;
+  cbtn.addEventListener("click",function(){
+    i=(i+1)%m.length;
+    document.body.classList.toggle("softer", i===1);
+    cbtn.textContent="Comfort: "+m[i];
+  });
 })();
 </script>
 </body>

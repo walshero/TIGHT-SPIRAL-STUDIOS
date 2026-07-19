@@ -192,9 +192,7 @@
     <button id="homeBtn" type="button" aria-label="Back to plan">Home</button>
   </div>
   <div class="grp" role="group" aria-label="Comfort">
-    <button id="mSoft" type="button" aria-pressed="false">Softer</button>
-    <button id="mDay"  type="button" aria-pressed="true">Default</button>
-    <button id="mNite" type="button" aria-pressed="false">Warm dark</button>
+    <button class="comfort-knob" id="comfortBtn" type="button" aria-label="Switch comfort mode" aria-live="polite">Comfort: Default</button>
   </div>
 </div>
 
@@ -298,16 +296,13 @@
   "use strict";
   var body=document.body;
 
-  var modes={mSoft:"softer",mDay:null,mNite:"night"};
-  function setMode(id){
+  var cmodes=[null,"softer","night"], clabel=["Default","Softer","Warm dark"], ci=0;
+  var comfortBtn=document.getElementById("comfortBtn");
+  comfortBtn.addEventListener("click",function(){
+    ci=(ci+1)%cmodes.length;
     body.classList.remove("softer","night");
-    if(modes[id])body.classList.add(modes[id]);
-    ["mSoft","mDay","mNite"].forEach(function(k){
-      document.getElementById(k).setAttribute("aria-pressed", k===id?"true":"false");
-    });
-  }
-  ["mSoft","mDay","mNite"].forEach(function(k){
-    document.getElementById(k).addEventListener("click",function(){setMode(k);});
+    if(cmodes[ci])body.classList.add(cmodes[ci]);
+    comfortBtn.textContent="Comfort: "+clabel[ci];
   });
 
   var tabs=[["tPlan","plan"],["tSchools","schools"],["tIdeas","ideas"]];

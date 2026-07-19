@@ -162,10 +162,32 @@ textarea:focus-visible{outline:3px solid var(--cool);outline-offset:2px}
   font-size:13.5px;color:var(--ink-2);line-height:1.7}
 .src b{color:var(--ink)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* comfort knob + page nav — studio floors (corner controls, never a gate) */
+.comfort-knob{position:fixed;top:10px;right:10px;z-index:60;
+  font:700 13px/1 var(--mono);padding:9px 12px;border:2px solid var(--ink);
+  border-radius:9px;background:var(--limestone);color:var(--ink);cursor:pointer;min-height:40px}
+.comfort-knob:focus-visible{outline:3px solid var(--cool);outline-offset:2px}
+.app-nav{position:fixed;top:10px;left:10px;z-index:60;display:flex;gap:8px}
+.app-nav button{font:700 13px/1 var(--mono);padding:9px 12px;border:2px solid var(--ink);
+  border-radius:9px;background:var(--limestone);color:var(--ink);cursor:pointer;min-height:40px}
+.app-nav button:focus-visible{outline:3px solid var(--cool);outline-offset:2px}
+/* softer: a gentler, lower-glare limestone (comfort mode — stays light) */
+body.softer{--limestone:#ece5d5;--limestone-2:#ded7c5;--rule:#c0b7a1}
+/* the opening scene — authored deco skyline, keeps the first screen >50% image */
+.cityscape{display:block;width:100%;height:auto;margin:8px 0 22px;
+  border:1px solid var(--rule);border-radius:2px;background:var(--slab)}
+
 @media (prefers-reduced-motion:reduce){*{transition:none}}
 </style>
 </head>
 <body>
+
+<nav class="app-nav" aria-label="Page navigation">
+  <button id="backBtn" type="button" aria-label="Go back">&larr; Back</button>
+  <button id="homeBtn" type="button" aria-label="Return to the studio home">Home</button>
+</nav>
+<button class="comfort-knob" id="comfortBtn" aria-label="Switch comfort mode" aria-live="polite">Comfort: Default</button>
 
 <header class="mast">
   <div class="mast-in">
@@ -180,6 +202,50 @@ textarea:focus-visible{outline:3px solid var(--cool);outline-offset:2px}
     <p class="sub">It is the one set below &mdash; a doorman one-bedroom, at a number that made
       sense in the city you are leaving. Here is what Manhattan is asking for it right now.
       Move the controls. Push them as far as you like.</p>
+
+    <svg class="cityscape" viewBox="0 0 860 240" role="img"
+         aria-label="A row of Art Deco Manhattan apartment towers at dusk. The tallest, a lit doorman building, stands in brass with a red awning; the others rise in slate and limestone behind it.">
+      <rect x="0" y="0" width="860" height="240" fill="var(--slab)"/>
+      <circle cx="726" cy="58" r="34" fill="var(--brass)" opacity="0.9"/>
+      <!-- distant slate towers -->
+      <g fill="var(--slab-2)">
+        <rect x="18" y="96" width="86" height="144"/>
+        <rect x="116" y="70" width="70" height="170"/>
+        <rect x="628" y="86" width="78" height="154"/>
+        <rect x="726" y="112" width="96" height="128"/>
+      </g>
+      <!-- cool mid-ground block -->
+      <g fill="var(--cool)" opacity="0.85">
+        <rect x="198" y="120" width="120" height="120"/>
+        <rect x="238" y="96" width="40" height="24"/>
+        <rect x="512" y="104" width="104" height="136"/>
+        <rect x="548" y="82" width="32" height="22"/>
+      </g>
+      <!-- hero doorman tower: deco setbacks, brass, lit -->
+      <g>
+        <rect x="352" y="150" width="156" height="90" fill="var(--brass)"/>
+        <rect x="368" y="104" width="124" height="46" fill="var(--brass)"/>
+        <rect x="392" y="60" width="76" height="44" fill="var(--brass)"/>
+        <rect x="418" y="34" width="24" height="26" fill="var(--brass)"/>
+        <rect x="428" y="18" width="4" height="16" fill="var(--brass)"/>
+      </g>
+      <!-- lit windows on the hero tower -->
+      <g fill="var(--paper-ink)" opacity="0.92">
+        <rect x="366" y="164" width="12" height="16"/><rect x="388" y="164" width="12" height="16"/>
+        <rect x="410" y="164" width="12" height="16"/><rect x="432" y="164" width="12" height="16"/>
+        <rect x="454" y="164" width="12" height="16"/><rect x="476" y="164" width="12" height="16"/>
+        <rect x="366" y="196" width="12" height="16"/><rect x="388" y="196" width="12" height="16"/>
+        <rect x="432" y="196" width="12" height="16"/><rect x="454" y="196" width="12" height="16"/>
+        <rect x="476" y="196" width="12" height="16"/>
+        <rect x="384" y="118" width="12" height="16"/><rect x="410" y="118" width="12" height="16"/>
+        <rect x="436" y="118" width="12" height="16"/><rect x="462" y="118" width="12" height="16"/>
+      </g>
+      <!-- the doorway + red awning -->
+      <rect x="410" y="212" width="40" height="28" fill="var(--slab)"/>
+      <path d="M400 212 h60 l-8 14 h-44 z" fill="var(--alert)"/>
+      <!-- pavement -->
+      <rect x="0" y="234" width="860" height="6" fill="var(--limestone-2)" opacity="0.35"/>
+    </svg>
 
     <div class="bar-shell" role="img" aria-labelledby="barlab">
       <div class="bar-market" id="mkt"></div>
@@ -727,8 +793,29 @@ textarea:focus-visible{outline:3px solid var(--cool);outline-offset:2px}
 })();
 </script>
 
+<!-- page nav + comfort wiring (static controls; injector nav disabled below to avoid a duplicate) -->
+<script>
+(function(){
+  var back=document.getElementById("backBtn"),
+      home=document.getElementById("homeBtn"),
+      cbtn=document.getElementById("comfortBtn");
+  if(home) home.addEventListener("click",function(){ location.href="index.html"; });
+  if(back) back.addEventListener("click",function(){
+    if(history.length>1){ history.back(); } else { location.href="index.html"; }
+  });
+  if(cbtn){
+    var m=["Default","Softer"], i=0;
+    cbtn.addEventListener("click",function(){
+      i=(i+1)%m.length;
+      document.body.classList.toggle("softer", i===1);
+      cbtn.textContent="Comfort: "+m[i];
+    });
+  }
+})();
+</script>
+
 <!-- TSP shared mobile nav + device adaptation -->
-<script>window.TSP_MOBILE = { home:"index.html" };</script>
+<script>window.TSP_MOBILE = { home:"index.html", nav:false };</script>
 <!-- TSP-MOBILE (inlined from tsp-mobile.js — single-file-offline law) -->
 <script>
 /* Tight Spiral Studios — shared mobile controls + Home/Back nav.

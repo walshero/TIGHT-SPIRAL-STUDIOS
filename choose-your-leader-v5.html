@@ -66,7 +66,7 @@
     --screen-hot:#dfe8ee;
     --glow:#b8863a;
     --glow-soft:#7a5f2c;
-    --accent:#c7b28a;
+    --accent:#d9c9a8;
     --accent-ink:#171208;
     --chair:#0d1116;
     --rule:#39434e;
@@ -575,7 +575,7 @@ function glassEngine(S_){
 }
 
 const ORDER=["title","prelude","room","blind","record","post","descent","arc"];
-$("#back").onclick=()=>{
+document.getElementById("back").onclick=()=>{
   if(S.beat==="title") return;
   if(S.beat==="prelude"){
     if(S.i>0){ S.i--; return go("descent"); }
@@ -584,11 +584,11 @@ $("#back").onclick=()=>{
   const i=ORDER.indexOf(S.beat);
   if(i>0) go(ORDER[i-1]); else go("title");
 };
-$("#home").onclick=()=>{ if(confirm("Start over? This clears your session.")){ S.blind={};S.post={};S.seen={};S.i=0; go("title"); } };
+document.getElementById("home").onclick=()=>{ if(confirm("Start over? This clears your session.")){ S.blind={};S.post={};S.seen={};S.i=0; go("title"); } };
 
 const STOPS=["","softer","daylight"];
 let stop=0;
-$("#comfort").onclick=()=>{ stop=(stop+1)%3; document.body.classList.remove("softer","daylight");
+document.getElementById("comfort").onclick=()=>{ stop=(stop+1)%3; document.body.classList.remove("softer","daylight");
   if(STOPS[stop]) document.body.classList.add(STOPS[stop]);
   $("#comfort").setAttribute("aria-pressed", stop?"true":"false");
   live("Comfort: "+(["default","softer","warm daylight"][stop])); };
@@ -599,7 +599,7 @@ function click(){ if(!SND) return; const a=acx(); if(!a) return;
   g.gain.setValueAtTime(0.0001,a.currentTime); g.gain.exponentialRampToValueAtTime(0.05,a.currentTime+0.01);
   g.gain.exponentialRampToValueAtTime(0.0001,a.currentTime+0.12); o.connect(g).connect(a.destination);
   o.start(); o.stop(a.currentTime+0.13); }
-$("#snd").onclick=()=>{ SND=!SND; $("#snd").setAttribute("aria-pressed",SND?"true":"false");
+document.getElementById("snd").onclick=()=>{ SND=!SND; $("#snd").setAttribute("aria-pressed",SND?"true":"false");
   $("#snd").setAttribute("aria-label","Room sound: "+(SND?"on":"off")); $("#snd").textContent=SND?"Sound on":"Sound";
   live("Sound "+(SND?"on":"off")); if(SND) click(); };
 

@@ -137,6 +137,10 @@ body.warm .foot{ color:#0f0e0b; } .foot a{ color:#fff; } body.warm .foot a{ colo
 .sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
 @media (max-width:520px){ body{font-size:18px;} h1{font-size:1.4rem;} .wrap{padding:1rem .8rem 5rem;} .ln{font-size:1.02rem;} }
 @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+.app-nav{ display:flex; gap:.5rem; margin:0 0 1rem; flex-wrap:wrap; }
+.app-nav button{ font:700 .8rem/1 var(--sans); letter-spacing:.02em; padding:.55rem .9rem; min-height:44px; border:2px solid var(--line2); border-radius:9px; background:var(--surface); color:var(--ink); cursor:pointer; }
+.app-nav button:disabled{ opacity:.42; cursor:default; }
+.app-nav button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 </style>
 </head>
 <body>
@@ -147,6 +151,11 @@ body.warm .foot{ color:#0f0e0b; } .foot a{ color:#fff; } body.warm .foot a{ colo
 </div>
 
 <div class="wrap">
+
+  <div class="app-nav">
+    <button id="backBtn" aria-label="Go back one screen" disabled>&larr; Back</button>
+    <button id="homeBtn" aria-label="Return to the start">Home</button>
+  </div>
 
   <!-- SCREEN 0 — COMFORT GATE -->
   <section class="screen on" id="gate" aria-labelledby="gateh">
@@ -368,6 +377,18 @@ body.warm .foot{ color:#0f0e0b; } .foot a{ color:#fff; } body.warm .foot a{ colo
     $('praise').value=''; $('onemove').value=''; $('carry').value=''; $('copiedMsg').textContent='';
     updateTally(); show('review');
   });
+
+  /* gate-visible in-app Back + Home (studio nav floor) */
+  (function(){
+    var first='gate', hist=[first];
+    var back=document.getElementById('backBtn'), home=document.getElementById('homeBtn');
+    if(!back||!home) return;
+    var _show=show;
+    show=function(id,rec){ _show(id); if(rec!==false){ hist.push(id); } back.disabled=hist.length<=1; };
+    back.addEventListener('click',function(){ if(hist.length>1){ hist.pop(); show(hist[hist.length-1],false); } });
+    home.addEventListener('click',function(){ hist=[first]; show(first,false); back.disabled=true; });
+    back.disabled=true;
+  })();
 })();
 </script>
 

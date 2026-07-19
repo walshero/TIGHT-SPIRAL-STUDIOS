@@ -18,13 +18,25 @@
     --parch:#f3e7c9; --parch-2:#ecdcb4; --parch-deep:#e2cfa0;
     --ink:#241a10; --ink-soft:#4a3a26;
     --teal:#0e4b5a; --teal-2:#0a3a46; --sea:#1c7c8c;
-    --gold:#c8961e; --gold-2:#e6b53c; --gold-deep:#9a6f12;
+    --gold:#c8961e; --gold-2:#e6b53c; --gold-deep:#7a5410;
     --oxblood:#7a2e2e; --oxblood-2:#9c4040;
     --moss:#3f6b3a;
     --line:#b79b63;
     --focus:#1c7c8c;
     --shadow:0 6px 22px rgba(36,26,16,.22);
   }
+  /* SOFTER — a gentler light parchment; lower glare, same ink relationships.
+     Two light palettes only (no dark inverse) so the contrast floor holds. */
+  body.softer{
+    --parch:#eaddbc; --parch-2:#e2d1a6; --parch-deep:#d6c393;
+    --line:#ab8f58;
+  }
+  /* CORNER COMFORT KNOB — a live corner control, never a gate. */
+  .comfort-knob{position:fixed; top:10px; right:10px; z-index:60;
+    font:700 13px/1 ui-monospace,Menlo,Consolas,monospace; padding:9px 12px;
+    border:2px solid var(--ink); border-radius:9px; background:var(--parch);
+    color:var(--ink); cursor:pointer; min-height:40px}
+  .comfort-knob:focus-visible{outline:4px solid var(--focus); outline-offset:2px}
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important;transition:none!important}}
@@ -152,6 +164,7 @@
 </head>
 <body>
 <a class="skip" href="#legend">Skip to the map legend (contents)</a>
+<button class="comfort-knob" id="comfortBtn" aria-label="Switch comfort mode" aria-live="polite">Comfort: Default</button>
 
 <!-- ============ HERO ============ -->
 <header class="hero" role="banner" aria-label="The FYS Treasure Trove title map">
@@ -692,6 +705,14 @@ See you in [MONTH].
 
 
 <!-- TSP shared mobile nav + device adaptation -->
+<script>
+/* Corner comfort knob — Default → Softer (two light palettes). Never a gate. */
+(function(){var m=["Default","Softer"],i=0,b=document.getElementById("comfortBtn");
+ b.addEventListener("click",function(){i=(i+1)%m.length;
+   document.body.classList.remove("softer");
+   if(i===1)document.body.classList.add("softer");
+   b.textContent="Comfort: "+m[i];});})();
+</script>
 <script>window.TSP_MOBILE = { home:"index.html" };</script>
 <!-- TSP-MOBILE (inlined from tsp-mobile.js — single-file-offline law) -->
 <script>

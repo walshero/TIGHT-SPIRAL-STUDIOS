@@ -135,9 +135,21 @@
   .cred .who{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:15px;margin:0 0 6px;letter-spacing:.04em}
 
   @media print{ .btn-row,.foe,.rail{display:none} body{background:#fff;padding:0} .card{box-shadow:none} }
+
+  /* comfort knob — corner control (studio floor 1), never a gate */
+  .comfort-knob{position:fixed;top:10px;right:10px;z-index:60;
+    font:700 13px/1 ui-monospace,Menlo,Consolas,monospace;padding:9px 12px;
+    border:2px solid var(--ink);border-radius:9px;background:var(--slip);color:var(--ink);
+    cursor:pointer;min-height:40px}
+  .comfort-knob:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+  @media print{ .comfort-knob{display:none} }
+  /* softer: a gentler, lower-glare paper (comfort mode — stays light) */
+  body.softer{--paper:#efe8d8;--paper-2:#e6ddc9;--slip:#fbf6ec;--rule:#b4ab93}
 </style>
 </head>
 <body>
+
+  <button class="comfort-knob" id="comfortBtn" aria-label="Switch comfort mode" aria-live="polite">Comfort: Default</button>
 
   <div class="brandbar">
     <span class="wm">TIGHT SPIRAL <b>PRODUCTIONS</b></span>
@@ -426,6 +438,17 @@
   }
 
   show("q1");
+
+  // comfort knob — Default -> Softer (two light palettes; safe default is high-contrast)
+  var cbtn=document.getElementById("comfortBtn");
+  if(cbtn){
+    var cm=["Default","Softer"], ci=0;
+    cbtn.addEventListener("click",function(){
+      ci=(ci+1)%cm.length;
+      document.body.classList.toggle("softer", ci===1);
+      cbtn.textContent="Comfort: "+cm[ci];
+    });
+  }
 })();
 </script>
 </body>

@@ -218,6 +218,15 @@
   @media (prefers-reduced-motion:reduce){
     .screen.active{animation:none} .btn{transition:none} *{scroll-behavior:auto !important}
   }
+
+  /* Authored scene band — every screen opens on a picture, not a text-wall.
+     One coherent line-art family (page + reading eye + voice), palette-tokened
+     so it inverts cleanly under the high-contrast floor. */
+  .wib-scene{position:relative;z-index:1;margin:0 0 20px}
+  .wib-scene svg{display:block;width:100%;height:auto;
+    border:1.5px solid var(--rule);border-radius:12px;background:var(--slip);
+    box-shadow:0 6px 18px var(--shadow)}
+  body.a11y-contrast .wib-scene svg{box-shadow:none}
 </style>
 </head>
 <body>
@@ -228,7 +237,7 @@
   <div class="topbar">
     <span class="brand">Tight Spiral Studios · Workshop in a Box</span>
     <div class="toolbtns">
-      <button class="textlink" id="restartLink" hidden onclick="restart()">Start over</button>
+      <button class="textlink" id="restartLink" aria-label="Return home to the start" hidden onclick="restart()">Start over</button>
       <button class="textlink" onclick="openA11y()">Display options</button>
     </div>
   </div>
@@ -238,6 +247,20 @@
   <!-- ===== 0 WELCOME ===== -->
   <section class="screen active" id="s0" aria-labelledby="s0h">
     <div class="sheet">
+      <figure class="wib-scene" aria-hidden="true">
+        <svg viewBox="0 0 600 230" role="img" aria-label="An open book beneath a reading eye, a spoken line rising from the page.">
+          <path d="M300 180 C240 150 150 150 90 172 L90 96 C150 74 240 74 300 104 Z" fill="var(--paper-2)" stroke="var(--ink)" stroke-width="3"/>
+          <path d="M300 180 C360 150 450 150 510 172 L510 96 C450 74 360 74 300 104 Z" fill="var(--slip)" stroke="var(--ink)" stroke-width="3"/>
+          <path d="M300 104 V180" stroke="var(--ink)" stroke-width="3"/>
+          <path d="M120 110 H270 M120 128 H262 M120 146 H270" stroke="var(--ink-soft)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M330 110 H480 M338 128 H480 M330 146 H470" stroke="var(--ink-soft)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M250 46 C280 22 330 22 360 46 C330 70 280 70 250 46 Z" fill="none" stroke="var(--ink)" stroke-width="3"/>
+          <circle cx="305" cy="46" r="12" fill="var(--accent)" stroke="var(--ink)" stroke-width="2"/>
+          <path d="M305 62 V92" stroke="var(--sage-deep)" stroke-width="2.5" stroke-dasharray="4 6" stroke-linecap="round"/>
+          <path d="M452 66 h78 a10 10 0 0 1 10 10 v26 a10 10 0 0 1 -10 10 h-44 l-16 16 v-16 h-18 a10 10 0 0 1 -10 -10 v-26 a10 10 0 0 1 10 -10 Z" fill="var(--gold)" stroke="var(--ink)" stroke-width="2.5"/>
+          <path d="M470 84 h44 M470 98 h30" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </figure>
       <p class="eyebrow">Workshop 4 · Flash Fiction · Peer Response</p>
       <h1 id="s0h" style="font-size:33px;margin-bottom:12px">You already know how to read.<br>This is where you learn to <em>say what you saw.</em></h1>
       <p style="color:var(--ink-soft);font-size:19px">You'll warm up on one short piece — read it, respond to it, then see where other readers landed. Then you'll do the real thing: respond to your partner's actual story and carry your response into the shared document.</p>
@@ -254,6 +277,23 @@
   <!-- ===== 1 PREPARE ===== -->
   <section class="screen" id="s1" aria-labelledby="s1h">
     <div class="sheet">
+      <figure class="wib-scene" aria-hidden="true">
+        <svg viewBox="0 0 600 230" role="img" aria-label="Four numbered cards standing in a row — the four things to know first.">
+          <g stroke="var(--ink)" stroke-width="3">
+            <rect x="40" y="58" width="115" height="120" rx="10" fill="var(--paper-2)"/>
+            <rect x="175" y="58" width="115" height="120" rx="10" fill="var(--slip)"/>
+            <rect x="310" y="58" width="115" height="120" rx="10" fill="var(--paper-2)"/>
+            <rect x="445" y="58" width="115" height="120" rx="10" fill="var(--slip)"/>
+          </g>
+          <g fill="var(--accent)" font-family="ui-sans-serif,Arial,sans-serif" font-weight="700" font-size="36" text-anchor="middle">
+            <text x="97" y="112">1</text><text x="232" y="112">2</text><text x="367" y="112">3</text><text x="502" y="112">4</text>
+          </g>
+          <g stroke="var(--ink-soft)" stroke-width="3" stroke-linecap="round">
+            <path d="M62 134 H132 M62 152 H118"/><path d="M197 134 H267 M197 152 H253"/>
+            <path d="M332 134 H402 M332 152 H388"/><path d="M467 134 H537 M467 152 H523"/>
+          </g>
+        </svg>
+      </figure>
       <p class="eyebrow">Prepare · what responding actually is</p>
       <h2 id="s1h" style="font-size:26px;margin-bottom:10px">Four things, then you're ready</h2>
       <div class="prep">
@@ -274,6 +314,19 @@
   <!-- ===== 2 READ MODEL ===== -->
   <section class="screen" id="s2" aria-labelledby="s2h">
     <div class="sheet">
+      <figure class="wib-scene" aria-hidden="true">
+        <svg viewBox="0 0 600 230" role="img" aria-label="A page of story text whose lines fall into a crosswalk marked with black spots.">
+          <rect x="120" y="22" width="360" height="186" rx="8" fill="var(--paper-2)" stroke="var(--ink)" stroke-width="3"/>
+          <path d="M150 50 H360" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/>
+          <g stroke="var(--ink-soft)" stroke-width="3" stroke-linecap="round"><path d="M150 78 H450 M150 96 H438 M150 114 H450"/></g>
+          <g fill="var(--slip)" stroke="var(--ink)" stroke-width="2.5">
+            <path d="M150 198 l16 -52 h22 l-16 52 Z"/><path d="M196 198 l16 -52 h22 l-16 52 Z"/>
+            <path d="M242 198 l16 -52 h22 l-16 52 Z"/><path d="M288 198 l16 -52 h22 l-16 52 Z"/>
+            <path d="M334 198 l16 -52 h22 l-16 52 Z"/><path d="M380 198 l16 -52 h22 l-16 52 Z"/>
+          </g>
+          <g fill="var(--ink)"><circle cx="205" cy="172" r="7"/><circle cx="272" cy="184" r="9"/><circle cx="332" cy="164" r="6"/><circle cx="394" cy="186" r="8"/></g>
+        </svg>
+      </figure>
       <p class="eyebrow">Read once for the feel. Then read again with a pen-hand.</p>
       <h2 id="s2h" class="story title">Black Spots on the Crosswalk</h2>
       <div class="story">
@@ -298,6 +351,22 @@
   <!-- ===== 3 RESPOND COLD ===== -->
   <section class="screen" id="s3" aria-labelledby="s3h">
     <div class="sheet">
+      <figure class="wib-scene" aria-hidden="true">
+        <svg viewBox="0 0 600 230" role="img" aria-label="A page with one line highlighted and a note beginning in the margin, a pen resting nearby.">
+          <rect x="70" y="26" width="330" height="178" rx="8" fill="var(--paper-2)" stroke="var(--ink)" stroke-width="3"/>
+          <g stroke="var(--ink-soft)" stroke-width="3" stroke-linecap="round"><path d="M100 58 H368 M100 82 H356 M100 132 H368 M100 156 H340 M100 180 H364"/></g>
+          <rect x="92" y="99" width="284" height="18" rx="4" fill="var(--gold)" opacity=".55"/>
+          <path d="M100 108 H368" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M416 99 v18" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/>
+          <path d="M432 101 H548 M432 115 H520" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+          <g stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round">
+            <rect x="452" y="150" width="120" height="26" rx="4" fill="var(--sage)"/>
+            <path d="M452 150 L410 163 L452 176 Z" fill="var(--paper-2)"/>
+            <path d="M430 157 L410 163 L430 169 Z" fill="var(--ink)"/>
+            <rect x="560" y="150" width="12" height="26" rx="4" fill="var(--accent)"/>
+          </g>
+        </svg>
+      </figure>
       <p class="eyebrow">Respond first. We'll show you the rubric after, not before.</p>
       <h2 id="s3h" style="font-size:26px;margin-bottom:6px">What did you notice?</h2>
       <p style="color:var(--ink-soft)">Write to the writer. Point to an actual moment. You're not fixing the piece — you're telling them what landed and what you wondered.</p>
@@ -321,6 +390,23 @@
   <!-- ===== 4 CONVERGE ===== -->
   <section class="screen" id="s4" aria-labelledby="s4h">
     <div class="sheet">
+      <figure class="wib-scene" aria-hidden="true">
+        <svg viewBox="0 0 600 230" role="img" aria-label="Three readers' notes all pointing at the same line of the story.">
+          <rect x="220" y="150" width="160" height="20" rx="5" fill="var(--gold)" stroke="var(--ink)" stroke-width="2.5"/>
+          <path d="M232 184 H368" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+          <g stroke="var(--ink)" stroke-width="2.5">
+            <rect x="40" y="30" width="130" height="70" rx="8" fill="var(--slip)"/>
+            <rect x="235" y="24" width="130" height="70" rx="8" fill="var(--paper-2)"/>
+            <rect x="430" y="30" width="130" height="70" rx="8" fill="var(--slip)"/>
+          </g>
+          <g stroke="var(--ink-soft)" stroke-width="3" stroke-linecap="round">
+            <path d="M58 54 H150 M58 72 H132"/><path d="M253 48 H345 M253 66 H327"/><path d="M448 54 H540 M448 72 H522"/>
+          </g>
+          <g stroke="var(--accent)" stroke-width="3" fill="none" stroke-linecap="round">
+            <path d="M110 100 L280 150"/><path d="M300 94 V150"/><path d="M490 100 L320 150"/>
+          </g>
+        </svg>
+      </figure>
       <p class="eyebrow">Now — here's where readers converged</p>
       <h2 id="s4h" style="font-size:26px;margin-bottom:6px">You're not being corrected. You're being joined.</h2>
       <p style="color:var(--ink-soft)">Three readings of the same piece. Notice what they share — and where your own read already overlaps. The thing you felt has company, and it has names.</p>
@@ -337,6 +423,22 @@
   <!-- ===== 5 RUBRIC ===== -->
   <section class="screen" id="s5" aria-labelledby="s5h">
     <div class="sheet">
+      <figure class="wib-scene" aria-hidden="true">
+        <svg viewBox="0 0 600 230" role="img" aria-label="Five rising bars from a low mark to a high one — the scale your comments are read on.">
+          <path d="M60 200 H560" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+          <g stroke="var(--ink)" stroke-width="2.5">
+            <rect x="80" y="150" width="70" height="50" fill="var(--paper-2)"/>
+            <rect x="176" y="120" width="70" height="80" fill="var(--slip)"/>
+            <rect x="272" y="92" width="70" height="108" fill="var(--paper-2)"/>
+            <rect x="368" y="66" width="70" height="134" fill="var(--sage)"/>
+            <rect x="464" y="40" width="70" height="160" fill="var(--accent)"/>
+          </g>
+          <g font-family="ui-sans-serif,Arial,sans-serif" font-weight="700" font-size="26" text-anchor="middle">
+            <text x="115" y="183" fill="var(--ink)">1</text><text x="211" y="183" fill="var(--ink)">2</text>
+            <text x="307" y="183" fill="var(--ink)">3</text><text x="403" y="152" fill="var(--slip)">4</text><text x="499" y="152" fill="var(--slip)">5</text>
+          </g>
+        </svg>
+      </figure>
       <p class="eyebrow">The language your comments are read on</p>
       <h2 id="s5h" style="font-size:26px;margin-bottom:6px">What separates a 5 from a 2</h2>
       <p style="color:var(--ink-soft)">Not about being nice or harsh — about being <em>specific</em> and <em>useful</em> to the writer.</p>
@@ -359,6 +461,19 @@
   <!-- ===== 6 SHARPEN ===== -->
   <section class="screen" id="s6" aria-labelledby="s6h">
     <div class="sheet">
+      <figure class="wib-scene" aria-hidden="true">
+        <svg viewBox="0 0 600 230" role="img" aria-label="A sharpened pencil pointing at one line of a page, making it land harder.">
+          <rect x="70" y="40" width="300" height="150" rx="8" fill="var(--paper-2)" stroke="var(--ink)" stroke-width="3"/>
+          <g stroke="var(--ink-soft)" stroke-width="3" stroke-linecap="round"><path d="M100 72 H340 M100 122 H320 M100 150 H340"/></g>
+          <path d="M100 98 H300" stroke="var(--accent)" stroke-width="6" stroke-linecap="round"/>
+          <g stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round">
+            <rect x="410" y="84" width="150" height="30" rx="4" fill="var(--gold)"/>
+            <path d="M410 84 L360 99 L410 114 Z" fill="var(--paper-2)"/>
+            <path d="M386 92 L360 99 L386 106 Z" fill="var(--ink)"/>
+            <rect x="548" y="84" width="12" height="30" rx="4" fill="var(--accent)"/>
+          </g>
+        </svg>
+      </figure>
       <p class="eyebrow">One pass. Make it land harder.</p>
       <h2 id="s6h" style="font-size:26px;margin-bottom:6px">Sharpen it</h2>
       <p style="color:var(--ink-soft)">Take your warm-up response and do one thing: anchor it to a specific line, and end with a real question. That single move usually lifts a comment a whole level.</p>
@@ -379,6 +494,15 @@
   <!-- ===== 7 LOAD PARTNER PIECE ===== -->
   <section class="screen" id="s7" aria-labelledby="s7h">
     <div class="sheet">
+      <figure class="wib-scene" aria-hidden="true">
+        <svg viewBox="0 0 600 230" role="img" aria-label="A page dropping into an open tray — your partner's piece, loaded in.">
+          <path d="M120 150 H480 L500 200 H100 Z" fill="var(--paper-2)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M120 150 L150 168 H450 L480 150" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+          <rect x="220" y="30" width="160" height="120" rx="8" fill="var(--slip)" stroke="var(--ink)" stroke-width="3"/>
+          <g stroke="var(--ink-soft)" stroke-width="3" stroke-linecap="round"><path d="M244 60 H356 M244 82 H344 M244 104 H356 M244 126 H330"/></g>
+          <g stroke="var(--sage-deep)" stroke-width="3" fill="none" stroke-linecap="round"><path d="M300 8 V26"/><path d="M270 12 L300 30 L330 12"/></g>
+        </svg>
+      </figure>
       <p class="eyebrow">The real round · your partner's piece</p>
       <h2 id="s7h" style="font-size:26px;margin-bottom:6px">Bring in the story you're responding to</h2>
       <p style="color:var(--ink-soft)">Paste your partner's piece below, or load it from a text file. It stays on this page — nothing is uploaded.</p>
@@ -401,6 +525,16 @@
   <!-- ===== 8 RESPOND TO PARTNER ===== -->
   <section class="screen" id="s8" aria-labelledby="s8h">
     <div class="sheet">
+      <figure class="wib-scene" aria-hidden="true">
+        <svg viewBox="0 0 600 230" role="img" aria-label="A page with five numbered margin comments and an end-note block beside it.">
+          <rect x="70" y="20" width="300" height="150" rx="8" fill="var(--paper-2)" stroke="var(--ink)" stroke-width="3"/>
+          <g stroke="var(--ink-soft)" stroke-width="3" stroke-linecap="round"><path d="M118 44 H346 M118 68 H334 M118 92 H346 M118 116 H322 M118 140 H346"/></g>
+          <g fill="var(--accent)"><circle cx="92" cy="44" r="9"/><circle cx="92" cy="68" r="9"/><circle cx="92" cy="92" r="9"/><circle cx="92" cy="116" r="9"/><circle cx="92" cy="140" r="9"/></g>
+          <rect x="400" y="40" width="150" height="160" rx="8" fill="var(--slip)" stroke="var(--ink)" stroke-width="3"/>
+          <path d="M420 66 H530 M420 86 H514 M420 106 H530 M420 126 H500 M420 146 H524 M420 166 H510" stroke="var(--ink-soft)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M400 44 L376 32" stroke="var(--sage-deep)" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </figure>
       <p class="eyebrow">The real round · your response</p>
       <h2 id="s8h" style="font-size:25px;margin-bottom:6px">Respond to your partner</h2>
       <details style="margin:6px 0 14px">
@@ -435,6 +569,15 @@
   <!-- ===== 9 CARRY OUT ===== -->
   <section class="screen" id="s9" aria-labelledby="s9h">
     <div class="sheet">
+      <figure class="wib-scene" aria-hidden="true">
+        <svg viewBox="0 0 600 230" role="img" aria-label="A finished response folded into an envelope, carried out to the shared document.">
+          <rect x="215" y="30" width="170" height="110" rx="6" fill="var(--slip)" stroke="var(--ink)" stroke-width="3"/>
+          <g stroke="var(--ink-soft)" stroke-width="3" stroke-linecap="round"><path d="M238 58 H362 M238 80 H350 M238 102 H362"/></g>
+          <rect x="150" y="108" width="300" height="92" rx="8" fill="var(--paper-2)" stroke="var(--ink)" stroke-width="3"/>
+          <path d="M150 116 L300 172 L450 116" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+          <g stroke="var(--accent)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M470 150 H562"/><path d="M538 130 L562 150 L538 170"/></g>
+        </svg>
+      </figure>
       <p class="eyebrow">Carry it into the shared document</p>
       <h2 id="s9h" style="font-size:27px;margin-bottom:8px">You practiced the move. You did it for real. Now deliver it.</h2>
       <p style="color:var(--ink-soft)">Here's your complete response. Copy it or download it, then open your partner's shared document and put your margin comments and end note <em>there</em> — that's where the work is saved and where your instructor reads it.</p>
@@ -453,6 +596,18 @@
   <!-- ===== 10 ALIGNMENT ===== -->
   <section class="screen" id="s10" aria-labelledby="s10h">
     <div class="sheet">
+      <figure class="wib-scene" aria-hidden="true">
+        <svg viewBox="0 0 600 230" role="img" aria-label="Four stacked rungs — the assignment building up to the program outcome.">
+          <g stroke="var(--ink)" stroke-width="2.5">
+            <rect x="120" y="168" width="360" height="40" rx="6" fill="var(--paper-2)"/>
+            <rect x="150" y="120" width="300" height="40" rx="6" fill="var(--slip)"/>
+            <rect x="180" y="72" width="240" height="40" rx="6" fill="var(--sage)"/>
+            <rect x="210" y="24" width="180" height="40" rx="6" fill="var(--accent)"/>
+          </g>
+          <g stroke="var(--ink-soft)" stroke-width="3" stroke-linecap="round"><path d="M140 190 H360"/><path d="M170 142 H330"/></g>
+          <g stroke="var(--gold)" stroke-width="3" fill="none" stroke-linecap="round"><path d="M300 168 V160"/><path d="M300 120 V112"/><path d="M300 72 V64"/></g>
+        </svg>
+      </figure>
       <p class="eyebrow">Workshop 4 · why responding is the whole point</p>
       <h2 id="s10h" style="font-size:25px;margin-bottom:8px">The assignment, and what it's evidence for</h2>
       <p style="color:var(--ink-soft);margin-bottom:4px">In your partner's shared document:</p>

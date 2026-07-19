@@ -13,7 +13,7 @@
   TSP-META at end of file.
 -->
 <style>
-:root{--paper:#faf5ec;--ink:#211d18;--card:#fffdf7;--edge:#d8cfbe;--gold:#a8791f;
+:root{--paper:#faf5ec;--ink:#211d18;--card:#fffdf7;--edge:#d8cfbe;--gold:#8a6012;
 --green:#2e6b46;--red:#8a4030;--blue:#1f5fa8;--dim:#5a5348;}
 body.softer{--paper:#f3ecdd;--ink:#2c2721;--card:#faf4e6;--edge:#d3c8b2;}
 body.warm{--paper:#26221c;--ink:#ecc57a;--card:#2f2a22;--edge:#4a4234;--dim:#c9a967;
@@ -60,6 +60,8 @@ min-height:40px;font-style:italic;margin-bottom:6px}
 .chatbtns{display:flex;gap:8px;flex-wrap:wrap}
 .chatbtns button{flex:1;min-width:120px;font-size:.85rem;min-height:44px}
 .screen{display:none}.screen.on{display:block}
+.hero{width:100%;height:auto;display:block;border:2px solid var(--edge);border-radius:14px;margin:0 0 12px}
+.endhero{width:100%;max-width:320px;height:auto;display:block;margin:0 auto 8px}
 .grade{background:var(--card);border:2px solid var(--edge);border-radius:12px;padding:12px 14px;margin:10px 0}
 .super{font-weight:700;color:var(--gold)}
 .winner{font-size:1.5rem;font-weight:700;text-align:center;margin:14px 0;color:var(--green)}
@@ -75,6 +77,14 @@ details .inner{padding:0 14px 12px;font-size:.9rem}
 </style>
 </head>
 <body>
+
+<!-- Static Home/Back nav (styled by the inlined tsp-mobile .tsp-nav rules; its
+     buildNav() bails when a .tsp-nav already exists, so this is not duplicated). -->
+<nav class="tsp-nav" aria-label="Site navigation">
+  <a href="arcade.html" aria-label="Back">&lsaquo; Back</a>
+  <a href="index.html" aria-label="Home">&#8962; Home</a>
+</nav>
+
 <div class="wrap">
 
 <section class="screen on" id="draft" aria-label="Auction draft room">
@@ -83,6 +93,37 @@ details .inner{padding:0 14px 12px;font-size:.9rem}
     <button class="ghost" id="cstop">Comfort</button>
     <span><b>Evan</b> <span class="money" id="eBank">$100</span></span>
   </div>
+
+  <svg class="hero" viewBox="0 0 400 190" role="img" aria-label="Auction draft room: a gavel swings over a lectern showing a dollar figure, Matt's warriors bench on the left and Evan's on the right, with a tag reading true value over price.">
+    <rect x="0" y="0" width="400" height="190" fill="var(--paper)"/>
+    <line x1="0" y1="150" x2="400" y2="150" stroke="var(--edge)" stroke-width="2"/>
+    <g fill="var(--green)">
+      <rect x="24" y="96" width="20" height="26" rx="4"/><circle cx="34" cy="86" r="10"/>
+      <rect x="52" y="104" width="16" height="20" rx="4"/><circle cx="60" cy="97" r="8"/>
+    </g>
+    <text x="46" y="143" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">MATT</text>
+    <g fill="var(--blue)">
+      <rect x="356" y="96" width="20" height="26" rx="4"/><circle cx="366" cy="86" r="10"/>
+      <rect x="332" y="104" width="16" height="20" rx="4"/><circle cx="340" cy="97" r="8"/>
+    </g>
+    <text x="354" y="143" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">EVAN</text>
+    <path d="M150 150 L250 150 L238 96 L162 96 Z" fill="var(--card)" stroke="var(--ink)" stroke-width="3"/>
+    <rect x="171" y="104" width="58" height="34" rx="4" fill="var(--ink)"/>
+    <text x="200" y="131" text-anchor="middle" font-size="22" font-weight="800" fill="var(--gold)">$</text>
+    <rect x="186" y="82" width="40" height="10" rx="3" fill="var(--gold)"/>
+    <g stroke="var(--gold)" stroke-width="3" fill="none" stroke-linecap="round">
+      <path d="M96 40 Q120 26 150 34"/><path d="M104 54 Q128 42 156 50"/>
+    </g>
+    <g transform="rotate(-24 210 60)">
+      <rect x="168" y="52" width="52" height="22" rx="6" fill="var(--red)" stroke="var(--ink)" stroke-width="2"/>
+      <rect x="214" y="58" width="46" height="9" rx="4" fill="var(--ink)"/>
+    </g>
+    <g transform="translate(276 26)">
+      <rect x="0" y="0" width="92" height="36" rx="8" fill="var(--card)" stroke="var(--gold)" stroke-width="2"/>
+      <text x="46" y="16" text-anchor="middle" font-size="9" letter-spacing="1" fill="var(--dim)">TRUE VALUE</text>
+      <text x="46" y="30" text-anchor="middle" font-size="13" font-weight="800" fill="var(--green)">&gt; PRICE</text>
+    </g>
+  </svg>
 
   <div class="turnline" id="turnLine">Matt nominates first. Tap a player below to put them on the block.</div>
 
@@ -121,6 +162,25 @@ details .inner{padding:0 14px 12px;font-size:.9rem}
 <section class="screen" id="end" aria-label="Draft grades">
   <div class="burst" id="burst" aria-hidden="true"></div>
   <p class="winner" id="winLine"></p>
+  <svg class="endhero" viewBox="0 0 240 160" role="img" aria-label="A trophy flanked by two ledger columns comparing true value against price paid.">
+    <line x1="0" y1="138" x2="240" y2="138" stroke="var(--edge)" stroke-width="2"/>
+    <g fill="none" stroke="var(--gold)" stroke-width="6" stroke-linecap="round">
+      <path d="M96 40 Q70 40 70 62 Q70 84 100 88"/>
+      <path d="M144 40 Q170 40 170 62 Q170 84 140 88"/>
+    </g>
+    <path d="M96 34 L144 34 L140 78 Q120 96 100 78 Z" fill="var(--gold)" stroke="var(--ink)" stroke-width="3"/>
+    <rect x="112" y="94" width="16" height="18" fill="var(--gold)"/>
+    <rect x="96" y="112" width="48" height="12" rx="3" fill="var(--ink)"/>
+    <text x="120" y="58" text-anchor="middle" font-size="20" font-weight="800" fill="var(--ink)">$</text>
+    <g>
+      <rect x="14" y="86" width="30" height="52" fill="var(--green)"/>
+      <text x="29" y="78" text-anchor="middle" font-size="9" fill="var(--dim)">VALUE</text>
+    </g>
+    <g>
+      <rect x="196" y="104" width="30" height="34" fill="var(--red)"/>
+      <text x="211" y="96" text-anchor="middle" font-size="9" fill="var(--dim)">PAID</text>
+    </g>
+  </svg>
   <h1 tabindex="-1">Draft Grades</h1>
   <div class="grade" id="grades"></div>
   <button class="primary" id="replay" style="width:100%">Run it back</button>
@@ -164,9 +224,9 @@ var POOL=[
 ];
 var SLOTS=["QB","RB","RB","WR","WR","FLEX"]; // 6 per side, 12 nominations total
 var TALK={
- talk1:["Nice pick. Genuinely. This hurts.","Fine. FINE.","Okay, that one stung a little."],
- talk2:["Bold. The kind of bold they write about. Briefly.","A gutsy call. Guts are refundable, right?","Wow. Committing to the bit."],
- talk3:["Enjoy that contract in week eight.","Enjoy your kicker money on one guy.","Enjoy explaining that one at Thanksgiving."]
+ "talk1":["Nice pick. Genuinely. This hurts.","Fine. FINE.","Okay, that one stung a little."],
+ "talk2":["Bold. The kind of bold they write about. Briefly.","A gutsy call. Guts are refundable, right?","Wow. Committing to the bit."],
+ "talk3":["Enjoy that contract in week eight.","Enjoy your kicker money on one guy.","Enjoy explaining that one at Thanksgiving."]
 };
 var st;
 function fresh(){ st={bank:{M:100,E:100},ros:{M:[],E:[]},nomTurn:"M",phase:"nominate",
@@ -322,7 +382,7 @@ TSP-META
 -->
 
 <!-- TSP shared mobile nav + device adaptation -->
-<script>window.TSP_MOBILE = { home:"index.html" };</script>
+<script>window.TSP_MOBILE = { home:"index.html", back:"arcade.html" };</script>
 <!-- TSP-MOBILE (inlined from tsp-mobile.js — single-file-offline law) -->
 <script>
 /* Tight Spiral Studios — shared mobile controls + Home/Back nav.

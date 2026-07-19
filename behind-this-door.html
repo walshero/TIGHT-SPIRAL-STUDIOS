@@ -96,6 +96,10 @@ details .inner{padding:0 16px 14px;font-size:.95rem;}
 .foot{font-size:.82rem;color:var(--dim);margin-top:30px;line-height:1.5;}
 .topbar{display:flex;justify-content:flex-end;margin-bottom:8px;}
 .topbar button{width:auto;min-height:44px;font-size:.85rem;padding:8px 14px;}
+.app-nav{display:flex;gap:10px;margin-bottom:10px;}
+.app-nav button{width:auto;min-height:44px;font-size:.9rem;padding:8px 14px;}
+.app-nav button:disabled{opacity:.45;cursor:default;}
+.ring-hero{display:block;width:100%;max-width:300px;height:auto;margin:8px auto 16px;}
 /* door-open flourish */
 .leaf{transition:transform .8s cubic-bezier(.3,.7,.3,1);}
 .glowlight{opacity:0;transition:opacity .9s ease .2s;}
@@ -115,12 +119,34 @@ svg.open .mote{animation:rise 1.6s ease-out .3s forwards;}
 <body>
 <div class="wrap">
 
+  <!-- IN-APP NAV — persists across screens; wired to the screen system (back = previous screen, home = title) -->
+  <div class="app-nav">
+    <button id="backBtn" aria-label="Go back one screen" disabled>&larr; Back</button>
+    <button id="homeBtn" aria-label="Return to the start">Home</button>
+  </div>
+
   <!-- TITLE (screen one — the door itself; comfort is a corner knob, never a wall) -->
   <section class="screen on" id="title" aria-label="Title">
     <div class="topbar"><button class="ghost" id="cstop1">Comfort</button></div>
     <p class="eyebrow">Tight Spiral Productions</p>
     <h1 tabindex="-1">Behind This Door</h1>
-    <div class="doorbox" id="titleDoor" aria-hidden="true"></div>
+    <div class="doorbox" id="titleDoor" aria-hidden="true"><svg viewBox="0 0 260 360" role="img" aria-label="A tall paneled door with a brass knocker beneath a glowing fanlight — the doorway of the game.">
+      <defs><linearGradient id="fanGlow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--glow)"/><stop offset="1" stop-color="var(--brass)"/></linearGradient></defs>
+      <rect x="0" y="0" width="260" height="360" fill="var(--card)"/>
+      <path d="M56 322 L56 132 A74 74 0 0 1 204 132 L204 322 Z" fill="var(--edge)"/>
+      <path d="M70 130 A60 60 0 0 1 190 130 Z" fill="url(#fanGlow)"/>
+      <g stroke="var(--card)" stroke-width="3">
+        <line x1="130" y1="130" x2="130" y2="70"/><line x1="130" y1="130" x2="88" y2="88"/>
+        <line x1="130" y1="130" x2="172" y2="88"/><line x1="130" y1="130" x2="74" y2="130"/><line x1="130" y1="130" x2="186" y2="130"/>
+      </g>
+      <rect x="74" y="134" width="112" height="188" fill="var(--brass)"/>
+      <rect x="74" y="134" width="112" height="188" fill="none" stroke="var(--ink)" stroke-width="4"/>
+      <rect x="86" y="146" width="88" height="70" rx="3" fill="none" stroke="var(--ink)" stroke-width="3"/>
+      <rect x="86" y="228" width="88" height="82" rx="3" fill="none" stroke="var(--ink)" stroke-width="3"/>
+      <circle cx="130" cy="196" r="9" fill="none" stroke="var(--ink)" stroke-width="4"/>
+      <rect x="48" y="322" width="164" height="14" rx="2" fill="var(--edge)"/>
+      <rect x="58" y="336" width="144" height="12" rx="2" fill="var(--dim)"/>
+    </svg></div>
     <p>Doors from the real world, dealt in decks by interest. Read each one — color, hardware, street — and guess who is behind it.</p>
     <p><b>Door alone: two keys. With a clue: one.</b></p>
     <div class="stack">
@@ -161,6 +187,23 @@ svg.open .mote{animation:rise 1.6s ease-out .3s forwards;}
     <div class="topbar"><button class="ghost" id="cstop3">Comfort</button></div>
     <p class="eyebrow">The keyring</p>
     <h1 tabindex="-1"><span id="finalKeys"></span> of <span id="maxKeys">20</span> keys</h1>
+    <svg class="ring-hero" viewBox="0 0 300 150" role="img" aria-label="A brass ring hung with keys — the keys you gathered by reading doors.">
+      <circle cx="150" cy="40" r="26" fill="none" stroke="var(--brass)" stroke-width="8"/>
+      <g stroke="var(--ink)" stroke-width="3" fill="var(--card)">
+        <g transform="rotate(-24 150 60)">
+          <circle cx="150" cy="74" r="11"/><line x1="150" y1="85" x2="150" y2="132" stroke-linecap="round"/>
+          <line x1="150" y1="120" x2="162" y2="120"/><line x1="150" y1="130" x2="160" y2="130"/>
+        </g>
+        <g>
+          <circle cx="150" cy="78" r="12"/><line x1="150" y1="90" x2="150" y2="140" stroke-linecap="round"/>
+          <line x1="150" y1="126" x2="164" y2="126"/><line x1="150" y1="137" x2="161" y2="137"/>
+        </g>
+        <g transform="rotate(24 150 60)">
+          <circle cx="150" cy="74" r="11"/><line x1="150" y1="85" x2="150" y2="132" stroke-linecap="round"/>
+          <line x1="150" y1="120" x2="162" y2="120"/><line x1="150" y1="130" x2="160" y2="130"/>
+        </g>
+      </g>
+    </svg>
     <p id="finalLine"></p>
     <div class="keyring" id="keyring"></div>
     <div class="stack">
@@ -474,11 +517,19 @@ var IRELAND=[ DOORS[0], DOORS[1],
 var DECK=DOORS, DECKNAME="World Doors";
 var state={i:0,keys:0,clueUsed:false,misses:0,results:[]};
 function $(id){return document.getElementById(id);}
-function show(id){
+/* in-app screen history: back = previous screen, home = the title */
+var navHist=['title'];
+function show(id, record){
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');});
   var el=$(id); el.classList.add('on'); window.scrollTo(0,0);
   var h=el.querySelector('h1,h2'); if(h){h.setAttribute('tabindex','-1');h.focus({preventScroll:true});}
+  if(record!==false && navHist[navHist.length-1]!==id){ navHist.push(id); }
+  $('backBtn').disabled = navHist.length<=1;
 }
+$('backBtn').addEventListener('click',function(){
+  if(navHist.length>1){ navHist.pop(); show(navHist[navHist.length-1], false); }
+});
+$('homeBtn').addEventListener('click',function(){ navHist=['title']; show('title', false); });
 /* comfort */
 var stops=['default','softer','warm'], curStop='default';
 function applyStop(st){ document.body.classList.remove('softer','warm');

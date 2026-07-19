@@ -125,10 +125,7 @@ p b{color:var(--ink); font-weight:600}
 </nav>
 
 <nav class="corner comfort" aria-label="Comfort">
-  <span>Comfort</span>
-  <button data-set="softer" aria-pressed="false">Softer</button>
-  <button data-set="default" aria-pressed="true">Default</button>
-  <button data-set="warm" aria-pressed="false">Warm-dark</button>
+  <button class="comfort-knob" id="comfortBtn" aria-label="Switch comfort mode" aria-live="polite">Comfort: Default</button>
 </nav>
 
 <!-- SCREEN 1 · the signature, settling in -->
@@ -206,16 +203,20 @@ if('scrollRestoration' in history) history.scrollRestoration='manual';
 window.scrollTo(0,0);
 
 // Move 3 — comfort crossfade (live corner control, never a gate)
-// class-based comfort on html + body: default = no stop class (machine-testable by the sweep)
-const root=document.documentElement, bodyEl=document.body;
-document.querySelectorAll('.comfort button').forEach(b=>{
-  b.addEventListener('click',()=>{
-    const set=b.dataset.set;
-    ['softer','warm'].forEach(c=>{ root.classList.remove(c); bodyEl.classList.remove(c); });
-    if(set==='softer'||set==='warm'){ root.classList.add(set); bodyEl.classList.add(set); }
-    document.querySelectorAll('.comfort button').forEach(x=>x.setAttribute('aria-pressed', x===b));
+// single cycling knob: Default → Softer → Warm-dark. class-based on html + body
+// so the opacity tooth holds (machine-testable by the sweep).
+(function(){
+  var modes=['Default','Softer','Warm-dark'], i=0;
+  var root=document.documentElement, bodyEl=document.body;
+  var b=document.getElementById('comfortBtn');
+  b.addEventListener('click',function(){
+    i=(i+1)%modes.length;
+    ['softer','warm'].forEach(function(c){ root.classList.remove(c); bodyEl.classList.remove(c); });
+    if(i===1){ root.classList.add('softer'); bodyEl.classList.add('softer'); }
+    else if(i===2){ root.classList.add('warm'); bodyEl.classList.add('warm'); }
+    b.textContent='Comfort: '+modes[i];
   });
-});
+})();
 </script>
 </body>
 </html>

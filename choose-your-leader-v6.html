@@ -48,7 +48,7 @@
     --screen-hot:#dfe8ee;
     --glow:#b8863a;          /* ATMOSPHERE ONLY — screen-rim, edge-light. NEVER text. */
     --glow-soft:#7a5f2c;
-    --accent:#c7b28a;        /* button field; dark ink rides on it */
+    --accent:#d9c9a8;        /* button field; dark ink rides on it (light enough to be a true surface) */
     --accent-ink:#171208;
     --chair:#0d1116;
     --rule:#39434e;
@@ -60,13 +60,13 @@
     --tap:44px;
   }
   /* COMFORT STOPS — live corner control, never an opening wall. */
-body.softer{ --paper:#8d97a3; --wall:#9ea8b4; --wall-lit:#b0bac5; --chair:#77818d;
+body.softer{ --paper:#bcc3cb; --wall:#c8ced5; --wall-lit:#d4d9df; --chair:#aeb5bd;
              --ink:#0f1317; --ink-dim:#2b3238; --rule:#5e6874;
              --screen:#2a333c; --screen-hot:#1c242c;
              --label:#4a3410; --cool:#12554d; --cool-dec:#1d6f65;
              --hot:#7a2f10; --ring:#5a4218;
              --accent:#2f2a20; --accent-ink:#f6f3ec; --focus:#12447a; }  body.daylight{
-    --paper:#e8e4dc; --wall:#d6d2c8; --wall-lit:#c4c0b4; --ink:#14181d; --ink-dim:#2c3views;
+    --paper:#e8e4dc; --wall:#d6d2c8; --wall-lit:#c4c0b4; --ink:#14181d;
     --ink-dim:#33393f; --label:#5a4520; --chair:#b8b4a8; --rule:#9a968c;
     --screen:#3a4650; --screen-hot:#4d5b67; --hot:#8a3d1c; --cool:#1c5a52;
     --cool-dec:#2a7a70; --ring:#6b4a18;
@@ -397,7 +397,7 @@ function click(){
   const t=a.currentTime; o.start(t);
   g.gain.exponentialRampToValueAtTime(0.0001,t+0.07); o.stop(t+0.08);
 }
-$("#snd").onclick = e => {
+document.getElementById("snd").onclick = e => {
   on = !on; e.currentTarget.setAttribute("aria-pressed", on);
   e.currentTarget.setAttribute("aria-label", "Room sound: " + (on?"on":"off"));
   if(on){ room_tone(); } else if(hum){ hum.o.stop(); hum.w.stop(); hum=null; }
@@ -405,7 +405,7 @@ $("#snd").onclick = e => {
 
 /* ---- comfort: a live corner control. NEVER an opening wall. ---- */
 const STOPS=["","softer","daylight"]; let stop=0;
-$("#comfort").onclick = e => {
+document.getElementById("comfort").onclick = e => {
   stop=(stop+1)%3; document.body.className=STOPS[stop];
   e.currentTarget.setAttribute("aria-pressed", stop>0);
   live("Comfort: " + (STOPS[stop]||"default"));

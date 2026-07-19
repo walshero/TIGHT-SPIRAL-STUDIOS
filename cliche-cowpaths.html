@@ -78,9 +78,18 @@
     .hint{display:none}           /* keyboard-only hint — irrelevant on touch */
     .slot{flex-wrap:wrap;gap:8px}
   }
+  /* comfort knob — shared corner control (adapted to this file's tokens) */
+  .comfort-knob{position:fixed;top:10px;right:10px;z-index:60;
+    font:700 13px/1 ui-monospace,Menlo,Consolas,monospace;padding:9px 12px;
+    border:2px solid var(--ink);border-radius:9px;background:var(--paper2);
+    color:var(--ink);cursor:pointer;min-height:40px}
+  .comfort-knob:focus-visible{outline:3px solid var(--amber,#0a4fd0);outline-offset:2px}
+  body.softer{--paper:#15120f;--paper2:#221d18;--panel:#1c1813;--ink:#efe9dc;--dim:#9c968a;--amber:#ffd98a;--amber2:#ffb05a;--line:#463f36}
+  body.warm{--paper:#161009;--paper2:#241a10;--panel:#1e160d;--ink:#f3ead6;--dim:#a89a86;--amber:#ffd98a;--amber2:#ffb968;--line:#4a3a26}
 </style>
 </head>
 <body>
+<button class="comfort-knob" id="comfortBtn" aria-label="Switch comfort mode" aria-live="polite">Comfort: Default</button>
 <div id="stage">
   <div class="marquee">
     <!-- Tight Spiral logo: the outer line IS the circle — outermost turn of the spiral, coiling inward -->
@@ -189,6 +198,15 @@
 })();
 </script>
 
+<script>
+(function(){var m=["Default","Softer","Warm-dark"],i=0,b=document.getElementById("comfortBtn");
+ if(!b)return;
+ b.addEventListener("click",function(){i=(i+1)%m.length;
+   document.body.classList.remove("softer","warm");
+   if(i===1)document.body.classList.add("softer");
+   else if(i===2)document.body.classList.add("warm");
+   b.textContent="Comfort: "+m[i];});})();
+</script>
 <!-- TSP shared nav (Home / Back) -->
 <script>window.TSP_MOBILE = { home:"index.html", back:"arcade.html" };</script>
 <!-- TSP-MOBILE (inlined from tsp-mobile.js — single-file-offline law) -->

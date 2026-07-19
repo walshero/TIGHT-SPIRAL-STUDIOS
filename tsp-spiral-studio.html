@@ -3,7 +3,13 @@
 <title>TSP Spiral Studio</title>
 <style>
 :root{--paper:#fbfaf7;--ink:#0a0a0a;--line:#d8d3c8;--charcoal:#1c1a17;--teal:#0f5f5a;--orange:#c05a1e}
+body.softer{--paper:#f0ece3;--line:#cfc9bc}
 *{box-sizing:border-box}
+.comfort-knob{position:fixed;top:10px;right:10px;z-index:60;
+  font:700 13px/1 ui-monospace,Menlo,Consolas,monospace;padding:9px 12px;
+  border:2px solid var(--ink);border-radius:9px;background:var(--paper);
+  color:var(--ink);cursor:pointer;min-height:40px}
+.comfort-knob:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
 body{margin:0;background:var(--paper);color:var(--ink);
 font:400 17px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
 padding:16px 16px 96px}
@@ -33,6 +39,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--orange);outline
 details{max-width:640px;margin:14px auto 0}
 summary{font-size:15px;cursor:pointer;min-height:44px;display:flex;align-items:center}
 </style></head><body>
+<button class="comfort-knob" id="comfortBtn" aria-label="Switch comfort mode" aria-live="polite">Comfort: Default</button>
 <h1>TSP Spiral Studio</h1>
 <div class="stage">
   <div class="pane light" id="paneL"></div>
@@ -76,6 +83,10 @@ summary{font-size:15px;cursor:pointer;min-height:44px;display:flex;align-items:c
 </div>
 
 <script>
+(function(){var m=["Default","Softer"],i=0,b=document.getElementById("comfortBtn");
+ b.addEventListener("click",function(){i=(i+1)%m.length;
+   document.body.classList.toggle("softer",i===1);
+   b.textContent="Comfort: "+m[i];});})();
 const $=id=>document.getElementById(id);
 const P={turns:'turns',thick:'thick',outer:'outer',gap:'gap',tickN:'tickN',tickL:'tickL',tickW:'tickW',offset:'offset',dot:'dot'};
 const V=id=>parseFloat($(id).value);
