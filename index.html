@@ -83,16 +83,16 @@ h2{
 .sub b{color:var(--ink); font-weight:600}
 
 /* ── ROOM CARDS ──────────────────────────────────────────────────────────── */
-.rooms{display:grid; grid-template-columns:repeat(auto-fill,minmax(258px,1fr)); gap:14px}
+.rooms{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px}
 .room{
-  display:block; padding:18px 18px 16px; border:1.5px solid var(--rule); border-radius:2px;
+  display:block; padding:22px 22px 20px; border:2px solid var(--rule); border-top-width:6px; border-radius:3px;
   background:var(--paper-2); text-decoration:none; color:var(--ink);
-  transition:border-color .12s, transform .12s;
+  transition:border-color .12s, transform .12s, box-shadow .12s;
 }
-.room:hover{border-color:var(--ink); transform:translateY(-1px)}
+.room:hover{transform:translateY(-2px); box-shadow:0 4px 0 var(--acc,var(--rule))}
 .room:focus-visible{outline:3px solid var(--cool-ink); outline-offset:3px}
-.room h3{font-family:var(--serif); font-size:21px; margin:0 0 7px; font-weight:400; line-height:1.2}
-.room p{margin:0; font-size:14.5px; color:var(--ink-3); line-height:1.45}
+.room h3{font-family:var(--serif); font-size:23px; margin:0 0 8px; font-weight:400; line-height:1.2}
+.room p{margin:0; font-size:15px; color:var(--ink-3); line-height:1.5}
 .chips{margin-top:11px; display:flex; gap:6px; flex-wrap:wrap}
 .chip{
   font-family:var(--mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase;
@@ -185,9 +185,22 @@ footer p{margin:0 0 7px}
 }
 
 /* ── INSTRUMENT MARKS. Glyphs inherit card ink via currentColor (token-role safe). ── */
-.gmark{width:34px; height:34px; display:block; color:var(--brass-ink); margin-bottom:11px; flex:0 0 auto}
-.room:hover .gmark{color:var(--ink)}
+.gmark{width:50px; height:50px; display:block; color:var(--brass-ink); margin-bottom:14px; flex:0 0 auto}
+.room .gmark{color:var(--acc,var(--brass-ink))}
 .job .gmark{color:var(--brass-fill)}            /* on dark slab */
+
+/* ── DIFFERENT-COLORED GAME BOXES. Each card carries a green-free accent (--acc),
+   applied to its border, top strip, and glyph. Text stays --ink/--ink-3 on the
+   gated paper ground — the accent is decoration only (token-role safe, RP: no green). */
+.rooms .room{border-color:var(--acc,var(--rule))}
+.rooms .room:nth-child(8n+1){--acc:#6a4d12}   /* brass   */
+.rooms .room:nth-child(8n+2){--acc:#274063}   /* cool    */
+.rooms .room:nth-child(8n+3){--acc:#8a2f22}   /* oxblood */
+.rooms .room:nth-child(8n+4){--acc:#5a3a6e}   /* plum    */
+.rooms .room:nth-child(8n+5){--acc:#8f4a08}   /* burnt   */
+.rooms .room:nth-child(8n+6){--acc:#343a86}   /* indigo  */
+.rooms .room:nth-child(8n+7){--acc:#2f4a5c}   /* steel   */
+.rooms .room:nth-child(8n+8){--acc:#8a3a1c}   /* clay    */
 .room h3, .job h3{display:flex; align-items:center; gap:0}
 .hero-mark{width:clamp(120px,20vw,168px); height:auto; color:var(--brass-ink); flex:0 0 auto}
 .stage-row{display:flex; align-items:flex-start; gap:clamp(20px,4vw,44px); justify-content:space-between}
