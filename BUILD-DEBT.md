@@ -41,6 +41,7 @@ Format: `DATE | SHIP or GOV | what a player can now do (or what governance was a
 
 ```
 2026-07-19 | GOV | added BUILD-DEBT.md ratio rule. DEBT +1. Next session owes a build.
+2026-07-19 | SHIP | preship-gate-v4.py render-proof teeth: the gate now catches the class where a screen passes at 13:1 and renders unreadable on Matt's retina (opacity floor + RP warm-hue floor). A builder can no longer ship a gold-on-unpainted screen the old gate green-lit. Canaried: your-rp-world HALTs, viscosity SHIPs. DEBT paid.
 ```
 
 ---
