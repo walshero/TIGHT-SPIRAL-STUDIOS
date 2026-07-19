@@ -55,20 +55,21 @@ the outcomes the college measures that the suite does not yet build. Same move a
 
 ## 3. Coverage map — existing shelf → the seven outcomes
 
-Nineteen existing builds map onto the seven outcomes. This is a **finishing** play, not a building spree:
-most of the suite already exists and only needed to be pointed at the framework.
+Nineteen existing builds map onto the seven outcomes — a **finishing** play, not a building spree: most of
+the suite already existed and only needed pointing at the framework. A twentieth, **Sticker Price**, was then
+built this pass to close the quantitative gap.
 
 | iSLO | Coverage | Games that BUILD it (live now) | Measure |
 |---|---|---|---|
 | **1 · Written/Oral Comm** | 🟢 **Built** (strongest lane) | The Tell · Sandbags · Cliché Cowpaths · Flash Ballast · Workshop Wall · Review Bench · EN195 Hub | WC VALUE (live) |
-| **2 · Quantitative** | 🟠 **Thin** | The Tension Bar (client engine) · Warriors Fantasy Arcade | QL VALUE (not normed) |
+| **2 · Quantitative** | 🟢 **Built** | **Sticker Price** · The Tension Bar (client engine) · Warriors Fantasy Arcade | QL VALUE (not normed) |
 | **3 · Tech / Info-Sci** | 🟢 **Built** | The Console · Funny Boney's Factory · How an Idea Travels | suite-proposed criteria |
 | **4 · Natural World** | 🔴 **Dry cell** | *(none)* | Scientific reasoning (not normed) |
 | **5 · DEI** | 🟠 **Thin** | Choose Your Leader | **ISLO #5 (live)** |
 | **6 · Critical Thinking** | 🟢 **Built** (deepest lane) | Choose Your Leader · The Console · The Viscosity · The Compound Capstone · Warriors · Behind This Door | ISLO #6 (in development) |
 | **7 · Personal/Civic** | 🟢 **Built** | Play the Semester · The Course River · Workshop Wall · FYS Treasure Trove | suite-proposed reflective rubric |
 
-**Net:** 4 outcomes built, 2 thin, 1 dry — and one built lane (iSLO 6) sits over a rubric still being normed.
+**Net:** 5 outcomes built, 1 thin (DEI), 1 dry (Natural World) — and one built lane (iSLO 6) sits over a rubric still being normed.
 
 ---
 
@@ -76,13 +77,24 @@ most of the suite already exists and only needed to be pointed at the framework.
 
 Ranked by value-to-effort (the studio's standing ranking rule). Each reuses a proven engine.
 
-### 4.1 `Sticker Price` — iSLO 2 (Quantitative) · **highest value-to-effort**
-A headline number — a student loan, a tuition bill, a "4 out of 5 dentists" statistic inside an argument —
+### 4.1 `Sticker Price` — iSLO 2 (Quantitative) · **SHIPPED 2026-07-19** (`sticker-price.html`)
+A headline number — a student loan, a tuition sticker, a statistic in an argument, a small monthly charge —
 gets pulled apart into what it actually means over time. **Reuses the Tension Bar cost-decomposition engine**
-already shipped for Advantage Relocation (it already turns "a doorman" into "$18,400 a year"). Point the same
-engine at numbers students actually meet. Teaches interpretation, calculation, and *surfacing what a number
-hides* — the interpret-a-quantitative-argument half of the AAC&U QL rubric that pure math courses skip.
-**Effort: low** (engine exists). **Also produces the work samples faculty need to norm a local QL rubric.**
+and its dignity framing (the number asks — never "you are short"). Four cases, each guess-first then reveal:
+1. **The Loan** — a real fixed-rate amortization; principal vs. interest bar; the sticker is the amount
+   borrowed, the price is the amount repaid.
+2. **The Sticker** — published price minus gift aid = net price; what the sticker leaves out (books, housing,
+   loans-vs-grants).
+3. **The Statistic** — a percentage change with the counts and denominator put back; *a percentage with no
+   denominator is a rumour.*
+4. **The Small Charge** — a `/mo` multiplied out over a degree; small-times-often is not small.
+
+Teaches all four AAC&U QL dimensions — Interpretation, Calculation, Assumptions, Communication. Every headline
+is an **editable example** the student sets (dignity floor: a starting point is never a verdict), so no market
+number is fabricated — provenance names the *method* (amortization formula; federal net-price definition;
+base-rate pedagogy). **Verified end-to-end in a headless browser** (all four cases, no console errors, correct
+arithmetic); preship-gate-v4: SHIP (worst pair 5.57:1). **Still open on the measure side:** norming a local QL
+rubric — the game now produces the work samples for it.
 
 ### 4.2 `Who Holds the Room` — iSLO 5 (DEI) · **built to a live rubric**
 One scene, several positions. You map who holds power, trace how a group and an individual read the same
@@ -110,7 +122,11 @@ pass are open here — the strongest single opportunity for a brand-new instrume
 
 ---
 
-## 5. What shipped in this pass
+## 5. What shipped
+
+**2026-07-19 (pass 2):** `sticker-price.html` — the iSLO 2 build, above. Hub updated: iSLO 2 flips Thin→Built, Sticker Price card goes live, counts re-read (20 games mapped, 2 dry cells left).
+
+**2026-07-19 (pass 1):**
 
 - **`islo-hub.html`** — the hub. Seven stations, verbatim definitions, 19 live games mapped, 2 live rubrics
   reproduced, 3 dry cells marked, 3 proposed builds shown as dashed "Proposed" cards. Standing Home/Back nav,
