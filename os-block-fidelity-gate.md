@@ -79,3 +79,40 @@ That is a founder-in-the-room build session, not a background task.
 ## ARTIFACTS
   tsp-intake.html          — front door, emits brief.json (LIVE, gate-passed 11.19)
   preship-fidelity-gate.py — the way (NOT YET BUILT)
+
+---
+
+## MENARD — WHY A STUDIO OF RESKINS IS A STUDIO OF ORIGINALS
+
+Belongs at the head of OS §1 (identity/philosophy). The founding claim:
+
+  Writerly Moves is the origin, hand-built, no AI. Every game since is the
+  SAME ENGINE pointed at a new domain — the Console, CYL, the Cabinet all run
+  Play·Notice·Design on different material. This is not repetition to apologize
+  for. It is Pierre Menard's Quixote: the same words are a NEW WORK because the
+  context changed. Same engine, made new by where it stands.
+
+The reskin is the studio's method, not its shortcut. But the claim only holds
+if the domain GENUINELY changed the work. A reskin that changes nothing but the
+paint is a photocopy, and Menard's whole point collapses.
+
+So Menard is not a quote to hang on the wall — it is the WHY behind the three
+named things. The image, the verb, the source ARE the proof the context changed.
+If a reskin cannot name a different image/verb/source than its parent, it did
+not become a new work; it is the parent in fresh paint.
+
+## menard_check (reskin tooth)
+
+Fires only when a build declares a parent (reskin_of set in brief.json):
+
+  reskin_of named  AND  what_changed blank        -> HALT (photocopy)
+  reskin_of named  AND  image/verb/source == parent's -> HALT (photocopy)
+  reskin_of named  AND  what_changed names a real domain shift -> pass (a Menard)
+  reskin_of blank                                  -> original build, check skipped
+
+LIVE NOW in tsp-intake.html: the "Is this a reskin?" block collects reskin_of +
+what_changed; a named parent with no what_changed renders the photocopy HALT.
+THE WAY (preship-fidelity-gate.py): read reskin_of from brief.json; when set,
+diff the new build's anchor/verb/source against the parent's brief.json; identical
+slots HALT. A reskin must prove its Menard, arithmetically, against the parent it
+names.
