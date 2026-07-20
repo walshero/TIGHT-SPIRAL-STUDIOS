@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en" data-comfort="default">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TSP Game Intake — Name it before you build it</title>
+<style>
+  :root{
+    --ink:#0a0a0a;
+    --ink-2:#333029;
+    --paper:#fbfaf7;
+    --card:#fdfcf9;
+    --accent:#7a4a12;
+    --accent-soft:#efe6d6;
+    --line:#c9c2b4;
+  }
+  html[data-comfort="softer"]{
+    --ink:#26241f;
+    --ink-2:#3a372f;
+    --paper:#f2efe8;
+    --card:#faf8f3;
+    --accent:#6b4110;
+    --accent-soft:#e7ddcb;
+    --line:#c2bbac;
+  }
+  html[data-comfort="warm-dark"]{
+    --ink:#eef1f5;
+    --ink-2:#c9cdd4;
+    --paper:#1a1712;
+    --card:#241f18;
+    --accent:#d9a441;
+    --accent-soft:#3a3122;
+    --line:#4a4234;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font:19px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    padding:0 0 120px;
+  }
+
+  .scene{
+    background:var(--card);
+    border-bottom:3px solid var(--accent);
+    padding:38px 22px 30px;
+  }
+  .scene .kicker{
+    font-size:14px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+    margin:0 0 10px;
+  }
+  .scene h1{
+    font-size:32px;
+    line-height:1.15;
+    margin:0 0 12px;
+    color:var(--ink);
+    max-width:720px;
+  }
+  .scene p{
+    font-size:19px;
+    margin:0;
+    max-width:640px;
+    color:var(--ink);
+  }
+  .three{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:20px;
+  }
+  .three span{
+    border:2px solid var(--accent);
+    border-radius:999px;
+    padding:6px 16px;
+    font-size:15px;
+    font-weight:600;
+    color:var(--ink);
+    background:var(--accent-soft);
+  }
+
+  main{max-width:720px;margin:0 auto;padding:26px 22px 0}
+
+  .field{margin:0 0 26px}
+  label{
+    display:block;
+    font-weight:700;
+    font-size:20px;
+    color:var(--ink);
+    margin:0 0 4px;
+  }
+  .hint{
+    display:block;
+    font-size:15.5px;
+    color:var(--ink-2);
+    margin:0 0 10px;
+  }
+  input[type=text],textarea,input[type=number]{
+    width:100%;
+    font:inherit;
+    color:var(--ink);
+    background:var(--card);
+    border:2px solid var(--line);
+    border-radius:10px;
+    padding:13px 14px;
+    min-height:52px;
+  }
+  textarea{min-height:92px;resize:vertical}
+  input:focus,textarea:focus{
+    outline:3px solid var(--accent);
+    outline-offset:2px;
+    border-color:var(--accent);
+  }
+
+  .btn{
+    display:inline-block;
+    font:inherit;
+    font-weight:700;
+    font-size:19px;
+    color:var(--ink);
+    background:var(--accent-soft);
+    border:2px solid var(--accent);
+    border-radius:12px;
+    padding:15px 26px;
+    min-height:54px;
+    cursor:pointer;
+  }
+  .btn:focus{outline:3px solid var(--accent);outline-offset:3px}
+  .btn-row{display:flex;flex-wrap:wrap;gap:12px;margin:8px 0 40px}
+
+  .brief{
+    background:var(--card);
+    border:2px solid var(--accent);
+    border-radius:14px;
+    padding:24px 22px;
+    margin:0 0 28px;
+  }
+  .brief h2{font-size:22px;margin:0 0 16px;color:var(--ink)}
+  .slot{margin:0 0 16px}
+  .slot .k{
+    font-size:13.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+    margin:0 0 3px;
+  }
+  .slot .v{font-size:19px;color:var(--ink);white-space:pre-wrap}
+  .flag{
+    border-left:4px solid var(--accent);
+    background:var(--accent-soft);
+    padding:12px 14px;
+    border-radius:0 8px 8px 0;
+    font-size:16px;
+    color:var(--ink);
+    margin:6px 0 0;
+  }
+  pre{
+    background:var(--accent-soft);
+    color:var(--ink);
+    border:2px solid var(--line);
+    border-radius:10px;
+    padding:16px;
+    font:14.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    overflow:auto;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+
+  .hidden{display:none}
+
+  .corner{
+    position:fixed;
+    right:12px;
+    z-index:50;
+    display:flex;
+    gap:8px;
+    background:var(--card);
+    border:2px solid var(--accent);
+    border-radius:999px;
+    padding:6px 8px;
+  }
+  .corner.top{top:12px}
+  .corner.bottom{bottom:12px}
+  .cbtn{
+    font:inherit;
+    font-size:15px;
+    font-weight:700;
+    color:var(--ink);
+    background:transparent;
+    border:2px solid transparent;
+    border-radius:999px;
+    padding:8px 13px;
+    min-height:44px;
+    min-width:44px;
+    cursor:pointer;
+  }
+  .cbtn[aria-pressed="true"]{
+    background:var(--accent-soft);
+    border-color:var(--accent);
+  }
+  .cbtn:focus{outline:3px solid var(--accent);outline-offset:2px}
+  .corner .lbl{
+    align-self:center;
+    font-size:12px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+    padding:0 4px;
+  }
+</style>
+</head>
+<body>
+
+<nav class="corner top" aria-label="Comfort">
+  <span class="lbl">Comfort</span>
+  <button class="cbtn" data-set="softer"    aria-pressed="false">Softer</button>
+  <button class="cbtn" data-set="default"   aria-pressed="true">Default</button>
+  <button class="cbtn" data-set="warm-dark" aria-pressed="false">Warm dark</button>
+</nav>
+
+<nav class="corner bottom" aria-label="Navigation">
+  <button class="cbtn" id="navBack">Back</button>
+  <button class="cbtn" id="navHome">Home</button>
+</nav>
+
+<header class="scene">
+  <p class="kicker">Tight Spiral · Game Intake</p>
+  <h1>Name it before you build it.</h1>
+  <p>Three named things turn a pitch into a brief the fidelity gate can check the build against. If you can't name all three, it isn't ready to build.</p>
+  <div class="three">
+    <span>The image</span>
+    <span>The verb</span>
+    <span>The source</span>
+  </div>
+</header>
+
+<main>
+  <section id="formView">
+
+    <div class="field">
+      <label for="fTitle">Working title</label>
+      <span class="hint">What is this game called for now.</span>
+      <input type="text" id="fTitle" placeholder="CYL v6 — the child who overhears">
+    </div>
+
+    <div class="field">
+      <label for="fImage">The image — scene anchor</label>
+      <span class="hint">The one image or moment the first screen is about. Concrete, not a mood. Name the thing a player sees, not the feeling.</span>
+      <textarea id="fImage" placeholder="A child at the kitchen radio, Oct 1962, suburban TV house — the broadcast half-heard from the next room."></textarea>
+    </div>
+
+    <div class="field">
+      <label for="fVerb">The verb — player action</label>
+      <span class="hint">What the player can now DO that they couldn't before. One verb. Reachable in two taps.</span>
+      <input type="text" id="fVerb" placeholder="Choose which room to stand in as the news breaks.">
+    </div>
+
+    <div class="field">
+      <label for="fSource">The source — attributed</label>
+      <span class="hint">The named, open-license text or domain the content rests on. Author, license, link. Averaged-internet fill is a failure, not a source.</span>
+      <textarea id="fSource" placeholder="Chicago Defender radio-log excerpt, Oct 1962 — public domain / archive link…"></textarea>
+    </div>
+
+    <div class="field">
+      <label for="fDecisions">Decisions per screen</label>
+      <span class="hint">One decision per screen is the floor. More than one halts.</span>
+      <input type="number" id="fDecisions" min="0" step="1" value="1" style="max-width:140px">
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" id="compile">Compile the brief</button>
+    </div>
+  </section>
+
+  <section id="briefView" class="hidden">
+    <div class="brief" id="briefCard"></div>
+    <div class="field">
+      <label for="jsonOut">brief.json</label>
+      <span class="hint">This is what the fidelity gate reads. Copy it, or download it beside the build.</span>
+      <pre id="jsonOut"></pre>
+    </div>
+    <div class="btn-row">
+      <button class="btn" id="copyJson">Copy brief.json</button>
+      <button class="btn" id="downloadJson">Download brief.json</button>
+      <button class="btn" id="editAgain">Back to edit</button>
+    </div>
+  </section>
+</main>
+
+<script>
+(function(){
+  var root = document.documentElement;
+
+  document.querySelectorAll('.cbtn[data-set]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var m = b.getAttribute('data-set');
+      root.setAttribute('data-comfort', m);
+      document.querySelectorAll('.cbtn[data-set]').forEach(function(x){
+        x.setAttribute('aria-pressed', x === b ? 'true' : 'false');
+      });
+    });
+  });
+
+  var formView  = document.getElementById('formView');
+  var briefView = document.getElementById('briefView');
+
+  function show(view){
+    formView.classList.toggle('hidden', view !== 'form');
+    briefView.classList.toggle('hidden', view !== 'brief');
+    window.scrollTo(0,0);
+  }
+
+  function val(id){ return document.getElementById(id).value.trim(); }
+
+  function collect(){
+    return {
+      title: val('fTitle'),
+      scene_anchor: val('fImage'),
+      player_verb: val('fVerb'),
+      named_source: val('fSource'),
+      decisions_per_screen: parseInt(document.getElementById('fDecisions').value, 10) || 0
+    };
+  }
+
+  function esc(s){
+    return (s||'').replace(/[&<>]/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];
+    });
+  }
+
+  function render(){
+    var d = collect();
+    var missing = [];
+    if(!d.scene_anchor) missing.push('the image');
+    if(!d.player_verb)  missing.push('the verb');
+    if(!d.named_source) missing.push('the source');
+
+    var html = '<h2>' + (esc(d.title) || 'Untitled build') + '</h2>';
+
+    html += slot('The image', d.scene_anchor);
+    html += slot('The verb', d.player_verb);
+    html += slot('The source', d.named_source);
+    html += slot('Decisions per screen', String(d.decisions_per_screen));
+
+    if(missing.length){
+      html += '<p class="flag">Not ready to build. Missing: ' + missing.join(', ') + '. The gate cannot check a build against a slot you left blank.</p>';
+    }
+    if(d.decisions_per_screen > 1){
+      html += '<p class="flag">Decisions per screen is ' + d.decisions_per_screen + '. The floor is one. Split the screen before you build.</p>';
+    }
+    document.getElementById('briefCard').innerHTML = html;
+
+    document.getElementById('jsonOut').textContent = JSON.stringify(d, null, 2);
+  }
+
+  function slot(k, v){
+    return '<div class="slot"><p class="k">' + esc(k) + '</p><p class="v">' +
+           (esc(v) || '—') + '</p></div>';
+  }
+
+  document.getElementById('compile').addEventListener('click', function(){
+    render();
+    show('brief');
+  });
+  document.getElementById('editAgain').addEventListener('click', function(){ show('form'); });
+
+  document.getElementById('copyJson').addEventListener('click', function(){
+    var t = document.getElementById('jsonOut').textContent;
+    if(navigator.clipboard){ navigator.clipboard.writeText(t); }
+    this.textContent = 'Copied';
+    var self = this;
+    setTimeout(function(){ self.textContent = 'Copy brief.json'; }, 1400);
+  });
+
+  document.getElementById('downloadJson').addEventListener('click', function(){
+    var t = document.getElementById('jsonOut').textContent;
+    var blob = new Blob([t], {type:'application/json'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'brief.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  document.getElementById('navBack').addEventListener('click', function(){
+    if(!briefView.classList.contains('hidden')){ show('form'); }
+  });
+  document.getElementById('navHome').addEventListener('click', function(){
+    show('form');
+  });
+})();
+</script>
+</body>
+</html>
