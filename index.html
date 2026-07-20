@@ -207,7 +207,14 @@ footer p{margin:0 0 7px}
 .stage-copy{flex:1 1 auto; min-width:0}
 .banner-mark{height:34px; width:auto; color:var(--brass-ink); display:block; margin-bottom:10px}
 .slab .banner-mark{color:var(--brass-fill)}
-@media (max-width:640px){ .hero-mark{display:none} }  /* keep hero text-first on phone */
+/* Phone: the row can't hold copy + clock side by side, so it stacks. Rather than
+   hide the clock (losing the studio mark) or let it drop to the bottom, lift it to
+   the top-right as a masthead: clock, then eyebrow, headline, lede — a deliberate
+   vertical hero, not a broken one. */
+@media (max-width:640px){
+  .stage-row{ flex-direction:column; align-items:stretch; gap:14px; }
+  .hero-mark{ display:block; order:-1; width:96px; align-self:flex-end; margin:0 0 -4px; }
+}
 
 </style>
 </head>
