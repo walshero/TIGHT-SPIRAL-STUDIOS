@@ -172,6 +172,25 @@
 
   .hidden{display:none}
 
+  .menard{
+    border:2px solid var(--accent);
+    border-radius:14px;
+    padding:22px 20px 4px;
+    margin:0 0 26px;
+    background:var(--card);
+  }
+  .menard-head{
+    font-weight:800;
+    font-size:20px;
+    color:var(--ink);
+    margin:0 0 6px;
+  }
+  .menard-note{
+    font-size:16px;
+    color:var(--ink-2);
+    margin:0 0 18px;
+  }
+
   .corner{
     position:fixed;
     right:12px;
@@ -271,6 +290,23 @@
       <input type="number" id="fDecisions" min="0" step="1" value="1" style="max-width:140px">
     </div>
 
+    <div class="menard">
+      <p class="menard-head">Is this a reskin?</p>
+      <p class="menard-note">The engine repeats on purpose — Writerly Moves is the origin, every game since is the same mechanic in a new domain. A reskin is a new work only if the domain genuinely changed it. Same words, made new by where they stand. If nothing changed but the paint, it is a photocopy, not a new work.</p>
+
+      <div class="field">
+        <label for="fParent">Reskin of</label>
+        <span class="hint">The parent build this repeats. Leave blank if this is an original.</span>
+        <input type="text" id="fParent" placeholder="The Console (variable-ratio reward engine)">
+      </div>
+
+      <div class="field">
+        <label for="fChanged">What changed besides the skin</label>
+        <span class="hint">What the new domain does to the engine — the meaning that only exists here. If a reskin cannot name this, it halts.</span>
+        <textarea id="fChanged" placeholder="The reward schedule now teaches the player to recognize it being run ON them, not to run it."></textarea>
+      </div>
+    </div>
+
     <div class="btn-row">
       <button class="btn" id="compile">Compile the brief</button>
     </div>
@@ -322,7 +358,9 @@
       scene_anchor: val('fImage'),
       player_verb: val('fVerb'),
       named_source: val('fSource'),
-      decisions_per_screen: parseInt(document.getElementById('fDecisions').value, 10) || 0
+      decisions_per_screen: parseInt(document.getElementById('fDecisions').value, 10) || 0,
+      reskin_of: val('fParent'),
+      what_changed: val('fChanged')
     };
   }
 
@@ -346,11 +384,19 @@
     html += slot('The source', d.named_source);
     html += slot('Decisions per screen', String(d.decisions_per_screen));
 
+    if(d.reskin_of){
+      html += slot('Reskin of', d.reskin_of);
+      html += slot('What changed', d.what_changed);
+    }
+
     if(missing.length){
       html += '<p class="flag">Not ready to build. Missing: ' + missing.join(', ') + '. The gate cannot check a build against a slot you left blank.</p>';
     }
     if(d.decisions_per_screen > 1){
       html += '<p class="flag">Decisions per screen is ' + d.decisions_per_screen + '. The floor is one. Split the screen before you build.</p>';
+    }
+    if(d.reskin_of && !d.what_changed){
+      html += '<p class="flag">Photocopy, not a new work. This is a reskin of ' + esc(d.reskin_of) + ' but nothing is named as changed. Same words are only a new work when the domain changes them. Name what the new domain does, or it is the same build in fresh paint.</p>';
     }
     document.getElementById('briefCard').innerHTML = html;
 
