@@ -16,7 +16,7 @@ This essay makes one claim: the hard problems of building production pipelines i
 
 ## The garden: branching state
 
-"The Garden of Forking Paths" (1941) describes a novel that is also a labyrinth: a book in which every time a character faces alternatives, the story takes all of them at once. Its maker leaves, in Borges's words, "to various futures (not to all) my garden of forking paths." Scholars of digital media have long treated the story as the conceptual ancestor of hypertext; it is the opening selection of the field's standard anthology, *The New Media Reader* (Wardrip-Fruin and Montfort, 2003), which is roughly the discipline's way of saying: this is where we begin.
+"The Garden of Forking Paths" (1941) describes a novel that is also a labyrinth: a book in which every time a character faces alternatives, the story takes all of them at once. Its structure, in Borges's words, is "a growing, dizzying network of divergent, convergent and parallel times." Scholars of digital media have long treated the story as the conceptual ancestor of hypertext; it is the opening selection of the field's standard anthology, *The New Media Reader* (Wardrip-Fruin and Montfort, 2003), which is roughly the discipline's way of saying: this is where we begin.
 
 Every branching educational game I build is a garden of forking paths with a rubric attached. The design question is never "what happens next" but "what structure holds all the nexts at once." The engineering answer turns out to be the one the makers of Zork found at MIT in the late 1970s: the world is data. Rooms, choices, and consequences live in a structure; the prose that describes them is a separate layer that reads the structure aloud. Story logic first, as a rule, before a single expensive pixel.
 
@@ -28,7 +28,7 @@ A humanist did not need a product team to arrive at this architecture. The archi
 
 ## The library: generation without verification
 
-"The Library of Babel" (1941) opens by naming its subject flatly, "The universe (which others call the Library)," and imagines it containing every possible book, every combination of characters, and therefore every true book, every false book, every refutation of every book, and every catalog, true and false, of all the others. The librarians who inhabit it are not empowered by this totality. They are ruined by it. Everything exists; nothing can be trusted; the cost has merely moved from writing to verifying.
+"The Library of Babel" (1941) imagines a universe of shelves holding, in Borges's inventory, "thousands of false catalogues" of every possible book, every combination of characters, and therefore every true book, every false book, every refutation of every book, and every catalog, true and false, of all the others. The librarians who inhabit it are not empowered by this totality. They are ruined by it. Everything exists; nothing can be trusted; the cost has merely moved from writing to verifying.
 
 I do not know a more precise description of the working condition of anyone using large language models in 2026. The machine will produce a plausible rubric, a plausible citation, a plausible departmental history, and somewhere in the library the false catalog sits on the shelf beside the true one, identically bound. Early in the studio's assessment work, an AI-drafted document confidently described a four-point argumentative rubric my department has never possessed. It was caught the only way such things are caught: by checking the artifact against the department's actual documents, byte for byte.
 
@@ -46,7 +46,7 @@ Every knowledge system I have watched fail in higher education, and every one I 
 
 ## The Aleph: seeing everything, asking one thing
 
-"The Aleph" (1945) is about a point in a Buenos Aires basement that contains all other points, the place, in the narrator's account, where "all the places of the earth are seen from every angle." Look into it and you see everything in the universe at once. The owner of the basement, a mediocre poet, uses this total vision to write an interminable poem describing the entire planet, acre by acre. Borges's narrator sees the Aleph too, and is shattered by it, and then, this is the part that matters, goes back upstairs and gets on with his life.
+"The Aleph" (1945) is about a point in a Buenos Aires basement that contains all other points. Its problem is stated in one line: "what my eyes saw was simultaneous; what I shall transcribe is successive." The total view has to be serialized to be used at all. The owner of the basement, a mediocre poet, uses this total vision to write an interminable poem describing the entire planet, acre by acre. Borges's narrator sees the Aleph too, and is shattered by it, and then, this is the part that matters, goes back upstairs and gets on with his life.
 
 The studio holds a standing review ritual named for that basement. At the close of every working session, the whole system is looked at at once, every build, every file, every stalled lane, and the omniscient view is permitted to answer exactly one question: *why aren't builds moving?* Not "how do we perfect the system." Not the interminable poem. One diagnostic question, then back upstairs. The total view is real and it is useful, but only when it is disciplined by a single purpose; undisciplined, it produces the mediocre poet's masterwork, endless, comprehensive, and unread. Any faculty member who has served on a strategic planning committee will recognize both outcomes.
 
@@ -54,7 +54,7 @@ The studio holds a standing review ritual named for that basement. At the close 
 
 ## The map: documentation the size of the territory
 
-Borges needed only a paragraph for "On Exactitude in Science" (1946): an empire's cartographers, pursuing perfection, produce, in the text's phrase, "a Map of the Empire whose size was that of the Empire," coinciding with it point for point. The following generations find it useless and abandon it to the weather.
+Borges needed only a paragraph for "On Exactitude in Science" (1946): an empire's cartographers, pursuing perfection, produce a map coinciding point for point with the empire. The following generations abandon it, in the text's phrase, "to the rigours of sun and rain." The fate is the lesson.
 
 The studio's cross-session index is one page. It is one page on purpose, and keeping it one page is treated as maintenance work of the same seriousness as fixing a bug, because the alternative, faithfully recorded, is the map rotting in the desert with the animals living in it. Every institution I have worked in owns at least one such map.
 
