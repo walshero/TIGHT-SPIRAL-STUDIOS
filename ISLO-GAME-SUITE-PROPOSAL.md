@@ -64,12 +64,12 @@ built this pass to close the quantitative gap.
 | **1 · Written/Oral Comm** | 🟢 **Built** (strongest lane) | The Tell · Sandbags · Cliché Cowpaths · Flash Ballast · Workshop Wall · Review Bench · EN195 Hub | WC VALUE (live) |
 | **2 · Quantitative** | 🟢 **Built** | **Sticker Price** · The Tension Bar (client engine) · Warriors Fantasy Arcade | QL VALUE (not normed) |
 | **3 · Tech / Info-Sci** | 🟢 **Built** | The Console · Funny Boney's Factory · How an Idea Travels | suite-proposed criteria |
-| **4 · Natural World** | 🔴 **Dry cell** | *(none)* | Scientific reasoning (not normed) |
-| **5 · DEI** | 🟠 **Thin** | Choose Your Leader | **ISLO #5 (live)** |
+| **4 · Natural World** | 🟢 **Built** | **Update the Model** | Scientific reasoning (not normed) |
+| **5 · DEI** | 🟢 **Built** | **Who Holds the Room** · Choose Your Leader | **ISLO #5 (live)** |
 | **6 · Critical Thinking** | 🟢 **Built** (deepest lane) | Choose Your Leader · The Console · The Viscosity · The Compound Capstone · Warriors · Behind This Door | ISLO #6 (in development) |
 | **7 · Personal/Civic** | 🟢 **Built** | Play the Semester · The Course River · Workshop Wall · FYS Treasure Trove | suite-proposed reflective rubric |
 
-**Net:** 5 outcomes built, 1 thin (DEI), 1 dry (Natural World) — and one built lane (iSLO 6) sits over a rubric still being normed.
+**Net:** all 7 outcomes built. What remains open is the *measure* side — four outcomes (2, 3, 4, 7) have no locally-normed MassBay rubric yet; iSLO 6's rubric is still in development.
 
 ---
 
@@ -96,7 +96,7 @@ base-rate pedagogy). **Verified end-to-end in a headless browser** (all four cas
 arithmetic); preship-gate-v4: SHIP (worst pair 5.57:1). **Still open on the measure side:** norming a local QL
 rubric — the game now produces the work samples for it.
 
-### 4.2 `Who Holds the Room` — iSLO 5 (DEI) · **built to a live rubric**
+### 4.2 `Who Holds the Room` — iSLO 5 (DEI) · **SHIPPED 2026-07-19** (`who-holds-the-room.html`)
 One scene, several positions. You map who holds power, trace how a group and an individual read the same
 moment differently, and choose an advocacy move — then see it scored on the college's **live ISLO #5 rubric**,
 whose three dimensions become the three rounds:
@@ -111,7 +111,7 @@ MassBay's verbatim language, attributed — non-negotiable given the outcome.
 > Note from the workshop deck: *"What else do we lose when we lose DEI?"* This build keeps the college's own
 > normed instrument in students' hands, which is the durable answer.
 
-### 4.3 `Update the Model` — iSLO 4 (Natural World) · **the clearest gap**
+### 4.3 `Update the Model` — iSLO 4 (Natural World) · **SHIPPED 2026-07-19** (`update-the-model.html`)
 You hold a belief about how something in the natural world works. Evidence arrives. You decide whether to
 test it, state in advance *what would change your mind*, and how much to revise. Hypothesis → test → update —
 **the tight-spiral feedback loop the whole studio is named after** (Xenos-ISLE / Learning Games Network, 2012),
@@ -123,6 +123,8 @@ pass are open here — the strongest single opportunity for a brand-new instrume
 ---
 
 ## 5. What shipped
+
+**2026-07-19 (pass 3):** `who-holds-the-room.html` (iSLO 5) + `update-the-model.html` (iSLO 4) — the last two dry cells filled. **All seven outcomes now have a build.** Hub: iSLO 4 Dry→Built, iSLO 5 Thin→Built; counts 22 games mapped / 0 dry cells. Both browser-verified end-to-end; ratchet 0 regressions.
 
 **2026-07-19 (pass 2):** `sticker-price.html` — the iSLO 2 build, above. Hub updated: iSLO 2 flips Thin→Built, Sticker Price card goes live, counts re-read (20 games mapped, 2 dry cells left).
 

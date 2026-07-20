@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Who Holds the Room — one scene, read on the college's own DEI rubric · Tight Spiral Productions</title>
+<meta name="description" content="A game for MassBay students, built to the college's live ISLO #5 rubric. Read one ordinary campus scene three ways: who holds power in it, how the same moment lands differently on different people, and what a real advocacy move looks like. Dignity-first, single-file, offline, contrast-gated.">
+
+<!-- tsp:outcome       MassBay iSLO 5 — Diversity, Equity & Inclusion. Build side of islo-hub.html.
+     tsp:source        MassBay ISLO #5 Rubric (verbatim) — Systems of Power / Group–Individual Interactions /
+                       Advocacy, levels 0–4 — from the Spring 2026 DEI Graduation-Competency workshop deck.
+                       Equity levers (deliberative interdependence, transformative translation, proactive
+                       engagement) from Estefan et al. 2023, as presented in that workshop.
+     tsp:last-verified 2026-07-19
+     tsp:measure       MassBay ISLO #5 Rubric — LIVE, three dimensions, 0–4 — reproduced verbatim, attributed.
+     tsp:floor         single-file · offline · zero external hosts · contrast-gated 4.5:1 · no emoji · token-role law
+     tsp:dignity        A starting point is never a verdict. Ipsative: measured against the levels and one's own
+                        growth, never ranked against a classmate. People framed as whole and capable, never deficits.
+     THIS PAGE MAKES NO NETWORK CALLS. Nothing loads from anywhere. Nothing is collected. -->
+
+<style>
+:root{
+  --paper:#fbfaf7; --paper-2:#f1eee6; --rule:#d8d2c4;
+  --ink:#14181d; --ink-2:#3d4652; --ink-3:#5c6675;
+  --brass-ink:#6a4d12; --brass-fill:#d9a441;
+  --cool-ink:#274063; --cool-fill:#c3d2e6;
+  --live-ink:#1d5c3f; --warn-ink:#8a2f22;
+  --clay-ink:#8a3a1c;
+  --slab:#12161b; --slab-ink:#f4f1e8;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:17px; line-height:1.55; -webkit-font-smoothing:antialiased}
+.wrap{max-width:760px; margin:0 auto; padding:0 22px 90px}
+
+.topnav{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1.5px solid var(--rule)}
+.topnav-in{max-width:760px; margin:0 auto; padding:9px 22px; display:flex; align-items:center; gap:10px}
+.topnav a{display:inline-flex; align-items:center; gap:.35em; text-decoration:none; font-family:var(--mono); font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-2); padding:.42em .8em; border:1.5px solid var(--rule); border-radius:999px; background:var(--paper-2); transition:border-color .12s,color .12s}
+.topnav a:hover{border-color:var(--cool-ink); color:var(--ink)}
+.topnav a:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
+.topnav-mark{margin-left:auto; font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+@media (max-width:520px){ .topnav-mark{display:none} }
+
+.stage{padding:44px 0 26px; border-bottom:2px solid var(--ink)}
+.mark{font-family:var(--mono); font-size:11.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--brass-ink); font-weight:700; margin:0 0 16px}
+h1{font-family:var(--serif); font-size:clamp(30px,6vw,50px); line-height:1.06; margin:0 0 16px; letter-spacing:-.015em; font-weight:400}
+h1 em{font-style:italic; color:var(--cool-ink)}
+.lede{font-size:clamp(17px,2.4vw,20px); line-height:1.5; color:var(--ink-2); margin:0 0 12px}
+.lede b{color:var(--ink); font-weight:600}
+.tag{font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); margin:20px 0 0}
+.hero-mark{display:block; width:clamp(120px,30vw,180px); height:auto; color:var(--brass-ink); margin:22px 0 4px}
+
+/* scene card */
+.scene{border:2px solid var(--clay-ink); border-left-width:6px; border-radius:4px; background:var(--paper-2); padding:18px 20px; margin:24px 0 0}
+.scene .sh{font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--clay-ink); font-weight:700; margin:0 0 8px}
+.scene p{margin:0; font-size:16.5px; color:var(--ink); line-height:1.6} .scene p + p{margin-top:9px}
+.scene b{color:var(--ink)}
+
+.rail{display:flex; gap:8px; margin:24px 0 0; flex-wrap:wrap}
+.rail button{flex:1 1 150px; text-align:left; cursor:pointer; background:var(--paper-2); color:var(--ink-2); border:1.5px solid var(--rule); border-top-width:5px; border-radius:3px; padding:10px 12px 11px; font-family:var(--sans); transition:border-color .12s, color .12s}
+.rail button .rn{display:block; font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); margin-bottom:3px}
+.rail button .rt{display:block; font-family:var(--serif); font-size:15.5px; line-height:1.15; color:var(--ink)}
+.rail button:hover{border-color:var(--acc,var(--clay-ink))}
+.rail button:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
+.rail button[aria-current="true"]{border-color:var(--acc,var(--clay-ink)); color:var(--ink); background:var(--paper)}
+.rail button[data-done="1"] .rn::after{content:" · read"; color:var(--live-ink)}
+
+.case{padding:32px 0 0}
+.case[hidden]{display:none}
+.kicker{font-family:var(--mono); font-size:11px; letter-spacing:.15em; text-transform:uppercase; color:var(--acc-ink,var(--clay-ink)); font-weight:700; margin:0 0 8px}
+.case h2{font-family:var(--serif); font-size:clamp(23px,4.2vw,31px); font-weight:400; line-height:1.14; margin:0 0 10px}
+.case .intro{font-size:16px; color:var(--ink-2); line-height:1.55; margin:0 0 20px; max-width:62ch}
+.case .intro b{color:var(--ink)}
+
+.q{font-size:16px; color:var(--ink); font-weight:600; margin:0 0 4px}
+.qw{font-size:14px; color:var(--ink-3); line-height:1.5; margin:0 0 12px; max-width:60ch}
+
+/* multi-select checklist (round 1) */
+.checks{display:flex; flex-direction:column; gap:8px}
+.chk{display:flex; gap:11px; align-items:flex-start; text-align:left; padding:12px 14px; border:1.5px solid var(--rule); border-radius:2px; background:var(--paper); color:var(--ink); cursor:pointer; font-family:var(--sans); font-size:15px; line-height:1.4; width:100%}
+.chk .box{flex:0 0 auto; width:20px; height:20px; border:2px solid var(--ink-3); border-radius:3px; margin-top:1px; position:relative}
+.chk[aria-pressed="true"]{border-color:var(--clay-ink); background:var(--paper-2)}
+.chk[aria-pressed="true"] .box{border-color:var(--clay-ink); background:var(--clay-ink)}
+.chk[aria-pressed="true"] .box::after{content:""; position:absolute; left:5px; top:1px; width:6px; height:11px; border:solid var(--paper); border-width:0 2.5px 2.5px 0; transform:rotate(45deg)}
+.chk:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
+
+/* people (round 2) */
+.people{display:flex; flex-direction:column; gap:10px}
+.person{border:1.5px solid var(--rule); border-radius:3px; background:var(--paper); overflow:hidden}
+.person button{display:flex; gap:12px; align-items:center; width:100%; text-align:left; padding:13px 15px; background:none; border:0; cursor:pointer; font-family:var(--sans); color:var(--ink)}
+.person button:focus-visible{outline:3px solid var(--cool-ink); outline-offset:-3px}
+.person .pmark{width:30px; height:30px; flex:0 0 auto; color:var(--clay-ink)}
+.person .pwho{flex:1 1 auto; min-width:0}
+.person .pname{font-family:var(--serif); font-size:17px; line-height:1.2}
+.person .prole{font-size:13px; color:var(--ink-3); margin-top:1px}
+.person .ptoggle{font-family:var(--mono); font-size:11px; color:var(--clay-ink); font-weight:700; flex:0 0 auto}
+.person .pdetail{padding:0 15px; max-height:0; overflow:hidden; transition:max-height .25s ease}
+.person.open .pdetail{max-height:360px; padding:0 15px 14px}
+.person .pdetail p{margin:0; font-size:14.5px; color:var(--ink-2); line-height:1.55}
+.person.open{border-color:var(--clay-ink)}
+.person.open .ptoggle{color:var(--ink-3)}
+
+/* advocacy choices (round 3) */
+.moves{display:flex; flex-direction:column; gap:9px}
+.move{text-align:left; padding:13px 15px; border:1.5px solid var(--rule); border-radius:2px; background:var(--paper); color:var(--ink); cursor:pointer; font-family:var(--sans); font-size:15.5px; line-height:1.45}
+.move[aria-pressed="true"]{border-color:var(--clay-ink); border-left-width:5px; background:var(--paper-2); font-weight:600}
+.move:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
+
+.btn{font-family:var(--sans); font-size:16px; font-weight:600; padding:11px 20px; background:var(--slab); color:var(--slab-ink); border:0; border-radius:2px; cursor:pointer}
+.btn:hover{background:#232b35}
+.btn:focus-visible{outline:3px solid var(--cool-ink); outline-offset:3px}
+.btn.ghost{background:var(--paper); color:var(--ink); border:1.5px solid var(--rule)}
+.btn.ghost:hover{border-color:var(--ink); background:var(--paper-2)}
+.btn[disabled]{opacity:.5; cursor:default}
+
+.reveal[hidden]{display:none}
+.reading{border:2px solid var(--acc,var(--clay-ink)); border-radius:4px; padding:18px 20px; margin:18px 0 0; background:var(--paper)}
+.reading .rh{font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--acc-ink,var(--clay-ink)); font-weight:700; margin:0 0 8px}
+.reading .rb{font-size:16.5px; color:var(--ink); line-height:1.6; margin:0}
+.reading .rb b{color:var(--ink)}
+.reading .rb + .rb{margin-top:10px}
+
+/* rubric level callout */
+.level{margin:16px 0 0; border:2px solid var(--clay-ink); border-radius:4px; overflow:hidden}
+.level .lvtop{display:flex; align-items:center; gap:12px; padding:12px 16px; background:var(--paper-2)}
+.level .lvnum{font-family:var(--serif); font-size:30px; color:var(--clay-ink); line-height:1; flex:0 0 auto}
+.level .lvname{font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); font-weight:700}
+.level .lvtext{padding:13px 16px; font-size:15px; color:var(--ink); line-height:1.55; border-top:1.5px solid var(--rule)}
+.level .lvnext{padding:12px 16px; font-size:14px; color:var(--ink-2); line-height:1.55; background:var(--paper-2); border-top:1.5px solid var(--rule)}
+.level .lvnext b{color:var(--clay-ink)}
+
+.hides{margin:16px 0 0; padding:15px 17px; border-left:5px solid var(--cool-ink); background:var(--paper-2); border-radius:2px}
+.hides .hh{font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--cool-ink); font-weight:700; margin:0 0 6px}
+.hides p{margin:0; font-size:15px; color:var(--ink-2); line-height:1.55} .hides p b{color:var(--ink)}
+.dim{margin:18px 0 0; font-family:var(--mono); font-size:11.5px; letter-spacing:.04em; color:var(--ink-3); line-height:1.6}
+.dim b{color:var(--clay-ink)}
+.nav-row{display:flex; justify-content:space-between; gap:12px; margin:30px 0 0; padding-top:20px; border-top:1.5px solid var(--rule)}
+
+/* self-position (dignity) */
+.selfpos{margin:16px 0 0; padding:15px 17px; border:1.5px dashed var(--clay-ink); border-radius:3px; background:var(--paper)}
+.selfpos .sh{font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--clay-ink); font-weight:700; margin:0 0 6px}
+.selfpos p{margin:0; font-size:15px; color:var(--ink); line-height:1.55; font-style:italic; font-family:var(--serif)}
+
+/* CLOSE + rubric */
+.close{padding:32px 0 0}
+.close[hidden]{display:none}
+.close h2{font-family:var(--serif); font-size:clamp(24px,4.6vw,34px); font-weight:400; margin:0 0 12px}
+.close .lede{max-width:64ch}
+.rubric{border:2px solid var(--rule); border-radius:4px; overflow:hidden; margin:22px 0 0}
+.rubric .rdim{border-top:1.5px solid var(--rule)}
+.rubric .rdim:first-child{border-top:0}
+.rubric .rdh{padding:12px 16px; background:var(--paper-2); font-family:var(--serif); font-size:18px; color:var(--ink)}
+.rubric .rdh span{display:block; font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--clay-ink); font-weight:700; margin-bottom:2px}
+.rubric .lvl{display:flex; gap:12px; padding:9px 16px; border-top:1px solid var(--rule); font-size:14px; color:var(--ink-2); line-height:1.5}
+.rubric .lvl b{flex:0 0 auto; color:var(--clay-ink); font-family:var(--mono); width:1.2em}
+
+.slab{background:var(--slab); color:var(--slab-ink); margin:30px 0 0; padding:26px 22px; border-radius:4px}
+.slab h3{font-family:var(--mono); font-size:12px; letter-spacing:.15em; text-transform:uppercase; color:var(--brass-fill); font-weight:700; margin:0 0 12px}
+.slab ul{margin:0; padding-left:20px}
+.slab li{font-size:15px; color:#cdd4dd; line-height:1.6; margin-bottom:8px} .slab li b{color:var(--slab-ink)}
+
+.src{margin-top:34px; padding-top:18px; border-top:1.5px solid var(--rule); font-size:13px; color:var(--ink-3); line-height:1.6}
+.src b{color:var(--ink-2)}
+footer{margin-top:26px; font-size:14px; color:var(--ink-3)}
+footer a{color:var(--cool-ink); font-weight:600}
+
+.case[data-acc="1"], .rail button[data-acc="1"]{--acc:#8a3a1c; --acc-ink:#8a3a1c}
+.case[data-acc="2"], .rail button[data-acc="2"]{--acc:#6a4d12; --acc-ink:#6a4d12}
+.case[data-acc="3"], .rail button[data-acc="3"]{--acc:#274063; --acc-ink:#274063}
+
+@media (prefers-reduced-motion:reduce){*{transition:none}}
+.sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+</style>
+</head>
+<body>
+
+<!-- STANDING NAV — Home + Back on every product (founder nav floor). Static, no JS, offline. -->
+<nav class="topnav" aria-label="Site navigation">
+  <div class="topnav-in">
+    <a class="backbtn" href="islo-hub.html" aria-label="Back to the iSLO Suite">&lsaquo; Back</a>
+    <a class="homebtn" href="index.html" aria-label="Home — studio front door">&#8962; Home</a>
+    <span class="topnav-mark">Who Holds the Room · DEI</span>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ═══ STAGE ═══ -->
+<div class="stage">
+  <p class="mark">Tight Spiral Productions · MassBay iSLO 5 — Diversity, Equity &amp; Inclusion</p>
+  <h1>Who holds <em>the room?</em></h1>
+  <p class="lede">One ordinary campus scene. No villains. You'll read it three ways — the same way the
+    college's own DEI rubric does: <b>who holds power in it, how the same moment lands differently on
+    different people, and what it looks like to actually say something.</b></p>
+  <p class="lede">This isn't a quiz with a right answer to catch you out. <b>A starting point is never a
+    verdict.</b> You're measured against the rubric's levels and your own growth — never against anyone else.</p>
+  <p class="tag">See the structure · Feel the difference · Find the move</p>
+
+  <svg class="hero-mark" viewBox="0 0 120 64" aria-hidden="true">
+    <rect x="12" y="14" width="96" height="40" rx="3" fill="none" stroke="currentColor" stroke-width="2.4"/>
+    <line x1="12" y1="26" x2="108" y2="26" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 3"/>
+    <circle cx="30" cy="40" r="6" fill="currentColor"/>
+    <circle cx="52" cy="40" r="6" fill="none" stroke="currentColor" stroke-width="2.4"/>
+    <circle cx="74" cy="40" r="4.5" fill="none" stroke="currentColor" stroke-width="2.4"/>
+    <circle cx="92" cy="40" r="3.5" fill="none" stroke="currentColor" stroke-width="2.4"/>
+  </svg>
+</div>
+
+<!-- THE SCENE — held constant across all three reads -->
+<div class="scene">
+  <p class="sh">The scene · it does not change</p>
+  <p>A required course. Week 10. The professor announces a <b>group project</b>, assigns the groups,
+    and says: <b>&ldquo;You'll need to meet outside class to finish it. Figure out a time that works and
+    get it done.&rdquo;</b></p>
+  <p>Four students land in one group. Each one wants to do well. Each one hears the same sentence.</p>
+</div>
+
+<div class="rail" id="rail" role="tablist" aria-label="Three reads of one scene">
+  <button data-acc="1" data-go="0" role="tab" aria-current="true"><span class="rn">Read one</span><span class="rt">Who holds power</span></button>
+  <button data-acc="2" data-go="1" role="tab" aria-current="false"><span class="rn">Read two</span><span class="rt">How it lands</span></button>
+  <button data-acc="3" data-go="2" role="tab" aria-current="false"><span class="rn">Read three</span><span class="rt">The move</span></button>
+</div>
+
+<!-- ═══ ROUND 1 — SYSTEMS OF POWER ═══ -->
+<section class="case" data-acc="1" id="case-0">
+  <p class="kicker">Read one · systems of power</p>
+  <h2>Who does this plan quietly build for?</h2>
+  <p class="intro">&ldquo;Figure out a time that works&rdquo; sounds neutral. But every neutral-sounding rule
+    is built around a <b>default person</b> — the one it assumes. Whoever fits the default holds the power in
+    the room without anyone deciding they should. <b>Select every assumption baked into this plan.</b></p>
+
+  <p class="q">The plan assumes each student…</p>
+  <p class="qw">There's no trick here — read each one against the sentence the professor said.</p>
+  <div class="checks" id="c0-checks" role="group" aria-label="Assumptions in the plan">
+    <button class="chk" data-k="1" aria-pressed="false"><span class="box" aria-hidden="true"></span><span>has reliable transportation and can get to campus (or anywhere) on an evening or weekend</span></button>
+    <button class="chk" data-k="1" aria-pressed="false"><span class="box" aria-hidden="true"></span><span>has hours free of paid work whenever the group happens to pick</span></button>
+    <button class="chk" data-k="1" aria-pressed="false"><span class="box" aria-hidden="true"></span><span>has no children or family members depending on their time</span></button>
+    <button class="chk" data-k="1" aria-pressed="false"><span class="box" aria-hidden="true"></span><span>is confident speaking up and negotiating in English, on the spot</span></button>
+    <button class="chk" data-k="1" aria-pressed="false"><span class="box" aria-hidden="true"></span><span>can organize a group without having been taught how, and feels entitled to</span></button>
+  </div>
+  <div style="margin-top:14px"><button class="btn" id="c0-show" disabled>Read the structure</button></div>
+
+  <div class="reveal" id="c0-reveal" hidden>
+    <div class="reading">
+      <p class="rh">The structure</p>
+      <p class="rb">Every one of those is an assumption the plan makes — <span id="c0-count"></span>. None of
+        them is written down. That's what makes them <b>structural</b>: the rules were set by someone with
+        the institutional power to set them (the professor, and behind them the college's norms), and they
+        quietly assume a <b>default student</b> — one with a car, open time, no caregiving, easy English, and
+        the confidence to run a room.</p>
+      <p class="rb">Whoever matches that default holds power in this group <b>without doing anything</b>.
+        Whoever doesn't will spend energy just getting to the starting line that the default student never
+        spends. That gap wasn't chosen by anyone in the room. It was built into the design.</p>
+    </div>
+    <div class="selfpos">
+      <p class="sh">Where are you in it?</p>
+      <p>Nothing here is recorded. Just notice: which parts of that default fit your life, and which don't?
+        The rubric's top level isn't seeing the structure — it's seeing your own place inside it.</p>
+    </div>
+    <p class="dim">Rubric &mdash; <b>Systems of Power</b> · recognize the structures &rarr; analyze them &rarr; see your position within them.</p>
+  </div>
+
+  <div class="nav-row"><span></span><button class="btn ghost" data-next="1">Read two: how it lands &rsaquo;</button></div>
+</section>
+
+<!-- ═══ ROUND 2 — GROUP / INDIVIDUAL INTERACTIONS ═══ -->
+<section class="case" data-acc="2" id="case-1" hidden>
+  <p class="kicker">Read two · group &amp; individual interactions</p>
+  <h2>One sentence. Four different landings.</h2>
+  <p class="intro">The professor's sentence was identical for everyone: <b>&ldquo;meet outside class and
+    figure it out.&rdquo;</b> Watch it land on each person in the group. <b>Open all four</b> — each is a
+    whole person doing their best, not a problem to be solved.</p>
+
+  <div class="people" id="c1-people">
+    <div class="person" data-p="1">
+      <button aria-expanded="false"><svg class="pmark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M5 28 q11 -12 22 0" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pwho"><span class="pname">Marisol</span><span class="prole">Carrying a 32-hour week on top of full-time classes</span></span><span class="ptoggle">Open +</span></button>
+      <div class="pdetail"><p>She's up at 5, closes the store at 11. She hears &ldquo;figure out a time&rdquo; and already knows every time the group picks will be a time she's on the clock — and that asking them to work around her shift will make her sound like the difficult one. She's not less committed. She's carrying more, and the plan makes her carry it alone.</p></div>
+    </div>
+    <div class="person" data-p="2">
+      <button aria-expanded="false"><svg class="pmark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="12" cy="11" r="5.5" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="23" cy="14" r="3.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M4 28 q8 -10 16 -1 M19 27 q4 -6 9 -2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span class="pwho"><span class="pname">Dennis</span><span class="prole">Parenting two kids; class is his second shift</span></span><span class="ptoggle">Open +</span></button>
+      <div class="pdetail"><p>Evenings are pickup, dinner, homework — not his, theirs. A &ldquo;quick Saturday meet&rdquo; means finding and paying for childcare, or bringing a four-year-old to a study room. He'll do the work at midnight after the house is asleep. The plan assumes his time is his to give. Most of it already belongs to someone smaller.</p></div>
+    </div>
+    <div class="person" data-p="3">
+      <button aria-expanded="false"><svg class="pmark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M5 28 q11 -12 22 0" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M22 6 q4 2 3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="pwho"><span class="pname">Aigerim</span><span class="prole">Second year in the U.S.; strong writer, still gaining spoken confidence</span></span><span class="ptoggle">Open +</span></button>
+      <div class="pdetail"><p>On paper she's one of the sharpest in the class. But &ldquo;figure it out&rdquo; happens fast, out loud, in overlapping talk — the one setting where her second language costs her most. By the time she's shaped the sentence, the group has moved on and quietly filed her as quiet. The plan rewards the loudest scheduler, not the strongest thinker.</p></div>
+    </div>
+    <div class="person" data-p="4">
+      <button aria-expanded="false"><svg class="pmark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M5 28 q11 -12 22 0" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M16 17 v6 M13 20 h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="pwho"><span class="pname">Tyler</span><span class="prole">Lives on campus, car, no job this term — the default the plan was built for</span></span><span class="ptoggle">Open +</span></button>
+      <div class="pdetail"><p>For Tyler, &ldquo;figure out a time&rdquo; genuinely is easy — his calendar is open, the library is a five-minute walk, and speaking up in a group has never once cost him anything. None of that is his fault, and none of it makes him a bad teammate. It just means the plan fits him like a glove and he may never notice it was cut to his measurements.</p></div>
+    </div>
+  </div>
+  <div style="margin-top:14px"><button class="btn" id="c1-show" disabled>What the same sentence added up to</button></div>
+
+  <div class="reveal" id="c1-reveal" hidden>
+    <div class="reading">
+      <p class="rh">How it lands</p>
+      <p class="rb">One instruction, four different costs — and they line up almost perfectly with who has
+        power outside the room. That's the thing to see: <b>the plan didn't create the inequality, but it
+        passed it straight through</b>, unchanged, and called the result &ldquo;fair because everyone got
+        the same rule.&rdquo;</p>
+      <p class="rb"><b>Individual:</b> three of four spend energy just reaching the start. <b>Community:</b>
+        the group loses Aigerim's thinking and reads Marisol as difficult. <b>Society:</b> repeat this design
+        across a whole degree and it quietly decides who finishes college — not by talent, by fit.</p>
+    </div>
+    <p class="dim">Rubric &mdash; <b>Group / Individual Interactions</b> · notice people differ &rarr; explain the impact on individual, community, society &rarr; connect it to your own experience.</p>
+  </div>
+
+  <div class="nav-row"><button class="btn ghost" data-next="0">&lsaquo; Read one</button><button class="btn ghost" data-next="2">Read three: the move &rsaquo;</button></div>
+</section>
+
+<!-- ═══ ROUND 3 — ADVOCACY ═══ -->
+<section class="case" data-acc="3" id="case-2" hidden>
+  <p class="kicker">Read three · advocacy</p>
+  <h2>You're in the group. You can speak.</h2>
+  <p class="intro">You've seen the structure and felt the landings. Now the group is picking a time and
+    looking at their phones. <b>What do you actually do?</b> There's no gotcha — pick the one closest to what
+    you'd really say, then see what it does and where the college's rubric places it. You can try another.</p>
+
+  <div class="moves" id="c2-moves" role="group" aria-label="What do you do">
+    <button class="move" data-lvl="0" aria-pressed="false">Say nothing. Everyone's an adult; managing your own schedule is your own business.</button>
+    <button class="move" data-lvl="2" aria-pressed="false">Quietly message the professor afterward that the plan is hard for you personally.</button>
+    <button class="move" data-lvl="3" aria-pressed="false">Suggest the group use a shared doc and rotating roles, so no one has to be in the same room at the same time.</button>
+    <button class="move" data-lvl="4" aria-pressed="false">Say it to the group: let's build the work so it doesn't depend on everyone being equally free — and I'll be honest, I'm raising it partly because of my own schedule.</button>
+  </div>
+  <div style="margin-top:14px"><button class="btn" id="c2-show" disabled>See what that move does</button></div>
+
+  <div class="reveal" id="c2-reveal" hidden>
+    <div class="level" id="c2-level"><!-- filled by JS --></div>
+    <div class="hides">
+      <p class="hh">Why advocacy is a skill, not a personality</p>
+      <p>Notice the ladder isn't about being loud or nice. It climbs from <b>staying silent</b>, to
+        <b>naming a problem</b>, to <b>offering a strategy</b>, to <b>changing the design and owning your
+        place in it</b>. Every rung is learnable. Wherever you are today is a starting point, not a verdict.</p>
+    </div>
+    <p class="dim">Rubric &mdash; <b>Advocacy</b> · recognize it matters &rarr; begin the hard conversation &rarr; apply a strategy &rarr; advocate while naming your own place in it.</p>
+  </div>
+
+  <div class="nav-row"><button class="btn ghost" data-next="1">&lsaquo; Read two</button><button class="btn" data-finish="1">See the whole rubric &rsaquo;</button></div>
+</section>
+
+<!-- ═══ CLOSE ═══ -->
+<section class="close" id="close" hidden>
+  <p class="kicker" style="color:var(--brass-ink)">The instrument you were just read on</p>
+  <h2>This is the college's own DEI rubric.</h2>
+  <p class="lede">Every read you just did maps to one row of the MassBay ISLO&nbsp;#5 rubric — the same one
+    faculty use to score the graduation portfolio, reproduced word for word. It measures growth against these
+    levels and your own earlier work. <b>It never ranks you against a classmate.</b></p>
+
+  <div class="rubric" id="rubric"><!-- filled by JS --></div>
+
+  <div class="slab">
+    <h3>What actually fixes the room</h3>
+    <ul>
+      <li><b>Deliberative interdependence</b> — design the work so people genuinely rely on each other, with clear rules for how it gets done, so &ldquo;community&rdquo; is built into the mechanism instead of left to whoever has time.</li>
+      <li><b>Transformative translation</b> — let people bring the work through their own experience and more than one way in, so the strongest thinker isn't lost to the fastest talker.</li>
+      <li><b>Proactive engagement</b> — move the support to the center: build feedback and flexible timing into the design, instead of waiting for the person carrying the most to raise their hand and ask.</li>
+    </ul>
+  </div>
+
+  <div class="src">
+    <p><b>Source:</b> The MassBay ISLO&nbsp;#5 Rubric — Systems of Power, Group/Individual Interactions, and
+      Advocacy, levels 0&ndash;4 — reproduced verbatim from the Spring 2026 DEI Graduation-Competency
+      workshop. The three equity levers (deliberative interdependence, transformative translation, proactive
+      engagement) are from Estefan et&nbsp;al. (2023), as presented in that workshop. Scene and characters are
+      composite and fictional; no real student is depicted. <b>Last-verified 2026-07-19.</b></p>
+    <p><b>Outcome.</b> Built for MassBay iSLO 5 (Diversity, Equity &amp; Inclusion): <i>analyze systems of
+      power and the ways group and individual interactions impact self, community, and society; and identify
+      skills and strategies for promoting equity, inclusion, and cultural sensitivity.</i></p>
+  </div>
+  <footer>
+    <p><a href="islo-hub.html">&lsaquo; Back to the iSLO Suite</a> &nbsp;&middot;&nbsp;
+       <a href="index.html">The studio front door</a> &nbsp;&middot;&nbsp; CC BY-NC-ND 4.0</p>
+  </footer>
+</section>
+
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var $ = function(id){ return document.getElementById(id); };
+
+  /* ---- ISLO #5 rubric, verbatim (MassBay, Spring 2026) ---- */
+  var RUBRIC = [
+    { dim:"Systems of Power", key:"Read one",
+      lv:[
+        ["4","Demonstrates an advanced understanding and ability to critically analyze historical, organizational, institutional, political, and/or global structures that determine who holds power and privilege and see their position within it."],
+        ["3","Able to effectively analyze various aspects of those structures that determine who holds power and privilege."],
+        ["2","Can explain some of the underlying aspects of those structures."],
+        ["1","Recognizes and describes some aspects of those structures."],
+        ["0","Does not address any aspects of those structures."]
+      ]},
+    { dim:"Group / Individual Interactions", key:"Read two",
+      lv:[
+        ["4","Connects an understanding of the complex dynamics of individual and group interactions and their impact on the individual, community, and society to their own experiences and relationships."],
+        ["3","Able to analyze the complexity of individual and group interactions and their influence on the individual, community, and society."],
+        ["2","Can explain in some depth how individual and group interactions affect the individual, community, and society."],
+        ["1","Recognizes that people interact differently within and between groups and that this affects individual, community, and society."],
+        ["0","Does not address that idea."]
+      ]},
+    { dim:"Advocacy", key:"Read three",
+      lv:[
+        ["4","Effectively advocates for equity, inclusion, and cultural sensitivity in the communities and/or broader societies of which they are a part, acknowledging their own place in this dialogue."],
+        ["3","Selects and applies appropriate communication skills and strategies to promote equity, inclusion, and cultural sensitivity."],
+        ["2","Demonstrates ability to begin engaging in difficult dialogues about equity, inclusion, and cultural sensitivity."],
+        ["1","Recognizes the importance of appropriate communication and engagement skills and strategies."],
+        ["0","Does not address the importance of those skills and strategies."]
+      ]}
+  ];
+  var ADV = RUBRIC[2].lv; // advocacy levels by index (0 => "4" ... 4 => "0")
+  function advByNum(n){ for(var i=0;i<ADV.length;i++){ if(ADV[i][0]===String(n)) return ADV[i][1]; } return ""; }
+  var chosenAdv = null;
+
+  /* ---- navigation ---- */
+  var cases = [ $("case-0"), $("case-1"), $("case-2") ];
+  var railBtns = Array.prototype.slice.call(document.querySelectorAll("#rail button"));
+  function show(i){
+    var isClose = (i === "close");
+    cases.forEach(function(c,k){ c.hidden = isClose ? true : (k !== i); });
+    $("close").hidden = !isClose;
+    railBtns.forEach(function(b){ var t=parseInt(b.getAttribute("data-go"),10); b.setAttribute("aria-current",(!isClose&&t===i)?"true":"false"); });
+    if(window.scrollTo) window.scrollTo(0,0);
+  }
+  railBtns.forEach(function(b){ b.addEventListener("click", function(){ show(parseInt(b.getAttribute("data-go"),10)); }); });
+  document.querySelectorAll("[data-next]").forEach(function(b){ b.addEventListener("click", function(){ show(parseInt(b.getAttribute("data-next"),10)); }); });
+  document.querySelectorAll("[data-finish]").forEach(function(b){ b.addEventListener("click", function(){ buildRubric(); show("close"); }); });
+  function markDone(i){ railBtns[i] && railBtns[i].setAttribute("data-done","1"); }
+
+  /* ---- ROUND 1: multi-select assumptions ---- */
+  (function(){
+    var grp=$("c0-checks"), showBtn=$("c0-show");
+    grp.addEventListener("click", function(e){
+      var b=e.target.closest(".chk"); if(!b) return;
+      var on = b.getAttribute("aria-pressed")==="true";
+      b.setAttribute("aria-pressed", on?"false":"true");
+      var any = grp.querySelector('.chk[aria-pressed="true"]');
+      showBtn.disabled = !any;
+    });
+    showBtn.addEventListener("click", function(){
+      var n = grp.querySelectorAll('.chk[aria-pressed="true"]').length;
+      var total = grp.querySelectorAll('.chk').length;
+      $("c0-count").textContent = (n===total)
+        ? "you found all " + total
+        : "you marked " + n + " of " + total + ", and the fact is all " + total + " are baked in";
+      $("c0-reveal").hidden=false; markDone(0);
+      $("c0-reveal").scrollIntoView({behavior:"smooth", block:"nearest"});
+    });
+  })();
+
+  /* ---- ROUND 2: open all four people ---- */
+  (function(){
+    var wrap=$("c1-people"), showBtn=$("c1-show"), opened={};
+    wrap.addEventListener("click", function(e){
+      var btn=e.target.closest("button"); if(!btn) return;
+      var card=btn.closest(".person");
+      var isOpen=card.classList.toggle("open");
+      btn.setAttribute("aria-expanded", isOpen?"true":"false");
+      btn.querySelector(".ptoggle").textContent = isOpen ? "Close –" : "Open +";
+      opened[card.getAttribute("data-p")] = isOpen;
+      var count=0; for(var k in opened){ if(opened[k]) count++; }
+      showBtn.disabled = count < 4;
+    });
+    showBtn.addEventListener("click", function(){
+      $("c1-reveal").hidden=false; markDone(1);
+      $("c1-reveal").scrollIntoView({behavior:"smooth", block:"nearest"});
+    });
+  })();
+
+  /* ---- ROUND 3: pick an advocacy move ---- */
+  (function(){
+    var grp=$("c2-moves"), showBtn=$("c2-show");
+    grp.addEventListener("click", function(e){
+      var b=e.target.closest(".move"); if(!b) return;
+      grp.querySelectorAll(".move").forEach(function(k){ k.setAttribute("aria-pressed","false"); });
+      b.setAttribute("aria-pressed","true");
+      chosenAdv = b.getAttribute("data-lvl");
+      showBtn.disabled=false;
+    });
+    showBtn.addEventListener("click", function(){
+      var n = chosenAdv;
+      var names={"0":"Does not address it","1":"Recognizes it matters","2":"Begins the hard conversation","3":"Applies a strategy","4":"Advocates, and owns their place"};
+      var nextLine;
+      if(n==="4") nextLine = "This is the top of the rubric: you changed the design <b>and</b> named your own stake in it. The rung above is only doing it again, out loud, when it's harder.";
+      else{
+        var up=String(parseInt(n,10)+1);
+        nextLine = "One rung up (<b>level "+up+"</b>): " + advByNum(up);
+      }
+      $("c2-level").innerHTML =
+        '<div class="lvtop"><span class="lvnum">'+n+'</span><span class="lvname">Advocacy · level '+n+' — '+names[n]+'</span></div>'+
+        '<div class="lvtext">&ldquo;'+advByNum(n)+'&rdquo;</div>'+
+        '<div class="lvnext">'+nextLine+'</div>';
+      $("c2-reveal").hidden=false; markDone(2);
+      $("c2-reveal").scrollIntoView({behavior:"smooth", block:"nearest"});
+    });
+  })();
+
+  /* ---- CLOSE: full rubric ---- */
+  function buildRubric(){
+    var html="";
+    RUBRIC.forEach(function(d){
+      html += '<div class="rdim"><div class="rdh"><span>'+d.key+'</span>'+d.dim+'</div>';
+      d.lv.forEach(function(l){ html += '<div class="lvl"><b>'+l[0]+'</b><span>'+l[1]+'</span></div>'; });
+      html += '</div>';
+    });
+    $("rubric").innerHTML = html;
+  }
+})();
+</script>
+</body>
+</html>
