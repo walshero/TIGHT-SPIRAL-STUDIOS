@@ -25,6 +25,15 @@
   Humor is culturally situated: the audience you poll changes what lands. That is taught, not hidden.
 
   CHANGELOG
+   v7  2026-07-20  COMFORT IS A TOGGLE (founder ruling: "stop listing all comfort modes
+                  - it's a toggle!"). The 5-mode cycler (Default/Softer/Warm dark/
+                  Daylight/Clear Reader) that named every stop is gone. In its place:
+                  one light/dark toggle, flanked by a text-size minus/plus stepper
+                  (- before, + after). Smallest body text raised off the sub-13px
+                  floor. And the fixed top-left nav chip no longer overlaps the
+                  poster - the stage clears it. (The softer/warmdark/clear-reader
+                  palettes remain in CSS, still contrast-checked; only the cycler UI
+                  was retired.)
    v6  2026-07-19  COLD-OPEN REBUILD (founder eye: "fails splash. no text or minimal").
                   The old opening was a wide 2.26:1 strip carrying a four-line
                   instruction paragraph in an OPAQUE headline box. On a phone the
@@ -103,7 +112,8 @@
   .sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
 
   /* ---- shell ---- */
-  .stage{ max-width:1040px; margin:0 auto; padding:18px 18px 60px; }
+  /* padding-top clears the fixed top-left nav chip so it never sits over the art */
+  .stage{ max-width:1040px; margin:0 auto; padding:56px 18px 60px; zoom:var(--textscale,1); }
 
   /* ---- top bar: comfort knobs + lens toggle. never a gate; always reachable ---- */
   .bar{
@@ -122,7 +132,7 @@
   .brand .glyph{ width:22px; height:22px; }
   .knobs{ display:flex; gap:6px; flex-wrap:wrap; }
   .knob{
-    font-size:.74rem; padding:6px 10px; border-radius:999px;
+    font-size:.82rem; padding:6px 10px; border-radius:999px;
     background:var(--surface-2); border:1px solid var(--line); color:var(--ink-soft);
     display:inline-flex; align-items:center; gap:6px;
   }
@@ -131,7 +141,7 @@
 
   /* lens toggle */
   .lenses{ display:flex; gap:6px; background:var(--surface-2); padding:4px; border-radius:999px; border:1px solid var(--line);}
-  .lens-btn{ font-size:.78rem; font-weight:700; padding:6px 12px; border-radius:999px; color:var(--ink-soft); position:relative;}
+  .lens-btn{ font-size:.86rem; font-weight:700; padding:6px 12px; border-radius:999px; color:var(--ink-soft); position:relative;}
   .lens-btn[data-l="spell"][aria-pressed="true"]{ background:#b98cff; color:#10151c; }
   .lens-btn[data-l="code"][aria-pressed="true"]{ background:#5fd0e6; color:#10151c; }
   .lens-btn[data-l="story"][aria-pressed="true"]{ background:#ff8fa8; color:#10151c; }
@@ -199,7 +209,7 @@
   .part .ic{ flex:0 0 auto; width:40px; height:40px; }
   .part .tx{ display:flex; flex-direction:column; gap:2px; }
   .part .tx b{ font-size:.92rem; }
-  .part .tx span{ font-size:.76rem; color:var(--ink-soft); }
+  .part .tx span{ font-size:.84rem; color:var(--ink-soft); }
   .part .pred{ margin-top:5px; font-size:.7rem; color:#ffb347; font-weight:700; letter-spacing:.4px;}
   body.softer .part .pred{ color:#ffc061; }
 
@@ -219,14 +229,14 @@
   .meter{ background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:14px; }
   .meter h3{ margin:0 0 12px; font-size:.95rem; }
   .bars{ display:flex; flex-direction:column; gap:12px; }
-  .bar-lab{ display:flex; justify-content:space-between; font-size:.78rem; color:var(--ink-soft); margin-bottom:4px;}
+  .bar-lab{ display:flex; justify-content:space-between; font-size:.86rem; color:var(--ink-soft); margin-bottom:4px;}
   .track{ height:16px; background:var(--surface); border:1px solid var(--line); border-radius:999px; overflow:hidden; }
   .fill{ height:100%; border-radius:999px; transition:width .7s cubic-bezier(.2,.8,.2,1); }
   .fill.pred{ background:var(--lens); }
   .fill.actual{ background:var(--good); }
   .gapnum{ text-align:center; margin-top:6px; }
   .gapnum .big{ font-size:2.4rem; font-weight:800; line-height:1; }
-  .gapnum .cap{ font-size:.76rem; color:var(--ink-soft); letter-spacing:.5px; text-transform:uppercase;}
+  .gapnum .cap{ font-size:.84rem; color:var(--ink-soft); letter-spacing:.5px; text-transform:uppercase;}
 
   .read{ background:var(--surface-2); border:1px solid var(--line); border-left:4px solid var(--lens);
     border-radius:10px; padding:13px 15px; font-size:.9rem; }
@@ -241,7 +251,7 @@
     background:var(--surface-2); border:1px solid var(--line); }
   .pollpick button[aria-pressed="true"]{ border-color:var(--lens); box-shadow:inset 0 0 0 1px var(--lens); }
   .pollpick b{ display:block; font-size:.86rem; }
-  .pollpick span{ font-size:.74rem; color:var(--ink-soft); }
+  .pollpick span{ font-size:.82rem; color:var(--ink-soft); }
 
   /* ---- glass engine ring: the real-world system, hidden until noticed ---- */
   .ring{ margin:20px 0 0; text-align:center; }
@@ -273,7 +283,7 @@
   .fade-in{ animation:fade .5s ease both; }
   @keyframes fade{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
 
-  .foot{ margin-top:34px; padding-top:16px; border-top:1px solid var(--line); color:var(--ink-soft); font-size:.78rem; text-align:center;}
+  .foot{ margin-top:34px; padding-top:16px; border-top:1px solid var(--line); color:var(--ink-soft); font-size:.86rem; text-align:center;}
   .foot a{ color:var(--lens-ink); }
   body.daylight .foot a{ color:#7a4600; }
   .badge{ display:inline-block; font-size:.68rem; padding:3px 9px; border-radius:999px;
@@ -368,18 +378,25 @@ body.clear-reader .cr-note{
    the comfort BECAUSE you have seen something and want to see it differently —
    not before you have seen anything at all, when the choice is meaningless.
    ═════════════════════════════════════════════════════════════════════════ */
+/* Comfort is a TOGGLE, not a list of modes (founder ruling 2026-07-20).
+   One light/dark switch, flanked by text-size minus/plus on either side. */
 .comfort{
   position:fixed; right:14px; bottom:14px; z-index:9999;
-  font:700 12.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
-  letter-spacing:.05em; padding:12px 15px; min-height:44px;
+  display:flex; align-items:stretch; gap:6px;
+}
+.comfort button{
+  font:700 13px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.05em; min-height:44px;
   background:var(--bg); color:var(--ink);
   border:2px solid var(--ink); border-radius:2px; cursor:pointer;
   box-shadow:0 2px 10px rgba(0,0,0,.16);
 }
-.comfort:focus-visible{ outline:4px solid #0000ee; outline-offset:3px; }
+.comfort .c-size{ width:44px; font-size:22px; padding:0; }
+.comfort .c-toggle{ padding:0 15px; min-width:96px; }
+.comfort button:focus-visible{ outline:4px solid #0000ee; outline-offset:3px; }
+.comfort button:disabled{ opacity:.4; cursor:default; }
 body.clear-reader .comfort{
-  position:static !important; display:block !important;
-  margin:0 0 20px !important; box-shadow:none !important;
+  position:static !important; margin:0 0 20px !important; box-shadow:none !important;
 }
 /* ═══ HOME — the mirror of Comfort. Bottom-LEFT corner. ════════════════════
    NAV FLOOR (founder rule, 2026-07-16): every 2+ screen product carries BACK
@@ -667,36 +684,35 @@ again to bring the design back.</div>
   </div>
 </div>
 
-<button class="comfort" id="comfort">Comfort: <span id="comfort-label">Default</span></button>
+<div class="comfort" role="group" aria-label="Comfort">
+  <button type="button" class="c-size" id="c-minus" onclick="stepSize(-1)" aria-label="Smaller text" title="Smaller text">&minus;</button>
+  <button type="button" class="c-toggle" id="c-day" onclick="toggleDay()" aria-pressed="false">Daylight</button>
+  <button type="button" class="c-size" id="c-plus" onclick="stepSize(1)" aria-label="Bigger text" title="Bigger text">+</button>
+</div>
 <button class="homenav" id="homenav" hidden onclick="goHome()" aria-label="Home — back to the opening scene">Home</button>
 
 <script>
-(function(){
-  "use strict";
-  var STOPS = [
-    { cls:"",             label:"Default"      },
-    { cls:"softer",       label:"Softer"       },
-    { cls:"warmdark",     label:"Warm dark"    },
-    { cls:"daylight",     label:"Daylight"     },
-    { cls:"clear-reader", label:"Clear Reader" }
-  ];
-  var i = 0;
-  var btn = document.getElementById("comfort");
-  var lab = document.getElementById("comfort-label");
-  function apply(){
-    for(var k=0;k<STOPS.length;k++){ if(STOPS[k].cls) document.body.classList.remove(STOPS[k].cls); }
-    if(STOPS[i].cls) document.body.classList.add(STOPS[i].cls);
-    lab.textContent = STOPS[i].label;
-    /* A button announces what it will DO, not what it is. A screen-reader user
-       pressing this needs to know where it takes them. */
-    var next = STOPS[(i+1) % STOPS.length].label;
-    btn.setAttribute("aria-label",
-      "Comfort setting: " + STOPS[i].label + ". Press to switch to " + next + ".");
-  }
-  btn.addEventListener("click", function(){ i = (i+1) % STOPS.length; apply(); });
-  /* NO STORAGE. Single-file, offline, zero-persistence is studio law. */
-  apply();
-})();
+/* Comfort = a light/dark TOGGLE + a text-size stepper. Was a 5-mode cycler that
+   named every stop; the founder ruled it a toggle (2026-07-20). The button
+   announces the state it switches TO. No emoji (studio floor). No storage. */
+function toggleDay(){
+  var on = document.body.classList.toggle("daylight");
+  var b = document.getElementById("c-day");
+  b.setAttribute("aria-pressed", on ? "true" : "false");
+  b.textContent = on ? "Dark" : "Daylight";   // label = where the press takes you
+  b.setAttribute("aria-label", on ? "Comfort: Daylight on. Press for Dark." : "Comfort: Dark. Press for Daylight.");
+}
+var SIZES = [0.9, 1, 1.15, 1.3], sizeIdx = 1;
+function applySize(){
+  document.querySelector(".stage").style.setProperty("--textscale", SIZES[sizeIdx]);
+  document.getElementById("c-minus").disabled = (sizeIdx === 0);
+  document.getElementById("c-plus").disabled  = (sizeIdx === SIZES.length - 1);
+}
+function stepSize(d){
+  sizeIdx = Math.max(0, Math.min(SIZES.length - 1, sizeIdx + d));
+  applySize();
+}
+applySize();
 </script>
 
 <script>
