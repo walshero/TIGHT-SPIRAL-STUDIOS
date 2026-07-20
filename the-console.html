@@ -37,9 +37,17 @@ body{line-height:1.4}
 .comfort button{background:var(--panel);color:var(--dim);border:1px solid var(--edge);
   border-radius:10px;font:inherit;font-size:20px;width:48px;height:48px;cursor:pointer;line-height:1}
 .comfort button:hover,.comfort button:focus-visible,.comfort button[aria-pressed="true"]{color:var(--ink);border-color:var(--phos)}
-body.big{font-size:19px}
+/* Text-size stepper: minus before, plus after (comfort control) */
+.sizer{display:flex;align-items:center;gap:2px;background:var(--panel);border:1px solid var(--edge);border-radius:10px;height:48px;padding:0 2px}
+.comfort .sizer button{background:transparent;border:none;color:var(--dim);font:inherit;font-size:26px;width:40px;height:46px;cursor:pointer;line-height:1;border-radius:8px}
+.comfort .sizer button:hover,.comfort .sizer button:focus-visible{color:var(--ink)}
+.comfort .sizer button:disabled{opacity:.3;cursor:default;color:var(--dim)}
+.sizer-label{color:var(--dim);font-weight:800;font-size:15px;min-width:15px;text-align:center;pointer-events:none;user-select:none}
 body.still *{animation:none!important;transition:none!important}
-.app-shell{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+/* --scale drives the whole console's size. The min-height divides by the same
+   scale so the zoomed shell still fills exactly one viewport (no phantom scroll). */
+.app-shell{--scale:1.15;zoom:var(--scale);min-height:calc(100dvh / var(--scale));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding:16px 16px 28px;max-width:560px;margin:0 auto}
 .big-btn{background:var(--phos);color:#04211e;border:none;border-radius:16px;
   font:inherit;font-weight:800;font-size:22px;padding:20px 30px;cursor:pointer;
@@ -156,7 +164,11 @@ body.still .flip{transition:none}
 </head>
 <body>
 <div class="comfort" role="group" aria-label="Comfort controls">
-  <button type="button" id="cBig" onclick="toggleBody('big',this)" aria-pressed="false" aria-label="Bigger text" title="Bigger text">A+</button>
+  <div class="sizer" role="group" aria-label="Text size">
+    <button type="button" id="cMinus" onclick="stepSize(-1)" aria-label="Smaller text" title="Smaller text">&minus;</button>
+    <span class="sizer-label" aria-hidden="true">A</span>
+    <button type="button" id="cPlus" onclick="stepSize(1)" aria-label="Bigger text" title="Bigger text">+</button>
+  </div>
   <button type="button" id="cStill" onclick="toggleBody('still',this)" aria-pressed="false" aria-label="Reduce motion" title="Reduce motion">&#9680;</button>
 </div>
 <div class="app-shell">
@@ -256,29 +268,43 @@ const LEVERS=[
   cite:"Cialdini, Influence (2001)"}
 ];
 const RANK_TITLES=["Intern","Junior","Growth Lead","Senior Lead","Head of Growth"];
-const NAMES=["sunroom.mornings","north_trail","q.ramos","daily.loaf","cvx","el.reads","tidepool","hank.jpg","808drift","nora.makes"];
-const BODIES=["repotted the basil. it's thriving. i am, however, not.","day 41 of the loaf. the crumb opened up.","best trail is the one nobody photographs.","you're allowed to log off. (i won't.)","found a box from 2009. not ok.","is 6 coffees a personality","the sunset did a thing. no notes.","still can't find the mugs","unpopular opinion in 3\u2026 2\u2026","replied to one email today. one."];
-const HUES=[210,340,150,30,265,190,90,10,300,55];
+const NAMES=["sunroom.mornings","north_trail","q.ramos","daily.loaf","cvx","el.reads","tidepool","hank.jpg","808drift","nora.makes","moss.and.co","late.bus","pixel.orchard","salt.air","the.opener","mid.century.mel","one.more.chapter","porch.light"];
+const BODIES=["repotted the basil. it's thriving. i am, however, not.","day 41 of the loaf. the crumb opened up.","best trail is the one nobody photographs.","you're allowed to log off. (i won't.)","found a box from 2009. not ok.","is 6 coffees a personality","the sunset did a thing. no notes.","still can't find the mugs","unpopular opinion in 3\u2026 2\u2026","replied to one email today. one.","the tomatoes staged a coup. i lost.","missed the bus, found a whole album.","planted forty bulbs, remembered zero.","the ocean said nothing. felt heard.","opened with a joke, closed with a nap.","thrifted a lamp older than me.","one chapter became the whole night.","left the porch light on for nobody."];
+const HUES=[210,340,150,30,265,190,90,10,300,55,130,20,280,50,175,320,100,240];
 const REWARD_TAPS=new Set([2,3,6,8,11,15]);
+// Each technique opens on a DIFFERENT slice of the feed, so no two levers show
+// the same posts. (fLOK 1 note, 2026-07-19: the feed used to be identical every level.)
+const FEED_OFFSET=[0,7,13,4,10];
+function curOffset(){return FEED_OFFSET[step]||0;}
+let nextIdx=0;   // per-lever running post counter: base cards, appends, and new posts all draw from it
 function avatar(h){return '<svg class="avatar" viewBox="0 0 38 38" aria-hidden="true"><rect width="38" height="38" rx="19" fill="hsl('+h+' 55% 62%)"/><circle cx="19" cy="14" r="7" fill="rgba(255,255,255,.85)"/><rect x="8" y="24" width="22" height="14" rx="7" fill="rgba(255,255,255,.85)"/></svg>';}
 function grad(h){return 'background:linear-gradient(135deg,hsl('+h+' 60% 72%),hsl('+((h+40)%360)+' 65% 55%));';}
 function cardHTML(i,lit,likes){
-  const idx=i%NAMES.length;
+  const idx=(i+curOffset())%NAMES.length;
   return '<article class="feed-card"><div class="fc-head">'+avatar(HUES[idx])+'<div><div class="fc-name">'+NAMES[idx]+'</div><div class="fc-sub">'+((i+1)*3)+'m</div></div></div><div class="fc-body">'+BODIES[idx]+'</div><div class="fc-media" style="'+grad(HUES[idx])+'"></div><div class="fc-actions"><span><i class="heart '+(lit?'lit':'')+'"></i> <b class="likeN">'+likes+'</b></span><span>&#9671; '+(1+((i*7)%20))+'</span><span>&#8599;</span></div><div class="fc-seen">Seen 2:41 PM</div></article>';
 }
 let step=0,meterVal=0,hit=false,cardCount=0,scrollAcc=0,lastTop=0,streakDays=3,bellCount=0;
 const T={taps:0,rewards:0,screens:0,alerts:0};
 function renderFeedBase(n){
   const feed=document.getElementById('feed');
-  let html='';cardCount=n;
-  for(let i=0;i<n;i++)html+=cardHTML(i,false,3+((i*9)%28));
-  feed.innerHTML=html;feed.scrollTop=0;lastTop=0;scrollAcc=0;
+  let html='';nextIdx=0;
+  for(let i=0;i<n;i++){html+=cardHTML(nextIdx,false,3+((nextIdx*9)%28));nextIdx++;}
+  cardCount=n;feed.innerHTML=html;feed.scrollTop=0;lastTop=0;scrollAcc=0;
 }
 function appendCards(k){
   const feed=document.getElementById('feed');
   let html='';
-  for(let i=cardCount;i<cardCount+k;i++)html+=cardHTML(i,false,3+((i*9)%28));
-  cardCount+=k;feed.insertAdjacentHTML('beforeend',html);
+  for(let j=0;j<k;j++){html+=cardHTML(nextIdx,false,3+((nextIdx*9)%28));nextIdx++;}
+  cardCount=nextIdx;feed.insertAdjacentHTML('beforeend',html);
+}
+// fLOK 1 "Surprise likes": tapping Post drops a NEW post on top of the feed —
+// the post visibly changes every tap — and the reward lands (or doesn't).
+function postNew(){
+  const feed=document.getElementById('feed');
+  const html=cardHTML(nextIdx,false,3+((nextIdx*11)%40));nextIdx++;
+  feed.insertAdjacentHTML('afterbegin',html);
+  while(feed.children.length>9)feed.removeChild(feed.lastElementChild);
+  cardCount=feed.children.length;feed.scrollTop=0;
 }
 function setMeter(v){
   meterVal=Math.max(0,Math.min(100,v));
@@ -327,14 +353,15 @@ function paintTrain(){
 }
 function doTap(){
   T.taps++;
+  postNew();                 // the post changes on every tap
   const rewarded=REWARD_TAPS.has(T.taps);
   if(rewarded){
     T.rewards++;bump(16);
+    // the surprise: your just-posted card lights up with a burst of likes
     const feed=document.getElementById('feed');
-    const hearts=feed.querySelectorAll('.heart');
-    const pick=hearts[T.rewards%hearts.length];
+    const pick=feed.querySelector('.feed-card .heart');
     if(pick){pick.classList.remove('lit');void pick.offsetWidth;pick.classList.add('lit');
-      const n=pick.parentElement.querySelector('.likeN');if(n)n.textContent=parseInt(n.textContent,10)+ (5+T.rewards*3);}
+      const n=pick.parentElement.querySelector('.likeN');if(n)n.textContent=parseInt(n.textContent,10)+ (7+T.rewards*4);}
     const b=document.getElementById('burst');b.classList.remove('go');void b.offsetWidth;b.classList.add('go');
   }else{bump(7);}
 }
@@ -388,6 +415,15 @@ function go(id){
 function startTraining(){step=0;T.taps=0;T.rewards=0;T.screens=0;T.alerts=0;streakDays=3;bellCount=0;go('train');paintTrain();}
 function restart(){go('hire');}
 function toggleBody(cls,btn){btn.setAttribute('aria-pressed',document.body.classList.toggle(cls));}
+// Text size — larger by default (index 1); minus/plus step it.
+const SIZES=[1,1.15,1.32,1.5];let sizeIdx=1;
+function applySize(){
+  document.querySelector('.app-shell').style.setProperty('--scale',SIZES[sizeIdx]);
+  document.getElementById('cMinus').disabled=(sizeIdx===0);
+  document.getElementById('cPlus').disabled=(sizeIdx===SIZES.length-1);
+}
+function stepSize(d){sizeIdx=Math.max(0,Math.min(SIZES.length-1,sizeIdx+d));applySize();}
+applySize();
 document.getElementById('feed').addEventListener('scroll',onFeedScroll,{passive:true});
 </script>
 
