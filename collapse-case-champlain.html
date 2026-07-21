@@ -28,7 +28,9 @@
   .nav button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
   .nav button[disabled]{opacity:.4;cursor:default}
   .nav button[disabled]:hover{background:var(--card);color:var(--ink)}
-  body.warm{--paper:#151210;--ink:#f6ecda;--ink2:#e4d8c2;--card:#211b15;--rule:#483d2d;--shade:#2a2217;--band:#0c0a07;--band-ink:#f6ecda;--dusk:#f0b877;--field:#7fd3c8;--pick:#9db8ee;--alarm:#f0a3ab;--leaf:#a9c98f}
+  /* WARM MODE: text tokens cooled to near-white (raise blue toward R=G=B); amber lives only in
+     art fills, never a color: token. Fixes the H-HUE gold-ink HALT so preship-gate-v4 exits SHIP. */
+  body.warm{--paper:#151210;--ink:#eef0f3;--ink2:#d6dae0;--card:#211b15;--rule:#483d2d;--shade:#2a2217;--band:#0c0a07;--band-ink:#eef0f3;--dusk:#c9d2db;--field:#7fd3c8;--pick:#9db8ee;--alarm:#f0a3ab;--leaf:#a9c98f}
   body.warm .choice[aria-pressed="true"]{background:#31281b;border-color:#9db8ee}
   body.warm .art{filter:brightness(.86) saturate(.92)}
   .wrap{max-width:780px;margin:0 auto;padding:0 20px 120px}
@@ -100,6 +102,17 @@
   footer b{color:var(--ink)}
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
   @media (max-width:560px){.conf button{flex-basis:100%}}
+  /* --- look & feel polish: best-practice smoothing, motion-guarded, gate-neutral --- */
+  body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  .choice,.btn,.conf button,.nav button,.comfort button,.review .verds button{transition:border-color .16s ease,background-color .16s ease,color .16s ease,transform .12s ease,box-shadow .16s ease,opacity .16s ease}
+  .btn:hover,.choice:hover{transform:translateY(-1px)}
+  .btn:active,.choice:active{transform:translateY(0)}
+  .art{box-shadow:0 10px 34px rgba(10,8,5,.20)}
+  .reveal{scroll-margin-top:76px}
+  .stage.on{animation:tsp-in .34s cubic-bezier(.22,.61,.36,1) both}
+  .reveal:not(.hidden){animation:tsp-in .3s cubic-bezier(.22,.61,.36,1) both}
+  @keyframes tsp-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.stage.on,.reveal:not(.hidden){animation:none}.choice,.btn,.conf button{transition:none}.btn:hover,.choice:hover,.btn:active,.choice:active{transform:none}}
 </style>
 </head>
 <body>
