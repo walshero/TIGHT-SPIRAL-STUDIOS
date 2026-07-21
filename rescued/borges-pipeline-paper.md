@@ -85,17 +85,17 @@ For chrissake, we have been assigning these stories for decades. We might also b
 
 # BACK MATTER, venue map & submission strategy (editor's memo, not for publication)
 
-**Genre honesty first.** "Academic paper" and Wired are different animals. What exists above is a ~2,100-word practitioner essay, the Chronicle-shaped master. Magazines (Wired, MIT TR, Atlantic) buy PITCHES, not manuscripts; peer-reviewed venues want a different apparatus entirely (that's the paper series' Papers II to IV lane, per the existing prospectus). Strategy: one master, many doors, three tiers.
+**Genre honesty first.** "Academic paper" and Wired are different animals. What exists above is a ~2,100-word practitioner essay, the Chronicle-shaped master. Magazines (Wired, MIT TR, Atlantic) buy PITCHES, not manuscripts; peer-reviewed venues want a different apparatus entirely (that's the paper series' Papers II–IV lane, per the existing prospectus). Strategy: one master, many doors, three tiers.
 
 **TIER 1, full draft, submit now**
 1. **Chronicle of Higher Ed (The Review)**, the named home audience. This draft's native shape. Accepts full drafts. FIRST OUT THE DOOR.
 2. **Inside Higher Ed**, backup/simultaneous-adjacent lane if Chronicle passes; slightly shorter cut.
 3. **Hybrid Pedagogy**, pedagogy-forward full draft; also the prospectus's Paper II venue, so sequence carefully (don't burn the relationship on the lighter piece if Paper II is the better fit).
 
-**TIER 2, pitch letters (150 to 250 words), send in parallel; pitches are not submissions, no exclusivity problem**
+**TIER 2, pitch letters (150–250 words), send in parallel; pitches are not submissions, no exclusivity problem**
 4. **Wired (Ideas)**, 900-word op-ed cut; angle: the blind designer and the five failure modes AI vendors resell.
 5. **MIT Technology Review**, angle: accessibility-first architecture (the scene-graph/voice-renderer split) as engineering, with the Borges frame.
-6. **Harvard → recommend HBR (Big Idea / AI coverage)** over Harvard Educational Review, HER is peer-reviewed, 12 to 18 months, wrong genre for this piece; HBR angle: why your AI team needs someone who reads. (HER stays on the list for Paper III.)
+6. **Harvard → recommend HBR (Big Idea / AI coverage)** over Harvard Educational Review, HER is peer-reviewed, 12–18 months, wrong genre for this piece; HBR angle: why your AI team needs someone who reads. (HER stays on the list for Paper III.)
 7. **The Atlantic (Technology)**, angle: Funes and the archive problem; institutional memory in the AI era.
 8. **Aeon**, ideas-essay lane; Borges is native currency there; would take a 3,000-word literary expansion.
 9. **Noema**, philosophy-of-technology lane; the kernel/standard distinction is their sweet spot.
