@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  ══════════════════════════════════════════════════════════════════
+  CHOOSE YOUR LEADER — v5 VERTICAL SLICE  (NIXON · November 3, 1969)
+  Tight Spiral Studios · walshero@gmail.com
+  Built 2026-07-21. Second scene on the shipped v5 engine — same four
+  beats, a heavier room. LBJ '64 remains the third.
+
+  What this is: the FULL v5 beat structure realized for a second sourced
+  scene — media prelude → scene-first room → blind directional reaction
+  → the record turns → re-react → visual Maslow descent → arc.
+
+  The lesson here inverts JFK's. JFK's reveal: the calm voice was day
+  eight of a SECRET argument; the room heard a conclusion. Nixon's
+  reveal: the address NAMES the trust problem out loud ("many Americans
+  have lost confidence in what their Government has told them"), then
+  the record shows the speech was itself a persuasion instrument —
+  drafted with advisers, answered by an orchestrated telegram-and-poll
+  response that became the proof of its own claim. A man asks for trust
+  by naming distrust; the record shows the machine that manufactured
+  the "majority" he invoked.
+
+  Floors held: single-file, offline, in-memory only. No network at
+  runtime. Scene-first (no opening wall). Full-contrast type. 44px
+  targets. Keyboard nav. Visible focus. Scroll-reset each screen.
+  Reduced-motion respected. FERPA: public figure, no capture.
+
+  Instrument (v5 reframe, §1.4): plain more/less/neutral shown to the
+  player, resolving onto a 5-point capture underneath; identical wording
+  blind + post-record; scored ipsatively against the player's own prior.
+
+  Source of speech text: Public Papers of the Presidents, Nixon 1969,
+  pp. 901-909 (public domain); FRUS 1969-76 vol. VI, doc. 144.
+  ══════════════════════════════════════════════════════════════════
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Choose Your Leader — November 3, 1969</title>
+<style>
+  /* ─── TOKENS ─────────────────────────────────────────────────
+     Palette is the 1969 room itself: Kodachrome-cool walls, one warm
+     screen-glow, austere B&W broadcast. Not the arcade default — this
+     scene's Medium Gate chose photographic period, so the tokens ARE
+     the period. Full-contrast ink floor holds over every surface. */
+  :root{
+    --paper:#12161c;         /* the dark room */
+    --wall:#1b2530;          /* cool mid-century wall in shadow */
+    --wall-lit:#26333f;      /* wall catching screen-light */
+    --ink:#eef1f4;           /* TEXT — near-white, full strength (16:1 on paper) */
+    --ink-dim:#c4ccd4;       /* TEXT dim — 9.5:1 on wall; never muted-gray */
+    --label:#d8b98a;         /* TEXT accent — readable warm sand (8.3:1), NOT the glow */
+    /* SCREEN = cool B&W phosphor of a 1969 tube set. Never warm, never pure white. */
+    --screen:#c9d4dc; --screen-hot:#dfe8ee;
+    /* GLOW = atmosphere ONLY (screen-rim, room edge-light). NEVER used as text. */
+    --glow:#b87a3a; --glow-soft:#785528;
+    /* UI accent = quiet parchment for buttons; dark ink rides on it. */
+    --accent:#c7b28a; --accent-ink:#171208;
+    --chair:#0d1116;
+    --rule:#39434e;
+    --brake:#6bb6ae;         /* the catch — cool teal (decoration: border/fill) */
+    --brake-ink:#8fd4cc;     /* the catch, as TEXT — brighter, clears floor on dark */
+    --pull:#c9744f;          /* the fall — warm clay (decoration) */
+    --pull-ink:#e8a583;      /* the fall, as TEXT — brighter, clears floor on dark */
+    --focus:#9fd0ff;         /* cool focus ring — reads as light, not a warning */
+    --measure:1.5rem;
+    --tap:44px;
+  }
+  /* Softer stop — separated paper, text stays near-white */
+  html[data-comfort="softer"]{
+    --paper:#20272f; --wall:#2b3742; --wall-lit:#38454f;
+    --ink:#fbf7ef; --ink-dim:#dfe4ea; --label:#e0c79c;
+  }
+  /* Warm-dark stop — amber on deep charcoal. TEXT pale warm-white, high contrast; glow still atmosphere. */
+  html[data-comfort="warm"]{
+    --paper:#161009; --wall:#241a0e; --wall-lit:#33260f;
+    --ink:#ffe6b8; --ink-dim:#f0d29a; --label:#ffcf8a;
+    --screen:#e6d4ad; --screen-hot:#f3e6c8; --glow:#e0952f;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:"Iowan Old Style","Palatino Linotype",Georgia,"Times New Roman",serif;
+    font-size:clamp(17px,2.6vw,20px); line-height:1.55;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    min-height:100vh; overflow-x:hidden;
+  }
+  /* utility face for labels/data */
+  .u{font-family:"Helvetica Neue",Arial,system-ui,sans-serif;
+     letter-spacing:.06em; text-transform:uppercase; font-size:.72rem; font-weight:700;}
+
+  .stage{max-width:640px;margin:0 auto;padding:max(20px,env(safe-area-inset-top)) 20px 96px;}
+  .screen{display:none;animation:fade .5s ease both}
+  .screen.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){
+    .screen{animation:none}
+    *{animation-duration:.001s !important;transition-duration:.001s !important}
+  }
+
+  h1,h2{font-weight:700;line-height:1.15;letter-spacing:-.01em;margin:0 0 .5em}
+  h1{font-size:clamp(1.9rem,7vw,2.7rem)}
+  h2{font-size:clamp(1.4rem,5vw,1.9rem)}
+  p{margin:0 0 1em;max-width:38ch}
+  .lead{font-size:1.12rem;color:var(--ink)}
+
+  /* ─── BUTTONS (44px floor, visible focus) ───────────────────── */
+  button{font-family:inherit;cursor:pointer}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:.5em;
+    min-height:var(--tap);padding:.7em 1.3em;
+    background:var(--accent);color:var(--accent-ink);border:2px solid var(--accent);
+    border-radius:2px;font-weight:700;font-size:1.05rem;letter-spacing:.01em;
+    transition:transform .15s,box-shadow .15s;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(200,162,74,.3)}
+  .btn.ghost{background:transparent;color:var(--ink);border-color:var(--rule)}
+  .btn.ghost:hover{border-color:var(--glow);box-shadow:none}
+  :focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:2px}
+  button:focus:not(:focus-visible){outline:none}
+
+  /* ─── COMFORT CORNER (live, immediate, never a gate) ─────────── */
+  .comfort{position:fixed;top:8px;right:8px;z-index:60;display:flex;gap:4px;
+    background:rgba(10,14,18,.82);backdrop-filter:blur(6px);
+    padding:5px;border-radius:999px;border:1px solid var(--rule)}
+  .comfort button{min-width:38px;min-height:38px;border-radius:999px;
+    border:1px solid transparent;background:transparent;color:var(--ink-dim);
+    font-size:1rem;line-height:1}
+  .comfort button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .comfort .lbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .snd-toggle{position:fixed;top:8px;left:8px;z-index:60;
+    min-height:38px;padding:6px 12px;border-radius:999px;
+    background:rgba(10,14,18,.82);backdrop-filter:blur(6px);
+    border:1px solid var(--rule);color:var(--ink-dim);
+    font-family:"Helvetica Neue",Arial,sans-serif;font-size:.7rem;
+    letter-spacing:.06em;text-transform:uppercase;font-weight:700}
+  .snd-toggle[aria-pressed="true"]{color:var(--label);border-color:var(--glow)}
+
+  /* ─── THE ROOM (CSS-composed 1969 living room) ──────────────── */
+  .room{position:relative;width:100%;aspect-ratio:4/3;border-radius:4px;
+    overflow:hidden;margin:0 0 1.2em;
+    background:
+      radial-gradient(120% 90% at 50% 38%, var(--wall-lit) 0%, var(--wall) 42%, var(--paper) 100%);
+    box-shadow:inset 0 0 120px rgba(0,0,0,.7);}
+  /* fine film grain — atmosphere only, never carries info */
+  .room::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.05;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='120' height='120' filter='url(%23n)'/></svg>");}
+  /* the television — the only light source */
+  .tv{position:absolute;top:22%;left:50%;transform:translateX(-50%);
+    width:46%;aspect-ratio:5/4;border-radius:10px/14px;
+    background:linear-gradient(155deg,#2a2018,#0e0a06);
+    padding:5%;box-shadow:0 20px 60px rgba(200,162,74,.18),0 4px 14px rgba(0,0,0,.6);}
+  .crt{position:relative;width:100%;height:100%;border-radius:24px/30px;overflow:hidden;
+    background:radial-gradient(90% 80% at 50% 45%,var(--screen-hot) 0%,var(--screen) 40%,#8f8b7e 100%);}
+  /* withheld figure — made of the broadcast, never a face */
+  .figure{position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+    width:52%;height:74%;
+    background:radial-gradient(60% 70% at 50% 38%,rgba(30,30,28,.55) 0%,rgba(40,40,36,.28) 55%,transparent 72%);
+    border-radius:50% 50% 42% 42%;filter:blur(1.5px);}
+  .figure::before{content:"";position:absolute;left:50%;top:8%;transform:translateX(-50%);
+    width:38%;height:34%;border-radius:50%;
+    background:radial-gradient(circle,rgba(25,25,24,.5),transparent 70%);}
+  /* scan lines over the whole CRT */
+  .crt::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,.16) 0 1px,transparent 1px 3px);}
+  /* unstable-signal flicker on the glow */
+  .tv::before{content:"";position:absolute;inset:-30% -20%;pointer-events
