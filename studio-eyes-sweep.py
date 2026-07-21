@@ -235,17 +235,8 @@ def sweep(path):
         out["WARN"].append("institutional-lane offline break (exemption pending founder call)")
 
     # --- palettes per stop ---
-    # BUG (found 2026-07-21): re.search grabbed only the FIRST :root block. Since
-    # the "STUDIO EYES v4 CLASS-FIX" lock adds `:root{ color-scheme: light; }` at
-    # the top of every file, the real palette :root (--bg/--accent/...) below it
-    # was never read. root came back empty, so the default stop was skipped
-    # (no bg) and component text in other stops grounded against the page body
-    # instead of its own var(--accent) background — manufacturing a whole class
-    # of false INVISIBLE HALTs (.topbar/.cstop/.go/.foot, white-on-slate at
-    # 1.2:1). CSS cascades every :root; so must the sweep. Merge them all.
-    root = {}
-    for rm in re.finditer(r':root\s*\{([^}]*)\}', css):
-        root.update(parse_vars(rm.group(1)))
+    rm = re.search(r':root\s*\{([^}]*)\}', css)
+    root = parse_vars(rm.group(1)) if rm else {}
     stops = {"default": dict(root)}
     referenced_dark = bool(re.search(r"['\"](warmdark|warm|dark)['\"]", src)) or bool(re.search(r'body\.(warmdark|warm|dark)\b', css))
     dark_found = None
