@@ -1,108 +1,84 @@
-# Choose Your Leader v5 — Image Lane manifest & generation prompts
+# Choose Your Leader v5 — Image Lane manifest (slot map + sourcing + drop‑in)
 
 *Tight Spiral Productions · walshero@gmail.com · companion to `choose-your-leader-v5.html`*
-*Lane: dual, PD‑first, Ideogram‑fill (game spec §1.1 / §3.3). This doc IS the asset‑drop scaffold — every image slot in the game, its source target, and a ready‑to‑paste generation prompt.*
+**Art direction is owned by `cyl-period-bible.md` — this doc does NOT re‑decide it.** This is the operational layer: which slot is which, where each asset comes from, how it drops in and gets gated.
 
 ---
 
-## The floors (every asset inherits these — non‑negotiable)
+## Reconciliation — 2026‑07‑20 (two rivers, one ledger)
 
-1. **A real face NEVER ships. A voice likeness NEVER ships.** The chair stays anyone's. Rooms are empty or shown from behind; crowds are wide/anonymous. This is why the game exists — the player judges the words, not a portrait.
-2. **No baked text.** No letters, numbers, headlines, captions, or signage *in the image*. All text (the headline, the quote, the record) is rendered in code over the asset. Generate the *room / the object / the glow*, never the words.
-3. **Center stays clear.** Composition leaves the middle uncluttered so the interface (notice‑spots, panel) sits on top cleanly.
-4. **Period‑accurate + matte.** Documentary realism for the exact year; true cast shadows, warm, slightly worn; not glossy, not "cinematic teal‑orange."
-5. **Studio‑Eyes‑ready.** Because text is added in code, the image only has to survive the contrast gate *underneath* text — keep a usable tonal zone where captions land (the game already handles this via its panel, but avoid a busy high‑contrast center).
+This file was first written (2026‑07‑19) prescribing **AI‑generated photoreal** rooms. That was off‑canon and is now corrected. Reconciled against the TSP project chat's CYL work as it lands in the repo (I can't read that chat directly — the cross‑chat access boundary in `CYL_Harvest…md`; the repo is the shared ledger):
 
-**Global style suffix** — append to every generation prompt below:
-> *…photoreal documentary photograph, {YEAR}, period‑accurate; lit chiefly by the television's glow; NO people, NO faces, NO figures; absolutely no text, letters, numbers, or signage anywhere; center of frame kept clear and uncluttered for a UI overlay; matte finish, true cast shadows, warm tungsten, slightly worn; 16:9 horizontal. Negative: text, words, caption, watermark, logo, people, faces, hands.*
+- **`edec2e1` — "draw the world":** the three era rooms ship as **handcrafted SVG dioramas** (`paintRoom()`), *honestly illustrative, never [smooth‑AI] photoreal* — the **"Greg the pancake" ruling stands.** This is the **current live floor.**
+- **`cyl-period-bible.md`:** the canonical promotion — a **composite** build: a real **photographic room** + a **withheld figure**, across the 62/64/69 era ladder. **No real faces, ever.**
+- **Founder ruling (2026‑07‑20): _magazine collage IS photoreal._** The photographic layer is achieved by **cutting and compositing real period print** (LIFE / Look / newspapers / ads of the exact year) — genuinely photographic **and** period‑authentic (real film stock carries the real color science for free), while sidestepping both AI‑hallucinated photoreal and the Greg‑the‑pancake trap.
+
+**Net canonical state:** SVG diorama = shipped floor. **Magazine‑collage composite = the promotion** (produced in an image‑capable session, composited behind the live interactive layer). Never smooth‑AI‑photoreal. The figure is always withheld.
 
 ---
 
-## Where each step happens (the division of labor)
+## The floors (every asset inherits these)
+
+1. **No real faces / no voice likeness — ever.** The leader is *made of the broadcast* (scan‑lines '62/'64, unstable‑color smear '69), never a resolved face. The empty chair is *you* — anyone. (Period‑bible withheld‑figure law; game spine.)
+2. **Photoreal = collage of REAL period print, not AI‑generation.** Magazine/newspaper/ad clippings of the exact year, cut and composited. AI is only ever a *compositing/finishing* assist on real material — labeled "Super Sketchy Graphics, AI‑assisted," never CC‑BY, never "a real photo of a real event" unless it *is* a sourced archival photo.
+3. **No baked GAME text.** Period print *as texture/atmosphere* is allowed (a torn ad, a masthead fragment) — but it must carry **no read‑line the game needs** (those live in the panel + alt‑text) and must not smuggle in a real leader's face or a legible endorsement. When in doubt, blur/crop it to texture.
+4. **The seam is the meaning.** Vivid, specific, dated *world* + deliberately blank *person*. Light, grain, and scale must reconcile across that seam or the Compositor HALTs.
+5. **Accessibility holds.** Grain/color are atmosphere, never the sole signal; every rhetoric the image carries also lives in alt‑text. Full‑contrast text floor untouched.
+
+---
+
+## Where each step happens
 
 | Step | Where | Who |
 |---|---|---|
-| **1. PD sourcing** (real archival photos) | Library of Congress (loc.gov) · National Archives (catalog.archives.gov) · US Navy / DoD (all US‑gov = public domain) | You / an image session (this sandbox's egress can't reach them) |
-| **2. Ideogram‑fill** (generate environments where no PD exists) | Ideogram · Adobe Firefly (the OS's in‑lane generator) · your ChatGPT Pro → Midjourney reference lane | You / an image session |
-| **3. Composite → base64 ≤400 KB/room → Studio Eyes → ship** | a code session (here) | Me — drop assets in the repo or Drive and I wire, gate, deploy |
+| **Art direction** (color science, per‑scene, withheld figure) | `cyl-period-bible.md` | Locked |
+| **Collage material — PD‑first** (real archival print/photo) | Library of Congress · National Archives · US Navy/DoD (US‑gov = public domain) | You / an image session (sandbox egress can't reach them) |
+| **Compose the collage** (cut, layer, grain, seam) | an image‑capable session (period print + optional Super Sketchy Graphics AI finishing) | You / an image session |
+| **Composite → base64 ≤400 KB/room → Studio Eyes → ship** | a code session (here) | Me — drop assets in the repo/Drive and I wire, gate, deploy |
 
-*The Adobe tools connected to this session only **edit** existing images (masking, fill, background removal) — they do not generate. Generation is step 2's job, not this sandbox's.*
+*The Adobe tools in this session only **edit** existing images (mask/fill/bg‑removal) — useful for collage finishing, not for generating. No text‑to‑image here.*
 
 ---
 
 ## The slots
 
-Each slot below maps 1:1 to a `data-art-*` schema in the game. When an asset is ready, fill: `data-art-src` (base64 or path), `data-art-license`, `data-art-author`, `data-art-source` (URL), `data-art-date`. Until then the shell renders its period‑toned SVG placeholder — nothing breaks.
+Each maps 1:1 to a `data-art-*` schema in the game. Fill `data-art-src` (base64/path), `-license`, `-author`, `-source` (URL), `-date` when an asset lands; until then the SVG diorama (edec2e1) stands. **Room direction: follow the period bible's per‑scene section — do not re‑spec it here.**
 
-### ERA ’62 — October 22, 1962 (`jfk62`)
+### ERA ’62 — Oct 22, 1962 (`jfk62`) — *Kodachrome, cool, hopeful; B&W broadcast*
+- **`room.jfk62`** — collage a 1962 living room from period print (mid‑century furniture, cool Kodachrome walls); the console **B&W** set is the only light; withheld scan‑line figure on screen; empty armchair = you. Per bible Scene 1.
+- **`prelude.jfk62.a`** "U‑2 flights confirm missile sites in Cuba" — **PD‑FIRST:** declassified U‑2 recon frames (San Cristóbal MRBM sites), **National Archives / CIA** — US‑gov public domain, no faces by nature.
+- **`prelude.jfk62.b`** "Run on canned goods" — collage a period supermarket‑shelf clipping (no faces); PD where the print allows, else generic era stock.
+- **`prelude.jfk62.c`** "Duck‑and‑cover school drill" — **PD‑FIRST:** federal Civil Defense materials (**National Archives**), wide/empty framing or crop to keep faces out.
+- **`prelude.jfk62.d`** "Three networks. One address." — collage a 1962 console TV, blank warming glow. No headline text baked in.
 
-**`room.jfk62` — the scene.** *"A living room lit only by a television set. It is nearly 7 p.m. Nobody has gone to bed."*
-- **Source:** GENERATE (no PD room needed).
-- **Prompt:** *A 1962 American living room at dusk, empty; a single console black‑and‑white television is on and is the only light source, casting a cool glow across an empty armchair, a patterned sofa, a side table; heavy curtains drawn; the room feels held, waiting.* + global suffix (YEAR 1962).
-- **Record as:** license `AI‑generated (Ideogram/Firefly)`, author `Super Sketchy Graphics / TSP`, date of generation.
+### ERA ’64 — Aug 4, 1964, midnight (`lbj64`) — *a year heavier; cold B&W bulletin*
+- **`room.lbj64`** — same room a year tireder, near midnight; cold B&W bulletin cut‑in, two flag *shapes*, wall map; withheld silhouette. Per bible Scene 2.
+- **`prelude.lbj64.a`** "Second attack, Gulf of Tonkin" — **PD‑FIRST:** **US Navy** photos of USS Maddox / destroyers (NARA / Naval History & Heritage Command), no faces.
+- **`prelude.lbj64.b`** "Election season, the steady hand" — collage period campaign material *without candidate likeness* (bunting, empty bleachers).
+- **`prelude.lbj64.c`** "Late bulletin interrupts programming" — collage a 1964 TV, blank broadcast wash.
 
-**`prelude.jfk62.a` — "U‑2 flights confirm missile sites in Cuba"** · *CIA reconnaissance, declassified · Oct 1962*
-- **Source:** PD‑FIRST. The declassified U‑2 aerial reconnaissance frames of the San Cristóbal MRBM sites are **US‑government public domain** — the canonical asset. Target: **National Archives** (JFK Library / CIA declassified imagery) or LoC. Grainy top‑down aerial, no faces by nature.
-- **Fallback:** generate a grainy monochrome aerial reconnaissance frame of rural terrain with faint rectangular clearings (no markings/text).
-
-**`prelude.jfk62.b` — "Grocers report a run on canned goods"** · *Contemporary press, Oct 1962*
-- **Source:** GENERATE (period press photos are usually rights‑encumbered). Prompt: *A 1962 supermarket aisle, shelves half‑emptied of canned goods, a lone shopping cart, fluorescent light* + suffix. No faces.
-
-**`prelude.jfk62.c` — "Schools drill children under their desks"** · *Civil Defense footage, public domain*
-- **Source:** PD‑FIRST. Federal **Civil Defense "Duck and Cover"** materials are public domain — National Archives. Prefer wide shots / empty classroom to keep faces out; or crop.
-- **Fallback:** generate an empty period classroom, desks in rows, mid‑afternoon light.
-
-**`prelude.jfk62.d` — "Three networks. One address. Tonight."** · *Broadcast listings, Oct 22 1962*
-- **Source:** GENERATE. Prompt: *Close on a 1962 console television, screen warming to a blank glow in a dark room* + suffix. (Headline text is added in code — none in the image.)
-
-### ERA ’64 — August 4, 1964 (`lbj64`)
-
-**`room.lbj64` — the scene.** *"A den, past midnight. The set is still on. A bulletin has cut into the late movie."*
-- **Source:** GENERATE. Prompt: *A 1964 American den after midnight, empty; a black‑and‑white television glows with a bright "bulletin" wash (no text) interrupting darkness; an empty recliner, a floor lamp off, a half‑finished drink on the side table; heavy shadow.* + suffix (1964).
-
-**`prelude.lbj64.a` — "Reports of a second attack … Gulf of Tonkin"** · *Wire services, Aug 4 1964*
-- **Source:** PD‑FIRST. **US Navy** photographs of **USS Maddox** / destroyers at sea are public domain (NARA / Naval History & Heritage Command). No faces.
-- **Fallback:** generate a grainy monochrome open‑ocean horizon from a destroyer's rail at night.
-
-**`prelude.lbj64.b` — "An election season; the incumbent runs as the steady hand"** · *Campaign press, 1964*
-- **Source:** GENERATE (avoid candidate likeness). Prompt: *A 1964 street with campaign bunting and empty bleachers at dusk, red‑white‑blue swags, no people, no readable signs* + suffix.
-
-**`prelude.lbj64.c` — "Late‑night bulletin interrupts programming"** · *Broadcast logs, Aug 4 1964*
-- **Source:** GENERATE. Prompt: *A 1964 television screen filled with a bright blank broadcast wash in a dark den* + suffix. (No "BULLETIN" text — added in code.)
-
-### ERA ’69 — November 3, 1969 (`nixon69`)
-
-**`room.nixon69` — the scene.** *"A living room, early color television. The picture is a little unstable; the colors bleed at the edges."*
-- **Source:** GENERATE. Prompt: *A 1969 American living room at night, empty; an early color television set glows, the picture slightly unstable with colors bleeding at the edges, casting shifting warm hues on an empty armchair and shag rug; wood paneling.* + suffix (1969).
-
-**`prelude.nixon69.a` — "Hundreds of thousands march against the war"** · *Moratorium coverage, Oct–Nov 1969*
-- **Source:** PD‑FIRST. **Moratorium to End the War** coverage held by **National Archives / LoC** includes public‑domain wide crowd shots. Use **wide/anonymous** framing only — no identifiable close faces.
-- **Fallback:** generate a very wide, high‑angle anonymous crowd on a broad avenue at dusk, banners abstracted, no faces legible.
-
-**`prelude.nixon69.b` — "Casualty figures read aloud on the evening news"** · *Network news, 1969*
-- **Source:** GENERATE. Prompt: *Close on a 1969 color television set glowing in a dark room, the screen an unstable warm blur* + suffix. No faces, no text.
-
-**`prelude.nixon69.c` — "The President will address the nation on Vietnam"** · *Broadcast advisory, Nov 3 1969*
-- **Source:** GENERATE. Prompt: *A 1969 living room, the color television just switched on, warm glow filling an empty room* + suffix.
+### ERA ’69 — Nov 3, 1969 (`nixon69`) — *Ektachrome amber, decaying; first unstable color*
+- **`room.nixon69`** — warmer, faded, worn; early **unstable color** set, colors bleeding; warm smear where a face would be. Per bible Scene 3. *(Open founder call in the bible: early‑color vs ambiguous B&W.)*
+- **`prelude.nixon69.a`** "Hundreds of thousands march" — **PD‑FIRST:** Moratorium coverage (**National Archives / LoC**), **wide/anonymous** crowd only — no identifiable close faces.
+- **`prelude.nixon69.b`** "Casualty figures on the evening news" — collage a 1969 color TV, unstable warm blur.
+- **`prelude.nixon69.c`** "President will address the nation" — collage a 1969 living room, color set just switched on.
 
 ### Gated slots (`gate-a/b/c`)
-Marked `[PENDING]` in the game and **excluded from play** — living‑president records are not fabricated. **No assets. Do not source or generate.** Leave them gated.
+`[PENDING]`, **excluded from play** — living‑president records not fabricated (and the living‑president image lane is an active rights/disinfo hazard — see `CYL_Harvest…md`). **No assets.**
 
 ---
 
-## Provenance tag (record on every embedded asset — OS §16.4)
-
-Add an HTML comment beside each embed:
+## Provenance (OS §16.4 — record on every embed)
 ```
-<!-- art: {slot} · {PD source & URL, or "AI‑generated: Ideogram/Firefly"} ·
-     license: {Public Domain, US Gov | AI‑generated, TSP} · added {date} · refinish: {steps} -->
+<!-- art: {slot} · {archive source & URL | "period-print collage: {titles, year}" | "Super Sketchy Graphics, AI-assisted"} ·
+     license: {Public Domain, US Gov | period print, see note | AI-assisted, TSP} · added {date} · steps: {cut/composite/grain} -->
 ```
-- **PD asset:** `data-art-license="Public Domain (US Gov)"`, `data-art-author="{agency}"`, `data-art-source="{archive URL}"`, `data-art-date="{original date}"`.
-- **Generated asset:** `data-art-license="AI‑generated (Ideogram/Firefly)"`, `data-art-author="Super Sketchy Graphics / TSP"`, `data-art-source=""`, `data-art-date="{generation date}"`. Never labeled CC‑BY. Never presented as a real photograph of a real event unless it is a sourced PD photograph.
+- **PD archival:** `data-art-license="Public Domain (US Gov)"`, `-author="{agency}"`, `-source="{URL}"`, `-date="{original}"`.
+- **Period‑print collage:** name the publications + year; flag rights (much post‑1963 print is still in copyright — prefer PD or clearly transformative/fair‑use crops; when unsure, ask before ship). Never labeled CC‑BY; never presented as a single authentic photograph of the event.
 
-## Drop‑in contract (what I do when assets land)
-1. You put finals (PNG/JPG, or a folder) in the repo (`/art/cyl-v5/`) or Drive and tell me the slot each maps to.
-2. I refinish if needed, base64‑embed at **≤400 KB per room** (downscale/optimize), fill the `data-art-*` schema + provenance comment, swap each placeholder.
-3. I run the **composite** through Studio Eyes (contrast under the text, image‑ratio, offline, no‑baked‑text), then push → the floor gate → deploy.
+## Drop‑in contract (mine, when material lands)
+1. You put finals in the repo (`/art/cyl-v5/`) or Drive and name the slot each maps to.
+2. I finish/optimize, base64‑embed **≤400 KB/room**, fill `data-art-*` + provenance, swap the placeholder.
+3. I run the **composite** through Studio Eyes (contrast under text, seam/opacity, offline, no‑baked‑game‑text), then push → floor gate → deploy.
 
-**You (or an image session) generate/source. I integrate, gate, and ship.**
+**You (or an image session) source period print + compose the collage. I integrate, gate, ship. Art direction: the period bible.**
