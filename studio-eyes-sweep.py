@@ -19,6 +19,7 @@ import re, sys, glob, os
 ALLOWLIST_OFFLINE = {"studio-eyes-auditor.html"}  # names the tokens it hunts
 INSTITUTIONAL = {"confluence-TRUNK.html", "confluence-TRUNK-2026-06-23.html",
                  "confluence-walkthrough.html"}   # exemption PENDING founder call
+FOUNDER_OPS = {"live.html"}  # founder testing lane: reads same-origin version.json by design (founder call 2026-07-22)
 DARK_CLASSES = ["warmdark", "warm", "dark"]        # canon call open: pick one
 
 def hex2rgb(h):
@@ -225,7 +226,7 @@ def sweep(path):
     css = "\n".join(re.findall(r'<style[^>]*>([\s\S]*?)</style>', src, re.I))
 
     # --- H4 offline floor ---
-    if name not in ALLOWLIST_OFFLINE and name not in INSTITUTIONAL:
+    if name not in ALLOWLIST_OFFLINE and name not in INSTITUTIONAL and name not in FOUNDER_OPS:
         for tok in ['localStorage', 'sessionStorage', 'XMLHttpRequest', 'fetch(']:
             if tok in src: out["H4"].append(f"uses {tok}")
         for m in re.finditer(r'(?:src|href)="(https?://[^"]+)"', src):

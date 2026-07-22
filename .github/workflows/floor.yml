@@ -77,6 +77,8 @@ jobs:
         run: |
           printf '{"sha":"%s","ref":"%s","run":"%s","built":"%s"}\n' \
             "$GITHUB_SHA" "$GITHUB_REF_NAME" "$GITHUB_RUN_ID" "$(date -u +%FT%TZ)" > version.json
+          # Founder testing lane: stamp live.html's own build id so it can self-report staleness.
+          [ -f live.html ] && sed -i "s/__TSP_BUILD__/$GITHUB_SHA/g" live.html
       - uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
