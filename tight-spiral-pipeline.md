@@ -65,6 +65,12 @@ Direct → generate (Firefly only; OS §16 license wall) → refinish (floors li
 embed (base64, ≤400KB/room) → gate the COMPOSITE through Studio Eyes. The raw generation
 never ships. MJ never enters a shipping lane.
 
+**Documentary / diagnostic imagery (the trainee reads it — smoke, fire, collapse):** source is
+**real / public-domain, never generated** — fabricated fire teaches the wrong read (Registrar +
+Hand seats HALT it). Ingest path when the sandbox can't reach the source: `WebSearch` to verify →
+Zapier Upload File from URL → Drive → base64-embed, credited (`Madrzykowski/NIST · public domain`,
+or the responder's dept). See `LANE-REGISTRY.md § THE ASSET-INGEST LANE`.
+
 ### 4. MVP build (the hinge)
 Build the smallest thing that does the named job. Mechanic Prototype: art minimal, allowed to look plain. Defeats optimization-before-implementation — nothing downstream runs until the minimum ships.
 

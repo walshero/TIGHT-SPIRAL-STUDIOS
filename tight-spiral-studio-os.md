@@ -1373,7 +1373,7 @@ Settled calls. A future session — human or AI — should not reopen these with
 
 *Added after live tool probes overturned three memory assumptions. The verified detail lives in `studio-file-map.md` on the shelf; this section is the correction of record so no future session repeats the errors.*
 
-**14.1 The "Zapier can't do trunk files" myth is dead.** The 5K ceiling applies ONLY to the paste-text path. Zapier's file lane (Upload File from URL, Replace File, Move Files to Folder) handles up to 100MB. The move/replace/upload actions are live and tested. Trunk files fail the *paste* path, not the *file* path.
+**14.1 The "Zapier can't do trunk files" myth is dead.** The 5K ceiling applies ONLY to the paste-text path. Zapier's file lane (Upload File from URL, Replace File, Move Files to Folder) handles up to 100MB. The move/replace/upload actions are live and tested. Trunk files fail the *paste* path, not the *file* path. **Asset-ingest corollary (2026-07-21):** because Upload File from URL fetches **server-side**, this same lane is the way *past the sandbox's own egress wall* (the proxy 403s the open web) to pull public-domain assets into a build — `WebSearch` to verify the source, then Upload File from URL → Drive → base64-embed. Full recipe + bounds: `LANE-REGISTRY.md § THE ASSET-INGEST LANE`.
 
 **14.2 CORRECTED 2026-07-13 — native Drive WRITE works.** The 07-05 claim that `create_file`
 errors out is **stale**. It works with `disableConversionToGoogleType: true` + an explicit

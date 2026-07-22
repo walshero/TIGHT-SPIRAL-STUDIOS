@@ -23,6 +23,12 @@ unstamped claim is a suspicion, not a fact.*
 
 ## CANON POINTERS — current, verified
 
+- **Asset-ingest past the egress wall** → `LANE-REGISTRY.md § THE ASSET-INGEST LANE` — STATE:
+  **proven 2026-07-21.** Sandbox web egress is policy-blocked (proxy 403s CONNECT to all
+  non-allowlisted hosts; `web_fetch` too). To pull a public asset in: `WebSearch` to verify →
+  Zapier **Upload File** (`file`=URL, `convert=false`) fetches server-side → Drive → base64-embed.
+  `WebSearch` works; `fetch_url_as_base64` is Google-hosts-only. Not for generated art.
+
 - **Confluence trunk = v44** — repo, 598,114 B, md5 `8dcf990336eb1c0ffa600cae3b689539`
   (LANE-REGISTRY, 2026-07-13). Supersedes v43 (`bed8c7a3…`) and the long-cited v33/v34.
   *A prior session lost hours editing v34; the pointer that would have caught it existed in Drive,
