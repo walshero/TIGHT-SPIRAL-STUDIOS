@@ -182,6 +182,30 @@
     padding:.1em .4em; border-radius:12px; }
   body.daylight .headline h1{ color:#fff; background-color:#161009; }
 
+  /* ---- THE TOY: one tap fires the chain (The Bench ruling, 2026-07-19) ----
+     The opening is playable in the first second: tapping the scene runs the
+     machine — marble rolls, bucket tips, chicken drops, springboard flings,
+     the cat laughs — then it lands you in the predict loop. Felt physics, not
+     an engine. Reduced motion is honored: html[data-motion="calm"] flattens
+     every duration, so calm players get an instant fire, not a jerk. */
+  .scene{ cursor:pointer; }
+  .scene:focus-visible{ outline:3px solid var(--lens); outline-offset:4px; }
+  /* live on load: a gentle bob on the marble invites the tap */
+  #scene:not(.firing) #marble{ animation:fb-bob 2.4s ease-in-out infinite; }
+  @keyframes fb-bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-4px); } }
+  #scene.firing #marble{ animation:fb-roll .55s cubic-bezier(.4,0,.7,1) forwards; }
+  #scene.firing #bucket{ transform-box:fill-box; transform-origin:60% 92%; animation:fb-tip .5s ease-in .40s both; }
+  #scene.firing #chicken{ animation:fb-drop .55s cubic-bezier(.5,0,.85,1) .75s both; }
+  #scene.firing #spring{ transform-box:fill-box; transform-origin:center bottom; animation:fb-boing .5s ease-out 1.05s both; }
+  #scene.firing #cat{ transform-box:fill-box; transform-origin:center; animation:fb-laugh .7s ease-out 1.3s both; }
+  #scene.firing #zz{ animation:fb-fade .4s ease-out 1.3s both; }
+  @keyframes fb-roll{ to{ transform:translate(196px,98px) rotate(400deg); } }
+  @keyframes fb-tip{ 45%{ transform:rotate(30deg); } 100%{ transform:rotate(8deg); } }
+  @keyframes fb-drop{ to{ transform:translate(-8px,124px) rotate(22deg); } }
+  @keyframes fb-boing{ 0%{ transform:scaleY(1); } 28%{ transform:scaleY(.58); } 60%{ transform:scaleY(1.18); } 100%{ transform:scaleY(1); } }
+  @keyframes fb-laugh{ 0%,100%{ transform:translateY(0) rotate(0); } 18%{ transform:translateY(-11px) rotate(-2.5deg); } 40%{ transform:translateY(0) rotate(2.5deg); } 62%{ transform:translateY(-6px) rotate(-1.5deg); } 82%{ transform:translateY(0); } }
+  @keyframes fb-fade{ to{ opacity:0; } }
+
   /* ---- primary controls under the scene ---- */
   .row{ display:flex; flex-wrap:wrap; gap:12px; margin:16px 0; }
   .btn{
@@ -453,7 +477,10 @@ again to bring the design back.</div>
        "Make the cat laugh." is a great first line. It should be the first thing
        you see. Now it is.
        ==================================================================== -->
-  <div class="scene" id="scene">
+  <div class="scene" id="scene" role="button" tabindex="0"
+       aria-label="Run the machine and make the cat laugh"
+       onclick="playChain()"
+       onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();playChain();}">
     <!-- WORDLESS SPLASH. A near-square poster (760x680) so it fills a phone with
          picture instead of prose. The whole gag reads top-to-bottom down a centre
          column: marble rolls the ramp -> tips a bucket -> a rubber chicken drops ->
@@ -515,7 +542,7 @@ again to bring the design back.</div>
         <path d="M337 542 l5 -10 l8 10" fill="none" stroke="var(--line)" stroke-width="2.4"/>
         <path d="M344 558 q8 8 18 0" stroke="var(--line)" stroke-width="2.6" fill="none"/>
         <path d="M324 542 q-13 -3 -23 3 M324 549 q-15 1 -25 6" stroke="var(--ink-soft)" stroke-width="1.8"/>
-        <text x="470" y="514" font-size="30" fill="var(--ink-soft)" font-family="var(--mono)">z z</text>
+        <text id="zz" x="470" y="514" font-size="30" fill="var(--ink-soft)" font-family="var(--mono)">z z</text>
       </g>
 
       <!-- motion hints: the chain, drawn as arcs from link to link -->
@@ -844,6 +871,17 @@ function toggleMotion(){
   document.getElementById('k-motion').setAttribute('aria-pressed', motionCalm?'true':'false');
 }
 
+/* =================== THE TOY =================== */
+/* One tap fires the chain, then drops you into the predict loop (The Bench). */
+function playChain(){
+  var scene = document.getElementById('scene');
+  if(scene.classList.contains('firing')) return;   // debounce a second tap
+  scene.classList.add('firing');
+  var calm = motionCalm ||
+    (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  setTimeout(function(){ scene.classList.remove('firing'); goBuild(); }, calm ? 200 : 2000);
+}
+
 /* =================== NAV =================== */
 function goBuild(){
   show('bench'); hide('result'); hide('how'); setHome(true);
@@ -860,6 +898,7 @@ function goHome(){
 function setHome(on){ document.getElementById('homenav').hidden = !on; }
 function backToScene(){
   hide('bench'); setHome(false);
+  document.getElementById('scene').classList.remove('firing');   // reset the toy
   document.getElementById('scene').scrollIntoView({behavior: motionCalm?'auto':'smooth'});
 }
 function openHow(){ show('how'); hide('bench'); hide('result'); setHome(true); }
