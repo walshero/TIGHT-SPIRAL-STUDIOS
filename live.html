@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>What's Live — Tight Spiral Productions</title>
+
+<!-- FOUNDER TESTING LANE (ops page, not a game).
+     Purpose: tell the founder, from a phone, EXACTLY what build is live right now,
+     and never itself show stale. It reads version.json (stamped by floor.yml on every
+     deploy) with a cache-buster, so the DATA is always the true latest even if this
+     HTML was served from cache. It also carries its own deploy id (__TSP_BUILD__,
+     injected at deploy); if this page is itself stale, it hard-reloads once to fresh.
+     Exempt from the offline game-floor by design: the one fetch is same-origin
+     version.json (no external host), which is the whole point of the page. -->
+
+<style>
+  :root{
+    --paper:#fbfaf7; --paper-2:#f1eee6; --rule:#d8d2c4;
+    --ink:#14181d;       /* 15.9:1 on paper */
+    --ink-2:#3d4652;     /*  8.1:1 on paper */
+    --ink-3:#5c6675;     /*  5.3:1 on paper */
+    --live-ink:#1d5c3f;  /*  6.7:1 on paper */
+    --warn-ink:#8a2f22;  /*  6.9:1 on paper */
+    --brass-ink:#6a4d12; /*  6.2:1 on paper */
+    --slab:#12161b; --slab-ink:#f4f1e8;  /* 16.4:1 on slab */
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0; background:var(--paper); color:var(--ink);
+       font-family:var(--sans); font-size:18px; line-height:1.55; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:640px; margin:0 auto; padding:34px 22px 90px}
+  .mark{font-family:var(--mono); font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--brass-ink); font-weight:700; margin:0 0 18px}
+  h1{font-family:var(--serif); font-size:clamp(30px,7vw,44px); line-height:1.08; margin:0 0 8px; font-weight:400}
+  .sub{color:var(--ink-2); margin:0 0 26px; font-size:18px}
+
+  .panel{border:2px solid var(--rule); border-top-width:7px; border-radius:4px; background:var(--paper-2); padding:22px; margin:0 0 22px}
+  .panel.ok{border-top-color:var(--live-ink)}
+  .panel.stale{border-top-color:var(--warn-ink)}
+  .panel.err{border-top-color:var(--brass-ink)}
+  .state{font-family:var(--mono); font-size:13px; letter-spacing:.12em; text-transform:uppercase; font-weight:700; margin:0 0 12px}
+  .state.ok{color:var(--live-ink)} .state.stale{color:var(--warn-ink)} .state.err{color:var(--brass-ink)}
+  .big{font-family:var(--serif); font-size:clamp(24px,6vw,34px); line-height:1.15; margin:0 0 6px}
+  dl{margin:16px 0 0; display:grid; grid-template-columns:auto 1fr; gap:8px 16px}
+  dt{font-family:var(--mono); font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); align-self:center}
+  dd{margin:0; font-family:var(--mono); font-size:15px; color:var(--ink); word-break:break-word; align-self:center}
+
+  .go{display:inline-flex; align-items:center; justify-content:center; gap:.4em;
+      min-height:48px; padding:.7em 1.3em; border-radius:3px; text-decoration:none;
+      font-weight:700; font-size:18px; cursor:pointer; border:2px solid var(--ink); background:var(--ink); color:var(--paper)}
+  .go.sec{background:transparent; color:var(--ink)}
+  .go:focus-visible{outline:3px solid var(--brass-ink); outline-offset:3px}
+  .row{display:flex; gap:12px; flex-wrap:wrap; margin-top:8px}
+  .fine{color:var(--ink-3); font-size:14px; margin:22px 0 0; line-height:1.5}
+  .fine a{color:var(--brass-ink)}
+  code{font-family:var(--mono)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="mark">Tight Spiral Productions · Founder testing lane</p>
+  <h1>What's live right now</h1>
+  <p class="sub">This page reads the deploy stamp fresh every time. It cannot show you stale.</p>
+
+  <div class="panel err" id="panel">
+    <p class="state err" id="state">Checking the live deploy…</p>
+    <p class="big" id="headline">Reading version.json…</p>
+    <dl id="facts"></dl>
+  </div>
+
+  <div class="row">
+    <a class="go" id="openStudio" href="index.html">Open the studio, fresh</a>
+    <button class="go sec" id="recheck" type="button">Re-check</button>
+  </div>
+
+  <p class="fine">
+    The bar's build id is what GitHub Pages has actually published. If your bookmark of the
+    studio ever looks old, open it from the button above — it carries a cache-buster so the phone
+    fetches the newest files. Raw stamp: <a id="raw" href="version.json">version.json</a>.
+  </p>
+</div>
+
+<script>
+"use strict";
+/* This page's own deploy id, injected by floor.yml at deploy. Literal sentinel until then. */
+var MY_BUILD = "__TSP_BUILD__";
+var SENTINEL = "__TSP_" + "BUILD__";   /* split so the sed never rewrites this guard copy */
+
+var $ = function(id){ return document.getElementById(id); };
+
+function short(sha){ return (sha||"").slice(0,12); }
+function fmt(iso){
+  if(!iso) return "unknown";
+  var d = new Date(iso);
+  if(isNaN(d)) return iso;
+  var mins = Math.round((Date.now() - d.getTime())/60000);
+  var ago = mins < 1 ? "just now"
+          : mins < 60 ? mins + " min ago"
+          : mins < 1440 ? Math.round(mins/60) + " h ago"
+          : Math.round(mins/1440) + " d ago";
+  return d.toISOString().replace("T"," ").replace(/\..+/,"") + " UTC (" + ago + ")";
+}
+
+function paint(cls, state, headline, facts){
+  $("panel").className = "panel " + cls;
+  $("state").className = "state " + cls;
+  $("state").textContent = state;
+  $("headline").textContent = headline;
+  var dl = $("facts"); dl.innerHTML = "";
+  facts.forEach(function(f){
+    var dt=document.createElement("dt"); dt.textContent=f[0];
+    var dd=document.createElement("dd"); dd.textContent=f[1];
+    dl.appendChild(dt); dl.appendChild(dd);
+  });
+}
+
+function check(){
+  paint("err","Checking the live deploy…","Reading version.json…",[]);
+  fetch("version.json?_=" + Date.now(), { cache:"no-store" })
+    .then(function(r){ if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(function(v){
+      var facts = [
+        ["Build", short(v.sha)],
+        ["Branch", v.ref || "—"],
+        ["Built", fmt(v.built)],
+        ["Run", v.run || "—"]
+      ];
+      /* freshen the studio button with a cache-buster keyed to the live build */
+      $("openStudio").href = "index.html?v=" + short(v.sha);
+
+      /* If THIS page was itself served stale, reload once to the live build. */
+      var iAmStamped = (MY_BUILD !== SENTINEL);
+      var iAmStale = iAmStamped && v.sha && (MY_BUILD !== v.sha);
+      var params = new URLSearchParams(location.search);
+      if(iAmStale && params.get("r") !== "1"){
+        location.replace("live.html?v=" + short(v.sha) + "&r=1");
+        return;
+      }
+      paint("ok","● Live", "Latest build is up.", facts);
+    })
+    .catch(function(e){
+      paint("err","Could not read the stamp",
+        "No version.json reached.",
+        [["Reason", String(e.message || e)],
+         ["Likely", "this deploy predates the stamp, or you are offline"]]);
+    });
+}
+
+$("recheck").addEventListener("click", check);
+check();
+</script>
+</body>
+</html>
