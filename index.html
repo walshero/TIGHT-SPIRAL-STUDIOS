@@ -48,6 +48,41 @@ body{
 }
 .wrap{max-width:1060px; margin:0 auto; padding:0 22px 90px}
 
+/* ── COMFORT. One control, three stops on a single axis: − softer · 0 default · + daylight.
+   Not a 5-block cycler — a dial you read at a glance. The two end-stops reuse the studio's
+   OWN canonical comfort tokens (comfort-control.html, locked 2026-07-14), so contrast stays
+   a computation, never a judgment. No storage: single-file law, resets on reload. ───────── */
+body.cft-soft{                 /* − : same design, calmer. Lower push, still far above floor. */
+  --paper:#f6f3ec; --paper-2:#ece7dc; --rule:#d6cfc0;
+  --ink:#24292f;   /* 12.4:1 */ --ink-2:#48505c; /* 7.1:1 */ --ink-3:#5f6875; /* 5.1:1 */
+  --brass-ink:#6d5016; --cool-ink:#2b4467;
+}
+body.cft-day{                  /* + : maximum legibility. Flat, high-contrast, no atmosphere. */
+  --paper:#ffffff; --paper-2:#f2f2f2; --rule:#767676;
+  --ink:#000000; --ink-2:#1a1a1a; --ink-3:#333333; /* 12.6:1 — no muted text in this stop */
+  --brass-ink:#5c4000; --brass-fill:#ffd97a; --cool-ink:#14304f; --cool-fill:#d6e4f5;
+  --live-ink:#14472f; --slab:#000000; --slab-ink:#ffffff;
+}
+
+.comfort{
+  position:fixed; top:12px; right:14px; z-index:80;
+  display:inline-flex; align-items:stretch;
+  background:var(--paper-2); border:2px solid var(--ink); border-radius:4px;
+  overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.10);
+}
+.comfort button{
+  font-family:var(--mono); font-size:18px; font-weight:700; line-height:1;
+  min-width:46px; min-height:44px; padding:0 8px;      /* tap-target floor. Non-negotiable. */
+  background:transparent; color:var(--ink);            /* --ink is a TEXT token, never a fill. */
+  border:0; cursor:pointer;
+}
+.comfort button+button{border-left:1.5px solid var(--rule)}
+.comfort button:hover,.comfort button:focus-visible,
+.comfort button[aria-pressed="true"]{background:var(--slab); color:var(--slab-ink)} /* slab = ground, slab-ink = text */
+.comfort button:focus-visible{outline:3px solid var(--cool-ink); outline-offset:-2px}
+.comfort .sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+@media (max-width:640px){ .comfort{top:8px; right:8px} }
+
 /* ── THE STAGE. Scene first. No wall, no preference gate, no modal. ───────── */
 .stage{padding:70px 0 44px; border-bottom:2px solid var(--ink)}
 .mark{
@@ -226,6 +261,15 @@ footer p{margin:0 0 7px}
 </head>
 <body>
 
+<!-- COMFORT. One control, three stops on a single axis: − softer · 0 default · + daylight.
+     A corner control, never a wall. No storage — resets on reload (single-file law). -->
+<div class="comfort" role="group" aria-label="Comfort: reading contrast">
+  <button type="button" class="cft" data-lvl="-1" aria-pressed="false" aria-label="Softer — calmer, lower contrast">&minus;</button>
+  <button type="button" class="cft" data-lvl="0"  aria-pressed="true"  aria-label="Default — the designed look">0</button>
+  <button type="button" class="cft" data-lvl="1"  aria-pressed="false" aria-label="Daylight — maximum legibility">+</button>
+  <span class="sr" id="cft-status" role="status" aria-live="polite">Comfort: Default</span>
+</div>
+
 <main class="wrap">
 
 <!-- THE STAGE. Content on load. No gate, no wall, no ask. -->
@@ -317,14 +361,6 @@ footer p{margin:0 0 7px}
       <h3>The Tell</h3>
       <p>Reading the moment a text gives itself away. Ten moves, and the reader-test for each.</p>
       <div class="chips"><span class="chip c-live">Live</span><span class="chip c-note">Craft</span></div>
-    </a>
-
-    <a class="room" href="the-viscosity.html">
-      <svg class="gmark" viewBox="0 0 48 48" aria-hidden="true"><line x1="10" y1="12" x2="38" y2="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="10" y1="16" x2="38" y2="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="11" y1="20" x2="37" y2="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="13" y1="26" x2="35" y2="26" stroke-dasharray="2 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="15" y1="33" x2="33" y2="33" stroke-dasharray="1 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 40 L24 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 16 L24 12 L28 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <h3>The Viscosity</h3>
-      <p>Maslow's hierarchy as a space you have to move through. The higher you climb, the thicker
-         the air — and you feel exactly why.</p>
-      <div class="chips"><span class="chip c-live">Live</span><span class="chip c-note">Motivation</span></div>
     </a>
 
     <a class="room" href="cliche-cowpaths.html">
@@ -797,6 +833,35 @@ footer p{margin:0 0 7px}
   });
 
   if(window.scrollTo) window.scrollTo(0,0);
+})();
+</script>
+
+<!-- COMFORT — the − 0 + control. Three stops, one axis. No storage (single-file law). -->
+<script>
+(function(){
+  "use strict";
+  var STOPS = {
+    "-1": { cls:"cft-soft", label:"Softer"   },
+    "0":  { cls:"",         label:"Default"  },
+    "1":  { cls:"cft-day",  label:"Daylight" }
+  };
+  var btns   = document.querySelectorAll(".comfort .cft");
+  var status = document.getElementById("cft-status");
+  var body   = document.body;
+
+  function set(lvl){
+    var stop = STOPS[lvl] || STOPS["0"];
+    body.classList.remove("cft-soft","cft-day");
+    if(stop.cls) body.classList.add(stop.cls);
+    for(var i=0;i<btns.length;i++){
+      btns[i].setAttribute("aria-pressed", btns[i].getAttribute("data-lvl")===lvl ? "true" : "false");
+    }
+    if(status) status.textContent = "Comfort: " + stop.label;
+  }
+
+  for(var i=0;i<btns.length;i++){
+    btns[i].addEventListener("click", function(){ set(this.getAttribute("data-lvl")); });
+  }
 })();
 </script>
 </body>
