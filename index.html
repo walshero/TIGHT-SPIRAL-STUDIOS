@@ -46,7 +46,18 @@ body{
   font-family:var(--sans); font-size:17px; line-height:1.55;
   -webkit-font-smoothing:antialiased;
 }
-.wrap{max-width:1060px; margin:0 auto; padding:0 22px 90px}
+.wrap{max-width:1060px; margin:0 auto; padding:0 22px 90px; zoom:var(--textscale,1)}
+/* TEXT-SIZE CONTROL (canon: the size axis of comfort — minus before, plus after).
+   Scales the reading content via --textscale; the control itself stays put. */
+.textsize{position:fixed; right:16px; bottom:16px; z-index:50; display:flex; align-items:center; gap:6px;
+  background:var(--paper); border:1.5px solid var(--rule); border-radius:12px; padding:5px;
+  box-shadow:0 4px 16px rgba(20,24,29,.12)}
+.textsize button{width:44px; height:44px; border:1.5px solid var(--rule); border-radius:9px;
+  background:var(--paper-2); color:var(--ink); font:700 22px/1 system-ui,sans-serif; cursor:pointer}
+.textsize button:hover{border-color:var(--brass-ink)}
+.textsize button:focus-visible{outline:3px solid var(--brass-fill); outline-offset:2px}
+.textsize button:disabled{opacity:.4; cursor:default}
+.textsize .a{color:var(--ink-3); font-weight:700; padding:0 3px; min-width:18px; text-align:center; user-select:none}
 
 /* ── THE STAGE. Scene first. No wall, no preference gate, no modal. ───────── */
 .stage{padding:70px 0 44px; border-bottom:2px solid var(--ink)}
@@ -219,6 +230,12 @@ footer p{margin:0 0 7px}
 </style>
 </head>
 <body>
+
+<div class="textsize" role="group" aria-label="Text size">
+  <button type="button" id="tsMinus" aria-label="Smaller text" title="Smaller text">&minus;</button>
+  <span class="a" aria-hidden="true">A</span>
+  <button type="button" id="tsPlus" aria-label="Bigger text" title="Bigger text">+</button>
+</div>
 
 <main class="wrap">
 
@@ -670,6 +687,26 @@ footer p{margin:0 0 7px}
   });
 
   if(window.scrollTo) window.scrollTo(0,0);
+})();
+</script>
+
+<script>
+/* Text size — the canon size axis. Five steps, clamped; scales .wrap only.
+   In-memory, no storage (single-file-offline law). */
+(function(){
+  "use strict";
+  var SIZES = [0.9, 1, 1.15, 1.3, 1.45], i = 1;
+  var wrap = document.querySelector(".wrap");
+  var minus = document.getElementById("tsMinus");
+  var plus  = document.getElementById("tsPlus");
+  function apply(){
+    wrap.style.setProperty("--textscale", SIZES[i]);
+    minus.disabled = (i === 0);
+    plus.disabled  = (i === SIZES.length - 1);
+  }
+  minus.addEventListener("click", function(){ if(i > 0){ i--; apply(); } });
+  plus.addEventListener("click",  function(){ if(i < SIZES.length - 1){ i++; apply(); } });
+  apply();
 })();
 </script>
 </body>
