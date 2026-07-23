@@ -3,14 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
 <title>Confluence — Where Student Work Meets the World</title>
 <style>
 /* CONFLUENCE FOR MASSBAY — assessment companion.
    Single file. Offline. No external hosts. No names.
    Token-role law: a color is atmosphere OR text, never both.
    --orange is DECORATION ONLY and never carries text.
-   Font floor: 20px body, 18px absolute minimum. */
+   Font floor: 20px body, 18px absolute minimum.
+   color-scheme declared per stop — without it, phone browsers in OS dark
+   mode force-darken the page and destroy the computed contrast (found
+   live on device 2026-07-22; now a gate tooth). */
 :root{
+  color-scheme:light;
   --chart:#EEF2EE;        /* pale survey-chart ground */
   --panel:#E2E9E4;        /* raised panel ground */
   --ink:#17272A;          /* body ink, 13.5:1 on chart */
@@ -26,6 +31,7 @@ body.softer{
   --chart:#E4E8E2; --panel:#DAE0D9; --ink:#1C2A2C; --teal:#0D5450;
 }
 body.dark{
+  color-scheme:dark;
   --chart:#122023; --panel:#1A2B2E; --ink:#E7EDE4; --teal:#8FD6CB;
   --orange:#C05A1E; --focus:#8FD6CB; --stream:#2E4A48;
 }
@@ -195,6 +201,12 @@ footer{
 </style>
 </head>
 <body>
+<script>
+/* pre-paint: honor the phone/OS dark preference as the starting stop */
+if (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches){
+  document.body.classList.add('dark');
+}
+</script>
 <a class="skip-link" href="#main-content">Skip to main content</a>
 
 <header class="riverbar">
@@ -476,6 +488,13 @@ footer{
 <script>
 (function(){
   'use strict';
+  /* sync comfort buttons to the pre-paint stop */
+  var startDark = document.body.classList.contains('dark');
+  var cb = document.querySelectorAll('.comfort button');
+  for (var s=0;s<cb.length;s++){
+    cb[s].setAttribute('aria-pressed',
+      (startDark ? s===2 : s===0) ? 'true' : 'false');
+  }
   window.go = function(id, btn){
     var pages = document.querySelectorAll('.page');
     for (var i=0;i<pages.length;i++) pages[i].classList.remove('on');
