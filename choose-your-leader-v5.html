@@ -4,9 +4,12 @@
   CHOOSE YOUR LEADER — v5 · "The Receiver's Game"  ·  three eras, one reflex
   Tight Spiral Productions · walshero@gmail.com · single-file, offline, nothing stored.
 
-  SPINE (v5, founder-locked, carried out in full 2026-07-18):
-    "You don't judge the leader. You judge what you were allowed to see."
-    Rate blind trust → the record turns → rate again → see how far the words pulled you.
+  SPINE (v5) — THE MECHANIC IS THE SPINE (game-design panel, 2026-07-23):
+    Rate blind trust → the record turns → rate again → SEE THE GAP between your two readings.
+    The gap is the payoff — no rung, no rank, no score.
+    Prior thesis line ("You don't judge the leader. You judge what you were allowed to see.",
+    founder-locked 2026-07-18) is SUPERSEDED: demoted off the title screen after objection
+    (scold + gatekeeper + media-literacy drift). Words moved to a post-play coda. See TSP_Ledger.md.
 
   RELATION TO v6: v6 is the DECIDER'S game (you're in the chair, decide in the fog).
     v5 is the RECEIVER'S game (you're in the room, a broadcast reaches you). Both ship.
@@ -182,6 +185,18 @@
     background:var(--paper); padding:.15rem .3rem; border-radius:2px }
   .braked{ color:var(--cool) } .pulled{ color:var(--hot) }
 
+  /* the two-readings strip — the delta IS the payoff (game-design panel, 2026-07-20) */
+  .strip{ margin:.4rem 0 1rem; border:2px solid var(--rule); border-radius:2px;
+          background:var(--wall-lit); padding:.7rem .8rem .8rem }
+  .strip .ends{ display:flex; justify-content:space-between; color:var(--ink-dim);
+                font:.72rem/1 system-ui,sans-serif; letter-spacing:.03em; margin-bottom:.15rem }
+  .strip svg{ display:block; width:100%; height:auto }
+  .strip .key{ margin-top:.5rem; display:flex; flex-direction:column; gap:.2rem;
+               color:var(--ink); font:.86rem/1.4 system-ui,sans-serif }
+  .strip .key b{ color:var(--ink) } .strip .key .mv{ color:var(--ink-dim) }
+  .coda{ color:var(--ink); font:italic 400 1.06rem/1.55 Georgia,serif;
+         border-top:2px solid var(--rule); margin:1.1rem 0 .3rem; padding-top:.9rem; max-width:34em }
+
   .arcrow{ display:flex; align-items:center; gap:.6rem; border-bottom:1px solid var(--rule); padding:.5rem 0 }
   .arcrow b{ color:var(--ink); font:600 .9rem system-ui,sans-serif; flex:0 0 6.5rem }
   .arcrow span{ color:var(--ink-dim); font:.82rem system-ui,sans-serif }
@@ -325,13 +340,6 @@ const SCENES = [
 ];
 const PLAY = SCENES.filter(s => !s.gated);
 
-const RUNGS = [
-  { n:5, lab:"Your own judgment", sub:"You kept your footing. The message didn't override you.", ico:"eye" },
-  { n:4, lab:"Standing, a voice",  sub:"Lightly moved, still mostly your own.",                  ico:"figure" },
-  { n:3, lab:"A people, a we",     sub:"Pulled toward belonging \u2014 us, one safe message.",   ico:"link" },
-  { n:2, lab:"Safety",             sub:"Pulled toward fear and protection.",                     ico:"shield" },
-  { n:1, lab:"The floor",          sub:"Where consent stops mattering. How far rhetoric can reach.", ico:"anchor" }
-];
 
 const SCALE = [
   { k:1, band:"less", t:"Much less" },
@@ -588,9 +596,8 @@ function title(S_){
       <circle cx="356" cy="46" r="7" fill="#cdd6de" opacity=".5"/>
       <rect x="298" y="22" width="78" height="100" fill="none" stroke="${WOOD['era-62']}" stroke-width="4"/>`
   });
-  say(`<strong>You don't judge the leader. You judge what you were allowed to see.</strong><br><br>
-    A real president says a real thing. You decide how much it moves you \u2014 then the record turns,
-    and you see what the room wasn't shown. Three moments, about ten minutes.
+  say(`<strong>A real president says a real thing. You decide how much it moves you \u2014 then the record
+    turns, and you see what the room wasn't shown.</strong> Three moments, about ten minutes.
     <br><br><em>This game uses optional sound (off until you turn it on) and full-contrast text.
     Comfort and sound are in the top-right, always. Back and Home are in the top-left, always.</em>`);
   const b = el("button","btn","Enter the first room"); b.onclick=()=>{ S.i=0; go("prelude"); };
@@ -681,26 +688,44 @@ function computeLanding(sc){
   const noticed = p < b;
   return { tier, noticed, pull, brake };
 }
+function scaleX(k){ return 20 + (k-1)*50; }   /* 7 points across a 340-wide strip */
 function descent(sc,S_){
-  const r = computeLanding(sc);
-  eyebrow(`Where the words pulled you \u00B7 ${sc.when}`);
-  say(r.noticed
-    ? `You trusted them <span class="cool">less</span> once you saw the record. That drop is the brake. Naming the gap is the whole skill.`
-    : (r.pull>0
-        ? `The words moved you toward trust, and the record didn't pull you back. This is how far rhetoric can carry a person \u2014 not a verdict on you.`
-        : `You held. The message didn't override your judgment.`));
-  const d = el("div","descent");
-  RUNGS.forEach(rung=>{
-    const row = el("div","rung"+(rung.n===r.tier?" you":""));
-    row.innerHTML = `<div class="ico ${rung.n<=2?'pulled':(rung.n>=4?'cool':'')}">${icon(rung.ico)}</div>
-      <div class="lab"><b>${rung.lab}</b><span>${rung.sub}</span></div>`;
-    d.append(row);
-  });
-  S_.append(d);
+  const b = S.blind[sc.id] ?? 4, p = S.post[sc.id] ?? b;
+  const pull = b - 4, braked = p < b;
+  eyebrow(`Your two readings \u00B7 ${sc.when}`);
+  say(braked
+    ? `Blind, the words moved you toward trust. Once you saw the record, you pulled back. <strong>That gap \u2014 how far you moved \u2014 is the whole of it.</strong>`
+    : (pull>0
+        ? `Blind, the words moved you toward trust, and the record didn't move you back. <strong>This is how far rhetoric can carry a person \u2014 not a mark against you.</strong>`
+        : `Blind, you didn't lean. The words met a reader already keeping their footing.`));
+  const xb=scaleX(b), xp=scaleX(p);
+  let ticks=""; for(let k=1;k<=7;k++){ const x=scaleX(k);
+    ticks+=`<line x1="${x}" y1="${k===4?22:25}" x2="${x}" y2="${k===4?38:35}" stroke="var(--rule)" stroke-width="${k===4?3:2}"/>`; }
+  const arrow = (b!==p) ? `<line x1="${xb}" y1="30" x2="${xp}" y2="30" stroke="var(--cool-dec)" stroke-width="3" marker-end="url(#mv)"/>` : "";
+  const mv = braked ? `You pulled back ${b-p} step${b-p>1?'s':''} once you saw the record.`
+           : (p>b ? `You leaned further ${p-b} step${p-b>1?'s':''} after the record.`
+                  : `You didn't move.`);
+  const strip = el("div","strip");
+  strip.innerHTML =
+    `<div class="ends"><span>trusted less</span><span>neutral</span><span>trusted more</span></div>
+     <svg viewBox="0 0 340 46" aria-hidden="true">
+       <defs><marker id="mv" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+         <path d="M0 0 L8 4 L0 8 z" fill="var(--cool-dec)"/></marker></defs>
+       <line x1="20" y1="30" x2="320" y2="30" stroke="var(--rule)" stroke-width="2"/>
+       ${ticks}${arrow}
+       <circle cx="${xb}" cy="30" r="8" fill="var(--wall-lit)" stroke="var(--ink-dim)" stroke-width="2.5"/>
+       <circle cx="${xp}" cy="30" r="8" fill="var(--ink)"/>
+     </svg>
+     <div class="key">
+       <span><b>Blind</b> (hollow mark): ${SCALE[b-1].t}</span>
+       <span><b>After the record</b> (solid mark): ${SCALE[p-1].t}</span>
+       <span class="mv">${mv}</span>
+     </div>`;
+  S_.append(strip);
   const last = S.i>=PLAY.length-1;
-  const b = el("button","btn", last?"See the whole arc":"The next room");
-  b.onclick=()=>{ if(last){ go("arc"); } else { S.i++; go("prelude"); } };
-  S_.append(b);
+  const bb = el("button","btn", last?"See the whole arc":"The next room");
+  bb.onclick=()=>{ if(last){ go("arc"); } else { S.i++; go("prelude"); } };
+  S_.append(bb);
 }
 
 function arc(S_){
@@ -717,16 +742,17 @@ function arc(S_){
     <rect y="206" width="400" height="94" fill="var(--paper)"/>
     <rect y="200" width="400" height="6" fill="var(--chair)"/>
     ${set(40,"#dbe6ee")}${set(166,"#c7d2da")}${set(292,"#e0a75c")}</g>`;
-  say(`Where you held, and where you caught the gap.`);
+  say(`Room by room \u2014 where the record moved you, and where it didn't.`);
   PLAY.forEach(sc=>{
     const r=computeLanding(sc);
     const row=el("div","arcrow");
     row.innerHTML=`<b>${sc.when.split(",")[0]}</b>
-      <span>${r.noticed?`<span class="cool">caught the gap</span>`:`<span class="pulled">carried</span>`}
-      \u2014 landed at rung ${r.tier} of 5</span>`;
+      <span>${r.noticed ? `you pulled back once you saw the record` : `the record didn't move you`}</span>`;
     S_.append(row);
   });
   glassEngine(S_);
+  const coda=el("div","coda","Be easy on the person in the chair. That was you \u2014 and you did fine with what you had.");
+  S_.append(coda);
   const again=el("button","btn","Play again"); again.onclick=()=>{ S.blind={}; S.post={}; S.seen={}; S.i=0; go("title"); };
   S_.append(again);
 }
@@ -735,16 +761,16 @@ function glassEngine(S_){
   const r1=el("details","ring");
   r1.innerHTML=`<summary>What was this measuring?</summary>
     <p>The distance between two commitments: how far the words moved you before the record,
-    and whether that moved back once you saw what the room couldn't. Noticing the gap is the skill \u2014
-    not distrust. Calibration, not suspicion.</p>`;
+    and whether that moved back once you saw what the room couldn't. Noticing the gap is the whole
+    of it \u2014 not distrust. Calibration, not suspicion.</p>`;
   const r2=el("details","ring");
-  r2.innerHTML=`<summary>How the rung was computed</summary>
+  r2.innerHTML=`<summary>How your two readings are read</summary>
     <p>Each rating is captured on a 7-point directional scale (three words shown to you, seven steps
-    underneath). Your landing is compared only to <em>your own</em> blind rating for that scene \u2014
-    never to another player. Pull lowers the rung; noticing the gap brakes the fall.</p>`;
+    underneath). Your two readings are compared only to each other, and only to <em>your own</em> \u2014
+    never to another player. The gap between them is the whole result: no score, no rank.</p>`;
   const r3=el("details","ring");
   r3.innerHTML=`<summary>Is this ready for a classroom grade?</summary>
-    <p class="gateflag">Not yet. This instrument and its descent math are provisional.</p>
+    <p class="gateflag">Not yet. This instrument is provisional.</p>
     <p>Before any graded or ISLO use, the model passes a Measurement Design review \u2014 a survey
     methodologist (scale validity, identical pre/post wording), a psychometrician (is the score a
     coherent construct?), and a persuasion scholar (does it measure how rhetoric actually moves trust?).
