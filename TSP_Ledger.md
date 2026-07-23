@@ -3,6 +3,16 @@
 
 ---
 
+## 2026-07-23 — CYL v5: spine objection + game-design panel (logged, binding)
+
+**DECIDED — The mechanic is the spine, not a sentence.** Game-design panel (Romero, Blow, Chen, Meier; Hocking on ludonarrative fit) advised: CYL's spine is the re-rate DELTA — rate blind → the record turns → rate again → SEE THE GAP between your two readings — not a thesis line. Implemented in `choose-your-leader-v5.html` (presentation only; ipsative capture unchanged): descent now shows the two readings on one 7-point scale with the gap between them; the 5→1 rung ladder and "rung X of 5" removed; "skill" language cut; ends on a Saunders mercy coda ("Be easy on the person in the chair — that was you, and you did fine with what you had."); honesty rings + MEASUREMENT_PENDING kept.
+
+**SUPERSEDED — the 2026-07-18 founder-locked spine line.** *"You don't judge the leader. You judge what you were allowed to see."* — objected on three counts: scold ("you don't judge" contradicts the rating mechanic and quietly absolves); gatekeeper ("allowed" imports an intentionalist frame the game's own structural beats contradict); and drift toward "media literacy" (the framing guarded against, per `CYL_Harvest…md`). Demoted off the title screen. Saunders reframed the intent; the panel then demoted the line itself to a post-play coda. A lock re-opened by objection, not photocopied forward.
+
+**RECORDED — CYL art lane reconciled (cross-chat, via the repo).** Rooms ship as handcrafted SVG dioramas (never smooth-AI-photoreal — Greg-the-pancake). Photoreal = magazine collage of real period print (founder ruling). Art direction owned by `cyl-period-bible.md`; operational manifest `cyl-v5-image-lane.md`. "Never a real face" rationale: epistemic (strip the halo), methodological (control the variable), inclusive (the chair stays anyone's), science-grounded (faces pre-empt judgment), rights (living-figure disinfo hazard), rhetorical (the withholding is the point).
+
+---
+
 ## 2026-07-03 — Strategic decisions (logged, binding)
 
 **DECIDED — Open by default.** Backstage assets go public on the studio face. Hub and face become ONE site. No more design friction invented for IP security. Build in stealth with trusted parties; lock down later if ever needed.
