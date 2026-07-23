@@ -1,0 +1,65 @@
+/* ============================================================================
+   COMFORT STOPS — the C1-safe theming scaffold
+   ----------------------------------------------------------------------------
+   Vendored pattern, extracted from the gate-green companion
+   confluence-massbay-assessment.html (TSP@09b76d8). This is the reusable
+   mechanism, not a palette: fill the tokens with your build's own colors.
+
+   THE C1 LAW (why color-scheme is declared per stop):
+     Without `color-scheme`, a phone browser in OS dark mode FORCE-DARKENS the
+     page and destroys the computed contrast. Found live on device 2026-07-22;
+     it is now a Studio Eyes gate tooth (C1). Declaring color-scheme tells the
+     UA "this build owns both themes — do not re-color it."
+
+   THE TOKEN-ROLE LAW:
+     A color is atmosphere OR text, never both. Decoration tokens (rivers,
+     rules, accents) must NEVER carry text. The preship gate HALTs on violation.
+
+   FONT FLOOR: 20px body, 18px absolute minimum (E1 gate tooth).
+
+   THREE STOPS: Day (:root) · Softer (body.softer) · Night (body.dark).
+   Pair with comfort-stops.js for the pre-paint stop-setter + the corner control.
+   ========================================================================== */
+
+/* Put this in <head> as well: <meta name="color-scheme" content="light dark"> */
+
+:root {
+  color-scheme: light;                 /* C1: Day owns light */
+  /* --- fill with your build's palette; studio-green reference below --- */
+  --chart:  #EEF2EE;                    /* pale ground            */
+  --panel:  #E2E9E4;                    /* raised panel ground    */
+  --ink:    #17272A;                    /* body ink   (13.5:1 on --chart) */
+  --accent: #0F5F5A;                    /* heading/link (6.6:1 on --chart) */
+  --decor:  #C05A1E;                    /* DECORATION ONLY — never text   */
+  --focus:  #0F5F5A;
+}
+
+body.softer {                          /* a lower-glare light stop */
+  --chart: #E4E8E2; --panel: #DAE0D9; --ink: #1C2A2C; --accent: #0D5450;
+}
+
+body.dark {
+  color-scheme: dark;                  /* C1: Night owns dark */
+  --chart: #122023; --panel: #1A2B2E; --ink: #E7EDE4; --accent: #8FD6CB;
+  --decor: #C05A1E; --focus: #8FD6CB;
+}
+
+/* Apply the tokens. Body font-size honors the 20px floor. */
+body {
+  background: var(--chart);
+  color: var(--ink);
+  font-size: 20px;
+  line-height: 1.65;
+}
+
+/* Comfort corner control (Day / Softer / Night). */
+.comfort { position: fixed; top: .6rem; right: .6rem; display: flex; gap: 4px; z-index: 50; }
+.comfort button {
+  font-size: 18px; padding: 6px 12px; border-radius: 999px;
+  border: 1px solid var(--accent); background: var(--panel); color: var(--ink);
+}
+.comfort button[aria-pressed="true"] { background: var(--accent); color: var(--chart); }
+body.dark .comfort button[aria-pressed="true"] { color: #122023; }
+
+/* Visible focus is a floor, not an option. */
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
