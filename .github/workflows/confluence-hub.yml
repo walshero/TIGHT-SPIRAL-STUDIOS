@@ -1,0 +1,24 @@
+# Confluence hub — C1 gate for the JS-driven SPA.
+# The root sweep (floor.yml) only globs root-level *.html, so the SPA under
+# confluence-hub/ isn't covered there. The SPA is JS-driven, so full render-proof
+# can't see its content — but C1 (color-scheme) is static and DOES apply. This
+# gate enforces it, so the phone-dark force-darken bug can't return here.
+name: confluence-hub — C1
+
+on:
+  push:
+    paths: ['confluence-hub/**', '.github/workflows/confluence-hub.yml', 'c1-check.py']
+  pull_request:
+    paths: ['confluence-hub/**', 'c1-check.py']
+  workflow_dispatch:
+
+jobs:
+  c1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: C1 — color-scheme declaration
+        run: python3 c1-check.py confluence-hub/index.html
