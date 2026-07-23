@@ -166,7 +166,8 @@ def sweep_stop(src, stop, width, name, out, px_budget):
                         gr = composite([tuple(a.style['background_color']) for a in anc]
                                        + [tuple(box.style['background_color'])])
                         if max(abs(px[i]-gr[i]) for i in range(3)) > 0.18:
-                            has_img = str(box.style['background_image']) not in ('none', '(\\'none\\',)', "('none',)")
+                            bg_img = str(box.style['background_image'])
+                            has_img = 'gradient' in bg_img or 'url(' in bg_img
                             why = ("gradient/image ground — R1 contrast above was computed on the fallback color; hand-verify this surface"
                                    if has_img else "engine and paint disagree — hand-verify this surface")
                             out["R2"].append("%s: PAINT MISMATCH on <%s>: engine %s vs pixel %s (%s)"
