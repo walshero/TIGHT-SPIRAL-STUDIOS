@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
 <title>Table Four</title>
 <style>
 :root{
+  color-scheme:light dark;
   --paper:#F4EFE6;
   --paper2:#EBE4D8;
   --white:#FBF8F2;
@@ -16,6 +18,38 @@
   --redink:#8E1610;
   --chalk:#FBF7F0;
   --t:20px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#14120E;
+    --paper2:#221E18;
+    --white:#1B1813;
+    --red:#7E120C;
+    --ink:#F2ECE1;
+    --ink2:#CFC5B6;
+    --redink:#F2A08D;
+    --chalk:#FBF7F0;
+  }
+}
+html[data-comfort="dark"]{
+  --paper:#14120E;
+  --paper2:#221E18;
+  --white:#1B1813;
+  --red:#7E120C;
+  --ink:#F2ECE1;
+  --ink2:#CFC5B6;
+  --redink:#F2A08D;
+  --chalk:#FBF7F0;
+}
+html[data-comfort="day"]{
+  --paper:#F4EFE6;
+  --paper2:#EBE4D8;
+  --white:#FBF8F2;
+  --red:#B31B14;
+  --ink:#14100C;
+  --ink2:#4A423A;
+  --redink:#8E1610;
+  --chalk:#FBF7F0;
 }
 html[data-type="2"]{--t:23px}
 html[data-type="3"]{--t:27px}
@@ -31,14 +65,14 @@ body{
 
 /* ---------- masthead : back + home always visible ---------- */
 .bar{
-  display:flex;align-items:center;gap:10px;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
   padding:10px 12px;
   background:var(--paper2);
   border-bottom:3px solid var(--ink);
   position:sticky;top:0;z-index:9;
 }
 .bar h1{
-  font-size:var(--t);margin:0;flex:1;
+  font-size:var(--t);margin:0;flex:1 0 auto;
   letter-spacing:.06em;text-transform:uppercase;font-weight:700;
   color:var(--ink);
 }
@@ -58,6 +92,24 @@ button[disabled]{opacity:.4;cursor:default}
 .hidden{display:none}
 
 /* room art carries the screen */
+.rm-surf{fill:var(--white)}
+.rm-line{color:var(--ink);stroke:currentColor;fill:none;stroke-width:.9}
+.rm-edge{color:var(--ink);stroke:currentColor;fill:none;stroke-width:1.8}
+.rm-lab{color:var(--ink);fill:currentColor;font-family:Georgia,serif}
+.rm-tbl{fill:var(--white);color:var(--ink);stroke:currentColor;stroke-width:.9}
+.rm-tbl.seen{fill:var(--paper2)}
+.rm-tbl.now{stroke-width:2.4}
+.rm-num{color:var(--ink);fill:currentColor;font-family:Georgia,serif}
+.rm-pip{fill:var(--red)}
+.rm-grain{fill:var(--red)}
+.nd{fill:var(--white);color:var(--ink);stroke:currentColor;stroke-width:.9}
+.nd.on{fill:var(--red)}
+.nd-num{color:var(--ink);fill:currentColor;font-family:Georgia,serif}
+.nd-num.on{color:var(--chalk)}
+.nd-link{color:var(--ink);stroke:currentColor;stroke-width:.9}
+a.skip{position:absolute;left:-9999px}
+a.skip:focus{left:12px;top:8px;background:var(--paper2);color:var(--ink);padding:10px;z-index:20}
+:focus-visible{outline:4px solid var(--redink);outline-offset:2px}
 .room{
   width:100%;display:block;
   background:var(--white);
@@ -106,41 +158,34 @@ h2{font-size:var(--t);margin:16px 0 6px;letter-spacing:.05em;text-transform:uppe
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to the room</a>
 
 <div class="bar">
   <h1>Table Four</h1>
   <button class="navbtn" id="backBtn" onclick="goBack()" aria-label="Back">Back</button>
   <button class="navbtn" id="homeBtn" onclick="goHome()" aria-label="Home">Home</button>
   <button class="navbtn" onclick="stepType()" aria-label="Text size">Text</button>
+  <button class="navbtn" id="lightBtn" onclick="setStop()" aria-label="Light or dark">Dark</button>
 </div>
 
 <!-- ============ THE ROOM ============ -->
 <section class="scene" id="play">
 
-  <svg class="room" id="art" viewBox="0 0 100 66" role="img"
-       aria-label="Floor plan of a sixty-five seat cafe: kitchen pass along the top, bar at the left, host stand at the door, five tables in the dining room.">
-    <rect x="0" y="0" width="100" height="66" fill="#FBF8F2"/>
-    <!-- kitchen pass -->
-    <rect x="6" y="4" width="88" height="7" fill="none" stroke="#14100C" stroke-width="0.7"/>
-    <text x="50" y="9" font-size="3.4" text-anchor="middle" fill="#14100C"
-          font-family="Georgia,serif" letter-spacing="0.5">KITCHEN PASS</text>
-    <!-- bar -->
-    <rect x="6" y="17" width="9" height="34" rx="1" fill="none" stroke="#14100C" stroke-width="0.7"/>
-    <text x="10.5" y="35" font-size="3.2" text-anchor="middle" fill="#14100C"
-          font-family="Georgia,serif" transform="rotate(-90 10.5 35)">BAR</text>
-    <!-- host stand / door -->
-    <rect x="6" y="56" width="15" height="6" rx="1" fill="none" stroke="#14100C" stroke-width="0.7"/>
-    <text x="13.5" y="60.2" font-size="3" text-anchor="middle" fill="#14100C"
-          font-family="Georgia,serif">DOOR</text>
-    <!-- room outline -->
-    <rect x="0.9" y="0.9" width="98.2" height="64.2" fill="none" stroke="#14100C" stroke-width="1.8"/>
-    <!-- tables drawn by script -->
+  <svg class="room" id="art" viewBox="0 0 100 72" role="img"
+       aria-label="Floor plan of a sixty-five seat cafe: kitchen pass along the top, bar down the left, door at the lower left, tables four and five in the back room, tables one two and three across the front.">
+    <rect class="rm-surf" x="0" y="0" width="100" height="72"/>
+    <rect class="rm-line" x="6" y="3" width="88" height="9"/>
+    <text class="rm-lab" x="50" y="9.8" font-size="6" text-anchor="middle">KITCHEN</text>
+    <rect class="rm-line" x="6" y="16" width="11" height="32" rx="1"/>
+    <text class="rm-lab" x="11.5" y="32" font-size="6" text-anchor="middle" transform="rotate(-90 11.5 32)">BAR</text>
+    <rect class="rm-line" x="6" y="53" width="18" height="9" rx="1"/>
+    <text class="rm-lab" x="15" y="59.4" font-size="6" text-anchor="middle">DOOR</text>
+    <rect class="rm-edge" x="0.9" y="0.9" width="98.2" height="70.2"/>
     <g id="tables"></g>
-    <!-- salt-spill cascade trail -->
     <g id="spill"></g>
   </svg>
 
-  <div class="beat">
+  <div class="beat" id="main">
     <div class="n" id="beatNo">Service &mdash; beat 1 of 8</div>
     <p id="beatLine">Friday. Sixty-five seats, five of them yours.</p>
   </div>
@@ -154,8 +199,8 @@ h2{font-size:var(--t);margin:16px 0 6px;letter-spacing:.05em;text-transform:uppe
 <section class="scene hidden" id="out">
   <svg class="room" id="outArt" viewBox="0 0 100 40" role="img"
        aria-label="Diagram of the cascade: eight linked nodes running from a missed plate at the corner table to a couple leaving the empty door.">
-    <rect x="0" y="0" width="100" height="40" fill="#FBF8F2"/>
-    <rect x="0.9" y="0.9" width="98.2" height="38.2" fill="none" stroke="#14100C" stroke-width="1.8"/>
+    <rect class="rm-surf" x="0" y="0" width="100" height="40"/>
+    <rect class="rm-edge" x="0.9" y="0.9" width="98.2" height="38.2"/>
     <g id="chainArt"></g>
   </svg>
   <h2>What you set in motion</h2>
@@ -170,218 +215,6 @@ h2{font-size:var(--t);margin:16px 0 6px;letter-spacing:.05em;text-transform:uppe
 <script>
 /* ---------------- the room ---------------- */
 var TABLES = [
-  {id:"T1", x:26, y:47, w:13, h:11, label:"1",
+  {id:"T1", x:28, y:38, w:18, h:16, label:"1",
    who:"Two-top by the window",
-   look:["First night out since they moved in up the street.",
-         "They keep glancing at the door for someone to notice them.",
-         "He has the menu closed. She has not opened hers."]},
-  {id:"T2", x:47, y:47, w:13, h:11, label:"2",
-   who:"The wall table",
-   look:["Their entrees are twenty minutes late and nobody has said so.",
-         "Water glasses empty. Bread basket empty.",
-         "One of them has started checking the time on the phone."]},
-  {id:"T3", x:68, y:47, w:16, h:11, label:"3",
-   who:"Four-top, working dinner",
-   look:["Laptops half open. They are eating, not dining.",
-         "They want the check before dessert is offered.",
-         "One of them asked for the wifi twice."]},
-  {id:"T4", x:26, y:24, w:16, h:14, label:"4",
-   who:"The family &mdash; two children, two and four",
-   look:["They have been in before. Many times.",
-         "The four-year-old is out of the chair already. Crayons would land.",
-         "Bread first, and a glass of wine each, without asking."]},
-  {id:"T5", x:70, y:24, w:14, h:14, label:"5",
-   who:"The corner table",
-   look:["A plate for this table is sitting under the heat lamp, unclaimed.",
-         "They have not complained. They are still waiting.",
-         "Their server thinks somebody else picked it up."]}
-];
-
-/* eight authored beats. each unserved demand forges one link. */
-var BEATS = [
-  {dem:"T5", line:"A plate for the corner table never left the pass. It is still under the lamp.",
-   serve:"Run the corner plate before it dies under the lamp",
-   link:"The missed plate at the corner table went out cold, so the kitchen cooked it twice."},
-  {dem:"T2", line:"The wall table wants to know how long. Nobody has told them anything.",
-   serve:"Go to the wall table and give them a real number",
-   link:"The wall table waited on food that got pushed behind a re-cook."},
-  {dem:"T2", line:"Done waiting, the wall table orders a round instead.",
-   serve:"Take the round to the bar yourself, right now",
-   link:"Impatient, the wall table ordered drinks the bar was not staffed for."},
-  {dem:"BAR", line:"The bar is out of the bottle that round needs. It lives in the cellar.",
-   serve:"Get the bottle from the cellar so the bartender stays behind the bar",
-   link:"The bartender went downstairs for a bottle and left the bar unattended."},
-  {dem:"T3", line:"The four-top has closed their laptops. They want the check, not dessert.",
-   serve:"Drop the check on the four-top before they have to ask twice",
-   link:"The working four-top had to ask twice and sat on a table someone was waiting for."},
-  {dem:"T4", line:"Table four is seated. The four-year-old is already out of the chair.",
-   serve:"Get to table four",
-   link:"Table four was handled only after they asked, like anybody else."},
-  {dem:"HOST", line:"Two people are standing at the door. The stand is empty &mdash; the manager is behind the bar.",
-   serve:"Cover the door yourself and seat them",
-   link:"A couple stood at an empty host stand long enough to leave."},
-  {dem:"T1", line:"The window two-top is finished, and still has not been spoken to by name.",
-   serve:"Stop at the window table and learn who they are",
-   link:"The new neighbours ate a whole meal as table one and left as strangers."}
-];
-
-var S;
-function fresh(){
-  S = {beat:0, forged:[], banked:{}, moment:null, done:false, hist:[]};
-  TABLES.forEach(function(t){S.banked[t.id]=0;});
-}
-
-/* ---------------- art ---------------- */
-function drawRoom(){
-  var g="";
-  TABLES.forEach(function(t){
-    var demanding = !S.done && S.beat<BEATS.length && BEATS[S.beat].dem===t.id;
-    g += '<rect x="'+t.x+'" y="'+t.y+'" width="'+t.w+'" height="'+t.h+'" rx="1.4" '+
-         'fill="'+(S.banked[t.id]?'#EBE4D8':'#FBF8F2')+'" stroke="#14100C" stroke-width="'+(demanding?1.6:0.7)+'"/>';
-    g += '<text x="'+(t.x+t.w/2)+'" y="'+(t.y+t.h/2+1.6)+'" font-size="5" text-anchor="middle" '+
-         'fill="#14100C" font-family="Georgia,serif">'+t.label+'</text>';
-    if(demanding){
-      g += '<circle cx="'+(t.x+t.w-1.6)+'" cy="'+(t.y+1.8)+'" r="1.9" fill="#B31B14"/>';
-    }
-    for(var i=0;i<S.banked[t.id];i++){
-      g += '<rect x="'+(t.x+1.4+i*2.6)+'" y="'+(t.y+t.h-2.6)+'" width="1.7" height="1.7" fill="#14100C"/>';
-    }
-  });
-  /* mark bar / host demands on the fixtures */
-  if(!S.done && S.beat<BEATS.length){
-    var d=BEATS[S.beat].dem;
-    if(d==="BAR") g+='<circle cx="13.4" cy="19.4" r="1.9" fill="#B31B14"/>';
-    if(d==="HOST") g+='<circle cx="19" cy="57.8" r="1.9" fill="#B31B14"/>';
-  }
-  document.getElementById("tables").innerHTML=g;
-
-  /* salt spill: one grain per forged link, trailing from the corner table */
-  var sp="", n=S.forged.length, seed=7;
-  for(var i=0;i<n*9;i++){
-    seed=(seed*1103515245+12345)&0x7fffffff;
-    var f=i/(n*9||1);
-    var cx=76 - f*54 + ((seed>>7)%80)/12 - 3;
-    var cy=36 + f*16 + ((seed>>13)%80)/16 - 2;
-    sp+='<circle cx="'+cx.toFixed(1)+'" cy="'+cy.toFixed(1)+'" r="'+(0.4+((seed>>3)%5)/9).toFixed(2)+'" fill="#B31B14"/>';
-  }
-  document.getElementById("spill").innerHTML=sp;
-}
-
-/* ---------------- turn loop ---------------- */
-function render(){
-  var b=BEATS[S.beat];
-  document.getElementById("beatNo").textContent="Service \u2014 beat "+(S.beat+1)+" of "+BEATS.length;
-  document.getElementById("beatLine").innerHTML=b.line;
-
-  var html="";
-  html+='<button onclick="serve()"><span class="k">Serve</span>'+b.serve+'</button>';
-  TABLES.forEach(function(t){
-    if(S.banked[t.id]>=t.look.length) return;
-    html+='<button onclick="notice(\''+t.id+'\')"><span class="k">Notice table '+t.label+'</span>'+t.who+'</button>';
-  });
-  if(S.beat===5 && S.banked.T4>=2 && S.moment===null){
-    html+='<button onclick="takeMoment()"><span class="k">The recurring moment</span>'+
-          'Crayons down, bread out, a glass of wine each &mdash; before anyone asks'+'</button>';
-  }
-  document.getElementById("acts").innerHTML=html;
-
-  var bank="", any=false;
-  TABLES.forEach(function(t){
-    for(var i=0;i<S.banked[t.id];i++){any=true;bank+='<p>Table '+t.label+' &mdash; '+t.look[i]+'</p>';}
-  });
-  var box=document.getElementById("bankBox");
-  box.innerHTML=bank; box.className=any?"banked":"banked hidden";
-  drawRoom();
-}
-
-function advance(served){
-  if(!served) S.forged.push(S.beat);
-  S.beat++;
-  if(S.beat>=BEATS.length) finish(); else render();
-}
-function serve(){ S.hist.push("served"); advance(true); }
-function notice(id){
-  var t=TABLES.filter(function(x){return x.id===id;})[0];
-  if(S.banked[id]<t.look.length) S.banked[id]++;
-  S.hist.push("noticed:"+id);
-  advance(false);
-}
-function takeMoment(){ S.moment=true; S.hist.push("moment"); advance(false); }
-
-/* ---------------- reveal ---------------- */
-function finish(){
-  S.done=true;
-  if(S.moment===null) S.moment=false;
-
-  var li="", art="", lit=0;
-  BEATS.forEach(function(b,i){
-    var on=S.forged.indexOf(i)>-1;
-    if(on) lit++;
-    li+='<li class="'+(on?'lit':'')+'">'+(on?b.link:'Prevented: '+b.link.replace(/\.$/,''))+'</li>';
-    var x=6+i*11.6;
-    art+='<rect x="'+x+'" y="14" width="9.4" height="12" rx="1.2" fill="'+(on?'#B31B14':'#FBF8F2')+
-         '" stroke="#14100C" stroke-width="0.8"/>';
-    art+='<text x="'+(x+4.7)+'" y="21.6" font-size="5" text-anchor="middle" fill="'+(on?'#FBF7F0':'#14100C')+
-         '" font-family="Georgia,serif">'+(i+1)+'</text>';
-    if(i<BEATS.length-1) art+='<line x1="'+(x+9.4)+'" y1="20" x2="'+(x+11.6)+'" y2="20" stroke="#14100C" stroke-width="0.8"/>';
-  });
-  document.getElementById("chainList").innerHTML=li;
-  document.getElementById("chainArt").innerHTML=art;
-
-  var looked=0, details=0;
-  TABLES.forEach(function(t){ if(S.banked[t.id]>0) looked++; details+=S.banked[t.id]; });
-  var quiet=0;
-  TABLES.forEach(function(t){
-    var shouted=BEATS.some(function(b){return b.dem===t.id;});
-    if(S.banked[t.id]>0 && !shouted) quiet++;
-  });
-  var regulars=[];
-  if(S.moment) regulars.push("Table four");
-  if(S.banked.T1>0 && S.forged.indexOf(7)===-1) regulars.push("The window two-top");
-
-  var t="";
-  t+='<p class="big">'+lit+' of '+BEATS.length+' links forged.</p>';
-  t+='<p>Perspective &mdash; you looked at '+looked+' of 5 tables, '+details+
-     ' detail'+(details===1?'':'s')+' banked'+(quiet?', '+quiet+' of them at a table that was not shouting':'')+'.</p>';
-  t+='<p>Humour &mdash; the recurring moment was '+(S.moment?'taken':'not taken')+
-     (S.moment?', and it cost you the beat.':S.banked.T4>=2?'. You had what you needed to see it.':'. You never learned enough about table four to see it.')+'</p>';
-  t+='<p>'+(regulars.length
-        ? 'Left as regulars: '+regulars.join(' and ')+'.'
-        : 'Everyone left as a table number. Tonight you were table four to them, too.')+'</p>';
-  t+='<p>Every plate went out. That was never the game.</p>';
-  document.getElementById("tally").innerHTML=t;
-
-  document.getElementById("play").className="scene hidden";
-  document.getElementById("out").className="scene";
-  window.scrollTo(0,0);
-}
-
-/* ---------------- nav / comfort ---------------- */
-function goHome(){
-  fresh();
-  document.getElementById("out").className="scene hidden";
-  document.getElementById("play").className="scene";
-  render(); window.scrollTo(0,0);
-}
-function goBack(){
-  if(S.done){ goHome(); return; }
-  if(S.beat===0) return;
-  S.beat--;
-  var i=S.forged.indexOf(S.beat); if(i>-1) S.forged.splice(i,1);
-  var last=S.hist.pop()||"";
-  if(last.indexOf("noticed:")===0){
-    var id=last.split(":")[1];
-    if(S.banked[id]>0) S.banked[id]--;
-  }
-  if(last==="moment") S.moment=null;
-  render(); window.scrollTo(0,0);
-}
-function stepType(){
-  var n=parseInt(document.documentElement.getAttribute("data-type"),10)||1;
-  document.documentElement.setAttribute("data-type", n>=3?1:n+1);
-}
-
-fresh(); render();
-</script>
-</body>
-</html>
+   look:["Fir
