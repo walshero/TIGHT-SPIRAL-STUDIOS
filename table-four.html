@@ -126,4 +126,82 @@ h2{font-size:var(--t);margin:16px 0 6px;letter-spacing:.05em;text-transform:uppe
           font-family="Georgia,serif" letter-spacing="0.5">KITCHEN PASS</text>
     <!-- bar -->
     <rect x="6" y="17" width="9" height="34" rx="1" fill="none" stroke="#14100C" stroke-width="0.7"/>
-    <te
+    <text x="10.5" y="35" font-size="3.2" text-anchor="middle" fill="#14100C"
+          font-family="Georgia,serif" transform="rotate(-90 10.5 35)">BAR</text>
+    <!-- host stand / door -->
+    <rect x="6" y="56" width="15" height="6" rx="1" fill="none" stroke="#14100C" stroke-width="0.7"/>
+    <text x="13.5" y="60.2" font-size="3" text-anchor="middle" fill="#14100C"
+          font-family="Georgia,serif">DOOR</text>
+    <!-- room outline -->
+    <rect x="0.9" y="0.9" width="98.2" height="64.2" fill="none" stroke="#14100C" stroke-width="1.8"/>
+    <!-- tables drawn by script -->
+    <g id="tables"></g>
+    <!-- salt-spill cascade trail -->
+    <g id="spill"></g>
+  </svg>
+
+  <div class="beat">
+    <div class="n" id="beatNo">Service &mdash; beat 1 of 8</div>
+    <p id="beatLine">Friday. Sixty-five seats, five of them yours.</p>
+  </div>
+
+  <div class="acts" id="acts"></div>
+  <p class="note" id="note">One action per beat. Serving clears the thing that is shouting. Noticing does not.</p>
+  <div class="banked hidden" id="bankBox"></div>
+</section>
+
+<!-- ============ REVEAL ============ -->
+<section class="scene hidden" id="out">
+  <svg class="room" id="outArt" viewBox="0 0 100 40" role="img"
+       aria-label="Diagram of the cascade: eight linked nodes running from a missed plate at the corner table to a couple leaving the empty door.">
+    <rect x="0" y="0" width="100" height="40" fill="#FBF8F2"/>
+    <rect x="0.9" y="0.9" width="98.2" height="38.2" fill="none" stroke="#14100C" stroke-width="1.8"/>
+    <g id="chainArt"></g>
+  </svg>
+  <h2>What you set in motion</h2>
+  <ul class="chain" id="chainList"></ul>
+  <div class="tally" id="tally"></div>
+  <div class="acts" style="margin-top:14px">
+    <button onclick="goHome()"><span class="k">Again</span>Work the same Friday differently</button>
+  </div>
+  <p class="src">Adapted with permission from <b>Choreographed Chaos: Every Table in the Restaurant Counts</b> by Steve &amp; Karen Waller (Damianos Publishing, 2026). The cascade is the book&rsquo;s own &ldquo;Everything&rsquo;s Connected.&rdquo; The scoring is the book&rsquo;s own Carol Index &mdash; a sense of humor and a sense of perspective, the sixth and seventh senses. Tight Spiral Productions vertical slice.</p>
+</section>
+
+<script>
+/* ---------------- the room ---------------- */
+var TABLES = [
+  {id:"T1", x:26, y:47, w:13, h:11, label:"1",
+   who:"Two-top by the window",
+   look:["First night out since they moved in up the street.",
+         "They keep glancing at the door for someone to notice them.",
+         "He has the menu closed. She has not opened hers."]},
+  {id:"T2", x:47, y:47, w:13, h:11, label:"2",
+   who:"The wall table",
+   look:["Their entrees are twenty minutes late and nobody has said so.",
+         "Water glasses empty. Bread basket empty.",
+         "One of them has started checking the time on the phone."]},
+  {id:"T3", x:68, y:47, w:16, h:11, label:"3",
+   who:"Four-top, working dinner",
+   look:["Laptops half open. They are eating, not dining.",
+         "They want the check before dessert is offered.",
+         "One of them asked for the wifi twice."]},
+  {id:"T4", x:26, y:24, w:16, h:14, label:"4",
+   who:"The family &mdash; two children, two and four",
+   look:["They have been in before. Many times.",
+         "The four-year-old is out of the chair already. Crayons would land.",
+         "Bread first, and a glass of wine each, without asking."]},
+  {id:"T5", x:70, y:24, w:14, h:14, label:"5",
+   who:"The corner table",
+   look:["A plate for this table is sitting under the heat lamp, unclaimed.",
+         "They have not complained. They are still waiting.",
+         "Their server thinks somebody else picked it up."]}
+];
+
+/* eight authored beats. each unserved demand forges one link. */
+var BEATS = [
+  {dem:"T5", line:"A plate for the corner table never left the pass. It is still under the lamp.",
+   serve:"Run the corner plate before it dies under the lamp",
+   link:"The missed plate at the corner table went out cold, so the kitchen cooked it twice."},
+  {dem:"T2", line:"The wall table wants to know how long. Nobody has told them anything.",
+   serve:"Go to the wall table and give them a real number",
+   lin
