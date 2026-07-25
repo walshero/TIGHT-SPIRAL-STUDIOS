@@ -204,4 +204,87 @@ var BEATS = [
    link:"The missed plate at the corner table went out cold, so the kitchen cooked it twice."},
   {dem:"T2", line:"The wall table wants to know how long. Nobody has told them anything.",
    serve:"Go to the wall table and give them a real number",
-   lin
+   link:"The wall table waited on food that got pushed behind a re-cook."},
+  {dem:"T2", line:"Done waiting, the wall table orders a round instead.",
+   serve:"Take the round to the bar yourself, right now",
+   link:"Impatient, the wall table ordered drinks the bar was not staffed for."},
+  {dem:"BAR", line:"The bar is out of the bottle that round needs. It lives in the cellar.",
+   serve:"Get the bottle from the cellar so the bartender stays behind the bar",
+   link:"The bartender went downstairs for a bottle and left the bar unattended."},
+  {dem:"T3", line:"The four-top has closed their laptops. They want the check, not dessert.",
+   serve:"Drop the check on the four-top before they have to ask twice",
+   link:"The working four-top had to ask twice and sat on a table someone was waiting for."},
+  {dem:"T4", line:"Table four is seated. The four-year-old is already out of the chair.",
+   serve:"Get to table four",
+   link:"Table four was handled only after they asked, like anybody else."},
+  {dem:"HOST", line:"Two people are standing at the door. The stand is empty &mdash; the manager is behind the bar.",
+   serve:"Cover the door yourself and seat them",
+   link:"A couple stood at an empty host stand long enough to leave."},
+  {dem:"T1", line:"The window two-top is finished, and still has not been spoken to by name.",
+   serve:"Stop at the window table and learn who they are",
+   link:"The new neighbours ate a whole meal as table one and left as strangers."}
+];
+
+var S;
+function fresh(){
+  S = {beat:0, forged:[], banked:{}, moment:null, done:false, hist:[]};
+  TABLES.forEach(function(t){S.banked[t.id]=0;});
+}
+
+/* ---------------- art ---------------- */
+function drawRoom(){
+  var g="";
+  TABLES.forEach(function(t){
+    var demanding = !S.done && S.beat<BEATS.length && BEATS[S.beat].dem===t.id;
+    g += '<rect x="'+t.x+'" y="'+t.y+'" width="'+t.w+'" height="'+t.h+'" rx="1.4" '+
+         'fill="'+(S.banked[t.id]?'#EBE4D8':'#FBF8F2')+'" stroke="#14100C" stroke-width="'+(demanding?1.6:0.7)+'"/>';
+    g += '<text x="'+(t.x+t.w/2)+'" y="'+(t.y+t.h/2+1.6)+'" font-size="5" text-anchor="middle" '+
+         'fill="#14100C" font-family="Georgia,serif">'+t.label+'</text>';
+    if(demanding){
+      g += '<circle cx="'+(t.x+t.w-1.6)+'" cy="'+(t.y+1.8)+'" r="1.9" fill="#B31B14"/>';
+    }
+    for(var i=0;i<S.banked[t.id];i++){
+      g += '<rect x="'+(t.x+1.4+i*2.6)+'" y="'+(t.y+t.h-2.6)+'" width="1.7" height="1.7" fill="#14100C"/>';
+    }
+  });
+  /* mark bar / host demands on the fixtures */
+  if(!S.done && S.beat<BEATS.length){
+    var d=BEATS[S.beat].dem;
+    if(d==="BAR") g+='<circle cx="13.4" cy="19.4" r="1.9" fill="#B31B14"/>';
+    if(d==="HOST") g+='<circle cx="19" cy="57.8" r="1.9" fill="#B31B14"/>';
+  }
+  document.getElementById("tables").innerHTML=g;
+
+  /* salt spill: one grain per forged link, trailing from the corner table */
+  var sp="", n=S.forged.length, seed=7;
+  for(var i=0;i<n*9;i++){
+    seed=(seed*1103515245+12345)&0x7fffffff;
+    var f=i/(n*9||1);
+    var cx=76 - f*54 + ((seed>>7)%80)/12 - 3;
+    var cy=36 + f*16 + ((seed>>13)%80)/16 - 2;
+    sp+='<circle cx="'+cx.toFixed(1)+'" cy="'+cy.toFixed(1)+'" r="'+(0.4+((seed>>3)%5)/9).toFixed(2)+'" fill="#B31B14"/>';
+  }
+  document.getElementById("spill").innerHTML=sp;
+}
+
+/* ---------------- turn loop ---------------- */
+function render(){
+  var b=BEATS[S.beat];
+  document.getElementById("beatNo").textContent="Service \u2014 beat "+(S.beat+1)+" of "+BEATS.length;
+  document.getElementById("beatLine").innerHTML=b.line;
+
+  var html="";
+  html+='<button onclick="serve()"><span class="k">Serve</span>'+b.serve+'</button>';
+  TABLES.forEach(function(t){
+    if(S.banked[t.id]>=t.look.length) return;
+    html+='<button onclick="notice(\''+t.id+'\')"><span class="k">Notice table '+t.label+'</span>'+t.who+'</button>';
+  });
+  if(S.beat===5 && S.banked.T4>=2 && S.moment===null){
+    html+='<button onclick="takeMoment()"><span class="k">The recurring moment</span>'+
+          'Crayons down, bread out, a glass of wine each &mdash; before anyone asks'+'</button>';
+  }
+  document.getElementById("acts").innerHTML=html;
+
+  var bank="", any=false;
+  TABLES.forEach(function(t){
+    for(var i=0;i<S.ban
