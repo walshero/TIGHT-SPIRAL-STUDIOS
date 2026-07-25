@@ -382,4 +382,52 @@ function finish(){
   t+='<p class="big">'+lit+' of '+BEATS.length+' links forged.</p>';
   t+='<p>Perspective &mdash; you looked at '+looked+' of 5 tables, '+details+
      ' detail'+(details===1?'':'s')+' banked'+(quiet?', '+quiet+' of them at a table that was not shouting':'')+'.</p>';
-  t+='<p>Humour &mdash; the recurring moment was '+(S.moment?'taken':'not take
+  t+='<p>Humour &mdash; the recurring moment was '+(S.moment?'taken':'not taken')+
+     (S.moment?', and it cost you the beat.':S.banked.T4>=2?'. You had what you needed to see it.':'. You never learned enough about table four to see it.')+'</p>';
+  t+='<p>'+(regulars.length
+        ? 'Left as regulars: '+regulars.join(' and ')+'.'
+        : 'Everyone left as a table number. Tonight you were table four to them, too.')+'</p>';
+  t+='<p>Every plate went out. That was never the game.</p>';
+  document.getElementById("tally").innerHTML=t;
+
+  document.getElementById("play").className="scene hidden";
+  document.getElementById("out").className="scene";
+  window.scrollTo(0,0);
+}
+
+/* ---------------- nav / comfort ---------------- */
+function goHome(){
+  fresh();
+  document.getElementById("out").className="scene hidden";
+  document.getElementById("play").className="scene";
+  render(); window.scrollTo(0,0);
+}
+function goBack(){
+  if(S.done){ goHome(); return; }
+  if(S.beat===0) return;
+  S.beat--;
+  var i=S.forged.indexOf(S.beat); if(i>-1) S.forged.splice(i,1);
+  var last=S.hist.pop()||"";
+  if(last.indexOf("noticed:")===0){
+    var id=last.split(":")[1];
+    if(S.banked[id]>0) S.banked[id]--;
+  }
+  if(last==="moment") S.moment=null;
+  render(); window.scrollTo(0,0);
+}
+function stepType(){
+  var n=parseInt(document.documentElement.getAttribute("data-type"),10)||1;
+  document.documentElement.setAttribute("data-type", n>=3?1:n+1);
+}
+
+function setStop(){
+  var h=document.documentElement;
+  var next = h.getAttribute("data-comfort")==="dark" ? "day" : "dark";
+  h.setAttribute("data-comfort", next);
+  document.getElementById("lightBtn").textContent = next==="dark" ? "Day" : "Dark";
+}
+
+fresh(); render();
+</script>
+</body>
+</html>
