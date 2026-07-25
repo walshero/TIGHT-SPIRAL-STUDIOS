@@ -217,4 +217,169 @@ h2{font-size:var(--t);margin:16px 0 6px;letter-spacing:.05em;text-transform:uppe
 var TABLES = [
   {id:"T1", x:28, y:38, w:18, h:16, label:"1",
    who:"Two-top by the window",
-   look:["Fir
+   look:["First night out since they moved in up the street.",
+         "They keep glancing at the door for someone to notice them.",
+         "He has the menu closed. She has not opened hers."]},
+  {id:"T2", x:50, y:38, w:18, h:16, label:"2",
+   who:"The wall table",
+   look:["Their entrees are twenty minutes late and nobody has said so.",
+         "Water glasses empty. Bread basket empty.",
+         "One of them has started checking the time on the phone."]},
+  {id:"T3", x:72, y:38, w:18, h:16, label:"3",
+   who:"Four-top, working dinner",
+   look:["Laptops half open. They are eating, not dining.",
+         "They want the check before dessert is offered.",
+         "One of them asked for the wifi twice."]},
+  {id:"T4", x:28, y:16, w:20, h:17, label:"4",
+   who:"The family &mdash; two children, two and four",
+   look:["They have been in before. Many times.",
+         "The four-year-old is out of the chair already. Crayons would land.",
+         "Bread first, and a glass of wine each, without asking."]},
+  {id:"T5", x:68, y:16, w:20, h:17, label:"5",
+   who:"The corner table",
+   look:["A plate for this table is sitting under the heat lamp, unclaimed.",
+         "They have not complained. They are still waiting.",
+         "Their server thinks somebody else picked it up."]}
+];
+
+/* eight authored beats. each unserved demand forges one link. */
+var BEATS = [
+  {dem:"T5", line:"A plate for the corner table never left the pass. It is still under the lamp.",
+   serve:"Run the corner plate before it dies under the lamp",
+   link:"The missed plate at the corner table went out cold, so the kitchen cooked it twice."},
+  {dem:"T2", line:"The wall table wants to know how long. Nobody has told them anything.",
+   serve:"Go to the wall table and give them a real number",
+   link:"The wall table waited on food that got pushed behind a re-cook."},
+  {dem:"T2", line:"Done waiting, the wall table orders a round instead.",
+   serve:"Take the round to the bar yourself, right now",
+   link:"Impatient, the wall table ordered drinks the bar was not staffed for."},
+  {dem:"BAR", line:"The bar is out of the bottle that round needs. It lives in the cellar.",
+   serve:"Get the bottle from the cellar so the bartender stays behind the bar",
+   link:"The bartender went downstairs for a bottle and left the bar unattended."},
+  {dem:"T3", line:"The four-top has closed their laptops. They want the check, not dessert.",
+   serve:"Drop the check on the four-top before they have to ask twice",
+   link:"The working four-top had to ask twice and sat on a table someone was waiting for."},
+  {dem:"T4", line:"Table four is seated. The four-year-old is already out of the chair.",
+   serve:"Get to table four",
+   link:"Table four was handled only after they asked, like anybody else."},
+  {dem:"HOST", line:"Two people are standing at the door. The stand is empty &mdash; the manager is behind the bar.",
+   serve:"Cover the door yourself and seat them",
+   link:"A couple stood at an empty host stand long enough to leave."},
+  {dem:"T1", line:"The window two-top is finished, and still has not been spoken to by name.",
+   serve:"Stop at the window table and learn who they are",
+   link:"The new neighbours ate a whole meal as table one and left as strangers."}
+];
+
+var S;
+function fresh(){
+  S = {beat:0, forged:[], banked:{}, moment:null, done:false, hist:[]};
+  TABLES.forEach(function(t){S.banked[t.id]=0;});
+}
+
+/* ---------------- art ---------------- */
+function drawRoom(){
+  var g="";
+  TABLES.forEach(function(t){
+    var demanding = !S.done && S.beat<BEATS.length && BEATS[S.beat].dem===t.id;
+    var cls = "rm-tbl" + (S.banked[t.id]?" seen":"") + (demanding?" now":"");
+    g += '<rect class="'+cls+'" x="'+t.x+'" y="'+t.y+'" width="'+t.w+'" height="'+t.h+'" rx="1.4"/>';
+    g += '<text class="rm-num" x="'+(t.x+t.w/2)+'" y="'+(t.y+t.h/2+3.1)+'" font-size="9" text-anchor="middle">'+t.label+'</text>';
+    if(demanding){
+      g += '<circle class="rm-pip" cx="'+(t.x+t.w-3.6)+'" cy="'+(t.y+3.8)+'" r="3"/>';
+    }
+  });
+  /* mark bar / host demands on the fixtures */
+  if(!S.done && S.beat<BEATS.length){
+    var d=BEATS[S.beat].dem;
+    if(d==="BAR") g+='<circle class="rm-pip" cx="11.5" cy="20" r="3"/>';
+    if(d==="HOST") g+='<circle class="rm-pip" cx="20.5" cy="57.5" r="3"/>';
+  }
+  document.getElementById("tables").innerHTML=g;
+
+  /* salt spill: one grain per forged link, trailing from the corner table */
+  var sp="", n=S.forged.length, seed=7;
+  for(var i=0;i<n*9;i++){
+    seed=(seed*1103515245+12345)&0x7fffffff;
+    var f=i/(n*9||1);
+    var cx=94 - f*66 + ((seed>>7)%80)/22 - 1.8;
+    var cy=65.4 + ((seed>>13)%80)/16 - 2.5;
+    sp+='<circle class="rm-grain" cx="'+cx.toFixed(1)+'" cy="'+cy.toFixed(1)+'" r="'+(0.4+((seed>>3)%5)/9).toFixed(2)+'"/>';
+  }
+  document.getElementById("spill").innerHTML=sp;
+}
+
+/* ---------------- turn loop ---------------- */
+function render(){
+  var b=BEATS[S.beat];
+  document.getElementById("beatNo").textContent="Service \u2014 beat "+(S.beat+1)+" of "+BEATS.length;
+  document.getElementById("beatLine").innerHTML=b.line;
+
+  var html="";
+  html+='<button onclick="serve()"><span class="k">Serve</span>'+b.serve+'</button>';
+  TABLES.forEach(function(t){
+    if(S.banked[t.id]>=t.look.length) return;
+    html+='<button onclick="notice(\''+t.id+'\')"><span class="k">Notice table '+t.label+'</span>'+t.who+'</button>';
+  });
+  if(S.beat===5 && S.banked.T4>=2 && S.moment===null){
+    html+='<button onclick="takeMoment()"><span class="k">The recurring moment</span>'+
+          'Crayons down, bread out, a glass of wine each &mdash; before anyone asks'+'</button>';
+  }
+  document.getElementById("acts").innerHTML=html;
+
+  var bank="", any=false;
+  TABLES.forEach(function(t){
+    for(var i=0;i<S.banked[t.id];i++){any=true;bank+='<p>Table '+t.label+' &mdash; '+t.look[i]+'</p>';}
+  });
+  var box=document.getElementById("bankBox");
+  box.innerHTML=bank; box.className=any?"banked":"banked hidden";
+  drawRoom();
+}
+
+function advance(served){
+  if(!served) S.forged.push(S.beat);
+  S.beat++;
+  if(S.beat>=BEATS.length) finish(); else render();
+}
+function serve(){ S.hist.push("served"); advance(true); }
+function notice(id){
+  var t=TABLES.filter(function(x){return x.id===id;})[0];
+  if(S.banked[id]<t.look.length) S.banked[id]++;
+  S.hist.push("noticed:"+id);
+  advance(false);
+}
+function takeMoment(){ S.moment=true; S.hist.push("moment"); advance(false); }
+
+/* ---------------- reveal ---------------- */
+function finish(){
+  S.done=true;
+  if(S.moment===null) S.moment=false;
+
+  var li="", art="", lit=0;
+  BEATS.forEach(function(b,i){
+    var on=S.forged.indexOf(i)>-1;
+    if(on) lit++;
+    li+='<li class="'+(on?'lit':'')+'">'+(on?b.link:'Prevented: '+b.link.replace(/\.$/,''))+'</li>';
+    var x=4+i*11.8;
+    art+='<rect class="nd'+(on?' on':'')+'" x="'+x+'" y="13" width="10" height="14" rx="1.2"/>';
+    art+='<text class="nd-num'+(on?' on':'')+'" x="'+(x+5)+'" y="23.1" font-size="6" text-anchor="middle">'+(i+1)+'</text>';
+    if(i<BEATS.length-1) art+='<line class="nd-link" x1="'+(x+10)+'" y1="20" x2="'+(x+11.8)+'" y2="20"/>';
+  });
+  document.getElementById("chainList").innerHTML=li;
+  document.getElementById("chainArt").innerHTML=art;
+
+  var looked=0, details=0;
+  TABLES.forEach(function(t){ if(S.banked[t.id]>0) looked++; details+=S.banked[t.id]; });
+  var quiet=0;
+  TABLES.forEach(function(t){
+    var shouted=BEATS.some(function(b){return b.dem===t.id;});
+    if(S.banked[t.id]>0 && !shouted) quiet++;
+  });
+  var regulars=[];
+  if(S.moment) regulars.push("Table four");
+  if(S.banked.T1>0 && S.forged.indexOf(7)===-1) regulars.push("The window two-top");
+
+  var t="";
+  t+='<p class="big">'+lit+' of '+BEATS.length+' links forged.</p>';
+  t+='<p>Perspective &mdash; you looked at '+looked+' of 5 tables, '+details+
+     ' detail'+(details===1?'':'s')+' banked'+(quiet?', '+quiet+' of them at a table that was not shouting':'')+'.</p>';
+  t+='<p>Humour &mdash; the recurring moment was '+(S.moment?'taken':'not take
