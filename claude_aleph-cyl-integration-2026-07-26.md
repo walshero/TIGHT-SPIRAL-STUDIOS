@@ -73,3 +73,19 @@ Matt, this session, in his words:
 - **Open:** Horvath's seat unnamed — parked, non-blocking.
 
 Ruling recorded the day it was made, per the founder-canon close.
+
+---
+
+## FUNES CORRECTION — 2026-07-26 (verified after the convening; the convening's premise was wrong)
+
+A file-mapping pass (git + byte-level) overturned the factual basis of the ruling above. Recorded here because the reliability floor demands the correction sit next to the claim, not replace it silently.
+
+- **The "Nixon slice" is a reverted 10,000-byte stub**, not a realized scene. `choose-your-leader-nixon-slice.html` ends mid-CSS at line 170 — no `</style>`, no `<body>`, no `<script>`, no scene data. Git: `seed (1/5)` → `append (2/5)` → **`Revert "append (2/5)"`** (`0106b00`). Its only real content is the header comment stating the intended reveal thesis (manufactured "silent majority").
+- **`choose-your-leader-v5.html` is already the complete three-broadcast game.** JFK '62 (scene 1), LBJ '64 (scene 2), Nixon '69 (scene 3) all exist as data-driven `SCENES[]` objects on one shared engine/instrument/comfort/nav, with the §3.3 asset slots wired. LBJ is NOT unbuilt; the shell is NOT missing; Nixon already exists as scene 3.
+
+**What this changes:**
+- The build order's ASSEMBLE / DROP-IN / BUILD-LBJ rows are largely **already done** inside `v5.html`. The real work is refinement + a face/reveal decision, not construction.
+- **`v5.html` gate fix shipped 2026-07-26:** cooled the `--label` text token from warm sand `#d8b98a` to cool `#b9c4d0` (RP H-HUE floor). Preship gate v4 now **SHIP, worst pair 5.99**.
+- **Open decision — the Nixon reveal:** `v5.html` currently reveals Nixon via the *secret Cambodia bombing* angle. The stub header proposes the *manufactured-majority* angle (orchestrated telegram-and-poll response; Public Papers 1969 pp.901–909; FRUS 1969–76 vol.VI doc.144). Two historically real reveals — a founder + sourcing call, not a merge.
+- **Open decision — the face:** per the ratification (v5 three-broadcast is canon; v6 parked), the studio face should point at `v5.html`, not `v6.html`. Awaiting the go before flipping the live front door a second time.
+- The Nixon *slice* stub can be archived (its thesis is preserved here); nothing is lost.
