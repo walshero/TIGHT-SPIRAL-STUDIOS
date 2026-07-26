@@ -240,7 +240,7 @@
         fb:"You bring her in. The build slows by 400% and improves by every measure that counts. She tapes one flap for twenty minutes and considers herself the chief engineer. She is not wrong. Greg supervises from a shelf."}
      ]},
     {eyebrow:"7:55 p.m. — bedtime, almost",title:"Stall",setup:art.s4,setupCap:"\"the short kind. i promise.\"",
-     text:["The castle is nearly ready in the backyard. You just need ten more minutes — and she is, at this exact moment, demanding to go to bed early \"so the castle comes faster.\"",
+     text:["The castle is finished — the paint on the drawbridge just needs ten untouchable minutes to dry before the reveal, and nothing you do can hurry it. So your whole job now is to run out the clock: she is, at this exact moment, demanding to go to bed early \"so the castle comes faster.\"",
            "<span class='narrator'>You must now keep an excited child awake without admitting why.</span>"],
      options:[
        {label:"Spin a stalling tale: \"First, the LEGEND of this castle...\"",tag:"Author.",zing:true,d:2,cap:"the legend (improvised)",
@@ -317,16 +317,24 @@
     showTop();var btns=card.querySelectorAll("button.choice");btns.forEach(function(b){b.addEventListener("click",function(){choose(parseInt(b.dataset.i,10));});});if(btns[0])focusTop(btns[0]);}
 
   function choose(i){pushHistory();var s=scenes[step],opt=s.options[i];promise+=(opt.d||0);clampP();syncNav();
-    card.innerHTML='<p class="eyebrow">'+s.eyebrow+'</p><h1>'+s.title+'</h1>'+artBlock(s.reveal,opt.cap,opt.warn)+meterHTML()+'<div class="feedback '+(opt.zing?'zing':'')+'"><span class="tag">'+opt.tag+'</span>'+opt.fb+'</div><div class="next-row"><button class="next" id="nextBtn">'+(step<scenes.length-1?"Next":"See how the day landed")+'</button></div><p class="step-count">Scene '+(step+1)+' of '+scenes.length+'</p>';
+    var last=step>=scenes.length-1,artHTML,capLine='';
+    // COMBINED result: the castle's next piece appears WITH the choice's feedback —
+    // one screen per stage, not a feedback screen followed by a separate build screen.
+    if(!last){var L=castleLayers[step];
+      artHTML='<div class="build-art"><svg viewBox="0 0 600 210" role="img" aria-label="'+L.cap+'" preserveAspectRatio="xMidYMid meet"><g class="bnew">'+L.svg+'</g></svg></div>';
+      capLine='<p class="build-sub">'+L.cap+'</p>';
+    } else { artHTML=artBlock(s.reveal,opt.cap,opt.warn); }
+    card.innerHTML='<p class="eyebrow">'+s.eyebrow+'</p><h1>'+s.title+'</h1>'+artHTML+meterHTML()+'<div class="feedback '+(opt.zing?'zing':'')+'"><span class="tag">'+opt.tag+'</span>'+opt.fb+'</div>'+capLine+'<div class="next-row"><button class="next" id="nextBtn">'+(last?"See how the day landed":"Next")+'</button></div><p class="step-count">Scene '+(step+1)+' of '+scenes.length+'</p>';
     showTop();var nb=document.getElementById("nextBtn");nb.addEventListener("click",advance);focusTop(nb);}
 
   // map each scene to its reveal drawing
   scenes[0].reveal=art.s1;scenes[1].reveal=art.s2r;scenes[2].reveal=art.s3r;scenes[3].reveal=art.s4r;scenes[4].reveal=art.s5r;
 
   function advance(){
-    // between scenes 1-4, show the castle assembling one more piece, then continue
-    if(step < scenes.length-1){ step++; renderBuild(step); }
-    else { step++; renderEnding(); }
+    // the castle beat now rides on the choice screen (see choose); just move on.
+    step++;
+    if(step < scenes.length){ renderScene(); }
+    else { renderEnding(); }
   }
 
   // ---- cumulative castle: layers[0..n] drawn; layer n animates in ----
@@ -435,7 +443,7 @@
       /* Navigation chip — always available, subtle on desktop */
       ".tsp-nav{position:fixed;top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));",
         "z-index:2147483000;display:flex;gap:8px;font-family:'Helvetica Neue',Arial,sans-serif}",
-      ".tsp-nav a{display:inline-flex;align-items:center;gap:.4em;text-decoration:none;",
+      ".tsp-nav a{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;gap:.4em;text-decoration:none;",
         "padding:.5em .85em;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:.04em;",
         "color:#f4f1e8;background:rgba(20,18,15,.66);border:1px solid rgba(255,207,90,.45);",
         "-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);line-height:1;",
@@ -446,7 +454,7 @@
 
       /* Nav integrated into the studio's shared .topbar (no overlap) */
       ".tsp-barnav{display:inline-flex;align-items:center;gap:.35rem;margin-right:.25rem;flex:none}",
-      ".tsp-barnav a{display:inline-flex;align-items:center;gap:.3em;text-decoration:none;color:inherit;",
+      ".tsp-barnav a{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;gap:.3em;text-decoration:none;color:inherit;",
         "font-family:inherit;font-weight:800;font-size:.82rem;letter-spacing:.02em;line-height:1;",
         "padding:.4em .7em;border-radius:999px;border:1px solid currentColor;opacity:.85;",
         "background:transparent;white-space:nowrap;transition:opacity .12s,background .12s}",
