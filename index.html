@@ -43,25 +43,21 @@
 html{-webkit-text-size-adjust:100%}
 body{
   margin:0; background:var(--paper); color:var(--ink);
-  font-family:var(--sans); font-size:17px; line-height:1.55;
+  font-family:var(--sans); font-size:calc(17px * var(--fs)); line-height:1.55;
   -webkit-font-smoothing:antialiased;
 }
 .wrap{max-width:1060px; margin:0 auto; padding:0 22px 90px}
 
-/* ── COMFORT. One control, three stops on a single axis: − softer · 0 default · + daylight.
-   Not a 5-block cycler — a dial you read at a glance. The two end-stops reuse the studio's
-   OWN canonical comfort tokens (comfort-control.html, locked 2026-07-14), so contrast stays
-   a computation, never a judgment. No storage: single-file law, resets on reload. ───────── */
-body.cft-soft{                 /* − : same design, calmer. Lower push, still far above floor. */
+/* ── COMFORT. One corner control: [ A− ] smaller text · [ ◐ ] comfort toggle · [ A+ ] bigger text.
+   A− / A+ change the REAL font size (text reflows via --fs), never a zoom or transform. The
+   ◐ toggles a calmer reading ground that reuses the studio's own canonical soft tokens, so
+   contrast stays a computation. No storage: single-file law, both reset on reload. ────────── */
+:root{ --fs:1; }               /* text-size multiplier, driven by A− / A+ */
+
+body.cft-soft{                 /* comfort mode: same design, calmer. Still far above the floor. */
   --paper:#f6f3ec; --paper-2:#ece7dc; --rule:#d6cfc0;
   --ink:#24292f;   /* 12.4:1 */ --ink-2:#48505c; /* 7.1:1 */ --ink-3:#5f6875; /* 5.1:1 */
   --brass-ink:#6d5016; --cool-ink:#2b4467;
-}
-body.cft-day{                  /* + : maximum legibility. Flat, high-contrast, no atmosphere. */
-  --paper:#ffffff; --paper-2:#f2f2f2; --rule:#767676;
-  --ink:#000000; --ink-2:#1a1a1a; --ink-3:#333333; /* 12.6:1 — no muted text in this stop */
-  --brass-ink:#5c4000; --brass-fill:#ffd97a; --cool-ink:#14304f; --cool-fill:#d6e4f5;
-  --live-ink:#14472f; --slab:#000000; --slab-ink:#ffffff;
 }
 
 .comfort{
@@ -90,11 +86,11 @@ body.cft-day{                  /* + : maximum legibility. Flat, high-contrast, n
   text-transform:uppercase; color:var(--brass-ink); font-weight:700; margin:0 0 20px;
 }
 h1{
-  font-family:var(--serif); font-size:clamp(34px,6.4vw,60px); line-height:1.06;
+  font-family:var(--serif); font-size:clamp(calc(34px * var(--fs)),6.4vw,calc(60px * var(--fs))); line-height:1.06;
   margin:0 0 22px; letter-spacing:-.015em; font-weight:400; max-width:15ch;
 }
 h1 em{font-style:italic; color:var(--cool-ink)}
-.lede{font-size:clamp(18px,2.5vw,21px); line-height:1.5; color:var(--ink-2); max-width:58ch; margin:0 0 14px}
+.lede{font-size:clamp(calc(18px * var(--fs)),2.5vw,calc(21px * var(--fs))); line-height:1.5; color:var(--ink-2); max-width:58ch; margin:0 0 14px}
 .lede b{color:var(--ink); font-weight:600}
 .tag{font-family:var(--mono); font-size:12.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3); margin:26px 0 0}
 
@@ -105,16 +101,16 @@ h1 em{font-style:italic; color:var(--cool-ink)}
 }
 .count div{flex:1 1 130px; padding:14px 16px; border-right:1.5px solid var(--rule); background:var(--paper-2)}
 .count div:last-child{border-right:0}
-.count b{display:block; font-family:var(--mono); font-size:23px; color:var(--ink); font-weight:700; line-height:1.2}
+.count b{display:block; font-family:var(--mono); font-size:calc(23px * var(--fs)); color:var(--ink); font-weight:700; line-height:1.2}
 .count span{display:block; font-family:var(--mono); font-size:10.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--ink-3); margin-top:3px}
 
 /* ── SECTIONS ────────────────────────────────────────────────────────────── */
 section{padding:56px 0 0}
 h2{
-  font-family:var(--mono); font-size:12px; letter-spacing:.2em; text-transform:uppercase;
+  font-family:var(--mono); font-size:calc(12px * var(--fs)); letter-spacing:.2em; text-transform:uppercase;
   color:var(--brass-ink); font-weight:700; margin:0 0 6px;
 }
-.sub{font-size:16px; color:var(--ink-2); margin:0 0 26px; max-width:64ch}
+.sub{font-size:calc(16px * var(--fs)); color:var(--ink-2); margin:0 0 26px; max-width:64ch}
 .sub b{color:var(--ink); font-weight:600}
 
 /* ── ROOM CARDS ──────────────────────────────────────────────────────────── */
@@ -127,8 +123,8 @@ h2{
 }
 .room:hover{transform:translateY(-2px); box-shadow:0 4px 0 var(--acc,var(--rule))}
 .room:focus-visible{outline:3px solid var(--cool-ink); outline-offset:3px}
-.room h3{font-family:var(--serif); font-size:23px; margin:0 0 8px; font-weight:400; line-height:1.2}
-.room p{margin:0; font-size:15px; color:var(--ink-2); line-height:1.5}
+.room h3{font-family:var(--serif); font-size:calc(23px * var(--fs)); margin:0 0 8px; font-weight:400; line-height:1.2}
+.room p{margin:0; font-size:calc(15px * var(--fs)); color:var(--ink-2); line-height:1.5}
 
   /* ── PER-CARD COLOR (added 2026-07-19) — each square its own hue.
      --acc paints the icon + 6px top stripe; --card is a light tint the dark
@@ -165,21 +161,21 @@ h2{
 .job:hover{border-color:var(--brass-fill)}
 .job:focus-visible{outline:3px solid var(--brass-fill); outline-offset:3px}
 .job .who{font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--brass-fill); font-weight:700; margin-bottom:6px}
-.job h3{font-family:var(--serif); font-size:21px; margin:0 0 7px; font-weight:400}
-.job p{margin:0; font-size:14.5px; color:#c3cad4; line-height:1.45}  /* 10.1:1 on #1a1f27 */
+.job h3{font-family:var(--serif); font-size:calc(21px * var(--fs)); margin:0 0 7px; font-weight:400}
+.job p{margin:0; font-size:calc(14.5px * var(--fs)); color:#c3cad4; line-height:1.45}  /* 10.1:1 on #1a1f27 */
 
 /* ── THE PLAYTEST INTAKE ─────────────────────────────────────────────────── */
 .bench{border:2px solid var(--ink); border-radius:2px; padding:0; overflow:hidden; margin-top:26px}
 .bench-top{background:var(--cool-fill); padding:22px 22px 20px}
-.bench-top h3{font-family:var(--serif); font-size:26px; margin:0 0 9px; font-weight:400; color:var(--ink)}
-.bench-top p{margin:0 0 8px; font-size:15.5px; color:#22313f; line-height:1.5; max-width:62ch}  /* 8.9:1 on cool-fill */
+.bench-top h3{font-family:var(--serif); font-size:calc(26px * var(--fs)); margin:0 0 9px; font-weight:400; color:var(--ink)}
+.bench-top p{margin:0 0 8px; font-size:calc(15.5px * var(--fs)); color:#22313f; line-height:1.5; max-width:62ch}  /* 8.9:1 on cool-fill */
 .bench-top p:last-child{margin:0}
 .bench-top b{color:var(--ink)}
 
 .teach{padding:22px; border-bottom:1.5px solid var(--rule); background:var(--paper-2)}
 .teach .h{font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--brass-ink); font-weight:700; margin:0 0 12px}
 .teach ol{margin:0; padding-left:20px}
-.teach li{font-size:15px; color:var(--ink-2); margin-bottom:9px; line-height:1.5}
+.teach li{font-size:calc(15px * var(--fs)); color:var(--ink-2); margin-bottom:9px; line-height:1.5}
 .teach li:last-child{margin-bottom:0}
 .teach li b{color:var(--ink)}
 
@@ -221,9 +217,9 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{outline:3px so
 .floor-list{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:13px; margin-top:22px}
 .fl{padding:15px 16px; border:1.5px solid var(--rule); border-radius:2px; background:var(--paper-2)}
 .fl b{display:block; font-family:var(--mono); font-size:11px; letter-spacing:.11em; text-transform:uppercase; color:var(--brass-ink); margin-bottom:6px}
-.fl p{margin:0; font-size:14.5px; color:var(--ink-3); line-height:1.45}
+.fl p{margin:0; font-size:calc(14.5px * var(--fs)); color:var(--ink-3); line-height:1.45}
 
-footer{margin-top:64px; padding-top:24px; border-top:1.5px solid var(--rule); font-size:14.5px; color:var(--ink-3)}
+footer{margin-top:64px; padding-top:24px; border-top:1.5px solid var(--rule); font-size:calc(14.5px * var(--fs)); color:var(--ink-3)}
 footer a{color:var(--cool-ink); font-weight:600}
 footer p{margin:0 0 7px}
 
@@ -255,19 +251,24 @@ footer p{margin:0 0 7px}
 .stage-copy{flex:1 1 auto; min-width:0}
 .banner-mark{height:34px; width:auto; color:var(--brass-ink); display:block; margin-bottom:10px}
 .slab .banner-mark{color:var(--brass-fill)}
-@media (max-width:640px){ .hero-mark{display:none} }  /* keep hero text-first on phone */
+/* Portrait: the dial stays VISIBLE — an image shown in landscape must show in portrait too.
+   Stack the stage and shrink the mark so it reads under the headline, never hidden. */
+@media (max-width:640px){
+  .stage-row{flex-direction:column; gap:16px}
+  .hero-mark{display:block; width:92px}
+}
 
 </style>
 </head>
 <body>
 
-<!-- COMFORT. One control, three stops on a single axis: − softer · 0 default · + daylight.
-     A corner control, never a wall. No storage — resets on reload (single-file law). -->
-<div class="comfort" role="group" aria-label="Comfort: reading contrast">
-  <button type="button" class="cft" data-lvl="-1" aria-pressed="false" aria-label="Softer — calmer, lower contrast">&minus;</button>
-  <button type="button" class="cft" data-lvl="0"  aria-pressed="true"  aria-label="Default — the designed look">0</button>
-  <button type="button" class="cft" data-lvl="1"  aria-pressed="false" aria-label="Daylight — maximum legibility">+</button>
-  <span class="sr" id="cft-status" role="status" aria-live="polite">Comfort: Default</span>
+<!-- COMFORT. Bigger/smaller text + a comfort toggle. Corner control, never a wall.
+     No storage — text size and comfort both reset on reload (single-file law). -->
+<div class="comfort" role="group" aria-label="Reading comfort">
+  <button type="button" id="cft-smaller" aria-label="Smaller text">A&minus;</button>
+  <button type="button" id="cft-comfort" aria-pressed="false" aria-label="Comfort reading mode: softer, calmer ground">&#9680;</button>
+  <button type="button" id="cft-bigger" aria-label="Bigger text">A+</button>
+  <span class="sr" id="cft-status" role="status" aria-live="polite">Text size 100 percent</span>
 </div>
 
 <main class="wrap">
@@ -843,32 +844,32 @@ footer p{margin:0 0 7px}
 })();
 </script>
 
-<!-- COMFORT — the − 0 + control. Three stops, one axis. No storage (single-file law). -->
+<!-- COMFORT — bigger/smaller text (real font-size, not zoom) + a comfort toggle.
+     No storage: both reset on reload (single-file law). -->
 <script>
 (function(){
   "use strict";
-  var STOPS = {
-    "-1": { cls:"cft-soft", label:"Softer"   },
-    "0":  { cls:"",         label:"Default"  },
-    "1":  { cls:"cft-day",  label:"Daylight" }
-  };
-  var btns   = document.querySelectorAll(".comfort .cft");
+  var root = document.documentElement, body = document.body;
   var status = document.getElementById("cft-status");
-  var body   = document.body;
+  var FS = 1, MIN = 0.85, MAX = 1.45, STEP = 0.1;
 
-  function set(lvl){
-    var stop = STOPS[lvl] || STOPS["0"];
-    body.classList.remove("cft-soft","cft-day");
-    if(stop.cls) body.classList.add(stop.cls);
-    for(var i=0;i<btns.length;i++){
-      btns[i].setAttribute("aria-pressed", btns[i].getAttribute("data-lvl")===lvl ? "true" : "false");
-    }
-    if(status) status.textContent = "Comfort: " + stop.label;
+  function applyFS(){
+    root.style.setProperty("--fs", FS.toFixed(2));
+    if(status) status.textContent = "Text size " + Math.round(FS * 100) + " percent";
   }
+  function step(d){ FS = Math.min(MAX, Math.max(MIN, +(FS + d).toFixed(2))); applyFS(); }
 
-  for(var i=0;i<btns.length;i++){
-    btns[i].addEventListener("click", function(){ set(this.getAttribute("data-lvl")); });
-  }
+  document.getElementById("cft-bigger").addEventListener("click",  function(){ step(+STEP); });
+  document.getElementById("cft-smaller").addEventListener("click", function(){ step(-STEP); });
+
+  var cbtn = document.getElementById("cft-comfort");
+  cbtn.addEventListener("click", function(){
+    var on = body.classList.toggle("cft-soft");
+    cbtn.setAttribute("aria-pressed", on ? "true" : "false");
+    if(status) status.textContent = on ? "Comfort mode on" : "Comfort mode off";
+  });
+
+  applyFS();
 })();
 </script>
 </body>
