@@ -135,8 +135,18 @@ def image_floor(html):
     elif screens >= 3 and visual < screens/2 and chars > 1500:
         warns.append('[image-floor] ' + str(visual) + ' visual element(s) across ' + str(screens) + ' screens, ' + str(chars) + ' chars text - likely under the 50% image floor; verify by eye.')
     return halts, warns
-def nav_floor(html):
+# The back+home rule exists so a player deep in a multi-screen PRODUCT can always
+# get out. It does not apply to the studio FRONT DOOR: index.html is home, so a
+# back/home control there points at itself and means nothing. Entry/hub pages that
+# ARE the top of the tree are exempt from H-NAV (only H-NAV — every other floor
+# still applies). Add a hub here only if it is genuinely a root, never to silence a
+# real missing-nav on a product.
+NAV_EXEMPT = {'index.html'}
+
+def nav_floor(html, name=''):
     halts = []
+    if name in NAV_EXEMPT:
+        return halts
     body = re.sub(r'<(script|style)[\s\S]*?</\1>', ' ', html, flags=re.I)
     screens = len(re.findall(r'class="[^"]*\b(?:stage|screen|slide|scene)\b', body, re.I))
     toggled = len(re.findall(r'\bclass="[^"]*\bhidden\b', body, re.I))
@@ -278,7 +288,7 @@ def run(path):
             if rgb == (0, 0, 0):
                 warns.append('[' + mode + '] ' + v + ' is pure #000')
     halts += flip_check(modes, text_use, surface_use)
-    halts += nav_floor(html)
+    halts += nav_floor(html, os.path.basename(path))
     ifh, ifw = image_floor(html)
     halts += ifh
     warns += ifw

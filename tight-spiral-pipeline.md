@@ -72,7 +72,9 @@ Build the smallest thing that does the named job. Mechanic Prototype: art minima
 - **Ledger A — Fidelity** (binary, unforgiving; a miss is a HALT)
 - **Ledger B — Emergence** (captured, never scored; routes to the parking lot)
 
-Inner loop: agent pre-flight (CLEAN/HALT) → founder plays once holding two questions (*does it still do its job? did anything surprise me?*) → **the Drift Fork**: *does this surprise serve the objective, or audition to replace it?* Serves → fold in; replaces → park it, named. → Calibration ping (did the measurement behave?).
+Inner loop: two-stage agent pre-flight — mechanical (`playthrough-agent.py` CLEAN/HALT) then experiential (**The Playtest Table**, `claude_seat-playtesting-agents.md`: five reader-personas incl. the RP Reader, each note filed `verb·owner·date` or WISH into the two ledgers) → founder plays once holding two questions (*does it still do its job? did anything surprise me?*) → **the Drift Fork**: *does this surprise serve the objective, or audition to replace it?* Serves → fold in; replaces → park it, named. → Calibration ping (did the measurement behave?).
+
+> **The Table runs after the machines are green and before the founder plays; it never approves or ships — it files owned checks so the founder's single cold play lands on meaning, not on rubble a persona could have caught (§16.7).**
 
 ### 6. Full work-up (Paper Craft)
 Once the mechanic is proven, graduate to ship quality. Must pass C1–C5 asset rules. Gated *behind* a proven mechanic — never run on an unproven loop.
