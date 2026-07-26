@@ -20,7 +20,7 @@
 
 - **Todd Gitlin** — media framing (*The Whole World Is Watching*, 1980). The three broadcasts are the thesis: one instrument received across a decade of collapsing trust; Nixon '69 is the keystone (names distrust, then the record shows the manufactured majority). → **CHECK:** shell keeps the three-broadcast spine; each reveal shows the *manufacture*, not just the speech. · build · v-next
 - **George Saunders** — craft / moment-to-moment (*A Swim in a Pond in the Rain*). The power is the gap between blind reaction and re-reaction. → **CHECK:** every "record turns" beat must move one of the player's own prior ratings; instrument the delta so an unearned turn is visible. · build · v-next
-- **Horvath** — [INFERRED LENS — awaiting founder's naming]. Provisional: persuasion/period-authenticity. Held **WISH** until named; no fabricated read.
+- **Jared Cooney Horvath** — reception / retention science (cognitive neuroscientist, University of Melbourne; *Stop Talking, Start Influencing: 12 Insights from Brain Science to Make Your Message Stick*, 2019). His floor: a message changes a mind only if the original judgment was genuinely *encoded* — a committed, effortful read — so the new information forces re-consolidation, not a re-skim. Cognitive load: one idea per beat, or nothing sticks (backs the C6 "<50 words per screen" floor). On the Nixon reveal: the *manufactured-majority* angle is a case study in his own subject — a message engineered so a manufactured consensus *feels* real — so it teaches the reception mechanic the game is built on. → **CHECK:** the blind beat must extract an effortful, committed judgment before the reveal (not a lazy tap), so the blind→post delta is real reconsolidation; and each beat carries one idea. · build · v-next
 - **Alfred Hitchcock** — storyboards / suspense-as-withheld-information. "Never a face" is the bomb under the table. → **CHECK:** each scene ships a 3-frame board — room (receiver POV) / glow / the turn (match-cut felt→record). · build+sourcing · v-next
 - **Mad Men design staff** — period production design. Hold the film-stock arc: Kodachrome-cool '62 → cold B&W bulletin '64 → unstable early color '69. Shapes not emblems; no faces. → **CHECK:** each room to the bible's stock; PD-first (LOC/NARA); per-asset provenance in alt. · sourcing · v-next
 - **Aleph-selected — Sourcing** (institutional-PD-first, `cyl-v5-image-lane.md`). → **CHECK:** source+verify PD plates for 3 rooms + preludes; provenance; base64 embed. · sourcing · v-next
@@ -60,7 +60,7 @@
 ## NAMED WISHES
 - **WISH:** per-scene bespoke period sound (`cyl-sound-period-bible.md`); scenes ship silent-capable.
 - **WISH:** v6's ExComm room kept as a fourth "room where it's made" companion.
-- **WISH:** Horvath's lens — pending the founder naming person + domain.
+- (resolved) Horvath's lens — seated 2026-07-26 as Jared Cooney Horvath (reception/retention science); read folded into the seats above.
 
 ---
 
@@ -70,7 +70,7 @@ Matt, this session, in his words:
 - *"Why not integrate Nixon slice?"*
 - *"All hands on deck moving CYL thru build w founders mad men attention to detail to build game AND studio assets needed to attain vision."*
 - Ratification (*"Ok"*): **v5 three-broadcast is canon CYL; v6 is parked as a separate instrument, not the flagship.** Proceed with ASSEMBLE. Nixon slice is integrated as scene 3, not archived.
-- **Open:** Horvath's seat unnamed — parked, non-blocking.
+- Horvath named 2026-07-26: **Jared Cooney Horvath** (reception/retention science). Seat filled; his read (encode-before-reveal; one idea per beat; leans the manufactured-majority reveal) folded into the build spec.
 
 Ruling recorded the day it was made, per the founder-canon close.
 
