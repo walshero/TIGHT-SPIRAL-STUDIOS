@@ -186,4 +186,200 @@ def svg_text_floor(html):
         r'viewBox\s*=\s*"\s*[\d.-]+\s+[\d.-]+\s+([\d.]+)\s+([\d.]+)\s*"', html, re.I)]
     if not widths:
         return halts
-    vw = max(widths)                 # widest viewBox = fewest px per unit = wor
+    vw = max(widths)                 # widest viewBox = fewest px per unit = worst case
+    ppu = SVG_RENDER_W / vw
+    need = FONT_FLOOR_ABS / ppu
+    seen = {}
+    for f in re.finditer(r'font-size\s*=\s*\\?["\']([\d.]+)\\?["\']', html):
+        u = float(f.group(1))
+        seen[u] = seen.get(u, 0) + 1
+    for u in sorted(seen):
+        px = u * ppu
+        if px < FONT_FLOOR_ABS:
+            halts.append('E1-SVG font-size ' + str(u) + ' units x' + str(seen[u]) +
+                         ' renders at ' + format(px, '.1f') + 'px at viewBox width ' +
+                         str(vw) + ' on a ' + str(int(SVG_RENDER_W)) + 'px surface (floor ' +
+                         str(FONT_FLOOR_ABS) + '). Raise to >= ' + format(need, '.2f') +
+                         ' units or move the label to HTML.')
+    return halts
+
+def css_text_floor(css):
+    halts = []
+    for m in re.finditer(r'font-size\s*:\s*([\d.]+)px', css):
+        v = float(m.group(1))
+        if v < FONT_FLOOR_ABS:
+            halts.append('E1-CSS font-size ' + format(v, '.0f') + 'px < ' +
+                         str(FONT_FLOOR_ABS) + 'px floor.')
+    return sorted(set(halts))
+
+def image_floor(html):
+    halts, warns = [], []
+    body = re.sub(r'<(script|style)[\s\S]*?</\1>', ' ', html, flags=re.I)
+    visual = sum(len(re.findall(r'<' + t + r'\b', body, re.I))
+                 for t in ('img', 'svg', 'picture', 'video', 'canvas'))
+    visual += len(re.findall(r'background-image\s*:', html, re.I))
+    screens = len(re.findall(r'class="[^"]*\b(?:stage|screen|slide|scene)\b', body, re.I))
+    chars = len(re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', ' ', body)).strip())
+    if screens >= 1 and visual == 0 and chars > 400:
+        halts.append('H-IMAGE-FLOOR ' + str(screens) + ' screen(s), ' + str(chars) +
+                     ' chars, ZERO visual. Screens must be >50% image.')
+    elif screens >= 3 and visual < screens / 2 and chars > 1500:
+        warns.append('[image-floor] ' + str(visual) + ' visual across ' + str(screens) +
+                     ' screens, ' + str(chars) + ' chars - verify by eye.')
+    return halts, warns
+
+def nav_floor(html):
+    halts = []
+    body = re.sub(r'<(script|style)[\s\S]*?</\1>', ' ', html, flags=re.I)
+    screens = len(re.findall(r'class="[^"]*\b(?:stage|screen|slide|scene)\b', body, re.I))
+    toggled = len(re.findall(r'\bclass="[^"]*\bhidden\b', body, re.I))
+    if max(screens, toggled + 1 if toggled else 0) < 2:
+        return halts
+    if not re.search(r'id=["\']backBtn|class="[^"]*\bback(nav|btn)?\b|aria-label="[^"]*\bback\b'
+                     r'|onclick="[^"]*(?:goBack|backTo)|>\s*(?:&larr;\s*)?back\b', html, re.I):
+        halts.append('H-NAV-BACK multi-screen product has no BACK control.')
+    if not re.search(r'id=["\']homeBtn|class="[^"]*\bhome(nav|btn)?\b'
+                     r'|aria-label="[^"]*\b(?:home|start)\b'
+                     r'|onclick="[^"]*(?:goHome|toHome|homeScreen)|>\s*home\b', html, re.I):
+        halts.append('H-NAV-HOME multi-screen product has no HOME control.')
+    return halts
+
+def emoji_floor(html):
+    vis = re.sub(r'<(script|style)[\s\S]*?</\1>', ' ', html, flags=re.I)
+    if re.search(r'[\U0001F000-\U0001FAFF\u2600-\u26FF]', vis):
+        return ['H-EMOJI emoji in visible text. Never, in any venue.']
+    return []
+
+def floors(html, css, modes):
+    """The single list of source-computable teeth. Studio Eyes calls this."""
+    halts = []
+    halts += dark_floor(html, css, modes)
+    halts += svg_text_floor(html)
+    halts += css_text_floor(css)
+    halts += nav_floor(html)
+    halts += emoji_floor(html)
+    ih, iw = image_floor(html)
+    return halts + ih, iw
+
+# ---------- run ----------
+def run(path, ratchet=False, base=None):
+    html = open(path, encoding='utf-8', errors='replace').read()
+    css  = ''.join(re.findall(r'<style[^>]*>(.*?)</style>', html, re.S))
+    modes = token_blocks(css)
+    text_use, deco_use, surface_use = token_roles(css)
+    halts, warns, rows = [], [], []
+
+    for mode, tok in sorted(modes.items()):
+        surfaces = {s: hex2rgb(tok[s]) for s in surface_use if s in tok and hex2rgb(tok[s])}
+        if not surfaces:
+            warns.append('[' + mode + '] declares tokens but no surface token - unmeasurable')
+            continue
+        for tv in sorted(text_use):
+            if tv not in tok:
+                continue
+            trgb = hex2rgb(tok[tv])
+            if not trgb:
+                continue
+            pairs = {sv: ratio(trgb, srgb) for sv, srgb in surfaces.items()}
+            best, home = max(pairs.values()), max(pairs, key=pairs.get)
+            if best < AA_BODY:
+                halts.append('H-TEXT-UNREADABLE [' + mode + '] ' + tv +
+                             ' clears no surface. Best ' + home + ' at ' +
+                             format(best, '.2f') + ' (needs ' + str(AA_BODY) + '). Split it.')
+            else:
+                rows.append((mode, tv, home, round(best, 2),
+                             'AAA' if best >= AAA else 'AA '))
+                for sv, r in sorted(pairs.items()):
+                    if r < AA_BODY and sv != home:
+                        warns.append('[' + mode + '] ' + tv + ' on ' + sv + ' = ' +
+                                     format(r, '.2f') + ' - only safe on ' + home)
+
+    for mode, tok in modes.items():
+        for v, hx in tok.items():
+            rgb = hex2rgb(hx)
+            if rgb == (255, 255, 255):
+                warns.append('[' + mode + '] ' + v + ' is pure #fff')
+            if rgb == (0, 0, 0):
+                warns.append('[' + mode + '] ' + v + ' is pure #000')
+
+    fh, fw = floors(html, css, modes)
+    halts += fh; warns += fw
+
+    debt = []
+    if ratchet:
+        known = set((base or {}).get(os.path.basename(path), []))
+        keep = []
+        for h in halts:
+            if code_of(h) in known:
+                debt.append(h)
+            else:
+                keep.append(h)
+        halts = keep
+
+    print()
+    print('  STUDIO EYES - PRE-SHIP GATE v4 - ' + os.path.basename(path))
+    print('  ' + '-' * 60)
+    print('  modes measured: ' + ', '.join(sorted(modes)))
+    print('  text tokens: ' + (', '.join(sorted(text_use)) or '(none)'))
+    print('  ' + '-' * 60)
+    for mode, tv, sv, r, tag in rows:
+        print('  [' + tag + '] ' + mode.ljust(10) + ' ' + tv.ljust(10) +
+              ' on ' + sv.ljust(10) + ' = ' + format(r, '6.2f'))
+    if debt:
+        print()
+        print('  DEBT carried by the ratchet (' + str(len(debt)) + ') - counted, not forgiven:')
+        for d in sorted(set(debt)):
+            print('     ' + d)
+    if warns:
+        print()
+        print('  warnings:')
+        for w in sorted(set(warns)):
+            print('     ' + w)
+    print()
+    if halts:
+        print('  HALT - do not ship' + (' (REGRESSION - not in baseline)' if ratchet else '') + ':')
+        for h in sorted(set(halts)):
+            print('     ' + h)
+        print()
+        return 1
+    worst = min((r for _, _, _, r, _ in rows), default=None)
+    print('  SHIP - every text token clears ' + str(AA_BODY) + ' in every mode' +
+          ('. Worst pair = ' + format(worst, '.2f') if worst is not None else ''))
+    print()
+    return 0
+
+# ---------- self-test teeth: a gate that cannot fail a bad file is a wall ----------
+BAD = ('<html><head><meta name="color-scheme" content="light dark"></head>'
+       '<style>:root{--p:#fff;--i:#111}body{background:var(--p);color:var(--i)}'
+       '.scene{}</style><body><div class="scene">'
+       '<svg viewBox="0 0 100 60"><text font-size="3">tiny</text></svg>'
+       '</div></body></html>')
+
+def self_test():
+    import tempfile
+    p = os.path.join(tempfile.mkdtemp(), 'bad.html')
+    open(p, 'w').write(BAD)
+    html = BAD
+    css = ''.join(re.findall(r'<style[^>]*>(.*?)</style>', html, re.S))
+    fh, _ = floors(html, css, token_blocks(css))
+    got = ' '.join(fh)
+    ok_svg  = 'E1-SVG' in got
+    ok_dark = 'H-DARK-PROMISE' in got
+    if not (ok_svg and ok_dark):
+        print('  SELF-TEST FAILED - svg:%s dark:%s -> the gate is not biting' % (ok_svg, ok_dark))
+        sys.exit(3)
+    print('  self-test ok: svg scale tooth bites, dark-promise tooth bites')
+
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print('usage: preship-gate-v4.py <file.html> [more.html ...]')
+        sys.exit(2)
+    self_test()
+    args = [a for a in sys.argv[1:] if not a.startswith('--')]
+    ratchet = '--ratchet' in sys.argv
+    base = load_baseline() if ratchet else None
+    if ratchet:
+        tot = sum(len(v) for v in base.values())
+        print('  RATCHET on: ' + str(len(base)) + ' files carrying ' + str(tot) +
+              ' known halts. New halts and new files are held to the full floor.')
+    sys.exit(max(run(p, ratchet, base) for p in args))
