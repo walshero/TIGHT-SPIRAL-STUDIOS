@@ -175,6 +175,31 @@ the record (RP Reader): the rectification is **presentation, not spine** — ado
 tap-the-room *feel* (touch-to-attend) without importing v6's decide-in-the-fog mechanic; CYL stays
 a receiver's instrument.
 
+## IMPROVEMENTS — v-next doctrine (earned from the 2026-07-26 inaugural run)
+*How to improve the agentic playtest, from what the run actually did well and badly, crossed with best practice. Each is a CHECK (rich in rules, thin in enforcers: a rule that cannot be a check is a wish).*
+
+**A · Render the play; do not only reason about it.** The inaugural personas *read the code and reasoned* — strong on code-grounded fact (dead `.spot`, orphaned `tier`, the `slice` crop geometry) but *estimated* on rendered fact (chip fold "~500-650px," contrast of JS-produced comfort stops, screen-reader order deferred). Chromium is present; the two-layer law says measurable claims get measured.
+→ **CHECK:** each persona pass runs against a Playwright-rendered build (phone + desktop, every comfort stop, OS dark mode); fold position, tap-target px, JS-state contrast, and portrait crop are *measured*, and only the genuinely un-measurable (assistive-tech order, "does it pull") is handed to reasoning and labelled inference. · owner: tooling · when: v-next
+
+**B · Assign distinct primary axes; treat convergence as confidence, not coverage.** All four personas re-found "the room has no hotspots" (redundant); the non-obvious catches — the `reach` line manufacturing the delta, the blind-overwrite integrity hole, Nixon-reveal-inert-to-the-encoded-object — each came from a single seat. Persona diversity exists for coverage.
+→ **CHECK:** the Chair assigns each persona a distinct primary axis + scene/beat focus; convergence raises a finding's priority but no persona is credited for re-finding the obvious. · owner: chair · when: each run
+
+**C · Adversarially verify before Ledger A.** The personas flagged their own inferences (honest) but nothing tried to *refute* a finding before it became a blocking check. The WOLF-GUARD / anti-crying-wolf rule, made a step.
+→ **CHECK:** every Ledger-A candidate gets one refutation pass (a second agent tries to break it on the actual build); survives = CONFIRMED, else PLAUSIBLE / verify-by-eye. · owner: process · when: each run
+
+**D · The heuristic library grows (provenance is the content).** Today's catches (dead-code descent, blind-overwrite, `slice` crop, hue-only selection) evaporate unless carried. `studio-eyes-two-layers.md`: each firing check becomes dated, attributed, reusable.
+→ **CHECK:** `claude_playtest-heuristics.md` is the standing regression ledger; the Table re-runs it first on every build, and every new firing check is appended with build · persona · date. · owner: chair · when: each run
+
+**E · Layer-1-first + honest degradation are preconditions, not courtesies.** This run skipped the mechanical player (`playthrough-agent.py`) before the persona Table — a pipeline-order miss, flagged. The firm-up agent hit a 403 and degraded honestly. Both are the rule: Layer 1 before Layer 2; name the tool/egress failure, never guess past it.
+→ **CHECK:** the Chair blocks persona play until `studio-eyes-sweep.py` SHIP + `playthrough-agent.py` CLEAN are on record; any tool/egress/no-device failure is named in the run record. · owner: chair · when: each run
+
+**F · One output contract across the whole apparatus.** The persona agents emitted `verb·owner·date` (because briefed); `playthrough-agent.py` still emits glyph-prose that does not plug into the check tables.
+→ **CHECK:** wrap/retrofit `playthrough-agent.py` output into `verb·owner·date` rows so sweep + playthrough + Table all speak one ledger. · owner: tooling · when: v-next
+
+**G · The invariant that must never "improve" away.** Every gain above clears more rubble *beneath* the founder's eyes; none substitutes for them. The agent never judges; it files checks; GATE 1 (founder cold play) + GATE 2 + §6.5 ship (§16.7). And per BUILD-DEBT: this doctrine is a GOV artifact — it earns its keep only when the next player-facing build ships *better* because of it, not when the doc gets tidier.
+
+**Twin-rule note (adding a seat expects a prune):** candidate prune is folding `playthrough-agent.py`'s standalone status into the Table as its mechanical persona (improvement F makes that natural). Left as a founder call; not auto-pruned.
+
 ---
 <!-- SOURCES (house rule: cite, don't guess), web-verified 2026-07-26:
  - LLM agents as automated game testers: arXiv 2509.22170; emergentmind.com/topics/llm-agents-as-game-testers.
