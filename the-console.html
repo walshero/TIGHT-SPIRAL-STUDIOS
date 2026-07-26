@@ -24,7 +24,7 @@ html,body{margin:0;padding:0;background:var(--void);color:var(--ink);
   -webkit-text-size-adjust:100%;overflow-x:hidden}
 body{line-height:1.4}
 :focus-visible{outline:3px solid var(--phos);outline-offset:3px;border-radius:8px}
-.comfort{position:fixed;top:0;right:0;z-index:80;display:flex;gap:4px;padding:8px}
+.comfort{position:fixed;top:0;right:0;z-index:80;padding:8px;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
 /* STANDARD TSP HOME CONTROL — top-left, per RP it is an UNMISTAKABLE LINK:
    underlined, obviously tappable, never camouflaged as a button/chrome. A control
    that blends in is a control an RP reader cannot find. Real <a href>, corner
@@ -32,11 +32,26 @@ body{line-height:1.4}
 .tsp-home{position:fixed;top:0;left:0;z-index:80;padding:12px 14px}
 .tsp-home a{color:var(--ink);font:inherit;font-size:16px;font-weight:700;
   text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:2px;
-  padding:6px 2px;line-height:1.2}
+  padding:8px 8px;min-height:44px;box-sizing:border-box;display:inline-flex;align-items:center;line-height:1.2}
 .tsp-home a:hover,.tsp-home a:focus-visible{color:var(--phos);text-decoration-thickness:3px;outline:2px solid var(--phos);outline-offset:3px}
-.comfort button{background:var(--panel);color:var(--dim);border:1px solid var(--edge);
-  border-radius:10px;font:inherit;font-size:20px;width:48px;height:48px;cursor:pointer;line-height:1}
-.comfort button:hover,.comfort button:focus-visible,.comfort button[aria-pressed="true"]{color:var(--ink);border-color:var(--phos)}
+/* COMFORT = a knob, never a wall (founder floor 2026-07-03). The options stay
+   HIDDEN until the reader taps the comfort button — never shown unasked. */
+.comfort-btn{display:inline-flex;align-items:center;gap:7px;background:var(--panel);
+  color:var(--dim);border:1px solid var(--edge);border-radius:12px;font:inherit;
+  font-weight:700;font-size:14px;min-height:44px;padding:0 14px;cursor:pointer;line-height:1}
+.comfort-btn:hover,.comfort-btn:focus-visible,.comfort-btn[aria-expanded="true"]{color:var(--ink);border-color:var(--phos)}
+.comfort-btn .caret{transition:transform .2s}
+.comfort-btn[aria-expanded="true"] .caret{transform:rotate(180deg)}
+body.still .comfort-btn .caret{transition:none}
+.comfort-panel{display:flex;flex-direction:column;gap:6px;background:var(--panel);
+  border:1px solid var(--edge);border-radius:12px;padding:8px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.comfort-panel[hidden]{display:none}
+.comfort-panel button{display:flex;align-items:center;gap:10px;background:var(--panel-2);
+  color:var(--dim);border:1px solid var(--edge);border-radius:10px;font:inherit;font-size:15px;
+  font-weight:700;min-height:44px;padding:0 14px;cursor:pointer;text-align:left;white-space:nowrap}
+.comfort-panel button:hover,.comfort-panel button:focus-visible{color:var(--ink);border-color:var(--phos)}
+.comfort-panel button[aria-pressed="true"]{color:#04211e;background:var(--phos);border-color:var(--phos)}
+.comfort-panel .tick{width:16px;text-align:center;font-weight:900}
 body.big{font-size:19px}
 body.still *{animation:none!important;transition:none!important}
 .app-shell{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -162,9 +177,17 @@ body.still .flip{transition:none}
 </style>
 </head>
 <body>
-<div class="comfort" role="group" aria-label="Comfort controls">
-  <button type="button" id="cBig" onclick="toggleBody('big',this)" aria-pressed="false" aria-label="Bigger text" title="Bigger text">A+</button>
-  <button type="button" id="cStill" onclick="toggleBody('still',this)" aria-pressed="false" aria-label="Reduce motion" title="Reduce motion">&#9680;</button>
+<div class="comfort">
+  <button type="button" id="comfortToggle" class="comfort-btn" onclick="toggleComfort()"
+          aria-expanded="false" aria-controls="comfortPanel" aria-label="Comfort and display options">
+    Comfort <span class="caret" aria-hidden="true">&#9662;</span>
+  </button>
+  <div class="comfort-panel" id="comfortPanel" role="group" aria-label="Comfort options" hidden>
+    <button type="button" id="cBig" onclick="toggleBody('big',this)" aria-pressed="false">
+      <span class="tick" aria-hidden="true">&#65291;</span> Bigger text</button>
+    <button type="button" id="cStill" onclick="toggleBody('still',this)" aria-pressed="false">
+      <span class="tick" aria-hidden="true">&#9680;</span> Reduce motion</button>
+  </div>
 </div>
 <div class="app-shell">
 <nav class="tsp-home"><a href="index.html" aria-label="Back to the studio">&#8617; studio</a></nav>
@@ -413,6 +436,21 @@ function go(id){
 function startTraining(){step=0;T.taps=0;T.rewards=0;T.screens=0;T.alerts=0;streakDays=3;bellCount=0;go('train');paintTrain();}
 function restart(){go('hire');}
 function toggleBody(cls,btn){btn.setAttribute('aria-pressed',document.body.classList.toggle(cls));}
+function setComfort(open){
+  var b=document.getElementById('comfortToggle'),p=document.getElementById('comfortPanel');
+  if(open){p.removeAttribute('hidden');b.setAttribute('aria-expanded','true');}
+  else{p.setAttribute('hidden','');b.setAttribute('aria-expanded','false');}
+}
+function toggleComfort(){setComfort(document.getElementById('comfortPanel').hasAttribute('hidden'));}
+// Never shown unasked: panel starts hidden; dismiss on outside tap or Escape.
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.comfort'))setComfort(false);
+});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'&&!document.getElementById('comfortPanel').hasAttribute('hidden')){
+    setComfort(false);document.getElementById('comfortToggle').focus();
+  }
+});
 document.getElementById('feed').addEventListener('scroll',onFeedScroll,{passive:true});
 </script>
 
@@ -480,7 +518,7 @@ document.getElementById('feed').addEventListener('scroll',onFeedScroll,{passive:
       /* Navigation chip — always available, subtle on desktop */
       ".tsp-nav{position:fixed;top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));",
         "z-index:2147483000;display:flex;gap:8px;font-family:'Helvetica Neue',Arial,sans-serif}",
-      ".tsp-nav a{display:inline-flex;align-items:center;gap:.4em;text-decoration:none;",
+      ".tsp-nav a{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;gap:.4em;text-decoration:none;",
         "padding:.5em .85em;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:.04em;",
         "color:#f4f1e8;background:rgba(20,18,15,.66);border:1px solid rgba(255,207,90,.45);",
         "-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);line-height:1;",
@@ -491,7 +529,7 @@ document.getElementById('feed').addEventListener('scroll',onFeedScroll,{passive:
 
       /* Nav integrated into the studio's shared .topbar (no overlap) */
       ".tsp-barnav{display:inline-flex;align-items:center;gap:.35rem;margin-right:.25rem;flex:none}",
-      ".tsp-barnav a{display:inline-flex;align-items:center;gap:.3em;text-decoration:none;color:inherit;",
+      ".tsp-barnav a{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;gap:.3em;text-decoration:none;color:inherit;",
         "font-family:inherit;font-weight:800;font-size:.82rem;letter-spacing:.02em;line-height:1;",
         "padding:.4em .7em;border-radius:999px;border:1px solid currentColor;opacity:.85;",
         "background:transparent;white-space:nowrap;transition:opacity .12s,background .12s}",
