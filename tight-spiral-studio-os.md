@@ -290,6 +290,8 @@ A reusable cast of review personas for pressure-testing creative and game work. 
 
 Keep the convening **as small as the job honestly allows**, so each HALT still means something. The full roster follows; convening recipes are in §5.5.
 
+**Playtest personas (the Playtest Table).** The reader-facing seats — Cold Newcomer, RP Reader, Screen-Reader User, Mobile-One-Hand, Skeptic — do not convene as reviewers of a draft; they *play* the build as a Stage-5 pre-flight and file owned checks (`verb·owner·date`/WISH) for GATE 1. Spec: `claude_seat-playtesting-agents.md`. They are Studio Eyes Layer 2 aimed at reader experience (see `studio-eyes-two-layers.md`); the RP Reader is §5.10's Accessibility/ADA Officer run as a player, the Skeptic is §5.12's Skeptical Faculty Adopter run as a player. They file checks; they never ship a build — only GATE 1 + GATE 2 + §6.5 do (§16.7).
+
 ---
 
 ### 5.1 Craft core
@@ -1148,6 +1150,8 @@ The game pipeline (Stages −1 through 6) is a **production line**: an idea ente
 *Folded from the Home-era walkthrough post-mortem: the pipeline audited floors but never experience; flat builds canonized because no gate asked "does this feel like a place?" Twin rule paid in full: two gates in, two seats out (named at bottom).*
 
 **Stage 6.5 — THE WALKTHROUGH GATE (final gate).** Sits AFTER Studio Eyes (Stage 6), BEFORE Ship & Canonize (Stage 7). Cheap machine checks fire first; the founder's eyes fire last and only on builds the robot already passed.
+
+**Precondition — the Playtest Table has run.** "The robot" is now two stages: the arithmetic floor (`studio-eyes-sweep.py`) and the mechanical player (`playthrough-agent.py`), and on top of them the Playtest Table (`claude_seat-playtesting-agents.md`) — five reader-personas incl. the RP Reader — whose owned checks (`verb·owner·date`/WISH) are filed before the founder's cold play. A build that reaches this gate without a Table run is unverified for reader friction and is marked so at the gate. The Table never overrides the founder: it clears experiential rubble the way the machines clear mechanical rubble, so the founder's scarce cold play lands on taste (§16.7), not on friction a persona could have caught.
 
 **The gate:** Matt plays the build on his phone, cold, as a player. Binary, adversarial, gradeable by someone who sees only the session:
 
@@ -2288,6 +2292,8 @@ One line. Founder can then veto a skip. Silence may mean "no fork," never "never
 ## What it is
 
 A capture layer that **rides on top of an existing playable build** — never a fresh game. The build stays untouched; the instrument is added, and can be stripped back out. Purpose: let a named playtester record phase-tagged thoughts and hand back one report, with the offline floor intact.
+
+**Not to be confused with the Playtest Table** (`claude_seat-playtesting-agents.md`): the *instrument* is the notebook a **human** playtester writes in; the *Table* is the **agent** pre-flight of named reader-personas that plays the build before any human. The instrument captures one human's session; the Table files owned checks across five personas. Both feed GATE 1; neither is GATE 1.
 
 ## The floor (every playtest wrapper carries all six)
 
