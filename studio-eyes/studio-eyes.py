@@ -399,7 +399,15 @@ def audit(path, no_net=True):
     halts = []
     external = []
     with sync_playwright() as p:
-        b = p.chromium.launch()
+        # Use the preinstalled Chromium the authoring/CI sandbox actually ships (tsp_browser),
+        # so v3 runs where p.chromium.launch() misses it on a version mismatch. Falls back.
+        try:
+            import sys as _sys, os as _os
+            _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
+            import tsp_browser as _tb
+            b = _tb.launch(p)
+        except Exception:
+            b = p.chromium.launch()
         try:
             ctx = b.new_context(viewport={'width':390,'height':844})  # phone-width
 

@@ -39,8 +39,12 @@ def main(argv):
 
     total = 0
     try:
+        import tsp_browser
+    except Exception:
+        tsp_browser = None
+    try:
         with sync_playwright() as p:
-            browser = p.chromium.launch()
+            browser = tsp_browser.launch(p) if tsp_browser else p.chromium.launch()
             for f in files:
                 page = browser.new_page()
                 # offline floor: block every network request; only file:// runs.
