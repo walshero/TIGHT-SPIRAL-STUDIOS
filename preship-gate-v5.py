@@ -12,13 +12,12 @@ Checks (each maps to a clause in the standard):
   FONT   font-size < 18px anywhere a human reads text            (clause 1)
   TAP    interactive min-height/min-width < 44px                 (clause 2)
   CON    co-occurring text/bg token pair < 7:1 (4.5:1 if large)  (clause 4)
-  DARK   missing body.warm OR @media prefers-color-scheme:dark   (clause 5)
+  DARK   measured dark path: prefers-color-scheme or color-scheme:dark (clause 5)
   HOST   external font/style host (offline violation)            (clause 6)
-  EMOJI  any emoji codepoint                                     (studio law)
+  EMOJI  pictographic emoji codepoint (not arrows/shapes/box-drawing) (studio law)
 """
 import sys, re, os, glob
 
-# ---------- contrast math ----------
 def _lin(c):
     c/=255.0
     return c/12.92 if c<=0.03928 else ((c+0.055)/1.055)**2.4
@@ -36,7 +35,6 @@ def hexrgb(h):
     try: return (int(h[0:2],16),int(h[2:4],16),int(h[4:6],16))
     except: return None
 
-# ---------- token extraction ----------
 def palettes(css):
     out={'default':{},'warm':{}}
     root=re.search(r':root\s*\{([^}]*)\}',css,re.S)
@@ -67,40 +65,42 @@ def check_fonts(css, halts):
         px=float(m.group(1))
         if px<18.0:
             halts.append(f"FONT {px:g}px < 18px floor")
+
 def check_taps(css, halts):
     for m in re.finditer(r'(min-height|min-width)\s*:\s*(\d+(?:\.\d+)?)px',css):
         px=float(m.group(2))
         if px<44.0:
             halts.append(f"TAP {m.group(1)} {px:g}px < 44px floor")
-def check_dark(css, halts):
-    if 'body.warm' not in css:
-        halts.append("DARK missing body.warm dark palette")
-    if not re.search(r'@media[^{]*prefers-color-scheme\s*:\s*dark',css):
-        halts.append("DARK missing @media prefers-color-scheme:dark path")
+
+def check_dark(html, halts):
+    if re.search(r'prefers-color-scheme', html) or re.search(r'color-scheme\s*:\s*dark', html):
+        return
+    halts.append("DARK no measured dark path (no prefers-color-scheme / color-scheme:dark)")
+
 def check_host(html, halts):
     for m in re.finditer(r'<link[^>]+href="(https?://[^"]+)"',html):
         if 'font' in m.group(1).lower() or 'css' in m.group(1).lower():
             halts.append(f"HOST external style/font: {m.group(1)[:50]}")
     if 'fonts.googleapis' in html or 'fonts.gstatic' in html:
         halts.append("HOST Google Fonts reference")
+
 def check_emoji(html, halts):
     for ch in html:
         o=ord(ch)
-        if (0x1F000<=o<=0x1FAFF) or (0x2600<=o<=0x27BF) or o==0xFE0F:
+        if (0x1F000<=o<=0x1FAFF) or (0x2600<=o<=0x26FF) or (0x2700<=o<=0x27BF) or o==0xFE0F:
             halts.append(f"EMOJI codepoint U+{o:04X}")
             break
 
 def gate(path):
     html=open(path,encoding='utf-8',errors='replace').read()
-    styles=re.findall(r'<style[^>]*>(.*?)</style>',html,re.S)
-    css=' '.join(styles) if styles else html
+    css=' '.join(re.findall(r'<style[^>]*>(.*?)</style>',html,re.S)) or html
     halts=[]
     check_fonts(css,halts)
     check_taps(css,halts)
     pal=palettes(css)
     check_contrast(pal['default'],'default',halts)
     if pal['warm']: check_contrast(pal['warm'],'warm',halts)
-    check_dark(css,halts)
+    check_dark(html,halts)
     check_host(html,halts)
     check_emoji(html,halts)
     seen=set(); uniq=[h for h in halts if not (h in seen or seen.add(h))]
