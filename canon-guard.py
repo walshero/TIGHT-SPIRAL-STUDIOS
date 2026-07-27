@@ -29,6 +29,7 @@ USAGE
     canon-guard.py --self-test          gate the guard (schema + verdict + real-scan canaries; refuse on fail)
     canon-guard.py --wiring             per role, is the DECLARED canonical the WIRED one? HALT if not
     canon-guard.py --refs               scan repo for references to declared-superseded files; HALT
+    canon-guard.py --workflows          YAML-parse every .github/workflows/*.yml; HALT on parse error
     canon-guard.py --check <file>       is <file> superseded for a role? print the canonical pointer
 EXIT  0 clean · 1 HALT (superseded used/referenced, or unwired canonical) · 2 guard self-test failed
 """
@@ -294,6 +295,38 @@ def self_test():
     return 0
 
 
+def check_workflows():
+    """YAML-parse every workflow file; HALT on a parse error — the gate that guards the gates.
+
+    Born 2026-07-27: a colon-space in a floor.yml step NAME made an unquoted scalar parse as a
+    nested map; the run died in 0s with 0 jobs (GitHub compiled the file and refused it). A broken
+    workflow can't lint ITSELF in CI (it never runs), so the teeth are LOCAL: run this before any
+    workflow push. In CI it still guards every OTHER workflow file and re-affirms parse on green.
+    """
+    try:
+        import yaml
+    except Exception as e:
+        print(f"  NOTE — PyYAML absent ({e}); workflow lint skipped (CI has it). (exit 0)")
+        return 0
+    files = sorted(glob.glob(os.path.join(ROOT, ".github", "workflows", "*.yml")) +
+                   glob.glob(os.path.join(ROOT, ".github", "workflows", "*.yaml")))
+    if not files:
+        print("  workflows: none found."); return 0
+    bad = 0
+    for f in files:
+        rel = os.path.relpath(f, ROOT)
+        try:
+            with open(f, encoding="utf-8") as fh:
+                yaml.safe_load(fh)
+            print(f"  ok   {rel}")
+        except Exception as e:
+            bad += 1
+            msg = (str(e).splitlines() or [e.__class__.__name__])[0]
+            print(f"  HALT {rel} — YAML parse error: {msg}")
+    print(f"\n  === workflow lint: {len(files)} file(s), {bad} broken ===")
+    return 1 if bad else 0
+
+
 def io_devnull():
     import io
     return io.StringIO()
@@ -317,13 +350,15 @@ def main(argv):
         return wiring(manifest)
     if "--refs" in argv:
         return scan_refs(manifest)
+    if "--workflows" in argv:
+        return check_workflows()
     if "--check" in argv:
         i = argv.index("--check")
         if i + 1 >= len(argv):
             print("  usage: canon-guard.py --check <file>"); return 2
         return check_file(argv[i + 1], manifest)
     print(__doc__.strip().splitlines()[0])
-    print("  usage: --self-test | --wiring | --refs | --check <file>")
+    print("  usage: --self-test | --wiring | --refs | --workflows | --check <file>")
     return 0
 
 
