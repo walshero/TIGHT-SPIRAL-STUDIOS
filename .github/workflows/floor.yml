@@ -55,11 +55,22 @@ jobs:
       - name: THE RATCHET — ARMED 2026-07-14. Blocks REGRESSIONS. This one refuses.
         run: python3 ratchet.py
 
-      - name: CANON GUARD — declared role-canon must match the wiring (passes today; bites once roles are declared)
+      - name: CANON GUARD — the SSOT loop, ENFORCED (index in sync, wiring matches, no stale refs). Blocks.
         run: |
           python3 canon-guard.py --self-test
+          python3 canon-guard.py --check-index
           python3 canon-guard.py --wiring
           python3 canon-guard.py --refs
+
+      - name: CANON GUARD — decay report (never blocks; flags roles overdue for re-verify)
+        run: python3 canon-guard.py --stale
+        continue-on-error: true
+
+      - name: STUDIO EYES v3 — JS/dynamic-state gate (real browser; report until proven green in CI)
+        run: |
+          python3 studio-eyes/studio-eyes.py --self-test
+          python3 studio-eyes/studio-eyes.py index.html
+        continue-on-error: true
 
       - name: Screenshots — every screen, light + dark, iPhone 390x844
         if: always()
