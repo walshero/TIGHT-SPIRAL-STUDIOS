@@ -87,6 +87,17 @@ def run_sweep():
     if not out.strip():
         print("HALT — the sweep produced no output. Refusing to guess.", file=sys.stderr)
         sys.exit(2)
+    # The audit must actually COMPLETE. A non-zero exit (e.g. WeasyPrint absent) means the sweep
+    # went BLIND — it saw no HALTs not because the corpus is clean but because it could not render.
+    # Returning {} here would make check() read every baselined file as 'repaid' and WIPE the
+    # baseline (this happened 2026-07-27 in a sandbox without WeasyPrint). A gate that goes blind
+    # never reports clean, and NEVER rewrites the baseline. Only a completed render may do that.
+    if r.returncode != 0:
+        print(f"HALT — the sweep exited {r.returncode} without completing an audit (it went BLIND, "
+              "e.g. WeasyPrint not installed). Refusing to report clean or touch the baseline. "
+              "Run where the renderer is present — CI.", file=sys.stderr)
+        sys.stderr.write("  sweep said: " + " ".join(out.split())[:300] + "\n")
+        sys.exit(2)
 
     halts, cur = {}, None
     for line in out.splitlines():
