@@ -200,6 +200,15 @@ a receiver's instrument.
 
 **Twin-rule note (adding a seat expects a prune):** candidate prune is folding `playthrough-agent.py`'s standalone status into the Table as its mechanical persona (improvement F makes that natural). Left as a founder call; not auto-pruned.
 
+## CORRECTION — 2026-07-26 (append, not rewrite; the 07-22 law)
+*Verified against the repo after the founder's SESSION-2026-07-26 handoff. The mapping and improvements above were partly built on a stale reading; the wrong version stays above, the correction lands here so the error and its fix are both visible.*
+
+- **The real Studio Eyes is `studio-eyes/studio-eyes.py` (v3)** — browser-rendered (imports Playwright/Chromium; runs a self-test canary of known-verdict traps, half of them FALSE-POSITIVE traps, and REFUSES to audit if it cannot grade its own canary; README verified). The firm-up mapped `studio-eyes-sweep.py` (WeasyPrint; states plainly "JavaScript is not executed") as the Studio Eyes floor. That is the *secondary, JS-blind* sweep, not the canonical gate. Every reference above to studio-eyes-sweep.py as "Layer 1 / Studio Eyes" should read `studio-eyes/studio-eyes.py`.
+- **Improvement A overstated the gap.** Browser rendering already exists: `studio-eyes/studio-eyes.py` renders, and `playthrough-agent.py` already drives the interface. The correct check is NOT "add Playwright rendering" — it is **wire the personas to the existing browser-rendered gate** and stop reasoning about rendered facts the existing tools can measure.
+- **`floor.yml` calls the wrong sweep (verified).** It installs Playwright + Chromium + axe-core (lines 47-49) then runs `python3 studio-eyes-sweep.py .` (line 52) — the JS-blind sweep, not v3. Fix = call `studio-eyes/studio-eyes.py`. Writing `.github/workflows/` needs the `workflow` OAuth scope a session lacks; it is the founder's paste (the SESSION-2026-07-26 handoff prepared it — do not duplicate it).
+- **The process lesson (the handoff's thesis, now mine on the record): read the index (Funes / Aleph) BEFORE spawning research or build agents.** This session mapped and proposed capability that already existed — the same failure the handoff confesses. Index-first is the cheapest fix; it belongs above improvement E as the precondition to the whole Table.
+- **Caveat, applied to the handoff itself (verify, don't trust whole):** commit `13e9b269`, `SESSION-2026-07-26.md`, `studio-fingers.py`, and `gate-baseline.json` are NOT in this branch's object store. The handoff is right on the structural facts above; those specific artifacts must be checked wherever it landed, not assumed here.
+
 ---
 <!-- SOURCES (house rule: cite, don't guess), web-verified 2026-07-26:
  - LLM agents as automated game testers: arXiv 2509.22170; emergentmind.com/topics/llm-agents-as-game-testers.
