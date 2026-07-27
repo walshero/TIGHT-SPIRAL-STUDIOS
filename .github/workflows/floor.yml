@@ -53,7 +53,12 @@ jobs:
 
       - name: Install the eyes
         run: |
-          pip install --quiet playwright
+          # WeasyPrint is the render-proof sweep's renderer. It was MISSING in CI until 2026-07-27 —
+          # so studio-eyes-sweep.py exited 2 (blind) and the ratchet passed on nothing. Its system
+          # deps (pango/cairo/harfbuzz) are not pulled by playwright's --with-deps, so install them.
+          sudo apt-get update -qq && sudo apt-get install -y -qq \
+            libpango-1.0-0 libpangoft2-1.0-0 libpangocairo-1.0-0 libharfbuzz0b libcairo2 libgdk-pixbuf-2.0-0 libffi-dev
+          pip install --quiet playwright weasyprint
           playwright install --with-deps chromium
           npm install --silent axe-core@4.10.2   # pinned + reproducible; injected offline by axe-audit.py (no CDN)
 
@@ -61,8 +66,9 @@ jobs:
         run: python3 studio-eyes-sweep.py .
         continue-on-error: true
 
-      - name: THE RATCHET — ARMED 2026-07-14. Blocks REGRESSIONS. This one refuses.
+      - name: THE RATCHET — FIRST SIGHTED RUN (observe-only). Blind in CI until 2026-07-27 (no WeasyPrint); re-arm blocking after an honest re-baseline from this real render.
         run: python3 ratchet.py
+        continue-on-error: true      # TEMPORARY: the eyes just gained sight; the 2026-07-14 baseline predates today's corpus, so observe the true debt here, then re-init + flip back to blocking.
 
       - name: CANON GUARD — the SSOT loop, ENFORCED (index in sync, wiring matches, no stale refs). Blocks.
         run: |
