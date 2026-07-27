@@ -71,3 +71,23 @@ The verified reason the Studio Eyes canon kept flipping: **the docs and the wiri
 
 ## HONEST STANDING (as of this convening)
 canon-guard is a **working, self-proving mechanism with real weak spots**, not yet an enforcer. Its highest-value hardening (in order): wire it into CI (#1), recursive+bounded matching (#2/#4), a self-test that runs the shipping code (#3). Its highest-value *use* is still generate-index-from-manifest (Eagle Eye) — but only after the Studio Eyes contradiction is reconciled, or the generated index would encode the contradiction.
+
+---
+
+## ACCESSIBILITY STANDARDS MAP — the gates vs industry (2026-07-27)
+*Verified against the code. WCAG SC numbers from established knowledge (w3.org 403'd via proxy).*
+
+**MEET / EXCEED:**
+- WCAG 2.x contrast ratio, correct math, in every gate. Target **7:1 (SC 1.4.6 AAA)**, above the 4.5:1 AA floor (SC 1.4.3) — right for low vision.
+- **Render-proof** (v4 pixel-crosscheck, v3 real browser) is the industry direction (test the rendered result, not the source). Retiring the regex contrast-gate is this move.
+- **Anti-halation** (never #000 on #fff) is AHEAD of WCAG 2.x — and is APCA's own rationale. Early, not behind.
+
+**CLOSED THIS SESSION (all report-mode; blocking once proven):**
+- axe-core was installed and never invoked → `axe-audit.py` invokes it (one shared browser, offline-injected, pinned `axe-core@4.10.2`).
+- SC **1.4.11 non-text contrast** (3:1 for focus/border/graphics) was unchecked → `contrast-plus.py` checks it (index passes; `--strict` gates once the corpus is clean).
+- No perceptual second opinion → `contrast-plus.py` adds **APCA** (Lc), self-tested against published reference (#000/#fff = 106.0, #fff/#000 = -107.9). It already flagged `--ink-3` at Lc 71.2 in the softer stop — a body-text weakness WCAG 2.x passes at 5:1.
+
+**STILL OPEN (moves):**
+- axe + v3 are report-mode until proven green in CI (no browser in the authoring sandbox; honest).
+- `contrast-plus.py` is token-based (a secondary lens); the render-proof primary stays the sweep. A *rendered* APCA/1.4.11 (focus states need a browser) is the next rigor step.
+- Declare `axe-audit.py` / `contrast-plus.py` in the canon-manifest once they've earned a role.

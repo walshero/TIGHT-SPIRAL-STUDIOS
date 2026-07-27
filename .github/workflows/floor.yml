@@ -46,7 +46,7 @@ jobs:
         run: |
           pip install --quiet playwright
           playwright install --with-deps chromium
-          npm install --silent axe-core
+          npm install --silent axe-core@4.10.2   # pinned + reproducible; injected offline by axe-audit.py (no CDN)
 
       - name: STUDIO EYES — full report (never blocks; the whole picture)
         run: python3 studio-eyes-sweep.py .
@@ -70,6 +70,16 @@ jobs:
         run: |
           python3 studio-eyes/studio-eyes.py --self-test
           python3 studio-eyes/studio-eyes.py index.html
+        continue-on-error: true
+
+      - name: AXE-CORE — industry a11y engine, now INVOKED (names/roles/ARIA/landmarks; report)
+        run: python3 axe-audit.py index.html choose-your-leader-v5.html the-console.html reading-the-fireground.html
+        continue-on-error: true
+
+      - name: CONTRAST-PLUS — APCA + WCAG 1.4.11 non-text, the gaps WCAG-2.x-text misses (report)
+        run: |
+          python3 contrast-plus.py --self-test
+          python3 contrast-plus.py index.html choose-your-leader-v5.html the-console.html
         continue-on-error: true
 
       - name: Screenshots — every screen, light + dark, iPhone 390x844
