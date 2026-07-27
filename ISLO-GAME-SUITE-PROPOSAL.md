@@ -63,10 +63,10 @@ built this pass to close the quantitative gap.
 |---|---|---|---|
 | **1 · Written/Oral Comm** | 🟢 **Built** (strongest lane) | The Tell · Sandbags · Cliché Cowpaths · Flash Ballast · Workshop Wall · Review Bench · EN195 Hub | WC VALUE (live) |
 | **2 · Quantitative** | 🟢 **Built** | **Sticker Price** · The Tension Bar (client engine) · Warriors Fantasy Arcade | QL VALUE (not normed) |
-| **3 · Tech / Info-Sci** | 🟢 **Built** | The Console · Funny Boney's Factory · How an Idea Travels | suite-proposed criteria |
+| **3 · Tech / Info-Sci** | 🟢 **Built** | Flok · Funny Boney's Factory · How an Idea Travels | suite-proposed criteria |
 | **4 · Natural World** | 🔴 **Dry cell** | *(none)* | Scientific reasoning (not normed) |
 | **5 · DEI** | 🟠 **Thin** | Choose Your Leader | **ISLO #5 (live)** |
-| **6 · Critical Thinking** | 🟢 **Built** (deepest lane) | Choose Your Leader · The Console · The Viscosity · The Compound Capstone · Warriors · Behind This Door | ISLO #6 (in development) |
+| **6 · Critical Thinking** | 🟢 **Built** (deepest lane) | Choose Your Leader · Flok · The Viscosity · The Compound Capstone · Warriors · Behind This Door | ISLO #6 (in development) |
 | **7 · Personal/Civic** | 🟢 **Built** | Play the Semester · The Course River · Workshop Wall · FYS Treasure Trove | suite-proposed reflective rubric |
 
 **Net:** 5 outcomes built, 1 thin (DEI), 1 dry (Natural World) — and one built lane (iSLO 6) sits over a rubric still being normed.

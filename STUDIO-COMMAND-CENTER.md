@@ -54,7 +54,7 @@ stubs because the shelf copies were *bigger*. They were bigger because they held
 | what | where | state |
 |---|---|---|
 | **Choose Your Leader v5 slice** | repo `4f25f4a` · 38,721 B | **AWAITING GATE 1** (founder cold play) |
-| **The Console** | repo `c946c60` · ~24KB | **AWAITING GATE 1** |
+| **Flok** | repo `c946c60` · ~24KB | **AWAITING GATE 1** |
 | **The Viscosity** | repo `742c1be` | **AWAITING GATE 1** · not linked from index |
 | **Confluence v44** | repo `abbddc6` · 598,114 B | RO for TSP. Confluence lane owns RW. |
 | **The front door** | repo `e613d29` | rebuilt — all 7 games findable, 0-HALT, 9.30:1 |
@@ -126,7 +126,7 @@ task ceiling as a reason.) It is not a cleanup or audit tool.
 
 ## OPEN — FOUNDER ONLY
 
-- **GATE 1 cold plays:** CYL v5 slice · The Console · The Viscosity. Two questions:
+- **GATE 1 cold plays:** CYL v5 slice · Flok · The Viscosity. Two questions:
   *does it still do its job; did anything surprise me.*
 - **Writerly Moves review session** — the two-taxonomy question.
 - **Drive: delete the `mwalsh@post` rows.** Claude cannot delete another account's files.
