@@ -20,7 +20,16 @@
       "why": "v3, real Chromium via Playwright: EXECUTES JS, flips comfort stops via document.body.className and re-reads getComputedStyle, screenshots pixels under glyphs. The JS/dynamic-state capability v4 (no JS) cannot have. Kept per the v3 review 2026-07-26 (do not retire).",
       "siblings": [],
       "superseded": [],
-      "status": "KEPT but UNWIRED — runs nowhere in the deploy path yet. WIRE for JS-driven builds (comfort stops, dynamic states). Needs the playwright pkg + a matching Chromium at runtime (CI's `playwright install` provides it; a bare sandbox does not, so its self-test could not be executed this session — the '20/20' is per its docstring, unverified here)."
+      "status": "KEPT but UNWIRED at declaration; WIRED into floor.yml this session (report mode). WIRE fully for JS-driven builds (comfort stops, dynamic states). Needs the playwright pkg + a matching Chromium at runtime (CI's `playwright install` provides it; a bare sandbox does not, so its self-test could not be executed this session — the '20/20' is per its docstring, unverified here)."
+    },
+    {
+      "role": "pre-ship gate (manual, render-proof)",
+      "verified": "2026-07-27",
+      "canonical": "preship-gate-v4.py",
+      "why": "v4 'render-proof teeth' — newest pre-ship gate and the one actually run this session (the CYL gates). A MANUAL tool invoked by hand before ship, NOT wired into floor.yml — so --wiring will WARN unwired, which is honest.",
+      "siblings": [],
+      "superseded": ["preship-gate-v3.py"],
+      "status": "canonical = v4 (supersedes v3.1, by version + this session's use; v3 has zero live references, so --refs is ARMED but quiet). OPEN founder call: preship-contrast-gate.py (v2, contrast-only) — superseded by v4, a distinct lighter gate, or made redundant by the WIRED studio-eyes-sweep.py? NOT declared superseded pending your ruling (learned from the Studio Eyes over-declaration). NOTE: no 'preship-gate-v2.py' exists — the handoff's 'v2 referenced by 11 files' is unverified/false in this repo."
     }
   ],
   "families_awaiting_founder_declaration": [

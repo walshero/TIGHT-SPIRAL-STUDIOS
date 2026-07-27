@@ -30,6 +30,7 @@ unstamped claim is a suspicion, not a fact.*
 |---|---|---|
 | accessibility floor — render-proof (WIRED) | `studio-eyes-sweep.py` | 2026-07-26 |
 | accessibility gate — JS / dynamic-state (real browser) | `studio-eyes/studio-eyes.py` | 2026-07-26 |
+| pre-ship gate (manual, render-proof) | `preship-gate-v4.py` | 2026-07-27 |
 
 <!-- CANON:END -->
 
