@@ -29,6 +29,17 @@ unstamped claim is a suspicion, not a fact.*
   unopened. This row is why Funes exists.*
 - **Studio Eyes** — `studio-eyes-sweep.py`, 448 lines, commit `07f1db9`, byte-verified on GitHub.
   Shelf HALTs cut 42/57 → 20/57 after six grounding bugs were fixed. Canary mandatory after any change.
+  <!-- CORRECTION 2026-07-26 (append, not rewrite; 07-22 law): the line ABOVE is stale and it
+  mis-pointed a whole session. The canonical Studio Eyes gate is `studio-eyes/studio-eyes.py`
+  (v3, BROWSER-RENDERED via Playwright/Chromium, self-test canary of false-positive traps;
+  README verified 2026-07-26). `studio-eyes-sweep.py` is the SECONDARY, JS-blind WeasyPrint
+  sweep ("JavaScript is not executed"). floor.yml currently calls the sweep, not v3 — a wiring
+  bug. Role-canon is now data + enforced: see `canon-manifest.json` + `canon-guard.py`. -->
+- **Role-canon (NEW 2026-07-26)** — `canon-manifest.json` declares role → canonical file +
+  superseded siblings; `canon-guard.py` enforces it (a reference to a superseded file HALTs).
+  This is the automation that ends the stale-read class `resolve-canon.py` can't catch (it
+  resolves a NAME across lanes; this resolves a ROLE across differently-named files). Keep this
+  index's prose in sync with the manifest, or better, generate the pointer rows FROM it.
 - **EN195 hub** — `en195-hub.html` pushed + byte-verified; all six doors live.
 - **Warriors** — real 19,577 B game pushed over a 2,277 B repo stub (the Warriors rule).
 - **The nine EN195 files** — clean, contrast-verified, deploy-ready (two earlier "failures" were

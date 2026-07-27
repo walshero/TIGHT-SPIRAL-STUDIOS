@@ -1,0 +1,24 @@
+{
+  "_doc": "Canon ROLE map — the automation that ends stale-role reads. CURATED (a human declares canon), MACHINE-ENFORCED by canon-guard.py. Distinct from resolve-canon.py: that resolves a NAME across the four lanes by md5 (the Warriors rule); THIS resolves a ROLE across DIFFERENT names inside the repo (studio-eyes.py vs studio-eyes-sweep.py; a wired vN vs a newer unwired vN). Canon is what is WIRED, never 'the highest version number'.",
+  "updated": "2026-07-26",
+  "how_to_use": "canon-guard.py --self-test (gate the guard) ; canon-guard.py --refs (scan repo code/workflows for references to superseded files; HALT) ; canon-guard.py --check <file> (is this file superseded for a role?).",
+  "roles": [
+    {
+      "role": "accessibility gate (Studio Eyes)",
+      "canonical": "studio-eyes/studio-eyes.py",
+      "why": "v3, browser-rendered (Playwright/Chromium), self-test canary of false-positive traps; README verified 2026-07-26.",
+      "superseded": ["studio-eyes-sweep.py"],
+      "status": "PROPOSED — founder ratify: floor.yml calls studio-eyes-sweep.py; is the sweep RETIRED, or a fast-CI floor that coexists with the browser gate? If coexisting, split into two roles instead of superseding."
+    }
+  ],
+  "families_awaiting_founder_declaration": [
+    {"family": "preship-gate-v*.py", "note": "handoff: v2 is referenced by 11 files though v3/v4 exist. Declare the WIRED one canon, list the rest superseded."},
+    {"family": "index.html / your-rp-world.html (shelf vs repo)", "note": "repo is canon over shelf (resolve-canon precedence); the guard should HALT any tool that reads the shelf copy as current."},
+    {"family": "choose-your-leader-v*.html", "note": "v5 = three-broadcast canon (ratified 2026-07-26); v6 parked; slices are sources. Declare so a session can't grab a slice as the game."}
+  ],
+  "principles": [
+    "repo > shelf: if a shelf copy differs from repo, the shelf is stale (resolve-canon.py precedence).",
+    "canonical version = the file that is WIRED/referenced, not the highest number.",
+    "a role's canon is DECLARED here once and ENFORCED in CI; a reference to a superseded file fails the build, so this manifest cannot silently rot."
+  ]
+}
