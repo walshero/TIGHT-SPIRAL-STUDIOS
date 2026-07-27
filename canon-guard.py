@@ -4,46 +4,72 @@ canon-guard.py — enforce ROLE-canon so a stale/superseded file can't be read a
 
 WHY THIS EXISTS
 ---------------
-resolve-canon.py resolves a NAME across the four lanes (repo/netlify/shelf) by md5 — the
-Warriors rule (never ship the smaller stub). It CANNOT catch the class that burned this studio
-repeatedly: a role served by the WRONG, differently-named file — the wired render-proof gate
-studio-eyes-sweep.py (v4) vs the unwired studio-eyes/studio-eyes.py (v3); a wired preship-gate vN
-vs a newer unwired one; a shelf index.html read as current. Those are different names, all
-legitimately in the repo. (Note: which of two same-role files is canon is a DECLARATION derived
-from wiring + version, not an inference from prose — declaring it backwards is itself the hazard.) The map that
-was supposed to prevent it (FUNES-INDEX.md) is hand-typed prose that went stale and mis-pointed.
+resolve-canon.py resolves a NAME across the four lanes (repo/netlify/shelf) by md5 — the Warriors
+rule (never ship the smaller stub). It CANNOT catch the class that keeps burning sessions: a role
+served by the WRONG, differently-named file — the wired render-proof gate studio-eyes-sweep.py (v4)
+vs the unwired studio-eyes/studio-eyes.py (v3); a wired preship-gate vN vs a newer unwired one; a
+shelf index.html read as current. Those are different names, all legitimately in the repo. (Note:
+which of two same-role files is canon is a DECLARATION derived from wiring + version, not an
+inference from prose — declaring it backwards is itself the hazard.)
 
 This guard reads canon-manifest.json (curated: role -> canonical + superseded) and HALTs when a
 superseded file is USED or REFERENCED. Canon is DECLARED once, and INTENDED to be ENFORCED in CI.
-STATUS 2026-07-26: NOT YET WIRED into CI (floor.yml) — needs the workflow-scope paste. Until then
-this guard is ADVISORY and only runs when a human types it; do not claim it enforces (red-team #1).
-Known weak spots being hardened: non-recursive/code-only globs miss subdir + .md/.html/.js callers;
-substring matching over-/under-counts; the self-test does not exercise the file-scan it ships.
-See claude_convening-systems-2026-07-26.md (RED TEAM section) for the full list and the fixes.
+STATUS 2026-07-26: NOW WIRED into floor.yml (this session could push the workflow; the handoff's
+"needs workflow scope" claim was verified false here). It passes today (nothing declared
+superseded); it bites once roles declare supersession.
 
-Not a rival to resolve-canon.py — its complement. Name-drift -> resolve-canon; role-supersession
--> canon-guard.
+HARDENED 2026-07-26 (red-team): recursive + boundary-aware ref scan (was non-recursive, code-only,
+naked-substring); self-test now validates the real manifest schema AND runs the shipping scan on a
+temp fixture (was synthetic-only). Prose .md/.html are intentionally OUT of the ref scan — a
+filename in prose is not a live call. Residual limits (documented, WISH): indirect/`$VAR` and
+`/tmp`-copy invocations, byte-identical unnamed duplicates, and accumulate-never-shed of the
+manifest itself — see claude_convening-systems-2026-07-26.md (RED TEAM section).
 
 USAGE
-    canon-guard.py --self-test          gate the guard on a canary (refuses if it can't grade it)
-    canon-guard.py --refs               scan repo code/workflows for refs to superseded files; HALT
+    canon-guard.py --self-test          gate the guard (schema + verdict + real-scan canaries; refuse on fail)
+    canon-guard.py --wiring             per role, is the DECLARED canonical the WIRED one? HALT if not
+    canon-guard.py --refs               scan repo for references to declared-superseded files; HALT
     canon-guard.py --check <file>       is <file> superseded for a role? print the canonical pointer
-EXIT  0 clean · 1 HALT (superseded file used/referenced) · 2 guard self-test failed (do not trust)
+EXIT  0 clean · 1 HALT (superseded used/referenced, or unwired canonical) · 2 guard self-test failed
 """
-import json, os, re, sys, glob
+import json, os, re, sys, glob, tempfile, contextlib
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 MANIFEST = os.path.join(ROOT, "canon-manifest.json")
 # files that legitimately NAME a superseded file (the map + its own corrections); never flag these.
 REF_EXEMPT = {"canon-manifest.json", "canon-guard.py", "claude_FUNES-INDEX.md",
-              "claude_seat-playtesting-agents.md", "claude_cyl-playtest-table-2026-07-26.md"}
-# where a live reference to a superseded file is a real bug: code + workflows + shell.
-REF_GLOBS = ["*.py", ".github/workflows/*.yml", "*.yml", "*.sh"]
+              "claude_seat-playtesting-agents.md", "claude_cyl-playtest-table-2026-07-26.md",
+              "claude_convening-systems-2026-07-26.md"}
+# Recursive code/workflow/shell/js + known extensionless hooks. A live reference to a superseded
+# file in any of these is a real bug. Prose (.md/.html) is deliberately excluded (a mention is not
+# a call). REF_EXEMPT still applies on top of these.
+REF_GLOBS = ["**/*.py", "**/*.sh", "**/*.yml", "**/*.js",
+             ".github/workflows/*.yml",   # hidden dir: '**' glob skips dotdirs, so name it explicitly
+             "founder-gate/*", "**/pre-push", "**/pre-commit", "**/post-*"]
 
 
 def load(path=MANIFEST):
     with open(path) as f:
         return json.load(f)
+
+
+def _iter_files(root):
+    seen = set()
+    for pat in REF_GLOBS:
+        for path in glob.glob(os.path.join(root, pat), recursive=True):
+            if not os.path.isfile(path):
+                continue
+            rel = os.path.relpath(path, root)
+            if rel in seen:
+                continue
+            seen.add(rel)
+            yield path, rel, os.path.basename(path)
+
+
+def _mentions(text, basename):
+    """A real reference to basename, not a substring of a longer name (gate.py != founder-gate.py).
+    Path prefixes (/tmp/, ./) are allowed to precede; word/hyphen chars are not."""
+    return re.search(r'(?<![\w-])' + re.escape(basename) + r'(?![\w-])', text) is not None
 
 
 def superseded_map(manifest):
@@ -55,6 +81,20 @@ def superseded_map(manifest):
     return m
 
 
+def count_refs(basename, root=ROOT):
+    """How many scanned files reference this basename (boundary-aware; excluding itself + exempt)."""
+    n, where = 0, []
+    for path, rel, b in _iter_files(root):
+        if b in REF_EXEMPT or b == basename:
+            continue
+        try:
+            if _mentions(open(path, encoding="utf-8", errors="replace").read(), basename):
+                n += 1; where.append(rel)
+        except Exception:
+            pass
+    return n, where
+
+
 def check_file(name, manifest):
     sm = superseded_map(manifest)
     base = os.path.basename(name)
@@ -63,124 +103,150 @@ def check_file(name, manifest):
         print(f"  HALT — {base} is SUPERSEDED for role '{role}'. Canon = {canon}"
               + (f"  [{status}]" if status else ""))
         return 1
-    print(f"  OK — {base} is not a declared-superseded file (role-canon says nothing against it).")
+    print(f"  OK — {base} is not a declared-superseded file.")
     return 0
 
 
-def scan_refs(manifest):
+def scan_refs(manifest, root=ROOT):
     sm = superseded_map(manifest)
     if not sm:
-        print("  (no superseded files declared yet — nothing to enforce)")
+        print("  (no superseded files declared — ENFORCING NOTHING here)")
         return 0
     hits = []
-    seen = set()
-    for pat in REF_GLOBS:
-        for path in glob.glob(os.path.join(ROOT, pat)):
-            rel = os.path.relpath(path, ROOT)
-            if rel in seen or os.path.basename(path) in REF_EXEMPT:
+    for path, rel, b in _iter_files(root):
+        if b in REF_EXEMPT:
+            continue
+        try:
+            lines = open(path, encoding="utf-8", errors="replace").read().splitlines()
+        except Exception:
+            continue
+        for supbase, (canon, role, _s) in sm.items():
+            if b == supbase:
                 continue
-            seen.add(rel)
-            try:
-                text = open(path, encoding="utf-8", errors="replace").read()
-            except Exception:
-                continue
-            for supbase, (canon, role, _status) in sm.items():
-                if os.path.basename(path) == supbase:
-                    continue  # a superseded file naming itself (its own docstring) is not a bug
-                for i, line in enumerate(text.splitlines(), 1):
-                    if supbase in line:
-                        hits.append((rel, i, supbase, canon, role))
+            for i, line in enumerate(lines, 1):
+                if _mentions(line, supbase):
+                    hits.append((rel, i, supbase, canon, role))
     if hits:
         print("  HALT — live references to SUPERSEDED files (fix to the canonical, or split the role):")
         for rel, i, sup, canon, role in hits:
-            print(f"     {rel}:{i}  uses {sup}  →  canon for '{role}' is {canon}")
+            print(f"     {rel}:{i}  uses {sup}  ->  canon for '{role}' is {canon}")
         return 1
-    print("  OK — no code/workflow references a superseded file.")
+    print("  OK — no scanned file references a superseded file.")
     return 0
 
 
-def count_refs(basename):
-    """How many code/workflow/shell files reference this basename (excluding itself + exempt)."""
-    n, where, seen = 0, [], set()
-    for pat in REF_GLOBS:
-        for path in glob.glob(os.path.join(ROOT, pat)):
-            rel = os.path.relpath(path, ROOT)
-            b = os.path.basename(path)
-            if rel in seen or b in REF_EXEMPT or b == basename:
-                continue
-            seen.add(rel)
-            try:
-                if basename in open(path, encoding="utf-8", errors="replace").read():
-                    n += 1; where.append(rel)
-            except Exception:
-                pass
-    return n, where
-
-
 def wiring_verdict(canon_refs, sibling_refs):
-    """Pure decision (canary-able): is the DECLARED canonical actually the wired one?"""
     if canon_refs == 0 and any(s > 0 for s in sibling_refs):
-        return "HALT"   # canon names an unwired file while a sibling is wired — the 2026-07-26 error
+        return "HALT"
     if canon_refs == 0:
-        return "WARN"   # nobody wired: not-yet-wired, or a doc/standalone tool
+        return "WARN"
     return "OK"
 
 
-def wiring(manifest):
-    """Derive canon from WIRING and flag any role whose declared canonical is unwired
-    while a sibling is wired. This is the check that catches a manifest declared from prose."""
+def wiring(manifest, root=ROOT):
     bad = 0
     for r in manifest.get("roles", []):
         print(f"  role: {r['role']}")
         canon = r["canonical"]
-        cn, cw = count_refs(os.path.basename(canon))
+        cn, cw = count_refs(os.path.basename(canon), root)
         print(f"     [canonical] {canon}: {cn} ref(s)" + (f"  ({', '.join(cw[:4])})" if cw else "  — UNWIRED"))
-        sib_counts = []
+        sib = []
         for s in r.get("siblings", []):
-            sn, sw = count_refs(os.path.basename(s))
-            sib_counts.append(sn)
+            sn, sw = count_refs(os.path.basename(s), root)
+            sib.append(sn)
             print(f"     [sibling]   {s}: {sn} ref(s)" + (f"  ({', '.join(sw[:4])})" if sw else "  — UNWIRED"))
-        verdict = wiring_verdict(cn, sib_counts)
-        if verdict == "HALT":
-            print(f"     HALT — declared canonical is UNWIRED while a sibling is wired. The declaration "
-                  f"likely points at the wrong file (the exact error class of 2026-07-26). Re-declare from wiring.")
+        v = wiring_verdict(cn, sib)
+        if v == "HALT":
+            print("     HALT — declared canonical is UNWIRED while a sibling is wired. The declaration "
+                  "likely points at the wrong file (the exact error class of 2026-07-26). Re-declare from wiring.")
             bad += 1
-        elif verdict == "WARN":
-            print(f"     WARN — canonical unwired and no sibling wired (not-yet-wired, or a standalone/doc tool).")
+        elif v == "WARN":
+            print("     WARN — canonical unwired and no sibling wired (not-yet-wired, or a standalone/doc tool).")
         else:
             print(f"     OK — declared canonical is the wired one ({cn} ref(s)).")
     return 1 if bad else 0
 
 
+def validate_schema(manifest):
+    errs = []
+    roles = manifest.get("roles")
+    if not isinstance(roles, list):
+        return ["'roles' is not a list"]
+    names = []
+    for r in roles:
+        if not isinstance(r, dict):
+            errs.append("a role is not an object"); continue
+        nm = r.get("role"); names.append(nm)
+        if not isinstance(nm, str):
+            errs.append("a role is missing a string 'role' name")
+        c = r.get("canonical")
+        if not isinstance(c, str):
+            errs.append(f"role {nm!r} is missing a string 'canonical'")
+        for k in ("siblings", "superseded"):
+            if k in r and not isinstance(r[k], list):
+                errs.append(f"role {nm!r}.{k} is not a list")
+        if isinstance(c, str) and (c in r.get("siblings", []) or c in r.get("superseded", [])):
+            errs.append(f"role {nm!r}: canonical is listed in its own siblings/superseded")
+    dups = sorted({x for x in names if names.count(x) > 1})
+    if dups:
+        errs.append(f"duplicate role names: {dups}")
+    return errs
+
+
 def self_test():
-    """Gate the guard on a synthetic canary. If it can't catch a planted superseded ref, REFUSE."""
-    fake = {"roles": [{"role": "canary", "canonical": "the-real.py",
-                       "superseded": ["the-old.py"], "status": ""}]}
-    # 1) --check must flag the superseded name and pass the canonical.
-    sm = superseded_map(fake)
-    if "the-old.py" not in sm or sm["the-old.py"][0] != "the-real.py":
-        print("  SELF-TEST FAIL — guard did not map a planted superseded->canonical.")
+    # 1) the REAL manifest must be schema-valid (a malformed map silently under-enforces).
+    try:
+        real = load()
+    except Exception as e:
+        print(f"  SELF-TEST FAIL — manifest unreadable: {e}"); return 2
+    errs = validate_schema(real)
+    if errs:
+        print("  SELF-TEST FAIL — manifest schema:")
+        for e in errs:
+            print("     " + e)
         return 2
-    # 2) an empty manifest must map nothing (no false positives).
-    if superseded_map({"roles": []}):
-        print("  SELF-TEST FAIL — guard invented a superseded entry from an empty manifest.")
-        return 2
-    # 3) the wiring verdict must HALT an unwired canonical beside a wired sibling.
+    # 2) pure verdict canaries.
     if not (wiring_verdict(0, [2]) == "HALT" and wiring_verdict(3, [0]) == "OK"
             and wiring_verdict(0, [0]) == "WARN"):
-        print("  SELF-TEST FAIL — wiring verdict does not catch an unwired canonical.")
-        return 2
-    print("  SELF-TEST OK — superseded mapping bites, invents none, and wiring catches an unwired canonical.")
+        print("  SELF-TEST FAIL — wiring verdict logic."); return 2
+    # 3) REAL-CODE canary: a temp tree with a planted stale ref in a SUBDIR must HALT via the
+    #    shipping scan (exercises recursive glob + IO + boundary matching + verdict).
+    with tempfile.TemporaryDirectory() as td:
+        os.makedirs(os.path.join(td, "sub"))
+        with open(os.path.join(td, "sub", "caller.sh"), "w") as f:
+            f.write("#!/bin/sh\npython3 old-gate.py --run\n")
+        fx = {"roles": [{"role": "canary", "canonical": "new-gate.py",
+                         "siblings": ["old-gate.py"], "superseded": ["old-gate.py"]}]}
+        buf = io_devnull()
+        with contextlib.redirect_stdout(buf):
+            refs_halt = scan_refs(fx, td)
+            wire_halt = wiring(fx, td)
+        # boundary: a look-alike must NOT match.
+        with open(os.path.join(td, "sub", "decoy.sh"), "w") as f:
+            f.write("python3 very-old-gate.py\n")   # contains 'old-gate.py' only as a substring
+        with contextlib.redirect_stdout(buf):
+            still = scan_refs({"roles": [{"role": "c", "canonical": "n.py",
+                                          "superseded": ["old-gate.py"]}]}, td)
+        if not (refs_halt == 1 and wire_halt == 1 and still == 1):
+            print("  SELF-TEST FAIL — real-scan canary: subdir stale ref not caught by the shipping code.")
+            return 2
+    print("  SELF-TEST OK — manifest schema valid; verdict logic bites; recursive/boundary scan catches a planted stale ref.")
     return 0
+
+
+def io_devnull():
+    import io
+    return io.StringIO()
 
 
 def main(argv):
     if "--self-test" in argv:
         return self_test()
-    # self-test always runs before real work (studio law: a gate that can't grade its canary refuses).
     if self_test() == 2:
         return 2
     manifest = load()
+    if not manifest.get("roles"):
+        print("  NOTE — manifest declares NO roles: ENFORCING NOTHING (unconfigured, not 'clean').")
     if "--wiring" in argv:
         return wiring(manifest)
     if "--refs" in argv:
@@ -188,8 +254,7 @@ def main(argv):
     if "--check" in argv:
         i = argv.index("--check")
         if i + 1 >= len(argv):
-            print("  usage: canon-guard.py --check <file>")
-            return 2
+            print("  usage: canon-guard.py --check <file>"); return 2
         return check_file(argv[i + 1], manifest)
     print(__doc__.strip().splitlines()[0])
     print("  usage: --self-test | --wiring | --refs | --check <file>")

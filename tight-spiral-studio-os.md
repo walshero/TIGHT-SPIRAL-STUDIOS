@@ -1647,7 +1647,7 @@ check, it's a wish.** These are not wishes.*
 
 | law | the program | HALT on |
 |---|---|---|
-| Contrast, image floor, opening wall, emoji, offline, focus, tap targets | `studio-eyes/studio-eyes.py` | exit 1. Self-tests 20/20 or **refuses to audit**. |
+| Contrast, image floor, opening wall, emoji, offline, focus, tap targets | **`studio-eyes-sweep.py`** (v4, render-proof, WIRED in `floor.yml`) | exit 1. Self-test teeth or refuses. *Reconciled 2026-07-26: v4 is the live floor (this row previously named v3, which the wiring never ran — the doc-vs-wiring split that burned two sessions). `studio-eyes/studio-eyes.py` (v3, real-browser, EXECUTES JS, screenshots under glyphs) is KEPT per the v3 review as the JS/dynamic-state gate — the capability v4 structurally lacks — to be wired for JS-driven builds.* |
 | Canon is computed, not remembered | `resolve-canon.py` | exit 2 rather than guess |
 | **Destruction requires the founder to name the path** | `founder-gate.py` + `.git/hooks/pre-push` | no push may carry an unauthorized deletion |
 | Never overwrite canon with a fossil | `safe-push.sh` | local smaller than remote |

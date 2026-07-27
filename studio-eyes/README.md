@@ -3,6 +3,14 @@
 The accessibility auditor for a founder with retinitis pigmentosa.
 **Contrast is arithmetic, not judgment.**
 
+> **STATUS 2026-07-26 (reconciled).** This v3 is NOT the wired live floor — `studio-eyes-sweep.py`
+> (v4, WeasyPrint render-proof) is what `floor.yml`/`ratchet.py`/`safe-push.sh` actually run. The two
+> were documented and wired against different files, which burned two sessions. Their roles are now
+> split: **v4 = the wired render-proof floor** (every push, no browser). **v3 (this tool) = the
+> real-browser JS/dynamic-state gate** — it EXECUTES JS and re-reads computed styles per comfort stop,
+> which v4 cannot. Kept per the v3 review; still to be WIRED for JS-driven builds. Needs the
+> `playwright` pkg + a matching Chromium at runtime (CI installs both; a bare sandbox may not).
+
 ## Run it
 
     pip install playwright pillow && playwright install chromium
