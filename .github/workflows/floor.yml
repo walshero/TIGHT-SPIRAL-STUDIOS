@@ -19,9 +19,18 @@ name: Studio Eyes — Accessibility Floor
 
 on:
   push:
-    branches: [main]
-  pull_request:
+    branches: ['**']      # every branch spins the belt. The belt must not depend on the PR
+                          # 'synchronize' event: a parse-failed run once wedged it, and feature
+                          # pushes then fired NO run until hand-cranked (2026-07-27). Push is the
+                          # reliable trigger; PR checks still attach to the head-branch push run.
   workflow_dispatch:      # fire by hand from the phone
+
+# Auto-cancel superseded runs on feature/PR branches (fast feedback, no runner pile-up) — but
+# NEVER on main: main runs the Pages deploy, and cancelling a superseded main run could skip a
+# deploy (GitHub Actions best practice, researched 2026-07-27).
+concurrency:
+  group: floor-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 permissions:
   contents: read
@@ -62,6 +71,8 @@ jobs:
           python3 canon-guard.py --check-index
           python3 canon-guard.py --wiring
           python3 canon-guard.py --refs
+          python3 canon-guard.py --gates
+          python3 canon-guard.py --vocab
 
       - name: CANON GUARD — decay report (never blocks; flags roles overdue for re-verify)
         run: python3 canon-guard.py --stale
@@ -83,10 +94,13 @@ jobs:
           python3 contrast-plus.py index.html choose-your-leader-v5.html the-console.html
         continue-on-error: true
 
-      - name: STAGING SANDBOX — one rendered browser; axe + probes (overflow, tap-target, focus, landmarks). Self-tests, then report.
+      - name: STAGING SANDBOX (BLOCKING) — render-truth floor on the proven-green build. RATIFIED 2026-07-27 (founder go, 0 FLAGs). This one refuses.
         run: |
           python3 staging-sandbox.py --self-test
-          python3 staging-sandbox.py --shots-dir studio-eyes-shots index.html choose-your-leader-v5.html the-console.html reading-the-fireground.html
+          python3 staging-sandbox.py --strict --shots-dir studio-eyes-shots index.html
+
+      - name: STAGING SANDBOX (report) — the rest of the corpus, not yet green; advisory until its landmark/tap debt clears and it earns promotion.
+        run: python3 staging-sandbox.py --shots-dir studio-eyes-shots choose-your-leader-v5.html the-console.html reading-the-fireground.html
         continue-on-error: true
 
       - name: Screenshots — every screen, light + dark, iPhone 390x844

@@ -30,6 +30,8 @@ USAGE
     canon-guard.py --wiring             per role, is the DECLARED canonical the WIRED one? HALT if not
     canon-guard.py --refs               scan repo for references to declared-superseded files; HALT
     canon-guard.py --workflows          YAML-parse every .github/workflows/*.yml; HALT on parse error
+    canon-guard.py --gates              gate promotion: 'blocking' needs founder-go>=0.70 AND --strict wiring; HALT on drift
+    canon-guard.py --vocab              game builds vs the Move Bible mirror; HALT on a retired card name
     canon-guard.py --check <file>       is <file> superseded for a role? print the canonical pointer
 EXIT  0 clean · 1 HALT (superseded used/referenced, or unwired canonical) · 2 guard self-test failed
 """
@@ -37,10 +39,14 @@ import json, os, re, sys, glob, tempfile, contextlib, datetime
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 MANIFEST = os.path.join(ROOT, "canon-manifest.json")
+VOCAB = os.path.join(ROOT, "canon-vocab.json")
 INDEX = os.path.join(ROOT, "claude_FUNES-INDEX.md")
+FLOOR = os.path.join(ROOT, ".github", "workflows", "floor.yml")
 BEGIN_MARK = "<!-- CANON:BEGIN"
 END_MARK = "<!-- CANON:END -->"
 STALE_DAYS = 90
+GATE_MODES = {"report", "blocking"}
+GO_THRESHOLD = 0.70   # founder-go confidence a gate must clear to be allowed to BLOCK
 # files that legitimately NAME a superseded file (the map + its own corrections); never flag these.
 REF_EXEMPT = {"canon-manifest.json", "canon-guard.py", "claude_FUNES-INDEX.md",
               "claude_seat-playtesting-agents.md", "claude_cyl-playtest-table-2026-07-26.md",
@@ -327,6 +333,111 @@ def check_workflows():
     return 1 if bad else 0
 
 
+def _invokes(run, base):
+    """True if the step actually RUNS the script (python3 .../base or ./base), not merely mentions
+    it in a comment (the 'Install the eyes' step names axe-audit.py in a comment — not an invocation)."""
+    pat = re.compile(r'(?:python3?\s+|\./)\S*' + re.escape(base) + r'(?![\w-])')
+    return any(pat.search(line) for line in run.splitlines())
+
+
+def _floor_steps():
+    """(name, run_text, continue_on_error) for each floor-job step that has a `run:`.
+    Note: PyYAML parses the bare key `on` as boolean True (YAML 1.1) — we only read `jobs`,
+    so that quirk doesn't matter here."""
+    import yaml
+    wf = yaml.safe_load(open(FLOOR, encoding="utf-8"))
+    steps = (wf.get("jobs", {}) or {}).get("floor", {}).get("steps", []) or []
+    return [(s.get("name", ""), s.get("run", ""), bool(s.get("continue-on-error", False)))
+            for s in steps if isinstance(s, dict) and "run" in s]
+
+
+def check_gates(manifest):
+    """Couple gate APPROVAL (this ledger) to gate ENFORCEMENT (floor.yml wiring).
+
+    A gate promoted to 'blocking' must (a) carry founder_go:true with confidence >= GO_THRESHOLD,
+    AND (b) be wired in floor.yml as a NON-continue-on-error `--strict` step covering its
+    blocking_scope. Approval without enforcement HALTs; enforcement of a 'report' gate (a
+    non-continue-on-error step) HALTs too. This is the system that makes 'promote a gate to
+    blocking' a ratified, wired act instead of a silent flag flip."""
+    gates = manifest.get("gates", [])
+    if not gates:
+        print("  (no gates declared — ENFORCING NOTHING here)"); return 0
+    try:
+        steps = _floor_steps()
+    except Exception as e:
+        print(f"  NOTE — cannot parse floor.yml ({e}); run --workflows. Gate-wiring check skipped. (exit 0)")
+        return 0
+    bad = 0
+    for g in gates:
+        gid, script, mode = g.get("id", "?"), g.get("script", ""), g.get("mode")
+        base = os.path.basename(script)
+        invoking = [(n, run, coe) for (n, run, coe) in steps if _invokes(run, base)]
+        if mode not in GATE_MODES:
+            print(f"  HALT gate '{gid}': mode {mode!r} is not report|blocking."); bad += 1; continue
+        if mode == "blocking":
+            p = g.get("promotion", {}) or {}
+            conf = p.get("confidence", 0) or 0
+            if not (p.get("founder_go") is True and conf >= GO_THRESHOLD):
+                print(f"  HALT gate '{gid}': mode=blocking but NOT ratified "
+                      f"(founder_go={p.get('founder_go')}, confidence={conf} < {GO_THRESHOLD}). "
+                      f"A gate may block only with founder go >= {GO_THRESHOLD}."); bad += 1; continue
+            scope = g.get("blocking_scope", []) or []
+            if not scope:
+                print(f"  HALT gate '{gid}': mode=blocking but blocking_scope is empty (nothing to enforce)."); bad += 1; continue
+            strict = [(n, run, coe) for (n, run, coe) in invoking if "--strict" in run and not coe]  # invoking already filters to real runs
+            covered = strict and all(any(_mentions(run, b) for (_n, run, _c) in strict) for b in scope)
+            if not covered:
+                print(f"  HALT gate '{gid}': RATIFIED blocking, but floor.yml has no non-continue-on-error "
+                      f"`{base} --strict` step covering blocking_scope {scope}. Approval without enforcement.")
+                bad += 1; continue
+            print(f"  ok   gate '{gid}': blocking, ratified (go, conf {conf}), wired --strict on {scope}.")
+        else:  # report
+            enforcing = [n for (n, run, coe) in invoking if not coe]
+            if enforcing:
+                print(f"  HALT gate '{gid}': mode=report but a floor.yml step is NON-continue-on-error "
+                      f"({enforcing}). A report gate must not block. Promote it in the ledger first.")
+                bad += 1; continue
+            print(f"  ok   gate '{gid}': report ({'wired advisory' if invoking else 'not wired'}).")
+    print(f"\n  === gate promotion: {len(gates)} gate(s), {bad} drift ===")
+    return 1 if bad else 0
+
+
+def check_vocab(vocab_path=VOCAB):
+    """Enforce game builds against the in-repo mirror of the Drive Move Bible: a RETIRED card
+    name in a scoped build is drift from the SSOT -> HALT. Matches an alias only as a CARD NAME
+    (n:'ALIAS' in a deck object, or >ALIAS< as visible text), after stripping HTML comments, so a
+    provenance note that mentions the old name does not trip it. The automated half of Drive->build;
+    the mirror itself is refreshed from Drive by a chat/cowork step (see canon-vocab.json.refresh)."""
+    try:
+        v = load(vocab_path)
+    except Exception as e:
+        print(f"  NOTE — no vocab mirror ({e}); skipping. (exit 0)"); return 0
+    retired, globs = v.get("retired", []), v.get("scope_globs", [])
+    if not retired or not globs:
+        print("  (vocab mirror declares no retired aliases or no scope — ENFORCING NOTHING)"); return 0
+    files = sorted({f for g in globs for f in glob.glob(os.path.join(ROOT, g)) if os.path.isfile(f)})
+    comment = re.compile(r"<!--.*?-->", re.S)
+    bad = 0
+    for f in files:
+        rel = os.path.relpath(f, ROOT)
+        try:
+            text = comment.sub(" ", open(f, encoding="utf-8", errors="replace").read())
+        except Exception:
+            continue
+        for r in retired:
+            alias, canon = r.get("alias", ""), r.get("canon", "")
+            if not alias:
+                continue
+            a = re.escape(alias)
+            if re.search(r"n\s*:\s*['\"]" + a + r"['\"]|>\s*" + a + r"\s*<", text):
+                bad += 1
+                print(f"  HALT {rel}: uses RETIRED card name '{alias}' -> canon is '{canon}' (Move Bible SSOT).")
+    if bad:
+        print(f"\n  === vocab guard: {bad} drift(s) from the Move Bible mirror ==="); return 1
+    print(f"  OK — {len(files)} game build(s) match the Move Bible vocabulary mirror (no retired card names).")
+    return 0
+
+
 def io_devnull():
     import io
     return io.StringIO()
@@ -352,13 +463,17 @@ def main(argv):
         return scan_refs(manifest)
     if "--workflows" in argv:
         return check_workflows()
+    if "--gates" in argv:
+        return check_gates(manifest)
+    if "--vocab" in argv:
+        return check_vocab()
     if "--check" in argv:
         i = argv.index("--check")
         if i + 1 >= len(argv):
             print("  usage: canon-guard.py --check <file>"); return 2
         return check_file(argv[i + 1], manifest)
     print(__doc__.strip().splitlines()[0])
-    print("  usage: --self-test | --wiring | --refs | --workflows | --check <file>")
+    print("  usage: --self-test | --wiring | --refs | --workflows | --gates | --vocab | --check <file>")
     return 0
 
 
