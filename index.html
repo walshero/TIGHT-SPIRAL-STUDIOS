@@ -147,7 +147,7 @@ h2{
 .c-note{background:var(--paper); color:var(--ink-3); border:1px solid var(--rule)}
 
 /* ── THE ENTERPRISE SLAB ─────────────────────────────────────────────────── */
-.slab{background:var(--slab); color:var(--slab-ink); margin:56px -22px 0; padding:46px 22px 44px}
+.slab{background:var(--slab); color:var(--slab-ink); margin:56px 0 0; padding:46px 22px 44px}
 .slab .in{max-width:1060px; margin:0 auto}
 .slab h2{color:var(--brass-fill)}          /* on the DARK slab this clears 8.4:1 */
 .slab .sub{color:#cdd4dd}                  /* 11.2:1 on slab */
@@ -225,7 +225,7 @@ footer p{margin:0 0 7px}
 
 @media (max-width:640px){
   .stage{padding:44px 0 32px}
-  .slab{margin:44px -22px 0; padding:36px 22px}
+  .slab{margin:44px 0 0; padding:36px 22px}
 }
 
 /* ── INSTRUMENT MARKS. Glyphs inherit card ink via currentColor (token-role safe). ── */
@@ -262,8 +262,10 @@ footer p{margin:0 0 7px}
 </head>
 <body>
 
+<main>
 <!-- COMFORT. Bigger/smaller text + a comfort toggle. Corner control, never a wall.
-     No storage — text size and comfort both reset on reload (single-file law). -->
+     No storage — text size and comfort both reset on reload (single-file law).
+     Inside <main> so it sits within a landmark (axe region rule); position:fixed keeps its corner. -->
 <div class="comfort" role="group" aria-label="Reading comfort">
   <button type="button" id="cft-smaller" aria-label="Smaller text">A&minus;</button>
   <button type="button" id="cft-comfort" aria-pressed="false" aria-label="Comfort reading mode: softer, calmer ground">&#9680;</button>
@@ -271,7 +273,7 @@ footer p{margin:0 0 7px}
   <span class="sr" id="cft-status" role="status" aria-live="polite">Text size 100 percent</span>
 </div>
 
-<main class="wrap">
+<div class="wrap">
 
 <!-- THE STAGE. Content on load. No gate, no wall, no ask. -->
 <div class="stage">
@@ -502,7 +504,7 @@ footer p{margin:0 0 7px}
   </div>
 </section>
 
-</main>
+</div>
 
 <!-- ═══ THE ENTERPRISE SLAB — the lane that was never advertised ═══ -->
 <div class="slab">
@@ -541,7 +543,7 @@ footer p{margin:0 0 7px}
   </div>
 </div>
 
-<main class="wrap">
+<div class="wrap">
 
 <!-- ═══ THE WHOLE STUDIO — the OS, the map, the ways in, the college it runs inside ═══ -->
 <section>
@@ -717,15 +719,16 @@ footer p{margin:0 0 7px}
   </div>
 </section>
 
-<footer>
+</div>
+</main>
+
+<footer class="wrap">
   <p><b>Tight Spiral Productions.</b> A one-person studio. Everything here was made by hand, with a
     machine in the room and a person deciding.</p>
   <p><a href="mailto:walshero@gmail.com">walshero@gmail.com</a> &nbsp;&middot;&nbsp; Boston</p>
   <p style="margin-top:11px; font-family:var(--mono); font-size:12px; color:var(--ink-3);">
     33 builds &middot; shelf counted from the repo, 2026-07-14 &middot; not remembered</p>
 </footer>
-
-</main>
 
 <script>
 (function(){
