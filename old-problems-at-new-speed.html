@@ -114,7 +114,7 @@ body.narrowed .vignette{opacity:1}
 section{background:var(--paper); border-bottom:2px solid var(--rule)}
 /* scenes are image-dominant: an opaque painted box, min ~58vh, art centered inside
    (meet, never letterboxed to page bg — the box itself paints --paper-2). */
-.scene{display:block; width:100%; height:auto; min-height:52dvh; background:var(--paper-2)}
+.scene{display:block; width:100%; height:auto; min-height:46dvh; background:var(--paper-2)}
 .stage{position:relative; max-width:1000px; margin:0 auto}
 .wrap{max-width:760px; margin:0 auto; padding:26px 22px 46px}
 .pad-top{padding-top:84px}
@@ -284,7 +284,8 @@ a{color:var(--accent-ink)}
       <svg class="fuse" viewBox="0 0 44 8" aria-hidden="true"><line x1="2" y1="4" x2="42" y2="4" stroke="var(--line)" stroke-width="2" stroke-dasharray="3 3"/><circle class="spark" cx="4" cy="4" r="3.4" fill="var(--lamp)"/></svg>
     </p>
     <h1 class="settle d2 in">Old problems<br>at <em>new speed</em>.</h1>
-    <p class="lede settle d3 in">In 1955, as his blindness became nearly total, Jorge Luis Borges was made
+    <p class="lede settle d3 in"><b>Tight Spiral Studios makes games a blind player and a sighted player play the same way.</b> This piece is where that comes from &mdash; and why the hard problems of the AI era aren't new.</p>
+    <p class="settle d3 in">In 1955, as his blindness became nearly total, Jorge Luis Borges was made
       director of a library of a million books — handed the volumes and the darkness in the same gesture.
       He kept working for thirty years, composing in his head.</p>
     <p class="settle d4 in">The studio that built this piece is run by a professor with retinitis pigmentosa,
@@ -502,10 +503,13 @@ a{color:var(--accent-ink)}
     </div>
     <p class="told" id="aTold" aria-live="polite">A point on the cellar floor. It holds every file, every build, every stalled lane.</p>
     <div class="reveal" id="aQ">
-      <p style="margin:0"><b>The one permitted question:</b> <em>Why aren't builds moving?</em>
-        Not "how do we perfect the system." Not the interminable poem. One diagnostic question — then upstairs.
-        (The honest answer, this quarter: the studio does not have a building problem. It has a
-        <b>finishing</b> problem. The essay this piece delivers is done, and unsent.)</p>
+      <p style="margin:0 0 10px"><b>You get one.</b> Choose the single question you'd spend it on — the others go dark.</p>
+      <div class="act" id="aQChoices">
+        <button class="btn ghost" data-q="0">Why aren't builds moving?</button>
+        <button class="btn ghost" data-q="1">What is the studio, in one line?</button>
+        <button class="btn ghost" data-q="2">What should it fix first?</button>
+      </div>
+      <p class="told" id="aAnswer" aria-live="polite" style="margin-top:12px"></p>
     </div>
     <p class="aside"><b>Eagleman, on the stairs:</b> a nervous system given everything at once does not
       perceive more — it seizes. Perception is what's left after the brain throws most of the signal away.
@@ -686,6 +690,18 @@ document.addEventListener('keydown',function(e){
 });
 function status(msg){ var s=document.getElementById('a11y-status'); if(s) s.textContent=msg; }
 
+// Reaction where the finger is: a room's illustration sits above its button, so when
+// you press and the scene reacts (stamps, collapse, flood, map), pull that scene into
+// view if it has scrolled off the top. Delegated so every room inherits it.
+document.addEventListener('click', function(e){
+  var btn = e.target.closest('section .btn');
+  if(!btn) return;
+  var sec = btn.closest('section'), scene = sec && sec.querySelector('.scene');
+  if(!scene) return;
+  var r = scene.getBoundingClientRect();
+  if(r.bottom < 160){ setTimeout(function(){ scene.scrollIntoView({behavior: reduce?'auto':'smooth', block:'center'}); }, 60); }
+}, true);
+
 // ── procedural cut-paper fills (kept as decoration; aria on the parent <svg>) ──
 function el(tag,attrs){ var e=document.createElementNS('http://www.w3.org/2000/svg',tag);
   for(var k in attrs) e.setAttribute(k,attrs[k]); return e; }
@@ -822,6 +838,22 @@ if(up) up.addEventListener('click',function(){
   q.classList.remove('open');
   document.getElementById('aTold').textContent='Back upstairs. The total view is real — and only useful disciplined to one purpose.';
   up.disabled=true; lk.disabled=false;
+});
+// The Aleph grants exactly ONE question — and the player chooses it, not the script.
+var A_ANSWERS=[
+  'Not a building problem — a <b>finishing</b> problem. The essay this piece delivers is done, and unsent.',
+  'A one-person engine that turns an idea into a quality-gated, shipped game — and proves it can, before it scales.',
+  'Ship one asset end-to-end through the whole pipeline. The engine is real; the proof is the move not yet made.'
+];
+document.querySelectorAll('#aQChoices .btn').forEach(function(b){
+  b.addEventListener('click',function(){
+    var i=+b.dataset.q, ans=document.getElementById('aAnswer');
+    ans.innerHTML='<b>'+b.textContent+'</b> — '+A_ANSWERS[i];
+    document.querySelectorAll('#aQChoices .btn').forEach(function(x){
+      x.disabled=true; if(x===b){ x.setAttribute('aria-pressed','true'); } else { x.style.opacity='.4'; }
+    });
+    status('Question spent: '+b.textContent);
+  });
 });
 
 // Map: perfect → grow to 1:1 (fills, useless); abandon → collapse to one-page index
