@@ -52,11 +52,16 @@ of assets do not. Bring bytes in via Zapier (server-side fetch). See
 `LANE-REGISTRY.md § THE ASSET-INGEST LANE`.
 
 1. **Fetch:** Zapier Google Drive **Upload File** with `file`=<verified URL>, **`convert=false`**,
-   and **an explicit `folder`=<a native-visible Drive folder ID>**.
-   ⚠️ **READ-BACK FIX (verify on first live run):** uploads that OMIT the folder land in a
-   space the native Drive connector cannot see; the one upload with an explicit folder landed
-   visibly. Always set `folder`. Confirm the file then appears via native `search_files`
-   (`parentId = '<folder>'`) — if it does, read-back is solved end-to-end.
+   and **an explicit `folder`=<a native-visible Drive folder ID>** (e.g. MW KNOWLEDGE BASE
+   `1HgCt7LgM88cexg90tjVh0844eYfo0oOq`).
+   ✅ **READ-BACK FIX (CONFIRMED 2026-07-27):** uploads that OMIT the folder land where the
+   native Drive connector cannot see them; **with an explicit folder they are visible +
+   downloadable.** Full loop verified end-to-end (fetch → native `search_files` → download →
+   decode → view). Always set `folder`.
+   **Zapier connector resilience (learned same day):** two mirrored connectors exist
+   (`mcp__Zapier__*` and a UUID one) that ALTERNATE — use whichever is live. The transport
+   flaps mid-call; **retry on "connection lost"** and **verify against Drive** before trusting
+   any error (a lost-connection error still executed server-side in testing — a false negative).
 2. **Read back:** native `search_files` to get the real file ID → `download_file_content`
    (base64) → decode to a local file.
 3. **View + verify:** open the decoded image with the **Read tool** (proven: the scout can see

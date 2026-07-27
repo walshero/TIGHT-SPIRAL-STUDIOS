@@ -87,9 +87,20 @@ landing the file in Drive, which the sandbox can read. The recipe:
 
 1. **`WebSearch`** → find + verify the real public-domain source (works from the sandbox).
 2. **Zapier `Upload File`** with `file` = the URL, **`convert=false`** for binaries (else it
-   silently rasterizes a PDF into a Google Doc and strips the figures) → Drive.
-3. **Read it back** (`download_file_content` / Drive connector) → **base64-embed** into the
-   single-file build. Credit the source (e.g. `Madrzykowski/NIST · public domain`).
+   silently rasterizes a PDF into a Google Doc and strips the figures), **and an explicit
+   `folder`** = a native-visible Drive folder ID (e.g. MW KNOWLEDGE BASE
+   `1HgCt7LgM88cexg90tjVh0844eYfo0oOq`) → Drive.
+3. **Read it back** — native `search_files` (`parentId='<folder>'`) → `download_file_content`
+   → decode → **base64-embed** into the single-file build. Credit the source
+   (e.g. `Madrzykowski/NIST · public domain`).
+
+**READ-BACK CONFIRMED 2026-07-27.** Full loop verified end-to-end (fetch → native search →
+download → decode → view). The load-bearing fix: **binary uploads MUST name an explicit
+folder** — without one they land where the native connector can't see them.
+**Zapier connector resilience:** two mirrored connectors (`mcp__Zapier__*` + a UUID one)
+**alternate** — use whichever is live. The transport flaps mid-call; **retry on
+"connection lost"** and **verify against Drive before trusting any error** (a lost-connection
+error still executed server-side in testing — a false negative).
 
 **Bounds.** Use for genuine public-domain / licensed assets only. **Not** for AI-generated art —
 that fails the Art Lane and the fidelity floor (generated smoke/fire is fabricated data a trainee
