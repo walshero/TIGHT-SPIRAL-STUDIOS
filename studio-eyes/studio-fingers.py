@@ -69,19 +69,36 @@ PROBE = r"""
     if (m < 44) out.small.push({ tag: el.tagName.toLowerCase(), name: name(el), px: Math.round(m) });
   });
 
-  // comfort wall: display-option controls visible without being summoned
-  const OPT = /bigger text|larger text|reduce motion|reduced motion|text size|high contrast|comfort stop|softer|daylight|warm dark/i;
-  const TOGGLE = /comfort|display option|accessibility/i;
-  let visibleOptions = 0, hasToggle = false;
+  // comfort wall: display/comfort controls shown WITHOUT being summoned.
+  // Two signals so wording can't hide a wall:
+  //  (a) LABEL — 2+ controls whose names read as display options, no collapsing toggle;
+  //  (b) CONTAINER — a visible comfort/settings/theme container holding 2+ controls
+  //      and no collapsing toggle (catches "Softer / Warm-dark / Dim the room / Default").
+  const OPT = /bigger text|larger text|smaller text|reduce motion|reduced motion|text size|font size|high contrast|\bcontrast\b|comfort stop|softer|default|daylight|warm[\s-]?dark|dark mode|light mode|\bnight\b|dim the room|brightness|\btheme\b/i;
+  const TOGGLE = /comfort|display option|accessibility|settings|\baa\b/i;
+  const CONTAINER = /comfort|accessib|settings|display.?option|theme|palette|reading.?mode/i;
+  const cname = (el) => {
+    const cls = (el.className && el.className.baseVal !== undefined) ? el.className.baseVal : (el.className || '');
+    return ((el.getAttribute('aria-label') || '') + ' ' + cls + ' ' + (el.id || '')).toLowerCase();
+  };
+  const collapses = (el) => el.hasAttribute('aria-expanded') || el.hasAttribute('aria-controls')
+                            || !!el.querySelector('[aria-expanded],[aria-controls]');
+
+  let visibleOptions = 0, hasToggle = false, wallContainer = false;
   document.querySelectorAll(sel).forEach(el => {
-    const n = name(el);
-    const r = vis(el);
+    const n = name(el), r = vis(el);
     if (!r) return;
     if (TOGGLE.test(n) && (el.hasAttribute('aria-expanded') || el.hasAttribute('aria-controls'))) hasToggle = true;
     else if (OPT.test(n)) visibleOptions++;
   });
+  document.querySelectorAll('*').forEach(el => {
+    if (!CONTAINER.test(cname(el)) || !vis(el) || collapses(el)) return;
+    const ctrls = Array.prototype.slice.call(el.querySelectorAll(sel)).filter(vis);
+    if (ctrls.length >= 2) wallContainer = true;
+  });
   out.comfort.visibleOptions = visibleOptions;
   out.comfort.hasToggle = hasToggle;
+  out.comfort.wallContainer = wallContainer;
   return out;
 }
 """
@@ -104,8 +121,11 @@ def audit_page(page, path):
                      "A thumb can't reliably hit it.")
 
     c = d['comfort']
-    if c['visibleOptions'] >= 2 and not c['hasToggle']:
-        halts.append(f"F-WALL      {c['visibleOptions']} display-option controls are shown UNASKED and no comfort button gates them. "
+    if (c['visibleOptions'] >= 2 and not c['hasToggle']) or c.get('wallContainer'):
+        detail = (f"{c['visibleOptions']} display-option controls are shown UNASKED"
+                  if c['visibleOptions'] >= 2 else
+                  "a comfort/theme control cluster is shown UNASKED (2+ controls, no collapsing toggle)")
+        halts.append(f"F-WALL      {detail} and no comfort button gates them. "
                      "Comfort is a knob, not a wall — hide the options behind a single comfort button (never shown unasked).")
     return halts
 

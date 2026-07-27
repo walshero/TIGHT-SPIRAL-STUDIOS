@@ -95,9 +95,14 @@ body{
   border-radius:2px; transition:background 160ms,color 160ms}
 .corner button:focus-visible{outline:3px solid var(--accent-ink); outline-offset:2px}
 .nav-left{top:12px; left:12px; display:flex; gap:8px}
-.comfort{top:12px; right:12px; display:flex; gap:6px; align-items:center; flex-wrap:wrap; justify-content:flex-end; max-width:60vw}
-.comfort .lbl{font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3)}
+/* Comfort is a KNOB, not a wall: a single button opens the options on tap; never shown unasked. */
+.comfort{top:12px; right:12px; display:flex; flex-direction:column; align-items:flex-end; gap:6px; max-width:72vw}
+.comfort-panel{display:flex; flex-direction:column; gap:6px; background:var(--paper);
+  border:1.5px solid var(--rule); border-radius:4px; padding:8px; box-shadow:0 8px 24px var(--shadow)}
+.comfort-panel[hidden]{display:none}
+.comfort-panel button{white-space:nowrap; text-align:left}
 .comfort button[aria-pressed="true"]{background:var(--ink); color:var(--paper)}
+.comfort-btn .caret{transition:transform 160ms} .comfort-btn[aria-expanded="true"] .caret{transform:rotate(180deg)}
 
 /* Eagleman "dim the room" — constructed-perception overlay (decorative, off by default) */
 .vignette{position:fixed; inset:0; z-index:50; pointer-events:none; opacity:0;
@@ -109,7 +114,7 @@ body.narrowed .vignette{opacity:1}
 section{background:var(--paper); border-bottom:2px solid var(--rule)}
 /* scenes are image-dominant: an opaque painted box, min ~58vh, art centered inside
    (meet, never letterboxed to page bg — the box itself paints --paper-2). */
-.scene{display:block; width:100%; height:auto; min-height:58vh; background:var(--paper-2)}
+.scene{display:block; width:100%; height:auto; min-height:52dvh; background:var(--paper-2)}
 .stage{position:relative; max-width:1000px; margin:0 auto}
 .wrap{max-width:760px; margin:0 auto; padding:26px 22px 46px}
 .pad-top{padding-top:84px}
@@ -208,11 +213,14 @@ a{color:var(--accent-ink)}
 </nav>
 
 <nav class="corner comfort" aria-label="Reading comfort">
-  <span class="lbl">Comfort</span>
-  <button data-set="softer" aria-pressed="false">Softer</button>
-  <button data-set="default" aria-pressed="true">Default</button>
-  <button data-set="warm" aria-pressed="false">Warm-dark</button>
-  <button data-set="dim" id="dimBtn" aria-pressed="false" title="Narrow the field of view">Dim the room</button>
+  <button type="button" id="comfortToggle" class="comfort-btn" onclick="toggleComfort()"
+          aria-expanded="false" aria-controls="comfortPanel" aria-label="Comfort and display options">Comfort <span class="caret" aria-hidden="true">&#9662;</span></button>
+  <div class="comfort-panel" id="comfortPanel" role="group" aria-label="Comfort options" hidden>
+    <button data-set="softer" aria-pressed="false">Softer</button>
+    <button data-set="default" aria-pressed="true">Default</button>
+    <button data-set="warm" aria-pressed="false">Warm-dark</button>
+    <button data-set="dim" id="dimBtn" aria-pressed="false" title="Narrow the field of view">Dim the room</button>
+  </div>
 </nav>
 
 
@@ -647,7 +655,7 @@ var reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
 
 // ── comfort stops + Eagleman "dim the room" ──
 var root=document.documentElement, body=document.body;
-document.querySelectorAll('.comfort button').forEach(function(b){
+document.querySelectorAll('.comfort button[data-set]').forEach(function(b){
   b.addEventListener('click',function(){
     var set=b.dataset.set;
     if(set==='dim'){
@@ -659,10 +667,22 @@ document.querySelectorAll('.comfort button').forEach(function(b){
     // class-based comfort on html + body: default = no stop class
     ['softer','warm'].forEach(function(c){ root.classList.remove(c); body.classList.remove(c); });
     if(set==='softer'||set==='warm'){ root.classList.add(set); body.classList.add(set); }
-    document.querySelectorAll('.comfort button:not(#dimBtn)').forEach(function(x){
+    document.querySelectorAll('.comfort button[data-set]:not(#dimBtn)').forEach(function(x){
       x.setAttribute('aria-pressed', x===b?'true':'false');
     });
   });
+});
+// Comfort is a knob: the panel stays hidden until the button is tapped, and dismisses on outside-tap/Escape.
+function setComfort(open){
+  var t=document.getElementById('comfortToggle'), p=document.getElementById('comfortPanel');
+  if(!t||!p) return;
+  if(open){ p.removeAttribute('hidden'); t.setAttribute('aria-expanded','true'); }
+  else{ p.setAttribute('hidden',''); t.setAttribute('aria-expanded','false'); }
+}
+function toggleComfort(){ setComfort(document.getElementById('comfortPanel').hasAttribute('hidden')); }
+document.addEventListener('click',function(e){ if(!e.target.closest('.comfort')) setComfort(false); });
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){ var p=document.getElementById('comfortPanel'); if(p&&!p.hasAttribute('hidden')){ setComfort(false); document.getElementById('comfortToggle').focus(); } }
 });
 function status(msg){ var s=document.getElementById('a11y-status'); if(s) s.textContent=msg; }
 
@@ -746,6 +766,9 @@ function el(tag,attrs){ var e=document.createElementNS('http://www.w3.org/2000/s
 // ── Room interactions ──
 // Garden: choose a path; the garden keeps the road not taken
 function chooseGarden(side){
+  // reset first so exactly ONE path is taken and one is ghost — never both (logic-integrity fix)
+  ['pathL','pathR'].forEach(function(id){ document.getElementById(id).classList.remove('dim'); });
+  ['ghostL','ghostR'].forEach(function(id){ document.getElementById(id).classList.remove('on'); });
   var takenId = side==='L' ? 'pathL' : 'pathR';
   var ghostId = side==='L' ? 'ghostR' : 'ghostL';
   document.getElementById(takenId).classList.add('dim');
