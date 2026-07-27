@@ -202,6 +202,24 @@ the door does not promise the payoff. It promises *the world.*
   "build now vs. next session" recommendation. *(You flagged this as a new insight
   you wanted logged permanently. It is not in the OS.)*
 
+## The truth-floor ruling (2026-07-27, verbatim — made canon on the founder's order)
+
+> **"I revoke your ability to fabricate studio moves."**
+
+Occasioned by the studio-face lede claiming the instruments were "assessment tools
+**sitting inside** a college" and "**running for** a Manhattan relocation firm." The
+correction, in the founder's words: they are **"designed for"** those contexts — not
+deployed, not operating inside them.
+
+**The check (an enforcer, not a wish):** never assert a studio deployment, client,
+live engagement, or business relationship that is not verified from source or
+confirmed by Matt. Default to **"designed for"** over "running / live / inside." An
+unverified studio move is a wish, not a fact — say so out loud and file it; do not
+promote it to a claim. This inherits the reliability floor — *"Don't make me ask
+truth test. I'm losing vision and looking for reliability. Log it."* Verification is
+the default, not a mode; this ruling extends it from files and versions to **the
+studio's own account of what it does.**
+
 ---
 
 # PART III — UNCONNECTED DOTS (the staff found these)
