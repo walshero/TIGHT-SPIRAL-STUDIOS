@@ -9,6 +9,15 @@
   FUNNY BONEY'S FACTORY  ·  Tight Spiral Productions  ·  v7 (rebuild)
   Play. Notice. Design.  ·  Single file. Offline. No network. Nothing stored.
 
+  v7.1 2026-07-27 P1 PASS, on the v2 playtest (comprehension gap + unreachable
+      payoff, found by the optimized instrument). The machine is now a REPLAYABLE
+      toy (tap it as many times as you like; it makes the cat laugh — the promise
+      kept on screen 1) with an explicit "Read the room ->" entry, no auto-yank.
+      The game reframes from "make the cat laugh" to READ THE ROOM: the win is an
+      accurate read (gap <=1), reachable in every room, so a cold room is no longer
+      a dead end; the cat stays the room's honest reaction. "Call it" says why it's
+      disabled; the last-call note is anchored to its own bit+room (no more
+      mis-attribution across a room switch).
   v7  2026-07-27  FULL REBUILD, on The Bench's ruling (art failing on sight; the
       game was overwhelming and convoluted — a deck of ideas costumed as a game).
       The verb now reaches the hand. Four states that REPLACE each other, one
@@ -151,17 +160,23 @@
     border:1px solid var(--line); border-radius:20px; padding:8px; margin-bottom:6px; }
   .catwrap svg{ display:block; width:100%; height:auto; max-height:38vh; }
   .verdict{ text-align:center; font-size:1.15rem; font-weight:800; margin:14px 0 2px; color:var(--ink); }
-  .verdict.flat{ color:var(--ink-soft); }   /* honest muted grey — a flat gag is a fact */
+  .verdict.win{ animation:fb-pop .5s ease both; }   /* a good READ is the win, reachable in any room */
+  @keyframes fb-pop{ 0%{transform:scale(.9); opacity:.4;} 60%{transform:scale(1.08);} 100%{transform:scale(1);} }
+  .ctahint{ text-align:center; color:var(--ink-soft); font-size:.85rem; margin:0 0 8px; }
   /* the gap made physical: two markers on one track, the space between = the gap.
      colour lives on the stem+dot (decoration); the caption is readable ink. */
-  .track{ position:relative; height:56px; margin:18px 4px 6px; }
-  .track .line{ position:absolute; top:27px; left:0; right:0; height:3px; background:var(--line); border-radius:2px; }
-  .track .mk{ position:absolute; top:11px; width:0; }
-  .track .mk .stem{ position:absolute; top:0; left:-1px; width:2px; height:34px; }
-  .track .mk .dot{ position:absolute; top:-9px; left:50%; width:20px; height:20px; margin-left:-10px;
+  /* you rides ABOVE the line, them BELOW — so a dead-on read (same x) never
+     collides the dots or the labels; the space between is still the gap. */
+  .track{ position:relative; height:84px; margin:16px 4px 6px; }
+  .track .line{ position:absolute; top:41px; left:0; right:0; height:3px; background:var(--line); border-radius:2px; }
+  .track .mk{ position:absolute; top:0; width:0; height:84px; }
+  .track .mk .dot{ position:absolute; left:50%; width:18px; height:18px; margin-left:-9px;
     border-radius:50%; border:3px solid var(--bg); }
-  .track .mk .cap{ position:absolute; top:34px; left:50%; transform:translateX(-50%);
+  .track .mk .stem{ position:absolute; left:-1px; width:2px; }
+  .track .mk .cap{ position:absolute; left:50%; transform:translateX(-50%);
     font:800 .72rem/1 var(--mono); white-space:nowrap; color:var(--ink-soft); }
+  .mk.you .cap{ top:-2px; } .mk.you .dot{ top:15px; } .mk.you .stem{ top:24px; height:18px; }
+  .mk.them .stem{ top:42px; height:18px; } .mk.them .dot{ top:51px; } .mk.them .cap{ top:70px; }
   .mk.you .stem, .mk.you .dot{ background:var(--amber); }
   .mk.them .stem, .mk.them .dot{ background:var(--good); }
   .gapread{ text-align:center; color:var(--ink-soft); font-size:.95rem; margin:14px 0 20px; }
@@ -268,20 +283,23 @@ Press Comfort again to bring the design back.</div>
       </svg>
       <div class="headline"><h1>Make the cat laugh.</h1></div>
     </div>
-    <p class="taphint">Tap the machine.</p>
+    <p class="taphint">Tap the machine &mdash; as many times as you like.</p>
+    <div class="grow"></div>
+    <button class="btn" onclick="go('setup')">Read the room &rarr;</button>
   </section>
 
   <!-- ============ SCREEN 2 · SET IT UP ============ -->
   <section class="screen" id="s-setup" aria-label="Set up the gag">
     <button class="backbtn" type="button" onclick="go('machine')">&larr; the machine</button>
-    <p class="eyebrow">One bit &middot; one room</p>
-    <h1 class="q">Pick the bit you think lands.</h1>
-    <p class="sub">You are guessing what a crowd finds funny. That guess is the whole game.</p>
+    <p class="eyebrow">Read the room</p>
+    <h1 class="q">Which bit lands with this crowd?</h1>
+    <p class="sub">Same joke, different room, different laugh. Reading that gap is the whole game.</p>
     <div class="lastmiss" id="lastmiss" hidden></div>
     <div class="picks" id="gags" role="group" aria-label="Pick a bit"></div>
     <div class="grouplab">Who's in the room?</div>
     <div class="rooms" id="rooms" role="group" aria-label="Pick a room"></div>
     <div class="grow"></div>
+    <p class="ctahint" id="ctahint">Pick a bit and a room first.</p>
     <button class="btn" id="toCall" disabled onclick="go('call')">Call it &rarr;</button>
   </section>
 
@@ -398,7 +416,7 @@ function catFace(level){
 }
 
 /* ───────────────── STATE ───────────────── */
-var state = { gag:null, room:null, bet:5, actual:null, lastGap:null };
+var state = { gag:null, room:null, bet:5, actual:null, lastCall:null };
 
 /* ───────────────── SCREEN MACHINE (replace, never stack) ───────────────── */
 var SCREENS = ["machine","setup","call","room"];
@@ -419,8 +437,8 @@ function calm(){ return document.documentElement.getAttribute("data-motion")==="
 window.fire = function(){
   var scene=document.getElementById("scene");
   if(scene.classList.contains("firing")) return;
-  scene.classList.add("firing");
-  setTimeout(function(){ go("setup"); }, calm()?200:2000);
+  scene.classList.add("firing");   /* the toy replays — tap it as many times as you like */
+  setTimeout(function(){ scene.classList.remove("firing"); }, calm()?200:2000);
 };
 
 /* SCREEN 2 — pick a bit + a room */
@@ -436,10 +454,11 @@ function buildSetup(){
       +'<span class="ic">'+roomArt(x.id)+'</span><span>'+x.name+'</span></button>';
   }).join("");
   var lm=document.getElementById("lastmiss");
-  if(state.lastGap===null){ lm.hidden=true; }
-  else { lm.hidden=false; lm.innerHTML = state.lastGap===0
-    ? '<b>Last call: dead on.</b> Now change one thing and see if you still are.'
-    : 'Last call you were <b>'+state.lastGap+' off</b>. Same room, or find an easier one?'; }
+  if(!state.lastCall){ lm.hidden=true; }
+  else { lm.hidden=false; var lc=state.lastCall;   /* anchored to its own bit+room — never mis-attributed */
+    lm.innerHTML = lc.gap===0
+      ? '<b>'+lc.gag+' &rarr; '+lc.room+': dead on.</b> Try that room with a different bit.'
+      : '<b>'+lc.gag+' &rarr; '+lc.room+': '+lc.gap+' off.</b> Read them again, or try a new room.'; }
   syncSetup();
 }
 document.getElementById("gags").addEventListener("click", function(e){
@@ -454,7 +473,11 @@ document.getElementById("rooms").addEventListener("click", function(e){
   this.querySelectorAll("[data-r]").forEach(function(x){ x.setAttribute("aria-pressed", x===b); });
   syncSetup();
 });
-function syncSetup(){ document.getElementById("toCall").disabled = !(state.gag && state.room); }
+function syncSetup(){
+  var ok = !!(state.gag && state.room);
+  document.getElementById("toCall").disabled = !ok;
+  document.getElementById("ctahint").hidden = ok;   /* say WHY it's disabled */
+}
 
 /* SCREEN 3 — the player's own bet */
 function gagById(id){ return GAGS.filter(function(x){return x.id===id;})[0]; }
@@ -476,21 +499,23 @@ window.showRoom = function(){
   var g=gagById(state.gag), r=roomById(state.room);
   state.actual = actualFor(g, r);
   var gap = Math.abs(state.bet - state.actual);
-  state.lastGap = gap;
+  state.lastCall = { gag:g.name, room:r.name, gap:gap };
   var level = state.actual>=6 ? "laugh" : (state.actual>=3 ? "smile" : "flat");
+  var good = gap<=1;   /* the WIN is an accurate read — reachable in every room */
 
   document.getElementById("roomeyebrow").textContent = r.name;
-  document.getElementById("catwrap").innerHTML = catFace(level);
+  document.getElementById("catwrap").innerHTML = catFace(level);   /* the cat is the room's HONEST reaction */
 
   var v=document.getElementById("verdict");
-  v.className = "verdict" + (level==="laugh"?" win":(level==="flat"?" flat":""));
-  v.textContent = level==="laugh" ? "They cracked up." : (level==="flat" ? "It landed flat." : "A few smiled.");
+  v.className = "verdict" + (good ? " win" : "");
+  v.textContent = gap===0 ? "Dead on. You read them." : (good ? "Good read." : "You were "+gap+" off.");
 
   document.getElementById("mkYou").style.left  = (state.bet*10)+"%";
   document.getElementById("mkThem").style.left = (state.actual*10)+"%";
-  document.getElementById("gapread").innerHTML = gap===0
-    ? 'You said <b>'+state.bet+'</b>. <b>'+state.actual+'</b> laughed. <b>Dead on.</b>'
-    : 'You said <b>'+state.bet+'</b>. <b>'+state.actual+'</b> laughed. You were <b>'+gap+' off</b> &mdash; not a fail, a fact about this room.';
+  var phrase = level==="laugh" ? "they cracked up" : (level==="flat" ? "it landed flat" : "a few smiled");
+  document.getElementById("gapread").innerHTML =
+    'You said <b>'+state.bet+'</b>. <b>'+state.actual+'</b> laughed &mdash; '+phrase+'. '
+    + (good ? 'You read the room.' : 'Not a fail &mdash; that is this room, not you.');
   go("room");
 };
 
