@@ -26,8 +26,11 @@ shared. (This was asked and answered too many times — it is settled.)
 
 ## Voice — settled
 - **No invented or inflated claims.** Use the founder's actual words; if a claim isn't
-  in his docs or this session, don't write it. (Blind and sighted players do NOT "play
-  the same way" — never claimed. The real claim: a blind student can play the game *as
-  the game*, not via a bolted-on accommodation.)
+  in his docs or this session, don't write it.
+- **Make NO claim about blind players being able to play the games.** There is no playtest
+  or evidence behind it and the founder does not assert it. Do not write that a blind
+  player/student "can play," that their version "is the game," or that blind and sighted
+  players "play the same way." The only defensible framing is the founder's retinitis
+  pigmentosa and an accessibility-first design *intent* — never an outcome claim about blind play.
 - **Pull back on disclaimers as a rule** — hedges, caveats, safety-flags, "note:" asides,
   in prose and in files. Say the thing plainly. Caveat only when it is load-bearing.
