@@ -14,8 +14,12 @@ from wiring + version, not an inference from prose — declaring it backwards is
 was supposed to prevent it (FUNES-INDEX.md) is hand-typed prose that went stale and mis-pointed.
 
 This guard reads canon-manifest.json (curated: role -> canonical + superseded) and HALTs when a
-superseded file is USED or REFERENCED. Canon is DECLARED once, ENFORCED forever. Wire --refs into
-CI (floor.yml) and a reference to a superseded file fails the build — the manifest cannot rot.
+superseded file is USED or REFERENCED. Canon is DECLARED once, and INTENDED to be ENFORCED in CI.
+STATUS 2026-07-26: NOT YET WIRED into CI (floor.yml) — needs the workflow-scope paste. Until then
+this guard is ADVISORY and only runs when a human types it; do not claim it enforces (red-team #1).
+Known weak spots being hardened: non-recursive/code-only globs miss subdir + .md/.html/.js callers;
+substring matching over-/under-counts; the self-test does not exercise the file-scan it ships.
+See claude_convening-systems-2026-07-26.md (RED TEAM section) for the full list and the fixes.
 
 Not a rival to resolve-canon.py — its complement. Name-drift -> resolve-canon; role-supersession
 -> canon-guard.
