@@ -35,6 +35,15 @@ unstamped claim is a suspicion, not a fact.*
   README verified 2026-07-26). `studio-eyes-sweep.py` is the SECONDARY, JS-blind WeasyPrint
   sweep ("JavaScript is not executed"). floor.yml currently calls the sweep, not v3 — a wiring
   bug. Role-canon is now data + enforced: see `canon-manifest.json` + `canon-guard.py`. -->
+  <!-- RE-CORRECTION 2026-07-26 (the correction above was ALSO wrong; append, don't rewrite):
+  verification by version + WIRING inverts it. `studio-eyes-sweep.py` is v4 RENDER-PROOF
+  (WeasyPrint + pixel paint-crosscheck + self-test teeth) and is the WIRED gate (ratchet.py,
+  safe-push.sh, floor.yml call it). `studio-eyes/studio-eyes.py` is v3 (Playwright, executes JS)
+  and is UNWIRED. So the ORIGINAL line ("Studio Eyes = studio-eyes-sweep.py") was right; my
+  correction, trusting the SESSION-2026-07-26 handoff + the v3 README over the wiring, was wrong.
+  Open founder call: retire v3, or keep it for the JS/dynamic-state check v4 explicitly can't do.
+  Lesson, twice earned this session: canon = what is WIRED, established by check, never inferred
+  from a handoff, a README, or prose. -->
 - **Role-canon (NEW 2026-07-26)** — `canon-manifest.json` declares role → canonical file +
   superseded siblings; `canon-guard.py` enforces it (a reference to a superseded file HALTs).
   This is the automation that ends the stale-read class `resolve-canon.py` can't catch (it

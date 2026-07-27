@@ -6,9 +6,11 @@ WHY THIS EXISTS
 ---------------
 resolve-canon.py resolves a NAME across the four lanes (repo/netlify/shelf) by md5 — the
 Warriors rule (never ship the smaller stub). It CANNOT catch the class that burned this studio
-repeatedly: a role served by the WRONG, differently-named file — studio-eyes-sweep.py used where
-studio-eyes/studio-eyes.py (v3) is canon; a wired preship-gate vN vs a newer unwired one; a shelf
-index.html read as current. Those are different names, all legitimately in the repo. The map that
+repeatedly: a role served by the WRONG, differently-named file — the wired render-proof gate
+studio-eyes-sweep.py (v4) vs the unwired studio-eyes/studio-eyes.py (v3); a wired preship-gate vN
+vs a newer unwired one; a shelf index.html read as current. Those are different names, all
+legitimately in the repo. (Note: which of two same-role files is canon is a DECLARATION derived
+from wiring + version, not an inference from prose — declaring it backwards is itself the hazard.) The map that
 was supposed to prevent it (FUNES-INDEX.md) is hand-typed prose that went stale and mis-pointed.
 
 This guard reads canon-manifest.json (curated: role -> canonical + superseded) and HALTs when a

@@ -1,24 +1,26 @@
 {
-  "_doc": "Canon ROLE map — the automation that ends stale-role reads. CURATED (a human declares canon), MACHINE-ENFORCED by canon-guard.py. Distinct from resolve-canon.py: that resolves a NAME across the four lanes by md5 (the Warriors rule); THIS resolves a ROLE across DIFFERENT names inside the repo (studio-eyes.py vs studio-eyes-sweep.py; a wired vN vs a newer unwired vN). Canon is what is WIRED, never 'the highest version number'.",
+  "_doc": "Canon ROLE map — the automation that ends stale-role reads. CURATED (a human declares canon), MACHINE-ENFORCED by canon-guard.py. Distinct from resolve-canon.py: that resolves a NAME across the four lanes by md5 (the Warriors rule); THIS resolves a ROLE across DIFFERENT names inside the repo. Canon is what is WIRED, never 'the highest version number' and never what a README/handoff/prose claims.",
   "updated": "2026-07-26",
-  "how_to_use": "canon-guard.py --self-test (gate the guard) ; canon-guard.py --refs (scan repo code/workflows for references to superseded files; HALT) ; canon-guard.py --check <file> (is this file superseded for a role?).",
+  "_correction_2026-07-26": "The Studio Eyes role was first declared BACKWARDS here (canonical=studio-eyes/studio-eyes.py, sweep 'superseded'), inferred from the SESSION-2026-07-26 handoff + the v3 README. VERIFICATION inverted it: version headers + wiring show studio-eyes-sweep.py is v4 RENDER-PROOF and wired into ratchet.py + safe-push.sh + floor.yml, while studio-eyes/studio-eyes.py is v3 and UNWIRED. The lesson this manifest exists to enforce nearly got enforced backwards. Canon = wired + versioned, established by check, never by prose.",
+  "how_to_use": "canon-guard.py --self-test (gate the guard) ; canon-guard.py --refs (scan repo code/workflows for references to declared-superseded files; HALT) ; canon-guard.py --check <file>.",
   "roles": [
     {
       "role": "accessibility gate (Studio Eyes)",
-      "canonical": "studio-eyes/studio-eyes.py",
-      "why": "v3, browser-rendered (Playwright/Chromium), self-test canary of false-positive traps; README verified 2026-07-26.",
-      "superseded": ["studio-eyes-sweep.py"],
-      "status": "PROPOSED — founder ratify: floor.yml calls studio-eyes-sweep.py; is the sweep RETIRED, or a fast-CI floor that coexists with the browser gate? If coexisting, split into two roles instead of superseding."
+      "canonical": "studio-eyes-sweep.py",
+      "why": "v4 RENDER-PROOF: WeasyPrint layout + alpha-composited grounds + pixel paint-crosscheck (catches the your-rp-world 13.23-vs-1.17 false-certification class) + self-test teeth that refuse to certify if they don't bite. Highest version AND the WIRED gate (ratchet.py, safe-push.sh, floor.yml). Repo copy verified byte-identical to the founder's uploaded file, 2026-07-26.",
+      "superseded": [],
+      "open_founder_call": "studio-eyes/studio-eyes.py (v3, Playwright/Chromium, EXECUTES JS) is UNWIRED. v4 names its own limitation: 'JavaScript is not executed; hand-verify dynamic states on device.' So v3 may be worth keeping for exactly that gap. DECLARE: retire v3, or keep it as a second role (render-proof floor = v4 sweep; JS/dynamic-state browser check = v3)? Until you declare, nothing is marked superseded and the guard enforces no supersession here."
     }
   ],
   "families_awaiting_founder_declaration": [
     {"family": "preship-gate-v*.py", "note": "handoff: v2 is referenced by 11 files though v3/v4 exist. Declare the WIRED one canon, list the rest superseded."},
-    {"family": "index.html / your-rp-world.html (shelf vs repo)", "note": "repo is canon over shelf (resolve-canon precedence); the guard should HALT any tool that reads the shelf copy as current."},
-    {"family": "choose-your-leader-v*.html", "note": "v5 = three-broadcast canon (ratified 2026-07-26); v6 parked; slices are sources. Declare so a session can't grab a slice as the game."}
+    {"family": "index.html / your-rp-world.html (shelf vs repo)", "note": "repo is canon over shelf (resolve-canon precedence); guard should HALT any tool reading the shelf copy as current."},
+    {"family": "choose-your-leader-v*.html", "note": "v5 = three-broadcast canon (ratified 2026-07-26); v6 parked; slices are sources."}
   ],
   "principles": [
-    "repo > shelf: if a shelf copy differs from repo, the shelf is stale (resolve-canon.py precedence).",
-    "canonical version = the file that is WIRED/referenced, not the highest number.",
-    "a role's canon is DECLARED here once and ENFORCED in CI; a reference to a superseded file fails the build, so this manifest cannot silently rot."
+    "canon = what is WIRED + versioned, established by check; never inferred from a README, a handoff, or prose (that inference put the Studio Eyes role in backwards on the first pass).",
+    "repo > shelf: if a shelf copy differs from repo, the shelf is stale.",
+    "a role's canon is DECLARED here once and ENFORCED in CI; a reference to a declared-superseded file fails the build, so this manifest cannot silently rot.",
+    "do not mark a sibling superseded until the founder rules — an unratified supersession enforced in CI is worse than none."
   ]
 }
