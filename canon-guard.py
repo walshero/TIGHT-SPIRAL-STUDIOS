@@ -50,6 +50,9 @@ REF_EXEMPT = {"canon-manifest.json", "canon-guard.py", "claude_FUNES-INDEX.md",
 REF_GLOBS = ["**/*.py", "**/*.sh", "**/*.yml", "**/*.js",
              ".github/workflows/*.yml",   # hidden dir: '**' glob skips dotdirs, so name it explicitly
              "founder-gate/*", "**/pre-push", "**/pre-commit", "**/post-*"]
+# Enforce LIVE code, not the archive: a reference to a superseded file inside archived/rescued
+# material is not a live bug (that code isn't running), and it is not wiring evidence either.
+ARCHIVE_DIRS = {"rescued", "archive"}
 
 
 def load(path=MANIFEST):
@@ -64,7 +67,7 @@ def _iter_files(root):
             if not os.path.isfile(path):
                 continue
             rel = os.path.relpath(path, root)
-            if rel in seen:
+            if rel in seen or any(p in ARCHIVE_DIRS for p in rel.split(os.sep)):
                 continue
             seen.add(rel)
             yield path, rel, os.path.basename(path)
