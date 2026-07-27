@@ -23,3 +23,11 @@ shared. (This was asked and answered too many times — it is settled.)
 ## Face
 - `index.html` accounts for **every** page in the repo — nothing is orphaned.
   Keep it that way: new pages get linked from the face.
+
+## Voice — settled
+- **No invented or inflated claims.** Use the founder's actual words; if a claim isn't
+  in his docs or this session, don't write it. (Blind and sighted players do NOT "play
+  the same way" — never claimed. The real claim: a blind student can play the game *as
+  the game*, not via a bolted-on accommodation.)
+- **Pull back on disclaimers as a rule** — hedges, caveats, safety-flags, "note:" asides,
+  in prose and in files. Say the thing plainly. Caveat only when it is load-bearing.
