@@ -153,26 +153,26 @@ body.warm .foot{ color:#0f0e0b; }
 <div class="topbar">
   <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 12 C14 16 14 8 22 12 C30 16 30 8 36 12 M6 22 C14 26 14 18 22 22 C30 26 30 18 36 22 M6 32 C14 36 14 28 22 32 C30 36 30 28 36 32" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
   <span class="wm">Play the Semester — Flash</span>
-  <button class="cstop" id="cstop" aria-label="Change comfort palette">Comfort</button>
+  <button class="cstop" id="cstop" aria-label="Comfort and reading options" aria-expanded="false" aria-controls="gate">Comfort</button>
 </div>
 
 <div class="wrap">
 
   <!-- SCREEN 0 — COMFORT GATE -->
-  <section class="screen on" id="gate" aria-labelledby="gateh">
-    <div class="where">First, your eyes</div>
+  <section class="screen" id="gate" aria-labelledby="gateh">
+    <div class="where">Comfort</div>
     <h1 id="gateh">Pick what's comfortable to read.</h1>
-    <p class="beat">Sets the whole thing before it starts. Change it any time from the corner.</p>
+    <p class="beat">Change it any time — this is the corner button. Nothing here is required.</p>
     <div class="swatches" id="swatches" role="radiogroup" aria-label="Comfort palette">
       <div class="sw" tabindex="0" role="radio" aria-checked="false" data-stop="softer"><span class="chip soft" aria-hidden="true"><span></span><span></span></span><span><span class="lbl">Softer</span><br><span class="subt">gentle paper, lower contrast</span></span></div>
       <div class="sw sel" tabindex="0" role="radio" aria-checked="true" data-stop="default"><span class="chip def" aria-hidden="true"><span></span><span></span></span><span><span class="lbl">Default</span><br><span class="subt">warm paper, dark ink</span></span></div>
       <div class="sw" tabindex="0" role="radio" aria-checked="false" data-stop="warm"><span class="chip dark" aria-hidden="true"><span></span><span></span></span><span><span class="lbl">Warm-dark</span><br><span class="subt">amber on charcoal (not pure black/white)</span></span></div>
     </div>
-    <button class="go" id="enterBtn">This is comfortable — start &rarr;</button>
+    <button class="go" id="enterBtn">Done &rarr;</button>
   </section>
 
   <!-- SCREEN 1 — ROLE -->
-  <section class="screen" id="role" aria-labelledby="roleh">
+  <section class="screen on" id="role" aria-labelledby="roleh">
     <div class="where">Who's at the wheel</div>
     <h1 id="roleh">Who are you right now?</h1>
     <p class="lead">The semester plays the same either way. This just sets how a score gets in.</p>
@@ -255,11 +255,10 @@ B3, none"></textarea>
     sw.addEventListener('click',pick);
     sw.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); }});
   });
-  $('cstop').addEventListener('click',function(){ ci=(ci+1)%3; applyStop(stops[ci]); this.textContent='Comfort: '+stops[ci].charAt(0).toUpperCase()+stops[ci].slice(1);
-    document.querySelectorAll('.sw').forEach(function(x){ var on=x.dataset.stop===stops[ci]; x.classList.toggle('sel',on); x.setAttribute('aria-checked',on?'true':'false'); }); });
+  $('cstop').addEventListener('click',function(){ show('gate'); this.setAttribute('aria-expanded','true'); });
 
   function show(id){ document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');}); $(id).classList.add('on'); window.scrollTo(0,0); var h=$(id).querySelector('h1'); if(h){ h.setAttribute('tabindex','-1'); h.focus(); } }
-  $('enterBtn').addEventListener('click',function(){ show('role'); });
+  $('enterBtn').addEventListener('click',function(){ show('role'); var _c=document.getElementById('cstop'); if(_c)_c.setAttribute('aria-expanded','false'); });
   $('asStudent').addEventListener('click',function(){ show('student'); });
   $('asInstructor').addEventListener('click',function(){ show('instructor'); });
 

@@ -141,7 +141,7 @@ body.warm .foot{ color:#0f0e0b; } .foot a{ color:#cfe9dd; } body.warm .foot a{ c
 <div class="topbar">
   <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 4 C30 4 36 12 36 20 C36 28 30 33 23 33 C17 33 13 29 13 24 C13 20 16 17 20 17 C23 17 25 19 25 22" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
   <span class="wm">What Counts Now</span>
-  <button class="cstop" id="cstop" aria-label="Change comfort palette">Comfort</button>
+  <button class="cstop" id="cstop" aria-label="Comfort and reading options" aria-expanded="false" aria-controls="gate">Comfort</button>
 </div>
 <div class="wrap">
   <div class="tray" id="tray" aria-live="polite" hidden>
@@ -149,19 +149,19 @@ body.warm .foot{ color:#0f0e0b; } .foot a{ color:#cfe9dd; } body.warm .foot a{ c
     <span class="empty" id="trayEmpty">claim the workshops you've finished</span>
   </div>
 
-  <section class="screen on" id="gate" aria-labelledby="gateh">
-    <div class="where">First, your eyes</div>
+  <section class="screen" id="gate" aria-labelledby="gateh">
+    <div class="where">Comfort</div>
     <h1 id="gateh">Pick what's comfortable to read.</h1>
-    <p class="beat">This sets the whole thing before it starts — so nothing jumps out at you. Change it any time from the corner.</p>
+    <p class="beat">Change it any time — this is the corner button. Nothing here is required.</p>
     <div class="swatches" id="swatches" role="radiogroup" aria-label="Comfort palette">
       <div class="sw" tabindex="0" role="radio" aria-checked="false" data-stop="softer"><span class="chip soft" aria-hidden="true"><span></span><span></span></span><span><span class="lbl">Softer</span><br><span class="sub">gentle paper, lower contrast</span></span></div>
       <div class="sw sel" tabindex="0" role="radio" aria-checked="true" data-stop="default"><span class="chip def" aria-hidden="true"><span></span><span></span></span><span><span class="lbl">Default</span><br><span class="sub">warm paper, dark ink</span></span></div>
       <div class="sw" tabindex="0" role="radio" aria-checked="false" data-stop="warm"><span class="chip dark" aria-hidden="true"><span></span><span></span></span><span><span class="lbl">Warm-dark</span><br><span class="sub">amber on charcoal (not pure black/white)</span></span></div>
     </div>
-    <button class="go" id="enterBtn">This is comfortable — start →</button>
+    <button class="go" id="enterBtn">Done &rarr;</button>
   </section>
 
-  <section class="screen" id="s0" aria-labelledby="s0h">
+  <section class="screen on" id="s0" aria-labelledby="s0h">
     <div class="where">EN195 Creative Writing · the last week</div>
     <h1 id="s0h">It's the last week.</h1>
     <p class="lead">Six weeks of readings, videos, discussion boards, and four workshops — all still on the board in front of you, shouting the same volume.</p>
@@ -336,9 +336,9 @@ body.warm .foot{ color:#0f0e0b; } .foot a{ color:#cfe9dd; } body.warm .foot a{ c
   var sws=document.querySelectorAll('#swatches .sw');
   function pickSwatch(sw){ sws.forEach(function(x){x.classList.remove('sel');x.setAttribute('aria-checked','false');}); sw.classList.add('sel'); sw.setAttribute('aria-checked','true'); applyStop(sw.getAttribute('data-stop')); }
   sws.forEach(function(sw){ sw.addEventListener('click',function(){pickSwatch(sw);}); sw.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pickSwatch(sw);}}); });
-  $('enterBtn').addEventListener('click',function(){show('s0');});
+  $('enterBtn').addEventListener('click',function(){show('s0'); var _c=document.getElementById('cstop'); if(_c)_c.setAttribute('aria-expanded','false');});
   var stops=['default','softer','warm'];
-  $('cstop').addEventListener('click',function(){ var i=(stops.indexOf(answers.comfort)+1)%3; applyStop(stops[i]); this.textContent='Comfort: '+stops[i].charAt(0).toUpperCase()+stops[i].slice(1); });
+  $('cstop').addEventListener('click',function(){ show('gate'); this.setAttribute('aria-expanded','true'); });
   document.querySelectorAll('[data-to]').forEach(function(b){ b.addEventListener('click',function(){ var t=this.getAttribute('data-to'); if(t==='s6')buildLeft(); if(t==='s7')buildSummary(); show(t); }); });
   function wire(gid,key,btn){ var g=$(gid); g.querySelectorAll('.choice').forEach(function(lab){ lab.addEventListener('click',function(){ g.querySelectorAll('.choice').forEach(function(l){l.classList.remove('sel');}); lab.classList.add('sel'); lab.querySelector('input').checked=true; answers[key]=lab.querySelector('input').value; if($(btn))$(btn).disabled=false; }); lab.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();lab.click();}}); }); }
   wire('qTime','time','toS3'); wire('qGoal','goal','toS4');

@@ -163,7 +163,7 @@ body.warm .foot{ color:#0f0e0b; } .foot a{ color:#cfe9dd; } body.warm .foot a{ c
 <div class="topbar">
   <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 4 C30 4 36 12 36 20 C36 28 30 33 23 33 C17 33 13 29 13 24 C13 20 16 17 20 17 C23 17 25 19 25 22" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
   <span class="wm" id="wm">The Compound</span>
-  <button class="cstop" id="cstop" aria-label="Change comfort palette">Comfort</button>
+  <button class="cstop" id="cstop" aria-label="Comfort and reading options" aria-expanded="false" aria-controls="gate">Comfort</button>
 </div>
 <div class="wrap">
   <div class="rail" id="rail" aria-hidden="true" hidden>
@@ -173,20 +173,20 @@ body.warm .foot{ color:#0f0e0b; } .foot a{ color:#cfe9dd; } body.warm .foot a{ c
   </div>
 
   <!-- ===== SCREEN 0 — COMFORT GATE ===== -->
-  <section class="screen on" id="gate" aria-labelledby="gh">
-    <div class="where">First, your eyes</div>
+  <section class="screen" id="gate" aria-labelledby="gh">
+    <div class="where">Comfort</div>
     <h1 id="gh">Pick what's comfortable to read.</h1>
-    <p class="beat">This sets the whole thing before it starts — so nothing jumps out at you. Change it any time from the corner.</p>
+    <p class="beat">Change it any time — this is the corner button. Nothing here is required.</p>
     <div class="picks" id="swatches" role="radiogroup" aria-label="Comfort palette">
       <div class="pick" tabindex="0" role="radio" aria-checked="false" data-stop="softer"><span class="chip soft" aria-hidden="true"><span></span><span></span></span><span><span class="plbl">Softer</span><br><span class="psub">gentle paper, lower contrast</span></span></div>
       <div class="pick sel" tabindex="0" role="radio" aria-checked="true" data-stop="default"><span class="chip def" aria-hidden="true"><span></span><span></span></span><span><span class="plbl">Default</span><br><span class="psub">warm paper, dark ink</span></span></div>
       <div class="pick" tabindex="0" role="radio" aria-checked="false" data-stop="warm"><span class="chip dark" aria-hidden="true"><span></span><span></span></span><span><span class="plbl">Warm-dark</span><br><span class="psub">amber on charcoal (not pure black/white)</span></span></div>
     </div>
-    <button class="go" id="toVeh">This is comfortable — begin →</button>
+    <button class="go" id="toVeh">Done &rarr;</button>
   </section>
 
   <!-- ===== SCREEN 1 — CHOOSE VEHICLE ===== -->
-  <section class="screen" id="veh" aria-labelledby="vh">
+  <section class="screen on" id="veh" aria-labelledby="vh">
     <div class="where">Choose your metaphor · 1 of 2</div>
     <h1 id="vh">How does thinking move?</h1>
     <p class="lead">This is a paper you ride. Before you read a word of argument, pick the shape your mind gives a process. There's no wrong answer — the point is that you choose.</p>
@@ -440,9 +440,9 @@ body.warm .foot{ color:#0f0e0b; } .foot a{ color:#cfe9dd; } body.warm .foot a{ c
     function pick(p){ ss.forEach(function(x){x.classList.remove('sel');x.setAttribute('aria-checked','false');}); p.classList.add('sel'); p.setAttribute('aria-checked','true'); applyStop(p.getAttribute('data-stop')); }
     ss.forEach(function(p){ p.addEventListener('click',function(){pick(p);}); p.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pick(p);}}); });
   })();
-  $('toVeh').addEventListener('click',function(){ show('veh'); });
+  $('toVeh').addEventListener('click',function(){ show('veh'); var _c=document.getElementById('cstop'); if(_c)_c.setAttribute('aria-expanded','false'); });
   var cstops=['default','softer','warm'];
-  $('cstop').addEventListener('click',function(){ var i=(cstops.indexOf(state.comfort)+1)%3; applyStop(cstops[i]); this.textContent='Comfort: '+cstops[i].charAt(0).toUpperCase()+cstops[i].slice(1); });
+  $('cstop').addEventListener('click',function(){ show('gate'); this.setAttribute('aria-expanded','true'); });
 
   // vehicle pick
   (function(){ var ps=document.querySelectorAll('#vehPicks .pick');
