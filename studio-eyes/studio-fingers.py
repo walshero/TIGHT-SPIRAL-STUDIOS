@@ -59,9 +59,11 @@ PROBE = r"""
   const name = (el) =>
     (el.getAttribute('aria-label') || el.textContent || el.getAttribute('title') || '').trim().replace(/\s+/g,' ').slice(0,40);
 
-  // inline text link exemption: <a> sitting inside running prose
+  // inline text link exemption: <a> sitting inside running prose or a footer/credit
+  // byline. An email in "Tight Spiral Studios · you@example.com — …" is inline text,
+  // not a primary touch target; forcing it to 44px would break the credit line.
   const inlineLink = (el) =>
-    el.tagName === 'A' && el.closest('p,li,dd,dt,blockquote,.fc-body,.prose,figcaption');
+    el.tagName === 'A' && el.closest('p,li,dd,dt,blockquote,.fc-body,.prose,figcaption,footer,.foot,.credits,.credit,.byline,address');
 
   const sel = 'button,a[href],[role="button"],input:not([type="hidden"]),select,textarea,[onclick],[tabindex]:not([tabindex="-1"])';
   document.querySelectorAll(sel).forEach(el => {
