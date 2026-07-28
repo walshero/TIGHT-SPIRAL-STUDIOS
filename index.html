@@ -232,7 +232,9 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{outline:3px so
 .fl p{margin:0; font-size:calc(14.5px * var(--fs)); color:var(--ink-3); line-height:1.45}
 
 footer{margin-top:64px; padding-top:24px; border-top:1.5px solid var(--rule); font-size:calc(14.5px * var(--fs)); color:var(--ink-3)}
-footer a{color:var(--cool-ink); font-weight:600}
+footer a{color:var(--cool-ink); font-weight:600; display:inline-block; min-height:44px; padding:11px 2px}
+/* Every link gets a visible focus ring (cards/jobs override with their own). */
+a:focus-visible{outline:3px solid var(--ring); outline-offset:2px; border-radius:2px}
 footer p{margin:0 0 7px}
 
 @media (max-width:640px){
@@ -249,14 +251,16 @@ footer p{margin:0 0 7px}
    applied to its border, top strip, and glyph. Text stays --ink/--ink-3 on the
    gated paper ground — the accent is decoration only (token-role safe, RP: no green). */
 .rooms .room{border-color:var(--acc,var(--rule))}
-.rooms .room:nth-child(8n+1){--acc:#6a4d12}   /* brass   */
-.rooms .room:nth-child(8n+2){--acc:#274063}   /* cool    */
-.rooms .room:nth-child(8n+3){--acc:#8a2f22}   /* oxblood */
-.rooms .room:nth-child(8n+4){--acc:#5a3a6e}   /* plum    */
-.rooms .room:nth-child(8n+5){--acc:#8f4a08}   /* burnt   */
-.rooms .room:nth-child(8n+6){--acc:#343a86}   /* indigo  */
-.rooms .room:nth-child(8n+7){--acc:#2f4a5c}   /* steel   */
-.rooms .room:nth-child(8n+8){--acc:#8a3a1c}   /* clay    */
+  /* --acc is DECORATION (stripe/border/shadow); --acc-ink is the glyph TEXT form.
+     Same value per card, split so neither token is ever both roles. */
+.rooms .room:nth-child(8n+1){--acc:#6a4d12; --acc-ink:#6a4d12}   /* brass   */
+.rooms .room:nth-child(8n+2){--acc:#274063; --acc-ink:#274063}   /* cool    */
+.rooms .room:nth-child(8n+3){--acc:#8a2f22; --acc-ink:#8a2f22}   /* oxblood */
+.rooms .room:nth-child(8n+4){--acc:#5a3a6e; --acc-ink:#5a3a6e}   /* plum    */
+.rooms .room:nth-child(8n+5){--acc:#8f4a08; --acc-ink:#8f4a08}   /* burnt   */
+.rooms .room:nth-child(8n+6){--acc:#343a86; --acc-ink:#343a86}   /* indigo  */
+.rooms .room:nth-child(8n+7){--acc:#2f4a5c; --acc-ink:#2f4a5c}   /* steel   */
+.rooms .room:nth-child(8n+8){--acc:#8a3a1c; --acc-ink:#8a3a1c}   /* clay    */
 .room h3, .job h3{display:flex; align-items:center; gap:0}
 .hero-mark{width:clamp(120px,20vw,168px); height:auto; color:var(--brass-ink); flex:0 0 auto}
 .stage-row{display:flex; align-items:flex-start; gap:clamp(20px,4vw,44px); justify-content:space-between}
@@ -732,7 +736,7 @@ footer p{margin:0 0 7px}
   </div>
 </section>
 
-<style>#full-shelf .shelf-cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px 28px}#full-shelf .shelf-h{font-size:.86rem;letter-spacing:.08em;text-transform:uppercase;opacity:.7;margin:.2rem 0 .5rem}#full-shelf .shelf-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}#full-shelf .shelf-list a{display:block;min-height:44px;display:flex;align-items:center;padding:.4em .5em;border-radius:8px;text-decoration:none;color:inherit;border-bottom:1px solid rgba(127,127,127,.14)}#full-shelf .shelf-list a:hover,#full-shelf .shelf-list a:focus-visible{background:rgba(127,127,127,.12);outline:none}</style>
+<style>#full-shelf .shelf-cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px 28px}#full-shelf .shelf-h{font-size:.86rem;letter-spacing:.08em;text-transform:uppercase;opacity:.7;margin:.2rem 0 .5rem}#full-shelf .shelf-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}#full-shelf .shelf-list a{display:block;min-height:44px;display:flex;align-items:center;padding:.4em .5em;border-radius:8px;text-decoration:none;color:inherit;border-bottom:1px solid rgba(127,127,127,.14)}#full-shelf .shelf-list a:hover{background:rgba(127,127,127,.12)}#full-shelf .shelf-list a:focus-visible{background:rgba(127,127,127,.12);outline:3px solid var(--ring);outline-offset:-3px}</style>
 <section id="full-shelf">
   <h2>The full shelf</h2>
   <p class="sub">Everything in the studio, linked so nothing gets lost — drafts, slices, tools, and pages not yet promoted into a section above. Rough edges expected.</p>

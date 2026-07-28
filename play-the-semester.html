@@ -34,7 +34,7 @@
 :root{ color-scheme: light; }
 
 :root{
-  --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --ink2:#1f1b12;
+  --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --ink2:#1f1b12; --ink-fill:#1f1b12;
   --line:#d8caa8; --line2:#c2b288;
   --accent:#3a4654; --accent2:#2b3540;
   --water:#4a6b86; --water-d:#2b4256;
@@ -45,8 +45,8 @@
   --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
   --mono:ui-monospace,Consolas,monospace;
 }
-body.softer{ --bg:#d9d2c4; --surface:#e2dccf; --ink:#241f16; --ink2:#241f16; --line:#c3b7a3; --line2:#b0a488; }
-body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0; --line:#4a4230; --line2:#5e553e;
+body.softer{ --bg:#d9d2c4; --surface:#e2dccf; --ink:#241f16; --ink2:#241f16; --ink-fill:#241f16; --line:#c3b7a3; --line2:#b0a488; }
+body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0; --ink-fill:#f3e4c0; --line:#4a4230; --line2:#5e553e;
   --accent:#8fa6bd; --accent2:#9fb6cd; --water:#8fb4d0; --water-d:#a9c6dd; --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a; --rust:#e8a07c; }
 *{box-sizing:border-box;} html,body{margin:0;}
 body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; -webkit-text-size-adjust:100%; }
@@ -56,8 +56,8 @@ body.warm .topbar{ color:#0f0e0b; }
 .topbar .mark{ width:26px; height:26px; flex:none; } .topbar .wm{ font-weight:800; font-size:.9rem; }
 .blink{ color:inherit; text-decoration:underline; font:700 .74rem/1 var(--sans); min-height:44px; display:inline-flex; align-items:center; padding:0 .2rem; }
 .blink:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
-.cstop{ margin-left:auto; background:rgba(255,255,255,.18); color:#241f16; border:2px solid rgba(255,255,255,.6); border-radius:9px; padding:.45rem .65rem; font:700 .74rem/1 var(--sans); cursor:pointer; min-height:44px; }
-body.warm .cstop{ border-color:rgba(0,0,0,.4); background:rgba(0,0,0,.12); }
+.cstop{ margin-left:auto; background:var(--surface); color:var(--ink); border:2px solid var(--line2); border-radius:9px; padding:.45rem .65rem; font:700 .74rem/1 var(--sans); cursor:pointer; min-height:44px; }
+/* .cstop uses --surface/--ink; both retune per theme, so no warm override needed */
 .cstop:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 
 .wrap{ max-width:680px; margin:0 auto; padding:1.1rem 1rem 5rem; }
@@ -72,7 +72,7 @@ p{ margin:0 0 .9rem; } .lead{ font-size:1.06rem; } .beat{ font-style:italic; col
 .go{ display:block; width:100%; font:800 1.04rem/1.2 var(--sans); cursor:pointer; min-height:56px; padding:.9rem 1rem; border:none; border-radius:13px; background:var(--accent); color:#fff; margin:.45rem 0; text-align:center; text-decoration:none; }
 body.warm .go{ color:#0f0e0b; }
 .go:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
-.go.sec{ background:var(--surface); color:var(--ink); border:2px solid var(--ink); }
+.go.sec{ background:var(--surface); color:var(--ink); border:2px solid var(--ink-fill); }
 .go.ghost{ background:transparent; color:var(--ink); border:2px solid var(--line2); font-weight:700; min-height:48px; }
 
 /* ---- COLD-OPEN SCENE: the river ---- */
@@ -117,6 +117,8 @@ body.warm .openbtn{ color:#0f0e0b; }
 .foot{ margin-top:1.6rem; padding:1rem; background:var(--accent); color:#fff; border-radius:12px; font-family:var(--sans); font-size:.8rem; }
 body.warm .foot{ background:#26231d; color:#f3e4c0; }
 .foot a{ color:#fff; text-decoration:underline; } body.warm .foot a{ color:#f3e4c0; text-decoration:underline; font-weight:800; }
+a:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; border-radius:2px; }
+.tsp-barnav a:focus-visible, .tsp-nav a:focus-visible{ outline:3px solid var(--focus) !important; outline-offset:2px; }
 .sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
 @media (max-width:520px){ body{font-size:18px;} h1{font-size:1.4rem;} .wrap{padding:1rem .8rem 5rem;} .stn .ill{width:60px;} }
 @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
