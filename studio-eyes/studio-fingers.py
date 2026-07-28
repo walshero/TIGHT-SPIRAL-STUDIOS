@@ -48,6 +48,9 @@ PROBE = r"""
   const vis = (el) => {
     const r = el.getBoundingClientRect();
     if (r.width <= 0 || r.height <= 0) return null;
+    // Off-canvas by position (e.g. a visually-hidden "Skip to content" link parked at
+    // left:-9999px until focus): not a touch target a thumb can land on, so not measured.
+    if (r.right <= 0 || r.bottom <= 0 || r.left >= vw) return null;
     const cs = getComputedStyle(el);
     if (cs.visibility === 'hidden' || cs.display === 'none' || parseFloat(cs.opacity) === 0) return null;
     if (el.closest('[hidden]')) return null;
