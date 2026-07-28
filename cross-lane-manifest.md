@@ -11,7 +11,7 @@ os-block-cross-lane-mount.md §12. v1 — 2026-07-10.*
 
 | doc | canonical ID / path | bytes | version | owner-lane | RW/RO by lane |
 |-----|--------------------|-------|---------|-----------|--------------|
-| Confluence trunk | `confluence-TRUNK.html` · **repo** (canon) · Drive `1034TofDcOWwaukceHcwzsnUlsLO4yggt` = pointer only | 598,114 | **v44** (md5 `8dcf9903`) | Confluence RW | TSP: RO (pointer only) · Leeder/Capstone: — |
+| Confluence trunk | **LATEST = Drive** `1ASstFxZrdobjUpPVK6uFMCfDYLN3yQFA` `confluence-TRUNK-v48-2026-07-14.html` (631,929 B) · repo `confluence-TRUNK.html` = **STALE v43** (598,114 B, md5 `8dcf9903`) · Drive `1034TofD…` = pointer | **v48** (Drive) · repo lags at v43 | Confluence RW | TSP: RO · **DO NOT edit repo copy — it is not canon** |
 | OS canon | `tight-spiral-studio-os.md` · **repo** (canon, landed 2026-07-12) | 168,264 (body 166,146) | 2026-07-05 · **INCOMPLETE — §12/§14 unmerged** | TSP RW | Confluence: RO (§6.4 only) · others: RO |
 | OS blocks (unmerged law) | `os-block-*.md` × 9 · repo | — | 07-04 → 07-11 | TSP RW | all: RO — **these GOVERN; the OS text does not contain them** |
 | Visual Constitution | `tight-spiral-visual-constitution.md` | 10,141 | §13, 2026-07-04 | TSP RW | Confluence: RO · Leeder: RO · Capstone: — |
@@ -32,12 +32,29 @@ os-block-cross-lane-mount.md §12. v1 — 2026-07-10.*
 
 ---
 
-## CLOSED FOUNDER GATE — Confluence trunk (resolved 2026-07-12)
+## REOPENED FOUNDER GATE — Confluence trunk (the 07-12 "close" was wrong)
 
-**Resolved by repo fetch, not memory.** `raw.githubusercontent.com/.../confluence-TRUNK.html`
-returns **598,114 B, md5 `8dcf9903` = v44**. Both prior candidates (v33 522,533 B and
-v34 528,886 B) are **fossils**. Drive holds a pointer only. The trunk row above is now
-disk-confirmed; the VERIFY flag is lifted.
+**The 2026-07-12 resolution recorded the repo copy as canon "v44." A four-lane resolve on
+2026-07-14 shows that was false on two counts:**
+1. **The repo copy is v43, not v44.** Its own stamps read v43; the newest *dated* banner is
+   v43 (2026-07-10). The manifest was recording a v44 that never landed in the repo.
+2. **Drive is not "pointer only."** It holds a real **v48** file
+   (`confluence-TRUNK-v48-2026-07-14.html`, 631,929 B) carrying four dated additive builds
+   inside — v45 token-split, v46 truth-pass, v47 open-asks, v48 reliability-engine
+   (all 2026-07-14). Diffed against repo: **every repo section is present + 8 more; nothing
+   is lost by adopting it.** The real work was built in Drive and never pushed to the repo —
+   the studio's own "built → landed → never pushed" loss pattern.
+
+**Canon (from content, not memory): the Drive v48 is latest; the repo is a stale ancestor.**
+It is **not yet promotable to repo canon** — `safe-push`'s Studio Eyes gate HALTs it. A
+true-pixel sweep (headless Chromium) separated the real defects from the auditor's
+mis-grounding: **8 genuinely invisible text roles fixed** (incl. two `FERPA` labels rendered
+gold-on-gold, and a white-on-white progress chip) + 4 AA near-misses, all now ≥4.5:1,
+verified in real pixels. Remaining Studio-Eyes HALTs (`.cab-glyph`, `.lum-*`, `.ssb-*`) are
+**false positives** — the auditor grounds to `body` where the real background is dark;
+those render 9–14:1. Two live `fetch()` calls (`api.anthropic.com`, a Supabase endpoint;
+**no key committed**) still break the offline floor and must be gated/stripped before ship.
+Staged, contrast-fixed v48 is in `outputs`; **the push is a Confluence-lane action.**
 
 **Lane-size law (why the drift happened):** the Drive bus passes file content as a tool
 parameter (~30–50 KB ceiling). A 598 KB file can never fit — so the most important file
