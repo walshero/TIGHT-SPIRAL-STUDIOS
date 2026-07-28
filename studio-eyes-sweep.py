@@ -222,11 +222,15 @@ def horvath_watch(src, out):
     out["WATCH"].append("HORVATH: staging-area.py NOT FOUND — lens not run. Loud skip.")
 
 # ---------- per file ----------
-HALT_KEYS = ("R1", "R2", "C1", "E1", "H4", "EM")
+HALT_KEYS = ("R1", "R2", "H4", "EM")
+# 2026-07-28 founder call: a HALT means INVISIBLE/low-contrast RENDERED TEXT (R1).
+# C1 (no color-scheme) and E1 (font < 18px) are REPORT-ONLY warns — real, shown, but
+# they do not block. The gate red = "you cannot read this", not "someone used 16px".
+SOFT_KEYS = ("C1", "E1")
 
 def sweep_file(path, px_budget):
     src = open(path, errors='replace').read()
-    out = {k: [] for k in HALT_KEYS}; out["WARN"] = []; out["WATCH"] = []
+    out = {k: [] for k in HALT_KEYS + SOFT_KEYS}; out["WARN"] = []; out["WATCH"] = []
     static_floors(src, os.path.basename(path), out)
     for stop in discover_stops(src):
         for w in WIDTHS:
@@ -245,13 +249,13 @@ FIX_GOOD = """<html><head><meta name="color-scheme" content="light dark"></head>
 <p style="font-size:20px">clean twenty pixel text on chart</p></body></html>"""
 
 def self_test():
-    bad = {k: [] for k in HALT_KEYS}; bad["WARN"] = []; bad["WATCH"] = []
+    bad = {k: [] for k in HALT_KEYS + SOFT_KEYS}; bad["WARN"] = []; bad["WATCH"] = []
     static_floors(FIX_BAD, "FIX_BAD", bad)
     sweep_stop(FIX_BAD, None, 390, "FIX_BAD", bad, [0])
-    good = {k: [] for k in HALT_KEYS}; good["WARN"] = []; good["WATCH"] = []
+    good = {k: [] for k in HALT_KEYS + SOFT_KEYS}; good["WARN"] = []; good["WATCH"] = []
     static_floors(FIX_GOOD, "FIX_GOOD", good)
     sweep_stop(FIX_GOOD, None, 390, "FIX_GOOD", good, [0])
-    bad_ok = bad["R1"] and bad["E1"] and bad["C1"] and bad["H4"]
+    bad_ok = bad["R1"] and bad["H4"]  # the blocking teeth; C1/E1 are soft now
     good_ok = not any(good[k] for k in HALT_KEYS)
     if not (bad_ok and good_ok):
         print("SELF-TEST FAILED — the teeth do not bite (bad HALTs: R1=%d E1=%d C1=%d H4=%d; good clean: %s)."
@@ -277,7 +281,7 @@ def main():
         if hard: halts += 1
         if not (hard or r["WARN"] or r["WATCH"]): continue
         print("\n%s  %s" % ("HALT" if hard else "warn", os.path.basename(f)))
-        for k in list(HALT_KEYS) + ["WARN", "WATCH"]:
+        for k in list(HALT_KEYS) + list(SOFT_KEYS) + ["WARN", "WATCH"]:
             for m in r[k][:6]:
                 print("   %s: %s" % (k, m))
             if len(r[k]) > 6: print("   %s: (+%d more)" % (k, len(r[k]) - 6))
