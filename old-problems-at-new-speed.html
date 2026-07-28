@@ -153,7 +153,7 @@ p b{color:var(--ink-fg); font-weight:600}
 .btn.ghost{background:var(--paper); color:var(--ink-fg)}
 .btn:focus-visible{outline:3px solid var(--accent-ink); outline-offset:2px}
 .btn:active{transform:translateY(1px)}
-.btn[disabled]{opacity:.5; cursor:default}
+.btn[disabled],.btn[aria-disabled="true"]{opacity:.5; cursor:default}
 .told{font-family:var(--mono); font-size:13px; color:var(--ink-3); margin:14px 0 0; min-height:1.2em; letter-spacing:.02em}
 .told b{color:var(--accent-ink-fg)}
 
@@ -458,7 +458,7 @@ a{color:var(--accent-ink-fg)}
       what "kept everything" looks like. There is exactly one button worth pressing.</p>
     <div class="act settle">
       <button class="btn" id="forget">Forget</button>
-      <button class="btn ghost" id="unforget" disabled>Keep it all</button>
+      <button class="btn ghost" id="unforget" aria-disabled="true">Keep it all</button>
     </div>
     <p class="told" id="fTold" aria-live="polite">Total recall. No thought. The archive no one can navigate.</p>
     <p class="settle" style="margin-top:18px">Every knowledge system that fails in higher education — and
@@ -507,7 +507,7 @@ a{color:var(--accent-ink-fg)}
       And then it will let you ask it exactly <b>one</b> question. The discipline is the whole gift.</p>
     <div class="act settle">
       <button class="btn" id="look">Look into the Aleph</button>
-      <button class="btn ghost" id="upstairs" disabled>Back upstairs</button>
+      <button class="btn ghost" id="upstairs" aria-disabled="true">Back upstairs</button>
     </div>
     <p class="told" id="aTold" aria-live="polite">A point on the cellar floor. It holds every file, every build, every stalled lane.</p>
     <div class="reveal" id="aQ">
@@ -567,7 +567,7 @@ a{color:var(--accent-ink-fg)}
       You will want to perfect it. Then you will want to let it rot. Both instincts are correct.</p>
     <div class="act settle">
       <button class="btn" id="perfect">Perfect the map</button>
-      <button class="btn ghost" id="abandon" disabled>Abandon it to the weather</button>
+      <button class="btn ghost" id="abandon" aria-disabled="true">Abandon it to the weather</button>
     </div>
     <p class="told" id="mTold" aria-live="polite">One to one is perfect, and perfectly useless.</p>
     <p class="settle" style="margin-top:18px">The studio's cross-session index is <b>one page</b>. It is one
@@ -838,14 +838,15 @@ if(lk) lk.addEventListener('click',function(){
   document.getElementById('alephPt').setAttribute('r','120');
   document.getElementById('aTold').innerHTML='You see all of it at once — every file, every stalled lane. '+
     'It is too much to be useful. So it grants you <b>one question.</b>';
-  q.classList.add('open'); lk.disabled=true; up.disabled=false;
+  q.classList.add('open'); lk.disabled=true; up.setAttribute('aria-disabled','false');
 });
 if(up) up.addEventListener('click',function(){
+  if(up.getAttribute('aria-disabled')==='true') return;   // focusable-but-inert until the Aleph is opened
   var flood=document.getElementById('flood'), q=document.getElementById('aQ');
   flood.style.opacity=0; document.getElementById('alephPt').setAttribute('r','16');
   q.classList.remove('open');
   document.getElementById('aTold').textContent='Back upstairs. The total view is real — and only useful disciplined to one purpose.';
-  up.disabled=true; lk.disabled=false;
+  up.setAttribute('aria-disabled','true'); lk.disabled=false;
 });
 // The Aleph grants exactly ONE question — and the player chooses it, not the script.
 var A_ANSWERS=[
@@ -872,14 +873,15 @@ if(pf) pf.addEventListener('click',function(){
   m.setAttribute('transform','translate(500 260) scale(1.02)'); m.style.opacity='0.5';
   document.getElementById('mTold').innerHTML='Point for point, one to one. <b>Perfect — and perfectly useless.</b> '+
     'It now covers the very thing it was meant to help you see.';
-  pf.disabled=true; ab.disabled=false;
+  pf.disabled=true; ab.setAttribute('aria-disabled','false');
 });
 if(ab) ab.addEventListener('click',function(){
+  if(ab.getAttribute('aria-disabled')==='true') return;   // focusable-but-inert until the map is perfected
   var m=document.getElementById('mapG'), idx=document.getElementById('indexCard');
   m.style.opacity='0'; idx.style.transition=reduce?'none':'opacity 700ms 250ms cubic-bezier(.22,1,.36,1)'; idx.style.opacity='1';
   document.getElementById('mTold').innerHTML='Abandoned to the weather. What survives is <b>one page</b>, '+
     'kept one page on purpose.';
-  ab.disabled=true;
+  ab.setAttribute('aria-disabled','true');
 });
 </script>
 </body>
