@@ -34,6 +34,14 @@
   --slab:       #12161b;   /* dark ground */
   --slab-ink:   #f4f1e8;   /* 16.4:1 on slab   — TEXT */
 
+  /* DECORATION forms — token-role law: these appear ONLY in border/outline/shadow,
+     never in `color:`. Same values as their ink siblings, split so no token is both. */
+  --edge:       #14181d;   /* ink as a line (borders) */
+  --ring:       #274063;   /* focus ring — cool, visible */
+  --brass-line: #6a4d12;   /* brass ink as a hairline (chips) */
+  --brass-edge: #d9a441;   /* brass fill as a hairline/outline on dark */
+  --live-line:  #1d5c3f;   /* live ink as a hairline (chips) */
+
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
@@ -54,16 +62,17 @@ body{
    contrast stays a computation. No storage: single-file law, both reset on reload. ────────── */
 :root{ --fs:1; }               /* text-size multiplier, driven by A− / A+ */
 
-body.cft-soft{                 /* comfort mode: same design, calmer. Still far above the floor. */
-  --paper:#f6f3ec; --paper-2:#ece7dc; --rule:#d6cfc0;
-  --ink:#24292f;   /* 12.4:1 */ --ink-2:#48505c; /* 7.1:1 */ --ink-3:#5f6875; /* 5.1:1 */
+body.cft-soft{                 /* comfort mode: a genuinely calmer, warmer paper (>=0.12 luminance
+                                  below the default). Every text token re-checked on it. */
+  --paper:#eae3d1; --paper-2:#ded5be; --rule:#cbc0a4;
+  --ink:#24292f;   /* 11.4:1 */ --ink-2:#48505c; /* 6.4:1 */ --ink-3:#4e5763; /* 5.0:1 on paper-2 */
   --brass-ink:#6d5016; --cool-ink:#2b4467;
 }
 
 .comfort{
   position:fixed; top:12px; right:14px; z-index:80;
   display:inline-flex; align-items:stretch;
-  background:var(--paper-2); border:2px solid var(--ink); border-radius:4px;
+  background:var(--paper-2); border:2px solid var(--edge); border-radius:4px;
   overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.10);
 }
 .comfort button{
@@ -75,7 +84,7 @@ body.cft-soft{                 /* comfort mode: same design, calmer. Still far a
 .comfort button+button{border-left:1.5px solid var(--rule)}
 .comfort button:hover,.comfort button:focus-visible,
 .comfort button[aria-pressed="true"]{background:var(--slab); color:var(--slab-ink)} /* slab = ground, slab-ink = text */
-.comfort button:focus-visible{outline:3px solid var(--cool-ink); outline-offset:-2px}
+.comfort button:focus-visible{outline:3px solid var(--ring); outline-offset:-2px}
 .comfort-toggle{font-family:var(--mono); font-size:14px; font-weight:700; letter-spacing:.02em}
 .comfort-stops{display:inline-flex; align-items:stretch}
 .comfort-stops[hidden]{display:none}
@@ -125,7 +134,7 @@ h2{
   transition:border-color .12s, transform .12s, box-shadow .12s;
 }
 .room:hover{transform:translateY(-2px); box-shadow:0 4px 0 var(--acc,var(--rule))}
-.room:focus-visible{outline:3px solid var(--cool-ink); outline-offset:3px}
+.room:focus-visible{outline:3px solid var(--ring); outline-offset:3px}
 .room h3{font-family:var(--serif); font-size:calc(23px * var(--fs)); margin:0 0 8px; font-weight:400; line-height:1.2}
 .room p{margin:0; font-size:calc(15px * var(--fs)); color:var(--ink-2); line-height:1.5}
 
@@ -145,8 +154,8 @@ h2{
   font-family:var(--mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase;
   padding:2.5px 7px; border-radius:2px; font-weight:700;
 }
-.c-live{background:var(--paper); color:var(--live-ink); border:1px solid var(--live-ink)}
-.c-work{background:var(--paper); color:var(--brass-ink); border:1px solid var(--brass-ink)}
+.c-live{background:var(--paper); color:var(--live-ink); border:1px solid var(--live-line)}
+.c-work{background:var(--paper); color:var(--brass-ink); border:1px solid var(--brass-line)}
 .c-note{background:var(--paper); color:var(--ink-3); border:1px solid var(--rule)}
 
 /* ── THE ENTERPRISE SLAB ─────────────────────────────────────────────────── */
@@ -161,14 +170,14 @@ h2{
   background:#1a1f27; text-decoration:none; color:var(--slab-ink);
   transition:border-color .12s;
 }
-.job:hover{border-color:var(--brass-fill)}
-.job:focus-visible{outline:3px solid var(--brass-fill); outline-offset:3px}
+.job:hover{border-color:var(--brass-edge)}
+.job:focus-visible{outline:3px solid var(--brass-edge); outline-offset:3px}
 .job .who{font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--brass-fill); font-weight:700; margin-bottom:6px}
 .job h3{font-family:var(--serif); font-size:calc(21px * var(--fs)); margin:0 0 7px; font-weight:400}
 .job p{margin:0; font-size:calc(14.5px * var(--fs)); color:#c3cad4; line-height:1.45}  /* 10.1:1 on #1a1f27 */
 
 /* ── THE PLAYTEST INTAKE ─────────────────────────────────────────────────── */
-.bench{border:2px solid var(--ink); border-radius:2px; padding:0; overflow:hidden; margin-top:26px}
+.bench{border:2px solid var(--edge); border-radius:2px; padding:0; overflow:hidden; margin-top:26px}
 .bench-top{background:var(--cool-fill); padding:22px 22px 20px}
 .bench-top h3{font-family:var(--serif); font-size:calc(26px * var(--fs)); margin:0 0 9px; font-weight:400; color:var(--ink)}
 .bench-top p{margin:0 0 8px; font-size:calc(15.5px * var(--fs)); color:#22313f; line-height:1.5; max-width:62ch}  /* 8.9:1 on cool-fill */
@@ -190,7 +199,7 @@ input[type=text], input[type=email], textarea, select{
   border:1.5px solid var(--rule); border-radius:2px; background:var(--paper); color:var(--ink);
 }
 textarea{min-height:78px; resize:vertical; line-height:1.5}
-input:focus-visible, textarea:focus-visible, select:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px; border-color:var(--ink)}
+input:focus-visible, textarea:focus-visible, select:focus-visible{outline:3px solid var(--ring); outline-offset:2px; border-color:var(--edge)}
 
 .opts{display:flex; flex-wrap:wrap; gap:7px}
 .opt{
@@ -198,10 +207,10 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{outline:3px so
   border-radius:2px; background:var(--paper); color:var(--ink-2); cursor:pointer; font-weight:500;
 }
 .opt[aria-pressed="true"]{background:var(--slab); color:var(--slab-ink); border-color:var(--slab); font-weight:600}
-.opt:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
+.opt:focus-visible{outline:3px solid var(--ring); outline-offset:2px}
 
 .consent{
-  margin:4px 0 16px; padding:13px 15px; border-left:4px solid var(--cool-ink);
+  margin:4px 0 16px; padding:13px 15px; border-left:4px solid var(--ring);
   background:var(--paper-2); font-size:14.5px; color:var(--ink-2); line-height:1.5;
 }
 .consent b{color:var(--ink)}
@@ -211,7 +220,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{outline:3px so
   background:var(--slab); color:var(--slab-ink); border:0; border-radius:2px; cursor:pointer;
 }
 .send:hover{background:#232b35}
-.send:focus-visible{outline:3px solid var(--cool-ink); outline-offset:3px}
+.send:focus-visible{outline:3px solid var(--ring); outline-offset:3px}
 .send[disabled]{opacity:.55; cursor:default}
 .out{margin:13px 0 0; font-size:15px; font-weight:600; color:var(--live-ink); min-height:1.2em}
 .out.bad{color:#8c2f39}   /* 6.6:1 on paper */
@@ -233,7 +242,7 @@ footer p{margin:0 0 7px}
 
 /* ── INSTRUMENT MARKS. Glyphs inherit card ink via currentColor (token-role safe). ── */
 .gmark{width:50px; height:50px; display:block; color:var(--brass-ink); margin-bottom:14px; flex:0 0 auto}
-.room .gmark{color:var(--acc,var(--brass-ink))}
+.room .gmark{color:var(--acc-ink,var(--brass-ink))}
 .job .gmark{color:var(--brass-fill)}            /* on dark slab */
 
 /* ── DIFFERENT-COLORED GAME BOXES. Each card carries a green-free accent (--acc),

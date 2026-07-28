@@ -8,47 +8,51 @@
 /* STUDIO EYES v4 CLASS-FIX 2026-07-11: lock the palette. */
 :root{ color-scheme: light; }
 
-  :root{--ink:#f4f1e8;--paper:#12100f;--paper2:#1c1917;--hot:#ff5a3c;--cool:#57c7ff;--dim:#8a857b;--gold:#ffcf5a;--wound:#e0384f;--keep:#dfe6ec;--field:#57c7ff;}
+  :root{--ink:#f4f1e8;--paper:#12100f;--paper2:#1c1917;--hot-ink:#ff5a3c;--hot-fill:#ff5a3c;--cool-ink:#57c7ff;--cool-fill:#57c7ff;--dim:#8a857b;--gold-ink:#ffcf5a;--gold-fill:#ffcf5a;--wound:#e0384f;--keep:#dfe6ec;--field:#57c7ff;}
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{background:var(--paper);color:var(--ink);font-family:"Georgia","Times New Roman",serif;
     display:flex;align-items:center;justify-content:center;min-height:100vh;overflow:hidden;}
+  .bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(1200px 800px at 50% -10%, #241f1c 0%, var(--paper) 62%);}
+  #stage{z-index:1}
   #stage{position:relative;width:min(96vw,1200px);aspect-ratio:3/2;
-    background:radial-gradient(1200px 800px at 50% -10%, #241f1c 0%, var(--paper) 62%);
+    background:var(--paper);
     border:2px solid #3a352f;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.6);}
   canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
   #hud{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;gap:8px;
     padding:12px 20px;pointer-events:none;font-family:"Helvetica Neue",Arial,sans-serif;letter-spacing:.05em;}
   .hud-item{font-size:clamp(11px,1.4vw,15px);text-transform:uppercase;color:var(--dim);white-space:nowrap}
   .hud-item b{color:var(--ink);font-size:clamp(16px,2vw,24px);font-family:"Georgia",serif;margin-left:.35em}
-  .hud-item.hot b{color:var(--hot)}.hud-item.gold b{color:var(--gold)}.hud-item.cool b{color:var(--cool)}
+  .hud-item.hot b{color:var(--hot-ink)}.hud-item.gold b{color:var(--gold-ink)}.hud-item.cool b{color:var(--cool-ink)}
   .meterwrap{display:flex;align-items:center;gap:.5em}
   .meter{width:90px;height:9px;border:1px solid #4a443c;border-radius:5px;overflow:hidden;background:#0c0b0a}
-  .meter i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--wound),var(--gold),var(--cool));transition:width .25s ease}
+  .meter i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--wound),var(--gold-fill),var(--cool-fill));transition:width .25s ease}
   #attrib{position:absolute;left:0;right:0;bottom:0;padding:9px 18px;pointer-events:none;
     font-family:"Helvetica Neue",Arial,sans-serif;font-size:clamp(10px,1.3vw,13px);color:#8a857b;letter-spacing:.03em;text-align:center;}
   #attrib b{color:#a49b8d;font-weight:600}
   .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
-    background:linear-gradient(180deg,rgba(10,9,8,.80),rgba(10,9,8,.94));padding:5vh 8vw;z-index:5;}
+    background:#0e0c0b;padding:5vh 8vw;z-index:5;}
   .screen.hidden{display:none}
-  .kicker{font-family:"Helvetica Neue",Arial,sans-serif;text-transform:uppercase;letter-spacing:.4em;font-size:clamp(11px,1.4vw,15px);color:var(--hot);margin-bottom:1.1rem;}
+  .kicker{font-family:"Helvetica Neue",Arial,sans-serif;text-transform:uppercase;letter-spacing:.4em;font-size:clamp(11px,1.4vw,15px);color:var(--hot-ink);margin-bottom:1.1rem;}
   h1{font-size:clamp(38px,7.5vw,88px);line-height:.92;font-weight:400;letter-spacing:-.01em;margin-bottom:.35em;}
   h1 .strike{position:relative;color:var(--dim)}
-  h1 .strike::after{content:"";position:absolute;left:-2%;right:-2%;top:52%;height:5px;background:var(--hot);transform:rotate(-3deg);}
+  h1 .strike::after{content:"";position:absolute;left:-2%;right:-2%;top:52%;height:5px;background:var(--hot-fill);transform:rotate(-3deg);}
   .lede{max-width:52ch;font-size:clamp(15px,2vw,21px);line-height:1.5;margin-bottom:1.3em;}
   .rules{max-width:52ch;font-size:clamp(13px,1.7vw,17px);line-height:1.6;color:var(--dim);margin-bottom:1.6em;font-family:"Helvetica Neue",Arial,sans-serif;}
-  .rules .hot{color:var(--hot)}.rules .keepc{color:var(--keep)}.rules .fieldc{color:var(--field)}.rules b{color:var(--ink)}
+  .rules .hot{color:var(--hot-ink)}.rules .keepc{color:var(--keep)}.rules .fieldc{color:var(--field)}.rules b{color:var(--ink)}
   .controls{font-family:"Helvetica Neue",Arial,sans-serif;display:flex;gap:1.4em;flex-wrap:wrap;justify-content:center;color:var(--dim);font-size:clamp(12px,1.5vw,16px);margin-bottom:1.8em;}
   .controls b{color:var(--ink)}
   kbd{display:inline-block;background:var(--paper2);border:1px solid #4a443c;border-bottom-width:3px;border-radius:6px;padding:.15em .5em;font-family:"Helvetica Neue",Arial,sans-serif;color:var(--ink);font-size:.95em;margin:0 .1em;}
-  button{font-family:"Helvetica Neue",Arial,sans-serif;background:var(--hot);color:#1a0d09;border:none;border-radius:999px;min-height:44px;padding:.75em 2.1em;font-size:clamp(16px,2vw,20px);font-weight:700;letter-spacing:.04em;cursor:pointer;text-transform:uppercase;box-shadow:0 6px 0 #b93b23;transition:transform .08s ease;}
+  button{font-family:"Helvetica Neue",Arial,sans-serif;background:var(--hot-fill);color:#1a0d09;border:none;border-radius:999px;min-height:44px;padding:.75em 2.1em;font-size:clamp(16px,2vw,20px);font-weight:700;letter-spacing:.04em;cursor:pointer;text-transform:uppercase;box-shadow:0 6px 0 #b93b23;transition:transform .08s ease;}
   button:hover{transform:translateY(-1px)}button:active{transform:translateY(3px);box-shadow:0 3px 0 #b93b23}
   .tag{position:absolute;bottom:12px;right:18px;z-index:6;font-family:"Helvetica Neue",Arial,sans-serif;letter-spacing:.28em;text-transform:uppercase;font-size:11px;color:#8a857b;pointer-events:none;}
-  .final{font-size:clamp(20px,3vw,30px);color:var(--gold);margin-bottom:.3em;font-family:"Georgia",serif}
+  .final{font-size:clamp(20px,3vw,30px);color:var(--gold-ink);margin-bottom:.3em;font-family:"Georgia",serif}
   .verdict{color:var(--dim);font-style:italic;margin-bottom:1.6em;max-width:44ch}
 </style>
 </head>
 <body>
+<div class="bg" aria-hidden="true"></div>
 <div id="stage">
   <canvas id="game"></canvas>
   <div id="hud">

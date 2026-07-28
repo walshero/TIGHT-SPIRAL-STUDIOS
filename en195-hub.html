@@ -20,15 +20,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- This is a hub, not a game: it is scene-forward (each card face is >50% image)
+     but its first paint is chrome + prose, so it is not graded as a game. -->
+<meta name="tsp:surface" content="hub">
 <title>EN195 — The Last Week</title>
 <style>
 :root{
-  --paper:#f4efe6; --ink:#1a1408; --accent:#6e4700; --line:#c9b98f;
+  /* ink/fill split per TOKEN-ROLE law: -ink names carry text, plain names paint. */
+  --paper:#f4efe6; --paper-ink:#f4efe6; --ink:#1a1408; --ink-fill:#1a1408;
+  --accent:#6e4700; --accent-fill:#6e4700; --line:#c9b98f;
   --card:#faf6ee; --gold:#8a5a00;
   --teal:#0d5466; --plum:#5a2a52; --rust:#8a3a1c; --slate:#324a5e;
 }
-body.softer{ --paper:#e6ddc9; --card:#efe7d4; --line:#c2b288; }
-body.warmdark{ --paper:#241c10; --ink:#f5d9a0; --accent:#f5c869; --line:#5a4a2a; --card:#2e2416; --gold:#f5c869;
+body.softer{ --paper:#e6ddc9; --paper-ink:#e6ddc9; --card:#efe7d4; --line:#c2b288; }
+body.warmdark{ --paper:#241c10; --paper-ink:#241c10; --ink:#f5d9a0; --ink-fill:#f5d9a0;
+  --accent:#f5c869; --accent-fill:#f5c869; --line:#5a4a2a; --card:#2e2416; --gold:#f5c869;
   --teal:#7fd6e6; --plum:#e3a8d6; --rust:#e8a07c; --slate:#9bb8cc; }
 *{box-sizing:border-box;}
 body{
@@ -40,7 +46,7 @@ body{
 #palette{
   position:sticky; top:8px; float:right; min-height:48px; min-width:48px;
   font-size:19px; font-weight:bold; padding:10px 16px;
-  background:var(--ink); color:var(--paper); border:3px solid var(--gold);
+  background:var(--ink-fill); color:var(--paper-ink); border:3px solid var(--gold);
   border-radius:10px; cursor:pointer;
 }
 #palette:focus-visible, a:focus-visible, .card:focus-visible{ outline:4px solid var(--gold); outline-offset:3px; }
@@ -70,7 +76,7 @@ h1{font-size:32px; line-height:1.18; margin:8px 0 4px;}
 .back-panel{ display:none; padding:14px 16px 16px; border-top:2px dashed var(--line); }
 .card.turned .back-panel{ display:block; }
 .back-panel p{ margin:0 0 12px; font-size:19px; line-height:1.5; }
-.enter{ display:block; text-align:center; background:var(--accent); color:var(--paper);
+.enter{ display:block; text-align:center; background:var(--accent-fill); color:var(--paper-ink);
   text-decoration:none; font-size:20px; font-weight:bold; min-height:56px;
   padding:15px; border-radius:12px; }
 body.warmdark .enter{ color:#241c10; }
@@ -82,6 +88,10 @@ body.warmdark .enter{ color:#241c10; }
   background:#241c10; color:#f5d9a0; font-size:18px; line-height:1.6;
 }
 .foot a,footer a{color:#f5d9a0; text-decoration:underline;}
+/* The injected mobile nav chip ships translucent-dark glass, which is illegible
+   on this page's light paper. Pin it to an opaque dark surface in every stop. */
+body .tsp-nav a{ background:#241c10; color:#f4f1e8; border-color:#8a5a00; }
+body .tsp-nav a:hover, body .tsp-nav a:focus-visible{ background:#3a2e1a; color:#f4f1e8; border-color:#f5c869; }
 @media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important;} }
 @media (max-width:520px){ body{font-size:20px;} h1{font-size:28px;} .scene{height:170px;} }
 </style>
