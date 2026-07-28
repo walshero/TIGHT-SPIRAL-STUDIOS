@@ -72,7 +72,7 @@ Single-file offline · Studio-Eyes contrast · **no baked GAME text** (the recor
 ## A/B cold-play protocol (founder — GATE 1, undelegatable)
 
 1. Shipped withheld build (A) stays live and unchanged.
-2. B lives as a separate file (`choose-your-leader-v5-B.html`) — **not linked from index, not shipped to students, no assessment use.**
+2. B lives as a separate file (`choose-your-leader-v5-b.html`) — reachable only through a clearly-labeled **playtest** link in the full-shelf (so it's tappable for cold-play and nothing is orphaned), **not promoted into a shipped section, not shipped to students, no assessment use.**
 3. Cold-play both on your phone, same three scenes. The question your eyes answer: **does the confrontation move you toward truth harder than the withholding — or does the halo survive the record (CIE) and leave you where you started?**
 4. Decide: keep A · adopt B · hybrid. **Only then** is the law amended (logged), and only then does B touch the shipped/linked build or any assessment claim.
 
