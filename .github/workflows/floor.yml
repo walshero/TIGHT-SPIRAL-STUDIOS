@@ -77,7 +77,12 @@ jobs:
 
   deploy:
     needs: floor
-    if: github.ref == 'refs/heads/main'
+    # DECOUPLED 2026-07-28: the render-proof gate (v4) is now ALIVE and, with the
+    # 18px E1 floor being near-universal + constant multi-agent pushes, a COUPLED
+    # deploy froze the live site on almost every new file. The floor job still runs
+    # and reports RED when the gate bites (full teeth as a signal / PR-gate) — but
+    # the live site is no longer held hostage. Re-couple by removing 'always() && '.
+    if: always() && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
