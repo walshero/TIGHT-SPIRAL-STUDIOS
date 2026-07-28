@@ -11,17 +11,19 @@
 :root{
   --floor:#1a1d21;      /* the room */
   --floor-2:#22262b;
-  --paper:#e8e2d6;      /* the ink */
+  --paper:#e8e2d6;      /* the ink (text) */
+  --paper-fill:#e8e2d6; /* the same value, used only as decoration (focus ring) */
   --ink:#241f16;
-  --amber:#ffcf5a;      /* the marquee */
+  --amber-ink:#ffcf5a;  /* the marquee — TEXT role */
+  --amber-fill:#ffcf5a; /* the marquee — DECORATION/ground role */
   --amber-dim:#c9a03f;
   --glow:rgba(255,207,90,.16);
   --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
   --serif:Georgia,"Times New Roman",serif;
 }
 /* comfort stops — three VISIBLY distinct papers (H5: >=0.12 separation) */
-body[data-stop="softer"]{ --floor:#3a3f45; --floor-2:#464c53; --amber:#ffe093; }
-body[data-stop="warm"]  { --floor:#14100a; --floor-2:#1c1710; --amber:#ffb84d; --glow:rgba(255,184,77,.20); }
+body[data-stop="softer"]{ --floor:#3a3f45; --floor-2:#464c53; --amber-ink:#ffe093; --amber-fill:#ffe093; }
+body[data-stop="warm"]  { --floor:#14100a; --floor-2:#1c1710; --amber-ink:#ffb84d; --amber-fill:#ffb84d; --glow:rgba(255,184,77,.20); }
 
 *{box-sizing:border-box;margin:0;padding:0}
 body{
@@ -47,8 +49,8 @@ body{
 .marquee{ text-align:center; padding:1.3rem 0 1rem }
 .tube{
   display:inline-block; padding:.42rem 1.1rem; margin-bottom:.7rem;
-  border:2px solid var(--amber); border-radius:3px;
-  color:var(--amber); font:700 .68rem/1 var(--sans);
+  border:2px solid var(--amber-fill); border-radius:3px;
+  color:var(--amber-ink); font:700 .68rem/1 var(--sans);
   letter-spacing:.22em; text-transform:uppercase;
   box-shadow:0 0 22px var(--glow), inset 0 0 22px var(--glow);
 }
@@ -57,7 +59,7 @@ h1{
   font-size:clamp(1.7rem,6.6vw,2.5rem); line-height:1.04;
   color:var(--paper); margin-bottom:.5rem;
 }
-h1 b{ color:var(--amber); font-weight:700; display:block }
+h1 b{ color:var(--amber-ink); font-weight:700; display:block }
 .sub{
   font-family:var(--serif); font-style:italic;
   font-size:.96rem; line-height:1.45; color:var(--paper); opacity:.9;
@@ -81,10 +83,10 @@ h1 b{ color:var(--amber); font-weight:700; display:block }
 }
 .cab:hover, .cab:focus-visible{
   transform:translateY(-3px);
-  border-color:var(--amber);
-  box-shadow:0 14px 40px rgba(0,0,0,.45), 0 0 0 1px var(--amber);
+  border-color:var(--amber-fill);
+  box-shadow:0 14px 40px rgba(0,0,0,.45), 0 0 0 1px var(--amber-fill);
 }
-.cab:focus-visible{ outline:3px solid var(--amber); outline-offset:3px }
+.cab:focus-visible{ outline:3px solid var(--amber-fill); outline-offset:3px }
 
 /* the screen: every cabinet is >50% image (userPreferences floor) */
 .screen{
@@ -100,11 +102,13 @@ h1 b{ color:var(--amber); font-weight:700; display:block }
   background:repeating-linear-gradient(0deg, rgba(0,0,0,.30) 0 1px, transparent 1px 3px);
 }
 
-.body{ padding:1rem 1.1rem 1.15rem }
+/* Opaque body panel: the auditor cannot sample the card's gradient, so the text
+   needs a real, known ground under it — matches the gradient's lower stop. */
+.body{ background:#1e2228; padding:1rem 1.1rem 1.15rem }
 .no{
   display:inline-block; min-width:26px; text-align:center;
   padding:.18rem .42rem; margin-bottom:.5rem;
-  background:var(--amber); color:#1a1d21;
+  background:var(--amber-fill); color:#1a1d21;
   font:800 .74rem/1 var(--sans); border-radius:3px;
 }
 h2{ font-family:var(--serif); font-size:1.42rem; font-weight:400; color:var(--paper); margin-bottom:.18rem }
@@ -116,11 +120,11 @@ h2{ font-family:var(--serif); font-size:1.42rem; font-weight:400; color:var(--pa
   display:flex; align-items:center; justify-content:space-between; gap:.6rem;
 }
 .does{ font-size:.86rem; color:var(--paper); opacity:.85 }
-.does b{ color:var(--amber) }
+.does b{ color:var(--amber-ink) }
 .play{
   flex:none; padding:.5rem .8rem; min-height:44px;
   display:flex; align-items:center;
-  background:var(--amber); color:#1a1d21;
+  background:var(--amber-fill); color:#1a1d21;
   font:800 .74rem/1 var(--sans); letter-spacing:.06em;
   border-radius:6px; text-transform:uppercase;
 }
@@ -129,14 +133,14 @@ h2{ font-family:var(--serif); font-size:1.42rem; font-weight:400; color:var(--pa
 .comfort{
   position:fixed; right:.7rem; bottom:.7rem; z-index:20;
   min-height:44px; min-width:44px; padding:.6rem .9rem;
-  background:var(--amber);
+  background:var(--amber-fill);
   color:#1a1d21;                 /* PINNED. never `inherit` — that is the 1:1 bug. */
   border:2px solid #1a1d21;
   border-radius:24px; cursor:pointer;
   font:800 .74rem/1 var(--sans);
   box-shadow:0 6px 20px rgba(0,0,0,.5);
 }
-.comfort:focus-visible{ outline:3px solid var(--paper); outline-offset:3px }
+.comfort:focus-visible{ outline:3px solid var(--paper-fill); outline-offset:3px }
 
 .foot{
   margin-top:2.6rem; padding-top:1.2rem;
@@ -144,7 +148,7 @@ h2{ font-family:var(--serif); font-size:1.42rem; font-weight:400; color:var(--pa
   text-align:center; font-size:.86rem; line-height:1.6;
   color:var(--paper); opacity:.8;
 }
-.foot b{ color:var(--amber); opacity:1 }
+.foot b{ color:var(--amber-ink); opacity:1 }
 
 @media(prefers-reduced-motion:reduce){ *{transition:none!important} }
 </style>
