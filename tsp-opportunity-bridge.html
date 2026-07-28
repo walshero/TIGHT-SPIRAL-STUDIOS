@@ -3,16 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="tsp:surface" content="tool">
 <title>TSP Opportunity Bridge</title>
 <style>
   :root{
+    /* FILL forms — background / border / stroke only, never text */
     --paper:#faf7f1; --ink:#0f0d0a; --line:#c9c2b4;
     --card:#fffdf8; --band:#efe9dd;
-    --hot:#8a2b1a;      /* deadline-close accent, used on dark chips only */
+    --hot:#8a2b1a;      /* deadline-close accent FILL, used on dark chips only */
+    --go:#1f4d2e;       /* ready accent FILL */
+    --wait:#5a4a12;     /* not-ready accent FILL */
+    /* INK forms — color: only. Same hue as the fill, split by token-role law. */
+    --ink-fill:#0f0d0a; /* --ink as decoration (tab fill, dot border) */
+    --paper-ink:#faf7f1;/* --paper as text (selected-tab label) */
+    --hot-ink:#8a2b1a; --go-ink:#1f4d2e; --wait-ink:#5a4a12;
     --hotink:#ffe3d8;
-    --go:#1f4d2e;       /* ready accent */
     --goink:#dcefe0;
-    --wait:#5a4a12;     /* not-ready accent */
     --waitink:#f3ecca;
     --link:#1a3d6e;
     --shadow:0 2px 0 rgba(0,0,0,.08);
@@ -23,6 +29,8 @@
     --hot:#ffb59e; --hotink:#2a0f08;
     --go:#a6dcb4; --goink:#0e2416;
     --wait:#e6d68a; --waitink:#241d06;
+    --ink-fill:#f4ede2; --paper-ink:#141210;
+    --hot-ink:#ffb59e; --go-ink:#a6dcb4; --wait-ink:#e6d68a;
     --link:#a9c4ec;
     --shadow:0 2px 0 rgba(0,0,0,.4);
   }
@@ -56,7 +64,7 @@
     min-height:44px;padding:0 16px;font-size:17px;font-weight:600;
     background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:10px;cursor:pointer
   }
-  nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  nav.tabs button[aria-selected="true"]{background:var(--ink-fill);color:var(--paper-ink);border-color:var(--ink-fill)}
   nav.tabs button:focus{outline:3px solid var(--link);outline-offset:2px}
   section[hidden]{display:none}
   .lane-note{font-size:16px;margin:6px 0 14px 0;padding:10px 12px;background:var(--band);border-radius:10px}
@@ -91,14 +99,14 @@
   .row{position:relative}
   .status{position:absolute;top:14px;right:14px;display:flex;align-items:center;gap:6px;
     font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
-  .status .dot{width:13px;height:13px;border-radius:50%;flex:0 0 auto;border:2px solid var(--ink)}
+  .status .dot{width:13px;height:13px;border-radius:50%;flex:0 0 auto;border:2px solid var(--ink-fill)}
   .status.go .dot{background:var(--go);border-color:var(--go)}
-  .status.go{color:var(--go)}
+  .status.go{color:var(--go-ink)}
   .status.hold .dot{background:transparent;border-color:var(--wait)}
-  .status.hold{color:var(--wait)}   /* renamed off .wait: --wait is a chip FILL; token-role law */
+  .status.hold{color:var(--wait-ink)}   /* text form: --wait is a chip FILL; token-role law */
   .status.block .dot{background:transparent;border-color:var(--hot);
     background-image:linear-gradient(45deg,transparent 44%,var(--hot) 44%,var(--hot) 56%,transparent 56%)}
-  .status.block{color:var(--hot)}
+  .status.block{color:var(--hot-ink)}
   .row h3{padding-right:96px}   /* clear space for the status marker */
   /* sample-B per-opportunity mark */
   .opp-mark{width:30px;height:30px;float:left;margin:2px 12px 4px 0;color:var(--ink);opacity:.85}

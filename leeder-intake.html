@@ -349,7 +349,7 @@
     document.getElementById("railLabel").textContent=(id==="done")?"Your plan":"Question "+(idx+1)+" of 5";
     var scene=document.getElementById("scene");
     scene.classList.toggle("band", id!=="q1");
-    document.getElementById("navBack").disabled=(idx<=0);
+    document.getElementById("navBack").setAttribute("aria-disabled",(idx<=0)?"true":"false");
     if(id==="done"){buildPlan();}
     document.getElementById("footCred").hidden=(id==="done");
     window.scrollTo(0,0);
@@ -361,12 +361,14 @@
       A[q]=b.getAttribute("data-v");
       document.querySelectorAll('.opt[data-q="'+q+'"]').forEach(function(o){o.classList.remove("on");});
       b.classList.add("on");
-      var nb=document.getElementById("n"+q); if(nb){nb.disabled=false;}
+      var nb=document.getElementById("n"+q); if(nb){nb.setAttribute("aria-disabled","false");}
     });
   });
   for(var i=1;i<=5;i++){(function(n){
     var nb=document.getElementById("n"+n);
-    if(nb){nb.addEventListener("click",function(){show(order[n]);});}
+    if(nb){nb.addEventListener("click",function(){
+      if(nb.getAttribute("aria-disabled")==="true")return;
+      show(order[n]);});}
   })(i);}
   document.querySelectorAll("[data-jump]").forEach(function(b){
     b.addEventListener("click",function(){show("done");});
@@ -379,7 +381,7 @@
   });
   document.getElementById("navHome").addEventListener("click",function(){
     A={}; document.querySelectorAll(".opt.on").forEach(function(o){o.classList.remove("on");});
-    for(var i=1;i<=5;i++){var nb=document.getElementById("n"+i); if(nb)nb.disabled=true;}
+    for(var i=1;i<=5;i++){var nb=document.getElementById("n"+i); if(nb)nb.setAttribute("aria-disabled","true");}
     show("q1");
   });
 
