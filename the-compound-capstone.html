@@ -41,26 +41,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="tsp:surface" content="tool">
 <title>The Compound — a paper you ride</title>
 <style>
 /* STUDIO EYES v4 CLASS-FIX 2026-07-11: lock the palette. */
 :root{ color-scheme: light; }
 
 :root{
-  --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --ink2:#1f1b12;
+  --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --ink2:#1f1b12; --ink-fill:#1f1b12;
   --line:#d8caa8; --line2:#c2b288;
-  --accent:#1a4a35; --accent2:#256649;
+  --accent:#1a4a35; --accent2:#256649; --accent2-ink:#256649;
   --gold:#6e4700; --gold-br:#c8900a; --gold-pale:#fbeec6;
-  --plum:#5a2a52; --teal:#0d5466; --rust:#8a3a1c;
+  --plum:#5a2a52; --teal:#0d5466; --rust:#8a3a1c; --rust-ink:#8a3a1c;
   --focus:#c8900a;
   --serif:Georgia,'Times New Roman',serif;
   --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
-  --veh:#1a4a35;  /* recolored by vehicle choice */
+  --veh:#1a4a35; --veh-ink:#1a4a35;  /* recolored by vehicle choice. -ink=text, -no-suffix=decoration */
 }
-body.softer{ --bg:#efe9dd; --surface:#f7f1e6; --ink:#2c2618; --ink2:#2c2618; --line:#ded2b6; --line2:#cdbf9c; }
-body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0; --line:#4a4230; --line2:#5e553e;
-  --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a; --accent:#7fe3c0; --accent2:#7fe3c0;
-  --plum:#e3a8d6; --teal:#7fd6e6; --rust:#e8a07c; --veh:#7fe3c0; }
+body.softer{ --bg:#e0d5bd; --surface:#ece2cb; --ink:#2c2618; --ink2:#2c2618; --ink-fill:#2c2618; --line:#d0c19c; --line2:#c0ad84; }
+body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0; --ink-fill:#f3e4c0; --line:#4a4230; --line2:#5e553e;
+  --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a; --accent:#7fe3c0; --accent2:#7fe3c0; --accent2-ink:#7fe3c0;
+  --plum:#e3a8d6; --teal:#7fd6e6; --rust:#e8a07c; --rust-ink:#e8a07c; --veh:#7fe3c0; --veh-ink:#7fe3c0; }
 *{box-sizing:border-box;} html,body{margin:0;}
 body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.65; font-size:19px; -webkit-text-size-adjust:100%; }
 .topbar{ background:var(--veh); color:#fff; padding:.6rem .9rem; display:flex; align-items:center; gap:.6rem; font-family:var(--sans); position:sticky; top:0; z-index:20; }
@@ -69,6 +70,7 @@ body.warm .topbar{ color:#0f0e0b; }
 .cstop{ margin-left:auto; background:var(--surface); color:var(--ink); border:2px solid var(--line2); border-radius:9px; padding:.45rem .6rem; font:700 .74rem/1 var(--sans); cursor:pointer; min-height:44px; }
 /* .cstop uses --surface/--ink; both retune per theme, so no warm override needed */
 .cstop:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+a:focus-visible{ outline:3px solid var(--focus) !important; outline-offset:2px; }
 .wrap{ max-width:680px; margin:0 auto; padding:1.1rem 1rem 5rem; }
 
 /* progress rail (the chosen-vehicle skin shows here) */
@@ -77,7 +79,7 @@ body.warm .topbar{ color:#0f0e0b; }
 .rail .stops{ display:flex; align-items:center; gap:.3rem; flex:1; }
 .rail .stop{ flex:1; height:8px; border-radius:6px; background:var(--line); }
 .rail .stop.done{ background:var(--veh); } .rail .stop.cur{ background:var(--gold-br); }
-.rail .vehname{ font:700 .72rem/1 var(--sans); color:var(--veh); white-space:nowrap; }
+.rail .vehname{ font:700 .72rem/1 var(--sans); color:var(--veh-ink); white-space:nowrap; }
 
 .screen{ display:none; } .screen.on{ display:block; animation:fade .25s ease; }
 @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
@@ -90,9 +92,9 @@ em{font-style:italic;}
 .go{ display:block; width:100%; font:800 1.04rem/1.2 var(--sans); cursor:pointer; min-height:56px; padding:.9rem 1rem; border:none; border-radius:13px; background:var(--veh); color:#fff; margin:.5rem 0; text-align:center; }
 body.warm .go{ color:#0f0e0b; }
 .go:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
-.go.sec{ background:var(--surface); color:var(--ink); border:2px solid var(--ink); }
+.go.sec{ background:var(--surface); color:var(--ink); border:2px solid var(--ink-fill); }
 .go.ghost{ background:transparent; color:var(--ink2); border:2px solid var(--line2); font-weight:700; min-height:48px; }
-.go:disabled{ opacity:.6; cursor:default; }
+.go:disabled{ opacity:.6; cursor:default; box-shadow:0 0 0 2px var(--line2) inset; }
 
 /* pickers */
 .picks{ display:flex; flex-direction:column; gap:.7rem; margin:1rem 0; }
@@ -105,7 +107,7 @@ body.warm .go{ color:#0f0e0b; }
 /* comfort swatches */
 .chip{ width:54px; height:42px; border-radius:9px; flex:none; border:2px solid rgba(0,0,0,.15); display:flex; overflow:hidden; }
 .chip span{ flex:1; }
-.chip.soft span:nth-child(1){background:#efe9dd;} .chip.soft span:nth-child(2){background:#2c2618;}
+.chip.soft span:nth-child(1){background:#e0d5bd;} .chip.soft span:nth-child(2){background:#2c2618;}
 .chip.def span:nth-child(1){background:#f3ead8;} .chip.def span:nth-child(2){background:#1f1b12;}
 .chip.dark span:nth-child(1){background:#26231d;} .chip.dark span:nth-child(2){background:#f0c357;}
 
@@ -117,12 +119,12 @@ body.warm .go{ color:#0f0e0b; }
 .compound .glyphs svg{ width:40px; height:40px; }
 
 /* station */
-.station .num{ font:800 .8rem/1 var(--sans); color:var(--veh); letter-spacing:.06em; }
+.station .num{ font:800 .8rem/1 var(--sans); color:var(--veh-ink); letter-spacing:.06em; }
 .pull{ border-left:5px solid var(--gold-br); background:var(--gold-pale); border-radius:0 10px 10px 0; padding:.9rem 1.1rem; margin:1.2rem 0; font-size:1.06rem; }
 
 /* micro-demo frame */
 .demo{ border:2px dashed var(--accent2); border-radius:14px; background:var(--surface); padding:.9rem; margin:1.1rem 0; }
-.demo .dtag{ font:800 .72rem/1 var(--sans); letter-spacing:.05em; text-transform:uppercase; color:var(--accent2); margin-bottom:.5rem; }
+.demo .dtag{ font:800 .72rem/1 var(--sans); letter-spacing:.05em; text-transform:uppercase; color:var(--accent2-ink); margin-bottom:.5rem; }
 .demo .dhint{ font:400 .85rem/1.4 var(--sans); color:var(--ink2); margin:.2rem 0 .7rem; }
 .demo .full{ font:700 .8rem/1.3 var(--sans); color:var(--gold); margin-top:.6rem; }
 
@@ -149,7 +151,7 @@ body.warm .go{ color:#0f0e0b; }
 .marginnote .mtext{ font:italic 400 .9rem/1.45 var(--serif); color:var(--ink2); }
 
 .flag{ border:2px solid var(--rust); border-radius:12px; background:var(--surface); padding:.85rem .9rem; margin:1rem 0; font-family:var(--sans); }
-.flag .fh{ font:800 .76rem/1 var(--sans); letter-spacing:.05em; text-transform:uppercase; color:var(--rust); margin-bottom:.4rem; }
+.flag .fh{ font:800 .76rem/1 var(--sans); letter-spacing:.05em; text-transform:uppercase; color:var(--rust-ink); margin-bottom:.4rem; }
 .flag p{ font-size:.92rem; margin:0; }
 
 .foot{ margin-top:1.8rem; padding:1rem; background:var(--veh); color:#fff; border-radius:12px; font-family:var(--sans); font-size:.8rem; }
