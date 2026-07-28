@@ -63,7 +63,7 @@ PROBE = r"""
   // byline. An email in "Tight Spiral Studios · you@example.com — …" is inline text,
   // not a primary touch target; forcing it to 44px would break the credit line.
   const inlineLink = (el) =>
-    el.tagName === 'A' && el.closest('p,li,dd,dt,blockquote,.fc-body,.prose,figcaption,footer,.foot,.credits,.credit,.byline,address');
+    el.tagName === 'A' && el.closest('p,li,dd,dt,blockquote,.fc-body,.prose,figcaption,footer,.foot,.credits,.credit,.byline,address,.bio-card,.award-card,.sec-hd');
 
   const sel = 'button,a[href],[role="button"],input:not([type="hidden"]),select,textarea,[onclick],[tabindex]:not([tabindex="-1"])';
   document.querySelectorAll(sel).forEach(el => {
