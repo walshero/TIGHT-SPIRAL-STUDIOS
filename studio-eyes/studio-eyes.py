@@ -405,6 +405,16 @@ def audit_page(page, path, mode_label):
 
 def audit(path, no_net=True):
     from playwright.sync_api import sync_playwright
+    # Paste-snippets / component fragments (no <html>/<body> root) are not pages: the
+    # ground is painted by the host build that pastes them in, so a headless render
+    # measures an unpainted body and reports phantom stop/contrast defects. Not a page,
+    # not gated (mirrors studio-fingers' fragment skip).
+    try:
+        _head = open(path, encoding='utf-8', errors='replace').read(4000).lower()
+        if '<html' not in _head and '<body' not in _head:
+            return []
+    except Exception:
+        pass
     halts = []
     external = []
     with sync_playwright() as p:
