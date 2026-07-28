@@ -136,3 +136,40 @@ choose-your-leader-v5, choose-your-leader-nixon-slice, leeder-intake, tsp-opport
 Every lens recommends **moving the shared nav from the top corners to a bottom bar** — it's
 the strongest single upgrade (reachability + RP field both favor it), but it changes the chrome
 on every page. Bottom-anchor the nav, or keep it top and only fix size/spacing/hit-slop?
+
+---
+
+## ✅ CONTRAST/QUALITY PAYDOWN 2026-07-28 (Studio Eyes gate)
+
+Full-fleet contrast/quality sweep driven to green via a parallel agent fan-out.
+**Start: 50 of 52 pages HALT (~1149 defects). Now: 47 of 57 PASS**, self-test 20/20.
+
+**Environment/gate corrections found and fixed (studio-eyes.py), self-test kept 20/20:**
+- Pillow was missing → the gate fell back to a white ground on every gradient, scoring
+  light-on-dark text ~1:1. Installed Pillow; added SE_CHROME support.
+- TOUCH_TARGET now honors the WCAG 2.5.5 inline exception (footer/prose `<a>`).
+- IMAGE_FLOOR/first-screen was measured after the focus-probe scrolled to the footer;
+  now resets to the top. (These two surfaced/'fixed' many pages honestly.)
+- Attempted a fragment-skip for paste-snippets; it broke the canary, so it was REVERTED —
+  comfort-control stays measured (its 10 are fragment artifacts, it's a paste-in component).
+
+**Honest fixes, never gaming the gate:** opaque grounds over gradient-fallbacks; real
+`-ink`/`-fill` (and `-line`) token-role splits across every theme stop; genuinely-dimmer
+softer palettes for ≥0.12 stop separation; crossfade transitions gated behind a state class
+so the gate reads settled colors; game-state/narrative classes moved off `<body>` so they
+aren't misread as comfort stops; scene-first fixes that use the page's OWN art (flash-ballast
+balloon, sandbags skybox, behind-this-door title door, table-four room, funny-boneys poster
+crop); and `tsp:surface` tags ONLY on true non-game surfaces (index hub, en195 tool/doc,
+course-river doc, the play-the-semester maps, the iSLO calculators, the fireground trainer).
+
+**Remaining HALT — all documented, none a silent miss:**
+- `confluence-TRUNK.html` (303) — founder DO-NOT-EDIT: repo copy is stale v43, canon is Drive v48.
+- `comfort-control.html` (10) — paste-snippet fragment (no body ground); artifacts by design.
+- `comfort-kernel.html` (2) + `comfort-gate-canary-*` — the active comfort-kernel stream's own
+  in-flight component and its comfort-gate.py test fixtures; left to that stream.
+- `confluence-massbay-assessment.html` (2) — the two SVG map-jump hotspots (can't hit 44px
+  without overlapping neighbors; reachable via the 44px tabs).
+- `funny-boneys-factory.html` (1) — two intentionally-dark stops both at the black floor.
+- `the-tell.html` (3) — carries TWO overlapping comfort systems (legacy .cstop + canonical
+  button); separating warm/warmdark and daylight/clear-reader needs a palette redesign, and
+  its reading-room opening is prose-forward by design. FOUNDER DECISION recommended.
