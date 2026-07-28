@@ -47,7 +47,7 @@ def ribbon(name, nr1):
         'background:#1a1200;color:#ffd24a;border-top:3px solid #ffd24a;'
         'font:700 18px/1.35 system-ui,-apple-system,sans-serif;'
         'padding:10px 16px;text-align:center;text-decoration:none;display:block">'
-        '⚠ DRAFT · %s the founder can’t read on this page — see the floor status →'
+        'DRAFT · %s the founder cannot read on this page — see the floor status →'
         '</a>' % (RIBBON_MARK, issue)
     )
 
@@ -137,6 +137,8 @@ the number is the rendered ratio, the floor is 4.5:1 (3.0 for large text).</p>
 
 def main():
     target = sys.argv[1] if len(sys.argv) > 1 else "."
+    for f in __import__("glob").glob("*.html"):
+        strip_ribbon(f)                      # clean slate: the gate must see true state
     try:
         out = run_sweep(target)
     except Exception as e:
