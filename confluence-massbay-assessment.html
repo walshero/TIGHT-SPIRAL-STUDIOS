@@ -90,6 +90,10 @@ body.dark .skip-link{color:#122023;}
 .comfort button[aria-pressed="true"]{
   background:var(--teal); color:var(--chart); font-weight:700;
 }
+.comfort-stops{display:flex; gap:.4rem}
+.comfort-stops[hidden]{display:none}
+.comfort-toggle{min-height:44px; min-width:44px}
+.comfort-toggle[aria-expanded="true"]{background:var(--teal); color:var(--chart)}
 body.dark .comfort button[aria-pressed="true"]{color:#122023;}
 
 /* ── pages ── */
@@ -221,9 +225,12 @@ if (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches){
 </header>
 
 <div class="comfort" role="group" aria-label="Display comfort">
-  <button onclick="setStop('day',this)" aria-pressed="true">Day</button>
-  <button onclick="setStop('softer',this)" aria-pressed="false">Softer</button>
-  <button onclick="setStop('dark',this)" aria-pressed="false">Night</button>
+  <button class="comfort-toggle" data-comfort-toggle aria-expanded="false" aria-controls="comfortStops" aria-label="Comfort and display options">◐ Comfort</button>
+  <span class="comfort-stops" id="comfortStops" data-comfort-panel hidden>
+    <button onclick="setStop('day',this)" aria-pressed="true">Day</button>
+    <button onclick="setStop('softer',this)" aria-pressed="false">Softer</button>
+    <button onclick="setStop('dark',this)" aria-pressed="false">Night</button>
+  </span>
 </div>
 
 <main id="main-content">
@@ -490,7 +497,7 @@ if (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches){
   'use strict';
   /* sync comfort buttons to the pre-paint stop */
   var startDark = document.body.classList.contains('dark');
-  var cb = document.querySelectorAll('.comfort button');
+  var cb = document.querySelectorAll('.comfort button[aria-pressed]');
   for (var s=0;s<cb.length;s++){
     cb[s].setAttribute('aria-pressed',
       (startDark ? s===2 : s===0) ? 'true' : 'false');
@@ -512,9 +519,21 @@ if (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches){
   window.setStop = function(stop, btn){
     document.body.classList.remove('softer','dark');
     if (stop!=='day') document.body.classList.add(stop);
-    var b = document.querySelectorAll('.comfort button');
+    var b = document.querySelectorAll('.comfort button[aria-pressed]');
     for (var k=0;k<b.length;k++) b[k].setAttribute('aria-pressed', b[k]===btn ? 'true':'false');
   };
+})();
+</script>
+<!-- Comfort is a knob, not a wall: one button reveals the stops on demand. -->
+<script>
+(function(){
+  var t=document.querySelector('[data-comfort-toggle]'), p=document.querySelector('[data-comfort-panel]');
+  if(!t||!p) return;
+  function set(open){ p.hidden=!open; t.setAttribute('aria-expanded',open?'true':'false'); }
+  set(false);
+  t.addEventListener('click',function(e){ set(p.hidden); e.stopPropagation(); });
+  document.addEventListener('click',function(e){ if(!p.hidden && !p.contains(e.target) && !t.contains(e.target)) set(false); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && !p.hidden){ set(false); t.focus(); } });
 })();
 </script>
 </body>

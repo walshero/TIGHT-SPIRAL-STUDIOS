@@ -222,6 +222,9 @@
     border-color:var(--accent);
   }
   .cbtn:focus{outline:3px solid var(--accent);outline-offset:2px}
+  .comfort-stops{display:flex;gap:8px;align-items:center}
+  .comfort-stops[hidden]{display:none}
+  .comfort-toggle[aria-expanded="true"]{background:var(--accent-soft);border-color:var(--accent)}
   .corner .lbl{
     align-self:center;
     font-size:12px;
@@ -235,10 +238,13 @@
 <body>
 
 <nav class="corner top" aria-label="Comfort">
-  <span class="lbl">Comfort</span>
-  <button class="cbtn" data-set="softer"    aria-pressed="false">Softer</button>
-  <button class="cbtn" data-set="default"   aria-pressed="true">Default</button>
-  <button class="cbtn" data-set="warm-dark" aria-pressed="false">Warm dark</button>
+  <button class="cbtn comfort-toggle" data-comfort-toggle aria-expanded="false" aria-controls="comfortStops" aria-label="Comfort and reading options">◐ Comfort</button>
+  <div class="comfort-stops" id="comfortStops" data-comfort-panel hidden>
+    <span class="lbl">Comfort</span>
+    <button class="cbtn" data-set="softer"    aria-pressed="false">Softer</button>
+    <button class="cbtn" data-set="default"   aria-pressed="true">Default</button>
+    <button class="cbtn" data-set="warm-dark" aria-pressed="false">Warm dark</button>
+  </div>
 </nav>
 
 <nav class="corner bottom" aria-label="Navigation">
@@ -439,6 +445,18 @@
   document.getElementById('navHome').addEventListener('click', function(){
     show('form');
   });
+})();
+</script>
+<!-- Comfort is a knob, not a wall: one button reveals the stops on demand. -->
+<script>
+(function(){
+  var t=document.querySelector('[data-comfort-toggle]'), p=document.querySelector('[data-comfort-panel]');
+  if(!t||!p) return;
+  function set(open){ p.hidden=!open; t.setAttribute('aria-expanded',open?'true':'false'); }
+  set(false);
+  t.addEventListener('click',function(e){ set(p.hidden); e.stopPropagation(); });
+  document.addEventListener('click',function(e){ if(!p.hidden && !p.contains(e.target) && !t.contains(e.target)) set(false); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && !p.hidden){ set(false); t.focus(); } });
 })();
 </script>
 </body>

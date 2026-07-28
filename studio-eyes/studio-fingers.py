@@ -84,10 +84,15 @@ PROBE = r"""
   const collapses = (el) => el.hasAttribute('aria-expanded') || el.hasAttribute('aria-controls')
                             || !!el.querySelector('[aria-expanded],[aria-controls]');
 
+  // STATUS chrome (draft ribbons, badges, deploy stamps) is not a comfort option,
+  // even when its text happens to contain an option-word like "contrast" — the
+  // draft ribbon reads "N contrast issues" and must not be counted as a display knob.
+  const STATUS = /draft|ribbon|badge|\bstatus\b|deployed|last.?updated/i;
   let visibleOptions = 0, hasToggle = false, wallContainer = false;
   document.querySelectorAll(sel).forEach(el => {
     const n = name(el), r = vis(el);
     if (!r) return;
+    if (STATUS.test(cname(el))) return;
     if (TOGGLE.test(n) && (el.hasAttribute('aria-expanded') || el.hasAttribute('aria-controls'))) hasToggle = true;
     else if (OPT.test(n)) visibleOptions++;
   });

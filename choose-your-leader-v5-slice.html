@@ -122,6 +122,10 @@
     border:1px solid transparent;background:transparent;color:var(--ink-dim);
     font-size:1rem;line-height:1}
   .comfort button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .comfort-stops{display:flex;gap:4px}
+  .comfort-stops[hidden]{display:none}
+  .comfort-toggle{min-width:44px;min-height:44px}
+  .comfort-toggle[aria-expanded="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
   .comfort .lbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
   .snd-toggle{position:fixed;top:8px;left:8px;z-index:60;
     min-height:38px;padding:6px 12px;border-radius:999px;
@@ -257,9 +261,12 @@
 
 <!-- COMFORT CORNER: live immediately, never a gate -->
 <div class="comfort" role="group" aria-label="Comfort">
-  <button data-comfort="softer" aria-pressed="false" title="Softer"><span class="lbl">Softer light</span>◐</button>
-  <button data-comfort="default" aria-pressed="true" title="Default"><span class="lbl">Default</span>●</button>
-  <button data-comfort="warm" aria-pressed="false" title="Warm dark"><span class="lbl">Warm dark</span>◑</button>
+  <button class="comfort-toggle" data-comfort-toggle aria-expanded="false" aria-controls="comfortStops" aria-label="Comfort and reading options">◐ Comfort</button>
+  <span class="comfort-stops" id="comfortStops" data-comfort-panel hidden>
+    <button data-comfort="softer" aria-pressed="false" title="Softer"><span class="lbl">Softer light</span>◐</button>
+    <button data-comfort="default" aria-pressed="true" title="Default"><span class="lbl">Default</span>●</button>
+    <button data-comfort="warm" aria-pressed="false" title="Warm dark"><span class="lbl">Warm dark</span>◑</button>
+  </span>
 </div>
 <button class="snd-toggle" id="sndBtn" aria-pressed="false">Sound: off</button>
 
@@ -315,10 +322,10 @@ sndBtn.addEventListener('click',()=>{
 });
 
 /* ─── COMFORT ─── */
-document.querySelectorAll('.comfort button').forEach(b=>{
+document.querySelectorAll('.comfort button[data-comfort]').forEach(b=>{
   b.addEventListener('click',()=>{
     const v=b.dataset.comfort;
-    document.querySelectorAll('.comfort button').forEach(x=>x.setAttribute('aria-pressed','false'));
+    document.querySelectorAll('.comfort button[data-comfort]').forEach(x=>x.setAttribute('aria-pressed','false'));
     b.setAttribute('aria-pressed','true');
     if(v==='default') document.documentElement.removeAttribute('data-comfort');
     else document.documentElement.setAttribute('data-comfort',v);
@@ -624,6 +631,18 @@ function reset(){ S.blind=null;S.post=null;S.taps=new Set();S.reaction=0; scrPre
 
 /* ─── BOOT — scene-first floor: first paint is content, never a gate ─── */
 scrTitle();
+</script>
+<!-- Comfort is a knob, not a wall: one button reveals the stops on demand. -->
+<script>
+(function(){
+  var t=document.querySelector('[data-comfort-toggle]'), p=document.querySelector('[data-comfort-panel]');
+  if(!t||!p) return;
+  function set(open){ p.hidden=!open; t.setAttribute('aria-expanded',open?'true':'false'); }
+  set(false);
+  t.addEventListener('click',function(e){ set(p.hidden); e.stopPropagation(); });
+  document.addEventListener('click',function(e){ if(!p.hidden && !p.contains(e.target) && !t.contains(e.target)) set(false); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && !p.hidden){ set(false); t.focus(); } });
+})();
 </script>
 </body>
 </html>

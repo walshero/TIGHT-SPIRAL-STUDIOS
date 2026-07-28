@@ -64,6 +64,9 @@
     background:var(--card);color:var(--ink);cursor:pointer;font-weight:700;}
   .corner button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
   .corner button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+  .comfort-stops{display:flex;gap:6px;align-items:center}
+  .comfort-stops[hidden]{display:none}
+  .comfort-toggle[aria-expanded="true"]{background:var(--ink);color:var(--paper)}
 
   header.hero{text-align:center;margin:6px 0 22px}
   .kicker{font-size:14px;letter-spacing:.14em;text-transform:uppercase;
@@ -192,9 +195,12 @@
     <button id="homeBtn" type="button" aria-label="Back to plan">Home</button>
   </div>
   <div class="grp" role="group" aria-label="Comfort">
-    <button id="mSoft" type="button" aria-pressed="false">Softer</button>
-    <button id="mDay"  type="button" aria-pressed="true">Default</button>
-    <button id="mNite" type="button" aria-pressed="false">Warm dark</button>
+    <button class="comfort-toggle" type="button" data-comfort-toggle aria-expanded="false" aria-controls="comfortStops" aria-label="Comfort and reading options">◐ Comfort</button>
+    <span class="comfort-stops" id="comfortStops" data-comfort-panel hidden>
+      <button id="mSoft" type="button" aria-pressed="false">Softer</button>
+      <button id="mDay"  type="button" aria-pressed="true">Default</button>
+      <button id="mNite" type="button" aria-pressed="false">Warm dark</button>
+    </span>
   </div>
 </div>
 
@@ -451,6 +457,18 @@
   });
 
   renderSchools(); renderIdeas();
+})();
+</script>
+<!-- Comfort is a knob, not a wall: one button reveals the stops on demand. -->
+<script>
+(function(){
+  var t=document.querySelector('[data-comfort-toggle]'), p=document.querySelector('[data-comfort-panel]');
+  if(!t||!p) return;
+  function set(open){ p.hidden=!open; t.setAttribute('aria-expanded',open?'true':'false'); }
+  set(false);
+  t.addEventListener('click',function(e){ set(p.hidden); e.stopPropagation(); });
+  document.addEventListener('click',function(e){ if(!p.hidden && !p.contains(e.target) && !t.contains(e.target)) set(false); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && !p.hidden){ set(false); t.focus(); } });
 })();
 </script>
 </body>

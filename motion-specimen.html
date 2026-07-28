@@ -63,6 +63,9 @@ body{
 .comfort{top:14px; right:14px; display:flex; gap:6px; align-items:center}
 .comfort span{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); margin-right:2px}
 .comfort button[aria-pressed="true"]{background:var(--ink); color:var(--paper)}
+.comfort-stops{display:flex; gap:6px; align-items:center}
+.comfort-stops[hidden]{display:none}
+.comfort-toggle[aria-expanded="true"]{background:var(--ink); color:var(--paper)}
 
 /* ── SECTIONS: each paints its own opaque ground ─────────────────── */
 section{background:var(--paper); padding:88px 22px 44px; max-width:760px; margin:0 auto;
@@ -125,10 +128,13 @@ p b{color:var(--ink); font-weight:600}
 </nav>
 
 <nav class="corner comfort" aria-label="Comfort">
-  <span>Comfort</span>
-  <button data-set="softer" aria-pressed="false">Softer</button>
-  <button data-set="default" aria-pressed="true">Default</button>
-  <button data-set="warm" aria-pressed="false">Warm-dark</button>
+  <button class="comfort-toggle" data-comfort-toggle aria-expanded="false" aria-controls="comfortStops" aria-label="Comfort and reading options">◐ Comfort</button>
+  <span class="comfort-stops" id="comfortStops" data-comfort-panel hidden>
+    <span>Comfort</span>
+    <button data-set="softer" aria-pressed="false">Softer</button>
+    <button data-set="default" aria-pressed="true">Default</button>
+    <button data-set="warm" aria-pressed="false">Warm-dark</button>
+  </span>
 </nav>
 
 <!-- SCREEN 1 · the signature, settling in -->
@@ -208,14 +214,25 @@ window.scrollTo(0,0);
 // Move 3 — comfort crossfade (live corner control, never a gate)
 // class-based comfort on html + body: default = no stop class (machine-testable by the sweep)
 const root=document.documentElement, bodyEl=document.body;
-document.querySelectorAll('.comfort button').forEach(b=>{
+document.querySelectorAll('.comfort button[data-set]').forEach(b=>{
   b.addEventListener('click',()=>{
     const set=b.dataset.set;
     ['softer','warm'].forEach(c=>{ root.classList.remove(c); bodyEl.classList.remove(c); });
     if(set==='softer'||set==='warm'){ root.classList.add(set); bodyEl.classList.add(set); }
-    document.querySelectorAll('.comfort button').forEach(x=>x.setAttribute('aria-pressed', x===b));
+    document.querySelectorAll('.comfort button[data-set]').forEach(x=>x.setAttribute('aria-pressed', x===b));
   });
 });
+
+// Comfort is a knob, not a wall: one button reveals the stops on demand.
+(function(){
+  var t=document.querySelector('[data-comfort-toggle]'), p=document.querySelector('[data-comfort-panel]');
+  if(!t||!p) return;
+  function set(open){ p.hidden=!open; t.setAttribute('aria-expanded',open?'true':'false'); }
+  set(false);
+  t.addEventListener('click',function(e){ set(p.hidden); e.stopPropagation(); });
+  document.addEventListener('click',function(e){ if(!p.hidden && !p.contains(e.target) && !t.contains(e.target)) set(false); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && !p.hidden){ set(false); t.focus(); } });
+})();
 </script>
 </body>
 </html>
