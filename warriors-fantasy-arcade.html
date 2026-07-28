@@ -13,11 +13,12 @@
   TSP-META at end of file.
 -->
 <style>
-:root{--paper:#faf5ec;--ink:#211d18;--card:#fffdf7;--edge:#d8cfbe;--gold:#a8791f;
+:root{--paper:#faf5ec;--paper-ink:#faf5ec;--ink:#211d18;--ink-fill:#211d18;--card:#fffdf7;--edge:#d8cfbe;
+--gold-ink:#7f5c10;--gold-fill:#a8791f;
 --green:#2e6b46;--red:#8a4030;--blue:#1f5fa8;--dim:#5a5348;}
-body.softer{--paper:#f3ecdd;--ink:#2c2721;--card:#faf4e6;--edge:#d3c8b2;}
-body.warm{--paper:#26221c;--ink:#ecc57a;--card:#2f2a22;--edge:#4a4234;--dim:#c9a967;
---green:#8fce9f;--red:#e09a7c;--gold:#e0b45c;--blue:#7fb4e8;}
+body.softer{--paper:#e2d9c4;--paper-ink:#e2d9c4;--ink:#2c2721;--ink-fill:#2c2721;--card:#faf4e6;--edge:#d3c8b2;}
+body.warm{--paper:#26221c;--paper-ink:#26221c;--ink:#ecc57a;--ink-fill:#ecc57a;--card:#2f2a22;--edge:#4a4234;--dim:#c9a967;
+--green:#8fce9f;--red:#e09a7c;--gold-ink:#e0b45c;--gold-fill:#e0b45c;--blue:#7fb4e8;}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--paper);color:var(--ink);font-family:"Iowan Old Style",Palatino,Georgia,serif;
 font-size:18px;line-height:1.5;min-height:100vh}
@@ -25,10 +26,10 @@ font-size:18px;line-height:1.5;min-height:100vh}
 h1{font-size:1.7rem;line-height:1.15}h2{font-size:1.3rem}
 h1:focus,h2:focus{outline:none}
 button{font-family:inherit;font-size:1rem;color:var(--ink);background:var(--card);
-border:2px solid var(--ink);border-radius:10px;min-height:48px;padding:10px 14px;cursor:pointer}
+border:2px solid var(--ink-fill);border-radius:10px;min-height:48px;padding:10px 14px;cursor:pointer}
 button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
-button.primary{background:var(--ink);color:var(--paper);font-weight:700}
-body.warm button.primary{background:var(--gold);color:#26221c;border-color:var(--gold)}
+button.primary{background:var(--ink-fill);color:var(--paper-ink);font-weight:700}
+body.warm button.primary{background:var(--gold-fill);color:#26221c;border-color:var(--gold-fill)}
 button.ghost{border-color:var(--edge);color:var(--dim);background:transparent;min-height:44px}
 button:disabled{opacity:.4;cursor:default}
 .bar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
@@ -36,14 +37,14 @@ button:disabled{opacity:.4;cursor:default}
 .podium{background:var(--card);border:2px solid var(--edge);border-radius:14px;padding:14px;margin:10px 0;text-align:center}
 .pname{font-size:1.5rem;font-weight:700}
 .ppos{color:var(--dim);margin-bottom:4px}
-.sleeper{display:inline-block;border:2px solid var(--gold);color:var(--gold);border-radius:6px;
+.sleeper{display:inline-block;border:2px solid var(--gold-fill);color:var(--gold-ink);border-radius:6px;
 padding:1px 8px;font-size:.8rem;font-weight:700;letter-spacing:.06em}
 .scout{font-style:italic;color:var(--dim);margin:8px 0;font-size:.95rem}
 .bid{font-size:2.2rem;font-weight:700;margin:6px 0}
 .bidwho{color:var(--dim);font-size:.95rem;margin-bottom:10px}
 .bidrow{display:flex;gap:10px;justify-content:center}
 .bidrow button{flex:1;max-width:130px;font-weight:700}
-.turnline{background:var(--card);border-left:5px solid var(--gold);padding:8px 12px;
+.turnline{background:var(--card);border-left:5px solid var(--gold-fill);padding:8px 12px;
 border-radius:0 10px 10px 0;margin:10px 0;font-weight:700}
 .board{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
 .pcard{background:var(--card);border:2px solid var(--edge);border-radius:10px;padding:8px 10px;
@@ -61,7 +62,7 @@ min-height:40px;font-style:italic;margin-bottom:6px}
 .chatbtns button{flex:1;min-width:120px;font-size:.85rem;min-height:44px}
 .screen{display:none}.screen.on{display:block}
 .grade{background:var(--card);border:2px solid var(--edge);border-radius:12px;padding:12px 14px;margin:10px 0}
-.super{font-weight:700;color:var(--gold)}
+.super{font-weight:700;color:var(--gold-ink)}
 .winner{font-size:1.5rem;font-weight:700;text-align:center;margin:14px 0;color:var(--green)}
 .burst{position:relative;height:60px;overflow:hidden}
 .burst span{position:absolute;width:12px;height:18px;border-radius:2px;opacity:0}
@@ -72,7 +73,12 @@ min-height:40px;font-style:italic;margin-bottom:6px}
 details{margin:14px 0;border:2px solid var(--edge);border-radius:10px;background:var(--card)}
 summary{padding:10px 14px;cursor:pointer;font-weight:700;min-height:48px;display:flex;align-items:center}
 details .inner{padding:0 14px 12px;font-size:.9rem}
-</style>
+/* This page is light-themed, but the shared floating "Home" chip (injected by
+   tsp-mobile) is styled for dark pages: near-white text on a translucent dark
+   pill. Over light paper the auditor resolves the paper as the real ground and
+   sees near-white on near-white. Give the chip an opaque dark ground here so its
+   text has a real backdrop. Higher specificity so it wins over the injected rule. */
+body .tsp-nav a{background:#26221c}
 </head>
 <body>
 <div class="wrap">
@@ -109,7 +115,7 @@ details .inner{padding:0 14px 12px;font-size:.9rem}
     </div>
   </div>
 
-  <h2 id="boardHead" tabindex="-1">The Big Board</h2>
+  <h2 id="boardHead">The Big Board</h2>
   <div class="board" id="board"></div>
 
   <div class="rosters">
