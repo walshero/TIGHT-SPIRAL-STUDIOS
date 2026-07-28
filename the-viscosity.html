@@ -42,6 +42,8 @@
     --cool:#2F4A5A;  --cool-ink:#F2EEE3;
     --floor:#CFC5AE;
     --step:34px;
+    /* TOKEN-ROLE split: decoration-only alias (same hex as --ink, per theme) */
+    --ink-line:var(--ink);
   }
   html[data-c="soft"]{
     --paper:#DCD5C6; --cell:#CEC5B2; --cell-far:#C4BAA4;
@@ -142,9 +144,12 @@
    One button. Five stops. The same five in every room in the studio.
    Written in THIS FILE'S token names (paper / ink) — a graft, not a clobber.
    ═════════════════════════════════════════════════════════════════════════ */
-body.softer{  /* STOP 2 — same design, calmer. Lower push, still far above floor. */
-  --paper: #f6f3ec;
-  --ink: #24292f;
+body.softer{  /* STOP 2 — same design, genuinely calmer: a dimmer warm paper, well
+                 below the daylight/default glare, every surface lowered together so
+                 the honeycomb never goes light-on-light. Text stays far above floor. */
+  --paper:#D8D1C0; --cell:#CCC4B0; --cell-far:#C2BAA4;
+  --line:#8E8368;  --ink:#221E16;  --label:#453E30;
+  --floor:#BEB6A0;
 }
 
 body.warmdark{  /* STOP 3 — warm charcoal, never #000. Max contrast BLOOMS on an RP retina.
@@ -177,14 +182,14 @@ body.daylight{  /* STOP 4 — maximum legibility. Bright rooms, projectors, bad 
    MAKE THE INVISIBLE STRUCTURE VISIBLE. That is every game in this studio. This
    is that engine, pointed at the studio's own interface.
    ═════════════════════════════════════════════════════════════════════════ */
-body.clear-reader{
+html.clear-reader body{
   background:#fff !important; color:#000 !important;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
   font-size:19px !important; line-height:1.65 !important;
   max-width:38em !important; margin:0 auto !important;
   padding:24px 20px 90px !important;
 }
-body.clear-reader *:not(.cr-note):not(.cr-note *):not(.comfort):not(.comfort *){
+html.clear-reader body *:not(.cr-note):not(.cr-note *):not(.comfort):not(.comfort *){
   all:revert;
   font-family:inherit !important;
   color:#000 !important; background:#fff !important; border-color:#767676 !important;
@@ -193,30 +198,30 @@ body.clear-reader *:not(.cr-note):not(.cr-note *):not(.comfort):not(.comfort *){
   position:static !important; float:none !important; max-width:100% !important;
 }
 /* Decoration is not meaning. If it carries no information, it goes. */
-body.clear-reader svg, body.clear-reader canvas, body.clear-reader video,
-body.clear-reader [aria-hidden="true"]{ display:none !important; }
+html.clear-reader body svg, html.clear-reader body canvas, html.clear-reader body video,
+html.clear-reader body [aria-hidden="true"]{ display:none !important; }
 /* Structure must be VISIBLE — that is the entire point of this stop. */
-body.clear-reader h1{ font-size:30px !important; margin:24px 0 10px !important;
+html.clear-reader body h1{ font-size:30px !important; margin:24px 0 10px !important;
   border-bottom:3px solid #000 !important; padding-bottom:5px !important; }
-body.clear-reader h2{ font-size:24px !important; margin:22px 0 8px !important;
+html.clear-reader body h2{ font-size:24px !important; margin:22px 0 8px !important;
   border-bottom:1px solid #767676 !important; padding-bottom:3px !important; }
-body.clear-reader h3{ font-size:20px !important; margin:18px 0 6px !important; }
-body.clear-reader p, body.clear-reader li{ font-size:19px !important; margin:0 0 13px !important; }
-body.clear-reader ul, body.clear-reader ol{ padding-left:26px !important; margin:0 0 16px !important; }
-body.clear-reader li{ list-style:disc !important; }
-body.clear-reader ol li{ list-style:decimal !important; }
-body.clear-reader a{ color:#0000ee !important; text-decoration:underline !important; }
-body.clear-reader a:visited{ color:#551a8b !important; }
-body.clear-reader button, body.clear-reader select, body.clear-reader input{
+html.clear-reader body h3{ font-size:20px !important; margin:18px 0 6px !important; }
+html.clear-reader body p, html.clear-reader body li{ font-size:19px !important; margin:0 0 13px !important; }
+html.clear-reader body ul, html.clear-reader body ol{ padding-left:26px !important; margin:0 0 16px !important; }
+html.clear-reader body li{ list-style:disc !important; }
+html.clear-reader body ol li{ list-style:decimal !important; }
+html.clear-reader body a{ color:#0000ee !important; text-decoration:underline !important; }
+html.clear-reader body a:visited{ color:#551a8b !important; }
+html.clear-reader body button, html.clear-reader body select, html.clear-reader body input{
   font-size:18px !important; padding:11px 16px !important;
   border:2px solid #000 !important; border-radius:0 !important;
   background:#fff !important; color:#000 !important;
   margin:0 8px 8px 0 !important; display:inline-block !important;
   min-height:44px !important; cursor:pointer !important;
 }
-body.clear-reader button[aria-pressed="true"]{ background:#000 !important; color:#fff !important; font-weight:700 !important; }
-body.clear-reader :focus-visible{ outline:4px solid #0000ee !important; outline-offset:2px !important; }
-body.clear-reader .cr-note{
+html.clear-reader body button[aria-pressed="true"]{ background:#000 !important; color:#fff !important; font-weight:700 !important; }
+html.clear-reader body :focus-visible{ outline:4px solid #0000ee !important; outline-offset:2px !important; }
+html.clear-reader body .cr-note{
   display:block !important; border:3px solid #000 !important; background:#fff !important;
   color:#000 !important; padding:15px 17px !important; margin:0 0 26px !important;
   font-size:17px !important; line-height:1.5 !important;
@@ -234,17 +239,22 @@ body.clear-reader .cr-note{
   font:700 12.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
   letter-spacing:.05em; padding:12px 15px; min-height:44px;
   background:var(--paper); color:var(--ink);
-  border:2px solid var(--ink); border-radius:2px; cursor:pointer;
+  border:2px solid var(--ink-line); border-radius:2px; cursor:pointer;
   box-shadow:0 2px 10px rgba(0,0,0,.16);
 }
 .comfort:focus-visible{ outline:4px solid #0000ee; outline-offset:3px; }
-body.clear-reader .comfort{
+html.clear-reader body .comfort{
   position:static !important; display:block !important;
   margin:0 0 20px !important; box-shadow:none !important;
 }
 @media (prefers-reduced-motion: reduce){
   *{ animation:none !important; transition:none !important; }
 }
+
+/* The shared mobile nav chip (⌂ Home) is injected later with a translucent
+   ground; on a light page that leaves near-white text measuring against the
+   paper underneath. Give it an OPAQUE ground so contrast is true on every stop. */
+.tsp-nav a{ background:#1b1a17 !important; border-color:#ffcf5a !important; color:#f6f3ec !important; }
 </style>
 </head>
 <body>
@@ -337,8 +347,10 @@ again to bring the design back.</div>
   var btn = document.getElementById("comfort");
   var lab = document.getElementById("comfort-label");
   function apply(){
-    for(var k=0;k<STOPS.length;k++){ if(STOPS[k].cls) document.body.classList.remove(STOPS[k].cls); }
-    if(STOPS[i].cls) document.body.classList.add(STOPS[i].cls);
+    /* Clear Reader rides on <html> (a mode, not a palette stop); the palette
+       stops ride on <body>. Clear from both so switching is always clean. */
+    for(var k=0;k<STOPS.length;k++){ if(STOPS[k].cls){ document.body.classList.remove(STOPS[k].cls); document.documentElement.classList.remove(STOPS[k].cls); } }
+    if(STOPS[i].cls){ (STOPS[i].cls==="clear-reader" ? document.documentElement : document.body).classList.add(STOPS[i].cls); }
     lab.textContent = STOPS[i].label;
     /* A button announces what it will DO, not what it is. A screen-reader user
        pressing this needs to know where it takes them. */

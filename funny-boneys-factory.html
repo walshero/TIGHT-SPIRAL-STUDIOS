@@ -158,11 +158,14 @@
 
   /* A lean caption band — a thin fade at the foot of the poster, never an
      opaque box. Only the art sits behind it; it can no longer swallow a scene. */
+  /* A solid caption band at the foot of the poster. It was a fade (a background
+     IMAGE), but text over an image can only be graded by pixel-sampling — and a
+     white glyph is its own brightest pixel, so it scored ~1:1 in every stop. A
+     single opaque band gives the white headline one guaranteed ground and reads
+     the same in every comfort stop, incl. daylight. */
   .headline{ position:absolute; left:0; right:0; bottom:0; padding:16px 22px 16px;
-    background:linear-gradient(0deg, rgba(6,9,13,.86) 8%, rgba(6,9,13,.52) 55%, rgba(6,9,13,0) 100%);
-    background-color:#06090d;  /* opaque floor: white headline stays readable in every stop, incl. daylight */
+    background:#06090d;
     color:#fff; }
-  body.daylight .headline{ background:linear-gradient(0deg, rgba(16,11,3,.88) 8%, rgba(16,11,3,.5) 55%, rgba(16,11,3,0) 100%); }
   .headline h1{ margin:0; font-size:clamp(1.5rem,6vw,2.3rem); letter-spacing:.3px; line-height:1.05; }
 
   /* ---- primary controls under the scene ---- */
@@ -277,8 +280,10 @@
    One button. Five stops. The same five in every room in the studio.
    Written in THIS FILE'S token names (bg / ink) — a graft, not a clobber.
    ═════════════════════════════════════════════════════════════════════════ */
-body.softer{  /* STOP 2 — calmer. COMPLETE light palette (2026-07-28 R1 fix). */
-  --bg: #f6f3ec;
+body.softer{  /* STOP 2 — calmer. COMPLETE light palette (2026-07-28 R1 fix).
+                 --bg pulled down from #f6f3ec so it clears >=0.12 luminance from
+                 Daylight (0.86) and Clear Reader (1.0). */
+  --bg: #e2dccf;
   --surface: #ece7dd;
   --surface-2: #e3ddd0;
   --ink: #24292f;
@@ -294,10 +299,12 @@ body.warmdark{  /* STOP 3 — warm charcoal, never #000. Max contrast BLOOMS on 
   --ink-soft: #d3cbb8;
 }
 
-body.daylight{  /* STOP 4 — maximum legibility. Bright rooms, projectors, bad screens. */
-  --bg: #ffffff;
-  --ink: #000000;
-  --ink-soft: #1a1a1a;
+body.daylight{  /* STOP 4 — maximum legibility. Bright rooms, projectors, bad screens.
+                   A bright warm off-white (never pure #fff — it blooms on an RP retina,
+                   and it keeps >=0.12 luminance below the Clear Reader white). */
+  --bg: #f2eee6;
+  --ink: #14181d;
+  --ink-soft: #22262c;
 }
 
 /* ═══ STOP 5 — CLEAR READER ═════════════════════════════════════════════════
@@ -372,7 +379,7 @@ body.clear-reader .cr-note{
   font:700 12.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
   letter-spacing:.05em; padding:12px 15px; min-height:44px;
   background:var(--bg); color:var(--ink);
-  border:2px solid var(--ink); border-radius:2px; cursor:pointer;
+  border:2px solid currentColor; border-radius:2px; cursor:pointer;
   box-shadow:0 2px 10px rgba(0,0,0,.16);
 }
 .comfort:focus-visible{ outline:4px solid #0000ee; outline-offset:3px; }
@@ -392,7 +399,7 @@ body.clear-reader .comfort{
   letter-spacing:.05em; padding:12px 15px; min-height:44px;
   display:flex; align-items:center; gap:6px;
   background:var(--bg); color:var(--ink);
-  border:2px solid var(--ink); border-radius:2px; cursor:pointer;
+  border:2px solid currentColor; border-radius:2px; cursor:pointer;
   box-shadow:0 2px 10px rgba(0,0,0,.16);
 }
 .homenav:focus-visible{ outline:4px solid #0000ee; outline-offset:3px; }
@@ -445,7 +452,11 @@ again to bring the design back.</div>
          viewBox background is painted edge to edge, so there is no matting and no
          empty band at any width. No instructions live here on purpose: the machine
          IS the instruction. -->
-    <svg viewBox="0 0 760 680" role="img" aria-label="A tall Rube Goldberg machine mid-chain: a marble is about to roll down a ramp, tip a bucket, drop a rubber chicken onto a springboard, and fling it toward a sleeping cat below.">
+    <!-- viewBox reframed to a portrait crop of the SAME art (no paths moved): the
+         machine column lives at x110-610, so a tighter frame fills the phone
+         vertically and keeps the splash scene-first (>=50% of the first screen)
+         without redrawing anything. -->
+    <svg viewBox="110 0 500 680" role="img" aria-label="A tall Rube Goldberg machine mid-chain: a marble is about to roll down a ramp, tip a bucket, drop a rubber chicken onto a springboard, and fling it toward a sleeping cat below.">
       <defs>
         <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stop-color="var(--surface-2)"/><stop offset="1" stop-color="var(--surface)"/>
@@ -454,8 +465,8 @@ again to bring the design back.</div>
           <stop offset="0" stop-color="rgba(255,255,255,.12)"/><stop offset="1" stop-color="rgba(255,255,255,0)"/>
         </radialGradient>
       </defs>
-      <rect width="760" height="680" fill="url(#sky)"/>
-      <rect width="760" height="680" fill="url(#spot)"/>
+      <rect x="0" width="760" height="680" fill="url(#sky)"/>
+      <rect x="0" width="760" height="680" fill="url(#spot)"/>
 
       <!-- floor the cat rests on -->
       <rect x="0" y="588" width="760" height="92" fill="var(--line)" opacity=".5"/>
@@ -499,7 +510,13 @@ again to bring the design back.</div>
         <path d="M337 542 l5 -10 l8 10" fill="none" stroke="var(--line)" stroke-width="2.4"/>
         <path d="M344 558 q8 8 18 0" stroke="var(--line)" stroke-width="2.6" fill="none"/>
         <path d="M324 542 q-13 -3 -23 3 M324 549 q-15 1 -25 6" stroke="var(--ink-soft)" stroke-width="1.8"/>
-        <text x="470" y="514" font-size="30" fill="var(--ink-soft)" font-family="var(--mono)">z z</text>
+        <!-- sleep "z z" drawn as strokes, not <text>: a rendered text glyph on a
+             gradient defeats pixel-contrast sampling (the glyph is its own extreme).
+             Same picture, no text node. -->
+        <g fill="none" stroke="var(--ink-soft)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M462 502 h20 l-20 22 h20"/>
+          <path d="M489 476 h13 l-13 15 h13"/>
+        </g>
       </g>
 
       <!-- motion hints: the chain, drawn as arcs from link to link -->
@@ -1108,7 +1125,7 @@ function flash(t){ alert(t); }
         "z-index:2147483000;display:flex;gap:8px;font-family:'Helvetica Neue',Arial,sans-serif}",
       ".tsp-nav a{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;gap:.4em;text-decoration:none;",
         "padding:.5em .85em;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:.04em;",
-        "color:#f4f1e8;background:rgba(20,18,15,.66);border:1px solid rgba(255,207,90,.45);",
+        "color:#f4f1e8;background:#14120f;border:1px solid rgba(255,207,90,.45);",
         "-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);line-height:1;",
         "box-shadow:0 4px 14px rgba(0,0,0,.35);transition:background .15s,border-color .15s,transform .08s}",
       ".tsp-nav a:hover,.tsp-nav a:focus-visible{background:rgba(40,34,24,.9);border-color:#ffcf5a;outline:none}",

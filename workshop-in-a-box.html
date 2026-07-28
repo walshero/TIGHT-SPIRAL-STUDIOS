@@ -25,6 +25,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="tsp:surface" content="tool">
 <title>Creative Writing Workshop in a Box — Workshop 4</title>
 <style>
   :root{
@@ -32,13 +33,16 @@
     --ink:#2c2620; --ink-soft:#5a5040; --rule:#c9b89a;
     --accent:#9c5a3c; --accent-deep:#7a4329;
     --sage:#6f7d5a; --sage-deep:#54603f; --gold:#c79a3e;
+    /* TOKEN_ROLE split: *-fill = decoration (bg/shadow), base = text; same hex */
+    --ink-fill:#2c2620; --paper-ink:#f4ead8; --accent-deep-fill:#7a4329; --sage-deep-fill:#54603f;
     --shadow:rgba(60,40,20,.22); --focus:#1f6f8b;
     --maxw:780px; --tap:52px;
   }
   /* high-contrast floor always wins */
   body.a11y-contrast{ --paper:#000; --paper-2:#000; --slip:#000; --ink:#fff;
     --ink-soft:#fff; --rule:#fff; --accent:#ffd24a; --accent-deep:#ffd24a;
-    --sage:#7fe3a0; --sage-deep:#7fe3a0; --gold:#ffd24a; --shadow:rgba(0,0,0,0); }
+    --sage:#7fe3a0; --sage-deep:#7fe3a0; --gold:#ffd24a; --shadow:rgba(0,0,0,0);
+    --ink-fill:#fff; --paper-ink:#000; --accent-deep-fill:#ffd24a; --sage-deep-fill:#7fe3a0; }
   body.a11y-contrast *{ border-color:#fff !important; }
 
   *{box-sizing:border-box}
@@ -48,7 +52,7 @@
     font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
     font-size:20px; line-height:1.55; -webkit-font-smoothing:antialiased;
   }
-  body.bigtext{ font-size:23px; }
+  body[data-bigtext]{ font-size:23px; }  /* text-size knob, not a comfort/darkness stop */
   body::before{
     content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
     background:
@@ -72,13 +76,13 @@
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;
     min-height:var(--tap);padding:14px 22px;font-family:ui-sans-serif,Arial,sans-serif;
     font-size:18px;font-weight:700;color:#fff;background:var(--accent);border:none;border-radius:8px;
-    cursor:pointer;box-shadow:0 4px 0 var(--accent-deep);transition:transform .08s ease,box-shadow .08s ease;text-decoration:none}
+    cursor:pointer;box-shadow:0 4px 0 var(--accent-deep-fill);transition:transform .08s ease,box-shadow .08s ease;text-decoration:none}
   .btn:hover{filter:brightness(1.04)}
-  .btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--accent-deep)}
+  .btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--accent-deep-fill)}
   .btn.ghost{background:transparent;color:var(--accent-deep);box-shadow:none;border:2px solid var(--rule)}
   .btn.ghost:active{transform:none;background:var(--paper-2)}
-  .btn.sage{background:var(--sage);box-shadow:0 4px 0 var(--sage-deep)}
-  .btn.sage:active{box-shadow:0 1px 0 var(--sage-deep)}
+  .btn.sage{background:var(--sage);box-shadow:0 4px 0 var(--sage-deep-fill)}
+  .btn.sage:active{box-shadow:0 1px 0 var(--sage-deep-fill)}
   .btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none;transform:none}
   body.a11y-contrast .btn{color:#000;border:2px solid #fff}
   :focus-visible{outline:4px solid var(--focus);outline-offset:3px;border-radius:6px}
@@ -177,7 +181,7 @@
   .filebtn input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;font-size:0}
 
   .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(80px);
-    background:var(--ink);color:var(--paper);padding:14px 22px;border-radius:10px;
+    background:var(--ink-fill);color:var(--paper-ink);padding:14px 22px;border-radius:10px;
     font-family:ui-sans-serif,Arial,sans-serif;font-weight:700;z-index:50;opacity:0;
     transition:transform .3s ease,opacity .3s ease;box-shadow:0 10px 30px -8px rgba(0,0,0,.5)}
   body.a11y-contrast .toast{background:#fff;color:#000;border:2px solid #000}
@@ -210,7 +214,7 @@
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
 
   @media (max-width:480px){
-    body{font-size:18px} body.bigtext{font-size:21px}
+    body{font-size:18px} body[data-bigtext]{font-size:21px}
     .wrap{padding:14px 14px 130px} .story{font-size:18px}
     .btn{width:100%} .row .spacer{display:none}
     .topbar{flex-direction:column;align-items:flex-start}
@@ -345,7 +349,7 @@
         <div class="rline"><div class="rscore">4</div><div class="rtext"><b>Specific and helpful,</b> but stops short — names the moment without quite saying why it matters or what it opens.</div></div>
         <div class="rline"><div class="rscore" style="background:var(--gold)">3</div><div class="rtext"><b>Engaged but general.</b> "I liked this part" without the part. The writer feels seen but not guided.</div></div>
         <div class="rline"><div class="rscore" style="background:var(--accent)">2</div><div class="rtext"><b>Vague or evaluative only.</b> "Good job" / "needs work." No anchor in the text. The writer can't act on it.</div></div>
-        <div class="rline"><div class="rscore" style="background:var(--accent-deep)">1</div><div class="rtext"><b>Editing, not responding.</b> Fixes commas, rewrites sentences, skips the story. Misses the point of the workshop.</div></div>
+        <div class="rline"><div class="rscore" style="background:var(--accent-deep-fill)">1</div><div class="rtext"><b>Editing, not responding.</b> Fixes commas, rewrites sentences, skips the story. Misses the point of the workshop.</div></div>
       </div>
       <div class="note"><strong>Re-read your own response.</strong> Where does it sit? You don't report a number — this is for you. The aim is to push every comment toward specific-and-useful before it reaches your partner.</div>
       <div class="row" style="margin-top:14px">
@@ -664,7 +668,8 @@ function openA11y(){lastFocus=document.activeElement;var o=document.getElementBy
 function closeA11y(){document.getElementById('a11yOverlay').classList.remove('open');
   document.removeEventListener('keydown',escClose);if(lastFocus)lastFocus.focus();}
 function escClose(e){if(e.key==='Escape')closeA11y();}
-function toggleText(){var b=document.getElementById('swText');var on=document.body.classList.toggle('bigtext');
+function toggleText(){var b=document.getElementById('swText');var on=document.body.getAttribute('data-bigtext')!=='on';
+  if(on){document.body.setAttribute('data-bigtext','on');}else{document.body.removeAttribute('data-bigtext');}
   b.setAttribute('aria-pressed',on);b.textContent=on?'On':'Off';a11yAnnounce('Larger text '+(on?'on':'off'));}
 function toggleContrast(){var b=document.getElementById('swContrast');var on=document.body.classList.toggle('a11y-contrast');
   b.setAttribute('aria-pressed',on);b.textContent=on?'On':'Off';a11yAnnounce('High contrast '+(on?'on':'off'));}
@@ -757,7 +762,8 @@ buildDots();paintDots();updateCount();updateCount2();updatePartner();selfCheck()
         "font-family:inherit;font-weight:800;font-size:.82rem;letter-spacing:.02em;line-height:1;",
         "padding:.4em .7em;border-radius:999px;border:1px solid currentColor;opacity:.85;",
         "background:transparent;white-space:nowrap;transition:opacity .12s,background .12s}",
-      ".tsp-barnav a:hover,.tsp-barnav a:focus-visible{opacity:1;background:rgba(127,127,127,.18);outline:none}",
+      ".tsp-barnav a:hover{opacity:1;background:rgba(127,127,127,.18)}",
+      ".tsp-barnav a:focus-visible{opacity:1;background:rgba(127,127,127,.18);outline:2px solid currentColor;outline-offset:2px}",
       ".tsp-barnav a:active{transform:translateY(1px)}",
       /* Keep the shared bar on one row once Home/Back are added: title ellipsizes */
       ".tsp-touch .topbar{gap:.4rem}",
