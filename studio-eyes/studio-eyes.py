@@ -399,7 +399,8 @@ def audit(path, no_net=True):
     halts = []
     external = []
     with sync_playwright() as p:
-        b = p.chromium.launch()
+        _exe = os.environ.get('SE_CHROME')  # optional explicit chromium path
+        b = p.chromium.launch(**({'executable_path': _exe} if _exe else {}))
         try:
             ctx = b.new_context(viewport={'width':390,'height':844})  # phone-width
 
