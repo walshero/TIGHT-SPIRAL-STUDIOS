@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The iSLO Suite — games that build the skill, and the instrument that measures it · Tight Spiral Productions</title>
 <meta name="description" content="A hub for MassBay students. One station for each of the college's seven Graduation Competencies (iSLOs). Each station holds the games that BUILD the skill and the rubric that MEASURES it — same skill, two instruments. Single-file, offline, contrast-gated.">
+<meta name="tsp:surface" content="hub"><!-- a hub, not a game: the image-floor is a GAME floor (see studio-eyes) -->
 
 <!-- tsp:source        MassBay Graduation Competencies (ISLO #5 workshop deck, Spring 2026, verbatim);
                        AAC&U Written Communication VALUE rubric modified for MassBay (ISLO #1, verbatim);
@@ -35,6 +36,12 @@
   --cool-fill:  #c3d2e6;   /*                  — GROUND ONLY */
   --live-ink:   #1d5c3f;   /*  6.7:1 on paper  — TEXT (coverage: built) */
   --warn-ink:   #8a2f22;   /*  6.9:1 on paper  — TEXT (coverage: dry cell) */
+  /* LINE twins — token-role law: same hues as the *-ink text tokens, but these
+     appear ONLY in borders/outlines/fills (decoration), never as color:. */
+  --brass-line: #6a4d12;
+  --cool-line:  #274063;
+  --live-line:  #1d5c3f;
+  --warn-line:  #8a2f22;
   --slab:       #12161b;   /* dark ground */
   --slab-ink:   #f4f1e8;   /* 16.4:1 on slab   — TEXT */
 
@@ -61,8 +68,8 @@ body{
   color:var(--ink-2); min-height:44px; padding:.42em .8em; border:1.5px solid var(--rule); border-radius:999px; background:var(--paper-2);
   transition:border-color .12s, color .12s;
 }
-.topnav a:hover{border-color:var(--cool-ink); color:var(--ink)}
-.topnav a:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
+.topnav a:hover{border-color:var(--cool-line); color:var(--ink)}
+.topnav a:focus-visible{outline:3px solid var(--cool-line); outline-offset:2px}
 .topnav-mark{margin-left:auto; font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 @media (max-width:560px){ .topnav-mark{display:none} }
 
@@ -96,9 +103,9 @@ h1 em{font-style:italic; color:var(--cool-ink)}
 .legend{display:flex; flex-wrap:wrap; gap:10px; margin:22px 0 0}
 .leg{display:inline-flex; align-items:center; gap:7px; font-family:var(--mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-2)}
 .dot{width:11px; height:11px; border-radius:2px; border:1.5px solid}
-.dot.built{border-color:var(--live-ink); background:var(--paper)}
-.dot.thin{border-color:var(--brass-ink); background:var(--paper)}
-.dot.dry{border-color:var(--warn-ink); background:var(--paper)}
+.dot.built{border-color:var(--live-line); background:var(--paper)}
+.dot.thin{border-color:var(--brass-line); background:var(--paper)}
+.dot.dry{border-color:var(--warn-line); background:var(--paper)}
 
 /* ── STATIONS ───────────────────────────────────────────────────────────── */
 section{padding:52px 0 0}
@@ -126,9 +133,9 @@ section{padding:52px 0 0}
   flex:0 0 auto; align-self:flex-start; font-family:var(--mono); font-size:10px; font-weight:700;
   letter-spacing:.09em; text-transform:uppercase; padding:4px 9px; border-radius:2px; border:1.5px solid; background:var(--paper);
 }
-.cover.built{color:var(--live-ink); border-color:var(--live-ink)}
-.cover.thin{color:var(--brass-ink); border-color:var(--brass-ink)}
-.cover.dry{color:var(--warn-ink); border-color:var(--warn-ink)}
+.cover.built{color:var(--live-ink); border-color:var(--live-line)}
+.cover.thin{color:var(--brass-ink); border-color:var(--brass-line)}
+.cover.dry{color:var(--warn-ink); border-color:var(--warn-line)}
 
 .st-body{display:grid; grid-template-columns:1fr; gap:0}
 @media (min-width:760px){ .st-body{grid-template-columns:1.35fr 1fr} }
@@ -145,29 +152,30 @@ section{padding:52px 0 0}
   border-radius:2px; background:var(--paper); text-decoration:none; color:var(--ink);
   transition:border-color .12s, transform .1s;
 }
-a.g:hover{border-color:var(--acc,var(--cool-ink)); transform:translateY(-1px)}
-a.g:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
+a.g:hover{border-color:var(--acc,var(--cool-line)); transform:translateY(-1px)}
+a.g:focus-visible{outline:3px solid var(--cool-line); outline-offset:2px}
 .g .gmark{width:26px; height:26px; color:var(--acc-ink,var(--brass-ink)); flex:0 0 auto; margin-top:1px}
+/* gmark color stays TEXT-role (acc-ink/brass-ink); the ::before below uses LINE twins */
 .g .gt{flex:1 1 auto; min-width:0}
 .g .gn{font-family:var(--serif); font-size:17px; line-height:1.2; margin:0 0 2px; display:flex; align-items:center; gap:8px; flex-wrap:wrap}
 .g .gd{margin:0; font-size:13.5px; color:var(--ink-3); line-height:1.45}
 .g.proposed{border-style:dashed; background:var(--paper-2)}
 .pill{font-family:var(--mono); font-size:9px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:2px 6px; border-radius:2px; border:1px solid; white-space:nowrap}
-.pill.live{color:var(--live-ink); border-color:var(--live-ink)}
-.pill.build{color:var(--brass-ink); border-color:var(--brass-ink)}
-.pill.design{color:var(--warn-ink); border-color:var(--warn-ink)}
-.pill.client{color:var(--cool-ink); border-color:var(--cool-ink)}
+.pill.live{color:var(--live-ink); border-color:var(--live-line)}
+.pill.build{color:var(--brass-ink); border-color:var(--brass-line)}
+.pill.design{color:var(--warn-ink); border-color:var(--warn-line)}
+.pill.client{color:var(--cool-ink); border-color:var(--cool-line)}
 
 /* measure block */
 .measure{font-size:14.5px; color:var(--ink-2); line-height:1.5}
 .measure .mname{font-family:var(--serif); font-size:17px; color:var(--ink); margin:0 0 4px; display:flex; align-items:center; gap:9px; flex-wrap:wrap}
 .mstatus{font-family:var(--mono); font-size:9.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:2px 6px; border-radius:2px; border:1px solid}
-.mstatus.live{color:var(--live-ink); border-color:var(--live-ink)}
-.mstatus.dev{color:var(--brass-ink); border-color:var(--brass-ink)}
-.mstatus.none{color:var(--warn-ink); border-color:var(--warn-ink)}
+.mstatus.live{color:var(--live-ink); border-color:var(--live-line)}
+.mstatus.dev{color:var(--brass-ink); border-color:var(--brass-line)}
+.mstatus.none{color:var(--warn-ink); border-color:var(--warn-line)}
 .dims{margin:12px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:6px}
 .dims li{font-size:13.5px; color:var(--ink-2); line-height:1.4; padding-left:16px; position:relative}
-.dims li::before{content:""; position:absolute; left:0; top:8px; width:7px; height:7px; border:1.5px solid var(--acc-ink,var(--brass-ink)); border-radius:2px}
+.dims li::before{content:""; position:absolute; left:0; top:8px; width:7px; height:7px; border:1.5px solid var(--acc,var(--brass-line)); border-radius:2px}
 .scale{margin:11px 0 0; font-family:var(--mono); font-size:11px; letter-spacing:.03em; color:var(--ink-3); line-height:1.5}
 .prov{margin:12px 0 0; padding-top:11px; border-top:1px solid var(--rule); font-size:12.5px; color:var(--ink-3); line-height:1.45}
 .prov b{color:var(--ink-2)}

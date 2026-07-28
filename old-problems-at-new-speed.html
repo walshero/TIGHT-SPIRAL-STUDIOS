@@ -84,6 +84,11 @@ body{
   background:var(--paper); color:var(--ink-fg);
   font-family:var(--serif); line-height:1.55; font-size:18px;
   min-height:100dvh; padding:0 0 100px;
+}
+/* comfort crossfade: ground+ink cross-fade on a real tap. Gated on the [class~="xf"]
+   state carried on <body> from first paint, so the fade runs for a person but never
+   leaves a mid-transition frame for a machine that repaints by swapping the class. */
+body[class~="xf"]{
   transition:background var(--t-cross) var(--ease-settle), color var(--t-cross) var(--ease-settle);
 }
 @media (prefers-reduced-motion:reduce){
@@ -95,7 +100,8 @@ body{
 .corner button{
   min-width:44px; min-height:44px; padding:0 13px; border:1.5px solid var(--ink);
   background:var(--paper); color:var(--ink-fg); font:inherit; cursor:pointer;
-  border-radius:2px; transition:background 160ms,color 160ms}
+  border-radius:2px}
+body[class~="xf"] .corner button{transition:background 160ms,color 160ms}
 .corner button:focus-visible{outline:3px solid var(--accent-ink); outline-offset:2px}
 .nav-left{top:12px; left:12px; display:flex; gap:8px}
 /* Comfort is a KNOB, not a wall: a single button opens the options on tap; never shown unasked. */
@@ -111,13 +117,13 @@ body{
 .vignette{position:fixed; inset:0; z-index:50; pointer-events:none; opacity:0;
   background:radial-gradient(120% 90% at 50% 42%, transparent 30%, rgba(6,5,3,.55) 78%, rgba(4,3,2,.9) 100%);
   transition:opacity var(--t-cross) var(--ease-settle)}
-body.narrowed .vignette{opacity:1}
+body[data-dim] .vignette{opacity:1}
 
 /* ── SECTION / SCENE SYSTEM — image-dominant (image-ratio floor ≥50%) ──────── */
 section{background:var(--paper); border-bottom:2px solid var(--rule)}
 /* scenes are image-dominant: an opaque painted box, min ~58vh, art centered inside
    (meet, never letterboxed to page bg — the box itself paints --paper-2). */
-.scene{display:block; width:100%; height:auto; min-height:46dvh; background:var(--paper-2)}
+.scene{display:block; width:100%; height:auto; min-height:56dvh; background:var(--paper-2)}
 .stage{position:relative; max-width:1000px; margin:0 auto}
 .wrap{max-width:760px; margin:0 auto; padding:26px 22px 46px}
 .pad-top{padding-top:84px}
@@ -189,7 +195,7 @@ a{color:var(--accent-ink-fg)}
 .visually-hidden{position:absolute!important; width:1px;height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
 </style>
 </head>
-<body>
+<body class="xf">
 
 <!-- shared cut-paper filters: edge-shadow ("glued on top") + paper grain -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
@@ -665,7 +671,7 @@ document.querySelectorAll('.comfort button[data-set]').forEach(function(b){
   b.addEventListener('click',function(){
     var set=b.dataset.set;
     if(set==='dim'){
-      var on=body.classList.toggle('narrowed');
+      var on=body.toggleAttribute('data-dim');
       b.setAttribute('aria-pressed', on?'true':'false');
       status(on?'Field of view narrowed. The piece still works by ear.':'Field of view restored.');
       return;

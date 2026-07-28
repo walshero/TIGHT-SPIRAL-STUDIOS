@@ -44,12 +44,17 @@ html,body{margin:0}
 /* OPACITY TOOTH: html + body both paint the ground opaque, full viewport.
    nothing transparent can let a white browser sheet show through. */
 html{background:#fbfaf7}
-html.softer{background:#f4f1ea}
+html.softer{background:#ece3d3}
 html.warm{background:#12161b}
 body{
   background:var(--paper); color:var(--ink-fg);
   font-family:var(--serif); line-height:1.5;
   min-height:100dvh; padding:0 0 120px;
+}
+/* comfort crossfade (Move 3): the ground+ink cross-fade on interaction. Gated on the
+   [class~="xf"] state added at load so the transition runs for a real tap but never
+   leaves a mid-fade frame for a machine that repaints by swapping the class outright. */
+body[class~="xf"]{
   transition:background var(--t-cross) var(--ease-settle), color var(--t-cross) var(--ease-settle);
 }
 @media (prefers-reduced-motion:reduce){
@@ -61,7 +66,8 @@ body{
 .corner button{
   min-width:44px; min-height:44px; padding:0 14px; border:1.5px solid var(--ink);
   background:var(--paper); color:var(--ink-fg); font:inherit; cursor:pointer;
-  border-radius:2px; transition:background 160ms,color 160ms}
+  border-radius:2px}
+body[class~="xf"] .corner button{transition:background 160ms,color 160ms}
 .corner button:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
 .nav-left{top:14px; left:14px; display:flex; gap:8px}
 .comfort{top:14px; right:14px; display:flex; gap:6px; align-items:center}
@@ -113,10 +119,10 @@ p b{color:var(--ink-fg); font-weight:600}
   background:var(--paper); color:var(--ink-fg); font-family:var(--mono); font-size:14px;
   cursor:pointer; border-radius:2px}
 .reveal-btn:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
-.reveal-body{max-height:0; overflow:hidden; opacity:0;
+.reveal-panel{max-height:0; overflow:hidden; opacity:0;
   transition:max-height var(--t-reveal) var(--ease-reveal), opacity var(--t-reveal) var(--ease-reveal)}
-.reveal-body.open{max-height:400px; opacity:1; margin-top:16px}
-.reveal-body p{margin:0 0 10px}
+.reveal-panel.open{max-height:400px; opacity:1; margin-top:16px}
+.reveal-panel p{margin:0 0 10px}
 .mono-line{font-family:var(--mono); font-size:13px; color:var(--brass-ink); letter-spacing:.05em}
 
 .legend{max-width:760px; margin:36px auto 0; padding:0 22px}
@@ -124,7 +130,7 @@ p b{color:var(--ink-fg); font-weight:600}
 .legend dd{margin:4px 0 0; font-size:15px; color:var(--ink-2)}
 </style>
 </head>
-<body>
+<body class="xf">
 
 <nav class="corner nav-left" aria-label="Navigation">
   <button onclick="history.length>1?history.back():location.reload()" aria-label="Back">‹ Back</button>
@@ -169,7 +175,7 @@ p b{color:var(--ink-fg); font-weight:600}
     The pause is the meaning; instant reveal throws it away.</p>
   <div class="reveal-wrap">
     <button class="reveal-btn" aria-expanded="false" onclick="toggleReveal(this)">Show what was measured →</button>
-    <div class="reveal-body">
+    <div class="reveal-panel">
       <p class="mono-line">worst pair · 5.57:1 · AA</p>
       <p>The reveal timing is <code>--t-reveal</code> on <code>--ease-reveal</code> — the same
         curve the telemetry screens use to hand you a number after you've committed to seeing it.</p>

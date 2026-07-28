@@ -37,17 +37,17 @@
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important;transition:none!important}}
   body{
     margin:0; color:var(--ink);
-    background:
-      radial-gradient(1200px 700px at 15% -5%, #fbf3df 0%, rgba(251,243,223,0) 55%),
-      radial-gradient(1000px 800px at 110% 10%, #f6ecd0 0%, rgba(246,236,208,0) 50%),
-      var(--parch);
+    /* Solid ground: text must sit on an opaque colour so contrast is arithmetic,
+       not sampled through a translucent gradient (which the render gate reads as
+       a near-1:1 wall). Warm corner glows dropped for a flat, legible parchment. */
+    background:var(--parch);
     font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
     font-size:20px; line-height:1.55; letter-spacing:.1px;
   }
   a{color:var(--teal-ink)}
   a:focus-visible,button:focus-visible,.card:focus-visible{outline:4px solid var(--focus); outline-offset:3px; border-radius:6px}
   .wrap{max-width:1120px; margin:0 auto; padding:0 22px}
-  .skip{position:absolute; left:-9999px; top:auto}
+  .skip{position:absolute; left:-9999px; top:auto; min-height:44px; display:flex; align-items:center}
   .skip:focus{position:fixed; left:16px; top:16px; z-index:99; display:inline-flex; align-items:center; min-height:44px; background:var(--gold-2); color:var(--ink); padding:14px 18px; border-radius:10px; font-weight:700; box-shadow:var(--shadow)}
   h1,h2,h3{font-family:"Trattatello","Bookman Old Style",Georgia,serif; line-height:1.08; margin:0}
   .eyebrow{font-family:Georgia,serif; text-transform:uppercase; letter-spacing:3px; font-size:.72em; color:var(--oxblood-ink); font-weight:700}
@@ -57,7 +57,7 @@
     border-bottom:8px solid var(--gold-deep)}
   .hero svg{position:absolute; inset:0; width:100%; height:100%}
   .hero .heroText{position:relative; z-index:3; align-self:flex-end; max-width:680px; margin:0 22px 4vh; padding:26px 30px;
-    background:linear-gradient(180deg, rgba(243,231,201,.86), rgba(243,231,201,.96));
+    background:var(--parch);
     border:2px solid var(--line); border-radius:16px; box-shadow:var(--shadow)}
   .hero h1{font-size:clamp(38px,6.4vw,74px); color:var(--teal-2-ink); text-shadow:0 2px 0 rgba(255,255,255,.5)}
   .hero p.lead{font-size:clamp(19px,2.2vw,24px); margin:.5em 0 0; color:var(--ink-soft)}
@@ -82,7 +82,7 @@
 
   /* ---------- SECTIONS ---------- */
   section.chapter{padding:60px 0; border-bottom:3px solid var(--line)}
-  section.chapter:nth-of-type(even){background:linear-gradient(180deg, rgba(226,207,160,.35), rgba(226,207,160,.12))}
+  section.chapter:nth-of-type(even){background:#e7d7b0}
   .chapHead{display:flex; align-items:center; gap:20px; margin-bottom:8px; flex-wrap:wrap}
   .chapHead svg{flex:0 0 auto}
   .chapHead h2{font-size:clamp(28px,4.4vw,46px); color:var(--teal-2-ink)}
@@ -154,6 +154,11 @@
   footer ul{padding-left:1.1em; margin:.4em 0}
   footer a{color:var(--gold-2-ink)}
   .backtop{display:inline-block; margin-top:16px; background:var(--gold-2); color:var(--ink); text-decoration:none; padding:10px 16px; border-radius:10px; font-weight:700}
+
+  /* The shared floating Home chip lands on the light parchment hero here, so its
+     default translucent-dark fill reads as low-contrast. Pin it to an opaque
+     near-black on this page — light label on solid dark clears the floor. */
+  .tsp-nav a{ background:#14120f !important; border-color:#e6b53c !important }
 
   @media print{
     .legend,.backtop,.skip{display:none} body{font-size:12pt} .card:hover{transform:none}
