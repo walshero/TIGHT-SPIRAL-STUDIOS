@@ -76,6 +76,9 @@ body.cft-soft{                 /* comfort mode: same design, calmer. Still far a
 .comfort button:hover,.comfort button:focus-visible,
 .comfort button[aria-pressed="true"]{background:var(--slab); color:var(--slab-ink)} /* slab = ground, slab-ink = text */
 .comfort button:focus-visible{outline:3px solid var(--cool-ink); outline-offset:-2px}
+.comfort-toggle{font-family:var(--mono); font-size:14px; font-weight:700; letter-spacing:.02em}
+.comfort-stops{display:inline-flex; align-items:stretch}
+.comfort-stops[hidden]{display:none}
 .comfort .sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
 @media (max-width:640px){ .comfort{top:8px; right:8px} }
 
@@ -265,10 +268,13 @@ footer p{margin:0 0 7px}
 <!-- COMFORT. Bigger/smaller text + a comfort toggle. Corner control, never a wall.
      No storage — text size and comfort both reset on reload (single-file law). -->
 <div class="comfort" role="group" aria-label="Reading comfort">
-  <button type="button" id="cft-smaller" aria-label="Smaller text">A&minus;</button>
-  <button type="button" id="cft-comfort" aria-pressed="false" aria-label="Comfort reading mode: softer, calmer ground">&#9680;</button>
-  <button type="button" id="cft-bigger" aria-label="Bigger text">A+</button>
-  <span class="sr" id="cft-status" role="status" aria-live="polite">Text size 100 percent</span>
+  <button type="button" class="comfort-toggle" data-comfort-toggle aria-expanded="false" aria-controls="cftPanel" aria-label="Reading comfort options">&#9680;&nbsp;Comfort</button>
+  <span class="comfort-stops" id="cftPanel" data-comfort-panel hidden>
+    <button type="button" id="cft-smaller" aria-label="Smaller text">A&minus;</button>
+    <button type="button" id="cft-comfort" aria-pressed="false" aria-label="Comfort reading mode: softer, calmer ground">&#9680;</button>
+    <button type="button" id="cft-bigger" aria-label="Bigger text">A+</button>
+    <span class="sr" id="cft-status" role="status" aria-live="polite">Text size 100 percent</span>
+  </span>
 </div>
 
 <main class="wrap">
@@ -959,6 +965,18 @@ footer p{margin:0 0 7px}
   });
 
   applyFS();
+})();
+</script>
+<!-- Comfort is a knob, not a wall: one button reveals the reading options on demand. -->
+<script>
+(function(){
+  var t=document.querySelector('[data-comfort-toggle]'), p=document.querySelector('[data-comfort-panel]');
+  if(!t||!p) return;
+  function set(open){ p.hidden=!open; t.setAttribute('aria-expanded',open?'true':'false'); }
+  set(false);
+  t.addEventListener('click',function(e){ set(p.hidden); e.stopPropagation(); });
+  document.addEventListener('click',function(e){ if(!p.hidden && !p.contains(e.target) && !t.contains(e.target)) set(false); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && !p.hidden){ set(false); t.focus(); } });
 })();
 </script>
 </body>
