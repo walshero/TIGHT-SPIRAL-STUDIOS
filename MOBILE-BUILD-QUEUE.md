@@ -1,5 +1,48 @@
 # MOBILE BUILD QUEUE — the all-aleph convening + Studio Fingers sweep (2026-07-27)
 
+## ✅ STATUS 2026-07-28 — Tiers 0–3 shipped
+
+Starting sweep: 43 HALT / 7 PASS. **Now: 4 HALT / 48 PASS**, and the three whole-page
+defect classes are at ZERO.
+
+| Defect | Start | Now |
+|---|---|---|
+| F-WALL (comfort walls) | 15 | **0** |
+| F-VIEWPORT (sideways scroll) | 3 | **0** |
+| F-METAVIEW (no viewport meta) | 1 | **0** |
+| F-TAP (sub-44px targets) | 206→184 | **8** (all documented exceptions) |
+
+- **Tier 0** — shared nav scroll-away + 44px re-inline across the fleet.
+- **Tier 1** — comfort is a knob, not a wall, on all 15 pages: 8 "gate" pages land on
+  content (Comfort button reveals the swatch panel); 7 persistent-row pages collapse
+  behind a shared `data-comfort-toggle`; the face too. funny-boneys' flagged bar was
+  gameplay lenses (mislabel fixed, not hidden).
+- **Tier 2** — killed sideways scroll on index/trail-notes/confluence-TRUNK; fragment
+  files (comfort-control snippet) skipped.
+- **Tier 3** — sandbags (56, hit-slop prose words), the calculators, sliders, the face
+  intake form, nav bars, dashboard, lens buttons, progress dots, and more — all to 44px.
+
+**Gate teeth added (feedback loop):** status-chrome excluded from the comfort count
+(draft ribbon said "N contrast issues"); off-canvas skip-links not measured; inline
+`<a>` in footer/credit bylines + showcase cards exempt (WCAG 2.5.5). Self-test stays green.
+
+**Documented F-TAP exceptions (8):**
+- confluence-TRUNK ×3 — inline email/citation links (contact sentence, submit placeholder,
+  quote attribution): WCAG 2.5.5 inline exception; 44px would break the running text.
+- cliche-cabinet ×3 — the cards are occluded by the landscape-required rotate wall in
+  portrait (deliberate design); they size correctly in landscape.
+- confluence-massbay ×2 — redundant SVG map-jump hotspots; the map renders at ~0.53 scale
+  so 44px would overlap neighbors, and both destinations are reachable via the 44px tabs.
+
+**Open follow-up (NOT F-TAP — belongs to Studio Eyes / contrast):** the comfort *toggle*
+button reads ~2.56–2.86:1 on several gate-family pages (course-river, en195-*, flash-ballast,
+review-bench, the-compound-capstone, play-the-semester*). It is now the SOLE comfort
+affordance, so the "lit exit sign" floor (≥3:1 default theme, ideally ≥4.5:1) applies. An
+active R1 contrast-paydown stream is working these; coordinate before re-touching.
+
+---
+
+
 **How this was made.** Studio Fingers swept 50 pages (43 fail, 7 pass). Five industry
 lenses were convened — mobile game design, accessibility/assistive-tech, consumer-platform
 HIG, attention-economy ergonomics, safety-critical HMI — and the Aleph synthesized. The
