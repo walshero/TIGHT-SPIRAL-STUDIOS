@@ -87,8 +87,15 @@ jobs:
       - uses: actions/configure-pages@v5
       - name: Stamp the deployment (lets Site Watch tell live from stale)
         run: |
+          BUILT="$(date -u +%FT%TZ)"
+          SHORT="$(printf '%s' "$GITHUB_SHA" | cut -c1-7)"
           printf '{"sha":"%s","ref":"%s","run":"%s","built":"%s"}\n' \
-            "$GITHUB_SHA" "$GITHUB_REF_NAME" "$GITHUB_RUN_ID" "$(date -u +%FT%TZ)" > version.json
+            "$GITHUB_SHA" "$GITHUB_REF_NAME" "$GITHUB_RUN_ID" "$BUILT" > version.json
+          # Bake the live deploy time into the studio face so a phone bookmark can
+          # see freshness (the client script renders it local + "X ago").
+          sed -i "s#id=\"deployed\" datetime=\"\"#id=\"deployed\" datetime=\"$BUILT\"#" index.html
+          sed -i "s#<span id=\"deployed-sha\">local</span>#<span id=\"deployed-sha\">$SHORT</span>#" index.html
+          grep -q "datetime=\"$BUILT\"" index.html || { echo "HALT — deploy stamp did not inject into index.html"; exit 1; }
       - uses: actions/upload-pages-artifact@v3
         with:
           path: '.'

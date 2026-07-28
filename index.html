@@ -791,10 +791,30 @@ footer p{margin:0 0 7px}
     machine in the room and a person deciding.</p>
   <p><a href="mailto:walshero@gmail.com">walshero@gmail.com</a> &nbsp;&middot;&nbsp; Boston</p>
   <p style="margin-top:11px; font-family:var(--mono); font-size:12px; color:var(--ink-3);">
-    33 builds &middot; shelf counted from the repo, 2026-07-14 &middot; not remembered</p>
+    Last deployed <time id="deployed" datetime="">local copy — not the live site</time>
+    &middot; build <span id="deployed-sha">local</span>
+    &middot; shelf counted from the repo, not remembered</p>
 </footer>
 
 </main>
+
+<script>
+// Freshness stamp. The deploy writes datetime="<UTC>" into #deployed; here we
+// render it in the viewer's own timezone with a relative "X ago". Offline-safe:
+// Date only, no fetch/storage. On a stale cached bookmark the baked time is old,
+// so "X ago" grows — that IS the staleness tell.
+(function(){
+  var t=document.getElementById('deployed'); if(!t) return;
+  var iso=t.getAttribute('datetime'); if(!iso) return;   // local copy: leave the fallback text
+  var d=new Date(iso); if(isNaN(d.getTime())) return;
+  var mins=Math.max(0,Math.round((Date.now()-d.getTime())/60000));
+  var ago = mins<1?'just now' : mins<60?mins+' min ago'
+          : mins<1440?Math.round(mins/60)+' h ago'
+          : Math.round(mins/1440)+' d ago';
+  var local=d.toLocaleString(undefined,{year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  t.textContent=local+' ('+ago+')';
+})();
+</script>
 
 <script>
 (function(){
