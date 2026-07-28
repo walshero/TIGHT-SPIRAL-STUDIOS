@@ -69,6 +69,12 @@ body.warm .go{ color:#0f0e0b; }
 .sky .track{ position:relative; height:260px; margin:.55rem 0 .2rem; background:linear-gradient(180deg, var(--sky) 0%, var(--surface) 100%); border-radius:10px; overflow:hidden; }
 .sky .ground{ position:absolute; left:0; right:0; bottom:0; height:3px; background:var(--ink-fill); border-radius:2px; }
 .sky .ball{ position:absolute; left:50%; transform:translateX(-50%); bottom:6px; width:88px; height:106px; transition:bottom .6s cubic-bezier(.2,1.2,.3,1); }
+/* Scene-first: the launch field is the first paint — the balloon roped to the ground,
+   the thing the whole game is about, before a word of instruction. */
+.launchscene{ position:relative; height:56dvh; min-height:340px; margin:0 0 1rem; border:3px solid var(--line2); border-radius:14px; overflow:hidden;
+  background:linear-gradient(180deg, var(--sky) 0%, var(--surface) 100%); }
+.launchscene::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:4px; background:var(--ink-fill); }
+.launchscene .ls-ball{ position:absolute; left:50%; bottom:10px; transform:translateX(-50%); width:min(40vw,150px); height:auto; }
 .sky .liftmark{ position:absolute; left:0; right:0; border-top:2px dashed var(--gold-br); }
 .sky .liftlabel{ position:absolute; right:2px; font:800 .64rem/1 var(--sans); color:var(--gold); background:var(--sky); padding:0 .2rem; }
 .sky .weight{ font:700 .76rem/1.2 var(--sans); color:var(--ink); }
@@ -144,6 +150,9 @@ a:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; border-radi
 
   <section class="screen on" id="scene" aria-labelledby="sceneh">
     <div class="where">The launch field</div>
+    <div class="launchscene" aria-hidden="true">
+      <svg class="ls-ball" viewBox="0 0 40 48"><path d="M20 2 C31 2 37 11 37 20 C37 29 29 35 24 38 L16 38 C11 35 3 29 3 20 C3 11 9 2 20 2 Z" fill="var(--rust)" stroke="var(--ink-fill)" stroke-width="1.5"/><path d="M20 2 C24 8 24 32 24 38 M20 2 C16 8 16 32 16 38" stroke="var(--ink-fill)" stroke-width="1" fill="none" opacity=".5"/><rect x="15" y="40" width="10" height="6" rx="1.5" fill="var(--gold-br)" stroke="var(--ink-fill)" stroke-width="1.2"/><path d="M16 40 L17 38 M24 40 L23 38" stroke="var(--ink-fill)" stroke-width="1"/></svg>
+    </div>
     <div class="playbill" aria-hidden="false">
       <div class="bill-h"><div class="k">One night only · The astounding</div><div class="t">OVERWRITTEN BALLOON CO.</div></div>
       <p class="lead" style="margin-bottom:.4rem;">A balloon sits on the ground. It is roped to the dirt by every extra word in the draft tied to it.</p>
