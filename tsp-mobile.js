@@ -88,7 +88,8 @@
     if (d.getElementById("tsp-mobile-style")) return;
     var css = [
       /* Navigation chip — always available, subtle on desktop */
-      ".tsp-nav{position:fixed;top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));",
+      /* top-left, but ABSOLUTE so it scrolls away with the page (founder call 2026-07-27) — not a pinned overlay */
+      ".tsp-nav{position:absolute;top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));",
         "z-index:2147483000;display:flex;gap:8px;font-family:'Helvetica Neue',Arial,sans-serif}",
       ".tsp-nav a{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;gap:.4em;text-decoration:none;",
         "padding:.5em .85em;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:.04em;",
