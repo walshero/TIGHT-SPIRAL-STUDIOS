@@ -117,7 +117,7 @@ h1{font-size:30px;margin:0 0 6px}
 .draft{display:inline-block;background:#1a1200;color:#ffd24a;font-weight:700;padding:4px 12px;border-radius:4px;font-size:15px;letter-spacing:.04em}
 article{background:#fff;border:1px solid #e3ddd0;border-left:6px solid #b0332a;border-radius:6px;padding:14px 18px;margin:0 0 14px}
 h2{font-size:20px;margin:0 0 8px}
-h2 a{color:inherit}
+h2 a{color:inherit;display:inline-flex;align-items:center;min-height:44px}
 .n{background:#b0332a;color:#fff;border-radius:20px;padding:1px 10px;font-size:15px;font-weight:700}
 ul{margin:0;padding-left:20px}
 li{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;margin:3px 0}
