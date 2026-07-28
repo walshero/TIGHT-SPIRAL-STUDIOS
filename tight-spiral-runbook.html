@@ -10,21 +10,29 @@
     --paper: #f6f1e7;
     --card: #fffdf8;
     --line: #d8cfbd;
-    --accent: #b5552e;       /* terracotta — used sparingly for "your turn" */
+    --accent: #b5552e;       /* terracotta — DECORATION (borders, dots, fills) */
+    --accent-ink: #a34c27;   /* terracotta TEXT twin — darker to clear 4.5:1 on paper */
     --accent-soft: #f0d9cc;
-    --claude: #3a5a6e;       /* slate blue — "Claude's turn" */
+    --claude: #3a5a6e;       /* slate blue — "Claude's turn" (TEXT) */
+    --claude-fill: #3a5a6e;  /* slate blue DECORATION twin (dots) */
     --claude-soft: #d9e4ea;
-    --done: #4a6b3a;         /* moss — "done when" */
+    --done: #4a6b3a;         /* moss — DECORATION (dots, done button) */
+    --done-ink: #4a6b3a;     /* moss TEXT twin */
     --done-soft: #dde7d4;
-    --focus: #1a6fb5;
+    --focus: #1a6fb5;        /* focus rings (DECORATION) */
+    --focus-ink: #1a6fb5;    /* link TEXT twin */
+    --ink-fill: #1a1814;     /* ink DECORATION twin (the step-number chip) */
+    --paper-ink: #f6f1e7;    /* paper TEXT twin (the step-number numeral) */
     --shadow: 0 1px 0 rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --ink: #ece6da; --paper: #1c1a16; --card: #262320; --line: #423d34;
-      --accent: #e08a5f; --accent-soft: #3a2a20;
-      --claude: #8fb6cb; --claude-soft: #22303a;
-      --done: #9bbf85; --done-soft: #25301f;
+      --accent: #e08a5f; --accent-ink: #e08a5f; --accent-soft: #3a2a20;
+      --claude: #8fb6cb; --claude-fill: #8fb6cb; --claude-soft: #22303a;
+      --done: #9bbf85; --done-ink: #9bbf85; --done-soft: #25301f;
+      --focus-ink: #6fb0e0;
+      --ink-fill: #ece6da; --paper-ink: #1c1a16;
       --shadow: 0 1px 0 rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.4);
     }
   }
@@ -41,7 +49,7 @@
   .eyebrow {
     font-family: ui-monospace, 'SF Mono', Menlo, monospace;
     font-size: 13px; letter-spacing: .14em; text-transform: uppercase;
-    color: var(--accent); margin: 0 0 6px;
+    color: var(--accent-ink); margin: 0 0 6px;
   }
   h1 { font-size: 2.1rem; line-height: 1.1; margin: 0 0 10px; letter-spacing: -.01em; }
   .sub { font-size: 1.05rem; margin: 0; color: var(--ink); opacity: .82; }
@@ -62,7 +70,7 @@
   nav.toc a::before {
     content: counter(toc, decimal-leading-zero);
     font-family: ui-monospace, monospace; font-size: 13px;
-    color: var(--accent); min-width: 26px; opacity: .8;
+    color: var(--accent-ink); min-width: 26px; opacity: .8;
   }
   nav.toc .pipe { font-weight: 600; }
   nav.toc .pipe small { display:block; font-family: ui-monospace, monospace; font-size: 12px; font-weight: 400; opacity:.7; letter-spacing:.02em; text-transform:none; }
@@ -72,7 +80,7 @@
   }
   .pipeline-head .tag {
     font-family: ui-monospace, monospace; font-size: 12px; letter-spacing:.12em;
-    text-transform: uppercase; color: var(--accent);
+    text-transform: uppercase; color: var(--accent-ink);
   }
   .pipeline-head h2 { font-size: 1.6rem; margin: 4px 0 6px; }
   .pipeline-head p { margin: 0 0 8px; opacity: .85; }
@@ -91,7 +99,7 @@
   summary:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
   .stepnum {
     font-family: ui-monospace, monospace; font-size: 14px;
-    background: var(--ink); color: var(--paper);
+    background: var(--ink-fill); color: var(--paper-ink);
     min-width: 30px; height: 30px; border-radius: 50%;
     display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;
   }
@@ -105,11 +113,11 @@
     text-transform: uppercase; margin: 0 0 8px; display:flex; align-items:center; gap:8px;
   }
   .lane h4::before { content:""; width:10px; height:10px; border-radius:3px; flex:0 0 auto; }
-  .lane.you h4 { color: var(--accent); }
+  .lane.you h4 { color: var(--accent-ink); }
   .lane.you h4::before { background: var(--accent); }
   .lane.claude h4 { color: var(--claude); }
-  .lane.claude h4::before { background: var(--claude); }
-  .lane.done h4 { color: var(--done); }
+  .lane.claude h4::before { background: var(--claude-fill); }
+  .lane.done h4 { color: var(--done-ink); }
   .lane.done h4::before { background: var(--done); }
   .lane p { margin: 0 0 8px; }
   .lane ul { margin: 4px 0 0; padding-left: 22px; }
@@ -134,8 +142,11 @@
     font-family: ui-monospace, monospace; font-size: 14px; font-weight: 600; cursor: pointer;
   }
   .copybtn:hover { filter: brightness(1.06); }
-  .copybtn:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .copybtn:focus-visible, .copybtn:focus { outline: 3px solid var(--focus); outline-offset: 2px; }
   .copybtn.copied { background: var(--done); }
+  /* Dark mode: --accent lightens to #e08a5f, where white text drops to 2.6:1.
+     Near-black label on the terracotta fill clears the floor. */
+  @media (prefers-color-scheme: dark) { .copybtn { color: #14181d; } }
 
   .note {
     border-left: 4px solid var(--accent); background: var(--accent-soft);
@@ -146,13 +157,13 @@
     margin-top: 18px; padding-top: 14px; border-top: 1px dashed var(--line);
     font-size: .98rem;
   }
-  .next strong { color: var(--accent); }
+  .next strong { color: var(--accent-ink); }
 
   footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--line);
     font-size: .9rem; opacity: .7; }
 
-  a { color: var(--focus); }
-  a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 3px; }
+  a { color: var(--focus-ink); }
+  a:focus-visible, a:focus { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 3px; }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .chev { transition: none; }
@@ -623,7 +634,7 @@ Re-present the file. Tell me what changed and what you fixed that I didn't menti
         "z-index:2147483000;display:flex;gap:8px;font-family:'Helvetica Neue',Arial,sans-serif}",
       ".tsp-nav a{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;gap:.4em;text-decoration:none;",
         "padding:.5em .85em;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:.04em;",
-        "color:#f4f1e8;background:rgba(20,18,15,.66);border:1px solid rgba(255,207,90,.45);",
+        "color:#f4f1e8;background:#14120f;border:1px solid rgba(255,207,90,.45);",
         "-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);line-height:1;",
         "box-shadow:0 4px 14px rgba(0,0,0,.35);transition:background .15s,border-color .15s,transform .08s}",
       ".tsp-nav a:hover,.tsp-nav a:focus-visible{background:rgba(40,34,24,.9);border-color:#ffcf5a;outline:none}",
