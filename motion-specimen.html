@@ -4,9 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Motion Specimen · Tight Spiral Studios</title>
+<meta name="tsp:surface" content="reference">
 <style>
 /* ── STUDIO TOKENS (canon, from index.html) ───────────────────────── */
 :root{
+  --cool-ink-fg:var(--cool-ink);
+  --ink-fg:var(--ink);
+  --paper-fg:var(--paper);
   --paper:#fbfaf7; --paper-2:#f1eee6;
   --ink:#14181d; --ink-2:#3d4652; --ink-3:#5c6675;
   --brass-ink:#6a4d12; --brass-fill:#d9a441;
@@ -22,10 +26,10 @@
 /* SOFTER — lower-contrast paper, same ink relationships.
    Class-based comfort (canonical studio pattern; machine-testable by the sweep). */
 body.softer{
-  --paper:#f4f1ea; --paper-2:#ece8de;
-  --ink:#1f2530; --ink-2:#454e5b; --ink-3:#616b79;
-  --rule:#cfc9bc;
-}
+  --paper:#ece3d3; --paper-2:#e0d8c8;
+  --ink:#1f2530; --ink-2:#404855; --ink-3:#565f6c;
+  --rule:#cabfab;
+ --ink-fg:var(--ink); --paper-fg:var(--paper);}
 /* WARM-DARK — opaque charcoal ground; TEXT is cool near-white at full strength.
    amber/brass is GROUND + motion-fill ONLY, never color: (RP hue floor). */
 body.warm{
@@ -34,7 +38,7 @@ body.warm{
   --brass-ink:#e6c67a;        /* used ONLY on dark ground as accent text, 8.9:1 on --paper */
   --cool-ink:#a9c3e6;         /* cool accent on dark */
   --rule:#333b45;
-}
+ --cool-ink-fg:var(--cool-ink); --ink-fg:var(--ink); --paper-fg:var(--paper);}
 *{box-sizing:border-box}
 html,body{margin:0}
 /* OPACITY TOOTH: html + body both paint the ground opaque, full viewport.
@@ -43,7 +47,7 @@ html{background:#fbfaf7}
 html.softer{background:#f4f1ea}
 html.warm{background:#12161b}
 body{
-  background:var(--paper); color:var(--ink);
+  background:var(--paper); color:var(--ink-fg);
   font-family:var(--serif); line-height:1.5;
   min-height:100dvh; padding:0 0 120px;
   transition:background var(--t-cross) var(--ease-settle), color var(--t-cross) var(--ease-settle);
@@ -56,27 +60,27 @@ body{
 .corner{position:fixed; z-index:40; font-family:var(--mono); font-size:13px}
 .corner button{
   min-width:44px; min-height:44px; padding:0 14px; border:1.5px solid var(--ink);
-  background:var(--paper); color:var(--ink); font:inherit; cursor:pointer;
+  background:var(--paper); color:var(--ink-fg); font:inherit; cursor:pointer;
   border-radius:2px; transition:background 160ms,color 160ms}
 .corner button:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
 .nav-left{top:14px; left:14px; display:flex; gap:8px}
 .comfort{top:14px; right:14px; display:flex; gap:6px; align-items:center}
 .comfort span{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); margin-right:2px}
-.comfort button[aria-pressed="true"]{background:var(--ink); color:var(--paper)}
+.comfort button[aria-pressed="true"]{background:var(--ink); color:var(--paper-fg)}
 .comfort-stops{display:flex; gap:6px; align-items:center}
 .comfort-stops[hidden]{display:none}
-.comfort-toggle[aria-expanded="true"]{background:var(--ink); color:var(--paper)}
+.comfort-toggle[aria-expanded="true"]{background:var(--ink); color:var(--paper-fg)}
 
 /* ── SECTIONS: each paints its own opaque ground ─────────────────── */
 section{background:var(--paper); padding:88px 22px 44px; max-width:760px; margin:0 auto;
   border-bottom:2px solid var(--rule)}
 .eyebrow{font-family:var(--mono); font-size:12.5px; letter-spacing:.14em;
   text-transform:uppercase; color:var(--brass-ink); font-weight:700; margin:0 0 18px}
-h1{font-size:clamp(30px,6vw,46px); line-height:1.08; margin:0 0 16px; color:var(--ink); font-weight:700}
-h1 em{font-style:italic; color:var(--cool-ink)}
-h2{font-size:clamp(21px,3.5vw,27px); margin:0 0 12px; color:var(--ink)}
+h1{font-size:clamp(30px,6vw,46px); line-height:1.08; margin:0 0 16px; color:var(--ink-fg); font-weight:700}
+h1 em{font-style:italic; color:var(--cool-ink-fg)}
+h2{font-size:clamp(21px,3.5vw,27px); margin:0 0 12px; color:var(--ink-fg)}
 p{font-size:clamp(16px,2.2vw,18px); color:var(--ink-2); max-width:60ch; margin:0 0 14px}
-p b{color:var(--ink); font-weight:600}
+p b{color:var(--ink-fg); font-weight:600}
 .note{font-family:var(--mono); font-size:12.5px; color:var(--ink-3); letter-spacing:.03em; margin-top:20px}
 
 /* ── MOTION 1 · SISYPHUS LETTERHEAD (the signature loop) ─────────── */
@@ -106,7 +110,7 @@ p b{color:var(--ink); font-weight:600}
 /* ── MOTION 4 · REVEAL (delayed disclosure, Console-style) ───────── */
 .reveal-wrap{margin:22px 0 6px}
 .reveal-btn{min-height:44px; padding:12px 20px; border:1.5px solid var(--ink);
-  background:var(--paper); color:var(--ink); font-family:var(--mono); font-size:14px;
+  background:var(--paper); color:var(--ink-fg); font-family:var(--mono); font-size:14px;
   cursor:pointer; border-radius:2px}
 .reveal-btn:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
 .reveal-body{max-height:0; overflow:hidden; opacity:0;
@@ -116,7 +120,7 @@ p b{color:var(--ink); font-weight:600}
 .mono-line{font-family:var(--mono); font-size:13px; color:var(--brass-ink); letter-spacing:.05em}
 
 .legend{max-width:760px; margin:36px auto 0; padding:0 22px}
-.legend dt{font-family:var(--mono); font-size:13px; color:var(--ink); font-weight:700; margin-top:14px; letter-spacing:.05em}
+.legend dt{font-family:var(--mono); font-size:13px; color:var(--ink-fg); font-weight:700; margin-top:14px; letter-spacing:.05em}
 .legend dd{margin:4px 0 0; font-size:15px; color:var(--ink-2)}
 </style>
 </head>

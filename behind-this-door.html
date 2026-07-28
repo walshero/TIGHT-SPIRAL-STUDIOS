@@ -14,14 +14,21 @@
 -->
 <style>
 :root{
-  --paper:#faf5ec; --ink:#211d18; --card:#fffdf7; --edge:#d8cfbe;
+  /* -ink names carry text, plain names paint (TOKEN-ROLE law). */
+  --paper:#faf5ec; --paper-ink:#faf5ec; --ink:#211d18; --ink-fill:#211d18;
+  --card:#fffdf7; --edge:#d8cfbe;
   --brass:#a8791f; --brick:#8a4a3b; --moss:#3f6b4f; --wine:#7c2f33;
-  --dim:#5a5348; --focus:#1f5fa8; --glow:#f7d98b;
-  --ok:#2e6b46; --no:#8a4030;
+  --dim:#5a5348; --dim-fill:#5a5348; --focus:#1f5fa8; --glow:#f7d98b;
+  --ok:#2e6b46; --ok-fill:#2e6b46; --no:#8a4030;
 }
-body.softer{ --paper:#f3ecdd; --ink:#2c2721; --card:#faf4e6; --edge:#d3c8b2; --dim:#5e5748; }
-body.warm{ --paper:#26221c; --ink:#ecc57a; --card:#2f2a22; --edge:#4a4234;
-  --dim:#c9a967; --brass:#e0b45c; --focus:#7fb4e8; --ok:#8fce9f; --no:#e09a7c; }
+/* Softer is a genuinely calmer (dimmer) cream — separated from Default by >=0.12
+   luminance, so the knob is felt, not cosmetic. */
+body.softer{ --paper:#ece0c4; --paper-ink:#ece0c4; --ink:#2c2721; --ink-fill:#2c2721;
+  --card:#faf4e6; --edge:#d3c8b2; --dim:#5e5748; --dim-fill:#5e5748; }
+body.warm{ --paper:#26221c; --paper-ink:#26221c; --ink:#ecc57a; --ink-fill:#ecc57a;
+  --card:#2f2a22; --edge:#4a4234;
+  --dim:#c9a967; --dim-fill:#c9a967; --brass:#e0b45c; --focus:#7fb4e8;
+  --ok:#8fce9f; --ok-fill:#8fce9f; --no:#e09a7c; }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:auto;}
 body{
@@ -30,22 +37,24 @@ body{
   font-size:19px; line-height:1.55; min-height:100vh;
 }
 .wrap{max-width:560px;margin:0 auto;padding:18px 16px 60px;}
-h1{font-size:2rem;line-height:1.15;letter-spacing:.01em;margin-bottom:.4em;}
+h1{font-size:2rem;line-height:1.15;letter-spacing:.01em;margin-bottom:.4em;min-height:44px;}
 h2{font-size:1.5rem;line-height:1.2;margin-bottom:.4em;}
-h1:focus,h2:focus{outline:none;}
+/* Headings are script-focus landing points (tabindex -1) on every screen change;
+   give that landing a visible ring for keyboard / low-vision users. */
+h1:focus,h2:focus,.reveal-name:focus{outline:3px solid var(--focus);outline-offset:3px;border-radius:4px;}
 p{margin-bottom:.8em;}
 .screen{display:none;}
 .screen.on{display:block;}
 .eyebrow{font-size:.85rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:.5em;}
 button{
   font-family:inherit;font-size:1.05rem;color:var(--ink);
-  background:var(--card);border:2px solid var(--ink);border-radius:10px;
+  background:var(--card);border:2px solid var(--ink-fill);border-radius:10px;
   min-height:52px;padding:12px 18px;cursor:pointer;width:100%;
   text-align:left;line-height:1.35;
 }
 button.center{text-align:center;}
 button:focus-visible{outline:3px solid var(--focus);outline-offset:3px;}
-button.primary{background:var(--ink);color:var(--paper);font-weight:700;}
+button.primary{background:var(--ink-fill);color:var(--paper-ink);font-weight:700;}
 body.warm button.primary{background:var(--brass);color:#26221c;border-color:var(--brass);}
 button.ghost{border-color:var(--edge);color:var(--dim);background:transparent;}
 button.ghost:focus-visible{outline:3px solid var(--focus);}
@@ -53,11 +62,11 @@ button:disabled{opacity:.45;cursor:default;}
 .stack{display:flex;flex-direction:column;gap:12px;margin:14px 0;}
 .choice .kbd{
   display:inline-block;min-width:1.6em;text-align:center;margin-right:10px;
-  border:1.5px solid var(--dim);border-radius:6px;font-size:.85rem;
+  border:1.5px solid var(--dim-fill);border-radius:6px;font-size:.85rem;
   padding:1px 4px;color:var(--dim);vertical-align:2px;
 }
 .choice.out{opacity:.45;text-decoration:line-through;}
-.choice.hit{border-color:var(--ok);border-width:3px;}
+.choice.hit{border-color:var(--ok-fill);border-width:3px;}
 .tally{
   display:flex;justify-content:space-between;align-items:center;
   font-size:.95rem;color:var(--dim);margin-bottom:10px;
@@ -96,6 +105,12 @@ details .inner{padding:0 16px 14px;font-size:.95rem;}
 .foot{font-size:.82rem;color:var(--dim);margin-top:30px;line-height:1.5;}
 .topbar{display:flex;justify-content:flex-end;margin-bottom:8px;}
 .topbar button{width:auto;min-height:44px;font-size:.85rem;padding:8px 14px;}
+/* Title screen leads with the door itself — the hero fills the column so the first
+   paint is scene-first, not prose-first. */
+#titleDoor{max-width:none;padding:0;}
+/* Injected mobile nav needs a visible keyboard focus ring (its default has none
+   when it docks into the shared .topbar). */
+body .tsp-barnav a:focus-visible, body .tsp-nav a:focus-visible{outline:3px solid var(--focus);outline-offset:2px;}
 /* door-open flourish */
 .leaf{transition:transform .8s cubic-bezier(.3,.7,.3,1);}
 .glowlight{opacity:0;transition:opacity .9s ease .2s;}
