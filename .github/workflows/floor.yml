@@ -46,7 +46,8 @@ jobs:
         run: |
           pip install --quiet playwright
           playwright install --with-deps chromium
-          npm install --silent axe-core
+          npm install --silent axe-core playwright
+          npx playwright install chromium
 
       - name: STUDIO EYES — full report (never blocks; the whole picture)
         run: python3 studio-eyes-sweep.py .
@@ -54,6 +55,15 @@ jobs:
 
       - name: THE RATCHET — ARMED 2026-07-14. Blocks REGRESSIONS. This one refuses.
         run: python3 ratchet.py
+
+      # ARMED 2026-07-28. The WeasyPrint sweep is blind to the LIVE dark comfort
+      # stop — it called the corpus clean while The Tell and The Viscosity showed
+      # light-on-light on the phone. This drives a real browser through every dark
+      # stop and lets axe-core (the known solution) judge contrast. Corpus is clean
+      # today, so this hard-blocks: any NEW dark-stop light-on-light fails the floor
+      # and skips deploy. Comp the eyes to a proven engine; don't re-derive WCAG.
+      - name: COMFORT AUDIT — dark-stop contrast in a real browser (axe-core). This one refuses.
+        run: node comfort-audit.mjs
 
       - name: Screenshots — every screen, light + dark, iPhone 390x844
         if: always()
