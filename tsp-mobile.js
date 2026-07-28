@@ -140,7 +140,7 @@
         "-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 4px 14px rgba(0,0,0,.4)}",
       ".tsp-rot .rk{font-size:14px;color:#ffcf5a}",
       ".tsp-rot button{background:none;border:none;color:inherit;font-size:16px;line-height:1;",
-        "padding:0 .15em;margin:0;cursor:pointer;opacity:.65}",
+        "padding:0 .15em;margin:0;cursor:pointer;opacity:.65;min-width:44px;min-height:44px}",
       ".tsp-rot button:active{opacity:1}",
       "@media (orientation:portrait){.tsp-touch .tsp-rot{display:inline-flex}}",
       ".tsp-rot-dismissed .tsp-rot{display:none!important}"
