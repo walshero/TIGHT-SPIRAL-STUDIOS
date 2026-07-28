@@ -110,10 +110,8 @@ def dashboard(files):
 <style>
 :root{color-scheme:light dark}
 body{margin:0;background:#faf8f3;color:#14181d;font:18px/1.55 system-ui,-apple-system,sans-serif;padding:24px;max-width:900px;margin:0 auto}
-@media (prefers-color-scheme:dark){body{background:#14120e;color:#f2efe8}article{background:#1d1a15;border-color:#3a352c}}
 h1{font-size:30px;margin:0 0 6px}
 .lede{color:#3d4652;margin:0 0 22px;font-size:18px}
-@media (prefers-color-scheme:dark){.lede{color:#c9c3b6}}
 .draft{display:inline-block;background:#1a1200;color:#ffd24a;font-weight:700;padding:4px 12px;border-radius:4px;font-size:15px;letter-spacing:.04em}
 article{background:#fff;border:1px solid #e3ddd0;border-left:6px solid #b0332a;border-radius:6px;padding:14px 18px;margin:0 0 14px}
 h2{font-size:20px;margin:0 0 8px}
@@ -124,7 +122,14 @@ li{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;margin
 .soft{margin:8px 0 0;font-size:15px;color:#5c6675}
 h3{margin:26px 0 8px;font-size:20px}
 .pass li{font-family:inherit}
+.pass li a{display:inline-flex;align-items:center;min-height:44px}
 footer{margin-top:30px;color:#5c6675;font-size:15px}
+@media (prefers-color-scheme:dark){
+  body{background:#14120e;color:#f2efe8}
+  article{background:#1d1a15;border-color:#3a352c;border-left-color:#e0736a}
+  .lede{color:#c9c3b6}
+  .soft,footer{color:#b8b2a4}
+}
 </style></head><body>
 <h1>Floor Status <span class="draft">DRAFT MODE</span></h1>
 <p class="lede">Every page below has text the render-proof gate measured as <b>invisible or low-contrast</b>
