@@ -143,6 +143,15 @@ def run(files, headed=False):
                                   device_scale_factor=2, is_mobile=True, has_touch=True)
         page = ctx.new_page()
         for f in files:
+            # Paste-snippets / component fragments are not pages a phone loads —
+            # no <html>/<body> root means there is nothing for a viewport to govern.
+            try:
+                head = open(f, encoding='utf-8', errors='replace').read(4000).lower()
+                if '<html' not in head and '<body' not in head:
+                    print(f"  – {os.path.basename(f)}  — fragment (snippet), not a page; skipped")
+                    continue
+            except Exception:
+                pass
             try:
                 halts = audit_page(page, f)
             except Exception as e:
