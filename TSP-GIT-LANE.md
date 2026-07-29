@@ -49,6 +49,14 @@ the studio. A session name (even this one) does not grant permanence — git doe
   studio-eyes false-positives on light-on-dark and on `<a href>`/SVG-namespace — trust
   comfort-gate's measurement over studio-eyes' guessing.
 
+## SAY IT ONCE (founder ruling, 2026-07-29)
+
+Matt is solo staff. Security and hygiene items — token revocation, expiry, cleanup chores —
+get said ONCE, at the moment they arise, and never again. No standing-reminder lists, no
+"still owed" refrains at the end of reports. He heard you. A repeated reminder is nagging,
+not diligence. If an item is genuinely blocking, say it is blocking; otherwise it is his
+to schedule, not yours to repeat.
+
 ## COMPUTED > TYPED (the hollow-claim rule)
 
 Anything you **type** as a fact about state — a version, a date, a deployment status — is
