@@ -143,6 +143,19 @@ html.seen-on .fc-seen{display:block;animation:pop .3s}
 .streak-banner.dying .sc-fill{background:#c8391c}
 .streak-banner.lost{background:linear-gradient(90deg,#f0ded8,#e7cdc4);border-color:#cbb0a6}
 .streak-banner.lost .sc-txt{color:#7a4a3a}
+/* L5 — the 'Seen' guilt panel: messages seen but not replied to, and the reply-rate. */
+.dm{text-align:left}
+.dm-row{display:flex;gap:9px;padding:8px 6px;border-bottom:1px solid #e7e9ee}
+.dm-av .avatar{width:32px;height:32px}
+.dm-b{flex:1;min-width:0}
+.dm-name{font-weight:800;font-size:13px;color:var(--feed-ink)}
+.dm-msg{font-size:13px;color:#2a2f38}
+.dm-stat{font-size:11px;font-weight:800;margin-top:3px;color:var(--feed-dim)}
+.dm-stat .noreply{color:#a3341a}
+.dm-stat .typing{color:var(--feed-accent)}
+.dm-stat .replied{color:#1a6f46}
+.dm-rate{display:flex;justify-content:space-between;align-items:center;padding:9px 6px 2px;font-size:12px;font-weight:800;color:var(--feed-dim)}
+.dm-rate b{color:var(--feed-accent);font-size:17px}
 .burst{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);pointer-events:none;
   font-size:44px;color:var(--red-ink);opacity:0;font-weight:900}
 .burst.go{animation:burst .8s ease-out}
@@ -342,8 +355,8 @@ const LEVERS=[
   fact:"A waiting red dot fires anticipatory dopamine. Constant interruption also lowers attention and raises stress.",
   cite:"Montag et al. (2019); Mark et al. (2016)"},
  {id:"social",name:"'Seen' receipts",tag:"a guilt trick",type:"flip",verb:"'Seen' receipts",target:64,
-  task:"Turn silence into guilt. Switch on read-receipts so ignoring a message feels like something users are doing to a friend.",
-  hint:"Flip it on.",
+  task:"Turn silence into guilt. Three messages sat 'Seen' with no reply. Switch on read-receipts so ignoring a friend becomes something they can see you doing.",
+  hint:"Three messages, seen, unanswered. Flip receipts on and watch the reply rate.",
   fact:"Once someone knows you saw their message, not replying feels like something you're doing to them. Reciprocity does the rest.",
   cite:"Cialdini, Influence (2001)"}
 ];
@@ -382,6 +395,22 @@ function renderOneUser(n){
   for(let i=0;i<n;i++)html+=cardHTMLU(R1_POSTS[i%R1_POSTS.length],false,3+((i*9)%22),(i===0?'now':(i*4)+'m'));
   feed.innerHTML=html;feed.scrollTop=0;
 }
+// ── L5 ('Seen' guilt): messages the cohort saw and left unanswered. ──
+const MSGS=[
+  {name:"north_trail",hue:150,msg:"you around this weekend?"},
+  {name:"daily.loaf",hue:30,msg:"did you get my last one?"},
+  {name:"q.ramos",hue:340,msg:"lmk when you're free"}
+];
+function renderMessages(){
+  const feed=document.getElementById('feed');
+  feed.innerHTML='<div class="dm">'+MSGS.map(function(m,i){
+    return '<div class="dm-row"><span class="dm-av">'+avatar(m.hue)+'</span><div class="dm-b">'
+      +'<div class="dm-name">'+m.name+'</div><div class="dm-msg">'+m.msg+'</div>'
+      +'<div class="dm-stat" id="dmStat'+i+'">Seen 2:41 PM · <span class="noreply">no reply</span></div></div></div>';
+  }).join('')+'<div class="dm-rate">Reply rate <b id="dmRate">0%</b></div></div>';
+  feed.scrollTop=0;
+}
+function animateRate(el,to){var v=0;var t=setInterval(function(){v+=8;if(v>=to){v=to;clearInterval(t);}el.textContent=v+'%';},45);}
 let step=0,meterVal=0,hit=false,cardCount=0,scrollAcc=0,lastTop=0,streakDays=3,bellCount=0;
 const T={taps:0,rewards:0,screens:0,alerts:0};
 function renderFeedBase(n){
@@ -434,8 +463,10 @@ function paintTrain(){
   stopStreakClock();
   setBell(0,false);
   document.getElementById('feedMore').textContent=(L.type==='scroll')?'loading more\u2026':'\u2014 end \u2014';
-  document.getElementById('feed').classList.toggle('scrollable',L.type==='scroll');
-  if(L.type==='tap'||L.type==='send'||L.type==='release')renderOneUser(3);else renderFeedBase(L.type==='scroll'?7:5);
+  document.getElementById('feed').classList.toggle('scrollable',L.type==='scroll'||L.type==='flip');
+  if(L.type==='tap'||L.type==='send'||L.type==='release')renderOneUser(3);
+  else if(L.type==='flip')renderMessages();
+  else renderFeedBase(L.type==='scroll'?7:5);
   if(L.type==='send')startStreakClock();
   if(L.type==='release')startNotify();
   setMeter(26);
@@ -542,7 +573,25 @@ function doFlip(k){
   const on=k.classList.toggle('armed');
   k.setAttribute('aria-pressed',on);
   document.documentElement.classList.toggle('seen-on',on);
-  if(on)bump(42);else setMeter(26);
+  const still=document.documentElement.classList.contains('still');
+  const rate=document.getElementById('dmRate');
+  if(on){
+    // Receipts on: not-replying is now visible to the sender. Silence becomes something
+    // you're doing TO a friend. Watch guilt convert 'no reply' into replies — you did nothing
+    // but flip a switch; reciprocity did the rest.
+    MSGS.forEach(function(m,i){
+      const s=document.getElementById('dmStat'+i);if(!s)return;
+      const reveal=function(){s.innerHTML='Seen 2:41 PM · <span class="replied">replied just now</span>';};
+      if(still){reveal();}
+      else{s.innerHTML='Seen 2:41 PM · <span class="typing">typing…</span>';setTimeout(reveal,320+i*280);}
+    });
+    if(rate){if(still)rate.textContent='92%';else animateRate(rate,92);}
+    bump(42);
+  }else{
+    MSGS.forEach(function(m,i){const s=document.getElementById('dmStat'+i);if(s)s.innerHTML='Seen 2:41 PM · <span class="noreply">no reply</span>';});
+    if(rate)rate.textContent='0%';
+    setMeter(26);
+  }
 }
 function onFeedScroll(){
   const L=LEVERS[step];if(L.type!=='scroll')return;
