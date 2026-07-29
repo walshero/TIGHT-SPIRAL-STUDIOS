@@ -136,6 +136,14 @@ html.seen-on .fc-seen{display:block;animation:pop .3s}
 .heart.lit{background:var(--red);animation:beat .5s}
 @keyframes beat{0%,100%{transform:rotate(45deg) scale(1)}50%{transform:rotate(45deg) scale(1.5)}}
 .feed-more{text-align:center;color:var(--feed-dim);font-size:12px;padding:8px}
+/* L2 — the stop-cue you reach for. Present at first (a real floor), then removed;
+   after that, decoy "caught up" cards surface and get buried — the bottom recedes. */
+.feed-stop{background:#eef7f0;border:1px solid #cfe8d8;border-radius:14px;padding:14px 12px;margin-bottom:10px;
+  text-align:center;color:#1a6f46;font-weight:800;font-size:13px;display:flex;flex-direction:column;gap:3px}
+.feed-stop .sub{color:#1a6f46;font-weight:600;font-size:11.5px}
+.feed-stop.buried{opacity:.7;background:#f0f2f5;border-color:#e2e6ec;color:#61697a}
+.feed-stop.buried .sub{color:#61697a}
+.floor-note{color:var(--dim);font-size:13px;font-weight:700;text-align:center;padding:16px 10px}
 .streak-banner{display:none;margin:0 10px 10px;background:linear-gradient(90deg,#fff3d6,#ffe6b0);
   border:1px solid #f0d089;border-radius:12px;padding:10px 12px;color:#7a5410;font-size:13px;font-weight:800}
 .streak-banner.on{display:block;animation:pop .4s}
@@ -438,9 +446,9 @@ const LEVERS=[
   bridge:"Your first tool: hand out likes at random and people keep checking back.",hint:"Tap Boost to drop a surprise like on a post.",
   fact:"Unpredictable rewards drive the most persistent checking \u2014 the same schedule that makes slot machines compulsive.",
   cite:"Skinner, Science and Human Behavior (1953)"},
- {id:"scroll",name:"Infinite scroll",tag:"a no-stop trick",type:"scroll",target:70,
-  task:"Take the floor out of the feed. Load more the instant users near the end so there's never a natural place to stop.",
-  hint:"Scroll the feed \u2014 it never ends.",
+ {id:"scroll",name:"Infinite scroll",tag:"a no-stop trick",type:"scroll",verb:"Remove the bottom",target:70,
+  task:"This feed has a floor \u2014 users hit \u201cyou\u2019re all caught up\u201d and close the app. Take the floor out so there\u2019s never a natural place to stop.",
+  hint:"Scroll down until you hit the bottom. Then press Remove the bottom \u2014 and try to find where the feed ends now.",
   fact:"Take away the bottom of the page and people keep going past the point they meant to stop. The missing stop-cue is the trick.",
   cite:"Tristan Harris, U.S. Senate testimony (2019)"},
  {id:"streak",name:"Don't-lose-it streak",tag:"a loss trick",type:"send",verb:"Send streak alert",target:66,
@@ -523,6 +531,7 @@ function renderMessages(){
 let flipTimers=[];
 function clearFlipTimers(){flipTimers.forEach(clearTimeout);flipTimers=[];}
 let step=0,meterVal=0,hit=false,cardCount=0,scrollAcc=0,lastTop=0,streakDays=3,bellCount=0;
+let floorRemoved=false,scrollLoads=0;
 const T={taps:0,rewards:0,screens:0,alerts:0};
 function renderFeedBase(n){
   const feed=document.getElementById('feed');
@@ -536,6 +545,19 @@ function appendCards(k){
   for(let i=cardCount;i<cardCount+k;i++)html+=cardHTML(i,false,3+((i*9)%28));
   cardCount+=k;feed.insertAdjacentHTML('beforeend',html);
 }
+// L2: a finite feed that ENDS — a real "you're all caught up" floor to scroll into.
+function stopCardHTML(buried){
+  return '<div class="feed-stop'+(buried?' buried':'')+'">You’re all caught up'
+    +'<span class="sub">'+(buried?'…loading more anyway':'That’s everything — nothing more to load.')+'</span></div>';
+}
+function renderScrollFeed(){
+  const feed=document.getElementById('feed');
+  let html='';cardCount=6;
+  for(let i=0;i<6;i++)html+=cardHTML(i,false,3+((i*9)%28));
+  html+=stopCardHTML(false);
+  feed.innerHTML=html;feed.scrollTop=0;lastTop=0;scrollAcc=0;
+}
+function appendStop(buried){document.getElementById('feed').insertAdjacentHTML('beforeend',stopCardHTML(buried));}
 function setMeter(v){
   meterVal=Math.max(0,Math.min(100,v));
   document.getElementById('meterFill').style.width=meterVal+'%';
@@ -574,12 +596,15 @@ function paintTrain(){
   stopStreakClock();
   clearFlipTimers();
   const burst=document.getElementById('burst');burst.classList.remove('go');
+  floorRemoved=false;scrollLoads=0;
   bellCount=0;setBell(0,false);
-  document.getElementById('feedMore').textContent=(L.type==='scroll')?'loading more\u2026':'\u2014 end \u2014';
+  // Scroll starts WITH a floor (the stop-cue lives inside the feed); no "loading more" yet.
+  document.getElementById('feedMore').textContent=(L.type==='scroll')?'':'\u2014 end \u2014';
   document.getElementById('feed').classList.toggle('scrollable',L.type==='scroll'||L.type==='flip');
   if(L.type==='tap'||L.type==='send'||L.type==='release')renderOneUser(3);
   else if(L.type==='flip')renderMessages();
-  else renderFeedBase(L.type==='scroll'?7:5);
+  else if(L.type==='scroll')renderScrollFeed();
+  else renderFeedBase(5);
   if(L.type==='send')startStreakClock();
   if(L.type==='release')startNotify();
   setMeter(26);
@@ -588,6 +613,7 @@ function paintTrain(){
   else if(L.type==='send')z.innerHTML='<button class="act-btn" type="button" onclick="doSend()">'+L.verb+'</button>';
   else if(L.type==='release')z.innerHTML='<button class="act-btn" type="button" onclick="doRelease()">'+L.verb+'</button>';
   else if(L.type==='flip')z.innerHTML='<button class="knob" type="button" id="knob" onclick="doFlip(this)" aria-pressed="false"><span class="knob-face"><span>'+L.verb+'</span><span class="knob-switch" aria-hidden="true"></span></span></button>';
+  else if(L.type==='scroll')z.innerHTML='<button class="act-btn" type="button" id="floorBtn" onclick="doFloor()">'+L.verb+'</button>';
   else z.innerHTML='';
 }
 function doTap(){
@@ -716,13 +742,37 @@ function doFlip(k){
     setMeter(26);
   }
 }
+// ── L2: the operator's verb — take the floor out. The stop-cue is gone; from here
+//    the feed simply never lets you reach a bottom. ──
+function doFloor(){
+  if(floorRemoved)return;
+  floorRemoved=true;
+  const feed=document.getElementById('feed');
+  const stop=feed.querySelector('.feed-stop');if(stop)stop.remove();
+  appendCards(4);
+  document.getElementById('feedMore').textContent='loading more…';
+  const btn=document.getElementById('floorBtn');
+  if(btn){btn.disabled=true;btn.style.opacity='.5';btn.textContent='Bottom removed';}
+  const h=document.getElementById('actHint');
+  if(!h.classList.contains('good'))h.innerHTML='<b class="lever-tag">The floor is gone.</b> Now scroll — the feed keeps loading past every place you meant to stop. There is no bottom to hit.';
+  bump(6);
+}
 function onFeedScroll(){
   const L=LEVERS[step];if(L.type!=='scroll')return;
   const f=document.getElementById('feed');
   const d=f.scrollTop-lastTop;lastTop=f.scrollTop;
+  // Before the floor is removed you scroll straight into "you're all caught up" and stop.
+  // That felt bottom is the whole point — engagement can't climb while a stop-cue exists.
+  if(!floorRemoved)return;
   if(d>0){scrollAcc+=d;
-    while(scrollAcc>=250){scrollAcc-=250;T.screens++;bump(6);}
-    if(f.scrollTop+f.clientHeight>f.scrollHeight-220)appendCards(4);
+    while(scrollAcc>=150){scrollAcc-=150;T.screens++;bump(8);}
+    if(f.scrollTop+f.clientHeight>f.scrollHeight-160){
+      scrollLoads++;
+      // Every few loads a decoy "caught up" surfaces — then the next load buries it.
+      // The stopping point you reach for keeps receding: the trick, in your own thumb.
+      if(scrollLoads%3===0){appendCards(3);appendStop(true);}
+      else appendCards(4);
+    }
   }
 }
 function flipCard(){document.getElementById('flip').classList.toggle('flipped');}
