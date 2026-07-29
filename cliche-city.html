@@ -1,22 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="tsp:surface" content="game">
 <title>Cliché City — Tight Spiral Studios</title>
 <style>
-/* STUDIO EYES v4 CLASS-FIX 2026-07-11: lock the palette. */
-:root{ color-scheme: light; }
+/* STUDIO EYES v2 — reconciled studio standard, adapted to Cliché City's dark palette.
+   Light = Default / Dusk / Warm-dark via html[data-light] token remaps.
+   Warm-dark is warm charcoal, never pure black. Every text >=4.5:1 in all three. */
 
-  :root{--ink:#f4f1e8;--paper:#12100f;--paper2:#1c1917;--hot-ink:#ff5a3c;--hot-fill:#ff5a3c;--dim:#8a857b;--gold:#ffcf5a;
-    --corp:#57c7ff;--folk:#ffb14e;--nat:#6ee7a5;--time:#c79bff;--misc:#c8bfae;}
+/* ---- LIGHT: DEFAULT (day) — the page's own tokens ---- */
+:root{
+  color-scheme: dark;
+  --ink:#f4f1e8;--paper:#12100f;--paper2:#1c1917;--hot-ink:#ff5a3c;--hot-fill:#ff5a3c;--dim:#948d82;--gold:#ffcf5a;
+  --corp:#57c7ff;--folk:#ffb14e;--nat:#6ee7a5;--time:#c79bff;--misc:#c8bfae;
+  /* Studio Eyes chrome surfaces (dark, adapted to this page) */
+  --se-surface:#1a1613;--se-surface2:#232019;--se-line:#3a352f;
+  --se-accent:#ffcf5a;--se-on-accent:#1a0d09;--se-focus:#ffcf5a;
+  --tap:44px;
+}
+/* ---- LIGHT: DUSK ---- */
+html[data-light="dusk"]{
+  --paper:#171310;--paper2:#221d18;--dim:#9a938a;
+  --se-surface:#201b16;--se-surface2:#2a251d;--se-line:#433c31;
+}
+/* ---- LIGHT: WARM-DARK (night) — warm charcoal, never pure black ---- */
+html[data-light="night"]{
+  --paper:#1c1a16;--paper2:#262219;--dim:#a49c90;
+  --se-surface:#242019;--se-surface2:#302b22;--se-line:#4a4234;
+}
+/* ---- TOGGLE: high contrast ---- */
+html.se-contrast{ --ink:#fff7e6;--dim:#c9c1b2; }
+/* ---- TOGGLE: text size A / A+ / A++ ---- */
+html{ font-size:100%; }
+html.se-a1{ font-size:113%; }
+html.se-a2{ font-size:126%; }
+/* ---- TOGGLE: reduce motion ---- */
+html.se-reduce *,html.se-reduce *::before,html.se-reduce *::after{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+@media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; } }
+/* ---- TOGGLE: colorblind cues ---- */
+html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
+  html,body{min-height:100%}
   body{background:var(--paper);color:var(--ink);font-family:"Georgia","Times New Roman",serif;
-    display:flex;align-items:center;justify-content:center;min-height:100vh;overflow:hidden;}
+    margin:0;min-height:100vh;transition:background .18s ease,color .18s ease;}
   .bg{position:fixed;inset:0;z-index:0;pointer-events:none;
     background:radial-gradient(1200px 800px at 50% -10%, #241f1c 0%, var(--paper) 62%);}
-  #stage{z-index:1}
+
+/* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+.se-chrome{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;
+  padding:9px 14px;background:var(--se-surface);border-bottom:2px solid var(--se-line);
+  position:sticky;top:0;z-index:100;font-family:"Helvetica Neue",Arial,sans-serif;}
+.se-home{justify-self:start;display:inline-flex;align-items:center;gap:7px;min-height:var(--tap);
+  padding:8px 12px;border:1.5px solid var(--se-line);border-radius:8px;background:var(--se-surface2);
+  color:var(--ink);font-weight:700;font-size:13px;text-decoration:none;letter-spacing:.03em;}
+.se-brand{justify-self:center;display:inline-flex;align-items:center;gap:9px;color:var(--ink);}
+.se-brand svg{width:34px;height:20px;color:var(--se-accent);flex:0 0 auto;}
+.se-brand .wm{font-family:"Georgia",serif;font-size:16px;letter-spacing:.01em;white-space:nowrap;}
+.se-eyes{justify-self:end;display:inline-flex;align-items:center;gap:7px;min-height:var(--tap);
+  padding:8px 13px;border:2px solid transparent;border-radius:8px;background:var(--se-accent);
+  color:var(--se-on-accent);font-weight:800;font-size:13px;cursor:pointer;letter-spacing:.03em;}
+.se-home:focus-visible,.se-eyes:focus-visible{outline:3px solid var(--se-focus);outline-offset:2px;}
+@media (max-width:560px){.se-brand .wm{display:none;}}
+
+/* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+.se-panel{position:fixed;right:12px;top:64px;z-index:101;
+  width:min(320px,calc(100vw - 24px));background:var(--se-surface);color:var(--ink);
+  border:2px solid var(--se-accent);border-radius:10px;padding:15px;
+  box-shadow:0 10px 34px rgba(0,0,0,.5);display:none;font-family:"Helvetica Neue",Arial,sans-serif;}
+.se-panel[data-open="1"]{display:block;}
+.se-panel h2{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin:0 0 8px;}
+.se-row{display:flex;gap:6px;margin-bottom:14px;}
+.se-btn{flex:1;min-height:var(--tap);padding:8px 4px;border:1.5px solid var(--se-line);border-radius:8px;
+  background:var(--se-surface2);color:var(--ink);font-weight:700;font-size:12.5px;cursor:pointer;font-family:inherit;}
+.se-btn[aria-pressed="true"]{background:var(--se-accent);color:var(--se-on-accent);border-color:var(--se-accent);}
+.se-btn:focus-visible{outline:3px solid var(--se-focus);outline-offset:2px;}
+.se-tog{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;
+  min-height:var(--tap);padding:8px 11px;margin-bottom:6px;border:1.5px solid var(--se-line);border-radius:8px;
+  background:var(--se-surface2);color:var(--ink);font-weight:600;font-size:14px;cursor:pointer;text-align:left;font-family:inherit;}
+.se-tog[aria-pressed="true"]{border-color:var(--se-accent);}
+.se-tog .st{font-size:11px;color:var(--dim);}
+.se-tog[aria-pressed="true"] .st{color:var(--se-accent);font-weight:700;}
+.se-tog:focus-visible{outline:3px solid var(--se-focus);outline-offset:2px;}
+.se-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
+
+/* ═══ STAGE WRAP — centers the game, normal scrolling ═══ */
+.se-stagewrap{display:flex;align-items:center;justify-content:center;padding:22px 12px;position:relative;z-index:1;}
+
   #stage{position:relative;width:min(96vw,1200px);aspect-ratio:3/2;
     background:var(--paper);
     border:2px solid #3a352f;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.6);}
@@ -42,16 +114,63 @@
   .controls{font-family:"Helvetica Neue",Arial,sans-serif;display:flex;gap:1.3em;flex-wrap:wrap;justify-content:center;color:var(--dim);font-size:clamp(12px,1.5vw,16px);margin-bottom:1.7em;}
   .controls b{color:var(--ink)}
   kbd{display:inline-block;background:var(--paper2);border:1px solid #4a443c;border-bottom-width:3px;border-radius:6px;padding:.15em .5em;font-family:"Helvetica Neue",Arial,sans-serif;color:var(--ink);font-size:.95em;margin:0 .1em;}
-  button{font-family:"Helvetica Neue",Arial,sans-serif;background:var(--hot-fill);color:#1a0d09;border:none;border-radius:999px;min-height:44px;padding:.75em 2.1em;font-size:clamp(16px,2vw,20px);font-weight:700;letter-spacing:.04em;cursor:pointer;text-transform:uppercase;box-shadow:0 6px 0 #b93b23;transition:transform .08s ease;}
-  button:hover{transform:translateY(-1px)}button:active{transform:translateY(3px);box-shadow:0 3px 0 #b93b23}
+  button.play{font-family:"Helvetica Neue",Arial,sans-serif;background:var(--hot-fill);color:#1a0d09;border:none;border-radius:999px;min-height:44px;padding:.75em 2.1em;font-size:clamp(16px,2vw,20px);font-weight:700;letter-spacing:.04em;cursor:pointer;text-transform:uppercase;box-shadow:0 6px 0 #b93b23;transition:transform .08s ease;}
+  button.play:hover{transform:translateY(-1px)}button.play:active{transform:translateY(3px);box-shadow:0 3px 0 #b93b23}
+  button.play:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
   .imp{margin-top:.8em;color:var(--nat);font-family:Arial,sans-serif;font-size:13px}
-  .tag{position:absolute;bottom:12px;right:18px;z-index:6;font-family:"Helvetica Neue",Arial,sans-serif;letter-spacing:.28em;text-transform:uppercase;font-size:11px;color:#8a857b;pointer-events:none;}
+  .tag{position:absolute;bottom:12px;right:18px;z-index:6;font-family:"Helvetica Neue",Arial,sans-serif;letter-spacing:.28em;text-transform:uppercase;font-size:11px;color:var(--dim);pointer-events:none;}
   .final{font-size:clamp(20px,3vw,30px);color:var(--gold);margin-bottom:.3em;font-family:"Georgia",serif}
   .verdict{color:var(--dim);font-style:italic;margin-bottom:1.6em;max-width:46ch}
+
+/* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+.se-rail{display:flex;gap:10px;justify-content:center;padding:20px;border-top:2px solid var(--se-line);
+  background:var(--se-surface);position:relative;z-index:1;font-family:"Helvetica Neue",Arial,sans-serif;}
+.se-rail a,.se-rail button{min-height:var(--tap);padding:10px 18px;border:1.5px solid var(--se-line);border-radius:8px;
+  background:var(--se-surface2);color:var(--ink);font-weight:700;font-size:13px;text-decoration:none;cursor:pointer;
+  font-family:inherit;letter-spacing:.03em;display:inline-flex;align-items:center;}
+.se-rail a:focus-visible,.se-rail button:focus-visible{outline:3px solid var(--se-focus);outline-offset:2px;}
 </style>
 </head>
 <body>
 <div class="bg" aria-hidden="true"></div>
+
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
+
+<main class="se-stagewrap">
 <div id="stage">
   <canvas id="game"></canvas>
   <div id="hud">
@@ -81,9 +200,9 @@
       <span><b>Rotate</b> <kbd>&uarr;</kbd> or <kbd>R</kbd></span>
       <span><b>Place</b> <kbd>Space</kbd> or <kbd>&darr;</kbd></span>
     </div>
-    <button id="startBtn">Break ground</button>
+    <button class="play" id="startBtn">Break ground</button>
     <p class="imp" id="impNote"></p>
-    <p style="margin-top:.6em;color:#8a857b;font-family:Arial,sans-serif;font-size:13px">No timer. Place at your own pace — a ghost shows where each slab lands.</p>
+    <p style="margin-top:.6em;color:var(--dim);font-family:Arial,sans-serif;font-size:13px">No timer. Place at your own pace — a ghost shows where each slab lands.</p>
   </div>
 
   <div class="screen hidden" id="overScreen">
@@ -91,18 +210,52 @@
     <h1>Game over</h1>
     <p class="final" id="finalScore"></p>
     <p class="verdict" id="verdict"></p>
-    <button id="againBtn">Rezone</button>
+    <button class="play" id="againBtn">Rezone</button>
   </div>
 
   <div class="tag">Studio Eyes · city build</div>
-  <a href="cliche-cowpaths.html" style="position:absolute;bottom:12px;left:18px;z-index:6;font-family:'Helvetica Neue',Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase;font-size:11px;color:#8a857b;text-decoration:none;min-height:44px;display:inline-flex;align-items:center;padding:0 8px">&lsaquo; Cabinet</a>
+  <a href="cliche-cowpaths.html" style="position:absolute;bottom:12px;left:18px;z-index:6;font-family:'Helvetica Neue',Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase;font-size:11px;color:var(--dim);text-decoration:none;min-height:44px;display:inline-flex;align-items:center;padding:0 8px">&lsaquo; Cabinet</a>
 </div>
+</main>
 
-<!-- TSP mobile controls: move / rotate / drop -->
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <a href="cliche-cowpaths.html" aria-label="Back to the Cliché cabinet">Back</a>
+  <a href="index.html" aria-label="Home">Home</a>
+</nav>
+
+<script>
+/* STUDIO EYES — light ladder, text size, comfort toggles */
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+})();
+</script>
+
+<!-- TSP mobile controls: move / rotate / drop (nav handled by the studio chrome) -->
 <script>
   window.TSP_MOBILE = {
-    home: "index.html",
-    back: "cliche-cowpaths.html",
+    nav: false,
     controls: [
       { label:"◀", key:"ArrowLeft",  side:"left", big:true, aria:"Move left" },
       { label:"▶", key:"ArrowRight", side:"left", big:true, aria:"Move right" },
@@ -113,7 +266,7 @@
 </script>
 <!-- TSP-MOBILE (inlined from tsp-mobile.js — single-file-offline law) -->
 <script>
-/* Tight Spiral Studios — shared mobile controls + Home/Back nav.
+/* Tight Spiral Studios — shared mobile controls.
    Source & docs: tsp-mobile.js. Edit there, then re-inline. */
 (function () {
   "use strict";
@@ -132,7 +285,6 @@
   if (isMobile) root.classList.add("tsp-mobile");
 
   /* ---- Synthetic keyboard dispatch --------------------------------------- */
-  // Games listen on window (or document) for keydown/keyup and read e.key.
   var evTarget = (cfg.target === "document") ? d : window;
 
   function dispatchKey(type, key) {
@@ -143,7 +295,6 @@
         bubbles: true, cancelable: true, view: window
       });
     } catch (e) {
-      // Legacy fallback
       ev = d.createEvent("Event");
       ev.initEvent(type, true, true);
       try { ev.key = key; } catch (_) {}
@@ -170,31 +321,6 @@
   function injectStyles() {
     if (d.getElementById("tsp-mobile-style")) return;
     var css = [
-      /* Navigation chip — always available, subtle on desktop */
-      ".tsp-nav{position:absolute;top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));",
-        "z-index:2147483000;display:flex;gap:8px;font-family:'Helvetica Neue',Arial,sans-serif}",
-      ".tsp-nav a{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;gap:.4em;text-decoration:none;",
-        "padding:.5em .85em;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:.04em;",
-        "color:#f4f1e8;background:rgba(20,18,15,.66);border:1px solid rgba(255,207,90,.45);",
-        "-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);line-height:1;",
-        "box-shadow:0 4px 14px rgba(0,0,0,.35);transition:background .15s,border-color .15s,transform .08s}",
-      ".tsp-nav a:hover,.tsp-nav a:focus-visible{background:rgba(40,34,24,.9);border-color:#ffcf5a;outline:none}",
-      ".tsp-nav a:active{transform:translateY(1px)}",
-      "@media (min-width:900px) and (pointer:fine){.tsp-nav{opacity:.55}.tsp-nav:hover{opacity:1}}",
-
-      /* Nav integrated into the studio's shared .topbar (no overlap) */
-      ".tsp-barnav{display:inline-flex;align-items:center;gap:.35rem;margin-right:.25rem;flex:none}",
-      ".tsp-barnav a{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;gap:.3em;text-decoration:none;color:inherit;",
-        "font-family:inherit;font-weight:800;font-size:.82rem;letter-spacing:.02em;line-height:1;",
-        "padding:.4em .7em;border-radius:999px;border:1px solid currentColor;opacity:.85;",
-        "background:transparent;white-space:nowrap;transition:opacity .12s,background .12s}",
-      ".tsp-barnav a:hover,.tsp-barnav a:focus-visible{opacity:1;background:rgba(127,127,127,.18);outline:none}",
-      ".tsp-barnav a:active{transform:translateY(1px)}",
-      /* Keep the shared bar on one row once Home/Back are added: title ellipsizes */
-      ".tsp-touch .topbar{gap:.4rem}",
-      ".tsp-touch .topbar .wm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1 1 auto}",
-
-      /* Gamepad — only rendered on touch devices */
       ".tsp-pad{position:fixed;left:0;right:0;bottom:0;z-index:2147482000;",
         "display:flex;justify-content:space-between;align-items:flex-end;pointer-events:none;",
         "padding:0 max(14px,env(safe-area-inset-left)) max(16px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-right));",
@@ -210,10 +336,8 @@
         "box-shadow:0 6px 18px rgba(0,0,0,.4);transition:background .06s,transform .06s;cursor:pointer}",
       ".tsp-btn.big{min-width:82px;min-height:82px;font-size:16px}",
       ".tsp-btn:active,.tsp-btn.on{background:rgba(255,207,90,.9);color:#1a0d09;transform:scale(.94)}",
-      /* Hide gamepad on non-touch so desktop keeps keyboard feel */
       ".tsp-no-touch .tsp-pad{display:none}",
 
-      /* Rotate-for-more-room hint — canvas games only, portrait phones only */
       ".tsp-rot{position:fixed;left:50%;transform:translateX(-50%);top:calc(72px + env(safe-area-inset-top));",
         "z-index:2147482500;display:none;align-items:center;gap:.55em;padding:.5em .55em .5em .9em;",
         "border-radius:999px;background:rgba(24,20,15,.86);color:#f4f1e8;",
@@ -231,57 +355,6 @@
     s.id = "tsp-mobile-style";
     s.textContent = css;
     d.head.appendChild(s);
-  }
-
-  /* ---- Navigation (Home / Back) ------------------------------------------ */
-  function makeLink(href, label, aria) {
-    var a = d.createElement("a");
-    a.href = href; a.innerHTML = label;
-    a.setAttribute("aria-label", aria);
-    return a;
-  }
-
-  function buildNav() {
-    if (cfg.nav === false) return;
-    if (d.querySelector(".tsp-nav, .tsp-barnav")) return;
-
-    var home = cfg.home === undefined ? "index.html" : cfg.home;
-    var links = [];
-    if (cfg.back) links.push(makeLink(cfg.back, "‹ Back", "Back"));
-    if (home)     links.push(makeLink(home, "⌂ Home", "Home"));
-    if (!links.length) return;
-
-    // Prefer integrating into the studio's shared sticky header if present —
-    // avoids overlapping page titles and matches each page's palette.
-    var bar = cfg.floatNav ? null : d.querySelector(".topbar");
-    if (bar) {
-      var wrap = d.createElement("span");
-      wrap.className = "tsp-barnav";
-      links.forEach(function (l) { wrap.appendChild(l); });
-      bar.insertBefore(wrap, bar.firstChild);
-      return;
-    }
-
-    // Otherwise: floating chip, and reserve top space on scrollable pages so
-    // it never covers the header/title.
-    var nav = d.createElement("nav");
-    nav.className = "tsp-nav";
-    nav.setAttribute("aria-label", "Site navigation");
-    links.forEach(function (l) { nav.appendChild(l); });
-    d.body.appendChild(nav);
-    reserveTopSpace();
-  }
-
-  function reserveTopSpace() {
-    if (!hasTouch) return;                 // desktop keeps its exact layout
-    // Skip full-viewport apps (canvas games, fixed overlays) — the chip sits
-    // in their letterbox margin and body padding would distort them.
-    var cs = getComputedStyle(d.body);
-    if (cs.overflowY === "hidden" || cs.overflowX === "hidden") return;
-    var scrolls = root.scrollHeight > (window.innerHeight + 4);
-    if (!scrolls) return;
-    var pad = parseFloat(cs.paddingTop) || 0;
-    d.body.style.paddingTop = (pad + 58) + "px";
   }
 
   /* ---- Gamepad ------------------------------------------------------------ */
@@ -320,7 +393,6 @@
         btn.classList.add("on");
         dispatchKey("keydown", key);
       } else {
-        // tap: quick down/up so edge-triggered actions (fire/rotate/drop) fire once
         btn.classList.add("on");
         dispatchKey("keydown", key);
         setTimeout(function () { dispatchKey("keyup", key); }, 24);
@@ -352,7 +424,6 @@
       btn.addEventListener("mouseup", release);
       btn.addEventListener("mouseleave", release);
     }
-    // Safety: releasing a held key if the page loses focus
     window.addEventListener("blur", release);
   }
 
@@ -360,7 +431,7 @@
   function buildRotateHint() {
     if (!hasTouch) return;
     if (cfg.rotateHint === false) return;
-    if (!cfg.controls || !cfg.controls.length) return;   // canvas games only
+    if (!cfg.controls || !cfg.controls.length) return;
     if (d.querySelector(".tsp-rot")) return;
     var hint = d.createElement("div");
     hint.className = "tsp-rot";
@@ -377,7 +448,6 @@
   /* ---- Boot --------------------------------------------------------------- */
   function boot() {
     injectStyles();
-    buildNav();
     buildPad();
     buildRotateHint();
   }
@@ -388,7 +458,6 @@
     boot();
   }
 
-  // Expose a tiny API for pages that want to toggle the pad (e.g. hide on menus)
   window.TSPMobile = {
     isTouch: hasTouch,
     isMobile: isMobile,

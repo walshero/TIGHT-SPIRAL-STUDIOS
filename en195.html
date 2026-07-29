@@ -1,30 +1,108 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="tsp:surface" content="doc">
 <title>EN195 — Play the Semester</title>
 <style>
-/* STUDIO EYES v4 CLASS-FIX 2026-07-11: lock the palette. */
-:root{ color-scheme: light; }
+/* ═══ TSP COMFORT KERNEL v2 — Studio Eyes + reserved chrome ═══
+   Light: Default(Day) / Dusk / Warm-dark(Night) via html[data-light] token remaps.
+   The page keeps its warm amber/cream identity; Warm-dark is warm charcoal, never
+   pure black. Every visible text stays >=4.5:1 in all three modes. */
 
-:root{--bg:#1a1410;--ink:#f4e4c1;--ink-fill:#f4e4c1;--amber-ink:#e8b04a;--amber-fill:#e8b04a;--btn-ink:#1a1410;--dim:#b89968;--line:#3a2f22;--panel:#221a12;--held:#2a221a;}
-/* High Contrast = a near-black-on-near-white light stop: maximum contrast and a
-   real, felt change from the warm-dark default (which is already near-black, so a
-   darker stop is impossible). */
-body.hc{--bg:#fbfaf7;--ink:#14181d;--ink-fill:#14181d;--amber-ink:#7a4600;--amber-fill:#8a5200;--btn-ink:#fbfaf7;--dim:#5a4b30;--line:#c9bfa8;--panel:#f1ece0;--held:#e7e0d0;}
+/* ---- LIGHT: DAY (default) ---- */
+:root{ color-scheme:light;
+  --bg:#f4ecda; --surface:#fbf5e6; --surface-2:#efe4c8;
+  --ink:#221d12; --ink-2:#463b22; --line:#d8c59a;
+  --accent:#3f5f78; --accent-strong:#2c4658; --focus:#8f3f00; --on-accent:#ffffff;
+  --amber:#7a4600;
+  --r:10px; --tap:48px;
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:ui-monospace,'SF Mono',Menlo,monospace;
+  --motion:.18s;
+  /* page-name aliases — resolve dynamically to whichever mode is active */
+  --panel:var(--surface); --held:var(--surface-2);
+  --dim:var(--ink-2); --amber-ink:var(--amber); --amber-fill:var(--amber);
+  --ink-fill:var(--ink); --btn-ink:var(--on-accent);
+}
+/* ---- LIGHT: DUSK ---- */
+html[data-light="dusk"]{
+  --bg:#ecdcbb; --surface:#f3e6c8; --surface-2:#e2c99a;
+  --ink:#241a10; --ink-2:#4a3a1e; --line:#cdb488;
+  --accent:#37536a; --accent-strong:#24384a; --focus:#9c4000; --on-accent:#ffffff;
+  --amber:#7a4200;
+}
+/* ---- LIGHT: WARM-DARK (night) — the page's native arcade look ---- */
+html[data-light="night"]{
+  --bg:#1c1a16; --surface:#242019; --surface-2:#33302a;
+  --ink:#f2e3bf; --ink-2:#d8c59a; --line:#463f30;
+  --accent:#8aa0b8; --accent-strong:#a9bcd0; --focus:#f0c357; --on-accent:#141109;
+  --amber:#e8b04a;
+}
+/* ---- TOGGLE: high contrast ---- */
+html.se-contrast:not([data-light="night"]){ --bg:#fbfaf7; --surface:#fbfaf7; --surface-2:#f0ece2; --ink:#141109; --ink-2:#2c2517; --line:#b9a06a; --accent:#243a4a; --accent-strong:#1e3140; --amber:#6a3d00; }
+html.se-contrast[data-light="night"]{ --bg:#0e0d0b; --surface:#161410; --surface-2:#201c15; --ink:#fff7e6; --ink-2:#efe0bc; --line:#5a4f3a; --accent:#b9cbe0; --accent-strong:#c9d8e8; --amber:#f0c357; }
+/* ---- TOGGLE: text size A / A+ / A++ ---- */
+html{ font-size:100%; }
+html.se-a1{ font-size:113%; }
+html.se-a2{ font-size:126%; }
+/* ---- TOGGLE: reduce motion ---- */
+html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+@media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+/* ---- TOGGLE: colorblind cues ---- */
+html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+
 *{box-sizing:border-box;}
-body{background:var(--bg);color:var(--ink);font-family:Georgia,'Times New Roman',serif;line-height:1.6;margin:0;}
-nav.top{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;background:var(--panel);border-bottom:2px solid var(--line);padding:.6rem 1rem;position:sticky;top:0;z-index:10;}
-nav.top a.logo{font-size:1.15rem;color:var(--amber-ink);text-decoration:none;font-weight:bold;letter-spacing:.5px;margin-right:auto;padding:.5rem .4rem;min-height:48px;display:flex;align-items:center;}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);line-height:1.6;margin:0;
+  transition:background var(--motion) ease, color var(--motion) ease;}
+
+/* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+.se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+  padding:9px 14px; background:var(--surface); border-bottom:2px solid var(--ink);
+  position:sticky; top:0; z-index:100; }
+.se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 12px; border:1.5px solid var(--line); border-radius:8px; background:var(--surface-2);
+  color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; }
+.se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+.se-brand svg{ width:34px; height:20px; color:var(--accent-strong); flex:0 0 auto; }
+.se-brand .wm{ font-family:var(--serif); font-size:16px; letter-spacing:.01em; white-space:nowrap; }
+.se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--accent-strong);
+  color:var(--on-accent); font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer; }
+.se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+@media (max-width:560px){ .se-brand .wm{ display:none; } }
+
+/* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+.se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:101;
+  width:min(320px,calc(100vw - 24px)); background:var(--surface); color:var(--ink);
+  border:2px solid var(--accent-strong); border-radius:var(--r); padding:15px;
+  box-shadow:0 10px 34px rgba(0,0,0,.28); display:none; }
+.se-panel[data-open="1"]{ display:block; }
+.se-panel h2{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-2); margin:0 0 8px; border:0; padding:0; }
+.se-row{ display:flex; gap:6px; margin-bottom:14px; }
+.se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:12.5px; cursor:pointer; }
+.se-btn[aria-pressed="true"]{ background:var(--accent-strong); color:var(--on-accent); border-color:var(--accent-strong); }
+.se-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+  min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--sans); font-weight:600; font-size:14px; cursor:pointer; text-align:left; }
+.se-tog[aria-pressed="true"]{ border-color:var(--accent-strong); }
+.se-tog .st{ font-family:var(--mono); font-size:11px; color:var(--ink-2); }
+.se-tog[aria-pressed="true"] .st{ color:var(--accent-strong); font-weight:700; }
+.se-tog:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+/* ═══ Secondary course menu ═══ */
+nav.top{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;background:var(--panel);border-bottom:2px solid var(--line);padding:.6rem 1rem;}
+nav.top a.logo,nav.top span.logo{font-size:1.15rem;color:var(--amber-ink);text-decoration:none;font-weight:bold;letter-spacing:.5px;margin-right:auto;padding:.5rem .4rem;min-height:48px;display:flex;align-items:center;}
 nav.top a.item{color:var(--ink);text-decoration:none;font-size:1rem;padding:.65rem .85rem;min-height:48px;display:flex;align-items:center;border-radius:8px;}
-nav.top a.item:hover,nav.top a.item:focus-visible,nav.top a.logo:focus-visible{outline:3px solid var(--amber-fill);outline-offset:2px;background:var(--held);}
-nav.top a.item.held{color:var(--dim);}
-button.comfort{margin-left:.4rem;font-family:inherit;font-size:.95rem;color:var(--btn-ink);background:var(--amber-fill);border:2px solid var(--amber-fill);border-radius:10px;min-height:48px;padding:.5rem 1rem;cursor:pointer;font-weight:bold;}
-button.comfort:focus-visible{outline:3px solid var(--ink-fill);outline-offset:2px;}
-@keyframes announce{0%{box-shadow:0 0 0 0 var(--amber-fill);}70%{box-shadow:0 0 0 12px rgba(232,176,74,0);}100%{box-shadow:0 0 0 0 rgba(232,176,74,0);}}
-button.comfort.pulse{animation:announce 1.1s ease-out 3;}
-@media(prefers-reduced-motion:reduce){button.comfort.pulse{animation:none;box-shadow:0 0 0 3px var(--ink-fill);}}
+nav.top a.item:hover,nav.top a.item:focus-visible{outline:3px solid var(--amber-fill);outline-offset:2px;background:var(--held);}
+nav.top span.item.held{color:var(--dim);font-size:1rem;padding:.65rem .85rem;min-height:48px;display:flex;align-items:center;}
+
+/* ═══ CONTENT ═══ */
 .wrap{max-width:46rem;margin:0 auto;padding:2rem 1.25rem 3rem;}
 header{margin-bottom:2rem;}
 h1{font-size:2.2rem;color:var(--amber-ink);margin:0 0 .3rem;letter-spacing:.5px;}
@@ -34,7 +112,7 @@ h2{font-size:.85rem;text-transform:uppercase;letter-spacing:2px;color:var(--dim)
 a.card,.card.held{display:block;border-radius:12px;padding:1.2rem 1.4rem;margin:.8rem 0;text-decoration:none;color:var(--ink);}
 a.card{background:var(--panel);border:1px solid var(--line);transition:border-color .15s,transform .1s;}
 a.card:hover,a.card:focus-visible{border-color:var(--amber-fill);outline:3px solid var(--amber-fill);outline-offset:3px;transform:translateY(-1px);}
-.card.held{background:var(--held);border:1px dashed var(--line);opacity:.75;}
+.card.held{background:var(--held);border:1px dashed var(--line);}
 .card .name{font-size:1.3rem;color:var(--amber-ink);display:block;margin-bottom:.15rem;}
 .card.held .name{color:var(--dim);}
 .card .desc{color:var(--dim);font-size:.98rem;}
@@ -42,20 +120,57 @@ a.card:hover,a.card:focus-visible{border-color:var(--amber-fill);outline:3px sol
 footer{margin-top:3rem;padding:1.5rem 1.25rem;border-top:1px solid var(--line);color:var(--dim);font-size:.92rem;line-height:1.6;max-width:46rem;margin-left:auto;margin-right:auto;}
 footer a{color:var(--amber-ink);text-decoration:none;}
 footer a:hover,footer a:focus-visible{outline:2px solid var(--amber-fill);outline-offset:2px;}
-/* In the light High-Contrast stop the injected mobile nav chip needs an opaque
-   light surface — its default translucent-dark glass is illegible on near-white. */
-body.hc .tsp-nav a{color:var(--ink);background:var(--panel);border-color:var(--amber-fill);}
-body.hc .tsp-nav a:hover,body.hc .tsp-nav a:focus-visible{color:var(--ink);background:var(--held);border-color:var(--amber-fill);}
+
+/* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+.se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; border-top:2px solid var(--line); }
+.se-rail a,.se-rail button{ min-height:var(--tap); padding:10px 18px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer; }
+.se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 </style>
 </head>
 <body>
 
-<nav class="top" aria-label="Main menu">
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
+
+<nav class="top" aria-label="Course menu">
   <span class="logo">Tight Spiral Productions</span>
   <span class="item held">Syllabus</span>
   <a class="item" href="course-river.html">Schedule</a>
   <a class="item" href="workshop-wall.html">Tools</a>
-  <button class="comfort pulse" id="comfortBtn" aria-pressed="false">High Contrast: Off</button>
 </nav>
 
 <div class="wrap">
@@ -103,308 +218,39 @@ Design &amp; build: Tight Spiral Productions — Play. Notice. Design.<br>
 Every piece is a single self-contained file: offline, keyboard-friendly, legible on load.
 </footer>
 
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <a href="en195-hub.html" aria-label="Back">Back</a>
+  <a href="index.html" aria-label="Home">Home</a>
+</nav>
+
 <script>
 (function(){
-  var b=document.getElementById('comfortBtn');
-  b.addEventListener('click',function(){
-    var on=document.body.classList.toggle('hc');
-    b.textContent='High Contrast: '+(on?'On':'Off');
-    b.setAttribute('aria-pressed',on?'true':'false');
-    b.classList.remove('pulse');
-  });
-  setTimeout(function(){b.classList.remove('pulse');},4000);
-})();
-</script>
-
-<!-- TSP shared mobile nav + device adaptation -->
-<script>window.TSP_MOBILE = { home:"index.html", back:"en195-hub.html" };</script>
-<!-- TSP-MOBILE (inlined from tsp-mobile.js — single-file-offline law) -->
-<script>
-/* Tight Spiral Studios — shared mobile controls + Home/Back nav.
-   Source & docs: tsp-mobile.js. Edit there, then re-inline. */
-(function () {
-  "use strict";
-
-  var d = document, root = d.documentElement, cfg = window.TSP_MOBILE || {};
-
-  /* ---- Device detection --------------------------------------------------- */
-  var hasTouch = ("ontouchstart" in window) ||
-                 (navigator.maxTouchPoints > 0) ||
-                 (navigator.msMaxTouchPoints > 0);
-  var coarse   = !!(window.matchMedia && matchMedia("(pointer: coarse)").matches);
-  var narrow   = Math.min(screen.width || 9999, screen.height || 9999) < 820;
-  var isMobile = hasTouch && (coarse || narrow);
-
-  root.classList.add(hasTouch ? "tsp-touch" : "tsp-no-touch");
-  if (isMobile) root.classList.add("tsp-mobile");
-
-  /* ---- Synthetic keyboard dispatch --------------------------------------- */
-  // Games listen on window (or document) for keydown/keyup and read e.key.
-  var evTarget = (cfg.target === "document") ? d : window;
-
-  function dispatchKey(type, key) {
-    var ev;
-    try {
-      ev = new KeyboardEvent(type, {
-        key: key, code: codeFor(key),
-        bubbles: true, cancelable: true, view: window
-      });
-    } catch (e) {
-      // Legacy fallback
-      ev = d.createEvent("Event");
-      ev.initEvent(type, true, true);
-      try { ev.key = key; } catch (_) {}
-    }
-    evTarget.dispatchEvent(ev);
-  }
-
-  function codeFor(key) {
-    switch (key) {
-      case "ArrowLeft":  return "ArrowLeft";
-      case "ArrowRight": return "ArrowRight";
-      case "ArrowUp":    return "ArrowUp";
-      case "ArrowDown":  return "ArrowDown";
-      case " ":          return "Space";
-      case "Enter":      return "Enter";
-      case "Shift":      return "ShiftLeft";
-      default:
-        if (key && key.length === 1) return "Key" + key.toUpperCase();
-        return "";
-    }
-  }
-
-  /* ---- Styles (injected once) -------------------------------------------- */
-  function injectStyles() {
-    if (d.getElementById("tsp-mobile-style")) return;
-    var css = [
-      /* Navigation chip — always available, subtle on desktop */
-      ".tsp-nav{position:absolute;top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));",
-        "z-index:2147483000;display:flex;gap:8px;font-family:'Helvetica Neue',Arial,sans-serif}",
-      ".tsp-nav a{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;gap:.4em;text-decoration:none;",
-        "padding:.5em .85em;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:.04em;",
-        "color:#f4f1e8;background:rgba(20,18,15,.66);border:1px solid rgba(255,207,90,.45);",
-        "-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);line-height:1;",
-        "box-shadow:0 4px 14px rgba(0,0,0,.35);transition:background .15s,border-color .15s,transform .08s}",
-      ".tsp-nav a:hover,.tsp-nav a:focus-visible{background:rgba(40,34,24,.9);border-color:#ffcf5a;outline:none}",
-      ".tsp-nav a:active{transform:translateY(1px)}",
-      "@media (min-width:900px) and (pointer:fine){.tsp-nav{opacity:.55}.tsp-nav:hover{opacity:1}}",
-
-      /* Nav integrated into the studio's shared .topbar (no overlap) */
-      ".tsp-barnav{display:inline-flex;align-items:center;gap:.35rem;margin-right:.25rem;flex:none}",
-      ".tsp-barnav a{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;gap:.3em;text-decoration:none;color:inherit;",
-        "font-family:inherit;font-weight:800;font-size:.82rem;letter-spacing:.02em;line-height:1;",
-        "padding:.4em .7em;border-radius:999px;border:1px solid currentColor;opacity:.85;",
-        "background:transparent;white-space:nowrap;transition:opacity .12s,background .12s}",
-      ".tsp-barnav a:hover,.tsp-barnav a:focus-visible{opacity:1;background:rgba(127,127,127,.18);outline:none}",
-      ".tsp-barnav a:active{transform:translateY(1px)}",
-      /* Keep the shared bar on one row once Home/Back are added: title ellipsizes */
-      ".tsp-touch .topbar{gap:.4rem}",
-      ".tsp-touch .topbar .wm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1 1 auto}",
-
-      /* Gamepad — only rendered on touch devices */
-      ".tsp-pad{position:fixed;left:0;right:0;bottom:0;z-index:2147482000;",
-        "display:flex;justify-content:space-between;align-items:flex-end;pointer-events:none;",
-        "padding:0 max(14px,env(safe-area-inset-left)) max(16px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-right));",
-        "font-family:'Helvetica Neue',Arial,sans-serif;touch-action:none}",
-      ".tsp-cluster{display:flex;gap:12px;pointer-events:none;align-items:flex-end;flex-wrap:wrap;max-width:46vw}",
-      ".tsp-cluster.right{justify-content:flex-end}",
-      ".tsp-btn{pointer-events:auto;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;",
-        "touch-action:none;min-width:62px;min-height:62px;padding:0 14px;border-radius:16px;",
-        "display:flex;align-items:center;justify-content:center;text-align:center;",
-        "font-size:15px;font-weight:700;letter-spacing:.03em;color:#f4f1e8;",
-        "background:rgba(24,20,15,.6);border:1.5px solid rgba(255,207,90,.5);",
-        "-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);",
-        "box-shadow:0 6px 18px rgba(0,0,0,.4);transition:background .06s,transform .06s;cursor:pointer}",
-      ".tsp-btn.big{min-width:82px;min-height:82px;font-size:16px}",
-      ".tsp-btn:active,.tsp-btn.on{background:rgba(255,207,90,.9);color:#1a0d09;transform:scale(.94)}",
-      /* Hide gamepad on non-touch so desktop keeps keyboard feel */
-      ".tsp-no-touch .tsp-pad{display:none}",
-
-      /* Rotate-for-more-room hint — canvas games only, portrait phones only */
-      ".tsp-rot{position:fixed;left:50%;transform:translateX(-50%);top:calc(72px + env(safe-area-inset-top));",
-        "z-index:2147482500;display:none;align-items:center;gap:.55em;padding:.5em .55em .5em .9em;",
-        "border-radius:999px;background:rgba(24,20,15,.86);color:#f4f1e8;",
-        "border:1px solid rgba(255,207,90,.5);white-space:nowrap;",
-        "font:600 12px/1 'Helvetica Neue',Arial,sans-serif;letter-spacing:.02em;",
-        "-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 4px 14px rgba(0,0,0,.4)}",
-      ".tsp-rot .rk{font-size:14px;color:#ffcf5a}",
-      ".tsp-rot button{background:none;border:none;color:inherit;font-size:16px;line-height:1;",
-        "padding:0 .15em;margin:0;cursor:pointer;opacity:.65}",
-      ".tsp-rot button:active{opacity:1}",
-      "@media (orientation:portrait){.tsp-touch .tsp-rot{display:inline-flex}}",
-      ".tsp-rot-dismissed .tsp-rot{display:none!important}"
-    ].join("");
-    var s = d.createElement("style");
-    s.id = "tsp-mobile-style";
-    s.textContent = css;
-    d.head.appendChild(s);
-  }
-
-  /* ---- Navigation (Home / Back) ------------------------------------------ */
-  function makeLink(href, label, aria) {
-    var a = d.createElement("a");
-    a.href = href; a.innerHTML = label;
-    a.setAttribute("aria-label", aria);
-    return a;
-  }
-
-  function buildNav() {
-    if (cfg.nav === false) return;
-    if (d.querySelector(".tsp-nav, .tsp-barnav")) return;
-
-    var home = cfg.home === undefined ? "index.html" : cfg.home;
-    var links = [];
-    if (cfg.back) links.push(makeLink(cfg.back, "‹ Back", "Back"));
-    if (home)     links.push(makeLink(home, "⌂ Home", "Home"));
-    if (!links.length) return;
-
-    // Prefer integrating into the studio's shared sticky header if present —
-    // avoids overlapping page titles and matches each page's palette.
-    var bar = cfg.floatNav ? null : d.querySelector(".topbar");
-    if (bar) {
-      var wrap = d.createElement("span");
-      wrap.className = "tsp-barnav";
-      links.forEach(function (l) { wrap.appendChild(l); });
-      bar.insertBefore(wrap, bar.firstChild);
-      return;
-    }
-
-    // Otherwise: floating chip, and reserve top space on scrollable pages so
-    // it never covers the header/title.
-    var nav = d.createElement("nav");
-    nav.className = "tsp-nav";
-    nav.setAttribute("aria-label", "Site navigation");
-    links.forEach(function (l) { nav.appendChild(l); });
-    d.body.appendChild(nav);
-    reserveTopSpace();
-  }
-
-  function reserveTopSpace() {
-    if (!hasTouch) return;                 // desktop keeps its exact layout
-    // Skip full-viewport apps (canvas games, fixed overlays) — the chip sits
-    // in their letterbox margin and body padding would distort them.
-    var cs = getComputedStyle(d.body);
-    if (cs.overflowY === "hidden" || cs.overflowX === "hidden") return;
-    var scrolls = root.scrollHeight > (window.innerHeight + 4);
-    if (!scrolls) return;
-    var pad = parseFloat(cs.paddingTop) || 0;
-    d.body.style.paddingTop = (pad + 58) + "px";
-  }
-
-  /* ---- Gamepad ------------------------------------------------------------ */
-  function buildPad() {
-    if (!hasTouch) return;                       // keyboard devices skip it
-    if (!cfg.controls || !cfg.controls.length) return;
-    if (d.querySelector(".tsp-pad")) return;
-
-    var pad = d.createElement("div");
-    pad.className = "tsp-pad";
-    var left  = d.createElement("div"); left.className  = "tsp-cluster left";
-    var right = d.createElement("div"); right.className = "tsp-cluster right";
-    pad.appendChild(left); pad.appendChild(right);
-
-    cfg.controls.forEach(function (c) {
-      var btn = d.createElement("button");
-      btn.type = "button";
-      btn.className = "tsp-btn" + (c.big ? " big" : "");
-      btn.innerHTML = c.label || "";
-      btn.setAttribute("aria-label", c.aria || c.label || c.key);
-      bindButton(btn, c);
-      (c.side === "left" ? left : right).appendChild(btn);
-    });
-
-    d.body.appendChild(pad);
-  }
-
-  function bindButton(btn, c) {
-    var key = c.key, held = false;
-
-    function press(e) {
-      if (e) { e.preventDefault(); e.stopPropagation(); }
-      if (c.hold) {
-        if (held) return;
-        held = true;
-        btn.classList.add("on");
-        dispatchKey("keydown", key);
-      } else {
-        // tap: quick down/up so edge-triggered actions (fire/rotate/drop) fire once
-        btn.classList.add("on");
-        dispatchKey("keydown", key);
-        setTimeout(function () { dispatchKey("keyup", key); }, 24);
-        setTimeout(function () { btn.classList.remove("on"); }, 90);
-      }
-    }
-    function release(e) {
-      if (e) e.preventDefault();
-      if (c.hold && held) {
-        held = false;
-        btn.classList.remove("on");
-        dispatchKey("keyup", key);
-      }
-    }
-
-    if (window.PointerEvent) {
-      btn.addEventListener("pointerdown", function (e) {
-        try { btn.setPointerCapture(e.pointerId); } catch (_) {}
-        press(e);
-      });
-      btn.addEventListener("pointerup", release);
-      btn.addEventListener("pointercancel", release);
-      btn.addEventListener("lostpointercapture", release);
-    } else {
-      btn.addEventListener("touchstart", press, { passive: false });
-      btn.addEventListener("touchend", release);
-      btn.addEventListener("touchcancel", release);
-      btn.addEventListener("mousedown", press);
-      btn.addEventListener("mouseup", release);
-      btn.addEventListener("mouseleave", release);
-    }
-    // Safety: releasing a held key if the page loses focus
-    window.addEventListener("blur", release);
-  }
-
-  /* ---- Rotate hint -------------------------------------------------------- */
-  function buildRotateHint() {
-    if (!hasTouch) return;
-    if (cfg.rotateHint === false) return;
-    if (!cfg.controls || !cfg.controls.length) return;   // canvas games only
-    if (d.querySelector(".tsp-rot")) return;
-    var hint = d.createElement("div");
-    hint.className = "tsp-rot";
-    hint.setAttribute("role", "note");
-    hint.innerHTML = '<span class="rk">↻</span>' +
-      '<span>Turn sideways for more room</span>' +
-      '<button type="button" aria-label="Dismiss">×</button>';
-    hint.querySelector("button").addEventListener("click", function () {
-      root.classList.add("tsp-rot-dismissed");
-    });
-    d.body.appendChild(hint);
-  }
-
-  /* ---- Boot --------------------------------------------------------------- */
-  function boot() {
-    injectStyles();
-    buildNav();
-    buildPad();
-    buildRotateHint();
-  }
-
-  if (d.readyState === "loading") {
-    d.addEventListener("DOMContentLoaded", boot);
-  } else {
-    boot();
-  }
-
-  // Expose a tiny API for pages that want to toggle the pad (e.g. hide on menus)
-  window.TSPMobile = {
-    isTouch: hasTouch,
-    isMobile: isMobile,
-    press: function (key) { dispatchKey("keydown", key); dispatchKey("keyup", key); },
-    showPad: function (v) {
-      var p = d.querySelector(".tsp-pad");
-      if (p) p.style.display = v === false ? "none" : "";
-    }
-  };
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
 })();
 </script>
 </body>

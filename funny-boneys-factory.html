@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -69,23 +69,34 @@
     --flat:#8899ac;       /* a flat gag: honest grey, never punishing red */
     --paper-sep:0;        /* comfort stop marker, for the sweep */
     --r:14px;
+    --tap:48px;
+    --accent:var(--amber); --accent-strong:var(--amber-deep); --on-accent:#10151c; --focus:var(--amber);
     --shadow:0 8px 30px rgba(0,0,0,.45);
     --font: ui-rounded, "Segoe UI", system-ui, -apple-system, sans-serif;
     --mono: ui-monospace, "SFMono-Regular", Menlo, monospace;
   }
-  /* comfort stop: SOFTER (a real second stop — >0.12 paper-luminance separation from default) */
-  body.softer{
-    --bg:#20262e; --surface:#2b333d; --surface-2:#343e4a; --line:#4a5666;
-    --ink:#f4f7fb; --ink-soft:#cdd7e2;
+  /* ═══ STUDIO EYES — LIGHT remaps on html[data-light], on THIS page's tokens ═══
+     Default (day) keeps the native arcade palette above. Dusk warms and lifts it;
+     Warm-dark is a warm charcoal (never pure black). Every text stays >=4.5:1. */
+  html[data-light="dusk"]{
+    --bg:#1a1410; --surface:#241c14; --surface-2:#2f2519; --line:#4a3d2a;
+    --ink:#f6efe0; --ink-soft:#d7c9b2;
+    --amber:#ffbe5c; --amber-deep:#e89530;
+    --accent:#ffbe5c; --accent-strong:#e89530; --on-accent:#1a1410; --focus:#ffbe5c;
   }
-  /* comfort stop: DAYLIGHT (high-lumen light stop for bright rooms — legible, green-free) */
-  body.daylight{
-    --bg:#e9e3d6; --surface:#f4efe4; --surface-2:#fbf7ee; --line:#c4bba9;
-    --ink:#22201a; --ink-soft:#4c483f; --shadow:0 8px 30px rgba(80,70,50,.18);
-    --amber:#9a5a00; --amber-deep:#7a4600;
-    --violet:#6b3fc0; --cyan:#0f6d82; --rose:#b03050; --good:#1f7a4d; --flat:#6a6255;
+  html[data-light="night"]{
+    --bg:#16150f; --surface:#1e1c14; --surface-2:#2a271c; --line:#443f30;
+    --ink:#f4ede0; --ink-soft:#d8ccb6;
+    --amber:#ffca6a; --amber-deep:#eea23c;
+    --accent:#ffca6a; --accent-strong:#eea23c; --on-accent:#16150f; --focus:#ffca6a;
   }
-  body.daylight .part .pred{ color:#7a4600; }
+  /* ═══ STUDIO EYES — text size / comfort toggles ═══ */
+  html.se-a1{ font-size:113%; }
+  html.se-a2{ font-size:126%; }
+  html.se-contrast[data-light="night"]{ --bg:#0e0d0b; --surface:#161410; --ink:#fff7e6; --ink-soft:#efe0bc; }
+  html.se-contrast:not([data-light="night"]){ --ink:#fbfdff; --ink-soft:#e6edf5; --line:#5a6b80; }
+  html.se-reduce *{ animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+  html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
 
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
@@ -135,9 +146,6 @@
   .lens-btn[data-l="spell"][aria-pressed="true"]{ background:#b98cff; color:#10151c; }
   .lens-btn[data-l="code"][aria-pressed="true"]{ background:#5fd0e6; color:#10151c; }
   .lens-btn[data-l="story"][aria-pressed="true"]{ background:#ff8fa8; color:#10151c; }
-  body.daylight .lens-btn[data-l="spell"][aria-pressed="true"]{ background:#6b3fc0; color:#ffffff; }
-  body.daylight .lens-btn[data-l="code"][aria-pressed="true"]{ background:#0f6d82; color:#ffffff; }
-  body.daylight .lens-btn[data-l="story"][aria-pressed="true"]{ background:#b03050; color:#ffffff; }
 
   /* ---- scene-first opening: a WORDLESS SPLASH ----
      2026-07-19 rebuild (founder eye: "fails splash. no text or minimal").
@@ -177,8 +185,6 @@
   }
   .btn:active{ transform:translateY(3px); box-shadow:0 1px 0 rgba(0,0,0,.3); }
   .btn.ghost{ background:var(--surface-2); color:var(--ink); border:1px solid var(--line); box-shadow:none;}
-  body.daylight .btn{ background:#7a4600; color:#ffffff; }
-  body.daylight .btn.ghost{ background:#f4efe4; color:#22201a; }
   .btn[disabled]{ opacity:.4; cursor:not-allowed; transform:none; box-shadow:0 4px 0 rgba(0,0,0,.3); }
 
   /* ---- the workbench: choose gag parts (the "build" is choosing what should be funny) ---- */
@@ -198,7 +204,6 @@
   .part .tx b{ font-size:.92rem; }
   .part .tx span{ font-size:.76rem; color:var(--ink-soft); }
   .part .pred{ margin-top:5px; font-size:.7rem; color:#ffb347; font-weight:700; letter-spacing:.4px;}
-  body.softer .part .pred{ color:#8a5200; }
 
   /* ---- the audience picker (humor is situated: WHO you show it to changes what lands) ---- */
   .aud{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;}
@@ -272,42 +277,13 @@
 
   .foot{ margin-top:34px; padding-top:16px; border-top:1px solid var(--line); color:var(--ink-soft); font-size:.78rem; text-align:center;}
   .foot a{ color:var(--lens-ink); }
-  body.daylight .foot a{ color:#7a4600; }
   .badge{ display:inline-block; font-size:.68rem; padding:3px 9px; border-radius:999px;
     background:var(--surface-2); border:1px solid var(--line); color:var(--ink-soft); margin-left:8px;}
 
-/* ═══ THE COMFORT STOPS — canonical, swept 2026-07-14 ═══════════════════════
-   One button. Five stops. The same five in every room in the studio.
-   Written in THIS FILE'S token names (bg / ink) — a graft, not a clobber.
-   ═════════════════════════════════════════════════════════════════════════ */
-body.softer{  /* STOP 2 — calmer. COMPLETE light palette (2026-07-28 R1 fix).
-                 --bg pulled down from #f6f3ec so it clears >=0.12 luminance from
-                 Daylight (0.86) and Clear Reader (1.0). */
-  --bg: #e2dccf;
-  --surface: #ece7dd;
-  --surface-2: #e3ddd0;
-  --ink: #24292f;
-  --ink-soft: #48505c;
-  --line: #cec7b9;
-  --amber:#8a5200; --amber-deep:#6f4200;
-  --violet:#6b3fc0; --cyan:#0f6d82; --rose:#a62f4c; --good:#1f7a4d; --flat:#5f5850;
-}
+/* ═══ (legacy 5-stop comfort palette removed — superseded by Studio Eyes
+   html[data-light] Default / Dusk / Warm-dark above) ═══════════════════════ */
 
-body.warmdark{  /* STOP 3 — warm charcoal, never #000. Max contrast BLOOMS on an RP retina. */
-  --bg: #16150f;
-  --ink: #f2ede0;
-  --ink-soft: #d3cbb8;
-}
-
-body.daylight{  /* STOP 4 — maximum legibility. Bright rooms, projectors, bad screens.
-                   A bright warm off-white (never pure #fff — it blooms on an RP retina,
-                   and it keeps >=0.12 luminance below the Clear Reader white). */
-  --bg: #f2eee6;
-  --ink: #14181d;
-  --ink-soft: #22262c;
-}
-
-/* ═══ STOP 5 — CLEAR READER ═════════════════════════════════════════════════
+/* ═══ (legacy Clear Reader stop removed with the old comfort control) ═══════
    Not a palette. The design taken OFF.
 
    What survives is what a screen reader actually receives: headings, lists,
@@ -322,102 +298,92 @@ body.daylight{  /* STOP 4 — maximum legibility. Bright rooms, projectors, bad 
    MAKE THE INVISIBLE STRUCTURE VISIBLE. That is every game in this studio. This
    is that engine, pointed at the studio's own interface.
    ═════════════════════════════════════════════════════════════════════════ */
-body.clear-reader{
-  background:#fff !important; color:#000 !important;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
-  font-size:19px !important; line-height:1.65 !important;
-  max-width:38em !important; margin:0 auto !important;
-  padding:24px 20px 90px !important;
-}
-body.clear-reader *:not(.cr-note):not(.cr-note *):not(.comfort):not(.comfort *){
-  all:revert;
-  font-family:inherit !important;
-  color:#000 !important; background:#fff !important; border-color:#767676 !important;
-  box-shadow:none !important; text-shadow:none !important;
-  animation:none !important; transition:none !important;
-  position:static !important; float:none !important; max-width:100% !important;
-}
-/* Decoration is not meaning. If it carries no information, it goes. */
-body.clear-reader svg, body.clear-reader canvas, body.clear-reader video,
-body.clear-reader [aria-hidden="true"]{ display:none !important; }
-/* Structure must be VISIBLE — that is the entire point of this stop. */
-body.clear-reader h1{ font-size:30px !important; margin:24px 0 10px !important;
-  border-bottom:3px solid #000 !important; padding-bottom:5px !important; }
-body.clear-reader h2{ font-size:24px !important; margin:22px 0 8px !important;
-  border-bottom:1px solid #767676 !important; padding-bottom:3px !important; }
-body.clear-reader h3{ font-size:20px !important; margin:18px 0 6px !important; }
-body.clear-reader p, body.clear-reader li{ font-size:19px !important; margin:0 0 13px !important; }
-body.clear-reader ul, body.clear-reader ol{ padding-left:26px !important; margin:0 0 16px !important; }
-body.clear-reader li{ list-style:disc !important; }
-body.clear-reader ol li{ list-style:decimal !important; }
-body.clear-reader a{ color:#0000ee !important; text-decoration:underline !important; }
-body.clear-reader a:visited{ color:#551a8b !important; }
-body.clear-reader button, body.clear-reader select, body.clear-reader input{
-  font-size:18px !important; padding:11px 16px !important;
-  border:2px solid #000 !important; border-radius:0 !important;
-  background:#fff !important; color:#000 !important;
-  margin:0 8px 8px 0 !important; display:inline-block !important;
-  min-height:44px !important; cursor:pointer !important;
-}
-body.clear-reader button[aria-pressed="true"]{ background:#000 !important; color:#fff !important; font-weight:700 !important; }
-body.clear-reader :focus-visible{ outline:4px solid #0000ee !important; outline-offset:2px !important; }
-body.clear-reader .cr-note{
-  display:block !important; border:3px solid #000 !important; background:#fff !important;
-  color:#000 !important; padding:15px 17px !important; margin:0 0 26px !important;
-  font-size:17px !important; line-height:1.5 !important;
-}
-.cr-note{ display:none; }
+/* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+.se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+  padding:9px 14px; background:var(--surface); border-bottom:2px solid var(--line);
+  position:sticky; top:0; z-index:100; }
+.se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 12px; border:1.5px solid var(--line); border-radius:8px; background:var(--surface-2);
+  color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; }
+.se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+.se-brand svg{ width:34px; height:20px; color:var(--amber); flex:0 0 auto; }
+.se-brand .wm{ font-family:var(--font); font-size:16px; letter-spacing:.01em; white-space:nowrap; }
+.se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--accent-strong);
+  color:var(--on-accent); font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer; }
+.se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+@media (max-width:560px){ .se-brand .wm{ display:none; } }
 
-/* ═══ THE BUTTON — a CORNER control. Never a wall. ═════════════════════════
-   It lives bottom-right, over the scene, always reachable and never in front of
-   it. The rule (locked 2026-06-29): the first screen is the SCENE. You change
-   the comfort BECAUSE you have seen something and want to see it differently —
-   not before you have seen anything at all, when the choice is meaningless.
-   ═════════════════════════════════════════════════════════════════════════ */
-.comfort{
-  position:fixed; right:14px; bottom:14px; z-index:9999;
-  font:700 12.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
-  letter-spacing:.05em; padding:12px 15px; min-height:44px;
-  background:var(--bg); color:var(--ink);
-  border:2px solid currentColor; border-radius:2px; cursor:pointer;
-  box-shadow:0 2px 10px rgba(0,0,0,.16);
-}
-.comfort:focus-visible{ outline:4px solid #0000ee; outline-offset:3px; }
-body.clear-reader .comfort{
-  position:static !important; display:block !important;
-  margin:0 0 20px !important; box-shadow:none !important;
-}
-/* ═══ HOME — the mirror of Comfort. Bottom-LEFT corner. ════════════════════
-   NAV FLOOR (founder rule, 2026-07-16): every 2+ screen product carries BACK
-   and HOME, reachable on every screen, a standing fixed corner, never buried,
-   never forward-only. Comfort lives bottom-right; Home mirrors it bottom-left.
-   Hidden only ON the scene itself, where Home would be a no-op (you are home).
-   ═════════════════════════════════════════════════════════════════════════ */
-.homenav{
-  position:fixed; left:14px; bottom:14px; z-index:9999;
-  font:700 12.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
-  letter-spacing:.05em; padding:12px 15px; min-height:44px;
-  display:flex; align-items:center; gap:6px;
-  background:var(--bg); color:var(--ink);
-  border:2px solid currentColor; border-radius:2px; cursor:pointer;
-  box-shadow:0 2px 10px rgba(0,0,0,.16);
-}
-.homenav:focus-visible{ outline:4px solid #0000ee; outline-offset:3px; }
-.homenav[hidden]{ display:none; }
-body.clear-reader .homenav{
-  position:static !important; display:block !important;
-  margin:0 0 20px !important; box-shadow:none !important;
-}
+/* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+.se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:101;
+  width:min(320px,calc(100vw - 24px)); background:var(--surface); color:var(--ink);
+  border:2px solid var(--accent-strong); border-radius:var(--r); padding:15px;
+  box-shadow:0 10px 34px rgba(0,0,0,.5); display:none; }
+.se-panel[data-open="1"]{ display:block; }
+.se-panel h2{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 8px; }
+.se-row{ display:flex; gap:6px; margin-bottom:14px; }
+.se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:12.5px; cursor:pointer; }
+.se-btn[aria-pressed="true"]{ background:var(--accent-strong); color:var(--on-accent); border-color:var(--accent-strong); }
+.se-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+  min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--font); font-weight:600; font-size:14px; cursor:pointer; text-align:left; }
+.se-tog[aria-pressed="true"]{ border-color:var(--accent-strong); }
+.se-tog .st{ font-family:var(--mono); font-size:11px; color:var(--ink-soft); }
+.se-tog[aria-pressed="true"] .st{ color:var(--amber); font-weight:700; }
+.se-tog:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+/* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+.se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; border-top:1px solid var(--line); }
+.se-rail a,.se-rail button{ min-height:var(--tap); padding:10px 18px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer; }
+.se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-updated{ font-family:var(--mono); font-size:.74rem; color:var(--ink-soft); }
+
 @media (prefers-reduced-motion: reduce){
   *{ animation:none !important; transition:none !important; }
 }
 </style>
 </head>
 <body>
-<div class="cr-note" role="note"><b>Clear Reader.</b> The design is off. This is the
-document underneath &mdash; headings, lists, links, in the order a screen reader receives them.
-<b>If this is hard to follow, it is hard to follow with a screen reader too.</b> Press the button
-again to bring the design back.</div>
+
+<!-- RESERVED CHROME — Home · teaspoon brand · Studio Eyes. Its own row; never overlaps. -->
+<header class="se-chrome">
+  <a class="se-home" href="index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
 
 <div class="stage">
 
@@ -679,39 +645,51 @@ again to bring the design back.</div>
     Tight Spiral Productions · Play. Notice. Design.
     <span class="badge">Offline · nothing leaves this page</span>
     <span class="badge" id="build-badge">v3 playable</span>
+    <div style="margin-top:8px"><span class="se-updated" id="seUpdated">Last updated&hellip;</span></div>
     <div style="margin-top:8px">Humor is situated: what's funny depends on who's in the room, how their mind works, and where they're from. This game is honest about that.</div>
   </div>
 </div>
 
-<button class="comfort" id="comfort">Comfort: <span id="comfort-label">Default</span></button>
-<button class="homenav" id="homenav" hidden onclick="goHome()" aria-label="Home — back to the opening scene">Home</button>
+<!-- BOTTOM NAV RAIL — Back + Home -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="index.html" aria-label="Home">Home</a>
+</nav>
 
 <script>
+/* ═══ STUDIO EYES — the reconciled studio comfort control (v2 kernel) ═══════
+   Light: Default / Dusk / Warm-dark (html[data-light]). Text size A/A+/A++.
+   Toggles: High contrast · Reduce motion · Colorblind cues. No storage. */
 (function(){
   "use strict";
-  var STOPS = [
-    { cls:"",             label:"Default"      },
-    { cls:"softer",       label:"Softer"       },
-    { cls:"warmdark",     label:"Warm dark"    },
-    { cls:"daylight",     label:"Daylight"     },
-    { cls:"clear-reader", label:"Clear Reader" }
-  ];
-  var i = 0;
-  var btn = document.getElementById("comfort");
-  var lab = document.getElementById("comfort-label");
-  function apply(){
-    for(var k=0;k<STOPS.length;k++){ if(STOPS[k].cls) document.body.classList.remove(STOPS[k].cls); }
-    if(STOPS[i].cls) document.body.classList.add(STOPS[i].cls);
-    lab.textContent = STOPS[i].label;
-    /* A button announces what it will DO, not what it is. A screen-reader user
-       pressing this needs to know where it takes them. */
-    var next = STOPS[(i+1) % STOPS.length].label;
-    btn.setAttribute("aria-label",
-      "Comfort setting: " + STOPS[i].label + ". Press to switch to " + next + ".");
-  }
-  btn.addEventListener("click", function(){ i = (i+1) % STOPS.length; apply(); });
-  /* NO STORAGE. Single-file, offline, zero-persistence is studio law. */
-  apply();
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(typeof applyLensColor==='function') applyLensColor();
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
 })();
 </script>
 
@@ -825,15 +803,10 @@ function setLens(l){
    stays legible against whichever comfort stop is showing. This is the fix for
    the "bright accent that only reads on dark" failure class. */
 function applyLensColor(){
-  /* FIXED 2026-07-15: read the daylight state from the LIVE comfort control
-     (Block A toggles a .daylight class on <body>), not from a second STOPS
-     array. Two comfort systems had been pasted into one file; the second one's
-     `const STOPS` was read on load BEFORE it was declared (temporal dead zone)
-     -> "Cannot access 'STOPS' before initialization", a crash on every load.
-     The playthrough agent caught it. One source of truth for daylight now. */
-  const daylight = document.body.classList.contains("daylight");
+  /* Studio Eyes keeps all three lights dark (Default / Dusk / Warm-dark), so the
+     bright lens accent (L.dark) stays legible in every mode. One source of truth. */
   const L=LENSES[state.lens];
-  document.documentElement.style.setProperty('--lens', daylight ? L.light : L.dark);
+  document.documentElement.style.setProperty('--lens', L.dark);
 }
 
 let motionCalm=false;
@@ -857,7 +830,7 @@ function goHome(){
   document.getElementById('scene').scrollIntoView({behavior: motionCalm?'auto':'smooth'});
   setHome(false);
 }
-function setHome(on){ document.getElementById('homenav').hidden = !on; }
+function setHome(on){ var h=document.getElementById('homenav'); if(h) h.hidden = !on; }
 function backToScene(){
   hide('bench'); setHome(false);
   document.getElementById('scene').scrollIntoView({behavior: motionCalm?'auto':'smooth'});
@@ -1060,7 +1033,7 @@ function flash(t){ alert(t); }
 </script>
 
 <!-- TSP shared mobile nav + device adaptation -->
-<script>window.TSP_MOBILE = { home:"index.html" };</script>
+<script>window.TSP_MOBILE = { nav:false, home:"index.html" };</script>
 <!-- TSP-MOBILE (inlined from tsp-mobile.js — single-file-offline law) -->
 <script>
 /* Tight Spiral Studios — shared mobile controls + Home/Back nav.

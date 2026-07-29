@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <!--
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   CREATIVE WRITING WORKSHOP IN A BOX (Workshop 4 · Flash Fiction) — IN-FILE CHANGELOG
@@ -38,12 +38,31 @@
     --shadow:rgba(60,40,20,.22); --focus:#1f6f8b;
     --maxw:780px; --tap:52px;
   }
-  /* high-contrast floor always wins */
-  body.a11y-contrast{ --paper:#000; --paper-2:#000; --slip:#000; --ink:#fff;
-    --ink-soft:#fff; --rule:#fff; --accent:#ffd24a; --accent-deep:#ffd24a;
-    --sage:#7fe3a0; --sage-deep:#7fe3a0; --gold:#ffd24a; --shadow:rgba(0,0,0,0);
-    --ink-fill:#fff; --paper-ink:#000; --accent-deep-fill:#ffd24a; --sage-deep-fill:#7fe3a0; }
-  body.a11y-contrast *{ border-color:#fff !important; }
+  /* ===== TSP COMFORT KERNEL v2 — Studio Eyes light ladder (remaps THIS page's tokens) ===== */
+  /* LIGHT: DUSK — dimmer warm paper, ink stays dark */
+  html[data-light="dusk"]{ --paper:#e7d8ba; --paper-2:#dccaa4; --slip:#eaddc0;
+    --ink:#211a10; --ink-soft:#453826; --rule:#c2ac82;
+    --accent:#8c4e30; --accent-deep:#653520; --sage:#5a6844; --sage-deep:#465130; --gold:#a67f2e;
+    --accent-deep-fill:#653520; --sage-deep-fill:#465130; --shadow:rgba(60,40,20,.26); }
+  /* LIGHT: WARM-DARK (night) — warm charcoal, never pure black */
+  html[data-light="night"]{ --paper:#201c16; --paper-2:#2c2720; --slip:#2a251d;
+    --ink:#f4e8cf; --ink-soft:#cdbd9c; --rule:#4c4536;
+    --accent:#8a4a2e; --accent-deep:#e3a878; --sage:#5f6b47; --sage-deep:#a8c088; --gold:#d6a94a;
+    --accent-deep-fill:#7a4329; --sage-deep-fill:#48532f; --shadow:rgba(0,0,0,.5); --focus:#7fb2c9; }
+  /* TOGGLE: high contrast */
+  html.se-contrast:not([data-light="night"]){ --paper:#fbfaf6; --paper-2:#efe7d4; --slip:#ffffff;
+    --ink:#120f0a; --ink-soft:#2c2517; --rule:#7a6a48; --accent:#7a3f22; --accent-deep:#5c2f18;
+    --sage:#3d4a2a; --sage-deep:#33421f; }
+  html.se-contrast[data-light="night"]{ --paper:#0b0a08; --paper-2:#17140f; --slip:#141109;
+    --ink:#fff7e6; --ink-soft:#f0e2be; --rule:#6a6048; --accent:#a05a34; --accent-deep:#f0bd8c;
+    --sage:#7a8a5a; --sage-deep:#bcd49a; }
+  /* TOGGLE: text size A / A+ / A++ */
+  html.se-a1 body{ font-size:22px; }
+  html.se-a2 body{ font-size:25px; }
+  /* TOGGLE: reduce motion */
+  html.se-reduce *{ animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+  /* TOGGLE: colorblind cues */
+  html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
 
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
@@ -52,14 +71,12 @@
     font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
     font-size:20px; line-height:1.55; -webkit-font-smoothing:antialiased;
   }
-  body[data-bigtext]{ font-size:23px; }  /* text-size knob, not a comfort/darkness stop */
   body::before{
     content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
     background:
       radial-gradient(circle at 20% 25%, rgba(255,255,255,.18), transparent 60%),
       radial-gradient(circle at 80% 75%, rgba(120,90,50,.06), transparent 55%);
   }
-  body.a11y-contrast::before{display:none}
   .wrap{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:20px 20px 130px}
 
   h1,h2,h3{font-family:"Iowan Old Style",Palatino,Georgia,serif;line-height:1.15;margin:0}
@@ -70,8 +87,6 @@
     box-shadow:0 1px 0 var(--rule),0 10px 22px -12px var(--shadow)}
   .sheet::after{content:"";position:absolute;left:6px;right:6px;bottom:-5px;height:6px;
     background:var(--shadow);filter:blur(3px);border-radius:50%;z-index:-1;opacity:.5}
-  body.a11y-contrast .sheet{border:2px solid #fff}
-  body.a11y-contrast .sheet::after{display:none}
 
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;
     min-height:var(--tap);padding:14px 22px;font-family:ui-sans-serif,Arial,sans-serif;
@@ -84,9 +99,7 @@
   .btn.sage{background:var(--sage);box-shadow:0 4px 0 var(--sage-deep-fill)}
   .btn.sage:active{box-shadow:0 1px 0 var(--sage-deep-fill)}
   .btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none;transform:none}
-  body.a11y-contrast .btn{color:#000;border:2px solid #fff}
   :focus-visible{outline:4px solid var(--focus);outline-offset:3px;border-radius:6px}
-  body.a11y-contrast :focus-visible{outline-color:#ffd24a}
 
   .row{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;align-items:center}
   .spacer{flex:1}
@@ -116,7 +129,6 @@
   textarea,input[type=text]{width:100%;font-family:"Iowan Old Style",Palatino,Georgia,serif;
     font-size:18px;line-height:1.5;padding:14px;border:2px solid var(--rule);border-radius:8px;
     background:#fffdf8;color:var(--ink)}
-  body.a11y-contrast textarea, body.a11y-contrast input[type=text]{background:#111}
   textarea{min-height:150px;resize:vertical}
   textarea:focus,input:focus{border-color:var(--focus)}
   .count{font-family:ui-sans-serif,Arial,sans-serif;font-size:14px;color:var(--ink-soft);margin-top:6px}
@@ -149,7 +161,6 @@
   .rline:first-child{border-top:none}
   .rscore{flex:0 0 auto;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;
     justify-content:center;font-family:ui-sans-serif,Arial,sans-serif;font-weight:700;font-size:16px;background:var(--sage);color:#fff}
-  body.a11y-contrast .rscore{color:#000}
   .rtext{flex:1} .rtext b{font-family:ui-sans-serif,Arial,sans-serif}
 
   /* self-check list (real round) */
@@ -159,7 +170,6 @@
   .checkitem .mark{flex:0 0 auto;font-family:ui-sans-serif,Arial,sans-serif;font-weight:700;
     width:26px;height:26px;border-radius:50%;border:2px solid var(--rule);display:flex;align-items:center;justify-content:center;color:var(--ink-soft)}
   .checkitem.on .mark{background:var(--sage);border-color:var(--sage);color:#fff}
-  body.a11y-contrast .checkitem.on .mark{color:#000}
   .checkitem .lbl{flex:1;font-size:16px}
 
   .build-wrap{text-align:center;margin:10px 0 4px}
@@ -175,7 +185,6 @@
 
   .final-slip{background:#fffdf8;border:2px dashed var(--rule);border-radius:8px;padding:18px;
     font-size:17px;line-height:1.55;white-space:pre-wrap;margin:10px 0}
-  body.a11y-contrast .final-slip{background:#111}
 
   .filebtn{position:relative;overflow:hidden}
   .filebtn input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;font-size:0}
@@ -184,7 +193,6 @@
     background:var(--ink-fill);color:var(--paper-ink);padding:14px 22px;border-radius:10px;
     font-family:ui-sans-serif,Arial,sans-serif;font-weight:700;z-index:50;opacity:0;
     transition:transform .3s ease,opacity .3s ease;box-shadow:0 10px 30px -8px rgba(0,0,0,.5)}
-  body.a11y-contrast .toast{background:#fff;color:#000;border:2px solid #000}
   .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 
   .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:10px}
@@ -193,28 +201,53 @@
   .textlink{background:none;border:none;color:var(--accent-deep);font-family:ui-sans-serif,Arial,sans-serif;
     font-size:14px;text-decoration:underline;cursor:pointer;padding:10px;min-height:var(--tap)}
 
-  /* a11y overlay — bounded frame guarantee */
-  .overlay{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;
-    background:rgba(8,20,28,.82);padding:1rem}
-  .overlay.open{display:flex}
-  body.a11y-contrast .overlay{background:#000}
-  .overlay-card{max-width:520px;width:100%;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;
-    border-radius:6px;margin:auto;background:var(--slip);color:var(--ink);box-shadow:0 16px 48px rgba(0,0,0,.4)}
-  body.a11y-contrast .overlay-card{border:2px solid #fff}
-  .overlay-card-hd{flex-shrink:0;padding:1.1rem 1.35rem;border-bottom:1px solid var(--rule)}
-  .overlay-card-body{flex:1 1 auto;min-height:0;overflow-y:auto;padding:1.1rem 1.35rem;line-height:1.7}
-  .overlay-card-ft{flex-shrink:0;padding:.85rem 1.35rem;border-top:1px solid var(--rule);display:flex;gap:.5rem;justify-content:flex-end}
-  .optline{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--rule)}
-  .optline:first-child{border-top:none}
-  .switch{min-height:44px;padding:8px 16px;border:2px solid var(--rule);border-radius:8px;background:var(--paper-2);
-    font-family:ui-sans-serif,Arial,sans-serif;font-weight:700;cursor:pointer;color:var(--ink)}
-  .switch[aria-pressed=true]{background:var(--sage);color:#fff;border-color:var(--sage)}
-  body.a11y-contrast .switch[aria-pressed=true]{color:#000}
+  /* ===== RESERVED CHROME + STUDIO EYES panel + BOTTOM RAIL (Comfort Kernel v2) ===== */
+  .se-chrome{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;
+    padding:9px 14px;background:var(--slip);border-bottom:2px solid var(--ink);position:sticky;top:0;z-index:100}
+  .se-home{justify-self:start;display:inline-flex;align-items:center;gap:7px;min-height:44px;
+    padding:8px 14px;border:1.5px solid var(--rule);border-radius:8px;background:var(--paper-2);
+    color:var(--ink);font-family:ui-sans-serif,Arial,sans-serif;font-weight:700;font-size:14px;text-decoration:none}
+  .se-brand{justify-self:center;display:inline-flex;align-items:center;gap:9px;color:var(--ink)}
+  .se-brand svg{width:34px;height:20px;color:var(--accent-deep);flex:0 0 auto}
+  .se-brand .wm{font-family:"Iowan Old Style",Palatino,Georgia,serif;font-size:16px;white-space:nowrap;color:var(--ink)}
+  .se-eyes{justify-self:end;display:inline-flex;align-items:center;gap:7px;min-height:44px;
+    padding:8px 14px;border:2px solid transparent;border-radius:8px;background:var(--accent);
+    color:#fff;font-family:ui-sans-serif,Arial,sans-serif;font-weight:700;font-size:14px;cursor:pointer}
+  .se-home:focus-visible,.se-eyes:focus-visible{outline:4px solid var(--focus);outline-offset:3px}
+  @media (max-width:560px){ .se-brand .wm{display:none} }
+
+  .se-panel{position:fixed;right:12px;top:64px;z-index:101;width:min(320px,calc(100vw - 24px));
+    background:var(--slip);color:var(--ink);border:2px solid var(--accent);border-radius:10px;padding:15px;
+    box-shadow:0 10px 34px rgba(0,0,0,.28);display:none}
+  .se-panel[data-open="1"]{display:block}
+  .se-panel h2{font-family:ui-sans-serif,Arial,sans-serif;font-size:11px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ink-soft);margin:0 0 8px}
+  .se-row{display:flex;gap:6px;margin-bottom:14px}
+  .se-btn{flex:1;min-height:44px;padding:8px 4px;border:1.5px solid var(--rule);border-radius:8px;
+    background:var(--paper-2);color:var(--ink);font-family:ui-sans-serif,Arial,sans-serif;font-weight:700;font-size:13px;cursor:pointer}
+  .se-btn[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .se-btn:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+  .se-tog{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;min-height:44px;
+    padding:8px 12px;margin-bottom:6px;border:1.5px solid var(--rule);border-radius:8px;background:var(--paper-2);
+    color:var(--ink);font-family:ui-sans-serif,Arial,sans-serif;font-weight:600;font-size:14px;cursor:pointer;text-align:left}
+  .se-tog[aria-pressed="true"]{border-color:var(--accent)}
+  .se-tog .st{font-family:ui-sans-serif,Arial,sans-serif;font-size:12px;color:var(--ink-soft)}
+  .se-tog[aria-pressed="true"] .st{color:var(--accent-deep);font-weight:700}
+  .se-tog:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+  .se-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);border:0}
+
+  .se-updated{font-family:ui-sans-serif,Arial,sans-serif;font-size:13px;color:var(--ink-soft);
+    text-align:center;margin:0;padding:20px 20px 0}
+  .se-rail{display:flex;gap:10px;justify-content:center;padding:14px 20px 30px}
+  .se-rail a,.se-rail button{min-height:44px;padding:10px 20px;border:1.5px solid var(--rule);border-radius:8px;
+    background:var(--paper-2);color:var(--ink);font-family:ui-sans-serif,Arial,sans-serif;font-weight:700;
+    font-size:14px;text-decoration:none;cursor:pointer}
+  .se-rail a:focus-visible,.se-rail button:focus-visible{outline:4px solid var(--focus);outline-offset:3px}
 
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
 
   @media (max-width:480px){
-    body{font-size:18px} body[data-bigtext]{font-size:21px}
+    body{font-size:18px}
     .wrap{padding:14px 14px 130px} .story{font-size:18px}
     .btn{width:100%} .row .spacer{display:none}
     .topbar{flex-direction:column;align-items:flex-start}
@@ -227,13 +260,48 @@
 <body>
 <div id="a11yLive" aria-live="polite" class="sr-only"></div>
 
+<!-- RESERVED CHROME (Comfort Kernel v2) — reserves its own row, never overlaps content -->
+<header class="se-chrome">
+  <a class="se-home" href="index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
+
 <div class="wrap" id="top">
 
   <div class="topbar">
     <span class="brand">Tight Spiral Studios · Workshop in a Box</span>
     <div class="toolbtns">
       <button class="textlink" id="restartLink" hidden onclick="restart()">Start over</button>
-      <button class="textlink" onclick="openA11y()">Display options</button>
     </div>
   </div>
 
@@ -484,18 +552,12 @@
 
 </div>
 
-<!-- a11y overlay (bounded frame) -->
-<div class="overlay" id="a11yOverlay" role="dialog" aria-modal="true" aria-labelledby="a11yTitle">
-  <div class="overlay-card">
-    <div class="overlay-card-hd"><h2 id="a11yTitle" style="font-size:21px">Display options</h2></div>
-    <div class="overlay-card-body">
-      <div class="optline"><span>Larger text</span><button class="switch" id="swText" aria-pressed="false" onclick="toggleText()">Off</button></div>
-      <div class="optline"><span>High contrast</span><button class="switch" id="swContrast" aria-pressed="false" onclick="toggleContrast()">Off</button></div>
-      <p style="font-size:15px;color:var(--ink-soft);margin:14px 0 0">These change how this page looks for you only. They don't affect your work or your partner's piece.</p>
-    </div>
-    <div class="overlay-card-ft"><button class="btn" onclick="closeA11y()">Done</button></div>
-  </div>
-</div>
+<!-- BOTTOM NAV RAIL (Comfort Kernel v2) -->
+<p class="se-updated" id="seUpdated">Last updated&hellip;</p>
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="index.html" aria-label="Home">Home</a>
+</nav>
 
 <div class="toast" id="toast" role="status" aria-live="polite">Copied</div>
 
@@ -661,19 +723,6 @@ function downloadResp(){
   showToast("Downloaded");
 }
 
-/* ---- a11y panel ---- */
-var lastFocus=null;
-function openA11y(){lastFocus=document.activeElement;var o=document.getElementById('a11yOverlay');
-  o.classList.add('open');o.querySelector('button,h2').focus();document.addEventListener('keydown',escClose);}
-function closeA11y(){document.getElementById('a11yOverlay').classList.remove('open');
-  document.removeEventListener('keydown',escClose);if(lastFocus)lastFocus.focus();}
-function escClose(e){if(e.key==='Escape')closeA11y();}
-function toggleText(){var b=document.getElementById('swText');var on=document.body.getAttribute('data-bigtext')!=='on';
-  if(on){document.body.setAttribute('data-bigtext','on');}else{document.body.removeAttribute('data-bigtext');}
-  b.setAttribute('aria-pressed',on);b.textContent=on?'On':'Off';a11yAnnounce('Larger text '+(on?'on':'off'));}
-function toggleContrast(){var b=document.getElementById('swContrast');var on=document.body.classList.toggle('a11y-contrast');
-  b.setAttribute('aria-pressed',on);b.textContent=on?'On':'Off';a11yAnnounce('High contrast '+(on?'on':'off'));}
-
 function a11yAnnounce(msg){var l=document.getElementById('a11yLive');if(l)l.textContent=msg;}
 var toastTimer;
 function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
@@ -683,8 +732,41 @@ function esc(s){return s.replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':
 buildDots();paintDots();updateCount();updateCount2();updatePartner();selfCheck();
 </script>
 
+<!-- STUDIO EYES controller (Comfort Kernel v2) -->
+<script>
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  var u=document.getElementById('seUpdated');
+  if(u){ var dt=new Date(document.lastModified);
+    u.textContent = isNaN(dt.getTime()) ? 'Last updated recently'
+      : 'Last updated '+dt.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}); }
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+})();
+</script>
+
 <!-- TSP shared mobile nav + device adaptation -->
-<script>window.TSP_MOBILE = { home:"index.html" };</script>
+<!-- nav:false — Home/Back are provided by the reserved chrome + bottom rail above -->
+<script>window.TSP_MOBILE = { home:"index.html", nav:false };</script>
 <!-- TSP-MOBILE (inlined from tsp-mobile.js — single-file-offline law) -->
 <script>
 /* Tight Spiral Studios — shared mobile controls + Home/Back nav.

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <!--
   EN195 — THE LAST WEEK · a hub. Tight Spiral Productions · walshero@gmail.com
 
@@ -9,9 +9,15 @@
   the way in. "Modes feel like own hubs" (founder note) resolved as: one hub, four
   cards, each its own scene before any text.
 
-  FLOOR: single-file, offline, in-memory; 3-stop comfort (never #000/#fff); large
-  type; 44px+ targets; keyboard; visible focus; reduced-motion safe; scroll-reset;
-  no emoji; shape+label not color alone; phone-width. Cards are >50% image on face.
+  MIGRATED 2026-07-29 to Comfort Kernel v2: legacy 3-stop palette button retired for
+  the reserved chrome header + Studio Eyes panel (Light Default/Dusk/Warm-dark, Text
+  size A/A+/A++, High contrast, Reduce motion, Colorblind cues). Light modes now ride
+  html[data-light]; back+home rail at the bottom. Card 2's generic single-weight
+  geometric glyphs redrawn to Cut-Paper (direction C) for a classroom/game surface.
+
+  FLOOR: single-file, offline, in-memory; comfort never #000/#fff; large type; 44px+
+  targets; keyboard; visible focus; reduced-motion safe; scroll-reset; no emoji;
+  shape+label not color alone; phone-width. Cards are >50% image on face.
 
   LINKS OUT (opens by filename in the same folder; says so plainly if absent):
     flash-ballast.html · play-the-semester-flash.html · en195-last-week.html ·
@@ -25,41 +31,100 @@
 <meta name="tsp:surface" content="hub">
 <title>EN195 — The Last Week</title>
 <style>
+/* ---- LIGHT: DAY (default) ---- */
 :root{
   /* ink/fill split per TOKEN-ROLE law: -ink names carry text, plain names paint. */
   --paper:#f4efe6; --paper-ink:#f4efe6; --ink:#1a1408; --ink-fill:#1a1408;
   --accent:#6e4700; --accent-fill:#6e4700; --line:#c9b98f;
   --card:#faf6ee; --gold:#8a5a00;
   --teal:#0d5466; --plum:#5a2a52; --rust:#8a3a1c; --slate:#324a5e;
+  --tap:48px;
 }
-body.softer{ --paper:#e6ddc9; --paper-ink:#e6ddc9; --card:#efe7d4; --line:#c2b288; }
-body.warmdark{ --paper:#241c10; --paper-ink:#241c10; --ink:#f5d9a0; --ink-fill:#f5d9a0;
+/* ---- LIGHT: DUSK (was "softer") ---- */
+html[data-light="dusk"]{
+  --paper:#e6ddc9; --paper-ink:#e6ddc9; --card:#efe7d4; --line:#c2b288;
+}
+/* ---- LIGHT: WARM-DARK (was "warmdark"; warm charcoal, never pure black) ---- */
+html[data-light="night"]{
+  --paper:#241c10; --paper-ink:#241c10; --ink:#f5d9a0; --ink-fill:#f5d9a0;
   --accent:#f5c869; --accent-fill:#f5c869; --line:#5a4a2a; --card:#2e2416; --gold:#f5c869;
-  --teal:#7fd6e6; --plum:#e3a8d6; --rust:#e8a07c; --slate:#9bb8cc; }
+  --teal:#7fd6e6; --plum:#e3a8d6; --rust:#e8a07c; --slate:#9bb8cc;
+}
+/* ---- TOGGLE: high contrast (still warm, never #000/#fff) ---- */
+html.se-contrast:not([data-light="night"]){
+  --paper:#fefdf9; --paper-ink:#fefdf9; --card:#fefdf9; --ink:#120d05; --ink-fill:#120d05;
+  --accent:#4a3000; --line:#a8905c;
+}
+html.se-contrast[data-light="night"]{
+  --paper:#0e0b06; --paper-ink:#0e0b06; --card:#171009; --ink:#fff3d6; --ink-fill:#fff3d6;
+  --accent:#ffd57a; --line:#6a5730;
+}
+/* ---- TOGGLE: text size A / A+ / A++ (root scales all rem text) ---- */
+html{ font-size:100%; }
+html.se-a1{ font-size:113%; }
+html.se-a2{ font-size:126%; }
+/* ---- TOGGLE: reduce motion ---- */
+html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+/* ---- TOGGLE: colorblind cues ---- */
+html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+
 *{box-sizing:border-box;}
 body{
   background:var(--paper); color:var(--ink);
   font-family:Georgia,'Times New Roman',serif;
-  font-size:22px; line-height:1.55; margin:0; padding:16px 16px 44px;
-  max-width:720px; margin-left:auto; margin-right:auto;
+  font-size:1.375rem; line-height:1.55; margin:0 auto; padding:0 16px 44px;
+  max-width:720px;
+  transition:background .18s ease, color .18s ease;
 }
-#palette{
-  position:sticky; top:8px; float:right; min-height:48px; min-width:48px;
-  font-size:19px; font-weight:bold; padding:10px 16px;
-  background:var(--ink-fill); color:var(--paper-ink); border:3px solid var(--gold);
-  border-radius:10px; cursor:pointer;
-}
-#palette:focus-visible, a:focus-visible, .card:focus-visible{ outline:4px solid var(--gold); outline-offset:3px; }
-a.back{ display:inline-block; font-size:18px; font-weight:bold; color:var(--accent);
-  text-decoration:none; min-height:44px; padding:10px 4px; }
-h1{font-size:32px; line-height:1.18; margin:8px 0 4px;}
-.tag{font-size:20px; margin:0 0 4px; font-weight:bold; color:var(--accent);}
-.sub{font-size:19px; margin:0 0 22px;}
+
+/* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+.se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+  padding:9px 4px; margin:0 -16px; padding-left:16px; padding-right:16px;
+  background:var(--card); border-bottom:3px solid var(--ink);
+  position:sticky; top:0; z-index:100; }
+.se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:44px;
+  padding:8px 14px; border:2px solid var(--gold); border-radius:8px; background:var(--card);
+  color:var(--accent); font-weight:bold; font-size:.9375rem; text-decoration:none; }
+.se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+.se-brand svg{ width:34px; height:20px; color:var(--accent); flex:0 0 auto; }
+.se-brand .wm{ font-size:1rem; letter-spacing:.01em; white-space:nowrap; }
+.se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:44px;
+  padding:8px 14px; border:2px solid var(--gold); border-radius:8px; background:var(--ink-fill);
+  color:var(--paper-ink); font-weight:bold; font-size:.9375rem; cursor:pointer; }
+.se-home:focus-visible,.se-eyes:focus-visible{ outline:4px solid var(--gold); outline-offset:2px; }
+@media (max-width:560px){ .se-brand .wm{ display:none; } }
+
+/* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+.se-panel{ position:fixed; right:12px; top:64px; z-index:101;
+  width:min(320px,calc(100vw - 24px)); background:var(--card); color:var(--ink);
+  border:3px solid var(--gold); border-radius:12px; padding:15px;
+  box-shadow:0 10px 34px rgba(0,0,0,.28); display:none; }
+.se-panel[data-open="1"]{ display:block; }
+.se-panel h2{ font-size:.8125rem; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin:0 0 8px; font-weight:bold; }
+.se-row{ display:flex; gap:6px; margin-bottom:14px; }
+.se-btn{ flex:1; min-height:44px; padding:8px 4px; border:2px solid var(--line); border-radius:8px;
+  background:var(--card); color:var(--ink); font-family:inherit; font-weight:bold; font-size:.875rem; cursor:pointer; }
+.se-btn[aria-pressed="true"]{ background:var(--ink-fill); color:var(--paper-ink); border-color:var(--ink-fill); }
+.se-btn:focus-visible{ outline:4px solid var(--gold); outline-offset:2px; }
+.se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+  min-height:44px; padding:8px 12px; margin-bottom:6px; border:2px solid var(--line); border-radius:8px;
+  background:var(--card); color:var(--ink); font-family:inherit; font-weight:bold; font-size:.9375rem; cursor:pointer; text-align:left; }
+.se-tog[aria-pressed="true"]{ border-color:var(--gold); }
+.se-tog .st{ font-size:.8125rem; color:var(--accent); }
+.se-tog[aria-pressed="true"] .st{ color:var(--accent); font-weight:bold; }
+.se-tog:focus-visible{ outline:4px solid var(--gold); outline-offset:2px; }
+.se-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+h1{font-size:2rem; line-height:1.18; margin:18px 0 4px;}
+.tag{font-size:1.25rem; margin:0 0 4px; font-weight:bold; color:var(--accent);}
+.sub{font-size:1.1875rem; margin:0 0 6px;}
+.updated{font-size:.875rem; font-weight:bold; color:var(--accent); margin:0 0 22px;}
 
 /* the grid of turnable cards */
 .grid{ display:flex; flex-direction:column; gap:16px; }
 .card{ display:block; width:100%; text-align:left; background:none; border:none;
   padding:0; cursor:pointer; color:var(--ink); font-family:inherit; }
+.card:focus-visible{ outline:4px solid var(--gold); outline-offset:3px; }
 .face{ border:3px solid var(--line); border-radius:16px; overflow:hidden;
   background:var(--card); }
 .card:hover .face, .card.turned .face{ border-color:var(--gold); }
@@ -68,40 +133,79 @@ h1{font-size:32px; line-height:1.18; margin:8px 0 4px;}
 .scene{ position:relative; height:200px; display:block; }
 .scene svg{ position:absolute; inset:0; width:100%; height:100%; }
 .card .label{ padding:12px 16px 14px; }
-.card .name{ font-size:24px; font-weight:bold; display:block; }
-.card .what{ font-size:18px; display:block; margin-top:2px; line-height:1.4; }
-.card .turn{ font-size:16px; font-weight:bold; color:var(--accent); margin-top:8px; display:block; }
+.card .name{ font-size:1.5rem; font-weight:bold; display:block; }
+.card .what{ font-size:1.125rem; display:block; margin-top:2px; line-height:1.4; }
+.card .turn{ font-size:1rem; font-weight:bold; color:var(--accent); margin-top:8px; display:block; }
 
 /* BACK of the card (revealed on turn) */
 .back-panel{ display:none; padding:14px 16px 16px; border-top:2px dashed var(--line); }
 .card.turned .back-panel{ display:block; }
-.back-panel p{ margin:0 0 12px; font-size:19px; line-height:1.5; }
+.back-panel p{ margin:0 0 12px; font-size:1.1875rem; line-height:1.5; }
 .enter{ display:block; text-align:center; background:var(--accent-fill); color:var(--paper-ink);
-  text-decoration:none; font-size:20px; font-weight:bold; min-height:56px;
+  text-decoration:none; font-size:1.25rem; font-weight:bold; min-height:56px;
   padding:15px; border-radius:12px; }
-body.warmdark .enter{ color:#241c10; }
+.enter:focus-visible{ outline:4px solid var(--gold); outline-offset:3px; }
 .enter:hover{ filter:brightness(1.08); }
-.missing{ font-size:17px; color:var(--accent); margin-top:8px; display:none; }
+.missing{ font-size:1.0625rem; color:var(--accent); margin-top:8px; display:none; }
 
 .foot,footer{
   margin-top:36px; padding:18px; border-radius:12px;
-  background:#241c10; color:#f5d9a0; font-size:18px; line-height:1.6;
+  background:#241c10; color:#f5d9a0; font-size:1.125rem; line-height:1.6;
 }
 .foot a,footer a{color:#f5d9a0; text-decoration:underline;}
-/* The injected mobile nav chip ships translucent-dark glass, which is illegible
-   on this page's light paper. Pin it to an opaque dark surface in every stop. */
-body .tsp-nav a{ background:#241c10; color:#f4f1e8; border-color:#8a5a00; }
-body .tsp-nav a:hover, body .tsp-nav a:focus-visible{ background:#3a2e1a; color:#f4f1e8; border-color:#f5c869; }
+
+/* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+.se-rail{ display:flex; gap:10px; justify-content:center; padding:22px 0 6px; margin-top:22px; border-top:2px solid var(--line); }
+.se-rail a,.se-rail button{ min-height:44px; padding:10px 22px; border:2px solid var(--gold); border-radius:8px;
+  background:var(--card); color:var(--accent); font-family:inherit; font-weight:bold; font-size:1rem; text-decoration:none; cursor:pointer; }
+.se-rail a:focus-visible,.se-rail button:focus-visible{ outline:4px solid var(--gold); outline-offset:2px; }
+
 @media (prefers-reduced-motion: reduce){ *{transition:none!important;animation:none!important;} }
-@media (max-width:520px){ body{font-size:20px;} h1{font-size:28px;} .scene{height:170px;} }
+@media (max-width:520px){ body{font-size:1.25rem;} h1{font-size:1.75rem;} .scene{height:170px;} }
 </style>
 </head>
 <body>
-<button id="palette" aria-label="Cycle palette. Current: Default">Palette: Default</button>
-<a class="back" href="index.html">&larr; The Studio</a>
+
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
+
 <h1>EN195 — the last week</h1>
 <p class="tag">Creative Writing · Week 6</p>
 <p class="sub">Four ways into the same week. Each card is its own room. Tap a card to see the way in, then walk through.</p>
+<p class="updated" id="seUpdated">Last updated&hellip;</p>
 
 <div class="grid" id="grid">
 
@@ -135,7 +239,7 @@ body .tsp-nav a:hover, body .tsp-nav a:focus-visible{ background:#3a2e1a; color:
     </div>
   </div>
 
-  <!-- CARD 2 — PLAY THE SEMESTER -->
+  <!-- CARD 2 — PLAY THE SEMESTER (glyphs redrawn to Cut-Paper, direction C) -->
   <div class="card" tabindex="0" role="button" aria-expanded="false" data-file="play-the-semester-flash.html">
     <div class="face">
       <div class="scene" aria-hidden="true">
@@ -143,9 +247,19 @@ body .tsp-nav a:hover, body .tsp-nav a:focus-visible{ background:#3a2e1a; color:
           <rect width="320" height="200" fill="var(--card)"/>
           <path d="M0 150 Q80 120 160 150 T320 150" fill="none" stroke="var(--teal)" stroke-width="4"/>
           <path d="M0 168 Q80 138 160 168 T320 168" fill="none" stroke="var(--teal)" stroke-width="3" opacity=".55"/>
-          <circle cx="70" cy="70" r="20" fill="none" stroke="var(--teal)" stroke-width="4"/>
-          <rect x="140" y="52" width="38" height="38" rx="4" fill="none" stroke="var(--plum)" stroke-width="4"/>
-          <path d="M250 50 L272 90 L228 90 Z" fill="none" stroke="var(--gold)" stroke-width="4" stroke-linejoin="round"/>
+          <!-- cut-paper circle: offset shadow, solid fill, punched center -->
+          <circle cx="73" cy="73" r="20" fill="var(--line)"/>
+          <circle cx="70" cy="70" r="20" fill="var(--teal)"/>
+          <circle cx="70" cy="70" r="7" fill="var(--card)"/>
+          <!-- cut-paper square -->
+          <rect x="143" y="55" width="38" height="38" rx="4" fill="var(--line)"/>
+          <rect x="140" y="52" width="38" height="38" rx="4" fill="var(--plum)"/>
+          <rect x="152" y="64" width="14" height="14" rx="2" fill="var(--card)"/>
+          <!-- cut-paper triangle -->
+          <path d="M253 53 L275 93 L231 93 Z" fill="var(--line)"/>
+          <path d="M250 50 L272 90 L228 90 Z" fill="var(--gold)"/>
+          <circle cx="250" cy="78" r="5" fill="var(--card)"/>
+          <!-- token marker (kept: already a solid) -->
           <path d="M160 118 l10 7 v10 l-10 7 -10 -7 v-10 Z" fill="var(--rust)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
         </svg>
       </div>
@@ -227,18 +341,51 @@ Tight Spiral Productions · walshero@gmail.com<br>
 EN195 Creative Writing · offline-capable, accessible-first. The human always has the last touch.
 </footer>
 
+<!-- BOTTOM NAV RAIL — Back + Home -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="index.html" aria-label="Home">Home</a>
+</nav>
+
 <script>
 (function(){
   "use strict";
-  /* palette */
-  var b=document.getElementById('palette');
-  var stops=[['Default',''],['Softer','softer'],['Warm-dark','warmdark']];
-  var pi=0;
-  b.addEventListener('click',function(){
-    pi=(pi+1)%stops.length; document.body.className=stops[pi][1];
-    b.textContent='Palette: '+stops[pi][0];
-    b.setAttribute('aria-label','Cycle palette. Current: '+stops[pi][0]);
-  });
+  var root=document.documentElement, sr=document.getElementById('seSr');
+
+  /* last-updated: computed, not typed */
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+
+  /* STUDIO EYES panel open/close */
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+
+  /* Light */
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  /* Text size */
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  /* Comfort toggles */
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+
   /* turn a card: reveal its back panel */
   function turn(card){
     var open=card.classList.contains('turned');
@@ -264,298 +411,6 @@ EN195 Creative Writing · offline-capable, accessible-first. The human always ha
     });
   });
   window.scrollTo(0,0);
-})();
-</script>
-
-<!-- TSP shared mobile nav + device adaptation -->
-<script>window.TSP_MOBILE = { home:"index.html" };</script>
-<!-- TSP-MOBILE (inlined from tsp-mobile.js — single-file-offline law) -->
-<script>
-/* Tight Spiral Studios — shared mobile controls + Home/Back nav.
-   Source & docs: tsp-mobile.js. Edit there, then re-inline. */
-(function () {
-  "use strict";
-
-  var d = document, root = d.documentElement, cfg = window.TSP_MOBILE || {};
-
-  /* ---- Device detection --------------------------------------------------- */
-  var hasTouch = ("ontouchstart" in window) ||
-                 (navigator.maxTouchPoints > 0) ||
-                 (navigator.msMaxTouchPoints > 0);
-  var coarse   = !!(window.matchMedia && matchMedia("(pointer: coarse)").matches);
-  var narrow   = Math.min(screen.width || 9999, screen.height || 9999) < 820;
-  var isMobile = hasTouch && (coarse || narrow);
-
-  root.classList.add(hasTouch ? "tsp-touch" : "tsp-no-touch");
-  if (isMobile) root.classList.add("tsp-mobile");
-
-  /* ---- Synthetic keyboard dispatch --------------------------------------- */
-  // Games listen on window (or document) for keydown/keyup and read e.key.
-  var evTarget = (cfg.target === "document") ? d : window;
-
-  function dispatchKey(type, key) {
-    var ev;
-    try {
-      ev = new KeyboardEvent(type, {
-        key: key, code: codeFor(key),
-        bubbles: true, cancelable: true, view: window
-      });
-    } catch (e) {
-      // Legacy fallback
-      ev = d.createEvent("Event");
-      ev.initEvent(type, true, true);
-      try { ev.key = key; } catch (_) {}
-    }
-    evTarget.dispatchEvent(ev);
-  }
-
-  function codeFor(key) {
-    switch (key) {
-      case "ArrowLeft":  return "ArrowLeft";
-      case "ArrowRight": return "ArrowRight";
-      case "ArrowUp":    return "ArrowUp";
-      case "ArrowDown":  return "ArrowDown";
-      case " ":          return "Space";
-      case "Enter":      return "Enter";
-      case "Shift":      return "ShiftLeft";
-      default:
-        if (key && key.length === 1) return "Key" + key.toUpperCase();
-        return "";
-    }
-  }
-
-  /* ---- Styles (injected once) -------------------------------------------- */
-  function injectStyles() {
-    if (d.getElementById("tsp-mobile-style")) return;
-    var css = [
-      /* Navigation chip — always available, subtle on desktop */
-      ".tsp-nav{position:absolute;top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));",
-        "z-index:2147483000;display:flex;gap:8px;font-family:'Helvetica Neue',Arial,sans-serif}",
-      ".tsp-nav a{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;gap:.4em;text-decoration:none;",
-        "padding:.5em .85em;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:.04em;",
-        "color:#f4f1e8;background:rgba(20,18,15,.66);border:1px solid rgba(255,207,90,.45);",
-        "-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);line-height:1;",
-        "box-shadow:0 4px 14px rgba(0,0,0,.35);transition:background .15s,border-color .15s,transform .08s}",
-      ".tsp-nav a:hover,.tsp-nav a:focus-visible{background:rgba(40,34,24,.9);border-color:#ffcf5a;outline:none}",
-      ".tsp-nav a:active{transform:translateY(1px)}",
-      "@media (min-width:900px) and (pointer:fine){.tsp-nav{opacity:.55}.tsp-nav:hover{opacity:1}}",
-
-      /* Nav integrated into the studio's shared .topbar (no overlap) */
-      ".tsp-barnav{display:inline-flex;align-items:center;gap:.35rem;margin-right:.25rem;flex:none}",
-      ".tsp-barnav a{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;gap:.3em;text-decoration:none;color:inherit;",
-        "font-family:inherit;font-weight:800;font-size:.82rem;letter-spacing:.02em;line-height:1;",
-        "padding:.4em .7em;border-radius:999px;border:1px solid currentColor;opacity:.85;",
-        "background:transparent;white-space:nowrap;transition:opacity .12s,background .12s}",
-      ".tsp-barnav a:hover,.tsp-barnav a:focus-visible{opacity:1;background:rgba(127,127,127,.18);outline:none}",
-      ".tsp-barnav a:active{transform:translateY(1px)}",
-      /* Keep the shared bar on one row once Home/Back are added: title ellipsizes */
-      ".tsp-touch .topbar{gap:.4rem}",
-      ".tsp-touch .topbar .wm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1 1 auto}",
-
-      /* Gamepad — only rendered on touch devices */
-      ".tsp-pad{position:fixed;left:0;right:0;bottom:0;z-index:2147482000;",
-        "display:flex;justify-content:space-between;align-items:flex-end;pointer-events:none;",
-        "padding:0 max(14px,env(safe-area-inset-left)) max(16px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-right));",
-        "font-family:'Helvetica Neue',Arial,sans-serif;touch-action:none}",
-      ".tsp-cluster{display:flex;gap:12px;pointer-events:none;align-items:flex-end;flex-wrap:wrap;max-width:46vw}",
-      ".tsp-cluster.right{justify-content:flex-end}",
-      ".tsp-btn{pointer-events:auto;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;",
-        "touch-action:none;min-width:62px;min-height:62px;padding:0 14px;border-radius:16px;",
-        "display:flex;align-items:center;justify-content:center;text-align:center;",
-        "font-size:15px;font-weight:700;letter-spacing:.03em;color:#f4f1e8;",
-        "background:rgba(24,20,15,.6);border:1.5px solid rgba(255,207,90,.5);",
-        "-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);",
-        "box-shadow:0 6px 18px rgba(0,0,0,.4);transition:background .06s,transform .06s;cursor:pointer}",
-      ".tsp-btn.big{min-width:82px;min-height:82px;font-size:16px}",
-      ".tsp-btn:active,.tsp-btn.on{background:rgba(255,207,90,.9);color:#1a0d09;transform:scale(.94)}",
-      /* Hide gamepad on non-touch so desktop keeps keyboard feel */
-      ".tsp-no-touch .tsp-pad{display:none}",
-
-      /* Rotate-for-more-room hint — canvas games only, portrait phones only */
-      ".tsp-rot{position:fixed;left:50%;transform:translateX(-50%);top:calc(72px + env(safe-area-inset-top));",
-        "z-index:2147482500;display:none;align-items:center;gap:.55em;padding:.5em .55em .5em .9em;",
-        "border-radius:999px;background:rgba(24,20,15,.86);color:#f4f1e8;",
-        "border:1px solid rgba(255,207,90,.5);white-space:nowrap;",
-        "font:600 12px/1 'Helvetica Neue',Arial,sans-serif;letter-spacing:.02em;",
-        "-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 4px 14px rgba(0,0,0,.4)}",
-      ".tsp-rot .rk{font-size:14px;color:#ffcf5a}",
-      ".tsp-rot button{background:none;border:none;color:inherit;font-size:16px;line-height:1;",
-        "padding:0 .15em;margin:0;cursor:pointer;opacity:.65}",
-      ".tsp-rot button:active{opacity:1}",
-      "@media (orientation:portrait){.tsp-touch .tsp-rot{display:inline-flex}}",
-      ".tsp-rot-dismissed .tsp-rot{display:none!important}"
-    ].join("");
-    var s = d.createElement("style");
-    s.id = "tsp-mobile-style";
-    s.textContent = css;
-    d.head.appendChild(s);
-  }
-
-  /* ---- Navigation (Home / Back) ------------------------------------------ */
-  function makeLink(href, label, aria) {
-    var a = d.createElement("a");
-    a.href = href; a.innerHTML = label;
-    a.setAttribute("aria-label", aria);
-    return a;
-  }
-
-  function buildNav() {
-    if (cfg.nav === false) return;
-    if (d.querySelector(".tsp-nav, .tsp-barnav")) return;
-
-    var home = cfg.home === undefined ? "index.html" : cfg.home;
-    var links = [];
-    if (cfg.back) links.push(makeLink(cfg.back, "‹ Back", "Back"));
-    if (home)     links.push(makeLink(home, "⌂ Home", "Home"));
-    if (!links.length) return;
-
-    // Prefer integrating into the studio's shared sticky header if present —
-    // avoids overlapping page titles and matches each page's palette.
-    var bar = cfg.floatNav ? null : d.querySelector(".topbar");
-    if (bar) {
-      var wrap = d.createElement("span");
-      wrap.className = "tsp-barnav";
-      links.forEach(function (l) { wrap.appendChild(l); });
-      bar.insertBefore(wrap, bar.firstChild);
-      return;
-    }
-
-    // Otherwise: floating chip, and reserve top space on scrollable pages so
-    // it never covers the header/title.
-    var nav = d.createElement("nav");
-    nav.className = "tsp-nav";
-    nav.setAttribute("aria-label", "Site navigation");
-    links.forEach(function (l) { nav.appendChild(l); });
-    d.body.appendChild(nav);
-    reserveTopSpace();
-  }
-
-  function reserveTopSpace() {
-    if (!hasTouch) return;                 // desktop keeps its exact layout
-    // Skip full-viewport apps (canvas games, fixed overlays) — the chip sits
-    // in their letterbox margin and body padding would distort them.
-    var cs = getComputedStyle(d.body);
-    if (cs.overflowY === "hidden" || cs.overflowX === "hidden") return;
-    var scrolls = root.scrollHeight > (window.innerHeight + 4);
-    if (!scrolls) return;
-    var pad = parseFloat(cs.paddingTop) || 0;
-    d.body.style.paddingTop = (pad + 58) + "px";
-  }
-
-  /* ---- Gamepad ------------------------------------------------------------ */
-  function buildPad() {
-    if (!hasTouch) return;                       // keyboard devices skip it
-    if (!cfg.controls || !cfg.controls.length) return;
-    if (d.querySelector(".tsp-pad")) return;
-
-    var pad = d.createElement("div");
-    pad.className = "tsp-pad";
-    var left  = d.createElement("div"); left.className  = "tsp-cluster left";
-    var right = d.createElement("div"); right.className = "tsp-cluster right";
-    pad.appendChild(left); pad.appendChild(right);
-
-    cfg.controls.forEach(function (c) {
-      var btn = d.createElement("button");
-      btn.type = "button";
-      btn.className = "tsp-btn" + (c.big ? " big" : "");
-      btn.innerHTML = c.label || "";
-      btn.setAttribute("aria-label", c.aria || c.label || c.key);
-      bindButton(btn, c);
-      (c.side === "left" ? left : right).appendChild(btn);
-    });
-
-    d.body.appendChild(pad);
-  }
-
-  function bindButton(btn, c) {
-    var key = c.key, held = false;
-
-    function press(e) {
-      if (e) { e.preventDefault(); e.stopPropagation(); }
-      if (c.hold) {
-        if (held) return;
-        held = true;
-        btn.classList.add("on");
-        dispatchKey("keydown", key);
-      } else {
-        // tap: quick down/up so edge-triggered actions (fire/rotate/drop) fire once
-        btn.classList.add("on");
-        dispatchKey("keydown", key);
-        setTimeout(function () { dispatchKey("keyup", key); }, 24);
-        setTimeout(function () { btn.classList.remove("on"); }, 90);
-      }
-    }
-    function release(e) {
-      if (e) e.preventDefault();
-      if (c.hold && held) {
-        held = false;
-        btn.classList.remove("on");
-        dispatchKey("keyup", key);
-      }
-    }
-
-    if (window.PointerEvent) {
-      btn.addEventListener("pointerdown", function (e) {
-        try { btn.setPointerCapture(e.pointerId); } catch (_) {}
-        press(e);
-      });
-      btn.addEventListener("pointerup", release);
-      btn.addEventListener("pointercancel", release);
-      btn.addEventListener("lostpointercapture", release);
-    } else {
-      btn.addEventListener("touchstart", press, { passive: false });
-      btn.addEventListener("touchend", release);
-      btn.addEventListener("touchcancel", release);
-      btn.addEventListener("mousedown", press);
-      btn.addEventListener("mouseup", release);
-      btn.addEventListener("mouseleave", release);
-    }
-    // Safety: releasing a held key if the page loses focus
-    window.addEventListener("blur", release);
-  }
-
-  /* ---- Rotate hint -------------------------------------------------------- */
-  function buildRotateHint() {
-    if (!hasTouch) return;
-    if (cfg.rotateHint === false) return;
-    if (!cfg.controls || !cfg.controls.length) return;   // canvas games only
-    if (d.querySelector(".tsp-rot")) return;
-    var hint = d.createElement("div");
-    hint.className = "tsp-rot";
-    hint.setAttribute("role", "note");
-    hint.innerHTML = '<span class="rk">↻</span>' +
-      '<span>Turn sideways for more room</span>' +
-      '<button type="button" aria-label="Dismiss">×</button>';
-    hint.querySelector("button").addEventListener("click", function () {
-      root.classList.add("tsp-rot-dismissed");
-    });
-    d.body.appendChild(hint);
-  }
-
-  /* ---- Boot --------------------------------------------------------------- */
-  function boot() {
-    injectStyles();
-    buildNav();
-    buildPad();
-    buildRotateHint();
-  }
-
-  if (d.readyState === "loading") {
-    d.addEventListener("DOMContentLoaded", boot);
-  } else {
-    boot();
-  }
-
-  // Expose a tiny API for pages that want to toggle the pad (e.g. hide on menus)
-  window.TSPMobile = {
-    isTouch: hasTouch,
-    isMobile: isMobile,
-    press: function (key) { dispatchKey("keydown", key); dispatchKey("keyup", key); },
-    showPad: function (v) {
-      var p = d.querySelector(".tsp-pad");
-      if (p) p.style.display = v === false ? "none" : "";
-    }
-  };
 })();
 </script>
 </body>

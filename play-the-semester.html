@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <!--
   PLAY THE SEMESTER — EN195 Creative Writing, all four workshops. Tight Spiral Studios · walshero@gmail.com
 
@@ -31,35 +31,95 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Play the Semester — EN195</title>
 <style>
-/* STUDIO EYES v4 CLASS-FIX 2026-07-11: lock the palette. */
-:root{ color-scheme: light; }
+/* STUDIO EYES v2 KERNEL 2026-07-29: Light = Default / Dusk / Warm-dark via
+   html[data-light]. Warm-dark is warm charcoal, never pure black. Every text
+   holds >=4.5:1 in all three. */
+:root{ color-scheme: light dark; }
 
+/* ---- LIGHT: DEFAULT (day) ---- */
 :root{
-  --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --ink2:#1f1b12; --ink-fill:#1f1b12;
+  --bg:#f3ead8; --surface:#fffaf0; --surface-2:#efe1c2; --ink:#1f1b12; --ink2:#1f1b12; --ink-fill:#1f1b12;
   --line:#d8caa8; --line2:#c2b288;
-  --accent:#3a4654; --accent2:#2b3540;
+  --accent:#3a4654; --accent2:#2b3540; --accent-strong:#2b3540; --on-accent:#ffffff;
   --water:#4a6b86; --water-d:#2b4256;
   --gold:#6e4700; --gold-br:#c8900a; --gold-pale:#fbeec6;
   --rust:#8a3a1c;
   --focus:#c8900a;
+  --tap:48px; --r:12px;
   --serif:Georgia,'Times New Roman',serif;
   --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
   --mono:ui-monospace,Consolas,monospace;
 }
-body.softer{ --bg:#d9d2c4; --surface:#e2dccf; --ink:#241f16; --ink2:#241f16; --ink-fill:#241f16; --line:#c3b7a3; --line2:#b0a488; }
-body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0; --ink-fill:#f3e4c0; --line:#4a4230; --line2:#5e553e;
-  --accent:#8fa6bd; --accent2:#9fb6cd; --water:#8fb4d0; --water-d:#a9c6dd; --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a; --rust:#e8a07c; }
+/* ---- LIGHT: DUSK (softer daylight) ---- */
+html[data-light="dusk"]{
+  --bg:#d9d2c4; --surface:#e2dccf; --surface-2:#d3ccbb; --ink:#241f16; --ink2:#241f16; --ink-fill:#241f16;
+  --line:#c3b7a3; --line2:#b0a488;
+}
+/* ---- LIGHT: WARM-DARK (night, warm charcoal) ---- */
+html[data-light="night"]{
+  --bg:#1c1a16; --surface:#26231d; --surface-2:#33302a; --ink:#f3e4c0; --ink2:#f3e4c0; --ink-fill:#f3e4c0;
+  --line:#4a4230; --line2:#5e553e;
+  --accent:#8fa6bd; --accent2:#9fb6cd; --accent-strong:#a9bcd0; --on-accent:#141109;
+  --water:#8fb4d0; --water-d:#a9c6dd; --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a; --rust:#e8a07c;
+}
+/* ---- TOGGLE: high contrast ---- */
+html.se-contrast:not([data-light="night"]){ --bg:#fbfaf7; --surface:#fbfaf7; --surface-2:#f0ece2; --ink:#141109; --ink2:#141109; --line:#b9a06a; }
+html.se-contrast[data-light="night"]{ --bg:#0e0d0b; --surface:#161410; --surface-2:#211d16; --ink:#fff7e6; --ink2:#fff7e6; }
+/* ---- TOGGLE: text size A / A+ / A++ ---- */
+html.se-a1{ font-size:113%; }
+html.se-a2{ font-size:126%; }
+/* ---- TOGGLE: reduce motion ---- */
+html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+/* ---- TOGGLE: colorblind cues ---- */
+html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
 *{box-sizing:border-box;} html,body{margin:0;}
 body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; -webkit-text-size-adjust:100%; }
 
-.topbar{ background:var(--accent); color:#fff; padding:.6rem .9rem; display:flex; align-items:center; gap:.55rem; font-family:var(--sans); position:sticky; top:0; z-index:30; flex-wrap:wrap; }
-body.warm .topbar{ color:#0f0e0b; }
-.topbar .mark{ width:26px; height:26px; flex:none; } .topbar .wm{ font-weight:800; font-size:.9rem; }
-.blink{ color:inherit; text-decoration:underline; font:700 .74rem/1 var(--sans); min-height:44px; display:inline-flex; align-items:center; padding:0 .2rem; }
-.blink:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
-.cstop{ margin-left:auto; background:var(--surface); color:var(--ink); border:2px solid var(--line2); border-radius:9px; padding:.45rem .65rem; font:700 .74rem/1 var(--sans); cursor:pointer; min-height:44px; }
-/* .cstop uses --surface/--ink; both retune per theme, so no warm override needed */
-.cstop:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+/* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+.se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+  padding:9px 14px; background:var(--surface); border-bottom:2px solid var(--ink);
+  position:sticky; top:0; z-index:100; font-family:var(--sans); }
+.se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 12px; border:1.5px solid var(--line2); border-radius:8px; background:var(--surface-2);
+  color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; }
+.se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+.se-brand svg{ width:34px; height:20px; color:var(--accent-strong); flex:0 0 auto; }
+.se-brand .wm{ font-family:var(--serif); font-size:16px; letter-spacing:.01em; white-space:nowrap; }
+.se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--accent-strong);
+  color:var(--on-accent); font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer; }
+.se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+@media (max-width:560px){ .se-brand .wm{ display:none; } }
+
+/* ═══ STUDIO EYES panel ═══ */
+.se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:101;
+  width:min(320px,calc(100vw - 24px)); background:var(--surface); color:var(--ink);
+  border:2px solid var(--accent-strong); border-radius:var(--r); padding:15px;
+  box-shadow:0 10px 34px rgba(0,0,0,.28); display:none; font-family:var(--sans); }
+.se-panel[data-open="1"]{ display:block; }
+.se-panel h2{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink2); margin:0 0 8px; }
+.se-prow{ display:flex; gap:6px; margin-bottom:14px; }
+.se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--line2); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:12.5px; cursor:pointer; }
+.se-btn[aria-pressed="true"]{ background:var(--accent-strong); color:var(--on-accent); border-color:var(--accent-strong); }
+.se-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+  min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--line2); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--sans); font-weight:600; font-size:14px; cursor:pointer; text-align:left; }
+.se-tog[aria-pressed="true"]{ border-color:var(--accent-strong); }
+.se-tog .st{ font-family:var(--mono); font-size:11px; color:var(--ink2); }
+.se-tog:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+/* ═══ last-updated stamp ═══ */
+.updated{ font-family:var(--mono); font-size:.78rem; color:var(--ink2); margin:0 0 1rem; display:flex; align-items:center; gap:7px; }
+.updated::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--gold-br); flex:0 0 auto; }
+
+/* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+.se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; border-top:2px solid var(--line2); background:var(--bg); }
+.se-rail a,.se-rail button{ min-height:var(--tap); padding:10px 18px; border:1.5px solid var(--line2); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer; }
+.se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 
 .wrap{ max-width:680px; margin:0 auto; padding:1.1rem 1rem 5rem; }
 .screen{ display:none; } .screen.on{ display:block; animation:fade .25s ease; }
@@ -71,7 +131,7 @@ p{ margin:0 0 .9rem; } .lead{ font-size:1.06rem; } .beat{ font-style:italic; col
 .quote{ border-left:5px solid var(--water); padding:.5rem 0 .5rem .9rem; margin:.7rem 0 1rem; font-style:italic; color:var(--ink); }
 
 .go{ display:block; width:100%; font:800 1.04rem/1.2 var(--sans); cursor:pointer; min-height:56px; padding:.9rem 1rem; border:none; border-radius:13px; background:var(--accent); color:#fff; margin:.45rem 0; text-align:center; text-decoration:none; }
-body.warm .go{ color:#0f0e0b; }
+html[data-light="night"] .go{ color:#0f0e0b; }
 .go:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
 .go.sec{ background:var(--surface); color:var(--ink); border:2px solid var(--ink-fill); }
 .go.ghost{ background:transparent; color:var(--ink); border:2px solid var(--line2); font-weight:700; min-height:48px; }
@@ -94,7 +154,7 @@ body.warm .go{ color:#0f0e0b; }
 .stn .nm{ font:800 1.08rem/1.15 var(--sans); color:var(--ink); margin:.15rem 0; }
 .stn .ds{ font:400 .86rem/1.35 var(--sans); color:var(--ink2); }
 .stn .tag{ display:inline-block; font:800 .68rem/1 var(--sans); text-transform:uppercase; letter-spacing:.05em; padding:.25rem .45rem; border-radius:6px; margin-top:.35rem; }
-.tag.live{ background:var(--gold-br); color:#241a02; } body.warm .tag.live{ color:#241a02; }
+.tag.live{ background:var(--gold-br); color:#241a02; } html[data-light="night"] .tag.live{ color:#241a02; }
 .tag.soon{ background:transparent; border:2px solid var(--line2); color:var(--ink2); }
 
 /* ---- inside a station ---- */
@@ -108,7 +168,7 @@ body.warm .go{ color:#0f0e0b; }
 .gamecard .gt{ font:800 1.04rem/1.2 var(--sans); color:var(--ink); }
 .gamecard .gd{ font:400 .88rem/1.35 var(--sans); color:var(--ink2); margin:.25rem 0 .6rem; }
 .openbtn{ display:block; width:100%; min-height:52px; font:800 .98rem/1 var(--sans); border:none; border-radius:11px; background:var(--accent); color:#fff; cursor:pointer; text-align:center; text-decoration:none; padding:.75rem; }
-body.warm .openbtn{ color:#0f0e0b; }
+html[data-light="night"] .openbtn{ color:#0f0e0b; }
 .openbtn:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
 .soonbox{ border:2px dashed var(--line2); border-radius:14px; background:var(--surface); padding:.85rem .95rem; margin:.7rem 0; }
 .soonbox .st{ font:800 1rem/1.2 var(--sans); color:var(--ink); }
@@ -116,8 +176,8 @@ body.warm .openbtn{ color:#0f0e0b; }
 .miss{ font:700 .82rem/1.35 var(--sans); color:var(--rust); margin:.5rem 0 0; }
 
 .foot{ margin-top:1.6rem; padding:1rem; background:var(--accent); color:#fff; border-radius:12px; font-family:var(--sans); font-size:.8rem; }
-body.warm .foot{ background:#26231d; color:#f3e4c0; }
-.foot a{ color:#fff; text-decoration:underline; } body.warm .foot a{ color:#f3e4c0; text-decoration:underline; font-weight:800; }
+html[data-light="night"] .foot{ background:#26231d; color:#f3e4c0; }
+.foot a{ color:#fff; text-decoration:underline; } html[data-light="night"] .foot a{ color:#f3e4c0; text-decoration:underline; font-weight:800; }
 a:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; border-radius:2px; }
 .tsp-barnav a:focus-visible, .tsp-nav a:focus-visible{ outline:3px solid var(--focus) !important; outline-offset:2px; }
 .sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
@@ -126,12 +186,40 @@ a:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; border-radi
 </style>
 </head>
 <body>
-<div class="topbar">
-  <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 12 C14 16 14 8 22 12 C30 16 30 8 36 12 M6 22 C14 26 14 18 22 22 C30 26 30 18 36 22 M6 32 C14 36 14 28 22 32 C30 36 30 28 36 32" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
-  <span class="wm">Play the Semester</span>
-  <a class="blink" href="index.html">Studio</a>
-  <a class="blink" href="https://docs.google.com/document/d/1_MdiJpjyL5WuAaNvU9AZ5y2zrvLB3HVyFDuvWl11VHU/edit" target="_blank" rel="noopener">Schedule</a>
-  <button class="cstop" id="cstop" aria-label="Change comfort palette. Tap to cycle through three reading options.">Comfort: Default</button>
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-prow" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-prow" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
 </div>
 
 <div class="wrap">
@@ -167,22 +255,22 @@ a:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; border-radi
 
     <div class="stations" role="list">
       <button class="stn" role="listitem" data-go="w1">
-        <span class="ill"><svg viewBox="0 0 60 88" aria-hidden="true"><rect x="10" y="12" width="40" height="64" rx="3" fill="var(--surface)" stroke="var(--water-d)" stroke-width="2"/><path d="M18 26 H42 M18 34 H42 M18 42 H36 M18 50 H42 M18 58 H32" stroke="var(--water)" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <span class="ill"><svg viewBox="0 0 60 88" aria-hidden="true"><rect x="16" y="17" width="30" height="54" rx="3" fill="var(--line2)"/><rect x="13" y="14" width="30" height="54" rx="3" fill="var(--water-d)"/><g fill="var(--surface)"><rect x="18" y="22" width="20" height="3.4" rx="1.7"/><rect x="18" y="30" width="20" height="3.4" rx="1.7"/><rect x="18" y="38" width="14" height="3.4" rx="1.7"/><rect x="18" y="46" width="20" height="3.4" rx="1.7"/><rect x="18" y="54" width="11" height="3.4" rx="1.7"/></g></svg></span>
         <span class="body"><span class="wk">Workshop 1 · Weeks 1–3</span><span class="nm">Creative Nonfiction</span><span class="ds">The true thing, told with craft. Secret worlds and moving images.</span><span class="tag soon">Read the week</span></span>
       </button>
 
       <button class="stn" role="listitem" data-go="w2">
-        <span class="ill"><svg viewBox="0 0 60 88" aria-hidden="true"><path d="M14 20 C30 30 30 46 14 56 M30 16 C48 30 48 50 30 66 M22 72 H40" fill="none" stroke="var(--water-d)" stroke-width="2.4" stroke-linecap="round"/><circle cx="42" cy="24" r="3" fill="var(--gold-br)"/></svg></span>
+        <span class="ill"><svg viewBox="0 0 60 88" aria-hidden="true"><circle cx="33" cy="47" r="20" fill="var(--line2)"/><circle cx="30" cy="44" r="20" fill="var(--water-d)"/><g fill="var(--surface)"><rect x="20" y="36" width="20" height="3.2" rx="1.6"/><rect x="20" y="43" width="13" height="3.2" rx="1.6"/><rect x="20" y="50" width="17" height="3.2" rx="1.6"/></g></svg></span>
         <span class="body"><span class="wk">Workshop 2 · Weeks 3–4</span><span class="nm">Poetry</span><span class="ds">Where I'm From, then free verse. Image, sound, turn — no rhyme required.</span><span class="tag soon">Read the week</span></span>
       </button>
 
       <button class="stn" role="listitem" data-go="w3">
-        <span class="ill"><svg viewBox="0 0 60 88" aria-hidden="true"><path d="M8 60 L30 22 L52 60 Z" fill="none" stroke="var(--water-d)" stroke-width="2.4" stroke-linejoin="round"/><rect x="20" y="46" width="20" height="14" fill="var(--surface)" stroke="var(--water)" stroke-width="2"/><path d="M12 68 H48" stroke="var(--water-d)" stroke-width="2.4" stroke-linecap="round"/></svg></span>
+        <span class="ill"><svg viewBox="0 0 60 88" aria-hidden="true"><path d="M33 18 L13 66 L53 66 Z" fill="var(--line2)"/><path d="M30 15 L10 63 L50 63 Z" fill="var(--water-d)"/><rect x="24" y="45" width="12" height="18" rx="1.5" fill="var(--surface)"/></svg></span>
         <span class="body"><span class="wk">Workshop 3 · Weeks 4–5</span><span class="nm">The 10-Minute Play</span><span class="ds">Tension on a small stage. A want, an obstacle, nine to eleven minutes.</span><span class="tag soon">Read the week</span></span>
       </button>
 
       <button class="stn here" role="listitem" data-go="w4">
-        <span class="ill"><svg viewBox="0 0 60 88" aria-hidden="true"><ellipse cx="30" cy="30" rx="17" ry="20" fill="var(--surface)" stroke="var(--gold-br)" stroke-width="2.4"/><path d="M30 50 V64 M24 64 H36" stroke="var(--gold-br)" stroke-width="2.4" stroke-linecap="round"/><path d="M22 30 q8 -8 16 0" fill="none" stroke="var(--water)" stroke-width="2"/></svg></span>
+        <span class="ill"><svg viewBox="0 0 60 88" aria-hidden="true"><circle cx="33" cy="35" r="17" fill="var(--line2)"/><circle cx="30" cy="32" r="17" fill="var(--water-d)"/><circle cx="24" cy="26" r="4.5" fill="var(--surface)"/><rect x="27.5" y="49" width="5" height="4" fill="var(--line2)"/><rect x="25" y="52" width="10" height="9" rx="1.8" fill="var(--water-d)"/></svg></span>
         <span class="body"><span class="wk">Workshop 4 · Week 6 · you are here</span><span class="nm">Flash Fiction</span><span class="ds">The whole story in one breath. Cut the weight, let the piece rise.</span><span class="tag live">Play it now</span></span>
       </button>
     </div>
@@ -271,23 +359,52 @@ a:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; border-radi
     <button class="go ghost" data-back="river">Back to the river</button>
   </section>
 
+  <p class="updated" id="seUpdated">Last updated&hellip;</p>
+
   <div class="foot">
     Tight Spiral Studios · walshero@gmail.com — <b>Play the Semester</b>, all four EN195 workshops in one file. Assignments and dates are transcribed from the live <a href="https://docs.google.com/document/d/1_MdiJpjyL5WuAaNvU9AZ5y2zrvLB3HVyFDuvWl11VHU/edit" target="_blank" rel="noopener">Course Schedule</a>; that document is the record. Single file, offline, nothing stored or sent.<br>
-    <b>Comfort:</b> three reading stops, one tap each in the top-bar Comfort button — no default privileged, no wall before you start. <b>The real grade lives in the gradebook.</b> Green-free slate placeholder pending the palette pick.
+    <b>Comfort:</b> reading light, text size, and contrast live in Studio Eyes, top-right — no default privileged, no wall before you start. <b>The real grade lives in the gradebook.</b> Green-free slate placeholder pending the palette pick.
   </div>
 </div>
+
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="index.html" aria-label="Home">Home</a>
+</nav>
 
 <script>
 (function(){
   var $=function(id){return document.getElementById(id);};
 
-  var stops=['default','softer','warm'], labels={'default':'Default','softer':'Softer','warm':'Warm-dark'}, ci=0;
-  function applyStop(s){ document.body.classList.remove('softer','warm'); if(s==='softer')document.body.classList.add('softer'); if(s==='warm')document.body.classList.add('warm'); }
-  $('cstop').addEventListener('click',function(){
-    ci=(ci+1)%stops.length; applyStop(stops[ci]);
-    this.textContent='Comfort: '+labels[stops[ci]];
-    this.setAttribute('aria-label','Comfort palette is now '+labels[stops[ci]]+'. Tap to cycle to the next.');
-  });
+  /* ── STUDIO EYES ── */
+  var root=document.documentElement, sr=$('seSr');
+  (function(){ var u=$('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=$('seEyes'), panel=$('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
 
   function show(id){
     document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');});
@@ -299,296 +416,6 @@ a:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; border-radi
 })();
 </script>
 
-<!-- TSP shared mobile nav + device adaptation -->
-<script>window.TSP_MOBILE = { home:"index.html" };</script>
-<!-- TSP-MOBILE (inlined from tsp-mobile.js — single-file-offline law) -->
-<script>
-/* Tight Spiral Studios — shared mobile controls + Home/Back nav.
-   Source & docs: tsp-mobile.js. Edit there, then re-inline. */
-(function () {
-  "use strict";
 
-  var d = document, root = d.documentElement, cfg = window.TSP_MOBILE || {};
-
-  /* ---- Device detection --------------------------------------------------- */
-  var hasTouch = ("ontouchstart" in window) ||
-                 (navigator.maxTouchPoints > 0) ||
-                 (navigator.msMaxTouchPoints > 0);
-  var coarse   = !!(window.matchMedia && matchMedia("(pointer: coarse)").matches);
-  var narrow   = Math.min(screen.width || 9999, screen.height || 9999) < 820;
-  var isMobile = hasTouch && (coarse || narrow);
-
-  root.classList.add(hasTouch ? "tsp-touch" : "tsp-no-touch");
-  if (isMobile) root.classList.add("tsp-mobile");
-
-  /* ---- Synthetic keyboard dispatch --------------------------------------- */
-  // Games listen on window (or document) for keydown/keyup and read e.key.
-  var evTarget = (cfg.target === "document") ? d : window;
-
-  function dispatchKey(type, key) {
-    var ev;
-    try {
-      ev = new KeyboardEvent(type, {
-        key: key, code: codeFor(key),
-        bubbles: true, cancelable: true, view: window
-      });
-    } catch (e) {
-      // Legacy fallback
-      ev = d.createEvent("Event");
-      ev.initEvent(type, true, true);
-      try { ev.key = key; } catch (_) {}
-    }
-    evTarget.dispatchEvent(ev);
-  }
-
-  function codeFor(key) {
-    switch (key) {
-      case "ArrowLeft":  return "ArrowLeft";
-      case "ArrowRight": return "ArrowRight";
-      case "ArrowUp":    return "ArrowUp";
-      case "ArrowDown":  return "ArrowDown";
-      case " ":          return "Space";
-      case "Enter":      return "Enter";
-      case "Shift":      return "ShiftLeft";
-      default:
-        if (key && key.length === 1) return "Key" + key.toUpperCase();
-        return "";
-    }
-  }
-
-  /* ---- Styles (injected once) -------------------------------------------- */
-  function injectStyles() {
-    if (d.getElementById("tsp-mobile-style")) return;
-    var css = [
-      /* Navigation chip — always available, subtle on desktop */
-      ".tsp-nav{position:absolute;top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));",
-        "z-index:2147483000;display:flex;gap:8px;font-family:'Helvetica Neue',Arial,sans-serif}",
-      ".tsp-nav a{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;gap:.4em;text-decoration:none;",
-        "padding:.5em .85em;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:.04em;",
-        "color:#f4f1e8;background:rgba(20,18,15,.66);border:1px solid rgba(255,207,90,.45);",
-        "-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);line-height:1;",
-        "box-shadow:0 4px 14px rgba(0,0,0,.35);transition:background .15s,border-color .15s,transform .08s}",
-      ".tsp-nav a:hover,.tsp-nav a:focus-visible{background:rgba(40,34,24,.9);border-color:#ffcf5a;outline:none}",
-      ".tsp-nav a:active{transform:translateY(1px)}",
-      "@media (min-width:900px) and (pointer:fine){.tsp-nav{opacity:.55}.tsp-nav:hover{opacity:1}}",
-
-      /* Nav integrated into the studio's shared .topbar (no overlap) */
-      ".tsp-barnav{display:inline-flex;align-items:center;gap:.35rem;margin-right:.25rem;flex:none}",
-      ".tsp-barnav a{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;gap:.3em;text-decoration:none;color:inherit;",
-        "font-family:inherit;font-weight:800;font-size:.82rem;letter-spacing:.02em;line-height:1;",
-        "padding:.4em .7em;border-radius:999px;border:1px solid currentColor;opacity:.85;",
-        "background:transparent;white-space:nowrap;transition:opacity .12s,background .12s}",
-      ".tsp-barnav a:hover,.tsp-barnav a:focus-visible{opacity:1;background:rgba(127,127,127,.18);outline:none}",
-      ".tsp-barnav a:active{transform:translateY(1px)}",
-      /* Keep the shared bar on one row once Home/Back are added: title ellipsizes */
-      ".tsp-touch .topbar{gap:.4rem}",
-      ".tsp-touch .topbar .wm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1 1 auto}",
-
-      /* Gamepad — only rendered on touch devices */
-      ".tsp-pad{position:fixed;left:0;right:0;bottom:0;z-index:2147482000;",
-        "display:flex;justify-content:space-between;align-items:flex-end;pointer-events:none;",
-        "padding:0 max(14px,env(safe-area-inset-left)) max(16px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-right));",
-        "font-family:'Helvetica Neue',Arial,sans-serif;touch-action:none}",
-      ".tsp-cluster{display:flex;gap:12px;pointer-events:none;align-items:flex-end;flex-wrap:wrap;max-width:46vw}",
-      ".tsp-cluster.right{justify-content:flex-end}",
-      ".tsp-btn{pointer-events:auto;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;",
-        "touch-action:none;min-width:62px;min-height:62px;padding:0 14px;border-radius:16px;",
-        "display:flex;align-items:center;justify-content:center;text-align:center;",
-        "font-size:15px;font-weight:700;letter-spacing:.03em;color:#f4f1e8;",
-        "background:rgba(24,20,15,.6);border:1.5px solid rgba(255,207,90,.5);",
-        "-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);",
-        "box-shadow:0 6px 18px rgba(0,0,0,.4);transition:background .06s,transform .06s;cursor:pointer}",
-      ".tsp-btn.big{min-width:82px;min-height:82px;font-size:16px}",
-      ".tsp-btn:active,.tsp-btn.on{background:rgba(255,207,90,.9);color:#1a0d09;transform:scale(.94)}",
-      /* Hide gamepad on non-touch so desktop keeps keyboard feel */
-      ".tsp-no-touch .tsp-pad{display:none}",
-
-      /* Rotate-for-more-room hint — canvas games only, portrait phones only */
-      ".tsp-rot{position:fixed;left:50%;transform:translateX(-50%);top:calc(72px + env(safe-area-inset-top));",
-        "z-index:2147482500;display:none;align-items:center;gap:.55em;padding:.5em .55em .5em .9em;",
-        "border-radius:999px;background:rgba(24,20,15,.86);color:#f4f1e8;",
-        "border:1px solid rgba(255,207,90,.5);white-space:nowrap;",
-        "font:600 12px/1 'Helvetica Neue',Arial,sans-serif;letter-spacing:.02em;",
-        "-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 4px 14px rgba(0,0,0,.4)}",
-      ".tsp-rot .rk{font-size:14px;color:#ffcf5a}",
-      ".tsp-rot button{background:none;border:none;color:inherit;font-size:16px;line-height:1;",
-        "padding:0 .15em;margin:0;cursor:pointer;opacity:.65}",
-      ".tsp-rot button:active{opacity:1}",
-      "@media (orientation:portrait){.tsp-touch .tsp-rot{display:inline-flex}}",
-      ".tsp-rot-dismissed .tsp-rot{display:none!important}"
-    ].join("");
-    var s = d.createElement("style");
-    s.id = "tsp-mobile-style";
-    s.textContent = css;
-    d.head.appendChild(s);
-  }
-
-  /* ---- Navigation (Home / Back) ------------------------------------------ */
-  function makeLink(href, label, aria) {
-    var a = d.createElement("a");
-    a.href = href; a.innerHTML = label;
-    a.setAttribute("aria-label", aria);
-    return a;
-  }
-
-  function buildNav() {
-    if (cfg.nav === false) return;
-    if (d.querySelector(".tsp-nav, .tsp-barnav")) return;
-
-    var home = cfg.home === undefined ? "index.html" : cfg.home;
-    var links = [];
-    if (cfg.back) links.push(makeLink(cfg.back, "‹ Back", "Back"));
-    if (home)     links.push(makeLink(home, "⌂ Home", "Home"));
-    if (!links.length) return;
-
-    // Prefer integrating into the studio's shared sticky header if present —
-    // avoids overlapping page titles and matches each page's palette.
-    var bar = cfg.floatNav ? null : d.querySelector(".topbar");
-    if (bar) {
-      var wrap = d.createElement("span");
-      wrap.className = "tsp-barnav";
-      links.forEach(function (l) { wrap.appendChild(l); });
-      bar.insertBefore(wrap, bar.firstChild);
-      return;
-    }
-
-    // Otherwise: floating chip, and reserve top space on scrollable pages so
-    // it never covers the header/title.
-    var nav = d.createElement("nav");
-    nav.className = "tsp-nav";
-    nav.setAttribute("aria-label", "Site navigation");
-    links.forEach(function (l) { nav.appendChild(l); });
-    d.body.appendChild(nav);
-    reserveTopSpace();
-  }
-
-  function reserveTopSpace() {
-    if (!hasTouch) return;                 // desktop keeps its exact layout
-    // Skip full-viewport apps (canvas games, fixed overlays) — the chip sits
-    // in their letterbox margin and body padding would distort them.
-    var cs = getComputedStyle(d.body);
-    if (cs.overflowY === "hidden" || cs.overflowX === "hidden") return;
-    var scrolls = root.scrollHeight > (window.innerHeight + 4);
-    if (!scrolls) return;
-    var pad = parseFloat(cs.paddingTop) || 0;
-    d.body.style.paddingTop = (pad + 58) + "px";
-  }
-
-  /* ---- Gamepad ------------------------------------------------------------ */
-  function buildPad() {
-    if (!hasTouch) return;                       // keyboard devices skip it
-    if (!cfg.controls || !cfg.controls.length) return;
-    if (d.querySelector(".tsp-pad")) return;
-
-    var pad = d.createElement("div");
-    pad.className = "tsp-pad";
-    var left  = d.createElement("div"); left.className  = "tsp-cluster left";
-    var right = d.createElement("div"); right.className = "tsp-cluster right";
-    pad.appendChild(left); pad.appendChild(right);
-
-    cfg.controls.forEach(function (c) {
-      var btn = d.createElement("button");
-      btn.type = "button";
-      btn.className = "tsp-btn" + (c.big ? " big" : "");
-      btn.innerHTML = c.label || "";
-      btn.setAttribute("aria-label", c.aria || c.label || c.key);
-      bindButton(btn, c);
-      (c.side === "left" ? left : right).appendChild(btn);
-    });
-
-    d.body.appendChild(pad);
-  }
-
-  function bindButton(btn, c) {
-    var key = c.key, held = false;
-
-    function press(e) {
-      if (e) { e.preventDefault(); e.stopPropagation(); }
-      if (c.hold) {
-        if (held) return;
-        held = true;
-        btn.classList.add("on");
-        dispatchKey("keydown", key);
-      } else {
-        // tap: quick down/up so edge-triggered actions (fire/rotate/drop) fire once
-        btn.classList.add("on");
-        dispatchKey("keydown", key);
-        setTimeout(function () { dispatchKey("keyup", key); }, 24);
-        setTimeout(function () { btn.classList.remove("on"); }, 90);
-      }
-    }
-    function release(e) {
-      if (e) e.preventDefault();
-      if (c.hold && held) {
-        held = false;
-        btn.classList.remove("on");
-        dispatchKey("keyup", key);
-      }
-    }
-
-    if (window.PointerEvent) {
-      btn.addEventListener("pointerdown", function (e) {
-        try { btn.setPointerCapture(e.pointerId); } catch (_) {}
-        press(e);
-      });
-      btn.addEventListener("pointerup", release);
-      btn.addEventListener("pointercancel", release);
-      btn.addEventListener("lostpointercapture", release);
-    } else {
-      btn.addEventListener("touchstart", press, { passive: false });
-      btn.addEventListener("touchend", release);
-      btn.addEventListener("touchcancel", release);
-      btn.addEventListener("mousedown", press);
-      btn.addEventListener("mouseup", release);
-      btn.addEventListener("mouseleave", release);
-    }
-    // Safety: releasing a held key if the page loses focus
-    window.addEventListener("blur", release);
-  }
-
-  /* ---- Rotate hint -------------------------------------------------------- */
-  function buildRotateHint() {
-    if (!hasTouch) return;
-    if (cfg.rotateHint === false) return;
-    if (!cfg.controls || !cfg.controls.length) return;   // canvas games only
-    if (d.querySelector(".tsp-rot")) return;
-    var hint = d.createElement("div");
-    hint.className = "tsp-rot";
-    hint.setAttribute("role", "note");
-    hint.innerHTML = '<span class="rk">↻</span>' +
-      '<span>Turn sideways for more room</span>' +
-      '<button type="button" aria-label="Dismiss">×</button>';
-    hint.querySelector("button").addEventListener("click", function () {
-      root.classList.add("tsp-rot-dismissed");
-    });
-    d.body.appendChild(hint);
-  }
-
-  /* ---- Boot --------------------------------------------------------------- */
-  function boot() {
-    injectStyles();
-    buildNav();
-    buildPad();
-    buildRotateHint();
-  }
-
-  if (d.readyState === "loading") {
-    d.addEventListener("DOMContentLoaded", boot);
-  } else {
-    boot();
-  }
-
-  // Expose a tiny API for pages that want to toggle the pad (e.g. hide on menus)
-  window.TSPMobile = {
-    isTouch: hasTouch,
-    isMobile: isMobile,
-    press: function (key) { dispatchKey("keydown", key); dispatchKey("keyup", key); },
-    showPad: function (v) {
-      var p = d.querySelector(".tsp-pad");
-      if (p) p.style.display = v === false ? "none" : "";
-    }
-  };
-})();
-</script><a href="floor-status.html" id="tsp-draft-ribbon" style="position:fixed;left:0;right:0;bottom:0;z-index:99999;background:#1a1200;color:#ffd24a;border-top:3px solid #ffd24a;font:700 18px/1.35 system-ui,-apple-system,sans-serif;padding:10px 16px;text-align:center;text-decoration:none;display:block">DRAFT · 4 contrast issues the founder cannot read on this page — see the floor status →</a>
 </body>
 </html>

@@ -1,40 +1,160 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<!DOCTYPE html><html lang="en" data-light="day"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="tsp:surface" content="tool">
 <title>TSP Spiral Studio</title>
 <style>
-:root{--paper:#fbfaf7;--ink:#0a0a0a;--line:#d8d3c8;--charcoal:#1c1a17;--teal:#0f5f5a;--orange:#c05a1e;--ink-fill:#0a0a0a;--paper-ink:#fbfaf7}
+/* ---- LIGHT: DAY (default) — this page's own tokens, remapped per light mode ---- */
+:root{
+  --paper:#fbfaf7; --surface:#fbfaf7; --surface-2:#efe9dc;
+  --ink:#0a0a0a; --ink-2:#3a352c; --line:#d8d3c8;
+  --charcoal:#1c1a17; --teal:#0f5f5a; --orange:#c05a1e;
+  --accent:#0f5f5a; --accent-strong:#0b4a46; --on-accent:#ffffff; --focus:#8f3f00;
+  --ink-fill:#0a0a0a; --paper-ink:#fbfaf7;
+  --r:10px; --tap:48px; --motion:.18s;
+  --serif:Georgia,'Iowan Old Style','Times New Roman',serif;
+  --sans:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --mono:ui-monospace,'SF Mono',Menlo,monospace;
+}
+/* ---- LIGHT: DUSK ---- */
+html[data-light="dusk"]{
+  --paper:#ecdcbb; --surface:#f3e6c8; --surface-2:#e2c99a;
+  --ink:#241a10; --ink-2:#453820; --line:#cdb488;
+  --orange:#9c4000; --focus:#9c4000;
+  --accent:#0d4a45; --accent-strong:#093c38; --on-accent:#ffffff;
+  --ink-fill:#241a10; --paper-ink:#f3e6c8;
+}
+/* ---- LIGHT: WARM-DARK (night) — warm charcoal, never pure black ---- */
+html[data-light="night"]{
+  --paper:#1c1a16; --surface:#242019; --surface-2:#33302a;
+  --ink:#f2e3bf; --ink-2:#d3c096; --line:#463f30;
+  --orange:#f0c357; --focus:#f0c357;
+  --accent:#4fd6cf; --accent-strong:#a9bcd0; --on-accent:#141109;
+  --ink-fill:#f2e3bf; --paper-ink:#1c1a16;
+}
+/* ---- Studio Eyes toggles ---- */
+html{font-size:100%}
+html.se-a1{font-size:113%} html.se-a2{font-size:126%}
+html.se-contrast:not([data-light="night"]){ --paper:#fbfaf7; --surface:#fbfaf7; --surface-2:#f0ece2; --ink:#0a0a0a; --ink-2:#241f16; --line:#b9a06a; --accent-strong:#08403c; }
+html.se-contrast[data-light="night"]{ --paper:#0e0d0b; --surface:#161410; --ink:#fff7e6; --ink-2:#efe0bc; --accent-strong:#c3d3e4; }
+html.se-reduce *,@media (prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important;scroll-behavior:auto!important} }
+html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+
 *{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);
-font:400 17px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-padding:16px 16px 96px}
-h1{font-size:20px;margin:0 0 12px}
+font:400 1.0625rem/1.5 var(--sans);
+padding:16px 16px 112px;transition:background var(--motion) ease,color var(--motion) ease}
+h1{font-size:1.25rem;margin:0 0 12px}
+
+/* ═══ RESERVED CHROME — grid header, own row, never overlaps ═══ */
+.se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+  padding:9px 14px; background:var(--surface); border-bottom:2px solid var(--ink);
+  position:sticky; top:0; z-index:100; margin:-16px -16px 16px; }
+.se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 12px; border:1.5px solid var(--line); border-radius:8px; background:var(--surface-2);
+  color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; }
+.se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+.se-brand svg{ width:34px; height:20px; color:var(--accent-strong); flex:0 0 auto; }
+.se-brand .wm{ font-family:var(--serif); font-size:16px; letter-spacing:.01em; white-space:nowrap; }
+.se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--accent-strong);
+  color:var(--on-accent); font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer; }
+.se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+@media (max-width:560px){ .se-brand .wm{ display:none; } }
+
+/* ═══ STUDIO EYES panel ═══ */
+.se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:101;
+  width:min(320px,calc(100vw - 24px)); background:var(--surface); color:var(--ink);
+  border:2px solid var(--accent-strong); border-radius:var(--r); padding:15px;
+  box-shadow:0 10px 34px rgba(0,0,0,.28); display:none; }
+.se-panel[data-open="1"]{ display:block; }
+.se-panel h2{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-2); margin:0 0 8px; }
+.se-row{ display:flex; gap:6px; margin-bottom:14px; }
+.se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:12.5px; cursor:pointer; }
+.se-btn[aria-pressed="true"]{ background:var(--accent-strong); color:var(--on-accent); border-color:var(--accent-strong); }
+.se-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+  min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--sans); font-weight:600; font-size:14px; cursor:pointer; text-align:left; }
+.se-tog[aria-pressed="true"]{ border-color:var(--accent-strong); }
+.se-tog .st{ font-family:var(--mono); font-size:11px; color:var(--ink-2); }
+.se-tog[aria-pressed="true"] .st{ color:var(--accent-strong); font-weight:700; }
+.se-tog:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+.updated{ font-family:var(--mono); font-size:.8125rem; color:var(--ink-2); margin:0 0 16px; display:flex; align-items:center; gap:7px; }
+.updated::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--accent); flex:0 0 auto; }
+
 .stage{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:640px;margin:0 auto 18px}
 .pane{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;
 border:1px solid var(--line);border-radius:14px;padding:22px}
-.light{background:var(--paper)} .dark{background:var(--charcoal)}
+.light{background:#fbfaf7} .dark{background:#1c1a17}
 .pane svg{width:100%;height:auto;max-width:190px}
 .panel{max-width:640px;margin:0 auto;display:grid;gap:14px}
 .ctrl{display:grid;grid-template-columns:130px 1fr 54px;align-items:center;gap:10px}
-.ctrl label{font-size:15px}
-.ctrl output{font-size:15px;text-align:right;font-variant-numeric:tabular-nums}
+.ctrl label{font-size:.9375rem}
+.ctrl output{font-size:.9375rem;text-align:right;font-variant-numeric:tabular-nums}
 input[type=range]{width:100%;height:44px;accent-color:var(--teal)}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .swatch{display:flex;gap:8px;align-items:center}
 .swatch input[type=color]{width:52px;height:44px;border:1px solid var(--line);border-radius:8px;padding:2px;background:none}
-.toggle{display:flex;align-items:center;gap:8px;font-size:15px}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.9375rem}
 .toggle input{width:44px;height:44px;accent-color:var(--teal)}
-.bar{position:fixed;left:0;right:0;bottom:0;background:var(--paper);border-top:1px solid var(--line);
-padding:12px 16px;display:flex;gap:10px;justify-content:center}
-button{min-height:48px;padding:0 20px;font-size:16px;border-radius:12px;border:1px solid var(--ink-fill);
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);
+padding:12px 16px;display:flex;gap:10px;justify-content:center;z-index:99}
+button{min-height:48px;padding:0 20px;font-size:1rem;border-radius:12px;border:1px solid var(--ink-fill);
 background:var(--ink-fill);color:var(--paper-ink);cursor:pointer}
-button.ghost{background:var(--paper);color:var(--ink)}
+button.ghost{background:var(--paper);color:var(--ink);border-color:var(--line)}
 button:focus,input:focus,button:focus-visible,input:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
-.meta{max-width:640px;margin:10px auto 0;font-size:13px;color:#3a352c;text-align:center}
+.meta{max-width:640px;margin:10px auto 0;font-size:.8125rem;color:var(--ink-2);text-align:center}
 details{max-width:640px;margin:14px auto 0}
-summary{font-size:15px;cursor:pointer;min-height:44px;display:flex;align-items:center}
+summary{font-size:.9375rem;cursor:pointer;min-height:44px;display:flex;align-items:center}
+
+/* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+.se-rail{ display:flex; gap:10px; justify-content:center; max-width:640px; margin:26px auto 0; padding:18px 0 4px; border-top:2px solid var(--line); }
+.se-rail a,.se-rail button{ min-height:var(--tap); padding:10px 18px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer; }
+.se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 </style></head><body>
+
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
+
 <h1>TSP Spiral Studio</h1>
+<p class="updated" id="seUpdated">Last updated&hellip;</p>
 <div class="stage">
   <div class="pane light" id="paneL"></div>
   <div class="pane dark" id="paneD"></div>
@@ -70,6 +190,12 @@ summary{font-size:15px;cursor:pointer;min-height:44px;display:flex;align-items:c
     <button class="ghost" data-preset="dense">Dense ticks</button>
   </div>
 </details>
+
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="index.html" aria-label="Home">Home</a>
+</nav>
 
 <div class="bar">
   <button id="dl">Download SVG</button>
@@ -164,5 +290,38 @@ document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click'
 }));
 function set(o){for(const k in o)$(k).value=o[k];}
 render();
+</script>
+
+<!-- STUDIO EYES kernel -->
+<script>
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+})();
 </script>
 </body></html>

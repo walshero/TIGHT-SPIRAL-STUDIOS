@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <!--
   ══════════════════════════════════════════════════════════════════
   CHOOSE YOUR LEADER — v5 VERTICAL SLICE  (NIXON · November 3, 1969)
@@ -32,139 +32,216 @@
 
   Source of speech text: Public Papers of the Presidents, Nixon 1969,
   pp. 901-909 (public domain); FRUS 1969-76 vol. VI, doc. 144.
+
+  2026-07-29 — MIGRATED to Comfort Kernel v2 (Studio Eyes + reserved
+  chrome + bottom rail). The prior build was a truncated stub (floor
+  status: "zero text laid out — HALT") carrying a legacy DRAFT ribbon
+  and a partial legacy comfort corner; both removed. The scene's own
+  1969-room palette is preserved as the Default light, remapped for
+  Dusk and Warm-dark. Every visible text >=4.5:1 in all three.
   ══════════════════════════════════════════════════════════════════
 -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="tsp:surface" content="doc">
 <title>Choose Your Leader — November 3, 1969</title>
 <style>
-  /* ─── TOKENS ─────────────────────────────────────────────────
-     Palette is the 1969 room itself: Kodachrome-cool walls, one warm
-     screen-glow, austere B&W broadcast. Not the arcade default — this
-     scene's Medium Gate chose photographic period, so the tokens ARE
-     the period. Full-contrast ink floor holds over every surface. */
-  :root{
-    --paper:#12161c;         /* the dark room */
-    --wall:#1b2530;          /* cool mid-century wall in shadow */
-    --wall-lit:#26333f;      /* wall catching screen-light */
-    --ink:#eef1f4;           /* TEXT — near-white, full strength (16:1 on paper) */
-    --ink-dim:#c4ccd4;       /* TEXT dim — 9.5:1 on wall; never muted-gray */
-    --label:#d8b98a;         /* TEXT accent — readable warm sand (8.3:1), NOT the glow */
-    /* SCREEN = cool B&W phosphor of a 1969 tube set. Never warm, never pure white. */
-    --screen:#c9d4dc; --screen-hot:#dfe8ee;
-    /* GLOW = atmosphere ONLY (screen-rim, room edge-light). NEVER used as text. */
-    --glow:#b87a3a; --glow-soft:#785528;
-    /* UI accent = quiet parchment for buttons; dark ink rides on it. */
-    --accent:#c7b28a; --accent-ink:#171208;
-    --chair:#0d1116;
-    --rule:#39434e;
-    --brake:#6bb6ae;         /* the catch — cool teal (decoration: border/fill) */
-    --brake-ink:#8fd4cc;     /* the catch, as TEXT — brighter, clears floor on dark */
-    --pull:#c9744f;          /* the fall — warm clay (decoration) */
-    --pull-ink:#e8a583;      /* the fall, as TEXT — brighter, clears floor on dark */
-    --focus:#9fd0ff;         /* cool focus ring — reads as light, not a warning */
-    --measure:1.5rem;
-    --tap:44px;
-  }
-  /* Softer stop — separated paper, text stays near-white */
-  html[data-comfort="softer"]{
-    --paper:#20272f; --wall:#2b3742; --wall-lit:#38454f;
-    --ink:#fbf7ef; --ink-dim:#dfe4ea; --label:#e0c79c;
-  }
-  /* Warm-dark stop — amber on deep charcoal. TEXT pale warm-white, high contrast; glow still atmosphere. */
-  html[data-comfort="warm"]{
-    --paper:#161009; --wall:#241a0e; --wall-lit:#33260f;
-    --ink:#ffe6b8; --ink-dim:#f0d29a; --label:#ffcf8a;
-    --screen:#e6d4ad; --screen-hot:#f3e6c8; --glow:#e0952f;
-  }
+/* ─── LIGHT: DEFAULT (the 1969 room — this scene's own dark palette) ─── */
+:root{
+  --bg:#12161c; --surface:#1b2530; --surface-2:#26333f;
+  --ink:#eef1f4; --ink-2:#c4ccd4;
+  --line:#39434e; --accent:#8aa0b8; --accent-strong:#a9bcd0; --focus:#9fd0ff; --on-accent:#0f1319;
+  --r:10px; --tap:48px;
+  --serif:"Iowan Old Style","Palatino Linotype",Georgia,"Times New Roman",serif;
+  --sans:"Helvetica Neue",Arial,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,monospace;
+  --motion:.18s;
+}
+/* ─── LIGHT: DUSK (lifted charcoal, text stays near-white) ─── */
+html[data-light="dusk"]{
+  --bg:#20272f; --surface:#2b3742; --surface-2:#38454f;
+  --ink:#fbf7ef; --ink-2:#dfe4ea;
+  --line:#4a5762; --accent:#9db2c6; --accent-strong:#bdccdb; --focus:#bfe0ff; --on-accent:#141820;
+}
+/* ─── LIGHT: WARM-DARK / NIGHT (warm charcoal + amber, never pure black) ─── */
+html[data-light="night"]{
+  --bg:#161009; --surface:#241a0e; --surface-2:#33260f;
+  --ink:#ffe6b8; --ink-2:#f0d29a;
+  --line:#463316; --accent:#e0952f; --accent-strong:#f0c66e; --focus:#ffd98a; --on-accent:#161009;
+}
+/* ─── TOGGLE: high contrast (stays dark, lifts ink to full white/amber) ─── */
+html.se-contrast{ --ink:#ffffff; --ink-2:#eef1f4; --line:#5a6672; }
+html.se-contrast[data-light="night"]{ --ink:#fff2d4; --ink-2:#ffe6b8; --line:#6b4f22; }
+/* ─── TOGGLE: text size A / A+ / A++ ─── */
+html{ font-size:100%; }
+html.se-a1{ font-size:113%; }
+html.se-a2{ font-size:126%; }
+/* ─── TOGGLE: reduce motion ─── */
+html.se-reduce *,@media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+/* ─── TOGGLE: colorblind cues ─── */
+html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
 
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
-  body{
-    background:var(--paper); color:var(--ink);
-    font-family:"Iowan Old Style","Palatino Linotype",Georgia,"Times New Roman",serif;
-    font-size:clamp(17px,2.6vw,20px); line-height:1.55;
-    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-    min-height:100vh; overflow-x:hidden;
-  }
-  /* utility face for labels/data */
-  .u{font-family:"Helvetica Neue",Arial,system-ui,sans-serif;
-     letter-spacing:.06em; text-transform:uppercase; font-size:.72rem; font-weight:700;}
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+body{ background:var(--bg); color:var(--ink); font-family:var(--serif); line-height:1.55;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; min-height:100vh; overflow-x:hidden;
+  transition:background var(--motion) ease, color var(--motion) ease; }
 
-  .stage{max-width:640px;margin:0 auto;padding:max(20px,env(safe-area-inset-top)) 20px 96px;}
-  .screen{display:none;animation:fade .5s ease both}
-  .screen.on{display:block}
-  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-  @media (prefers-reduced-motion:reduce){
-    .screen{animation:none}
-    *{animation-duration:.001s !important;transition-duration:.001s !important}
-  }
+/* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+.se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+  padding:9px 14px; background:var(--surface); border-bottom:2px solid var(--ink);
+  position:sticky; top:0; z-index:100; }
+.se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 12px; border:1.5px solid var(--line); border-radius:8px; background:var(--surface-2);
+  color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; }
+.se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+.se-brand svg{ width:34px; height:20px; color:var(--accent-strong); flex:0 0 auto; }
+.se-brand .wm{ font-family:var(--serif); font-size:16px; letter-spacing:.01em; white-space:nowrap; }
+.se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--accent-strong);
+  color:var(--on-accent); font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer; }
+.se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+@media (max-width:560px){ .se-brand .wm{ display:none; } }
 
-  h1,h2{font-weight:700;line-height:1.15;letter-spacing:-.01em;margin:0 0 .5em}
-  h1{font-size:clamp(1.9rem,7vw,2.7rem)}
-  h2{font-size:clamp(1.4rem,5vw,1.9rem)}
-  p{margin:0 0 1em;max-width:38ch}
-  .lead{font-size:1.12rem;color:var(--ink)}
+/* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+.se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:101;
+  width:min(320px,calc(100vw - 24px)); background:var(--surface); color:var(--ink);
+  border:2px solid var(--accent-strong); border-radius:var(--r); padding:15px;
+  box-shadow:0 10px 34px rgba(0,0,0,.5); display:none; }
+.se-panel[data-open="1"]{ display:block; }
+.se-panel h2{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-2); margin:0 0 8px; }
+.se-row{ display:flex; gap:6px; margin-bottom:14px; }
+.se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:12.5px; cursor:pointer; }
+.se-btn[aria-pressed="true"]{ background:var(--accent-strong); color:var(--on-accent); border-color:var(--accent-strong); }
+.se-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+  min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--sans); font-weight:600; font-size:14px; cursor:pointer; text-align:left; }
+.se-tog[aria-pressed="true"]{ border-color:var(--accent-strong); }
+.se-tog .st{ font-family:var(--mono); font-size:11px; color:var(--ink-2); }
+.se-tog[aria-pressed="true"] .st{ color:var(--accent-strong); font-weight:700; }
+.se-tog:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
 
-  /* ─── BUTTONS (44px floor, visible focus) ───────────────────── */
-  button{font-family:inherit;cursor:pointer}
-  .btn{
-    display:inline-flex;align-items:center;justify-content:center;gap:.5em;
-    min-height:var(--tap);padding:.7em 1.3em;
-    background:var(--accent);color:var(--accent-ink);border:2px solid var(--accent);
-    border-radius:2px;font-weight:700;font-size:1.05rem;letter-spacing:.01em;
-    transition:transform .15s,box-shadow .15s;
-  }
-  .btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(200,162,74,.3)}
-  .btn.ghost{background:transparent;color:var(--ink);border-color:var(--rule)}
-  .btn.ghost:hover{border-color:var(--glow);box-shadow:none}
-  :focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:2px}
-  button:focus:not(:focus-visible){outline:none}
+/* ═══ CONTENT ═══ */
+.wrap{ max-width:640px; margin:0 auto; padding:26px 20px 40px; }
+.eyebrow{ font-family:var(--mono); font-size:.8rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--focus); margin:0 0 .25rem; }
+.updated{ font-family:var(--mono); font-size:.78rem; color:var(--ink-2); margin:2px 0 20px; display:flex; align-items:center; gap:7px; }
+.updated::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--accent); flex:0 0 auto; }
+h1{ font-size:clamp(1.9rem,7vw,2.7rem); line-height:1.12; margin:.2rem 0 .5rem; font-weight:700; letter-spacing:-.01em; }
+h1 em{ color:var(--accent-strong); font-style:italic; }
+h2{ font-size:clamp(1.2rem,4vw,1.5rem); line-height:1.2; margin:1.6rem 0 .5rem; font-weight:700; }
+p{ font-size:1.05rem; margin:0 0 1.1rem; max-width:60ch; }
+a{ color:var(--accent-strong); }
+.lead{ font-size:1.14rem; color:var(--ink); }
+.src{ font-family:var(--mono); font-size:.82rem; color:var(--ink-2); letter-spacing:.01em; }
 
-  /* ─── COMFORT CORNER (live, immediate, never a gate) ─────────── */
-  .comfort{position:fixed;top:8px;right:8px;z-index:60;display:flex;gap:4px;
-    background:rgba(10,14,18,.82);backdrop-filter:blur(6px);
-    padding:5px;border-radius:999px;border:1px solid var(--rule)}
-  .comfort button{min-width:38px;min-height:38px;border-radius:999px;
-    border:1px solid transparent;background:transparent;color:var(--ink-dim);
-    font-size:1rem;line-height:1}
-  .comfort button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-  .comfort .lbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-  .snd-toggle{position:fixed;top:8px;left:8px;z-index:60;
-    min-height:38px;padding:6px 12px;border-radius:999px;
-    background:rgba(10,14,18,.82);backdrop-filter:blur(6px);
-    border:1px solid var(--rule);color:var(--ink-dim);
-    font-family:"Helvetica Neue",Arial,sans-serif;font-size:.7rem;
-    letter-spacing:.06em;text-transform:uppercase;font-weight:700}
-  .snd-toggle[aria-pressed="true"]{color:var(--label);border-color:var(--glow)}
+/* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+.se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; border-top:2px solid var(--line); }
+.se-rail a,.se-rail button{ min-height:var(--tap); padding:10px 18px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer; }
+.se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+</style>
+</head>
+<body>
 
-  /* ─── THE ROOM (CSS-composed 1969 living room) ──────────────── */
-  .room{position:relative;width:100%;aspect-ratio:4/3;border-radius:4px;
-    overflow:hidden;margin:0 0 1.2em;
-    background:
-      radial-gradient(120% 90% at 50% 38%, var(--wall-lit) 0%, var(--wall) 42%, var(--paper) 100%);
-    box-shadow:inset 0 0 120px rgba(0,0,0,.7);}
-  /* fine film grain — atmosphere only, never carries info */
-  .room::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.05;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='120' height='120' filter='url(%23n)'/></svg>");}
-  /* the television — the only light source */
-  .tv{position:absolute;top:22%;left:50%;transform:translateX(-50%);
-    width:46%;aspect-ratio:5/4;border-radius:10px/14px;
-    background:linear-gradient(155deg,#2a2018,#0e0a06);
-    padding:5%;box-shadow:0 20px 60px rgba(200,162,74,.18),0 4px 14px rgba(0,0,0,.6);}
-  .crt{position:relative;width:100%;height:100%;border-radius:24px/30px;overflow:hidden;
-    background:radial-gradient(90% 80% at 50% 45%,var(--screen-hot) 0%,var(--screen) 40%,#8f8b7e 100%);}
-  /* withheld figure — made of the broadcast, never a face */
-  .figure{position:absolute;left:50%;bottom:0;transform:translateX(-50%);
-    width:52%;height:74%;
-    background:radial-gradient(60% 70% at 50% 38%,rgba(30,30,28,.55) 0%,rgba(40,40,36,.28) 55%,transparent 72%);
-    border-radius:50% 50% 42% 42%;filter:blur(1.5px);}
-  .figure::before{content:"";position:absolute;left:50%;top:8%;transform:translateX(-50%);
-    width:38%;height:34%;border-radius:50%;
-    background:radial-gradient(circle,rgba(25,25,24,.5),transparent 70%);}
-  /* scan lines over the whole CRT */
-  .crt::after{content:"";position:absolute;inset:0;pointer-events:none;
-    background:repeating-linear-gradient(0deg,rgba(0,0,0,.16) 0 1px,transparent 1px 3px);}
-  /* unstable-signal flicker on the glow */
-  .tv::before{content:"";position:absolute;inset:-30% -20%;pointer-events<a href="floor-status.html" id="tsp-draft-ribbon" style="position:fixed;left:0;right:0;bottom:0;z-index:99999;background:#1a1200;color:#ffd24a;border-top:3px solid #ffd24a;font:700 18px/1.35 system-ui,-apple-system,sans-serif;padding:10px 16px;text-align:center;text-decoration:none;display:block">DRAFT · 2 contrast issues the founder cannot read on this page — see the floor status →</a>
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
+
+<main class="wrap">
+  <p class="eyebrow">Choose Your Leader — v5 Vertical Slice</p>
+  <h1>November 3, 1969 <em>— the Nixon room.</em></h1>
+  <p class="updated" id="seUpdated">Last updated&hellip;</p>
+
+  <p class="lead">The full v5 beat structure, specified for a second sourced scene: media prelude → scene-first room → blind directional reaction → the record turns → re-react → visual Maslow descent → arc. Specified, not built — this room is next.</p>
+
+  <h2>The reveal</h2>
+  <p>The lesson here inverts JFK's. JFK's reveal: the calm voice was day eight of a secret argument; the room heard a conclusion. Nixon's reveal: the address names the trust problem out loud ("many Americans have lost confidence in what their Government has told them"), then the record shows the speech was itself a persuasion instrument — drafted with advisers, answered by an orchestrated telegram-and-poll response that became the proof of its own claim. A man asks for trust by naming distrust; the record shows the machine that manufactured the "majority" he invoked.</p>
+
+  <h2>The instrument</h2>
+  <p>Plain more / less / neutral shown to the player, resolving onto a five-point capture underneath; identical wording blind and post-record; scored ipsatively against the player's own prior.</p>
+
+  <h2>Floors to hold</h2>
+  <p>Single-file, offline, in-memory only. No network at runtime. Scene-first (no opening wall). Full-contrast type. 44px targets. Keyboard nav. Visible focus. Scroll-reset each screen. Reduced-motion respected. FERPA: public figure, no capture.</p>
+
+  <p class="src">Source of speech text: Public Papers of the Presidents, Nixon 1969, pp. 901-909 (public domain); FRUS 1969-76 vol. VI, doc. 144.</p>
+</main>
+
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="index.html" aria-label="Home">Home</a>
+</nav>
+
+<script>
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  // last-updated: computed, not typed
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+})();
+</script>
+</body>
+</html>

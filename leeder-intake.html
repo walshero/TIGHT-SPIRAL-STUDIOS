@@ -1,11 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <!--
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   LEEDER INTAKE — IN-FILE CHANGELOG
   Canonical trunk. Edit in place, no branching. Newest first.
   Drive canon: Claude_files 1RPydHJsopFdfjI_BUnv168Wsd9MwUOFw
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  v4 (2026-07-29) — mount Comfort Kernel v2 (Studio Eyes).
+    - RESERVED CHROME header (Home · teaspoon brand · Studio Eyes) on its own
+      sticky row; never overlaps the scene or the title.
+    - STUDIO EYES panel: Light Default/Dusk/Warm-dark (html[data-light] token
+      remaps; Warm-dark = warm charcoal, never pure black), Text size A/A+/A++,
+      toggles High-contrast · Reduce-motion · Colorblind cues. Content sized in
+      rem so text-size actually scales. Every text stays >=4.5:1 in all three.
+    - NAV: Home in the chrome (top) + Back+Home rail at the bottom (Home ->
+      index.html; Back steps back a question, then history.back() at the top).
+      The old fixed Back/Start-over navfloor is retired.
+    - Last-updated stamp computed from document.lastModified.
+    - No preference wall existed (scene-first already); no legacy comfort FAB
+      existed. Cut-paper scene is decorative + strong — left untouched.
   v3 (2026-07-16) — sale-first reframe + buyer bundling.
     - Website DEMOTED: no longer a co-equal pillar or a standalone plan line.
       It's the surface the showcase ships on — folded into the first piece as
@@ -55,32 +68,103 @@
     /* TEXT tokens — color: only. Each is its own bright ink. */
     --ink:#191d1a; --ink-soft:#33352f; --civic-ink:#fbfaf7; --gold-ink:#5a4212;
     --civic-deep:#1f4a4f; /* civic hue as TEXT (dark green on light). Fill form is --civic. */
+
+    /* STUDIO EYES chrome tokens — self-contained, contrast-proven (Comfort Kernel v2) */
+    --se-surface:#fbf5e6; --se-surface-2:#efe4c8; --se-ink:#221d12; --se-ink-2:#463b22;
+    --se-line:#d8c59a; --se-accent:#3f5f78; --se-accent-strong:#2c4658; --se-focus:#8f3f00; --se-on-accent:#ffffff;
+    --se-tap:48px; --se-r:10px;
+    --se-serif:Georgia,'Iowan Old Style','Times New Roman',serif;
+    --se-sans:ui-sans-serif,system-ui,Arial,sans-serif;
+    --se-mono:ui-monospace,'SF Mono',Menlo,monospace;
   }
+
+  /* ── STUDIO EYES: LIGHT = DUSK (warm, still light; ink stays dark) ── */
+  html[data-light="dusk"]{
+    --paper:#e9dcbf; --paper-2:#e0d2b0; --slip:#f4ead1; --rule:#c8bc9c;
+    --se-surface:#f3e6c8; --se-surface-2:#e2c99a; --se-ink:#241a10; --se-ink-2:#4a3a1e;
+    --se-line:#cdb488; --se-accent:#37536a; --se-accent-strong:#24384a; --se-focus:#9c4000;
+  }
+  /* ── STUDIO EYES: LIGHT = WARM-DARK (warm charcoal, never pure black; light ink) ── */
+  html[data-light="night"]{
+    --paper:#211d17; --paper-2:#2a251d; --slip:#332d23; --rule:#4a4436;
+    --ink:#f3e7cf; --ink-soft:#d8c9ab; --gold-ink:#e3c07a; --civic-deep:#8fb9bd;
+    --shadow:rgba(0,0,0,.5);
+    --se-surface:#242019; --se-surface-2:#33302a; --se-ink:#f2e3bf; --se-ink-2:#d8c59a;
+    --se-line:#463f30; --se-accent:#8aa0b8; --se-accent-strong:#a9bcd0; --se-focus:#f0c357; --se-on-accent:#141109;
+  }
+  /* ── TOGGLE: high contrast (halation floor) ── */
+  html.se-contrast:not([data-light="night"]){
+    --paper:#ffffff; --paper-2:#f5f2e9; --slip:#ffffff; --ink:#0c0e0c; --ink-soft:#1e221e; --rule:#8f886d;
+    --se-surface:#fbfaf7; --se-surface-2:#f0ece2; --se-ink:#141109; --se-ink-2:#2c2517; --se-line:#b9a06a; --se-accent-strong:#243a4a;
+  }
+  html.se-contrast[data-light="night"]{
+    --paper:#0b0a08; --paper-2:#131210; --slip:#181510; --ink:#fff7e6; --ink-soft:#efe0bc;
+    --se-surface:#161410; --se-ink:#fff7e6; --se-ink-2:#efe0bc; --se-accent-strong:#b9cbe0;
+  }
+  /* ── TOGGLE: text size A / A+ / A++ (content is rem-sized, so it scales) ── */
+  html{ font-size:100%; }
+  html.se-a1{ font-size:113%; }
+  html.se-a2{ font-size:126%; }
+  /* ── TOGGLE: reduce motion ── */
+  html.se-reduce *,@media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+  /* ── TOGGLE: colorblind cues ── */
+  html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+
   *{box-sizing:border-box}
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   html,body{margin:0;padding:0;background:var(--paper);color:var(--ink)}
-  body{font-family:Georgia,'Iowan Old Style',serif;font-size:20px;line-height:1.5;-webkit-text-size-adjust:100%;padding:0 0 84px}
+  body{font-family:Georgia,'Iowan Old Style',serif;font-size:1.25rem;line-height:1.5;-webkit-text-size-adjust:100%;padding:0;
+    transition:background .18s ease,color .18s ease}
   .wrap{max-width:640px;margin:0 auto;padding:0 0 0}
 
-  /* fixed nav floor — Back + Home, every screen */
-  .navfloor{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;gap:10px;
-    padding:10px 14px;background:var(--paper-2);border-top:1px solid var(--rule)}
-  .navfloor button{flex:1;min-height:48px;border-radius:10px;border:2px solid var(--rule);
-    background:var(--slip);color:var(--ink);font-family:ui-sans-serif,system-ui,Arial,sans-serif;
-    font-size:16px;font-weight:700;cursor:pointer}
-  .navfloor button:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
-  .navfloor button[aria-disabled="true"]{opacity:.4;cursor:default}
-  @media print{.navfloor{display:none}}
+  /* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+  .se-chrome{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;
+    padding:9px 14px;background:var(--se-surface);border-bottom:2px solid var(--se-ink);
+    position:sticky;top:0;z-index:100}
+  .se-home{justify-self:start;display:inline-flex;align-items:center;gap:7px;min-height:var(--se-tap);
+    padding:8px 12px;border:1.5px solid var(--se-line);border-radius:8px;background:var(--se-surface-2);
+    color:var(--se-ink);font-family:var(--se-mono);font-weight:700;font-size:13px;text-decoration:none}
+  .se-brand{justify-self:center;display:inline-flex;align-items:center;gap:9px;color:var(--se-ink)}
+  .se-brand svg{width:34px;height:20px;color:var(--se-accent-strong);flex:0 0 auto}
+  .se-brand .wm{font-family:var(--se-serif);font-size:16px;letter-spacing:.01em;white-space:nowrap}
+  .se-eyes{justify-self:end;display:inline-flex;align-items:center;gap:7px;min-height:var(--se-tap);
+    padding:8px 13px;border:2px solid transparent;border-radius:8px;background:var(--se-accent-strong);
+    color:var(--se-on-accent);font-family:var(--se-mono);font-weight:700;font-size:13px;cursor:pointer}
+  .se-home:focus-visible,.se-eyes:focus-visible{outline:3px solid var(--se-focus);outline-offset:2px}
+  @media (max-width:560px){.se-brand .wm{display:none}}
+
+  /* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+  .se-panel{position:fixed;right:12px;top:calc(var(--se-tap) + 14px);z-index:101;
+    width:min(320px,calc(100vw - 24px));background:var(--se-surface);color:var(--se-ink);
+    border:2px solid var(--se-accent-strong);border-radius:var(--se-r);padding:15px;
+    box-shadow:0 10px 34px rgba(0,0,0,.28);display:none}
+  .se-panel[data-open="1"]{display:block}
+  .se-panel h2{font-family:var(--se-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--se-ink-2);margin:0 0 8px}
+  .se-row{display:flex;gap:6px;margin-bottom:14px}
+  .se-btn{flex:1;min-height:var(--se-tap);padding:8px 4px;border:1.5px solid var(--se-line);border-radius:8px;
+    background:var(--se-surface-2);color:var(--se-ink);font-family:var(--se-mono);font-weight:700;font-size:12.5px;cursor:pointer}
+  .se-btn[aria-pressed="true"]{background:var(--se-accent-strong);color:var(--se-on-accent);border-color:var(--se-accent-strong)}
+  .se-btn:focus-visible{outline:3px solid var(--se-focus);outline-offset:2px}
+  .se-tog{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;
+    min-height:var(--se-tap);padding:8px 11px;margin-bottom:6px;border:1.5px solid var(--se-line);border-radius:8px;
+    background:var(--se-surface-2);color:var(--se-ink);font-family:var(--se-sans);font-weight:600;font-size:14px;cursor:pointer;text-align:left}
+  .se-tog[aria-pressed="true"]{border-color:var(--se-accent-strong)}
+  .se-tog .st{font-family:var(--se-mono);font-size:11px;color:var(--se-ink-2)}
+  .se-tog[aria-pressed="true"] .st{color:var(--se-accent-strong);font-weight:700}
+  .se-tog:focus-visible{outline:3px solid var(--se-focus);outline-offset:2px}
+  .se-sr2{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 
   .brandbar{display:flex;align-items:baseline;gap:10px;padding:16px 18px 4px;flex-wrap:wrap}
-  .brandbar .wm{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:15px;letter-spacing:.02em;color:var(--ink)}
+  .brandbar .wm{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:.9375rem;letter-spacing:.02em;color:var(--ink)}
   .brandbar .wm b{color:var(--gold-ink)}
-  .forline{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:14px;color:var(--ink-soft);font-weight:700;padding:0 18px 12px}
+  .forline{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:.875rem;color:var(--ink-soft);font-weight:700;padding:0 18px 4px}
+  .updated{font-family:var(--se-mono);font-size:.8125rem;color:var(--ink-soft);padding:0 18px 12px;display:flex;align-items:center;gap:7px}
+  .updated::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--civic);flex:0 0 auto}
 
   .rail{display:flex;align-items:center;gap:8px;padding:0 18px 12px;flex-wrap:wrap}
   .rail .pip{width:30px;height:8px;border-radius:4px;background:var(--rule)}
   .rail .pip.done{background:var(--civic)} .rail .pip.here{background:var(--gold)}
-  .rail .rl{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;color:var(--ink-soft);font-weight:700}
+  .rail .rl{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:.8125rem;color:var(--ink-soft);font-weight:700}
 
   /* the scene — cut-paper SVG, layered with edge-shadows */
   .scene{display:block;width:100%;height:auto;background:var(--sky)}
@@ -91,59 +175,102 @@
     box-shadow:0 1px 0 #fff inset,0 14px 30px -22px var(--shadow)}
   .card[hidden]{display:none}
 
-  .eyebrow{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;letter-spacing:.1em;
+  .eyebrow{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:.8125rem;letter-spacing:.1em;
     text-transform:uppercase;color:var(--ink-soft);margin:0 0 8px;font-weight:700}
-  h1{font-size:26px;line-height:1.16;margin:0 0 8px}
-  h2{font-size:22px;line-height:1.2;margin:0 0 6px}
+  h1{font-size:1.625rem;line-height:1.16;margin:0 0 8px}
+  h2{font-size:1.375rem;line-height:1.2;margin:0 0 6px}
   p{margin:0 0 12px}
-  .ask{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:19px;margin:4px 0 14px;color:var(--ink)}
-  .help{font-size:16px;color:var(--ink);margin:0 0 16px;line-height:1.5}
+  .ask{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:1.1875rem;margin:4px 0 14px;color:var(--ink)}
+  .help{font-size:1rem;color:var(--ink);margin:0 0 16px;line-height:1.5}
 
   .opts{display:flex;flex-direction:column;gap:10px;margin:6px 0 0}
   .opt{display:block;width:100%;text-align:left;background:var(--slip);border:2px solid var(--rule);border-radius:11px;
-    padding:14px 16px;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:16px;font-weight:600;color:var(--ink);
+    padding:14px 16px;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:1rem;font-weight:600;color:var(--ink);
     cursor:pointer;min-height:44px;line-height:1.4}
   .opt:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
   .opt.on{background:var(--civic);border-color:var(--civic);color:var(--civic-ink)}
-  .opt .sub{display:block;font-weight:400;font-size:14px;margin-top:3px}
+  .opt .sub{display:block;font-weight:400;font-size:.875rem;margin-top:3px}
   .opt .sub{color:var(--ink-soft)} .opt.on .sub{color:var(--civic-ink)}
 
   .btn-row{margin:18px 0 0;display:flex;gap:10px;flex-wrap:wrap}
   .btn{flex:1;min-width:150px;text-align:center;background:var(--civic);color:var(--civic-ink);border:none;border-radius:11px;
-    padding:16px;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:17px;font-weight:700;cursor:pointer;min-height:44px}
+    padding:16px;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:1.0625rem;font-weight:700;cursor:pointer;min-height:44px}
   .btn[aria-disabled="true"]{opacity:.45;cursor:default}
   .btn:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
   .btn.ghost{background:transparent;color:var(--civic-deep);border:2px solid var(--rule)}
 
   .foe{margin:16px 0 0;border-top:1px dashed var(--rule);padding-top:14px}
-  .foe-line{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:14px;color:var(--ink);margin:0 0 10px;font-weight:600;line-height:1.5}
+  .foe-line{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:.875rem;color:var(--ink);margin:0 0 10px;font-weight:600;line-height:1.5}
   .foe-btn{display:block;width:100%;text-align:center;background:transparent;color:var(--civic-deep);border:2px solid var(--rule);
-    border-radius:10px;padding:13px;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:15px;font-weight:700;cursor:pointer;min-height:44px}
+    border-radius:10px;padding:13px;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:.9375rem;font-weight:700;cursor:pointer;min-height:44px}
   .foe-btn:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
 
   .plan-item{background:var(--slip);border:2px solid var(--rule);border-left:8px solid var(--civic);border-radius:10px;
     padding:14px 16px;margin:0 0 12px}
-  .plan-item h3{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:17px;margin:0 0 4px}
-  .plan-item p{font-size:16px;margin:0;line-height:1.45}
+  .plan-item h3{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:1.0625rem;margin:0 0 4px}
+  .plan-item p{font-size:1rem;margin:0;line-height:1.45}
   .plan-item.second{border-left-color:var(--gold)}
   .plan-item.third{border-left-color:var(--brick)}
   .terms{background:var(--slip);border:2px solid var(--civic);border-radius:10px;padding:14px 16px;margin:14px 0 0}
-  .terms h3{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:16px;margin:0 0 6px;letter-spacing:.06em;text-transform:uppercase}
-  .terms li{font-size:16px;line-height:1.5;margin:0 0 6px}
+  .terms h3{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:1rem;margin:0 0 6px;letter-spacing:.06em;text-transform:uppercase}
+  .terms li{font-size:1rem;line-height:1.5;margin:0 0 6px}
   .terms ul{margin:0;padding-left:20px}
 
-  .cred{margin:22px 18px 0;border-top:2px solid var(--rule);padding-top:16px;font-size:15px;line-height:1.55;color:var(--ink)}
-  .cred .who{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:15px;margin:0 0 6px;letter-spacing:.04em}
+  .cred{margin:22px 18px 0;border-top:2px solid var(--rule);padding-top:16px;font-size:.9375rem;line-height:1.55;color:var(--ink)}
+  .cred .who{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:.9375rem;margin:0 0 6px;letter-spacing:.04em}
 
-  @media print{ .btn-row,.foe,.rail{display:none} body{background:#fff;padding:0} .card{box-shadow:none} }
+  /* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+  .se-rail{display:flex;gap:10px;justify-content:center;padding:20px;margin-top:24px;border-top:2px solid var(--se-line);background:var(--se-surface)}
+  .se-rail a,.se-rail button{min-height:var(--se-tap);padding:10px 18px;border:1.5px solid var(--se-line);border-radius:8px;
+    background:var(--se-surface-2);color:var(--se-ink);font-family:var(--se-mono);font-weight:700;font-size:13px;text-decoration:none;cursor:pointer}
+  .se-rail a:focus-visible,.se-rail button:focus-visible{outline:3px solid var(--se-focus);outline-offset:2px}
+
+  @media print{ .se-chrome,.se-panel,.se-rail{display:none} .btn-row,.foe,.rail{display:none} body{background:#fff;padding:0} .card{box-shadow:none} }
 </style>
 </head>
 <body>
+
+  <!-- RESERVED CHROME -->
+  <header class="se-chrome">
+    <a class="se-home" href="index.html" aria-label="Home">Home</a>
+    <span class="se-brand">
+      <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+        <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+        <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+        <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <span class="wm">Tight Spiral</span>
+    </span>
+    <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+  </header>
+
+  <!-- STUDIO EYES panel -->
+  <div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+    <h2>Light</h2>
+    <div class="se-row" role="group" aria-label="Light level">
+      <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+      <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+      <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+    </div>
+    <h2>Text size</h2>
+    <div class="se-row" role="group" aria-label="Text size">
+      <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+      <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+      <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+    </div>
+    <h2>Comfort</h2>
+    <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+    <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+    <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+    <span class="se-sr2" id="seSr" role="status" aria-live="polite"></span>
+  </div>
 
   <div class="brandbar">
     <span class="wm">TIGHT SPIRAL <b>PRODUCTIONS</b></span>
   </div>
   <p class="forline">Prepared for Howard Leeder · Leeder Management · five questions, about three minutes</p>
+  <p class="updated" id="seUpdated">Last updated&hellip;</p>
 
   <div class="rail" aria-hidden="true">
     <span class="pip here" id="p1"></span><span class="pip" id="p2"></span><span class="pip" id="p3"></span>
@@ -328,10 +455,10 @@
 
   </div><!-- /.body -->
 
-  <!-- NAV FLOOR — fixed, every screen -->
-  <nav class="navfloor" aria-label="Navigation">
-    <button id="navBack" type="button" aria-disabled="true">Back</button>
-    <button id="navHome" type="button">Start over</button>
+  <!-- BOTTOM NAV RAIL — Back + Home -->
+  <nav class="se-rail" aria-label="Page navigation">
+    <button type="button" id="railBack" aria-label="Back">Back</button>
+    <a href="index.html" aria-label="Home">Home</a>
   </nav>
 
 <script>
@@ -349,7 +476,6 @@
     document.getElementById("railLabel").textContent=(id==="done")?"Your plan":"Question "+(idx+1)+" of 5";
     var scene=document.getElementById("scene");
     scene.classList.toggle("band", id!=="q1");
-    document.getElementById("navBack").setAttribute("aria-disabled",(idx<=0)?"true":"false");
     if(id==="done"){buildPlan();}
     document.getElementById("footCred").hidden=(id==="done");
     window.scrollTo(0,0);
@@ -374,15 +500,10 @@
     b.addEventListener("click",function(){show("done");});
   });
 
-  // nav floor
-  document.getElementById("navBack").addEventListener("click",function(){
+  // bottom rail — Back steps back a question, then leaves the page at the top
+  document.getElementById("railBack").addEventListener("click",function(){
     var cur=order.findIndex(function(k){return !document.getElementById(k).hidden;});
-    if(cur>0){show(order[cur-1]);}
-  });
-  document.getElementById("navHome").addEventListener("click",function(){
-    A={}; document.querySelectorAll(".opt.on").forEach(function(o){o.classList.remove("on");});
-    for(var i=1;i<=5;i++){var nb=document.getElementById("n"+i); if(nb)nb.setAttribute("aria-disabled","true");}
-    show("q1");
+    if(cur>0){show(order[cur-1]);} else {history.back();}
   });
 
   function item(cls,title,body){return '<div class="plan-item '+cls+'"><h3>'+title+'</h3><p>'+body+'</p></div>';}
@@ -429,6 +550,41 @@
   }
 
   show("q1");
+})();
+
+/* ── STUDIO EYES (Comfort Kernel v2) ── */
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  // last-updated: computed, not typed
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
 })();
 </script>
 </body>

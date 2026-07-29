@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,11 +20,45 @@
     --marker-line:var(--marker);
     --marker-deep-line:var(--marker-deep);
   }
+  /* ---- STUDIO EYES · LIGHT: DUSK (warm slate, still dark) ---- */
+  html[data-light="dusk"]{
+    --paper:#100c12;
+    --panel:#1d1922;
+    --ink:#efdcc0;
+    --ink-soft:#a99fb0;
+    --tape:#2a2434;
+    --marker:#e6b06a;
+    --marker-deep:#f6d590;
+    --warn:#e09a6a;
+    --line:#332b3a;
+    --focus:#f6d590;
+  }
+  /* ---- STUDIO EYES · LIGHT: WARM-DARK / night (warm charcoal, never pure black) ---- */
+  html[data-light="night"]{
+    --paper:#17130d;
+    --panel:#241d14;
+    --ink:#f4e6c4;
+    --ink-soft:#c2ad88;
+    --tape:#33291a;
+    --marker:#eab866;
+    --marker-deep:#f8d98e;
+    --warn:#e6a066;
+    --line:#3a2f1e;
+    --focus:#f8d98e;
+  }
+  /* ---- STUDIO EYES · toggles ---- */
+  html.se-contrast{ --ink:#fdfcf8; --ink-soft:#e6dcc8; --marker:#f6c877; --marker-deep:#ffe0a0; --line:#5a4a2a; }
+  html.se-a1 body{ font-size:clamp(20px,2.7vw,24px); }
+  html.se-a2 body{ font-size:clamp(22px,3vw,27px); }
+  html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+  html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{background:var(--paper);color:var(--ink);font-family:"Source Serif 4",Georgia,serif;
     font-size:clamp(18px,2.4vw,22px);line-height:1.55;min-height:100vh;
-    display:flex;align-items:flex-start;justify-content:center;padding:clamp(16px,4vw,48px);}
+    display:flex;flex-direction:column;transition:background .18s ease,color .18s ease;}
+  .page-main{flex:1 1 auto;display:flex;align-items:flex-start;justify-content:center;
+    padding:clamp(16px,4vw,48px);width:100%;}
   .card{background:var(--panel);border:2px solid #1d3328;border-radius:14px;
     box-shadow:0 0 0 1px rgba(224,168,87,.08), inset 0 0 70px rgba(224,168,87,.05), 0 18px 50px rgba(0,0,0,.5);
     max-width:700px;width:100%;padding:clamp(24px,5vw,48px);position:relative;overflow:hidden;}
@@ -154,24 +188,104 @@
     font-family:"Caveat",cursive;font-size:clamp(15px,3.2vw,19px);color:#6B9C82;
   }
 
-  /* Persistent nav — fixed corner, present on every screen (NAV FLOOR) */
-  .studio-nav{position:fixed;top:12px;left:12px;z-index:50;display:flex;gap:8px;}
-  .studio-nav button{font-family:"Source Serif 4",Georgia,serif;font-size:15px;font-weight:700;
-    letter-spacing:.04em;background:#16202c;color:#e8d9bc;border:2px solid #e8d9bc;
-    border-radius:10px;min-height:44px;min-width:44px;padding:0 14px;cursor:pointer;
-    line-height:1;display:inline-flex;align-items:center;gap:6px;box-shadow:0 4px 14px rgba(0,0,0,.45);}
-  .studio-nav button:hover{background:rgba(224,168,87,.14);}
-  .studio-nav button:focus-visible{outline:4px solid var(--focus);outline-offset:2px;}
-  .studio-nav button[disabled]{opacity:.32;cursor:default;}
-  @media (max-width:480px){.studio-nav button{font-size:14px;padding:0 11px;}}
+  /* ═══ STUDIO EYES — reserved chrome header (v2 standard, page palette) ═══ */
+  .se-chrome{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;
+    padding:9px 14px;background:var(--panel);border-bottom:2px solid var(--line);
+    position:sticky;top:0;z-index:100;box-shadow:0 4px 14px rgba(0,0,0,.45);}
+  .se-home{justify-self:start;display:inline-flex;align-items:center;gap:7px;min-height:44px;
+    padding:8px 14px;border:1.5px solid var(--ink);border-radius:8px;background:transparent;
+    color:var(--ink);font-family:"Source Serif 4",Georgia,serif;font-weight:700;font-size:14px;
+    letter-spacing:.02em;text-decoration:none;line-height:1;}
+  .se-brand{justify-self:center;display:inline-flex;align-items:center;gap:9px;}
+  .se-brand svg{width:34px;height:20px;color:var(--marker);flex:0 0 auto;}
+  .se-brand .wm{font-family:"Caveat",cursive;font-size:22px;letter-spacing:.01em;white-space:nowrap;
+    color:var(--marker);text-shadow:0 0 8px rgba(224,168,87,.35);}
+  .se-eyes{justify-self:end;display:inline-flex;align-items:center;gap:7px;min-height:44px;
+    padding:8px 15px;border:2px solid transparent;border-radius:8px;background:var(--marker);
+    color:var(--paper);font-family:"Source Serif 4",Georgia,serif;font-weight:700;font-size:14px;
+    cursor:pointer;line-height:1;}
+  .se-home:hover{background:rgba(224,168,87,.14);}
+  .se-eyes:hover{filter:brightness(1.06);}
+  .se-home:focus-visible,.se-eyes:focus-visible{outline:4px solid var(--focus);outline-offset:2px;}
+  @media (max-width:560px){.se-brand .wm{display:none;}}
+
+  /* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+  .se-panel{position:fixed;right:12px;top:64px;z-index:101;
+    width:min(320px,calc(100vw - 24px));background:var(--panel);color:var(--ink);
+    border:2px solid var(--marker);border-radius:12px;padding:15px;
+    box-shadow:0 12px 40px rgba(0,0,0,.55);display:none;}
+  .se-panel[data-open="1"]{display:block;}
+  .se-panel h2{font-family:"Source Serif 4",Georgia,serif;font-size:11px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ink-soft);margin:0 0 8px;}
+  .se-row{display:flex;gap:6px;margin-bottom:14px;}
+  .se-btn{flex:1;min-height:44px;padding:8px 4px;border:1.5px solid var(--line);border-radius:8px;
+    background:transparent;color:var(--ink);font-family:"Source Serif 4",Georgia,serif;font-weight:700;
+    font-size:14px;cursor:pointer;}
+  .se-btn[aria-pressed="true"]{background:var(--marker);color:var(--paper);border-color:var(--marker);}
+  .se-btn:focus-visible{outline:4px solid var(--focus);outline-offset:2px;}
+  .se-tog{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;
+    min-height:44px;padding:8px 12px;margin-bottom:6px;border:1.5px solid var(--line);border-radius:8px;
+    background:transparent;color:var(--ink);font-family:"Source Serif 4",Georgia,serif;font-weight:600;
+    font-size:15px;cursor:pointer;text-align:left;}
+  .se-tog[aria-pressed="true"]{border-color:var(--marker);}
+  .se-tog .st{font-family:"Source Serif 4",Georgia,serif;font-size:12px;color:var(--ink-soft);}
+  .se-tog[aria-pressed="true"] .st{color:var(--marker);font-weight:700;}
+  .se-tog:focus-visible{outline:4px solid var(--focus);outline-offset:2px;}
+  .se-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
+
+  /* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+  .se-rail{display:flex;gap:10px;justify-content:center;align-items:center;padding:18px;
+    border-top:2px solid var(--line);background:var(--panel);}
+  .se-rail a,.se-rail button{min-height:44px;padding:10px 20px;border:1.5px solid var(--ink);
+    border-radius:8px;background:transparent;color:var(--ink);font-family:"Source Serif 4",Georgia,serif;
+    font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;cursor:pointer;line-height:1;
+    display:inline-flex;align-items:center;}
+  .se-rail a:hover,.se-rail button:hover{background:rgba(224,168,87,.14);}
+  .se-rail a:focus-visible,.se-rail button:focus-visible{outline:4px solid var(--focus);outline-offset:2px;}
+  .se-updated{text-align:center;font-family:"Source Serif 4",Georgia,serif;font-size:13px;
+    color:var(--ink-soft);margin:0;padding:12px 16px 22px;background:var(--paper);letter-spacing:.02em;}
   </style>
 </head>
 <body>
-  <nav class="studio-nav" aria-label="Game navigation">
-    <button id="navBack" type="button" aria-label="Back one screen">← Back</button>
-    <button id="navHome" type="button" aria-label="Back to start">⌂ Home</button>
-  </nav>
-  <main class="card" id="card" role="application" aria-label="Dad Energy, a Father's Day game"></main>
+  <!-- RESERVED CHROME -->
+  <header class="se-chrome">
+    <a class="se-home" href="index.html" aria-label="Home">Home</a>
+    <span class="se-brand">
+      <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+        <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+        <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+        <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <span class="wm">Tight Spiral</span>
+    </span>
+    <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+  </header>
+
+  <!-- STUDIO EYES panel -->
+  <div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+    <h2>Light</h2>
+    <div class="se-row" role="group" aria-label="Light level">
+      <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+      <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+      <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+    </div>
+    <h2>Text size</h2>
+    <div class="se-row" role="group" aria-label="Text size">
+      <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+      <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+      <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+    </div>
+    <h2>Comfort</h2>
+    <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+    <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+    <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+    <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+  </div>
+
+  <div class="page-main">
+    <main class="card" id="card" role="application" aria-label="Dad Energy, a Father's Day game"></main>
+  </div>
 <script>
 (function(){
   "use strict";
@@ -384,7 +498,7 @@
 })();
 </script>
 <!-- TSP shared mobile nav + device adaptation -->
-<script>window.TSP_MOBILE = { home:"index.html" };</script>
+<script>window.TSP_MOBILE = { home:"index.html", nav:false };</script>
 <!-- TSP-MOBILE (inlined from tsp-mobile.js — single-file-offline law) -->
 <script>
 /* Tight Spiral Studios — shared mobile controls + Home/Back nav.
@@ -672,6 +786,45 @@
       if (p) p.style.display = v === false ? "none" : "";
     }
   };
+})();
+</script>
+
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="index.html" aria-label="Home">Home</a>
+</nav>
+<p class="se-updated" id="seUpdated">Last updated&hellip;</p>
+
+<!-- STUDIO EYES control -->
+<script>
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  var u=document.getElementById('seUpdated');
+  if(u){ var dt=new Date(document.lastModified);
+    u.textContent = isNaN(dt.getTime()) ? 'Last updated recently'
+      : 'Last updated '+dt.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}); }
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
 })();
 </script>
 </body>

@@ -1,19 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trail Notes — Nantahala with Evan</title>
 <meta name="tsp:surface" content="app">
 <style>
+  /* ---- LIGHT: DEFAULT (day) ---- */
   :root{
-  --far-fg:var(--far);
-  --ink-fg:var(--ink);
-  --mid-fg:var(--mid);
-  --near-fg:var(--near);
-  --paper-fg:var(--paper);
-  --rail-fg:var(--rail);
-  --river-fg:var(--river);
     --paper:#f4efe6;
     --ink:#161310;
     --ink-soft:#443c32;
@@ -28,16 +22,33 @@
     --near:#1d574f;
     --mid:#7c3b1e;
     --far:#5a4a2a;
+    --on-rail:#fbf7ef;
+    --far-fg:var(--far); --ink-fg:var(--ink); --mid-fg:var(--mid); --near-fg:var(--near);
+    --paper-fg:var(--paper); --rail-fg:var(--rail); --river-fg:var(--river);
   }
-  body.softer{
-    --paper:#e3d9c8;
-    --ink:#201b15;
-    --ink-soft:#463e33;
-    --card:#efe7d8;
+  /* ---- LIGHT: DUSK ---- */
+  html[data-light="dusk"]{
+    --paper:#e6dcc7;
+    --ink:#171208;
+    --ink-soft:#463d2e;
+    --river:#134a42;
+    --river-deep:#0f3a35;
+    --rail:#6d3117;
+    --gold:#7f5006;
     --line:#c9bda4;
-   --ink-fg:var(--ink); --paper-fg:var(--paper);}
-  body.night{
-    --paper:#17120d;
+    --card:#efe7d6;
+    --shadow:rgba(20,15,10,.15);
+    --win:#134a42;
+    --near:#134a42;
+    --mid:#6d3117;
+    --far:#4a3d20;
+    --on-rail:#fbf7ef;
+    --far-fg:var(--far); --ink-fg:var(--ink); --mid-fg:var(--mid); --near-fg:var(--near);
+    --paper-fg:var(--paper); --rail-fg:var(--rail); --river-fg:var(--river);
+  }
+  /* ---- LIGHT: WARM-DARK (night) — warm charcoal, never pure black ---- */
+  html[data-light="night"]{
+    --paper:#1c1813;
     --ink:#f1e7d6;
     --ink-soft:#cdbfa8;
     --river:#6fc9b8;
@@ -45,35 +56,75 @@
     --rail:#e2955f;
     --gold:#e3b24d;
     --line:#3a3128;
-    --card:#211a13;
+    --card:#26201a;
     --shadow:rgba(0,0,0,.5);
     --win:#6fc9b8;
     --near:#6fc9b8;
     --mid:#e2955f;
     --far:#d6b56a;
-   --far-fg:var(--far); --ink-fg:var(--ink); --mid-fg:var(--mid); --near-fg:var(--near); --paper-fg:var(--paper); --rail-fg:var(--rail); --river-fg:var(--river);}
+    --on-rail:#17120d;
+    --far-fg:var(--far); --ink-fg:var(--ink); --mid-fg:var(--mid); --near-fg:var(--near);
+    --paper-fg:var(--paper); --rail-fg:var(--rail); --river-fg:var(--river);
+  }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{
     margin:0;background:var(--paper);color:var(--ink-fg);
     font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;
-    font-size:18px;line-height:1.5;-webkit-text-size-adjust:100%;
+    font-size:1.125rem;line-height:1.5;-webkit-text-size-adjust:100%;
   }
-  .wrap{max-width:660px;margin:0 auto;padding:78px 18px 130px}
+  .wrap{max-width:660px;margin:0 auto;padding:24px 18px 130px}
 
-  .corner{position:fixed;top:0;left:0;right:0;z-index:60;
-    display:flex;justify-content:space-between;align-items:center;
-    gap:6px;padding:9px 12px;background:var(--paper);
-    border-bottom:2px solid var(--line);}
-  .corner .grp{display:flex;gap:6px}
-  .corner button{font:inherit;font-size:14px;min-height:44px;min-width:44px;
-    padding:5px 11px;border:2px solid var(--ink);border-radius:11px;
-    background:var(--card);color:var(--ink-fg);cursor:pointer;font-weight:700;}
-  .corner button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-  .corner button[aria-pressed="true"]{background:var(--ink);color:var(--paper-fg)}
-  .comfort-stops{display:flex;gap:6px;align-items:center}
-  .comfort-stops[hidden]{display:none}
-  .comfort-toggle[aria-expanded="true"]{background:var(--ink);color:var(--paper-fg)}
+  /* ═══ RESERVED CHROME — grid header: Home · teaspoon brand · Studio Eyes ═══ */
+  .se-chrome{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;
+    padding:9px 14px;background:var(--card);border-bottom:2px solid var(--ink);
+    position:sticky;top:0;z-index:100;}
+  .se-home{justify-self:start;display:inline-flex;align-items:center;min-height:44px;
+    padding:8px 12px;border:2px solid var(--ink);border-radius:11px;background:var(--paper);
+    color:var(--ink-fg);font:inherit;font-size:14px;font-weight:700;text-decoration:none;}
+  .se-brand{justify-self:center;display:inline-flex;align-items:center;gap:9px;color:var(--ink-fg);}
+  .se-brand svg{width:34px;height:20px;color:var(--river-fg);flex:0 0 auto;}
+  .se-brand .wm{font-size:16px;letter-spacing:.01em;white-space:nowrap;font-weight:700;}
+  .se-eyes{justify-self:end;display:inline-flex;align-items:center;min-height:44px;
+    padding:8px 13px;border:2px solid var(--rail);border-radius:11px;background:var(--paper);
+    color:var(--ink-fg);font:inherit;font-size:14px;font-weight:700;cursor:pointer;}
+  .se-home:focus-visible,.se-eyes:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+  @media (max-width:520px){ .se-brand .wm{display:none;} }
+
+  /* ═══ STUDIO EYES panel ═══ */
+  .se-panel{position:fixed;right:12px;top:62px;z-index:101;
+    width:min(320px,calc(100vw - 24px));background:var(--card);color:var(--ink-fg);
+    border:2px solid var(--river);border-radius:14px;padding:15px;
+    box-shadow:0 10px 34px var(--shadow);display:none;}
+  .se-panel[data-open="1"]{display:block;}
+  .se-panel h2{font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink-soft);margin:0 0 8px;font-weight:800;}
+  .se-row{display:flex;gap:6px;margin-bottom:14px;}
+  .se-btn{flex:1;min-height:44px;padding:8px 4px;border:2px solid var(--line);border-radius:10px;
+    background:var(--paper);color:var(--ink-fg);font:inherit;font-weight:700;font-size:14px;cursor:pointer;}
+  .se-btn[aria-pressed="true"]{background:var(--river);color:var(--paper-fg);border-color:var(--river);}
+  .se-btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+  .se-tog{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;
+    min-height:44px;padding:8px 11px;margin-bottom:6px;border:2px solid var(--line);border-radius:10px;
+    background:var(--paper);color:var(--ink-fg);font:inherit;font-weight:600;font-size:15px;cursor:pointer;text-align:left;}
+  .se-tog[aria-pressed="true"]{border-color:var(--river);}
+  .se-tog .st{font-size:13px;color:var(--ink-soft);font-weight:700;}
+  .se-tog[aria-pressed="true"] .st{color:var(--river-fg);}
+  .se-tog:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+  .se-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
+  html.se-contrast:not([data-light="night"]){--paper:#ffffff;--card:#ffffff;--ink:#0f0c08;--ink-soft:#2c2517;--line:#8a7a58;}
+  html.se-contrast[data-light="night"]{--paper:#0c0a08;--card:#141009;--ink:#fff7e6;--ink-soft:#e6d8b8;}
+  html.se-reduce *{animation:none!important;transition:none!important;scroll-behavior:auto!important;}
+  html.se-a1{font-size:113%;} html.se-a2{font-size:126%;}
+  html.se-cb .idea p a,html.se-cb .note{text-decoration:underline;text-underline-offset:2px;}
+
+  /* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+  .se-rail{display:flex;gap:10px;justify-content:center;padding:20px 0 4px;
+    border-top:2px solid var(--line);margin-top:26px;}
+  .se-rail a,.se-rail button{min-height:44px;padding:10px 18px;border:2px solid var(--line);
+    border-radius:11px;background:var(--card);color:var(--ink-fg);font:inherit;font-weight:700;
+    font-size:14px;text-decoration:none;cursor:pointer;}
+  .se-rail a:focus-visible,.se-rail button:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
 
   header.hero{text-align:center;margin:6px 0 22px}
   .kicker{font-size:14px;letter-spacing:.14em;text-transform:uppercase;
@@ -125,7 +176,7 @@
     color:var(--ink-fg);resize:vertical}
   .compose textarea:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
   .compose .add{font:inherit;font-weight:700;min-height:48px;border:none;
-    border-radius:12px;background:var(--rail);color:#fbf7ef;cursor:pointer}
+    border-radius:12px;background:var(--rail);color:var(--on-rail);cursor:pointer}
   .compose .add:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 
   .idea{background:var(--card);border:2px solid var(--line);border-radius:13px;
@@ -151,7 +202,7 @@
   .addschool input:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
   .addschool .hint{font-size:13px;color:var(--ink-soft);margin:0}
   .addschool .add{font:inherit;font-weight:700;min-height:48px;border:none;
-    border-radius:12px;background:var(--rail);color:#fbf7ef;cursor:pointer}
+    border-radius:12px;background:var(--rail);color:var(--on-rail);cursor:pointer}
   .addschool .add:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 
   .school{background:var(--card);border:2px solid var(--line);border-radius:13px;
@@ -192,23 +243,44 @@
   .swap input[type=file]{position:absolute;width:1px;height:1px;opacity:0}
   .note{font-size:14px;color:var(--ink-soft);text-align:center;margin-top:22px;line-height:1.45}
 
-  body.night .compose .add,body.night .addschool .add{color:#17120d}
 </style>
 </head>
 <body>
 
-<div class="corner">
-  <div class="grp">
-    <button id="homeBtn" type="button" aria-label="Back to plan">Home</button>
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" type="button" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" type="button" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" type="button" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" type="button" data-light-set="night" aria-pressed="false">Warm-dark</button>
   </div>
-  <div class="grp" role="group" aria-label="Comfort">
-    <button class="comfort-toggle" type="button" data-comfort-toggle aria-expanded="false" aria-controls="comfortStops" aria-label="Comfort and reading options">◐ Comfort</button>
-    <span class="comfort-stops" id="comfortStops" data-comfort-panel hidden>
-      <button id="mSoft" type="button" aria-pressed="false">Softer</button>
-      <button id="mDay"  type="button" aria-pressed="true">Default</button>
-      <button id="mNite" type="button" aria-pressed="false">Warm dark</button>
-    </span>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" type="button" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" type="button" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" type="button" data-text="2" aria-pressed="false">A++</button>
   </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" type="button" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" type="button" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" type="button" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
 </div>
 
 <div class="wrap">
@@ -298,6 +370,12 @@
   </div>
 
   <p class="note">Everything stays on this page &mdash; nothing is sent anywhere unless you save and share the file yourself.</p>
+
+  <!-- BOTTOM NAV RAIL — Back + Home -->
+  <nav class="se-rail" aria-label="Page navigation">
+    <button type="button" id="seBack" aria-label="Back">Back</button>
+    <a href="index.html" aria-label="Home">Home</a>
+  </nav>
 </div>
 
 <nav class="tabs" role="tablist" aria-label="Sections">
@@ -309,20 +387,6 @@
 <script>
 (function(){
   "use strict";
-  var body=document.body;
-
-  var modes={mSoft:"softer",mDay:null,mNite:"night"};
-  function setMode(id){
-    body.classList.remove("softer","night");
-    if(modes[id])body.classList.add(modes[id]);
-    ["mSoft","mDay","mNite"].forEach(function(k){
-      document.getElementById(k).setAttribute("aria-pressed", k===id?"true":"false");
-    });
-  }
-  ["mSoft","mDay","mNite"].forEach(function(k){
-    document.getElementById(k).addEventListener("click",function(){setMode(k);});
-  });
-
   var tabs=[["tPlan","plan"],["tSchools","schools"],["tIdeas","ideas"]];
   var swapBox=document.getElementById("swapBox");
   function show(sec){
@@ -337,7 +401,8 @@
   tabs.forEach(function(p){
     document.getElementById(p[0]).addEventListener("click",function(){show(p[1]);});
   });
-  document.getElementById("homeBtn").addEventListener("click",function(){show("plan");});
+  var backBtn=document.getElementById("seBack");
+  if(backBtn)backBtn.addEventListener("click",function(){history.back();});
 
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
 
@@ -466,16 +531,36 @@
   renderSchools(); renderIdeas();
 })();
 </script>
-<!-- Comfort is a knob, not a wall: one button reveals the stops on demand. -->
+<!-- STUDIO EYES — the studio's one comfort control, in the chrome. -->
 <script>
 (function(){
-  var t=document.querySelector('[data-comfort-toggle]'), p=document.querySelector('[data-comfort-panel]');
-  if(!t||!p) return;
-  function set(open){ p.hidden=!open; t.setAttribute('aria-expanded',open?'true':'false'); }
-  set(false);
-  t.addEventListener('click',function(e){ set(p.hidden); e.stopPropagation(); });
-  document.addEventListener('click',function(e){ if(!p.hidden && !p.contains(e.target) && !t.contains(e.target)) set(false); });
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && !p.hidden){ set(false); t.focus(); } });
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  if(!eyes||!panel) return;
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(e){ setOpen(panel.getAttribute('data-open')!=='1'); e.stopPropagation(); });
+  document.addEventListener('click',function(e){ if(panel.getAttribute('data-open')==='1' && !panel.contains(e.target) && !eyes.contains(e.target)) setOpen(false); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
 })();
 </script>
 </body>

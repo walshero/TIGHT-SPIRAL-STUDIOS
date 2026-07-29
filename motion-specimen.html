@@ -1,59 +1,72 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-light="day">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Motion Specimen · Tight Spiral Studios</title>
 <meta name="tsp:surface" content="reference">
 <style>
-/* ── STUDIO TOKENS (canon, from index.html) ───────────────────────── */
-:root{
-  --cool-ink-fg:var(--cool-ink);
-  --ink-fg:var(--ink);
-  --paper-fg:var(--paper);
+/* ── STUDIO TOKENS (canon, from index.html) — now driven by Comfort Kernel v2
+      light ladder: html[data-light="day|dusk|night"]. Same ink relationships. ── */
+:root, html[data-light="day"]{
   --paper:#fbfaf7; --paper-2:#f1eee6;
   --ink:#14181d; --ink-2:#3d4652; --ink-3:#5c6675;
   --brass-ink:#6a4d12; --brass-fill:#d9a441;
   --cool-ink:#274063; --cool-fill:#c3d2e6;
   --rule:#c9c3b6;
+  /* fg aliases resolve per-mode at use-time */
+  --paper-fg:var(--paper); --ink-fg:var(--ink); --cool-ink-fg:var(--cool-ink);
   --mono:ui-monospace,"SF Mono",Menlo,monospace;
   --serif:Georgia,"Times New Roman",serif;
+  --tap:48px; --r:10px;
+  /* Studio Eyes chrome tokens — auto-adapt because they reference remapped base tokens */
+  --se-surface:var(--paper-2); --se-surface2:var(--paper);
+  --se-line:var(--rule); --se-accent:var(--cool-ink); --se-on-accent:var(--paper-fg);
+  --se-focus:#8f3f00;
   /* motion grammar — one source of easing truth */
   --ease-settle:cubic-bezier(.16,.84,.44,1);   /* editorial come-to-rest */
   --ease-reveal:cubic-bezier(.22,1,.36,1);     /* delayed disclosure */
   --t-settle:620ms; --t-reveal:520ms; --t-cross:480ms; --t-sisyphus:5200ms;
 }
-/* SOFTER — lower-contrast paper, same ink relationships.
-   Class-based comfort (canonical studio pattern; machine-testable by the sweep). */
-body.softer{
+/* DUSK — lower-contrast warm paper, same ink relationships (from the old "softer"). */
+html[data-light="dusk"]{
   --paper:#ece3d3; --paper-2:#e0d8c8;
   --ink:#1f2530; --ink-2:#404855; --ink-3:#565f6c;
   --rule:#cabfab;
- --ink-fg:var(--ink); --paper-fg:var(--paper);}
-/* WARM-DARK — opaque charcoal ground; TEXT is cool near-white at full strength.
-   amber/brass is GROUND + motion-fill ONLY, never color: (RP hue floor). */
-body.warm{
-  --paper:#12161b; --paper-2:#1a1f26;
-  --ink:#f4f1e8; --ink-2:#d9d3c4; --ink-3:#bcb6a6;   /* all cool near-white, never amber */
-  --brass-ink:#e6c67a;        /* used ONLY on dark ground as accent text, 8.9:1 on --paper */
+  --se-focus:#9c4000;
+}
+/* WARM-DARK — opaque WARM charcoal ground (never pure black); TEXT is cool/warm
+   near-white at full strength. amber/brass is GROUND + motion-fill ONLY, never color:. */
+html[data-light="night"]{
+  --paper:#17140f; --paper-2:#201c15;
+  --ink:#f4f1e8; --ink-2:#d9d3c4; --ink-3:#bcb6a6;   /* all near-white, never amber */
+  --brass-ink:#e6c67a;        /* accent text on dark ground only */
   --cool-ink:#a9c3e6;         /* cool accent on dark */
-  --rule:#333b45;
- --cool-ink-fg:var(--cool-ink); --ink-fg:var(--ink); --paper-fg:var(--paper);}
+  --rule:#37301f;
+  --se-focus:#f0c357;
+}
+/* high contrast (halation floor) */
+html.se-contrast:not([data-light="night"]){ --paper:#ffffff; --paper-2:#f2efe7; --ink:#0e0b06; --ink-2:#242017; --ink-3:#3a3427; --brass-ink:#5a3f0c; --cool-ink:#1e3350; --rule:#b0a880; }
+html.se-contrast[data-light="night"]{ --paper:#0c0a07; --paper-2:#151209; --ink:#fff7e6; --ink-2:#efe0bc; --ink-3:#d8c9a3; --cool-ink:#bcd0ea; }
+/* text size A / A+ / A++ */
+html{ font-size:100%; }
+html.se-a1{ font-size:113%; }
+html.se-a2{ font-size:126%; }
+/* reduce motion */
+html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+/* colorblind cues */
+html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+
 *{box-sizing:border-box}
 html,body{margin:0}
-/* OPACITY TOOTH: html + body both paint the ground opaque, full viewport.
-   nothing transparent can let a white browser sheet show through. */
-html{background:#fbfaf7}
-html.softer{background:#ece3d3}
-html.warm{background:#12161b}
+/* OPACITY TOOTH: html + body both paint the ground opaque, full viewport. */
+html{background:var(--paper)}
 body{
   background:var(--paper); color:var(--ink-fg);
   font-family:var(--serif); line-height:1.5;
-  min-height:100dvh; padding:0 0 120px;
+  min-height:100dvh; padding:0 0 40px;
 }
-/* comfort crossfade (Move 3): the ground+ink cross-fade on interaction. Gated on the
-   [class~="xf"] state added at load so the transition runs for a real tap but never
-   leaves a mid-fade frame for a machine that repaints by swapping the class outright. */
+/* comfort crossfade (Move 3): ground+ink cross-fade when the light mode changes. */
 body[class~="xf"]{
   transition:background var(--t-cross) var(--ease-settle), color var(--t-cross) var(--ease-settle);
 }
@@ -61,24 +74,45 @@ body[class~="xf"]{
   *{animation:none!important; transition:none!important}
 }
 
-/* ── FIXED CORNER NAV (nav floor: back + home reachable on every screen) ── */
-.corner{position:fixed; z-index:40; font-family:var(--mono); font-size:13px}
-.corner button{
-  min-width:44px; min-height:44px; padding:0 14px; border:1.5px solid var(--ink);
-  background:var(--paper); color:var(--ink-fg); font:inherit; cursor:pointer;
-  border-radius:2px}
-body[class~="xf"] .corner button{transition:background 160ms,color 160ms}
-.corner button:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
-.nav-left{top:14px; left:14px; display:flex; gap:8px}
-.comfort{top:14px; right:14px; display:flex; gap:6px; align-items:center}
-.comfort span{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); margin-right:2px}
-.comfort button[aria-pressed="true"]{background:var(--ink); color:var(--paper-fg)}
-.comfort-stops{display:flex; gap:6px; align-items:center}
-.comfort-stops[hidden]{display:none}
-.comfort-toggle[aria-expanded="true"]{background:var(--ink); color:var(--paper-fg)}
+/* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+.se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+  padding:9px 14px; background:var(--se-surface); border-bottom:2px solid var(--ink-fg);
+  position:sticky; top:0; z-index:100; }
+.se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 12px; border:1.5px solid var(--se-line); border-radius:8px; background:var(--se-surface2);
+  color:var(--ink-fg); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; }
+.se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink-fg); }
+.se-brand svg{ width:34px; height:20px; color:var(--se-accent); flex:0 0 auto; }
+.se-brand .wm{ font-family:var(--serif); font-size:16px; letter-spacing:.01em; white-space:nowrap; color:var(--ink-fg); }
+.se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--se-accent);
+  color:var(--se-on-accent); font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer; }
+.se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--se-focus); outline-offset:2px; }
+@media (max-width:560px){ .se-brand .wm{ display:none; } }
+
+/* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+.se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:101;
+  width:min(320px,calc(100vw - 24px)); background:var(--se-surface); color:var(--ink-fg);
+  border:2px solid var(--se-accent); border-radius:var(--r); padding:15px;
+  box-shadow:0 10px 34px rgba(0,0,0,.28); display:none; }
+.se-panel[data-open="1"]{ display:block; }
+.se-panel h2{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-2); margin:0 0 8px; }
+.se-row{ display:flex; gap:6px; margin-bottom:14px; }
+.se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--se-line); border-radius:8px;
+  background:var(--se-surface2); color:var(--ink-fg); font-family:var(--mono); font-weight:700; font-size:12.5px; cursor:pointer; }
+.se-btn[aria-pressed="true"]{ background:var(--se-accent); color:var(--se-on-accent); border-color:var(--se-accent); }
+.se-btn:focus-visible{ outline:3px solid var(--se-focus); outline-offset:2px; }
+.se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+  min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--se-line); border-radius:8px;
+  background:var(--se-surface2); color:var(--ink-fg); font-family:var(--serif); font-weight:600; font-size:14px; cursor:pointer; text-align:left; }
+.se-tog[aria-pressed="true"]{ border-color:var(--se-accent); }
+.se-tog .st{ font-family:var(--mono); font-size:11px; color:var(--ink-3); }
+.se-tog[aria-pressed="true"] .st{ color:var(--se-accent); font-weight:700; }
+.se-tog:focus-visible{ outline:3px solid var(--se-focus); outline-offset:2px; }
+.se-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
 
 /* ── SECTIONS: each paints its own opaque ground ─────────────────── */
-section{background:var(--paper); padding:88px 22px 44px; max-width:760px; margin:0 auto;
+section{background:var(--paper); padding:56px 22px 44px; max-width:760px; margin:0 auto;
   border-bottom:2px solid var(--rule)}
 .eyebrow{font-family:var(--mono); font-size:12.5px; letter-spacing:.14em;
   text-transform:uppercase; color:var(--brass-ink); font-weight:700; margin:0 0 18px}
@@ -91,11 +125,11 @@ p b{color:var(--ink-fg); font-weight:600}
 
 /* ── MOTION 1 · SISYPHUS LETTERHEAD (the signature loop) ─────────── */
 .sisyphus{display:flex; align-items:flex-end; gap:0; height:120px; margin:8px 0 4px;
-  border-bottom:2px solid var(--ink); position:relative; overflow:hidden}
+  border-bottom:2px solid var(--ink-fg); position:relative; overflow:hidden}
 .hill{position:absolute; inset:0; background:
   linear-gradient(to top right, transparent 48%, var(--brass-fill) 48.4%, var(--brass-fill) 50%, transparent 50.4%);
   opacity:.55}
-.boulder{width:26px; height:26px; border-radius:50%; background:var(--ink);
+.boulder{width:26px; height:26px; border-radius:50%; background:var(--ink-fg);
   position:absolute; bottom:0; left:0;
   animation:roll var(--t-sisyphus) var(--ease-settle) infinite}
 @keyframes roll{
@@ -115,10 +149,10 @@ p b{color:var(--ink-fg); font-weight:600}
 
 /* ── MOTION 4 · REVEAL (delayed disclosure, Console-style) ───────── */
 .reveal-wrap{margin:22px 0 6px}
-.reveal-btn{min-height:44px; padding:12px 20px; border:1.5px solid var(--ink);
+.reveal-btn{min-height:44px; padding:12px 20px; border:1.5px solid var(--ink-fg);
   background:var(--paper); color:var(--ink-fg); font-family:var(--mono); font-size:14px;
   cursor:pointer; border-radius:2px}
-.reveal-btn:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
+.reveal-btn:focus-visible{outline:3px solid var(--cool-ink-fg); outline-offset:2px}
 .reveal-panel{max-height:0; overflow:hidden; opacity:0;
   transition:max-height var(--t-reveal) var(--ease-reveal), opacity var(--t-reveal) var(--ease-reveal)}
 .reveal-panel.open{max-height:400px; opacity:1; margin-top:16px}
@@ -128,24 +162,51 @@ p b{color:var(--ink-fg); font-weight:600}
 .legend{max-width:760px; margin:36px auto 0; padding:0 22px}
 .legend dt{font-family:var(--mono); font-size:13px; color:var(--ink-fg); font-weight:700; margin-top:14px; letter-spacing:.05em}
 .legend dd{margin:4px 0 0; font-size:15px; color:var(--ink-2)}
+
+/* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+.se-rail{ display:flex; gap:10px; justify-content:center; padding:22px 20px; margin-top:24px; border-top:2px solid var(--se-line); }
+.se-rail a,.se-rail button{ min-height:var(--tap); padding:10px 18px; border:1.5px solid var(--se-line); border-radius:8px;
+  background:var(--se-surface2); color:var(--ink-fg); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer; }
+.se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--se-focus); outline-offset:2px; }
 </style>
 </head>
 <body class="xf">
 
-<nav class="corner nav-left" aria-label="Navigation">
-  <button onclick="history.length>1?history.back():location.reload()" aria-label="Back">‹ Back</button>
-  <button onclick="location.href='index.html'" aria-label="Home">Home</button>
-</nav>
-
-<nav class="corner comfort" aria-label="Comfort">
-  <button class="comfort-toggle" data-comfort-toggle aria-expanded="false" aria-controls="comfortStops" aria-label="Comfort and reading options">◐ Comfort</button>
-  <span class="comfort-stops" id="comfortStops" data-comfort-panel hidden>
-    <span>Comfort</span>
-    <button data-set="softer" aria-pressed="false">Softer</button>
-    <button data-set="default" aria-pressed="true">Default</button>
-    <button data-set="warm" aria-pressed="false">Warm-dark</button>
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="wm">Tight Spiral</span>
   </span>
-</nav>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
 
 <!-- SCREEN 1 · the signature, settling in -->
 <section aria-label="Motion specimen, part one">
@@ -184,12 +245,12 @@ p b{color:var(--ink-fg); font-weight:600}
   <p class="note">Move 2 · Settle-on-load. Move 4 · Reveal. Both certified by the gate on this paper ground.</p>
 </section>
 
-<!-- SCREEN 3 · the crossfade IS this screen; changing comfort demonstrates move 3 -->
+<!-- SCREEN 3 · the crossfade IS this screen; changing light demonstrates move 3 -->
 <section aria-label="Motion specimen, part three">
-  <p class="eyebrow">Move 3 · Comfort-stop crossfade</p>
-  <h2>Tap a comfort stop, top-right.</h2>
-  <p>The ground and ink cross-fade on <code>--t-cross</code> rather than snapping. Softer and
-    Default are gate-certified. <b>Warm-dark is hand-verified against the render-proof floor:</b>
+  <p class="eyebrow">Move 3 · Light-stop crossfade</p>
+  <h2>Change the light in Studio Eyes, top-right.</h2>
+  <p>The ground and ink cross-fade on <code>--t-cross</code> rather than snapping. Default and Dusk
+    are gate-certified. <b>Warm-dark is hand-verified against the render-proof floor:</b>
     the ground paints opaque so no white browser sheet shows through, and every glyph of text is
     <b>cool near-white at full strength</b> — amber lives only in the hill and the ground, never
     as a letter. That is the fix for the screen the gate once passed at 13:1 and a retina read at 1.17:1.</p>
@@ -200,8 +261,14 @@ p b{color:var(--ink-fg); font-weight:600}
   <dt>--ease-settle</dt><dd>editorial come-to-rest; load, settle, comfort crossfade.</dd>
   <dt>--ease-reveal</dt><dd>delayed disclosure; the Console/telemetry hand-off.</dd>
   <dt>--t-sisyphus 5200ms</dt><dd>the signature loop; roll, slip, begin again.</dd>
-  <dt>reduced-motion</dt><dd>honored — all animation and transition off under the OS setting.</dd>
+  <dt>reduced-motion</dt><dd>honored — all animation and transition off under the OS setting or the Reduce-motion toggle.</dd>
 </dl>
+
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.length>1?history.back():location.href='index.html'" aria-label="Back">Back</button>
+  <a href="index.html" aria-label="Home">Home</a>
+</nav>
 
 <script>
 // Move 2 — settle-on-load (already applied via .in on first paint for above-the-fold;
@@ -221,27 +288,33 @@ function toggleReveal(btn){
 if('scrollRestoration' in history) history.scrollRestoration='manual';
 window.scrollTo(0,0);
 
-// Move 3 — comfort crossfade (live corner control, never a gate)
-// class-based comfort on html + body: default = no stop class (machine-testable by the sweep)
-const root=document.documentElement, bodyEl=document.body;
-document.querySelectorAll('.comfort button[data-set]').forEach(b=>{
-  b.addEventListener('click',()=>{
-    const set=b.dataset.set;
-    ['softer','warm'].forEach(c=>{ root.classList.remove(c); bodyEl.classList.remove(c); });
-    if(set==='softer'||set==='warm'){ root.classList.add(set); bodyEl.classList.add(set); }
-    document.querySelectorAll('.comfort button[data-set]').forEach(x=>x.setAttribute('aria-pressed', x===b));
-  });
-});
-
-// Comfort is a knob, not a wall: one button reveals the stops on demand.
+// ═══ STUDIO EYES — Comfort Kernel v2 control (Move 3 crossfade rides the light change) ═══
 (function(){
-  var t=document.querySelector('[data-comfort-toggle]'), p=document.querySelector('[data-comfort-panel]');
-  if(!t||!p) return;
-  function set(open){ p.hidden=!open; t.setAttribute('aria-expanded',open?'true':'false'); }
-  set(false);
-  t.addEventListener('click',function(e){ set(p.hidden); e.stopPropagation(); });
-  document.addEventListener('click',function(e){ if(!p.hidden && !p.contains(e.target) && !t.contains(e.target)) set(false); });
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && !p.hidden){ set(false); t.focus(); } });
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light — drives html[data-light]; body[class~="xf"] cross-fades the ground+ink (Move 3)
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
 })();
 </script>
 </body>
