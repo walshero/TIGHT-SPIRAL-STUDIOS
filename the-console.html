@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,7 +14,41 @@
   --phos-ink:#4fd6c9;
   --amber:#f2b64b;--amber-fill:#f2b64b;--red:#ff6b6b;--red-ink:#ff6b6b;--green:#57d98a;--green-fill:#57d98a;
   --feed-bg:#f4f5f7;--feed-ink:#14171c;--feed-dim:#61697a;--feed-accent:#2452e6;
+  /* STUDIO EYES v2 chrome tokens — day = the console's native cool dark */
+  --surface:#121b26;--surface-2:#0e1620;--line:#2c4256;--ink-2:#93a6b8;
+  --accent-strong:#4fd6c9;--on-accent:#04211e;--focus:#4fd6c9;
+  --tap:44px;--r:10px;
+  --mono:ui-monospace,"SF Mono",Menlo,monospace;--serif:Georgia,"Times New Roman",serif;
 }
+/* ── STUDIO EYES v2 LIGHT LADDER — remaps of THIS page's own tokens.
+   Day is the console's native cool dark. Dusk warms and softens the room.
+   Night is warm charcoal — never pure black. The diegetic phone (--feed-*)
+   is a prop inside the fiction and keeps its own light. ── */
+html[data-light="dusk"]{
+  --void:#1a1512;--panel:#241d16;--panel-2:#1d1712;--edge:#463a2b;
+  --ink:#f0e6d0;--dim:#b9a887;
+  --phos:#5ad6b0;--phos-deep:#0d5c48;--phos-ink:#5ad6b0;
+  --amber:#f2bc5f;--amber-fill:#f2bc5f;
+  --red:#ff8a70;--red-ink:#ff8a70;--green:#6bd98a;--green-fill:#6bd98a;
+  --surface:#241d16;--surface-2:#1d1712;--line:#4d4030;--ink-2:#b9a887;
+  --accent-strong:#5ad6b0;--on-accent:#0b201a;--focus:#5ad6b0;
+}
+html[data-light="night"]{
+  --void:#171310;--panel:#201b14;--panel-2:#19150f;--edge:#42392b;
+  --ink:#f2e3bf;--dim:#c6b48d;
+  --phos:#e9c169;--phos-deep:#5f4a12;--phos-ink:#e9c169;
+  --amber:#f0c357;--amber-fill:#f0c357;
+  --red:#ff9078;--red-ink:#ff9078;--green:#8fd9a3;--green-fill:#8fd9a3;
+  --surface:#201b14;--surface-2:#19150f;--line:#4a3f2c;--ink-2:#c6b48d;
+  --accent-strong:#e9c169;--on-accent:#241a06;--focus:#f0c357;
+}
+/* ── STUDIO EYES toggles ── */
+html.se-a1{font-size:113%}
+html.se-a2{font-size:126%}
+html.se-contrast{--ink:#ffffff;--dim:#d6d2c4;--ink-2:#d6d2c4;--line:#6d5f45}
+html.se-reduce *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+html.se-cb a{text-decoration:underline;text-underline-offset:2px}
 @media (prefers-color-scheme:light){:root{color-scheme:dark;}}
 @media (forced-colors:active){
   :root{--ink:CanvasText;--dim:CanvasText;--edge:CanvasText;--void:Canvas;--panel:Canvas;}
@@ -26,34 +60,8 @@ html,body{margin:0;padding:0;background:var(--void);color:var(--ink);
   -webkit-text-size-adjust:100%;overflow-x:hidden}
 body{line-height:1.4}
 :focus-visible{outline:3px solid var(--phos);outline-offset:3px;border-radius:8px}
-.comfort{position:fixed;top:0;right:0;z-index:80;padding:8px;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
-/* STANDARD TSP HOME CONTROL — top-left, per RP it is an UNMISTAKABLE LINK:
-   underlined, obviously tappable, never camouflaged as a button/chrome. A control
-   that blends in is a control an RP reader cannot find. Real <a href>, corner
-   placement, never a wall. Every game gets this; home-sweep.py HALTs any missing it. */
-.tsp-home{position:fixed;top:0;left:0;z-index:80;padding:12px 14px}
-.tsp-home a{color:var(--ink);font:inherit;font-size:16px;font-weight:700;
-  text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:2px;
-  padding:8px 8px;min-height:44px;box-sizing:border-box;display:inline-flex;align-items:center;line-height:1.2}
-.tsp-home a:hover,.tsp-home a:focus-visible{color:var(--phos-ink);text-decoration-thickness:3px;outline:2px solid var(--phos);outline-offset:3px}
-/* COMFORT = a knob, never a wall (founder floor 2026-07-03). The options stay
-   HIDDEN until the reader taps the comfort button — never shown unasked. */
-.comfort-btn{display:inline-flex;align-items:center;gap:7px;background:var(--panel);
-  color:var(--dim);border:1px solid var(--edge);border-radius:12px;font:inherit;
-  font-weight:700;font-size:14px;min-height:44px;padding:0 14px;cursor:pointer;line-height:1}
-.comfort-btn:hover,.comfort-btn:focus-visible,.comfort-btn[aria-expanded="true"]{color:var(--ink);border-color:var(--phos)}
-.comfort-btn .caret{transition:transform .2s}
-.comfort-btn[aria-expanded="true"] .caret{transform:rotate(180deg)}
-html.still .comfort-btn .caret{transition:none}
-.comfort-panel{display:flex;flex-direction:column;gap:6px;background:var(--panel);
-  border:1px solid var(--edge);border-radius:12px;padding:8px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
-.comfort-panel[hidden]{display:none}
-.comfort-panel button{display:flex;align-items:center;gap:10px;background:var(--panel-2);
-  color:var(--dim);border:1px solid var(--edge);border-radius:10px;font:inherit;font-size:15px;
-  font-weight:700;min-height:44px;padding:0 14px;cursor:pointer;text-align:left;white-space:nowrap}
-.comfort-panel button:hover,.comfort-panel button:focus-visible{color:var(--ink);border-color:var(--phos)}
-.comfort-panel button[aria-pressed="true"]{color:#04211e;background:var(--phos);border-color:var(--phos)}
-.comfort-panel .tick{width:16px;text-align:center;font-weight:900}
+/* Legacy corner Comfort control and corner Home chip removed 2026-07-29:
+   nav + comfort now live in the Studio Eyes reserved chrome and bottom rail. */
 html.big{font-size:19px}
 html.still *{animation:none!important;transition:none!important}
 .app-shell{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -234,24 +242,94 @@ html.still .flip{transition:none}
    locked so play fits the smallest screens, then it opens as the earned reveal. */
 #sc-train .flip-wrap.locked{max-height:0;margin-top:0;opacity:0}
 #sc-train .big-btn.advance{margin-top:9px}
+
+/* ═══ STUDIO EYES v2 — RESERVED CHROME (grid row, never overlaps content) ═══ */
+.se-chrome{position:relative;z-index:100;display:grid;grid-template-columns:1fr auto 1fr;
+  align-items:center;gap:10px;padding:9px 14px;background:var(--surface);
+  border-bottom:2px solid var(--line);position:sticky;top:0}
+.se-home{justify-self:start;display:inline-flex;align-items:center;gap:7px;min-height:var(--tap);
+  padding:8px 12px;border:1.5px solid var(--line);border-radius:8px;background:var(--surface-2);
+  color:var(--ink);font-family:var(--mono);font-weight:700;font-size:13px;text-decoration:none}
+.se-brand{justify-self:center;display:inline-flex;align-items:center;gap:9px;color:var(--ink)}
+.se-brand svg{width:34px;height:20px;color:var(--accent-strong);flex:0 0 auto}
+.se-brand .wm{font-family:var(--serif);font-size:16px;letter-spacing:.01em;white-space:nowrap}
+.se-eyes{justify-self:end;display:inline-flex;align-items:center;gap:7px;min-height:var(--tap);
+  padding:8px 13px;border:2px solid transparent;border-radius:8px;background:var(--accent-strong);
+  color:var(--on-accent);font-family:var(--mono);font-weight:700;font-size:13px;cursor:pointer}
+.se-home:focus-visible,.se-eyes:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+@media (max-width:560px){.se-brand .wm{display:none}}
+
+/* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+.se-panel{position:fixed;right:12px;top:calc(var(--tap) + 22px);z-index:101;
+  width:min(320px,calc(100vw - 24px));background:var(--surface);color:var(--ink);
+  border:2px solid var(--accent-strong);border-radius:var(--r);padding:15px;
+  box-shadow:0 10px 34px rgba(0,0,0,.5);display:none}
+.se-panel[data-open="1"]{display:block}
+.se-panel h2{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);margin:0 0 8px}
+.se-row{display:flex;gap:6px;margin-bottom:14px}
+.se-eyebtn{flex:1;min-height:var(--tap);padding:8px 4px;border:1.5px solid var(--line);border-radius:8px;
+  background:var(--surface-2);color:var(--ink);font-family:var(--mono);font-weight:700;font-size:12.5px;cursor:pointer}
+.se-eyebtn[aria-pressed="true"]{background:var(--accent-strong);color:var(--on-accent);border-color:var(--accent-strong)}
+.se-eyebtn:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.se-tog{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;
+  min-height:var(--tap);padding:8px 11px;margin-bottom:6px;border:1.5px solid var(--line);border-radius:8px;
+  background:var(--surface-2);color:var(--ink);font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;text-align:left}
+.se-tog[aria-pressed="true"]{border-color:var(--accent-strong)}
+.se-tog .st{font-family:var(--mono);font-size:11px;color:var(--ink-2)}
+.se-tog[aria-pressed="true"] .st{color:var(--accent-strong);font-weight:700}
+.se-tog:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.se-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ═══ LAST-UPDATED stamp + BOTTOM NAV RAIL — Back + Home ═══ */
+.se-updated{position:relative;z-index:1;text-align:center;font-family:var(--mono);font-size:12px;
+  color:var(--dim);letter-spacing:.04em;margin:14px 0 0}
+.se-rail{position:relative;z-index:1;display:flex;gap:10px;justify-content:center;padding:20px;
+  border-top:2px solid var(--line);margin-top:14px}
+.se-rail a,.se-rail button{min-height:var(--tap);padding:10px 18px;border:1.5px solid var(--line);border-radius:8px;
+  background:var(--surface-2);color:var(--ink);font-family:var(--mono);font-weight:700;font-size:13px;text-decoration:none;cursor:pointer}
+.se-rail a:focus-visible,.se-rail button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 </style>
 </head>
 <body>
-<div class="scene-bg" aria-hidden="true"></div>
-<div class="comfort">
-  <button type="button" id="comfortToggle" class="comfort-btn" onclick="toggleComfort()"
-          aria-expanded="false" aria-controls="comfortPanel" aria-label="Comfort and display options">
-    Comfort <span class="caret" aria-hidden="true">&#9662;</span>
-  </button>
-  <div class="comfort-panel" id="comfortPanel" role="group" aria-label="Comfort options" hidden>
-    <button type="button" id="cBig" onclick="toggleBody('big',this)" aria-pressed="false">
-      <span class="tick" aria-hidden="true">&#65291;</span> Bigger text</button>
-    <button type="button" id="cStill" onclick="toggleBody('still',this)" aria-pressed="false">
-      <span class="tick" aria-hidden="true">&#9680;</span> Reduce motion</button>
+
+<!-- RESERVED CHROME — Home · teaspoon brand · Studio Eyes (own grid row) -->
+<header class="se-chrome">
+  <a class="se-home" href="index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-eyebtn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-eyebtn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-eyebtn" data-light-set="night" aria-pressed="false">Warm-dark</button>
   </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-eyebtn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-eyebtn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-eyebtn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
 </div>
+
+<div class="scene-bg" aria-hidden="true"></div>
 <div class="app-shell">
-<nav class="tsp-home"><a href="index.html" aria-label="Back to the studio">&#8617; studio</a></nav>
 
 <section class="screen on" id="sc-hire" aria-label="Your job">
   <div class="logo">flok<span class="dot">.</span></div>
@@ -332,6 +410,15 @@ html.still .flip{transition:none}
 </section>
 
 </div>
+
+<p class="se-updated" id="seUpdated">Last updated recently</p>
+
+<!-- BOTTOM NAV RAIL — Back + Home -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="index.html" aria-label="Home">Home</a>
+</nav>
+
 <script>
 const LEVERS=[
  {id:"vrr",name:"Surprise likes",tag:"a reward trick",type:"tap",verb:"Boost",target:72,
@@ -626,27 +713,48 @@ function go(id){
 }
 function startTraining(){step=0;T.taps=0;T.rewards=0;T.screens=0;T.alerts=0;streakDays=3;bellCount=0;go('train');paintTrain();}
 function restart(){stopStreakClock();go('hire');}
-function toggleBody(cls,btn){btn.setAttribute('aria-pressed',document.documentElement.classList.toggle(cls));}
-function setComfort(open){
-  var b=document.getElementById('comfortToggle'),p=document.getElementById('comfortPanel');
-  if(open){p.removeAttribute('hidden');b.setAttribute('aria-expanded','true');}
-  else{p.setAttribute('hidden','');b.setAttribute('aria-expanded','false');}
-}
-function toggleComfort(){setComfort(document.getElementById('comfortPanel').hasAttribute('hidden'));}
-// Never shown unasked: panel starts hidden; dismiss on outside tap or Escape.
-document.addEventListener('click',function(e){
-  if(!e.target.closest('.comfort'))setComfort(false);
-});
-document.addEventListener('keydown',function(e){
-  if(e.key==='Escape'&&!document.getElementById('comfortPanel').hasAttribute('hidden')){
-    setComfort(false);document.getElementById('comfortToggle').focus();
-  }
-});
 document.getElementById('feed').addEventListener('scroll',onFeedScroll,{passive:true});
+
+/* ═══ STUDIO EYES v2 — Comfort Kernel (chrome control; replaces legacy corner Comfort) ═══ */
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  // last-updated: computed, not typed
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  document.addEventListener('click',function(e){ if(panel.getAttribute('data-open')==='1'&&!e.target.closest('.se-panel,.se-eyes'))setOpen(false); });
+  // light ladder
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles — reduce-motion also drives the game's existing html.still logic
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    if(cls==='se-reduce') root.classList.toggle('still',on);
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+})();
 </script>
 
 <!-- TSP shared mobile nav + device adaptation -->
-<script>window.TSP_MOBILE = { home:"index.html" };</script>
+<script>window.TSP_MOBILE = { home:"index.html", nav:false }; /* nav:false — Home/Back live in the Studio Eyes chrome + bottom rail (Kernel v2); no floating chip */</script>
 <!-- TSP-MOBILE (inlined from tsp-mobile.js — single-file-offline law) -->
 <script>
 /* Tight Spiral Studios — shared mobile controls + Home/Back nav.
