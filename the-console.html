@@ -102,9 +102,15 @@ html.still *{animation:none!important;transition:none!important}
 .phone-top{background:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eef0f4}
 .phone-top .app{font-weight:900;color:var(--feed-accent);letter-spacing:-.03em;font-size:20px}
 .phone-top .app .dot{color:var(--amber)}
-.bell{font-size:12px;color:#fff;background:var(--red);border-radius:20px;padding:5px 10px;font-weight:800;min-width:28px;text-align:center;transition:transform .2s}
-.bell.zero{background:#c7ccd6}
-.bell.jump{transform:scale(1.35)}
+.bell{font-size:14px;color:#fff;background:#c0392b;border-radius:22px;min-width:44px;min-height:44px;
+  display:inline-flex;align-items:center;justify-content:center;padding:0 9px;font-weight:800;
+  border:none;cursor:pointer;transition:transform .2s}
+.bell.zero{background:#c7ccd6;color:#2a2f38;cursor:default}
+.bell.jump{transform:scale(1.3)}
+.bell:focus-visible{outline:3px solid var(--phos);outline-offset:2px}
+.bell.hot{animation:bellpulse 1.1s ease-in-out infinite}
+@keyframes bellpulse{0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,.55)}50%{box-shadow:0 0 0 9px rgba(192,57,43,0)}}
+html.still .bell.hot{animation:none;outline:3px solid #c0392b;outline-offset:2px}
 .feed{height:290px;overflow-y:hidden;padding:10px}
 .feed.scrollable{overflow-y:auto}
 .feed-card{background:#fff;border:1px solid #eef0f4;border-radius:16px;padding:12px;margin-bottom:10px}
@@ -259,7 +265,7 @@ html.still .flip{transition:none}
     <div class="phone">
       <div class="phone-top">
         <div class="app">flok<span class="dot">.</span></div>
-        <div class="bell zero" id="bell" aria-label="Notifications">0</div>
+        <div class="bell zero" id="bell" role="button" tabindex="0" aria-label="Notifications — tap to clear" onclick="clearBell()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();clearBell();}">0</div>
       </div>
       <div class="streak-banner" id="streakBanner">Day <span id="streakDays">3</span> streak. Keep it alive.</div>
       <div class="feed" id="feed" tabindex="0" aria-label="Simulated feed"></div>
@@ -331,8 +337,8 @@ const LEVERS=[
   fact:"Losing hurts more than gaining feels good. 'Don't break your streak' turns that into a daily pull.",
   cite:"Kahneman & Tversky, Prospect Theory (1979)"},
  {id:"notify",name:"Red-dot alerts",tag:"an interrupt trick",type:"release",verb:"Release notifications",target:68,
-  task:"Interrupt on purpose. Release a batch of red-dot alerts to pull users back into the app mid-task.",
-  hint:"Release a batch.",
+  task:"Interrupt on purpose. First — see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task.",
+  hint:"That red dot up top — tap it to clear it (you know you want to). Then release a batch.",
   fact:"A waiting red dot fires anticipatory dopamine. Constant interruption also lowers attention and raises stress.",
   cite:"Montag et al. (2019); Mark et al. (2016)"},
  {id:"social",name:"'Seen' receipts",tag:"a guilt trick",type:"flip",verb:"'Seen' receipts",target:64,
@@ -406,6 +412,7 @@ function setMeter(v){
 function bump(d){setMeter(meterVal+d);}
 function setBell(n,jump){
   const b=document.getElementById('bell');b.textContent=n;b.classList.toggle('zero',n===0);
+  b.classList.toggle('hot',n>0);
   if(jump){b.classList.add('jump');setTimeout(function(){b.classList.remove('jump');},250);}
 }
 function paintTrain(){
@@ -428,8 +435,9 @@ function paintTrain(){
   setBell(0,false);
   document.getElementById('feedMore').textContent=(L.type==='scroll')?'loading more\u2026':'\u2014 end \u2014';
   document.getElementById('feed').classList.toggle('scrollable',L.type==='scroll');
-  if(L.type==='tap'||L.type==='send')renderOneUser(3);else renderFeedBase(L.type==='scroll'?7:5);
+  if(L.type==='tap'||L.type==='send'||L.type==='release')renderOneUser(3);else renderFeedBase(L.type==='scroll'?7:5);
   if(L.type==='send')startStreakClock();
+  if(L.type==='release')startNotify();
   setMeter(26);
   const z=document.getElementById('actZone');
   if(L.type==='tap')z.innerHTML='<button class="act-btn" type="button" onclick="doTap()">'+L.verb+'</button>';
@@ -506,8 +514,29 @@ function doSend(){
   feed.scrollTop=0;
   bump(15);
 }
+// ── L4: feel the red dot's pull yourself, THEN plant it on the cohort. ──
+function startNotify(){
+  bellCount=2;setBell(bellCount,true);        // opens with an unread dot already itching
+}
+function clearBell(){
+  if(LEVERS[step].type!=='release'||bellCount<=0)return;
+  // You couldn't leave it sitting. The reward is in the CLEAR — anticipatory dopamine,
+  // paid out the instant the dot hits zero. That reflex is the whole product.
+  bellCount=0;setBell(0,false);
+  const h=document.getElementById('actHint');
+  if(!h.classList.contains('good'))h.innerHTML='<b class="lever-tag">You cleared it.</b> That reflex to zero the dot is the hook. Now plant a batch on the cohort — a sample lands back on you.';
+  bump(12);
+}
 function doRelease(){
-  T.alerts++;bellCount+=3;setBell(bellCount,true);bump(15);
+  T.alerts++;
+  // Plant a batch on the cohort — and one pings back to your own console. Watch what you
+  // do next. You will clear it. You can't leave a red dot sitting either.
+  bellCount+=3;setBell(bellCount,true);
+  const feed=document.getElementById('feed');
+  feed.insertAdjacentHTML('afterbegin',cardHTMLU('opened the app again. not sure why.',false,3+(T.alerts%5),'now'));
+  while(feed.querySelectorAll('.feed-card').length>6)feed.lastElementChild.remove();
+  feed.scrollTop=0;
+  bump(5);
 }
 function doFlip(k){
   const on=k.classList.toggle('armed');
