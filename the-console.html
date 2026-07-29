@@ -125,6 +125,18 @@ html.seen-on .fc-seen{display:block;animation:pop .3s}
 .streak-banner{display:none;margin:0 10px 10px;background:linear-gradient(90deg,#fff3d6,#ffe6b0);
   border:1px solid #f0d089;border-radius:12px;padding:10px 12px;color:#7a5410;font-size:13px;font-weight:800}
 .streak-banner.on{display:block;animation:pop .4s}
+/* L3 — the dying-streak clock. A loss you can watch approach and act to prevent. */
+.streakclock{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sc-flame{width:18px;height:18px;flex:none;color:#b5651a}
+.sc-txt{font-size:12.5px;font-weight:800;color:#6a4a0e}
+.sc-bar{flex:1 1 100%;height:8px;border-radius:6px;background:#eddaa8;overflow:hidden;margin-top:3px}
+.sc-fill{height:100%;width:100%;background:#3f8f66;border-radius:6px;transition:width .09s linear}
+.streak-banner.dying{background:linear-gradient(90deg,#ffe1d1,#ffccb2);border-color:#e79b73}
+.streak-banner.dying .sc-txt{color:#8a2d10}
+.streak-banner.dying .sc-flame{color:#b23a16}
+.streak-banner.dying .sc-fill{background:#c8391c}
+.streak-banner.lost{background:linear-gradient(90deg,#f0ded8,#e7cdc4);border-color:#cbb0a6}
+.streak-banner.lost .sc-txt{color:#7a4a3a}
 .burst{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);pointer-events:none;
   font-size:44px;color:var(--red-ink);opacity:0;font-weight:900}
 .burst.go{animation:burst .8s ease-out}
@@ -314,8 +326,8 @@ const LEVERS=[
   fact:"Take away the bottom of the page and people keep going past the point they meant to stop. The missing stop-cue is the trick.",
   cite:"Stopping-cue research; Harris, U.S. Senate (2019)"},
  {id:"streak",name:"Don't-lose-it streak",tag:"a loss trick",type:"send",verb:"Send streak alert",target:66,
-  task:"Weaponize loss. Warn users their streak will die unless they come back today.",
-  hint:"Send the streak alert.",
+  task:"Weaponize loss. The streak is draining — warn them it'll die unless they come back, and watch them rush to save it.",
+  hint:"Watch the streak drain. Send the alert before it hits zero — they come running.",
   fact:"Losing hurts more than gaining feels good. 'Don't break your streak' turns that into a daily pull.",
   cite:"Kahneman & Tversky, Prospect Theory (1979)"},
  {id:"notify",name:"Red-dot alerts",tag:"an interrupt trick",type:"release",verb:"Release notifications",target:68,
@@ -412,11 +424,12 @@ function paintTrain(){
   h.innerHTML='<b class="lever-tag">'+L.name+' &mdash; '+L.tag+'.</b> '+(L.bridge?L.bridge+' ':'')+L.hint;
   h.classList.remove('good');
   document.documentElement.classList.remove('seen-on');
-  document.getElementById('streakBanner').classList.remove('on');
+  stopStreakClock();
   setBell(0,false);
   document.getElementById('feedMore').textContent=(L.type==='scroll')?'loading more\u2026':'\u2014 end \u2014';
   document.getElementById('feed').classList.toggle('scrollable',L.type==='scroll');
-  if(L.type==='tap')renderOneUser(3);else renderFeedBase(L.type==='scroll'?7:5);
+  if(L.type==='tap'||L.type==='send')renderOneUser(3);else renderFeedBase(L.type==='scroll'?7:5);
+  if(L.type==='send')startStreakClock();
   setMeter(26);
   const z=document.getElementById('actZone');
   if(L.type==='tap')z.innerHTML='<button class="act-btn" type="button" onclick="doTap()">'+L.verb+'</button>';
@@ -445,11 +458,52 @@ function doTap(){
     const b=document.getElementById('burst');b.classList.remove('go');void b.offsetWidth;b.classList.add('go');
   }else{bump(7);}
 }
-function doSend(){
-  T.alerts++;streakDays++;
-  document.getElementById('streakDays').textContent=streakDays;
-  document.getElementById('streakBanner').classList.remove('on');void document.getElementById('streakBanner').offsetWidth;
+// ── L3: the streak is a LOSS the player watches approach and acts to prevent. ──
+let streakTimer=null,streakLeft=0;
+const FLAME='<svg class="sc-flame" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c1 3-2 4-2 7a2 2 0 0 0 4 0c0-1 0-1 .5-2 1.5 1.5 3.5 4 3.5 7a6 6 0 0 1-12 0c0-3 3-5 6-12z" fill="currentColor"/></svg>';
+function renderStreak(){
+  const c=document.getElementById('streakBanner');
+  const lost=streakLeft<=0;
+  const secs=Math.max(0,Math.ceil(streakLeft/14));
+  c.classList.toggle('dying',!lost&&streakLeft<45);
+  c.classList.toggle('lost',lost);
+  c.innerHTML='<div class="streakclock">'+FLAME+'<span class="sc-txt"><b>'+R1_USER.name+'</b> · '+streakDays+'-day streak'
+    +(lost?' — <b>streak lost</b>':' — ends in 0:'+(secs<10?'0':'')+secs)+'</span>'
+    +'<span class="sc-bar"><span class="sc-fill" id="scFill" style="width:'+Math.max(0,streakLeft)+'%"></span></span></div>';
+}
+function tickStreak(){
+  streakLeft-=1.4;
+  if(streakLeft<=0){streakLeft=0;clearInterval(streakTimer);streakTimer=null;}
+  renderStreak();
+}
+function startStreakClock(){
+  clearInterval(streakTimer);streakTimer=null;
+  const still=document.documentElement.classList.contains('still');
+  // Reduced-motion: no auto-drain (that's moving content). Show the loss STATICALLY
+  // urgent instead — already near the edge — so the pressure is seen, not animated.
+  streakLeft=still?18:100;
   document.getElementById('streakBanner').classList.add('on');
+  renderStreak();
+  if(!still)streakTimer=setInterval(tickStreak,95);
+}
+function stopStreakClock(){
+  clearInterval(streakTimer);streakTimer=null;
+  const c=document.getElementById('streakBanner');
+  c.classList.remove('on','dying','lost');
+}
+function doSend(){
+  T.alerts++;
+  // Fire the "don't lose your streak" alert: north_trail rushes back, the loss is averted,
+  // the clock resets to full. You watch the fear of losing do the work a reward never could.
+  const revived=streakLeft<=0;
+  streakDays++;streakLeft=100;
+  document.getElementById('streakBanner').classList.remove('dying','lost');
+  if(!streakTimer&&!document.documentElement.classList.contains('still'))streakTimer=setInterval(tickStreak,95);
+  renderStreak();
+  const feed=document.getElementById('feed');
+  feed.insertAdjacentHTML('afterbegin',cardHTMLU(revived?'ok i literally came back just for the streak':'not losing my streak. back.',false,3+(T.alerts%5),'now'));
+  while(feed.querySelectorAll('.feed-card').length>6)feed.lastElementChild.remove();
+  feed.scrollTop=0;
   bump(15);
 }
 function doRelease(){
@@ -472,7 +526,7 @@ function onFeedScroll(){
 }
 function flipCard(){document.getElementById('flip').classList.toggle('flipped');}
 function nextLever(){
-  if(!hit)return;step++;
+  if(!hit)return;stopStreakClock();step++;
   document.getElementById('rankTitle').textContent=RANK_TITLES[Math.min(step,RANK_TITLES.length-1)];
   go('rank');
 }
@@ -493,7 +547,7 @@ function go(id){
   window.scrollTo({top:0,behavior:document.documentElement.classList.contains('still')?'auto':'smooth'});
 }
 function startTraining(){step=0;T.taps=0;T.rewards=0;T.screens=0;T.alerts=0;streakDays=3;bellCount=0;go('train');paintTrain();}
-function restart(){go('hire');}
+function restart(){stopStreakClock();go('hire');}
 function toggleBody(cls,btn){btn.setAttribute('aria-pressed',document.documentElement.classList.toggle(cls));}
 function setComfort(open){
   var b=document.getElementById('comfortToggle'),p=document.getElementById('comfortPanel');
