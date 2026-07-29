@@ -198,20 +198,14 @@
 </style>
 </head>
 <body>
-<a class="skip" href="#main">Skip to content</a>
-<header class="se-chrome">
-  <a class="se-home" href="index.html" aria-label="Home — studio index">Home</a>
-  <span class="se-brand">
-    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
-      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
-      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
-      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+<path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
       <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
     </svg>
     <span class="wm">Tight Spiral</span>
   </span>
   <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
 </header>
+<p class="se-stamp" style="margin:.45rem .9rem;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.76rem;opacity:.92;display:flex;align-items:center;gap:.45rem;flex-wrap:wrap"><span id="seUpdated">Last updated&hellip;</span> <span class="se-version" style="font:inherit;opacity:.85">&middot; v9 <span style="opacity:.75">bc423ed</span></p>
 <div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
   <h2>Light</h2>
   <div class="se-row" role="group" aria-label="Light level">
@@ -239,7 +233,7 @@
   <button id="homeBtn" type="button" aria-label="Case list">Cases</button>
   <a href="index.html" aria-label="Home — studio index">Home</a>
 </nav>
-<div class="se-stamp"><span id="seUpdated">Last updated&hellip;</span></div>
+<div class="se-stamp"> </span></div>
 <script>
 const SEATS={feel:{seat:"THE HAND",hint:"routes to the Hand — the texture of the call"},fact:{seat:"THE ENGINEER",hint:"routes to the Engineer — a physics / fire-behavior or number problem"},frame:{seat:"THE COORDINATOR",hint:"routes to the Coordinator — the operational frame / sequence"},source:{seat:"THE REGISTRAR",hint:"routes to the Registrar — a provenance / citation gap"},score:{seat:"THE CALIBRATOR",hint:"routes to the Calibrator — the scoring / calibration logic"},access:{seat:"THE STRANGER",hint:"routes to the Stranger — a readability / access problem"},works:{seat:"—",hint:"logged as working, no seat owes a fix"}};
 
@@ -345,7 +339,15 @@ function el(html){const d=document.createElement('div');d.innerHTML=html.trim();
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 function initials(name){const p=String(name||'').trim().split(/\s+/).filter(Boolean);if(!p.length)return '—';return (p[0][0]+(p.length>1?p[p.length-1][0]:'')).toUpperCase();}
 function knownBlock(k){return`<div class="known"><h3>${k.title}</h3><ul>${k.items.map(i=>`<li>${i.t}<span class="tag ${i.tag.indexOf('PENDING')===0?'pend':''}">${i.tag}</span></li>`).join('')}</ul></div>`;}
-function reviewBlock(screenKey){return`<div class="review" data-review="${screenKey}"><h3>Reviewer note (optional)</h3><p>One quick verdict, then anything you would tell me. Your note routes to the seat that owns it.</p><div class="verds" role="group" aria-label="Verdict for this screen"><button class="v-good" data-v="works" aria-pressed="false">Works</button><button class="v-bad" data-v="feel" aria-pressed="false">Does not feel real</button><button class="v-bad" data-v="fact" aria-pressed="false">Wrong fact</button><button class="v-bad" data-v="frame" aria-pressed="false">Frame off</button><button class="v-bad" data-v="source" aria-pressed="false">Needs a source</button><button class="v-bad" data-v="score" aria-pressed="false">Scoring off</button><button class="v-bad" data-v="access" aria-pressed="false">Hard to read</button></div><label class="skip" for="rv-${screenKey}">Your note</label><textarea id="rv-${screenKey}" placeholder="Type here — plain language. What would a firefighter say?"></textarea><p class="seat-hint" data-hint="${screenKey}"></p></div>`;}
+function reviewBlock(screenKey){return`<div class="review" data-review="${screenKey}"><h3>Reviewer note (optional)</h3><p>One quick verdict, then anything you would tell me. Your note routes to the seat that owns it.</p>
+<a class="skip" href="#main">Skip to content</a>
+<header class="se-chrome">
+  <a class="se-home" href="index.html" aria-label="Home — studio index">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <div class="verds" role="group" aria-label="Verdict for this screen"><button class="v-good" data-v="works" aria-pressed="false">Works</button><button class="v-bad" data-v="feel" aria-pressed="false">Does not feel real</button><button class="v-bad" data-v="fact" aria-pressed="false">Wrong fact</button><button class="v-bad" data-v="frame" aria-pressed="false">Frame off</button><button class="v-bad" data-v="source" aria-pressed="false">Needs a source</button><button class="v-bad" data-v="score" aria-pressed="false">Scoring off</button><button class="v-bad" data-v="access" aria-pressed="false">Hard to read</button></div><label class="skip" for="rv-${screenKey}">Your note</label><textarea id="rv-${screenKey}" placeholder="Type here — plain language. What would a firefighter say?"></textarea><p class="seat-hint" data-hint="${screenKey}"></p></div>`;}
 function screenHome(){return`<section class="stage on" id="s0" aria-labelledby="s0h"><div class="art" role="img" aria-label="${C.openArt.label}">${C.openArt.svg}</div><p class="kicker">${C.kicker}</p><h1 id="s0h">${C.title}</h1><p class="sub">${C.subtitle}</p><div class="disclaimer">This is a <span class="word">calibration</span> exercise, not certification. It trains how to read smoke and reason under uncertainty — it cannot teach the hand skills of the fireground, and it does not qualify anyone to do this work.</div><div class="btnrow"><button class="btn" data-go="first">Begin the case</button><button class="btn ghost" data-go="hub">Facilitator mode</button></div><p class="credit">Private and offline. Nothing you enter leaves this page unless you export it. Reviewer: ${C.reviewer}.</p></section>`;}
 function screenTurn(turn){return`<section class="stage" id="${turn.id}" aria-labelledby="${turn.id}h"><p class="prog">${turn.prog}</p><div class="art" role="img" aria-label="${turn.art.label}">${turn.art.svg}</div><p class="prompt" id="${turn.id}h">${turn.prompt}</p>${knownBlock(turn.known)}<div class="choices" role="group" aria-label="Your read">${turn.choices.map(c=>`<button class="choice" data-choice="${c.id}" aria-pressed="false">${c.t}</button>`).join('')}</div><div class="conf" data-conf hidden><h3>How sure are you?</h3><p>Before you see the record — how confident is this read?</p><div class="row" role="group" aria-label="Confidence"><button data-cf="low" aria-pressed="false">Not sure</button><button data-cf="med" aria-pressed="false">Fairly sure</button><button data-cf="high" aria-pressed="false">Very sure</button></div></div><div class="btnrow"><button class="btn" data-commit="${turn.id}" disabled>Commit and meet the record</button></div><div class="reveal hidden" data-reveal="${turn.id}"></div></section>`;}
 function screenClose(){return`<section class="stage" id="close" aria-labelledby="closeh"><p class="prog">The record</p><h2 id="closeh">${C.closing.heading}</h2><p class="sub">${C.closing.body}</p><div class="known"><h3>The habit that keeps you alive</h3><ul><li>${C.closing.ceiling}</li></ul></div>${reviewBlock('closing')}<div class="export"><h3>Export your review</h3><p>This gathers every verdict and note you left, routed to the right panel seat, into one block. Copy it and paste it back into the project — it becomes the Hand seat's record.</p><textarea id="exportBox" readonly aria-label="Your exportable review block"></textarea><div class="btnrow"><button class="btn" id="buildExport">Build my review block</button><button class="btn ghost" id="copyExport">Copy to clipboard</button><button class="btn ghost" data-go="hub">Facilitator mode</button></div><p class="note" id="copyNote"></p></div><footer><b>Reading the Smoke</b> — smoke-read calibration case, engine v1. Studio Eyes gated: arithmetic contrast floor + the Pile Panel. Fire-behavior figures tagged, never invented. Scene art authored in the NIST public-domain idiom, tagged for replacement with real NIST stills. Reviewer: ${C.reviewer}.</footer></section>`;}
