@@ -305,7 +305,7 @@ footer p{margin:0 0 7px}
 <div class="stage-row"><div class="stage-copy">
   <p class="mark">Tight Spiral Productions</p>
   <h1>We build instruments that show you the rules <em>while they are being run on you.</em></h1>
-  <p class="face-updated"><time datetime="2026-07-14">Last updated July 14, 2026</time></p>
+  <p class="face-updated"><time id="faceUpdated">Last updated&hellip;</time></p>
   <p class="lede">Most software hides its machinery. Ours hands it to you and lets you turn it.
     <b>You pull the levers, then the seat turns around and shows you your own telemetry.</b></p>
   <p class="lede">Some of these are games. Some are assessment tools designed for a college.
@@ -980,6 +980,14 @@ footer p{margin:0 0 7px}
 <script>
 (function(){
   var root=document.documentElement, sr=document.getElementById('kSr');
+  /* Last-updated: computed from the file's real served last-modified time (updates every
+     deploy). NOT a typed date — a typed 'last updated' is a hollow claim by construction. */
+  (function(){ var fu=document.getElementById('faceUpdated'); if(!fu) return;
+    var d=new Date(document.lastModified);
+    if(isNaN(d.getTime())){ fu.textContent='Last updated recently'; return; }
+    fu.setAttribute('datetime', d.toISOString().slice(0,10));
+    fu.textContent='Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
   var fab=document.getElementById('kFab'), panel=document.getElementById('kPanel');
   fab.addEventListener('click',function(){ var o=panel.getAttribute('data-open')==='1'; panel.setAttribute('data-open',o?'0':'1'); fab.setAttribute('aria-expanded',String(!o)); });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ panel.setAttribute('data-open','0'); fab.setAttribute('aria-expanded','false'); fab.focus(); }});
