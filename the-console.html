@@ -57,7 +57,7 @@ html.still .comfort-btn .caret{transition:none}
 html.big{font-size:19px}
 html.still *{animation:none!important;transition:none!important}
 .app-shell{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:16px 16px 28px;max-width:560px;margin:0 auto;position:relative;z-index:1}
+  padding:12px 16px 16px;max-width:560px;margin:0 auto;position:relative;z-index:1}
 /* SCENE LAYER — a full-bleed atmospheric backdrop behind the console. It is a
    sibling of the content (never an ancestor of any text), so it carries the scene
    without changing any text's computed ground. */
@@ -185,6 +185,24 @@ html.still .flip{transition:none}
 .job-meter{width:100%;max-width:320px;margin:8px auto 30px}
 .job-line{color:var(--ink);font-size:clamp(17px,4.8vw,21px);font-weight:800;margin-bottom:14px}
 .job-how{color:var(--ink);font-size:clamp(14px,3.9vw,16px);font-weight:600;margin-top:14px;line-height:1.4}
+
+/* ── Training fits ONE screen on a phone — no page scroll; only the feed is a window. ── */
+#sc-train{padding-top:4px}
+#sc-train .ranks{margin-bottom:6px;flex-wrap:nowrap;gap:4px}
+#sc-train .ranks .rank-pip{padding:4px 7px;font-size:9.5px}
+#sc-train .brief{margin-bottom:7px;padding-top:9px;padding-bottom:9px}
+#sc-train .brief .brief-task{font-size:14px;line-height:1.32}
+#sc-train .train-phone{margin-bottom:7px}
+#sc-train .feed{height:150px}
+#sc-train .fc-media{height:80px}
+#sc-train .meter-wrap{margin-bottom:7px}
+#sc-train .act-zone{min-height:56px}
+#sc-train .act-hint{margin-top:6px;min-height:18px;font-size:13px;line-height:1.34}
+#sc-train .flip-wrap{margin-top:7px;max-height:120px;overflow:hidden;transition:max-height .3s,margin .3s,opacity .3s}
+/* the "why does this work?" card is locked until you hit the target — collapse it while
+   locked so play fits the smallest screens, then it opens as the earned reveal. */
+#sc-train .flip-wrap.locked{max-height:0;margin-top:0;opacity:0}
+#sc-train .big-btn.advance{margin-top:9px}
 </style>
 </head>
 <body>
@@ -322,6 +340,30 @@ function cardHTML(i,lit,likes){
   const idx=i%NAMES.length;
   return '<article class="feed-card"><div class="fc-head">'+avatar(HUES[idx])+'<div><div class="fc-name">'+NAMES[idx]+'</div><div class="fc-sub">'+((i+1)*3)+'m</div></div></div><div class="fc-body">'+BODIES[idx]+'</div><div class="fc-media" style="'+grad(HUES[idx])+'"></div><div class="fc-actions"><span><i class="heart '+(lit?'lit':'')+'"></i> <b class="likeN">'+likes+'</b></span><span>&#9671; '+(1+((i*7)%20))+'</span><span>&#8599;</span></div><div class="fc-seen">Seen 2:41 PM</div></article>';
 }
+// ── Round 1 (variable reward) is ONE user. You drop likes at random; you watch
+//    that one person keep coming back to post again. The Skinner box, made legible. ──
+const R1_USER={name:"north_trail",hue:150};
+const R1_POSTS=[
+  "golden hour by the creek. no filter.",
+  "back — did the trail one do anything?",
+  "trying again. the fog this morning.",
+  "ok this one i actually like",
+  "anyone up? or just me",
+  "posting through it",
+  "day two of this. still here.",
+  "one more before bed",
+  "checked again. that's, uh, a lot of times.",
+  "reposting. maybe the timing was off"
+];
+let r1i=0;
+function cardHTMLU(body,lit,likes,sub){
+  return '<article class="feed-card"><div class="fc-head">'+avatar(R1_USER.hue)+'<div><div class="fc-name">'+R1_USER.name+'</div><div class="fc-sub">'+sub+'</div></div></div><div class="fc-body">'+body+'</div><div class="fc-media" style="'+grad(R1_USER.hue)+'"></div><div class="fc-actions"><span><i class="heart '+(lit?'lit':'')+'"></i> <b class="likeN">'+likes+'</b></span><span>&#9671; '+(1+((likes*7)%20))+'</span><span>&#8599;</span></div><div class="fc-seen">Seen 2:41 PM</div></article>';
+}
+function renderOneUser(n){
+  const feed=document.getElementById('feed');let html='';cardCount=n;r1i=n;
+  for(let i=0;i<n;i++)html+=cardHTMLU(R1_POSTS[i%R1_POSTS.length],false,3+((i*9)%22),(i===0?'now':(i*4)+'m'));
+  feed.innerHTML=html;feed.scrollTop=0;
+}
 let step=0,meterVal=0,hit=false,cardCount=0,scrollAcc=0,lastTop=0,streakDays=3,bellCount=0;
 const T={taps:0,rewards:0,screens:0,alerts:0};
 function renderFeedBase(n){
@@ -374,7 +416,7 @@ function paintTrain(){
   setBell(0,false);
   document.getElementById('feedMore').textContent=(L.type==='scroll')?'loading more\u2026':'\u2014 end \u2014';
   document.getElementById('feed').classList.toggle('scrollable',L.type==='scroll');
-  renderFeedBase(L.type==='scroll'?7:5);
+  if(L.type==='tap')renderOneUser(3);else renderFeedBase(L.type==='scroll'?7:5);
   setMeter(26);
   const z=document.getElementById('actZone');
   if(L.type==='tap')z.innerHTML='<button class="act-btn" type="button" onclick="doTap()">'+L.verb+'</button>';
@@ -386,13 +428,18 @@ function paintTrain(){
 function doTap(){
   T.taps++;
   const rewarded=REWARD_TAPS.has(T.taps);
-  // Every Boost lands on a post — light its heart so it reads as acting ON the feed, not posting.
+  // One user, feed alive: each Boost, north_trail comes back and posts AGAIN, and you
+  // decide (at random) whether this one gets the surprise like. The reward is unpredictable;
+  // the checking-back is not. That gap is the whole lesson.
   const feed=document.getElementById('feed');
-  const hearts=feed.querySelectorAll('.heart');
-  const pick=hearts[T.taps%hearts.length];
-  if(pick){pick.classList.remove('lit');void pick.offsetWidth;pick.classList.add('lit');
-    const n=pick.parentElement.querySelector('.likeN');
-    if(n)n.textContent=parseInt(n.textContent,10)+(rewarded?(5+T.rewards*3):1);}
+  const body=R1_POSTS[r1i%R1_POSTS.length];r1i++;
+  const likes=rewarded?(12+T.rewards*5):(3+(T.taps%5));
+  feed.insertAdjacentHTML('afterbegin',cardHTMLU(body,rewarded,likes,'now'));
+  // keep the older "now" stamps honest and the feed short (one screen)
+  const cards=feed.querySelectorAll('.feed-card');
+  cards.forEach(function(c,i){if(i>0){const s=c.querySelector('.fc-sub');if(s&&s.textContent==='now')s.textContent='1m';}});
+  while(feed.querySelectorAll('.feed-card').length>6)feed.lastElementChild.remove();
+  feed.scrollTop=0;
   if(rewarded){
     T.rewards++;bump(16);
     const b=document.getElementById('burst');b.classList.remove('go');void b.offsetWidth;b.classList.add('go');
