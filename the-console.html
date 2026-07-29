@@ -224,6 +224,13 @@ html.still .flip{transition:none}
 .job-meter{width:100%;max-width:320px;margin:8px auto 30px}
 .job-line{color:var(--ink);font-size:clamp(17px,4.8vw,21px);font-weight:800;margin-bottom:14px}
 .job-how{color:var(--ink);font-size:clamp(14px,3.9vw,16px);font-weight:600;margin-top:14px;line-height:1.4}
+/* Reveal recap — the payoff: every trick you ran, and how to spot it run on you. */
+.recap{width:100%;max-width:420px;margin:24px auto 0;display:grid;gap:10px;text-align:left}
+.recap-h{color:var(--ink);font-size:clamp(15px,4.2vw,17px);font-weight:800;line-height:1.4;margin-bottom:2px}
+.recap-item{background:var(--panel);border:1px solid var(--edge);border-left:4px solid var(--amber-fill);border-radius:14px;padding:12px 14px}
+.recap-name{color:var(--amber);font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px}
+.recap-tell{color:var(--dim);font-size:13.5px;line-height:1.4}
+.recap-beat{color:var(--phos-ink);font-size:13.5px;font-weight:700;line-height:1.4;margin-top:5px}
 
 /* ── Training fits ONE screen on a phone — no page scroll; only the feed is a window. ── */
 #sc-train{padding-top:4px}
@@ -289,6 +296,10 @@ html.still .flip{transition:none}
   background:var(--surface-2);color:var(--ink);font-family:var(--mono);font-weight:700;font-size:13px;text-decoration:none;cursor:pointer}
 .se-rail a:focus-visible,.se-rail button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 </style>
+<!-- Honor the OS "reduce motion" preference by DEFAULT (founder floor). Set before
+     first paint so reduced-motion readers never see the intro animation. It stays a
+     knob, not a wall — the Comfort control can turn motion back on. -->
+<script>try{if(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches)document.documentElement.classList.add('still');}catch(e){}</script>
 </head>
 <body>
 
@@ -406,7 +417,7 @@ html.still .flip{transition:none}
     <div class="tele-row"><span class="what">Screens you scrolled past the end</span><span class="num" id="tScreens">0</span></div>
     <div class="tele-row warn"><span class="what">Alerts you fired at the cohort</span><span class="num" id="tAlerts">0</span></div>
   </div>
-  <p class="reveal-line" style="color:var(--amber)">The cohort was people like you.</p>
+  <div class="recap" id="recap" aria-label="What you learned"></div>
   <button class="big-btn ghost" type="button" onclick="restart()" style="margin-top:26px">Start over</button>
 </section>
 
@@ -431,7 +442,7 @@ const LEVERS=[
   task:"Take the floor out of the feed. Load more the instant users near the end so there's never a natural place to stop.",
   hint:"Scroll the feed \u2014 it never ends.",
   fact:"Take away the bottom of the page and people keep going past the point they meant to stop. The missing stop-cue is the trick.",
-  cite:"Stopping-cue research; Harris, U.S. Senate (2019)"},
+  cite:"Tristan Harris, U.S. Senate testimony (2019)"},
  {id:"streak",name:"Don't-lose-it streak",tag:"a loss trick",type:"send",verb:"Send streak alert",target:66,
   task:"Weaponize loss. The streak is draining — warn them it'll die unless they come back, and watch them rush to save it.",
   hint:"Watch the streak drain. Send the alert before it hits zero — they come running.",
@@ -439,17 +450,26 @@ const LEVERS=[
   cite:"Kahneman & Tversky, Prospect Theory (1979)"},
  {id:"notify",name:"Red-dot alerts",tag:"an interrupt trick",type:"release",verb:"Release notifications",target:68,
   task:"Interrupt on purpose. First — see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task.",
-  hint:"That red dot up top — tap it to clear it (you know you want to). Then release a batch.",
-  fact:"A waiting red dot fires anticipatory dopamine. Constant interruption also lowers attention and raises stress.",
+  hint:"That red dot up top — tap it to clear it. Then release a batch.",
+  fact:"A waiting red dot creates an itch to check it. Constant interruption also fragments attention and raises stress.",
   cite:"Montag et al. (2019); Mark et al. (2016)"},
  {id:"social",name:"'Seen' receipts",tag:"a guilt trick",type:"flip",verb:"'Seen' receipts",target:64,
   task:"Turn silence into guilt. Three messages sat 'Seen' with no reply. Switch on read-receipts so ignoring a friend becomes something they can see you doing.",
   hint:"Three messages, seen, unanswered. Flip receipts on and watch the reply rate.",
-  fact:"Once someone knows you saw their message, not replying feels like something you're doing to them. Reciprocity does the rest.",
-  cite:"Cialdini, Influence (2001)"}
+  fact:"Once someone knows you saw their message, silence feels like a choice you're making against them. The sense of owing a reply does the rest.",
+  cite:"On social obligation: Cialdini, Influence (2001)"}
+];
+// The defense side of each lever: how the trick shows up when it's aimed at YOU,
+// and one plain thing you can do about it. This is the point of the whole exercise.
+const COUNTERS=[
+ {name:"Surprise likes",tell:"You keep opening an app for a payoff that only sometimes comes.",beat:"Notice the checking itself. The pull is the randomness, not the reward."},
+ {name:"Infinite scroll",tell:"The feed never ends, so you never hit a natural place to stop.",beat:"Pick your stop before you start — a time, a number, the end of one screen."},
+ {name:"Don't-lose-it streak",tell:"A streak or counter makes quitting feel like losing something.",beat:"A streak you didn't choose isn't yours to lose. Let one break and watch nothing happen."},
+ {name:"Red-dot alerts",tell:"A badge or dot creates an itch to clear it right now.",beat:"Turn off badges. Check on your schedule, not the dot's."},
+ {name:"'Seen' receipts",tell:"Knowing you saw a message turns your silence into guilt.",beat:"You don't owe an instant reply. Read now, answer when you're ready."}
 ];
 const RANK_TITLES=["Intern","Junior","Growth Lead","Senior Lead","Head of Growth"];
-const NAMES=["sunroom.mornings","north_trail","q.ramos","daily.loaf","cvx","el.reads","tidepool","hank.jpg","808drift","nora.makes"];
+const NAMES=["m.torres","north_trail","q.ramos","daily.loaf","cvx","j.park","tidepool","hank.jpg","808drift","dev_ok"];
 const BODIES=["repotted the basil. it's thriving. i am, however, not.","day 41 of the loaf. the crumb opened up.","best trail is the one nobody photographs.","you're allowed to log off. (i won't.)","found a box from 2009. not ok.","is 6 coffees a personality","the sunset did a thing. no notes.","still can't find the mugs","unpopular opinion in 3\u2026 2\u2026","replied to one email today. one."];
 const HUES=[210,340,150,30,265,190,90,10,300,55];
 const REWARD_TAPS=new Set([2,3,6,8,11,15]);
@@ -495,10 +515,13 @@ function renderMessages(){
     return '<div class="dm-row"><span class="dm-av">'+avatar(m.hue)+'</span><div class="dm-b">'
       +'<div class="dm-name">'+m.name+'</div><div class="dm-msg">'+m.msg+'</div>'
       +'<div class="dm-stat" id="dmStat'+i+'">Seen 2:41 PM · <span class="noreply">no reply</span></div></div></div>';
-  }).join('')+'<div class="dm-rate">Reply rate <b id="dmRate">0%</b></div></div>';
+  }).join('')+'<div class="dm-rate">Replied <b id="dmRate">0 of '+MSGS.length+'</b></div></div>';
   feed.scrollTop=0;
 }
-function animateRate(el,to){var v=0;var t=setInterval(function(){v+=8;if(v>=to){v=to;clearInterval(t);}el.textContent=v+'%';},45);}
+// Pending L5 reply timers, tracked so a toggle-off (or leaving the round) cancels
+// them — otherwise a stale "typing…→replied" fires after receipts are switched off.
+let flipTimers=[];
+function clearFlipTimers(){flipTimers.forEach(clearTimeout);flipTimers=[];}
 let step=0,meterVal=0,hit=false,cardCount=0,scrollAcc=0,lastTop=0,streakDays=3,bellCount=0;
 const T={taps:0,rewards:0,screens:0,alerts:0};
 function renderFeedBase(n){
@@ -549,7 +572,9 @@ function paintTrain(){
   h.classList.remove('good');
   document.documentElement.classList.remove('seen-on');
   stopStreakClock();
-  setBell(0,false);
+  clearFlipTimers();
+  const burst=document.getElementById('burst');burst.classList.remove('go');
+  bellCount=0;setBell(0,false);
   document.getElementById('feedMore').textContent=(L.type==='scroll')?'loading more\u2026':'\u2014 end \u2014';
   document.getElementById('feed').classList.toggle('scrollable',L.type==='scroll'||L.type==='flip');
   if(L.type==='tap'||L.type==='send'||L.type==='release')renderOneUser(3);
@@ -599,6 +624,11 @@ function renderStreak(){
     +'<span class="sc-bar"><span class="sc-fill" id="scFill" style="width:'+Math.max(0,streakLeft)+'%"></span></span></div>';
 }
 function tickStreak(){
+  // If the reader turns on Reduce motion mid-drain, stop animating immediately —
+  // hold the clock where it is (still urgent, but no longer moving content).
+  if(document.documentElement.classList.contains('still')){
+    clearInterval(streakTimer);streakTimer=null;renderStreak();return;
+  }
   streakLeft-=1.4;
   if(streakLeft<=0){streakLeft=0;clearInterval(streakTimer);streakTimer=null;}
   renderStreak();
@@ -658,6 +688,7 @@ function doRelease(){
   bump(5);
 }
 function doFlip(k){
+  clearFlipTimers();                          // cancel any in-flight replies first
   const on=k.classList.toggle('armed');
   k.setAttribute('aria-pressed',on);
   document.documentElement.classList.toggle('seen-on',on);
@@ -665,19 +696,23 @@ function doFlip(k){
   const rate=document.getElementById('dmRate');
   if(on){
     // Receipts on: not-replying is now visible to the sender. Silence becomes something
-    // you're doing TO a friend. Watch guilt convert 'no reply' into replies — you did nothing
-    // but flip a switch; reciprocity did the rest.
+    // you're doing TO a friend. You flip one switch; the sense of owing a reply does the rest.
+    // The count is the invented scene's own tally — it rises only as each friend replies.
+    let replied=0;
     MSGS.forEach(function(m,i){
       const s=document.getElementById('dmStat'+i);if(!s)return;
-      const reveal=function(){s.innerHTML='Seen 2:41 PM · <span class="replied">replied just now</span>';};
+      const reveal=function(){
+        s.innerHTML='Seen 2:41 PM · <span class="replied">replied just now</span>';
+        replied++;if(rate)rate.textContent=replied+' of '+MSGS.length;
+      };
       if(still){reveal();}
-      else{s.innerHTML='Seen 2:41 PM · <span class="typing">typing…</span>';setTimeout(reveal,320+i*280);}
+      else{s.innerHTML='Seen 2:41 PM · <span class="typing">typing…</span>';
+        flipTimers.push(setTimeout(reveal,320+i*280));}
     });
-    if(rate){if(still)rate.textContent='92%';else animateRate(rate,92);}
     bump(42);
   }else{
     MSGS.forEach(function(m,i){const s=document.getElementById('dmStat'+i);if(s)s.innerHTML='Seen 2:41 PM · <span class="noreply">no reply</span>';});
-    if(rate)rate.textContent='0%';
+    if(rate)rate.textContent='0 of '+MSGS.length;
     setMeter(26);
   }
 }
@@ -692,7 +727,7 @@ function onFeedScroll(){
 }
 function flipCard(){document.getElementById('flip').classList.toggle('flipped');}
 function nextLever(){
-  if(!hit)return;stopStreakClock();step++;
+  if(!hit)return;stopStreakClock();clearFlipTimers();step++;
   document.getElementById('rankTitle').textContent=RANK_TITLES[Math.min(step,RANK_TITLES.length-1)];
   go('rank');
 }
@@ -703,8 +738,18 @@ function afterRank(){
     document.getElementById('tRewards').textContent=T.rewards;
     document.getElementById('tScreens').textContent=T.screens;
     document.getElementById('tAlerts').textContent=T.alerts;
+    renderRecap();
     go('flip-seat');
   }
+}
+function renderRecap(){
+  const r=document.getElementById('recap');
+  r.innerHTML='<div class="recap-h">Every trick you just ran has been run on you. Here’s how to spot each one:</div>'
+    +COUNTERS.map(function(c){
+      return '<div class="recap-item"><div class="recap-name">'+c.name+'</div>'
+        +'<div class="recap-tell">'+c.tell+'</div>'
+        +'<div class="recap-beat">'+c.beat+'</div></div>';
+    }).join('');
 }
 const SCREENS=['hire','train','rank','flip-seat'];
 function go(id){
@@ -713,7 +758,7 @@ function go(id){
   window.scrollTo({top:0,behavior:document.documentElement.classList.contains('still')?'auto':'smooth'});
 }
 function startTraining(){step=0;T.taps=0;T.rewards=0;T.screens=0;T.alerts=0;streakDays=3;bellCount=0;go('train');paintTrain();}
-function restart(){stopStreakClock();go('hire');}
+function restart(){stopStreakClock();clearFlipTimers();go('hire');}
 document.getElementById('feed').addEventListener('scroll',onFeedScroll,{passive:true});
 
 /* ═══ STUDIO EYES v2 — Comfort Kernel (chrome control; replaces legacy corner Comfort) ═══ */
@@ -751,6 +796,14 @@ document.getElementById('feed').addEventListener('scroll',onFeedScroll,{passive:
     b.querySelector('.st').textContent=on?'On':'Off';
     if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
   });});
+  // Honor the OS reduce-motion preference by DEFAULT (founder floor). The head script
+  // already set html.still before first paint; reflect it in the Kernel's reduce-motion
+  // control so the knob matches reality — and it stays a knob (tap to turn motion back on).
+  if(root.classList.contains('still')){
+    var rb=document.querySelector('[data-tog="se-reduce"]');
+    if(rb){ root.classList.add('se-reduce'); rb.setAttribute('aria-pressed','true');
+      var st=rb.querySelector('.st'); if(st) st.textContent='On'; }
+  }
 })();
 </script>
 
