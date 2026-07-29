@@ -57,40 +57,57 @@ body{
 }
 .wrap{max-width:1060px; margin:0 auto; padding:0 22px 90px}
 
-/* ── COMFORT. One corner control: [ A− ] smaller text · [ ◐ ] comfort toggle · [ A+ ] bigger text.
-   A− / A+ change the REAL font size (text reflows via --fs), never a zoom or transform. The
-   ◐ toggles a calmer reading ground that reuses the studio's own canonical soft tokens, so
-   contrast stays a computation. No storage: single-file law, both reset on reload. ────────── */
-:root{ --fs:1; }               /* text-size multiplier, driven by A− / A+ */
+/* ── COMFORT KERNEL (mounted 2026-07-14). Day/Dusk/Night + toggles, harvested from
+   the studio's own tsp-home ladder. Remaps THIS face's tokens per light level — the
+   design is unchanged, only the ground shifts. Night is warm charcoal, never pure black
+   (RP halation floor). Control lives BOTTOM-RIGHT, clear of the title. No storage. ── */
+:root{ --fs:1; }
 
-body.cft-soft{                 /* comfort mode: a genuinely calmer, warmer paper (>=0.12 luminance
-                                  below the default). Every text token re-checked on it. */
-  --paper:#eae3d1; --paper-2:#ded5be; --rule:#cbc0a4;
-  --ink:#24292f;   /* 11.4:1 */ --ink-2:#48505c; /* 6.4:1 */ --ink-3:#4e5763; /* 5.0:1 on paper-2 */
-  --brass-ink:#6d5016; --cool-ink:#2b4467;
+html[data-light="dusk"]{
+  --paper:#f2ead9; --paper-2:#e7ddc6; --rule:#cdbf9f;
+  --ink:#1b190f; --ink-2:#3b3823; --ink-3:#50492d;
+  --brass-ink:#5c4210; --cool-ink:#22364f; --live-ink:#184a32;
 }
+html[data-light="night"]{
+  --paper:#1c1a16; --paper-2:#262219; --rule:#443d30;
+  --ink:#f4ecd8; --ink-2:#d8cdb0; --ink-3:#b4a888;
+  --brass-ink:#e6bf6a; --brass-fill:#d9a441; --cool-ink:#a6c0de; --cool-fill:#2b3a4a;
+  --live-ink:#84cca0; --slab:#141019; --slab-ink:#f4f1e8;
+}
+html[data-light="night"] .rooms .room{ --card:#262219; --acc:#e6bf6a; }
+html[data-light="night"] .bench-top{ background:#26313e; }
+html[data-light="night"] .bench-top p{ color:#dbe6f1; }
+html[data-light="night"] .out.bad{ color:#f2a6ad; }
 
-.comfort{
-  position:fixed; top:12px; right:14px; z-index:80;
-  display:inline-flex; align-items:stretch;
-  background:var(--paper-2); border:2px solid var(--edge); border-radius:4px;
-  overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.10);
-}
-.comfort button{
-  font-family:var(--mono); font-size:18px; font-weight:700; line-height:1;
-  min-width:46px; min-height:44px; padding:0 8px;      /* tap-target floor. Non-negotiable. */
-  background:transparent; color:var(--ink);            /* --ink is a TEXT token, never a fill. */
-  border:0; cursor:pointer;
-}
-.comfort button+button{border-left:1.5px solid var(--rule)}
-.comfort button:hover,.comfort button:focus-visible,
-.comfort button[aria-pressed="true"]{background:var(--slab); color:var(--slab-ink)} /* slab = ground, slab-ink = text */
-.comfort button:focus-visible{outline:3px solid var(--ring); outline-offset:-2px}
-.comfort-toggle{font-family:var(--mono); font-size:14px; font-weight:700; letter-spacing:.02em}
-.comfort-stops{display:inline-flex; align-items:stretch}
-.comfort-stops[hidden]{display:none}
-.comfort .sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
-@media (max-width:640px){ .comfort{top:8px; right:8px} }
+html.kx-contrast:not([data-light="night"]){ --paper:#fbfaf7; --paper-2:#f2efe7; --ink:#0f1216; --ink-2:#2b323b; --ink-3:#474f5b; }
+html.kx-contrast[data-light="night"]{ --paper:#0e0d0b; --paper-2:#171410; --ink:#fff8e8; --ink-2:#e8dcbe; --ink-3:#cbbf9c; }
+html.kx-reduce *{ animation:none!important; transition:none!important; }
+html.kx-cb a{ text-decoration:underline; text-underline-offset:2px; }
+
+.kfab{ position:fixed; right:14px; bottom:14px; z-index:80; min-height:48px; min-width:48px; padding:11px 16px;
+  background:var(--slab); color:var(--slab-ink); border:2px solid transparent; border-radius:6px;
+  font-family:var(--mono); font-size:14px; font-weight:700; letter-spacing:.02em; cursor:pointer; }
+.kfab:focus-visible{ outline:3px solid var(--cool-ink); outline-offset:2px; }
+.kpanel{ position:fixed; right:14px; bottom:70px; z-index:81; width:min(300px,calc(100vw - 28px));
+  background:var(--paper); color:var(--ink); border:2px solid var(--ink); border-radius:6px; padding:15px;
+  box-shadow:0 6px 22px rgba(0,0,0,.22); display:none; }
+.kpanel[data-open="1"]{ display:block; }
+.kpanel h4{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); font-weight:700; margin:0 0 8px; }
+.krow{ display:flex; gap:6px; margin-bottom:14px; }
+.kbtn{ flex:1; min-height:44px; padding:8px; border:1.5px solid var(--rule); border-radius:4px; background:var(--paper-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer; }
+.kbtn[aria-pressed="true"]{ background:var(--slab); color:var(--slab-ink); border-color:var(--slab); }
+.kbtn:focus-visible{ outline:3px solid var(--cool-ink); outline-offset:2px; }
+.ktog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px; min-height:44px; padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--rule); border-radius:4px; background:var(--paper-2); color:var(--ink); font-family:var(--sans); font-weight:600; font-size:14px; cursor:pointer; text-align:left; }
+.ktog[aria-pressed="true"]{ border-color:var(--ink); }
+.ktog .st{ font-family:var(--mono); font-size:11px; color:var(--ink-3); }
+.ktog[aria-pressed="true"] .st{ color:var(--live-ink); font-weight:700; }
+.ktog:focus-visible{ outline:3px solid var(--cool-ink); outline-offset:2px; }
+.ksr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+.face-updated{ font-family:var(--mono); font-size:12px; letter-spacing:.04em; color:var(--ink-3); margin:2px 0 18px; display:flex; align-items:center; gap:7px; }
+.face-updated::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--live-ink); flex:0 0 auto; }
+
+@media (max-width:640px){ .kfab{ right:8px; bottom:8px } .kpanel{ right:8px } }
 
 /* ── THE STAGE. Scene first. No wall, no preference gate, no modal. ───────── */
 .stage{padding:70px 0 44px; border-bottom:2px solid var(--ink)}
@@ -281,16 +298,6 @@ footer p{margin:0 0 7px}
 
 <!-- COMFORT. Bigger/smaller text + a comfort toggle. Corner control, never a wall.
      No storage — text size and comfort both reset on reload (single-file law). -->
-<div class="comfort" role="group" aria-label="Reading comfort">
-  <button type="button" class="comfort-toggle" data-comfort-toggle aria-expanded="false" aria-controls="cftPanel" aria-label="Reading comfort options">&#9680;&nbsp;Comfort</button>
-  <span class="comfort-stops" id="cftPanel" data-comfort-panel hidden>
-    <button type="button" id="cft-smaller" aria-label="Smaller text">A&minus;</button>
-    <button type="button" id="cft-comfort" aria-pressed="false" aria-label="Comfort reading mode: softer, calmer ground">&#9680;</button>
-    <button type="button" id="cft-bigger" aria-label="Bigger text">A+</button>
-    <span class="sr" id="cft-status" role="status" aria-live="polite">Text size 100 percent</span>
-  </span>
-</div>
-
 <main class="wrap">
 
 <!-- THE STAGE. Content on load. No gate, no wall, no ask. -->
@@ -298,6 +305,7 @@ footer p{margin:0 0 7px}
 <div class="stage-row"><div class="stage-copy">
   <p class="mark">Tight Spiral Productions</p>
   <h1>We build instruments that show you the rules <em>while they are being run on you.</em></h1>
+  <p class="face-updated"><time datetime="2026-07-14">Last updated July 14, 2026</time></p>
   <p class="lede">Most software hides its machinery. Ours hands it to you and lets you turn it.
     <b>You pull the levers, then the seat turns around and shows you your own telemetry.</b></p>
   <p class="lede">Some of these are games. Some are assessment tools designed for a college.
@@ -953,44 +961,40 @@ footer p{margin:0 0 7px}
 })();
 </script>
 
-<!-- COMFORT — bigger/smaller text (real font-size, not zoom) + a comfort toggle.
-     No storage: both reset on reload (single-file law). -->
+<!-- COMFORT KERNEL control — bottom-right, out of the text column. No storage. -->
+<button class="kfab" id="kFab" aria-expanded="false" aria-controls="kPanel" aria-label="Comfort settings">Comfort</button>
+<div class="kpanel" id="kPanel" role="dialog" aria-label="Comfort settings">
+  <h4>Light</h4>
+  <div class="krow" role="group" aria-label="Light level">
+    <button class="kbtn" data-light-set="day"   aria-pressed="true">Day</button>
+    <button class="kbtn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="kbtn" data-light-set="night" aria-pressed="false">Night</button>
+  </div>
+  <h4>Comfort</h4>
+  <button class="ktog" data-tog="kx-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="ktog" data-tog="kx-large"    aria-pressed="false">Larger text <span class="st">Off</span></button>
+  <button class="ktog" data-tog="kx-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="ktog" data-tog="kx-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="ksr" id="kSr" role="status" aria-live="polite"></span>
+</div>
 <script>
 (function(){
-  "use strict";
-  var root = document.documentElement, body = document.body;
-  var status = document.getElementById("cft-status");
-  var FS = 1, MIN = 0.85, MAX = 1.45, STEP = 0.1;
-
-  function applyFS(){
-    root.style.setProperty("--fs", FS.toFixed(2));
-    if(status) status.textContent = "Text size " + Math.round(FS * 100) + " percent";
-  }
-  function step(d){ FS = Math.min(MAX, Math.max(MIN, +(FS + d).toFixed(2))); applyFS(); }
-
-  document.getElementById("cft-bigger").addEventListener("click",  function(){ step(+STEP); });
-  document.getElementById("cft-smaller").addEventListener("click", function(){ step(-STEP); });
-
-  var cbtn = document.getElementById("cft-comfort");
-  cbtn.addEventListener("click", function(){
-    var on = body.classList.toggle("cft-soft");
-    cbtn.setAttribute("aria-pressed", on ? "true" : "false");
-    if(status) status.textContent = on ? "Comfort mode on" : "Comfort mode off";
-  });
-
-  applyFS();
-})();
-</script>
-<!-- Comfort is a knob, not a wall: one button reveals the reading options on demand. -->
-<script>
-(function(){
-  var t=document.querySelector('[data-comfort-toggle]'), p=document.querySelector('[data-comfort-panel]');
-  if(!t||!p) return;
-  function set(open){ p.hidden=!open; t.setAttribute('aria-expanded',open?'true':'false'); }
-  set(false);
-  t.addEventListener('click',function(e){ set(p.hidden); e.stopPropagation(); });
-  document.addEventListener('click',function(e){ if(!p.hidden && !p.contains(e.target) && !t.contains(e.target)) set(false); });
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && !p.hidden){ set(false); t.focus(); } });
+  var root=document.documentElement, sr=document.getElementById('kSr');
+  var fab=document.getElementById('kFab'), panel=document.getElementById('kPanel');
+  fab.addEventListener('click',function(){ var o=panel.getAttribute('data-open')==='1'; panel.setAttribute('data-open',o?'0':'1'); fab.setAttribute('aria-expanded',String(!o)); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ panel.setAttribute('data-open','0'); fab.setAttribute('aria-expanded','false'); fab.focus(); }});
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed', String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim()+' light';
+  });});
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(cls==='kx-large') root.style.setProperty('--fs', on?'1.3':'1');
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
 })();
 </script>
 </body>
