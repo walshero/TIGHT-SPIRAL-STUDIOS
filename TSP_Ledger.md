@@ -227,6 +227,8 @@ that lives in a file nobody opens is a finding that has to be made twice.
 
 **CORRECTED — index.html studio-face lede.** "assessment tools **sitting inside** a college / one **running for** a Manhattan relocation firm" → **"designed for"** both (commit efa3f59). Provenance verified from source: the lede predated this branch on `main` (`git diff origin/main..HEAD -- index.html` adds/removes neither sentence); this session did not author it. Gate still SHIP (5.02).
 
-**STILL OPEN — "client instruments" labels.** `index.html` meta description and the `:534` filter button still read "client instruments." Left to founder's call (soften to designed-for framing, or keep as a genre label).
+**RESOLVED — "client instruments" labels softened.** Founder's call: `index.html` meta, the `<h2>Client work</h2>` section header, and the `:534` filter button all reframed to **"designed for a client"** (commit 584b1eb). Filter key `data-v="client"` unchanged.
+
+**VERIFIED (founder) — Advantage Relocation is a real working relationship.** James Power named on the studio face — the Advantage card `who` line now reads "Advantage Relocation · James Power · Manhattan." The `tsp:client` meta in `advantage-intake.html` ("Advantage Relocation Inc. — James Power") confirmed accurate and kept. The tool's own masthead stays the firm's brand (client-facing to tenants; the studio-contact name lives on the studio face, not the tenant tool). Not a fabricated move — a confirmed one.
 
 **SHIPPED (branch only, NOT `main`) — the three ship floors across all 42 root pages.** Comfort toggle / >50% image / back+home nav; both gates 0 HALT. Branch `claude/tsp-accessibility-design-review-w55xa0`, commits be2fef0 (floors) + b2a9cb4 (ALEPH+FUNES harvest). Not on canon until a human merges. Two harvest flags for human hands: confluence-TRUNK canon pointer in FUNES-INDEX stale ~11KB vs live `main`; PII-flagged 2026-06-23 trunk copies still in `archive/` and `rescued/`.
