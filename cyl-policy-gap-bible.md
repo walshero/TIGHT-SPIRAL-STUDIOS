@@ -474,7 +474,7 @@ Files live at `art/cyl/plates/`. Status is a probe of what exists on disk, not a
 
 All four pass the dignity rules by construction: no person in frame, displacement coded on the artifact. Outstanding from this prompt round: `prop.shelterign` (1962 fallout-shelter sign). Outstanding founder call: `room.household.lbj64` monochrome-vs-color.
 
-| `insert.leader.lbj64` | `insert.leader.lbj64.jpg` | ACCEPTED (founder-delegated adaptation, 2026-07-30) | LBJ retry plate had resolved eyes/nose/mouth — killed under the withholding rule. Studio adapted it in-pipeline: full face-interior silhouette, both lenses repainted as broadcast glare, grain rebuilt to match. ID survives through outline, ears, heavy frames' glare, bulk, and the both-hands podium grip. Provenance chain: founder MJ generation, machine silhouette adaptation (SSG imprint applies at integration), open chair stands. |
+| `insert.leader.lbj64` | — | REJECTED (founder, 2026-07-30) — silhouette adaptation diverged from house style | House style per accepted JFK/Nixon inserts: normal broadcast lighting, blank featureless face (no eyes/nose/mouth, mannequin-smooth skin), hair/ears/hands/posture fully detailed. Glare-lens silhouette read alien. Regeneration prompt issued (B&W '64 podium, blank face, ears + receding slicked hair + bulk + forward lean carry the ID; glasses variant held in reserve). Awaiting founder MJ generation. |
 
 ---
 
