@@ -2,7 +2,7 @@
 
 *Matt Walsh · Professor of English, MassBay Community College · Founder, Tight Spiral Productions · walshero@gmail.com*
 
-*Status update, 2026-07-30 (machine note, cut freely): the companion art piece is live and retitled — "Borges Already Solved This," walshero.github.io/TIGHT-SPIRAL-STUDIOS/old-problems-at-new-speed.html. All six scenes (hero + five rooms) now trace from the founder's own generated references; provenance in each scene's aria-label. The essay's every-studio-fact-is-a-shipped-artifact claim got stronger since v1.*
+*Status update, 2026-07-30 (machine note, cut freely): the companion art piece is live and retitled — "Borges Was Here," walshero.github.io/TIGHT-SPIRAL-STUDIOS/old-problems-at-new-speed.html. All six scenes (hero + five rooms) now trace from the founder's own generated references; provenance in each scene's aria-label. The essay's every-studio-fact-is-a-shipped-artifact claim got stronger since v1.*
 
 *MASTER DRAFT v1, 2026-07-03. Chronicle-shaped (~2,100 words). Founder note slots marked ‹MW: ›, add ad hoc, any angle. Venue map and submission strategy in back matter. No fabricated concepts: every Borges fact is biographical or bibliographical record; every studio fact is a documented, shipped artifact. Borges is quoted sparingly: short fragments, each under fair use and attributed to story and year. Translations differ; verify each quoted phrase against your preferred edition before submission.*
 
