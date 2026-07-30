@@ -1,29 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Timing Belt — Tight Spiral Studios</title>
 <style>
+  /* ---- LIGHT: DAY (default) ---- */
   :root{
     --paper:#f4efe6; --ink:#1b1712; --ink2:#1b1712;
-    --line:#c9bfae; --accent:#6e4700;
+    --line:#c9bfae; --accent:#6e4700; --on-accent:#ffffff;
     --card:#fbf8f2; --shadow:rgba(30,22,12,.16);
     --slip:#efe7d6; --warn-bg:#f6e9d4; --warn-line:#8a5a12;
+    --foot-link:#e6b866;
+    --tap:48px; --motion:.18s;
+    --mono:ui-monospace,Menlo,Consolas,monospace;
   }
-  [data-stop="soft"]{ --paper:#e6ddc9; --ink:#2b2013; --ink2:#2b2013; --card:#efe7d3;
-    --line:#bcae90; --slip:#ddd2b8; }
-  [data-stop="warm"]{ --paper:#2a2620; --ink:#f3e7cf; --ink2:#f3e7cf; --card:#332e26;
-    --line:#5a5040; --accent:#e6b866; --shadow:rgba(0,0,0,.4);
-    --slip:#3a342b; --warn-bg:#3f3320; --warn-line:#e6b866; }
+  /* ---- LIGHT: DUSK ---- */
+  html[data-light="dusk"]{
+    --paper:#e6ddc9; --ink:#2b2013; --ink2:#2b2013; --card:#efe7d3;
+    --line:#bcae90; --slip:#ddd2b8;
+  }
+  /* ---- LIGHT: WARM-DARK (night) — warm charcoal, never pure black ---- */
+  html[data-light="night"]{
+    --paper:#2a2620; --ink:#f3e7cf; --ink2:#f3e7cf; --card:#332e26;
+    --line:#5a5040; --accent:#e6b866; --on-accent:#2a2620; --shadow:rgba(0,0,0,.4);
+    --slip:#3a342b; --warn-bg:#3f3320; --warn-line:#e6b866;
+    --foot-link:#6e4700;
+  }
+  /* ---- TOGGLE: high contrast ---- */
+  html.se-contrast:not([data-light="night"]){ --paper:#fbfaf7; --card:#fbfaf7; --slip:#f0ece2;
+    --ink:#141109; --ink2:#141109; --line:#9a8a68; --accent:#5c3a00; --warn-bg:#f6ecd8; }
+  html.se-contrast[data-light="night"]{ --paper:#16130f; --card:#1c1913; --slip:#28231b;
+    --ink:#fff7e6; --ink2:#fff7e6; --accent:#f0c357; --warn-bg:#332a18; --warn-line:#f0c357; }
+  /* ---- TOGGLE: text size A / A+ / A++ ---- */
+  html{ font-size:100%; }
+  html.se-a1{ zoom:1.15; }
+  html.se-a2{ zoom:1.3; }
+  /* ---- TOGGLE: reduce motion ---- */
+  html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+  @media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+  /* ---- TOGGLE: colorblind cues ---- */
+  html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+
   *{box-sizing:border-box}
   html{scroll-behavior:auto}
   body{
     margin:0; background:var(--paper); color:var(--ink);
     font:19px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    padding:0 0 80px;
+    padding:0 0 20px;
+    transition:background var(--motion) ease, color var(--motion) ease;
   }
   .wrap{max-width:760px; margin:0 auto; padding:0 20px}
+
+  /* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+  .se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+    padding:9px 14px; background:var(--card); border-bottom:2px solid var(--ink);
+    position:sticky; top:0; z-index:100; }
+  .se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+    padding:8px 12px; border:1.5px solid var(--line); border-radius:8px; background:var(--slip);
+    color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; }
+  .se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+  .se-brand svg{ width:34px; height:20px; color:var(--accent); flex:0 0 auto; }
+  .se-brand .wm{ font-size:16px; letter-spacing:.01em; white-space:nowrap; }
+  .se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+    padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--accent);
+    color:var(--on-accent); font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer; }
+  .se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; }
+  @media (max-width:560px){ .se-brand .wm{ display:none; } }
+
+  /* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+  .se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:101;
+    width:min(320px,calc(100vw - 24px)); background:var(--card); color:var(--ink);
+    border:2px solid var(--accent); border-radius:10px; padding:15px;
+    box-shadow:0 10px 34px var(--shadow); display:none; }
+  .se-panel[data-open="1"]{ display:block; }
+  .se-panel h2{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink2); margin:0 0 8px; border:none; padding:0; }
+  .se-row{ display:flex; gap:6px; margin-bottom:14px; }
+  .se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--line); border-radius:8px;
+    background:var(--slip); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:12.5px; cursor:pointer; }
+  .se-btn[aria-pressed="true"]{ background:var(--accent); color:var(--on-accent); border-color:var(--accent); }
+  .se-btn:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; }
+  .se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+    min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--line); border-radius:8px;
+    background:var(--slip); color:var(--ink); font-weight:600; font-size:14px; cursor:pointer; text-align:left; font-family:inherit; }
+  .se-tog[aria-pressed="true"]{ border-color:var(--accent); }
+  .se-tog .st{ font-family:var(--mono); font-size:11px; color:var(--ink2); }
+  .se-tog[aria-pressed="true"] .st{ color:var(--accent); font-weight:700; }
+  .se-tog:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; }
+  .se-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
   header.top{
     background:var(--card); border-bottom:3px solid var(--accent);
     padding:22px 20px; margin-bottom:8px;
@@ -31,16 +96,8 @@
   header.top .wrap{padding:0}
   h1{font-size:1.7rem; margin:.1em 0 .15em; letter-spacing:-.01em}
   .sub{font-size:1rem; margin:0}
-  .comfort{
-    display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;
-  }
-  .comfort button{
-    min-height:44px; min-width:44px; padding:8px 16px;
-    background:var(--paper); color:var(--ink); border:2px solid var(--accent);
-    border-radius:8px; font-size:.95rem; cursor:pointer; font-weight:600;
-  }
-  .comfort button[aria-pressed="true"]{background:var(--accent); color:var(--paper)}
-  .comfort button:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+  .updated{ font-family:var(--mono); font-size:.78rem; color:var(--ink2); margin:10px 0 0; display:flex; align-items:center; gap:7px; }
+  .updated::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--accent); flex:0 0 auto; }
   section{
     background:var(--card); border:1px solid var(--line); border-radius:12px;
     padding:20px; margin:16px 0; box-shadow:0 2px 6px var(--shadow);
@@ -61,7 +118,7 @@
   }
   ol.steps > li::before{
     content:counter(step); position:absolute; left:12px; top:14px;
-    width:32px; height:32px; background:var(--accent); color:var(--paper);
+    width:32px; height:32px; background:var(--accent); color:var(--on-accent);
     border-radius:50%; display:flex; align-items:center; justify-content:center;
     font-weight:700; font-size:1rem;
   }
@@ -82,33 +139,73 @@
   }
   textarea:focus-visible{outline:3px solid var(--accent); outline-offset:1px}
   .btn{
-    min-height:44px; padding:12px 22px; background:var(--accent); color:var(--paper);
+    min-height:44px; padding:12px 22px; background:var(--accent); color:var(--on-accent);
     border:none; border-radius:10px; font-size:1rem; font-weight:700; cursor:pointer;
   }
   .btn:focus-visible{outline:3px solid var(--ink); outline-offset:2px}
   .out{
     white-space:pre-wrap; background:var(--slip); border:1px dashed var(--accent);
     border-radius:8px; padding:14px; margin-top:12px; font-size:.9rem;
-    font-family:ui-monospace,Menlo,Consolas,monospace; display:none;
+    font-family:var(--mono); display:none;
   }
   .foot{
     margin-top:24px; padding:18px 20px; background:var(--ink); color:var(--paper);
     border-radius:12px; font-size:.9rem;
   }
-  .foot a{color:var(--accent); font-weight:700}
+  .foot a{color:var(--foot-link); font-weight:700}
   a:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+
+  /* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+  .se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; border-top:2px solid var(--line); margin-top:24px; }
+  .se-rail a,.se-rail button{ min-height:var(--tap); padding:10px 18px; border:1.5px solid var(--line); border-radius:8px;
+    background:var(--slip); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer;
+    display:inline-flex; align-items:center; }
+  .se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; }
 </style>
 </head>
 <body>
+
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="../index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
+
 <header class="top">
   <div class="wrap">
     <h1>The Timing Belt</h1>
     <p class="sub">The part that keeps memory, the shelf, and Drive turning <em>in phase</em>.</p>
-    <div class="comfort" role="group" aria-label="Comfort">
-      <button data-set="soft" aria-pressed="false">Softer</button>
-      <button data-set="default" aria-pressed="true">Default</button>
-      <button data-set="warm" aria-pressed="false">Warm-dark</button>
-    </div>
+    <p class="updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v2 <span style="opacity:.75">e613d29</span></span>
   </div>
 </header>
 
@@ -186,33 +283,61 @@
 
 </div>
 
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="../index.html" aria-label="Home">Home</a>
+</nav>
+
 <script>
-  var root=document.documentElement;
-  document.querySelectorAll('.comfort button').forEach(function(b){
-    b.addEventListener('click',function(){
-      var set=b.getAttribute('data-set');
-      if(set==='default'){root.removeAttribute('data-stop');}
-      else{root.setAttribute('data-stop',set);}
-      document.querySelectorAll('.comfort button').forEach(function(x){
-        x.setAttribute('aria-pressed', x===b ? 'true':'false');
-      });
-    });
-  });
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  // last-updated: computed, not typed
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+})();
 
-  document.getElementById('gen').addEventListener('click',function(){
-    var note=document.getElementById('note').value.trim();
-    var d=new Date().toISOString().slice(0,10);
-    var out=document.getElementById('out');
-    var txt='TIMING BELT — carry-out ('+d+')\n'
-      +'Paste into the next session to keep phase.\n\n'
-      +'Belt state: '+(note||'(no note entered — run the belt to fill the ledger)')+'\n\n'
-      +'Next: load full OS, run the belt, apply each correcting move, phone-save any flagged file.';
-    out.textContent=txt;
-    out.style.display='block';
-    out.focus && out.focus();
-  });
+document.getElementById('gen').addEventListener('click',function(){
+  var note=document.getElementById('note').value.trim();
+  var d=new Date().toISOString().slice(0,10);
+  var out=document.getElementById('out');
+  var txt='TIMING BELT — carry-out ('+d+')\n'
+    +'Paste into the next session to keep phase.\n\n'
+    +'Belt state: '+(note||'(no note entered — run the belt to fill the ledger)')+'\n\n'
+    +'Next: load full OS, run the belt, apply each correcting move, phone-save any flagged file.';
+  out.textContent=txt;
+  out.style.display='block';
+  out.focus && out.focus();
+});
 
-  window.scrollTo(0,0);
+window.scrollTo(0,0);
 </script>
 </body>
 </html>

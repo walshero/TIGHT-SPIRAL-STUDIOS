@@ -1,13 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <!--
   THE BRIDGE — founder cockpit / decision dashboard. Tight Spiral Studios · walshero@gmail.com
   "Start here." Opens joy-first, takes a short proper input, then renders the one-screen
   dashboard that drives Matt's next decision and links out to the live files.
 
-  SPLASH RULE (locked 2026-06-29): opens on NOVELTY, not a gray gate. Comfort is the gold
-  corner button — large, high-contrast, names the palette in words. The old palette-gate
+  SPLASH RULE (locked 2026-06-29): opens on NOVELTY, not a gray gate. The old palette-gate
   is retired.
+
+  COMFORT KERNEL v2 (migrated 2026-07-30): the old 3-stop Comfort cycle button is replaced
+  by the studio-standard reserved chrome (Home · teaspoon · Studio Eyes) and the Studio Eyes
+  panel — Light Default/Dusk/Warm-dark via html[data-light], text A/A+/A++, high contrast,
+  reduce motion, colorblind cues. Bottom rail: Back + Home. Warm-dark is warm charcoal,
+  never pure black.
 
   FLOW: splash (joy) -> proper input form (one move / what's live / what's parked) ->
   dashboard. The form is the on-ramp INTO the hub, not a wall. Function first; prettier
@@ -18,40 +23,106 @@
   warns rather than failing silently.
 
   FERPA: no student data here. Cockpit is for Matt's own decisions only.
-  FLOOR: single-file offline, in-memory, 3-stop comfort (never #000/#fff), large type,
-  44px+, keyboard, visible focus, reduced-motion safe, scroll-reset, no emoji, phone-width.
-  Green-free slate placeholder pending the palette pick.
+  FLOOR: single-file offline, in-memory, three light modes (never #000/#fff body), large
+  type, 44px+, keyboard, visible focus, reduced-motion safe, scroll-reset, no emoji,
+  phone-width. Green-free slate placeholder pending the palette pick.
 -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Bridge — start here</title>
 <style>
-/* STUDIO EYES v4 CLASS-FIX 2026-07-11: lock the palette. */
+/* ---- LIGHT: DAY (default) ---- */
 :root{ color-scheme: light; }
+html[data-light="night"]{ color-scheme: dark; }
 
 :root{
-  --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --ink2:#1f1b12;
+  --bg:#f3ead8; --surface:#fffaf0; --surface-2:#f0e6cf; --ink:#1f1b12; --ink2:#1f1b12;
   --line:#d8caa8; --line2:#c2b288;
-  --accent:#3a4654; --accent2:#2b3540;
+  --accent:#3a4654; --accent2:#2b3540; --on-accent:#ffffff;
   --gold:#6e4700; --gold-br:#c8900a; --gold-pale:#fbeec6;
   --rust:#8a3a1c; --sky-wash:#e7e0cf;
-  --focus:#c8900a;
+  --focus:#8f3f00;
+  --tap:48px; --motion:.18s;
   --serif:Georgia,'Times New Roman',serif;
   --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:ui-monospace,'SF Mono',Menlo,monospace;
 }
-body.softer{ --bg:#efe9dd; --surface:#f7f1e6; --ink:#2c2618; --ink2:#2c2618; --line:#ded2b6; --line2:#cdbf9c; --sky-wash:#e2dccd; }
-body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0; --line:#4a4230; --line2:#5e553e; --accent:#8fa6bd; --accent2:#9fb6cd; --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a; --rust:#e8a07c; --sky-wash:#222019; }
+/* ---- LIGHT: DUSK ---- */
+html[data-light="dusk"]{
+  --bg:#ecdcbb; --surface:#f3e6c8; --surface-2:#e6d3a6; --ink:#241a10; --ink2:#241a10;
+  --line:#cdb488; --line2:#b39a67;
+  --accent:#37536a; --accent2:#24384a; --on-accent:#ffffff;
+  --gold:#6e4000; --gold-br:#a86f00; --gold-pale:#f0e0b4;
+  --rust:#83341a; --sky-wash:#e0d0aa;
+  --focus:#9c4000;
+}
+/* ---- LIGHT: WARM-DARK (night) — warm charcoal, never pure black ---- */
+html[data-light="night"]{
+  --bg:#1c1a16; --surface:#26231d; --surface-2:#33302a; --ink:#f3e4c0; --ink2:#f3e4c0;
+  --line:#4a4230; --line2:#5e553e;
+  --accent:#8fa6bd; --accent2:#9fb6cd; --on-accent:#0f0e0b;
+  --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a;
+  --rust:#e8a07c; --sky-wash:#222019;
+  --focus:#f0c357;
+}
+/* ---- TOGGLE: high contrast ---- */
+html.se-contrast:not([data-light="night"]){ --bg:#fbfaf7; --surface:#fffdf6; --surface-2:#f0ece2;
+  --ink:#141109; --ink2:#141109; --line:#b9a06a; --line2:#8f7a4a;
+  --accent:#243a4a; --accent2:#1c2e3c; --gold:#5a3a00; --rust:#762c12; }
+html.se-contrast[data-light="night"]{ --bg:#0e0d0b; --surface:#161410; --surface-2:#242019;
+  --ink:#fff7e6; --ink2:#fff7e6; --accent:#b9cbe0; --accent2:#c8d8ea; --gold:#f6d27a; --rust:#f0b492; }
+/* ---- TOGGLE: text size A / A+ / A++ ---- */
+html{ font-size:100%; }
+html.se-a1{ zoom:1.15; }
+html.se-a2{ zoom:1.3; }
+/* ---- TOGGLE: reduce motion ---- */
+html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+/* ---- TOGGLE: colorblind cues ---- */
+html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+
 *{box-sizing:border-box;} html,body{margin:0;}
-body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; -webkit-text-size-adjust:100%; }
+body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; -webkit-text-size-adjust:100%;
+  transition:background var(--motion) ease, color var(--motion) ease; }
 
-.topbar{ background:var(--accent); color:#fff; padding:.6rem .9rem; display:flex; align-items:center; gap:.6rem; font-family:var(--sans); position:sticky; top:0; z-index:30; }
-body.warm .topbar{ color:#0f0e0b; }
-.topbar .mark{ width:26px; height:26px; flex:none; } .topbar .wm{ font-weight:800; font-size:.92rem; }
-.cstop{ margin-left:auto; background:var(--gold-br); color:#1f1b12; border:2px solid #1f1b12; border-radius:9px; padding:.45rem .65rem; font:800 .82rem/1 var(--sans); cursor:pointer; min-height:44px; }
-.cstop:focus-visible{ outline:3px solid #1f1b12; outline-offset:2px; }
+/* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+.se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+  padding:9px 14px; background:var(--surface); border-bottom:2px solid var(--ink);
+  position:sticky; top:0; z-index:100; }
+.se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 12px; border:1.5px solid var(--line); border-radius:8px; background:var(--surface-2);
+  color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; }
+.se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+.se-brand svg{ width:34px; height:20px; color:var(--accent2); flex:0 0 auto; }
+.se-brand .wm{ font-family:var(--serif); font-size:16px; letter-spacing:.01em; white-space:nowrap; }
+.se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--accent2);
+  color:var(--on-accent); font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer; }
+.se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+@media (max-width:560px){ .se-brand .wm{ display:none; } }
 
-.wrap{ max-width:680px; margin:0 auto; padding:1.1rem 1rem 5rem; }
+/* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+.se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:101;
+  width:min(320px,calc(100vw - 24px)); background:var(--surface); color:var(--ink);
+  border:2px solid var(--accent2); border-radius:10px; padding:15px;
+  box-shadow:0 10px 34px rgba(0,0,0,.28); display:none; }
+.se-panel[data-open="1"]{ display:block; }
+.se-panel h2{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink2); margin:0 0 8px; }
+.se-row{ display:flex; gap:6px; margin-bottom:14px; }
+.se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:12.5px; cursor:pointer; }
+.se-btn[aria-pressed="true"]{ background:var(--accent2); color:var(--on-accent); border-color:var(--accent2); }
+.se-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+  min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--sans); font-weight:600; font-size:14px; cursor:pointer; text-align:left; }
+.se-tog[aria-pressed="true"]{ border-color:var(--accent2); }
+.se-tog .st{ font-family:var(--mono); font-size:11px; color:var(--ink2); }
+.se-tog[aria-pressed="true"] .st{ color:var(--accent2); font-weight:700; }
+.se-tog:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+.wrap{ max-width:680px; margin:0 auto; padding:1.1rem 1rem 2rem; }
 .screen{ display:none; } .screen.on{ display:block; animation:fade .25s ease; }
 @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
 .where{ font:800 .72rem/1 var(--sans); letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:.6rem; }
@@ -59,8 +130,7 @@ h1{ font-size:1.62rem; line-height:1.16; color:var(--ink); margin:.2rem 0 .5rem;
 h2{ font-size:1.18rem; color:var(--ink); margin:.2rem 0 .5rem; }
 p{ margin:0 0 .9rem; } .lead{ font-size:1.06rem; } .beat{ font-style:italic; color:var(--ink2); }
 
-.go{ display:block; width:100%; font:800 1.04rem/1.2 var(--sans); cursor:pointer; min-height:56px; padding:.9rem 1rem; border:none; border-radius:13px; background:var(--accent); color:#fff; margin:.45rem 0; text-align:center; }
-body.warm .go{ color:#0f0e0b; }
+.go{ display:block; width:100%; font:800 1.04rem/1.2 var(--sans); cursor:pointer; min-height:56px; padding:.9rem 1rem; border:none; border-radius:13px; background:var(--accent); color:var(--on-accent); margin:.45rem 0; text-align:center; }
 .go:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
 .go.ghost{ background:transparent; color:var(--ink); border:2px solid var(--line2); font-weight:700; min-height:48px; }
 
@@ -102,18 +172,57 @@ body.warm .go{ color:#0f0e0b; }
 .link .arr{ margin-left:auto; font:800 1.1rem/1 var(--sans); color:var(--accent2); }
 
 .miss{ font:700 .82rem/1.35 var(--sans); color:var(--rust); margin:.5rem 0 0; }
-.foot{ margin-top:1.4rem; padding:1rem; background:var(--accent); color:#fff; border-radius:12px; font-family:var(--sans); font-size:.8rem; }
-body.warm .foot{ color:#0f0e0b; } .foot a{ color:#fff; } body.warm .foot a{ color:#0f0e0b; }
+.foot{ margin-top:1.4rem; padding:1rem; background:var(--accent); color:var(--on-accent); border-radius:12px; font-family:var(--sans); font-size:.8rem; }
+.foot a{ color:var(--on-accent); }
+.updated{ font:600 .78rem/1.4 var(--mono); color:var(--ink2); margin:1rem 0 0; display:flex; align-items:center; gap:7px; }
+.updated::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--accent); flex:0 0 auto; }
 .sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
-@media (max-width:520px){ body{font-size:18px;} h1{font-size:1.4rem;} .wrap{padding:1rem .8rem 5rem;} }
+@media (max-width:520px){ body{font-size:18px;} h1{font-size:1.4rem;} .wrap{padding:1rem .8rem 2rem;} }
 @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+
+/* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+.se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; border-top:2px solid var(--line); }
+.se-rail a,.se-rail button{ min-height:var(--tap); padding:10px 18px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer; }
+.se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 </style>
 </head>
 <body>
-<div class="topbar">
-  <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 L24 18 L37 20 L24 22 L20 37 L16 22 L3 20 L16 18 Z" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/></svg>
-  <span class="wm">The Bridge · start here</span>
-  <button class="cstop" id="cstop" aria-label="Change comfort palette. Currently Default.">Comfort</button>
+
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="../index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
 </div>
 
 <div class="wrap">
@@ -137,7 +246,7 @@ body.warm .foot{ color:#0f0e0b; } .foot a{ color:#fff; } body.warm .foot a{ colo
     <h1 id="splashh" class="splashh">One screen.<br>One move.</h1>
     <p class="lead splashp">Tell it three quick things and it points you at the single most valuable move — and puts everything you built one tap away.</p>
     <button class="go" id="toForm">Find my bearing &rarr;</button>
-    <p class="splashtip">Eyes need a different setting? Tap <b>Comfort</b>, top-right — any time.</p>
+    <p class="splashtip">Eyes need a different setting? Tap <b>Studio Eyes</b>, top-right — any time.</p>
   </section>
 
   <!-- SCREEN 1 — INPUT FORM -->
@@ -183,7 +292,13 @@ body.warm .foot{ color:#0f0e0b; } .foot a{ color:#fff; } body.warm .foot a{ colo
         <div class="ct">The art lane (when you're ready)</div>
         <div class="links">
           <a class="link" href="the-first-image-midjourney-spec.md" target="_blank" rel="noopener">
-            <svg class="li" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 4 C24 4 28 10 28 16 C28 23 22 26 19 28 L15 28 C12 26 6 23 6 16 C6 10 10 4 17 4 Z" fill="none" stroke="var(--ink)" stroke-width="2"/></svg>
+            <svg class="li" viewBox="0 0 34 34" fill="none" stroke="var(--ink)" aria-hidden="true">
+              <path d="M17 3.5 C23.5 3.5 27.5 8.5 27.5 14 C27.5 19.5 22.5 23 19.5 25.5 L14.5 25.5 C11.5 23 6.5 19.5 6.5 14 C6.5 8.5 10.5 3.5 17 3.5 Z" stroke-width="2.6"/>
+              <path d="M17 3.5 C13.5 8 13.5 21 17 25.5" stroke-width="1.1"/>
+              <path d="M17 3.5 C20.5 8 20.5 21 17 25.5" stroke-width="1.1"/>
+              <path d="M14.5 25.5 L15.5 29 M19.5 25.5 L18.5 29" stroke-width="1.1"/>
+              <rect x="14" y="29" width="6" height="3.5" rx="0.8" fill="var(--ink)" stroke="none"/>
+            </svg>
             <span><span class="lt">The First Image (Midjourney spec)</span><br><span class="ld">one balloon, the prompt + pipeline</span></span><span class="arr">&rarr;</span>
           </a>
         </div>
@@ -211,18 +326,53 @@ body.warm .foot{ color:#0f0e0b; } .foot a{ color:#fff; } body.warm .foot a{ colo
   <div class="foot">
     Tight Spiral Studios · <a href="mailto:walshero@gmail.com">walshero@gmail.com</a> — <b>The Bridge.</b> Your start-here cockpit: one move, your builds one tap away, the art lane when ready. Function first; better over time. Single file, offline, nothing stored or sent. Green-free slate placeholder pending the palette pick.
   </div>
+  <p class="updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v2 <span style="opacity:.75">e613d29</span></span>
 </div>
+
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="../index.html" aria-label="Home">Home</a>
+</nav>
 
 <script>
 (function(){
   var $=function(id){return document.getElementById(id);};
+  var root=document.documentElement, sr=$('seSr');
 
-  var stops=['softer','default','warm'], ci=1;
-  function applyStop(s){ document.body.classList.remove('softer','warm'); if(s==='softer')document.body.classList.add('softer'); if(s==='warm')document.body.classList.add('warm'); }
-  $('cstop').addEventListener('click',function(){ ci=(ci+1)%3; applyStop(stops[ci]);
-    var name=stops[ci].charAt(0).toUpperCase()+stops[ci].slice(1);
-    this.textContent='Comfort: '+name; this.setAttribute('aria-label','Change comfort palette. Currently '+name+'.'); });
+  /* ═══ STUDIO EYES (Comfort Kernel v2) ═══ */
+  // last-updated: computed, not typed
+  (function(){ var u=$('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=$('seEyes'), panel=$('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
 
+  /* ═══ THE BRIDGE ═══ */
   function show(id){ document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');}); $(id).classList.add('on'); window.scrollTo(0,0); var h=$(id).querySelector('h1'); if(h){ h.setAttribute('tabindex','-1'); h.focus(); } }
   $('toForm').addEventListener('click',function(){ show('form'); });
   $('redo').addEventListener('click',function(){ show('form'); });
@@ -235,7 +385,13 @@ body.warm .foot{ color:#0f0e0b; } .foot a{ color:#fff; } body.warm .foot a{ colo
     { f:'review-bench.html', t:'The Review Bench', d:'peer-workshop trainer — name the moves' },
     { f:'workshop-wall.html', t:'The Workshop Wall', d:'the six writerly moves, labeled' }
   ];
-  function linkIcon(){ return '<svg class="li" viewBox="0 0 34 34" aria-hidden="true"><rect x="5" y="7" width="24" height="20" rx="3" fill="none" stroke="var(--ink)" stroke-width="2"/><path d="M5 13 H29" stroke="var(--ink)" stroke-width="2"/></svg>'; }
+  /* build-link mark — direction A (Technical Engraving): heavy contour, fine mechanism */
+  function linkIcon(){ return '<svg class="li" viewBox="0 0 34 34" fill="none" stroke="var(--ink)" aria-hidden="true">'
+    +'<rect x="4.5" y="6.5" width="25" height="21" rx="2.5" stroke-width="2.6"/>'
+    +'<path d="M4.5 12.5 H29.5" stroke-width="1.2"/>'
+    +'<path d="M9 17.5 H25 M9 22 H20" stroke-width="1.2" stroke-linecap="round"/>'
+    +'<circle cx="8.2" cy="9.5" r="1.5" fill="var(--ink)" stroke="none"/>'
+    +'</svg>'; }
   var box=$('buildLinks');
   BUILDS.forEach(function(b){
     var a=document.createElement('a'); a.className='link'; a.href=b.f; a.target='_blank'; a.rel='noopener';

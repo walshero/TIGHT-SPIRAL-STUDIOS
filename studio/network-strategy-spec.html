@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <!--
   NETWORK STRATEGY SPEC — Tight Spiral Studios · walshero@gmail.com
   Canonical role: the studio-scaling strategy doc. Decodes how FableVision and
@@ -15,19 +15,23 @@
   live-reading layer can parse role / open calls / what it gates, once that
   hub ships. Co-located so it can't drift.
 
-  FLOOR (locked): Comfort Gate screen-zero (palette picked as LIVE swatches
-  before content). Banned-token rule: --ink2 == --ink, no muted-text, no green
-  text on paper (green only as button/border fill behind full-contrast white).
-  Large type, one idea per line where it counts, 44px targets, keyboard nav,
-  visible focus, reduced-motion safe, scroll-reset, no emoji, no color-as-sole.
-  Single-file, offline, in-memory only.
+  FLOOR (Comfort Kernel v2, migrated 2026-07-30): NO opening wall — scene shows
+  on load; comfort lives in Studio Eyes (chrome, top right). Reserved chrome
+  header (Home · teaspoon brand · Studio Eyes) that never overlaps content.
+  Light: Default / Dusk / Warm-dark via html[data-light] token remaps
+  (warm-dark = warm charcoal, never pure black). Text size A / A+ / A++.
+  Toggles: High contrast · Reduce motion · Colorblind cues. Back + Home rail
+  at bottom. Banned-token rule kept: --ink2 == --ink, no muted-text, no green
+  text on paper (green only as fill behind full-contrast white). Large type,
+  44px targets, keyboard nav, visible focus, reduced-motion safe, no emoji,
+  no color-as-sole. Single-file, offline, every text >=4.5:1 in all three modes.
 -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Network Strategy Spec — Tight Spiral Studios</title>
 <style>
-/* STUDIO EYES v4 CLASS-FIX 2026-07-11: lock the palette. */
+/* ---- LIGHT: DAY (default) ---- */
 :root{ color-scheme: light; }
 
 :root{
@@ -36,39 +40,85 @@
   --pine:#1a4a35; --pine-fill:#1a4a35; --blue:#1a3d5c;
   --stop:#8b1a2a; --stop-bg:#f7e7e8;
   --go:#185f3e; --go-bg:#e6f1ea;
+  --on-fill:#ffffff;
+  --tap:48px;
 }
-body.softer{ --bg:#efe9dd; --surface:#f7f1e6; --ink:#26210f; --ink2:#26210f; --line:#cdbf9c; }
-body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0; --line:#5e553e;
-  --gold:#f0c357; --focus:#f0c357; --pine-fill:#3d8a64; --stop-bg:#3a2622; --go-bg:#243a2f; --stop:#f0a8a8; --go:#9fd9b6; }
+/* ---- LIGHT: DUSK ---- */
+html[data-light="dusk"]{
+  --bg:#efe9dd; --surface:#f7f1e6; --ink:#26210f; --ink2:#26210f; --line:#cdbf9c;
+}
+/* ---- LIGHT: WARM-DARK (night) — warm charcoal, never pure black ---- */
+html[data-light="night"]{
+  color-scheme: dark;
+  --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0; --line:#5e553e;
+  --gold:#f0c357; --focus:#f0c357;
+  --stop-bg:#3a2622; --go-bg:#243a2f; --stop:#f0a8a8; --go:#9fd9b6;
+}
+/* ---- TOGGLE: high contrast ---- */
+html.se-contrast:not([data-light="night"]){
+  --bg:#fbfaf7; --surface:#ffffff; --ink:#141109; --ink2:#141109; --line:#b9a06a; --gold:#5a3a00;
+}
+html.se-contrast[data-light="night"]{
+  --bg:#0e0d0b; --surface:#161410; --ink:#fff7e6; --ink2:#fff7e6; --gold:#f5cf6e;
+}
+/* ---- TOGGLE: text size A / A+ / A++ ---- */
+html{ font-size:100%; }
+html.se-a1{ zoom:1.15; }
+html.se-a2{ zoom:1.3; }
+/* ---- TOGGLE: reduce motion ---- */
+html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+/* ---- TOGGLE: colorblind cues ---- */
+html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{ margin:0; font-family:Georgia,'Times New Roman',serif; background:var(--bg); color:var(--ink);
   line-height:1.6; font-size:19px; }
 .sans{ font-family:system-ui,-apple-system,'Segoe UI',sans-serif; }
 
-/* top bar */
-.topbar{ position:sticky; top:0; z-index:10; background:var(--pine-fill); color:#fff;
-  display:flex; align-items:center; gap:.6rem; padding:.7rem 1rem; border-bottom:3px solid var(--gold); }
-.topbar .wm{ font:700 .95rem/1.2 system-ui,sans-serif; color:#fff; }
-.cstop{ margin-left:auto; background:rgba(255,255,255,.16); color:#fff; border:2px solid rgba(255,255,255,.75);
-  border-radius:9px; padding:.5rem .7rem; font:700 .8rem/1 system-ui,sans-serif; cursor:pointer; min-height:44px; min-width:44px; }
-.cstop:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+/* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+.se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+  padding:9px 14px; background:var(--surface); border-bottom:2px solid var(--ink);
+  position:sticky; top:0; z-index:100; }
+.se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 12px; border:1.5px solid var(--line); border-radius:8px; background:var(--bg);
+  color:var(--ink); font:700 13px/1.2 ui-monospace,'SF Mono',Menlo,monospace; text-decoration:none; }
+.se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+.se-brand svg{ width:34px; height:20px; color:var(--gold); flex:0 0 auto; }
+.se-brand .wm{ font-family:Georgia,'Times New Roman',serif; font-size:16px; letter-spacing:.01em; white-space:nowrap; }
+.se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--pine-fill);
+  color:var(--on-fill); font:700 13px/1.2 ui-monospace,'SF Mono',Menlo,monospace; cursor:pointer; }
+.se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+@media (max-width:560px){ .se-brand .wm{ display:none; } }
+
+/* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+.se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:101;
+  width:min(320px,calc(100vw - 24px)); background:var(--surface); color:var(--ink);
+  border:2px solid var(--pine-fill); border-radius:12px; padding:15px;
+  box-shadow:0 10px 34px rgba(0,0,0,.28); display:none; }
+html[data-light="night"] .se-panel{ border-color:var(--gold); }
+.se-panel[data-open="1"]{ display:block; }
+.se-panel h2{ font:700 10.5px/1.3 ui-monospace,'SF Mono',Menlo,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--ink2); margin:0 0 8px; padding:0; border:0; }
+.se-row{ display:flex; gap:6px; margin-bottom:14px; }
+.se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--bg); color:var(--ink); font:700 12.5px/1.2 ui-monospace,'SF Mono',Menlo,monospace; cursor:pointer; }
+.se-btn[aria-pressed="true"]{ background:var(--pine-fill); color:var(--on-fill); border-color:var(--pine-fill); }
+.se-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+  min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--bg); color:var(--ink); font:600 14px/1.3 system-ui,-apple-system,'Segoe UI',sans-serif; cursor:pointer; text-align:left; }
+.se-tog[aria-pressed="true"]{ border-color:var(--pine-fill); }
+html[data-light="night"] .se-tog[aria-pressed="true"]{ border-color:var(--gold); }
+.se-tog .st{ font:700 11px/1.2 ui-monospace,'SF Mono',Menlo,monospace; color:var(--ink2); }
+.se-tog:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
 
 .wrap{ max-width:760px; margin:0 auto; padding:1.6rem 1.2rem 4rem; }
 
-/* comfort gate screen-zero */
-#gate{ max-width:760px; margin:0 auto; padding:2rem 1.2rem; }
-#gate h1{ font-size:1.5rem; margin:.2rem 0 .4rem; }
-#gate p{ font-size:1.02rem; }
-.swatches{ display:flex; flex-direction:column; gap:.7rem; margin:1.3rem 0; }
-.sw{ display:flex; align-items:center; gap:1rem; width:100%; text-align:left; cursor:pointer;
-  border:3px solid var(--line); border-radius:12px; padding:1rem 1.1rem; min-height:44px;
-  font:600 1.05rem/1.3 system-ui,sans-serif; }
-.sw:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
-.sw .chip{ width:42px; height:42px; border-radius:8px; flex:0 0 auto; border:2px solid rgba(0,0,0,.25); }
-.sw.d{ background:#fffaf0; color:#1f1b12; } .sw.d .chip{ background:#1f1b12; }
-.sw.s{ background:#f7f1e6; color:#26210f; } .sw.s .chip{ background:#26210f; }
-.sw.w{ background:#26231d; color:#f3e4c0; border-color:#5e553e; } .sw.w .chip{ background:#f0c357; }
+/* last-updated stamp — computed, not typed */
+.updated{ font:400 .78rem/1.4 ui-monospace,'SF Mono',Menlo,monospace; color:var(--ink2); margin:.4rem 0 1rem; display:flex; align-items:center; gap:7px; }
+.updated::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--gold); flex:0 0 auto; }
 
 h1.title{ font-size:1.75rem; line-height:1.25; margin:.4rem 0 .3rem; }
 .kicker{ font:700 .8rem/1 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); }
@@ -77,7 +127,6 @@ h3{ font-size:1.08rem; margin:1.3rem 0 .3rem; font-family:system-ui,sans-serif; 
 p{ margin:.6rem 0; }
 strong{ color:var(--ink); }
 a{ color:var(--gold); }
-body.warm a{ color:var(--focus); }
 
 /* the headline brake card */
 .brake{ background:var(--stop-bg); border:3px solid var(--stop); border-radius:14px; padding:1.2rem 1.3rem; margin:1.4rem 0; }
@@ -100,37 +149,62 @@ th,td{ text-align:left; padding:.6rem .5rem; border-bottom:1px solid var(--line)
 th{ font-family:system-ui,sans-serif; font-size:.82rem; text-transform:uppercase; letter-spacing:.04em; color:var(--gold); }
 
 .foot{ margin-top:3rem; padding-top:1.2rem; border-top:2px solid var(--line); font-size:.9rem; }
-.studiofoot{ background:var(--pine-fill); color:#fff; border-radius:12px; padding:1.1rem 1.2rem; margin-top:1.4rem; }
-.studiofoot a{ color:#fff; }
-.hidden{ display:none; }
+.studiofoot{ background:var(--pine-fill); color:var(--on-fill); border-radius:12px; padding:1.1rem 1.2rem; margin-top:1.4rem; }
+.studiofoot a{ color:var(--on-fill); }
+.studiofoot strong{ color:var(--on-fill); }
+
+/* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+.se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; border-top:2px solid var(--line); }
+.se-rail a,.se-rail button{ min-height:var(--tap); padding:10px 18px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--surface); color:var(--ink); font:700 13px/1.2 ui-monospace,'SF Mono',Menlo,monospace; text-decoration:none; cursor:pointer; }
+.se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
 @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
 </style>
 </head>
 <body>
 
-<!-- ============ COMFORT GATE (screen zero) ============ -->
-<div id="gate">
-  <p class="kicker">Tight Spiral Studios</p>
-  <h1>Pick what's easiest on your eyes</h1>
-  <p>Three palettes, shown as real swatches. No surprise — choose before the document renders. All three meet the contrast floor; the only test that matters is which one your eyes prefer.</p>
-  <div class="swatches" role="group" aria-label="palette choice">
-    <button class="sw d" data-stop="default"><span class="chip" aria-hidden="true"></span><span>Default — ink on warm paper</span></button>
-    <button class="sw s" data-stop="softer"><span class="chip" aria-hidden="true"></span><span>Softer — lower glare, muted paper</span></button>
-    <button class="sw w" data-stop="warm"><span class="chip" aria-hidden="true"></span><span>Warm-dark — amber on charcoal</span></button>
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="../index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
   </div>
-  <p class="sans" style="font-size:.9rem;">You can change this any time with the Comfort button, top right.</p>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
 </div>
 
 <!-- ============ DOCUMENT ============ -->
-<div id="doc" class="hidden">
-  <div class="topbar">
-    <span class="wm">Tight Spiral Studios — Network Strategy Spec</span>
-    <button class="cstop" id="cstop" aria-label="change comfort palette">Comfort</button>
-  </div>
-
-  <div class="wrap">
+<main class="wrap">
     <p class="kicker">Strategic spec · feeds the hubs</p>
     <h1 class="title">How studios build partner networks — and why ours waits</h1>
+    <p class="updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v2 <span style="opacity:.75">e613d29</span></span>
     <p class="lede">A decode of FableVision's and Filament Games' network strategies, filed under the one finding that governs all of it: <strong>scaling waits until a real student plays a real game.</strong></p>
 
     <!-- THE HEADLINE BRAKE -->
@@ -250,8 +324,13 @@ th{ font-family:system-ui,sans-serif; font-size:.82rem; text-transform:uppercase
       <a href="tight-spiral-system-map.html">How the studio works</a>
       <p style="font-size:.85rem; margin-top:.6rem;">Sources: FableVision and Filament Games public sites, blogs, SBIR/IES records, and game-design press. Reference studios cited for method only; no IP or floor is reshaped by them.</p>
     </div>
-  </div>
-</div>
+</main>
+
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="../index.html" aria-label="Home">Home</a>
+</nav>
 
 <!--
   TSP-META BLOCK
@@ -261,44 +340,50 @@ th{ font-family:system-ui,sans-serif; font-size:.82rem; text-transform:uppercase
     "headline_finding":"do not build a partner network until one game is PLAYED by real students with captured evidence",
     "models":{"fablevision":"inbound mission magnet + named door-opener per vertical + walled business engine","filament":"non-dilutive grants (SBIR) + RFP-through-grant + partner-as-playtester"},
     "reference_layer":["Filament: Alpha/Beta/Gold gates","FableVision: mission magnet + door-opener-per-vertical","Lumino City: Lume move / paper-craft as moat","Journey: Japanese-garden subtraction test","Metroid: knowledge gate","Amanita: wordless-first + exposure must become a task"],
-    "comfort_gate":true,
+    "comfort_gate":false,
+    "comfort_kernel":"v2 — Studio Eyes in reserved chrome; no opening wall (migrated 2026-07-30)",
     "operative":true,
     "hitl_active":["headline redirect overrides the stated scaling request — human judgment that ship-first beats scale-first","reference studios held as seed-only, never reshaping IP/floors"],
     "hitl_NEEDED":["founder confirms the one pilot game + section for fall","founder voice/wording pass","decide which two mechanics actually graduate to patterns file (knowledge gate + garden test proposed)"],
     "founder_open":["pick CYL or EN195 for the fall pilot","send/skip the Paul Reynolds peer note","open the Alpha/Beta/Gold gate-naming into OS §6","first grant target: NEH vs IES SBIR"],
     "feeds":["founder-hub strategy lane (anchor)","system-map colophon (reference layer)","patterns file (knowledge gate + garden test)","OS §6 pipeline (Alpha/Beta/Gold)"],
     "parking_lot_flagged":["full two-model network plan","NEH/IES SBIR application","named verticals + door-opener plan — ALL gated behind one played game"],
-    "floor_states_verified":["Default/Softer/Warm-dark target WCAG AA; --ink2==--ink (no muted text); no green text on paper (green only as fill behind white); 44px+ targets; keyboard nav; visible focus; reduced-motion safe; scroll-reset on gate->doc; no emoji; no color-as-sole-signal (label+border)"],
-    "assets_promoted":["comfort-gate screen-zero (reused)","headline-brake card pattern (lead-with-the-finding)","before/after-the-gate action split","six-studio reference-layer table"] }
+    "floor_states_verified":["Default/Dusk/Warm-dark target WCAG AA (>=4.5:1 measured); --ink2==--ink (no muted text); no green text on paper (green only as fill behind white); 44px+ targets; keyboard nav; visible focus; reduced-motion safe; no opening wall; no emoji; no color-as-sole-signal (label+border)"],
+    "assets_promoted":["headline-brake card pattern (lead-with-the-finding)","before/after-the-gate action split","six-studio reference-layer table"] }
 -->
 <script>
 (function(){
-  var stops=['default','softer','warm'];
-  function apply(s){
-    document.body.classList.remove('softer','warm');
-    if(s==='softer')document.body.classList.add('softer');
-    if(s==='warm')document.body.classList.add('warm');
-  }
-  // gate -> doc
-  document.querySelectorAll('.sw').forEach(function(b){
-    b.addEventListener('click',function(){
-      apply(this.getAttribute('data-stop'));
-      document.getElementById('gate').classList.add('hidden');
-      document.getElementById('doc').classList.remove('hidden');
-      window.scrollTo(0,0);
-      var cs=document.getElementById('cstop');
-      cs.dataset.i = stops.indexOf(this.getAttribute('data-stop'));
-      cs.focus();
-    });
-  });
-  // comfort toggle in-doc
-  var cs=document.getElementById('cstop');
-  cs.dataset.i='0';
-  cs.addEventListener('click',function(){
-    var i=(parseInt(this.dataset.i,10)+1)%3; this.dataset.i=i;
-    apply(stops[i]);
-    this.textContent='Comfort: '+stops[i].charAt(0).toUpperCase()+stops[i].slice(1);
-  });
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  // last-updated: computed, not typed
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
 })();
 </script>
 </body>

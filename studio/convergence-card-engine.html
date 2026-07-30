@@ -1,16 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Convergence Card — a machine-assisted, human-verified research engine</title>
 <style>
   /* ---- LEGIBILITY FLOOR (Matt's RP eyes are the verdict) ---- */
+  /* ---- LIGHT: DAY (default) ---- */
   :root{
     --paper:#f7f5ef;      /* warm near-white, never pure #fff */
+    --paper-2:#eae6dc;    /* hover / secondary surface */
+    --field:#ffffff;      /* input fields */
     --ink:#141210;        /* near-black, never gray for body */
     --ink-soft:#141210;   /* captions match ink; no muted gray */
-    --channel:#1f4e5f;    /* deep teal — the confluence channel */
+    --channel:#1f4e5f;    /* deep teal — the confluence channel (accent BG) */
+    --channel-ink:#1f4e5f;/* the channel as TEXT on paper */
+    --channel-hover:#163a47;
+    --on-channel:#ffffff; /* text on the channel background */
     --converge:#1a5c3a;   /* deep green = sources agree */
     --contest:#8a5a00;    /* deep amber = sources clash */
     --thin:#6b4a8a;       /* deep violet = one source only */
@@ -18,21 +24,104 @@
     --reject:#7a2318;     /* deep rust = verified false */
     --line:#141210;
     --size:19px;
+    /* chrome / Studio Eyes tokens */
+    --surface:#fdfbf4; --surface-2:#eae5d8; --ink-2:#3f3a33;
+    --accent-strong:#163a47; --on-accent:#ffffff; --focus:#8a5a00;
+    --r:10px; --tap:48px;
+    --sans:"Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,sans-serif;
+    --mono:ui-monospace,'SF Mono',Menlo,monospace;
+    --motion:.18s;
   }
+  /* ---- LIGHT: DUSK ---- */
+  html[data-light="dusk"]{
+    --paper:#efe3c6; --paper-2:#e2d2ac; --field:#faf3df;
+    --ink:#141210; --ink-soft:#141210;
+    --channel:#1a4450; --channel-ink:#1a4450; --channel-hover:#12333d; --on-channel:#ffffff;
+    --line:#141210;
+    --surface:#f4ead0; --surface-2:#e4d5ae; --ink-2:#453a22;
+    --accent-strong:#143440; --on-accent:#ffffff; --focus:#8f3f00;
+  }
+  /* ---- LIGHT: WARM-DARK (night) — warm charcoal, never pure black ---- */
+  html[data-light="night"]{
+    --paper:#211d18; --paper-2:#33302a; --field:#2e2a23;
+    --ink:#f0e7d8; --ink-soft:#f0e7d8;
+    --channel:#1f4e5f; --channel-ink:#9ec7d6; --channel-hover:#163a47; --on-channel:#ffffff;
+    --contest:#d9a13f; --thin:#b39ad1; --silent:#8a807c;
+    --line:#8a7f68;
+    --surface:#2a2520; --surface-2:#38322a; --ink-2:#d8c8a4;
+    --accent-strong:#a9c6d8; --on-accent:#141109; --focus:#f0c357;
+  }
+  /* ---- TOGGLE: high contrast (halation floor) ---- */
+  html.se-contrast:not([data-light="night"]){ --paper:#fbfaf7; --paper-2:#f0ece2; --field:#ffffff; --surface:#fbfaf7; --surface-2:#f0ece2; --ink:#0e0c0a; --ink-2:#2c2517; --accent-strong:#12303c; --channel-ink:#173b48; }
+  html.se-contrast[data-light="night"]{ --paper:#0e0d0b; --paper-2:#1e1b16; --field:#1a1814; --surface:#161410; --surface-2:#1e1b16; --ink:#fff7e6; --ink-2:#efe0bc; --accent-strong:#b9cbe0; --channel-ink:#b9d6e4; }
+  /* ---- TOGGLE: text size A / A+ / A++ ---- */
+  html.se-a1{ zoom:1.15; }
+  html.se-a2{ zoom:1.3; }
+  /* ---- TOGGLE: reduce motion ---- */
+  html.se-reduce *,@media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+  /* ---- TOGGLE: colorblind cues ---- */
+  html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+
   *{box-sizing:border-box}
   html{font-size:var(--size)}
   body{
     margin:0; background:var(--paper); color:var(--ink);
-    font-family:"Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,sans-serif;
+    font-family:var(--sans);
     line-height:1.6; letter-spacing:0.01em;
-    padding:2rem 1.25rem 5rem;
+    transition:background var(--motion) ease, color var(--motion) ease;
   }
-  .wrap{max-width:70ch; margin:0 auto}
+  .wrap{max-width:70ch; margin:0 auto; padding:2rem 1.25rem 3rem}
+
+  /* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+  .se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+    padding:9px 14px; background:var(--surface); border-bottom:2px solid var(--ink);
+    position:sticky; top:0; z-index:100; }
+  .se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+    padding:8px 12px; border:1.5px solid var(--line); border-radius:8px; background:var(--surface-2);
+    color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; }
+  .se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+  .se-brand svg{ width:34px; height:20px; color:var(--accent-strong); flex:0 0 auto; }
+  .se-brand .wm{ font-family:var(--sans); font-size:16px; letter-spacing:.01em; white-space:nowrap; }
+  .se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+    padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--accent-strong);
+    color:var(--on-accent); font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer; }
+  .se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  @media (max-width:560px){ .se-brand .wm{ display:none; } }
+
+  /* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+  .se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:101;
+    width:min(320px,calc(100vw - 24px)); background:var(--surface); color:var(--ink);
+    border:2px solid var(--accent-strong); border-radius:var(--r); padding:15px;
+    box-shadow:0 10px 34px rgba(0,0,0,.28); display:none; }
+  .se-panel[data-open="1"]{ display:block; }
+  .se-panel h2{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-2); margin:0 0 8px; }
+  .se-row{ display:flex; gap:6px; margin-bottom:14px; }
+  .se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--line); border-radius:8px;
+    background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:12.5px; cursor:pointer; }
+  .se-btn[aria-pressed="true"]{ background:var(--accent-strong); color:var(--on-accent); border-color:var(--accent-strong); }
+  .se-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+    min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--line); border-radius:8px;
+    background:var(--surface-2); color:var(--ink); font-family:var(--sans); font-weight:600; font-size:14px; cursor:pointer; text-align:left; }
+  .se-tog[aria-pressed="true"]{ border-color:var(--accent-strong); }
+  .se-tog .st{ font-family:var(--mono); font-size:11px; color:var(--ink-2); }
+  .se-tog[aria-pressed="true"] .st{ color:var(--accent-strong); font-weight:700; }
+  .se-tog:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .se-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+  /* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+  .se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; border-top:2px solid var(--line); }
+  .se-rail a,.se-rail button{ min-height:var(--tap); padding:10px 18px; border:1.5px solid var(--line); border-radius:8px;
+    background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer; }
+  .se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
   /* ---- masthead: the confluence gauge is the signature ---- */
   .masthead{border-bottom:3px solid var(--line); padding-bottom:1.25rem; margin-bottom:1.5rem}
-  .eyebrow{font-size:0.85rem; letter-spacing:0.14em; text-transform:uppercase; font-weight:700; color:var(--channel)}
+  .eyebrow{font-size:0.85rem; letter-spacing:0.14em; text-transform:uppercase; font-weight:700; color:var(--channel-ink)}
   h1{font-size:1.9rem; line-height:1.2; margin:0.4rem 0 0.5rem; font-weight:800}
   .sub{font-size:0.98rem; margin:0}
+  .updated{ font-family:var(--mono); font-size:.78rem; color:var(--ink-2); margin:.5rem 0 0; display:flex; align-items:center; gap:7px; }
+  .updated::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--channel-ink); flex:0 0 auto; }
   /* the four tributaries flowing into one channel */
   .gauge{display:flex; align-items:stretch; margin:1.25rem 0 0; border:2px solid var(--line); border-radius:8px; overflow:hidden}
   .trib{flex:1; padding:0.55rem 0.4rem; text-align:center; font-size:0.72rem; font-weight:700; letter-spacing:0.03em; border-right:2px solid var(--line); background:var(--paper)}
@@ -43,22 +132,22 @@
   label{display:block; font-weight:700; margin:1.5rem 0 0.4rem; font-size:1rem}
   textarea,input[type=text]{
     width:100%; font:inherit; font-size:1rem; padding:0.7rem;
-    border:2px solid var(--line); border-radius:6px; background:#fff; color:var(--ink);
+    border:2px solid var(--line); border-radius:6px; background:var(--field); color:var(--ink);
   }
   textarea{min-height:3.2rem; resize:vertical}
   .btn{
     display:inline-block; margin-top:0.9rem; font:inherit; font-weight:700; font-size:1rem;
     padding:0.7rem 1.4rem; min-height:44px; cursor:pointer;
-    background:var(--channel); color:#fff; border:2px solid var(--line); border-radius:6px;
+    background:var(--channel); color:var(--on-channel); border:2px solid var(--line); border-radius:6px;
   }
-  .btn:hover{background:#163a47}
-  .btn:focus-visible{outline:3px solid var(--contest); outline-offset:2px}
+  .btn:hover{background:var(--channel-hover)}
+  .btn:focus-visible{outline:3px solid var(--focus); outline-offset:2px}
   .btn.secondary{background:var(--paper); color:var(--ink)}
-  .btn.secondary:hover{background:#eae6dc}
+  .btn.secondary:hover{background:var(--paper-2)}
   /* ---- the card ---- */
   .card{margin-top:2rem; border:2px solid var(--line); border-radius:10px; overflow:hidden; display:none}
   .card.show{display:block}
-  .card-q{background:var(--channel); color:#fff; padding:1rem 1.1rem; font-weight:700; font-size:1.1rem; line-height:1.3}
+  .card-q{background:var(--channel); color:var(--on-channel); padding:1rem 1.1rem; font-weight:700; font-size:1.1rem; line-height:1.3}
   .tier{padding:0.9rem 1.1rem; border-bottom:2px solid var(--line)}
   .tier h2{margin:0 0 0.5rem; font-size:0.8rem; letter-spacing:0.1em; text-transform:uppercase; display:flex; align-items:center; gap:0.5rem}
   .chip{display:inline-block; width:0.9rem; height:0.9rem; border-radius:2px; border:1.5px solid var(--line); flex:none}
@@ -70,9 +159,10 @@
   .claim .src{font-size:0.86rem}
   .seat-note{font-size:0.86rem; font-style:italic; margin-top:0.25rem}
   .verify{display:flex; gap:0.5rem; margin-top:0.5rem; flex-wrap:wrap}
-  .vbtn{font:inherit; font-size:0.82rem; font-weight:700; padding:0.4rem 0.8rem; min-height:36px; cursor:pointer; border:2px solid var(--line); border-radius:5px; background:var(--paper); color:var(--ink)}
+  .vbtn{font:inherit; font-size:0.82rem; font-weight:700; padding:0.4rem 0.8rem; min-height:44px; cursor:pointer; border:2px solid var(--line); border-radius:5px; background:var(--paper); color:var(--ink)}
   .vbtn[aria-pressed=true]{background:var(--converge); color:#fff}
   .vbtn.rej[aria-pressed=true]{background:var(--reject); color:#fff}
+  .vbtn:focus-visible{outline:3px solid var(--focus); outline-offset:2px}
   .empty{padding:1rem 1.1rem; font-style:italic}
   .howto{margin-top:2.5rem; border-top:2px solid var(--line); padding-top:1.25rem; font-size:0.94rem}
   .howto h3{font-size:1rem; margin:0 0 0.5rem}
@@ -88,12 +178,50 @@
 </style>
 </head>
 <body>
-<div class="wrap">
+
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="../index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
+
+<main class="wrap">
 
   <div class="masthead">
     <span class="eyebrow">Confluence · Convergence Card</span>
     <h1>Where independent sources meet, and where they don't.</h1>
     <p class="sub">Peer review is one fallible source. This machine gathers several, shows you where they converge and where they clash — honestly, never averaged — and hands you the verdict to close. Machine-assisted. Human-verified.</p>
+    <p class="updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v2 <span style="opacity:.75">e613d29</span></span>
 
     <div class="gauge" role="img" aria-label="Four review seats flow into one verified verdict: Denzin codes convergence, Cochrane weighs quality, Marcus challenges, Pearl defines what verified means.">
       <div class="trib"><span class="who">Denzin</span><span class="job">codes agree / clash / silent</span></div>
@@ -158,7 +286,13 @@
     Sources cited on each claim are external and open; verify at the link before you rely.<br>
     Tight Spiral · Confluence · built to last.
   </p>
-</div>
+</main>
+
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="../index.html" aria-label="Home">Home</a>
+</nav>
 
 <script>
 // ---- the pre-run example: the real card from the panel session ----
@@ -238,6 +372,41 @@ document.getElementById("blankBtn").addEventListener("click", function(){
   var q = document.getElementById("q").value.trim() || "Untitled question";
   draw({q:q, conv:[], cont:[], thin:[], sil:[]});
 });
+
+// ---- Studio Eyes (Comfort Kernel v2) ----
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  // last-updated: computed, not typed
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+})();
 </script>
 </body>
 </html>

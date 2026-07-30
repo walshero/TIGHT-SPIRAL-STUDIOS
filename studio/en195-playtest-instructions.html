@@ -1,35 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light dark">
 <title>EN195 Playtest — How to Play &amp; Log</title>
 <style>
+/* ---- LIGHT: DAY (default) ---- */
 :root{
   --paper:#f4efe6; --ink:#1a1408; --accent:#6e4700; --line:#c9b98f;
   --card:#faf6ee; --gold:#8a5a00;
   --snag:#7a2318; --fog:#4a3a6e; --spark:#1e5a2e;
+  --ink-2:#4a3a1e;
+  --surface:#faf6ee; --surface-2:#ede4cf;
+  --accent-strong:#5a3a00; --on-accent:#ffffff; --focus:#8a5a00;
+  --r:10px; --tap:48px;
+  --mono:ui-monospace,'SF Mono',Menlo,monospace;
+  --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+  --motion:.18s;
 }
-body.softer{ --paper:#e2dccf; --card:#efe7d4; --ink:#241f16; }
-body.warmdark{ --paper:#241c10; --ink:#f5d9a0; --accent:#f5c869; --line:#5a4a2a; --card:#2e2416; --gold:#f5c869; }
+/* ---- LIGHT: DUSK ---- */
+html[data-light="dusk"]{
+  --paper:#e2dccf; --card:#efe7d4; --ink:#241f16; --ink-2:#443722;
+  --surface:#efe7d4; --surface-2:#ddd2b8;
+  --accent-strong:#5a3a00; --on-accent:#ffffff; --focus:#7a3f00;
+}
+/* ---- LIGHT: WARM-DARK (night) — warm charcoal, never pure black ---- */
+html[data-light="night"]{
+  --paper:#241c10; --ink:#f5d9a0; --accent:#f5c869; --line:#5a4a2a;
+  --card:#2e2416; --gold:#f5c869; --ink-2:#d8c090;
+  --surface:#2e2416; --surface-2:#3a2e1c;
+  --accent-strong:#f5c869; --on-accent:#241c10; --focus:#f5c869;
+}
+/* ---- TOGGLE: high contrast ---- */
+html.se-contrast:not([data-light="night"]){
+  --paper:#fbfaf7; --card:#fbfaf7; --surface:#fbfaf7; --surface-2:#f0ece2;
+  --ink:#141109; --ink-2:#2c2517; --accent:#5a3a00; --accent-strong:#3a2500; --line:#b9a06a;
+}
+html.se-contrast[data-light="night"]{
+  --paper:#0e0d0b; --card:#161410; --surface:#161410; --surface-2:#221e16;
+  --ink:#fff7e6; --ink-2:#efe0bc; --accent:#ffd98a; --accent-strong:#ffd98a;
+}
+/* ---- TOGGLE: text size A / A+ / A++ ---- */
+html{ font-size:100%; }
+html.se-a1{ zoom:1.15; }
+html.se-a2{ zoom:1.3; }
+/* ---- TOGGLE: reduce motion ---- */
+html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+@media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+/* ---- TOGGLE: colorblind cues ---- */
+html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+
 *{box-sizing:border-box;}
 body{
   background:var(--paper); color:var(--ink);
   font-family:Georgia,'Times New Roman',serif;
-  font-size:22px; line-height:1.55; margin:0; padding:16px 16px 40px;
-  max-width:720px; margin-left:auto; margin-right:auto;
+  font-size:22px; line-height:1.55; margin:0;
+  transition:background var(--motion) ease, color var(--motion) ease;
 }
+.wrap{ max-width:720px; margin:0 auto; padding:16px 16px 40px; }
 h1{font-size:32px; line-height:1.2; margin:10px 0 4px;}
-.sub{font-size:19px; margin:0 0 18px; color:var(--accent); font-weight:bold;}
+.sub{font-size:19px; margin:0 0 6px; color:var(--accent); font-weight:bold;}
+.updated{ font-family:var(--mono); font-size:15px; color:var(--ink-2); margin:0 0 18px; display:flex; align-items:center; gap:7px; }
+.updated::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--accent); flex:0 0 auto; }
 h2{font-size:25px; margin:28px 0 8px; border-bottom:3px solid var(--line); padding-bottom:6px;}
-#palette{
-  position:sticky; top:8px; float:right; min-height:48px; min-width:48px;
-  font-size:19px; font-weight:bold; padding:10px 16px;
-  background:var(--ink); color:var(--paper); border:3px solid var(--gold);
-  border-radius:10px; cursor:pointer;
-}
-#palette:focus-visible, a:focus-visible{ outline:4px solid var(--gold); outline-offset:3px; }
+a:focus-visible{ outline:4px solid var(--focus); outline-offset:3px; }
+
+/* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+.se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+  padding:9px 14px; background:var(--surface); border-bottom:2px solid var(--ink);
+  position:sticky; top:0; z-index:100; }
+.se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 12px; border:1.5px solid var(--line); border-radius:8px; background:var(--surface-2);
+  color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; }
+.se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+.se-brand svg{ width:34px; height:20px; color:var(--accent-strong); flex:0 0 auto; }
+.se-brand .wm{ font-family:Georgia,'Times New Roman',serif; font-size:16px; letter-spacing:.01em; white-space:nowrap; }
+.se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--accent-strong);
+  color:var(--on-accent); font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer; }
+.se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+@media (max-width:560px){ .se-brand .wm{ display:none; } }
+
+/* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+.se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:101;
+  width:min(320px,calc(100vw - 24px)); background:var(--surface); color:var(--ink);
+  border:2px solid var(--accent-strong); border-radius:var(--r); padding:15px;
+  box-shadow:0 10px 34px rgba(0,0,0,.28); display:none; }
+.se-panel[data-open="1"]{ display:block; }
+.se-panel h2{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-2); margin:0 0 8px; border-bottom:none; padding-bottom:0; }
+.se-row{ display:flex; gap:6px; margin-bottom:14px; }
+.se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:12.5px; cursor:pointer; }
+.se-btn[aria-pressed="true"]{ background:var(--accent-strong); color:var(--on-accent); border-color:var(--accent-strong); }
+.se-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+  min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--sans); font-weight:600; font-size:14px; cursor:pointer; text-align:left; }
+.se-tog[aria-pressed="true"]{ border-color:var(--accent-strong); }
+.se-tog .st{ font-family:var(--mono); font-size:11px; color:var(--ink-2); }
+.se-tog[aria-pressed="true"] .st{ color:var(--accent-strong); font-weight:700; }
+.se-tog:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+/* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+.se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; border-top:2px solid var(--line); }
+.se-rail a{ min-height:var(--tap); display:inline-flex; align-items:center; padding:10px 18px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer; }
+.se-rail a:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
 .banner{
   width:100%; border:3px solid var(--line); border-radius:16px;
   background:var(--card); margin:8px 0 22px; display:block;
@@ -49,6 +128,10 @@ ol.steps li{ margin:14px 0; }
   padding:10px 18px; border-radius:10px; margin:6px 8px 6px 0; min-height:48px;
 }
 .chip.snag{ background:var(--snag); } .chip.fog{ background:var(--fog); } .chip.spark{ background:var(--spark); }
+html[data-light="night"] .chip{ background:#3a2a14; }
+html[data-light="night"] .chip.snag{ background:#7a2318; }
+html[data-light="night"] .chip.fog{ background:#4a3a6e; }
+html[data-light="night"] .chip.spark{ background:#1e5a2e; }
 .chip .d{ display:block; font-size:15px; font-weight:normal; }
 .rule{
   background:var(--card); border-left:8px solid var(--gold);
@@ -63,9 +146,47 @@ ol.steps li{ margin:14px 0; }
 </style>
 </head>
 <body>
-<button id="palette" aria-label="Cycle palette. Current: Default">Palette: Default</button>
+
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="../index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
+
+<main class="wrap">
 <h1>EN195 Playtest</h1>
 <p class="sub">How to play &middot; How to log what you find</p>
+<p class="updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v2 <span style="opacity:.75">e613d29</span></span>
 
 <svg class="banner" viewBox="0 0 700 300" role="img" aria-label="A log card with three tabs labeled Snag, Fog, and Spark, and a hand adding a note.">
   <rect width="700" height="300" fill="#f4efe6"/>
@@ -119,19 +240,47 @@ ol.steps li{ margin:14px 0; }
 EN195 &middot; Tight Spiral Productions &middot; Play. Notice. Design.<br>
 Questions during the playtest go to your instructor, not into the log.
 </footer>
+</main>
+
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <a href="../en195-hub.html" aria-label="Back to EN195 hub">Back</a>
+  <a href="../index.html" aria-label="Home">Home</a>
+</nav>
 
 <script>
 (function(){
-  var b=document.getElementById('palette');
-  var stops=[['Default',''],['Softer','softer'],['Warm-dark','warmdark']];
-  var i=0;
-  b.addEventListener('click',function(){
-    i=(i+1)%stops.length;
-    document.body.className=stops[i][1];
-    b.textContent='Palette: '+stops[i][0];
-    b.setAttribute('aria-label','Cycle palette. Current: '+stops[i][0]);
-  });
-  window.scrollTo(0,0);
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  // last-updated: computed, not typed
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
 })();
 </script>
 </body>

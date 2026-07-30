@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <!--
   THE RECURSION LEDGER — Tight Spiral Studios · walshero@gmail.com
   The executable form of recursive governance (OS §6.2.5 + §5.4.5.1).
@@ -27,6 +27,11 @@
   HARVEST (Stage 7): proved recursive governance is shippable as a single offline
   instrument — the wall can be made structurally un-crossable in UI, not just stated.
   Reusable candidate: the "fence line" component (a tier boundary entries can't cross).
+
+  COMFORT KERNEL v2 (mounted 2026-07-30): reserved chrome (Home · teaspoon · Studio
+  Eyes), html[data-light] day/dusk/night token remaps (warm charcoal night), text
+  size A/A+/A++, high-contrast / reduce-motion / colorblind-cue toggles, Back+Home
+  rail, computed last-updated stamp. Legacy bar toggles removed.
 -->
 <head>
 <meta charset="UTF-8">
@@ -37,47 +42,113 @@
      Green-free by floor. High contrast by floor. The hot signal is amber, used
      ONLY for "live / eligible to graduate" — one bold place (Chanel's last-accessory
      rule: spend boldness once). Everything else is quiet steel + ink. */
+
+  /* ---- LIGHT: DAY (default) — light console ---- */
   :root{
-    /* default = light console */
     --bg:#e9ecf1; --panel:#f7f9fc; --ink:#13171e; --ink2:#13171e;
     --rule:#aeb7c4; --rule2:#8b96a6;
-    --steel:#2d3a4e; --steel2:#1d2735;
-    --hot:#b4540a; --hot-br:#d8730f; --hot-pale:#fff0df;  /* amber signal */
-    --wall:#7a1f1f; --wall-pale:#fbe6e6;                   /* the hard wall = oxblood */
+    --steel:#2d3a4e; --steel2:#1d2735; --on-steel:#f2f5fa;
+    --hot:#a34a06; --hot-br:#d8730f; --hot-pale:#fff0df; --on-hot:#ffffff;  /* amber signal */
+    --wall:#7a1f1f; --wall-pale:#fbe6e6; --on-wall:#ffffff;                 /* the hard wall = oxblood */
     --lock:#3a2f12;
     --focus:#d8730f;
+    --tap:48px; --motion:.18s;
     --mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
     --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
   }
-  /* user toggle: higher-contrast dark console (for eyes unlike the founder's, or low light) */
-  body.console{
-    --bg:#0f141c; --panel:#1a212d; --ink:#f2f5fa; --ink2:#f2f5fa;
-    --rule:#3a4658; --rule2:#586679;
-    --steel:#c4d0e0; --steel2:#d6e0ee;
-    --hot:#f6a23c; --hot-br:#f6a23c; --hot-pale:#2a1d0b;
-    --wall:#f0a0a0; --wall-pale:#2c1414;
+  /* ---- LIGHT: DUSK — lower-glare warm console ---- */
+  html[data-light="dusk"]{
+    --bg:#e6dfd0; --panel:#f0e9da; --ink:#161410; --ink2:#161410;
+    --rule:#b0a68c; --rule2:#877d64;
+    --steel:#2d3a4e; --steel2:#1d2735; --on-steel:#f2f5fa;
+    --hot:#9a4406; --hot-br:#c05a08; --hot-pale:#f7e6cf; --on-hot:#ffffff;
+    --wall:#7a1f1f; --wall-pale:#f2ded4; --on-wall:#ffffff;
+    --lock:#3a2f12;
+    --focus:#9c4000;
+  }
+  /* ---- LIGHT: WARM-DARK (night) — warm charcoal console, never pure black ---- */
+  html[data-light="night"]{
+    --bg:#1d1a15; --panel:#272219; --ink:#f2e9d5; --ink2:#e0d5ba;
+    --rule:#453f30; --rule2:#6e6650;
+    --steel:#c4d0e0; --steel2:#39424f; --on-steel:#f2f5fa;
+    --hot:#f6a23c; --hot-br:#f6a23c; --hot-pale:#2a1d0b; --on-hot:#1d1a15;
+    --wall:#f0a0a0; --wall-pale:#2c1414; --on-wall:#1d1a15;
     --lock:#f0dd9a;
     --focus:#f6a23c;
   }
+  /* ---- TOGGLE: high contrast (halation floor) ---- */
+  html.se-contrast:not([data-light="night"]){
+    --bg:#fbfaf7; --panel:#ffffff; --ink:#10141a; --ink2:#10141a;
+    --rule:#8b96a6; --rule2:#5a6472; --steel:#1d2735; --hot:#8a3c04; }
+  html.se-contrast[data-light="night"]{
+    --bg:#12100c; --panel:#181510; --ink:#fff6e1; --ink2:#f4e8cc;
+    --steel:#d6e0ee; --hot:#f8b060; --wall:#f6b6b6; }
+  /* ---- TOGGLE: text size A / A+ / A++ ---- */
+  html{ font-size:100%; }
+  html.se-a1{ zoom:1.15; }
+  html.se-a2{ zoom:1.3; }
+  /* ---- TOGGLE: reduce motion ---- */
+  html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+  @media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+  /* ---- TOGGLE: colorblind cues ---- */
+  html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+
   *{box-sizing:border-box;} html,body{margin:0;}
   body{ font-family:var(--sans); background:var(--bg); color:var(--ink);
-    line-height:1.5; font-size:19px; -webkit-text-size-adjust:100%; }
+    line-height:1.5; font-size:19px; -webkit-text-size-adjust:100%;
+    transition:background var(--motion) ease, color var(--motion) ease; }
 
-  /* ---- top console bar ---- */
-  .bar{ background:var(--steel2); color:#f2f5fa; padding:.7rem 1rem; display:flex;
-    align-items:center; gap:.7rem; position:sticky; top:0; z-index:40; flex-wrap:wrap; }
-  body.console .bar{ background:var(--steel2); color:#0f141c; }
+  /* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+  .se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+    padding:9px 14px; background:var(--panel); border-bottom:2px solid var(--ink);
+    position:sticky; top:0; z-index:100; }
+  .se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+    padding:8px 12px; border:1.5px solid var(--rule2); border-radius:8px; background:var(--bg);
+    color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; }
+  .se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+  .se-brand svg{ width:34px; height:20px; color:var(--steel); flex:0 0 auto; }
+  .se-brand .wm{ font-family:var(--sans); font-size:16px; letter-spacing:.01em; white-space:nowrap; }
+  .se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+    padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--steel2);
+    color:var(--on-steel); font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer; }
+  .se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  @media (max-width:560px){ .se-brand .wm{ display:none; } }
+
+  /* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+  .se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:101;
+    width:min(320px,calc(100vw - 24px)); background:var(--panel); color:var(--ink);
+    border:2px solid var(--steel2); border-radius:10px; padding:15px;
+    box-shadow:0 10px 34px rgba(0,0,0,.28); display:none; }
+  .se-panel[data-open="1"]{ display:block; }
+  .se-panel h2{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink2); margin:0 0 8px; }
+  .se-row{ display:flex; gap:6px; margin-bottom:14px; }
+  .se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--rule2); border-radius:8px;
+    background:var(--bg); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:12.5px; cursor:pointer; }
+  .se-btn[aria-pressed="true"]{ background:var(--steel2); color:var(--on-steel); border-color:var(--steel2); }
+  .se-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+    min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--rule2); border-radius:8px;
+    background:var(--bg); color:var(--ink); font-family:var(--sans); font-weight:600; font-size:14px; cursor:pointer; text-align:left; }
+  .se-tog[aria-pressed="true"]{ border-color:var(--steel2); }
+  .se-tog .st{ font-family:var(--mono); font-size:11px; color:var(--ink2); }
+  .se-tog[aria-pressed="true"] .st{ color:var(--steel); font-weight:700; }
+  .se-tog:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .se-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+  /* ---- top console bar (title only — comfort lives in Studio Eyes) ---- */
+  .bar{ background:var(--steel2); color:var(--on-steel); padding:.7rem 1rem; display:flex;
+    align-items:center; gap:.7rem; flex-wrap:wrap; }
   .bar .dot{ width:14px; height:14px; border-radius:50%; background:var(--hot-br);
     flex:none; box-shadow:0 0 0 4px rgba(216,115,15,.25); }
   .bar h1{ font:800 1.02rem/1.1 var(--sans); margin:0; letter-spacing:.01em; }
   .bar .sub{ font:600 .76rem/1 var(--mono); opacity:.85; }
-  .ctrls{ margin-left:auto; display:flex; gap:.5rem; }
-  .tgl{ background:transparent; color:inherit; border:2px solid currentColor;
-    border-radius:9px; padding:.5rem .7rem; font:700 .78rem/1 var(--sans);
-    cursor:pointer; min-height:44px; }
-  .tgl:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 
-  .wrap{ max-width:760px; margin:0 auto; padding:1.1rem 1rem 5rem; }
+  .wrap{ max-width:760px; margin:0 auto; padding:1.1rem 1rem 2rem; }
+
+  /* ---- last-updated stamp (computed, not typed) ---- */
+  .updated{ font:600 .78rem/1.4 var(--mono); color:var(--ink2); margin:.2rem 0 .9rem;
+    display:flex; align-items:center; gap:7px; }
+  .updated::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--hot-br); flex:none; }
 
   /* ---- the governor readout ---- */
   .governor{ background:var(--panel); border:2px solid var(--rule2); border-radius:14px;
@@ -86,7 +157,6 @@
     text-transform:uppercase; color:var(--steel); margin-bottom:.5rem; }
   .gauge{ display:flex; align-items:baseline; gap:.5rem; }
   .gauge .big{ font:800 2.4rem/1 var(--mono); color:var(--hot); }
-  body.console .gauge .big{ color:var(--hot); }
   .gauge .cap{ font:600 .95rem/1.3 var(--sans); color:var(--ink2); }
   .governor p{ margin:.6rem 0 0; font-size:.95rem; }
 
@@ -103,10 +173,9 @@
   .fence{ position:relative; height:0; margin:1.6rem 0; border-top:4px solid var(--wall);
     background:repeating-linear-gradient(90deg,var(--wall) 0 14px,transparent 14px 28px); }
   .fence .plate{ position:absolute; left:50%; top:-.95rem; transform:translateX(-50%);
-    background:var(--wall); color:#fff; font:800 .72rem/1 var(--mono);
+    background:var(--wall); color:var(--on-wall); font:800 .72rem/1 var(--mono);
     letter-spacing:.14em; text-transform:uppercase; padding:.4rem .8rem; border-radius:8px;
     white-space:nowrap; }
-  body.console .fence .plate{ color:#0f141c; }
 
   /* ---- an entry card ---- */
   .entry{ background:var(--panel); border:2px solid var(--rule2); border-radius:13px;
@@ -119,8 +188,7 @@
   .state.live{ background:var(--hot-pale); color:var(--hot); border:2px solid var(--hot-br); }
   .state.waiting{ background:transparent; color:var(--ink2); border:2px solid var(--rule2); }
   .state.locked{ background:var(--wall-pale); color:var(--wall); border:2px solid var(--wall); }
-  .state.graduated{ background:var(--steel2); color:#f2f5fa; border:2px solid var(--steel2); }
-  body.console .state.graduated{ color:#0f141c; }
+  .state.graduated{ background:var(--steel2); color:var(--on-steel); border:2px solid var(--steel2); }
   .meta{ display:flex; flex-wrap:wrap; gap:.4rem; margin:.6rem 0 .2rem; }
   .chip{ font:700 .74rem/1.2 var(--mono); padding:.3rem .5rem; border-radius:6px;
     border:2px solid var(--rule2); color:var(--ink2); }
@@ -129,15 +197,14 @@
   .acts{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.7rem; }
   .lockmsg{ font:700 .82rem/1.35 var(--sans); color:var(--wall); margin:.5rem 0 0;
     display:flex; gap:.4rem; align-items:flex-start; }
-  .lockmsg .ic{ font:800 1rem/1 var(--mono); flex:none; }
+  .lockmsg .ic{ width:19px; height:19px; flex:none; margin-top:1px; }
 
   /* ---- buttons ---- */
   .btn{ font:800 .9rem/1.1 var(--sans); cursor:pointer; min-height:44px;
     padding:.6rem .9rem; border-radius:10px; border:2px solid var(--steel); background:transparent;
     color:var(--steel); }
   .btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
-  .btn.go{ background:var(--hot); color:#fff; border-color:var(--hot); }
-  body.console .btn.go{ color:#0f141c; }
+  .btn.go{ background:var(--hot); color:var(--on-hot); border-color:var(--hot); }
   .btn.kill{ border-color:var(--wall); color:var(--wall); }
   .btn:disabled{ opacity:.5; cursor:not-allowed; }
 
@@ -167,22 +234,64 @@
   .msg{ font:700 .85rem/1.3 var(--sans); color:var(--hot); min-height:1.1rem; margin:.4rem 0 0; }
   .foot{ font:600 .8rem/1.4 var(--mono); color:var(--ink2); text-align:center;
     margin-top:2rem; padding-top:1rem; border-top:2px solid var(--rule); }
+
+  /* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+  .se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; border-top:2px solid var(--rule); }
+  .se-rail a,.se-rail button{ display:inline-flex; align-items:center; min-height:var(--tap); padding:10px 18px;
+    border:1.5px solid var(--rule2); border-radius:8px;
+    background:var(--bg); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer; }
+  .se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 </style>
 </head>
 <body>
+
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="../index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
+
 <div class="bar" role="banner">
   <span class="dot" aria-hidden="true"></span>
   <div>
     <h1>The Recursion Ledger</h1>
     <div class="sub">the studio correcting itself · auto below the wall</div>
   </div>
-  <div class="ctrls">
-    <button class="tgl" id="contrast" aria-pressed="false">Higher contrast</button>
-    <button class="tgl" id="text" aria-pressed="false">Bigger text</button>
-  </div>
 </div>
 
 <div class="wrap">
+
+  <p class="updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v2 <span style="opacity:.75">e613d29</span></span>
 
   <section class="governor" aria-labelledby="govh">
     <div class="lbl" id="govh">The Governor — rate limit</div>
@@ -238,23 +347,51 @@
   <p class="foot">In-memory · same-tab only · no student data · FERPA-clean<br>Tight Spiral Studios</p>
 </div>
 
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="../index.html" aria-label="Home">Home</a>
+</nav>
+
 <script>
 "use strict";
 var $=function(id){return document.getElementById(id);};
 var KEY="tsp-recursion-ledger-v1";
 
-/* ---------- toggles: adapt, never gate ---------- */
-$('contrast').addEventListener('click',function(){
-  var on=document.body.classList.toggle('console');
-  this.setAttribute('aria-pressed',on?'true':'false');
-  this.textContent=on?'Standard contrast':'Higher contrast';
-});
-var big=false;
-$('text').addEventListener('click',function(){
-  big=!big; document.body.style.fontSize=big?'22px':'';
-  this.setAttribute('aria-pressed',big?'true':'false');
-  this.textContent=big?'Standard text':'Bigger text';
-});
+/* ---------- Studio Eyes (Comfort Kernel v2): adapt, never gate ---------- */
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  // last-updated: computed, not typed
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+})();
 
 /* ---------- data ---------- */
 var seed=[
@@ -286,6 +423,14 @@ function save(){ try{ sessionStorage.setItem(KEY,JSON.stringify(data)); }catch(e
 function tierLabel(t){ return t==='wall'?'HARD WALL':'BELOW THE WALL'; }
 function el(tag,cls,txt){ var e=document.createElement(tag); if(cls)e.className=cls; if(txt!=null)e.textContent=txt; return e; }
 
+/* Engraved lock mark (art direction A — dual-weight line): heavy contour, fine interior. */
+var LOCK_SVG='<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" focusable="false">'
+  +'<rect x="4.5" y="10.5" width="15" height="9.5" rx="1.8" stroke-width="2.4"/>'
+  +'<path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" stroke-width="2.4"/>'
+  +'<circle cx="12" cy="14.4" r="1" stroke-width="1.1"/>'
+  +'<path d="M12 15.4v2.2" stroke-width="1.1" stroke-linecap="round"/>'
+  +'</svg>';
+
 function entryCard(d){
   var c=el('div','entry'+(d.tier==='wall'?' locked':''));
   var top=el('div','top');
@@ -301,7 +446,7 @@ function entryCard(d){
 
   if(d.tier==='wall'){
     var lm=el('div','lockmsg');
-    lm.appendChild(el('span','ic','\u2716'));
+    var ic=el('span'); ic.innerHTML=LOCK_SVG; lm.appendChild(ic.firstChild);
     lm.appendChild(el('span',null,'The machine cannot graduate this. Founder gate required to change a hard wall.'));
     c.appendChild(lm);
     var acts=el('div','acts');
@@ -333,19 +478,19 @@ function render(){
   // BELOW zone
   var bh=el('div','zone-head');
   var bt=el('span','tag below','Below the wall'); bh.appendChild(bt);
-  bh.appendChild(el('span','note','recursable \u2014 these graduate automatically, one per build')); 
+  bh.appendChild(el('span','note','recursable — these graduate automatically, one per build'));
   b.appendChild(bh);
   if(below.length){ below.forEach(function(d){ b.appendChild(entryCard(d)); }); }
   else { b.appendChild(el('p','why','Nothing below the wall right now. Log a defect above.')); }
 
   // THE FENCE
-  var f=el('div','fence'); var pl=el('span','plate','\u26A1 hard wall \u2014 the machine stops here'); f.appendChild(pl);
+  var f=el('div','fence'); var pl=el('span','plate','hard wall — the machine stops here'); f.appendChild(pl);
   b.appendChild(f);
 
   // WALL zone
   var wh=el('div','zone-head');
   var wt=el('span','tag wall','Hard wall'); wh.appendChild(wt);
-  wh.appendChild(el('span','note','emoji \u00b7 trauma \u00b7 FERPA \u00b7 child-safety \u2014 never recurse'));
+  wh.appendChild(el('span','note','emoji · trauma · FERPA · child-safety — never recurse'));
   b.appendChild(wh);
   if(wall.length){ wall.forEach(function(d){ b.appendChild(entryCard(d)); }); }
   else { b.appendChild(el('p','why','No hard-wall items queued.')); }
@@ -362,21 +507,21 @@ function commit(){ save(); render(); }
 /* ---------- carry-out ---------- */
 function buildOut(){
   var L=[];
-  L.push('RECURSION LEDGER \u2014 QUEUE FOR NEXT BUILD');
+  L.push('RECURSION LEDGER — QUEUE FOR NEXT BUILD');
   L.push('(auto-below-the-wall; one graduates per build; hard wall never recurses)');
   L.push('');
   var live=data.filter(function(d){return d.tier==='below'&&d.state==='live';});
   var grad=data.filter(function(d){return d.state==='graduated';});
   var gate=data.filter(function(d){return d.tier==='wall'&&d.state==='waiting';});
   L.push('ELIGIBLE BELOW THE WALL ('+live.length+'):');
-  live.forEach(function(d){ L.push('  \u2022 '+d.title+'  [cal: '+(d.cal||'UNSET')+']'); if(d.why)L.push('      fix: '+d.why); });
+  live.forEach(function(d){ L.push('  • '+d.title+'  [cal: '+(d.cal||'UNSET')+']'); if(d.why)L.push('      fix: '+d.why); });
   if(!live.length)L.push('  (none)');
   L.push('');
   L.push('GRADUATED ('+grad.length+'):');
-  grad.forEach(function(d){ L.push('  \u2713 '+d.title); });
+  grad.forEach(function(d){ L.push('  * '+d.title); });
   if(!grad.length)L.push('  (none)');
   L.push('');
-  L.push('FOUNDER GATE REQUESTED \u2014 hard wall ('+gate.length+'):');
+  L.push('FOUNDER GATE REQUESTED — hard wall ('+gate.length+'):');
   gate.forEach(function(d){ L.push('  ! '+d.title); });
   if(!gate.length)L.push('  (none)');
   $('out').value=L.join('\n');
@@ -391,7 +536,7 @@ $('addBtn').addEventListener('click',function(){
   data.push(d);
   $('ftitle').value=''; $('fwhy').value=''; $('fcal').value=''; $('ftier').value='below';
   commit();
-  $('msg').textContent='Logged. '+(tier==='wall'?'Locked above the fence \u2014 the machine can\u2019t touch it.':'Below the wall \u2014 set a reference, then it can graduate.');
+  $('msg').textContent='Logged. '+(tier==='wall'?'Locked above the fence — the machine can’t touch it.':'Below the wall — set a reference, then it can graduate.');
 });
 
 /* ---------- copy / reset ---------- */

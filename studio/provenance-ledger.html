@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <!--
   THE PROVENANCE LEDGER — Tight Spiral Studios · walshero@gmail.com · built 2026-06-30.
   Enforces the PROVENANCE FLOOR (OS §3.1): no asset — art OR sound — enters the TSP system
@@ -14,42 +14,106 @@
 
   ART: original inline SVG, CC0, tagged. FLOORS: no green, full-contrast ink (--ink2==--ink),
   no raw-text wall, single-file/offline/no-storage, 44px+, keyboard nav, visible focus,
-  reduced-motion safe, no emoji, named-palette comfort corner, phone-width.
+  reduced-motion safe, no emoji, phone-width.
+
+  COMFORT KERNEL v2 (2026-07-30): mounted the studio standard — reserved chrome header
+  (Home · teaspoon brand · Studio Eyes), Studio Eyes panel (Default/Dusk/Warm-dark via
+  html[data-light], text size A/A+/A++, high contrast, reduce motion, colorblind cues),
+  bottom Back+Home rail, computed last-updated stamp. Legacy comfort cycler removed.
 -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Provenance Ledger — Tight Spiral Studios</title>
 <style>
-/* STUDIO EYES v4 CLASS-FIX 2026-07-11: lock the palette. */
+/* ---- LIGHT: DAY (default) ---- */
 :root{ color-scheme: light; }
 
 :root{
-  --ink:#1a1712; --ink2:#1a1712; --bg:#f3e9d6; --surface:#fffaf0; --border:#bda77e;
+  --ink:#1a1712; --ink2:#1a1712; --bg:#f3e9d6; --surface:#fffaf0; --surface-2:#ece0c6; --border:#bda77e;
   --slate:#2d4654; --slate-soft:#e2e9ee;
   --river:#0f5566; --river-soft:#deebee;
   --gold:#7a5200; --gold-br:#c08a09; --gold-soft:#fbf0d4;
   --rust:#8a3216; --rust-soft:#f6e5dc;
   --plum:#5a2a52; --plum-soft:#eedff0;
+  --on-accent:#ffffff;
   --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
   --serif:Georgia,'Times New Roman',serif;
-  --focus:#c08a09;
+  --mono:ui-monospace,Menlo,Consolas,monospace;
+  --focus:#8a3216;
+  --tap:44px; --motion:.18s;
 }
-body.softer{ --bg:#ece2cd; --surface:#f7efe0; --border:#b09a72; }
-body.warm{
-  --ink:#f3e6c6; --ink2:#f3e6c6; --bg:#1a1712; --surface:#262019; --border:#5d543d;
+/* ---- LIGHT: DUSK (the old "softer", now a kernel mode) ---- */
+html[data-light="dusk"]{
+  --bg:#ece2cd; --surface:#f7efe0; --surface-2:#e3d5b2; --border:#b09a72;
+}
+/* ---- LIGHT: WARM-DARK (night) — warm charcoal, never pure black ---- */
+html[data-light="night"]{
+  color-scheme: dark;
+  --ink:#f3e6c6; --ink2:#f3e6c6; --bg:#1a1712; --surface:#262019; --surface-2:#343026; --border:#5d543d;
   --slate:#9ab6c8; --slate-soft:#212c33; --river:#84cad9; --river-soft:#1b272c;
   --gold:#f0c357; --gold-br:#f0c357; --gold-soft:#2c2614; --rust:#eaa183; --rust-soft:#2c1f19;
   --plum:#d39bc8; --plum-soft:#2a1d28;
+  --on-accent:#14110a;
+  --focus:#f0c357;
 }
+/* ---- TOGGLE: high contrast ---- */
+html.se-contrast:not([data-light="night"]){ --bg:#fbfaf7; --surface:#ffffff; --surface-2:#f0ece2; --ink:#141109; --ink2:#141109; --border:#8a7448; --slate:#223743; --river:#0b4451; --gold:#5f4000; }
+html.se-contrast[data-light="night"]{ --bg:#0e0d0b; --surface:#161410; --surface-2:#242018; --ink:#fff7e6; --ink2:#fff7e6; --slate:#b9cbe0; --river:#a3dbe7; }
+/* ---- TOGGLE: text size A / A+ / A++ ---- */
+html{ font-size:100%; }
+html.se-a1{ zoom:1.15; }
+html.se-a2{ zoom:1.3; }
+/* ---- TOGGLE: reduce motion ---- */
+html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+@media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+/* ---- TOGGLE: colorblind cues ---- */
+html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+
 *{box-sizing:border-box;}
-body{ margin:0; font-family:var(--sans); background:var(--bg); color:var(--ink); line-height:1.6; font-size:18px; }
-.topbar{ background:var(--slate); color:#fff; padding:.65rem 1rem; display:flex; align-items:center; gap:.6rem; position:sticky; top:0; z-index:50; }
-.topbar .mark{ width:26px; height:26px; flex:none; }
-.topbar .wm{ font-weight:800; font-size:1rem; }
-.comfort{ margin-left:auto; background:var(--gold-br); color:#1a1712; border:2px solid #fff; border-radius:10px; padding:.55rem .8rem; font:800 .82rem/1 var(--sans); cursor:pointer; min-height:44px; }
-.comfort:focus-visible{ outline:3px solid #fff; outline-offset:2px; }
-.wrap{ max-width:860px; margin:0 auto; padding:1.3rem 1rem 5rem; }
+body{ margin:0; font-family:var(--sans); background:var(--bg); color:var(--ink); line-height:1.6; font-size:18px;
+  transition:background var(--motion) ease, color var(--motion) ease; }
+
+/* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+.se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+  padding:9px 14px; background:var(--surface); border-bottom:2px solid var(--ink);
+  position:sticky; top:0; z-index:100; }
+.se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 12px; border:1.5px solid var(--border); border-radius:8px; background:var(--surface-2);
+  color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; }
+.se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+.se-brand svg{ width:34px; height:20px; color:var(--slate); flex:0 0 auto; }
+.se-brand .wm{ font-family:var(--serif); font-size:16px; letter-spacing:.01em; white-space:nowrap; }
+.se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--slate);
+  color:var(--on-accent); font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer; }
+.se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+@media (max-width:560px){ .se-brand .wm{ display:none; } }
+
+/* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+.se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:101;
+  width:min(320px,calc(100vw - 24px)); background:var(--surface); color:var(--ink);
+  border:2px solid var(--slate); border-radius:10px; padding:15px;
+  box-shadow:0 10px 34px rgba(0,0,0,.28); display:none; }
+.se-panel[data-open="1"]{ display:block; }
+.se-panel h2{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink2); margin:0 0 8px; }
+.se-row{ display:flex; gap:6px; margin-bottom:14px; }
+.se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--border); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:12.5px; cursor:pointer; }
+.se-btn[aria-pressed="true"]{ background:var(--slate); color:var(--on-accent); border-color:var(--slate); }
+.se-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+  min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--border); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--sans); font-weight:600; font-size:14px; cursor:pointer; text-align:left; }
+.se-tog[aria-pressed="true"]{ border-color:var(--slate); }
+.se-tog .st{ font-family:var(--mono); font-size:11px; color:var(--ink2); }
+.se-tog[aria-pressed="true"] .st{ color:var(--slate); font-weight:700; }
+.se-tog:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+.wrap{ max-width:860px; margin:0 auto; padding:1.3rem 1rem 3rem; }
+.masthead{ display:flex; align-items:center; gap:.55rem; margin:0 0 .1rem; font:800 .82rem/1 var(--sans); letter-spacing:.08em; text-transform:uppercase; color:var(--slate); }
+.masthead .mark{ width:26px; height:26px; flex:none; color:var(--slate); }
+.updated{ font:600 .78rem/1.4 var(--mono); color:var(--ink2); margin:.35rem 0 0; }
 .hero h1{ font-family:var(--serif); font-size:1.95rem; color:var(--slate); margin:.3rem 0 .25rem; line-height:1.12; }
 .hero .tag{ font-size:1.04rem; margin:0; }
 .hero .vow{ font-size:.95rem; background:var(--gold-soft); border-left:5px solid var(--gold-br); padding:.6rem .85rem; border-radius:0 9px 9px 0; margin:.7rem 0 0; }
@@ -62,7 +126,7 @@ select{ min-height:48px; }
 input:focus-visible, textarea:focus-visible, select:focus-visible{ outline:3px solid var(--focus); outline-offset:1px; }
 .two{ display:grid; grid-template-columns:1fr; gap:.2rem; } @media(min-width:600px){ .two{ grid-template-columns:1fr 1fr; gap:1rem; } }
 .hint{ font-size:.82rem; margin:.25rem 0 0; }
-.btn{ background:var(--river); color:#fff; border:2px solid var(--river); border-radius:11px; padding:.65rem 1rem; font:800 .95rem/1 var(--sans); cursor:pointer; min-height:48px; }
+.btn{ background:var(--river); color:var(--on-accent); border:2px solid var(--river); border-radius:11px; padding:.65rem 1rem; font:800 .95rem/1 var(--sans); cursor:pointer; min-height:48px; }
 .btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 .btn.gold{ background:var(--gold-br); border-color:var(--gold-br); color:#1a1712; }
 .btn.ghost{ background:transparent; color:var(--river); }
@@ -83,34 +147,73 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{ outline:3px s
 .rec{ border:2px solid var(--border); border-left-width:6px; border-radius:10px; padding:.7rem .85rem; margin:.5rem 0; background:var(--surface); }
 .rec .top{ display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
 .rec .nm{ font-weight:800; }
-.rec .lic{ font:800 .68rem/1 var(--sans); letter-spacing:.04em; text-transform:uppercase; padding:.25rem .45rem; border-radius:5px; color:#fff; }
+.rec .lic{ font:800 .68rem/1 var(--sans); letter-spacing:.04em; text-transform:uppercase; padding:.25rem .45rem; border-radius:5px; color:var(--on-accent); }
 .rec .meta{ font-size:.85rem; margin:.35rem 0 0; }
-.rec .attr{ font:600 .85rem/1.4 ui-monospace,Menlo,Consolas,monospace; background:var(--bg); border-radius:8px; padding:.45rem .6rem; margin:.45rem 0 0; white-space:pre-wrap; word-break:break-word; }
+.rec .attr{ font:600 .85rem/1.4 var(--mono); background:var(--bg); border-radius:8px; padding:.45rem .6rem; margin:.45rem 0 0; white-space:pre-wrap; word-break:break-word; }
 .rec .x{ background:transparent; border:2px solid var(--border); color:var(--ink); border-radius:8px; min-width:44px; min-height:36px; cursor:pointer; font-weight:800; margin-left:auto; }
 .rec .x:focus-visible{ outline:3px solid var(--focus); }
 .lic-cc0{ background:var(--river); } .lic-ccby{ background:var(--gold-br); color:#1a1712; }
 .lic-own{ background:var(--plum); } .lic-synth{ background:var(--slate); } .lic-commission{ background:var(--rust); } .lic-pd{ background:var(--river); }
 
 .copyout{ border:2px dashed var(--border); border-radius:12px; padding:.85rem; margin-top:1rem; }
-.copyout pre{ margin:0; white-space:pre-wrap; word-break:break-word; font:600 .85rem/1.45 ui-monospace,Menlo,Consolas,monospace; max-height:300px; overflow:auto; }
+.copyout pre{ margin:0; white-space:pre-wrap; word-break:break-word; font:600 .85rem/1.45 var(--mono); max-height:300px; overflow:auto; }
 .copy{ margin-top:.55rem; background:transparent; border:2px solid var(--border); color:var(--ink); border-radius:9px; padding:.45rem .75rem; font:800 .82rem/1 var(--sans); cursor:pointer; min-height:40px; }
 .copy:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 .footer{ margin-top:2.4rem; font-size:.84rem; border-top:2px solid var(--border); padding-top:1rem; }
-.tagchip{ display:inline-block; font:800 .64rem/1 var(--sans); letter-spacing:.04em; background:var(--slate); color:#fff; border-radius:5px; padding:.22rem .4rem; vertical-align:middle; }
+.tagchip{ display:inline-block; font:800 .64rem/1 var(--sans); letter-spacing:.04em; background:var(--slate); color:var(--on-accent); border-radius:5px; padding:.22rem .4rem; vertical-align:middle; }
 .sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+/* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+.se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; border-top:2px solid var(--border); }
+.se-rail a,.se-rail button{ min-height:var(--tap); padding:10px 18px; border:1.5px solid var(--border); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer; }
+.se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 </style>
 </head>
 <body>
-<div class="topbar">
-  <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><title>Spiral mark — CC0, original, Tight Spiral Paper Craft</title><path d="M20 5 C10 5 5 13 5 20 c0 7 5 13 13 13 6 0 10-4 10-9 0-4-3-7-7-7-3 0-5 2-5 5 0 2 1 3 3 3" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
-  <span class="wm">The Provenance Ledger</span>
-  <button class="comfort" id="comfortBtn" aria-live="polite">Comfort: Default</button>
+
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="../index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="sr" id="seSr" role="status" aria-live="polite"></span>
 </div>
 
 <div class="wrap">
   <div class="hero">
+    <p class="masthead"><svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><title>Spiral mark — CC0, original, Tight Spiral Paper Craft</title><path d="M20 5 C10 5 5 13 5 20 c0 7 5 13 13 13 6 0 10-4 10-9 0-4-3-7-7-7-3 0-5 2-5 5 0 2 1 3 3 3" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>The Provenance Ledger</span></p>
     <h1>How every asset earns its place</h1>
     <p class="tag">Art and sound. Source, license, attribution, and how it entered — recorded before use.</p>
+    <p class="updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v2 <span style="opacity:.75">e613d29</span></span>
     <p class="vow"><strong>The Provenance Floor:</strong> nothing enters the system without legal, recorded provenance. No scraping. No guessed attribution. "Found online" is not a license. The founder's own work enters money-walled, at the $1-sim purchase. This page is both the working ledger and the proof of how the studio sources.</p>
   </div>
 
@@ -183,13 +286,50 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{ outline:3px s
   </div>
 </div>
 
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="../index.html" aria-label="Home">Home</a>
+</nav>
+
 <script>
 (function(){
   "use strict";
-  var pals=[{c:"",n:"Default"},{c:"softer",n:"Softer"},{c:"warm",n:"Warm-dark"}], pi=0;
-  var cb=document.getElementById("comfortBtn");
-  cb.addEventListener("click",function(){ document.body.classList.remove("softer","warm"); pi=(pi+1)%pals.length; if(pals[pi].c)document.body.classList.add(pals[pi].c); cb.textContent="Comfort: "+pals[pi].n; });
 
+  /* ═══ STUDIO EYES (Comfort Kernel v2) ═══ */
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  // last-updated: computed, not typed
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+
+  /* ═══ THE LEDGER ═══ */
   var aType=document.getElementById("aType"), aLic=document.getElementById("aLic"),
       aName=document.getElementById("aName"), aAuthor=document.getElementById("aAuthor"),
       aURL=document.getElementById("aURL"), aNote=document.getElementById("aNote"),

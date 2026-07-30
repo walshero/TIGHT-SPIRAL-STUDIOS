@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,6 +25,11 @@
   Humor is culturally situated: the audience you poll changes what lands. That is taught, not hidden.
 
   CHANGELOG
+   v5  2026-07-30  COMFORT KERNEL v2 mounted: reserved chrome (Home · teaspoon · Studio Eyes),
+                  light ladder Default/Dusk/Warm-dark remapped onto this page's own tokens
+                  (warm-dark = warm charcoal), text size A/A+/A++, high-contrast/reduce-motion/
+                  colorblind toggles, Back+Home bottom rail, computed last-updated stamp.
+                  Legacy View/Motion knobs retired. Part icons redrawn cut-paper relief (dir C).
    v4  2026-07-13  TOKEN-ROLE LAW across playtest layer. Split --lens/--lens-ink,
                   --amber/--amber-ink, and lifted focus rings off --ink onto --focus.
                   Gate HALTed v3 on three dual-role tokens. 0-HALT.
@@ -53,23 +58,42 @@
     --flat:#8899ac;       /* a flat gag: honest grey, never punishing red */
     --paper-sep:0;        /* comfort stop marker, for the sweep */
     --r:14px;
+    --tap:48px;
     --shadow:0 8px 30px rgba(0,0,0,.45);
     --font: ui-rounded, "Segoe UI", system-ui, -apple-system, sans-serif;
     --mono: ui-monospace, "SFMono-Regular", Menlo, monospace;
   }
-  /* comfort stop: SOFTER (a real second stop — >0.12 paper-luminance separation from default) */
-  body.softer{
+  /* ---- COMFORT KERNEL v2 light ladder, remapped onto THIS page's tokens ----
+     Default (day) = the arcade stop the page was built on.
+     Dusk          = the old "softer" stop, lifted slate.
+     Warm-dark     = warm charcoal (never pure black), night reading. */
+  html[data-light="dusk"] body{
     --bg:#20262e; --surface:#2b333d; --surface-2:#343e4a; --line:#4a5666;
     --ink:#f4f7fb; --ink-soft:#cdd7e2;
   }
-  /* comfort stop: DAYLIGHT (high-lumen light stop for bright rooms — legible, green-free) */
-  body.daylight{
-    --bg:#e9e3d6; --surface:#f4efe4; --surface-2:#fbf7ee; --line:#c4bba9;
-    --ink:#22201a; --ink-soft:#4c483f; --shadow:0 8px 30px rgba(80,70,50,.18);
-    --amber:#9a5a00; --amber-deep:#7a4600;
-    --violet:#6b3fc0; --cyan:#0f6d82; --rose:#b03050; --good:#1f7a4d; --flat:#6a6255;
+  html[data-light="dusk"] .part .pred{ color:#ffc061; }
+  html[data-light="night"] body{
+    --bg:#1e1913; --surface:#282116; --surface-2:#332a1d; --line:#4d4130;
+    --ink:#f4ead2; --ink-soft:#d6c8a9;
   }
-  body.daylight .part .pred{ color:#7a4600; }
+  html[data-light="night"] .part .pred{ color:#ffc061; }
+  /* ---- Studio Eyes toggle: high contrast (halation floor) ---- */
+  html.se-contrast body{
+    --bg:#0c0f14; --surface:#131820; --surface-2:#1b222c; --line:#55637a;
+    --ink:#ffffff; --ink-soft:#e2e9f2;
+  }
+  html.se-contrast[data-light="night"] body{
+    --bg:#141008; --surface:#1c1710; --surface-2:#262017; --line:#5c4f38;
+    --ink:#fff8e8; --ink-soft:#eee0c2;
+  }
+  /* ---- Studio Eyes toggle: text size A / A+ / A++ ---- */
+  html{ font-size:100%; }
+  html.se-a1{ zoom:1.15; }
+  html.se-a2{ zoom:1.3; }
+  /* ---- Studio Eyes toggle: reduce motion ---- */
+  html.se-reduce *{ animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+  /* ---- Studio Eyes toggle: colorblind cues ---- */
+  html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
 
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
@@ -97,14 +121,52 @@
   }
   .brand{ font-weight:800; letter-spacing:.3px; font-size:1.02rem; margin-right:auto; display:flex; align-items:center; gap:9px;}
   .brand .glyph{ width:22px; height:22px; }
-  .knobs{ display:flex; gap:6px; flex-wrap:wrap; }
-  .knob{
-    font-size:.74rem; padding:6px 10px; border-radius:999px;
-    background:var(--surface-2); border:1px solid var(--line); color:var(--ink-soft);
-    display:inline-flex; align-items:center; gap:6px;
-  }
-  .knob[aria-pressed="true"]{ color:var(--ink); border-color:var(--lens); box-shadow:inset 0 0 0 1px var(--lens); }
-  .knob small{ opacity:.7; font-size:.68rem;}
+  /* ═══ RESERVED CHROME (Comfort Kernel v2) — grid header, reserves its own row,
+     never overlaps the scene or the title ═══ */
+  .se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+    padding:9px 14px; background:var(--surface); border-bottom:2px solid var(--line);
+    position:sticky; top:0; z-index:58; }
+  .se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+    padding:8px 12px; border:1.5px solid var(--line); border-radius:8px; background:var(--surface-2);
+    color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; }
+  .se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+  .se-brand svg{ width:34px; height:20px; color:var(--amber); flex:0 0 auto; }
+  .se-brand .wm{ font-size:15px; font-weight:700; letter-spacing:.01em; white-space:nowrap; }
+  .se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+    padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--amber);
+    color:#1a1206; font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer; }
+  .se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  @media (max-width:560px){ .se-brand .wm{ display:none; } }
+
+  /* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+  .se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:59;
+    width:min(320px,calc(100vw - 24px)); background:var(--surface); color:var(--ink);
+    border:2px solid var(--amber); border-radius:12px; padding:15px;
+    box-shadow:var(--shadow); display:none; }
+  .se-panel[data-open="1"]{ display:block; }
+  .se-panel h2{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 8px; }
+  .se-row{ display:flex; gap:6px; margin-bottom:14px; }
+  .se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--line); border-radius:8px;
+    background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:12.5px; cursor:pointer; }
+  .se-btn[aria-pressed="true"]{ background:var(--amber); color:#1a1206; border-color:var(--amber); }
+  .se-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+    min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--line); border-radius:8px;
+    background:var(--surface-2); color:var(--ink); font-weight:600; font-size:14px; cursor:pointer; text-align:left; }
+  .se-tog[aria-pressed="true"]{ border-color:var(--amber); }
+  .se-tog .st{ font-family:var(--mono); font-size:11px; color:var(--ink-soft); }
+  .se-tog[aria-pressed="true"] .st{ color:var(--amber-ink); font-weight:700; }
+  .se-tog:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+  /* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+  .se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; border-top:1px solid var(--line); }
+  .se-rail a,.se-rail button{ display:inline-flex; align-items:center; min-height:var(--tap); padding:10px 18px;
+    border:1.5px solid var(--line); border-radius:8px;
+    background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer; }
+  .se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+  /* last-updated stamp: computed, never typed */
+  .updated{ font-family:var(--mono); font-size:.74rem; color:var(--ink-soft); margin-top:8px; }
 
   /* lens toggle */
   .lenses{ display:flex; gap:6px; background:var(--surface-2); padding:4px; border-radius:999px; border:1px solid var(--line);}
@@ -112,9 +174,6 @@
   .lens-btn[data-l="spell"][aria-pressed="true"]{ background:#b98cff; color:#10151c; }
   .lens-btn[data-l="code"][aria-pressed="true"]{ background:#5fd0e6; color:#10151c; }
   .lens-btn[data-l="story"][aria-pressed="true"]{ background:#ff8fa8; color:#10151c; }
-  body.daylight .lens-btn[data-l="spell"][aria-pressed="true"]{ background:#6b3fc0; color:#ffffff; }
-  body.daylight .lens-btn[data-l="code"][aria-pressed="true"]{ background:#0f6d82; color:#ffffff; }
-  body.daylight .lens-btn[data-l="story"][aria-pressed="true"]{ background:#b03050; color:#ffffff; }
 
   /* ---- scene-first opening ---- */
   .scene{
@@ -129,7 +188,6 @@
     background:linear-gradient(0deg, rgba(0,0,0,.72), rgba(0,0,0,.28));
     background-color:#1a1206;
     color:#fff; }
-  body.daylight .headline{ background:linear-gradient(0deg, rgba(20,14,4,.72), rgba(20,14,4,.30)); background-color:#1a1206; }
   .headline h1{ margin:0 0 4px; font-size:clamp(1.5rem,4.4vw,2.4rem); letter-spacing:.3px; }
   .headline p{ margin:0; font-size:clamp(.9rem,2.4vw,1.05rem); opacity:.92; max-width:52ch;}
 
@@ -142,8 +200,6 @@
   }
   .btn:active{ transform:translateY(3px); box-shadow:0 1px 0 rgba(0,0,0,.3); }
   .btn.ghost{ background:var(--surface-2); color:var(--ink); border:1px solid var(--line); box-shadow:none;}
-  body.daylight .btn{ background:#7a4600; color:#ffffff; }
-  body.daylight .btn.ghost{ background:#f4efe4; color:#22201a; }
   .btn[disabled]{ opacity:.4; cursor:not-allowed; transform:none; box-shadow:0 4px 0 rgba(0,0,0,.3); }
 
   /* ---- the workbench: choose gag parts (the "build" is choosing what should be funny) ---- */
@@ -163,7 +219,6 @@
   .part .tx b{ font-size:.92rem; }
   .part .tx span{ font-size:.76rem; color:var(--ink-soft); }
   .part .pred{ margin-top:5px; font-size:.7rem; color:#ffb347; font-weight:700; letter-spacing:.4px;}
-  body.softer .part .pred{ color:#ffc061; }
 
   /* ---- the audience picker (humor is situated: WHO you show it to changes what lands) ---- */
   .aud{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;}
@@ -237,7 +292,6 @@
 
   .foot{ margin-top:34px; padding-top:16px; border-top:1px solid var(--line); color:var(--ink-soft); font-size:.78rem; text-align:center;}
   .foot a{ color:var(--lens-ink); }
-  body.daylight .foot a{ color:#7a4600; }
   .badge{ display:inline-block; font-size:.68rem; padding:3px 9px; border-radius:999px;
     background:var(--surface-2); border:1px solid var(--line); color:var(--ink-soft); margin-left:8px;}
   /* ============ PLAYTEST CAPTURE LAYER ============ */
@@ -300,31 +354,54 @@
   .pt-tag-CONFUSED{ background:var(--violet); color:#1a0c2a; }
   .pt-tag-CUT{ background:var(--flat); color:#0d1218; }
   .pt-tag-NOTE{ background:var(--surface-2); color:var(--ink); border:1px solid var(--line); }
-  /* DAYLIGHT FIX (2026-07-13). The chip inks above are near-black, tuned against
-     the ARCADE stop where --good/--amber/--rose/--violet are bright. Daylight
-     redefines those tokens darker, so dark-ink-on-dark-chip collapsed to
-     2.7-3.4:1 — real, measured, below floor. Studio Eyes ground=own, no false
-     positive. Daylight chips carry white ink instead. */
-  body.daylight .pt-tag-LANDED,
-  body.daylight .pt-tag-DELIGHT,
-  body.daylight .pt-tag-SNAG,
-  body.daylight .pt-tag-CONFUSED,
-  body.daylight .pt-tag-CUT{ color:#ffffff; }
-  /* --amber-ink must darken in daylight or it floats on light paper. */
-  body.daylight{ --amber-ink:#7a4600; }
-  /* #pt-tab rides --amber, a MID-TONE: in daylight it fails both ways (dark ink
-     3.4:1, white ink 1.3:1). No ink saves a bad chip. Fix the CHIP: daylight
-     gives it a deep surface + white ink. Contrast is arithmetic, not taste. */
-  body.daylight #pt-tab{ background:#7a4600; color:#ffffff; }
+  /* (Daylight-stop chip fixes retired with the legacy knob: all three Studio Eyes
+     light modes on this page are dark-paper stops, where the tuned chip inks hold.) */
   .pt-final{ border-top:1px solid var(--line); margin-top:18px; padding-top:14px; }
   @media (max-width:520px){ .pt-q{ flex:1 1 100%; } }
 </style>
 </head>
 <body>
+
+<!-- ═══ RESERVED CHROME (Comfort Kernel v2): Home · teaspoon brand · Studio Eyes ═══ -->
+<header class="se-chrome">
+  <a class="se-home" href="../index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- ═══ STUDIO EYES panel ═══ -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
+
 <div class="stage">
 
-  <!-- ============ TOP BAR: comfort knobs (never gates) + lens toggle ============ -->
-  <div class="bar" role="region" aria-label="Comfort and lens controls">
+  <!-- ============ TOP BAR: lens toggle (comfort moved to Studio Eyes in the chrome) ============ -->
+  <div class="bar" role="region" aria-label="Lens controls">
     <div class="brand">
       <svg class="glyph" viewBox="0 0 32 32" aria-hidden="true">
         <circle cx="16" cy="16" r="14" fill="none" stroke="var(--lens)" stroke-width="2"/>
@@ -338,15 +415,6 @@
       <button class="lens-btn" data-l="spell"  aria-pressed="false" onclick="setLens('spell')">Spellcaster</button>
       <button class="lens-btn" data-l="code"   aria-pressed="false" onclick="setLens('code')">Coder</button>
       <button class="lens-btn" data-l="story"  aria-pressed="false" onclick="setLens('story')">Storyteller</button>
-    </div>
-
-    <div class="knobs" role="group" aria-label="Comfort settings">
-      <button class="knob" id="k-stop" aria-pressed="false" onclick="cycleStop()">
-        View: <small id="stop-lab">Arcade</small>
-      </button>
-      <button class="knob" id="k-motion" aria-pressed="false" onclick="toggleMotion()">
-        Motion: <small id="motion-lab">Full</small>
-      </button>
     </div>
   </div>
 
@@ -582,8 +650,15 @@
     <span class="badge">Offline · nothing leaves this page</span>
     <span class="badge" id="build-badge">v3 · playtest for Peter</span>
     <div style="margin-top:8px">Humor is situated: what's funny depends on who's in the room, how their mind works, and where they're from. This game is honest about that.</div>
+    <div class="updated" id="seUpdated">Last updated&hellip;</div> <span class="se-version" style="font:inherit;opacity:.85">&middot; v3 <span style="opacity:.75">25d3dba</span></span>
   </div>
 </div>
+
+<!-- ═══ BOTTOM NAV RAIL — Back + Home ═══ -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="../index.html" aria-label="Home">Home</a>
+</nav>
 
 <script>
 /* =========================================================================
@@ -654,14 +729,15 @@ const POLLS = {
   adaptive: { quality:.97, noise:.05, note:"Asking, then following up with the surprised faces, gets you the real signal — the truest read, and the most work. This is what good designers actually do." },
 };
 
-/* ---- part icons (tiny authored SVG, skin-tone-neutral, prop-carries-the-role) ---- */
+/* ---- part icons — CUT-PAPER RELIEF (art direction C): solid shapes, one offset
+   shadow layer, paper-colored cutouts. Token colors only; prop-carries-the-role. ---- */
 function partIcon(kind){
-  const c="var(--lens)", l="var(--line)";
+  const c="var(--lens)", l="var(--line)", p="var(--surface-2)";
   switch(kind){
-    case "orb": return `<svg viewBox="0 0 40 40"><circle cx="20" cy="22" r="12" fill="${c}"/><circle cx="16" cy="18" r="4" fill="#fff" opacity=".7"/><path d="M6 34 h28" stroke="${l}" stroke-width="3"/></svg>`;
-    case "bucket": return `<svg viewBox="0 0 40 40"><path d="M11 14 h18 l-3 20 h-12 z" fill="var(--surface)" stroke="${c}" stroke-width="2.5"/><path d="M11 14 q9 -8 18 0" fill="none" stroke="${l}" stroke-width="2.5"/></svg>`;
-    case "chicken": return `<svg viewBox="0 0 40 40"><ellipse cx="20" cy="22" rx="10" ry="14" fill="#f2f6fb"/><path d="M20 8 q7 -8 12 -2 q-4 6 -10 6z" fill="${c}"/><circle cx="16" cy="14" r="1.8" fill="#10151c"/></svg>`;
-    case "spring": return `<svg viewBox="0 0 40 40"><rect x="8" y="28" width="24" height="6" rx="2" fill="${c}"/><path d="M12 28 v-8 m6 8 v-8 m6 8 v-8 m6 8 v-8" stroke="${l}" stroke-width="2.5"/></svg>`;
+    case "orb": return `<svg viewBox="0 0 40 40"><circle cx="23" cy="25" r="12" fill="${l}"/><circle cx="19" cy="21" r="12" fill="${c}"/><circle cx="15" cy="16" r="4" fill="${p}"/></svg>`;
+    case "bucket": return `<svg viewBox="0 0 40 40"><path d="M14 13 h18 l-3 22 h-12 z" fill="${l}"/><path d="M11 10 h18 l-3 22 h-12 z" fill="${c}"/><rect x="14" y="15" width="12" height="3.5" rx="1.5" fill="${p}"/></svg>`;
+    case "chicken": return `<svg viewBox="0 0 40 40"><ellipse cx="22" cy="25" rx="10" ry="13" fill="${l}"/><ellipse cx="19" cy="22" rx="10" ry="13" fill="${c}"/><path d="M19 9 q8 -8 13 -2 q-5 7 -12 6 z" fill="${c}"/><circle cx="15" cy="15" r="2.2" fill="${p}"/></svg>`;
+    case "spring": return `<svg viewBox="0 0 40 40"><rect x="10" y="29" width="24" height="7" rx="2" fill="${l}"/><g fill="${l}"><rect x="14" y="15" width="4" height="12" rx="2"/><rect x="21" y="15" width="4" height="12" rx="2"/><rect x="28" y="15" width="4" height="12" rx="2"/></g><rect x="7" y="26" width="24" height="7" rx="2" fill="${c}"/><g fill="${c}"><rect x="11" y="12" width="4" height="12" rx="2"/><rect x="18" y="12" width="4" height="12" rx="2"/><rect x="25" y="12" width="4" height="12" rx="2"/></g></svg>`;
   }
   return "";
 }
@@ -681,7 +757,6 @@ let state = {
 if('scrollRestoration' in history) history.scrollRestoration='manual';
 window.scrollTo(0,0);
 setLens("spell");
-setStop(0);
 
 /* =================== LENS =================== */
 function setLens(l){
@@ -692,40 +767,49 @@ function setLens(l){
   });
   renderBench();
 }
-/* --lens carries the ACTIVE lens accent, chosen light-or-dark so accent TEXT
-   stays legible against whichever comfort stop is showing. This is the fix for
-   the "bright accent that only reads on dark" failure class. */
+/* --lens carries the ACTIVE lens accent. All three Studio Eyes light modes on this
+   page are dark-paper stops, so the bright (dark-ground) lens variant always reads. */
 function applyLensColor(){
-  const daylight = (STOPS[stopIx] && STOPS[stopIx].key==="daylight");
   const L=LENSES[state.lens];
-  document.documentElement.style.setProperty('--lens', daylight ? L.light : L.dark);
+  document.documentElement.style.setProperty('--lens', L.dark);
 }
 
-/* =================== COMFORT KNOBS (knobs, never walls) =================== */
-const STOPS = [
-  {key:"arcade",   lab:"Arcade"},
-  {key:"softer",   lab:"Softer"},
-  {key:"daylight", lab:"Daylight"},
-];
-let stopIx = 0;
-function setStop(i){
-  stopIx = ((i%STOPS.length)+STOPS.length)%STOPS.length;
-  const s = STOPS[stopIx];
-  document.body.classList.remove('softer','daylight');
-  if(s.key!=="arcade") document.body.classList.add(s.key);
-  document.getElementById('stop-lab').textContent = s.lab;
-  document.getElementById('k-stop').setAttribute('aria-pressed', stopIx>0?'true':'false');
-  if(typeof applyLensColor==="function") applyLensColor();
-}
-function cycleStop(){ setStop(stopIx+1); }
-
+/* =================== STUDIO EYES (Comfort Kernel v2 — in the chrome, never a wall) =================== */
 let motionCalm=false;
-function toggleMotion(){
-  motionCalm=!motionCalm;
-  document.documentElement.setAttribute('data-motion', motionCalm?'calm':'full');
-  document.getElementById('motion-lab').textContent = motionCalm?'Calm':'Full';
-  document.getElementById('k-motion').setAttribute('aria-pressed', motionCalm?'true':'false');
-}
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  // last-updated: computed, not typed
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light: Default / Dusk / Warm-dark (html[data-light] token remaps)
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size A / A+ / A++
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles: high contrast / reduce motion / colorblind cues
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(cls==='se-reduce'){ motionCalm=on; root.setAttribute('data-motion', on?'calm':'full'); }
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+})();
 
 /* =================== NAV =================== */
 function goBuild(){

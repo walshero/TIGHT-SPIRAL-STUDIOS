@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-stop="default" data-bigtext="off">
+<html lang="en" data-light="day">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,12 +13,14 @@
   "medium_gate": "Lane A cut-paper SVG — animates natively, fully offline, zero sourcing",
   "hitl": "Layout, copy, dock curation, palette stops, and motion behavior all human-decided; no generated assets in this file",
   "supersedes": "tight-spiral-studio-face.html as front door (the desk remains live as a room)",
-  "floors": ["visibility ink==ink2", "3-stop palette visibly distinct", "no green structural", "44px targets", "keyboard + focus rings", "reduced-motion respected with replay", "18px+ type", "offline single-file"]
+  "comfort": "Comfort Kernel v2 — Studio Eyes in reserved chrome; light Default/Dusk/Warm-dark via html[data-light]",
+  "floors": ["visibility ink==ink2", "3-stop palette visibly distinct", "no green structural", "44px targets", "keyboard + focus rings", "reduced-motion respected", "18px+ type", "offline single-file"]
 }
 -->
 <style>
-  /* ============ PALETTE STOPS — every stop passes the floor on its own ============ */
-  html[data-stop="default"] {
+  /* ============ LIGHT LADDER — Comfort Kernel v2 remap of this page's tokens ============ */
+  /* DAY (Default) */
+  :root {
     --paper: #f4efe6;
     --ink: #1c1712;
     --ink2: #1c1712;            /* ink2 == ink, always */
@@ -33,8 +35,11 @@
     --focus: #8a5a00;
     --foot-bg: #241d15;
     --foot-ink: #f0e6d2;
+    --tap: 48px;
+    --mono: ui-monospace, "SF Mono", Menlo, monospace;
   }
-  html[data-stop="softer"] {
+  /* DUSK */
+  html[data-light="dusk"] {
     --paper: #e6ddc9;
     --ink: #221a10;
     --ink2: #221a10;
@@ -50,7 +55,8 @@
     --foot-bg: #241d15;
     --foot-ink: #ede2cc;
   }
-  html[data-stop="warmdark"] {
+  /* WARM-DARK (night) — warm charcoal, never pure black */
+  html[data-light="night"] {
     --paper: #2a241c;
     --ink: #f0dcae;
     --ink2: #f0dcae;
@@ -66,8 +72,26 @@
     --foot-bg: #17120c;
     --foot-ink: #f0dcae;
   }
-
-  html[data-bigtext="on"] { font-size: 115%; }
+  /* ---- TOGGLE: high contrast ---- */
+  html.se-contrast:not([data-light="night"]) {
+    --paper: #ffffff; --card: #ffffff; --ink: #100c07; --ink2: #100c07;
+    --card-edge: #6b5326; --foot-bg: #100c07; --foot-ink: #ffffff;
+  }
+  html.se-contrast[data-light="night"] {
+    --paper: #17120c; --card: #1f1912; --ink: #fff6e0; --ink2: #fff6e0;
+    --card-edge: #a08650; --foot-bg: #0e0b07; --foot-ink: #fff6e0;
+  }
+  /* ---- TOGGLE: text size A / A+ / A++ ---- */
+  html { font-size: 100%; }
+  html.se-a1 { zoom: 1.15; }
+  html.se-a2 { zoom: 1.3; }
+  /* ---- TOGGLE: reduce motion ---- */
+  html.se-reduce * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  }
+  /* ---- TOGGLE: colorblind cues ---- */
+  html.se-cb a { text-decoration: underline; text-underline-offset: 2px; }
 
   * { box-sizing: border-box; }
 
@@ -91,35 +115,59 @@
   .skip {
     position: absolute; left: -999px; top: 0;
     background: var(--gold-bg); color: var(--gold-ink);
-    padding: 14px 20px; z-index: 50; font-weight: 700;
+    padding: 14px 20px; z-index: 200; font-weight: 700;
     text-decoration: none;
   }
   .skip:focus { left: 12px; top: 12px; }
 
-  /* ============ BRAND BAR ============ */
-  .brandbar {
-    display: flex; align-items: center; gap: 12px;
-    padding: 14px 18px;
-    border-bottom: 3px solid var(--card-edge);
+  /* ============ RESERVED CHROME — grid header, reserves its own row, never overlaps ============ */
+  .se-chrome {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px;
+    padding: 9px 14px; background: var(--card); border-bottom: 2px solid var(--ink);
+    position: sticky; top: 0; z-index: 100;
   }
-  .brandbar svg { flex: none; }
-  .brandbar strong { font-size: 1.15rem; letter-spacing: 0.02em; }
+  .se-home {
+    justify-self: start; display: inline-flex; align-items: center; gap: 7px; min-height: var(--tap);
+    padding: 8px 12px; border: 1.5px solid var(--card-edge); border-radius: 8px; background: var(--paper);
+    color: var(--ink); font-family: var(--mono); font-weight: 700; font-size: 13px; text-decoration: none;
+  }
+  .se-brand { justify-self: center; display: inline-flex; align-items: center; gap: 9px; color: var(--ink); }
+  .se-brand svg { width: 34px; height: 20px; color: var(--pier); flex: 0 0 auto; }
+  .se-brand .wm { font-family: Georgia, "Times New Roman", serif; font-size: 16px; letter-spacing: .01em; white-space: nowrap; }
+  .se-eyes {
+    justify-self: end; display: inline-flex; align-items: center; gap: 7px; min-height: var(--tap);
+    padding: 8px 13px; border: 2px solid transparent; border-radius: 8px; background: var(--gold-bg);
+    color: var(--gold-ink); font-family: var(--mono); font-weight: 700; font-size: 13px; cursor: pointer;
+  }
+  .se-home:focus-visible, .se-eyes:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  @media (max-width: 560px) { .se-brand .wm { display: none; } }
 
-  /* ============ CONTROLS (corner, never a gate) ============ */
-  .controls {
-    position: sticky; top: 0; z-index: 40;
-    display: flex; gap: 10px; justify-content: flex-end;
-    padding: 10px 14px;
-    background: var(--paper);
+  /* ============ STUDIO EYES panel — opens under the chrome, top-right ============ */
+  .se-panel {
+    position: fixed; right: 12px; top: calc(var(--tap) + 22px); z-index: 101;
+    width: min(320px, calc(100vw - 24px)); background: var(--card); color: var(--ink);
+    border: 2px solid var(--ink); border-radius: 10px; padding: 15px;
+    box-shadow: 0 10px 34px rgba(0,0,0,.28); display: none;
   }
-  .ctl {
-    min-height: 48px; min-width: 48px;
-    padding: 10px 18px;
-    font-size: 1.05rem; font-weight: 700;
-    background: var(--gold-bg); color: var(--gold-ink);
-    border: none; border-radius: 10px;
-    cursor: pointer;
+  .se-panel[data-open="1"] { display: block; }
+  .se-panel h2 { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink2); margin: 0 0 8px; border: none; padding: 0; }
+  .se-row { display: flex; gap: 6px; margin-bottom: 14px; }
+  .se-btn {
+    flex: 1; min-height: var(--tap); padding: 8px 4px; border: 1.5px solid var(--card-edge); border-radius: 8px;
+    background: var(--paper); color: var(--ink); font-family: var(--mono); font-weight: 700; font-size: 12.5px; cursor: pointer;
   }
+  .se-btn[aria-pressed="true"] { background: var(--gold-bg); color: var(--gold-ink); border-color: var(--gold-bg); }
+  .se-btn:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .se-tog {
+    display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 10px;
+    min-height: var(--tap); padding: 8px 11px; margin-bottom: 6px; border: 1.5px solid var(--card-edge); border-radius: 8px;
+    background: var(--paper); color: var(--ink); font-weight: 600; font-size: 14px; cursor: pointer; text-align: left;
+    font-family: inherit;
+  }
+  .se-tog[aria-pressed="true"] { border-color: var(--gold-bg); }
+  .se-tog .st { font-family: var(--mono); font-size: 11px; color: var(--ink2); }
+  .se-tog[aria-pressed="true"] .st { font-weight: 700; }
+  .se-tog:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 
   /* ============ HERO: THE RIVER ============ */
   .hero {
@@ -168,7 +216,6 @@
     50%  { transform: translateX(48vw) rotate(2deg); }
     100% { transform: translateX(110vw) rotate(-2deg); }
   }
-  html.paused .wave, html.paused .boat { animation-play-state: paused; }
 
   /* ============ DOCKS ============ */
   main {
@@ -193,7 +240,6 @@
     from { background-position: 0 0; }
     to   { background-position: 0 60px; }
   }
-  html.paused .current { animation-play-state: paused; }
 
   .dock {
     margin: 44px 0 0 34px;
@@ -253,14 +299,29 @@
   .studiofoot .made {
     max-width: 52ch; margin: 14px auto 0;
   }
+  .studiofoot .updated {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    margin: 14px auto 0;
+  }
+
+  /* ============ BOTTOM NAV RAIL — Back + Home ============ */
+  .se-rail {
+    display: flex; gap: 10px; justify-content: center; padding: 20px;
+    background: var(--paper); border-top: 2px solid var(--card-edge);
+  }
+  .se-rail a, .se-rail button {
+    min-height: var(--tap); min-width: var(--tap); padding: 10px 18px;
+    border: 1.5px solid var(--card-edge); border-radius: 8px;
+    background: var(--card); color: var(--ink); font-family: var(--mono);
+    font-weight: 700; font-size: 13px; text-decoration: none; cursor: pointer;
+    display: inline-flex; align-items: center;
+  }
+  .se-rail a:focus-visible, .se-rail button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 
   .srlive {
     position: absolute; width: 1px; height: 1px;
     overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .wave, .boat, .current { animation-play-state: paused; }
   }
 </style>
 </head>
@@ -268,20 +329,41 @@
 
 <a class="skip" href="#docks">Skip to the docks</a>
 
-<header class="brandbar">
-  <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
-    <path d="M17 17 m0 -1 a1 1 0 0 1 1 1 a2.4 2.4 0 0 1 -2.4 2.4 a4.2 4.2 0 0 1 -4.2 -4.2 a6.6 6.6 0 0 1 6.6 -6.6 a9.4 9.4 0 0 1 9.4 9.4 a12.6 12.6 0 0 1 -12.6 12.6 a15 15 0 0 1 -13.9 -9.4"
-      fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
-  </svg>
-  <strong>Tight Spiral Studios</strong>
+<!-- RESERVED CHROME — Home · teaspoon brand · Studio Eyes -->
+<header class="se-chrome">
+  <a class="se-home" href="../index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
 </header>
 
-<div class="controls">
-  <button class="ctl" id="motionBtn" type="button">Pause the water</button>
-  <button class="ctl" id="textBtn" type="button" aria-pressed="false">Bigger text</button>
-  <button class="ctl" id="paletteBtn" type="button">Palette: Default</button>
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="srlive" id="seSr" role="status" aria-live="polite"></span>
 </div>
-<div class="srlive" aria-live="polite" id="announce"></div>
 
 <section class="hero">
   <h1>The river runs past every dock.</h1>
@@ -403,53 +485,74 @@
   <div>Tight Spiral Studios &middot; walshero@gmail.com</div>
   <div><a href="tight-spiral-system-map.html">How the studio works</a></div>
   <p class="made">How it was made: designed and curated by a human founder; layout, copy, dock selection, palette stops, and motion behavior are founder decisions. Built as cut-paper SVG, fully offline, in one file. No generated assets. Play. Notice. Design.</p>
+  <p class="updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v2 <span style="opacity:.75">e613d29</span></span>
 </footer>
+
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" id="seBack" aria-label="Back">Back</button>
+  <a href="../index.html" aria-label="Home">Home</a>
+</nav>
 
 <script>
   // Scroll reset
   window.scrollTo(0, 0);
 
-  var html = document.documentElement;
-  var announce = document.getElementById('announce');
+  (function(){
+    var root = document.documentElement, sr = document.getElementById('seSr');
 
-  // ---- Palette: corner button cycles stops by name; never a gate ----
-  var stops = [
-    { key: 'default',  name: 'Default' },
-    { key: 'softer',   name: 'Softer' },
-    { key: 'warmdark', name: 'Warm dark' }
-  ];
-  var stopIx = 0;
-  var paletteBtn = document.getElementById('paletteBtn');
-  paletteBtn.addEventListener('click', function () {
-    stopIx = (stopIx + 1) % stops.length;
-    html.setAttribute('data-stop', stops[stopIx].key);
-    paletteBtn.textContent = 'Palette: ' + stops[stopIx].name;
-    announce.textContent = 'Palette set to ' + stops[stopIx].name;
-  });
+    // last-updated: computed, not typed
+    (function(){
+      var u = document.getElementById('seUpdated'); if(!u) return;
+      var d = new Date(document.lastModified);
+      u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+        : 'Last updated ' + d.toLocaleDateString(undefined, {year:'numeric', month:'long', day:'numeric'});
+    })();
 
-  // ---- Bigger text toggle ----
-  var textBtn = document.getElementById('textBtn');
-  textBtn.addEventListener('click', function () {
-    var on = html.getAttribute('data-bigtext') === 'on';
-    html.setAttribute('data-bigtext', on ? 'off' : 'on');
-    textBtn.setAttribute('aria-pressed', String(!on));
-    textBtn.textContent = on ? 'Bigger text' : 'Regular text';
-    announce.textContent = on ? 'Text set to regular size' : 'Text set to larger size';
-  });
+    // Studio Eyes panel open/close
+    var eyes = document.getElementById('seEyes'), panel = document.getElementById('sePanel');
+    function setOpen(o){ panel.setAttribute('data-open', o ? '1' : '0'); eyes.setAttribute('aria-expanded', String(o)); }
+    eyes.addEventListener('click', function(){ setOpen(panel.getAttribute('data-open') !== '1'); });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' && panel.getAttribute('data-open') === '1'){ setOpen(false); eyes.focus(); }
+    });
 
-  // ---- Motion: joy defaults ON, replay control always present,
-  //      reduced-motion users start paused and may opt in ----
-  var motionBtn = document.getElementById('motionBtn');
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function setPaused(paused) {
-    html.classList.toggle('paused', paused);
-    motionBtn.textContent = paused ? 'Let it flow' : 'Pause the water';
-    announce.textContent = paused ? 'Water paused' : 'Water flowing';
-  }
-  setPaused(reduced);
-  motionBtn.addEventListener('click', function () {
-    setPaused(!html.classList.contains('paused'));
-  });
+    // light: Default / Dusk / Warm-dark
+    [].forEach.call(document.querySelectorAll('[data-light-set]'), function(b){
+      b.addEventListener('click', function(){
+        root.setAttribute('data-light', b.getAttribute('data-light-set'));
+        [].forEach.call(document.querySelectorAll('[data-light-set]'), function(x){ x.setAttribute('aria-pressed', String(x === b)); });
+        if(sr) sr.textContent = b.textContent.trim();
+      });
+    });
+
+    // text size A / A+ / A++
+    [].forEach.call(document.querySelectorAll('[data-text]'), function(b){
+      b.addEventListener('click', function(){
+        var n = b.getAttribute('data-text');
+        root.classList.remove('se-a1', 'se-a2');
+        if(n === '1') root.classList.add('se-a1');
+        if(n === '2') root.classList.add('se-a2');
+        [].forEach.call(document.querySelectorAll('[data-text]'), function(x){ x.setAttribute('aria-pressed', String(x === b)); });
+        if(sr) sr.textContent = 'Text size ' + b.textContent.trim();
+      });
+    });
+
+    // toggles: high contrast / reduce motion / colorblind cues
+    [].forEach.call(document.querySelectorAll('[data-tog]'), function(b){
+      b.addEventListener('click', function(){
+        var cls = b.getAttribute('data-tog'), on = !root.classList.contains(cls);
+        root.classList.toggle(cls, on);
+        b.setAttribute('aria-pressed', String(on));
+        b.querySelector('.st').textContent = on ? 'On' : 'Off';
+        if(sr) sr.textContent = b.textContent.replace(/On|Off/, '').trim() + (on ? ' on' : ' off');
+      });
+    });
+
+    // Back rail
+    var back = document.getElementById('seBack');
+    if(back) back.addEventListener('click', function(){ history.back(); });
+  })();
 </script>
 
 </body>

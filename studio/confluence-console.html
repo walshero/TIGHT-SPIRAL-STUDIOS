@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,7 +15,9 @@
        STATION 2  IMAGE        (Show the Tell) show, don't name
        STATION 3  TURN         (The Late Quiet) land late & quiet
      Copy-paste IN at each station, carry-out OUT. No storage. FERPA-clean.
-     Arcade skin LEADS. Comfort button = one-tap accessible fallback (eyes win).
+     Arcade skin LEADS as Default. Comfort Kernel v2: Studio Eyes in the
+     reserved chrome (Light Default/Dusk/Warm-dark via html[data-light],
+     text A/A+/A++, high contrast, reduce motion, colorblind cues).
      =========================================================== */
   :root{
     /* ARCADE skin (default) */
@@ -37,22 +39,41 @@
     --mono:"Courier New",ui-monospace,monospace;
     --glow:0 0 0 transparent;
   }
-  /* COMFORT: HIGH CONTRAST — near-black ink on light, no glow, no neon */
-  body.comfort-high{
+  /* LIGHT: DUSK — near-black ink on warm paper, no glow, no neon */
+  html[data-light="dusk"]{
     --bg:#f3efe6; --board:#fffdf8; --panel:#fffdf8; --ink:#15120e; --ink2:#15120e;
     --trace:#2c5e8a; --trace-dim:#9bb6cc; --hot:#8a3d1e; --line:#15120e;
     --focus:#1546b8; --good:#1f5d34; --bad:#8a3d1e; --glow:0 0 0 transparent;
   }
-  /* COMFORT: WARM-DARK — amber on charcoal, never #000/#fff */
-  body.comfort-warm{
+  /* LIGHT: WARM-DARK (night) — amber on warm charcoal, never #000/#fff */
+  html[data-light="night"]{
     --bg:#22201c; --board:#2c2925; --panel:#2c2925; --ink:#f1e3c8; --ink2:#f1e3c8;
     --trace:#e0a35c; --trace-dim:#6e5c3c; --hot:#e0a35c; --line:#f1e3c8;
     --focus:#9cc2ff; --good:#9ad0a0; --bad:#e0a98c; --glow:0 0 0 transparent;
   }
+  /* TOGGLE: high contrast — push each light further apart */
+  html.se-contrast:not([data-light="night"]){
+    --bg:#fbfaf7; --board:#ffffff; --panel:#ffffff; --ink:#15120e; --ink2:#15120e;
+    --trace:#1c4a70; --trace-dim:#9bb6cc; --hot:#7c3517; --line:#15120e;
+    --focus:#1546b8; --good:#1a5230; --bad:#7c3517; --glow:0 0 0 transparent;
+  }
+  html.se-contrast[data-light="night"]{
+    --bg:#181614; --board:#201d1a; --panel:#201d1a; --ink:#fff3d6; --ink2:#fff3d6;
+    --trace:#f0b96a; --trace-dim:#6e5c3c; --hot:#f0b96a; --line:#fff3d6;
+    --focus:#9cc2ff; --good:#a8e0ae; --bad:#eab89a; --glow:0 0 0 transparent;
+  }
+  /* TOGGLE: text size A / A+ / A++ */
+  html{ font-size:100%; }
+  html.se-a1{ zoom:1.15; }
+  html.se-a2{ zoom:1.3; }
+  /* TOGGLE: reduce motion */
+  html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+  /* TOGGLE: colorblind cues */
+  html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
   *{box-sizing:border-box}
   html,body{margin:0}
   body{ background:var(--bg); color:var(--ink); font:var(--type)/1.55 var(--serif); }
-  .wrap{ max-width:680px; margin:0 auto; padding:18px 16px 100px; }
+  .wrap{ max-width:680px; margin:0 auto; padding:18px 16px 48px; }
 
   /* ---- arcade marquee ---- */
   .marquee{
@@ -72,20 +93,21 @@
   .board{ position:relative; overflow:hidden; }
   .board .circuitry{ position:absolute; inset:0; width:100%; height:100%; z-index:0; opacity:.5; pointer-events:none; }
   .board .legend, .board .river{ position:relative; z-index:1; }
-  body.comfort-high .board .circuitry, body.comfort-warm .board .circuitry{ opacity:.18; }
+  html[data-light="dusk"] .board .circuitry, html[data-light="night"] .board .circuitry,
+  html.se-contrast .board .circuitry{ opacity:.18; }
   /* chip icon inside each station's chip box */
   .chip svg{ width:22px; height:22px; display:block; }
   .chip .num{ position:absolute; font-family:var(--mono); font-weight:700; font-size:.7rem; }
   .chip{ position:relative; }
-  body:not(.comfort-high):not(.comfort-warm) .marquee{ box-shadow:0 0 24px rgba(57,224,196,.25), inset 0 0 30px rgba(57,224,196,.08); }
+  html[data-light="day"]:not(.se-contrast) .marquee{ box-shadow:0 0 24px rgba(57,224,196,.25), inset 0 0 30px rgba(57,224,196,.08); }
   .marquee h1{
     font-family:var(--sans); font-weight:800; letter-spacing:.06em;
     font-size:1.9rem; margin:.1em 0; color:var(--ink); line-height:1.1;
   }
-  body:not(.comfort-high):not(.comfort-warm) .marquee h1{ text-shadow:0 0 10px rgba(254,246,216,.45); }
+  html[data-light="day"]:not(.se-contrast) .marquee h1{ text-shadow:0 0 10px rgba(254,246,216,.45); }
   .marquee .sub{ font-family:var(--sans); text-transform:uppercase; letter-spacing:.2em; font-size:.78rem; color:var(--trace); font-weight:700; }
   .insert{ font-family:var(--mono); color:var(--hot); font-size:.85rem; margin-top:8px; }
-  body:not(.comfort-high):not(.comfort-warm) .insert{ animation:blink 1.4s steps(2,end) infinite; }
+  html[data-light="day"]:not(.se-contrast):not(.se-reduce) .insert{ animation:blink 1.4s steps(2,end) infinite; }
   @keyframes blink{50%{opacity:.25}}
   @media (prefers-reduced-motion:reduce){ .insert{animation:none!important} }
 
@@ -106,10 +128,10 @@
     display:flex; align-items:center; justify-content:center; font-size:1rem;
   }
   .chip.lit{ background:var(--trace); color:var(--bg); }
-  .chip.done{ background:var(--good); border-color:var(--good); color:#0a1738; }
+  .chip.done{ background:var(--good); border-color:var(--good); color:var(--bg); }
   .wire{ width:5px; flex:1; min-height:26px; background:var(--trace-dim); margin:3px 0; border-radius:3px; }
   .wire.live{ background:var(--trace); }
-  body:not(.comfort-high):not(.comfort-warm) .wire.live{ box-shadow:0 0 8px var(--trace); }
+  html[data-light="day"]:not(.se-contrast) .wire.live{ box-shadow:0 0 8px var(--trace); }
   .nodebtn{
     flex:1; text-align:left; border:3px solid var(--line); border-radius:12px;
     background:var(--panel); color:var(--ink); padding:12px 14px; margin:0 0 12px;
@@ -132,12 +154,50 @@
   .btn.trace{ background:var(--trace); color:var(--bg); border-color:var(--trace); }
   *:focus-visible{ outline:4px solid var(--focus); outline-offset:3px; }
 
-  /* ---- comfort corner button ---- */
-  .comfort{
-    position:fixed; top:10px; right:10px; min-height:44px; padding:10px 14px; z-index:30;
-    font-family:var(--sans); font-weight:800; background:var(--hot); color:var(--bg);
-    border:3px solid var(--hot); border-radius:10px; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,.5);
-  }
+  /* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+  .se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+    padding:8px 12px; background:var(--board); border-bottom:3px solid var(--line);
+    position:sticky; top:0; z-index:40; }
+  .se-home{ justify-self:start; display:inline-flex; align-items:center; min-height:48px;
+    padding:8px 14px; border:3px solid var(--line); border-radius:10px; background:var(--panel);
+    color:var(--ink); font-family:var(--sans); font-weight:800; font-size:.82rem;
+    letter-spacing:.08em; text-transform:uppercase; text-decoration:none; }
+  .se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+  .se-brand svg{ width:34px; height:20px; color:var(--trace); flex:0 0 auto; }
+  .se-brand .wm{ font-family:var(--sans); font-weight:800; font-size:.9rem; letter-spacing:.06em; white-space:nowrap; }
+  .se-eyes{ justify-self:end; display:inline-flex; align-items:center; min-height:48px;
+    padding:8px 14px; border:3px solid var(--hot); border-radius:10px; background:var(--hot);
+    color:var(--bg); font-family:var(--sans); font-weight:800; font-size:.82rem;
+    letter-spacing:.08em; text-transform:uppercase; cursor:pointer; }
+  @media (max-width:560px){ .se-brand .wm{ display:none; } }
+
+  /* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+  .se-panel{ position:fixed; right:10px; top:72px; z-index:50; width:min(320px,calc(100vw - 20px));
+    background:var(--board); color:var(--ink); border:3px solid var(--line); border-radius:14px;
+    padding:15px; box-shadow:0 10px 34px rgba(0,0,0,.45); display:none; }
+  .se-panel[data-open="1"]{ display:block; }
+  .se-panel h2{ font-family:var(--sans); font-size:.72rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--trace); margin:0 0 8px; font-weight:700; }
+  .se-row{ display:flex; gap:6px; margin-bottom:14px; }
+  .se-btn{ flex:1; min-height:48px; padding:8px 4px; border:3px solid var(--line); border-radius:10px;
+    background:var(--panel); color:var(--ink); font-family:var(--sans); font-weight:800; font-size:.8rem; cursor:pointer; }
+  .se-btn[aria-pressed="true"]{ background:var(--trace); color:var(--bg); border-color:var(--trace); }
+  .se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+    min-height:48px; padding:8px 12px; margin:0 0 6px; border:3px solid var(--line); border-radius:10px;
+    background:var(--panel); color:var(--ink); font-family:var(--sans); font-weight:700; font-size:.88rem;
+    cursor:pointer; text-align:left; }
+  .se-tog[aria-pressed="true"]{ border-color:var(--trace); }
+  .se-tog .st{ font-family:var(--mono); font-size:.72rem; font-weight:700; color:var(--ink2); }
+  .se-tog[aria-pressed="true"] .st{ color:var(--trace); }
+  .se-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+  /* ═══ last-updated stamp + BOTTOM NAV RAIL — Back + Home ═══ */
+  .se-updated{ max-width:680px; margin:0 auto; padding:0 16px 14px; font-family:var(--mono);
+    font-size:.8rem; color:var(--ink); text-align:center; }
+  .se-rail{ display:flex; gap:10px; justify-content:center; padding:18px 16px 28px; border-top:3px solid var(--line); }
+  .se-rail a,.se-rail button{ min-height:48px; min-width:44px; padding:12px 22px; border:3px solid var(--line);
+    border-radius:10px; background:var(--panel); color:var(--ink); font-family:var(--sans); font-weight:800;
+    font-size:.85rem; letter-spacing:.08em; text-transform:uppercase; text-decoration:none; cursor:pointer; }
 
   /* ---- station screens ---- */
   .card{ background:var(--panel); border:3px solid var(--line); border-radius:14px; padding:20px 18px; margin:16px 0; }
@@ -152,8 +212,8 @@
   }
   .pick{ display:block; width:100%; text-align:left; border:3px solid var(--line); border-radius:11px;
     background:var(--bg); color:var(--ink); padding:13px 15px; margin:9px 0; font:inherit; cursor:pointer; line-height:1.4; min-height:52px; }
-  .pick.correct{ background:var(--good); color:#0a1738; border-color:var(--good); }
-  .pick.wrong{ background:var(--bad); color:#0a1738; border-color:var(--bad); }
+  .pick.correct{ background:var(--good); color:var(--bg); border-color:var(--good); }
+  .pick.wrong{ background:var(--bad); color:var(--bg); border-color:var(--bad); }
   .pick:disabled{ cursor:default; }
   .why{ font-size:.97rem; margin-top:10px; }
   .out{ width:100%; min-height:120px; font:400 .95rem/1.45 var(--mono); padding:12px; border:3px dashed var(--trace);
@@ -167,8 +227,52 @@
 </style>
 </head>
 <body>
-<button class="comfort" id="comfort">EYES: Arcade</button>
+
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="../index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 26" fill="none" stroke="currentColor" aria-hidden="true">
+      <ellipse cx="15" cy="13" rx="12" ry="9" stroke-width="2.6"/>
+      <ellipse cx="15" cy="13" rx="6" ry="4" stroke-width="1.3"/>
+      <path d="M27 13 H58" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M15 4 q4 -3 1 -6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
+
 <div class="wrap" id="app"></div>
+
+<p class="se-updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v2 <span style="opacity:.75">e613d29</span></span>
+
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" id="seBack" aria-label="Back">Back</button>
+  <a href="../index.html" aria-label="Home">Home</a>
+</nav>
 
 <script>
 /* ============ CARRY-OUT (from Props Room v1, verbatim signature) ============ */
@@ -201,11 +305,23 @@ function bulbs(){
   }
   return s;
 }
-/* per-station chip glyph: 1=stacked bars shrinking (compression), 2=eye (image), 3=bent arrow (turn) */
+/* per-station chip glyph, cut-paper relief (art direction C): solid shapes,
+   one offset shadow layer, currentColor so every light mode inks them right.
+   1=sandbag bars shrinking (compression), 2=eye with cut pupil (image), 3=bent arrow (turn) */
 function chipIcon(which){
-  if(which==='compression') return '<svg viewBox="0 0 24 24" aria-hidden="true"><g stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="9" y1="18" x2="15" y2="18"/></g></svg>';
-  if(which==='image') return '<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 12 C6 5, 18 5, 22 12 C18 19, 6 19, 2 12 Z"/><circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none"/></g></svg>';
-  return '<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5 V13 a4 4 0 0 0 4 4 H17"/><polyline points="13 13 18 17 13 21"/></g></svg>';
+  if(which==='compression') return '<svg viewBox="0 0 24 24" aria-hidden="true">'
+    +'<g fill="currentColor" opacity=".35" transform="translate(1.6 1.6)"><rect x="3" y="4" width="17" height="4" rx="1.4"/><rect x="6" y="10" width="11" height="4" rx="1.4"/><rect x="9" y="16" width="5" height="4" rx="1.4"/></g>'
+    +'<g fill="currentColor"><rect x="3" y="4" width="17" height="4" rx="1.4"/><rect x="6" y="10" width="11" height="4" rx="1.4"/><rect x="9" y="16" width="5" height="4" rx="1.4"/></g></svg>';
+  if(which==='image') return '<svg viewBox="0 0 24 24" aria-hidden="true">'
+    +'<path fill="currentColor" opacity=".35" transform="translate(1.6 1.6)" d="M12 6 C16.5 6 20 8.7 21.5 12 C20 15.3 16.5 18 12 18 C7.5 18 4 15.3 2.5 12 C4 8.7 7.5 6 12 6 Z"/>'
+    +'<path fill="currentColor" fill-rule="evenodd" d="M12 6 C16.5 6 20 8.7 21.5 12 C20 15.3 16.5 18 12 18 C7.5 18 4 15.3 2.5 12 C4 8.7 7.5 6 12 6 Z M12 15 A3 3 0 1 0 12 9 A3 3 0 0 0 12 15 Z"/></svg>';
+  return '<svg viewBox="0 0 24 24" aria-hidden="true">'
+    +'<path fill="currentColor" opacity=".35" transform="translate(1.6 1.6)" d="M4 2 H8 V10.5 H13 V7 L21 12.5 L13 18 V14.5 H6 A2 2 0 0 1 4 12.5 Z"/>'
+    +'<path fill="currentColor" d="M4 2 H8 V10.5 H13 V7 L21 12.5 L13 18 V14.5 H6 A2 2 0 0 1 4 12.5 Z"/></svg>';
+}
+/* done-chip check — drawn, not typed (no glyph characters; studio floor) */
+function chipCheck(){
+  return '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.5 L9.5 17.5 L19.5 6.5"/></svg>';
 }
 
 /* ---- station 2 data: Show the Tell (Image) ---- */
@@ -294,7 +410,7 @@ function hub(){
     + '<div class="river">'
       // node 1
       + '<div class="node"><div class="rail">'
-          + '<div class="chip '+(c?'done':'lit')+'">'+(c?'\u2713':chipIcon('compression'))+'</div>'
+          + '<div class="chip '+(c?'done':'lit')+'">'+(c?chipCheck():chipIcon('compression'))+'</div>'
           + '<div class="wire '+(c?'live':'')+'"></div>'
         + '</div>'
         + '<button class="nodebtn" data-go="compression">'
@@ -306,7 +422,7 @@ function hub(){
       + '</div>'
       // node 2
       + '<div class="node"><div class="rail">'
-          + '<div class="chip '+(im?'done':lit(c))+'">'+(im?'\u2713':chipIcon('image'))+'</div>'
+          + '<div class="chip '+(im?'done':lit(c))+'">'+(im?chipCheck():chipIcon('image'))+'</div>'
           + '<div class="wire '+(im?'live':'')+'"></div>'
         + '</div>'
         + '<button class="nodebtn" data-go="image">'
@@ -318,7 +434,7 @@ function hub(){
       + '</div>'
       // node 3
       + '<div class="node"><div class="rail">'
-          + '<div class="chip '+(tu?'done':lit(im))+'">'+(tu?'\u2713':chipIcon('turn'))+'</div>'
+          + '<div class="chip '+(tu?'done':lit(im))+'">'+(tu?chipCheck():chipIcon('turn'))+'</div>'
         + '</div>'
         + '<button class="nodebtn" data-go="turn">'
           + '<span class="tag">Station 3 \u00B7 Turn</span>'
@@ -490,20 +606,46 @@ function runsheet(){
   };
   document.getElementById('copy').onclick=function(){
     var box=document.getElementById('out'); if(!box.value){ document.getElementById('build').click(); }
-    copyOut(box.value, function(){ var b=document.getElementById('copy'); b.textContent="Copied \u2713"; setTimeout(function(){b.textContent="Copy it";},1600); });
+    copyOut(box.value, function(){ var b=document.getElementById('copy'); b.textContent="Copied"; setTimeout(function(){b.textContent="Copy it";},1600); });
   };
 }
 
-/* ============ COMFORT: arcade \u2192 high-contrast \u2192 warm-dark ============ */
-var modes=["Arcade","High-contrast","Warm-dark"], mi=0;
-var cb=document.getElementById('comfort');
-cb.onclick=function(){
-  mi=(mi+1)%modes.length;
-  document.body.classList.remove('comfort-high','comfort-warm');
-  if(modes[mi]==="High-contrast")document.body.classList.add('comfort-high');
-  if(modes[mi]==="Warm-dark")document.body.classList.add('comfort-warm');
-  cb.textContent="EYES: "+modes[mi];
-};
+/* ============ STUDIO EYES (Comfort Kernel v2) ============ */
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  // last-updated: computed, not typed
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  // bottom rail Back
+  var bk=document.getElementById('seBack'); if(bk) bk.addEventListener('click',function(){ history.back(); });
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+})();
 
 hub();
 </script>
