@@ -49,6 +49,26 @@ the studio. A session name (even this one) does not grant permanence — git doe
   studio-eyes false-positives on light-on-dark and on `<a href>`/SVG-namespace — trust
   comfort-gate's measurement over studio-eyes' guessing.
 
+## LINK TO PLAY, ALWAYS (founder ruling, 2026-07-30)
+
+Every delivery that lands or changes a playable or viewable file ENDS with a
+click-ready link. Matt never constructs a URL, never gets a bare filename,
+never gets "it's in the repo." Verbatim: "Link to play. Always. It's easy
+for me so do it as rule."
+
+Link table (until GitHub Pages is switched on):
+- Pages and games (HTML): https://raw.githack.com/walshero/TIGHT-SPIRAL-STUDIOS/main/<file>.html
+- Docs and images: https://github.com/walshero/TIGHT-SPIRAL-STUDIOS/blob/main/<path>
+- githack CDN lags ~5 min after push, same as raw. Say so if the push is fresh.
+
+Durable upgrade, one switch, Matt's hands: repo Settings -> Pages -> Source
+"Deploy from a branch" -> main / root -> Save. After that every push
+auto-publishes and links become https://walshero.github.io/TIGHT-SPIRAL-STUDIOS/<file>.html
+(.nojekyll is already in the repo so underscore-prefixed files survive).
+Blocked from this lane three ways, all verified 2026-07-30: Netlify MCP proxy
+403s this sandbox, the GitHub Pages API path is blocked by the egress proxy,
+and the PAT lacks workflow scope for an Actions publish. The switch is the fix.
+
 ## SAY IT ONCE (founder ruling, 2026-07-29)
 
 Matt is solo staff. Security and hygiene items — token revocation, expiry, cleanup chores —
