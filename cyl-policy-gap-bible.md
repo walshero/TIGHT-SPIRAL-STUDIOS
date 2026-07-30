@@ -129,6 +129,9 @@ Scenes 1 and 2 stay blind — the instrument needs two clean blind measurements.
 
 ## 3. The Maslow instrument spec *(Horvath — measurement discipline)*
 
+**FOUNDER RULING (2026-07-30): Horvath's position adopted — the instrument ships as the WORDS | LIFE two-column, not the one-ladder Split Pyramid merge. Plainer screen, lower clutter, measurement integrity first. The pyramid stays in this document as the considered-and-declined alternative.**
+
+
 **Displacement is a property of the artifact. It is coded at authoring time. It is never a property of the player.** The player is never assigned a Maslow level. The game computes a number about the message, from sourced text and sourced effects.
 
 ### 3.1 The Register/Impact Codebook
