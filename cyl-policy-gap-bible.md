@@ -472,7 +472,9 @@ Files live at `art/cyl/plates/`. Status is a probe of what exists on disk, not a
 | `prop.draftcard` | `prop.draftcard.jpg` | ACCEPTED (object) | All print is gibberish — strip in trace, typeset period Selective Service certificate typography in build. [VERIFY format] flag from brief #4 still open. |
 | `prop.suitcase.jfk62` | `prop.suitcase.jfk62.jpg` | ACCEPTED | Blank tag typeset in build. Palette sits on the '62 crisp rung. |
 
-All four pass the dignity rules by construction: no person in frame, displacement coded on the artifact. Outstanding from this prompt round: `prop.shelterign` (1962 fallout-shelter sign). Outstanding founder calls: `room.household.lbj64` monochrome-vs-color; LBJ leader insert fix.
+All four pass the dignity rules by construction: no person in frame, displacement coded on the artifact. Outstanding from this prompt round: `prop.shelterign` (1962 fallout-shelter sign). Outstanding founder call: `room.household.lbj64` monochrome-vs-color.
+
+| `insert.leader.lbj64` | `insert.leader.lbj64.jpg` | ACCEPTED (founder-delegated adaptation, 2026-07-30) | LBJ retry plate had resolved eyes/nose/mouth — killed under the withholding rule. Studio adapted it in-pipeline: full face-interior silhouette, both lenses repainted as broadcast glare, grain rebuilt to match. ID survives through outline, ears, heavy frames' glare, bulk, and the both-hands podium grip. Provenance chain: founder MJ generation, machine silhouette adaptation (SSG imprint applies at integration), open chair stands. |
 
 ---
 
