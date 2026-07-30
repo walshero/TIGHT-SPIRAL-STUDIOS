@@ -80,11 +80,31 @@ the value; the ones that fail remember it.
   holds the real v48). **Confluence has its OWN repo — TSP does not write Confluence trunk
   files.**
 
+## DONE SINCE (2026-07-29, later the same day)
+
+- **Comfort Kernel v2** (`comfort-kernel-v2.html`) — the reconciled standard: Studio Eyes
+  (Default/Dusk/Warm-dark + A/A+/A++ + contrast/motion/colorblind) in a reserved chrome
+  header (Home · teaspoon · Studio Eyes) that cannot overlap content; bottom Back+Home rail.
+- **Phase 3, top level: DONE.** All 50 deployable top-level pages migrated to v2, gate-or-revert,
+  independently re-gated 0 HALT, copy-audited against `docs-voice-rubric.md` (one hollow claim
+  corrected). The three comfort dialects are dead at top level.
+- **Version stamps:** every page opens with "Last updated <computed> · vN <hash>" — version
+  derived from git by `version-stamp.py`, never typed. Measured: 0 of 50 below the fold.
+- **Copy Auditor seat** (`docs-voice-rubric.md`) — audits agent-added text before push.
+- **Games text bank** (`games-text-bank.md`) — games draw base text from Matt's own writing;
+  student work and client manuscripts excluded; 4 entries flagged VERIFY.
+- **safe-push.sh now blocks on `comfort-gate.py` + `version-stamp.py --check`** (replaced the
+  false-positiving studio-eyes contrast/offline checks; canary-proven).
+
 ## OPEN
 
-- **Phase 3:** mount the kernel across the remaining ~130 files — start with the `softer/warm`
-  cohort (kills the shared white-on-white bug at the root), then the 83 files with no comfort
-  system. Each file must pass `comfort-gate.py` before it ships.
+- **Phase 3, subdirs:** `studio/` + `fys/` pages (34) — migration in flight this session; land
+  gated results. `archive/` and `rescued/` are dead lanes, not migrated by design.
+- **Art:** full C-games / A-client mark-set pass awaits the founder's eye (only clearly-generic
+  glyphs were redrawn). Pitches live in `art-pitches.html`.
+- **Founder calls pending:** 4 VERIFY flags in the text bank · comfort persistence (no-storage
+  floor vs remembering the light choice across pages) · `db/confluence-schema.sql` (only Matt
+  has it) · face-copy reconcile vs his Drive original.
 - **Face coordination:** TSP-GIT-LANE writes `index.html`; any concurrent session must stay
   read-only on it, or hand off explicitly. This is the standing traffic rule.
 
