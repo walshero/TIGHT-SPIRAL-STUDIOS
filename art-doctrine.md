@@ -27,8 +27,10 @@ Machine art never blocks a human artist and is never defended against one.
 ## BRAND SYSTEM — founder ruling
 
 - **The logo is the tight spiral.** Identity mark, first position, unchanged.
-- **The teaspoon is the method mark.** tsp is how TSP builds: small kernels of truth,
-  measured, stirred into robust instruments. It represents process, not identity.
+- **The teaspoon is the imprint mark of SUPER SKETCHY GRAPHICS** — the studio's
+  machine-art subsidiary, a gear of TSP. Every machine-originated artwork (Midjourney
+  trace, Claude SVG) carries the teaspoon imprint until an artist takes the chair.
+  The teaspoon marks provenance, never studio identity — identity is the spiral, always.
 - **The measure ladder is the growth motif: tsp → tbsp → cup.** Small truths compound
   into bigger vessels. Use it wherever the studio explains how work scales — a kernel
   becomes a game becomes a suite.
