@@ -461,6 +461,19 @@ One-line briefs, ready to become MJ prompts. All plates follow the period bible'
 19. `household.agency.lbj64` — a teach-in notice or draft-counseling flyer, mimeograph texture. [VERIFY earliest dates; teach-in fallback March 1965]
 20. `household.agency.nixon69` — a Moratorium armband laid over the chair back, October 15 1969. [VERIFY participation estimate]
 
+### Plate ledger — generations received and accepted (founder MJ, 2026-07-30)
+
+Files live at `art/cyl/plates/`. Status is a probe of what exists on disk, not a promise.
+
+| Plate ID | File | Verdict | Build-lane work required |
+|---|---|---|---|
+| `room.household.nixon69` | `room.household.nixon69.jpg` | ACCEPTED | Calendar face is generator mush — overlay a real December 1969 page with **December 1 circled** (the lottery date, per brief #3). Ten-year-old appliances kept deliberately: a household feeling the '69 squeeze does not own a '69 kitchen. |
+| `glass.darkmirror.nixon69` | `glass.darkmirror.nixon69.jpg` | ACCEPTED as-is | Notice-trail type set on the screen surface in build (full-contrast, per Turkle HALT on reflection copy). |
+| `prop.draftcard` | `prop.draftcard.jpg` | ACCEPTED (object) | All print is gibberish — strip in trace, typeset period Selective Service certificate typography in build. [VERIFY format] flag from brief #4 still open. |
+| `prop.suitcase.jfk62` | `prop.suitcase.jfk62.jpg` | ACCEPTED | Blank tag typeset in build. Palette sits on the '62 crisp rung. |
+
+All four pass the dignity rules by construction: no person in frame, displacement coded on the artifact. Outstanding from this prompt round: `prop.shelterign` (1962 fallout-shelter sign). Outstanding founder calls: `room.household.lbj64` monochrome-vs-color; LBJ leader insert fix.
+
 ---
 
 ## 8. Panel warnings — the must-nots, kept sharp
