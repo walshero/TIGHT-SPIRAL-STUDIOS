@@ -40,7 +40,6 @@ Save architecture in `studio-file-map.md`. FERPA + repo detail in `TSP Ledger.md
 7. **VISUAL CONSTITUTION (§13)** — 50% text gate + §7.1 header/fold + game-tie + Brand Test. Doctrine: `tight-spiral-visual-constitution.md` (v1.1).
 8. **PALETTE** — arcade-B High Lumen amber (16.1:1) = games floor; studio green = Confluence only. (Note: `confluence-project-directions` bans green studio-wide except one decorative accent — reconcile.)
 9. **NO EMOJI, EVER.**
-10. **JOSH = MASSBAY-ONLY LANE** — college work only (Confluence/EN102, ISLO, committee). Studio housekeeping → automation or Matt, never Josh.
 11. **DELEGATION CHARTER + FORWARD GUARD** — agents run GREEN unasked, YELLOW then report, RED to Matt. Docs: `tsp-delegation-charter.md`, `studio-forward-guard.md`.
 12. **TRUTH IN ADVERTISING — LOG GAPS WHERE THEY LIVE** — every open need on the plate it belongs to; each surface states what it can and can't carry. Hidden gaps get tripped over. This run is Ruling 12 in action: re-reading source caught two false "resolved" facts, and byte-verify caught a lost doc.
 
@@ -60,7 +59,7 @@ Choose Your Leader (spec live; page verified clean 2026-07-11 — no named real 
 - **EN195 Game Hub: DEAD this term** (course ended July 2). Re-scope for fall as proof-of-concept.
 
 ## OPEN FOUNDER GATES (only you can clear these)
-0. **[CRITICAL] FERPA — repo serving PII.** `confluence-TRUNK-2026-06-23.html` (Ledger #19–21) and now the undated `confluence-TRUNK.html` (this run) return live content with names/emails. **Delete/scrub the live sensitive files via GitHub web editor (click-path: `site-sweep-2026-07-02.md`).** Also still live per Ledger: `claude-project-instructions.md`, `chatgpt-pro-instructions.md`, `massbay-fact-book-word.docx`. No session can push — Matt or Josh (repo access). Reset Integrity Guard trigger to weekly after.
+0. **[CRITICAL] FERPA — repo serving PII.** `confluence-TRUNK-2026-06-23.html` (Ledger #19–21) and now the undated `confluence-TRUNK.html` (this run) return live content with names/emails. **Delete/scrub the live sensitive files via GitHub web editor (click-path: `site-sweep-2026-07-02.md`).** Also still live per Ledger: `claude-project-instructions.md`, `chatgpt-pro-instructions.md`, `massbay-fact-book-word.docx`. No session can push — Matt (repo access). Reset Integrity Guard trigger to weekly after.
 1. **v33 vs v34 — RESOLVED 2026-07-13:** moot; canon = v43. (Confirm v43 vs the v40 Ledger claim.)
 2. **Score-6 label — email DRAFTED 2026-07-13** to Sean McCarthy (mccarthywriting@gmail.com), in Gmail Drafts. Review + send.
 3. **`Claude_files` canonical — RESOLVED:** walshero `1WJh...`.
@@ -68,12 +67,10 @@ Choose Your Leader (spec live; page verified clean 2026-07-11 — no named real 
 
 ## DELEGATE
 
-**Josh (12 hrs/wk) — MASSBAY-ONLY (Ruling 10).**
-- **Fittable MassBay task:** if Matt grants repo access, the FERPA repo pull (Gate 0) is college-data work Josh can do — removes/scrubs the live sensitive files. Otherwise hold Josh for ISLO data entry / EN102 rubric formatting once Sean rules.
 
-**Studio housekeeping — OFF Josh (not MassBay):**
-- Drive dedup — now **30+ `confluence-TRUNK` copies** across `1WJh...`/`1Nk1...`/`1govQ...` → Studio Archive Zap / `move_files_to_folder`. Keep the v43 pair (`confluence-TRUNK-v43-2026-07-10.html` + `confluence-TRUNK (9).html`); archive the rest. Not Josh.
-- Shelf-file deletes (list below) → Studio Archive Zap once this file is phone-confirmed. Not Josh.
+**Studio housekeeping (automation / Matt):**
+- Drive dedup — now **30+ `confluence-TRUNK` copies** across `1WJh...`/`1Nk1...`/`1govQ...` → Studio Archive Zap / `move_files_to_folder`. Keep the v43 pair (`confluence-TRUNK-v43-2026-07-10.html` + `confluence-TRUNK (9).html`); archive the rest.
+- Shelf-file deletes (list below) → Studio Archive Zap once this file is phone-confirmed.
 
 ---
 

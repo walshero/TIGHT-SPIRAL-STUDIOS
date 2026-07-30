@@ -107,8 +107,8 @@ The studio has three places a file can live. They are not interchangeable. Confu
 - **Zapier "Replace File"** pointed at a canonical Drive file, triggered on demand. Low risk: it replaces one known file by ID. Reversible (Drive keeps version history).
 - **Voice-first payoff:** "Hey Siri, run Confluence archive" → Shortcut → Zap → Drive updated. No menu hunting.
 
-### CLEAR TO BUILD — Duplicate cleanup list (delegate to automation, not Josh)
-- Drive has ~9 Confluence duplicates and the two non-canonical Claude_files folders. Route to the Studio Archive Zap (Ruling 10: not a Josh task).
+### CLEAR TO BUILD — Duplicate cleanup list (delegate to automation)
+- Drive has ~9 Confluence duplicates and the two non-canonical Claude_files folders. Route to the Studio Archive Zap.
 
 ### TEST FIRST — GitHub deploy Zap
 - The 21 GitHub actions are live but the deploy lane has an untested one-time auth. Test with ONE small file before trusting it for real deploys.
@@ -131,6 +131,6 @@ Every "which lane / can Zap do it / is it saved" spiral traces to one missing th
 1. **Resolve v33-vs-v34** — confirm which is the real current trunk; if v34 exists only in a chat, get it to Drive and the shelf. (Still open — founder gate.)
 2. **Claude_files canonical — DONE 2026-07-11:** walshero `1WJh...` is canonical; archive `1f85...` and `1A32...` via the Studio Archive Zap (execution queued behind untested Drive write).
 3. **Build the Replace-File Drive Zap** (the one clear automation).
-4. **Delegate the Drive duplicate cleanup** to the Studio Archive Zap with an explicit ID list (not Josh).
+4. **Delegate the Drive duplicate cleanup** to the Studio Archive Zap with an explicit ID list.
 
 *End of map. Verified 2026-07-05, amended 2026-07-11. Re-verify on any save failure.*

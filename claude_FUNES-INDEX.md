@@ -90,14 +90,14 @@ defects** (ORPHAN-HALTS) — real, not guesses.
   Formalization Map v1`, `MYSTERY TEXT`, `Copy of EN195-Portfolio: Emma Kwan`.
 - **Confluence sprawl:** 30+ `confluence-TRUNK*.html` copies across `1WJh…`, `1Nk1…`, `1govQ…`.
   Keep the v44 canon (repo) + its pointer; archive the rest via move-to-folder (`Archive Comments`
-  `1zqvxgKmET…`) — move, not trash. Not a Josh task.
+  `1zqvxgKmET…`) — move, not trash.
 - Command Center canon landed here: `STUDIO-COMMAND-CENTER-v5.3-2026-07-13.md`.
 
 ## OPEN FOUNDER GATES (carried)
 
 0. **[CRITICAL] FERPA** — repo serving names/emails (`confluence-TRUNK-2026-06-23.html` + undated
    trunk). Delete/scrub via GitHub web editor (click-path: `site-sweep-2026-07-02.md`), then reset
-   the Integrity Guard to weekly. Matt or Josh — no session can push.
+   the Integrity Guard to weekly. Matt — no session can push.
 1. **Confluence version** — canon = v44; confirm against any v40 "base" claim, then re-apply the
    irrigation/ISLO work onto v44 in Confluence's own Project.
 2. **Score-6 label** — Sean email drafted (Gmail Drafts), needs send.
