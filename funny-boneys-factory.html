@@ -13,6 +13,15 @@
   the studio lane.
   Play. Notice. Design.  ·  Single file. Offline. No network. Nothing stored.
 
+  v8  2026-07-29 THE META-MACHINE (P3, the heart — founder-canon #5). Your machine
+      is one link in a reel of machines; mood is the marble (each room's leftover
+      temperature spills into the next). Offline/single-file honoured by a TICKET:
+      a base64 code / #m= link the human relays hand to hand — no account, no
+      server, nothing stored. Founder's four calls: (1) MAKER score ("did your bit
+      land / carry the chain"); (2) BOTH ticket surfaces (copy code + copy link);
+      (3) FULL watch-the-reel-fire; (4) a labelled HOUSE crowd voiced from Matt's
+      own writing (games-text-bank.md, Roslindale). Never faked as live. New screen
+      5 (the Factory). Increment 1: emit + relay + load + chain-fire + Maker score.
   v7.1 2026-07-27 P1 PASS, on the v2 playtest (comprehension gap + unreachable
       payoff, found by the optimized instrument). The machine is now a REPLAYABLE
       toy (tap it as many times as you like; it makes the cat laugh — the promise
@@ -186,6 +195,38 @@
   .gapread{ text-align:center; color:var(--ink-soft); font-size:.95rem; margin:14px 0 20px; }
   .gapread b{ color:var(--ink); }
 
+  /* ---- SCREEN 5: THE FACTORY (the meta-machine — one reel, many machines) ---- */
+  .ticket{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:16px; }
+  .ticket .lab{ font-weight:800; font-size:.9rem; margin:0 0 8px; }
+  .ticket .sub{ color:var(--ink-soft); font-size:.82rem; margin:0 0 10px; }
+  .tickfield{ width:100%; font:600 .78rem/1.4 var(--mono); padding:10px 12px; border-radius:10px;
+    background:var(--surface-2); border:1px solid var(--line); color:var(--ink); word-break:break-all; resize:none; }
+  .tickrow{ display:flex; gap:8px; margin-top:8px; }
+  .tickrow .btn{ min-height:44px; font-size:.9rem; padding:10px 14px; }
+  .reellab{ display:flex; justify-content:space-between; align-items:baseline; margin:6px 0 8px; }
+  .reellab b{ font-size:1rem; } .reellab span{ color:var(--ink-soft); font-size:.8rem; }
+  .moodrow{ margin:2px 0 14px; }
+  .moodrow .bar{ height:12px; border-radius:999px; background:var(--surface-2); border:1px solid var(--line); overflow:hidden; }
+  .moodrow .fill{ height:100%; background:var(--amber); width:50%; border-radius:999px; transition:width .45s ease; }
+  .moodrow .lab{ display:flex; justify-content:space-between; font:700 .72rem/1 var(--mono); color:var(--ink-soft); margin-top:5px; }
+  .reel{ display:flex; flex-direction:column; gap:8px; margin:0 0 16px; }
+  .mcard{ display:flex; align-items:center; gap:10px; background:var(--surface); border:1px solid var(--line);
+    border-radius:12px; padding:9px 12px; transition:border-color .2s, transform .2s; }
+  .mcard.you{ border-color:var(--amber); box-shadow:inset 0 0 0 1px var(--amber); }
+  .mcard.firing{ transform:scale(1.02); border-color:var(--amber); box-shadow:0 0 0 3px color-mix(in srgb, var(--amber) 30%, transparent); }
+  .mcard .ic{ width:32px; height:32px; flex:0 0 auto; }
+  .mcard .who{ flex:1 1 auto; min-width:0; }
+  .mcard .who b{ font-size:.86rem; display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .mcard .who span{ font-size:.72rem; color:var(--ink-soft); }
+  .mcard .laugh{ font:800 1.05rem/1 var(--mono); color:var(--ink); min-width:30px; text-align:right; }
+  .mcard .laugh.pending{ color:var(--ink-soft); opacity:.45; }
+  .maker{ text-align:center; margin:6px 0 18px; }
+  .maker.win .big{ animation:fb-pop .5s ease both; }
+  .maker .big{ font:800 clamp(2.4rem,14vw,3.4rem)/1 var(--mono); color:var(--ink); }
+  .maker .cap{ color:var(--ink-soft); font-size:.92rem; max-width:30ch; margin:4px auto 0; }
+  .housetag{ font:700 .6rem/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:999px; padding:3px 7px; flex:0 0 auto; }
+
   /* ---- comfort dock: canonical [-] [Comfort] [+] ---- */
   .comfort-dock{ position:fixed; right:12px; bottom:12px; z-index:9999; display:flex; gap:6px; }
   .comfort-dock button{ font:700 12.5px/1 var(--mono); letter-spacing:.05em; min-height:44px;
@@ -334,7 +375,48 @@ Press Comfort again to bring the design back.</div>
     </div>
     <p class="gapread" id="gapread"></p>
     <div class="grow"></div>
-    <button class="btn" onclick="go('setup')">Go again &rarr;</button>
+    <button class="btn" onclick="sendMachine()">Send your machine into the reel &rarr;</button>
+    <button class="btn ghost" style="margin-top:10px" onclick="go('setup')">Go again</button>
+  </section>
+
+  <!-- ============ SCREEN 5 · THE FACTORY (the meta-machine) ============ -->
+  <section class="screen" id="s-factory" aria-label="The factory reel">
+    <button class="backbtn" type="button" onclick="go('setup')">&larr; build another</button>
+    <p class="eyebrow">The reel</p>
+    <h1 class="q">One factory, many machines.</h1>
+    <p class="sub">Your machine is a link in a chain. Each room's mood spills into the next. Hand your ticket to someone and their machine joins yours.</p>
+
+    <div class="ticket">
+      <p class="lab">Your ticket &mdash; hand it to someone</p>
+      <p class="sub">They paste it (or open the link) and your machine joins their reel. No account, no server &mdash; you are the wire.</p>
+      <textarea class="tickfield" id="tickfield" rows="2" readonly aria-label="Your machine ticket"></textarea>
+      <div class="tickrow">
+        <button class="btn" id="copyCode" type="button" onclick="copyTicket('code')">Copy code</button>
+        <button class="btn ghost" id="copyLink" type="button" onclick="copyTicket('link')">Copy link</button>
+      </div>
+    </div>
+
+    <div class="reellab"><b>The reel</b><span id="reelcount"></span></div>
+    <div class="moodrow" aria-hidden="true">
+      <div class="bar"><div class="fill" id="moodfill"></div></div>
+      <div class="lab"><span>cold room</span><span id="moodnow">mood 5</span><span>rolling</span></div>
+    </div>
+    <div class="reel" id="reel"></div>
+
+    <div class="maker" id="maker" hidden>
+      <div class="big" id="makerbig"></div>
+      <div class="cap" id="makercap"></div>
+    </div>
+
+    <div class="ticket" style="margin-top:4px">
+      <p class="lab">Someone hand you one?</p>
+      <textarea class="tickfield" id="loadfield" rows="2" placeholder="Paste a ticket code here" aria-label="Paste a machine ticket"></textarea>
+      <div class="tickrow"><button class="btn" type="button" onclick="loadTicket()">Add it to the reel</button></div>
+      <p class="sub" id="loadmsg" style="margin:8px 0 0" aria-live="polite"></p>
+    </div>
+
+    <div class="grow"></div>
+    <button class="btn" id="fireBtn" onclick="watchFire()">Watch the reel fire &rarr;</button>
     <button class="btn ghost" style="margin-top:10px" onclick="go('machine')">Back to the machine</button>
   </section>
 
@@ -420,13 +502,15 @@ function catFace(level){
 }
 
 /* ───────────────── STATE ───────────────── */
-var state = { gag:null, room:null, bet:5, actual:null, lastCall:null };
+var state = { gag:null, room:null, bet:5, actual:null, lastCall:null, mine:null };
+var reel = [];
 
 /* ───────────────── SCREEN MACHINE (replace, never stack) ───────────────── */
-var SCREENS = ["machine","setup","call","room"];
+var SCREENS = ["machine","setup","call","room","factory"];
 function go(id){
-  if(id==="setup") buildSetup();
-  if(id==="call")  buildCall();
+  if(id==="setup")   buildSetup();
+  if(id==="call")    buildCall();
+  if(id==="factory") buildFactory();
   SCREENS.forEach(function(s){ document.getElementById("s-"+s).classList.toggle("on", s===id); });
   document.getElementById("homenav").hidden = (id==="machine");
   document.getElementById("scene").classList.remove("firing");
@@ -522,6 +606,142 @@ window.showRoom = function(){
     + (good ? 'You read the room.' : 'Not a fail &mdash; that is this room, not you.');
   go("room");
 };
+
+/* ═════════════════ THE META-MACHINE ═════════════════
+   One reel of machines, chained. Mood is the marble: each room's leftover
+   temperature spills into the next. Single-file, offline, nothing stored — a
+   TICKET (a text code / #m= link) is the whole state, carried by a human. The
+   house crowd is authored, LABELLED house, voiced from Matt's own writing
+   (games-text-bank.md, Roslindale). Never faked as live. */
+var HOUSE = [
+  { h:"june.and.the.chicken", g:"chicken", r:"kids",  c:9 },
+  { h:"rusted.girders",       g:"boing",   r:"grown", c:4 },
+  { h:"potten.plants",        g:"trip",    r:"cat",   c:2 },
+  { h:"the.mm.cave",          g:"chicken", r:"web",   c:7 },
+  { h:"pixie.stix",           g:"boing",   r:"kids",  c:6 },
+  { h:"two.color.duplex",     g:"flip",    r:"grown", c:5 },
+  { h:"johns.bakery",         g:"trip",    r:"web",   c:4 },
+  { h:"the.joke.shop",        g:"chicken", r:"cat",   c:5 },
+  { h:"orange.line.up",       g:"boing",   r:"cat",   c:7 }
+];
+
+/* Ticket = base64 of a tiny object. The human relays it; no network, no store. */
+function encodeTicket(m){
+  try { return btoa(JSON.stringify({ h:(m.h==="you"?"":m.h), g:m.g, r:m.r, c:m.c, v:1 })); }
+  catch(e){ return ""; }
+}
+function decodeTicket(code){
+  try {
+    var o = JSON.parse(atob((code||"").trim()));
+    if(!gagById(o.g) || !roomById(o.r)) return null;
+    return { h:((o.h||"").toString().slice(0,24) || "a machine"),
+             g:o.g, r:o.r, c:Math.max(0, Math.min(10, o.c|0)) };
+  } catch(e){ return null; }
+}
+
+/* The chain: mood starts neutral (5); each machine's laugh becomes the next
+   room's starting temperature. A warm crowd laughs easier; a cold one drags. */
+function fireReel(){
+  var mood = 5;
+  return reel.map(function(m){
+    var base = actualFor(gagById(m.g), roomById(m.r));
+    var laugh = Math.max(0, Math.min(10, base + Math.round((mood - 5) * 0.5)));
+    mood = laugh;
+    return { m:m, laugh:laugh, mood:mood };
+  });
+}
+
+window.sendMachine = function(){
+  state.mine = { h:"you", g:state.gag, r:state.room, c:state.bet };
+  reel = reel.filter(function(m){ return m.h !== "you"; });
+  reel.push(state.mine);
+  go("factory");
+};
+
+function buildFactory(){
+  document.getElementById("tickfield").value = state.mine ? encodeTicket(state.mine) : "";
+  renderReel();
+}
+function renderReel(){
+  document.getElementById("reel").innerHTML = reel.map(function(m){
+    var g=gagById(m.g), r=roomById(m.r), isYou=(m.h==="you");
+    return '<div class="mcard'+(isYou?" you":"")+'">'
+      + '<span class="ic">'+gagArt(m.g)+'</span>'
+      + '<span class="who"><b>'+(isYou?"you":m.h)+'</b><span>'+g.name+' &rarr; '+r.name.toLowerCase()+'</span></span>'
+      + (m.house?'<span class="housetag">house</span>':'')
+      + '<span class="laugh pending">&middot;</span></div>';
+  }).join("");
+  document.getElementById("reelcount").textContent = reel.length + " machines";
+  document.getElementById("moodfill").style.width = "50%";
+  document.getElementById("moodnow").textContent = "mood 5";
+  document.getElementById("maker").hidden = true;
+}
+
+window.copyTicket = function(kind){
+  var code = document.getElementById("tickfield").value; if(!code) return;
+  var text = kind==="link" ? (location.origin + location.pathname + "#m=" + encodeURIComponent(code)) : code;
+  var btn = document.getElementById(kind==="link" ? "copyLink" : "copyCode"), restore = btn.textContent;
+  function ok(){ btn.textContent="Copied"; setTimeout(function(){ btn.textContent=restore; }, 1200); }
+  function fail(){ var tf=document.getElementById("tickfield"); tf.value=text; tf.focus(); tf.select();
+    btn.textContent="Select & copy"; setTimeout(function(){ btn.textContent=restore; tf.value=code; }, 2500); }
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(ok, fail); }
+  else { fail(); }
+};
+
+window.loadTicket = function(){
+  var raw = document.getElementById("loadfield").value.trim(), msg = document.getElementById("loadmsg");
+  if(!raw){ return; }
+  var hi = raw.indexOf("m="); var code = decodeURIComponent(hi>=0 ? raw.slice(hi+2) : raw);
+  var m = decodeTicket(code);
+  if(!m){ msg.textContent = "That ticket did not read — check you copied the whole code."; return; }
+  reel.push(m);
+  document.getElementById("loadfield").value = "";
+  msg.textContent = m.h + " joined the reel.";
+  renderReel();
+};
+
+window.watchFire = function(){
+  var results = fireReel();
+  var cards = document.querySelectorAll("#reel .mcard");
+  var moodfill = document.getElementById("moodfill"), moodnow = document.getElementById("moodnow");
+  var fireBtn = document.getElementById("fireBtn");
+  fireBtn.disabled = true; document.getElementById("maker").hidden = true;
+  var i = 0, step = calm() ? 40 : 500;
+  (function tick(){
+    if(i>0 && cards[i-1]) cards[i-1].classList.remove("firing");
+    if(i >= results.length){ showMaker(results); fireBtn.disabled = false; return; }
+    var r = results[i], card = cards[i];
+    if(card){ card.classList.add("firing");
+      var l = card.querySelector(".laugh"); if(l){ l.textContent = r.laugh; l.classList.remove("pending"); } }
+    moodfill.style.width = (r.mood*10) + "%"; moodnow.textContent = "mood " + r.mood;
+    i++; setTimeout(tick, step);
+  })();
+};
+
+function showMaker(results){
+  var youIdx = -1;
+  for(var k=0;k<reel.length;k++){ if(reel[k].h==="you"){ youIdx=k; break; } }
+  var mk = document.getElementById("maker");
+  if(youIdx < 0){ mk.hidden = true; return; }
+  var youLaugh = results[youIdx].laugh, n = results.length;
+  var beat = results.filter(function(r){ return r.laugh < youLaugh; }).length;   /* machines your bit out-laughed */
+  var top = beat >= Math.ceil((n-1)*0.6);
+  document.getElementById("makerbig").textContent = youLaugh;
+  document.getElementById("makercap").innerHTML = top
+    ? "Your bit carried the chain &mdash; it out-laughed " + beat + " of the other " + (n-1) + " machines."
+    : "Your bit landed <b>"+youLaugh+"</b> of 10 in the chain. Not a fail &mdash; a fact about where it sat in the reel.";
+  mk.className = "maker" + (top ? " win" : "");
+  mk.hidden = false;
+  mk.scrollIntoView({ behavior: calm()?"auto":"smooth", block:"center" });
+}
+
+/* seed the reel with the house crowd; a #m= link drops a machine straight in */
+(function initReel(){
+  reel = HOUSE.map(function(m){ return { h:m.h, g:m.g, r:m.r, c:m.c, house:true }; });
+  var h = location.hash || "";
+  var idx = h.indexOf("m=");
+  if(idx >= 0){ var m = decodeTicket(decodeURIComponent(h.slice(idx+2))); if(m){ reel.push(m); } }
+})();
 
 /* ───────────────── COMFORT: canonical five stops + size axis ───────────────── */
 var STOPS = [
