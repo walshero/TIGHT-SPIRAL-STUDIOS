@@ -314,3 +314,14 @@ Convened five studio lenses (Registrar/Cora, Learning Scientist, Studio-Eyes, As
 - Corrected `ISLO-GAPS-BRAINSTORM.md` (Tier 1 row, strategic flag, recommended-first-move) and added a correction note to my commentary in `ISLO-SCORING-REFLECTION-2026-mwalsh.md` — leaving Matt's verbatim words (which say "EN98/EN101") untouched, flagged as a prior/mis-stated frame.
 - **Revised first move:** lead with **Score the Room** (oral) + **Real-Cost Case Pack** — both stand on their own, no placement dependency. Co-req diagnostic + career/workforce lane held for founder briefing.
 - Being a co-req pioneer is itself a story/asset worth building around (support students *inside* EN101, not out of it) — noted for the later conversation.
+
+## 2026-07-30 — Green-lit gap builds shipped (full staff, funds): oral, real-cost, rubric-forge
+
+**Founder: "1 2 3 let's go with new alephs as needed to seat expertise. Funds and all staff."** Seated three expert "aleph" agents for content, then built + gated + browser-verified + ratcheted three tools.
+
+- **`score-the-room.html` (iSLO 1 — the ORAL lane, finally built).** Read a DESCRIBED delivery (transcript + stage directions) and score it on the AAC&U Oral Communication VALUE rubric (5 dims), then meet the normed anchor. Four fictional deliveries, levels 2/4/1/3. Scores described delivery ON PURPOSE: no mic, offline-safe, and it never scores accent/dialect/first-language word choice — only choices a speaker can change. Reuses the Norming Table scorer.
+- **`real-cost.html` (iSLO 2 — underserved).** The Commute (frequency×trips + hidden hours), The Hours (a course priced in hours; wrap-around childcare/commute; $/hour vs the credential), The Book (cost-per-use; re-reading = thoroughness), The Whole Bill (fees + aid's real denominator). Dignity floor absolute: assets not deficits, the NUMBER does the work, every headline an editable example. Reuses the Sticker Price engine.
+- **`rubric-forge.html` (measure — outcomes 2/3/4/7).** Faculty draft a normable rubric from an AAC&U VALUE scaffold (QL / Info Lit / Sci Reasoning / Civic Engagement), edit every dimension + level, add/remove dims, export copy/print. Ships 7 authoring checks + a draft-vs-normed explainer (drafting is authoring; norming is the IRR workshop). Reuses the Close the Loop engine.
+- **VERIFIED:** all three preship SHIP; browser-driven end-to-end (Score the Room 4 rounds + calibration; Real Cost 4 cases $360/135hr/$1,230; Rubric Forge 2/3/4/7 scaffolds load 6/5/6/5 dims, edit flows to report, add/remove, copy). **Ratchet 0 regressions** — TICK 3 markers baked in. Wired into the hub; games count 22→24.
+- **STAFF/ALEPH MODEL WORKED:** three parallel expert agents produced accurate rubric language + samples + cases; I assembled + gated. Fast and high-fidelity.
+- **STILL PARKED:** the co-req support diagnostic (ex-placement) and the career/workforce iSLO lane — both await the founder's co-req briefing ("ask me later").
