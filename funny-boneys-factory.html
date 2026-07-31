@@ -220,12 +220,27 @@
   .mcard .who span{ font-size:.72rem; color:var(--ink-soft); }
   .mcard .laugh{ font:800 1.05rem/1 var(--mono); color:var(--ink); min-width:30px; text-align:right; }
   .mcard .laugh.pending{ color:var(--ink-soft); opacity:.45; }
-  .maker{ text-align:center; margin:6px 0 18px; }
-  .maker.win .big{ animation:fb-pop .5s ease both; }
-  .maker .big{ font:800 clamp(2.4rem,14vw,3.4rem)/1 var(--mono); color:var(--ink); }
-  .maker .cap{ color:var(--ink-soft); font-size:.92rem; max-width:30ch; margin:4px auto 0; }
+  /* the Maker score is a WHISPER now (advisory: don't make the score the point) */
+  .maker{ text-align:center; margin:10px 0 4px; color:var(--ink-soft); font-size:.86rem; }
+  .maker b{ color:var(--ink); }
   .housetag{ font:700 .6rem/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft);
     border:1px solid var(--line); border-radius:999px; padding:3px 7px; flex:0 0 auto; }
+
+  /* ---- THE REPLY LOOP: two people, one room (the conversation, not the score) ---- */
+  .duetintro{ display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line);
+    border-radius:14px; padding:14px; margin-bottom:8px; }
+  .duetintro .ic{ width:48px; height:48px; flex:0 0 auto; }
+  .duetintro b{ font-size:1rem; } .duetintro span{ font-size:.85rem; color:var(--ink-soft); }
+  .cmp{ display:flex; flex-direction:column; gap:14px; margin:20px 0 8px; }
+  .cmprow .lab{ display:flex; justify-content:space-between; font-weight:800; font-size:.9rem; margin-bottom:5px; }
+  .cmprow .lab .n{ font-family:var(--mono); }
+  .cmprow .bar{ height:16px; border-radius:999px; background:var(--surface-2); border:1px solid var(--line); overflow:hidden; }
+  .cmprow .fill{ height:100%; border-radius:999px; width:0; transition:width .6s cubic-bezier(.2,.8,.2,1); }
+  .cmprow.you .fill{ background:var(--amber); }
+  .cmprow.friend .fill{ background:var(--amber); opacity:.45; }
+  .cmprow.room .fill{ background:var(--good); }
+  .duetread{ text-align:center; color:var(--ink-soft); font-size:.98rem; margin:16px 0 6px; }
+  .duetread b{ color:var(--ink); }
 
   /* ---- comfort dock: canonical [-] [Comfort] [+] ---- */
   .comfort-dock{ position:fixed; right:12px; bottom:12px; z-index:9999; display:flex; gap:6px; }
@@ -329,6 +344,7 @@ Press Comfort again to bring the design back.</div>
       <div class="headline"><h1>Make the cat laugh.</h1></div>
     </div>
     <p class="taphint">Tap the machine &mdash; as many times as you like.</p>
+    <button class="btn ghost" id="incomingBtn" hidden style="margin-top:14px" onclick="openIncoming()">A room came in from a friend &mdash; read it &rarr;</button>
     <div class="grow"></div>
     <button class="btn" onclick="go('setup')">Read the room &rarr;</button>
   </section>
@@ -360,7 +376,7 @@ Press Comfort again to bring the design back.</div>
            aria-label="How many out of ten laugh" oninput="onBet()">
     <div class="scalerow"><span>nobody</span><span>everybody</span></div>
     <div class="grow"></div>
-    <button class="btn" onclick="showRoom()">Show them &rarr;</button>
+    <button class="btn" id="callBtn" onclick="submitCall()">Show them &rarr;</button>
   </section>
 
   <!-- ============ SCREEN 4 · THE ROOM (the crowd = the cat) ============ -->
@@ -375,7 +391,7 @@ Press Comfort again to bring the design back.</div>
     </div>
     <p class="gapread" id="gapread"></p>
     <div class="grow"></div>
-    <button class="btn" onclick="sendMachine()">Send your machine into the reel &rarr;</button>
+    <button class="btn" onclick="sendToFriend()">Send this room to a friend &rarr;</button>
     <button class="btn ghost" style="margin-top:10px" onclick="go('setup')">Go again</button>
   </section>
 
@@ -403,10 +419,7 @@ Press Comfort again to bring the design back.</div>
     </div>
     <div class="reel" id="reel"></div>
 
-    <div class="maker" id="maker" hidden>
-      <div class="big" id="makerbig"></div>
-      <div class="cap" id="makercap"></div>
-    </div>
+    <p class="maker" id="maker" hidden></p>
 
     <div class="ticket" style="margin-top:4px">
       <p class="lab">Someone hand you one?</p>
@@ -418,6 +431,43 @@ Press Comfort again to bring the design back.</div>
     <div class="grow"></div>
     <button class="btn" id="fireBtn" onclick="watchFire()">Watch the reel fire &rarr;</button>
     <button class="btn ghost" style="margin-top:10px" onclick="go('machine')">Back to the machine</button>
+  </section>
+
+  <!-- ============ SCREEN 6 · SEND TO A FRIEND (the handoff) ============ -->
+  <section class="screen" id="s-send" aria-label="Send this room to a friend">
+    <button class="backbtn" type="button" onclick="go('setup')">&larr; play another</button>
+    <p class="eyebrow">To a friend</p>
+    <h1 class="q">Hand this to someone.</h1>
+    <p class="sub">They read the same room &mdash; without seeing your call &mdash; and send their read back. Then you see how you two saw it. No account, no server: you are the wire.</p>
+    <div class="ticket">
+      <p class="lab">Your room</p>
+      <div class="duetintro" id="sendcard"></div>
+      <textarea class="tickfield" id="sendfield" rows="2" readonly aria-label="Your room ticket"></textarea>
+      <div class="tickrow">
+        <button class="btn" id="sendCode" type="button" onclick="copyTicket('code')">Copy code</button>
+        <button class="btn ghost" id="sendLink" type="button" onclick="copyTicket('link')">Copy link</button>
+      </div>
+    </div>
+    <div class="ticket">
+      <p class="lab">Got their read back?</p>
+      <textarea class="tickfield" id="replyfield" rows="2" placeholder="Paste what they sent you" aria-label="Paste their read"></textarea>
+      <div class="tickrow"><button class="btn" type="button" onclick="receiveFromField('replyfield','sendmsg')">See how you two read it</button></div>
+      <p class="sub" id="sendmsg" style="margin:8px 0 0" aria-live="polite"></p>
+    </div>
+    <div class="grow"></div>
+    <button class="btn ghost" onclick="go('factory')">See the whole factory floor</button>
+  </section>
+
+  <!-- ============ SCREEN 7 · THE DUET (how you two read the room) ============ -->
+  <section class="screen" id="s-duet" aria-label="How you two read the room">
+    <p class="eyebrow" id="duetroom">The room</p>
+    <h1 class="q">How you two read it.</h1>
+    <div class="cmp" id="cmp"></div>
+    <p class="duetread" id="duetread"></p>
+    <div class="grow"></div>
+    <button class="btn" id="sendBackBtn" onclick="sendReadBack()" hidden>Send your read back &rarr;</button>
+    <button class="btn ghost" style="margin-top:10px" onclick="go('setup')">Play another room</button>
+    <p class="sub" id="duetbackmsg" style="text-align:center;margin:10px 0 0" aria-live="polite"></p>
   </section>
 
   <div class="foot">Tight Spiral Productions &middot; Play. Notice. Design. &middot; Offline &mdash; nothing leaves this page.</div>
@@ -502,15 +552,16 @@ function catFace(level){
 }
 
 /* ───────────────── STATE ───────────────── */
-var state = { gag:null, room:null, bet:5, actual:null, lastCall:null, mine:null };
+var state = { gag:null, room:null, bet:5, actual:null, lastCall:null, mine:null, replyTo:null };
 var reel = [];
 
 /* ───────────────── SCREEN MACHINE (replace, never stack) ───────────────── */
-var SCREENS = ["machine","setup","call","room","factory"];
+var SCREENS = ["machine","setup","call","room","factory","send","duet"];
 function go(id){
   if(id==="setup")   buildSetup();
   if(id==="call")    buildCall();
   if(id==="factory") buildFactory();
+  if(id==="send")    buildSend();
   SCREENS.forEach(function(s){ document.getElementById("s-"+s).classList.toggle("on", s===id); });
   document.getElementById("homenav").hidden = (id==="machine");
   document.getElementById("scene").classList.remove("firing");
@@ -571,12 +622,23 @@ function syncSetup(){
 function gagById(id){ return GAGS.filter(function(x){return x.id===id;})[0]; }
 function roomById(id){ return ROOMS.filter(function(x){return x.id===id;})[0]; }
 function buildCall(){
-  var g=gagById(state.gag), r=roomById(state.room);
+  var g=gagById(state.gag), r=roomById(state.room), reply=state.replyTo;
+  document.querySelector("#s-call .eyebrow").textContent = reply ? "Read it back" : "Your call";
+  document.querySelector("#s-call .q").textContent = reply
+    ? ("Your read of "+r.name.toLowerCase()) : "How many laugh?";
+  /* reply mode: the same bit+room a friend sent — but NOT their number (an honest, independent call) */
   document.getElementById("callcard").innerHTML =
-    '<span class="ic">'+gagArt(g.id)+'</span><span><b>'+g.name+'</b><span>for '+r.name.toLowerCase()+'</span></span>';
+    '<span class="ic">'+gagArt(g.id)+'</span><span><b>'+g.name+'</b><span>'
+    + (reply ? ((reply.h||"a friend")+" sent you this room") : ("for "+r.name.toLowerCase()))
+    + '</span></span>';
   document.getElementById("bet").value = state.bet;
   document.getElementById("betval").textContent = state.bet;
 }
+/* one call button: a fresh read reveals the room; a reply reveals the duet */
+window.submitCall = function(){
+  if(state.replyTo) showDuetFromReply();
+  else showRoom();
+};
 window.onBet = function(){
   state.bet = parseInt(document.getElementById("bet").value,10);
   document.getElementById("betval").textContent = state.bet;
@@ -625,22 +687,145 @@ var HOUSE = [
   { h:"orange.line.up",       g:"boing",   r:"cat",   c:7 }
 ];
 
-/* Ticket = base64 of a tiny object. The human relays it; no network, no store. */
-function encodeTicket(m){
-  try { return btoa(JSON.stringify({ h:(m.h==="you"?"":m.h), g:m.g, r:m.r, c:m.c, v:1 })); }
-  catch(e){ return ""; }
+/* ── THE TICKET — the human is the wire ──
+   A ticket carries a ROOM (a bit + a room) and the READS on it. A read is one
+   person's call: { h:handle, c:number }. ONE read = "here's a room, tell me how
+   you'd read it." TWO reads = "here's how we two read it." base64 of a tiny
+   object; the human relays it. No network, no store. v2 carries reads[]; a v1
+   single-machine ticket still loads, counted as one read. */
+var currentTicket = "";     /* the ticket the visible screen offers to copy */
+var duetBackTicket = "";    /* the read-back a receiver can hand back */
+var pendingIncoming = null; /* a #m= ticket waiting behind the machine screen */
+
+function clampC(c){ c=c|0; return Math.max(0, Math.min(10, c)); }
+function mkTicket(g, r, reads){
+  try {
+    var rd = reads.map(function(x){
+      return { h:(x.h==="you"?"":(x.h||"")).toString().slice(0,24), c:clampC(x.c) };
+    });
+    return btoa(JSON.stringify({ g:g, r:r, reads:rd, v:2 }));
+  } catch(e){ return ""; }
 }
-function decodeTicket(code){
+function readTicket(code){
   try {
     var o = JSON.parse(atob((code||"").trim()));
     if(!gagById(o.g) || !roomById(o.r)) return null;
-    return { h:((o.h||"").toString().slice(0,24) || "a machine"),
-             g:o.g, r:o.r, c:Math.max(0, Math.min(10, o.c|0)) };
+    var reads;
+    if(Array.isArray(o.reads)){
+      reads = o.reads.map(function(x){ return { h:(x.h||"").toString().slice(0,24), c:clampC(x.c) }; });
+    } else {   /* v1 back-compat: a lone machine is one read */
+      reads = [ { h:(o.h||"").toString().slice(0,24), c:clampC(o.c) } ];
+    }
+    if(!reads.length) return null;
+    return { g:o.g, r:o.r, reads:reads };
   } catch(e){ return null; }
 }
+/* pull a base64 ticket out of raw paste (a bare code, or a #m= link) */
+function ticketFrom(raw){
+  raw=(raw||"").trim(); if(!raw) return null;
+  var hi=raw.indexOf("m="); return readTicket(decodeURIComponent(hi>=0 ? raw.slice(hi+2) : raw));
+}
 
-/* The chain: mood starts neutral (5); each machine's laugh becomes the next
-   room's starting temperature. A warm crowd laughs easier; a cold one drags. */
+/* ── SEND: from the room, hand this room to one specific person ── */
+window.sendToFriend = function(){
+  state.mine = { h:"you", g:state.gag, r:state.room, c:state.bet };
+  reel = reel.filter(function(m){ return m.h !== "you"; });
+  reel.push(state.mine);
+  go("send");
+};
+function buildSend(){
+  var g=gagById(state.gag), r=roomById(state.room);
+  document.getElementById("sendcard").innerHTML =
+      '<span class="ic">'+gagArt(g.id)+'</span>'
+    + '<span><b>'+g.name+' &rarr; '+r.name.toLowerCase()+'</b>'
+    + '<span>they read it blind, then send their number back</span></span>';
+  currentTicket = mkTicket(state.gag, state.room, [{ h:"", c:state.bet }]);
+  document.getElementById("sendfield").value = currentTicket;
+}
+
+/* ── RECEIVE: a ticket handed to me. One read → I reply. Two reads → the duet. ── */
+function receiveTicket(t){
+  if(!t) return;
+  if(t.reads.length >= 2){                 /* a finished exchange handed to me — just show it */
+    var a=t.reads[0], b=t.reads[t.reads.length-1];
+    showDuet(t.g, t.r, a.c, "you", b.c, b.h||"a friend", false);
+  } else {                                  /* a room to read — reply mode, my call is honest & blind */
+    state.gag=t.g; state.room=t.r; state.bet=5;
+    state.replyTo = { g:t.g, r:t.r, c:t.reads[0].c, h:t.reads[0].h };
+    go("call");
+  }
+}
+window.receiveFromField = function(fieldId, msgId){
+  var el=document.getElementById(fieldId), msg=msgId?document.getElementById(msgId):null;
+  var t=ticketFrom(el.value);
+  if(!t){ if(msg) msg.textContent="That ticket did not read — check you copied the whole code."; return; }
+  el.value="";
+  receiveTicket(t);
+};
+window.openIncoming = function(){
+  if(pendingIncoming){ var t=pendingIncoming; pendingIncoming=null;
+    document.getElementById("incomingBtn").hidden=true; receiveTicket(t); }
+};
+
+/* ── THE DUET: how two people read the same room (the screen that matters) ── */
+window.showDuetFromReply = function(){
+  var rp=state.replyTo; if(!rp) return;
+  showDuet(rp.g, rp.r, state.bet, "you", rp.c, rp.h||"a friend", true);
+  state.replyTo=null;
+};
+function cmpRow(cls, label, val){
+  return '<div class="cmprow '+cls+'" data-k="'+cls+'">'
+    + '<div class="lab"><span>'+label+'</span><span class="n">'+val+' / 10</span></div>'
+    + '<div class="bar"><div class="fill"></div></div></div>';
+}
+function setFill(cls, val){
+  var el=document.querySelector('.cmprow[data-k="'+cls+'"] .fill');
+  if(el) el.style.width = Math.round((val/10)*100)+"%";
+}
+function showDuet(g, r, myC, myName, friendC, frName, canSendBack){
+  var gg=gagById(g), rr=roomById(r), actual=actualFor(gg, rr);
+  document.getElementById("duetroom").textContent = gg.name + " · " + rr.name;
+  document.getElementById("cmp").innerHTML =
+      cmpRow("you", "You", myC)
+    + cmpRow("friend", (frName||"a friend"), friendC)
+    + cmpRow("room", "The room, actually", actual);
+
+  var apart=Math.abs(myC-friendC), dr=document.getElementById("duetread"), phrase;
+  if(apart===0)      phrase="You two read the room <b>exactly the same</b>.";
+  else if(apart<=1)  phrase="You two are <b>a hair apart</b> &mdash; near the same read.";
+  else if(apart<=3)  phrase="You two are <b>"+apart+" apart</b> on this room.";
+  else               phrase="You two saw this room <b>very differently</b> &mdash; "+apart+" apart.";
+  var mineOff=Math.abs(myC-actual), frOff=Math.abs(friendC-actual), closer;
+  if(mineOff<frOff)      closer="You read them closer this time.";
+  else if(frOff<mineOff) closer=(frName||"Your friend")+" read them closer this time.";
+  else                   closer="You both landed the same distance off.";
+  dr.innerHTML = phrase + " " + closer;
+
+  var sb=document.getElementById("sendBackBtn");
+  document.getElementById("duetbackmsg").textContent="";
+  if(canSendBack){                     /* the receiver can hand the finished duet back */
+    duetBackTicket = mkTicket(g, r, [{ h:frName, c:friendC }, { h:"", c:myC }]);
+    sb.hidden=false;
+  } else { duetBackTicket=""; sb.hidden=true; }
+
+  go("duet");
+  if(calm()){ setFill("you",myC); setFill("friend",friendC); setFill("room",actual); }
+  else { requestAnimationFrame(function(){ requestAnimationFrame(function(){
+    setFill("you",myC); setFill("friend",friendC); setFill("room",actual); }); }); }
+}
+window.sendReadBack = function(){
+  if(!duetBackTicket) return;
+  var msg=document.getElementById("duetbackmsg");
+  var link = location.origin + location.pathname + "#m=" + encodeURIComponent(duetBackTicket);
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(link).then(
+      function(){ msg.textContent="Copied a link — send it back, and they'll see how you two read it."; },
+      function(){ msg.textContent="Send this back to them: "+duetBackTicket; });
+  } else { msg.textContent="Send this back to them: "+duetBackTicket; }
+};
+
+/* ═════════════════ THE FACTORY (the whole floor — many machines, chained) ═════
+   The reel is the aggregate; mood is the marble. The Maker line is a whisper. */
 function fireReel(){
   var mood = 5;
   return reel.map(function(m){
@@ -650,16 +835,9 @@ function fireReel(){
     return { m:m, laugh:laugh, mood:mood };
   });
 }
-
-window.sendMachine = function(){
-  state.mine = { h:"you", g:state.gag, r:state.room, c:state.bet };
-  reel = reel.filter(function(m){ return m.h !== "you"; });
-  reel.push(state.mine);
-  go("factory");
-};
-
 function buildFactory(){
-  document.getElementById("tickfield").value = state.mine ? encodeTicket(state.mine) : "";
+  currentTicket = state.mine ? mkTicket(state.mine.g, state.mine.r, [{ h:"", c:state.mine.c }]) : "";
+  document.getElementById("tickfield").value = currentTicket;
   renderReel();
 }
 function renderReel(){
@@ -676,30 +854,29 @@ function renderReel(){
   document.getElementById("moodnow").textContent = "mood 5";
   document.getElementById("maker").hidden = true;
 }
-
 window.copyTicket = function(kind){
-  var code = document.getElementById("tickfield").value; if(!code) return;
+  var code = currentTicket; if(!code) return;
   var text = kind==="link" ? (location.origin + location.pathname + "#m=" + encodeURIComponent(code)) : code;
-  var btn = document.getElementById(kind==="link" ? "copyLink" : "copyCode"), restore = btn.textContent;
+  var scr = document.querySelector(".screen.on") || document;
+  var btn = scr.querySelector(kind==="link" ? '[id$="Link"]' : '[id$="Code"]'); if(!btn) return;
+  var restore = btn.textContent, tf = scr.querySelector("textarea[readonly]");
   function ok(){ btn.textContent="Copied"; setTimeout(function(){ btn.textContent=restore; }, 1200); }
-  function fail(){ var tf=document.getElementById("tickfield"); tf.value=text; tf.focus(); tf.select();
-    btn.textContent="Select & copy"; setTimeout(function(){ btn.textContent=restore; tf.value=code; }, 2500); }
+  function fail(){ if(tf){ tf.value=text; tf.focus(); tf.select(); }
+    btn.textContent="Select & copy"; setTimeout(function(){ btn.textContent=restore; if(tf) tf.value=code; }, 2500); }
   if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(ok, fail); }
   else { fail(); }
 };
-
 window.loadTicket = function(){
-  var raw = document.getElementById("loadfield").value.trim(), msg = document.getElementById("loadmsg");
-  if(!raw){ return; }
-  var hi = raw.indexOf("m="); var code = decodeURIComponent(hi>=0 ? raw.slice(hi+2) : raw);
-  var m = decodeTicket(code);
-  if(!m){ msg.textContent = "That ticket did not read — check you copied the whole code."; return; }
-  reel.push(m);
+  var t = ticketFrom(document.getElementById("loadfield").value), msg = document.getElementById("loadmsg");
+  if(document.getElementById("loadfield").value.trim() && !t){
+    msg.textContent = "That ticket did not read — check you copied the whole code."; return; }
+  if(!t) return;
+  var rd = t.reads[t.reads.length-1], who = rd.h || "a friend";
+  reel.push({ h:who, g:t.g, r:t.r, c:rd.c });
   document.getElementById("loadfield").value = "";
-  msg.textContent = m.h + " joined the reel.";
+  msg.textContent = who + " joined the reel.";
   renderReel();
 };
-
 window.watchFire = function(){
   var results = fireReel();
   var cards = document.querySelectorAll("#reel .mcard");
@@ -717,30 +894,25 @@ window.watchFire = function(){
     i++; setTimeout(tick, step);
   })();
 };
-
+/* the Maker score is a WHISPER — a by-product of play, never the headline (advisory) */
 function showMaker(results){
   var youIdx = -1;
   for(var k=0;k<reel.length;k++){ if(reel[k].h==="you"){ youIdx=k; break; } }
   var mk = document.getElementById("maker");
   if(youIdx < 0){ mk.hidden = true; return; }
   var youLaugh = results[youIdx].laugh, n = results.length;
-  var beat = results.filter(function(r){ return r.laugh < youLaugh; }).length;   /* machines your bit out-laughed */
-  var top = beat >= Math.ceil((n-1)*0.6);
-  document.getElementById("makerbig").textContent = youLaugh;
-  document.getElementById("makercap").innerHTML = top
-    ? "Your bit carried the chain &mdash; it out-laughed " + beat + " of the other " + (n-1) + " machines."
-    : "Your bit landed <b>"+youLaugh+"</b> of 10 in the chain. Not a fail &mdash; a fact about where it sat in the reel.";
-  mk.className = "maker" + (top ? " win" : "");
+  mk.innerHTML = "Your bit landed <b>"+youLaugh+"</b> of 10 in the chain of "+n+".";
   mk.hidden = false;
-  mk.scrollIntoView({ behavior: calm()?"auto":"smooth", block:"center" });
 }
 
-/* seed the reel with the house crowd; a #m= link drops a machine straight in */
+/* seed the reel with the house crowd; a #m= link waits behind the machine screen */
 (function initReel(){
   reel = HOUSE.map(function(m){ return { h:m.h, g:m.g, r:m.r, c:m.c, house:true }; });
-  var h = location.hash || "";
-  var idx = h.indexOf("m=");
-  if(idx >= 0){ var m = decodeTicket(decodeURIComponent(h.slice(idx+2))); if(m){ reel.push(m); } }
+  var h = location.hash || "", idx = h.indexOf("m=");
+  if(idx >= 0){
+    pendingIncoming = readTicket(decodeURIComponent(h.slice(idx+2)));
+    if(pendingIncoming){ var ib=document.getElementById("incomingBtn"); if(ib) ib.hidden=false; }
+  }
 })();
 
 /* ───────────────── COMFORT: canonical five stops + size axis ───────────────── */
