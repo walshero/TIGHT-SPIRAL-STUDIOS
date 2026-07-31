@@ -66,7 +66,10 @@
   not placed out). So "EN98-vs-EN101 placement" is not a live mechanism, and any reference to it — including
   the founder's own reflection — is describing a prior or mis-stated model. The Registrar's caution was right.
   The Placement Skill-Scorer is **parked**; if it returns it will be a **co-req support diagnostic**, not a
-  placement gate. Founder to brief the co-req model ("ask me later") before this is re-scoped.
+  placement gate. **Now documented** in the department's own annual reports (2025): *"as a result of long-term
+  data on the efficacy of our co-req model, EN090 and EN098 have been officially retired"* — EN101X + EN101L
+  co-req lab; placement via college process / the dept Portfolio Assessment / ES150. See the seated corpus,
+  `claude_seat-english-assessment.md`. Founder still to brief the fuller co-req model before re-scoping.
 - **Delivery fit is verified:** MassBay is **~69% part-time / commuter** (Fact Book) — single-file, offline,
   no-account, phone-first is exactly the right vehicle for who MassBay actually is. This is a strength, not a
   gap; it just confirms the studio's whole delivery model.

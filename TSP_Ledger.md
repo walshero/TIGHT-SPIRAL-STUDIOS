@@ -325,3 +325,13 @@ Convened five studio lenses (Registrar/Cora, Learning Scientist, Studio-Eyes, As
 - **VERIFIED:** all three preship SHIP; browser-driven end-to-end (Score the Room 4 rounds + calibration; Real Cost 4 cases $360/135hr/$1,230; Rubric Forge 2/3/4/7 scaffolds load 6/5/6/5 dims, edit flows to report, add/remove, copy). **Ratchet 0 regressions** — TICK 3 markers baked in. Wired into the hub; games count 22→24.
 - **STAFF/ALEPH MODEL WORKED:** three parallel expert agents produced accurate rubric language + samples + cases; I assembled + gated. Fast and high-fidelity.
 - **STILL PARKED:** the co-req support diagnostic (ex-placement) and the career/workforce iSLO lane — both await the founder's co-req briefing ("ask me later").
+
+## 2026-07-30 — Trained on the English department annual reports (new seat: the Assessor)
+
+**Founder: "Train on my English department annual reports. Should have at least 4 of them."** Found and read four-plus via Drive; seated the record as `claude_seat-english-assessment.md` (Registrar-seat pattern; aggregate only, FERPA floor; repo context doc, unlinked from the public site).
+
+- **Corpus (with Drive IDs):** AY24-25 (Sikorski/Walsh/Herrera/Casson), 2025 draft (AI vs SLO#2), 2021 (SLO#5 multimodal), AY2017-18 (SLO#3 research), + AY16-17 notes + index.
+- **Captured:** the 7 English program PLOs verbatim (distinct from the college iSLOs); the assessment arc by year; recurring patterns — portfolio assessment + norming/blind scoring is the department's core method (exactly what The Norming Table + Close the Loop model); adjunct participation and **closing the loop** are the chronic gaps (a 2021 SLO#5 revision was drafted and still never posted); a ~5-year cycle (2025-26 assesses SLO#1).
+- **CO-REQ RESOLVED FROM THE SOURCE:** the 2025 report states plainly — *"as a result of long-term data on the efficacy of our co-req model, EN090 and EN098 have been officially retired."* EN101X + EN101L co-req lab; placement via college process / dept Portfolio Assessment / ES150. Confirms the founder's co-req correction and voids the EN98-vs-EN101 place-out framing. Folded into the brainstorm's parked-placement note. (Founder still to brief the fuller model.)
+- **GenAI thread surfaced** (SLO#2, AY24-25): 48/38/42% AI usage; 30/60/75% not-discussed-in-class/syllabus/assignment; CopyLeaks pilot; the dept is actively asking for AI-use guidance + AI-resistant assignment design — a ready build lane (iSLO 1 + 3 + academic integrity).
+- FERPA: excluded individual student names/scores present in raw 2021 scoring notes; seat holds aggregate/method only. Provenance header (Source + Last-verified 2026-07-30) so it clears TICK 3 if swept.
