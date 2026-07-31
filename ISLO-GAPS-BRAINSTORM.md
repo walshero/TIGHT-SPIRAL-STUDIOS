@@ -31,7 +31,7 @@
 ### Tier 1 — cheap, high value, reuse an engine, buildable now
 | Build | Gap / iSLO | Engine reused | Note |
 |---|---|---|---|
-| **Placement Skill-Scorer** ("Placement Prism") | EN placement + measure, iSLO 1 | Norming Table scorer + Close the Loop export | Flagship. Founder's rubric + rationale on file. Verify the placement mechanism is current first (see flags). |
+| ~~**Placement Skill-Scorer**~~ **PARKED** | ~~EN placement~~ → co-req support diagnostic? iSLO 1 | Norming Table scorer + Close the Loop export | **Premise void:** MassBay offers **no EN90/98** developmental courses — it's a **co-req pioneer**, no place-out gate. The engine + the founder's skill rubric still stand; the *use* must be re-framed (e.g. a co-req support-targeting diagnostic, not a placement). **Awaiting founder's co-req detail** ("ask me later"). |
 | **Score the Room** — oral comm | oral, iSLO 1 (unbuilt) | rubric-level scorer + case-rail | Scores *described* delivery on AAC&U Oral Communication VALUE. No audio. Opens the oral lane cheaply. |
 | **Real-Cost Case Pack** | underserved populations, iSLO 2 | Sticker Price (case data only — no new engine) | Commuter transit, working-parent time-cost, ESL textbook, first-gen hidden fees. Nearly free. |
 | **The Real Syllabus** | first-gen, iSLO 3 + 7 | predict-then-reveal | Decodes the hidden curriculum ("my door's open," "recommended reading"). Knowledge was *withheld, not missed.* |
@@ -61,10 +61,12 @@
   transfer-STEM. Those students must still clear all seven iSLOs, yet almost nothing meets them *inside their
   own programs.* Biggest strategic gap. *Verify the enrollment-by-division ranking against the Fact Book
   before choosing which division to build for first.*
-- **Verify before building the placement tool:** Massachusetts has pushed community colleges toward
-  co-requisite / multiple-measures placement; the EN98→EN101 gate may be partly dissolved. Confirm the
-  *current* English placement mechanism (Catalogue / English dept) before shipping — build for 2026's
-  pipeline, not the portfolio's memory.
+- **CONFIRMED by the founder (2026-07-30) — the placement premise is void.** MassBay offers **no EN90 or
+  EN98** developmental courses; it is a **co-requisite pioneer** (students enter EN101 with co-req support,
+  not placed out). So "EN98-vs-EN101 placement" is not a live mechanism, and any reference to it — including
+  the founder's own reflection — is describing a prior or mis-stated model. The Registrar's caution was right.
+  The Placement Skill-Scorer is **parked**; if it returns it will be a **co-req support diagnostic**, not a
+  placement gate. Founder to brief the co-req model ("ask me later") before this is re-scoped.
 - **Delivery fit is verified:** MassBay is **~69% part-time / commuter** (Fact Book) — single-file, offline,
   no-account, phone-first is exactly the right vehicle for who MassBay actually is. This is a strength, not a
   gap; it just confirms the studio's whole delivery model.
@@ -72,12 +74,13 @@
   the moment a recording or a register-choice becomes comparable to a peer's, the asset-framing collapses into
   a deficit score.
 
-## Recommended first move (the studio's synthesis)
-Two Tier-1 builds that reuse shipped engines and answer named needs, then one flagship:
-1. **Placement Skill-Scorer** — the founder's own named pain, primary-source rationale already on file, pure
-   Norming Table reuse. *(Pending the placement-mechanism verification above.)*
-2. **Score the Room** — opens the unbuilt oral lane at the lowest cost, on the AAC&U Oral Communication rubric.
+## Recommended first move (the studio's synthesis) — revised after the co-req correction
+The placement flagship is parked, so lead with builds that stand on their own:
+1. **Score the Room** — opens the unbuilt oral lane at the lowest cost, on the AAC&U Oral Communication rubric.
+2. **Real-Cost Case Pack** — nearly-free underserved-population reach on the shipped Sticker Price rail.
 3. Then **Rubric Forge** (unblocks the un-normed outcomes) or the prosody **Dry Run** (the deliberate oral flagship).
+4. **Held for founder briefing:** the co-req support diagnostic (the re-framed ex-"placement" build) and the
+   career/workforce iSLO lane.
 
 ## Open decisions for the founder
 - Green-light which Tier-1 build(s) first?

@@ -50,7 +50,11 @@ own words:
   records results **per rubric dimension**, not just a single holistic score, so the report can say *where*
   students are strong and weak.
 - **The named opportunity** — develop **accurately measurable outcomes for the EN placement portfolio**
-  (currently only the final placement, EN98 vs EN101, is recorded; two–three readers; no skill-level data).
+  (only a final holistic placement is recorded, read by two–three readers; no skill-level data).
+  **Correction (founder, 2026-07-30):** MassBay offers **no EN90/98** developmental courses and is a
+  **co-requisite pioneer** — so the "EN98 vs EN101 placement" wording in the reflection above does not describe
+  a current place-out gate. The per-skill data opportunity still stands, but re-scoped to the co-req model
+  (e.g. targeting co-req supports), not remedial placement. Founder to brief the co-req model.
   The listed candidate outcomes — analytical reading, interpretation, engagement, synthesis; rhetorical
   strategies to develop/advance/conclude an argument; audience awareness; supporting a central claim with
   credible evidence — are a ready-made draft rubric. A natural **next measure-side build**: an

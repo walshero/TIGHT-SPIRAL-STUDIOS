@@ -304,3 +304,13 @@ Convened five studio lenses (Registrar/Cora, Learning Scientist, Studio-Eyes, As
 - **Registrar's unnamed gap:** the suite is entirely English/writing/humanities idiom, but MassBay's largest enrollments are career/workforce (Health Sciences, Automotive, Business) + STEM — nothing meets those students in their disciplinary context. Biggest strategic gap. Also verified: MassBay ~69% part-time/commuter (Fact Book) — confirms single-file/offline/phone-first is exactly right.
 - **Cautions:** verify the current EN placement mechanism before building (MA co-req reform may have changed EN98→EN101); keep oral + multilingual builds private/ipsative or the asset-framing collapses into a deficit score.
 - **STATUS:** brainstorm only — nothing built. Awaiting founder green-light on first build(s) + the career/workforce lane question.
+
+## 2026-07-30 — Correction: no EN90/98; MassBay is a co-req pioneer (placement build parked)
+
+**Founder:** "We don't offer 90 or 98. We are pioneers in co-req. Ask me later for more on this."
+
+- The Registrar's brainstorm caution ("verify EN98→EN101 is still live before building") is **confirmed**: MassBay offers **no EN90/98 developmental courses** — students enter EN101 with **co-requisite support**, no place-out gate. The whole "Placement Skill-Scorer / EN98-vs-EN101" premise is **void**.
+- **PARKED** the placement flagship. The Norming-Table engine + the founder's candidate skill rubric still stand; the *use* re-frames to a **co-req support diagnostic** (targeting supports), not a placement gate — but not designed until the founder briefs the co-req model.
+- Corrected `ISLO-GAPS-BRAINSTORM.md` (Tier 1 row, strategic flag, recommended-first-move) and added a correction note to my commentary in `ISLO-SCORING-REFLECTION-2026-mwalsh.md` — leaving Matt's verbatim words (which say "EN98/EN101") untouched, flagged as a prior/mis-stated frame.
+- **Revised first move:** lead with **Score the Room** (oral) + **Real-Cost Case Pack** — both stand on their own, no placement dependency. Co-req diagnostic + career/workforce lane held for founder briefing.
+- Being a co-req pioneer is itself a story/asset worth building around (support students *inside* EN101, not out of it) — noted for the later conversation.
