@@ -56,6 +56,12 @@ if [ "${F##*.}" = "html" ]; then
     [ "$SAFE_PUSH_FORCE" != "1" ] && exit 1
   fi
   echo "  version stamp: present"
+  if ! python3 art-gate.py "$F" >/dev/null 2>&1; then
+    echo "  *** HALT — art-gate (founder ruling 2026-08-01: MJ lane or legal photo, never hand-drawn scene SVG) ***"
+    python3 art-gate.py "$F" 2>/dev/null | sed 's/^/     /'
+    [ "$SAFE_PUSH_FORCE" != "1" ] && exit 1
+  fi
+  echo "  art-gate: pass"
 fi
 
 # 3. PUSH

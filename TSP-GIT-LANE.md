@@ -57,7 +57,11 @@ never gets "it's in the repo." Verbatim: "Link to play. Always. It's easy
 for me so do it as rule."
 
 Link table (until GitHub Pages is switched on):
-- Pages and games (HTML): https://raw.githack.com/walshero/TIGHT-SPIRAL-STUDIOS/main/<file>.html
+- Pages and games (HTML): COMMIT-PINNED, always —
+  https://raw.githack.com/walshero/TIGHT-SPIRAL-STUDIOS/<full-commit-hash>/<file>.html
+  A pinned URL cannot serve a stale game (founder got a cached pre-mount CYL on
+  2026-08-01 from a branch URL; that never happens again). Branch URLs are for
+  bookmarks only, with the ~5-min caveat said aloud.
 - Docs and images: https://github.com/walshero/TIGHT-SPIRAL-STUDIOS/blob/main/<path>
 - githack CDN lags ~5 min after push, same as raw. Say so if the push is fresh.
 
