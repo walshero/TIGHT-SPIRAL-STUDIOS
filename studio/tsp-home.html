@@ -167,6 +167,11 @@ html[data-light="night"] .mode[aria-pressed="true"]{ color:var(--lamp); }
 .scene.m-rail  .only-rail { display:inline; }
 .scene.m-circuit .only-circuit{ display:inline; }
 
+/* CYL plate mount (arcade door + rooms card): the lit CRT face swaps with the light ladder */
+html[data-light="day"] .crt-dark{ display:none; }
+html:not([data-light="day"]) .crt-day{ display:none; }
+#doors a:hover .crt-img, #doors a:focus-visible .crt-img{ filter:brightness(1.22); }
+
 /* ---- rooms list (below the fold, reliable nav) ---- */
 .rooms{ max-width:1000px; margin:0 auto; padding:1.4rem 1rem 3rem; }
 .rooms h2{ font:800 1.15rem/1.2 var(--serif); margin:.4rem 0 .2rem; }
@@ -251,7 +256,7 @@ html[data-light="night"] .lane{ color:var(--lamp); }
   <div class="eyebrow">A one-person studio</div>
   <h1 class="title">A valley you can read at a glance.<span class="thin">Every building is a real, working thing. Open one — or change how the whole place moves.</span></h1>
 
-  <svg class="scene m-river" id="scene" viewBox="0 0 1000 620" role="img" aria-label="A cut-paper valley. A winding path runs through it, and the studio's rooms sit along it as buildings you can open.">
+  <svg class="scene m-river" id="scene" viewBox="0 0 1000 620" role="img" aria-label="A cut-paper valley. A winding path runs through it, and the studio's rooms sit along it as buildings you can open." data-art-class="instrument">
     <defs>
       <filter id="lift" x="-20%" y="-20%" width="140%" height="150%">
         <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#000" flood-opacity="0.22"/>
@@ -260,6 +265,16 @@ html[data-light="night"] .lane{ color:var(--lamp); }
         <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .04 0"/></filter>
     </defs>
 
+    <!-- ART-ASK [base valley plate]: MJ generation wanted for the whole landscape behind the path
+         (sky, spiral-embossed paper sun upper right, two drifting clouds, four receding hill layers,
+         open path corridor upper-left to lower-right). Deliver DAY state; dusk and warm-dark come as
+         same-seed variations or a CSS multiply grade on the mounted plate. GREEN-FREE per floors.
+         PROMPT: wide cut-paper valley landscape, four overlapping cardstock hill layers receding to a
+         cream paper sky, small embossed paper sun with a single incised spiral line, two torn-paper
+         clouds, an empty winding corridor of bare valley floor curving from upper left to lower right
+         awaiting a river, [HOUSE STYLE, see block above the script] (MJ flags: ar 50:31, style raw).
+         NOTE: this page carries the consolidation banner (superseded by root index.html); it is on the
+         charter fix queue but CONFIRM SCOPE WITH THE FOUNDER before spending generations. -->
     <!-- sky -->
     <rect x="0" y="0" width="1000" height="620" fill="var(--paper)"/>
     <!-- sun / spiral -->
@@ -279,15 +294,40 @@ html[data-light="night"] .lane{ color:var(--lamp); }
 
     <!-- THE PATH (river / rail / circuit share a centerline) -->
     <g>
+      <!-- ART-ASK [path overlay, RIVER mode]: MJ slate-blue paper river on this centerline
+           (M60 250 ... 1000 560), two layers (deep water + lighter surface), torn white glint strip
+           for the shimmer, scissor-cut banks with sparse paper cattails, nothing man-made in the water.
+           PROMPT: winding cut-paper river seen from above-front, two layered cardstock blues (slate
+           over deep teal-blue), a thin torn white paper highlight strip down the center, scissor-cut
+           banks with a few flat paper cattails, isolated on flat cream paper background for clean
+           cutout, [HOUSE STYLE] (MJ flags: ar 50:31). Compositor traces/masks to this SVG centerline
+           so all three modes stay geometrically interchangeable. -->
       <!-- river -->
       <path class="only-river" d="M60 250 C200 300 150 360 320 400 C500 442 460 500 660 520 C800 534 900 560 1000 560" fill="none" stroke="var(--water2)" stroke-width="26" stroke-linecap="round" opacity="0.5"/>
       <path class="only-river" d="M60 250 C200 300 150 360 320 400 C500 442 460 500 660 520 C800 534 900 560 1000 560" fill="none" stroke="var(--water)" stroke-width="18" stroke-linecap="round"/>
       <path class="only-river shimmer" d="M90 262 C210 305 165 360 330 398 C505 438 470 496 665 516" fill="none" stroke="var(--paper2)" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+      <!-- ART-ASK [path overlay, RAIL mode]: MJ 1960-correct single track on the same centerline —
+           jointed steel rail (no continuous-welded ribbon, that is mid-60s+ mainline), creosote-dark
+           wooden ties (not concrete), crushed-stone ballast shoulder, one lineside SEMAPHORE signal
+           (not color-light). Every object pre-1962.
+           PROMPT: winding cut-paper railway track, dark kraft-paper wooden crossties evenly spaced,
+           two thin silver-gray paper rails with visible joint bars, pale torn-paper gravel ballast
+           bed, one small paper semaphore signal post beside the line, isolated on flat cream paper
+           background, [HOUSE STYLE] (MJ flags: ar 50:31). -->
       <!-- rail -->
       <path class="only-rail" d="M60 250 C200 300 150 360 320 400 C500 442 460 500 660 520 C800 534 900 560 1000 560" fill="none" stroke="var(--stone)" stroke-width="16" stroke-linecap="round" opacity="0.4"/>
       <path class="only-rail" d="M60 250 C200 300 150 360 320 400 C500 442 460 500 660 520 C800 534 900 560 1000 560" fill="none" stroke="var(--amber-d)" stroke-width="4" stroke-dasharray="2 16" stroke-linecap="round"/>
       <path class="only-rail" d="M64 262 C204 312 154 372 324 412 C504 454 464 512 664 532 C804 546 904 572 1000 572" fill="none" stroke="var(--amber-d)" stroke-width="3" stroke-linecap="round"/>
       <path class="only-rail" d="M56 238 C196 288 146 348 316 388 C496 430 456 488 656 508 C796 522 896 548 1000 548" fill="none" stroke="var(--amber-d)" stroke-width="3" stroke-linecap="round"/>
+      <!-- ART-ASK [path overlay, CIRCUIT mode]: MJ printed-circuit trace on the same centerline —
+           terracotta copper-foil path, four round solder-pad nodes at the existing dot coordinates
+           (60,250 / 320,400 / 660,520 / 1000,560). Period anchor: single-sided phenolic board,
+           hand-taped 1960s curves (flowing curves are authentic; no modern 45-degree CAD routing),
+           amber pads like dollops of solder.
+           PROMPT: winding hand-taped copper circuit trace on cut paper, terracotta foil path with
+           smooth 1960s taped curves, four round amber solder-pad discs along its length, subtle
+           embossed sheen on the copper, isolated on flat cream paper background, [HOUSE STYLE]
+           (MJ flags: ar 50:31). -->
       <!-- circuit -->
       <path class="only-circuit" d="M60 250 C200 300 150 360 320 400 C500 442 460 500 660 520 C800 534 900 560 1000 560" fill="none" stroke="var(--roof)" stroke-width="5" stroke-linecap="round"/>
       <g class="only-circuit" fill="var(--amber)">
@@ -295,6 +335,16 @@ html[data-light="night"] .lane{ color:var(--lamp); }
       </g>
     </g>
 
+    <!-- ART-ASK [vehicles, three .bob sprites]: MJ, three runs at matching scale so the mode swap is
+         invisible, all pre-1962 referents:
+         (a) river boat: small cut-paper wooden sailing skiff, lapstrake terracotta hull, single cream
+             canvas sail, side elevation (no fiberglass hull, no aluminum mast);
+         (b) rail engine: small cut-paper 1950s diesel switcher locomotive, terracotta riveted hood,
+             three dark paper wheels, side elevation (steam also legal; no modern wide-cab, single
+             sealed-beam headlight);
+         (c) circuit pulse: small round amber paper disc with a torn pale-gold halo ring, abstract
+             glowing bead (paper disc with embossed glow, no lens-flare).
+         Each: isolated on flat cream paper background, [HOUSE STYLE] (MJ flags: ar 1:1). -->
     <!-- the vehicle on the path -->
     <g class="bob only-river" transform="translate(300 384)"><path d="M-18 6 L18 6 L12 16 L-12 16 Z" fill="var(--roof)"/><path d="M0 6 L0 -12 L14 -2 Z" fill="var(--paper2)" stroke="var(--roof)" stroke-width="1.5"/></g>
     <g class="bob only-rail" transform="translate(300 384)"><rect x="-20" y="-16" width="34" height="20" rx="3" fill="var(--roof)"/><path d="M14 -10 h8 l6 8 v6 h-14 z" fill="var(--roof2)"/><circle cx="-10" cy="8" r="4" fill="var(--stone)"/><circle cx="6" cy="8" r="4" fill="var(--stone)"/><circle cx="22" cy="8" r="4" fill="var(--stone)"/></g>
@@ -321,6 +371,79 @@ html[data-light="night"] .lane{ color:var(--lamp); }
   <a href="../index.html" aria-label="Home">Home</a>
 </nav>
 
+<!-- ═══ ART DEPARTMENT, 2026-08-01 — remount pass (compositor + continuity) ═══
+
+  [HOUSE STYLE] — reuse VERBATIM in every tsp-home MJ prompt:
+  hand-cut paper diorama, layered cardstock collage, deckled edges, visible paper-fiber grain,
+  soft single warm light from upper right, flat storybook front elevation, muted early-1960s
+  gouache palette of cream, butterscotch amber, terracotta, ochre, slate blue, strictly no green,
+  no text, no lettering, no people, no faces.
+
+  MOUNTED THIS PASS (existing-plate lane): the Choose Your Leader television glass — the arcade
+  door and its rooms-list card now show the game's own broadcast. Crops of founder MJ plates
+  art/cyl/plates/glass.setdark.teal.jpg (dusk/night state) and art/cyl/plates/room.scene.jfk62.jpg
+  TV corner (day state), base64-embedded, aspect-locked 4:3, provenance in data-art on each
+  <image>. No faces in either plate; withholding rule satisfied.
+
+  ART-ASK (doors) — the glyph() cases below are still hand-drawn SVG placeholders; each needs a
+  founder MJ generation. Sites are marked ART-ASK in the code. Every prompt ends with
+  "isolated on flat cream paper background, [HOUSE STYLE]" plus the flags noted:
+
+  1. lighthouse (Start here, 120,250): small cut-paper lighthouse, tapered cream tower with two
+     terracotta daymark bands, dark slate cast-iron lantern gallery and railing, warm amber glowing
+     lantern room, tiny attached stone oil house, front elevation (flags: ar 3:4).
+     Kill list: no solar panel, no rotating aerobeacon, no antenna. Keep a separate lit/unlit
+     lantern layer so the hover light-up survives the remount.
+  2. wall (Workshop Wall, 250,330): small cut-paper freestanding workshop pegboard wall in a wooden
+     frame, flat paper hand tools hung in rows (wooden mallet, hand brace, try square, pliers),
+     small blank manila paper tags pinned beside them, one warm amber glow behind a top corner,
+     front elevation (flags: ar 1:1). Kill list: no plastic handles, no cordless tools, no zip
+     ties, no blister packs. Masonite pegboard is period-legal (ubiquitous late 1950s).
+  3. bench (Review Bench, 360,408): small cut-paper wooden slat bench, on it a flat paper manual
+     typewriter in gray (Royal Quiet De Luxe class, crinkle finish), a stack of cream manuscript
+     pages weighted by a pebble, a red editing pencil, a small gooseneck lamp casting a warm amber
+     pool, side elevation (flags: ar 4:3). Kill list: no laptop, no sticky notes (Post-its are
+     1980), no ballpoint clicky pens; fountain pen or hexagonal pencil only.
+  4. sign (Course River, 490,352): small cut-paper rustic wooden trailhead sign, routed rectangular
+     panel with a carved slate-blue wavy river line, chamfered edges, single peeled cedar post,
+     front elevation (flags: ar 1:1). Panel stays blank of lettering; the door label is HTML text.
+     Kill list: no aluminum blank, no reflective sheeting, no modern wayfinding pictograms.
+  5. balloon (Sandbags, 560,470): GAS balloon, not hot-air — sandbags are gas-balloon ballast.
+     Small cut-paper gas balloon, round terracotta paper envelope with visible gore seams under a
+     knotted string net, wooden load ring, woven wicker basket with four tiny canvas sandbags
+     hanging from rope toggles, front elevation (flags: ar 3:4). Kill list: no propane burner
+     (Ed Yost hot-air rig), no ripstop nylon sheen, no parachute vent. Cut the sandbags as
+     separate layers — the cut-and-rise mechanic may want them individually addressable.
+  6. arcade BOOTH STRUCTURE (Choose Your Leader, 690,430): replace the video-arcade trapezoid
+     (upright video cabinets are post-1971 Computer Space) with a 1962 midway penny-arcade
+     television booth. Small cut-paper carnival midway booth, cream and terracotta striped canvas
+     awning, rows of tiny warm incandescent bulbs along the fascia, blank painted show panels, a
+     wooden cabinet console with an empty rounded television screen opening at center, small coin
+     slot plate, front elevation (flags: ar 3:4). Leave the screen opening empty — the mounted CYL
+     plate (already in this file) goes into it. Kill list: no joystick, no video-cabinet marquee,
+     no LED anything.
+  7. factory (Funnyboney Factory, 800,360): small cut-paper brick factory with sawtooth north-light
+     roof, multi-pane steel-sash windows with two glowing warm amber, riveted paper smokestack with
+     a pale blank painted band, timber loading dock with a tiny two-wheel hand truck, front
+     elevation (flags: ar 4:3). Kill list: no corrugated roll-up door (1970s+), no rooftop HVAC
+     package units, no chain-link — a board fence if any.
+  8. house (The Elves' House, 905,300): small cut-paper storybook cottage, steep terracotta roof
+     with five tiny gabled dormers in a row (one per room/mechanism), cream half-timbered walls,
+     leaded diamond-pane windows glowing warm amber, plank door with dark strap hinges, fieldstone
+     paper chimney, front elevation (flags: ar 3:4). Fairy-tale referent era-exempt, hardware
+     hand-forged: no Phillips screws, no modern doorknob.
+  9. gear (System Map, 150,470): small cut-paper open-sided timber shed sheltering two meshing dark
+     cast-iron gears, teeth aligned and interlocking (involute-ish, not cartoon cogs), small
+     overshot wooden waterwheel with flume at one side (ties this door to RIVER mode), tiny oil
+     can beneath, warm amber glow at the gear hub, front elevation (flags: ar 1:1). Kill list:
+     no plastic guards, no OSHA-yellow paint (1971+); bare iron and timber only.
+  10. office (Lumiere magazine, 660,545): small cut-paper two-story brick print shop, large
+     ground-floor shop window with a flat dark platen printing press silhouette and stacked paper
+     reams inside, blank glowing milk-glass transom band above the door, three upstairs windows lit
+     warm amber and one dark, small cloth awning, front elevation (flags: ar 3:4). Kill list: no
+     neon script sign (text ban), no photocopier-era anything, no fluorescent coldness — every lit
+     window warm incandescent.
+-->
 <script>
 "use strict";
 var $=function(id){return document.getElementById(id);};
@@ -383,7 +506,25 @@ var DOORS=[
   {x:660,y:545,type:'office',t:'Lumière',d:'The magazine the students make',url:'https://www.lumierelitmag.com',lane:'The magazine',live:true,ext:true}
 ];
 
-/* building glyphs — flat cut-paper shapes, a thin lift shadow, one lit window */
+/* building glyphs — flat cut-paper shapes, a thin lift shadow, one lit window.
+   ART-ASK: every case except the arcade screen insert is a hand-drawn placeholder awaiting a
+   founder MJ generation — full prompts in the ART DEPARTMENT comment block above this script. */
+
+/* MOUNTED PLATE — Choose Your Leader television glass (existing-plate lane).
+   crt-day: crop of art/cyl/plates/room.scene.jfk62.jpg, TV corner tube face (founder Midjourney
+   generation, SSG imprint). crt-dark: crop of art/cyl/plates/glass.setdark.teal.jpg, lit CRT face
+   (founder Midjourney generation, SSG imprint). Both 4:3, no faces in frame. */
+var CRT_DAY='data:image/jpeg;base64,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';
+var CRT_DARK='data:image/jpeg;base64,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';
+var CRT_ART_DAY='plate: CYL room.scene.jfk62.jpg TV-corner crop; founder Midjourney generation; SSG imprint; mounted 2026-08-01';
+var CRT_ART_DARK='plate: CYL glass.setdark.teal.jpg lit-CRT crop; founder Midjourney generation; SSG imprint; mounted 2026-08-01';
+function crtInsert(){
+  return '<rect x="-15" y="-17" width="30" height="23" rx="3" fill="#141109"/>'
+    +'<image class="crt-img crt-day" href="'+CRT_DAY+'" x="-14" y="-16" width="28" height="21" preserveAspectRatio="xMidYMid slice" data-art="'+CRT_ART_DAY+'"/>'
+    +'<image class="crt-img crt-dark" href="'+CRT_DARK+'" x="-14" y="-16" width="28" height="21" preserveAspectRatio="xMidYMid slice" data-art="'+CRT_ART_DARK+'"/>'
+    +'<rect x="-14.5" y="-16.5" width="29" height="22" rx="3" fill="none" stroke="var(--slate)" stroke-width="2"/>';
+}
+
 function glyph(type){
   switch(type){
     case 'lighthouse': return '<rect x="-11" y="-10" width="22" height="8" rx="2" fill="var(--lamp)"/><path d="M-9 -2 L-13 42 L13 42 L9 -2 Z" fill="var(--paper2)" stroke="var(--stone)" stroke-width="2"/><path d="M-11 8 L11 8 M-12 22 L12 22 M-13 36 L13 36" stroke="var(--roof)" stroke-width="4"/><rect class="win" x="-5" y="12" width="10" height="10" rx="2" fill="var(--amber-pale)"/>';
@@ -391,7 +532,9 @@ function glyph(type){
     case 'bench': return '<rect x="-22" y="2" width="44" height="7" rx="2" fill="var(--stone)"/><rect x="-22" y="-14" width="44" height="8" rx="2" class="win" fill="var(--amber-pale)"/><rect x="-18" y="9" width="6" height="16" fill="var(--stone)"/><rect x="12" y="9" width="6" height="16" fill="var(--stone)"/>';
     case 'sign': return '<rect x="-3" y="-2" width="6" height="34" fill="var(--stone)"/><rect x="-22" y="-24" width="44" height="24" rx="3" class="win" fill="var(--amber-pale)" stroke="var(--water2)" stroke-width="2"/><path d="M-16 -12 C-8 -8 -4 -16 4 -12 C10 -9 14 -14 18 -12" fill="none" stroke="var(--water2)" stroke-width="2.4" stroke-linecap="round"/>';
     case 'balloon': return '<path d="M0 -30 C16 -30 20 -12 8 2 L-8 2 C-20 -12 -16 -30 0 -30 Z" fill="var(--roof2)"/><path d="M0 -30 C10 -30 12 -14 4 0" fill="none" stroke="var(--paper2)" stroke-width="2" opacity="0.6"/><path d="M-6 2 L-4 14 M6 2 L4 14" stroke="var(--stone)" stroke-width="1.5"/><rect class="win" x="-9" y="14" width="18" height="12" rx="3" fill="var(--amber-pale)" stroke="var(--stone)" stroke-width="2"/>';
-    case 'arcade': return '<path d="M-20 -26 L20 -26 L26 40 L-26 40 Z" fill="var(--slate)"/><rect class="win" x="-14" y="-16" width="28" height="20" rx="3" fill="var(--lamp)"/><rect x="-14" y="10" width="28" height="8" rx="2" fill="var(--paper2)"/><circle cx="-6" cy="26" r="4" fill="var(--roof2)"/><circle cx="6" cy="26" r="4" fill="var(--amber)"/>';
+    /* ART-ASK: booth STRUCTURE still placeholder (1962 midway television booth wanted — see block
+       above). The screen region is MOUNTED: real CYL plate crops, day/dusk-night swap via CSS. */
+    case 'arcade': return '<path d="M-20 -26 L20 -26 L26 40 L-26 40 Z" fill="var(--slate)"/>'+crtInsert()+'<rect x="-14" y="10" width="28" height="8" rx="2" fill="var(--paper2)"/><circle cx="-6" cy="26" r="4" fill="var(--roof2)"/><circle cx="6" cy="26" r="4" fill="var(--amber)"/>';
     case 'factory': return '<rect x="-26" y="-2" width="52" height="34" rx="2" fill="var(--stone)"/><path d="M-26 -2 L-14 -18 L-2 -2 M-2 -2 L10 -18 L22 -2" fill="var(--paper2)" stroke="var(--stone)" stroke-width="2"/><rect x="16" y="-30" width="8" height="30" fill="var(--roof)"/><rect class="win" x="-20" y="10" width="12" height="14" rx="1.5" fill="var(--amber-pale)"/><rect class="win" x="2" y="10" width="12" height="14" rx="1.5" fill="var(--amber-pale)"/>';
     case 'house': return '<rect x="-20" y="-4" width="40" height="34" rx="2" fill="var(--fore)"/><path d="M-24 -4 L0 -26 L24 -4 Z" fill="var(--roof)"/><rect class="win" x="-13" y="4" width="12" height="12" rx="1.5" fill="var(--amber-pale)"/><rect class="win" x="3" y="4" width="12" height="12" rx="1.5" fill="var(--amber-pale)"/><rect x="-5" y="18" width="10" height="12" fill="var(--stone)"/>';
     case 'gear': return '<circle cx="0" cy="6" r="18" fill="none" stroke="var(--slate)" stroke-width="7"/><g fill="var(--slate)"><rect x="-3" y="-16" width="6" height="8"/><rect x="-3" y="20" width="6" height="8"/><rect x="-24" y="3" width="8" height="6"/><rect x="16" y="3" width="8" height="6"/></g><circle class="win" cx="0" cy="6" r="6" fill="var(--amber-pale)"/>';
