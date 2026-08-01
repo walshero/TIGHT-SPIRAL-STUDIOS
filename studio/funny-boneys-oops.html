@@ -645,7 +645,7 @@
     <span class="badge">Offline · nothing leaves this page</span>
     <span class="badge" id="build-badge">v3 · playtest for Peter</span>
     <div style="margin-top:8px">Humor is situated: what's funny depends on who's in the room, how their mind works, and where they're from. This game is honest about that.</div>
-    <div class="updated" id="seUpdated">Last updated&hellip;</div> <span class="se-version" style="font:inherit;opacity:.85">&middot; v4 <span style="opacity:.75">e77f0f7</span></span> </span>
+    <div class="updated" id="seUpdated">Last updated&hellip;</div> <span class="se-version" style="font:inherit;opacity:.85">&middot; v6 <span style="opacity:.75">ecc75cd</span></span> </span> </span>
   </div>
 </div>
 
@@ -745,6 +745,7 @@ let state = {
   poll:"thumbs",
   round:0,
   lastActualTrue:null,   // the true laugh-rate of last show (0..1), before poll distortion
+  lastSurveyedPct:null,  // the surveyed % the player actually SAW on the gap screen
   history:[],
 };
 
@@ -907,6 +908,7 @@ function renderResult(){
   // bars
   const predPct = Math.round(predicted*100);
   const actPct  = Math.round(surveyed*100);
+  state.lastSurveyedPct = actPct;                  // one roll per render — carry-out and history reuse THIS number
   document.getElementById('pred-pct').textContent = predPct+"%";
   document.getElementById('act-pct').textContent  = actPct+"%";
   document.getElementById('pred-fill').style.width = predPct+"%";
@@ -970,7 +972,7 @@ function recalibrate(){
   state.history.push({
     round:state.round, lens:state.lens, gag:part.b,
     audience:AUDIENCES[state.audience].label, poll:state.poll,
-    predicted:part.pred, surveyed:Math.round(surveyThrough(state.lastActualTrue)*100)
+    predicted:part.pred, surveyed:state.lastSurveyedPct
   });
   setRail('tune');
   setTimeout(()=>{ goBuild(); }, motionCalm?0:250);
@@ -979,7 +981,7 @@ function recalibrate(){
 /* =================== CARRY-OUT (emit, not store; FERPA-clean) =================== */
 function carryOut(){
   const L=LENSES[state.lens], part=L.parts[state.part];
-  const surveyed = Math.round(surveyThrough(state.lastActualTrue)*100);
+  const surveyed = state.lastSurveyedPct;
   const gap = Math.abs(part.pred - surveyed);
   const card =
 `FUNNY BONEY'S FACTORY — carried machine
@@ -998,7 +1000,7 @@ Paste this into a friend's factory to stack it. Nothing was stored; you carried 
 
 /* =================== RAIL =================== */
 function setRail(stage){
-  if(window.PT) PT.phase = stage;
+  if(typeof PT !== 'undefined') PT.phase = stage;
   const order=["build","show","poll","gap","tune"];
   const at=order.indexOf(stage);
   document.querySelectorAll('#rail .stop').forEach(s=>{

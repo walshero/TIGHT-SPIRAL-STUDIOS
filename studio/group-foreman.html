@@ -236,7 +236,7 @@ footer{
   <div>
     <h1>Group Foreman</h1>
     <p class="tag">EN195 Workshop Yard · nothing leaves this page</p>
-    <p class="updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v3 <span style="opacity:.75">e77f0f7</span></span> </span>
+    <p class="updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v5 <span style="opacity:.75">ecc75cd</span></span> </span> </span>
   </div>
 </div>
 
@@ -433,7 +433,7 @@ function deal(){
   var pool=writers.filter(function(w){return w.section===activeSection;});
   if(!pool.length){ say("No writers in section "+activeSection+" to deal."); return; }
   shuffle(pool);
-  var nTeams=Math.min(5, Math.max(1, Math.ceil(pool.length/teamSize)));
+  var nTeams=Math.max(1, Math.ceil(pool.length/teamSize));
   pool.forEach(function(w,idx){ w.team=(idx % nTeams)+1; });
   selectedId=null;
   render();
@@ -471,9 +471,14 @@ function placeSelected(teamNum){
 }
 
 // ---------- roles ----------
+function trackCount(sec){
+  var hi=5;
+  writers.forEach(function(w){ if(w.section===sec && w.team>hi) hi=w.team; });
+  return hi;
+}
 function assignRoles(){
   // rotate roles within each track by position
-  for(var t=1;t<=5;t++){
+  for(var t=1,tc=trackCount(activeSection);t<=tc;t++){
     var crew=writers.filter(function(w){return w.section===activeSection && w.team===t;});
     crew.forEach(function(w,idx){ w._role=ROLES[idx%3]; });
   }
@@ -524,7 +529,7 @@ function render(){
 
   var yard=$("tracks");
   yard.innerHTML="";
-  for(var t=1;t<=5;t++){
+  for(var t=1,tc=trackCount(activeSection);t<=tc;t++){
     (function(t){
       var box=document.createElement("div");
       box.className="track";
@@ -557,7 +562,7 @@ function buildExport(){
   var greekIdx=0;
   ["703","704"].forEach(function(sec){
     var hasAny=false;
-    for(var t=1;t<=5;t++){
+    for(var t=1,tc=trackCount(sec);t<=tc;t++){
       var crew=writers.filter(function(w){return w.section===sec && w.team===t;});
       if(!crew.length) continue;
       hasAny=true;

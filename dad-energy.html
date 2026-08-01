@@ -256,7 +256,7 @@
     </span>
     <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
   </header>
-<p class="se-stamp" style="margin:.45rem .9rem;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.76rem;opacity:.92;display:flex;align-items:center;gap:.45rem;flex-wrap:wrap"><p class="se-updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v11 <span style="opacity:.75">a3cda75</span></span>  </p>
+<p class="se-stamp" style="margin:.45rem .9rem;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.76rem;opacity:.92;display:flex;align-items:center;gap:.45rem;flex-wrap:wrap"><p class="se-updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v13 <span style="opacity:.75">ecc75cd</span></span> </span>  </p>
 
   <!-- STUDIO EYES panel -->
   <div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
@@ -381,9 +381,9 @@
   var endings=[
     {min:0,rank:"The Honest Improviser",img:art.endL,cap:"close enough, loved fully",
      blurb:"You over-promised at breakfast and spent the day shrinking it to something you could actually keep. No drawbridge, no moat — but you showed up with a box and your whole afternoon, and she never doubted you for a second. The promise got smaller. The day did not."},
-    {min:6,rank:"Keeper of the Promise",img:art.endM,cap:"you said a castle. you built a castle.",
+    {min:8,rank:"Keeper of the Promise",img:art.endM,cap:"you said a castle. you built a castle.",
      blurb:"You said \"castle\" before you had one, then spent twelve hours making the words true. It's cardboard and string lights and one garden-hose moat, and to her it is the most real thing in the world. You turned a reckless breakfast vow into a thing that actually stands."},
-    {min:9,rank:"Architect of the Whole Day",img:art.endH,cap:"drawbridge included",
+    {min:11,rank:"Architect of the Whole Day",img:art.endH,cap:"drawbridge included",
      blurb:"Working drawbridge. Blue flag. A moat she inspected and approved. You promised the impossible over a pancake named Greg and then, brick by cardboard brick, you went and made it real. She will tell this story her whole life. You will never tell anyone how the drawbridge actually worked."}
   ];
 
@@ -391,14 +391,20 @@
   // ---- NAV FLOOR: persistent back/home, set once, live on every screen ----
   var history=[];                       // stack of {step,promise} snapshots
   function pushHistory(){history.push({step:step,promise:promise});}
-  var navBack=document.getElementById("navBack"),navHome=document.getElementById("navHome");
+  var navBack=null,navHome=null;        // rail buttons sit below this script — wire once DOM is ready
   function syncNav(){ if(navBack) navBack.disabled = history.length===0; }
-  if(navHome) navHome.addEventListener("click",function(){history=[];renderIntro();syncNav();});
-  if(navBack) navBack.addEventListener("click",function(){
-    if(history.length===0)return;
-    var prev=history.pop(); step=prev.step; promise=prev.promise; clampP();
-    renderScene(); syncNav();
-  });
+  function wireNav(){
+    navBack=document.getElementById("navBack");navHome=document.getElementById("navHome");
+    if(navHome) navHome.addEventListener("click",function(){history=[];renderIntro();syncNav();});
+    if(navBack) navBack.addEventListener("click",function(){
+      if(history.length===0)return;
+      var prev=history.pop(); step=prev.step; promise=prev.promise; clampP();
+      renderScene(); syncNav();
+    });
+    syncNav();
+  }
+  if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",wireNav);}
+  else{wireNav();}
   function clampP(){if(promise<0)promise=0;if(promise>promiseMax)promise=promiseMax;}
   function meterHTML(){clampP();var pct=Math.min(100,Math.round((promise/promiseMax)*100));
     return '<div class="meter-wrap"><div class="meter-label"><span>The Promise</span><b>'+promiseWord()+'</b></div><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="'+promiseMax+'" aria-valuenow="'+promise+'" aria-label="The Promise is '+promiseWord()+'"><div class="meter-fill" style="width:'+pct+'%"></div></div></div>';}
@@ -488,7 +494,7 @@
 
   function renderEnding(){var end=endings[0];for(var k=0;k<endings.length;k++){if(promise>=endings[k].min)end=endings[k];}
     card.innerHTML='<div class="ending"><p class="eyebrow">8:45 p.m. — the couch</p><h1>The castle held.</h1>'+artBlock(end.img,end.cap,end.capWarn)+endMeterHTML()+'<p class="rank">'+end.rank+'</p><p>'+end.blurb+'</p><p class="narrator">Greg the pancake did not survive the day. He is survived by the castle, and by you.</p><button class="restart" id="again">Play the day again</button></div><p class="hint">There are no wrong moves in here — only different ways a promise comes true. Happy Father'+"'"+'s Day.</p><div class="brand"><span class="studio">Tight Spiral Studios</span>Play. Notice. Design. &nbsp;·&nbsp; <a href="mailto:walshero@gmail.com">walshero@gmail.com</a></div>';
-    showTop();var a=document.getElementById("again");a.addEventListener("click",function(){renderIntro();});focusTop(a);animateEndMeter();}
+    showTop();var a=document.getElementById("again");a.addEventListener("click",function(){history=[];renderIntro();syncNav();});focusTop(a);animateEndMeter();}
 
   renderIntro();syncNav();
 })();
@@ -787,8 +793,8 @@
 
 <!-- BOTTOM NAV RAIL -->
 <nav class="se-rail" aria-label="Page navigation">
-  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
-  <a href="index.html" aria-label="Home">Home</a>
+  <button type="button" id="navBack" aria-label="Back — undo last choice">Back</button>
+  <button type="button" id="navHome" aria-label="Home — return to title screen">Home</button>
 </nav>
 </span>
 

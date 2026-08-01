@@ -298,7 +298,7 @@
   </span>
   <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
 </header>
-<p class="se-stamp" style="margin:.45rem .9rem;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.76rem;opacity:.92;display:flex;align-items:center;gap:.45rem;flex-wrap:wrap"><p class="se-updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v6 <span style="opacity:.75">75e938c</span></span>  </p>
+<p class="se-stamp" style="margin:.45rem .9rem;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.76rem;opacity:.92;display:flex;align-items:center;gap:.45rem;flex-wrap:wrap"><p class="se-updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v8 <span style="opacity:.75">ecc75cd</span></span> </span>  </p>
 
 <!-- STUDIO EYES panel -->
 <div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
@@ -765,6 +765,7 @@ function room(sc,S_){
   const cont = el("button","btn","The set speaks"); cont.disabled=true; cont.id="cont";
   cont.onclick=()=>go("blind"); S_.append(cont);
   function reveal(){ if(Object.keys(S.seen[sc.id]).length>=1) $("#cont").disabled=false; }
+  reveal(); /* re-entry: evaluate the gate from state at render, not only on click */
 }
 
 function rate(sc,S_,phase){
@@ -773,9 +774,10 @@ function rate(sc,S_,phase){
   say(`<div class="quote">\u201C${sc.quote}\u201D</div>
     <em>${sc.reach}</em><br><br>
     <strong>You see ${sc.leader}. You hear this. Does it move you to trust them more, less, or stay neutral?</strong>`);
+  const stored = (first?S.blind:S.post)[sc.id]; /* re-entry: repaint the committed rating */
   const chips = el("div","chips");
   SCALE.forEach(o=>{
-    const c = el("button","chip",o.t); c.setAttribute("aria-pressed","false");
+    const c = el("button","chip",o.t); c.setAttribute("aria-pressed", String(stored===o.k));
     c.onclick=()=>{
       [...chips.children].forEach(x=>x.setAttribute("aria-pressed","false"));
       c.setAttribute("aria-pressed","true");
@@ -786,7 +788,7 @@ function rate(sc,S_,phase){
   });
   S_.append(chips);
   const cont = el("button","btn", first?"Turn the record over":"See where it pulled you");
-  cont.id="cont"; cont.disabled=true;
+  cont.id="cont"; cont.disabled = stored==null;
   cont.onclick=()=> first ? go("record") : go("descent");
   S_.append(cont);
 }

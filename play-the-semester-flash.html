@@ -207,11 +207,6 @@ p{ margin:0 0 .9rem; } .lead{ font-size:1.06rem; } .beat{ font-style:italic; col
   </span>
   <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
 </header>
-<div class="foot">
-    Tight Spiral Studios · walshero@gmail.com — <b>Play the Semester</b>, Flash Fiction slice. A score (your own, or pasted from the instructor's Sheet) opens the tool that fits. No proof, no verifying, no roster, nothing sent or stored. Single file, offline.<br>
-    <b>Privacy:</b> seat labels only, never full names. The real grade still lives in the gradebook, entered by the instructor. <b>How this was made:</b> the founder's playable-semester idea, scoped to one genre and built on the honor system (Carry-Out pattern) so it stays FERPA-clean and offline. Green-free slate placeholder pending the palette pick.
-    <span id="seUpdated">Last updated&hellip;</span> <span class="se-version" style="font:inherit;opacity:.85">&middot; v12 <span style="opacity:.75">75e938c</span></span> </span>
-  </div>
 
 <!-- STUDIO EYES panel -->
 <div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
@@ -314,7 +309,11 @@ B3, none"></textarea>
     <button class="go ghost" id="backToTiers" style="margin-top:.8rem;">Pick a different spot</button>
   </section>
 
-  
+  <div class="foot">
+    Tight Spiral Studios · walshero@gmail.com — <b>Play the Semester</b>, Flash Fiction slice. A score (your own, or pasted from the instructor's Sheet) opens the tool that fits. No proof, no verifying, no roster, nothing sent or stored. Single file, offline.<br>
+    <b>Privacy:</b> seat labels only, never full names. The real grade still lives in the gradebook, entered by the instructor. <b>How this was made:</b> the founder's playable-semester idea, scoped to one genre and built on the honor system (Carry-Out pattern) so it stays FERPA-clean and offline. Green-free slate placeholder pending the palette pick.
+    <span id="seUpdated">Last updated&hellip;</span> <span class="se-version" style="font:inherit;opacity:.85">&middot; v14 <span style="opacity:.75">ecc75cd</span></span> </span>
+  </div>
 </div>
 
 <!-- BOTTOM NAV RAIL -->
@@ -418,6 +417,7 @@ B3, none"></textarea>
   });
 
   /* instructor paste-in -> board (de-identified, in-memory only) */
+  function esc(s){ return String(s).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
   $('loadPaste').addEventListener('click',function(){
     var raw=$('paste').value.trim();
     var out=$('boardOut'); out.innerHTML='';
@@ -436,7 +436,7 @@ B3, none"></textarea>
     html+='<div class="river"><div class="rh">By seat</div>';
     parsed.forEach(function(p){
       var label = p.st==='none'?'not started':p.st==='draft'?'rough draft':p.st==='ready'?'ready to sharpen':'unreadable line';
-      html+='<div class="stage'+(p.st==='ready'?' here':'')+'"><div class="sn">'+ (p.seat||'(no label)') +'</div><div class="sd">'+label+'</div></div>';
+      html+='<div class="stage'+(p.st==='ready'?' here':'')+'"><div class="sn">'+ esc(p.seat||'(no label)') +'</div><div class="sd">'+label+'</div></div>';
     });
     html+='</div>';
     html+='<p style="margin:.6rem 0 0; font:400 .88rem/1.4 var(--sans);">Use this to see who needs the slug on-ramp (not started), who needs <b>Sandbags</b> (baggy draft), and who’s <b>ready</b> for the Review Bench. Point each student to the tool that fits — the games are the same ones the students open.</p>';

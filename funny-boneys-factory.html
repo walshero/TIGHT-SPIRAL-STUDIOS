@@ -362,7 +362,7 @@
     Tight Spiral Productions · Play. Notice. Design.
     <span class="badge">Offline · nothing leaves this page</span>
     <span class="badge" id="build-badge">v3 playable</span>
-    <div style="margin-top:8px"><span class="se-updated" id="seUpdated">Last updated&hellip;</span> <span class="se-version" style="font:inherit;opacity:.85">&middot; v21 <span style="opacity:.75">75e938c</span></span> </span></div>
+    <div style="margin-top:8px"><span class="se-updated" id="seUpdated">Last updated&hellip;</span> <span class="se-version" style="font:inherit;opacity:.85">&middot; v23 <span style="opacity:.75">ecc75cd</span></span> </span> </span></div>
 
 <!-- STUDIO EYES panel -->
 <div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
@@ -778,6 +778,7 @@ let state = {
   poll:"thumbs",
   round:0,
   lastActualTrue:null,   // the true laugh-rate of last show (0..1), before poll distortion
+  lastSurveyed:null,     // the polled rate the player last SAW (0..1) — reuse, never re-roll
   history:[],
 };
 
@@ -913,6 +914,7 @@ function renderResult(){
   const predicted = part.pred/100;                 // what the player bet
   const trueRate  = state.lastActualTrue;          // hidden truth
   const surveyed  = surveyThrough(trueRate);       // what the poll reports
+  state.lastSurveyed = surveyed;                   // remember what the player SAW
   setRail('gap');
 
   // crowd of 30 faces, seeded by surveyed rate
@@ -984,7 +986,7 @@ function recalibrate(){
   state.history.push({
     round:state.round, lens:state.lens, gag:part.b,
     audience:AUDIENCES[state.audience].label, poll:state.poll,
-    predicted:part.pred, surveyed:Math.round(surveyThrough(state.lastActualTrue)*100)
+    predicted:part.pred, surveyed:Math.round(state.lastSurveyed*100)
   });
   setRail('tune');
   setTimeout(()=>{ goBuild(); }, motionCalm?0:250);
@@ -993,7 +995,7 @@ function recalibrate(){
 /* =================== CARRY-OUT (emit, not store; FERPA-clean) =================== */
 function carryOut(){
   const L=LENSES[state.lens], part=L.parts[state.part];
-  const surveyed = Math.round(surveyThrough(state.lastActualTrue)*100);
+  const surveyed = Math.round(state.lastSurveyed*100);
   const gap = Math.abs(part.pred - surveyed);
   const card =
 `FUNNY BONEY'S FACTORY — carried machine

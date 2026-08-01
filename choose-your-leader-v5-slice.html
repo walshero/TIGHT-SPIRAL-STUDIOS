@@ -321,7 +321,7 @@
   </span>
   <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
 </header>
-<p class="se-stamp" style="margin:.4rem 0 1rem;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.76rem;opacity:.92;display:flex;align-items:center;gap:.45rem"><span id="seUpdated">Last updated&hellip;</span> <span class="se-version" style="font:inherit;opacity:.85">&middot; v7 <span style="opacity:.75">a3cda75</span></span></span></p>
+<p class="se-stamp" style="margin:.4rem 0 1rem;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.76rem;opacity:.92;display:flex;align-items:center;gap:.45rem"><span id="seUpdated">Last updated&hellip;</span> <span class="se-version" style="font:inherit;opacity:.85">&middot; v9 <span style="opacity:.75">ecc75cd</span></span> </span></span></p>
 <script>(function(){var u=document.getElementById('seUpdated');if(!u)return;var d=new Date(document.lastModified);u.textContent=isNaN(d.getTime())?'Last updated recently':'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});})();</script>
 
 <!-- STUDIO EYES panel -->
@@ -547,7 +547,7 @@ function scrRoom(){
     </div>
     <p class="lead" id="roomPrompt">Tap whatever your eye goes to. Every read is valid — then the room speaks.</p>
     <div class="hit-note" id="hitNote"></div>
-    <div class="actions"><button class="btn" id="roomNext" style="opacity:.45;pointer-events:none" onclick="scrBlind()">The set warms up →</button></div>
+    <div class="actions"><button class="btn" id="roomNext" disabled style="opacity:.45;pointer-events:none" onclick="scrBlind()">The set warms up →</button></div>
   `);
   const note=document.getElementById('hitNote'), next=document.getElementById('roomNext');
   stage.querySelectorAll('.hit').forEach(btn=>{
@@ -555,7 +555,7 @@ function scrRoom(){
       const k=+btn.dataset.k; S.taps.add(k); btn.classList.add('tapped');
       note.textContent=HITS[k].note; note.classList.add('show');
       setTimeout(()=>note.classList.remove('show'),3400);
-      if(S.taps.size>=1){ next.style.opacity='1'; next.style.pointerEvents='auto';
+      if(S.taps.size>=1){ next.disabled=false; next.style.opacity='1'; next.style.pointerEvents='auto';
         document.getElementById('roomPrompt').textContent='When you\'re ready, the set warms up.'; }
     });
   });
@@ -571,7 +571,7 @@ function scrBlind(){
     <blockquote class="quote">${QUOTE}</blockquote>
     <p class="lead">${ASK}</p>
     ${scaleHTML('blind')}
-    <div class="actions"><button class="btn" id="blindNext" style="opacity:.45;pointer-events:none" onclick="scrRecord()">Commit →</button></div>
+    <div class="actions"><button class="btn" id="blindNext" disabled style="opacity:.45;pointer-events:none" onclick="scrRecord()">Commit →</button></div>
   `);
   wireScale('blind', v=>{ S.blind=v; enable('blindNext'); });
 }
@@ -588,7 +588,7 @@ function scrRecord(){
     <blockquote class="quote">${QUOTE}</blockquote>
     <p class="lead">${ASK}</p>
     ${scaleHTML('post')}
-    <div class="actions"><button class="btn" id="postNext" style="opacity:.45;pointer-events:none" onclick="scrDescent()">See where it pulled you →</button></div>
+    <div class="actions"><button class="btn" id="postNext" disabled style="opacity:.45;pointer-events:none" onclick="scrDescent()">See where it pulled you →</button></div>
   `);
   wireScale('post', v=>{ S.post=v; enable('postNext'); });
 }
@@ -610,7 +610,7 @@ function wireScale(id,cb){
     });
   });
 }
-function enable(id){ const el=document.getElementById(id); el.style.opacity='1'; el.style.pointerEvents='auto'; }
+function enable(id){ const el=document.getElementById(id); el.disabled=false; el.style.opacity='1'; el.style.pointerEvents='auto'; }
 
 /* THE DESCENT — Beat 3. Re-derived ipsative math + visual Maslow ladder. */
 const RUNGS = [
