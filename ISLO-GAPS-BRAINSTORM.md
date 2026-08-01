@@ -68,8 +68,12 @@
   The Placement Skill-Scorer is **parked**; if it returns it will be a **co-req support diagnostic**, not a
   placement gate. **Now documented** in the department's own annual reports (2025): *"as a result of long-term
   data on the efficacy of our co-req model, EN090 and EN098 have been officially retired"* — EN101X + EN101L
-  co-req lab; placement via college process / the dept Portfolio Assessment / ES150. See the seated corpus,
-  `claude_seat-english-assessment.md`. Founder still to brief the fuller co-req model before re-scoping.
+  co-req lab. **Now fully documented** in the **Title III co-req grant summary (Katie McGrath, Aug 2024)**, seated
+  in `claude_seat-english-assessment.md`: placement is **multiple measures** (HS GPA ≥ 2.7 → EN101, else Accuplacer →
+  co-req/college-level/ESL); co-req passes college English at **80-83% vs 38-50%** developmental; the named open
+  target is the **EN102 + Hispanic/Latina-female equity gap**, and Title III's support models (embedded learning
+  specialists, coaches, PEEPS, Persistence Project) are the scaffolding a **co-req support diagnostic** would route
+  students toward. Buildable once the founder greenlights the co-req vision.
 - **Delivery fit is verified:** MassBay is **~69% part-time / commuter** (Fact Book) — single-file, offline,
   no-account, phone-first is exactly the right vehicle for who MassBay actually is. This is a strength, not a
   gap; it just confirms the studio's whole delivery model.

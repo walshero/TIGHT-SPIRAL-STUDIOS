@@ -14,6 +14,7 @@
 | **2021** English Outcomes Assessment | `13V9g4LW0wPrR2qDkrl-00ZH_Zq6qldYtKsJfDMf4Las` | 2021 | mwalsh | **SLO #5** (digital/multimodal) |
 | **AY 2017-2018** English Program Assessment | `1wR-0tuVkTha7bTXeKoJe8O4cb_vW-Ao96EUQdd5uC-0` | 2017-18 | mwalsh | **SLO #3** (research/sources) |
 | notes AY16-17 Assessment of Learning by Program: English | `13mFlDTKkeM6AKNT78CdW6hCiQVBVUXeFti_M7m0h2X0` | 2016-17 | mwalsh | (notes) |
+| **Grant Summary: Co-Requisite English (Title III)** — authored by **Katie McGrath** (per founder; first-person report, copy in Matt's Drive) | `1F4PXlD-ShaWsi39g3e6Xxnn4nJXRo09QWZWOCGO3pIM` | Aug 2024 | mwalsh | **the co-req record** (below) |
 | Liberal Arts: English, Annual Learning Outcome Assessment Reports (index) | `1mHOLjOnm_cpLLIv6iRsrZD6SdBHVIU4KyJvED9f8mJ0` | index | mwalsh | — |
 | *Related, not annual reports:* Spring 2026 English Dept Assessment Reading Packet (`1XJk0gSzdNOkEpsRZS9lsDejafMQTNevbHNVOrLcUgEs`, smccarthy); Program Assessment Template (`1QLT0aK7Sbp8b5PjThtg7L5LkS6yywuJv`) | | | | |
 
@@ -38,11 +39,20 @@
 - **Closing the loop is the chronic gap:** the SLO #5 revision was drafted (2021) and *still* not posted years later — the report itself names "the need … to close the loop by clearly posting and communicating all changes." The studio's Close the Loop instrument targets exactly this failure mode.
 - **A ~5-year assessment cycle** (schedule table in AY24-25): 2024-25 = SLO #2; **2025-26 = SLO #1 (reading)**; remaining outcomes staggered across 2026-29.
 
-## The co-req record (resolves the parked placement question)
-In the department's own words (2025 report): **"As a result of long-term data on the efficacy of our co-req model, EN090 and EN098 have been officially retired."** The structure now:
-- **EN101X** (English Composition I) + **EN101L** (co-requisite lab, same term, S/U, non-graduation credit) — "no longer a 2-semester developmental sequence."
-- **Placement** into EN101-with-lab is via the College's placement process, **the English Department's Portfolio Assessment**, or completion of **ES150**.
-This confirms MassBay as a genuine co-req pioneer and voids any "EN98-vs-EN101 place-out" framing. A future studio "placement/skill" instrument must be a **co-req support diagnostic** or a **portfolio-scoring skill-capture** (per SLO), never a remedial place-out. (Founder still to brief the fuller co-req picture.)
+## The co-req record — Title III grant summary (Katie McGrath, Aug 2024) · aggregate
+This is the definitive documentation of MassBay English's co-requisite model. It **voids any "EN98-vs-EN101 place-out" framing** and confirms MassBay as a genuine co-req pioneer.
+
+- **Full conversion.** Title III funding scaled co-req (EN101X) year over year for 6 years to **100% co-req for Fall 2024**. In **2023-24 the English Department voted to discontinue ALL stand-alone developmental English** (the 6-credit EN90 and 4-credit EN98) and place all students with developmental needs directly into co-req. Passing co-req = college-level English credit in the first semester.
+- **Placement = multiple measures.** Primary measure is **high-school GPA: ≥ 2.7 → automatic EN101**. Others take **Accuplacer**, which now places only into **co-req English, college-level English, or college-level ESL**. No developmental levels remain.
+- **The outcome data (the case for co-req).**
+  - Fall 2018-19 cohorts: of 260 who took EN101X, **80% passed** college-level English and **49%** went on to pass EN102. Of 174 who started in EN98, only **46%** later passed EN101 and **24%** passed EN102. Of 70 in EN90, **38%** passed EN101(X) and **10%** EN102.
+  - Fall 2012–Spring 2020: of 1,195 EN101X students, **83% passed** and **54%** passed EN102; of 2,355 EN98 students, **50%** passed EN101 and **37%** EN102.
+  - Headline: co-req completes college English at **80-83% vs 38-50%** developmental, **in one semester instead of two+**; EN102 completion **49-54% vs 10-37%**. (Sources: English Course Sequence Report Jan 2022; Traditional vs. Accelerated Pathways Oct 2023.)
+- **Equity.** Gains persisted across all groups; the significant EN102 gap **disappeared among male students** on the co-req path (African-American male students were the most likely among males to complete EN102). **Still open:** Hispanic/Latina females less likely to complete EN102 than Black/AA and white peers; IE (2023): "Racial, ethnic, and gender differences are lessened on the EN101X pathways but still persist."
+- **The support models Title III funded** (what a co-req student's scaffolding looks like): **embedded learning specialists** (AAC partnership, 3-6 hrs/week, 1:1 draft conferencing); a one-semester **embedded life-skills coach** pilot (goal-setting, time management); **PEEPS** (Program for Embedded English Partners — monthly faculty/specialist PD, a Covid "lifeline"); the **Persistence Project** (non-academic 10-15 min 1:1s in the first 3 weeks → persistence); and the semester **portfolio assessment** (blind, non-instructor scoring; non-binding but graded; measures co-req students against EN101 outcomes).
+- **Post-grant priorities:** sustain PD + portfolio norming; keep embedded learning specialists; track grad/transfer; increase EN102 success; **eliminate the remaining equity gaps in EN101X and EN102**.
+
+**Implication for the studio.** Any "placement/skill" instrument must be a **co-req support diagnostic** or a **portfolio-scoring skill-capture** (per SLO) — never a remedial place-out. The report even names the target: which students need which embedded support, and the persistent EN102 / Hispanic-Latina-female equity gap to close. (Founder still to brief the fuller co-req vision.)
 
 ## How this connects to the studio (why she's seated)
 - **Real work samples + a real method** for the measure-side tools: the portfolio/norming process is the live context for **The Norming Table**, **Close the Loop**, and **Rubric Forge**.

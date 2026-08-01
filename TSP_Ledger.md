@@ -335,3 +335,13 @@ Convened five studio lenses (Registrar/Cora, Learning Scientist, Studio-Eyes, As
 - **CO-REQ RESOLVED FROM THE SOURCE:** the 2025 report states plainly — *"as a result of long-term data on the efficacy of our co-req model, EN090 and EN098 have been officially retired."* EN101X + EN101L co-req lab; placement via college process / dept Portfolio Assessment / ES150. Confirms the founder's co-req correction and voids the EN98-vs-EN101 place-out framing. Folded into the brainstorm's parked-placement note. (Founder still to brief the fuller model.)
 - **GenAI thread surfaced** (SLO#2, AY24-25): 48/38/42% AI usage; 30/60/75% not-discussed-in-class/syllabus/assignment; CopyLeaks pilot; the dept is actively asking for AI-use guidance + AI-resistant assignment design — a ready build lane (iSLO 1 + 3 + academic integrity).
 - FERPA: excluded individual student names/scores present in raw 2021 scoring notes; seat holds aggregate/method only. Provenance header (Source + Last-verified 2026-07-30) so it clears TICK 3 if swept.
+
+## 2026-07-30 — Added the Title III co-req grant report (Katie McGrath) to the Assessor corpus
+
+**Founder: "Katie McGrath authored a Title III co-req report you need. Search files."** Found and read it — **"Grant Summary: Co-Requisite English" (Title III), Aug 2024** (`1F4PXlD-ShaWsi39g3e6Xxnn4nJXRo09QWZWOCGO3pIM`, in Matt's Drive; first-person, attributed to McGrath per founder). Folded into `claude_seat-english-assessment.md`.
+
+- **The definitive co-req record.** Title III scaled EN101X to 100% co-req by Fall 2024; 2023-24 the dept voted to discontinue ALL stand-alone developmental English (EN90/EN98 gone). Placement = **multiple measures**: HS GPA ≥ 2.7 → EN101, else Accuplacer → co-req/college-level/ESL.
+- **The data:** co-req passes college English **80-83% vs 38-50%** developmental (in one semester not two); EN102 completion **49-54% vs 10-37%** (cohorts 260/1,195 co-req vs 174/70/2,355 developmental).
+- **Equity:** gaps shrank on the co-req path (EN102 gap disappeared among male students; AA male students most likely among males to complete EN102) but **Hispanic/Latina females still lag** — the named open target.
+- **Support models Title III funded:** embedded learning specialists (AAC, 1:1 draft conferencing), a life-skills coach pilot, PEEPS (faculty/specialist PD), the Persistence Project (non-academic weeks-1-3 1:1s), and blind portfolio assessment. These are the scaffolds a future **co-req support diagnostic** would route students toward.
+- Enriched the Assessor seat's co-req section + the brainstorm parked-placement note. Aggregate only (no student PII). Repo context doc, unlinked from the public site.
