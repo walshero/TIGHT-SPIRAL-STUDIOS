@@ -89,6 +89,16 @@ The placement flagship is parked, so lead with builds that stand on their own:
 4. **Held for founder briefing:** the co-req support diagnostic (the re-framed ex-"placement" build) and the
    career/workforce iSLO lane.
 
+## Shipped since — the GenAI lane (2026-07-30, built while the founder was away)
+Not on the original tier list, but the strongest unblocked signal from the **Assessor seat**: the English annual
+reports name AI-use guidance and AI-resistant assignment design as active department needs (30/60/75% of students
+got no class/syllabus/assignment guidance). Two tools shipped, both gated + ratchet-clean + browser-verified:
+- **Whose Draft** (student, iSLO 1 & 3) — decide how much of an essay to hand to AI at each step; leave with a
+  usable disclosure statement. Grounded in the dept's own integrity indicators.
+- **AI-Resilient Assignment** (faculty, iSLO 1 & 3) — a 7-check assignment audit + redesign moves + a syllabus
+  GenAI policy builder. Answers the reports' action items directly.
+This did **not** touch the parked builds below.
+
 ## Open decisions for the founder
 - Green-light which Tier-1 build(s) first?
 - The **career/workforce iSLO** question — is that a lane the studio wants to open? (Biggest strategic gap.)
