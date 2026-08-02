@@ -1,11 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <!--
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   LEEDER INTAKE — IN-FILE CHANGELOG
   Canonical trunk. Edit in place, no branching. Newest first.
   Drive canon: Claude_files 1RPydHJsopFdfjI_BUnv168Wsd9MwUOFw
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  art-sweep (2026-08-01) — art-department pass, Compositor + Continuity seats.
+    - VERDICT: zero shots mountable this pass. All six scenes in this file
+      (Q1 hero + five CSS band crops of the SAME svg) derive from one source
+      plate, art/leeder/scene.street.hero.jpg, which does not exist in any
+      lane (art/leeder/ absent; the twelve art/cyl/plates are 1962-69
+      presidential interiors — a Continuity kill for a c.1915 Boston street).
+    - ART-ASK planted at the scene svg (the file's sole art-gate site) with
+      the founder MJ prompt, the legal-photo librarian brief, and the
+      six-screen mount plan. The hand-drawn svg stays as interim scaffolding
+      and HALTS art-gate ON PURPOSE until the plate lands.
+    - Mechanics untouched. Comfort-gate still passes; spiral glyph (chrome)
+      is under the 2.5KB floor and needs nothing.
+  v4 (2026-07-29) — mount Comfort Kernel v2 (Studio Eyes).
+    - RESERVED CHROME header (Home · teaspoon brand · Studio Eyes) on its own
+      sticky row; never overlaps the scene or the title.
+    - STUDIO EYES panel: Light Default/Dusk/Warm-dark (html[data-light] token
+      remaps; Warm-dark = warm charcoal, never pure black), Text size A/A+/A++,
+      toggles High-contrast · Reduce-motion · Colorblind cues. Content sized in
+      rem so text-size actually scales. Every text stays >=4.5:1 in all three.
+    - NAV: Home in the chrome (top) + Back+Home rail at the bottom (Home ->
+      index.html; Back steps back a question, then history.back() at the top).
+      The old fixed Back/Start-over navfloor is retired.
+    - Last-updated stamp computed from document.lastModified.
+    - No preference wall existed (scene-first already); no legacy comfort FAB
+      existed. Cut-paper scene is decorative + strong — left untouched.
   v3 (2026-07-16) — sale-first reframe + buyer bundling.
     - Website DEMOTED: no longer a co-equal pillar or a standalone plan line.
       It's the surface the showcase ships on — folded into the first piece as
@@ -54,32 +79,105 @@
     --win:#e9d79a; --shadow:rgba(40,36,28,.28); --focus:#0f5e7c;
     /* TEXT tokens — color: only. Each is its own bright ink. */
     --ink:#191d1a; --ink-soft:#33352f; --civic-ink:#fbfaf7; --gold-ink:#5a4212;
+    --civic-deep:#1f4a4f; /* civic hue as TEXT (dark green on light). Fill form is --civic. */
+
+    /* STUDIO EYES chrome tokens — self-contained, contrast-proven (Comfort Kernel v2) */
+    --se-surface:#fbf5e6; --se-surface-2:#efe4c8; --se-ink:#221d12; --se-ink-2:#463b22;
+    --se-line:#d8c59a; --se-accent:#3f5f78; --se-accent-strong:#2c4658; --se-focus:#8f3f00; --se-on-accent:#ffffff;
+    --se-tap:48px; --se-r:10px;
+    --se-serif:Georgia,'Iowan Old Style','Times New Roman',serif;
+    --se-sans:ui-sans-serif,system-ui,Arial,sans-serif;
+    --se-mono:ui-monospace,'SF Mono',Menlo,monospace;
   }
+
+  /* ── STUDIO EYES: LIGHT = DUSK (warm, still light; ink stays dark) ── */
+  html[data-light="dusk"]{
+    --paper:#e9dcbf; --paper-2:#e0d2b0; --slip:#f4ead1; --rule:#c8bc9c;
+    --se-surface:#f3e6c8; --se-surface-2:#e2c99a; --se-ink:#241a10; --se-ink-2:#4a3a1e;
+    --se-line:#cdb488; --se-accent:#37536a; --se-accent-strong:#24384a; --se-focus:#9c4000;
+  }
+  /* ── STUDIO EYES: LIGHT = WARM-DARK (warm charcoal, never pure black; light ink) ── */
+  html[data-light="night"]{
+    --paper:#211d17; --paper-2:#2a251d; --slip:#332d23; --rule:#4a4436;
+    --ink:#f3e7cf; --ink-soft:#d8c9ab; --gold-ink:#e3c07a; --civic-deep:#8fb9bd;
+    --shadow:rgba(0,0,0,.5);
+    --se-surface:#242019; --se-surface-2:#33302a; --se-ink:#f2e3bf; --se-ink-2:#d8c59a;
+    --se-line:#463f30; --se-accent:#8aa0b8; --se-accent-strong:#a9bcd0; --se-focus:#f0c357; --se-on-accent:#141109;
+  }
+  /* ── TOGGLE: high contrast (halation floor) ── */
+  html.se-contrast:not([data-light="night"]){
+    --paper:#ffffff; --paper-2:#f5f2e9; --slip:#ffffff; --ink:#0c0e0c; --ink-soft:#1e221e; --rule:#8f886d;
+    --se-surface:#fbfaf7; --se-surface-2:#f0ece2; --se-ink:#141109; --se-ink-2:#2c2517; --se-line:#b9a06a; --se-accent-strong:#243a4a;
+  }
+  html.se-contrast[data-light="night"]{
+    --paper:#0b0a08; --paper-2:#131210; --slip:#181510; --ink:#fff7e6; --ink-soft:#efe0bc;
+    --se-surface:#161410; --se-ink:#fff7e6; --se-ink-2:#efe0bc; --se-accent-strong:#b9cbe0;
+  }
+  /* ── TOGGLE: text size A / A+ / A++ (content is rem-sized, so it scales) ── */
+  html{ font-size:100%; }
+  html.se-a1{ zoom:1.15; }
+  html.se-a2{ zoom:1.3; }
+  /* ── TOGGLE: reduce motion ── */
+  html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+  @media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+  /* ── TOGGLE: colorblind cues ── */
+  html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+
   *{box-sizing:border-box}
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   html,body{margin:0;padding:0;background:var(--paper);color:var(--ink)}
-  body{font-family:Georgia,'Iowan Old Style',serif;font-size:20px;line-height:1.5;-webkit-text-size-adjust:100%;padding:0 0 84px}
+  body{font-family:Georgia,'Iowan Old Style',serif;font-size:1.25rem;line-height:1.5;-webkit-text-size-adjust:100%;padding:0;
+    transition:background .18s ease,color .18s ease}
   .wrap{max-width:640px;margin:0 auto;padding:0 0 0}
 
-  /* fixed nav floor — Back + Home, every screen */
-  .navfloor{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;gap:10px;
-    padding:10px 14px;background:var(--paper-2);border-top:1px solid var(--rule)}
-  .navfloor button{flex:1;min-height:48px;border-radius:10px;border:2px solid var(--rule);
-    background:var(--slip);color:var(--ink);font-family:ui-sans-serif,system-ui,Arial,sans-serif;
-    font-size:16px;font-weight:700;cursor:pointer}
-  .navfloor button:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
-  .navfloor button:disabled{opacity:.4;cursor:default}
-  @media print{.navfloor{display:none}}
+  /* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+  .se-chrome{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;
+    padding:9px 14px;background:var(--se-surface);border-bottom:2px solid var(--se-ink);
+    position:sticky;top:0;z-index:100}
+  .se-home{justify-self:start;display:inline-flex;align-items:center;gap:7px;min-height:var(--se-tap);
+    padding:8px 12px;border:1.5px solid var(--se-line);border-radius:8px;background:var(--se-surface-2);
+    color:var(--se-ink);font-family:var(--se-mono);font-weight:700;font-size:13px;text-decoration:none}
+  .se-brand{justify-self:center;display:inline-flex;align-items:center;gap:9px;color:var(--se-ink)}
+  .se-brand svg{width:34px;height:20px;color:var(--se-accent-strong);flex:0 0 auto}
+  .se-brand .wm{font-family:var(--se-serif);font-size:16px;letter-spacing:.01em;white-space:nowrap}
+  .se-eyes{justify-self:end;display:inline-flex;align-items:center;gap:7px;min-height:var(--se-tap);
+    padding:8px 13px;border:2px solid transparent;border-radius:8px;background:var(--se-accent-strong);
+    color:var(--se-on-accent);font-family:var(--se-mono);font-weight:700;font-size:13px;cursor:pointer}
+  .se-home:focus-visible,.se-eyes:focus-visible{outline:3px solid var(--se-focus);outline-offset:2px}
+  @media (max-width:560px){.se-brand .wm{display:none}}
+
+  /* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+  .se-panel{position:fixed;right:12px;top:calc(var(--se-tap) + 14px);z-index:101;
+    width:min(320px,calc(100vw - 24px));background:var(--se-surface);color:var(--se-ink);
+    border:2px solid var(--se-accent-strong);border-radius:var(--se-r);padding:15px;
+    box-shadow:0 10px 34px rgba(0,0,0,.28);display:none}
+  .se-panel[data-open="1"]{display:block}
+  .se-panel h2{font-family:var(--se-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--se-ink-2);margin:0 0 8px}
+  .se-row{display:flex;gap:6px;margin-bottom:14px}
+  .se-btn{flex:1;min-height:var(--se-tap);padding:8px 4px;border:1.5px solid var(--se-line);border-radius:8px;
+    background:var(--se-surface-2);color:var(--se-ink);font-family:var(--se-mono);font-weight:700;font-size:12.5px;cursor:pointer}
+  .se-btn[aria-pressed="true"]{background:var(--se-accent-strong);color:var(--se-on-accent);border-color:var(--se-accent-strong)}
+  .se-btn:focus-visible{outline:3px solid var(--se-focus);outline-offset:2px}
+  .se-tog{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;
+    min-height:var(--se-tap);padding:8px 11px;margin-bottom:6px;border:1.5px solid var(--se-line);border-radius:8px;
+    background:var(--se-surface-2);color:var(--se-ink);font-family:var(--se-sans);font-weight:600;font-size:14px;cursor:pointer;text-align:left}
+  .se-tog[aria-pressed="true"]{border-color:var(--se-accent-strong)}
+  .se-tog .st{font-family:var(--se-mono);font-size:11px;color:var(--se-ink-2)}
+  .se-tog[aria-pressed="true"] .st{color:var(--se-accent-strong);font-weight:700}
+  .se-tog:focus-visible{outline:3px solid var(--se-focus);outline-offset:2px}
+  .se-sr2{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 
   .brandbar{display:flex;align-items:baseline;gap:10px;padding:16px 18px 4px;flex-wrap:wrap}
-  .brandbar .wm{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:15px;letter-spacing:.02em;color:var(--ink)}
+  .brandbar .wm{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:.9375rem;letter-spacing:.02em;color:var(--ink)}
   .brandbar .wm b{color:var(--gold-ink)}
-  .forline{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:14px;color:var(--ink-soft);font-weight:700;padding:0 18px 12px}
+  .forline{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:.875rem;color:var(--ink-soft);font-weight:700;padding:0 18px 4px}
+  .updated{font-family:var(--se-mono);font-size:.8125rem;color:var(--ink-soft);padding:0 18px 12px;display:flex;align-items:center;gap:7px}
+  .updated::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--civic);flex:0 0 auto}
 
   .rail{display:flex;align-items:center;gap:8px;padding:0 18px 12px;flex-wrap:wrap}
   .rail .pip{width:30px;height:8px;border-radius:4px;background:var(--rule)}
   .rail .pip.done{background:var(--civic)} .rail .pip.here{background:var(--gold)}
-  .rail .rl{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;color:var(--ink-soft);font-weight:700}
+  .rail .rl{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:.8125rem;color:var(--ink-soft);font-weight:700}
 
   /* the scene — cut-paper SVG, layered with edge-shadows */
   .scene{display:block;width:100%;height:auto;background:var(--sky)}
@@ -90,59 +188,97 @@
     box-shadow:0 1px 0 #fff inset,0 14px 30px -22px var(--shadow)}
   .card[hidden]{display:none}
 
-  .eyebrow{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:13px;letter-spacing:.1em;
+  .eyebrow{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:.8125rem;letter-spacing:.1em;
     text-transform:uppercase;color:var(--ink-soft);margin:0 0 8px;font-weight:700}
-  h1{font-size:26px;line-height:1.16;margin:0 0 8px}
-  h2{font-size:22px;line-height:1.2;margin:0 0 6px}
+  h1{font-size:1.625rem;line-height:1.16;margin:0 0 8px}
+  h2{font-size:1.375rem;line-height:1.2;margin:0 0 6px}
   p{margin:0 0 12px}
-  .ask{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:19px;margin:4px 0 14px;color:var(--ink)}
-  .help{font-size:16px;color:var(--ink);margin:0 0 16px;line-height:1.5}
+  .ask{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:1.1875rem;margin:4px 0 14px;color:var(--ink)}
+  .help{font-size:1rem;color:var(--ink);margin:0 0 16px;line-height:1.5}
 
   .opts{display:flex;flex-direction:column;gap:10px;margin:6px 0 0}
   .opt{display:block;width:100%;text-align:left;background:var(--slip);border:2px solid var(--rule);border-radius:11px;
-    padding:14px 16px;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:16px;font-weight:600;color:var(--ink);
+    padding:14px 16px;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:1rem;font-weight:600;color:var(--ink);
     cursor:pointer;min-height:44px;line-height:1.4}
   .opt:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
   .opt.on{background:var(--civic);border-color:var(--civic);color:var(--civic-ink)}
-  .opt .sub{display:block;font-weight:400;font-size:14px;margin-top:3px}
+  .opt .sub{display:block;font-weight:400;font-size:.875rem;margin-top:3px}
   .opt .sub{color:var(--ink-soft)} .opt.on .sub{color:var(--civic-ink)}
 
   .btn-row{margin:18px 0 0;display:flex;gap:10px;flex-wrap:wrap}
   .btn{flex:1;min-width:150px;text-align:center;background:var(--civic);color:var(--civic-ink);border:none;border-radius:11px;
-    padding:16px;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:17px;font-weight:700;cursor:pointer;min-height:44px}
-  .btn:disabled{opacity:.45;cursor:default}
+    padding:16px;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:1.0625rem;font-weight:700;cursor:pointer;min-height:44px}
+  .btn[aria-disabled="true"]{opacity:.45;cursor:default}
   .btn:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
-  .btn.ghost{background:transparent;color:var(--civic);border:2px solid var(--rule)}
+  .btn.ghost{background:transparent;color:var(--civic-deep);border:2px solid var(--rule)}
 
   .foe{margin:16px 0 0;border-top:1px dashed var(--rule);padding-top:14px}
-  .foe-line{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:14px;color:var(--ink);margin:0 0 10px;font-weight:600;line-height:1.5}
-  .foe-btn{display:block;width:100%;text-align:center;background:transparent;color:var(--civic);border:2px solid var(--rule);
-    border-radius:10px;padding:13px;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:15px;font-weight:700;cursor:pointer;min-height:44px}
+  .foe-line{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:.875rem;color:var(--ink);margin:0 0 10px;font-weight:600;line-height:1.5}
+  .foe-btn{display:block;width:100%;text-align:center;background:transparent;color:var(--civic-deep);border:2px solid var(--rule);
+    border-radius:10px;padding:13px;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:.9375rem;font-weight:700;cursor:pointer;min-height:44px}
   .foe-btn:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
 
   .plan-item{background:var(--slip);border:2px solid var(--rule);border-left:8px solid var(--civic);border-radius:10px;
     padding:14px 16px;margin:0 0 12px}
-  .plan-item h3{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:17px;margin:0 0 4px}
-  .plan-item p{font-size:16px;margin:0;line-height:1.45}
+  .plan-item h3{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:1.0625rem;margin:0 0 4px}
+  .plan-item p{font-size:1rem;margin:0;line-height:1.45}
   .plan-item.second{border-left-color:var(--gold)}
   .plan-item.third{border-left-color:var(--brick)}
   .terms{background:var(--slip);border:2px solid var(--civic);border-radius:10px;padding:14px 16px;margin:14px 0 0}
-  .terms h3{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:16px;margin:0 0 6px;letter-spacing:.06em;text-transform:uppercase}
-  .terms li{font-size:16px;line-height:1.5;margin:0 0 6px}
+  .terms h3{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:1rem;margin:0 0 6px;letter-spacing:.06em;text-transform:uppercase}
+  .terms li{font-size:1rem;line-height:1.5;margin:0 0 6px}
   .terms ul{margin:0;padding-left:20px}
 
-  .cred{margin:22px 18px 0;border-top:2px solid var(--rule);padding-top:16px;font-size:15px;line-height:1.55;color:var(--ink)}
-  .cred .who{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:15px;margin:0 0 6px;letter-spacing:.04em}
+  .cred{margin:22px 18px 0;border-top:2px solid var(--rule);padding-top:16px;font-size:.9375rem;line-height:1.55;color:var(--ink)}
+  .cred .who{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-weight:700;font-size:.9375rem;margin:0 0 6px;letter-spacing:.04em}
 
-  @media print{ .btn-row,.foe,.rail{display:none} body{background:#fff;padding:0} .card{box-shadow:none} }
+  /* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+  .se-rail{display:flex;gap:10px;justify-content:center;padding:20px;margin-top:24px;border-top:2px solid var(--se-line);background:var(--se-surface)}
+  .se-rail a,.se-rail button{min-height:var(--se-tap);padding:10px 18px;border:1.5px solid var(--se-line);border-radius:8px;
+    background:var(--se-surface-2);color:var(--se-ink);font-family:var(--se-mono);font-weight:700;font-size:13px;text-decoration:none;cursor:pointer}
+  .se-rail a:focus-visible,.se-rail button:focus-visible{outline:3px solid var(--se-focus);outline-offset:2px}
+
+  @media print{ .se-chrome,.se-panel,.se-rail{display:none} .btn-row,.foe,.rail{display:none} body{background:#fff;padding:0} .card{box-shadow:none} }
 </style>
 </head>
 <body>
+
+  <!-- RESERVED CHROME -->
+  <header class="se-chrome">
+    <a class="se-home" href="index.html" aria-label="Home">Home</a>
+    <span class="se-brand">
+      <svg viewBox="0 0 64 27" fill="none" stroke="currentColor" aria-hidden="true" focusable="false"><path d="M33.2 13.5 L33.3 13.6 L33.3 13.8 L33.4 13.9 L33.4 14.1 L33.4 14.3 L33.3 14.5 L33.3 14.7 L33.2 14.9 L33.1 15.0 L33.0 15.2 L32.8 15.4 L32.7 15.5 L32.5 15.7 L32.2 15.8 L32.0 15.9 L31.7 15.9 L31.5 16.0 L31.2 16.0 L30.9 15.9 L30.6 15.9 L30.3 15.8 L30.1 15.7 L29.8 15.5 L29.5 15.3 L29.3 15.1 L29.1 14.8 L28.9 14.5 L28.7 14.2 L28.6 13.9 L28.5 13.5 L28.4 13.1 L28.4 12.7 L28.4 12.3 L28.5 11.9 L28.6 11.5 L28.8 11.2 L29.0 10.8 L29.2 10.4 L29.5 10.1 L29.8 9.8 L30.2 9.5 L30.6 9.3 L31.1 9.1 L31.5 8.9 L32.0 8.8 L32.5 8.8 L33.0 8.8 L33.5 8.8 L34.0 8.9 L34.5 9.1 L35.0 9.3 L35.5 9.6 L35.9 9.9 L36.4 10.3 L36.7 10.8 L37.1 11.2 L37.3 11.8 L37.6 12.3 L37.7 12.9 L37.9 13.5 L37.9 14.1 L37.9 14.7 L37.8 15.4 L37.6 16.0 L37.4 16.6 L37.1 17.2 L36.8 17.8 L36.3 18.3 L35.8 18.8 L35.3 19.2 L34.7 19.6 L34.1 19.9 L33.4 20.2 L32.7 20.4 L32.0 20.5 L31.3 20.6 L30.5 20.5 L29.8 20.4 L29.0 20.2 L28.3 19.9 L27.6 19.5 L26.9 19.1 L26.3 18.6 L25.8 18.0 L25.3 17.4 L24.8 16.7 L24.4 16.0 L24.2 15.2 L23.9 14.3 L23.8 13.5 L23.8 12.6 L23.9 11.8 L24.0 10.9 L24.2 10.0 L24.6 9.2 L25.0 8.4 L25.5 7.7 L26.1 7.0 L26.8 6.3 L27.5 5.7 L28.3 5.3 L29.2 4.8 L30.1 4.5 L31.0 4.3 L32.0 4.2 L33.0 4.1 L34.0 4.2 L35.0 4.4 L35.9 4.7 L36.9 5.1 L37.8 5.6 L38.6 6.2 L39.4 6.8 L40.1 7.6 L40.8 8.4 L41.3 9.4 L41.8 10.3 L42.1 11.3 L42.4 12.4 L42.5 13.5" stroke-width="2.3" stroke-linecap="round"/><circle cx="32" cy="13.5" r="1.6" fill="currentColor" stroke="none"/></svg>
+      <span class="wm">Tight Spiral</span>
+    </span>
+    <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+  </header>
+
+  <!-- STUDIO EYES panel -->
+  <div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+    <h2>Light</h2>
+    <div class="se-row" role="group" aria-label="Light level">
+      <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+      <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+      <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+    </div>
+    <h2>Text size</h2>
+    <div class="se-row" role="group" aria-label="Text size">
+      <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+      <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+      <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+    </div>
+    <h2>Comfort</h2>
+    <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+    <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+    <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+    <span class="se-sr2" id="seSr" role="status" aria-live="polite"></span>
+  </div>
 
   <div class="brandbar">
     <span class="wm">TIGHT SPIRAL <b>PRODUCTIONS</b></span>
   </div>
   <p class="forline">Prepared for Howard Leeder · Leeder Management · five questions, about three minutes</p>
+  <p class="updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v12 <span style="opacity:.75">246aeaf</span></span> </span> </span> </span> </span>
 
   <div class="rail" aria-hidden="true">
     <span class="pip here" id="p1"></span><span class="pip" id="p2"></span><span class="pip" id="p3"></span>
@@ -151,6 +287,67 @@
   </div>
 
   <!-- ── SCREEN ONE = SCENE (cut-paper SVG). C7 image floor: first paint is scene, not form. ── -->
+  <!-- ART-ASK · art-department sweep 2026-08-01 · Compositor + Continuity
+       STATUS: this svg is INTERIM SCAFFOLDING and halts art-gate on purpose. It is the file's only
+       art site: Q1 shows it full-frame; Q2, Q3, Q4, Q5 and the Plan show the same element as a CSS
+       band. Every shot on the leeder shot list derives from ONE source plate that does not exist yet:
+       art/leeder/scene.street.hero.jpg. Verified absent in every local lane (art/leeder/ absent; the
+       twelve plates in art/cyl/plates are 1962-69 presidential-era interiors, a Continuity kill for a
+       c.1915 Boston streetcar-suburb walk-up). Founder picks a lane below; then the mount plan runs.
+
+       LANE A · FOUNDER MJ · paste this prompt verbatim:
+       Paper cut-out collage illustration, layered construction paper with soft drop shadows: a
+       circa-1915 Boston brick apartment building, four stories, red waterstruck brick, corbelled
+       brick cornice, limestone window lintels, six-over-one sash windows glowing warm amber, black
+       steel fire escape, granite stoop, paneled wood entry door with transom, small blank brass
+       nameplate, globe entry lantern. On the sidewalk in front, three faceless kraft-paper tradesmen
+       at work: a carpenter at sawhorses sawing a plank, a plumber crouched at a low pipe with a pipe
+       wrench, an electrician up a yellow fiberglass stepladder at a conduit. A cooler slate-blue
+       apartment building set back at left. Granite curbstones, concrete sidewalk. Flat matte paper
+       textures, warm limited palette: muted sky blue #cfe0e2, brick red #7e3a22, kraft tan #c99a63,
+       ochre gold #8a6322, deep teal #1f4a4f, sand #c9c0ad. No faces, no text, no letters, no logos.
+       --ar 32:15 --style raw
+
+       LANE B · LEGAL PHOTO · Period Librarian brief (if photographic real-building credibility is
+       preferred for this sales doc):
+       1. LOC Historic American Buildings Survey (HABS): search "apartment building Boston
+          Massachusetts", "apartment block Brookline", "three-decker Dorchester". License target:
+          public domain / no known restrictions. Verify the rights statement on the ITEM page, never
+          the search result.
+       2. Wikimedia Commons: Category:Apartment buildings in Boston, Category:Triple-deckers.
+          License target CC0 or CC-BY 4.0; record author, exact license string, and verified URL in
+          data-art-author / data-art-license / data-art-source per the cyl-v5-image-lane schema.
+       3. NARA regional holdings, Boston housing surveys.
+       Zero-result rule: retry with the era's own vocabulary: tenement, flats, apartment hotel,
+       walk-up. Reject any frame with identifiable faces, legible signage, or license plates.
+       Building fabric must audit: brick masonry, corbelled cornice, stone lintels, fire escape,
+       granite stoop. Trade figures then arrive as SSG kraft cut-paper overlays composited onto the
+       photo (teaspoon imprint), keeping the withholding rule on top of a true photograph. Best of
+       all: client-supplied photos of the actual Leeder buildings, with written owner permission
+       recorded as the license line.
+
+       MOUNT PLAN (Compositor, once the plate lands at art/leeder/scene.street.hero.jpg):
+       - Preferred: vtracer trace posterized to about 8 colors, fills remapped to this file's
+         atmosphere tokens (--sky --brick --kraft --gold --civic --stone) so all three light modes
+         keep working and bytes stay small. Provenance in the svg aria-label + data-art:
+         "traced from founder MJ generation, vtracer, Super Sketchy Graphics imprint".
+       - Raster fallback: base64 embed at or under 400KB with per-mode CSS tint, data-art provenance
+         per art-doctrine.md. Text never raw over photo: solid panels only.
+       - ONE plate serves all six screens. Q1 = full 640x300 frame. The five bands are aspect-locked
+         640x150 crops MEASURED IN PLATE PIXELS (viewBox crops of the trace; never letterbox-squash
+         via max-height alone):
+           Q2  hero building, cornice to stoop, back building excluded (one parcel reads cleanly)
+           Q3  lower-third sidewalk band, all three trade figures in frame
+           Q4  middle band, lit window grid plus doorway, nameplate visible and still blank
+           Q5  full-width thin slice centered on the streetline, buildings and trades together
+           Plan  tight doorway crop: civic door, gold inner panel, lantern, blank nameplate
+         Optional founder dusk variant for the Plan screen only (same prompt plus "early evening,
+         windows glowing, long shadows"); art-director default is the crop. One plate, six screens.
+       - Continuity floor, non-negotiable: no faces ever (kraft figures read by posture and props);
+         the electrician's ladder is YELLOW FIBERGLASS, never aluminum; every object in frame
+         datable c.1910-1925 except the present-day trade kit; blank brass nameplate, no baked text.
+       - After mount: re-run art-gate.py and comfort-gate.py per the charter's standing orders. The
+         spiral glyph in the chrome is under the 2.5KB floor and needs nothing. -->
   <svg class="scene" id="scene" viewBox="0 0 640 300" role="img"
        aria-label="A Leeder Management brick apartment building over a street, with three trade workers at work in front of it.">
     <defs>
@@ -232,7 +429,7 @@
         <span class="sub">The current site is dated and hard to update</span></button>
       <button class="opt" data-q="1" data-v="all">Honestly, all of it</button>
     </div>
-    <div class="btn-row"><button class="btn" id="n1" disabled>Next</button></div>
+    <div class="btn-row"><button class="btn" id="n1" aria-disabled="true">Next</button></div>
     <div class="foe">
       <p class="foe-line">Stop anytime — the plan below assembles from whatever you've answered.</p>
       <button class="foe-btn" data-jump="done">Skip to the plan</button>
@@ -251,7 +448,7 @@
         <span class="sub">Several interested parties, each after their own parcel</span></button>
       <button class="opt" data-q="2" data-v="both">Both — we'd take whole or parcels, whichever moves</button>
     </div>
-    <div class="btn-row"><button class="btn" id="n2" disabled>Next</button></div>
+    <div class="btn-row"><button class="btn" id="n2" aria-disabled="true">Next</button></div>
     <div class="foe"><button class="foe-btn" data-jump="done">Skip to the plan</button></div>
   </div>
 
@@ -266,7 +463,7 @@
       <button class="opt" data-q="3" data-v="head">Mostly one person's head</button>
       <button class="opt" data-q="3" data-v="varies">It varies by building</button>
     </div>
-    <div class="btn-row"><button class="btn" id="n3" disabled>Next</button></div>
+    <div class="btn-row"><button class="btn" id="n3" aria-disabled="true">Next</button></div>
     <div class="foe"><button class="foe-btn" data-jump="done">Skip to the plan</button></div>
   </div>
 
@@ -281,7 +478,7 @@
       <button class="opt" data-q="4" data-v="brand">The Leeder name and look</button>
       <button class="opt" data-q="4" data-v="unsure">Not sure what's even on it</button>
     </div>
-    <div class="btn-row"><button class="btn" id="n4" disabled>Next</button></div>
+    <div class="btn-row"><button class="btn" id="n4" aria-disabled="true">Next</button></div>
     <div class="foe"><button class="foe-btn" data-jump="done">Skip to the plan</button></div>
   </div>
 
@@ -295,7 +492,7 @@
       <button class="opt" data-q="5" data-v="bundle">A way to combine separate buyers into one deal</button>
       <button class="opt" data-q="5" data-v="trades">A simple board that keeps the trades coordinated</button>
     </div>
-    <div class="btn-row"><button class="btn" id="n5" disabled>See the plan</button></div>
+    <div class="btn-row"><button class="btn" id="n5" aria-disabled="true">See the plan</button></div>
   </div>
 
   <!-- PLAN -->
@@ -327,10 +524,10 @@
 
   </div><!-- /.body -->
 
-  <!-- NAV FLOOR — fixed, every screen -->
-  <nav class="navfloor" aria-label="Navigation">
-    <button id="navBack" type="button">Back</button>
-    <button id="navHome" type="button">Start over</button>
+  <!-- BOTTOM NAV RAIL — Back + Home -->
+  <nav class="se-rail" aria-label="Page navigation">
+    <button type="button" id="railBack" aria-label="Back">Back</button>
+    <a href="index.html" aria-label="Home">Home</a>
   </nav>
 
 <script>
@@ -348,7 +545,6 @@
     document.getElementById("railLabel").textContent=(id==="done")?"Your plan":"Question "+(idx+1)+" of 5";
     var scene=document.getElementById("scene");
     scene.classList.toggle("band", id!=="q1");
-    document.getElementById("navBack").disabled=(idx<=0);
     if(id==="done"){buildPlan();}
     document.getElementById("footCred").hidden=(id==="done");
     window.scrollTo(0,0);
@@ -360,26 +556,23 @@
       A[q]=b.getAttribute("data-v");
       document.querySelectorAll('.opt[data-q="'+q+'"]').forEach(function(o){o.classList.remove("on");});
       b.classList.add("on");
-      var nb=document.getElementById("n"+q); if(nb){nb.disabled=false;}
+      var nb=document.getElementById("n"+q); if(nb){nb.setAttribute("aria-disabled","false");}
     });
   });
   for(var i=1;i<=5;i++){(function(n){
     var nb=document.getElementById("n"+n);
-    if(nb){nb.addEventListener("click",function(){show(order[n]);});}
+    if(nb){nb.addEventListener("click",function(){
+      if(nb.getAttribute("aria-disabled")==="true")return;
+      show(order[n]);});}
   })(i);}
   document.querySelectorAll("[data-jump]").forEach(function(b){
     b.addEventListener("click",function(){show("done");});
   });
 
-  // nav floor
-  document.getElementById("navBack").addEventListener("click",function(){
+  // bottom rail — Back steps back a question, then leaves the page at the top
+  document.getElementById("railBack").addEventListener("click",function(){
     var cur=order.findIndex(function(k){return !document.getElementById(k).hidden;});
-    if(cur>0){show(order[cur-1]);}
-  });
-  document.getElementById("navHome").addEventListener("click",function(){
-    A={}; document.querySelectorAll(".opt.on").forEach(function(o){o.classList.remove("on");});
-    for(var i=1;i<=5;i++){var nb=document.getElementById("n"+i); if(nb)nb.disabled=true;}
-    show("q1");
+    if(cur>0){show(order[cur-1]);} else {history.back();}
   });
 
   function item(cls,title,body){return '<div class="plan-item '+cls+'"><h3>'+title+'</h3><p>'+body+'</p></div>';}
@@ -426,6 +619,41 @@
   }
 
   show("q1");
+})();
+
+/* ── STUDIO EYES (Comfort Kernel v2) ── */
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  // last-updated: computed, not typed
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
 })();
 </script>
 </body>

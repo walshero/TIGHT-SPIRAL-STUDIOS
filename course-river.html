@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <!--
   THE COURSE RIVER — EN195 Creative Writing, Summer 2026 6wk1 (May 26 - Jul 3).
   Tight Spiral Studios · walshero@gmail.com
@@ -23,69 +23,121 @@
   offline-floor break, same as the studio tracker). Generated on the fly; nothing leaves
   the page except the calendar URL the student chooses to open.
 
-  COMFORT GATE + VISIBILITY (locked 2026-06-29): screen-zero palette choice; --ink2 ==
-  --ink; accents structural only; GREEN-FREE (slate-B placeholder). FLOOR: single-file,
-  offline, in-memory; 3-stop comfort (never #000/#fff); large type; 44px+; keyboard;
-  visible focus; reduced-motion safe; scroll-reset; shape+label not color alone; no
-  emoji; phone-width.
+  COMFORT — MIGRATED 2026-07-29 to COMFORT KERNEL v2 (Studio Eyes + reserved chrome).
+  The old screen-zero palette gate / corner "Comfort" button was removed; reading comfort
+  now lives only in Studio Eyes in the header (Light Default/Dusk/Warm-dark, text A/A+/A++,
+  high-contrast, reduce-motion, colorblind cues), driven by html[data-light]. FLOOR held:
+  single-file, offline, in-memory; 3-stop light (never #000/#fff); large type; 44px+;
+  keyboard; visible focus; reduced-motion safe; scroll-reset; shape+label not colour alone;
+  no emoji; phone-width. Every visible text >=4.5:1 in Default, Dusk, and Warm-dark.
 -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="tsp:surface" content="doc">
 <title>The Course River — EN195, Summer 2026</title>
 <style>
-/* STUDIO EYES v4 CLASS-FIX 2026-07-11: lock the palette. */
 :root{ color-scheme: light; }
 
+/* ---- LIGHT: DEFAULT (day) ---- */
 :root{
-  --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --ink2:#1f1b12;
+  --bg:#f3ead8; --surface:#fffaf0; --surface-2:#efe4c8; --ink:#1f1b12; --ink2:#1f1b12; --ink-2:#1f1b12;
   --line:#d8caa8; --line2:#c2b288;
-  --accent:#3a4654; --accent2:#2b3540;        /* slate-B placeholder, GREEN-FREE */
+  --accent:#3a4654; --accent2:#2b3540; --accent-strong:#2b3540; --on-accent:#ffffff;   /* slate-B placeholder, GREEN-FREE */
   --water:#4a6b86; --water-d:#2b4256;
-  --gold:#6e4700; --gold-br:#c8900a; --gold-pale:#fbeec6;
+  --gold:#6e4700; --gold-ink:#6e4700; --gold-br:#c8900a; --gold-pale:#fbeec6;
   --rust:#8a3a1c;
   --focus:#c8900a;
+  --r:12px; --tap:48px;
   --serif:Georgia,'Times New Roman',serif;
   --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:ui-monospace,'SF Mono',Menlo,monospace;
+  --motion:.18s;
 }
-body.softer{ --bg:#efe9dd; --surface:#f7f1e6; --ink:#2c2618; --ink2:#2c2618; --line:#ded2b6; --line2:#cdbf9c; }
-body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0; --line:#4a4230; --line2:#5e553e;
-  --accent:#8fa6bd; --accent2:#9fb6cd; --water:#8fb4d0; --water-d:#a9c6dd; --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a; --rust:#e8a07c; }
+/* ---- LIGHT: DUSK ---- */
+html[data-light="dusk"]{
+  --bg:#e6d5b0; --surface:#f0e6cc; --surface-2:#e0cfa4; --ink:#241a10; --ink2:#241a10; --ink-2:#241a10;
+  --line:#ccbb92; --line2:#bca87e;
+  --focus:#9c4000;
+}
+/* ---- LIGHT: WARM-DARK (night) — warm charcoal, never pure black ---- */
+html[data-light="night"]{
+  --bg:#1c1a16; --surface:#26231d; --surface-2:#33302a; --ink:#f3e4c0; --ink2:#f3e4c0; --ink-2:#f3e4c0;
+  --line:#4a4230; --line2:#5e553e;
+  --accent:#8fa6bd; --accent2:#9fb6cd; --accent-strong:#a9bcd0; --on-accent:#141109;
+  --water:#8fb4d0; --water-d:#a9c6dd;
+  --gold:#f0c357; --gold-ink:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a;
+  --rust:#e8a07c;
+  --focus:#f0c357;
+}
+/* ---- TOGGLE: high contrast ---- */
+html.se-contrast:not([data-light="night"]){ --bg:#fbfaf7; --surface:#fbfaf7; --surface-2:#f0ece2; --ink:#141109; --ink2:#141109; --ink-2:#141109; --line:#b9a06a; --line2:#b9a06a; --accent:#243a4a; --accent2:#1c2e3c; --accent-strong:#1c2e3c; }
+html.se-contrast[data-light="night"]{ --bg:#0e0d0b; --surface:#161410; --surface-2:#241f18; --ink:#fff7e6; --ink2:#fff7e6; --ink-2:#fff7e6; --accent:#b9cbe0; --accent2:#c9dbf0; --accent-strong:#c9dbf0; }
+/* ---- TOGGLE: text size A / A+ / A++ ---- */
+html{ font-size:100%; }
+html.se-a1{ zoom:1.15; }
+html.se-a2{ zoom:1.3; }
+/* ---- TOGGLE: reduce motion ---- */
+html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+/* ---- TOGGLE: colorblind cues ---- */
+html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+
 *{box-sizing:border-box;} html,body{margin:0;}
-body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; -webkit-text-size-adjust:100%; }
+body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:1.19rem; -webkit-text-size-adjust:100%;
+  transition:background var(--motion) ease, color var(--motion) ease; }
 
-.topbar{ background:var(--accent); color:#fff; padding:.6rem .9rem; display:flex; align-items:center; gap:.6rem; font-family:var(--sans); position:sticky; top:0; z-index:30; }
-body.warm .topbar{ color:#0f0e0b; }
-.topbar .mark{ width:26px; height:26px; flex:none; } .topbar .wm{ font-weight:800; font-size:.92rem; }
-.cstop{ margin-left:auto; background:rgba(255,255,255,.18); color:#241f16; border:2px solid rgba(255,255,255,.6); border-radius:9px; padding:.45rem .65rem; font:700 .74rem/1 var(--sans); cursor:pointer; min-height:44px; }
-body.warm .cstop{ border-color:rgba(0,0,0,.4); background:rgba(0,0,0,.12); }
-.cstop:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+/* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+.se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+  padding:9px 14px; background:var(--surface); border-bottom:2px solid var(--ink);
+  position:sticky; top:0; z-index:100; }
+.se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 12px; border:1.5px solid var(--line2); border-radius:8px; background:var(--surface-2);
+  color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; }
+.se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+.se-brand svg{ width:34px; height:20px; color:var(--accent-strong); flex:0 0 auto; }
+.se-brand .wm{ font-family:var(--serif); font-size:16px; letter-spacing:.01em; white-space:nowrap; }
+.se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--accent-strong);
+  color:var(--on-accent); font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer; }
+.se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+@media (max-width:560px){ .se-brand .wm{ display:none; } }
 
-.wrap{ max-width:680px; margin:0 auto; padding:1.1rem 1rem 5rem; }
+/* Visible focus ring on the injected shared-nav links (their own rule sets outline:none). */
+a:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+/* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+.se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:101;
+  width:min(320px,calc(100vw - 24px)); background:var(--surface); color:var(--ink);
+  border:2px solid var(--accent-strong); border-radius:var(--r); padding:15px;
+  box-shadow:0 10px 34px rgba(0,0,0,.28); display:none; }
+.se-panel[data-open="1"]{ display:block; }
+.se-panel h2{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-2); margin:0 0 8px; }
+.se-row{ display:flex; gap:6px; margin-bottom:14px; }
+.se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--line2); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:12.5px; cursor:pointer; }
+.se-btn[aria-pressed="true"]{ background:var(--accent-strong); color:var(--on-accent); border-color:var(--accent-strong); }
+.se-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+  min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--line2); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--sans); font-weight:600; font-size:14px; cursor:pointer; text-align:left; }
+.se-tog[aria-pressed="true"]{ border-color:var(--accent-strong); }
+.se-tog .st{ font-family:var(--mono); font-size:11px; color:var(--ink-2); }
+.se-tog[aria-pressed="true"] .st{ color:var(--accent-strong); font-weight:700; }
+.se-tog:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+.wrap{ max-width:680px; margin:0 auto; padding:1.1rem 1rem 2rem; }
 .screen{ display:none; } .screen.on{ display:block; animation:fade .25s ease; }
 @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
-.where{ font:800 .72rem/1 var(--sans); letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:.6rem; }
+.where{ font:800 .72rem/1 var(--sans); letter-spacing:.1em; text-transform:uppercase; color:var(--gold-ink); margin-bottom:.6rem; }
 h1{ font-size:1.62rem; line-height:1.16; color:var(--ink); margin:.2rem 0 .5rem; }
+.updated{ font:700 .78rem/1 var(--mono); color:var(--ink-2); margin:0 0 .9rem; display:flex; align-items:center; gap:7px; }
+.updated::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--water); flex:0 0 auto; }
 p{ margin:0 0 .9rem; } .lead{ font-size:1.08rem; } .beat{ font-style:italic; color:var(--ink2); }
 
-.go{ display:block; width:100%; font:800 1.04rem/1.2 var(--sans); cursor:pointer; min-height:56px; padding:.9rem 1rem; border:none; border-radius:13px; background:var(--accent); color:#fff; margin:.45rem 0; text-align:center; }
-body.warm .go{ color:#0f0e0b; }
-.go:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
-
-/* comfort gate */
-.swatches{ display:flex; flex-direction:column; gap:.7rem; margin:1rem 0; }
-.sw{ display:flex; align-items:center; gap:.8rem; border:3px solid var(--line2); border-radius:14px; padding:.8rem; cursor:pointer; min-height:64px; background:var(--surface); }
-.sw:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
-.sw .chip{ width:54px; height:42px; border-radius:9px; flex:none; border:2px solid rgba(0,0,0,.15); display:flex; overflow:hidden; }
-.sw .chip span{ flex:1; } .sw .lbl{ font:800 1.02rem/1.2 var(--sans); } .sw .subt{ font:400 .85rem/1.3 var(--sans); color:var(--ink2); }
-.sw.sel{ border-color:var(--gold-br); }
-.chip.soft span:nth-child(1){background:#efe9dd;} .chip.soft span:nth-child(2){background:#2c2618;}
-.chip.def span:nth-child(1){background:#f3ead8;} .chip.def span:nth-child(2){background:#1f1b12;}
-.chip.dark span:nth-child(1){background:#26231d;} .chip.dark span:nth-child(2){background:#f0c357;}
-
 /* jump bar */
-.jump{ position:sticky; top:46px; z-index:20; background:var(--surface); border:2px solid var(--line2); border-radius:12px; padding:.5rem .55rem; margin:0 0 1rem; display:flex; gap:.35rem; flex-wrap:wrap; }
-.jump button{ flex:1; min-width:60px; min-height:44px; font:800 .76rem/1 var(--sans); border:2px solid var(--line2); border-radius:9px; background:var(--bg); color:var(--ink); cursor:pointer; }
+.jump{ position:sticky; top:66px; z-index:20; background:var(--surface); border:2px solid var(--line2); border-radius:12px; padding:.5rem .55rem; margin:0 0 1rem; display:flex; gap:.35rem; flex-wrap:wrap; }
+.jump button{ flex:1; min-width:60px; min-height:46px; font:800 .76rem/1 var(--sans); border:2px solid var(--line2); border-radius:9px; background:var(--bg); color:var(--ink); cursor:pointer; }
 .jump button:hover{ border-color:var(--gold-br); } .jump button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 
 /* the river: a week is a reach; markers sit on it */
@@ -103,15 +155,15 @@ body.warm .go{ color:#0f0e0b; }
 .node.sea::before{ background:var(--gold-br); border-color:var(--gold-br); }
 .node .nh{ display:flex; align-items:baseline; gap:.5rem; flex-wrap:wrap; }
 .node .due{ font:800 .74rem/1 var(--sans); letter-spacing:.03em; text-transform:uppercase; color:#fff; background:var(--accent2); border-radius:6px; padding:.26rem .42rem; }
-body.warm .node .due{ color:#0f0e0b; }
+html[data-light="night"] .node .due{ color:#0f0e0b; }
 .node.confluence .due{ background:var(--water-d); }
 .node.sea .due{ background:var(--gold); }
-body.warm .node.sea .due{ color:#0f0e0b; }
+html[data-light="night"] .node.sea .due{ color:#0f0e0b; }
 .node .nt{ font:800 1rem/1.25 var(--sans); color:var(--ink); }
 .node .nb{ font:400 .92rem/1.4 var(--sans); color:var(--ink); margin:.3rem 0 0; }
 .node .feeds{ font:italic 400 .86rem/1.35 var(--serif); color:var(--ink2); margin:.35rem 0 0; }
 .node .trib{ display:inline-block; font:800 .66rem/1 var(--sans); text-transform:uppercase; letter-spacing:.04em; border:2px solid var(--water-d); color:var(--ink); border-radius:5px; padding:.22rem .4rem; }
-.cal{ margin-top:.55rem; min-height:44px; font:800 .82rem/1 var(--sans); cursor:pointer; background:var(--bg); color:var(--ink); border:2px solid var(--accent2); border-radius:9px; padding:.5rem .7rem; display:inline-flex; align-items:center; gap:.4rem; text-decoration:none; }
+.cal{ margin-top:.55rem; min-height:46px; font:800 .82rem/1 var(--sans); cursor:pointer; background:var(--bg); color:var(--ink); border:2px solid var(--accent2); border-radius:9px; padding:.5rem .7rem; display:inline-flex; align-items:center; gap:.4rem; text-decoration:none; }
 .cal:hover{ border-color:var(--gold-br); } .cal:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 
 .legend{ border:2px solid var(--line2); border-radius:12px; background:var(--surface); padding:.7rem .85rem; margin:0 0 1.1rem; font:400 .9rem/1.45 var(--sans); }
@@ -123,38 +175,59 @@ body.warm .node.sea .due{ color:#0f0e0b; }
 .legend .d3{ background:var(--gold-br); }
 
 .foot{ margin-top:1.6rem; padding:1rem; background:var(--accent); color:#fff; border-radius:12px; font-family:var(--sans); font-size:.8rem; }
-body.warm .foot{ color:#0f0e0b; }
+html[data-light="night"] .foot{ color:#0f0e0b; }
 .sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
-@media (max-width:520px){ body{font-size:18px;} h1{font-size:1.4rem;} .wrap{padding:1rem .8rem 5rem;} }
+
+/* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+.se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; border-top:2px solid var(--line2); }
+.se-rail a,.se-rail button{ min-height:var(--tap); padding:10px 18px; border:1.5px solid var(--line2); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer; }
+.se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+@media (max-width:520px){ body{font-size:1.125rem;} h1{font-size:1.4rem;} .wrap{padding:1rem .8rem 2rem;} }
 @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
 </style>
 </head>
 <body>
-<div class="topbar">
-  <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 10 C14 14 14 6 22 10 C30 14 30 6 36 10 M6 20 C14 24 14 16 22 20 C30 24 30 16 36 20 M6 30 C14 34 14 26 22 30 C30 34 30 26 36 30" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
-  <span class="wm">The Course River — EN195</span>
-  <button class="cstop" id="cstop" aria-label="Change comfort palette">Comfort</button>
+
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 27" fill="none" stroke="currentColor" aria-hidden="true" focusable="false"><path d="M33.2 13.5 L33.3 13.6 L33.3 13.8 L33.4 13.9 L33.4 14.1 L33.4 14.3 L33.3 14.5 L33.3 14.7 L33.2 14.9 L33.1 15.0 L33.0 15.2 L32.8 15.4 L32.7 15.5 L32.5 15.7 L32.2 15.8 L32.0 15.9 L31.7 15.9 L31.5 16.0 L31.2 16.0 L30.9 15.9 L30.6 15.9 L30.3 15.8 L30.1 15.7 L29.8 15.5 L29.5 15.3 L29.3 15.1 L29.1 14.8 L28.9 14.5 L28.7 14.2 L28.6 13.9 L28.5 13.5 L28.4 13.1 L28.4 12.7 L28.4 12.3 L28.5 11.9 L28.6 11.5 L28.8 11.2 L29.0 10.8 L29.2 10.4 L29.5 10.1 L29.8 9.8 L30.2 9.5 L30.6 9.3 L31.1 9.1 L31.5 8.9 L32.0 8.8 L32.5 8.8 L33.0 8.8 L33.5 8.8 L34.0 8.9 L34.5 9.1 L35.0 9.3 L35.5 9.6 L35.9 9.9 L36.4 10.3 L36.7 10.8 L37.1 11.2 L37.3 11.8 L37.6 12.3 L37.7 12.9 L37.9 13.5 L37.9 14.1 L37.9 14.7 L37.8 15.4 L37.6 16.0 L37.4 16.6 L37.1 17.2 L36.8 17.8 L36.3 18.3 L35.8 18.8 L35.3 19.2 L34.7 19.6 L34.1 19.9 L33.4 20.2 L32.7 20.4 L32.0 20.5 L31.3 20.6 L30.5 20.5 L29.8 20.4 L29.0 20.2 L28.3 19.9 L27.6 19.5 L26.9 19.1 L26.3 18.6 L25.8 18.0 L25.3 17.4 L24.8 16.7 L24.4 16.0 L24.2 15.2 L23.9 14.3 L23.8 13.5 L23.8 12.6 L23.9 11.8 L24.0 10.9 L24.2 10.0 L24.6 9.2 L25.0 8.4 L25.5 7.7 L26.1 7.0 L26.8 6.3 L27.5 5.7 L28.3 5.3 L29.2 4.8 L30.1 4.5 L31.0 4.3 L32.0 4.2 L33.0 4.1 L34.0 4.2 L35.0 4.4 L35.9 4.7 L36.9 5.1 L37.8 5.6 L38.6 6.2 L39.4 6.8 L40.1 7.6 L40.8 8.4 L41.3 9.4 L41.8 10.3 L42.1 11.3 L42.4 12.4 L42.5 13.5" stroke-width="2.3" stroke-linecap="round"/><circle cx="32" cy="13.5" r="1.6" fill="currentColor" stroke="none"/></svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
 </div>
 
 <div class="wrap">
 
-  <!-- SCREEN 0 — COMFORT GATE -->
-  <section class="screen on" id="gate" aria-labelledby="gateh">
-    <div class="where">First, your eyes</div>
-    <h1 id="gateh">Pick what's comfortable to read.</h1>
-    <p class="beat">Sets the whole thing before it starts. Change it any time from the corner.</p>
-    <div class="swatches" id="swatches" role="radiogroup" aria-label="Comfort palette">
-      <div class="sw" tabindex="0" role="radio" aria-checked="false" data-stop="softer"><span class="chip soft" aria-hidden="true"><span></span><span></span></span><span><span class="lbl">Softer</span><br><span class="subt">gentle paper, lower contrast</span></span></div>
-      <div class="sw sel" tabindex="0" role="radio" aria-checked="true" data-stop="default"><span class="chip def" aria-hidden="true"><span></span><span></span></span><span><span class="lbl">Default</span><br><span class="subt">warm paper, dark ink</span></span></div>
-      <div class="sw" tabindex="0" role="radio" aria-checked="false" data-stop="warm"><span class="chip dark" aria-hidden="true"><span></span><span></span></span><span><span class="lbl">Warm-dark</span><br><span class="subt">amber on charcoal (not pure black/white)</span></span></div>
-    </div>
-    <button class="go" id="enterBtn">This is comfortable — show me the river &rarr;</button>
-  </section>
-
-  <!-- SCREEN 1 — THE RIVER -->
-  <section class="screen" id="river" aria-labelledby="riverh">
+  <!-- SCREEN 1 — THE RIVER (the landing screen; scene shows on load, no wall) -->
+  <section class="screen on" id="river" aria-labelledby="riverh">
     <div class="where">EN195 · Summer 2026 · May 26 – July 3</div>
     <h1 id="riverh">Your course is a river.</h1>
+    <p class="updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v17 <span style="opacity:.75">75e938c</span></span> </span>
     <p class="lead">Four kinds of writing flow in as tributaries. Each <b>workshop</b> is where your draft meets your readers. Everything reaches the sea: your <b>portfolio</b>. Follow it down — you always know what's next and what it feeds.</p>
 
     <div class="legend">
@@ -176,22 +249,47 @@ body.warm .foot{ color:#0f0e0b; }
   </div>
 </div>
 
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="index.html" aria-label="Home">Home</a>
+</nav>
+
 <script>
 (function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+
+  /* ---- STUDIO EYES ---- */
+  // last-updated: computed, not typed
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+
+  /* ---- THE RIVER ---- */
   var $=function(id){return document.getElementById(id);};
-
-  var stops=['softer','default','warm'], ci=1;
-  function applyStop(s){ document.body.classList.remove('softer','warm'); if(s==='softer')document.body.classList.add('softer'); if(s==='warm')document.body.classList.add('warm'); }
-  Array.prototype.forEach.call(document.querySelectorAll('.sw'),function(sw){
-    function pick(){ document.querySelectorAll('.sw').forEach(function(x){x.classList.remove('sel'); x.setAttribute('aria-checked','false');}); sw.classList.add('sel'); sw.setAttribute('aria-checked','true'); applyStop(sw.dataset.stop); ci=stops.indexOf(sw.dataset.stop); }
-    sw.addEventListener('click',pick);
-    sw.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); }});
-  });
-  $('cstop').addEventListener('click',function(){ ci=(ci+1)%3; applyStop(stops[ci]); this.textContent='Comfort: '+stops[ci].charAt(0).toUpperCase()+stops[ci].slice(1);
-    document.querySelectorAll('.sw').forEach(function(x){ var on=x.dataset.stop===stops[ci]; x.classList.toggle('sel',on); x.setAttribute('aria-checked',on?'true':'false'); }); });
-
-  function show(id){ document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');}); $(id).classList.add('on'); window.scrollTo(0,0); var h=$(id).querySelector('h1'); if(h){ h.setAttribute('tabindex','-1'); h.focus(); } }
-  $('enterBtn').addEventListener('click',function(){ show('river'); buildRiver(); });
 
   /* ---- the schedule: ARCHITECTURE ONLY. dates real (2026 6wk1). no names/titles/groups. ---- */
   var YEAR=2026;
@@ -208,24 +306,24 @@ body.warm .foot{ color:#0f0e0b; }
       { t:'WORKSHOP 1 — submit your CNF piece', due:'Fri Jun 5', date:[5,5], type:'confluence', body:'Pick one CNF piece, revise, and submit it for workshop. Your draft enters the current where readers will meet it.', feeds:'feeds → Workshop 1 responses (Week 3)' }
     ]},
     { id:'w3', n:'Week 3', d:'June 8 – 14', nodes:[
-      { t:'WORKSHOP 1 — respond to your group', due:'Mon Jun 8', date:[5,8], type:'confluence', body:'Read and comment on your group\u2019s CNF pieces: two margin comments + a short end response each.', feeds:'the first confluence — drafts meet readers' },
+      { t:'WORKSHOP 1 — respond to your group', due:'Mon Jun 8', date:[5,8], type:'confluence', body:'Read and comment on your group’s CNF pieces: two margin comments + a short end response each.', feeds:'the first confluence — drafts meet readers' },
       { t:'Read into Poetry + Discussion Board #3', due:'Tue Jun 9', date:[5,9], body:'Components of poetry; strategies for reading a poem.' },
-      { t:'Draft: Where I\u2019m From', due:'Wed Jun 10', date:[5,10], body:'Your first poem from the template.', trib:'Poetry' },
+      { t:'Draft: Where I’m From', due:'Wed Jun 10', date:[5,10], body:'Your first poem from the template.', trib:'Poetry' },
       { t:'Draft: Free Verse poem (no rhyme)', due:'Thu Jun 11', date:[5,11], body:'A second poem; Discussion Board #3 replies.', trib:'Poetry' },
       { t:'WORKSHOP 2 — submit your poem', due:'Fri Jun 12', date:[5,12], type:'confluence', body:'Pick one poem, revise, submit for workshop.', feeds:'feeds → Workshop 2 responses (Week 4)' }
     ]},
     { id:'w4', n:'Week 4', d:'June 15 – 21', nodes:[
-      { t:'WORKSHOP 2 — respond to your group', due:'Mon Jun 15', date:[5,15], type:'confluence', body:'Comment on your group\u2019s poems following the peer-response guide.', feeds:'the second confluence' },
+      { t:'WORKSHOP 2 — respond to your group', due:'Mon Jun 15', date:[5,15], type:'confluence', body:'Comment on your group’s poems following the peer-response guide.', feeds:'the second confluence' },
       { t:'Read into the 10-minute Play', due:'Tue Jun 16', date:[5,16], body:'Play/screenplay form + tension; brainstorm your play. (Juneteenth Thu Jun 19.)' },
       { t:'Read 3 short plays + Discussion Board #4', due:'Wed Jun 17', date:[5,17], body:'On plot, conflict, and what makes a 10-minute play compelling.' },
-      { t:'Write + submit your 10-minute play', due:'Mon Jun 22', date:[5,22], type:'confluence', body:'A 9\u201311 minute play, timed out loud; ~1,000\u20131,500 words. Submit for Workshop 3. (Deadline moved from Jun 21 for Father\u2019s Day.)', trib:'Play', feeds:'feeds → Workshop 3 responses (Week 5)' }
+      { t:'Write + submit your 10-minute play', due:'Mon Jun 22', date:[5,22], type:'confluence', body:'A 9–11 minute play, timed out loud; ~1,000–1,500 words. Submit for Workshop 3. (Deadline moved from Jun 21 for Father’s Day.)', trib:'Play', feeds:'feeds → Workshop 3 responses (Week 5)' }
     ]},
     { id:'w5', n:'Week 5', d:'June 22 – 28', nodes:[
       { t:'WORKSHOP 3 — respond to your group', due:'Tue Jun 23', date:[5,23], type:'confluence', body:'Five margin comments + an end response on each play in your group.', feeds:'the third confluence' },
       { t:'Read into Flash Fiction + Discussion Board #5', due:'Fri Jun 26', date:[5,26], body:'Story shapes, a flash-fiction guide, and three short stories read as a writer.', trib:'Flash' }
     ]},
     { id:'w6', n:'Week 6', d:'June 29 – July 3', last:true, nodes:[
-      { t:'Write your flash fiction story', due:'Mon Jun 29', date:[5,29], type:'confluence', body:'750\u20132000 words, any genre, self-contained. Submit for Workshop 4.', trib:'Flash', feeds:'feeds → Workshop 4 responses' },
+      { t:'Write your flash fiction story', due:'Mon Jun 29', date:[5,29], type:'confluence', body:'750–2000 words, any genre, self-contained. Submit for Workshop 4.', trib:'Flash', feeds:'feeds → Workshop 4 responses' },
       { t:'Course reflection — Discussion Board #6', due:'Tue Jun 30', date:[5,30], body:'Reflect on your experience in the course (300+ words).' },
       { t:'WORKSHOP 4 — respond to your group', due:'Wed Jul 1', date:[6,1], type:'confluence', body:'Five margin comments + an end response on each flash piece in your group.', feeds:'the last confluence — every tributary has now joined' },
       { t:'Portfolio + Artist Statement', due:'Wed Jul 2', date:[6,2], type:'sea', body:'All four streams arrive: your revised pieces + an artist statement. This is the sea. No final exam.', feeds:'the river reaches the sea' }
@@ -272,11 +370,16 @@ body.warm .foot{ color:#0f0e0b; }
       body.appendChild(reach);
     });
   }
+
+  /* Land on the river — WEEKS is defined by now; build it once (guarded). */
+  buildRiver();
 })();
 </script>
 
-<!-- TSP shared mobile nav + device adaptation -->
-<script>window.TSP_MOBILE = { home:"index.html" };</script>
+<!-- TSP shared mobile nav + device adaptation. nav:false — the Comfort Kernel v2 chrome
+     already carries Home (top) and the Back+Home rail (bottom); the shared floating nav
+     would double it. Gamepad/rotate hint stay dormant (no controls configured). -->
+<script>window.TSP_MOBILE = { home:"index.html", nav:false };</script>
 <!-- TSP-MOBILE (inlined from tsp-mobile.js — single-file-offline law) -->
 <script>
 /* Tight Spiral Studios — shared mobile controls + Home/Back nav.
@@ -337,9 +440,9 @@ body.warm .foot{ color:#0f0e0b; }
     if (d.getElementById("tsp-mobile-style")) return;
     var css = [
       /* Navigation chip — always available, subtle on desktop */
-      ".tsp-nav{position:fixed;top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));",
+      ".tsp-nav{position:absolute;top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));",
         "z-index:2147483000;display:flex;gap:8px;font-family:'Helvetica Neue',Arial,sans-serif}",
-      ".tsp-nav a{display:inline-flex;align-items:center;gap:.4em;text-decoration:none;",
+      ".tsp-nav a{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;gap:.4em;text-decoration:none;",
         "padding:.5em .85em;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:.04em;",
         "color:#f4f1e8;background:rgba(20,18,15,.66);border:1px solid rgba(255,207,90,.45);",
         "-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);line-height:1;",
@@ -350,7 +453,7 @@ body.warm .foot{ color:#0f0e0b; }
 
       /* Nav integrated into the studio's shared .topbar (no overlap) */
       ".tsp-barnav{display:inline-flex;align-items:center;gap:.35rem;margin-right:.25rem;flex:none}",
-      ".tsp-barnav a{display:inline-flex;align-items:center;gap:.3em;text-decoration:none;color:inherit;",
+      ".tsp-barnav a{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;gap:.3em;text-decoration:none;color:inherit;",
         "font-family:inherit;font-weight:800;font-size:.82rem;letter-spacing:.02em;line-height:1;",
         "padding:.4em .7em;border-radius:999px;border:1px solid currentColor;opacity:.85;",
         "background:transparent;white-space:nowrap;transition:opacity .12s,background .12s}",
@@ -377,7 +480,21 @@ body.warm .foot{ color:#0f0e0b; }
       ".tsp-btn.big{min-width:82px;min-height:82px;font-size:16px}",
       ".tsp-btn:active,.tsp-btn.on{background:rgba(255,207,90,.9);color:#1a0d09;transform:scale(.94)}",
       /* Hide gamepad on non-touch so desktop keeps keyboard feel */
-      ".tsp-no-touch .tsp-pad{display:none}"
+      ".tsp-no-touch .tsp-pad{display:none}",
+
+      /* Rotate-for-more-room hint — canvas games only, portrait phones only */
+      ".tsp-rot{position:fixed;left:50%;transform:translateX(-50%);top:calc(72px + env(safe-area-inset-top));",
+        "z-index:2147482500;display:none;align-items:center;gap:.55em;padding:.5em .55em .5em .9em;",
+        "border-radius:999px;background:rgba(24,20,15,.86);color:#f4f1e8;",
+        "border:1px solid rgba(255,207,90,.5);white-space:nowrap;",
+        "font:600 12px/1 'Helvetica Neue',Arial,sans-serif;letter-spacing:.02em;",
+        "-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 4px 14px rgba(0,0,0,.4)}",
+      ".tsp-rot .rk{font-size:14px;color:#ffcf5a}",
+      ".tsp-rot button{background:none;border:none;color:inherit;font-size:16px;line-height:1;",
+        "padding:0 .15em;margin:0;cursor:pointer;opacity:.65}",
+      ".tsp-rot button:active{opacity:1}",
+      "@media (orientation:portrait){.tsp-touch .tsp-rot{display:inline-flex}}",
+      ".tsp-rot-dismissed .tsp-rot{display:none!important}"
     ].join("");
     var s = d.createElement("style");
     s.id = "tsp-mobile-style";
@@ -508,11 +625,30 @@ body.warm .foot{ color:#0f0e0b; }
     window.addEventListener("blur", release);
   }
 
+  /* ---- Rotate hint -------------------------------------------------------- */
+  function buildRotateHint() {
+    if (!hasTouch) return;
+    if (cfg.rotateHint === false) return;
+    if (!cfg.controls || !cfg.controls.length) return;   // canvas games only
+    if (d.querySelector(".tsp-rot")) return;
+    var hint = d.createElement("div");
+    hint.className = "tsp-rot";
+    hint.setAttribute("role", "note");
+    hint.innerHTML = '<span class="rk">↻</span>' +
+      '<span>Turn sideways for more room</span>' +
+      '<button type="button" aria-label="Dismiss">×</button>';
+    hint.querySelector("button").addEventListener("click", function () {
+      root.classList.add("tsp-rot-dismissed");
+    });
+    d.body.appendChild(hint);
+  }
+
   /* ---- Boot --------------------------------------------------------------- */
   function boot() {
     injectStyles();
     buildNav();
     buildPad();
+    buildRotateHint();
   }
 
   if (d.readyState === "loading") {

@@ -63,10 +63,10 @@ built this pass to close the quantitative gap.
 |---|---|---|---|
 | **1 · Written/Oral Comm** | 🟢 **Built** (strongest lane) | The Tell · Sandbags · Cliché Cowpaths · Flash Ballast · Workshop Wall · Review Bench · EN195 Hub | WC VALUE (live) |
 | **2 · Quantitative** | 🟢 **Built** | **Sticker Price** · The Tension Bar (client engine) · Warriors Fantasy Arcade | QL VALUE (not normed) |
-| **3 · Tech / Info-Sci** | 🟢 **Built** | The Console · Funny Boney's Factory · How an Idea Travels | suite-proposed criteria |
+| **3 · Tech / Info-Sci** | 🟢 **Built** | Flok · Funny Boney's Factory · How an Idea Travels · Whose Draft | suite-proposed criteria |
 | **4 · Natural World** | 🟢 **Built** | **Update the Model** | Scientific reasoning (not normed) |
 | **5 · DEI** | 🟢 **Built** | **Who Holds the Room** · Choose Your Leader | **ISLO #5 (live)** |
-| **6 · Critical Thinking** | 🟢 **Built** (deepest lane) | Choose Your Leader · The Console · The Viscosity · The Compound Capstone · Warriors · Behind This Door | ISLO #6 (in development) |
+| **6 · Critical Thinking** | 🟢 **Built** (deepest lane) | Choose Your Leader · Flok · The Viscosity · The Compound Capstone · Warriors · Behind This Door | ISLO #6 (in development) |
 | **7 · Personal/Civic** | 🟢 **Built** | Play the Semester · The Course River · Workshop Wall · FYS Treasure Trove | suite-proposed reflective rubric |
 
 **Net:** all 7 outcomes built. What remains open is the *measure* side — four outcomes (2, 3, 4, 7) have no locally-normed MassBay rubric yet; iSLO 6's rubric is still in development.

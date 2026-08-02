@@ -1,12 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <head>
 <meta charset="utf-8">
+<meta name="tsp:surface" content="tool">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sticker Price — every number is a headline. Read the fine print. · Tight Spiral Productions</title>
 <meta name="description" content="A quantitative-reasoning game for MassBay students. Take a headline number — a loan, a tuition sticker, a statistic in an argument, a small monthly charge — and pull it apart into what it actually means over time. Guess first, then the arithmetic. Single-file, offline, contrast-gated.">
 
 <!-- tsp:outcome       MassBay iSLO 2 — Quantitative Skills. Build side of islo-hub.html.
+     Source:           MassBay iSLO 2 (Quantitative Skills) per islo-hub.html; AAC&U Quantitative Literacy
+                       VALUE dimensions. Figures are editable examples — method, not market data (nothing fabricated).
+     tsp:last-verified 2026-07-19 — formulas + the AAC&U QL framework checked against source on ship day.
      tsp:engine        cost-decomposition bar reused from advantage-intake.html (The Tension Bar), pointed
                        at numbers students actually meet. Dignity framing kept: the NUMBER asks — never "you are short."
      tsp:measure       AAC&U Quantitative Literacy VALUE — Interpretation · Calculation · Assumptions · Communication.
@@ -20,14 +24,43 @@
 :root{
   --paper:#fbfaf7; --paper-2:#f1eee6; --rule:#d8d2c4;
   --ink:#14181d; --ink-2:#3d4652; --ink-3:#5c6675;
-  --brass-ink:#6a4d12; --brass-fill:#d9a441;
-  --cool-ink:#274063; --cool-fill:#c3d2e6;
+  --brass-ink:#6a4d12; --brass-fill:#d9a441; --brass-slab-ink:#d9a441;
+  --cool-ink:#274063; --cool-fill:#c3d2e6; --cool-line:#274063;
+  --ink-line:#14181d;
   --live-ink:#1d5c3f; --warn-ink:#8a2f22;
   --slab:#12161b; --slab-ink:#f4f1e8;
   --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
   --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
 }
+/* ── STUDIO EYES — Light: Dusk / Warm-dark (token remaps; every text >=4.5:1) ── */
+html[data-light="dusk"]{
+  --paper:#e9ddc2; --paper-2:#ddceac; --rule:#c9b58a;
+  --ink:#171009; --ink-2:#352b1a; --ink-3:#4b4534;
+  --brass-ink:#5a3f0e; --cool-ink:#22384f; --cool-line:#22384f;
+  --live-ink:#184c33; --warn-ink:#7a281c; --ink-line:#2a2213;
+}
+html[data-light="night"]{ /* warm charcoal, never pure black */
+  --paper:#1b1814; --paper-2:#262019; --rule:#463f30;
+  --ink:#f3e7cb; --ink-2:#d9c9a2; --ink-3:#b8a887;
+  --brass-ink:#e0b25a; --cool-ink:#9fb6d0; --cool-line:#9fb6d0;
+  --cool-fill:#2c3f52; --brass-fill:#5c4514;
+  --live-ink:#7fc79e; --warn-ink:#e8967f; --ink-line:#5a4f3a;
+}
+/* per-case accents restated light for warm-dark (used as kicker/reading text) */
+html[data-light="night"] .case[data-acc="1"], html[data-light="night"] .rail button[data-acc="1"]{--acc:#9fb6d0; --acc-ink:#9fb6d0}
+html[data-light="night"] .case[data-acc="2"], html[data-light="night"] .rail button[data-acc="2"]{--acc:#7fc79e; --acc-ink:#7fc79e}
+html[data-light="night"] .case[data-acc="3"], html[data-light="night"] .rail button[data-acc="3"]{--acc:#e0a07f; --acc-ink:#e0a07f}
+html[data-light="night"] .case[data-acc="4"], html[data-light="night"] .rail button[data-acc="4"]{--acc:#c3a0d8; --acc-ink:#c3a0d8}
+/* kernel component tokens */
+:root{ --surface:var(--paper); --surface-2:var(--paper-2); --accent-strong:#1e3350; --on-accent:#ffffff; --focus:#8a3a1c; --tap:48px; }
+/* ── STUDIO EYES — text size + comfort toggles ── */
+html.se-a1{ zoom:1.15; }
+html.se-a2{ zoom:1.3; }
+html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+html.se-contrast:not([data-light="night"]){ --paper:#ffffff; --paper-2:#f2ece0; --ink:#0e1114; --ink-2:#242c34; --ink-3:#3c434c; --rule:#b7ab92; }
+html.se-contrast[data-light="night"]{ --paper:#0c0b09; --paper-2:#17140f; --ink:#fff7e6; --ink-2:#ecdcb6; --ink-3:#cdbd97; }
+html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:17px; line-height:1.55; -webkit-font-smoothing:antialiased}
@@ -36,14 +69,14 @@ body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans
 /* ── STANDING NAV ───────────────────────────────────────────────────────── */
 .topnav{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1.5px solid var(--rule)}
 .topnav-in{max-width:760px; margin:0 auto; padding:9px 22px; display:flex; align-items:center; gap:10px}
-.topnav a{display:inline-flex; align-items:center; gap:.35em; text-decoration:none; font-family:var(--mono); font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-2); padding:.42em .8em; border:1.5px solid var(--rule); border-radius:999px; background:var(--paper-2); transition:border-color .12s,color .12s}
-.topnav a:hover{border-color:var(--cool-ink); color:var(--ink)}
-.topnav a:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
+.topnav a{display:inline-flex; align-items:center; gap:.35em; text-decoration:none; font-family:var(--mono); font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-2); min-height:44px; padding:.42em .8em; border:1.5px solid var(--rule); border-radius:999px; background:var(--paper-2); transition:border-color .12s,color .12s}
+.topnav a:hover{border-color:var(--cool-line); color:var(--ink)}
+.topnav a:focus-visible{outline:3px solid var(--cool-line); outline-offset:2px}
 .topnav-mark{margin-left:auto; font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 @media (max-width:520px){ .topnav-mark{display:none} }
 
 /* ── STAGE ─────────────────────────────────────────────────────────────── */
-.stage{padding:44px 0 26px; border-bottom:2px solid var(--ink)}
+.stage{padding:44px 0 26px; border-bottom:2px solid var(--ink-line)}
 .mark{font-family:var(--mono); font-size:11.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--brass-ink); font-weight:700; margin:0 0 16px}
 h1{font-family:var(--serif); font-size:clamp(30px,6vw,50px); line-height:1.06; margin:0 0 16px; letter-spacing:-.015em; font-weight:400}
 h1 em{font-style:italic; color:var(--cool-ink)}
@@ -61,9 +94,9 @@ h1 em{font-style:italic; color:var(--cool-ink)}
 }
 .rail button .rn{display:block; font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); margin-bottom:3px}
 .rail button .rt{display:block; font-family:var(--serif); font-size:16px; line-height:1.15; color:var(--ink)}
-.rail button:hover{border-color:var(--acc,var(--cool-ink))}
-.rail button:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
-.rail button[aria-current="true"]{border-color:var(--acc,var(--cool-ink)); color:var(--ink); background:var(--paper)}
+.rail button:hover{border-color:var(--acc,var(--cool-line))}
+.rail button:focus-visible{outline:3px solid var(--cool-line); outline-offset:2px}
+.rail button[aria-current="true"]{border-color:var(--acc,var(--cool-line)); color:var(--ink); background:var(--paper)}
 .rail button[data-done="1"] .rn::after{content:" · read"; color:var(--live-ink)}
 
 /* ── CASE ──────────────────────────────────────────────────────────────── */
@@ -88,36 +121,36 @@ h1 em{font-style:italic; color:var(--cool-ink)}
 .ctl-q{font-size:16px; color:var(--ink); font-weight:600; margin:0 0 3px}
 .ctl-w{font-size:14px; color:var(--ink-3); line-height:1.5; margin:0 0 10px; max-width:58ch}
 .row{display:flex; align-items:center; gap:14px; flex-wrap:wrap}
-input[type=range]{flex:1 1 220px; accent-color:var(--cool-ink); height:26px}
+input[type=range]{flex:1 1 220px; accent-color:var(--cool-ink); height:44px}
 .read{font-family:var(--mono); font-size:22px; font-weight:700; color:var(--ink); min-width:5ch}
 .opts{display:flex; flex-wrap:wrap; gap:8px}
-.opt{font-family:var(--sans); font-size:15px; padding:9px 14px; border:1.5px solid var(--rule); border-radius:2px; background:var(--paper); color:var(--ink-2); cursor:pointer; font-weight:500}
+.opt{font-family:var(--sans); font-size:15px; min-height:44px; padding:9px 14px; border:1.5px solid var(--rule); border-radius:2px; background:var(--paper); color:var(--ink-2); cursor:pointer; font-weight:500}
 .opt[aria-pressed="true"]{background:var(--slab); color:var(--slab-ink); border-color:var(--slab); font-weight:600}
-.opt:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
-.numin{font-family:var(--mono); font-size:18px; padding:9px 12px; border:1.5px solid var(--rule); border-radius:2px; background:var(--paper); color:var(--ink); width:150px}
-.numin:focus-visible{outline:3px solid var(--cool-ink); outline-offset:1px; border-color:var(--ink)}
+.opt:focus-visible{outline:3px solid var(--cool-line); outline-offset:2px}
+.numin{font-family:var(--mono); font-size:18px; min-height:44px; padding:9px 12px; border:1.5px solid var(--rule); border-radius:2px; background:var(--paper); color:var(--ink); width:150px}
+.numin:focus-visible{outline:3px solid var(--cool-line); outline-offset:1px; border-color:var(--ink-line)}
 
 /* predict gate */
 .predict{border-left:5px solid var(--brass-ink); background:var(--paper-2); border-radius:2px; padding:16px 18px; margin:6px 0 20px}
 .predict .pq{font-size:15.5px; color:var(--ink); font-weight:600; margin:0 0 10px}
 .predict .pq b{color:var(--brass-ink)}
-.btn{font-family:var(--sans); font-size:16px; font-weight:600; padding:11px 20px; background:var(--slab); color:var(--slab-ink); border:0; border-radius:2px; cursor:pointer}
+.btn{font-family:var(--sans); font-size:16px; font-weight:600; min-height:44px; padding:11px 20px; background:var(--slab); color:var(--slab-ink); border:0; border-radius:2px; cursor:pointer}
 .btn:hover{background:#232b35}
-.btn:focus-visible{outline:3px solid var(--cool-ink); outline-offset:3px}
+.btn:focus-visible{outline:3px solid var(--cool-line); outline-offset:3px}
 .btn.ghost{background:var(--paper); color:var(--ink); border:1.5px solid var(--rule)}
-.btn.ghost:hover{border-color:var(--ink); background:var(--paper-2)}
+.btn.ghost:hover{border-color:var(--ink-line); background:var(--paper-2)}
 
 /* the decomposition bar */
 .reveal[hidden]{display:none}
 .bar-lab{font-family:var(--mono); font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3); margin:20px 0 8px}
-.bar{display:flex; height:52px; border:1.5px solid var(--ink); border-radius:3px; overflow:hidden; background:var(--paper)}
+.bar{display:flex; height:52px; border:1.5px solid var(--ink-line); border-radius:3px; overflow:hidden; background:var(--paper)}
 .seg{display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:12.5px; font-weight:700; color:var(--ink); white-space:nowrap; overflow:hidden; transition:flex-basis .35s ease; min-width:0}
 .seg.s-base{background:var(--cool-fill)}
 .seg.s-extra{background:var(--brass-fill)}
 .seg.s-quiet{background:var(--paper-2); color:var(--ink-2)}
 .bar-key{display:flex; flex-wrap:wrap; gap:16px; margin:9px 0 0; font-size:13px; color:var(--ink-2)}
 .bar-key span{display:inline-flex; align-items:center; gap:7px}
-.sw{width:13px; height:13px; border-radius:2px; border:1px solid var(--ink)}
+.sw{width:13px; height:13px; border-radius:2px; border:1px solid var(--ink-line)}
 .sw-base{background:var(--cool-fill)} .sw-extra{background:var(--brass-fill)} .sw-quiet{background:var(--paper-2)}
 
 .reading{border:2px solid var(--acc,var(--rule)); border-radius:4px; padding:18px 20px; margin:20px 0 0; background:var(--paper)}
@@ -153,7 +186,7 @@ input[type=range]{flex:1 1 220px; accent-color:var(--cool-ink); height:26px}
 .sumrow .sv b{font-family:var(--serif)}
 
 .slab{background:var(--slab); color:var(--slab-ink); margin:30px 0 0; padding:26px 22px; border-radius:4px}
-.slab h3{font-family:var(--mono); font-size:12px; letter-spacing:.15em; text-transform:uppercase; color:var(--brass-fill); font-weight:700; margin:0 0 12px}
+.slab h3{font-family:var(--mono); font-size:12px; letter-spacing:.15em; text-transform:uppercase; color:var(--brass-slab-ink); font-weight:700; margin:0 0 12px}
 .slab ul{margin:0; padding-left:20px}
 .slab li{font-size:15px; color:#cdd4dd; line-height:1.6; margin-bottom:8px}
 .slab li b{color:var(--slab-ink)}
@@ -171,22 +204,47 @@ footer a{color:var(--cool-ink); font-weight:600}
 
 @media (prefers-reduced-motion:reduce){*{transition:none}}
 .sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+
+/* ═══ RESERVED CHROME + STUDIO EYES ═══ */
+.se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px; padding:9px 14px; background:var(--surface); border-bottom:2px solid var(--ink-line); position:sticky; top:0; z-index:100; }
+.se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap); padding:8px 12px; border:1.5px solid var(--rule); border-radius:8px; background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; }
+.se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+.se-brand svg{ width:34px; height:20px; color:var(--cool-ink); flex:0 0 auto; }
+.se-brand .wm{ font-family:var(--serif); font-size:16px; letter-spacing:.01em; white-space:nowrap; color:var(--ink); }
+.se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap); padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--accent-strong); color:var(--on-accent); font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer; }
+.se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+@media (max-width:560px){ .se-brand .wm{ display:none; } }
+.se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:101; width:min(320px,calc(100vw - 24px)); background:var(--surface); color:var(--ink); border:2px solid var(--accent-strong); border-radius:10px; padding:15px; box-shadow:0 10px 34px rgba(0,0,0,.28); display:none; }
+.se-panel[data-open="1"]{ display:block; }
+.se-panel h2{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-2); margin:0 0 8px; }
+.se-prow{ display:flex; gap:6px; margin-bottom:14px; }
+.se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--rule); border-radius:8px; background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:12.5px; cursor:pointer; }
+.se-btn[aria-pressed="true"]{ background:var(--accent-strong); color:var(--on-accent); border-color:var(--accent-strong); }
+.se-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px; min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--rule); border-radius:8px; background:var(--surface-2); color:var(--ink); font-family:var(--sans); font-weight:600; font-size:14px; cursor:pointer; text-align:left; }
+.se-tog[aria-pressed="true"]{ border-color:var(--accent-strong); }
+.se-tog .st{ font-family:var(--mono); font-size:11px; color:var(--ink-2); }
+.se-tog[aria-pressed="true"] .st{ color:var(--cool-ink); font-weight:700; }
+.se-tog:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-sronly{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+/* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+.se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; border-top:2px solid var(--rule); background:var(--surface); }
+.se-rail a,.se-rail button{ min-height:var(--tap); padding:10px 18px; border:1.5px solid var(--rule); border-radius:8px; background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer; }
+.se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 </style>
 </head>
 <body>
 
-<!-- STANDING NAV — Home + Back on every product (founder nav floor). Static, no JS, offline. -->
-<nav class="topnav" aria-label="Site navigation">
-  <div class="topnav-in">
-    <a class="backbtn" href="islo-hub.html" aria-label="Back to the iSLO Suite">&lsaquo; Back</a>
-    <a class="homebtn" href="index.html" aria-label="Home — studio front door">&#8962; Home</a>
-    <span class="topnav-mark">Sticker Price · Quantitative Skills</span>
-  </div>
-</nav>
-
-<main class="wrap">
-
-<!-- ═══ STAGE ═══ -->
+<!-- RESERVED CHROME — Home · teaspoon brand · Studio Eyes. Reserves its own row; never overlaps. -->
+<header class="se-chrome">
+  <a class="se-home" href="index.html" aria-label="Home — studio front door">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 27" fill="none" stroke="currentColor" aria-hidden="true" focusable="false"><path d="M33.2 13.5 L33.3 13.6 L33.3 13.8 L33.4 13.9 L33.4 14.1 L33.4 14.3 L33.3 14.5 L33.3 14.7 L33.2 14.9 L33.1 15.0 L33.0 15.2 L32.8 15.4 L32.7 15.5 L32.5 15.7 L32.2 15.8 L32.0 15.9 L31.7 15.9 L31.5 16.0 L31.2 16.0 L30.9 15.9 L30.6 15.9 L30.3 15.8 L30.1 15.7 L29.8 15.5 L29.5 15.3 L29.3 15.1 L29.1 14.8 L28.9 14.5 L28.7 14.2 L28.6 13.9 L28.5 13.5 L28.4 13.1 L28.4 12.7 L28.4 12.3 L28.5 11.9 L28.6 11.5 L28.8 11.2 L29.0 10.8 L29.2 10.4 L29.5 10.1 L29.8 9.8 L30.2 9.5 L30.6 9.3 L31.1 9.1 L31.5 8.9 L32.0 8.8 L32.5 8.8 L33.0 8.8 L33.5 8.8 L34.0 8.9 L34.5 9.1 L35.0 9.3 L35.5 9.6 L35.9 9.9 L36.4 10.3 L36.7 10.8 L37.1 11.2 L37.3 11.8 L37.6 12.3 L37.7 12.9 L37.9 13.5 L37.9 14.1 L37.9 14.7 L37.8 15.4 L37.6 16.0 L37.4 16.6 L37.1 17.2 L36.8 17.8 L36.3 18.3 L35.8 18.8 L35.3 19.2 L34.7 19.6 L34.1 19.9 L33.4 20.2 L32.7 20.4 L32.0 20.5 L31.3 20.6 L30.5 20.5 L29.8 20.4 L29.0 20.2 L28.3 19.9 L27.6 19.5 L26.9 19.1 L26.3 18.6 L25.8 18.0 L25.3 17.4 L24.8 16.7 L24.4 16.0 L24.2 15.2 L23.9 14.3 L23.8 13.5 L23.8 12.6 L23.9 11.8 L24.0 10.9 L24.2 10.0 L24.6 9.2 L25.0 8.4 L25.5 7.7 L26.1 7.0 L26.8 6.3 L27.5 5.7 L28.3 5.3 L29.2 4.8 L30.1 4.5 L31.0 4.3 L32.0 4.2 L33.0 4.1 L34.0 4.2 L35.0 4.4 L35.9 4.7 L36.9 5.1 L37.8 5.6 L38.6 6.2 L39.4 6.8 L40.1 7.6 L40.8 8.4 L41.3 9.4 L41.8 10.3 L42.1 11.3 L42.4 12.4 L42.5 13.5" stroke-width="2.3" stroke-linecap="round"/><circle cx="32" cy="13.5" r="1.6" fill="currentColor" stroke="none"/></svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+<p class="se-stamp" style="margin:.45rem .9rem;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.76rem;opacity:.92;display:flex;align-items:center;gap:.45rem;flex-wrap:wrap"><p class="tag" id="seUpdated" style="margin:8px 0 0">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v11 <span style="opacity:.75">75e938c</span></span> </p>
 <div class="stage">
   <p class="mark">Tight Spiral Productions · MassBay iSLO 2 — Quantitative Skills</p>
   <h1>Every number is a headline. <em>Read the fine print.</em></h1>
@@ -196,6 +254,7 @@ footer a{color:var(--cool-ink); font-weight:600}
   <p class="lede">Four numbers below. For each one: <b>guess first</b>, then watch it come apart.
     The gap between your guess and the arithmetic is the whole skill.</p>
   <p class="tag">Guess · Calculate · Find what it hid · Say it plainly</p>
+   </span>
 
   <svg class="hero-mark" viewBox="0 0 120 64" aria-hidden="true">
     <path d="M60 8 H100 A5 5 0 0 1 105 13 V33 L74 58 A5 5 0 0 1 66 58 L44 36 A5 5 0 0 1 44 28 L55 10 A5 5 0 0 1 60 8 Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
@@ -211,6 +270,32 @@ footer a{color:var(--cool-ink); font-weight:600}
     <button data-acc="3" data-go="2" role="tab" aria-current="false"><span class="rn">Three</span><span class="rt">The Statistic</span></button>
     <button data-acc="4" data-go="3" role="tab" aria-current="false"><span class="rn">Four</span><span class="rt">The Small Charge</span></button>
   </div>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-prow" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-prow" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sronly" id="seSr" role="status" aria-live="polite"></span>
+</div>
+
+<main class="wrap">
+
+<!-- ═══ STAGE ═══ -->
+
 </div>
 
 <!-- ═══ CASE 1 — THE LOAN ═══ -->
@@ -227,7 +312,7 @@ footer a{color:var(--cool-ink); font-weight:600}
       <div class="hl-num" id="l-borrow">$12,000</div>
       <p class="hl-sub">Change any control below. Nothing here is your verdict — it is arithmetic you can steer.</p>
     </div>
-    <svg class="hl-glyph" viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="32" cy="18" rx="18" ry="7" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M14 18 V34 C14 38 22 41 32 41 C42 41 50 38 50 34 V18" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M14 34 V46 C14 50 22 53 32 53 C42 53 50 50 50 46 V34" fill="none" stroke="currentColor" stroke-width="2.6"/></svg>
+    <svg class="hl-glyph" viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="36" cy="46" rx="19" ry="7" fill="var(--rule)"/><path d="M13 18 V42 A19 7 0 0 0 51 42 V18 Z" fill="currentColor"/><ellipse cx="32" cy="18" rx="19" ry="7" fill="currentColor"/><ellipse cx="32" cy="18" rx="11" ry="3.6" fill="var(--paper-2)"/><path d="M13 27 A19 7 0 0 0 51 27" fill="none" stroke="var(--paper-2)" stroke-width="2.4"/><path d="M13 34 A19 7 0 0 0 51 34" fill="none" stroke="var(--paper-2)" stroke-width="2.4"/></svg>
   </div>
 
   <div class="ctl">
@@ -303,7 +388,7 @@ footer a{color:var(--cool-ink); font-weight:600}
       <div class="hl-num" id="s-sticker">$24,000</div>
       <p class="hl-sub">A one-year example. Put your own program's published cost and your own aid in — it re-reads live.</p>
     </div>
-    <svg class="hl-glyph" viewBox="0 0 64 64" aria-hidden="true"><path d="M33 8 H52 A4 4 0 0 1 56 12 V31 L34 53 A4 4 0 0 1 28 53 L11 36 A4 4 0 0 1 11 30 L31 10 A4 4 0 0 1 33 8 Z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><circle cx="46" cy="18" r="3.4" fill="currentColor"/><path d="M30 30 q-4 0 -4 3.5 t4 3.5 t4 3.5 t-4 3.5 M30 26.5 v3 M30 40 v3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    <svg class="hl-glyph" viewBox="0 0 64 64" aria-hidden="true"><path d="M34 12 H54 A4 4 0 0 1 58 16 V36 L37 57 A4 4 0 0 1 31 57 L14 40 A4 4 0 0 1 14 34 L34 12 Z" fill="var(--rule)"/><path d="M30 8 H50 A4 4 0 0 1 54 12 V32 L33 53 A4 4 0 0 1 27 53 L10 36 A4 4 0 0 1 10 30 L30 8 Z" fill="currentColor"/><circle cx="42" cy="20" r="5" fill="var(--paper-2)"/></svg>
   </div>
 
   <div class="ctl">
@@ -364,7 +449,7 @@ footer a{color:var(--cool-ink); font-weight:600}
       <div class="hl-num" id="p-pct">+200%</div>
       <p class="hl-sub" id="p-claim">"Incidents are up 200% since last year."</p>
     </div>
-    <svg class="hl-glyph" viewBox="0 0 64 64" aria-hidden="true"><line x1="10" y1="54" x2="56" y2="54" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><rect x="14" y="44" width="8" height="10" fill="none" stroke="currentColor" stroke-width="2.6"/><rect x="28" y="38" width="8" height="16" fill="none" stroke="currentColor" stroke-width="2.6"/><rect x="42" y="14" width="8" height="40" fill="currentColor"/><path d="M40 12 l6 -6 l6 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg class="hl-glyph" viewBox="0 0 64 64" aria-hidden="true"><g fill="var(--rule)"><rect x="17" y="35" width="10" height="21"/><rect x="31" y="25" width="10" height="31"/><rect x="45" y="15" width="10" height="41"/></g><g fill="currentColor"><rect x="13" y="31" width="10" height="21"/><rect x="27" y="21" width="10" height="31"/><rect x="41" y="11" width="10" height="41"/></g><rect x="9" y="52" width="46" height="4" fill="currentColor"/></svg>
   </div>
 
   <div class="ctl">
@@ -430,7 +515,7 @@ footer a{color:var(--cool-ink); font-weight:600}
       <div class="hl-num" id="m-month">$14.99<span style="font-family:var(--sans);font-size:.3em;color:var(--ink-3)"> /mo</span></div>
       <p class="hl-sub">A subscription, a fee, a "just" — set it to one of yours.</p>
     </div>
-    <svg class="hl-glyph" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="34" r="22" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M32 22 V34 L41 40" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 8 h16 M32 8 v4" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
+    <svg class="hl-glyph" viewBox="0 0 64 64" aria-hidden="true"><circle cx="36" cy="38" r="22" fill="var(--rule)"/><circle cx="32" cy="34" r="22" fill="currentColor"/><circle cx="32" cy="34" r="15" fill="var(--paper-2)"/><path d="M32 34 V23 M32 34 L40 38" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="34" r="2.4" fill="currentColor"/></svg>
   </div>
 
   <div class="ctl">
@@ -507,9 +592,7 @@ footer a{color:var(--cool-ink); font-weight:600}
       Department of Education College Scorecard and the College Board's <i>Trends in College Pricing</i>.
       The <b>statistic</b> case is the base-rate / denominator problem from quantitative-literacy pedagogy.
       Every headline on this page is an <b>editable example</b>, not a claim about any real program or market —
-      the numbers are yours to set. Method, not market. <b>Source:</b> the formulas and public definitions named
-      here (AAC&amp;U Quantitative Literacy VALUE; U.S. Dept. of Education net-price definition; standard fixed-rate
-      amortization). <b>Last-verified 2026-07-19.</b></p>
+      the numbers are yours to set. Method, not market. <b>Source:</b> methods per the U.S. Department of Education College Scorecard, the College Board&rsquo;s <i>Trends in College Pricing</i>, and AAC&amp;U Quantitative Literacy VALUE; competency per MassBay iSLO&nbsp;2 (Graduation Competencies). Formulas and sources last-verified 2026-07-19.</p>
     <p><b>Outcome.</b> Built for MassBay iSLO 2 (Quantitative Skills): <i>use a variety of mathematical
       tools and quantitative reasoning to solve problems and analyze complex challenges.</i> Measured on the
       AAC&amp;U Quantitative Literacy VALUE dimensions — Interpretation, Calculation, Assumptions, Communication.</p>
@@ -521,6 +604,41 @@ footer a{color:var(--cool-ink); font-weight:600}
 </section>
 
 </main>
+
+<!-- BOTTOM NAV RAIL — Back + Home -->
+<nav class="se-rail" aria-label="Page navigation">
+  <a href="islo-hub.html" aria-label="Back to the iSLO Suite">Back</a>
+  <a href="index.html" aria-label="Home — studio front door">Home</a>
+</nav>
+
+<script>
+/* Studio Eyes — light modes, text size, comfort toggles, computed last-updated */
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  var u=document.getElementById('seUpdated');
+  if(u){ var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}); }
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim(); }); });
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim(); }); });
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off'); }); });
+})();
+</script>
 
 <script>
 (function(){

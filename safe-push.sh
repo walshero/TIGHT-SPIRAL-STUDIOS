@@ -42,17 +42,26 @@ else
   echo "  remote: (new file)"
 fi
 
-# 2. GATE — Studio Eyes must pass
+# 2. GATES — measured, not guessed (comfort-gate replaced studio-eyes for contrast/offline
+#    on 2026-07-29: studio-eyes false-positives on light-on-dark and on hrefs/svg-ns).
 if [ "${F##*.}" = "html" ]; then
-  mkdir -p /tmp/_sweep && cp "$F" /tmp/_sweep/
-  if python3 /tmp/studio-eyes-sweep.py /tmp/_sweep 2>/dev/null | grep -q "^HALT"; then
-    echo "  *** HALT — Studio Eyes ***"
-    python3 /tmp/studio-eyes-sweep.py /tmp/_sweep 2>/dev/null | head -6 | sed 's/^/     /'
-    rm -rf /tmp/_sweep
+  if ! python3 comfort-gate.py "$F" >/dev/null 2>&1; then
+    echo "  *** HALT — comfort-gate (real-pixel contrast / dark / offline / emoji) ***"
+    python3 comfort-gate.py "$F" 2>/dev/null | grep -A6 '^HALT' | sed 's/^/     /'
     [ "$SAFE_PUSH_FORCE" != "1" ] && exit 1
   fi
-  rm -rf /tmp/_sweep
-  echo "  studio eyes: 0-HALT"
+  echo "  comfort-gate: pass"
+  if ! python3 version-stamp.py --check "$F" >/dev/null 2>&1; then
+    echo "  *** HALT — no last-updated stamp + version (version-stamp.py) ***"
+    [ "$SAFE_PUSH_FORCE" != "1" ] && exit 1
+  fi
+  echo "  version stamp: present"
+  if ! python3 art-gate.py "$F" >/dev/null 2>&1; then
+    echo "  *** HALT — art-gate (founder ruling 2026-08-01: MJ lane or legal photo, never hand-drawn scene SVG) ***"
+    python3 art-gate.py "$F" 2>/dev/null | sed 's/^/     /'
+    [ "$SAFE_PUSH_FORCE" != "1" ] && exit 1
+  fi
+  echo "  art-gate: pass"
 fi
 
 # 3. PUSH

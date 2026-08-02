@@ -136,6 +136,10 @@ PROBE = r"""
   }
 
   // ---- interactive targets: real rendered box + real focus ring
+  // WCAG 2.5.5 inline exception: an <a> in running prose or a footer/credit byline
+  // is inline text, not a primary touch target (mirrors studio-fingers). It still
+  // must show a focus ring, so it is measured for FOCUS but exempt from TOUCH_TARGET.
+  const INLINE_CTX = 'p,li,dd,dt,blockquote,figcaption,footer,.foot,.credits,.credit,.byline,address,.fc-body,.prose,.bio-card,.award-card,.sec-hd';
   document.querySelectorAll('a,button,input,select,textarea,[role=button],[tabindex]').forEach(el=>{
     const cs = getComputedStyle(el);
     if (cs.display==='none' || cs.visibility==='hidden') return;
@@ -149,10 +153,14 @@ PROBE = r"""
     out.targets.push({
       sel: el.tagName.toLowerCase() + (el.className && typeof el.className==='string'
             ? '.'+el.className.trim().split(/\s+/)[0] : ''),
-      w: r.width, h: r.height, ring: ring
+      w: r.width, h: r.height, ring: ring,
+      inlineLink: el.tagName === 'A' && !!el.closest(INLINE_CTX)
     });
     el.blur();
   });
+  // Focusing the controls above scrolls the page to the last one; reset to the top
+  // so first-screen measurements (opening wall, image floor) see the true first paint.
+  window.scrollTo(0, 0);
 
   // ---- TOKEN-ROLE LAW: a token is atmosphere OR text, never both.
   // Read the real stylesheets the browser assembled (not a regex over source).
@@ -325,7 +333,7 @@ def audit_page(page, path, mode_label):
 
     # -- 3. TOUCH TARGETS + FOCUS
     for t in d['targets']:
-        if t['w'] < MIN_TARGET or t['h'] < MIN_TARGET:
+        if (t['w'] < MIN_TARGET or t['h'] < MIN_TARGET) and not t.get('inlineLink'):
             halts.append(f"TOUCH_TARGET [{mode_label}] {t['sel']} "
                          f"{t['w']:.0f}x{t['h']:.0f}px (floor {MIN_TARGET})")
         if not t['ring']:
@@ -361,6 +369,7 @@ def audit_page(page, path, mode_label):
     # scene-carrying element — svg/img/canvas/video/picture, or any element painting
     # a background-image or gradient — and divide by the viewport. Under 50% HALTs.
     img = page.evaluate("""() => {
+      window.scrollTo(0, 0);   // measure the FIRST screen, not wherever focus left us
       const vw = innerWidth, vh = innerHeight, VP = vw * vh;
       const seen = [], hits = [];
       for (const el of document.querySelectorAll('*')) {
@@ -399,7 +408,8 @@ def audit(path, no_net=True):
     halts = []
     external = []
     with sync_playwright() as p:
-        b = p.chromium.launch()
+        _exe = os.environ.get('SE_CHROME')  # optional explicit chromium path
+        b = p.chromium.launch(**({'executable_path': _exe} if _exe else {}))
         try:
             ctx = b.new_context(viewport={'width':390,'height':844})  # phone-width
 

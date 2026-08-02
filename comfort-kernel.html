@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" data-light="day" data-updated="2026-07-14">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TSP Comfort Kernel — reference &amp; demo</title>
+<!-- ═══════════════════════════════════════════════════════════════════════
+     TSP COMFORT KERNEL v1  —  the one comfort system every studio file mounts.
+     Harvested, not invented:
+       • Day / Dusk / Night ladder  = palettes lifted verbatim from studio/tsp-home.html
+                                       (measured 12–14:1 in all three; night is warm
+                                        charcoal, never pure black — RP halation floor).
+       • Contrast / Large-text / Reduce-motion / Colorblind toggles = from Confluence.
+     Fixes carried in:
+       • control lives BOTTOM-RIGHT, out of the text column — never covers the title
+         (the studio-face bug: a top-right pill sat on "TIGHT SPIRAL PRODUCTIONS").
+       • a Last-updated stamp slot sits directly under the title.
+     Floors: no emoji · single-file · offline · every mode ≥ AA · reduce-motion honored.
+     TOKEN CONTRACT a mounting file styles against:
+       --bg --surface --surface-2 --ink --ink-2 --line --accent --focus
+     ═══════════════════════════════════════════════════════════════════════ -->
+<style>
+/* ---- DAY (default) ---- */
+:root{
+  --bg:#f4ecda; --surface:#fbf5e6; --surface-2:#efe4c8;
+  --ink:#221d12; --ink-2:#463b22;
+  --line:#d8c59a; --accent:#3f5f78; --accent-strong:#2c4658; --focus:#8f3f00; --on-accent:#ffffff;
+  --r:10px; --tap:48px;
+  --serif:Georgia,'Iowan Old Style','Times New Roman',serif;
+  --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+  --motion:.18s;
+}
+/* ---- DUSK (dim the room) ---- */
+html[data-light="dusk"]{
+  --bg:#ecdcbb; --surface:#f3e6c8; --surface-2:#e2c99a;
+  --ink:#241a10; --ink-2:#4a3a1e;
+  --line:#cdb488; --accent:#37536a; --accent-strong:#24384a; --focus:#9c4000; --on-accent:#ffffff;
+}
+/* ---- NIGHT (dark) ---- */
+html[data-light="night"]{
+  --bg:#1c1a16; --surface:#242019; --surface-2:#33302a;
+  --ink:#f2e3bf; --ink-2:#d8c59a;
+  --line:#463f30; --accent:#8aa0b8; --accent-strong:#a9bcd0; --focus:#f0c357; --on-accent:#141109;
+}
+/* ---- TOGGLE: high contrast (halation floor — off-white light / brighter dark, never pure) ---- */
+html.k-contrast:not([data-light="night"]){ --bg:#fbfaf7; --surface:#fbfaf7; --surface-2:#f0ece2; --ink:#141109; --ink-2:#2c2517; --line:#b9a06a; --accent:#243a4a; }
+html.k-contrast[data-light="night"]{ --bg:#0e0d0b; --surface:#161410; --ink:#fff7e6; --ink-2:#efe0bc; --accent:#b9cbe0; }
+/* ---- TOGGLE: large text ---- */
+html.k-large{ font-size:118%; }
+/* ---- TOGGLE: reduce motion ---- */
+html.k-reduce *,@media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+/* ---- TOGGLE: colorblind cues (never color alone) ---- */
+html.k-cb a{ text-decoration:underline; text-underline-offset:2px; }
+html.k-cb .k-chip{ border:2px solid currentColor; }
+
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--serif); line-height:1.55;
+  padding:2rem 1.25rem calc(var(--tap) + 3.5rem); /* bottom pad so nothing hides behind the control */
+  transition:background var(--motion) ease, color var(--motion) ease;
+  max-width:44rem; margin:0 auto;
+}
+.k-eyebrow{ font-family:var(--sans); font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+  font-size:.8rem; color:var(--focus); margin:0 0 .25rem; }
+/* Last-updated stamp — directly under the title block */
+.k-updated{ font-family:var(--sans); font-size:.78rem; color:var(--ink-2); margin:.1rem 0 1.4rem;
+  display:flex; align-items:center; gap:.4rem; }
+.k-updated::before{ content:""; width:.5rem; height:.5rem; border-radius:50%; background:var(--accent); flex:0 0 auto; }
+h1{ font-size:clamp(2rem,6vw,3rem); line-height:1.08; margin:.2rem 0 .6rem; }
+h1 em{ color:var(--accent-strong); font-style:italic; }
+p{ font-size:1.05rem; margin:0 0 1.1rem; }
+a{ color:var(--accent-strong); }
+.k-chip{ display:inline-block; font-family:var(--sans); font-size:.82rem; font-weight:600;
+  padding:.15rem .6rem; border-radius:20px; background:var(--surface-2); color:var(--ink); }
+.k-foot{ font-family:var(--sans); letter-spacing:.1em; text-transform:uppercase; font-size:.82rem;
+  color:var(--ink-2); margin-top:2rem; }
+
+/* ═══ THE CONTROL — fixed bottom-right, out of the text column ═══ */
+.k-fab{ position:fixed; right:1rem; bottom:1rem; z-index:400;
+  min-height:var(--tap); min-width:var(--tap); padding:.55rem .9rem;
+  display:inline-flex; align-items:center; gap:.5rem;
+  background:var(--accent-strong); color:var(--on-accent); border:2px solid transparent; border-radius:var(--r);
+  font-family:var(--sans); font-weight:700; font-size:.9rem; cursor:pointer; }
+.k-fab:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.k-panel{ position:fixed; right:1rem; bottom:calc(var(--tap) + 1.4rem); z-index:401;
+  width:min(320px, calc(100vw - 2rem)); background:var(--surface); color:var(--ink);
+  border:2px solid var(--accent-strong); border-radius:var(--r); padding:1rem;
+  box-shadow:0 10px 34px rgba(0,0,0,.28); display:none; }
+.k-panel[data-open="1"]{ display:block; }
+.k-panel h2{ font-family:var(--sans); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink-2); margin:0 0 .5rem; }
+.k-row{ display:flex; gap:.4rem; margin-bottom:.9rem; }
+.k-btn{ flex:1; min-height:var(--tap); padding:.5rem; border:2px solid var(--line); border-radius:8px;
+  background:var(--surface-2); color:var(--ink); font-family:var(--sans); font-weight:600; font-size:.9rem; cursor:pointer; }
+.k-btn[aria-pressed="true"]{ border-color:var(--accent-strong); background:var(--accent-strong); color:var(--on-accent); }
+.k-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.k-toggle{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:.6rem;
+  min-height:var(--tap); padding:.5rem .7rem; margin-bottom:.4rem; border:2px solid var(--line);
+  border-radius:8px; background:var(--surface-2); color:var(--ink); font-family:var(--sans);
+  font-weight:600; font-size:.9rem; cursor:pointer; text-align:left; }
+.k-toggle[aria-pressed="true"]{ border-color:var(--accent-strong); }
+.k-toggle .k-state{ font-size:.78rem; color:var(--ink-2); }
+.k-toggle[aria-pressed="true"] .k-state{ color:var(--accent-strong); font-weight:700; }
+.k-toggle:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+</style>
+</head>
+<body>
+  <p class="k-eyebrow">Tight Spiral Productions</p>
+  <h1>We build instruments that show you the rules <em>while they are being run on you.</em></h1>
+  <p class="k-updated" id="kUpdated">Last updated: <span id="kUpdatedDate">—</span></p>
+
+  <p>Most software hides its machinery. Ours hands it to you and lets you turn it. You pull the levers, then the seat turns around and shows you your own telemetry.</p>
+  <p>Some of these are games. Some are assessment tools designed for a college. One is designed for a Manhattan relocation firm. They are the same engine wearing different clothes: make the invisible constraint visible, and let the person <a href="#">find it</a> rather than be told.</p>
+  <p><span class="k-chip">Play</span> &nbsp; <span class="k-chip">Notice</span> &nbsp; <span class="k-chip">Design</span></p>
+  <p class="k-foot">Play &middot; Notice &middot; Design</p>
+
+  <!-- CONTROL -->
+  <button class="k-fab" id="kFab" aria-expanded="false" aria-controls="kPanel" aria-label="Comfort settings">Comfort</button>
+  <div class="k-panel" id="kPanel" role="dialog" aria-label="Comfort settings">
+    <h2>Light</h2>
+    <div class="k-row" role="group" aria-label="Light level">
+      <button class="k-btn" data-light-set="day"   aria-pressed="true">Day</button>
+      <button class="k-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+      <button class="k-btn" data-light-set="night" aria-pressed="false">Night</button>
+    </div>
+    <h2>Comfort</h2>
+    <button class="k-toggle" data-tog="k-contrast" aria-pressed="false">High contrast <span class="k-state">Off</span></button>
+    <button class="k-toggle" data-tog="k-large"    aria-pressed="false">Larger text <span class="k-state">Off</span></button>
+    <button class="k-toggle" data-tog="k-reduce"   aria-pressed="false">Reduce motion <span class="k-state">Off</span></button>
+    <button class="k-toggle" data-tog="k-cb"       aria-pressed="false">Colorblind cues <span class="k-state">Off</span></button>
+  </div>
+
+<script>
+/* TSP Comfort Kernel — minimal, dependency-free, no storage (single-file/offline floor). */
+(function(){
+  var root=document.documentElement;
+  // Last-updated: read data-updated on <html> if present, else file's own build stamp.
+  var stamp=root.getAttribute('data-updated') || document.lastModified || '';
+  var d=new Date(stamp);
+  document.getElementById('kUpdatedDate').textContent =
+    isNaN(d) ? stamp : d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+
+  var fab=document.getElementById('kFab'), panel=document.getElementById('kPanel');
+  fab.addEventListener('click',function(){
+    var open=panel.getAttribute('data-open')==='1';
+    panel.setAttribute('data-open',open?'0':'1');
+    fab.setAttribute('aria-expanded',String(!open));
+  });
+  // Light ladder
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){
+    b.addEventListener('click',function(){
+      root.setAttribute('data-light',b.getAttribute('data-light-set'));
+      [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){
+        x.setAttribute('aria-pressed',String(x===b));
+      });
+    });
+  });
+  // Toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){
+    b.addEventListener('click',function(){
+      var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+      root.classList.toggle(cls,on);
+      b.setAttribute('aria-pressed',String(on));
+      b.querySelector('.k-state').textContent=on?'On':'Off';
+    });
+  });
+})();
+</script>
+</body>
+</html>

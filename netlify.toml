@@ -1,0 +1,23 @@
+# TIGHT SPIRAL PRODUCTIONS - Netlify site config
+# Single-file HTML surfaces, no build step, one server-side function.
+#
+# The model key is NOT here and never will be. Set it once in the Netlify UI:
+#   Site configuration -> Environment variables -> Add a variable
+#   Key:   ANTHROPIC_API_KEY
+#   Value: the key
+# Netlify injects it into the function at runtime as process.env.ANTHROPIC_API_KEY.
+
+[build]
+  publish   = "."
+  functions = "netlify/functions"
+  command   = ""
+
+[functions]
+  node_bundler = "esbuild"
+
+# Nothing is cached long. These surfaces change and a stale copy in a phone
+# browser reads as a bug, not a cache.
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"

@@ -58,18 +58,38 @@
     --focus:#9fd0ff;         /* cool focus ring — reads as light, not a warning */
     --measure:1.5rem;
     --tap:44px;
+    /* ── STUDIO EYES chrome tokens (day/default) — dark chrome to match the room ── */
+    --se-surface:#1b2530; --se-surface-2:#26333f; --se-ink:#eef1f4; --se-ink-2:#c4ccd4;
+    --se-line:#3a4a58; --se-accent:#c7b28a; --se-on-accent:#171208; --se-focus:#9fd0ff;
+    --se-ui:"Helvetica Neue",Arial,system-ui,sans-serif;
+    --se-serif:"Iowan Old Style","Palatino Linotype",Georgia,serif;
+    --se-r:10px;
   }
-  /* Softer stop — separated paper, text stays near-white */
-  html[data-comfort="softer"]{
+  /* ── STUDIO EYES · Light = DUSK (was the "softer" stop) — separated paper, text near-white ── */
+  html[data-light="dusk"]{
     --paper:#20272f; --wall:#2b3742; --wall-lit:#38454f;
     --ink:#fbf7ef; --ink-dim:#dfe4ea; --label:#e0c79c;
+    --se-surface:#2b3742; --se-surface-2:#38454f; --se-ink:#fbf7ef; --se-ink-2:#dfe4ea;
+    --se-line:#4a5560; --se-accent:#d8c19a; --se-on-accent:#1a130a; --se-focus:#bfe0ff;
   }
-  /* Warm-dark stop — amber on deep charcoal. TEXT pale warm-white, high contrast; glow still atmosphere. */
-  html[data-comfort="warm"]{
+  /* ── STUDIO EYES · Light = WARM-DARK (was "warm") — amber on warm charcoal, never pure black ── */
+  html[data-light="night"]{
     --paper:#161009; --wall:#241a0e; --wall-lit:#33260f;
     --ink:#ffe6b8; --ink-dim:#f0d29a; --label:#ffcf8a;
     --screen:#e6d4ad; --screen-hot:#f3e6c8; --glow:#e0952f;
+    --se-surface:#241a0e; --se-surface-2:#33260f; --se-ink:#ffe6b8; --se-ink-2:#f0d29a;
+    --se-line:#4a3a1e; --se-accent:#e0c79c; --se-on-accent:#161009; --se-focus:#f0c357;
   }
+  /* ── STUDIO EYES · text size ── */
+  html.se-a1 body{ font-size:clamp(19px,2.9vw,22px); }
+  html.se-a2 body{ font-size:clamp(21px,3.3vw,25px); }
+  /* ── STUDIO EYES · high contrast (raise ink only; never lowers a ratio) ── */
+  html.se-contrast{ --ink:#ffffff; --ink-dim:#f2f5f8; }
+  html.se-contrast[data-light="night"]{ --ink:#fff3d6; --ink-dim:#ffe6b8; }
+  /* ── STUDIO EYES · reduce motion ── */
+  html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+  /* ── STUDIO EYES · colorblind cues ── */
+  html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
 
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
@@ -94,7 +114,9 @@
   }
 
   h1,h2{font-weight:700;line-height:1.15;letter-spacing:-.01em;margin:0 0 .5em}
-  h1{font-size:clamp(1.9rem,7vw,2.7rem)}
+  /* h1 receives a programmatic tabindex="-1" as a focus landing target on each
+     stage; give it a control-sized box so the render gate's target floor is met. */
+  h1{font-size:clamp(1.9rem,7vw,2.7rem);min-height:44px}
   h2{font-size:clamp(1.4rem,5vw,1.9rem)}
   p{margin:0 0 1em;max-width:38ch}
   .lead{font-size:1.12rem;color:var(--ink)}
@@ -114,17 +136,52 @@
   :focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:2px}
   button:focus:not(:focus-visible){outline:none}
 
-  /* ─── COMFORT CORNER (live, immediate, never a gate) ─────────── */
-  .comfort{position:fixed;top:8px;right:8px;z-index:60;display:flex;gap:4px;
-    background:rgba(10,14,18,.82);backdrop-filter:blur(6px);
-    padding:5px;border-radius:999px;border:1px solid var(--rule)}
-  .comfort button{min-width:38px;min-height:38px;border-radius:999px;
-    border:1px solid transparent;background:transparent;color:var(--ink-dim);
-    font-size:1rem;line-height:1}
-  .comfort button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-  .comfort .lbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-  .snd-toggle{position:fixed;top:8px;left:8px;z-index:60;
-    min-height:38px;padding:6px 12px;border-radius:999px;
+  /* ═══ RESERVED CHROME — grid header (Home · teaspoon brand · Studio Eyes); reserves its own row ═══ */
+  .se-chrome{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;
+    padding:9px 14px;background:var(--se-surface);border-bottom:2px solid var(--se-line);
+    position:sticky;top:0;z-index:100}
+  .se-home{justify-self:start;display:inline-flex;align-items:center;gap:7px;min-height:var(--tap);
+    padding:8px 12px;border:1.5px solid var(--se-line);border-radius:8px;background:var(--se-surface-2);
+    color:var(--se-ink);font-family:var(--se-ui);font-weight:700;font-size:13px;letter-spacing:.04em;text-decoration:none}
+  .se-brand{justify-self:center;display:inline-flex;align-items:center;gap:9px;color:var(--se-ink)}
+  .se-brand svg{width:34px;height:20px;color:var(--se-accent);flex:0 0 auto}
+  .se-brand .wm{font-family:var(--se-serif);font-size:16px;letter-spacing:.01em;white-space:nowrap;color:var(--se-ink)}
+  .se-eyes{justify-self:end;display:inline-flex;align-items:center;gap:7px;min-height:var(--tap);
+    padding:8px 13px;border:2px solid transparent;border-radius:8px;background:var(--se-accent);
+    color:var(--se-on-accent);font-family:var(--se-ui);font-weight:700;font-size:13px;letter-spacing:.04em;cursor:pointer}
+  .se-home:focus-visible,.se-eyes:focus-visible{outline:3px solid var(--se-focus);outline-offset:2px}
+  @media (max-width:560px){ .se-brand .wm{display:none} }
+
+  /* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+  .se-panel{position:fixed;right:12px;top:calc(var(--tap) + 24px);z-index:101;
+    width:min(320px,calc(100vw - 24px));background:var(--se-surface);color:var(--se-ink);
+    border:2px solid var(--se-accent);border-radius:var(--se-r);padding:15px;
+    box-shadow:0 10px 34px rgba(0,0,0,.5);display:none}
+  .se-panel[data-open="1"]{display:block}
+  .se-panel h2{font-family:var(--se-ui);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--se-ink-2);margin:0 0 8px}
+  .se-prow{display:flex;gap:6px;margin-bottom:14px}
+  .se-btn{flex:1;min-height:var(--tap);padding:8px 4px;border:1.5px solid var(--se-line);border-radius:8px;
+    background:var(--se-surface-2);color:var(--se-ink);font-family:var(--se-ui);font-weight:700;font-size:12.5px;cursor:pointer}
+  .se-btn[aria-pressed="true"]{background:var(--se-accent);color:var(--se-on-accent);border-color:var(--se-accent)}
+  .se-btn:focus-visible{outline:3px solid var(--se-focus);outline-offset:2px}
+  .se-tog{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;
+    min-height:var(--tap);padding:8px 11px;margin-bottom:6px;border:1.5px solid var(--se-line);border-radius:8px;
+    background:var(--se-surface-2);color:var(--se-ink);font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;text-align:left}
+  .se-tog[aria-pressed="true"]{border-color:var(--se-accent)}
+  .se-tog .st{font-family:var(--se-ui);font-size:11px;color:var(--se-ink-2)}
+  .se-tog[aria-pressed="true"] .st{color:var(--se-accent);font-weight:700}
+  .se-tog:focus-visible{outline:3px solid var(--se-focus);outline-offset:2px}
+  .se-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+  /* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+  .se-rail{display:flex;gap:10px;justify-content:center;padding:20px;border-top:2px solid var(--se-line);background:var(--se-surface)}
+  .se-rail a,.se-rail button{min-height:var(--tap);padding:10px 18px;border:1.5px solid var(--se-line);border-radius:8px;
+    background:var(--se-surface-2);color:var(--se-ink);font-family:var(--se-ui);font-weight:700;font-size:13px;letter-spacing:.04em;text-decoration:none;cursor:pointer}
+  .se-rail a:focus-visible,.se-rail button:focus-visible{outline:3px solid var(--se-focus);outline-offset:2px}
+
+  /* ─── SOUND (gameplay control, live, never a gate) — sits below the reserved chrome ─── */
+  .snd-toggle{position:fixed;top:calc(var(--tap) + 30px);left:8px;z-index:60;
+    min-height:44px;padding:6px 12px;border-radius:999px;
     background:rgba(10,14,18,.82);backdrop-filter:blur(6px);
     border:1px solid var(--rule);color:var(--ink-dim);
     font-family:"Helvetica Neue",Arial,sans-serif;font-size:.7rem;
@@ -255,15 +312,49 @@
 </head>
 <body>
 
-<!-- COMFORT CORNER: live immediately, never a gate -->
-<div class="comfort" role="group" aria-label="Comfort">
-  <button data-comfort="softer" aria-pressed="false" title="Softer"><span class="lbl">Softer light</span>◐</button>
-  <button data-comfort="default" aria-pressed="true" title="Default"><span class="lbl">Default</span>●</button>
-  <button data-comfort="warm" aria-pressed="false" title="Warm dark"><span class="lbl">Warm dark</span>◑</button>
+<!-- RESERVED CHROME — Home · teaspoon brand · Studio Eyes (never overlaps content) -->
+<header class="se-chrome">
+  <a class="se-home" href="index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 27" fill="none" stroke="currentColor" aria-hidden="true" focusable="false"><path d="M33.2 13.5 L33.3 13.6 L33.3 13.8 L33.4 13.9 L33.4 14.1 L33.4 14.3 L33.3 14.5 L33.3 14.7 L33.2 14.9 L33.1 15.0 L33.0 15.2 L32.8 15.4 L32.7 15.5 L32.5 15.7 L32.2 15.8 L32.0 15.9 L31.7 15.9 L31.5 16.0 L31.2 16.0 L30.9 15.9 L30.6 15.9 L30.3 15.8 L30.1 15.7 L29.8 15.5 L29.5 15.3 L29.3 15.1 L29.1 14.8 L28.9 14.5 L28.7 14.2 L28.6 13.9 L28.5 13.5 L28.4 13.1 L28.4 12.7 L28.4 12.3 L28.5 11.9 L28.6 11.5 L28.8 11.2 L29.0 10.8 L29.2 10.4 L29.5 10.1 L29.8 9.8 L30.2 9.5 L30.6 9.3 L31.1 9.1 L31.5 8.9 L32.0 8.8 L32.5 8.8 L33.0 8.8 L33.5 8.8 L34.0 8.9 L34.5 9.1 L35.0 9.3 L35.5 9.6 L35.9 9.9 L36.4 10.3 L36.7 10.8 L37.1 11.2 L37.3 11.8 L37.6 12.3 L37.7 12.9 L37.9 13.5 L37.9 14.1 L37.9 14.7 L37.8 15.4 L37.6 16.0 L37.4 16.6 L37.1 17.2 L36.8 17.8 L36.3 18.3 L35.8 18.8 L35.3 19.2 L34.7 19.6 L34.1 19.9 L33.4 20.2 L32.7 20.4 L32.0 20.5 L31.3 20.6 L30.5 20.5 L29.8 20.4 L29.0 20.2 L28.3 19.9 L27.6 19.5 L26.9 19.1 L26.3 18.6 L25.8 18.0 L25.3 17.4 L24.8 16.7 L24.4 16.0 L24.2 15.2 L23.9 14.3 L23.8 13.5 L23.8 12.6 L23.9 11.8 L24.0 10.9 L24.2 10.0 L24.6 9.2 L25.0 8.4 L25.5 7.7 L26.1 7.0 L26.8 6.3 L27.5 5.7 L28.3 5.3 L29.2 4.8 L30.1 4.5 L31.0 4.3 L32.0 4.2 L33.0 4.1 L34.0 4.2 L35.0 4.4 L35.9 4.7 L36.9 5.1 L37.8 5.6 L38.6 6.2 L39.4 6.8 L40.1 7.6 L40.8 8.4 L41.3 9.4 L41.8 10.3 L42.1 11.3 L42.4 12.4 L42.5 13.5" stroke-width="2.3" stroke-linecap="round"/><circle cx="32" cy="13.5" r="1.6" fill="currentColor" stroke="none"/></svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+<p class="se-stamp" style="margin:.4rem 0 1rem;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.76rem;opacity:.92;display:flex;align-items:center;gap:.45rem"><span id="seUpdated">Last updated&hellip;</span> <span class="se-version" style="font:inherit;opacity:.85">&middot; v9 <span style="opacity:.75">d701f4e</span></span> </span> </span></span></p>
+<script>(function(){var u=document.getElementById('seUpdated');if(!u)return;var d=new Date(document.lastModified);u.textContent=isNaN(d.getTime())?'Last updated recently':'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});})();</script>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-prow" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-prow" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
 </div>
+
+<!-- Sound: gameplay control (live, off by default), sits below the reserved chrome -->
 <button class="snd-toggle" id="sndBtn" aria-pressed="false">Sound: off</button>
 
 <div class="stage" id="stage"><!-- screens injected --></div>
+
+<!-- BOTTOM NAV RAIL — Back + Home -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="index.html" aria-label="Home">Home</a>
+</nav>
 
 <script>
 /* ══════════════════════════════════════════════════════════════
@@ -314,16 +405,35 @@ sndBtn.addEventListener('click',()=>{
   else stopRoomTone();
 });
 
-/* ─── COMFORT ─── */
-document.querySelectorAll('.comfort button').forEach(b=>{
-  b.addEventListener('click',()=>{
-    const v=b.dataset.comfort;
-    document.querySelectorAll('.comfort button').forEach(x=>x.setAttribute('aria-pressed','false'));
-    b.setAttribute('aria-pressed','true');
-    if(v==='default') document.documentElement.removeAttribute('data-comfort');
-    else document.documentElement.setAttribute('data-comfort',v);
-  });
-});
+/* ─── STUDIO EYES — reserved-chrome comfort control (light ladder · text size · toggles) ─── */
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // Light: Default(day) / Dusk / Warm-dark(night) — remaps html[data-light]
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    var v=b.getAttribute('data-light-set');
+    if(v==='day') root.removeAttribute('data-light'); else root.setAttribute('data-light', v);
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // Text size A / A+ / A++
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // Toggles: high contrast · reduce motion · colorblind cues
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+})();
 
 /* ─── SCREEN ROUTER (scroll-reset on every change) ─── */
 function show(html){
@@ -437,7 +547,7 @@ function scrRoom(){
     </div>
     <p class="lead" id="roomPrompt">Tap whatever your eye goes to. Every read is valid — then the room speaks.</p>
     <div class="hit-note" id="hitNote"></div>
-    <div class="actions"><button class="btn" id="roomNext" style="opacity:.45;pointer-events:none" onclick="scrBlind()">The set warms up →</button></div>
+    <div class="actions"><button class="btn" id="roomNext" disabled style="opacity:.45;pointer-events:none" onclick="scrBlind()">The set warms up →</button></div>
   `);
   const note=document.getElementById('hitNote'), next=document.getElementById('roomNext');
   stage.querySelectorAll('.hit').forEach(btn=>{
@@ -445,7 +555,7 @@ function scrRoom(){
       const k=+btn.dataset.k; S.taps.add(k); btn.classList.add('tapped');
       note.textContent=HITS[k].note; note.classList.add('show');
       setTimeout(()=>note.classList.remove('show'),3400);
-      if(S.taps.size>=1){ next.style.opacity='1'; next.style.pointerEvents='auto';
+      if(S.taps.size>=1){ next.disabled=false; next.style.opacity='1'; next.style.pointerEvents='auto';
         document.getElementById('roomPrompt').textContent='When you\'re ready, the set warms up.'; }
     });
   });
@@ -461,7 +571,7 @@ function scrBlind(){
     <blockquote class="quote">${QUOTE}</blockquote>
     <p class="lead">${ASK}</p>
     ${scaleHTML('blind')}
-    <div class="actions"><button class="btn" id="blindNext" style="opacity:.45;pointer-events:none" onclick="scrRecord()">Commit →</button></div>
+    <div class="actions"><button class="btn" id="blindNext" disabled style="opacity:.45;pointer-events:none" onclick="scrRecord()">Commit →</button></div>
   `);
   wireScale('blind', v=>{ S.blind=v; enable('blindNext'); });
 }
@@ -478,7 +588,7 @@ function scrRecord(){
     <blockquote class="quote">${QUOTE}</blockquote>
     <p class="lead">${ASK}</p>
     ${scaleHTML('post')}
-    <div class="actions"><button class="btn" id="postNext" style="opacity:.45;pointer-events:none" onclick="scrDescent()">See where it pulled you →</button></div>
+    <div class="actions"><button class="btn" id="postNext" disabled style="opacity:.45;pointer-events:none" onclick="scrDescent()">See where it pulled you →</button></div>
   `);
   wireScale('post', v=>{ S.post=v; enable('postNext'); });
 }
@@ -500,7 +610,7 @@ function wireScale(id,cb){
     });
   });
 }
-function enable(id){ const el=document.getElementById(id); el.style.opacity='1'; el.style.pointerEvents='auto'; }
+function enable(id){ const el=document.getElementById(id); el.disabled=false; el.style.opacity='1'; el.style.pointerEvents='auto'; }
 
 /* THE DESCENT — Beat 3. Re-derived ipsative math + visual Maslow ladder. */
 const RUNGS = [
@@ -575,17 +685,29 @@ function riverSVG(){
     <text x="280" y="${y2-12}" fill="#d8d2c6" font-family="Helvetica Neue,Arial" font-size="11" text-anchor="end">after</text>
   </svg>`;
 }
-/* mnemonic icons per rung (C5 — symbol lands faster than the word) */
+/* mnemonic icons per rung (C5 — symbol lands faster than the word).
+   Art direction C — Cut-Paper Relief: a single offset shadow layer, a solid warm
+   shape, and paper-dark cutouts. Solid fills beat thin strokes for low vision. */
 function rungIcon(k){
-  const s='width="34" height="34" viewBox="0 0 34 34" fill="none" stroke="#c8a24a" stroke-width="1.8"';
   const I={
-    eye:`<circle cx="17" cy="17" r="6"/><path d="M3 17c4-7 24-7 28 0-4 7-24 7-28 0z"/>`,
-    voice:`<path d="M17 5v24"/><path d="M11 11v12M23 11v12M6 15v6M28 15v6"/>`,
-    we:`<circle cx="12" cy="14" r="4"/><circle cx="22" cy="14" r="4"/><path d="M5 27c1-5 6-6 7-6M22 21c1 0 6 1 7 6"/>`,
-    shield:`<path d="M17 4l11 4v8c0 7-5 11-11 14-6-3-11-7-11-14V8z"/>`,
-    floor:`<path d="M5 24h24"/><path d="M9 24V14M17 24V10M25 24V17"/>`,
+    eye:`<ellipse cx="19" cy="19" rx="14" ry="9" fill="var(--glow-soft)"/>`+
+        `<ellipse cx="17" cy="17" rx="14" ry="9" fill="var(--label)"/>`+
+        `<circle cx="17" cy="17" r="6" fill="var(--paper)"/><circle cx="17" cy="17" r="2.6" fill="var(--label)"/>`,
+    voice:`<rect x="7" y="8" width="24" height="24" rx="5" fill="var(--glow-soft)"/>`+
+          `<rect x="4" y="5" width="24" height="24" rx="5" fill="var(--label)"/>`+
+          `<g fill="var(--paper)"><rect x="9" y="15" width="3.5" height="8" rx="1.6"/>`+
+          `<rect x="14.5" y="11" width="3.5" height="12" rx="1.6"/><rect x="20" y="14" width="3.5" height="9" rx="1.6"/></g>`,
+    we:`<g fill="var(--glow-soft)"><circle cx="13" cy="15" r="6.5"/><circle cx="25" cy="15" r="6.5"/></g>`+
+       `<g fill="var(--label)"><circle cx="11" cy="13" r="6.5"/><circle cx="23" cy="13" r="6.5"/></g>`,
+    shield:`<path d="M19 6 L30 10 V19 C30 26 25 30 19 32 C13 30 8 26 8 19 V10 Z" fill="var(--glow-soft)"/>`+
+           `<path d="M17 4 L28 8 V17 C28 24 23 28 17 30 C11 28 6 24 6 17 V8 Z" fill="var(--label)"/>`+
+           `<g fill="var(--paper)"><rect x="15.25" y="11" width="3.5" height="11" rx="1.6"/><rect x="12" y="15" width="10" height="3.5" rx="1.6"/></g>`,
+    floor:`<rect x="6" y="24" width="26" height="6" rx="2" fill="var(--glow-soft)"/>`+
+          `<g fill="var(--label)"><rect x="8" y="10" width="4.5" height="12" rx="1.6"/>`+
+          `<rect x="14.5" y="14" width="4.5" height="8" rx="1.6"/><rect x="21" y="17" width="4.5" height="5" rx="1.6"/></g>`+
+          `<rect x="4" y="22" width="26" height="6" rx="2" fill="var(--label)"/>`,
   };
-  return `<svg class="ic" ${s} aria-hidden="true">${I[k]||I.eye}</svg>`;
+  return `<svg class="ic" width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">${I[k]||I.eye}</svg>`;
 }
 
 /* ARC — the whole slice at once + Glass Engine door */

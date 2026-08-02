@@ -29,6 +29,23 @@ Governance is rate-limited by shipping. Debt must be paid before more is drawn.
 
 ---
 
+## THE PUSH RULE (fidelity is a check, not a wish)
+
+Every file written to the repo through the Zapier lane is verified by blob sha,
+because that lane is **functional-exact, not byte-exact** — it strips comment and
+blank lines in transit, and the CDN cache + markdown reads both lie on readback.
+The blob sha is the one readout that cannot be faked.
+
+> **Before an oversized or canon-comment push: `lane-fidelity.py plan <file>`.
+> After: `lane-fidelity.py check <file> <sha-git-returned>`. MATCH = ship.
+> DIFFER = HALT and decide (PAT re-push for byte-exact, or accept the strip on
+> purpose and re-run the artifact's own gate on the repo copy to prove logic
+> survived).**
+
+`"created: true"` is never proof. The blob sha is.
+
+---
+
 ## SESSION-OPEN CHECK (fires with the three seats)
 
 Read the last two lines below. If the most recent line is `GOV` and the one
@@ -43,6 +60,14 @@ Format: `DATE | SHIP or GOV | what a player can now do (or what governance was a
 2026-07-19 | GOV | added BUILD-DEBT.md ratio rule. DEBT +1. Next session owes a build.
 2026-07-19 | SHIP | preship-gate-v4.py render-proof teeth: the gate now catches the class where a screen passes at 13:1 and renders unreadable on Matt's retina (opacity floor + RP warm-hue floor). A builder can no longer ship a gold-on-unpainted screen the old gate green-lit. Canaried: your-rp-world HALTs, viscosity SHIPs. DEBT paid.
 2026-07-19 | SHIP | choose-your-leader-v6.html (the assessment flagship, worst file in the corpus sweep) now renders legible in all three comfort modes: default label cooled off gold, softer+daylight teal/rust darkened to clear 4.5, a malformed daylight hex removed. Gate v4 SHIP, worst pair 4.87, verified on the repo copy after push. A student can now read the CYL scene in every comfort stop.
+2026-07-19 | SHIP | the-console.html role clarity + Post→Boost verb fix (the standing coherence-gate blocker named in the opportunity bridge / GALA workback). Round 1's button no longer reads "Post" (which implied the player posts content); it reads "Boost" and every tap now lights a heart on a feed post, so the operator's act reads as acting ON the feed. Each scene now carries a job-posting-style assignment brief ("Growth Operator · Assignment N / 5") naming what the player is doing to users that round. Telemetry label updated to match. Verified end-to-end in headless Chromium (brief renders, Boost fires, hearts light, no JS errors). A player now knows their role in every scene.
+2026-07-21 | SHIP | preship-gate-v4.py v4.1 flip-check contrast guard: the gate stopped false-halting correctly-inverted mid-tone palettes (it was banding lum-0.30–0.48 grounds as "mid" and flagging good work). Now it asks the real question — does the text clear 4.5 on any surface in that mode — before crying H-FLIP. Verified byte-exact on the repo copy via blob sha 52edb293, canary suite 4/4 correct. A builder's clean inverted palette no longer gets blocked by a phantom.
+2026-07-21 | GOV | lane-fidelity.py + THE PUSH RULE: file-fidelity is now a deterministic check (git blob sha), not a hand-done readback that got skipped. plan-before / check-after. Self-verified its own push byte-exact (blob 5f72b7be). Permitted: prior three lines are SHIP.
+2026-07-22 | SHIP | the-console.html (Flok) mobile-first pass: comfort is now a single "Comfort" button that opens the display options ON TAP and is never shown unasked (founder floor "comfort is a knob, not a wall," sharpened — even the knobs stay hidden until summoned; panel dismisses on outside-tap/Escape). Home/back nav raised to the 44px touch floor — fixed in the shared tsp-mobile.js source too, so every game inherits it on re-inline. Verified on a 412px touch viewport: panel hidden→opens→closes, options toggle, Boost fires, 0 console errors; ratchet floor holds. A thumb can now run Flok.
+2026-07-22 | SHIP | dad-energy.html play fixes: (1) the "Stall" scene no longer contradicts itself — the castle is finished and its paint just needs ten untouchable minutes to dry, so keeping the child busy (read/negotiate/spin a tale) is the whole job, not building-while-reading; (2) collapsed the redundant per-stage flow — the choice feedback and the castle's next piece now share ONE screen instead of a feedback screen followed by a separate build screen; (3) raised its inlined home nav to the 44px touch floor. Verified: full 5-scene playthrough, castle rides each choice screen, ending "The castle held." renders, passes Studio Fingers, 0 console errors, ratchet floor holds. Fewer taps to the same ending.
+2026-07-22 | GOV | studio-eyes/studio-fingers.py — the touch wing of Studio Eyes. Renders each page on a 412px phone and HALTs on sub-44px tap targets (F-TAP), sideways scroll (F-VIEWPORT), missing meta-viewport (F-METAVIEW), and comfort options shown unasked (F-WALL). Self-test discriminates: GOOD canary clean, two bad canaries catch all four codes. It caught Flok's own 28–31px nav links before this pass fixed them. Permitted: prior line is SHIP.
+2026-07-26 | SHIP | old-problems-at-new-speed.html repaired via the 3-lens diagnostic (TSP tools + game-heuristics agent + media-frameworks agent). Unanimous fix: comfort is now a single button that opens the display options on tap, never a wall (was 4 controls front-loaded before the scene). Plus: garden logic bug fixed (exactly one path taken, never both), scene switched to dvh. Verified: passes Studio Fingers, comfort knob works, 0 console errors, ratchet holds.
+2026-07-26 | GOV | studio-fingers.py F-WALL hardened + os-block-aleph-diagnose-repair.md. The paper exposed a blind spot (F-WALL matched label-words only, missed "Warm-dark/Dim the room/Default"); added container-based wall detection (comfort/theme container, 2+ controls, no toggle). Re-verified: catches the paper, still passes Flok/Dad Energy real toggles, self-test green. Protocol doc captures the 3-lens diagnose->synthesize->repair loop. Permitted: prior line is SHIP.
 ```
 
 ---

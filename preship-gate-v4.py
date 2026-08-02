@@ -1,21 +1,81 @@
 #!/usr/bin/env python3
-# PRE-SHIP GATE v4 - render-proof teeth
-# ------------------------------------------------------------------
-# v3 (contrast + flip_check + image_floor + nav_floor) preserved verbatim.
-# v4 ADDS, per the 2026-07-16 handoff (a screen passed at 13:1, rendered at 1.17:1):
-#   TOOTH 5  opacity_floor  - a full-screen surface must PAINT an opaque bg in
-#                             EVERY comfort mode, or light text can land on the
-#                             white in-app-browser sheet showing through.
-#   TOOTH 6  hue_floor      - RP reader: warm-mode TEXT must be COOL near-white at
-#                             full strength. Amber/gold is fill/accent only, never
-#                             color:. WCAG can pass 13:1 while the retina fails.
-# v4.1 REFINES flip_check with a contrast guard (see inline) so a correctly-
-#   inverted mid-tone palette no longer trips a false H-FLIP. When a check flags
-#   good work, the check is the suspect.
-import re, sys, os
-AA_BODY = 4.5
-AAA     = 7.0
+"""
+STUDIO EYES - PRE-SHIP GATE  v4
+Tight Spiral Productions
 
+v4 REPLACES v3 AND ABSORBS svg-text-floor.py.
+Delete both. Three files implementing overlapping teeth is the ~30-rules
+problem in script form: when six checks should have caught something and
+only the arithmetic one did, the answer is more arithmetic in ONE place.
+
+WHAT v3 GOT WRONG - three holes, all on the dark axis
+-----------------------------------------------------
+1. prefers-color-scheme appeared ZERO times in preship-contrast-gate.py,
+   preship-gate-v3.py and studio-eyes-sweep.py. The palette the operating
+   system actually applies had never been measured by anything. C1 checked
+   that a color-scheme DECLARATION existed - it verified the promise and
+   never the palette. Declaring "light dark" and shipping no dark tokens is
+   worse than declaring nothing: it tells the OS not to force-darken, then
+   hands it a light palette to render on a dark surface.
+
+2. v3 lost v2's html[data-comfort="x"] parsing. v2 had 2 occurrences, v3 had
+   0. Any file using that convention was checked in light mode only and
+   printed "modes: default" while a whole second palette sat unread. A
+   silent regression is worse than a missing feature because the output
+   still looks like a pass.
+
+3. E1 (font floor, 18px absolute / 20px body) was correct and blind. Studio
+   Eyes reads sizes off the WeasyPrint box tree, and WeasyPrint treats <svg>
+   as a replaced image, so it never builds text boxes for SVG glyphs. A
+   <text font-size="3.4"> in viewBox="0 0 100 66" is 3.4 USER UNITS: on a
+   330px surface that paints at 11.2px. table-four.html passed both gates at
+   exit 0, worst pair 6.38:1, and the founder could not read the labels.
+   Same shape as your-rp-world.html: token claimed 13.23:1, device painted
+   1.17:1. The gate certifies declarations. The eye reads pixels.
+
+DARK IS NOT OPTIONAL HERE. A file with no dark palette HALTs. Every text
+token is measured in every mode, and a mode is any of the four conventions
+below - not just the one this month's gate happens to parse.
+
+Studio Eyes keeps the render lens (WeasyPrint, real widths, pixel sampling).
+It should CALL floors() from this module rather than reimplement it, so each
+tooth has exactly one implementation.
+
+exit 0 = ship.  exit 1 = HALT.
+"""
+import re, sys, os, json
+
+# ---------- RATCHET ----------
+# Founder ruling 2026-07-26: "dark mode ready everywhere" is reached by burning
+# down a counted debt, not by freezing the repo. A halt already recorded in the
+# baseline for that exact path is DEBT and prints as a warning. A halt NOT in the
+# baseline is a REGRESSION and exits 1. A file absent from the baseline is new
+# work and is held to the full floor. Debt count prints every run so it cannot
+# rot quietly. Ratchet only ever tightens: nothing is added to the baseline by
+# the gate itself.
+BASELINE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'gate-baseline.json')
+
+def load_baseline():
+    try:
+        return json.load(open(BASELINE))
+    except Exception:
+        return {}
+
+def code_of(halt):
+    return halt.split()[0]
+
+AA_BODY, AAA = 4.5, 7.0
+FONT_FLOOR_ABS, FONT_FLOOR_BODY = 18.0, 20.0
+SVG_RENDER_W = 330.0   # 360px Android viewport less 24px scene padding and 6px border
+                       # - the narrowest real surface in the corpus
+
+TEXT_PROPS = ('color',)
+DECO_PROPS = ('background', 'background-color', 'background-image', 'border',
+              'border-color', 'border-top', 'border-bottom', 'border-left',
+              'border-right', 'box-shadow', 'fill', 'stroke', 'outline',
+              'outline-color', 'text-shadow')
+
+# ---------- colour arithmetic ----------
 def hex2rgb(h):
     h = h.strip().lstrip('#')
     if len(h) == 3:
@@ -26,32 +86,53 @@ def hex2rgb(h):
         return tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
     except ValueError:
         return None
+
 def lum(rgb):
     def f(c):
         c = c / 255.0
         return c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
     r, g, b = (f(c) for c in rgb)
     return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
 def ratio(a, b):
     la, lb = lum(a), lum(b)
     hi, lo = max(la, lb), min(la, lb)
     return (hi + 0.05) / (lo + 0.05)
+
+# ---------- token blocks: ALL FOUR CONVENTIONS ----------
+def _decls(block):
+    return dict(re.findall(r'(--[\w-]+)\s*:\s*(#[0-9a-fA-F]{3,6})', block))
+
 def token_blocks(css):
-    def grab(sel):
-        m = re.search(re.escape(sel) + r'\s*\{([^}]*)\}', css)
-        if not m:
-            return {}
-        return dict(re.findall(r'(--[\w-]+)\s*:\s*(#[0-9a-fA-F]{3,6})', m.group(1)))
-    root  = grab(':root')
+    """:root  +  @media (prefers-color-scheme: dark)  +  html[data-comfort="x"]
+       +  body.x.  v2 knew two of these, v3 knew one, nothing knew the media
+       query. Parse all four or the report is a guess."""
+    m = re.search(r':root\s*\{([^}]*)\}', css)
+    root = _decls(m.group(1)) if m else {}
     modes = {'default': dict(root)}
-    for m in re.findall(r'body\.([\w-]+)\s*\{', css):
-        blk = grab('body.' + m)
+
+    # the OS-applied palette. nested braces, so match to the inner :root.
+    for mm in re.finditer(
+            r'@media[^{]*prefers-color-scheme\s*:\s*dark[^{]*\{\s*:root\s*\{([^}]*)\}', css, re.I):
+        blk = dict(root); blk.update(_decls(mm.group(1)))
+        modes['os-dark'] = blk
+
+    for name in re.findall(r'html\[data-comfort\s*=\s*"([\w-]+)"\]', css):
+        blk = _decls((re.search(r'html\[data-comfort\s*=\s*"' + re.escape(name) + r'"\]\s*\{([^}]*)\}', css) or
+                      re.match('', '')).group(1)) if re.search(
+                      r'html\[data-comfort\s*=\s*"' + re.escape(name) + r'"\]\s*\{([^}]*)\}', css) else {}
         if blk:
             merged = dict(root); merged.update(blk)
-            modes[m] = merged
+            modes[name] = merged
+
+    for name in re.findall(r'body\.([\w-]+)\s*\{', css):
+        mm = re.search(r'body\.' + re.escape(name) + r'\s*\{([^}]*)\}', css)
+        blk = _decls(mm.group(1)) if mm else {}
+        if blk:
+            merged = dict(root); merged.update(blk)
+            modes[name] = merged
     return modes
-TEXT_PROPS = ('color',)
-DECO_PROPS = ('background', 'background-color', 'background-image', 'border', 'border-color', 'border-top', 'border-bottom', 'border-left', 'border-right', 'box-shadow', 'fill', 'stroke', 'outline', 'outline-color', 'text-shadow')
+
 def token_roles(css):
     text_use, deco_use, surface_use = set(), set(), set()
     for d in re.split(r'[;{}]', css):
@@ -66,192 +147,132 @@ def token_roles(css):
         if prop in TEXT_PROPS:
             text_use.update(vars_in)
         elif prop in ('background', 'background-color'):
-            surface_use.update(vars_in)
-            deco_use.update(vars_in)
+            surface_use.update(vars_in); deco_use.update(vars_in)
         elif prop in DECO_PROPS or 'gradient' in val:
             deco_use.update(vars_in)
     return text_use, deco_use, surface_use
-def _lum(rgb):
-    def f(c):
-        c/=255; return c/12.92 if c<=0.03928 else ((c+0.055)/1.055)**2.4
-    return .2126*f(rgb[0])+.7152*f(rgb[1])+.0722*f(rgb[2])
-def flip_check(modes, text_use, surface_use):
+
+# ---------- floors. Studio Eyes should import these, not restate them ----------
+def dark_floor(html, css, modes):
+    """A file with no dark palette is not dark-mode ready, and one that
+       declares color-scheme without a dark palette actively lies to the OS."""
     halts = []
-    LIGHT, DARK = 0.5, 0.18
-    def band(hx):
-        rgb = hex2rgb(hx)
-        if not rgb: return None
-        L=_lum(rgb)
-        return 'light' if L>=LIGHT else ('dark' if L<=DARK else 'mid')
-    for tv in sorted(text_use):
-        bands = {}
-        for mode, tok in modes.items():
-            if tv in tok:
-                b = band(tok[tv])
-                if b: bands[mode] = b
-        if len(set(bands.values())) > 1:
-            for mode, tok in modes.items():
-                tb = bands.get(mode)
-                if not tb or tb=='mid': continue
-                opp = 'dark' if tb=='light' else 'light'
-                has_opp = any(band(tok[s])==opp for s in surface_use if s in tok)
-                if not has_opp:
-                    # CONTRAST GUARD (v4.1): band-matching is coarse. A mid-tone
-                    # ground (lum 0.18-0.5) is banded 'mid' and ignored, so a
-                    # correctly-inverted palette (dark text on lum-0.3 paper)
-                    # trips a false flip. Before HALTing, ask the real question:
-                    # does this text token actually FAIL contrast on every surface
-                    # in this mode? If it clears 4.5 on any surface present, it is
-                    # not stranded - suppress. Only genuinely unreadable = HALT.
-                    trgb = hex2rgb(tok[tv])
-                    clears = False
-                    if trgb:
-                        for s in surface_use:
-                            if s in tok:
-                                srgb = hex2rgb(tok[s])
-                                if srgb and ratio(trgb, srgb) >= AA_BODY:
-                                    clears = True
-                                    break
-                    if clears:
-                        continue  # correctly inverted, not a flip bug
-                    halts.append('H-FLIP [' + mode + '] text token ' + tv + ' is ' + tb + ' here but clears no surface in this mode - it will render ' + tb + '-on-' + tb + ' (the yellow-on-white class). Give ' + mode + ' a full inverse palette.')
+    # two distinct shapes, and v4's first cut only knew one of them:
+    #   CSS   ->  color-scheme: light dark
+    #   meta  ->  <meta name="color-scheme" content="light dark">
+    declares = bool(re.search(r'color-scheme\s*:\s*[^;}]*dark', css, re.I)) or \
+               bool(re.search(r'<meta[^>]*name\s*=\s*["\']color-scheme["\'][^>]*'
+                              r'content\s*=\s*["\'][^"\']*dark', html, re.I))
+    dark_modes = [k for k in modes if k != 'default' and
+                  any(h in k.lower() for h in ('dark', 'night', 'dim', 'warmdark'))]
+    has_os = 'os-dark' in modes
+    if not dark_modes and not has_os:
+        halts.append('H-DARK-MISSING no dark palette in any convention (@media '
+                     'prefers-color-scheme, html[data-comfort], body.class). Phone OS dark '
+                     'mode will force-darken this page and no gate has measured the result.')
+    if declares and not has_os:
+        halts.append('H-DARK-PROMISE color-scheme declares dark but there is no @media '
+                     '(prefers-color-scheme:dark) palette. That tells the OS not to '
+                     'force-darken and then hands it light tokens on a dark surface.')
     return halts
+
+def svg_text_floor(html):
+    """SVG text is user units, not px. 'font-size:' is CSS and measured in px;
+       'font-size=' is an SVG attribute and measured in user units - that
+       discriminator holds whether the attribute is static markup or written by
+       script, which matters because the script block sits after </svg>."""
+    halts = []
+    widths = [float(m.group(1)) for m in re.finditer(
+        r'viewBox\s*=\s*"\s*[\d.-]+\s+[\d.-]+\s+([\d.]+)\s+([\d.]+)\s*"', html, re.I)]
+    if not widths:
+        return halts
+    vw = max(widths)                 # widest viewBox = fewest px per unit = worst case
+    ppu = SVG_RENDER_W / vw
+    need = FONT_FLOOR_ABS / ppu
+    seen = {}
+    for f in re.finditer(r'font-size\s*=\s*\\?["\']([\d.]+)\\?["\']', html):
+        u = float(f.group(1))
+        seen[u] = seen.get(u, 0) + 1
+    for u in sorted(seen):
+        px = u * ppu
+        if px < FONT_FLOOR_ABS:
+            halts.append('E1-SVG font-size ' + str(u) + ' units x' + str(seen[u]) +
+                         ' renders at ' + format(px, '.1f') + 'px at viewBox width ' +
+                         str(vw) + ' on a ' + str(int(SVG_RENDER_W)) + 'px surface (floor ' +
+                         str(FONT_FLOOR_ABS) + '). Raise to >= ' + format(need, '.2f') +
+                         ' units or move the label to HTML.')
+    return halts
+
+def css_text_floor(css):
+    halts = []
+    for m in re.finditer(r'font-size\s*:\s*([\d.]+)px', css):
+        v = float(m.group(1))
+        if v < FONT_FLOOR_ABS:
+            halts.append('E1-CSS font-size ' + format(v, '.0f') + 'px < ' +
+                         str(FONT_FLOOR_ABS) + 'px floor.')
+    return sorted(set(halts))
+
 def image_floor(html):
     halts, warns = [], []
     body = re.sub(r'<(script|style)[\s\S]*?</\1>', ' ', html, flags=re.I)
-    visual = 0
-    visual += len(re.findall(r'<img\b', body, re.I))
-    visual += len(re.findall(r'<svg\b', body, re.I))
-    visual += len(re.findall(r'<picture\b', body, re.I))
-    visual += len(re.findall(r'<video\b', body, re.I))
-    visual += len(re.findall(r'<canvas\b', body, re.I))
+    visual = sum(len(re.findall(r'<' + t + r'\b', body, re.I))
+                 for t in ('img', 'svg', 'picture', 'video', 'canvas'))
     visual += len(re.findall(r'background-image\s*:', html, re.I))
     screens = len(re.findall(r'class="[^"]*\b(?:stage|screen|slide|scene)\b', body, re.I))
-    text = re.sub(r'<[^>]+>', ' ', body)
-    text = re.sub(r'&[a-z]+;', ' ', text)
-    chars = len(re.sub(r'\s+', ' ', text).strip())
+    chars = len(re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', ' ', body)).strip())
     if screens >= 1 and visual == 0 and chars > 400:
-        halts.append('H-IMAGE-FLOOR ' + str(screens) + ' screen-section(s), ' + str(chars) + ' chars of text, and ZERO images/svg/canvas. Founder rule: screens must be >50% image. This is a text-wall - add authored visual or justify the exemption.')
-    elif screens >= 3 and visual < screens/2 and chars > 1500:
-        warns.append('[image-floor] ' + str(visual) + ' visual element(s) across ' + str(screens) + ' screens, ' + str(chars) + ' chars text - likely under the 50% image floor; verify by eye.')
+        halts.append('H-IMAGE-FLOOR ' + str(screens) + ' screen(s), ' + str(chars) +
+                     ' chars, ZERO visual. Screens must be >50% image.')
+    elif screens >= 3 and visual < screens / 2 and chars > 1500:
+        warns.append('[image-floor] ' + str(visual) + ' visual across ' + str(screens) +
+                     ' screens, ' + str(chars) + ' chars - verify by eye.')
     return halts, warns
+
 def nav_floor(html):
     halts = []
     body = re.sub(r'<(script|style)[\s\S]*?</\1>', ' ', html, flags=re.I)
     screens = len(re.findall(r'class="[^"]*\b(?:stage|screen|slide|scene)\b', body, re.I))
     toggled = len(re.findall(r'\bclass="[^"]*\bhidden\b', body, re.I))
-    view_count = max(screens, toggled + 1 if toggled else 0)
-    if view_count < 2:
+    if max(screens, toggled + 1 if toggled else 0) < 2:
         return halts
-    has_back = bool(re.search(
-        r'id=["\']backBtn|class="[^"]*\bback(nav|btn)?\b|aria-label="[^"]*\bback\b'
-        r'|onclick="[^"]*(?:goBack|backTo)|>\s*(?:&larr;\s*)?back\b', html, re.I))
-    has_home = bool(re.search(
-        r'id=["\']homeBtn|class="[^"]*\bhome(nav|btn)?\b|aria-label="[^"]*\b(?:home|start)\b'
-        r'|onclick="[^"]*(?:goHome|toHome|homeScreen)|>\s*home\b', html, re.I))
-    if not has_back:
-        halts.append('H-NAV-BACK multi-screen product has no BACK control (founder rule: back + home on ALL products).')
-    if not has_home:
-        halts.append('H-NAV-HOME multi-screen product has no HOME control (founder rule: back + home on ALL products).')
+    if not re.search(r'id=["\']backBtn|class="[^"]*\bback(nav|btn)?\b|aria-label="[^"]*\bback\b'
+                     r'|onclick="[^"]*(?:goBack|backTo)|>\s*(?:&larr;\s*)?back\b', html, re.I):
+        halts.append('H-NAV-BACK multi-screen product has no BACK control.')
+    if not re.search(r'id=["\']homeBtn|class="[^"]*\bhome(nav|btn)?\b'
+                     r'|aria-label="[^"]*\b(?:home|start)\b'
+                     r'|onclick="[^"]*(?:goHome|toHome|homeScreen)|>\s*home\b', html, re.I):
+        halts.append('H-NAV-HOME multi-screen product has no HOME control.')
     return halts
-def _body_bg_decls(css):
-    out = {}
-    m = re.search(r'(?:^|[}\s])body\s*\{([^}]*)\}', css)
-    if m:
-        bm = re.search(r'background(?:-color)?\s*:\s*([^;]+)', m.group(1))
-        out['default'] = bm.group(1).strip() if bm else None
-    for mode in re.findall(r'body\.([\w-]+)\s*\{', css):
-        blk = re.search(r'body\.' + re.escape(mode) + r'\s*\{([^}]*)\}', css)
-        if blk:
-            bm = re.search(r'background(?:-color)?\s*:\s*([^;]+)', blk.group(1))
-            if bm:
-                out[mode] = bm.group(1).strip()
-    return out
-def _resolve_bg_rgb(valstr, tok):
-    if not valstr:
-        return None
-    v = valstr.strip()
-    if 'gradient' in v.lower():
-        return None
-    if re.search(r'\b(transparent|none)\b', v, re.I):
-        return None
-    if re.search(r'rgba?\([^)]*,\s*0?\.\d+\s*\)', v):
-        return None
-    mv = re.search(r'var\((--[\w-]+)', v)
-    if mv:
-        hx = tok.get(mv.group(1))
-        return hex2rgb(hx) if hx else None
-    mh = re.search(r'#[0-9a-fA-F]{3,6}', v)
-    if mh:
-        return hex2rgb(mh.group(0))
-    return None
-def opacity_floor(css, modes, text_use, surface_use):
+
+def emoji_floor(html):
+    vis = re.sub(r'<(script|style)[\s\S]*?</\1>', ' ', html, flags=re.I)
+    if re.search(r'[\U0001F000-\U0001FAFF\u2600-\u26FF]', vis):
+        return ['H-EMOJI emoji in visible text. Never, in any venue.']
+    return []
+
+def floors(html, css, modes):
+    """The single list of source-computable teeth. Studio Eyes calls this."""
     halts = []
-    LIGHT = 0.5
-    bg_decls = _body_bg_decls(css)
-    for mode, tok in modes.items():
-        raw = bg_decls.get(mode, bg_decls.get('default'))
-        bg_rgb = _resolve_bg_rgb(raw, tok)
-        body_is_dark_opaque = bg_rgb is not None and _lum(bg_rgb) < 0.5
-        dark_surfaces = [s for s in surface_use
-                         if s in tok and hex2rgb(tok[s]) and _lum(hex2rgb(tok[s])) < 0.5]
-        for tv in sorted(text_use):
-            hx = tok.get(tv)
-            rgb = hex2rgb(hx) if hx else None
-            if not (rgb and _lum(rgb) >= LIGHT):
-                continue
-            if body_is_dark_opaque or dark_surfaces:
-                continue
-            if bg_rgb is None:
-                halts.append('H-OPACITY [' + mode + '] light text ' + tv + ' but body has NO proven-opaque dark background in this mode (bg = ' + repr(raw) + ') and no dark surface token to sit on. Light ink can land on the white in-app sheet - the 13:1-passes-1.17:1-renders bug. Give body an opaque solid dark --paper in ' + mode + '.')
-            else:
-                halts.append('H-OPACITY [' + mode + '] light text ' + tv + ' on a LIGHT body background (lum ' + format(_lum(bg_rgb), '.2f') + ') with no dark surface partner - light-on-light. Fix the surface for ' + mode + '.')
-    return halts
-def hue_floor(css, modes, text_use):
-    halts, warns = [], []
-    def max_px_for(tok_name):
-        biggest = 0.0
-        for m in re.finditer(r'([^{}]+)\{([^}]*)\}', css):
-            body = m.group(2)
-            if 'color:var(' + tok_name not in body.replace(' ', ''):
-                if not re.search(r'color\s*:\s*var\(\s*' + re.escape(tok_name), body):
-                    continue
-            fs = re.search(r'font-size\s*:\s*([\d.]+)px', body)
-            if fs:
-                biggest = max(biggest, float(fs.group(1)))
-            else:
-                biggest = max(biggest, 0.0)
-        return biggest
-    for mode, tok in modes.items():
-        for tv in sorted(text_use):
-            hx = tok.get(tv)
-            rgb = hex2rgb(hx) if hx else None
-            if not rgb:
-                continue
-            r, g, b = rgb
-            if _lum(rgb) < 0.5:
-                continue
-            warm_gap = r - b
-            if warm_gap >= 24 and b < 235:
-                big = max_px_for(tv) >= 32
-                msg = ('text token ' + tv + ' = #' + '%02x%02x%02x' % rgb +
-                       ' is WARM near-white (R-B gap ' + str(warm_gap) + '). RP floor: '
-                       'warm-mode TEXT must be COOL near-white; amber/gold is fill/accent '
-                       'only, never color:.')
-                if big:
-                    warns.append('[' + mode + '] (large-display only, >=32px) ' + msg + ' Accept only if this token is never body-size text.')
-                else:
-                    halts.append('H-HUE [' + mode + '] ' + msg + ' Cool this token (raise blue toward R=G=B) or demote it to a decoration token.')
-    return halts, warns
-def run(path):
+    halts += dark_floor(html, css, modes)
+    halts += svg_text_floor(html)
+    halts += css_text_floor(css)
+    halts += nav_floor(html)
+    halts += emoji_floor(html)
+    ih, iw = image_floor(html)
+    return halts + ih, iw
+
+# ---------- run ----------
+def run(path, ratchet=False, base=None):
     html = open(path, encoding='utf-8', errors='replace').read()
     css  = ''.join(re.findall(r'<style[^>]*>(.*?)</style>', html, re.S))
     modes = token_blocks(css)
     text_use, deco_use, surface_use = token_roles(css)
     halts, warns, rows = [], [], []
+
     for mode, tok in sorted(modes.items()):
         surfaces = {s: hex2rgb(tok[s]) for s in surface_use if s in tok and hex2rgb(tok[s])}
         if not surfaces:
+            warns.append('[' + mode + '] declares tokens but no surface token - unmeasurable')
             continue
         for tv in sorted(text_use):
             if tv not in tok:
@@ -260,16 +281,19 @@ def run(path):
             if not trgb:
                 continue
             pairs = {sv: ratio(trgb, srgb) for sv, srgb in surfaces.items()}
-            best  = max(pairs.values())
-            home  = max(pairs, key=pairs.get)
+            best, home = max(pairs.values()), max(pairs, key=pairs.get)
             if best < AA_BODY:
-                halts.append('H-TEXT-UNREADABLE [' + mode + '] ' + tv + ' clears no surface. Best ' + home + ' at ' + format(best, '.2f') + ' (needs ' + str(AA_BODY) + '). Split it.')
+                halts.append('H-TEXT-UNREADABLE [' + mode + '] ' + tv +
+                             ' clears no surface. Best ' + home + ' at ' +
+                             format(best, '.2f') + ' (needs ' + str(AA_BODY) + '). Split it.')
             else:
-                tag = 'AAA' if best >= AAA else 'AA '
-                rows.append((mode, tv, home, round(best, 2), tag))
+                rows.append((mode, tv, home, round(best, 2),
+                             'AAA' if best >= AAA else 'AA '))
                 for sv, r in sorted(pairs.items()):
                     if r < AA_BODY and sv != home:
-                        warns.append('[' + mode + '] ' + tv + ' on ' + sv + ' = ' + format(r, '.2f') + ' - only safe on ' + home)
+                        warns.append('[' + mode + '] ' + tv + ' on ' + sv + ' = ' +
+                                     format(r, '.2f') + ' - only safe on ' + home)
+
     for mode, tok in modes.items():
         for v, hx in tok.items():
             rgb = hex2rgb(hx)
@@ -277,24 +301,35 @@ def run(path):
                 warns.append('[' + mode + '] ' + v + ' is pure #fff')
             if rgb == (0, 0, 0):
                 warns.append('[' + mode + '] ' + v + ' is pure #000')
-    halts += flip_check(modes, text_use, surface_use)
-    halts += nav_floor(html)
-    ifh, ifw = image_floor(html)
-    halts += ifh
-    warns += ifw
-    halts += opacity_floor(css, modes, text_use, surface_use)
-    hfh, hfw = hue_floor(css, modes, text_use)
-    halts += hfh
-    warns += hfw
-    name = os.path.basename(path)
+
+    fh, fw = floors(html, css, modes)
+    halts += fh; warns += fw
+
+    debt = []
+    if ratchet:
+        known = set((base or {}).get(os.path.basename(path), []))
+        keep = []
+        for h in halts:
+            if code_of(h) in known:
+                debt.append(h)
+            else:
+                keep.append(h)
+        halts = keep
+
     print()
-    print('  STUDIO EYES - PRE-SHIP GATE v4 (render-proof) - ' + name)
-    print('  ' + '-' * 58)
-    print('  modes: ' + ', '.join(sorted(modes)))
+    print('  STUDIO EYES - PRE-SHIP GATE v4 - ' + os.path.basename(path))
+    print('  ' + '-' * 60)
+    print('  modes measured: ' + ', '.join(sorted(modes)))
     print('  text tokens: ' + (', '.join(sorted(text_use)) or '(none)'))
-    print('  ' + '-' * 58)
+    print('  ' + '-' * 60)
     for mode, tv, sv, r, tag in rows:
-        print('  [' + tag + '] ' + mode.ljust(10) + ' ' + tv.ljust(14) + ' on ' + sv.ljust(12) + ' = ' + format(r, '6.2f'))
+        print('  [' + tag + '] ' + mode.ljust(10) + ' ' + tv.ljust(10) +
+              ' on ' + sv.ljust(10) + ' = ' + format(r, '6.2f'))
+    if debt:
+        print()
+        print('  DEBT carried by the ratchet (' + str(len(debt)) + ') - counted, not forgiven:')
+        for d in sorted(set(debt)):
+            print('     ' + d)
     if warns:
         print()
         print('  warnings:')
@@ -302,20 +337,49 @@ def run(path):
             print('     ' + w)
     print()
     if halts:
-        print('  HALT - do not ship:')
-        for h in halts:
+        print('  HALT - do not ship' + (' (REGRESSION - not in baseline)' if ratchet else '') + ':')
+        for h in sorted(set(halts)):
             print('     ' + h)
         print()
         return 1
-    worst = min((r for mode, tv, sv, r, tag in rows), default=None)
-    if worst is not None:
-        print('  SHIP - every text token clears ' + str(AA_BODY) + ', paints opaque, cools warm-mode ink. Worst pair = ' + format(worst, '.2f'))
-    else:
-        print('  SHIP - no text tokens to check')
+    worst = min((r for _, _, _, r, _ in rows), default=None)
+    print('  SHIP - every text token clears ' + str(AA_BODY) + ' in every mode' +
+          ('. Worst pair = ' + format(worst, '.2f') if worst is not None else ''))
     print()
     return 0
+
+# ---------- self-test teeth: a gate that cannot fail a bad file is a wall ----------
+BAD = ('<html><head><meta name="color-scheme" content="light dark"></head>'
+       '<style>:root{--p:#fff;--i:#111}body{background:var(--p);color:var(--i)}'
+       '.scene{}</style><body><div class="scene">'
+       '<svg viewBox="0 0 100 60"><text font-size="3">tiny</text></svg>'
+       '</div></body></html>')
+
+def self_test():
+    import tempfile
+    p = os.path.join(tempfile.mkdtemp(), 'bad.html')
+    open(p, 'w').write(BAD)
+    html = BAD
+    css = ''.join(re.findall(r'<style[^>]*>(.*?)</style>', html, re.S))
+    fh, _ = floors(html, css, token_blocks(css))
+    got = ' '.join(fh)
+    ok_svg  = 'E1-SVG' in got
+    ok_dark = 'H-DARK-PROMISE' in got
+    if not (ok_svg and ok_dark):
+        print('  SELF-TEST FAILED - svg:%s dark:%s -> the gate is not biting' % (ok_svg, ok_dark))
+        sys.exit(3)
+    print('  self-test ok: svg scale tooth bites, dark-promise tooth bites')
+
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         print('usage: preship-gate-v4.py <file.html> [more.html ...]')
         sys.exit(2)
-    sys.exit(max(run(p) for p in sys.argv[1:]))
+    self_test()
+    args = [a for a in sys.argv[1:] if not a.startswith('--')]
+    ratchet = '--ratchet' in sys.argv
+    base = load_baseline() if ratchet else None
+    if ratchet:
+        tot = sum(len(v) for v in base.values())
+        print('  RATCHET on: ' + str(len(base)) + ' files carrying ' + str(tot) +
+              ' known halts. New halts and new files are held to the full floor.')
+    sys.exit(max(run(p, ratchet, base) for p in args))

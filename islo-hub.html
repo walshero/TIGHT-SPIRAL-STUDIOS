@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The iSLO Suite — games that build the skill, and the instrument that measures it · Tight Spiral Productions</title>
 <meta name="description" content="A hub for MassBay students. One station for each of the college's seven Graduation Competencies (iSLOs). Each station holds the games that BUILD the skill and the rubric that MEASURES it — same skill, two instruments. Single-file, offline, contrast-gated.">
+<meta name="tsp:surface" content="hub"><!-- a hub, not a game: the image-floor is a GAME floor (see studio-eyes) -->
 
 <!-- tsp:source        MassBay Graduation Competencies (ISLO #5 workshop deck, Spring 2026, verbatim);
                        AAC&U Written Communication VALUE rubric modified for MassBay (ISLO #1, verbatim);
                        MassBay ISLO #5 Rubric (verbatim); ISLO #6 Critical Thinking rubric (in development).
-     tsp:last-verified 2026-07-19
+     tsp:last-verified 2026-07-19 — outcomes + rubrics checked against the named source decks on ship day.
      tsp:built-on      index.html token palette (shipped + gate-passed 2026-07-14) — reused, not re-invented.
      tsp:floor         single-file · offline · zero external hosts · contrast-gated 4.5:1 · no emoji · token-role law
      tsp:thesis         The rubric is the measurement. The game is the practice. This hub shows both, per outcome,
@@ -35,13 +36,55 @@
   --cool-fill:  #c3d2e6;   /*                  — GROUND ONLY */
   --live-ink:   #1d5c3f;   /*  6.7:1 on paper  — TEXT (coverage: built) */
   --warn-ink:   #8a2f22;   /*  6.9:1 on paper  — TEXT (coverage: dry cell) */
+  /* LINE twins — token-role law: same hues as the *-ink text tokens, but these
+     appear ONLY in borders/outlines/fills (decoration), never as color:. */
+  --brass-line: #6a4d12;
+  --cool-line:  #274063;
+  --live-line:  #1d5c3f;
+  --warn-line:  #8a2f22;
   --slab:       #12161b;   /* dark ground */
   --slab-ink:   #f4f1e8;   /* 16.4:1 on slab   — TEXT */
 
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+
+  /* STUDIO EYES chrome tokens (adapt to this page's palette) */
+  --se-accent:#274063; --se-on-accent:#fbfaf7; --se-focus:#8f3f00; --se-tap:48px;
 }
+
+/* ═══ STUDIO EYES — light modes, adapting this page's own tokens ═══ */
+/* DUSK — warm, still light; ink stays dark, contrast preserved */
+html[data-light="dusk"]{
+  --paper:#f4ecda; --paper-2:#eaddc2; --rule:#cdbb95;
+  --ink:#181206; --ink-2:#3a3320; --ink-3:#514a38;
+  --brass-ink:#5f440f; --cool-ink:#243a5c; --live-ink:#1a5238; --warn-ink:#7d2a1f;
+}
+/* WARM-DARK (night) — warm charcoal, never pure black; ink goes light */
+html[data-light="night"]{
+  --paper:#1c1a16; --paper-2:#26231d; --rule:#463f30;
+  --ink:#f2e3bf; --ink-2:#d8c59a; --ink-3:#b7a982;
+  --brass-ink:#d9a441; --cool-ink:#9db8d4; --live-ink:#7bb899; --warn-ink:#e59a86;
+  --brass-line:#d9a441; --cool-line:#9db8d4; --live-line:#7bb899; --warn-line:#e59a86;
+  --se-accent:#8aa0b8; --se-on-accent:#141109;
+}
+/* night: station accents go light so numbers and marks stay legible on charcoal */
+html[data-light="night"] .station:nth-of-type(1){--acc:#d9a441; --acc-ink:#d9a441}
+html[data-light="night"] .station:nth-of-type(2){--acc:#9db8d4; --acc-ink:#9db8d4}
+html[data-light="night"] .station:nth-of-type(3){--acc:#c3a0d6; --acc-ink:#c3a0d6}
+html[data-light="night"] .station:nth-of-type(4){--acc:#9db6c6; --acc-ink:#9db6c6}
+html[data-light="night"] .station:nth-of-type(5){--acc:#e0a07f; --acc-ink:#e0a07f}
+html[data-light="night"] .station:nth-of-type(6){--acc:#a6abe0; --acc-ink:#a6abe0}
+html[data-light="night"] .station:nth-of-type(7){--acc:#e0a35c; --acc-ink:#e0a35c}
+/* toggles */
+html.se-contrast:not([data-light="night"]){ --paper:#fbfaf7; --paper-2:#f0ece2; --rule:#b9a06a; --ink:#141109; --ink-2:#2c2517; }
+html.se-contrast[data-light="night"]{ --paper:#0e0d0b; --paper-2:#161410; --ink:#fff7e6; --ink-2:#efe0bc; }
+html{ font-size:100%; }
+html.se-a1{ zoom:1.15; }
+html.se-a2{ zoom:1.3; }
+html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+@media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
 
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
@@ -51,6 +94,7 @@ body{
   -webkit-font-smoothing:antialiased;
 }
 .wrap{max-width:1060px; margin:0 auto; padding:0 22px 90px}
+main a{color:var(--cool-ink)}
 
 /* ── STANDING NAV ───────────────────────────────────────────────────────── */
 .topnav{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1.5px solid var(--rule)}
@@ -58,11 +102,11 @@ body{
 .topnav a{
   display:inline-flex; align-items:center; gap:.35em; text-decoration:none;
   font-family:var(--mono); font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
-  color:var(--ink-2); padding:.42em .8em; border:1.5px solid var(--rule); border-radius:999px; background:var(--paper-2);
+  color:var(--ink-2); min-height:44px; padding:.42em .8em; border:1.5px solid var(--rule); border-radius:999px; background:var(--paper-2);
   transition:border-color .12s, color .12s;
 }
-.topnav a:hover{border-color:var(--cool-ink); color:var(--ink)}
-.topnav a:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
+.topnav a:hover{border-color:var(--cool-line); color:var(--ink)}
+.topnav a:focus-visible{outline:3px solid var(--cool-line); outline-offset:2px}
 .topnav-mark{margin-left:auto; font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 @media (max-width:560px){ .topnav-mark{display:none} }
 
@@ -96,9 +140,9 @@ h1 em{font-style:italic; color:var(--cool-ink)}
 .legend{display:flex; flex-wrap:wrap; gap:10px; margin:22px 0 0}
 .leg{display:inline-flex; align-items:center; gap:7px; font-family:var(--mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-2)}
 .dot{width:11px; height:11px; border-radius:2px; border:1.5px solid}
-.dot.built{border-color:var(--live-ink); background:var(--paper)}
-.dot.thin{border-color:var(--brass-ink); background:var(--paper)}
-.dot.dry{border-color:var(--warn-ink); background:var(--paper)}
+.dot.built{border-color:var(--live-line); background:var(--paper)}
+.dot.thin{border-color:var(--brass-line); background:var(--paper)}
+.dot.dry{border-color:var(--warn-line); background:var(--paper)}
 
 /* ── STATIONS ───────────────────────────────────────────────────────────── */
 section{padding:52px 0 0}
@@ -126,9 +170,9 @@ section{padding:52px 0 0}
   flex:0 0 auto; align-self:flex-start; font-family:var(--mono); font-size:10px; font-weight:700;
   letter-spacing:.09em; text-transform:uppercase; padding:4px 9px; border-radius:2px; border:1.5px solid; background:var(--paper);
 }
-.cover.built{color:var(--live-ink); border-color:var(--live-ink)}
-.cover.thin{color:var(--brass-ink); border-color:var(--brass-ink)}
-.cover.dry{color:var(--warn-ink); border-color:var(--warn-ink)}
+.cover.built{color:var(--live-ink); border-color:var(--live-line)}
+.cover.thin{color:var(--brass-ink); border-color:var(--brass-line)}
+.cover.dry{color:var(--warn-ink); border-color:var(--warn-line)}
 
 .st-body{display:grid; grid-template-columns:1fr; gap:0}
 @media (min-width:760px){ .st-body{grid-template-columns:1.35fr 1fr} }
@@ -145,29 +189,30 @@ section{padding:52px 0 0}
   border-radius:2px; background:var(--paper); text-decoration:none; color:var(--ink);
   transition:border-color .12s, transform .1s;
 }
-a.g:hover{border-color:var(--acc,var(--cool-ink)); transform:translateY(-1px)}
-a.g:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
+a.g:hover{border-color:var(--acc,var(--cool-line)); transform:translateY(-1px)}
+a.g:focus-visible{outline:3px solid var(--cool-line); outline-offset:2px}
 .g .gmark{width:26px; height:26px; color:var(--acc-ink,var(--brass-ink)); flex:0 0 auto; margin-top:1px}
+/* gmark color stays TEXT-role (acc-ink/brass-ink); the ::before below uses LINE twins */
 .g .gt{flex:1 1 auto; min-width:0}
 .g .gn{font-family:var(--serif); font-size:17px; line-height:1.2; margin:0 0 2px; display:flex; align-items:center; gap:8px; flex-wrap:wrap}
 .g .gd{margin:0; font-size:13.5px; color:var(--ink-3); line-height:1.45}
 .g.proposed{border-style:dashed; background:var(--paper-2)}
 .pill{font-family:var(--mono); font-size:9px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:2px 6px; border-radius:2px; border:1px solid; white-space:nowrap}
-.pill.live{color:var(--live-ink); border-color:var(--live-ink)}
-.pill.build{color:var(--brass-ink); border-color:var(--brass-ink)}
-.pill.design{color:var(--warn-ink); border-color:var(--warn-ink)}
-.pill.client{color:var(--cool-ink); border-color:var(--cool-ink)}
+.pill.live{color:var(--live-ink); border-color:var(--live-line)}
+.pill.build{color:var(--brass-ink); border-color:var(--brass-line)}
+.pill.design{color:var(--warn-ink); border-color:var(--warn-line)}
+.pill.client{color:var(--cool-ink); border-color:var(--cool-line)}
 
 /* measure block */
 .measure{font-size:14.5px; color:var(--ink-2); line-height:1.5}
 .measure .mname{font-family:var(--serif); font-size:17px; color:var(--ink); margin:0 0 4px; display:flex; align-items:center; gap:9px; flex-wrap:wrap}
 .mstatus{font-family:var(--mono); font-size:9.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:2px 6px; border-radius:2px; border:1px solid}
-.mstatus.live{color:var(--live-ink); border-color:var(--live-ink)}
-.mstatus.dev{color:var(--brass-ink); border-color:var(--brass-ink)}
-.mstatus.none{color:var(--warn-ink); border-color:var(--warn-ink)}
+.mstatus.live{color:var(--live-ink); border-color:var(--live-line)}
+.mstatus.dev{color:var(--brass-ink); border-color:var(--brass-line)}
+.mstatus.none{color:var(--warn-ink); border-color:var(--warn-line)}
 .dims{margin:12px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:6px}
 .dims li{font-size:13.5px; color:var(--ink-2); line-height:1.4; padding-left:16px; position:relative}
-.dims li::before{content:""; position:absolute; left:0; top:8px; width:7px; height:7px; border:1.5px solid var(--acc-ink,var(--brass-ink)); border-radius:2px}
+.dims li::before{content:""; position:absolute; left:0; top:8px; width:7px; height:7px; border:1.5px solid var(--acc,var(--brass-line)); border-radius:2px}
 .scale{margin:11px 0 0; font-family:var(--mono); font-size:11px; letter-spacing:.03em; color:var(--ink-3); line-height:1.5}
 .prov{margin:12px 0 0; padding-top:11px; border-top:1px solid var(--rule); font-size:12.5px; color:var(--ink-3); line-height:1.45}
 .prov b{color:var(--ink-2)}
@@ -203,22 +248,91 @@ footer .fine{font-family:var(--mono); font-size:11.5px; color:var(--ink-3); marg
   .st-head{flex-wrap:wrap}
   .slab{margin:44px -22px 0; padding:34px 22px}
 }
+
+/* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+.se-chrome{display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+  padding:9px 14px; background:var(--paper); border-bottom:2px solid var(--ink);
+  position:sticky; top:0; z-index:100}
+.se-home{justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--se-tap);
+  padding:8px 12px; border:1.5px solid var(--rule); border-radius:8px; background:var(--paper-2);
+  color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none}
+.se-brand{justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink)}
+.se-brand svg{width:34px; height:20px; color:var(--cool-ink); flex:0 0 auto}
+.se-brand .wm{font-family:var(--serif); font-size:16px; letter-spacing:.01em; white-space:nowrap; color:var(--ink)}
+.se-eyes{justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--se-tap);
+  padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--se-accent);
+  color:var(--se-on-accent); font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer}
+.se-home:focus-visible,.se-eyes:focus-visible{outline:3px solid var(--se-focus); outline-offset:2px}
+@media (max-width:560px){ .se-brand .wm{display:none} }
+
+/* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+.se-panel{position:fixed; right:12px; top:calc(var(--se-tap) + 14px); z-index:101;
+  width:min(320px,calc(100vw - 24px)); background:var(--paper); color:var(--ink);
+  border:2px solid var(--se-accent); border-radius:10px; padding:15px;
+  box-shadow:0 10px 34px rgba(0,0,0,.28); display:none}
+.se-panel[data-open="1"]{display:block}
+.se-panel h2{font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-2); margin:0 0 8px}
+.se-row{display:flex; gap:6px; margin-bottom:14px}
+.se-btn{flex:1; min-height:var(--se-tap); padding:8px 4px; border:1.5px solid var(--rule); border-radius:8px;
+  background:var(--paper-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:12.5px; cursor:pointer}
+.se-btn[aria-pressed="true"]{background:var(--se-accent); color:var(--se-on-accent); border-color:var(--se-accent)}
+.se-btn:focus-visible{outline:3px solid var(--se-focus); outline-offset:2px}
+.se-tog{display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+  min-height:var(--se-tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--rule); border-radius:8px;
+  background:var(--paper-2); color:var(--ink); font-family:var(--sans); font-weight:600; font-size:14px; cursor:pointer; text-align:left}
+.se-tog[aria-pressed="true"]{border-color:var(--se-accent)}
+.se-tog .st{font-family:var(--mono); font-size:11px; color:var(--ink-2)}
+.se-tog[aria-pressed="true"] .st{color:var(--cool-ink); font-weight:700}
+.se-tog:focus-visible{outline:3px solid var(--se-focus); outline-offset:2px}
+.se-sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)}
+
+/* last-updated stamp — computed from document.lastModified */
+.se-updated{font-family:var(--mono); font-size:12px; color:var(--ink-2); margin:14px 0 0; display:flex; align-items:center; gap:7px}
+.se-updated::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--cool-ink); flex:0 0 auto}
+
+/* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+.se-rail{display:flex; gap:10px; justify-content:center; padding:20px; border-top:2px solid var(--rule); background:var(--paper)}
+.se-rail a,.se-rail button{min-height:var(--se-tap); padding:10px 18px; border:1.5px solid var(--rule); border-radius:8px;
+  background:var(--paper-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer}
+.se-rail a:focus-visible,.se-rail button:focus-visible{outline:3px solid var(--se-focus); outline-offset:2px}
 </style>
 </head>
 <body>
 
-<!-- STANDING NAV — Home + Back on every product (founder nav floor). Static, no JS,
-     works offline and with scripting off. Both point to the studio front door: this
-     hub is a top-level sibling of index.html and arcade.html. -->
-<nav class="topnav" aria-label="Site navigation">
-  <div class="topnav-in">
-    <a class="backbtn" href="index.html" aria-label="Back to the studio">&lsaquo; Back</a>
-    <a class="homebtn" href="index.html" aria-label="Home — studio front door">&#8962; Home</a>
-    <span class="topnav-mark">Tight Spiral · iSLO Suite</span>
+<!-- RESERVED CHROME — Home · teaspoon brand · Studio Eyes. Reserves its own row,
+     never overlaps content (TSP Comfort Kernel v2). Static + offline. -->
+<header class="se-chrome">
+  <a class="se-home" href="index.html" aria-label="Home — studio front door">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 27" fill="none" stroke="currentColor" aria-hidden="true" focusable="false"><path d="M33.2 13.5 L33.3 13.6 L33.3 13.8 L33.4 13.9 L33.4 14.1 L33.4 14.3 L33.3 14.5 L33.3 14.7 L33.2 14.9 L33.1 15.0 L33.0 15.2 L32.8 15.4 L32.7 15.5 L32.5 15.7 L32.2 15.8 L32.0 15.9 L31.7 15.9 L31.5 16.0 L31.2 16.0 L30.9 15.9 L30.6 15.9 L30.3 15.8 L30.1 15.7 L29.8 15.5 L29.5 15.3 L29.3 15.1 L29.1 14.8 L28.9 14.5 L28.7 14.2 L28.6 13.9 L28.5 13.5 L28.4 13.1 L28.4 12.7 L28.4 12.3 L28.5 11.9 L28.6 11.5 L28.8 11.2 L29.0 10.8 L29.2 10.4 L29.5 10.1 L29.8 9.8 L30.2 9.5 L30.6 9.3 L31.1 9.1 L31.5 8.9 L32.0 8.8 L32.5 8.8 L33.0 8.8 L33.5 8.8 L34.0 8.9 L34.5 9.1 L35.0 9.3 L35.5 9.6 L35.9 9.9 L36.4 10.3 L36.7 10.8 L37.1 11.2 L37.3 11.8 L37.6 12.3 L37.7 12.9 L37.9 13.5 L37.9 14.1 L37.9 14.7 L37.8 15.4 L37.6 16.0 L37.4 16.6 L37.1 17.2 L36.8 17.8 L36.3 18.3 L35.8 18.8 L35.3 19.2 L34.7 19.6 L34.1 19.9 L33.4 20.2 L32.7 20.4 L32.0 20.5 L31.3 20.6 L30.5 20.5 L29.8 20.4 L29.0 20.2 L28.3 19.9 L27.6 19.5 L26.9 19.1 L26.3 18.6 L25.8 18.0 L25.3 17.4 L24.8 16.7 L24.4 16.0 L24.2 15.2 L23.9 14.3 L23.8 13.5 L23.8 12.6 L23.9 11.8 L24.0 10.9 L24.2 10.0 L24.6 9.2 L25.0 8.4 L25.5 7.7 L26.1 7.0 L26.8 6.3 L27.5 5.7 L28.3 5.3 L29.2 4.8 L30.1 4.5 L31.0 4.3 L32.0 4.2 L33.0 4.1 L34.0 4.2 L35.0 4.4 L35.9 4.7 L36.9 5.1 L37.8 5.6 L38.6 6.2 L39.4 6.8 L40.1 7.6 L40.8 8.4 L41.3 9.4 L41.8 10.3 L42.1 11.3 L42.4 12.4 L42.5 13.5" stroke-width="2.3" stroke-linecap="round"/><circle cx="32" cy="13.5" r="1.6" fill="currentColor" stroke="none"/></svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
   </div>
-</nav>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
 
 <main class="wrap">
+<p class="se-updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v15 <span style="opacity:.75">d701f4e</span></span> </span> </span> </span>
 
 <!-- ═══ STAGE ═══ -->
 <div class="stage">
@@ -424,17 +538,15 @@ footer .fine{font-family:var(--mono); font-size:11.5px; color:var(--ink-3); marg
         <div class="games">
           <a class="g" href="the-console.html">
             <svg class="gmark" viewBox="0 0 48 48" aria-hidden="true"><line x1="12" y1="12" x2="12" y2="38" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="16" r="3.2" fill="currentColor"/><line x1="24" y1="10" x2="24" y2="38" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="24" cy="22" r="3.2" fill="currentColor"/><line x1="36" y1="14" x2="36" y2="38" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="36" cy="30" r="3.2" fill="currentColor"/></svg>
-            <span class="gt"><span class="gn">The Console <span class="pill live">Live</span></span><span class="gd">Take a growth job and pull the levers yourself — the streak, the batch, the feed. Then the machine shows you your own telemetry.</span></span></a>
+            <span class="gt"><span class="gn">Flok <span class="pill live">Live</span></span><span class="gd">Take a growth job and pull the levers yourself — the streak, the batch, the feed. Then the machine shows you your own telemetry.</span></span></a>
           <a class="g" href="funny-boneys-factory.html">
             <svg class="gmark" viewBox="0 0 48 48" aria-hidden="true"><circle cx="19" cy="24" r="8" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="19" cy="24" r="2.4" fill="currentColor"/><circle cx="33" cy="30" r="5.5" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>
             <span class="gt"><span class="gn">Funny Boney's Factory <span class="pill build">In build</span></span><span class="gd">Build the machine that makes the jokes — tools that build tools, and code that farms. Systems literacy by construction.</span></span></a>
-          <a class="g" href="how-an-idea-travels.html">
-            <svg class="gmark" viewBox="0 0 48 48" aria-hidden="true"><circle cx="11" cy="24" r="3.4" fill="currentColor"/><circle cx="37" cy="24" r="3.4" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15 24 Q20 16 24 24 T33 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
-            <span class="gt"><span class="gn">How an Idea Travels <span class="pill live">Live</span></span><span class="gd">Watch a thought move person → medium → person, and lose things on the way. The information-science half of the outcome.</span></span></a>
           <a class="g" href="whose-draft.html">
             <svg class="gmark" viewBox="0 0 48 48" aria-hidden="true"><path d="M14 40 L14 12 a3 3 0 0 1 3 -3 h13 l7 7 v24 a3 3 0 0 1 -3 3 z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M30 9 v7 h7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><circle cx="34" cy="34" r="7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-dasharray="2.5 3"/></svg>
             <span class="gt"><span class="gn">Whose Draft <span class="pill live">Live</span></span><span class="gd">The ethics half, applied to the tool of the moment: using AI on your writing <b>appropriately and honestly</b>. Decide what to hand off at each step, see the trade, and leave with a disclosure statement. Cross-listed with iSLO 1.</span></span></a>
         </div>
+        <p class="scale" style="margin-top:14px">Behind these tools: <a href="how-an-idea-travels.html" style="color:var(--cool-ink);font-weight:600">How an Idea Travels</a> — a guided read, not a game. One idea followed from the back of a napkin through the studio&rsquo;s gates to a machine a stranger can play. How the tools on this shelf get made, and why most ideas don&rsquo;t ship.</p>
       </div>
       <div class="col">
         <p class="col-h"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M6 8l6-5 6 5M5 21h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Measure it</p>
@@ -447,7 +559,7 @@ footer .fine{font-family:var(--mono); font-size:11.5px; color:var(--ink-3); marg
             <li>Systems insight — explain how it works on you</li>
             <li>Appropriate use — choose the right tool, and the ethics of it</li>
           </ul>
-          <p class="prov"><b>Note:</b> <em>The Console</em> is deliberately a dark-patterns game. Reading the
+          <p class="prov"><b>Note:</b> <em>Flok</em> is deliberately a dark-patterns game. Reading the
             manipulation <em>is</em> the appropriate-use criterion — you cannot use a tool well until you can see what it is doing.</p>
           <p class="prov"><b>Draft one to norm:</b> <a href="rubric-forge.html">Rubric Forge</a> — start from the AAC&amp;U Information Literacy scaffold.</p>
           <p class="prov"><b>GenAI, appropriately used:</b> the appropriate-use criterion now has a live pair —
@@ -519,6 +631,9 @@ footer .fine{font-family:var(--mono); font-size:11.5px; color:var(--ink-3); marg
           <a class="g" href="choose-your-leader-v6.html">
             <svg class="gmark" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 40 L24 26 M24 26 L12 12 M24 26 L36 12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="10" r="3.6" fill="currentColor"/><circle cx="36" cy="10" r="3.6" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>
             <span class="gt"><span class="gn">Choose Your Leader <span class="pill live">Live</span></span><span class="gd">Who holds the chair, what the country is not told, and what a decision made in the fog does to people who never sat in the room. Systems of power, made playable.</span></span></a>
+          <a class="g" href="choose-your-leader-v5.html">
+            <svg class="gmark" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 40 L24 26 M24 26 L12 12 M24 26 L36 12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="10" r="3.6" fill="currentColor"/><circle cx="36" cy="10" r="3.6" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>
+            <span class="gt"><span class="gn">Choose Your Leader — The Receiver&rsquo;s Game <span class="pill live">Live</span></span><span class="gd">The companion piece: three broadcasts (1962 · 1964 · 1969) reach you in a lit room. Rate how far the words move you, then the record turns and you see what the room wasn&rsquo;t shown.</span></span></a>
           <a class="g" href="who-holds-the-room.html">
             <svg class="gmark" viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="12" width="32" height="24" rx="2" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="17" cy="24" r="3" fill="currentColor"/><circle cx="27" cy="24" r="3" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="35" cy="24" r="2.4" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>
             <span class="gt"><span class="gn">Who Holds the Room <span class="pill live">Live</span></span><span class="gd">One ordinary campus scene, read three ways — who holds power in it, how the same moment lands on four different students, and what a real advocacy move looks like — each scored on the college's live ISLO&nbsp;#5 rubric, shown verbatim. Dignity-first: a starting point is never a verdict.</span></span></a>
@@ -565,7 +680,7 @@ footer .fine{font-family:var(--mono); font-size:11.5px; color:var(--ink-3); marg
             <span class="gt"><span class="gn">Choose Your Leader <span class="pill live">Live</span></span><span class="gd">Judgment under uncertainty. Decide in the fog, then meet the historical record — the gap is the lesson.</span></span></a>
           <a class="g" href="the-console.html">
             <svg class="gmark" viewBox="0 0 48 48" aria-hidden="true"><line x1="12" y1="12" x2="12" y2="38" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="16" r="3.2" fill="currentColor"/><line x1="24" y1="10" x2="24" y2="38" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="24" cy="22" r="3.2" fill="currentColor"/></svg>
-            <span class="gt"><span class="gn">The Console <span class="pill live">Live</span></span><span class="gd">Notice the manipulation while it works on you — the ethics dimension, felt rather than lectured.</span></span></a>
+            <span class="gt"><span class="gn">Flok <span class="pill live">Live</span></span><span class="gd">Notice the manipulation while it works on you — the ethics dimension, felt rather than lectured.</span></span></a>
           <a class="g" href="the-viscosity.html">
             <svg class="gmark" viewBox="0 0 48 48" aria-hidden="true"><line x1="10" y1="12" x2="38" y2="12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><line x1="13" y1="26" x2="35" y2="26" stroke-dasharray="2 4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M24 40 L24 12 M20 16 L24 12 L28 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span class="gt"><span class="gn">The Viscosity <span class="pill live">Live</span></span><span class="gd">Maslow's hierarchy as a space you climb — systems thinking you feel in the thickening air.</span></span></a>
@@ -670,10 +785,51 @@ footer .fine{font-family:var(--mono); font-size:11.5px; color:var(--ink-3); marg
   <p class="fine">Sources · MassBay Graduation Competencies / Institutional Student Learning Objectives (Spring 2026
     ISLO&nbsp;#5 workshop deck, verbatim) · AAC&amp;U Written Communication VALUE rubric © 2017, modified for MassBay
     (verbatim) · MassBay ISLO&nbsp;#5 Rubric (verbatim) · ISLO&nbsp;#6 Critical Thinking criteria from existing MassBay
-    essay rubrics (rubric in development). Definitions quoted, not remembered · Last-verified 2026-07-19 · CC BY-NC-ND 4.0</p>
+    essay rubrics (rubric in development). Definitions quoted; not remembered. · Last-verified 2026-07-19 · CC BY-NC-ND 4.0</p>
 </footer>
 
 </main>
 
+<!-- BOTTOM NAV RAIL — Back + Home -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="index.html" aria-label="Home — studio front door">Home</a>
+</nav>
+
+<script>
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  // last-updated: computed, not typed
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+})();
+</script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <!--
   PLAY THE STUDIO — the deepest "want to know more" layer.
   Tight Spiral Studios · walshero@gmail.com
@@ -33,27 +33,111 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Play the studio — Tight Spiral Studios</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* STUDIO EYES v4 CLASS-FIX 2026-07-11: lock the palette. */
+/* COMFORT KERNEL v2 mounted 2026-07-30: Studio Eyes in reserved chrome,
+   day/dusk/night token ladder, Back+Home rail. Legacy palette lock removed. */
 :root{ color-scheme: light; }
 
+/* ---- LIGHT: DAY (default) ---- */
 :root{
   --pine:#1a4a35; --pine-mid:#256649; --pine-lt:#3d8a64; --pine-faint:#f3f8f5;
+  --on-pine:#ffffff;
   --gold:#8a5c00; --gold-pale:#fdf5e0; --gold-border:#e8c96a; --gold-bright:#c8900a;
   --blue:#1a3d5c; --blue-pale:#edf4fb;
   --ink:#1a1a1c; --ink-2:#3a3a3c;
   --bg:#f7f6f2; --surface:#ffffff; --border:#d8d5d0;
   --stop:#8b1a2a; --stop-bg:#fbeef0;
   --go:#1a7a4d; --go-bg:#e6f4ec;
-  --font-serif:'Playfair Display',Georgia,serif;
-  --font-sans:'Source Sans 3',system-ui,sans-serif;
+  --tap:48px;
+  --font-serif:Georgia,'Iowan Old Style','Times New Roman',serif;
+  --font-sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-mono:ui-monospace,'SF Mono',Menlo,monospace;
 }
+/* ---- LIGHT: DUSK ---- */
+html[data-light="dusk"]{
+  color-scheme: light;
+  --pine:#16402c; --pine-mid:#1e573e; --pine-lt:#357354; --pine-faint:#e9e1c2;
+  --on-pine:#ffffff;
+  --gold:#734a00; --gold-pale:#f3e8c6; --gold-border:#d3ae55; --gold-bright:#8f4400;
+  --blue:#173650; --blue-pale:#e2e9ee;
+  --ink:#211a10; --ink-2:#44381f;
+  --bg:#efe4c8; --surface:#f8f0da; --border:#c9b78c;
+  --stop:#7c1425; --stop-bg:#f3e0da;
+  --go:#155f3b; --go-bg:#e0ecda;
+}
+/* ---- LIGHT: WARM-DARK (night — warm charcoal, never pure black) ---- */
+html[data-light="night"]{
+  color-scheme: dark;
+  --pine:#93c9ab; --pine-mid:#a9d6bd; --pine-lt:#5d8a72; --pine-faint:#232c22;
+  --on-pine:#0f1d15;
+  --gold:#e3bd68; --gold-pale:#2c2515; --gold-border:#6a5a2c; --gold-bright:#f0c357;
+  --blue:#a3c0dc; --blue-pale:#20282f;
+  --ink:#f2e3bf; --ink-2:#d8c59a;
+  --bg:#1c1a16; --surface:#26231d; --border:#4a4336;
+  --stop:#eaa3ae; --stop-bg:#331f23;
+  --go:#8fd0aa; --go-bg:#1e2b22;
+}
+/* ---- TOGGLE: high contrast ---- */
+html.se-contrast:not([data-light="night"]){ --bg:#fbfaf7; --surface:#ffffff; --ink:#141109; --ink-2:#2c2517; --border:#8f8570; }
+html.se-contrast[data-light="night"]{ --bg:#0e0d0b; --surface:#161410; --ink:#fff7e6; --ink-2:#efe0bc; }
+/* ---- TOGGLE: text size A / A+ / A++ ---- */
+html{ font-size:100%; }
+html.se-a1{ zoom:1.15; }
+html.se-a2{ zoom:1.3; }
+/* ---- TOGGLE: reduce motion ---- */
+html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+@media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+/* ---- TOGGLE: colorblind cues ---- */
+html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
 *{box-sizing:border-box;}
 body{ margin:0; font-family:var(--font-sans); background:var(--bg); color:var(--ink);
-  line-height:1.6; font-size:19px; min-height:100vh; }
+  line-height:1.6; font-size:19px; min-height:100vh;
+  transition:background .18s ease, color .18s ease; }
 .stage{ max-width:660px; margin:0 auto; padding:1.4rem 1.3rem 3rem; }
+
+/* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+.se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+  padding:9px 14px; background:var(--surface); border-bottom:2px solid var(--ink);
+  position:sticky; top:0; z-index:100; }
+.se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 12px; border:1.5px solid var(--border); border-radius:8px; background:var(--bg);
+  color:var(--ink); font-family:var(--font-mono); font-weight:700; font-size:13px; text-decoration:none; }
+.se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+.se-brand svg{ width:34px; height:20px; color:var(--pine-mid); flex:0 0 auto; }
+.se-brand .wm{ font-family:var(--font-serif); font-size:16px; letter-spacing:.01em; white-space:nowrap; }
+.se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--pine);
+  color:var(--on-pine); font-family:var(--font-mono); font-weight:700; font-size:13px; cursor:pointer; }
+.se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--gold-bright); outline-offset:2px; }
+@media (max-width:560px){ .se-brand .wm{ display:none; } }
+
+/* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+.se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:101;
+  width:min(320px,calc(100vw - 24px)); background:var(--surface); color:var(--ink);
+  border:2px solid var(--pine); border-radius:10px; padding:15px;
+  box-shadow:0 10px 34px rgba(0,0,0,.28); display:none; }
+.se-panel[data-open="1"]{ display:block; }
+.se-panel h2{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-2); margin:0 0 8px; }
+.se-row{ display:flex; gap:6px; margin-bottom:14px; }
+.se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--border); border-radius:8px;
+  background:var(--bg); color:var(--ink); font-family:var(--font-mono); font-weight:700; font-size:12.5px; cursor:pointer; }
+.se-btn[aria-pressed="true"]{ background:var(--pine); color:var(--on-pine); border-color:var(--pine); }
+.se-btn:focus-visible{ outline:3px solid var(--gold-bright); outline-offset:2px; }
+.se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+  min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--border); border-radius:8px;
+  background:var(--bg); color:var(--ink); font-family:var(--font-sans); font-weight:600; font-size:14px; cursor:pointer; text-align:left; }
+.se-tog[aria-pressed="true"]{ border-color:var(--pine); }
+.se-tog .st{ font-family:var(--font-mono); font-size:11px; color:var(--ink-2); }
+.se-tog[aria-pressed="true"] .st{ color:var(--pine); font-weight:700; }
+.se-tog:focus-visible{ outline:3px solid var(--gold-bright); outline-offset:2px; }
+.se-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+/* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+.se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; border-top:2px solid var(--border); }
+.se-rail a,.se-rail button{ min-height:var(--tap); padding:10px 18px; border:1.5px solid var(--border); border-radius:8px;
+  background:var(--surface); color:var(--ink); font-family:var(--font-mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer; }
+.se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--gold-bright); outline-offset:2px; }
+.se-updated{ font-family:var(--font-mono); font-size:.78rem; color:var(--ink-2); text-align:center; margin:0; padding:0 16px 20px; }
 
 /* progress dots — countable, not color-alone */
 .prog{ display:flex; gap:.4rem; justify-content:center; padding:1rem 0 .4rem; }
@@ -76,7 +160,8 @@ strong{ color:var(--ink); }
 
 /* the spark — opening scene, scene-first */
 .spark-scene{ position:relative; border-radius:16px; overflow:hidden; margin:0 0 1.6rem;
-  background:radial-gradient(ellipse 60% 50% at 50% 40%, #14323f 0%, transparent 62%),
+  background-color:#0c1b27; /* solid backing so contrast walkers ground the caption to the real dark scene */
+  background-image:radial-gradient(ellipse 60% 50% at 50% 40%, #14323f 0%, transparent 62%),
              linear-gradient(180deg,#0c1b27 0%,#0f2433 55%,#091622 100%);
   min-height:230px; display:flex; align-items:center; justify-content:center; }
 .spark-dot{ width:14px; height:14px; border-radius:50%; background:#ffe9a8;
@@ -136,7 +221,7 @@ strong{ color:var(--ink); }
 .btn{ display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
   font-family:var(--font-sans); font-size:1.08rem; font-weight:700; cursor:pointer;
   min-height:54px; padding:.85rem 1.5rem; border-radius:10px; border:2px solid var(--pine);
-  background:var(--pine); color:#fff; width:100%; margin-top:.5rem; }
+  background:var(--pine); color:var(--on-pine); width:100%; margin-top:.5rem; }
 .btn:hover{ background:var(--pine-mid); }
 .btn:focus-visible{ outline:3px solid var(--gold-bright); outline-offset:3px; }
 .btn[disabled]{ opacity:.4; cursor:default; }
@@ -163,6 +248,37 @@ strong{ color:var(--ink); }
 </style>
 </head>
 <body>
+
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="../index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 27" fill="none" stroke="currentColor" aria-hidden="true" focusable="false"><path d="M33.2 13.5 L33.3 13.6 L33.3 13.8 L33.4 13.9 L33.4 14.1 L33.4 14.3 L33.3 14.5 L33.3 14.7 L33.2 14.9 L33.1 15.0 L33.0 15.2 L32.8 15.4 L32.7 15.5 L32.5 15.7 L32.2 15.8 L32.0 15.9 L31.7 15.9 L31.5 16.0 L31.2 16.0 L30.9 15.9 L30.6 15.9 L30.3 15.8 L30.1 15.7 L29.8 15.5 L29.5 15.3 L29.3 15.1 L29.1 14.8 L28.9 14.5 L28.7 14.2 L28.6 13.9 L28.5 13.5 L28.4 13.1 L28.4 12.7 L28.4 12.3 L28.5 11.9 L28.6 11.5 L28.8 11.2 L29.0 10.8 L29.2 10.4 L29.5 10.1 L29.8 9.8 L30.2 9.5 L30.6 9.3 L31.1 9.1 L31.5 8.9 L32.0 8.8 L32.5 8.8 L33.0 8.8 L33.5 8.8 L34.0 8.9 L34.5 9.1 L35.0 9.3 L35.5 9.6 L35.9 9.9 L36.4 10.3 L36.7 10.8 L37.1 11.2 L37.3 11.8 L37.6 12.3 L37.7 12.9 L37.9 13.5 L37.9 14.1 L37.9 14.7 L37.8 15.4 L37.6 16.0 L37.4 16.6 L37.1 17.2 L36.8 17.8 L36.3 18.3 L35.8 18.8 L35.3 19.2 L34.7 19.6 L34.1 19.9 L33.4 20.2 L32.7 20.4 L32.0 20.5 L31.3 20.6 L30.5 20.5 L29.8 20.4 L29.0 20.2 L28.3 19.9 L27.6 19.5 L26.9 19.1 L26.3 18.6 L25.8 18.0 L25.3 17.4 L24.8 16.7 L24.4 16.0 L24.2 15.2 L23.9 14.3 L23.8 13.5 L23.8 12.6 L23.9 11.8 L24.0 10.9 L24.2 10.0 L24.6 9.2 L25.0 8.4 L25.5 7.7 L26.1 7.0 L26.8 6.3 L27.5 5.7 L28.3 5.3 L29.2 4.8 L30.1 4.5 L31.0 4.3 L32.0 4.2 L33.0 4.1 L34.0 4.2 L35.0 4.4 L35.9 4.7 L36.9 5.1 L37.8 5.6 L38.6 6.2 L39.4 6.8 L40.1 7.6 L40.8 8.4 L41.3 9.4 L41.8 10.3 L42.1 11.3 L42.4 12.4 L42.5 13.5" stroke-width="2.3" stroke-linecap="round"/><circle cx="32" cy="13.5" r="1.6" fill="currentColor" stroke="none"/></svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
 
 <div class="prog" id="prog" aria-hidden="true"></div>
 
@@ -202,9 +318,10 @@ strong{ color:var(--ink); }
 
     <div class="gate">
       <div class="gate-top">
-        <svg class="gate-glyph" viewBox="0 0 30 30" aria-hidden="true">
-          <rect x="4" y="4" width="22" height="22" rx="3" fill="none" stroke="#1a3d5c" stroke-width="2.5"/>
-          <path d="M9 15 L13 19 L21 10" fill="none" stroke="#1a3d5c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <svg class="gate-glyph" viewBox="0 0 100 100" aria-hidden="true">
+          <rect x="20" y="20" width="66" height="66" rx="10" fill="var(--border)"/>
+          <rect x="13" y="13" width="66" height="66" rx="10" fill="var(--blue)"/>
+          <path d="M27 49 L36 41 L44 51 L59 27 L67 33 L46 66 Z" fill="var(--blue-pale)"/>
         </svg>
         <span class="gate-name">A gate, not a green light</span>
       </div>
@@ -295,6 +412,13 @@ strong{ color:var(--ink); }
 
 </div>
 
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="../index.html" aria-label="Home">Home</a>
+</nav>
+<p class="se-updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v5 <span style="opacity:.75">d701f4e</span></span> </span> </span> </span>
+
 <script>
 var SCREENS = ['s0','s1','s2','s3','s4','s5'];
 var idea = '';
@@ -360,6 +484,41 @@ document.getElementById('b5').addEventListener('click', function(){
 });
 
 paintProg(0);
+
+/* ═══ COMFORT KERNEL v2 — Studio Eyes ═══ */
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  // last-updated: computed, not typed
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+})();
 </script>
 </body>
 </html>

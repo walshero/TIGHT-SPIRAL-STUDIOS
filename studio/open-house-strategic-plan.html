@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <!--
   OPEN HOUSE — STRATEGIC PLAN · Tight Spiral Studios · walshero@gmail.com
   Compiled 2026-07-02 from the month-long open-house caucus report.
@@ -14,31 +14,61 @@
   declined / parked); founder is the verdict on every open call. Human-in-the-
   loop throughout — the founder named the katamari, the room caught it.
 
-  FLOORS HELD: single-file, offline, in-memory only. 3-stop palette
-  (Softer / Default / Warm-dark, never #000/#fff). Full-contrast ink, no muted
-  gray. 44px targets, keyboard nav, visible focus, no emoji. Green appears in
-  MODERATION per the revised 2026-07-02 green rule: one accent role, never a
-  state carrier, passes contrast at every stop. State = position+label+shape.
-  Joy flourish (spiral draw-in) plays full-on with a replay control;
-  prefers-reduced-motion stills it.
+  FLOORS HELD: single-file, offline, in-memory only. Migrated 2026-07-30 to
+  Comfort Kernel v2 (Studio Eyes): Light Default / Dusk / Warm-dark via
+  html[data-light] token remaps (never #000/#fff), text A / A+ / A++,
+  high contrast, reduce motion, colorblind cues. Reserved chrome header,
+  Back + Home rail. Full-contrast ink, no muted gray. 44px targets, keyboard
+  nav, visible focus, no emoji. Green appears in MODERATION per the revised
+  2026-07-02 green rule: one accent role, never a state carrier, passes
+  contrast at every stop. State = position+label+shape. Joy flourish (spiral
+  draw-in) plays full-on with a replay control; prefers-reduced-motion and the
+  Reduce-motion toggle still it.
 -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Open House — Strategic Plan · Tight Spiral Studios</title>
 <style>
+/* ---- LIGHT: DAY (default) ---- */
 :root{
   --paper:#f4efe6; --ink:#1d1a16; --ink2:#1d1a16;
   --gold:#6e4700; --goldbtn:#e8c96a; --rust:#a04222; --slate:#1f4e5f;
   --green:#1d5c3a; /* moderation accent — one role only */
   --card:#fbf8f1; --edge:#d8cfbc;
+  --strong:#1f4e5f; --on-strong:#ffffff;
+  --tap:48px;
+  --mono:ui-monospace,"SF Mono",Menlo,monospace;
 }
-body.softer{ --paper:#e6ddc9; --card:#efe7d4; --edge:#cabfa6; }
-body.warmdark{
+/* ---- LIGHT: DUSK (the old Softer stop) ---- */
+html[data-light="dusk"]{
+  --paper:#e6ddc9; --card:#efe7d4; --edge:#cabfa6;
+}
+/* ---- LIGHT: WARM-DARK (night — warm charcoal, never pure black) ---- */
+html[data-light="night"]{
   --paper:#2b2622; --ink:#f0d9a8; --ink2:#f0d9a8;
   --gold:#f0d9a8; --goldbtn:#c9a44a; --rust:#e0906c; --slate:#9cc4d4;
   --green:#8fd4ae; --card:#372f29; --edge:#57493c;
+  --strong:#9cc4d4; --on-strong:#1d1a16;
 }
+/* ---- TOGGLE: high contrast (halation floor) ---- */
+html.se-contrast:not([data-light="night"]){
+  --paper:#fbfaf7; --card:#fbfaf7; --edge:#b9a06a; --ink:#141109; --ink2:#141109;
+  --gold:#523500; --rust:#7e3016; --slate:#173b48; --strong:#173b48;
+}
+html.se-contrast[data-light="night"]{
+  --paper:#14100b; --card:#1b160f; --ink:#fff7e6; --ink2:#fff7e6;
+  --gold:#fff7e6; --rust:#eda486; --slate:#b9d3e0; --strong:#b9d3e0;
+}
+/* ---- TOGGLE: text size A / A+ / A++ ---- */
+html.se-a1{ zoom:1.15; }
+html.se-a2{ zoom:1.3; }
+/* ---- TOGGLE: reduce motion ---- */
+html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+html.se-reduce #spiralPath{ stroke-dashoffset:0; }
+/* ---- TOGGLE: colorblind cues ---- */
+html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+
 *{ box-sizing:border-box; }
 html{ scroll-behavior:smooth; }
 body{
@@ -46,7 +76,6 @@ body{
   font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   font-size:20px; line-height:1.6; letter-spacing:.01em;
 }
-body.bigtext{ font-size:24px; }
 main{ max-width:46rem; margin:0 auto; padding:1.2rem 1.1rem 3rem; }
 h1,h2,h3{ font-family:Palatino,"Palatino Linotype",Georgia,serif; line-height:1.25; }
 h1{ font-size:1.9em; margin:.4em 0 .2em; }
@@ -62,15 +91,51 @@ button{
   border:2px solid var(--ink); border-radius:10px;
   background:var(--card); color:var(--ink); padding:.4em .9em;
 }
-.topbar{
-  display:flex; align-items:center; gap:.7rem; flex-wrap:wrap;
-  padding:.8rem 1.1rem; border-bottom:4px solid var(--edge);
-  background:var(--paper); position:sticky; top:0; z-index:5;
-}
-.mark{ flex:0 0 auto; }
-.brand{ font-family:Palatino,Georgia,serif; font-weight:700; font-size:1.05em; }
-.spacer{ flex:1 1 auto; }
-.comfort{ background:var(--goldbtn); color:#1d1a16; border-color:#1d1a16; font-weight:700; }
+
+/* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+.se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+  padding:9px 14px; background:var(--card); border-bottom:2px solid var(--ink);
+  position:sticky; top:0; z-index:100; }
+.se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 12px; border:1.5px solid var(--edge); border-radius:8px; background:var(--paper);
+  color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; }
+.se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+.se-brand svg{ width:34px; height:20px; color:var(--slate); flex:0 0 auto; }
+.se-brand .wm{ font-family:Palatino,"Palatino Linotype",Georgia,serif; font-weight:700; font-size:16px; letter-spacing:.01em; white-space:nowrap; }
+.se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--strong);
+  color:var(--on-strong); font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer; }
+.se-home:focus-visible,.se-eyes:focus-visible{ outline:4px solid var(--goldbtn); outline-offset:2px; }
+@media (max-width:560px){ .se-brand .wm{ display:none; } }
+
+/* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+.se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:101;
+  width:min(320px,calc(100vw - 24px)); background:var(--card); color:var(--ink);
+  border:2px solid var(--strong); border-radius:10px; padding:15px;
+  box-shadow:0 10px 34px rgba(0,0,0,.28); display:none; }
+.se-panel[data-open="1"]{ display:block; }
+.se-panel h2{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink2); margin:0 0 8px; border-bottom:none; padding-bottom:0; }
+.se-row{ display:flex; gap:6px; margin-bottom:14px; }
+.se-btn{ flex:1; min-height:var(--tap); min-width:0; padding:8px 4px; border:1.5px solid var(--edge); border-radius:8px;
+  background:var(--paper); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:12.5px; cursor:pointer; }
+.se-btn[aria-pressed="true"]{ background:var(--strong); color:var(--on-strong); border-color:var(--strong); }
+.se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+  min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--edge); border-radius:8px;
+  background:var(--paper); color:var(--ink); font-weight:600; font-size:14px; cursor:pointer; text-align:left; }
+.se-tog[aria-pressed="true"]{ border-color:var(--strong); }
+.se-tog .st{ font-family:var(--mono); font-size:11px; color:var(--ink2); }
+.se-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+/* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+.se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; border-top:2px solid var(--edge); }
+.se-rail a,.se-rail button{ display:inline-flex; align-items:center; min-height:var(--tap); padding:10px 18px;
+  border:1.5px solid var(--edge); border-radius:8px;
+  background:var(--card); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer; }
+
+.updated{ font-family:var(--mono); font-size:.72em; color:var(--ink2); margin:2px 0 1em; display:flex; align-items:center; gap:7px; }
+.updated::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--slate); flex:0 0 auto; }
+
 .loop{
   background:var(--card); border:2px solid var(--edge); border-left:8px solid var(--slate);
   border-radius:12px; padding:.9rem 1rem; margin:1rem 0;
@@ -110,16 +175,37 @@ button{
 </style>
 </head>
 <body>
-<header class="topbar">
-  <svg class="mark" width="34" height="34" viewBox="0 0 40 40" aria-hidden="true">
-    <path d="M20 20 m0 -2 a2 2 0 1 1 -2 2 a4 4 0 1 1 4 -4 a7 7 0 1 1 -7 7 a10 10 0 1 1 10 -10 a14 14 0 1 1 -14 14"
-      fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
-  </svg>
-  <span class="brand">Tight Spiral Studios</span>
-  <span class="spacer"></span>
-  <button id="sizeBtn" type="button" aria-pressed="false">Text size</button>
-  <button id="comfortBtn" class="comfort" type="button">Comfort: Default</button>
+
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="../index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 27" fill="none" stroke="currentColor" aria-hidden="true" focusable="false"><path d="M33.2 13.5 L33.3 13.6 L33.3 13.8 L33.4 13.9 L33.4 14.1 L33.4 14.3 L33.3 14.5 L33.3 14.7 L33.2 14.9 L33.1 15.0 L33.0 15.2 L32.8 15.4 L32.7 15.5 L32.5 15.7 L32.2 15.8 L32.0 15.9 L31.7 15.9 L31.5 16.0 L31.2 16.0 L30.9 15.9 L30.6 15.9 L30.3 15.8 L30.1 15.7 L29.8 15.5 L29.5 15.3 L29.3 15.1 L29.1 14.8 L28.9 14.5 L28.7 14.2 L28.6 13.9 L28.5 13.5 L28.4 13.1 L28.4 12.7 L28.4 12.3 L28.5 11.9 L28.6 11.5 L28.8 11.2 L29.0 10.8 L29.2 10.4 L29.5 10.1 L29.8 9.8 L30.2 9.5 L30.6 9.3 L31.1 9.1 L31.5 8.9 L32.0 8.8 L32.5 8.8 L33.0 8.8 L33.5 8.8 L34.0 8.9 L34.5 9.1 L35.0 9.3 L35.5 9.6 L35.9 9.9 L36.4 10.3 L36.7 10.8 L37.1 11.2 L37.3 11.8 L37.6 12.3 L37.7 12.9 L37.9 13.5 L37.9 14.1 L37.9 14.7 L37.8 15.4 L37.6 16.0 L37.4 16.6 L37.1 17.2 L36.8 17.8 L36.3 18.3 L35.8 18.8 L35.3 19.2 L34.7 19.6 L34.1 19.9 L33.4 20.2 L32.7 20.4 L32.0 20.5 L31.3 20.6 L30.5 20.5 L29.8 20.4 L29.0 20.2 L28.3 19.9 L27.6 19.5 L26.9 19.1 L26.3 18.6 L25.8 18.0 L25.3 17.4 L24.8 16.7 L24.4 16.0 L24.2 15.2 L23.9 14.3 L23.8 13.5 L23.8 12.6 L23.9 11.8 L24.0 10.9 L24.2 10.0 L24.6 9.2 L25.0 8.4 L25.5 7.7 L26.1 7.0 L26.8 6.3 L27.5 5.7 L28.3 5.3 L29.2 4.8 L30.1 4.5 L31.0 4.3 L32.0 4.2 L33.0 4.1 L34.0 4.2 L35.0 4.4 L35.9 4.7 L36.9 5.1 L37.8 5.6 L38.6 6.2 L39.4 6.8 L40.1 7.6 L40.8 8.4 L41.3 9.4 L41.8 10.3 L42.1 11.3 L42.4 12.4 L42.5 13.5" stroke-width="2.3" stroke-linecap="round"/><circle cx="32" cy="13.5" r="1.6" fill="currentColor" stroke="none"/></svg>
+    <span class="wm">Tight Spiral Studios</span>
+  </span>
+  <button class="se-eyes" id="seEyes" type="button" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
 </header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" type="button" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" type="button" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" type="button" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" type="button" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" type="button" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" type="button" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" type="button" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" type="button" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" type="button" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
 
 <main>
   <div class="spiralwrap">
@@ -131,6 +217,7 @@ button{
   </div>
 
   <h1>Open House — Strategic Plan</h1>
+  <p class="updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v3 <span style="opacity:.75">e77f0f7</span></span> </span>
   <p class="kick">Eleven loops ran. This plan is what they proved, and nothing it hasn't earned.</p>
 
   <h2><span class="sq" aria-hidden="true"></span>The bearing</h2>
@@ -255,28 +342,50 @@ button{
   </footer>
 </main>
 
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="../index.html" aria-label="Home">Home</a>
+</nav>
+
 <script>
 (function(){
-  var stops=["Default","Softer","Warm dark"], idx=0;
-  var body=document.body;
-  var cBtn=document.getElementById("comfortBtn");
-  cBtn.addEventListener("click",function(){
-    idx=(idx+1)%3;
-    body.classList.remove("softer","warmdark");
-    if(idx===1)body.classList.add("softer");
-    if(idx===2)body.classList.add("warmdark");
-    cBtn.textContent="Comfort: "+stops[idx];
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  // last-updated: computed, not typed
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+  // spiral flourish replay
+  var sp=document.getElementById('spiralPath');
+  document.getElementById('replayBtn').addEventListener('click',function(){
+    sp.classList.remove('play'); void sp.getBoundingClientRect(); sp.classList.add('play');
   });
-  var sBtn=document.getElementById("sizeBtn");
-  sBtn.addEventListener("click",function(){
-    var on=body.classList.toggle("bigtext");
-    sBtn.setAttribute("aria-pressed",on?"true":"false");
-  });
-  var sp=document.getElementById("spiralPath");
-  document.getElementById("replayBtn").addEventListener("click",function(){
-    sp.classList.remove("play"); void sp.getBoundingClientRect(); sp.classList.add("play");
-  });
-  window.scrollTo(0,0);
 })();
 </script>
 </body>

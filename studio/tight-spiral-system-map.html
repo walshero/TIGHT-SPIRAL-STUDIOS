@@ -1,24 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tight Spiral Studios — System Map</title>
 <style>
-/* STUDIO EYES v4 CLASS-FIX 2026-07-11: lock the palette. */
+/* COMFORT KERNEL v2 mounted 2026-07-30 — Studio Eyes + reserved chrome. */
 :root{ color-scheme: light; }
 
+  /* ---- LIGHT: DAY (default) ---- */
   :root{
     --paper:#f3efe6; --paper-2:#e9e3d6; --ink:#1f2421; --ink-soft:#33352f;
     --label:#5c5b52;
-    --rule:#cdc6b4; --civic:#2f5d62; --crisis:#9c4a2e; --gold:#b8893b;
+    --rule:#cdc6b4; --civic:#2f5d62; --civic-ink:#2f5d62; --crisis:#9c4a2e; --gold:#b8893b;
     --slip:#fbf9f3; --shadow:rgba(40,36,28,.28); --focus:#1c6e8c; --ok:#3c6e47;
-    --steel:#6b7a7d;
+    --steel:#5e6d70; --walled:#8a3b3b; --walled-ink:#8a3b3b;
+    --tap:48px; --motion:.18s;
+    --sans-ui:ui-sans-serif,system-ui,Arial,sans-serif;
   }
+  /* ---- LIGHT: DUSK ---- */
+  html[data-light="dusk"]{
+    --paper:#eadfc4; --paper-2:#ddcfa9; --slip:#f2e9cf; --rule:#bfae85;
+    --ink:#221c10; --ink-soft:#443a20; --label:#544a2c;
+    --civic-ink:#284f54; --walled-ink:#7c3434; --focus:#155e78;
+    --shadow:rgba(46,38,22,.3);
+  }
+  /* ---- LIGHT: WARM-DARK (night — warm charcoal, never pure black) ---- */
+  html[data-light="night"]{
+    color-scheme:dark;
+    --paper:#1d1a15; --paper-2:#262219; --slip:#2a251c;
+    --ink:#f0e2c0; --ink-soft:#d6c49c; --label:#c9b78f;
+    --rule:#4a4232; --civic-ink:#a5c8d2; --walled-ink:#e0a494;
+    --gold:#d1a34f; --focus:#f0c357; --ok:#8fbf9a; --shadow:rgba(0,0,0,.5);
+  }
+  /* ---- TOGGLE: high contrast ---- */
+  html.se-contrast:not([data-light="night"]){
+    --paper:#fbfaf7; --paper-2:#f4f1e9; --slip:#ffffff;
+    --ink:#14100a; --ink-soft:#2c2517; --rule:#a3915e;
+    --civic-ink:#1c3f45; --walled-ink:#6e2a2a;
+  }
+  html.se-contrast[data-light="night"]{
+    --paper:#12100d; --paper-2:#191612; --slip:#1c1913;
+    --ink:#fff7e6; --ink-soft:#efe0bc; --civic-ink:#c4e2ea; --walled-ink:#f2bcac;
+  }
+  /* ---- TOGGLE: text size A / A+ / A++ ---- */
+  html{ font-size:100%; }
+  html.se-a1{ zoom:1.15; }
+  html.se-a2{ zoom:1.3; }
+  /* ---- TOGGLE: reduce motion ---- */
+  html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+  @media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+  /* ---- TOGGLE: colorblind cues ---- */
+  html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+
   *{box-sizing:border-box}
   html,body{margin:0;padding:0;background:var(--paper);color:var(--ink)}
   body{font-family:Georgia,'Iowan Old Style',serif;font-size:19px;line-height:1.5;
-    -webkit-text-size-adjust:100%;padding:0 0 64px}
+    -webkit-text-size-adjust:100%;padding:0 0 64px;
+    transition:background var(--motion) ease,color var(--motion) ease}
+
+  /* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+  .se-chrome{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;
+    padding:9px 14px;background:var(--slip);border-bottom:2px solid var(--ink);
+    position:sticky;top:0;z-index:100}
+  .se-home{justify-self:start;display:inline-flex;align-items:center;gap:7px;min-height:var(--tap);
+    padding:8px 12px;border:1.5px solid var(--rule);border-radius:8px;background:var(--paper-2);
+    color:var(--ink);font-family:var(--sans-ui);font-weight:700;font-size:13px;text-decoration:none}
+  .se-brand{justify-self:center;display:inline-flex;align-items:center;gap:9px;color:var(--ink)}
+  .se-brand svg{width:34px;height:20px;color:var(--civic-ink);flex:0 0 auto}
+  .se-brand .wm{font-family:Georgia,'Iowan Old Style',serif;font-size:16px;letter-spacing:.01em;white-space:nowrap}
+  .se-eyes{justify-self:end;display:inline-flex;align-items:center;gap:7px;min-height:var(--tap);
+    padding:8px 13px;border:2px solid transparent;border-radius:8px;background:var(--civic);
+    color:#fff;font-family:var(--sans-ui);font-weight:700;font-size:13px;cursor:pointer}
+  .se-home:focus-visible,.se-eyes:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+  @media (max-width:560px){ .se-brand .wm{display:none} }
+
+  /* ═══ STUDIO EYES panel ═══ */
+  .se-panel{position:fixed;right:12px;top:calc(var(--tap) + 14px);z-index:101;
+    width:min(320px,calc(100vw - 24px));background:var(--slip);color:var(--ink);
+    border:2px solid var(--civic);border-radius:10px;padding:15px;
+    box-shadow:0 10px 34px rgba(0,0,0,.28);display:none}
+  .se-panel[data-open="1"]{display:block}
+  .se-panel h2{font-family:var(--sans-ui);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 8px}
+  .se-row{display:flex;gap:6px;margin-bottom:14px}
+  .se-btn{flex:1;min-height:var(--tap);padding:8px 4px;border:1.5px solid var(--rule);border-radius:8px;
+    background:var(--paper-2);color:var(--ink);font-family:var(--sans-ui);font-weight:700;font-size:12.5px;cursor:pointer}
+  .se-btn[aria-pressed="true"]{background:var(--civic);color:#fff;border-color:var(--civic)}
+  .se-btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+  .se-tog{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;
+    min-height:var(--tap);padding:8px 11px;margin-bottom:6px;border:1.5px solid var(--rule);border-radius:8px;
+    background:var(--paper-2);color:var(--ink);font-family:var(--sans-ui);font-weight:600;font-size:14px;cursor:pointer;text-align:left}
+  .se-tog[aria-pressed="true"]{border-color:var(--civic)}
+  .se-tog .st{font-family:var(--sans-ui);font-size:11px;color:var(--ink-soft)}
+  .se-tog[aria-pressed="true"] .st{color:var(--civic-ink);font-weight:700}
+  .se-tog:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+  .se-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+  /* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+  .se-rail{display:flex;gap:10px;justify-content:center;padding:20px;border-top:2px solid var(--rule);margin-top:26px}
+  .se-rail a,.se-rail button{min-height:var(--tap);min-width:44px;padding:10px 18px;border:1.5px solid var(--rule);border-radius:8px;
+    background:var(--paper-2);color:var(--ink);font-family:var(--sans-ui);font-weight:700;font-size:13px;text-decoration:none;cursor:pointer}
+  .se-rail a:focus-visible,.se-rail button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+  .updated{font-family:var(--sans-ui);font-size:12.5px;color:var(--ink-soft);margin:0 0 20px;
+    display:flex;align-items:center;gap:7px}
+  .updated::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--civic);flex:0 0 auto}
   .wrap{max-width:720px;margin:0 auto;padding:22px 18px 0}
   .sans{font-family:ui-sans-serif,system-ui,Arial,sans-serif}
 
@@ -60,22 +146,22 @@
   .reader .role.walled{background:#8a3b3b}
 
   /* the Scout — walled off, unmeshed */
-  .scout{position:relative;background:var(--paper-2);border:2px dashed #8a3b3b;border-radius:14px;
+  .scout{position:relative;background:var(--paper-2);border:2px dashed var(--walled);border-radius:14px;
     padding:16px 16px 14px;margin:0 0 20px}
-  .scout-lab{position:absolute;top:-11px;left:16px;background:#8a3b3b;color:#fff;
+  .scout-lab{position:absolute;top:-11px;left:16px;background:var(--walled);color:#fff;
     font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:11.5px;font-weight:700;letter-spacing:.07em;
     text-transform:uppercase;padding:4px 11px;border-radius:18px}
   .scout p{margin:6px 0 0;font-size:15.5px;color:var(--ink-soft)}
-  .wall-note{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:12.5px;color:#8a3b3b;font-weight:700;
+  .wall-note{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:12.5px;color:var(--walled-ink);font-weight:700;
     text-transform:uppercase;letter-spacing:.05em;margin:10px 0 0}
 
   /* flOw ring-down */
   .refwrap{margin:0 0 18px}
   .descend{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;
-    background:transparent;color:var(--civic);border:2px solid var(--rule);border-radius:10px;
+    background:transparent;color:var(--civic-ink);border:2px solid var(--rule);border-radius:10px;
     padding:13px 15px;font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:15px;font-weight:600;
     cursor:pointer;min-height:44px}
-  .descend:hover{border-color:var(--civic)}
+  .descend:hover{border-color:var(--civic-ink)}
   .descend:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
   .descend .arrow{font-weight:700;font-size:18px;flex:0 0 auto}
   .ring{margin:10px 0 0}.ring[hidden]{display:none}
@@ -99,17 +185,50 @@
 
   .footer{font-family:ui-sans-serif,system-ui,Arial,sans-serif;font-size:12.5px;color:var(--ink-soft);
     text-align:center;margin:24px 0 0;line-height:1.5}
-  .footer a{color:var(--civic)}
+  .footer a{color:var(--civic-ink)}
   [hidden]{display:none}
   @media (max-width:430px){body{font-size:18px}h1{font-size:25px}}
 </style>
 </head>
 <body>
+
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="../index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 27" fill="none" stroke="currentColor" aria-hidden="true" focusable="false"><path d="M33.2 13.5 L33.3 13.6 L33.3 13.8 L33.4 13.9 L33.4 14.1 L33.4 14.3 L33.3 14.5 L33.3 14.7 L33.2 14.9 L33.1 15.0 L33.0 15.2 L32.8 15.4 L32.7 15.5 L32.5 15.7 L32.2 15.8 L32.0 15.9 L31.7 15.9 L31.5 16.0 L31.2 16.0 L30.9 15.9 L30.6 15.9 L30.3 15.8 L30.1 15.7 L29.8 15.5 L29.5 15.3 L29.3 15.1 L29.1 14.8 L28.9 14.5 L28.7 14.2 L28.6 13.9 L28.5 13.5 L28.4 13.1 L28.4 12.7 L28.4 12.3 L28.5 11.9 L28.6 11.5 L28.8 11.2 L29.0 10.8 L29.2 10.4 L29.5 10.1 L29.8 9.8 L30.2 9.5 L30.6 9.3 L31.1 9.1 L31.5 8.9 L32.0 8.8 L32.5 8.8 L33.0 8.8 L33.5 8.8 L34.0 8.9 L34.5 9.1 L35.0 9.3 L35.5 9.6 L35.9 9.9 L36.4 10.3 L36.7 10.8 L37.1 11.2 L37.3 11.8 L37.6 12.3 L37.7 12.9 L37.9 13.5 L37.9 14.1 L37.9 14.7 L37.8 15.4 L37.6 16.0 L37.4 16.6 L37.1 17.2 L36.8 17.8 L36.3 18.3 L35.8 18.8 L35.3 19.2 L34.7 19.6 L34.1 19.9 L33.4 20.2 L32.7 20.4 L32.0 20.5 L31.3 20.6 L30.5 20.5 L29.8 20.4 L29.0 20.2 L28.3 19.9 L27.6 19.5 L26.9 19.1 L26.3 18.6 L25.8 18.0 L25.3 17.4 L24.8 16.7 L24.4 16.0 L24.2 15.2 L23.9 14.3 L23.8 13.5 L23.8 12.6 L23.9 11.8 L24.0 10.9 L24.2 10.0 L24.6 9.2 L25.0 8.4 L25.5 7.7 L26.1 7.0 L26.8 6.3 L27.5 5.7 L28.3 5.3 L29.2 4.8 L30.1 4.5 L31.0 4.3 L32.0 4.2 L33.0 4.1 L34.0 4.2 L35.0 4.4 L35.9 4.7 L36.9 5.1 L37.8 5.6 L38.6 6.2 L39.4 6.8 L40.1 7.6 L40.8 8.4 L41.3 9.4 L41.8 10.3 L42.1 11.3 L42.4 12.4 L42.5 13.5" stroke-width="2.3" stroke-linecap="round"/><circle cx="32" cy="13.5" r="1.6" fill="currentColor" stroke="none"/></svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
+
 <div class="wrap">
 
   <p class="eyebrow">Tight Spiral Studios · how the machine turns</p>
   <h1>The System Map</h1>
   <p class="lead">The studios are gears. They drive each other. Tap any gear to read what it does — and notice what is <i>not</i> meshed, on purpose.</p>
+  <p class="updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v3 <span style="opacity:.75">e77f0f7</span></span> </span>
 
   <!-- ===================== THE HOUSING (OS) ===================== -->
   <div class="housing">
@@ -261,6 +380,49 @@
   </p>
 
 </div>
+
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="../index.html" aria-label="Home">Home</a>
+</nav>
+
+<script>
+/* STUDIO EYES — Comfort Kernel v2 */
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  // last-updated: computed, not typed
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+})();
+</script>
 
 <script>
 (function(){

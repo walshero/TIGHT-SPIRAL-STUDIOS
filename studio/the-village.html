@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <!--
   THE VILLAGE — the public face of Tight Spiral Productions. walshero@gmail.com
   Founder brief (2026-07-08): the studio front door as a village with a model-train line
@@ -9,9 +9,17 @@
 
   This is the OUTWARD face. The inward founder cockpit ("Work Desk") is a separate artifact.
 
+  COMFORT KERNEL v2 (migrated 2026-07-30): the old 3-stop Comfort cycle button is replaced
+  by the studio-standard reserved chrome (Home · teaspoon · Studio Eyes) and the Studio Eyes
+  panel — Light Default/Dusk/Warm-dark via html[data-light], text A/A+/A++, high contrast,
+  reduce motion, colorblind cues. Bottom rail: Back + Home. Warm-dark is warm charcoal,
+  never pure black. Last-updated stamp computed from document.lastModified.
+  ART (2026-07-30): the two weak generic card glyphs (EN195 flash unit, Warriors) redrawn
+  in direction C — Cut-Paper Relief: solid shapes, offset shadow layer, paper cutouts —
+  to match the village's cut-paper idiom. Hero village and the rest untouched.
+
   FLOOR: single-file, offline, in-memory; scene-first (the village is first paint, no wall);
-  color-scheme locked (never inherit OS charcoal); 3-stop comfort as a live corner knob
-  (never #000/#fff, >=0.12 stop separation); large type; 44px+ targets; full keyboard;
+  color-scheme locked (never inherit OS charcoal); large type; 44px+ targets; full keyboard;
   visible focus; reduced-motion safe (train + gears still under reduced-motion); scroll-reset
   via in-page anchors; no dead links (unbuilt/blocked games show status, never a broken door);
   no emoji; phone-width. Cut-paper SVG village = the image floor. Original SVG, CC0.
@@ -19,10 +27,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="color-scheme" content="light dark">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='19' fill='%230f5566'/%3E%3Cpath d='M20 7C11 7 7 14 7 20c0 6 4 11 11 11 5 0 9-3 9-8 0-4-3-6-6-6-3 0-4 2-4 4 0 1 1 2 2 2' fill='none' stroke='%23f0c357' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
 <title>Tight Spiral Productions — the studio</title>
 <style>
+/* ---- LIGHT: DAY (default) ---- */
 :root{
   color-scheme: light;
   --bg:#f0e4cc; --surface:#fbf4e4; --ink:#241a10; --ink2:#241a10;
@@ -30,26 +38,94 @@
   --slate:#33485a; --slate2:#26384a;
   --gold:#8a5c00; --gold-br:#c8900a; --gold-pale:#fbeecb;
   --rust:#8a3a1c; --sky:#cfdce6; --grass:#5f7a4a; --card:#efe1c4;
-  --focus:#c8900a;
+  --focus:#8f3f00;
+  --tap:48px; --motion:.18s;
   --serif:Georgia,'Times New Roman',serif;
   --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --mono:ui-monospace,'SF Mono',Menlo,monospace;
+  --on-accent:#ffffff;
 }
-body.softer{ --bg:#d9d2c4; --surface:#e4ddcd; --ink:#241f16; --ink2:#241f16; --line:#c2b48f; --line2:#a99a74; --sky:#ccd6df; --grass:#586f45; --card:#d8ccb2; }
-body.warm{ --bg:#1a1712; --surface:#241f18; --ink:#f3e6c6; --ink2:#f3e6c6; --line:#4a4230; --line2:#5e553e;
-  --slate:#9ab6c8; --slate2:#b0c6d6; --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#322a18;
-  --rust:#eaa183; --sky:#2a3540; --grass:#93ab7d; --card:#2c261c; }
+/* ---- LIGHT: DUSK ---- */
+html[data-light="dusk"]{
+  --bg:#e8d9b6; --surface:#f2e5c6; --ink:#241a10; --ink2:#241a10;
+  --line:#c6ae80; --line2:#a98f60;
+  --slate:#31465a; --slate2:#24384a;
+  --gold:#6e4700; --gold-br:#c8900a; --gold-pale:#f2e2b2;
+  --rust:#83341a; --sky:#c2cfda; --grass:#586f45; --card:#e6d3a6;
+  --focus:#9c4000;
+  --on-accent:#ffffff;
+}
+/* ---- LIGHT: WARM-DARK (night) — warm charcoal, never pure black ---- */
+html[data-light="night"]{
+  color-scheme: dark;
+  --bg:#1a1712; --surface:#241f18; --ink:#f3e6c6; --ink2:#f3e6c6;
+  --line:#4a4230; --line2:#5e553e;
+  --slate:#9ab6c8; --slate2:#b0c6d6;
+  --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#322a18;
+  --rust:#eaa183; --sky:#2a3540; --grass:#93ab7d; --card:#2c261c;
+  --focus:#f0c357;
+  --on-accent:#141109;
+}
+/* ---- TOGGLE: high contrast ---- */
+html.se-contrast:not([data-light="night"]){ --bg:#fbfaf7; --surface:#fffdf6; --ink:#141109; --ink2:#141109;
+  --line:#b9a06a; --line2:#8f7a4a; --gold:#5a3a00; --slate:#243a4a; --slate2:#1c2e3c;
+  --rust:#762c12; --grass:#3d5230; --card:#f0ece2; --gold-pale:#f6efd8; --sky:#dfe6ec; }
+html.se-contrast[data-light="night"]{ --bg:#0e0d0b; --surface:#161410; --ink:#fff7e6; --ink2:#fff7e6;
+  --slate:#b9cbe0; --slate2:#c8d8ea; --gold:#f6d27a; --gold-br:#f6d27a; --rust:#f0b492; --grass:#a9c193; --card:#242019; }
+/* ---- TOGGLE: text size A / A+ / A++ ---- */
+html{ font-size:100%; }
+html.se-a1{ zoom:1.15; }
+html.se-a2{ zoom:1.3; }
+/* ---- TOGGLE: reduce motion ---- */
+html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+/* ---- TOGGLE: colorblind cues ---- */
+html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+
 *{box-sizing:border-box;} html,body{margin:0;}
-body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; -webkit-text-size-adjust:100%; }
+body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; -webkit-text-size-adjust:100%;
+  transition:background var(--motion) ease, color var(--motion) ease; }
+a{ color:var(--slate2); }
 
-.topbar{ background:var(--slate); color:#fff; padding:.6rem .9rem; display:flex; align-items:center; gap:.6rem; font-family:var(--sans); position:sticky; top:0; z-index:40; }
-body.warm .topbar{ color:#0f0e0b; }
-.topbar .mark{ width:26px; height:26px; flex:none; }
-.topbar .wm{ font-weight:800; font-size:.95rem; letter-spacing:.01em; }
-.cstop{ margin-left:auto; background:rgba(255,255,255,.18); color:#241f16; border:2px solid rgba(255,255,255,.6); border-radius:9px; padding:.45rem .65rem; font:700 .76rem/1 var(--sans); cursor:pointer; min-height:44px; }
-body.warm .cstop{ border-color:rgba(0,0,0,.4); background:rgba(0,0,0,.12); }
-.cstop:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+/* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+.se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+  padding:9px 14px; background:var(--surface); border-bottom:2px solid var(--ink);
+  position:sticky; top:0; z-index:100; }
+.se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 12px; border:1.5px solid var(--line); border-radius:8px; background:var(--card);
+  color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; }
+.se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+.se-brand svg{ width:34px; height:20px; color:var(--slate2); flex:0 0 auto; }
+.se-brand .wm{ font-family:var(--serif); font-size:16px; letter-spacing:.01em; white-space:nowrap; }
+.se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--slate2);
+  color:var(--on-accent); font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer; }
+.se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+@media (max-width:560px){ .se-brand .wm{ display:none; } }
 
-.wrap{ max-width:720px; margin:0 auto; padding:0 1rem 5rem; }
+/* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+.se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:101;
+  width:min(320px,calc(100vw - 24px)); background:var(--surface); color:var(--ink);
+  border:2px solid var(--slate2); border-radius:10px; padding:15px;
+  box-shadow:0 10px 34px rgba(0,0,0,.28); display:none; }
+.se-panel[data-open="1"]{ display:block; }
+.se-panel h2{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink2); margin:0 0 8px; }
+.se-row{ display:flex; gap:6px; margin-bottom:14px; }
+.se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--card); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:12.5px; cursor:pointer; }
+.se-btn[aria-pressed="true"]{ background:var(--slate2); color:var(--on-accent); border-color:var(--slate2); }
+.se-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+  min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--card); color:var(--ink); font-family:var(--sans); font-weight:600; font-size:14px; cursor:pointer; text-align:left; }
+.se-tog[aria-pressed="true"]{ border-color:var(--slate2); }
+.se-tog .st{ font-family:var(--mono); font-size:11px; color:var(--ink2); }
+.se-tog[aria-pressed="true"] .st{ color:var(--slate2); font-weight:700; }
+html[data-light="night"] .se-tog[aria-pressed="true"] .st,
+html[data-light="night"] .se-panel h2{ color:var(--ink2); }
+.se-tog:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+.wrap{ max-width:720px; margin:0 auto; padding:0 1rem 3rem; }
 
 /* HERO VILLAGE */
 .hero{ padding:1.1rem 0 .3rem; text-align:center; }
@@ -57,6 +133,8 @@ body.warm .cstop{ border-color:rgba(0,0,0,.4); background:rgba(0,0,0,.12); }
 .tag{ font:800 .74rem/1 var(--sans); letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin:.2rem 0 .3rem; }
 h1{ font-family:var(--serif); font-size:1.75rem; line-height:1.14; color:var(--ink); margin:.1rem 0 .4rem; }
 .lede{ font-size:1.06rem; max-width:34rem; margin:.2rem auto .2rem; }
+.updated{ font:600 .78rem/1.4 var(--mono); color:var(--ink2); margin:.5rem 0 0; display:inline-flex; align-items:center; gap:7px; }
+.updated::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--slate); flex:0 0 auto; }
 
 /* moving parts */
 @keyframes spin{ to{ transform:rotate(360deg); } }
@@ -84,7 +162,7 @@ p{ margin:0 0 .9rem; }
 .big{ display:block; text-align:center; text-decoration:none; background:var(--gold-br); color:#241a10;
   border:3px solid #241a10; border-radius:14px; padding:.95rem 1rem; font:800 1.1rem/1.2 var(--sans);
   min-height:56px; margin:.5rem 0; }
-body.warm .big{ color:#1a1712; }
+html[data-light="night"] .big:not(.sec){ color:#1a1712; }
 .big:focus-visible{ outline:4px solid var(--rust); outline-offset:3px; }
 .big.sec{ background:var(--surface); color:var(--ink); border-color:var(--ink); }
 
@@ -100,10 +178,10 @@ body.warm .big{ color:#1a1712; }
 .gcard .gone{ font:400 .9rem/1.35 var(--sans); color:var(--ink2); margin-top:.15rem; }
 .pill{ display:inline-block; font:800 .68rem/1 var(--sans); letter-spacing:.04em; text-transform:uppercase;
   padding:.32rem .5rem; border-radius:999px; margin-top:.4rem; }
-.pill.live{ background:var(--grass); color:#fff; } body.warm .pill.live{ color:#12160e; }
+.pill.live{ background:var(--grass); color:#fff; } html[data-light="night"] .pill.live{ color:#12160e; }
 .pill.playtest{ background:var(--gold-br); color:#241a10; }
-.pill.build{ background:var(--slate); color:#fff; } body.warm .pill.build{ color:#0f1216; }
-.pill.blocked{ background:var(--rust); color:#fff; } body.warm .pill.blocked{ color:#1a0f0a; }
+.pill.build{ background:var(--slate); color:#fff; } html[data-light="night"] .pill.build{ color:#0f1216; }
+.pill.blocked{ background:var(--rust); color:#fff; } html[data-light="night"] .pill.blocked{ color:#1a0f0a; }
 .grid4{ padding:.2rem .9rem .3rem; }
 .row{ display:grid; grid-template-columns:auto 1fr; gap:.5rem .7rem; padding:.42rem 0; border-top:2px solid var(--line); align-items:start; }
 .row .k{ font:800 .7rem/1.3 var(--sans); letter-spacing:.03em; text-transform:uppercase; color:var(--gold); white-space:nowrap; }
@@ -111,36 +189,139 @@ body.warm .big{ color:#1a1712; }
 .gcard .gdoor{ display:block; text-align:center; text-decoration:none; margin:.5rem .9rem .9rem;
   padding:.8rem; border-radius:12px; font:800 1rem/1.2 var(--sans); min-height:52px; }
 .gcard .gdoor.play{ background:var(--gold-br); color:#241a10; border:3px solid #241a10; }
-body.warm .gcard .gdoor.play{ color:#1a1712; }
+html[data-light="night"] .gcard .gdoor.play{ color:#1a1712; }
 .gcard .gdoor.shut{ background:var(--card); color:var(--ink2); border:3px dashed var(--line2); cursor:default; }
 .gdoor.play:focus-visible{ outline:4px solid var(--rust); outline-offset:3px; }
 
 .foot{ margin-top:2rem; padding:1rem; background:var(--slate); color:#fff; border-radius:14px; font-family:var(--sans); font-size:.82rem; }
-body.warm .foot{ color:#0f0e0b; } .foot a{ color:#fff; font-weight:700; } body.warm .foot a{ color:#0f0e0b; }
+html[data-light="night"] .foot{ color:#0f0e0b; } .foot a{ color:#fff; font-weight:700; } html[data-light="night"] .foot a{ color:#0f0e0b; }
 .sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
-.skip{ position:absolute; left:-999px; } .skip:focus{ left:.5rem; top:.5rem; position:fixed; z-index:60; background:var(--gold-br); color:#241a10; padding:.6rem .9rem; border-radius:9px; font:800 .9rem var(--sans); }
+.skip{ position:absolute; left:-999px; } .skip:focus{ left:.5rem; top:.5rem; position:fixed; z-index:120; background:var(--gold-br); color:#241a10; padding:.6rem .9rem; border-radius:9px; font:800 .9rem var(--sans); }
 @media (max-width:520px){ body{font-size:18px;} h1{font-size:1.5rem;} .ramp .rt{font-size:1.04rem;} }
+
+/* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+.se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; border-top:2px solid var(--line); }
+.se-rail a,.se-rail button{ min-height:var(--tap); padding:10px 18px; border:1.5px solid var(--line); border-radius:8px;
+  background:var(--card); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer; }
+.se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 </style>
 </head>
 <body>
 <a class="skip" href="#ramps">Skip to the on-ramps</a>
+
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="../index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 27" fill="none" stroke="currentColor" aria-hidden="true" focusable="false"><path d="M33.2 13.5 L33.3 13.6 L33.3 13.8 L33.4 13.9 L33.4 14.1 L33.4 14.3 L33.3 14.5 L33.3 14.7 L33.2 14.9 L33.1 15.0 L33.0 15.2 L32.8 15.4 L32.7 15.5 L32.5 15.7 L32.2 15.8 L32.0 15.9 L31.7 15.9 L31.5 16.0 L31.2 16.0 L30.9 15.9 L30.6 15.9 L30.3 15.8 L30.1 15.7 L29.8 15.5 L29.5 15.3 L29.3 15.1 L29.1 14.8 L28.9 14.5 L28.7 14.2 L28.6 13.9 L28.5 13.5 L28.4 13.1 L28.4 12.7 L28.4 12.3 L28.5 11.9 L28.6 11.5 L28.8 11.2 L29.0 10.8 L29.2 10.4 L29.5 10.1 L29.8 9.8 L30.2 9.5 L30.6 9.3 L31.1 9.1 L31.5 8.9 L32.0 8.8 L32.5 8.8 L33.0 8.8 L33.5 8.8 L34.0 8.9 L34.5 9.1 L35.0 9.3 L35.5 9.6 L35.9 9.9 L36.4 10.3 L36.7 10.8 L37.1 11.2 L37.3 11.8 L37.6 12.3 L37.7 12.9 L37.9 13.5 L37.9 14.1 L37.9 14.7 L37.8 15.4 L37.6 16.0 L37.4 16.6 L37.1 17.2 L36.8 17.8 L36.3 18.3 L35.8 18.8 L35.3 19.2 L34.7 19.6 L34.1 19.9 L33.4 20.2 L32.7 20.4 L32.0 20.5 L31.3 20.6 L30.5 20.5 L29.8 20.4 L29.0 20.2 L28.3 19.9 L27.6 19.5 L26.9 19.1 L26.3 18.6 L25.8 18.0 L25.3 17.4 L24.8 16.7 L24.4 16.0 L24.2 15.2 L23.9 14.3 L23.8 13.5 L23.8 12.6 L23.9 11.8 L24.0 10.9 L24.2 10.0 L24.6 9.2 L25.0 8.4 L25.5 7.7 L26.1 7.0 L26.8 6.3 L27.5 5.7 L28.3 5.3 L29.2 4.8 L30.1 4.5 L31.0 4.3 L32.0 4.2 L33.0 4.1 L34.0 4.2 L35.0 4.4 L35.9 4.7 L36.9 5.1 L37.8 5.6 L38.6 6.2 L39.4 6.8 L40.1 7.6 L40.8 8.4 L41.3 9.4 L41.8 10.3 L42.1 11.3 L42.4 12.4 L42.5 13.5" stroke-width="2.3" stroke-linecap="round"/><circle cx="32" cy="13.5" r="1.6" fill="currentColor" stroke="none"/></svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
+
 <!-- CONSOLIDATION 2026-07-19: an earlier studio home, superseded by the root front door.
      Non-destructive pointer so this stops competing as a second door. -->
 <div style="background:#12161b;color:#f4f1e8;font:600 14px/1.45 -apple-system,'Segoe UI',Arial,sans-serif;padding:10px 16px;text-align:center">
   This was an earlier studio home. The current front door is
   <a href="../index.html" aria-label="Home — the studio front door" style="color:#ffcf5a;font-weight:700;text-decoration:none">Tight Spiral Productions&nbsp;&rsaquo;</a>
 </div>
-<div class="topbar">
-  <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="none" stroke="#fff" stroke-width="2"/><path d="M20 7C11 7 7 14 7 20c0 6 4 11 11 11 5 0 9-3 9-8 0-4-3-6-6-6-3 0-4 2-4 4 0 1 1 2 2 2" fill="none" stroke="#f0c357" stroke-width="3" stroke-linecap="round"/></svg>
-  <span class="wm">Tight Spiral Productions</span>
-  <button class="cstop" id="cstop" aria-label="Change comfort palette">Comfort</button>
-</div>
 
 <div class="wrap">
 
   <!-- HERO VILLAGE (scene-first, no wall) -->
+  <!-- ART-ASK (art-department, 2026-08-01): the hand-drawn hero village SVG below is this
+       file's ONLY art-gate HALT (4759 bytes, hand-authored scene art) and awaits a founder
+       plate. The art stays in place until a plate arrives. Two lanes, in preference order.
+
+       LANE 1 of 2 - MJ PROMPT. Founder pastes verbatim (or feeds the period brief below to
+       the Scriptorium prompt engine):
+       "a hand-built paper diorama village on a wooden table, keywound tinplate clockwork
+       toy locomotive with lithographed boiler pulling two tin cars on gauge-one track that
+       curves through the town in a loose spiral, three buildings of torn kraft paper and
+       letterpress scraps — a small station platform with scalloped canopy, a brick depot
+       with a blank clock face, a shopfront with shelved boxes in its window — exposed
+       riveted brass gear train at upper right, dyed-sawdust ground, circus playbill texture
+       with no legible letters, warm aged paper sky, pre-steampunk handmade diorama, true
+       cast shadows, matte finish, slightly worn edges, no people, no text --ar 28:15"
+       (target aspect 560:300; the double-hyphen ar flag is intentional and paste-verbatim —
+       browsers close comments only at the full arrow, so it is safe here).
+
+       PERIOD BRIEF (Continuity seat): Edwardian toy-room, nothing in frame designed after
+       ~1912. Loco is a keywound tinplate clockwork type with lithographed boiler,
+       Bing/Maerklin/Ives class shipped 1901-1912; NOT a Lionel electric outline (electric
+       outline reads post-1915); no plastic anything (plastic reads post-1947). Gauge-1
+       sectional tinplate track in a loose spiral. Three paper-and-letterpress buildings
+       left-to-right matching the on-ramps below the fold: small station platform with
+       scalloped canopy (Playtest Platform), brick depot with blank clock face and double
+       doors (Assessment Depot), shopfront with shelved box-spines in the window (Game
+       Shelf). Exposed brass gear train on a riveted mount at upper right (the works;
+       replaces the two animated SVG gears). Dyed-sawdust ground cover (ground foam is
+       post-1970, never). Warm aged-paper sky, one warm light source with true cast
+       shadows, matte finish, worn edges, faint fingerprints, chipped litho on the loco.
+       HARD RULES (house style): no legible text, letters, or numbers anywhere (woodtype as
+       texture only, blurred past reading); no figures, or kraft-paper silhouettes at most,
+       no faces ever. The scene's three semantic anchors (the three buildings) and the
+       spiral rail must survive the translation.
+
+       LANE 2 of 2 - LEGAL PHOTO fallback if the founder's MJ queue is cold. The
+       existing-plate lane was checked first per charter preference: all 12 plates in
+       art/cyl/plates are Choose Your Leader leader-era material (jfk62/lbj64/nixon69
+       rooms, broadcast inserts, draft card, suitcase, empty chair, dark set glass;
+       confirmed against cyl-v5-image-lane.md). None depicts a village, toy train, or
+       workshop; no plate fills this shot. That is a listed-and-inspected negative, not a
+       zero-result search. PERIOD LIBRARIAN BRIEF: search with the era's own vocabulary,
+       "toy railway", "clockwork train", "toy trains", "toy shop window", "miniature
+       railway" - not "model railroad layout" (postwar vocabulary). Stops in order:
+       (1) Library of Congress, Detroit Publishing Co. collection and Bain News Service
+       (both largely pre-1920); license target is an item page stating "No known
+       restrictions on publication" - record that exact string plus the loc.gov item URL.
+       (2) NARA / presidential libraries - long shot for this subject, one pass only.
+       (3) Wikimedia Commons, categories "Maerklin locomotives", "Toy trains", "Tin toys",
+       "Bing (company)"; license target Public Domain (pre-1930 publication or PD-old-100)
+       or CC0 or CC-BY; per the charter CC-BY-SA, NC, and ND do NOT qualify; verify the
+       license on the Commons file page itself, not the search result, and record source
+       URL + license string in the mount's data-art attributes. Audit the frame: every
+       object pre-1912 - no electric-outline locos, no plastic, no zip-cord wiring, no
+       modern shelving. No identifiable faces (withholding rule): empty layouts, shop
+       windows, or crop to hands.
+
+       MOUNT NOTES for the Compositor, either lane: base64 JPEG at or under ~400KB,
+       aspect-locked 560:300; data-art carries provenance (MJ lane: founder Midjourney
+       generation, Super Sketchy Graphics teaspoon imprint; photo lane: source URL +
+       verified license string); aria-label carries both the provenance string and the
+       existing scene narrative (train line looping like a spiral connecting playtest
+       platform, assessment depot, game shelf; gears as the works) - that string is what
+       art-gate's PROVENANCE regex passes on. The footer art credit in .foot ("original
+       cut-paper SVG, released CC0" - accurate today) must be corrected in the SAME commit
+       the plate mounts, or the file ships a false license statement; the header comment's
+       image-floor line goes stale the same day. The sub-floor animated train and gear
+       groups (each well under 2.5KB) may be composited OVER the plate to preserve the
+       chug/spin motion under reduced-motion rules. Plate must survive all three light
+       modes - supply or grade a dusk/night variant, comfort-gate before push. Play link
+       commit-pinned. -->
   <header class="hero">
-    <svg class="village" viewBox="0 0 560 300" role="img" aria-label="A small village. A model-train line loops through it like a spiral, connecting three buildings — a playtest platform, an assessment depot, and a game shelf. Two big gears turn beside them: the studio works.">
+    <svg class="village" viewBox="0 0 560 300" role="img" aria-label="A small village. A model-train line loops through it like a spiral, connecting three buildings — a playtest platform, an assessment depot, and a game shelf. Two big gears turn beside them: the studio works." data-art-class="instrument">
       <title>The Tight Spiral village — original cut-paper SVG, CC0</title>
       <!-- sky + ground -->
       <rect x="0" y="0" width="560" height="300" fill="var(--sky)"/>
@@ -193,8 +374,21 @@ body.warm .foot{ color:#0f0e0b; } .foot a{ color:#fff; font-weight:700; } body.w
     <p class="tag">Play. Notice. Design.</p>
     <h1>Tight Spiral Productions</h1>
     <p class="lede">A one-person studio that builds small games to make learning visible &mdash; the thinking, the measurement, and the rules underneath. Everything here is offline, single-file, and built to be read by anyone. Pick a track.</p>
+    <p class="updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v6 <span style="opacity:.75">246aeaf</span></span> </span> </span>
   </header>
 
+  <!-- ART-NOTE (continuity, non-blocking, 2026-08-01): the three ramp icons below and the
+       seven card emblems on the shelf (including the 2026-07-30 Cut-Paper Relief direction C
+       redraws: EN195 river, Warriors wheel) are each under the 2500-byte glyph floor —
+       art-gate passes them silently as UI glyphs. No replacement required; nothing here
+       blocks the hero fix. FOUNDER DECISION, not a gate matter: once the hero becomes an MJ
+       or archival plate, these glyphs are the last of the cut-paper idiom on the page, and
+       the header comment and footer art credit both describe an all-cut-paper page that will
+       no longer exist. Either keep the glyphs as honest UI chrome (charter-legal, zero cost)
+       or queue a matching SSG glyph set generated in the same MJ diorama session as the hero
+       plate — ten tiny isolated objects on flat single-color backgrounds, house hard rules
+       apply — so the page reads as one hand. If queued, it rides the hero's generation
+       batch. -->
   <!-- ON-RAMP STATIONS -->
   <nav class="ramps" id="ramps" aria-label="On-ramps">
     <a class="ramp" href="#playtest">
@@ -288,10 +482,11 @@ body.warm .foot{ color:#0f0e0b; } .foot a{ color:#fff; font-weight:700; } body.w
         <a class="gdoor play" href="sandbags.html">Play Sandbags &rarr;</a>
       </article>
 
-      <!-- EN195 FLASH UNIT -->
+      <!-- EN195 FLASH UNIT — mark redrawn 2026-07-30, direction C (Cut-Paper Relief):
+           the river with stepping stones, solid shapes + offset shadow layer + paper cutouts -->
       <article class="gcard" aria-labelledby="g-en195">
         <div class="gtop">
-          <svg class="gemb" viewBox="0 0 60 60" aria-hidden="true"><path d="M10 44 Q30 20 50 44" fill="none" stroke="var(--slate)" stroke-width="4" stroke-linecap="round"/><circle cx="10" cy="44" r="4" fill="var(--rust)"/><circle cx="30" cy="30" r="4" fill="var(--gold-br)"/><circle cx="50" cy="44" r="4" fill="var(--grass)"/></svg>
+          <svg class="gemb" viewBox="0 0 60 60" aria-hidden="true"><path d="M10 42 Q22 28 32 36 T56 32 V52 H10 Z" fill="var(--line2)"/><path d="M6 39 Q18 25 28 33 T52 29 V49 H6 Z" fill="var(--slate)"/><g fill="var(--surface)"><circle cx="15" cy="40" r="3.5"/><circle cx="28" cy="37" r="3.5"/><circle cx="42" cy="35" r="3.5"/></g></svg>
           <div><div class="gname" id="g-en195">EN195 &mdash; the flash unit</div><div class="gone">The flash-fiction workshop as a small arcade: the river, the wall, the bench, the climb.</div><span class="pill live">Live &middot; for the class</span></div>
         </div>
         <div class="grid4">
@@ -333,10 +528,11 @@ body.warm .foot{ color:#0f0e0b; } .foot a{ color:#fff; font-weight:700; } body.w
         <div class="gdoor shut" role="note">Greenlit &mdash; build not started</div>
       </article>
 
-      <!-- WARRIORS -->
+      <!-- WARRIORS — mark redrawn 2026-07-30, direction C (Cut-Paper Relief):
+           the wheel, solid disc + offset shadow layer + paper wedge cutouts -->
       <article class="gcard" aria-labelledby="g-war">
         <div class="gtop">
-          <svg class="gemb" viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="18" fill="var(--gold-br)" stroke="var(--ink)" stroke-width="3"/><path d="M30 12 v36 M12 30 h36" stroke="var(--ink)" stroke-width="2"/><path d="M30 12 a18 18 0 0 1 0 36" fill="none" stroke="var(--rust)" stroke-width="3"/></svg>
+          <svg class="gemb" viewBox="0 0 60 60" aria-hidden="true"><circle cx="33" cy="33" r="20" fill="var(--line2)"/><circle cx="29" cy="29" r="20" fill="var(--rust)"/><g fill="var(--surface)"><path d="M29 29 L29 11 A18 18 0 0 1 45 23 Z"/><path d="M29 29 L44 39 A18 18 0 0 1 18 45 Z"/><path d="M29 29 L15 40 A18 18 0 0 1 13 19 Z"/></g><circle cx="29" cy="29" r="4" fill="var(--rust)"/></svg>
           <div><div class="gname" id="g-war">Warriors Fantasy Arcade</div><div class="gone">A fantasy-sports learning game, built with a co-player at the kitchen table.</div><span class="pill blocked">Placeholder &middot; needs rebuild</span></div>
         </div>
         <div class="grid4">
@@ -358,12 +554,49 @@ body.warm .foot{ color:#0f0e0b; } .foot a{ color:#fff; font-weight:700; } body.w
   </div>
 </div>
 
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="../index.html" aria-label="Home">Home</a>
+</nav>
+
 <script>
 (function(){
   var $=function(id){return document.getElementById(id);};
-  var stops=['softer','default','warm'], ci=1;
-  function applyStop(s){ document.body.classList.remove('softer','warm'); if(s==='softer')document.body.classList.add('softer'); if(s==='warm')document.body.classList.add('warm'); ci=stops.indexOf(s); }
-  $('cstop').addEventListener('click',function(){ ci=(ci+1)%3; applyStop(stops[ci]); this.textContent='Comfort: '+stops[ci].charAt(0).toUpperCase()+stops[ci].slice(1); });
+  var root=document.documentElement, sr=$('seSr');
+
+  /* ═══ STUDIO EYES (Comfort Kernel v2) ═══ */
+  // last-updated: computed, not typed
+  (function(){ var u=$('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=$('seEyes'), panel=$('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+
   /* smooth anchor scroll with focus for keyboard users */
   document.querySelectorAll('a[href^="#"]').forEach(function(a){
     a.addEventListener('click',function(e){

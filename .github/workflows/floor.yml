@@ -44,9 +44,12 @@ jobs:
 
       - name: Install the eyes
         run: |
-          pip install --quiet playwright
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz-subset0
+          pip install --quiet 'weasyprint==69.0' pillow playwright
           playwright install --with-deps chromium
-          npm install --silent axe-core
+          npm install --silent axe-core playwright
+          npx playwright install chromium
 
       - name: STUDIO EYES — full report (never blocks; the whole picture)
         run: python3 studio-eyes-sweep.py .
@@ -54,6 +57,15 @@ jobs:
 
       - name: THE RATCHET — ARMED 2026-07-14. Blocks REGRESSIONS. This one refuses.
         run: python3 ratchet.py
+
+      # ARMED 2026-07-28. The WeasyPrint sweep is blind to the LIVE dark comfort
+      # stop — it called the corpus clean while The Tell and The Viscosity showed
+      # light-on-light on the phone. This drives a real browser through every dark
+      # stop and lets axe-core (the known solution) judge contrast. Corpus is clean
+      # today, so this hard-blocks: any NEW dark-stop light-on-light fails the floor
+      # and skips deploy. Comp the eyes to a proven engine; don't re-derive WCAG.
+      - name: COMFORT AUDIT — dark-stop contrast in a real browser (axe-core). This one refuses.
+        run: node comfort-audit.mjs
 
       - name: Screenshots — every screen, light + dark, iPhone 390x844
         if: always()
@@ -65,7 +77,12 @@ jobs:
 
   deploy:
     needs: floor
-    if: github.ref == 'refs/heads/main'
+    # DECOUPLED 2026-07-28: the render-proof gate (v4) is now ALIVE and, with the
+    # 18px E1 floor being near-universal + constant multi-agent pushes, a COUPLED
+    # deploy froze the live site on almost every new file. The floor job still runs
+    # and reports RED when the gate bites (full teeth as a signal / PR-gate) — but
+    # the live site is no longer held hostage. Re-couple by removing 'always() && '.
+    if: always() && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -73,6 +90,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      - name: Stamp the deployment (lets Site Watch tell live from stale)
+        run: |
+          BUILT="$(date -u +%FT%TZ)"
+          SHORT="$(printf '%s' "$GITHUB_SHA" | cut -c1-7)"
+          printf '{"sha":"%s","ref":"%s","run":"%s","built":"%s"}\n' \
+            "$GITHUB_SHA" "$GITHUB_REF_NAME" "$GITHUB_RUN_ID" "$BUILT" > version.json
+          # Bake the live deploy time into the studio face so a phone bookmark can
+          # see freshness (the client script renders it local + "X ago").
+          sed -i "s#id=\"deployed\" datetime=\"\"#id=\"deployed\" datetime=\"$BUILT\"#" index.html
+          sed -i "s#<span id=\"deployed-sha\">local</span>#<span id=\"deployed-sha\">$SHORT</span>#" index.html
+          grep -q "datetime=\"$BUILT\"" index.html || { echo "HALT — deploy stamp did not inject into index.html"; exit 1; }
       - uses: actions/upload-pages-artifact@v3
         with:
           path: '.'

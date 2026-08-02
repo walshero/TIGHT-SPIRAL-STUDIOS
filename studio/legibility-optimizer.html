@@ -1,30 +1,101 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Legibility Optimizer — Tight Spiral Studios</title>
 <style>
+  /* ---- LIGHT: DAY (default) ---- */
   :root{
-    --paper:#f4efe6; --ink:#1b1712; --accent:#6e4700;
+    --paper:#f4efe6; --ink:#1b1712; --ink-2:#4a3a24; --accent:#6e4700;
+    --accent-strong:#5a3a00; --on-accent:#ffffff; --focus:#8f3f00;
     --card:#fbf8f2; --line:#c9bfae; --slip:#efe7d6; --shadow:rgba(30,22,12,.16);
+    --foot-bg:#1b1712; --foot-fg:#f4efe6; --foot-link:#e9b45c;
     --r-size:20px;
     --r-lh:1.6;
     --r-ls:0.02em;
     --r-measure:66ch;
     --r-weight:450;
     --r-family:'Atkinson Hyperlegible','Segoe UI',system-ui,sans-serif;
+    --mono:ui-monospace,'SF Mono',Menlo,monospace;
+    --tap:48px; --motion:.18s;
   }
-  [data-pal="soft"]{ --paper:#e6ddc9; --ink:#2b2013; --card:#efe7d3; --line:#bcae90; --slip:#ddd2b8; }
-  [data-pal="warm"]{ --paper:#2a2620; --ink:#f3e7cf; --accent:#e6b866; --card:#332e26;
-    --line:#5a5040; --slip:#3a342b; --shadow:rgba(0,0,0,.4); }
+  /* ---- LIGHT: DUSK ---- */
+  html[data-light="dusk"]{
+    --paper:#e6ddc9; --ink:#2b2013; --ink-2:#4a3a1e; --accent:#5a3a00;
+    --accent-strong:#4a3000; --on-accent:#ffffff; --focus:#8f3f00;
+    --card:#efe7d3; --line:#bcae90; --slip:#ddd2b8;
+    --foot-bg:#2b2013; --foot-fg:#e6ddc9; --foot-link:#e9b45c;
+  }
+  /* ---- LIGHT: WARM-DARK (night — warm charcoal, never pure black) ---- */
+  html[data-light="night"]{
+    --paper:#2a2620; --ink:#f3e7cf; --ink-2:#d8c59a; --accent:#e6b866;
+    --accent-strong:#e6b866; --on-accent:#141109; --focus:#f0c357;
+    --card:#332e26; --line:#5a5040; --slip:#3a342b; --shadow:rgba(0,0,0,.4);
+    --foot-bg:#12100c; --foot-fg:#f3e7cf; --foot-link:#e6b866;
+  }
+  /* ---- TOGGLE: high contrast (halation floor) ---- */
+  html.se-contrast:not([data-light="night"]){ --paper:#fbfaf7; --card:#fbfaf7; --slip:#f0ece2;
+    --ink:#141109; --ink-2:#2c2517; --line:#9a8a64; --accent:#4a3000; --accent-strong:#3a2600; }
+  html.se-contrast[data-light="night"]{ --paper:#0e0d0b; --card:#161410; --slip:#1c1914;
+    --ink:#fff7e6; --ink-2:#efe0bc; --accent:#f0c357; --accent-strong:#f0c357; }
+  /* ---- TOGGLE: text size A / A+ / A++ ---- */
+  html{ font-size:100%; }
+  html.se-a1{ zoom:1.15; }
+  html.se-a2{ zoom:1.3; }
+  /* ---- TOGGLE: reduce motion ---- */
+  html.se-reduce *,@media (prefers-reduced-motion:reduce){ *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+  /* ---- TOGGLE: colorblind cues ---- */
+  html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+
   *{box-sizing:border-box}
   body{margin:0; background:var(--paper); color:var(--ink);
-    font-family:var(--r-family); padding:0 0 90px;}
+    font-family:var(--r-family); padding:0;
+    transition:background var(--motion) ease, color var(--motion) ease;}
+
+  /* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+  .se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+    padding:9px 14px; background:var(--card); border-bottom:2px solid var(--ink);
+    position:sticky; top:0; z-index:100; }
+  .se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+    padding:8px 12px; border:1.5px solid var(--line); border-radius:8px; background:var(--slip);
+    color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; }
+  .se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+  .se-brand svg{ width:34px; height:20px; color:var(--accent-strong); flex:0 0 auto; }
+  .se-brand .wm{ font-size:16px; letter-spacing:.01em; white-space:nowrap; }
+  .se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+    padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--accent-strong);
+    color:var(--on-accent); font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer; }
+  .se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  @media (max-width:560px){ .se-brand .wm{ display:none; } }
+
+  /* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+  .se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:101;
+    width:min(320px,calc(100vw - 24px)); background:var(--card); color:var(--ink);
+    border:2px solid var(--accent-strong); border-radius:10px; padding:15px;
+    box-shadow:0 10px 34px rgba(0,0,0,.28); display:none; }
+  .se-panel[data-open="1"]{ display:block; }
+  .se-panel h2{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-2); margin:0 0 8px; border:0; padding:0; }
+  .se-row{ display:flex; gap:6px; margin-bottom:14px; }
+  .se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--line); border-radius:8px;
+    background:var(--slip); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:12.5px; cursor:pointer; }
+  .se-btn[aria-pressed="true"]{ background:var(--accent-strong); color:var(--on-accent); border-color:var(--accent-strong); }
+  .se-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+    min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--line); border-radius:8px;
+    background:var(--slip); color:var(--ink); font-family:inherit; font-weight:600; font-size:14px; cursor:pointer; text-align:left; }
+  .se-tog[aria-pressed="true"]{ border-color:var(--accent-strong); }
+  .se-tog .st{ font-family:var(--mono); font-size:11px; color:var(--ink-2); }
+  .se-tog[aria-pressed="true"] .st{ color:var(--accent-strong); font-weight:700; }
+  .se-tog:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .se-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
   header.top{background:var(--card); border-bottom:3px solid var(--accent); padding:22px 20px}
   .wrap{max-width:860px; margin:0 auto; padding:0 20px}
   h1{font-size:1.7rem; margin:.1em 0 .1em}
   .sub{margin:0; font-size:1rem}
+  .updated{ font-family:var(--mono); font-size:.78rem; color:var(--ink-2); margin:10px 0 0; display:flex; align-items:center; gap:7px; }
+  .updated::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--accent); flex:0 0 auto; }
   .layout{display:grid; grid-template-columns:1fr; gap:20px; margin-top:20px}
   @media(min-width:820px){ .layout{grid-template-columns:340px 1fr} }
   .panel{background:var(--card); border:1px solid var(--line); border-radius:12px;
@@ -35,16 +106,11 @@
   .ctrl .val{font-weight:400; color:var(--accent); font-variant-numeric:tabular-nums}
   .why{font-size:.82rem; margin:4px 0 0; opacity:.9}
   input[type=range]{width:100%; height:44px; accent-color:var(--accent); cursor:pointer}
-  input[type=range]:focus-visible{outline:3px solid var(--accent); outline-offset:3px}
-  .segset{display:flex; gap:6px; flex-wrap:wrap}
-  .segset button{min-height:44px; min-width:44px; flex:1; padding:8px 10px; font-size:.9rem;
-    background:var(--paper); color:var(--ink); border:2px solid var(--accent); border-radius:8px;
-    cursor:pointer; font-weight:600; font-family:inherit}
-  .segset button[aria-pressed="true"]{background:var(--accent); color:var(--paper)}
-  .segset button:focus-visible{outline:3px solid var(--ink); outline-offset:2px}
+  input[type=range]:focus-visible{outline:3px solid var(--focus); outline-offset:3px}
   .reset{min-height:44px; width:100%; margin-top:8px; padding:10px; background:var(--paper);
     color:var(--accent); border:2px solid var(--accent); border-radius:8px; font-weight:700;
     cursor:pointer; font-family:inherit}
+  .reset:focus-visible{outline:3px solid var(--focus); outline-offset:2px}
   .sample{background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:24px 26px}
   .sample .reader{
     max-width:var(--r-measure);
@@ -56,18 +122,57 @@
   .glyphtest{font-weight:var(--r-weight); letter-spacing:var(--r-ls);
     font-size:calc(var(--r-size) + 2px); background:var(--slip); padding:10px 14px;
     border-radius:8px; margin-top:12px; display:inline-block}
-  .foot{margin-top:24px; padding:18px 20px; background:var(--ink); color:var(--paper);
+  .foot{margin-top:24px; padding:18px 20px; background:var(--foot-bg); color:var(--foot-fg);
     border-radius:12px; font-size:.85rem}
-  [data-pal="warm"] .foot{background:#12100c}
-  .foot a{color:var(--accent); font-weight:700}
+  .foot a{color:var(--foot-link); font-weight:700}
   .cite{font-size:.8rem; opacity:.85; margin-top:6px}
+
+  /* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+  .se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; margin-top:26px; border-top:2px solid var(--line); }
+  .se-rail a,.se-rail button{ min-height:var(--tap); min-width:44px; padding:10px 18px; border:1.5px solid var(--line); border-radius:8px;
+    background:var(--slip); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer;
+    display:inline-flex; align-items:center; }
+  .se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 </style>
 </head>
 <body>
+
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="../index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 27" fill="none" stroke="currentColor" aria-hidden="true" focusable="false"><path d="M33.2 13.5 L33.3 13.6 L33.3 13.8 L33.4 13.9 L33.4 14.1 L33.4 14.3 L33.3 14.5 L33.3 14.7 L33.2 14.9 L33.1 15.0 L33.0 15.2 L32.8 15.4 L32.7 15.5 L32.5 15.7 L32.2 15.8 L32.0 15.9 L31.7 15.9 L31.5 16.0 L31.2 16.0 L30.9 15.9 L30.6 15.9 L30.3 15.8 L30.1 15.7 L29.8 15.5 L29.5 15.3 L29.3 15.1 L29.1 14.8 L28.9 14.5 L28.7 14.2 L28.6 13.9 L28.5 13.5 L28.4 13.1 L28.4 12.7 L28.4 12.3 L28.5 11.9 L28.6 11.5 L28.8 11.2 L29.0 10.8 L29.2 10.4 L29.5 10.1 L29.8 9.8 L30.2 9.5 L30.6 9.3 L31.1 9.1 L31.5 8.9 L32.0 8.8 L32.5 8.8 L33.0 8.8 L33.5 8.8 L34.0 8.9 L34.5 9.1 L35.0 9.3 L35.5 9.6 L35.9 9.9 L36.4 10.3 L36.7 10.8 L37.1 11.2 L37.3 11.8 L37.6 12.3 L37.7 12.9 L37.9 13.5 L37.9 14.1 L37.9 14.7 L37.8 15.4 L37.6 16.0 L37.4 16.6 L37.1 17.2 L36.8 17.8 L36.3 18.3 L35.8 18.8 L35.3 19.2 L34.7 19.6 L34.1 19.9 L33.4 20.2 L32.7 20.4 L32.0 20.5 L31.3 20.6 L30.5 20.5 L29.8 20.4 L29.0 20.2 L28.3 19.9 L27.6 19.5 L26.9 19.1 L26.3 18.6 L25.8 18.0 L25.3 17.4 L24.8 16.7 L24.4 16.0 L24.2 15.2 L23.9 14.3 L23.8 13.5 L23.8 12.6 L23.9 11.8 L24.0 10.9 L24.2 10.0 L24.6 9.2 L25.0 8.4 L25.5 7.7 L26.1 7.0 L26.8 6.3 L27.5 5.7 L28.3 5.3 L29.2 4.8 L30.1 4.5 L31.0 4.3 L32.0 4.2 L33.0 4.1 L34.0 4.2 L35.0 4.4 L35.9 4.7 L36.9 5.1 L37.8 5.6 L38.6 6.2 L39.4 6.8 L40.1 7.6 L40.8 8.4 L41.3 9.4 L41.8 10.3 L42.1 11.3 L42.4 12.4 L42.5 13.5" stroke-width="2.3" stroke-linecap="round"/><circle cx="32" cy="13.5" r="1.6" fill="currentColor" stroke="none"/></svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
+
 <header class="top">
   <div class="wrap">
     <h1>The Legibility Optimizer</h1>
     <p class="sub">Not a tone picker. It tunes the whole reading surface to your eye. Move a control — the text below changes live.</p>
+    <p class="updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v3 <span style="opacity:.75">e77f0f7</span></span> </span>
   </div>
 </header>
 
@@ -112,15 +217,7 @@
       <p class="why" id="weight-why">Even, moderate stroke reads best; very heavy can close up apertures.</p>
     </div>
 
-    <div class="ctrl">
-      <label id="pal-label">Palette / contrast</label>
-      <div class="segset" role="group" aria-labelledby="pal-label">
-        <button data-pal="soft" aria-pressed="false">Softer</button>
-        <button data-pal="default" aria-pressed="true">Default</button>
-        <button data-pal="warm" aria-pressed="false">Warm-dark</button>
-      </div>
-      <p class="why">Warm-dark is amber on charcoal — never pure black/white, which glares.</p>
-    </div>
+    <p class="why">Light level (Default, Dusk, Warm-dark) now lives in Studio Eyes, top right — the studio-wide control. Warm-dark is amber on charcoal — never pure black/white, which glares.</p>
 
     <button class="reset" id="reset">Reset to research defaults</button>
   </div>
@@ -140,13 +237,19 @@
       Tight Spiral Studios &middot; walshero@gmail.com<br>
       How the studio works: <a href="tight-spiral-system-map.html">tight-spiral-system-map.html</a>
       <div class="cite">Defaults grounded in: WCAG 1.4.12 Text Spacing (line 1.5, letter 0.12&times;, word 0.16&times;); low-vision typography research (APH, Braille Institute Atkinson Hyperlegible, Arditi); 60–80 char measure. Prototype 2026-07-01 — ranges are evidence-based, the exact ship defaults are still Matt's-eyes-verdict.</div>
-      <hr style="border-color:var(--accent);opacity:.4;margin:12px 0">
+      <hr style="border-color:var(--foot-link);opacity:.4;margin:12px 0">
       <em>How this was made:</em> Built from the founder's correction that the "Comfort" control was mis-scoped as tone — it is a full legibility engine. Claude pulled the readability literature first, then set defaults from it rather than guessing. Human-in-the-loop move: the founder reframed the control and chose to implement now with research-grounded defaults, eyes as final verdict.
     </div>
   </div>
 
 </div>
 </div>
+
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="../index.html" aria-label="Home">Home</a>
+</nav>
 
 <script>
   var root=document.documentElement;
@@ -163,29 +266,49 @@
   bind('measure','--r-measure',{unit:function(v){return v+'ch'},label:function(v){return v+' char'}});
   bind('weight','--r-weight',{unit:function(v){return v},label:function(v){return v}});
 
-  document.querySelectorAll('.segset button').forEach(function(b){
-    b.addEventListener('click',function(){
-      var p=b.getAttribute('data-pal');
-      if(p==='default'){root.removeAttribute('data-pal');}
-      else{root.setAttribute('data-pal',p);}
-      document.querySelectorAll('.segset button').forEach(function(x){
-        x.setAttribute('aria-pressed', x===b?'true':'false');
-      });
-    });
-  });
-
   document.getElementById('reset').addEventListener('click',function(){
     var d={size:'20',lh:'1.6',ls:'0.02',measure:'66',weight:'450'};
     for(var k in d){ document.getElementById(k).value=d[k];
       document.getElementById(k).dispatchEvent(new Event('input')); }
-    root.removeAttribute('data-pal');
-    document.querySelectorAll('.segset button').forEach(function(x){
-      x.setAttribute('aria-pressed', x.getAttribute('data-pal')==='default'?'true':'false');
-    });
     window.scrollTo(0,0);
   });
 
   window.scrollTo(0,0);
+
+  /* ═══ STUDIO EYES — kernel v2 ═══ */
+  (function(){
+    var sr=document.getElementById('seSr');
+    // last-updated: computed, not typed
+    (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+      var d=new Date(document.lastModified);
+      u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+        : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+    })();
+    var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+    function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+    eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+    // light
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+      root.setAttribute('data-light', b.getAttribute('data-light-set'));
+      [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+      if(sr) sr.textContent=b.textContent.trim();
+    });});
+    // text size
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+      var n=b.getAttribute('data-text');
+      root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+      [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+      if(sr) sr.textContent='Text size '+b.textContent.trim();
+    });});
+    // toggles
+    [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+      var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+      root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+      b.querySelector('.st').textContent=on?'On':'Off';
+      if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+    });});
+  })();
 </script>
 </body>
 </html>

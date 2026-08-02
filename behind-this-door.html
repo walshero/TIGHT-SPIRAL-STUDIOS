@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,14 +14,38 @@
 -->
 <style>
 :root{
-  --paper:#faf5ec; --ink:#211d18; --card:#fffdf7; --edge:#d8cfbe;
+  /* -ink names carry text, plain names paint (TOKEN-ROLE law). */
+  --paper:#faf5ec; --paper-ink:#faf5ec; --ink:#211d18; --ink-fill:#211d18;
+  --card:#fffdf7; --edge:#d8cfbe;
   --brass:#a8791f; --brick:#8a4a3b; --moss:#3f6b4f; --wine:#7c2f33;
-  --dim:#5a5348; --focus:#1f5fa8; --glow:#f7d98b;
-  --ok:#2e6b46; --no:#8a4030;
+  --dim:#5a5348; --dim-fill:#5a5348; --focus:#1f5fa8; --glow:#f7d98b;
+  --ok:#2e6b46; --ok-fill:#2e6b46; --no:#8a4030;
+  --tap:44px; --mono:ui-monospace,"SF Mono",Menlo,monospace;
 }
-body.softer{ --paper:#f3ecdd; --ink:#2c2721; --card:#faf4e6; --edge:#d3c8b2; --dim:#5e5748; }
-body.warm{ --paper:#26221c; --ink:#ecc57a; --card:#2f2a22; --edge:#4a4234;
-  --dim:#c9a967; --brass:#e0b45c; --focus:#7fb4e8; --ok:#8fce9f; --no:#e09a7c; }
+/* STUDIO EYES · Light ladder — token remaps keyed on html[data-light].
+   Dusk = a calmer, dimmer cream (>=0.12 luminance below Default).
+   Warm-dark(night) = warm charcoal, NEVER pure black; amber ink stays >=4.5:1. */
+html[data-light="dusk"]{ --paper:#ece0c4; --paper-ink:#ece0c4; --ink:#2c2721; --ink-fill:#2c2721;
+  --card:#faf4e6; --edge:#d3c8b2; --dim:#5e5748; --dim-fill:#5e5748; }
+html[data-light="night"]{ --paper:#26221c; --paper-ink:#26221c; --ink:#ecc57a; --ink-fill:#ecc57a;
+  --card:#2f2a22; --edge:#4a4234;
+  --dim:#c9a967; --dim-fill:#c9a967; --brass:#e0b45c; --focus:#7fb4e8;
+  --ok:#8fce9f; --ok-fill:#8fce9f; --no:#e09a7c; }
+/* STUDIO EYES · high contrast (halation floor) */
+html.se-contrast:not([data-light="night"]){ --paper:#fbfaf7; --paper-ink:#fbfaf7; --card:#fbfaf7;
+  --edge:#b9a06a; --ink:#141109; --ink-fill:#141109; --dim:#2c2517; --dim-fill:#2c2517; }
+html.se-contrast[data-light="night"]{ --paper:#0e0d0b; --paper-ink:#0e0d0b; --card:#161410;
+  --ink:#fff7e6; --ink-fill:#fff7e6; --dim:#efe0bc; --dim-fill:#efe0bc; }
+/* STUDIO EYES · text size A / A+ / A++ */
+html.se-a1 body{ font-size:20.5px; } html.se-a1{ font-size:107%; }
+html.se-a2 body{ font-size:22px; }   html.se-a2{ font-size:115%; }
+/* STUDIO EYES · reduce motion */
+html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+html.se-reduce svg.open .leaf{ transform:none; opacity:.25; }
+html.se-reduce svg.open .mote{ opacity:0; }
+/* STUDIO EYES · colorblind cues (non-color redundancy) */
+html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+html.se-cb .choice.hit{ border-style:double; }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:auto;}
 body{
@@ -30,34 +54,36 @@ body{
   font-size:19px; line-height:1.55; min-height:100vh;
 }
 .wrap{max-width:560px;margin:0 auto;padding:18px 16px 60px;}
-h1{font-size:2rem;line-height:1.15;letter-spacing:.01em;margin-bottom:.4em;}
+h1{font-size:2rem;line-height:1.15;letter-spacing:.01em;margin-bottom:.4em;min-height:44px;}
 h2{font-size:1.5rem;line-height:1.2;margin-bottom:.4em;}
-h1:focus,h2:focus{outline:none;}
+/* Headings are script-focus landing points (tabindex -1) on every screen change;
+   give that landing a visible ring for keyboard / low-vision users. */
+h1:focus,h2:focus,.reveal-name:focus{outline:3px solid var(--focus);outline-offset:3px;border-radius:4px;}
 p{margin-bottom:.8em;}
 .screen{display:none;}
 .screen.on{display:block;}
 .eyebrow{font-size:.85rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:.5em;}
 button{
   font-family:inherit;font-size:1.05rem;color:var(--ink);
-  background:var(--card);border:2px solid var(--ink);border-radius:10px;
+  background:var(--card);border:2px solid var(--ink-fill);border-radius:10px;
   min-height:52px;padding:12px 18px;cursor:pointer;width:100%;
   text-align:left;line-height:1.35;
 }
 button.center{text-align:center;}
 button:focus-visible{outline:3px solid var(--focus);outline-offset:3px;}
-button.primary{background:var(--ink);color:var(--paper);font-weight:700;}
-body.warm button.primary{background:var(--brass);color:#26221c;border-color:var(--brass);}
+button.primary{background:var(--ink-fill);color:var(--paper-ink);font-weight:700;}
+html[data-light="night"] button.primary{background:var(--brass);color:#26221c;border-color:var(--brass);}
 button.ghost{border-color:var(--edge);color:var(--dim);background:transparent;}
 button.ghost:focus-visible{outline:3px solid var(--focus);}
 button:disabled{opacity:.45;cursor:default;}
 .stack{display:flex;flex-direction:column;gap:12px;margin:14px 0;}
 .choice .kbd{
   display:inline-block;min-width:1.6em;text-align:center;margin-right:10px;
-  border:1.5px solid var(--dim);border-radius:6px;font-size:.85rem;
+  border:1.5px solid var(--dim-fill);border-radius:6px;font-size:.85rem;
   padding:1px 4px;color:var(--dim);vertical-align:2px;
 }
 .choice.out{opacity:.45;text-decoration:line-through;}
-.choice.hit{border-color:var(--ok);border-width:3px;}
+.choice.hit{border-color:var(--ok-fill);border-width:3px;}
 .tally{
   display:flex;justify-content:space-between;align-items:center;
   font-size:.95rem;color:var(--dim);margin-bottom:10px;
@@ -94,8 +120,56 @@ summary{padding:12px 16px;cursor:pointer;font-weight:700;min-height:52px;display
 summary:focus-visible{outline:3px solid var(--focus);outline-offset:-3px;}
 details .inner{padding:0 16px 14px;font-size:.95rem;}
 .foot{font-size:.82rem;color:var(--dim);margin-top:30px;line-height:1.5;}
-.topbar{display:flex;justify-content:flex-end;margin-bottom:8px;}
-.topbar button{width:auto;min-height:44px;font-size:.85rem;padding:8px 14px;}
+
+/* ═══ STUDIO EYES — RESERVED CHROME (grid header, own row, never overlaps) ═══ */
+.se-chrome{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;
+  padding:8px 14px;background:var(--card);border-bottom:2px solid var(--ink-fill);
+  position:sticky;top:0;z-index:100;}
+.se-home{justify-self:start;display:inline-flex;align-items:center;gap:7px;min-height:var(--tap);
+  padding:8px 12px;border:1.5px solid var(--edge);border-radius:8px;background:var(--paper);
+  color:var(--ink);font-family:var(--mono);font-weight:700;font-size:13px;text-decoration:none;width:auto;}
+.se-brand{justify-self:center;display:inline-flex;align-items:center;gap:9px;color:var(--ink);}
+.se-brand svg{width:34px;height:20px;color:var(--brass);flex:0 0 auto;}
+.se-brand .wm{font-family:inherit;font-size:16px;letter-spacing:.01em;white-space:nowrap;color:var(--ink);}
+.se-eyes{justify-self:end;display:inline-flex;align-items:center;gap:7px;min-height:var(--tap);
+  padding:8px 13px;border:2px solid transparent;border-radius:8px;background:var(--ink-fill);
+  color:var(--paper-ink);font-family:var(--mono);font-weight:700;font-size:13px;cursor:pointer;width:auto;}
+.se-home:focus-visible,.se-eyes:focus-visible{outline:3px solid var(--focus);outline-offset:2px;}
+@media (max-width:560px){.se-brand .wm{display:none;}}
+
+/* ═══ STUDIO EYES panel ═══ */
+.se-panel{position:fixed;right:12px;top:calc(var(--tap) + 16px);z-index:101;
+  width:min(320px,calc(100vw - 24px));background:var(--card);color:var(--ink);
+  border:2px solid var(--ink-fill);border-radius:12px;padding:15px;
+  box-shadow:0 10px 34px rgba(0,0,0,.28);display:none;}
+.se-panel[data-open="1"]{display:block;}
+.se-panel h2{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin:0 0 8px;min-height:0;}
+.se-row{display:flex;gap:6px;margin-bottom:14px;}
+.se-btn{flex:1;min-height:var(--tap);padding:8px 4px;border:1.5px solid var(--edge);border-radius:8px;
+  background:var(--paper);color:var(--ink);font-family:var(--mono);font-weight:700;font-size:12.5px;cursor:pointer;width:auto;text-align:center;line-height:1.2;}
+.se-btn[aria-pressed="true"]{background:var(--ink-fill);color:var(--paper-ink);border-color:var(--ink-fill);}
+.se-btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px;}
+.se-tog{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;
+  min-height:var(--tap);padding:8px 11px;margin-bottom:6px;border:1.5px solid var(--edge);border-radius:8px;
+  background:var(--paper);color:var(--ink);font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;text-align:left;}
+.se-tog[aria-pressed="true"]{border-color:var(--ink-fill);}
+.se-tog .st{font-family:var(--mono);font-size:11px;color:var(--dim);}
+.se-tog[aria-pressed="true"] .st{color:var(--ink);font-weight:700;}
+.se-tog:focus-visible{outline:3px solid var(--focus);outline-offset:2px;}
+.se-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
+
+/* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+.se-updated{font-family:var(--mono);font-size:.78rem;color:var(--dim);text-align:center;margin:26px 0 0;}
+.se-rail{display:flex;gap:10px;justify-content:center;padding:16px 20px 26px;border-top:2px solid var(--edge);margin-top:10px;}
+.se-rail a,.se-rail button{min-height:var(--tap);padding:10px 18px;border:1.5px solid var(--edge);border-radius:8px;
+  background:var(--paper);color:var(--ink);font-family:var(--mono);font-weight:700;font-size:13px;text-decoration:none;cursor:pointer;width:auto;}
+.se-rail a:focus-visible,.se-rail button:focus-visible{outline:3px solid var(--focus);outline-offset:2px;}
+/* Title screen leads with the door itself — the hero fills the column so the first
+   paint is scene-first, not prose-first. */
+#titleDoor{max-width:none;padding:0;}
+/* Injected mobile nav needs a visible keyboard focus ring (its default has none
+   when it docks into the shared .topbar). */
+body .tsp-barnav a:focus-visible, body .tsp-nav a:focus-visible{outline:3px solid var(--focus);outline-offset:2px;}
 /* door-open flourish */
 .leaf{transition:transform .8s cubic-bezier(.3,.7,.3,1);}
 .glowlight{opacity:0;transition:opacity .9s ease .2s;}
@@ -113,11 +187,43 @@ svg.open .mote{animation:rise 1.6s ease-out .3s forwards;}
 </style>
 </head>
 <body>
+
+<!-- STUDIO EYES — RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 27" fill="none" stroke="currentColor" aria-hidden="true" focusable="false"><path d="M33.2 13.5 L33.3 13.6 L33.3 13.8 L33.4 13.9 L33.4 14.1 L33.4 14.3 L33.3 14.5 L33.3 14.7 L33.2 14.9 L33.1 15.0 L33.0 15.2 L32.8 15.4 L32.7 15.5 L32.5 15.7 L32.2 15.8 L32.0 15.9 L31.7 15.9 L31.5 16.0 L31.2 16.0 L30.9 15.9 L30.6 15.9 L30.3 15.8 L30.1 15.7 L29.8 15.5 L29.5 15.3 L29.3 15.1 L29.1 14.8 L28.9 14.5 L28.7 14.2 L28.6 13.9 L28.5 13.5 L28.4 13.1 L28.4 12.7 L28.4 12.3 L28.5 11.9 L28.6 11.5 L28.8 11.2 L29.0 10.8 L29.2 10.4 L29.5 10.1 L29.8 9.8 L30.2 9.5 L30.6 9.3 L31.1 9.1 L31.5 8.9 L32.0 8.8 L32.5 8.8 L33.0 8.8 L33.5 8.8 L34.0 8.9 L34.5 9.1 L35.0 9.3 L35.5 9.6 L35.9 9.9 L36.4 10.3 L36.7 10.8 L37.1 11.2 L37.3 11.8 L37.6 12.3 L37.7 12.9 L37.9 13.5 L37.9 14.1 L37.9 14.7 L37.8 15.4 L37.6 16.0 L37.4 16.6 L37.1 17.2 L36.8 17.8 L36.3 18.3 L35.8 18.8 L35.3 19.2 L34.7 19.6 L34.1 19.9 L33.4 20.2 L32.7 20.4 L32.0 20.5 L31.3 20.6 L30.5 20.5 L29.8 20.4 L29.0 20.2 L28.3 19.9 L27.6 19.5 L26.9 19.1 L26.3 18.6 L25.8 18.0 L25.3 17.4 L24.8 16.7 L24.4 16.0 L24.2 15.2 L23.9 14.3 L23.8 13.5 L23.8 12.6 L23.9 11.8 L24.0 10.9 L24.2 10.0 L24.6 9.2 L25.0 8.4 L25.5 7.7 L26.1 7.0 L26.8 6.3 L27.5 5.7 L28.3 5.3 L29.2 4.8 L30.1 4.5 L31.0 4.3 L32.0 4.2 L33.0 4.1 L34.0 4.2 L35.0 4.4 L35.9 4.7 L36.9 5.1 L37.8 5.6 L38.6 6.2 L39.4 6.8 L40.1 7.6 L40.8 8.4 L41.3 9.4 L41.8 10.3 L42.1 11.3 L42.4 12.4 L42.5 13.5" stroke-width="2.3" stroke-linecap="round"/><circle cx="32" cy="13.5" r="1.6" fill="currentColor" stroke="none"/></svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+<p class="se-stamp" style="margin:.45rem .9rem;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.76rem;opacity:.92;display:flex;align-items:center;gap:.45rem;flex-wrap:wrap"><p class="se-updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v9 <span style="opacity:.75">a3cda75</span></span>  </p>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
+
 <div class="wrap">
 
   <!-- TITLE (screen one — the door itself; comfort is a corner knob, never a wall) -->
   <section class="screen on" id="title" aria-label="Title">
-    <div class="topbar"><button class="ghost" id="cstop1">Comfort</button></div>
     <p class="eyebrow">Tight Spiral Productions</p>
     <h1 tabindex="-1">Behind This Door</h1>
     <div class="doorbox" id="titleDoor" aria-hidden="true"></div>
@@ -131,7 +237,6 @@ svg.open .mote{animation:rise 1.6s ease-out .3s forwards;}
 
   <!-- ROUND -->
   <section class="screen" id="round" aria-label="Guess the door">
-    <div class="topbar"><button class="ghost" id="cstop2">Comfort</button></div>
     <div class="tally"><span>Door <b id="rNum">1</b> of <span id="rMax">10</span></span><span>Keys: <b id="rKeys">0</b></span></div>
     <div class="doorbox"><div id="doorArt"></div></div>
     <div id="askBlock">
@@ -158,7 +263,6 @@ svg.open .mote{animation:rise 1.6s ease-out .3s forwards;}
 
   <!-- END -->
   <section class="screen" id="end" aria-label="Your keyring">
-    <div class="topbar"><button class="ghost" id="cstop3">Comfort</button></div>
     <p class="eyebrow">The keyring</p>
     <h1 tabindex="-1"><span id="finalKeys"></span> of <span id="maxKeys">20</span> keys</h1>
     <p id="finalLine"></p>
@@ -178,6 +282,13 @@ svg.open .mote{animation:rise 1.6s ease-out .3s forwards;}
   </section>
 
 </div>
+
+<!-- STUDIO EYES — last-updated stamp + bottom nav rail -->
+</span>
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" id="seBack" aria-label="Back">Back</button>
+  <a href="index.html" aria-label="Home">Home</a>
+</nav>
 
 <script>
 (function(){
@@ -479,18 +590,6 @@ function show(id){
   var el=$(id); el.classList.add('on'); window.scrollTo(0,0);
   var h=el.querySelector('h1,h2'); if(h){h.setAttribute('tabindex','-1');h.focus({preventScroll:true});}
 }
-/* comfort */
-var stops=['default','softer','warm'], curStop='default';
-function applyStop(st){ document.body.classList.remove('softer','warm');
-  if(st==='softer')document.body.classList.add('softer');
-  if(st==='warm')document.body.classList.add('warm'); curStop=st; }
-['cstop1','cstop2','cstop3'].forEach(function(id){
-  $(id).addEventListener('click',function(){
-    var n=stops[(stops.indexOf(curStop)+1)%3]; applyStop(n);
-    this.textContent='Comfort: '+n.charAt(0).toUpperCase()+n.slice(1);
-  });
-});
-
 /* scene-first: the first thing on screen is a door */
 $('titleDoor').innerHTML=doorSVG(DOORS[0].cfg,'tdoor');
 function startDeck(deck,name){ DECK=deck; DECKNAME=name; state={i:0,keys:0,clueUsed:false,misses:0,results:[]}; loadRound(); }
@@ -643,7 +742,41 @@ document.addEventListener('keydown',function(e){
 -->
 
 <!-- TSP shared mobile nav + device adaptation -->
-<script>window.TSP_MOBILE = { home:"index.html" };</script>
+<!-- STUDIO EYES — control wiring -->
+<script>
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  var back=document.getElementById('seBack'); if(back) back.addEventListener('click',function(){ history.back(); });
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+})();
+</script>
+
+<script>window.TSP_MOBILE = { home:"index.html", nav:false };</script>
 <!-- TSP-MOBILE (inlined from tsp-mobile.js — single-file-offline law) -->
 <script>
 /* Tight Spiral Studios — shared mobile controls + Home/Back nav.
@@ -704,9 +837,9 @@ document.addEventListener('keydown',function(e){
     if (d.getElementById("tsp-mobile-style")) return;
     var css = [
       /* Navigation chip — always available, subtle on desktop */
-      ".tsp-nav{position:fixed;top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));",
+      ".tsp-nav{position:absolute;top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));",
         "z-index:2147483000;display:flex;gap:8px;font-family:'Helvetica Neue',Arial,sans-serif}",
-      ".tsp-nav a{display:inline-flex;align-items:center;gap:.4em;text-decoration:none;",
+      ".tsp-nav a{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;gap:.4em;text-decoration:none;",
         "padding:.5em .85em;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:.04em;",
         "color:#f4f1e8;background:rgba(20,18,15,.66);border:1px solid rgba(255,207,90,.45);",
         "-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);line-height:1;",
@@ -717,7 +850,7 @@ document.addEventListener('keydown',function(e){
 
       /* Nav integrated into the studio's shared .topbar (no overlap) */
       ".tsp-barnav{display:inline-flex;align-items:center;gap:.35rem;margin-right:.25rem;flex:none}",
-      ".tsp-barnav a{display:inline-flex;align-items:center;gap:.3em;text-decoration:none;color:inherit;",
+      ".tsp-barnav a{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;gap:.3em;text-decoration:none;color:inherit;",
         "font-family:inherit;font-weight:800;font-size:.82rem;letter-spacing:.02em;line-height:1;",
         "padding:.4em .7em;border-radius:999px;border:1px solid currentColor;opacity:.85;",
         "background:transparent;white-space:nowrap;transition:opacity .12s,background .12s}",
@@ -744,7 +877,21 @@ document.addEventListener('keydown',function(e){
       ".tsp-btn.big{min-width:82px;min-height:82px;font-size:16px}",
       ".tsp-btn:active,.tsp-btn.on{background:rgba(255,207,90,.9);color:#1a0d09;transform:scale(.94)}",
       /* Hide gamepad on non-touch so desktop keeps keyboard feel */
-      ".tsp-no-touch .tsp-pad{display:none}"
+      ".tsp-no-touch .tsp-pad{display:none}",
+
+      /* Rotate-for-more-room hint — canvas games only, portrait phones only */
+      ".tsp-rot{position:fixed;left:50%;transform:translateX(-50%);top:calc(72px + env(safe-area-inset-top));",
+        "z-index:2147482500;display:none;align-items:center;gap:.55em;padding:.5em .55em .5em .9em;",
+        "border-radius:999px;background:rgba(24,20,15,.86);color:#f4f1e8;",
+        "border:1px solid rgba(255,207,90,.5);white-space:nowrap;",
+        "font:600 12px/1 'Helvetica Neue',Arial,sans-serif;letter-spacing:.02em;",
+        "-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 4px 14px rgba(0,0,0,.4)}",
+      ".tsp-rot .rk{font-size:14px;color:#ffcf5a}",
+      ".tsp-rot button{background:none;border:none;color:inherit;font-size:16px;line-height:1;",
+        "padding:0 .15em;margin:0;cursor:pointer;opacity:.65}",
+      ".tsp-rot button:active{opacity:1}",
+      "@media (orientation:portrait){.tsp-touch .tsp-rot{display:inline-flex}}",
+      ".tsp-rot-dismissed .tsp-rot{display:none!important}"
     ].join("");
     var s = d.createElement("style");
     s.id = "tsp-mobile-style";
@@ -875,11 +1022,30 @@ document.addEventListener('keydown',function(e){
     window.addEventListener("blur", release);
   }
 
+  /* ---- Rotate hint -------------------------------------------------------- */
+  function buildRotateHint() {
+    if (!hasTouch) return;
+    if (cfg.rotateHint === false) return;
+    if (!cfg.controls || !cfg.controls.length) return;   // canvas games only
+    if (d.querySelector(".tsp-rot")) return;
+    var hint = d.createElement("div");
+    hint.className = "tsp-rot";
+    hint.setAttribute("role", "note");
+    hint.innerHTML = '<span class="rk">↻</span>' +
+      '<span>Turn sideways for more room</span>' +
+      '<button type="button" aria-label="Dismiss">×</button>';
+    hint.querySelector("button").addEventListener("click", function () {
+      root.classList.add("tsp-rot-dismissed");
+    });
+    d.body.appendChild(hint);
+  }
+
   /* ---- Boot --------------------------------------------------------------- */
   function boot() {
     injectStyles();
     buildNav();
     buildPad();
+    buildRotateHint();
   }
 
   if (d.readyState === "loading") {

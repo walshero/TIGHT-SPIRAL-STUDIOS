@@ -82,8 +82,17 @@ def run_sweep():
         sys.exit(2)
 
     r = subprocess.run([sys.executable, SWEEP, "."],
-                       capture_output=True, text=True, timeout=600)
+                       capture_output=True, text=True, timeout=1500)  # v4 renders the corpus; heavier than the old regex sweep
     out = r.stdout
+    # The sweep exits 2 when it CANNOT RUN (engine missing, self-test failed).
+    # That is "I went blind", not "all clean". Never let a blind sweep read as
+    # zero halts — that is exactly how the render-proof gate silently rubber-stamped
+    # every push for weeks (weasyprint uninstalled -> exit 2 -> ratchet wiped the baseline).
+    if r.returncode == 2:
+        sys.stderr.write((out or "") + (r.stderr or ""))
+        print("HALT — the sweep could not run (exit 2). A gate that goes blind HALTS; "
+              "it does not pass. Refusing to certify.", file=sys.stderr)
+        sys.exit(2)
     if not out.strip():
         print("HALT — the sweep produced no output. Refusing to guess.", file=sys.stderr)
         sys.exit(2)
@@ -98,7 +107,8 @@ def run_sweep():
         if re.match(r'^warn\s+', line) or line.startswith('==='):
             cur = None
             continue
-        if cur and line.strip().startswith(('H1:', 'H2:', 'H3:', 'H4:',
+        if cur and line.strip().startswith(('R1:', 'R2:', 'C1:', 'E1:', 'EM:',
+                                            'H1:', 'H2:', 'H3:', 'H4:',
                                             'H6:', 'H7:', 'H8:')):
             halts[cur].append(line.strip())
     return halts

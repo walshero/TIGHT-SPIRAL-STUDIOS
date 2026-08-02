@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <!--
   THE TELL — an async workshop game for EN195. Tight Spiral Productions · walshero@gmail.com
   The Workshop-Four peer-review tool, reborn as a card game.
@@ -36,27 +36,76 @@
   color-scheme: light;
   --bg:#f3ead8; --surface:#fffaf0; --ink:#1f1b12; --ink2:#1f1b12;
   --line:#d8caa8; --line2:#c2b288;
-  --accent:#3a4654; --accent2:#2b3540;
+  --accent:#3a4654; --accent2:#2b3540; --accent2-ink:#2b3540;
   --gold:#6e4700; --gold-br:#c8900a; --gold-pale:#fbeec6;
   --rust:#8a3a1c; --sky:#cdd8e2; --card:#efe4cb;
   --focus:#c8900a;
   --serif:Georgia,'Times New Roman',serif;
   --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
   --display:'Times New Roman',Georgia,serif;
+  --mono:ui-monospace,'SF Mono',Menlo,monospace;
+  --tap:48px; --r:12px; --on-accent:#ffffff;
 }
-body.softer{ --bg:#d9d2c4; --surface:#e2dccf; --ink:#241f16; --ink2:#241f16; --line:#c9bd9f; --line2:#b6a983; --sky:#ccd6df; --card:#d8ccb2; }
-body.warm{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0; --line:#4a4230; --line2:#5e553e;
-  --accent:#8fa6bd; --accent2:#9fb6cd; --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a;
-  --rust:#e8a07c; --sky:#2c3540; --card:#332c1e; }
+/* ═══ STUDIO EYES light modes — this page's own tokens remapped per data-light ═══ */
+html[data-light="dusk"]{ --bg:#e6dcc2; --surface:#f1e8d0; --ink:#211c11; --ink2:#211c11;
+  --line:#cdbc93; --line2:#b4a479; --accent:#33495b; --accent2:#26313c; --accent2-ink:#26313c;
+  --gold:#5f3d00; --gold-br:#b5820a; --gold-pale:#f5e6bf; --rust:#7d3418; --sky:#c5d2dd; --card:#e0d3b4; --focus:#b5820a; --on-accent:#ffffff; }
+html[data-light="night"]{ --bg:#1c1a16; --surface:#26231d; --ink:#f3e4c0; --ink2:#f3e4c0; --line:#4a4230; --line2:#5e553e;
+  --accent:#8fa6bd; --accent2:#9fb6cd; --accent2-ink:#9fb6cd; --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a;
+  --rust:#e8a07c; --sky:#2c3540; --card:#332c1e; --focus:#f0c357; --on-accent:#141109; }
+/* Studio Eyes text size + toggles */
+html{ font-size:100%; }
+html.se-a1{ zoom:1.15; }
+html.se-a2{ zoom:1.3; }
+html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+html.se-contrast:not([data-light="night"]){ --bg:#fbfaf7; --surface:#ffffff; --ink:#141109; --ink2:#141109; --line:#b9a06a; --line2:#9a7f3f; }
+html.se-contrast[data-light="night"]{ --bg:#0e0d0b; --surface:#161410; --ink:#fff7e6; --ink2:#fff7e6; --line2:#6a6142; }
 *{box-sizing:border-box;} html,body{margin:0;}
-body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:19px; -webkit-text-size-adjust:100%; }
+body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-height:1.55; font-size:1.1875rem; -webkit-text-size-adjust:100%; }
 
-.topbar{ background:var(--accent); color:#fff; padding:.6rem .9rem; display:flex; align-items:center; gap:.6rem; font-family:var(--sans); position:sticky; top:0; z-index:30; }
-body.warm .topbar{ color:#0f0e0b; }
-.topbar .mark{ width:26px; height:26px; flex:none; } .topbar .wm{ font-weight:800; font-size:.95rem; }
-.cstop{ margin-left:auto; background:rgba(255,255,255,.18); color:#241f16; border:2px solid rgba(255,255,255,.6); border-radius:9px; padding:.45rem .65rem; font:700 .76rem/1 var(--sans); cursor:pointer; min-height:44px; }
-body.warm .cstop{ border-color:rgba(0,0,0,.4); background:rgba(0,0,0,.12); }
-.cstop:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+/* ═══ RESERVED CHROME — v2 grid header: reserves its own row, never overlaps ═══ */
+.se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+  padding:9px 14px; background:var(--surface); border-bottom:2px solid var(--ink);
+  position:sticky; top:0; z-index:100; font-family:var(--sans); }
+.se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 12px; border:1.5px solid var(--line2); border-radius:8px; background:var(--card);
+  color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; }
+.se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+.se-brand svg{ width:34px; height:20px; color:var(--accent2-ink); flex:0 0 auto; }
+.se-brand .wm{ font-family:var(--serif); font-size:16px; letter-spacing:.01em; white-space:nowrap; }
+.se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--accent2);
+  color:var(--on-accent); font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer; }
+.se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+@media (max-width:560px){ .se-brand .wm{ display:none; } }
+
+/* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+.se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:101;
+  width:min(320px,calc(100vw - 24px)); background:var(--surface); color:var(--ink);
+  border:2px solid var(--accent2); border-radius:var(--r); padding:15px;
+  box-shadow:0 10px 34px rgba(0,0,0,.28); display:none; font-family:var(--sans); }
+.se-panel[data-open="1"]{ display:block; }
+.se-panel h2{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink2); margin:0 0 8px; }
+.se-row{ display:flex; gap:6px; margin-bottom:14px; }
+.se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--line2); border-radius:8px;
+  background:var(--card); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:12.5px; cursor:pointer; }
+.se-btn[aria-pressed="true"]{ background:var(--accent2); color:var(--on-accent); border-color:var(--accent2); }
+.se-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+  min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--line2); border-radius:8px;
+  background:var(--card); color:var(--ink); font-family:var(--sans); font-weight:600; font-size:14px; cursor:pointer; text-align:left; }
+.se-tog[aria-pressed="true"]{ border-color:var(--accent2); }
+.se-tog .st{ font-family:var(--mono); font-size:11px; color:var(--ink2); }
+.se-tog[aria-pressed="true"] .st{ color:var(--accent2-ink); font-weight:700; }
+.se-tog:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+/* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+.se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; border-top:2px solid var(--line2); font-family:var(--sans); }
+.se-rail a,.se-rail button{ min-height:var(--tap); padding:10px 18px; border:1.5px solid var(--line2); border-radius:8px;
+  background:var(--card); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer; display:inline-flex; align-items:center; }
+.se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 
 .wrap{ max-width:660px; margin:0 auto; padding:1.1rem 1rem 5rem; }
 .screen{ display:none; } .screen.on{ display:block; animation:fade .25s ease; }
@@ -67,22 +116,11 @@ h2{ font-size:1.3rem; color:var(--ink); margin:.2rem 0 .6rem; }
 p{ margin:0 0 .9rem; } .lead{ font-size:1.1rem; } .beat{ font-style:italic; color:var(--ink2); }
 
 .go{ display:block; width:100%; font:800 1.04rem/1.2 var(--sans); cursor:pointer; min-height:56px; padding:.9rem 1rem; border:none; border-radius:13px; background:var(--accent); color:#fff; margin:.45rem 0; text-align:center; }
-body.warm .go{ color:#0f0e0b; }
+html[data-light="night"] .go{ color:#0f0e0b; }
 .go:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
-.go.sec{ background:var(--surface); color:var(--ink); border:2px solid var(--ink); }
+.go.sec{ background:var(--surface); color:var(--ink); border:2px solid currentColor; }
 .go.ghost{ background:transparent; color:var(--ink); border:2px solid var(--line2); font-weight:700; min-height:48px; }
 .go:disabled{ opacity:.55; cursor:default; }
-
-/* comfort gate */
-.swatches{ display:flex; flex-direction:column; gap:.7rem; margin:1rem 0; }
-.sw{ display:flex; align-items:center; gap:.8rem; border:3px solid var(--line2); border-radius:14px; padding:.8rem; cursor:pointer; min-height:64px; background:var(--surface); }
-.sw:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
-.sw .chip{ width:54px; height:42px; border-radius:9px; flex:none; border:2px solid rgba(0,0,0,.15); display:flex; overflow:hidden; }
-.sw .chip span{ flex:1; } .sw .lbl{ font:800 1.02rem/1.2 var(--sans); } .sw .subt{ font:400 .85rem/1.3 var(--sans); color:var(--ink2); }
-.sw.sel{ border-color:var(--gold-br); }
-.chip.soft span:nth-child(1){background:#d9d2c4;} .chip.soft span:nth-child(2){background:#241f16;}
-.chip.def span:nth-child(1){background:#f3ead8;} .chip.def span:nth-child(2){background:#1f1b12;}
-.chip.dark span:nth-child(1){background:#26231d;} .chip.dark span:nth-child(2){background:#f0c357;}
 
 /* big cut-paper card art (the image floor) */
 .artwrap{ text-align:center; margin:.6rem 0 1rem; }
@@ -99,7 +137,7 @@ body.warm .go{ color:#0f0e0b; }
 /* the piece / board */
 .piece{ border:3px solid var(--accent2); border-radius:16px; background:var(--surface); padding:.9rem 1rem 1rem; margin:.4rem 0 1rem; font-size:1.14rem; line-height:1.95; }
 .piece .ph{ text-align:center; border-bottom:3px double var(--accent2); padding-bottom:.4rem; margin:-.2rem 0 .7rem; }
-.piece .ph .k{ font:800 .66rem/1 var(--sans); letter-spacing:.16em; text-transform:uppercase; color:var(--accent2); }
+.piece .ph .k{ font:800 .66rem/1 var(--sans); letter-spacing:.16em; text-transform:uppercase; color:var(--accent2-ink); }
 .piece .ph .t{ font:800 1.05rem/1.1 var(--display); color:var(--ink); }
 .tagspot{ position:relative; display:inline; padding:.02em .18em; border-radius:5px; background:var(--gold-pale); border:2px dashed var(--gold-br); cursor:pointer; font-weight:600; }
 .tagspot:hover{ background:var(--card); }
@@ -145,131 +183,52 @@ body.warm .go{ color:#0f0e0b; }
 
 /* carry-out */
 .copyout{ border:2px solid var(--accent2); border-radius:13px; background:var(--surface); padding:.85rem .9rem; margin:1rem 0; }
-.copyout .ch{ font:800 .78rem/1 var(--sans); letter-spacing:.05em; text-transform:uppercase; color:var(--accent2); margin-bottom:.5rem; }
+.copyout .ch{ font:800 .78rem/1 var(--sans); letter-spacing:.05em; text-transform:uppercase; color:var(--accent2-ink); margin-bottom:.5rem; }
 #carry{ width:100%; font:400 .86rem/1.5 var(--sans); padding:.7rem; border:2px solid var(--line2); border-radius:9px; background:var(--bg); color:var(--ink); min-height:150px; resize:vertical; white-space:pre-wrap; }
 .copied{ font:700 .85rem/1 var(--sans); color:var(--ink); margin:.4rem 0 0; min-height:1.2em; }
 .hint{ border-left:5px solid var(--gold-br); background:var(--gold-pale); border-radius:0 10px 10px 0; padding:.7rem .9rem; margin:.8rem 0; font:400 .96rem/1.45 var(--sans); }
 
 .foot{ margin-top:1.6rem; padding:1rem; background:var(--accent); color:#fff; border-radius:12px; font-family:var(--sans); font-size:.8rem; }
-body.warm .foot{ color:#0f0e0b; } .foot a{ color:#fff; } body.warm .foot a{ color:#0f0e0b; }
+html[data-light="night"] .foot{ color:#0f0e0b; } .foot a{ color:#fff; } html[data-light="night"] .foot a{ color:#0f0e0b; }
 .sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+a:focus-visible, a:focus{ outline:3px solid var(--focus); outline-offset:2px; border-radius:3px; }
 @media (max-width:520px){ body{font-size:18px;} h1{font-size:1.46rem;} .wrap{padding:1rem .8rem 5rem;} .piece{font-size:1.06rem; line-height:1.85;} .cards{grid-template-columns:1fr;} }
 @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
 
-/* ═══ THE COMFORT STOPS — canonical, swept 2026-07-14 ═══════════════════════
-   One button. Five stops. The same five in every room in the studio.
-   Written in THIS FILE'S token names (bg / ink) — a graft, not a clobber.
-   ═════════════════════════════════════════════════════════════════════════ */
-body.softer{  /* STOP 2 — same design, calmer. Lower push, still far above floor. */
-  --bg: #f6f3ec;
-  --ink: #24292f;
-}
-
-body.warmdark{  /* STOP 3 — warm charcoal, never #000. Max contrast BLOOMS on an RP retina. */
-  --bg: #16150f;
-  --ink: #f2ede0;
-}
-
-body.daylight{  /* STOP 4 — maximum legibility. Bright rooms, projectors, bad screens. */
-  --bg: #ffffff;
-  --ink: #000000;
-}
-
-/* ═══ STOP 5 — CLEAR READER ═════════════════════════════════════════════════
-   Not a palette. The design taken OFF.
-
-   What survives is what a screen reader actually receives: headings, lists,
-   links, in document order. A sighted person has never seen that document —
-   they do not know whether the thing they built has a spine, or whether the
-   layout was doing all the work.
-
-   Tap it, and the game becomes its own outline. If it is unplayable here, it is
-   unplayable with a screen reader. No plugin, no expertise. One tap, and you are
-   looking at the truth.
-
-   MAKE THE INVISIBLE STRUCTURE VISIBLE. That is every game in this studio. This
-   is that engine, pointed at the studio's own interface.
-   ═════════════════════════════════════════════════════════════════════════ */
-body.clear-reader{
-  background:#fff !important; color:#000 !important;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif !important;
-  font-size:19px !important; line-height:1.65 !important;
-  max-width:38em !important; margin:0 auto !important;
-  padding:24px 20px 90px !important;
-}
-body.clear-reader *:not(.cr-note):not(.cr-note *):not(.comfort):not(.comfort *){
-  all:revert;
-  font-family:inherit !important;
-  color:#000 !important; background:#fff !important; border-color:#767676 !important;
-  box-shadow:none !important; text-shadow:none !important;
-  animation:none !important; transition:none !important;
-  position:static !important; float:none !important; max-width:100% !important;
-}
-/* Decoration is not meaning. If it carries no information, it goes. */
-body.clear-reader svg, body.clear-reader canvas, body.clear-reader video,
-body.clear-reader [aria-hidden="true"]{ display:none !important; }
-/* Structure must be VISIBLE — that is the entire point of this stop. */
-body.clear-reader h1{ font-size:30px !important; margin:24px 0 10px !important;
-  border-bottom:3px solid #000 !important; padding-bottom:5px !important; }
-body.clear-reader h2{ font-size:24px !important; margin:22px 0 8px !important;
-  border-bottom:1px solid #767676 !important; padding-bottom:3px !important; }
-body.clear-reader h3{ font-size:20px !important; margin:18px 0 6px !important; }
-body.clear-reader p, body.clear-reader li{ font-size:19px !important; margin:0 0 13px !important; }
-body.clear-reader ul, body.clear-reader ol{ padding-left:26px !important; margin:0 0 16px !important; }
-body.clear-reader li{ list-style:disc !important; }
-body.clear-reader ol li{ list-style:decimal !important; }
-body.clear-reader a{ color:#0000ee !important; text-decoration:underline !important; }
-body.clear-reader a:visited{ color:#551a8b !important; }
-body.clear-reader button, body.clear-reader select, body.clear-reader input{
-  font-size:18px !important; padding:11px 16px !important;
-  border:2px solid #000 !important; border-radius:0 !important;
-  background:#fff !important; color:#000 !important;
-  margin:0 8px 8px 0 !important; display:inline-block !important;
-  min-height:44px !important; cursor:pointer !important;
-}
-body.clear-reader button[aria-pressed="true"]{ background:#000 !important; color:#fff !important; font-weight:700 !important; }
-body.clear-reader :focus-visible{ outline:4px solid #0000ee !important; outline-offset:2px !important; }
-body.clear-reader .cr-note{
-  display:block !important; border:3px solid #000 !important; background:#fff !important;
-  color:#000 !important; padding:15px 17px !important; margin:0 0 26px !important;
-  font-size:17px !important; line-height:1.5 !important;
-}
-.cr-note{ display:none; }
-
-/* ═══ THE BUTTON — a CORNER control. Never a wall. ═════════════════════════
-   It lives bottom-right, over the scene, always reachable and never in front of
-   it. The rule (locked 2026-06-29): the first screen is the SCENE. You change
-   the comfort BECAUSE you have seen something and want to see it differently —
-   not before you have seen anything at all, when the choice is meaningless.
-   ═════════════════════════════════════════════════════════════════════════ */
-.comfort{
-  position:fixed; right:14px; bottom:14px; z-index:9999;
-  font:700 12.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
-  letter-spacing:.05em; padding:12px 15px; min-height:44px;
-  background:var(--bg); color:var(--ink);
-  border:2px solid var(--ink); border-radius:2px; cursor:pointer;
-  box-shadow:0 2px 10px rgba(0,0,0,.16);
-}
-.comfort:focus-visible{ outline:4px solid #0000ee; outline-offset:3px; }
-body.clear-reader .comfort{
-  position:static !important; display:block !important;
-  margin:0 0 20px !important; box-shadow:none !important;
-}
-@media (prefers-reduced-motion: reduce){
-  *{ animation:none !important; transition:none !important; }
-}
 </style>
 </head>
 <body>
-<div class="cr-note" role="note"><b>Clear Reader.</b> The design is off. This is the
-document underneath &mdash; headings, lists, links, in the order a screen reader receives them.
-<b>If this is hard to follow, it is hard to follow with a screen reader too.</b> Press the button
-again to bring the design back.</div>
+<!-- RESERVED CHROME — Home · teaspoon brand · Studio Eyes -->
+<header class="se-chrome">
+  <a class="se-home" href="index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 27" fill="none" stroke="currentColor" aria-hidden="true" focusable="false"><path d="M33.2 13.5 L33.3 13.6 L33.3 13.8 L33.4 13.9 L33.4 14.1 L33.4 14.3 L33.3 14.5 L33.3 14.7 L33.2 14.9 L33.1 15.0 L33.0 15.2 L32.8 15.4 L32.7 15.5 L32.5 15.7 L32.2 15.8 L32.0 15.9 L31.7 15.9 L31.5 16.0 L31.2 16.0 L30.9 15.9 L30.6 15.9 L30.3 15.8 L30.1 15.7 L29.8 15.5 L29.5 15.3 L29.3 15.1 L29.1 14.8 L28.9 14.5 L28.7 14.2 L28.6 13.9 L28.5 13.5 L28.4 13.1 L28.4 12.7 L28.4 12.3 L28.5 11.9 L28.6 11.5 L28.8 11.2 L29.0 10.8 L29.2 10.4 L29.5 10.1 L29.8 9.8 L30.2 9.5 L30.6 9.3 L31.1 9.1 L31.5 8.9 L32.0 8.8 L32.5 8.8 L33.0 8.8 L33.5 8.8 L34.0 8.9 L34.5 9.1 L35.0 9.3 L35.5 9.6 L35.9 9.9 L36.4 10.3 L36.7 10.8 L37.1 11.2 L37.3 11.8 L37.6 12.3 L37.7 12.9 L37.9 13.5 L37.9 14.1 L37.9 14.7 L37.8 15.4 L37.6 16.0 L37.4 16.6 L37.1 17.2 L36.8 17.8 L36.3 18.3 L35.8 18.8 L35.3 19.2 L34.7 19.6 L34.1 19.9 L33.4 20.2 L32.7 20.4 L32.0 20.5 L31.3 20.6 L30.5 20.5 L29.8 20.4 L29.0 20.2 L28.3 19.9 L27.6 19.5 L26.9 19.1 L26.3 18.6 L25.8 18.0 L25.3 17.4 L24.8 16.7 L24.4 16.0 L24.2 15.2 L23.9 14.3 L23.8 13.5 L23.8 12.6 L23.9 11.8 L24.0 10.9 L24.2 10.0 L24.6 9.2 L25.0 8.4 L25.5 7.7 L26.1 7.0 L26.8 6.3 L27.5 5.7 L28.3 5.3 L29.2 4.8 L30.1 4.5 L31.0 4.3 L32.0 4.2 L33.0 4.1 L34.0 4.2 L35.0 4.4 L35.9 4.7 L36.9 5.1 L37.8 5.6 L38.6 6.2 L39.4 6.8 L40.1 7.6 L40.8 8.4 L41.3 9.4 L41.8 10.3 L42.1 11.3 L42.4 12.4 L42.5 13.5" stroke-width="2.3" stroke-linecap="round"/><circle cx="32" cy="13.5" r="1.6" fill="currentColor" stroke="none"/></svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+<p class="se-stamp" style="margin:.4rem 0 1rem;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.76rem;opacity:.92;display:flex;align-items:center;gap:.45rem"><span id="seUpdated">Last updated&hellip;</span> <span class="se-version" style="font:inherit;opacity:.85">&middot; v16 <span style="opacity:.75">75e938c</span></span></span></p>
+<script>(function(){var u=document.getElementById('seUpdated');if(!u)return;var d=new Date(document.lastModified);u.textContent=isNaN(d.getTime())?'Last updated recently':'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});})();</script>
 
-<div class="topbar">
-  <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 4 C30 4 36 12 36 20 C36 28 30 33 23 33 C17 33 13 29 13 24 C13 20 16 17 20 17 C23 17 25 19 25 22" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
-  <span class="wm">The Tell</span>
-  <button class="cstop" id="cstop" aria-label="Change comfort palette">Comfort</button>
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
 </div>
 
 <div class="wrap">
@@ -307,11 +266,11 @@ again to bring the design back.</div>
     <p>Same piece, two lenses. You can play the other one after.</p>
     <div class="lens">
       <button class="lenscard" id="lensWriterly">
-        <svg class="li" viewBox="0 0 52 52" aria-hidden="true"><rect x="6" y="6" width="40" height="40" rx="6" fill="var(--card)" stroke="var(--accent2)" stroke-width="3"/><path d="M16 34 L24 18 L32 34 M19 28 L29 28" stroke="var(--accent2)" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+        <svg class="li" viewBox="0 0 52 52" aria-hidden="true"><path d="M28 11 L45 43 L11 43 Z" fill="var(--line2)"/><path d="M25 9 L42 41 L8 41 Z" fill="var(--accent2)"/><path d="M25 19 L33 34 L17 34 Z" fill="var(--surface)"/></svg>
         <span><span class="lt">Writerly moves</span><br><span class="ld">What craft move is working here? The appreciative read.</span></span>
       </button>
       <button class="lenscard" id="lensWorkshop">
-        <svg class="li" viewBox="0 0 52 52" aria-hidden="true"><rect x="6" y="6" width="40" height="40" rx="6" fill="var(--card)" stroke="var(--gold-br)" stroke-width="3"/><circle cx="23" cy="23" r="9" fill="none" stroke="var(--gold-br)" stroke-width="3"/><line x1="30" y1="30" x2="40" y2="40" stroke="var(--gold-br)" stroke-width="3" stroke-linecap="round"/></svg>
+        <svg class="li" viewBox="0 0 52 52" aria-hidden="true"><circle cx="25" cy="23" r="15" fill="var(--line2)"/><circle cx="23" cy="21" r="15" fill="var(--gold-br)"/><circle cx="23" cy="21" r="6.5" fill="var(--surface)"/><rect x="34.5" y="27.5" width="8" height="18" rx="4" transform="rotate(45 38.5 36.5)" fill="var(--gold-br)"/></svg>
         <span><span class="lt">Workshop moves</span><br><span class="ld">What is the piece asking for? The reviewer's read.</span></span>
       </button>
     </div>
@@ -360,45 +319,48 @@ again to bring the design back.</div>
   </div>
 </div>
 
-<button class="comfort" id="comfort">Comfort: <span id="comfort-label">Default</span></button>
+<!-- BOTTOM NAV RAIL — Back + Home -->
+<nav class="se-rail" aria-label="Page navigation">
+  <a href="arcade.html" aria-label="Back to the arcade">Back</a>
+  <a href="index.html" aria-label="Home">Home</a>
+</nav>
 
 <script>
+/* ═══ STUDIO EYES — v2 comfort control (reserved chrome, no wall) ═══ */
 (function(){
   "use strict";
-  var STOPS = [
-    { cls:"",             label:"Default"      },
-    { cls:"softer",       label:"Softer"       },
-    { cls:"warmdark",     label:"Warm dark"    },
-    { cls:"daylight",     label:"Daylight"     },
-    { cls:"clear-reader", label:"Clear Reader" }
-  ];
-  var i = 0;
-  var btn = document.getElementById("comfort");
-  var lab = document.getElementById("comfort-label");
-  function apply(){
-    for(var k=0;k<STOPS.length;k++){ if(STOPS[k].cls) document.body.classList.remove(STOPS[k].cls); }
-    if(STOPS[i].cls) document.body.classList.add(STOPS[i].cls);
-    lab.textContent = STOPS[i].label;
-    /* A button announces what it will DO, not what it is. A screen-reader user
-       pressing this needs to know where it takes them. */
-    var next = STOPS[(i+1) % STOPS.length].label;
-    btn.setAttribute("aria-label",
-      "Comfort setting: " + STOPS[i].label + ". Press to switch to " + next + ".");
-  }
-  btn.addEventListener("click", function(){ i = (i+1) % STOPS.length; apply(); });
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
   /* NO STORAGE. Single-file, offline, zero-persistence is studio law. */
-  apply();
 })();
 </script>
 
 <script>
 (function(){
   var $=function(id){return document.getElementById(id);};
-
-  /* ---------- comfort gate ---------- */
-  var stops=['softer','default','warm'], ci=1;
-  function applyStop(s){ document.body.classList.remove('softer','warm'); if(s==='softer')document.body.classList.add('softer'); if(s==='warm')document.body.classList.add('warm'); ci=stops.indexOf(s); }
-  $('cstop').addEventListener('click',function(){ ci=(ci+1)%3; applyStop(stops[ci]); this.textContent='Comfort: '+stops[ci].charAt(0).toUpperCase()+stops[ci].slice(1); });
 
   /* ---------- screen nav ---------- */
   function show(id){ document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');}); $(id).classList.add('on'); window.scrollTo(0,0); var h=$(id).querySelector('h1'); if(h){ h.setAttribute('tabindex','-1'); h.focus(); } }
@@ -601,7 +563,7 @@ again to bring the design back.</div>
 </script>
 
 <!-- TSP shared mobile nav + device adaptation -->
-<script>window.TSP_MOBILE = { home:"index.html", back:"arcade.html" };</script>
+<script>window.TSP_MOBILE = { nav:false };</script>
 <!-- TSP-MOBILE (inlined from tsp-mobile.js — single-file-offline law) -->
 <script>
 /* Tight Spiral Studios — shared mobile controls + Home/Back nav.
@@ -662,9 +624,9 @@ again to bring the design back.</div>
     if (d.getElementById("tsp-mobile-style")) return;
     var css = [
       /* Navigation chip — always available, subtle on desktop */
-      ".tsp-nav{position:fixed;top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));",
+      ".tsp-nav{position:absolute;top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));",
         "z-index:2147483000;display:flex;gap:8px;font-family:'Helvetica Neue',Arial,sans-serif}",
-      ".tsp-nav a{display:inline-flex;align-items:center;gap:.4em;text-decoration:none;",
+      ".tsp-nav a{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;gap:.4em;text-decoration:none;",
         "padding:.5em .85em;border-radius:999px;font-size:13px;font-weight:600;letter-spacing:.04em;",
         "color:#f4f1e8;background:rgba(20,18,15,.66);border:1px solid rgba(255,207,90,.45);",
         "-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);line-height:1;",
@@ -675,11 +637,12 @@ again to bring the design back.</div>
 
       /* Nav integrated into the studio's shared .topbar (no overlap) */
       ".tsp-barnav{display:inline-flex;align-items:center;gap:.35rem;margin-right:.25rem;flex:none}",
-      ".tsp-barnav a{display:inline-flex;align-items:center;gap:.3em;text-decoration:none;color:inherit;",
+      ".tsp-barnav a{display:inline-flex;align-items:center;min-height:44px;box-sizing:border-box;gap:.3em;text-decoration:none;color:inherit;",
         "font-family:inherit;font-weight:800;font-size:.82rem;letter-spacing:.02em;line-height:1;",
         "padding:.4em .7em;border-radius:999px;border:1px solid currentColor;opacity:.85;",
         "background:transparent;white-space:nowrap;transition:opacity .12s,background .12s}",
-      ".tsp-barnav a:hover,.tsp-barnav a:focus-visible{opacity:1;background:rgba(127,127,127,.18);outline:none}",
+      ".tsp-barnav a:hover,.tsp-barnav a:focus-visible{opacity:1;background:rgba(127,127,127,.18)}",
+      ".tsp-barnav a:focus-visible,.tsp-barnav a:focus{outline:3px solid currentColor;outline-offset:2px}",
       ".tsp-barnav a:active{transform:translateY(1px)}",
       /* Keep the shared bar on one row once Home/Back are added: title ellipsizes */
       ".tsp-touch .topbar{gap:.4rem}",
@@ -702,7 +665,21 @@ again to bring the design back.</div>
       ".tsp-btn.big{min-width:82px;min-height:82px;font-size:16px}",
       ".tsp-btn:active,.tsp-btn.on{background:rgba(255,207,90,.9);color:#1a0d09;transform:scale(.94)}",
       /* Hide gamepad on non-touch so desktop keeps keyboard feel */
-      ".tsp-no-touch .tsp-pad{display:none}"
+      ".tsp-no-touch .tsp-pad{display:none}",
+
+      /* Rotate-for-more-room hint — canvas games only, portrait phones only */
+      ".tsp-rot{position:fixed;left:50%;transform:translateX(-50%);top:calc(72px + env(safe-area-inset-top));",
+        "z-index:2147482500;display:none;align-items:center;gap:.55em;padding:.5em .55em .5em .9em;",
+        "border-radius:999px;background:rgba(24,20,15,.86);color:#f4f1e8;",
+        "border:1px solid rgba(255,207,90,.5);white-space:nowrap;",
+        "font:600 12px/1 'Helvetica Neue',Arial,sans-serif;letter-spacing:.02em;",
+        "-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 4px 14px rgba(0,0,0,.4)}",
+      ".tsp-rot .rk{font-size:14px;color:#ffcf5a}",
+      ".tsp-rot button{background:none;border:none;color:inherit;font-size:16px;line-height:1;",
+        "padding:0 .15em;margin:0;cursor:pointer;opacity:.65}",
+      ".tsp-rot button:active{opacity:1}",
+      "@media (orientation:portrait){.tsp-touch .tsp-rot{display:inline-flex}}",
+      ".tsp-rot-dismissed .tsp-rot{display:none!important}"
     ].join("");
     var s = d.createElement("style");
     s.id = "tsp-mobile-style";
@@ -833,11 +810,30 @@ again to bring the design back.</div>
     window.addEventListener("blur", release);
   }
 
+  /* ---- Rotate hint -------------------------------------------------------- */
+  function buildRotateHint() {
+    if (!hasTouch) return;
+    if (cfg.rotateHint === false) return;
+    if (!cfg.controls || !cfg.controls.length) return;   // canvas games only
+    if (d.querySelector(".tsp-rot")) return;
+    var hint = d.createElement("div");
+    hint.className = "tsp-rot";
+    hint.setAttribute("role", "note");
+    hint.innerHTML = '<span class="rk">↻</span>' +
+      '<span>Turn sideways for more room</span>' +
+      '<button type="button" aria-label="Dismiss">×</button>';
+    hint.querySelector("button").addEventListener("click", function () {
+      root.classList.add("tsp-rot-dismissed");
+    });
+    d.body.appendChild(hint);
+  }
+
   /* ---- Boot --------------------------------------------------------------- */
   function boot() {
     injectStyles();
     buildNav();
     buildPad();
+    buildRotateHint();
   }
 
   if (d.readyState === "loading") {

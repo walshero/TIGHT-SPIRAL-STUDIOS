@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-light="day">
 <!--
   MASSBAY DEGREE HUB — the player-facing shell that games plug into (v1, 2026-06-28)
   Front door = the degree directory (the exciting part; the world you're invited into).
   Real MassBay programs, nested by division, pulled verbatim from the Fact Book
   enrollment-by-major tables. Liberal Arts: English is the one PLAYABLE tile (links
-  to massbay-english-major.html). Every other program reads "In development" —
+  to ../play-the-semester.html — INTERIM target. The intended massbay-english-major.html
+  was never committed to any lane and is lost; english-major-build-map.md is its why-doc
+  and the rebuild spec. Repoint the tile there when it lands.) Every other program reads
+  "In development" —
   ROADMAP, not withholding (dignity-first: locks signal where the studio is going).
   Resource map = "Your crew" — one tap from every screen, framed as ASSETS the
   student already has (power-ups), organized by plain-language need mapping to the
@@ -21,34 +24,118 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MassBay Degrees — Tight Spiral</title>
 <style>
-/* STUDIO EYES v4 CLASS-FIX 2026-07-11: lock the palette. */
-:root{ color-scheme: light; }
+/* COMFORT KERNEL v2 mounted 2026-07-30 — Studio Eyes light ladder as token remaps
+   on html[data-light]; legacy body.contrast comfort control removed. */
 
+  /* ---- LIGHT: DAY (default) ---- */
   :root{
     --paper-0:#fbf9f3; --paper-1:#f4f1e8; --paper-2:#efe9da; --paper-3:#e6dfcd;
     --ink-0:#1a1a17; --ink-1:#33322c; --line:#8a8576;
-    --accent:#1a4a35; --accent-ink:#0f2e20; --accent-soft:#dfece4;
+    --accent:#1a4a35; --accent-ink:#0f2e20; --accent-hover:#0f2e20; --accent-soft:#dfece4;
     --cool:#13586b; --cool-soft:#dcebef; --good:#1a5e3a; --warn:#8a3a12; --gold:#8a5c00; --focus:#ffce2b;
+    --gold-bg:#ffd24a; --gold-bg-ink:#1a1505;
+    --se-accent:#0f2e20; --se-on-accent:#ffffff;
+    --tap:44px; --motion:.18s;
   }
+  /* ---- LIGHT: DUSK ---- */
+  html[data-light="dusk"]{
+    --paper-0:#f3e9d0; --paper-1:#ecdcbb; --paper-2:#e6d4b0; --paper-3:#dcc79c;
+    --ink-0:#241a10; --ink-1:#4a3a1e; --line:#8a7a55;
+    --accent:#17422f; --accent-ink:#0f2e20; --accent-hover:#0b2015; --accent-soft:#d7e2d2;
+    --cool:#11505f; --cool-soft:#d3e2e3; --gold:#7a5000;
+  }
+  /* ---- LIGHT: WARM-DARK (night) — warm charcoal, never pure black ---- */
+  html[data-light="night"]{
+    --paper-0:#242019; --paper-1:#1c1a16; --paper-2:#2a261f; --paper-3:#33302a;
+    --ink-0:#f2e3bf; --ink-1:#d8c59a; --line:#5a5342;
+    --accent:#2a6a4c; --accent-ink:#a8d8bc; --accent-hover:#1e5238; --accent-soft:#22302a;
+    --cool:#9fd3e0; --cool-soft:#1f2b2e; --gold:#e8b64c; --focus:#f0c357;
+    --se-accent:#a8d8bc; --se-on-accent:#14231b;
+  }
+  /* ---- TOGGLE: high contrast ---- */
+  html.se-contrast:not([data-light="night"]){
+    --paper-0:#fbfaf7; --paper-1:#fbfaf7; --paper-2:#f0ece2; --paper-3:#e6e0d0;
+    --ink-0:#141109; --ink-1:#2c2517; --line:#6e6444;
+    --accent:#123526; --accent-ink:#0c2418; --accent-hover:#081a10; --accent-soft:#eaf2ec;
+    --cool:#0c4250; --cool-soft:#e4eef0; --gold:#6a4600;
+    --se-accent:#0c2418;
+  }
+  html.se-contrast[data-light="night"]{
+    --paper-0:#161410; --paper-1:#0e0d0b; --paper-2:#1c1914; --paper-3:#262218;
+    --ink-0:#fff7e6; --ink-1:#efe0bc;
+    --accent-ink:#c9ecd7; --cool:#b8e4ef; --gold:#ffd24a;
+    --se-accent:#c9ecd7; --se-on-accent:#0e0d0b;
+  }
+  /* ---- TOGGLE: text size A / A+ / A++ ---- */
+  html.se-a1{ zoom:1.15; }
+  html.se-a2{ zoom:1.3; }
+  /* ---- TOGGLE: reduce motion ---- */
+  html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+  /* ---- TOGGLE: colorblind cues ---- */
+  html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+
   *{ box-sizing:border-box; }
   html,body{ margin:0; padding:0; }
   body{ background:var(--paper-1); color:var(--ink-0);
-    font:500 18px/1.55 "Segoe UI", system-ui, -apple-system, sans-serif; -webkit-text-size-adjust:100%; }
-  body.contrast{ --paper-0:#000; --paper-1:#000; --paper-2:#111; --paper-3:#222;
-    --ink-0:#fff; --ink-1:#fff; --line:#fff; --accent:#fff; --accent-ink:#fff;
-    --accent-soft:#111; --cool:#7fe3f5; --cool-soft:#111; --good:#7ef0a8; --warn:#ffb38a; --gold:#ffd24a; }
-  body.contrast *{ border-color:#fff !important; }
-  body.contrast .btn,body.contrast .tile{ background:#000 !important; color:#fff !important; border:2px solid #fff !important; }
-  body.contrast .btn-p,body.contrast .tile.live{ background:#fff !important; color:#000 !important; }
+    font:500 18px/1.55 "Segoe UI", system-ui, -apple-system, sans-serif; -webkit-text-size-adjust:100%;
+    transition:background var(--motion) ease, color var(--motion) ease; }
 
   .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 
-  .topbar{ background:var(--accent); color:#fff; padding:.7rem 1.05rem; display:flex; align-items:center; justify-content:space-between; gap:.6rem; position:sticky; top:0; z-index:30; }
-  .topbar .mark{ font-weight:800; font-size:1.02rem; }
-  .topbar .mark small{ display:block; font-weight:500; font-size:.72rem; opacity:.92; }
-  .crew-btn{ background:var(--gold); color:#1a1505; border:2px solid #fff; border-radius:11px;
+  /* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+  .se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+    padding:9px 14px; background:var(--paper-0); border-bottom:2px solid var(--ink-0);
+    position:sticky; top:0; z-index:100; }
+  .se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+    padding:8px 12px; border:1.5px solid var(--line); border-radius:8px; background:var(--paper-2);
+    color:var(--ink-0); font-family:inherit; font-weight:800; font-size:.82rem; text-decoration:none; }
+  .se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink-0); }
+  .se-brand svg{ width:34px; height:20px; color:var(--accent-ink); flex:0 0 auto; }
+  .se-brand .wm{ font-size:.92rem; white-space:nowrap; }
+  .se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+    padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--se-accent);
+    color:var(--se-on-accent); font-family:inherit; font-weight:800; font-size:.82rem; cursor:pointer; }
+  .se-home:focus-visible,.se-eyes:focus-visible{ outline:4px solid var(--focus); outline-offset:2px; }
+  @media (max-width:560px){ .se-brand .wm{ display:none; } }
+
+  /* ═══ STUDIO EYES panel ═══ */
+  .se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 22px); z-index:101;
+    width:min(320px,calc(100vw - 24px)); background:var(--paper-0); color:var(--ink-0);
+    border:2px solid var(--se-accent); border-radius:12px; padding:15px;
+    box-shadow:0 10px 34px rgba(0,0,0,.28); display:none; }
+  .se-panel[data-open="1"]{ display:block; }
+  .se-panel h2{ font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-1); margin:0 0 8px; }
+  .se-row{ display:flex; gap:6px; margin-bottom:14px; }
+  .se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--line); border-radius:8px;
+    background:var(--paper-2); color:var(--ink-0); font-family:inherit; font-weight:800; font-size:.8rem; cursor:pointer; }
+  .se-btn[aria-pressed="true"]{ background:var(--se-accent); color:var(--se-on-accent); border-color:var(--se-accent); }
+  .se-btn:focus-visible{ outline:4px solid var(--focus); outline-offset:2px; }
+  .se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+    min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--line); border-radius:8px;
+    background:var(--paper-2); color:var(--ink-0); font-family:inherit; font-weight:700; font-size:.86rem; cursor:pointer; text-align:left; }
+  .se-tog[aria-pressed="true"]{ border-color:var(--se-accent); }
+  .se-tog .st{ font-size:.72rem; font-weight:700; color:var(--ink-1); }
+  .se-tog[aria-pressed="true"] .st{ color:var(--se-accent); }
+  .se-tog:focus-visible{ outline:4px solid var(--focus); outline-offset:2px; }
+
+  /* page head — the hub's own mark + crew button (moved out of the old topbar) */
+  .pagehead{ background:var(--accent); color:#fff; border-radius:14px; padding:.7rem 1.05rem; margin:1rem 0 0;
+    display:flex; align-items:center; justify-content:space-between; gap:.6rem; }
+  .pagehead .mark{ font-weight:800; font-size:1.02rem; }
+  .pagehead .mark small{ display:block; font-weight:600; font-size:.72rem; }
+  .crew-btn{ background:var(--gold-bg); color:var(--gold-bg-ink); border:2px solid #fff; border-radius:11px;
     padding:.55rem .85rem; font:800 .9rem/1 inherit; cursor:pointer; min-height:44px; }
-  body.contrast .crew-btn{ background:#ffd24a !important; color:#000 !important; }
+  .crew-btn:focus-visible{ outline:4px solid var(--focus); outline-offset:2px; }
+
+  .updated{ font-size:.8rem; font-weight:600; color:var(--ink-1); margin:.5rem 0 0; display:flex; align-items:center; gap:7px; }
+  .updated::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--accent); flex:0 0 auto; }
+
+  /* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+  .se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; border-top:2px solid var(--line); background:var(--paper-1); }
+  .se-rail a,.se-rail button{ display:inline-flex; align-items:center; min-height:var(--tap); padding:10px 18px;
+    border:1.5px solid var(--line); border-radius:8px; background:var(--paper-2); color:var(--ink-0);
+    font-family:inherit; font-weight:800; font-size:.82rem; text-decoration:none; cursor:pointer; }
+  .se-rail a:focus-visible,.se-rail button:focus-visible{ outline:4px solid var(--focus); outline-offset:2px; }
 
   .wrap{ max-width:760px; margin:0 auto; padding:1rem 1.05rem 4rem; }
 
@@ -76,7 +163,7 @@
   .tile .status{ font-weight:800; font-size:.76rem; letter-spacing:.04em; text-transform:uppercase; white-space:nowrap; color:var(--ink-1); }
   .tile.live{ background:var(--accent); color:#fff; border-color:var(--accent); cursor:pointer; }
   .tile.live .status{ color:#fff; }
-  .tile.live:hover{ background:var(--accent-ink); }
+  .tile.live:hover{ background:var(--accent-hover); }
   .tile.live:focus-visible{ outline:4px solid var(--focus); outline-offset:2px; }
   .tile.soon{ opacity:.92; }
   .tile.soon .status{ color:var(--gold); }
@@ -113,17 +200,50 @@
 <body>
 <div id="live" aria-live="polite" class="sr-only"></div>
 
-<div class="topbar">
-  <div class="mark">MassBay Degrees<small>Find your path. Play your way in.</small></div>
-  <button class="crew-btn" id="crewOpen" aria-haspopup="dialog">Your crew</button>
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="../index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 27" fill="none" stroke="currentColor" aria-hidden="true" focusable="false"><path d="M33.2 13.5 L33.3 13.6 L33.3 13.8 L33.4 13.9 L33.4 14.1 L33.4 14.3 L33.3 14.5 L33.3 14.7 L33.2 14.9 L33.1 15.0 L33.0 15.2 L32.8 15.4 L32.7 15.5 L32.5 15.7 L32.2 15.8 L32.0 15.9 L31.7 15.9 L31.5 16.0 L31.2 16.0 L30.9 15.9 L30.6 15.9 L30.3 15.8 L30.1 15.7 L29.8 15.5 L29.5 15.3 L29.3 15.1 L29.1 14.8 L28.9 14.5 L28.7 14.2 L28.6 13.9 L28.5 13.5 L28.4 13.1 L28.4 12.7 L28.4 12.3 L28.5 11.9 L28.6 11.5 L28.8 11.2 L29.0 10.8 L29.2 10.4 L29.5 10.1 L29.8 9.8 L30.2 9.5 L30.6 9.3 L31.1 9.1 L31.5 8.9 L32.0 8.8 L32.5 8.8 L33.0 8.8 L33.5 8.8 L34.0 8.9 L34.5 9.1 L35.0 9.3 L35.5 9.6 L35.9 9.9 L36.4 10.3 L36.7 10.8 L37.1 11.2 L37.3 11.8 L37.6 12.3 L37.7 12.9 L37.9 13.5 L37.9 14.1 L37.9 14.7 L37.8 15.4 L37.6 16.0 L37.4 16.6 L37.1 17.2 L36.8 17.8 L36.3 18.3 L35.8 18.8 L35.3 19.2 L34.7 19.6 L34.1 19.9 L33.4 20.2 L32.7 20.4 L32.0 20.5 L31.3 20.6 L30.5 20.5 L29.8 20.4 L29.0 20.2 L28.3 19.9 L27.6 19.5 L26.9 19.1 L26.3 18.6 L25.8 18.0 L25.3 17.4 L24.8 16.7 L24.4 16.0 L24.2 15.2 L23.9 14.3 L23.8 13.5 L23.8 12.6 L23.9 11.8 L24.0 10.9 L24.2 10.0 L24.6 9.2 L25.0 8.4 L25.5 7.7 L26.1 7.0 L26.8 6.3 L27.5 5.7 L28.3 5.3 L29.2 4.8 L30.1 4.5 L31.0 4.3 L32.0 4.2 L33.0 4.1 L34.0 4.2 L35.0 4.4 L35.9 4.7 L36.9 5.1 L37.8 5.6 L38.6 6.2 L39.4 6.8 L40.1 7.6 L40.8 8.4 L41.3 9.4 L41.8 10.3 L42.1 11.3 L42.4 12.4 L42.5 13.5" stroke-width="2.3" stroke-linecap="round"/><circle cx="32" cy="13.5" r="1.6" fill="currentColor" stroke="none"/></svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="sr-only" id="seSr" role="status" aria-live="polite"></span>
 </div>
 
 <div class="wrap">
+
+  <div class="pagehead">
+    <div class="mark">MassBay Degrees<small>Find your path. Play your way in.</small></div>
+    <button class="crew-btn" id="crewOpen" aria-haspopup="dialog">Your crew</button>
+  </div>
 
   <div class="hero">
     <h1>Pick a path. Walk it like a game.</h1>
     <p>Every MassBay degree is here. Find the one that's yours — and where there's a game, play your way through what it actually takes to finish. More are on the way.</p>
   </div>
+
+  <p class="updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v5 <span style="opacity:.75">d701f4e</span></span> </span> </span> </span>
 
   <h2>Explore every MassBay degree</h2>
   <p class="div-sub">Open a division to see its programs. Tap a glowing tile to play. The rest are in development — a map of what's coming.</p>
@@ -152,9 +272,55 @@
   </div>
 </div>
 
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="../index.html" aria-label="Home">Home</a>
+</nav>
+
+<script>
+/* ── COMFORT KERNEL v2 — Studio Eyes ── */
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  // last-updated: computed, not typed
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+})();
+</script>
+
 <script>
 /* ── real MassBay programs, nested by division (Fact Book). English is live. ── */
-var ENGLISH_GAME = "massbay-english-major.html";
+/* INTERIM: massbay-english-major.html was never pushed to any lane (lost with the shelf;
+   see english-major-build-map.md). Until it is rebuilt, the live tile opens the studio's
+   existing playable English game. Repoint here when the degree game lands. */
+var ENGLISH_GAME = "../play-the-semester.html";
 var DIVISIONS = [
   { name:"Humanities & Social Sciences", sub:"Liberal arts, communication, English, psychology",
     programs:[

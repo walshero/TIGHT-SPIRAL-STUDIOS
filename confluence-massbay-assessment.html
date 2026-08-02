@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en" data-light="day">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>Confluence — Where Student Work Meets the World</title>
+<style>
+/* CONFLUENCE FOR MASSBAY — assessment companion.
+   Single file. Offline. No external hosts. No names.
+   Token-role law: a color is atmosphere OR text, never both.
+   --orange is DECORATION ONLY and never carries text.
+   Font floor: 20px body, 18px absolute minimum (rem-based so Studio Eyes
+   text-size steps A / A+ / A++ actually scale the content).
+
+   MIGRATED to the TSP Comfort Kernel v2 standard (2026-07-29):
+   Studio Eyes lives in the reserved chrome header, top-right. Light shifts
+   Default / Dusk / Warm-dark via html[data-light]; the page's own tokens are
+   remapped under each. Warm-dark is warm charcoal, never pure black. Every
+   visible text stays >=4.5:1 in all three modes. The old bottom-right comfort
+   FAB is gone. Home rides the chrome; Back+Home ride the bottom rail. */
+:root, html[data-light="day"]{
+  color-scheme:light;
+  /* Token-role law: -ink names carry text, plain/-fill names paint. Every
+     colour that was doing both jobs is split so a stop can dim atmosphere
+     without dimming text. */
+  --chart:#EEF2EE;        /* pale survey-chart ground (paint) */
+  --chart-ink:#EEF2EE;    /* light text that rides a teal fill */
+  --panel:#E2E9E4;        /* raised panel ground */
+  --ink:#17272A;          /* body ink, 13.5:1 on chart */
+  --ink-fill:#17272A;     /* same ink, used as SVG map-text fill */
+  --teal:#0F5F5A;         /* heading + link ink, 6.6:1 on chart */
+  --teal-fill:#0F5F5A;    /* same teal, used as fill/border/stroke */
+  --orange:#C05A1E;       /* DECORATION ONLY — river marks, rules */
+  --focus:#0F5F5A;
+  --stream:#9DB8AE;       /* faint waterline decoration */
+  --font-serif:Georgia,'Times New Roman',serif;
+  --font-sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-mono:'SF Mono',Consolas,Menlo,monospace;
+}
+/* ── LIGHT: DUSK — a genuinely calmer ground, separated from Day by >=0.12 luminance ── */
+html[data-light="dusk"]{
+  color-scheme:light;
+  --chart:#D3DAD2; --chart-ink:#D3DAD2; --panel:#DAE0D9;
+  --ink:#1C2A2C; --ink-fill:#1C2A2C; --teal:#0D5450; --teal-fill:#0D5450;
+  --focus:#0D5450;
+}
+/* ── LIGHT: WARM-DARK (night) — warm charcoal, never pure black ── */
+html[data-light="night"]{
+  color-scheme:dark;
+  --chart:#211E18; --chart-ink:#211E18; --panel:#2C2820;
+  --ink:#EFE7D6; --ink-fill:#EFE7D6; --teal:#8FD6CB; --teal-fill:#8FD6CB;
+  --orange:#D9773C; --focus:#8FD6CB; --stream:#4A5A50;
+}
+/* ── STUDIO EYES toggle: high contrast (halation floor) ── */
+html.se-contrast:not([data-light="night"]){
+  --chart:#FFFFFF; --chart-ink:#FFFFFF; --panel:#F2F5F2;
+  --ink:#0B1416; --ink-fill:#0B1416; --teal:#0A403C; --teal-fill:#0A403C;
+  --stream:#7A8F86;
+}
+html.se-contrast[data-light="night"]{
+  --chart:#0A0906; --chart-ink:#0A0906; --panel:#141210;
+  --ink:#FFF7E6; --ink-fill:#FFF7E6; --teal:#A6E4DA; --teal-fill:#A6E4DA;
+  --stream:#5A6A60;
+}
+/* ── STUDIO EYES toggle: text size A / A+ / A++ (content is rem-based) ── */
+html{ font-size:100%; scroll-behavior:smooth; }
+html.se-a1{ zoom:1.15; }
+html.se-a2{ zoom:1.3; }
+/* ── STUDIO EYES toggle: reduce motion ── */
+html.se-reduce *{ animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+/* ── STUDIO EYES toggle: colorblind cues ── */
+html.se-cb a{ text-decoration:underline; text-underline-offset:3px; }
+
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:var(--chart); color:var(--ink);
+  font-family:var(--font-sans); font-size:1.25rem; line-height:1.65;
+}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *{animation:none !important; transition:none !important;}
+}
+.skip-link{
+  position:absolute; left:-9999px; top:0; z-index:120;
+  background:var(--teal-fill); color:var(--chart-ink); padding:.7rem 1.2rem;
+  font-size:1.25rem; text-decoration:none;
+}
+.skip-link:focus{left:0;}
+:focus-visible{outline:3px solid var(--focus); outline-offset:3px;}
+
+/* ═══ RESERVED CHROME — grid header, reserves its own row, never overlaps ═══ */
+.se-chrome{
+  display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+  padding:9px 14px; background:var(--panel); border-bottom:3px solid var(--orange);
+  position:sticky; top:0; z-index:100;
+}
+.se-home{
+  justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:48px;
+  padding:8px 14px; border:1.5px solid var(--stream); border-radius:8px; background:var(--chart);
+  color:var(--ink); font-family:var(--font-mono); font-weight:700; font-size:15px; text-decoration:none;
+}
+.se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+.se-brand svg{ width:34px; height:20px; color:var(--teal); flex:0 0 auto; }
+.se-brand .wm{ font-family:var(--font-serif); font-size:16px; letter-spacing:.01em; white-space:nowrap; }
+.se-eyes{
+  justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:48px;
+  padding:8px 14px; border:2px solid transparent; border-radius:8px; background:var(--teal-fill);
+  color:var(--chart-ink); font-family:var(--font-mono); font-weight:700; font-size:15px; cursor:pointer;
+}
+.se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+@media (max-width:560px){ .se-brand .wm{ display:none; } }
+
+/* ═══ STUDIO EYES panel — opens under the chrome, top-right ═══ */
+.se-panel{
+  position:fixed; right:12px; top:70px; z-index:101;
+  width:min(340px,calc(100vw - 24px)); background:var(--panel); color:var(--ink);
+  border:2px solid var(--teal-fill); border-radius:10px; padding:15px;
+  box-shadow:0 10px 34px rgba(0,0,0,.28); display:none;
+}
+.se-panel[data-open="1"]{ display:block; }
+.se-panel h2{
+  font-family:var(--font-mono); font-size:14px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink); margin:0 0 8px; font-weight:700;
+}
+.se-row{ display:flex; gap:6px; margin-bottom:14px; }
+.se-btn{
+  flex:1; min-height:48px; padding:8px 4px; border:1.5px solid var(--stream); border-radius:8px;
+  background:var(--chart); color:var(--ink); font-family:var(--font-mono); font-weight:700; font-size:15px; cursor:pointer;
+}
+.se-btn[aria-pressed="true"]{ background:var(--teal-fill); color:var(--chart-ink); border-color:var(--teal-fill); }
+.se-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-tog{
+  display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px;
+  min-height:48px; padding:8px 12px; margin-bottom:6px; border:1.5px solid var(--stream); border-radius:8px;
+  background:var(--chart); color:var(--ink); font-family:var(--font-sans); font-weight:600; font-size:16px; cursor:pointer; text-align:left;
+}
+.se-tog[aria-pressed="true"]{ border-color:var(--teal-fill); }
+.se-tog .st{ font-family:var(--font-mono); font-size:14px; color:var(--ink); }
+.se-tog[aria-pressed="true"] .st{ color:var(--teal); font-weight:700; }
+.se-tog:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+/* ── nav: the five stops, the tour ── */
+.riverbar{
+  background:var(--chart);
+  border-bottom:3px solid var(--orange);
+  display:flex; align-items:center; gap:.4rem; flex-wrap:wrap;
+  padding:.7rem 1.2rem;
+}
+.riverbar .mark{
+  font-family:var(--font-serif); font-style:italic; font-size:1.375rem;
+  color:var(--teal); margin-right:.8rem; white-space:nowrap;
+}
+.riverbar nav{display:flex; gap:.35rem; flex-wrap:wrap;}
+.riverbar button{
+  font-family:var(--font-sans); font-size:1.125rem; letter-spacing:.04em;
+  background:none; border:2px solid transparent; border-radius:4px;
+  color:var(--teal); min-height:44px; padding:.4rem .8rem; cursor:pointer;
+}
+.riverbar button[aria-current="true"]{
+  border-color:var(--teal-fill); font-weight:700;
+}
+.riverbar button:hover{border-color:var(--stream);}
+
+/* ── pages ── */
+main{max-width:72ch; margin:0 auto; padding:2.5rem 1.4rem 3rem;}
+.page{display:none;}
+.page.on{display:block;}
+.eyebrow{
+  font-family:var(--font-sans); font-size:1.125rem; font-weight:700;
+  letter-spacing:.18em; text-transform:uppercase; color:var(--teal);
+}
+h1{
+  font-family:var(--font-serif); font-size:2.75rem; line-height:1.15;
+  color:var(--teal); margin:.4rem 0 1.4rem;
+}
+h2{
+  font-family:var(--font-serif); font-size:2.0625rem; line-height:1.2;
+  color:var(--teal); margin:2.4rem 0 .9rem;
+}
+h3{
+  font-family:var(--font-serif); font-style:italic; font-size:1.625rem;
+  color:var(--teal); margin:1.8rem 0 .6rem;
+}
+p{margin:0 0 1.1rem;}
+p.lede{font-size:1.4375rem; line-height:1.55;}
+ul,ol{margin:0 0 1.1rem 1.4rem;}
+li{margin-bottom:.55rem;}
+strong{font-weight:700;}
+a{color:var(--teal); text-decoration:underline; text-underline-offset:3px;}
+.rule{
+  border:none; border-top:3px solid var(--orange);
+  width:5rem; margin:2rem 0;
+}
+.figure-note{
+  font-family:var(--font-mono); font-size:1.125rem; color:var(--ink);
+  margin:.4rem 0 1.2rem;
+}
+
+/* ── the confluence map (signature) ── */
+.confluence-map{width:100%; height:auto; display:block; margin:1.6rem 0 .6rem;}
+.confluence-map .stream-path{fill:none; stroke:var(--stream); stroke-width:5; stroke-linecap:round;}
+.confluence-map .main-stem{fill:none; stroke:var(--orange); stroke-width:8; stroke-linecap:round;}
+.confluence-map text{
+  font-family:var(--font-serif); font-style:italic; font-size:19px;
+  fill:var(--ink-fill);
+}
+.confluence-map .stem-label{font-family:var(--font-sans); font-style:normal; font-weight:700; font-size:19px;}
+.map-jump{cursor:pointer;}
+.map-jump:hover .stream-path, .map-jump:focus .stream-path{stroke:var(--teal-fill); stroke-width:7;}
+
+/* ── tributary cards ── */
+.trib{
+  background:var(--panel); border-left:6px solid var(--orange);
+  border-radius:0 8px 8px 0; padding:1.3rem 1.5rem; margin:0 0 1.5rem;
+}
+.trib h3{margin-top:0;}
+.trib .who{
+  font-family:var(--font-sans); font-size:1.125rem; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--teal);
+  margin-bottom:.6rem;
+}
+.trib p:last-child{margin-bottom:0;}
+
+/* ── gauge steps: numbered because the cycle IS a sequence ── */
+.gauge{counter-reset:step; list-style:none; margin-left:0;}
+.gauge li{
+  counter-increment:step; position:relative;
+  padding:0 0 1.3rem 3.4rem; margin:0;
+  border-left:3px solid var(--stream); margin-left:1.1rem;
+}
+.gauge li:last-child{border-left-color:transparent; padding-bottom:0;}
+.gauge li::before{
+  content:counter(step);
+  position:absolute; left:-1.35rem; top:-.15rem;
+  width:2.5rem; height:2.5rem; border-radius:50%;
+  background:var(--teal-fill); color:var(--chart-ink);
+  font-family:var(--font-mono); font-size:1.25rem; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+}
+.gauge b{display:block; font-size:1.375rem; color:var(--teal);}
+
+/* ── outcome list ── */
+.slo{
+  display:grid; grid-template-columns:3.2rem 1fr; gap:0 1rem;
+  margin:0 0 1.1rem;
+}
+.slo .n{
+  font-family:var(--font-mono); font-size:1.5rem; font-weight:700;
+  color:var(--teal); text-align:right;
+}
+.slo .focus-tag{
+  display:inline-block; font-family:var(--font-sans); font-size:1.125rem;
+  font-weight:700; letter-spacing:.06em; color:var(--chart-ink);
+  background:var(--teal-fill); border-radius:4px; padding:.1rem .55rem;
+  margin-left:.5rem;
+}
+
+footer{
+  max-width:72ch; margin:0 auto; padding:2rem 1.4rem 2.5rem;
+  border-top:3px solid var(--orange);
+  font-size:1.125rem;
+}
+.se-updated{
+  font-family:var(--font-mono); font-size:1.125rem; color:var(--ink);
+  margin:0 0 1rem; display:flex; align-items:center; gap:7px;
+}
+.se-updated::before{ content:""; width:8px; height:8px; border-radius:50%; background:var(--teal); flex:0 0 auto; }
+
+/* ═══ BOTTOM NAV RAIL — Back + Home ═══ */
+.se-rail{ display:flex; gap:10px; justify-content:center; padding:20px 20px 40px; border-top:3px solid var(--orange); }
+.se-rail a,.se-rail button{
+  min-height:48px; padding:10px 20px; border:1.5px solid var(--stream); border-radius:8px;
+  background:var(--chart); color:var(--ink); font-family:var(--font-mono); font-weight:700; font-size:15px; text-decoration:none; cursor:pointer;
+}
+.se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+@media (max-width:640px){
+  h1{font-size:2.125rem;} h2{font-size:1.75rem;}
+  .riverbar .mark{font-size:1.25rem;}
+  main{padding-top:1.6rem;}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<!-- RESERVED CHROME -->
+<header class="se-chrome">
+  <a class="se-home" href="index.html" aria-label="Home">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 27" fill="none" stroke="currentColor" aria-hidden="true" focusable="false"><path d="M33.2 13.5 L33.3 13.6 L33.3 13.8 L33.4 13.9 L33.4 14.1 L33.4 14.3 L33.3 14.5 L33.3 14.7 L33.2 14.9 L33.1 15.0 L33.0 15.2 L32.8 15.4 L32.7 15.5 L32.5 15.7 L32.2 15.8 L32.0 15.9 L31.7 15.9 L31.5 16.0 L31.2 16.0 L30.9 15.9 L30.6 15.9 L30.3 15.8 L30.1 15.7 L29.8 15.5 L29.5 15.3 L29.3 15.1 L29.1 14.8 L28.9 14.5 L28.7 14.2 L28.6 13.9 L28.5 13.5 L28.4 13.1 L28.4 12.7 L28.4 12.3 L28.5 11.9 L28.6 11.5 L28.8 11.2 L29.0 10.8 L29.2 10.4 L29.5 10.1 L29.8 9.8 L30.2 9.5 L30.6 9.3 L31.1 9.1 L31.5 8.9 L32.0 8.8 L32.5 8.8 L33.0 8.8 L33.5 8.8 L34.0 8.9 L34.5 9.1 L35.0 9.3 L35.5 9.6 L35.9 9.9 L36.4 10.3 L36.7 10.8 L37.1 11.2 L37.3 11.8 L37.6 12.3 L37.7 12.9 L37.9 13.5 L37.9 14.1 L37.9 14.7 L37.8 15.4 L37.6 16.0 L37.4 16.6 L37.1 17.2 L36.8 17.8 L36.3 18.3 L35.8 18.8 L35.3 19.2 L34.7 19.6 L34.1 19.9 L33.4 20.2 L32.7 20.4 L32.0 20.5 L31.3 20.6 L30.5 20.5 L29.8 20.4 L29.0 20.2 L28.3 19.9 L27.6 19.5 L26.9 19.1 L26.3 18.6 L25.8 18.0 L25.3 17.4 L24.8 16.7 L24.4 16.0 L24.2 15.2 L23.9 14.3 L23.8 13.5 L23.8 12.6 L23.9 11.8 L24.0 10.9 L24.2 10.0 L24.6 9.2 L25.0 8.4 L25.5 7.7 L26.1 7.0 L26.8 6.3 L27.5 5.7 L28.3 5.3 L29.2 4.8 L30.1 4.5 L31.0 4.3 L32.0 4.2 L33.0 4.1 L34.0 4.2 L35.0 4.4 L35.9 4.7 L36.9 5.1 L37.8 5.6 L38.6 6.2 L39.4 6.8 L40.1 7.6 L40.8 8.4 L41.3 9.4 L41.8 10.3 L42.1 11.3 L42.4 12.4 L42.5 13.5" stroke-width="2.3" stroke-linecap="round"/><circle cx="32" cy="13.5" r="1.6" fill="currentColor" stroke="none"/></svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
+</header>
+<p class="se-stamp" style="margin:.45rem .9rem;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.76rem;opacity:.92;display:flex;align-items:center;gap:.45rem;flex-wrap:wrap"><p class="se-updated" id="seUpdated">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v9 <span style="opacity:.75">75e938c</span></span>  </p>
+
+<!-- STUDIO EYES panel -->
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-row" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-row" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sr" id="seSr" role="status" aria-live="polite"></span>
+</div>
+
+<header class="riverbar">
+  <span class="mark">Confluence</span>
+  <nav aria-label="Tour">
+    <button onclick="go('headwaters',this)" aria-current="true">Headwaters</button>
+    <button onclick="go('tributaries',this)" aria-current="false">Five Tributaries</button>
+    <button onclick="go('confluence',this)" aria-current="false">The Confluence</button>
+    <button onclick="go('gauge',this)" aria-current="false">The Gauge</button>
+    <button onclick="go('putin',this)" aria-current="false">Put-In</button>
+  </nav>
+</header>
+
+<main id="main-content">
+
+<!-- ═══════════ 1 · HEADWATERS ═══════════ -->
+<section class="page on" id="pg-headwaters" aria-label="Headwaters">
+  <span class="eyebrow">Headwaters · Why This Exists</span>
+  <h1>Assessment starts where the work goes.</h1>
+  <p class="lede">Every semester, student work leaves our classrooms and meets
+  a real audience: a magazine reader, a podcast listener, a poster-session
+  visitor, an industry professional at an expo. When work travels like that,
+  something useful happens for assessment — the artifact, the audience, and
+  the outcome are all visible in the same place.</p>
+  <p>Confluence is the department's tool for reading that evidence together.
+  It is not a new requirement and not a new platform to log into. It is one
+  file — this one opens the same way — that helps faculty and coordinators
+  collect student work, norm as raters, score against shared outcomes, and
+  hand a clean record to program review.</p>
+  <hr class="rule">
+  <h2>The shape of it</h2>
+  <p>Picture the department as a watershed. Courses are the headwaters.
+  Student work flows out through several channels — five of them are mapped
+  below. They join at the confluence, where artifacts are read against
+  learning outcomes. Downstream, the gauge measures how consistently we
+  read, and the whole record feeds program review.</p>
+
+  <svg class="confluence-map" viewBox="0 0 720 340" role="img"
+       aria-label="Map of five tributaries — magazine, podcast, posters, portfolios, expo — joining a main stem labeled evidence, flowing to program review.">
+    <g class="map-jump" tabindex="0" role="button" aria-label="Go to the literary magazine tributary" onclick="go('tributaries')" onkeydown="if(event.key==='Enter')go('tributaries')">
+      <path class="stream-path" d="M40,40 C160,50 260,90 360,150"/>
+      <text x="40" y="30">literary magazine</text>
+    </g>
+    <g class="map-jump" tabindex="0" role="button" aria-label="Go to the podcast tributary" onclick="go('tributaries')" onkeydown="if(event.key==='Enter')go('tributaries')">
+      <path class="stream-path" d="M60,120 C170,125 270,140 360,165"/>
+      <text x="60" y="110">student podcast</text>
+    </g>
+    <g class="map-jump" tabindex="0" role="button" aria-label="Go to the poster sessions tributary" onclick="go('tributaries')" onkeydown="if(event.key==='Enter')go('tributaries')">
+      <path class="stream-path" d="M50,215 C170,205 270,190 360,178"/>
+      <text x="50" y="245">poster sessions</text>
+    </g>
+    <g class="map-jump" tabindex="0" role="button" aria-label="Go to the portfolios tributary" onclick="go('tributaries')" onkeydown="if(event.key==='Enter')go('tributaries')">
+      <path class="stream-path" d="M75,280 C185,265 275,215 362,190"/>
+      <text x="75" y="308">portfolios</text>
+    </g>
+    <g class="map-jump" tabindex="0" role="button" aria-label="Go to the STEM Expo tributary" onclick="go('tributaries')" onkeydown="if(event.key==='Enter')go('tributaries')">
+      <path class="stream-path" d="M230,320 C300,300 330,240 365,200"/>
+      <text x="230" y="338">stem expo (the campus model)</text>
+    </g>
+    <path class="main-stem" d="M360,170 C460,180 540,180 700,180"/>
+    <text class="stem-label" x="430" y="160">evidence</text>
+    <text class="stem-label" x="565" y="212">to program review</text>
+  </svg>
+  <p class="figure-note">Fig. 1 — the watershed. Select any stream to visit its channel.</p>
+  <p>The pages above walk the water in order: the five channels, how their
+  artifacts map to outcomes, how the reading cycle runs, and how to put your
+  own course in.</p>
+</section>
+
+<!-- ═══════════ 2 · FIVE TRIBUTARIES ═══════════ -->
+<section class="page" id="pg-tributaries" aria-label="Five Tributaries">
+  <span class="eyebrow">Five Tributaries · What Students Make</span>
+  <h1>Work that already leaves the room.</h1>
+  <p class="lede">None of these channels was invented for assessment. Each
+  one exists because students wanted an audience. That is exactly what makes
+  them strong evidence: the work is authentic, public, and finished to a
+  standard an outside reader can judge.</p>
+
+  <div class="trib">
+    <h3>The literary magazine</h3>
+    <p class="who">Audience: campus and the public · annual print issue and a public website</p>
+    <p>The college's student literary magazine has published creative
+    writing, illustration, photography, and artwork from students, faculty,
+    and staff since 2016, and now accepts film and music as well. Its issues
+    have earned national recognition, including the National Council of
+    Teachers of English REALM First Class rank and multiple Community
+    College Humanities Association awards for individual student pieces.</p>
+    <p><strong>Evidence it yields:</strong> finished creative work, revision
+    history behind each accepted piece, and a student editorial process —
+    reading, selecting, and designing — that is itself assessable.</p>
+  </div>
+
+  <div class="trib">
+    <h3>The student podcast</h3>
+    <p class="who">Audience: listeners on cable access and online · student-produced episodes</p>
+    <p>Communication students launched a student-run podcast in partnership
+    with a local cable access station. Episodes are created, written,
+    produced, and edited by student interns, and podcasting now sits
+    alongside social media and video production as a named internship
+    track in the Communication program.</p>
+    <p><strong>Evidence it yields:</strong> scripted and revised audio
+    storytelling, interviewing, and editing — oral communication outcomes
+    with a public artifact attached.</p>
+  </div>
+
+  <div class="trib">
+    <h3>Honors poster sessions</h3>
+    <p class="who">Audience: the campus community, in the library · public presentation and Q&amp;A</p>
+    <p>Honors sections of English Composition II close with a public poster
+    session: students present their semester research as posters in the
+    library and field questions from visitors. The poster distills a
+    research question, sources, and an argument onto one surface a
+    stranger can follow.</p>
+    <p><strong>Evidence it yields:</strong> argument from evidence in a
+    compressed public form, plus a live defense — the same skills the
+    composition sequence assesses, performed for an audience.</p>
+  </div>
+
+  <div class="trib">
+    <h3>Portfolios</h3>
+    <p class="who">Audience: the department · the classroom-to-review channel</p>
+    <p>Portfolios are the quietest channel and the widest: a curated body of
+    a student's work across a course, carried forward for program-level
+    reading. Where the other channels sample the strongest work, portfolios
+    show range — drafts, revisions, and reflection alongside finished
+    pieces.</p>
+    <p><strong>Evidence it yields:</strong> growth over time and the revision
+    outcome made visible, in the student's own arrangement.</p>
+  </div>
+
+  <div class="trib">
+    <h3>The STEM Expo — the campus model</h3>
+    <p class="who">Audience: campus, industry, schools, and the public · in person and online</p>
+    <p>Twice a year the college's STEM Expo puts student projects — from
+    autonomous robots to student-designed games — in front of the campus,
+    local industry, and the public. An in-person session pairs with a
+    week-long online exhibition where visitors watch short project videos
+    and post questions, and presenters answer daily. Industry professionals
+    have hired students after meeting them there.</p>
+    <p><strong>Evidence it yields:</strong> artifact, explanation, and public
+    response in one package. The Expo's format — make, show, respond — is
+    the model this whole approach generalizes: every channel above is a
+    version of it.</p>
+  </div>
+
+  <p>Five channels, one pattern: the work travels, an audience receives it,
+  and the department can read what came back. The next page maps that
+  reading onto outcomes.</p>
+</section>
+
+<!-- ═══════════ 3 · THE CONFLUENCE ═══════════ -->
+<section class="page" id="pg-confluence" aria-label="The Confluence">
+  <span class="eyebrow">The Confluence · Mapping Work to Outcomes</span>
+  <h1>Where artifacts meet outcomes.</h1>
+  <p class="lede">An artifact by itself is a nice thing. An artifact read
+  against a shared outcome is evidence. The confluence is where the two
+  meet: every channel's work can be read against the same five program
+  outcomes, in plain language.</p>
+
+  <h2>The five outcomes, plainly</h2>
+  <div class="slo"><span class="n">1</span><p><strong>Read carefully and
+    critically.</strong> Students engage texts closely and question what
+    they read.</p></div>
+  <div class="slo"><span class="n">2</span><p><strong>Write with their own
+    thinking.</strong> The voice and the ideas on the page belong to the
+    student.</p></div>
+  <div class="slo"><span class="n">3</span><p><strong>Build an argument
+    from evidence.</strong><span class="focus-tag">This year's focus</span>
+    Students weigh sources, put evidence to work, and deal honestly with
+    the other side.</p></div>
+  <div class="slo"><span class="n">4</span><p><strong>Revise and
+    collaborate.</strong> Writing improves through drafts and through
+    other readers.</p></div>
+  <div class="slo"><span class="n">5</span><p><strong>Think about what
+    language does.</strong> Students notice how language works on an
+    audience — including their own.</p></div>
+
+  <hr class="rule">
+  <h2>How a channel reads against an outcome</h2>
+  <p>Take this year's focus, argument from evidence. A poster session is
+  almost a pure sample of it: research question, sources, claim, defense.
+  A magazine essay shows it in finished prose. A podcast episode shows it
+  in structure — what the episode chooses to include and in what order.
+  A portfolio shows it developing across drafts. The Expo shows its STEM
+  cousin: a project justified to a skeptical visitor.</p>
+  <p>The mapping runs upward, too. Course outcomes roll into program
+  outcomes; program outcomes align with the college's graduation
+  competencies and institutional outcomes. One artifact, read once, can
+  inform every level — which is why collecting it well matters, and why
+  the reading itself has to be trustworthy. That is the gauge's job.</p>
+</section>
+
+<!-- ═══════════ 4 · THE GAUGE ═══════════ -->
+<section class="page" id="pg-gauge" aria-label="The Gauge">
+  <span class="eyebrow">The Gauge · How the Reading Cycle Runs</span>
+  <h1>Trustworthy reading, on purpose.</h1>
+  <p class="lede">The hard part of outcomes assessment has never been
+  collecting work. It is knowing that two faculty readers scoring the same
+  essay mean the same thing by a 3. The gauge is the annual cycle that
+  makes that true — and Confluence's instruments exist for the two steps
+  in the middle.</p>
+
+  <ol class="gauge">
+    <li><b>Declare the cycle.</b> Pick the outcome in focus and the courses
+    contributing samples. One outcome per year keeps the reading deep
+    instead of thin.</li>
+    <li><b>Collect the samples.</b> Work arrives from the channels — a
+    student submits their own, or an instructor submits on their behalf.
+    Names come off; the artifact stays.</li>
+    <li><b>Norm the readers.</b> Before scoring counts, every reader scores
+    the same anchor samples. Confluence shows the group where readings
+    agree and where they scatter, so the conversation happens before the
+    data, not after.</li>
+    <li><b>Score and converge.</b> Readers score independently, then the
+    group reviews the spread. Where scores diverge, readers talk until the
+    divergence is understood — resolved, or documented as a real
+    disagreement about the rubric.</li>
+    <li><b>Report what was learned.</b> The output is short: what the
+    outcome looked like in student work this year, where readers agreed,
+    what the department will change.</li>
+    <li><b>Feed program review.</b> Each annual cycle becomes one layer in
+    the longer review record — five thin, honest layers instead of one
+    scramble every five years.</li>
+  </ol>
+
+  <hr class="rule">
+  <p>Nothing in the cycle requires new software on anyone's machine. The
+  scoring surfaces are files like this one — they open, they work offline,
+  and the record they produce travels as ordinary documents.</p>
+</section>
+
+<!-- ═══════════ 5 · PUT-IN ═══════════ -->
+<section class="page" id="pg-putin" aria-label="Put-In">
+  <span class="eyebrow">Put-In · How to Contribute</span>
+  <h1>Three ways in, none of them heavy.</h1>
+  <p class="lede">A put-in is where a boat enters the river. There are three
+  of them here, sized from an hour to a semester.</p>
+
+  <h3>Send work downstream</h3>
+  <p>The lightest entry: contribute student work samples from a course you
+  teach. Two ways — students submit their own work they're proud of, or an
+  instructor submits on a student's behalf with permission. Either way the
+  sample joins the year's collection for the outcome in focus.</p>
+
+  <h3>Join a norming session</h3>
+  <p>One session, about an hour: score the anchor samples alongside
+  colleagues and see the group's spread. This is the fastest way to
+  understand what the tool does, because the calibration conversation is
+  the product. No preparation needed beyond reading the samples.</p>
+
+  <h3>Run the cycle in your own area</h3>
+  <p>The full loop — declare, collect, norm, score, report — works for any
+  program with artifacts and readers, not just English. The channels differ
+  by discipline; the gauge does not. Coordinators who want to pilot a cycle
+  can start from this file and the department's assessment guide.</p>
+
+  <hr class="rule">
+  <p>Questions, samples, and session scheduling all route through the
+  department's assessment coordination — the same people who shared this
+  file with you.</p>
+</section>
+
+</main>
+
+<footer>
+  </span>
+  <p>Prepared by the English Department as a companion to the department's
+  assessment work. Channel descriptions draw on the college's public program
+  and press pages. This is a single file: it opens from a desktop, an email
+  attachment, or a shared drive, with no login and no internet connection
+  required.</p>
+</footer>
+
+<!-- BOTTOM NAV RAIL -->
+<nav class="se-rail" aria-label="Page navigation">
+  <button type="button" onclick="history.back()" aria-label="Back">Back</button>
+  <a href="index.html" aria-label="Home">Home</a>
+</nav>
+
+<script>
+(function(){
+  'use strict';
+  window.go = function(id, btn){
+    var pages = document.querySelectorAll('.page');
+    for (var i=0;i<pages.length;i++) pages[i].classList.remove('on');
+    var target = document.getElementById('pg-'+id);
+    if (target) target.classList.add('on');
+    var tabs = document.querySelectorAll('.riverbar nav button');
+    for (var j=0;j<tabs.length;j++){
+      var isCur = btn ? (tabs[j]===btn)
+        : (tabs[j].getAttribute('onclick').indexOf("'"+id+"'") !== -1);
+      tabs[j].setAttribute('aria-current', isCur ? 'true' : 'false');
+    }
+    window.scrollTo(0,0);            /* scroll reset on every page turn */
+    if (target) target.focus && target.setAttribute('tabindex','-1');
+  };
+})();
+</script>
+
+<!-- STUDIO EYES — the studio-standard comfort control (Comfort Kernel v2) -->
+<script>
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  // last-updated: computed, not typed
+  (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
+    var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  })();
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+  eyes.addEventListener('click',function(e){ setOpen(panel.getAttribute('data-open')!=='1'); e.stopPropagation(); });
+  document.addEventListener('click',function(e){ if(panel.getAttribute('data-open')==='1' && !panel.contains(e.target) && !eyes.contains(e.target)) setOpen(false); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  // light
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim();
+  });});
+  // text size
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim();
+  });});
+  // toggles
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
+  });});
+})();
+</script>
+</body>
+</html>
