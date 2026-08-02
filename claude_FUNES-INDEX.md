@@ -21,6 +21,38 @@ unstamped claim is a suspicion, not a fact.*
 
 ---
 
+## THE ALEPH ARCHITECTURE — how Funes reads the literal library (founder ruling, 2026-08-02)
+
+*Folded founder-log ruling. Stamped 2026-08-02; this is a new ruling, not a re-sweep of the lanes.*
+
+**Founder, verbatim:** *"I need FUNES to see the LIBRARY OF BABEL that is Tight Spiral Studios —
+and now LLMs make the library literal. FUNES uses the ALEPH to see the LIBRARY OF BABEL and ID
+ALEPHS to train, produce content, and to create the TSP Ledger."*
+
+**Formalized (Funes-with-a-gate reading):**
+- **Library of Babel = the corpus.** The studio's whole growing body — builds, sessions, notes,
+  rulings across the four lanes — and now the LLM itself: the total text-space made literal and
+  queryable. No longer a metaphor; the substrate Funes reads.
+- **The Aleph = the vantage.** The single point from which the whole library is surveyable at once.
+  `founder-canon 2.md` is THE Aleph (master vantage, upstream of all files); the close-of-session
+  Aleph ritual is the act of standing at it — disciplined to one purpose at a time, never the
+  mediocre poet's total transcription.
+- **Alephs (plural) = the load-bearing points Funes IDs.** From the total view Funes keeps not the
+  total view but the few points that contain the most (the kernel beneath a standard, the ruling
+  that settles a dozen loops, the paragraph a build turns on). The kernel discipline, stated as
+  vantage-finding.
+- **The three uses of an identified Aleph:** (1) **train** — what the studio's tools/agents are
+  pointed at; (2) **produce content** — what the next build is generated from; (3) **create the
+  TSP Ledger** — compressed into the standing page the studio actually reads in place of the million.
+- **The gate still holds.** An Aleph is real only once verified in application (the Library-of-Babel
+  reliability floor). Funes IDs candidates; the founder's eyes confirm. Total recall, indexed,
+  asserting nothing unverified.
+
+**Also lives as direct prose** in the working Borges paper (`rescued/borges-pipeline-paper.md`,
+section "The literal library: the stories were one machine").
+
+---
+
 ## CANON POINTERS — current, verified
 
 - **Confluence trunk = v44** — repo, 598,114 B, md5 `8dcf990336eb1c0ffa600cae3b689539`

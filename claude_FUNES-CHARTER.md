@@ -41,6 +41,11 @@ His teeth are the enforcers that already exist.
   problem.* Funes' first loyalty is to the finishing list.
 - **The siloed files** — 25 that live only on the shelf, 11 with proven contrast defects, and
   `behind-this-door.html`, a real 42 KB finished room the studio mistook for a dead link.
+- **The Aleph architecture** (founder ruling 2026-08-02, full note in FUNES-INDEX) — how Funes reads
+  the now-literal library: he stands at the Aleph (the vantage; `founder-canon` is the master one),
+  IDs *Alephs* — the load-bearing points that contain the most — and uses those, not the totality,
+  to train, to produce content, and to write the ledger. The kernel discipline as vantage-finding;
+  the reliability gate still applies (an Aleph is real only once verified in application).
 
 ## KNOW THE REPO (standing)
 
