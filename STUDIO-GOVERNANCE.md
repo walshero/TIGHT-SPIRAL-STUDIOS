@@ -25,7 +25,7 @@ The Zapier connector writes everything EXCEPT `.github/workflows/` — that path
 ## Arming (founder, once)
 
 1. Drop the workflow stub into each repo's `.github/workflows/` — the hub's reusable `belt.yml`, and each spoke's `studio-belt.yml`. Apply with your token from your Mac, or paste in the browser.
-2. Turn on branch protection per repo: require the **studio belt** �heck to pass before merge. That is what gives the tick agency — a failing tick becomes a wall the push cannot climb.
+2. Turn on branch protection per repo: require the **studio belt** check to pass before merge. That is what gives the tick agency — a failing tick becomes a wall the push cannot climb.
 3. (Optional, cross-repo sweep) add your token as the `STUDIO_SYNC_TOKEN` secret in the hub; the scheduled sweep fans out nightly and files an issue on any repo that drifts from canon.
 
 ## Prerequisite
