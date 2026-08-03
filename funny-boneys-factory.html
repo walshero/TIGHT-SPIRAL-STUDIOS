@@ -13,6 +13,15 @@
   the studio lane.
   Play. Notice. Design.  ·  Single file. Offline. No network. Nothing stored.
 
+  v8.2 2026-08-02 THE HUMOR MODEL + SIGNAL LOOP (funny-bonies-humor-model.md +
+      funny-bonies-signal-review-horvath-aleph.md). actualFor is no longer a magic
+      taste multiplier — it computes from humor theory: a UNIVERSAL part (physical,
+      reaches any room) + a CULTURAL part (gated by the room's shared context), held
+      under the room's BENIGN line (McGraw & Warren). So the game teaches WHY a bit
+      lands. Signal loop closed per Horvath + the instrumentation Alephs: RECEIVE
+      gains one hunch ("physical, or this room gets it?") framed as play; the reveal
+      EMITS one true reason (context vs tone) and crosses it with the hunch — a
+      revelation, never a grade. Offline/single-file/nothing-stored intact.
   v8  2026-07-29 THE META-MACHINE (P3, the heart — founder-canon #5). Your machine
       is one link in a reel of machines; mood is the marble (each room's leftover
       temperature spills into the next). Offline/single-file honoured by a TICKET:
@@ -167,6 +176,15 @@
     background:var(--amber); border:4px solid var(--bg); cursor:grab; }
   .scalerow{ display:flex; justify-content:space-between; color:var(--ink-soft);
     font-size:.78rem; font-weight:700; margin-top:8px; }
+  /* the why-prediction: a hunch, framed as play (never a test) — the richer receive signal */
+  .whyask{ margin-top:20px; }
+  .whylab{ text-align:center; color:var(--ink-soft); font-size:.9rem; font-weight:700; margin:0 0 8px; }
+  .whyrow{ display:flex; gap:8px; }
+  .whybtn{ flex:1 1 0; text-align:center; background:var(--surface); border:2px solid var(--line);
+    border-radius:12px; padding:12px 10px; min-height:56px; color:var(--ink); font-weight:700;
+    font-size:.86rem; line-height:1.25; transition:border-color .1s, transform .1s; }
+  .whybtn:hover{ transform:translateY(-2px); }
+  .whybtn[aria-pressed="true"]{ border-color:var(--amber); box-shadow:inset 0 0 0 1px var(--amber); }
 
   /* ---- SCREEN 4: the room (the cat's face is the crowd) ---- */
   .catwrap{ background:radial-gradient(120% 100% at 50% 10%, var(--surface-2), var(--surface) 75%);
@@ -192,8 +210,12 @@
   .mk.them .stem{ top:42px; height:18px; } .mk.them .dot{ top:51px; } .mk.them .cap{ top:70px; }
   .mk.you .stem, .mk.you .dot{ background:var(--amber); }
   .mk.them .stem, .mk.them .dot{ background:var(--good); }
-  .gapread{ text-align:center; color:var(--ink-soft); font-size:.95rem; margin:14px 0 20px; }
+  .gapread{ text-align:center; color:var(--ink-soft); font-size:.95rem; margin:14px 0 12px; }
   .gapread b{ color:var(--ink); }
+  /* the humor-literacy beat: one true reason, phrased as a discovery (not a grade) */
+  .teachline{ color:var(--ink-soft); font-size:.92rem; margin:0 4px 18px; padding:11px 14px;
+    border-left:4px solid var(--amber); background:var(--surface); border-radius:0 10px 10px 0; }
+  .teachline b{ color:var(--ink); }
 
   /* ---- SCREEN 5: THE FACTORY (the meta-machine — one reel, many machines) ---- */
   .ticket{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:16px; }
@@ -375,6 +397,13 @@ Press Comfort again to bring the design back.</div>
     <input type="range" class="bet" id="bet" min="0" max="10" step="1" value="5"
            aria-label="How many out of ten laugh" oninput="onBet()">
     <div class="scalerow"><span>nobody</span><span>everybody</span></div>
+    <div class="whyask" id="whyask">
+      <p class="whylab">And your hunch &mdash; why will it carry?</p>
+      <div class="whyrow" id="whyrow" role="group" aria-label="Why will it carry">
+        <button class="whybtn" type="button" data-why="physical" aria-pressed="false">It&rsquo;s physical &mdash; lands in any room</button>
+        <button class="whybtn" type="button" data-why="room" aria-pressed="false">This room gets the joke</button>
+      </div>
+    </div>
     <div class="grow"></div>
     <button class="btn" id="callBtn" onclick="submitCall()">Show them &rarr;</button>
   </section>
@@ -390,6 +419,7 @@ Press Comfort again to bring the design back.</div>
       <div class="mk them" id="mkThem"><div class="stem"></div><div class="dot"></div><div class="cap">them</div></div>
     </div>
     <p class="gapread" id="gapread"></p>
+    <p class="teachline" id="teachline" hidden></p>
     <div class="grow"></div>
     <button class="btn" onclick="sendToFriend()">Send this room to a friend &rarr;</button>
     <button class="btn ghost" style="margin-top:10px" onclick="go('setup')">Go again</button>
@@ -489,20 +519,41 @@ Press Comfort again to bring the design back.</div>
    taste = how much a room multiplies it. The actual laugh is DETERMINISTIC —
    the same bit in the same room always lands the same, so a player can LEARN a
    room over rounds. Situated humour, made learnable. */
+/* Grounded in the humor model (funny-bonies-humor-model.md).
+   A GAG carries: v = violation/surprise size (0-10); u = universal share (how
+   much is physical/incongruity vs. language/reference, 0-1); edge = how
+   transgressive (0-10 — gates the room's benign line); filters = its technique(s).
+   A ROOM carries: phys = receptivity to universal/physical humor (0-1, never 0 —
+   universal reaches everyone a little); culture = receptivity to shared-context
+   humor (0-1, can be 0 — a cat has no language); b = benign line (the most edge
+   it reads as safe). Deterministic → a room stays learnable across rounds. */
 var GAGS = [
-  { id:"trip",    name:"The Trip",    line:"the marble trips over its own feet", base:6 },
-  { id:"flip",    name:"The Flip",    line:"a pail forgets which way is up",      base:5 },
-  { id:"chicken", name:"The Chicken", line:"a rubber chicken, from nowhere",      base:8 },
-  { id:"boing",   name:"The Boing",   line:"the floor decides to be a trampoline",base:6 }
+  { id:"trip",    name:"The Trip",    line:"the marble trips over its own feet",  v:6, u:.90, edge:1, filters:"slapstick" },
+  { id:"flip",    name:"The Flip",    line:"a pail forgets which way is up",       v:5, u:.60, edge:1, filters:"absurd" },
+  { id:"chicken", name:"The Chicken", line:"a rubber chicken, from nowhere",       v:8, u:.50, edge:2, filters:"reference + slapstick" },
+  { id:"boing",   name:"The Boing",   line:"the floor decides to be a trampoline", v:6, u:.85, edge:2, filters:"slapstick" }
 ];
 var ROOMS = [
-  { id:"cat",   name:"One sleepy cat", taste:{trip:.40, flip:.50, chicken:.55, boing:.95} },
-  { id:"kids",  name:"A room of kids", taste:{trip:.70, flip:.60, chicken:.95, boing:.85} },
-  { id:"grown", name:"Tired grown-ups",taste:{trip:.55, flip:.80, chicken:.45, boing:.50} },
-  { id:"web",   name:"Strangers online",taste:{trip:.60, flip:.50, chicken:.75, boing:.65} }
+  { id:"cat",   name:"One sleepy cat",   phys:.35, culture:.00, b:3 },  /* quiet, no language, spooks easily */
+  { id:"kids",  name:"A room of kids",   phys:1.0, culture:.30, b:5 },  /* slapstick kills, reference bombs */
+  { id:"grown", name:"Tired grown-ups",  phys:.60, culture:.90, b:7 },  /* irony / wordplay / reference land */
+  { id:"web",   name:"Strangers online", phys:.75, culture:.95, b:9 }   /* edgy + reference thrive */
 ];
+/* the benign-violation engine: a universal part (physical — reaches any room) +
+   a cultural part (gated by shared context), all held under the room's benign
+   line. Over the line, it falls off (too much). Our current cast is low-edge, so
+   the line stays dormant until edgier bits arrive — honest by construction. */
+function humorBreakdown(g, r){
+  var physPart = g.u * g.v * r.phys;
+  var cultPart = (1 - g.u) * g.v * r.culture;
+  var cultPotential = (1 - g.u) * g.v;                 /* the cultural laugh IF the room shared the context */
+  var edge = g.edge || 0;
+  var fit = edge <= r.b ? 1 : Math.max(0, 1 - (edge - r.b) * 0.5);
+  return { physPart:physPart, cultPart:cultPart, cultPotential:cultPotential, fit:fit,
+           raw:(physPart + cultPart) * fit };
+}
 function actualFor(gag, room){
-  return Math.max(0, Math.min(10, Math.round(gag.base * room.taste[gag.id])));
+  return Math.max(0, Math.min(10, Math.round(humorBreakdown(gag, room).raw)));
 }
 
 /* ───────────────── ART, one hand ─────────────────
@@ -552,7 +603,7 @@ function catFace(level){
 }
 
 /* ───────────────── STATE ───────────────── */
-var state = { gag:null, room:null, bet:5, actual:null, lastCall:null, mine:null, replyTo:null };
+var state = { gag:null, room:null, bet:5, actual:null, lastCall:null, mine:null, replyTo:null, why:null };
 var reel = [];
 
 /* ───────────────── SCREEN MACHINE (replace, never stack) ───────────────── */
@@ -633,7 +684,17 @@ function buildCall(){
     + '</span></span>';
   document.getElementById("bet").value = state.bet;
   document.getElementById("betval").textContent = state.bet;
+  /* the why-prediction rides fresh play only; a reply stays a clean magnitude call */
+  var wa=document.getElementById("whyask");
+  wa.hidden = !!reply;
+  if(!reply){ state.why=null;
+    document.querySelectorAll("#whyrow [data-why]").forEach(function(x){ x.setAttribute("aria-pressed","false"); }); }
 }
+document.getElementById("whyrow").addEventListener("click", function(e){
+  var b=e.target.closest("[data-why]"); if(!b) return;
+  state.why=b.getAttribute("data-why");
+  this.querySelectorAll("[data-why]").forEach(function(x){ x.setAttribute("aria-pressed", x===b); });
+});
 /* one call button: a fresh read reveals the room; a reply reveals the duet */
 window.submitCall = function(){
   if(state.replyTo) showDuetFromReply();
@@ -666,6 +727,38 @@ window.showRoom = function(){
   document.getElementById("gapread").innerHTML =
     'You said <b>'+state.bet+'</b>. <b>'+state.actual+'</b> laughed &mdash; '+phrase+'. '
     + (good ? 'You read the room.' : 'Not a fail &mdash; that is this room, not you.');
+
+  /* the humor-literacy beat: WHY it carried, from the model — a revelation, not a
+     grade (Horvath); truthful attribution only, "both" when it's mixed (hollow-claim). */
+  var bd = humorBreakdown(g, r), denom = bd.physPart + bd.cultPart;
+  var carried = denom<=0 ? "none"
+    : (bd.physPart/denom > 0.6 ? "physical" : (bd.physPart/denom < 0.4 ? "room" : "both"));
+  var reason = bd.fit < 0.85 ? "tone"
+    : ((bd.cultPotential - bd.cultPart) >= 1.5 && (1 - g.u) >= 0.3 ? "context" : null);
+  var teach = "";
+  if(state.why){                              /* cross the hunch with what actually carried */
+    if(state.why === carried){
+      teach = carried==="physical" ? "You called it &mdash; the <b>physical</b> beat is what carried."
+        : "You called it &mdash; <b>this room got the joke</b>.";
+    } else if(carried==="both"){
+      teach = "A bit of both carried it &mdash; the physical beat <b>and</b> the room getting it.";
+    } else if(carried==="physical"){
+      teach = "You bet on the room getting it &mdash; but "
+        + (reason==="context" ? "it shares no language for that. " : "")
+        + "The <b>physical</b> beat is what carried.";
+    } else if(carried==="room"){
+      teach = "You bet on the physical &mdash; but this room ran on <b>getting the joke</b>. That is what carried.";
+    } else {
+      teach = "Nothing much carried here &mdash; that is this room, not you.";
+    }
+  } else if(reason==="context"){
+    teach = "This room shares little of that reference &mdash; only the <b>physical</b> beat landed.";
+  } else if(reason==="tone"){
+    teach = "The room&rsquo;s line is gentler than that &mdash; it read as a bit much.";
+  }
+  var tl=document.getElementById("teachline");
+  if(teach){ tl.hidden=false; tl.innerHTML=teach; } else { tl.hidden=true; tl.textContent=""; }
+  state.why=null;
   go("room");
 };
 
