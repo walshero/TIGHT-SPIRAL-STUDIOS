@@ -274,3 +274,12 @@ that lives in a file nobody opens is a finding that has to be made twice.
 - **HARVEST — four cross-build kernels** logged in `fireground-panel-kernels.md`: (K1) realism-carrying builds = licensed-photo lane; (K2) federal fire imagery is clean only for staff-authored figures — self-host, check "courtesy of" captions, San Diego drill = Dodson copyright, UL FSRI excluded; (K3) perceptual size-up transfers via predict-then-reveal + contrasting cases + calibration on the B-SAHF/Reading-Smoke schema; (K4) LODD-imagery dignity floor.
 - **BUILT — B-SAHF read framing + confidence→calibration** into the engine (no score); per-slot image spec in `fireground-photo-manifest.md`.
 - **OPEN — the photos.** OS §3.2 licensed-photo lane is "produced in a capable session"; the binary-ingest wall is mapped (see `DECISION-zapier-auth-lane.md`). NIST Charleston image sits clean in the studio Drive, one upload/Zap from live.
+
+## 2026-08-03 — "Fool me once": errors become enforcers (founder ruling)
+
+**Founder: "make this and all errors 'fool me once errors' — that's how this studio rolls."** Funes' law made operational: a caught mistake is not just fixed, it is encoded as a check so it cannot recur. A floor without an enforcer fails. Two errors from this session now have teeth:
+
+- **Medium Gate assumed** (studio-drawn art for a documentary of real LODD incidents — the OS 3.2 "gate wasn't run, it was assumed" failure, and a dignity breach). **Enforcer: `medium-gate-check.py`** — every build surface (declares `tsp:surface`) MUST declare its lane `tsp:medium` (licensed-photo|raster|cut-paper) or HALT; a licensed-photo build carrying inline drawn SVG scene art WARNs. Self-testing (refuses to certify if its fixtures lie). `reading-the-fireground.html` now declares `tsp:medium=licensed-photo`.
+- **"Egress blocked" asserted from one denied host.** Egress is SELECTIVE — the studio face (raw.githubusercontent) is reachable; external image hosts (Wikimedia/NIST/USFA/DVIDS) are policy-denied. **Enforcer: `egress-probe.sh`** — cite it before any "egress blocked" claim.
+
+**Standing practice going forward:** when a session makes an error, it Harvest-backs it into a check (a script, a required declaration, or a Funes rule) before moving on — not a note, a check. If it can't become a check, name it a wish out loud (Funes charter).
