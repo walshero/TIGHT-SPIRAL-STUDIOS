@@ -339,10 +339,10 @@ Press Comfort again to bring the design back.</div>
   <!-- ============ SCREEN 1 · THE MACHINE (the door) ============ -->
   <section class="screen on" id="s-machine" aria-label="The machine">
     <div class="scene" id="scene" role="button" tabindex="0"
-         aria-label="Drop the marble and make the cat laugh"
+         aria-label="Drop the marble and make Buster the cat laugh"
          onclick="dropMarble()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();dropMarble();}">
       <canvas id="physcanvas" width="380" height="330" aria-hidden="true" hidden></canvas>
-      <svg id="staticmachine" viewBox="0 0 760 680" role="img" aria-label="A tall Rube Goldberg machine: a marble rolls a ramp, tips a bucket, drops a rubber chicken onto a springboard, aimed at a sleeping cat.">
+      <svg id="staticmachine" viewBox="0 0 760 680" role="img" aria-label="A tall Rube Goldberg machine: a marble rolls a ramp, tips a bucket, drops a rubber chicken onto a springboard, aimed at Buster, a sleeping cat.">
         <defs>
           <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stop-color="var(--surface-2)"/><stop offset="1" stop-color="var(--surface)"/>
@@ -385,7 +385,7 @@ Press Comfort again to bring the design back.</div>
           <path d="M392 426 q10 -30 34 -50" stroke-dasharray="2 10"/><path d="M300 476 q40 58 96 66" stroke-dasharray="2 12"/>
         </g>
       </svg>
-      <div class="objective"><span class="eyebrow">The machine</span><h1>Make the cat laugh.</h1></div>
+      <div class="objective"><span class="eyebrow">The machine</span><h1>Make Buster laugh.</h1></div>
     </div>
     <p class="taphint">Tap to drop the marble &mdash; again and again.</p>
     <button class="btn ghost" id="incomingBtn" hidden style="margin-top:14px" onclick="openIncoming()">A room came in from a friend &mdash; read it &rarr;</button>
@@ -563,7 +563,7 @@ var GAGS = [
   { id:"boing",   name:"The Boing",   line:"the floor decides to be a trampoline", v:6, u:.85, edge:2, filters:"slapstick" }
 ];
 var ROOMS = [
-  { id:"cat",   name:"One sleepy cat",   phys:.35, culture:.00, b:3 },  /* quiet, no language, spooks easily */
+  { id:"cat",   name:"Buster, a sleepy cat", phys:.35, culture:.00, b:3 },  /* quiet, no language, spooks easily */
   { id:"kids",  name:"A room of kids",   phys:1.0, culture:.30, b:5 },  /* slapstick kills, reference bombs */
   { id:"grown", name:"Tired grown-ups",  phys:.60, culture:.90, b:7 },  /* irony / wordplay / reference land */
   { id:"web",   name:"Strangers online", phys:.75, culture:.95, b:9 }   /* edgy + reference thrive */
@@ -628,7 +628,7 @@ function catFace(level){
     mouth='<path d="M132 172 q18 6 36 0" stroke="'+i+'" stroke-width="4" fill="none" stroke-linecap="round"/>'
       +'<text x="214" y="96" font-size="30" fill="'+i+'" font-family="var(--mono)">z</text>';
   }
-  return '<svg viewBox="0 0 300 300" role="img" aria-label="the cat, reacting">'+body+eyes+mouth+'</svg>';
+  return '<svg viewBox="0 0 300 300" role="img" aria-label="Buster, reacting">'+body+eyes+mouth+'</svg>';
 }
 
 /* ───────────────── STATE ───────────────── */
@@ -701,15 +701,17 @@ function syncSetup(){
 /* SCREEN 3 — the player's own bet */
 function gagById(id){ return GAGS.filter(function(x){return x.id===id;})[0]; }
 function roomById(id){ return ROOMS.filter(function(x){return x.id===id;})[0]; }
+/* mid-sentence room name: lowercase the descriptive rooms, but never a proper noun (Buster) */
+function roomLC(r){ return r.id==="cat" ? r.name : r.name.toLowerCase(); }
 function buildCall(){
   var g=gagById(state.gag), r=roomById(state.room), reply=state.replyTo;
   document.querySelector("#s-call .eyebrow").textContent = reply ? "Read it back" : "Your call";
   document.querySelector("#s-call .q").textContent = reply
-    ? ("Your read of "+r.name.toLowerCase()) : "How many laugh?";
+    ? ("Your read of "+roomLC(r)) : "How many laugh?";
   /* reply mode: the same bit+room a friend sent — but NOT their number (an honest, independent call) */
   document.getElementById("callcard").innerHTML =
     '<span class="ic">'+gagArt(g.id)+'</span><span><b>'+g.name+'</b><span>'
-    + (reply ? ((reply.h||"a friend")+" sent you this room") : ("for "+r.name.toLowerCase()))
+    + (reply ? ((reply.h||"a friend")+" sent you this room") : ("for "+roomLC(r)))
     + '</span></span>';
   document.getElementById("bet").value = state.bet;
   document.getElementById("betval").textContent = state.bet;
@@ -858,7 +860,7 @@ function buildSend(){
   var g=gagById(state.gag), r=roomById(state.room);
   document.getElementById("sendcard").innerHTML =
       '<span class="ic">'+gagArt(g.id)+'</span>'
-    + '<span><b>'+g.name+' &rarr; '+r.name.toLowerCase()+'</b>'
+    + '<span><b>'+g.name+' &rarr; '+roomLC(r)+'</b>'
     + '<span>they read it blind, then send their number back</span></span>';
   currentTicket = mkTicket(state.gag, state.room, [{ h:"", c:state.bet }]);
   document.getElementById("sendfield").value = currentTicket;
@@ -966,7 +968,7 @@ function renderReel(){
     var g=gagById(m.g), r=roomById(m.r), isYou=(m.h==="you");
     return '<div class="mcard'+(isYou?" you":"")+'">'
       + '<span class="ic">'+gagArt(m.g)+'</span>'
-      + '<span class="who"><b>'+(isYou?"you":m.h)+'</b><span>'+g.name+' &rarr; '+r.name.toLowerCase()+'</span></span>'
+      + '<span class="who"><b>'+(isYou?"you":m.h)+'</b><span>'+g.name+' &rarr; '+roomLC(r)+'</span></span>'
       + (m.house?'<span class="housetag">house</span>':'')
       + '<span class="laugh pending">&middot;</span></div>';
   }).join("");
