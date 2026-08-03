@@ -46,3 +46,23 @@
 
 ## HYGIENE
 - **No credential ever in a transcript.** The old PAT flagged in `HANDOFF.md` should be **rotated/revoked** at the next stop; going forward the OAuth connection is the source.
+
+---
+
+## RESOLVED — 2026-08-03 (the fork is answered; tested, not assumed)
+
+The whole binary-ingest space is now mapped by real execution. Do not re-derive.
+
+**TOKENLESS SERVER-SIDE TRANSFER WORKS.** The native Zapier action `GitHub → Create or Update File` (`github_create_or_update_file`) writes to any repo/branch using the connected `walshero` OAuth account — **no token param, no code sandbox, no domain wall, no bytes through the model.** Proven: it committed a real file to the fireground branch server-side.
+- **DO for TEXT / HTML** (the studio's main deploy lane): this is the perma-fix, done. `content` = the file text (or a URL Zapier fetches), `repo`, `branch`, `path`, `message`. Tokenless, promptless, no corruption. The "deploy studio file" automation is solved.
+
+**BINARY (images) HAS ONE HARD BOUNDARY — the MCP string layer.** Every MCP-reachable binary path was tested and fails:
+- Native create-file with a **string** `content` (a URL *or* a Zapier hydration pointer) → the action text-decodes the bytes (UTF-8), so a 34 KB JPEG lands as ~61 KB of `efbfbd` replacement chars. **Corrupts. Confirmed twice.**
+- Code actions (either app context) are **domain-locked per action**: GitHub-context reaches only `api.github.com`; Drive-context reaches only `*.googleapis.com,docs.google.com` (tested — it downloaded the clean JPEG `ffd8ffe0`, then was blocked calling GitHub). A single code action cannot span both clouds, token or not.
+- Retyping base64 through the model corrupts (46 KB, zero error tolerance).
+
+**THE ONE BINARY-SAFE PATH = a real multi-step Zap (built once in the Zapier UI).** Zapier hydrates a file **object** server-side only when a `File` field is **mapped step→step inside a Zap** — not when a string is passed via a single MCP call. So: a 2-step Zap **[Google Drive: Retrieve/Find File] → [GitHub: Create or Update File]** with the Drive `file` output mapped into GitHub's `content` field moves raw bytes host-to-host, binary-safe, tokenless (OAuth). This is a ~5-minute one-time UI build; it then runs forever.
+
+**SOURCE READY.** `nist-charleston-image.jpg` in the studio Drive (`walshero`, id `1xX9EGKjgb2jWePDpLO5M4nS6Dm_FhHIQ`, folder `1HgCt7LgM88cexg90tjVh0844eYfo0oOq`) is a verified-clean JPEG, 34,459 B, md5 `5ea9080329a83c8780b291d41720c88d`, 325×221. It is the incident-matched NIST image (credit "NIST"). Ready for the Zap.
+
+**NET:** text/HTML deploys are fully automated and tokenless now. Binary images need the one-time 2-step Zap (or the game keeps its studio-drawn SVG art, already shipped, legal + labeled). No token was ever required for either — the OAuth connection carries it.
