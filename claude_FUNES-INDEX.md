@@ -48,8 +48,9 @@ ALEPHS to train, produce content, and to create the TSP Ledger."*
   reliability floor). Funes IDs candidates; the founder's eyes confirm. Total recall, indexed,
   asserting nothing unverified.
 
-**Also lives as direct prose** in the working Borges paper (`rescued/borges-pipeline-paper.md`,
-section "The literal library: the stories were one machine").
+**Also lives as direct prose** in the Borges paper (`borges-paper.md` — promoted out of the
+rescue bucket to canon root; companion piece titled "Borges Was Here"), section "The literal
+library: the stories were one machine".
 
 ---
 
