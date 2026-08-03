@@ -1,4 +1,6 @@
 # GROOVE CHECK — Cleese × Horvath on v8.2
+<!-- RESOLVED 2026-08-02: founder chose option 2. Applied to funny-boneys-factory.html (v8.2 groove pass): the hunch reads as a DARE ("Call it — what carries this bit? the body / the room"), and the teaching line is pure REVELATION (warm nod when right, no "you bet … but" sting when off). Copy/framing only, no logic change; the prediction is still captured before the reveal, so the humor-literacy signal is intact. -->
+
 <!-- 2026-08-02 · design lane · founder: "Process. Cleese and Horvath groove." A feel-check of the shipped humor model + signal loop (funny-boneys-factory.html v8.2) through the two lenses that guard the PLAY: John Cleese (open vs closed mode) and Agnes Horvath (generative liminal vs permanent-liminal trickster). Not a gate — a groove read: does it still swing? -->
 
 ## THE QUESTION
