@@ -268,7 +268,21 @@ def self_test():
 def main():
     self_test()
     target = sys.argv[1] if len(sys.argv) > 1 else '.'
-    files = sorted(glob.glob(os.path.join(target, '*.html'))) if os.path.isdir(target) else [target]
+    if os.path.isdir(target):
+        files = sorted(glob.glob(os.path.join(target, '*.html')))
+        # Do NOT sweep other gates' teeth-fixtures as if they were shipping pages.
+        # comfort-gate-canary-*.html are comfort-gate.py's canaries — built to HALT on
+        # purpose (external CDN host, no color-scheme, etc.). Sweeping them as corpus
+        # pages makes the ratchet read intentional fixtures as regressions and reddens
+        # the floor over a test file, not a real defect. (Named, never silent.)
+        FIXTURES = ('comfort-gate-canary-',)
+        skipped = [f for f in files if os.path.basename(f).startswith(FIXTURES)]
+        files = [f for f in files if not os.path.basename(f).startswith(FIXTURES)]
+        if skipped:
+            print("=== skipped %d gate-fixture file(s), not shipping pages: %s ===" %
+                  (len(skipped), ', '.join(os.path.basename(x) for x in skipped)))
+    else:
+        files = [target]                                # explicit single file: swept as asked
     halts = 0; blast = {}
     px_budget = [40]                                   # pixel samples across the run
     for f in files:
