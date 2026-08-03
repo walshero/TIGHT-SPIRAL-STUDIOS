@@ -32,7 +32,9 @@ echo; echo "-- tick 2: student attribution standard --"
 HITS=$(grep -rInE 'EN[0-9]{3}' --include=*.html --include=*.md . 2>/dev/null | grep -vE '/(archive|rescued|node_modules)/' || true)
 # a violation = a course code on a line that ALSO carries a SECTION token or a TERM-YEAR (e.g. "Summer 2026").
 # generic course lines ("EN195 Creative Writing (summer 6-week online)") and changelog dates ("2026-07-11") do NOT match.
-VIOL=$(printf '%s\n' "$HITS" | grep -Ei 'sec(tion)?[ .#_-]?[0-9]|(spring|summer|fall|winter|autumn)[a-z]* 20[0-9]{2}' || true)
+# only CREDIT lines count; drop source/provenance citations (a syllabus citation legitimately names a term)
+CRED=$(printf '%s\n' "$HITS" | grep -viE 'syllabus|quoted|source|cite|policy|licen|per the|from the|\\bnote\\b' || true)
+VIOL=$(printf '%s\n' "$CRED" | grep -Ei 'sec(tion)?[ .#_-]?[0-9]|(spring|summer|fall|winter|autumn)[a-z]* 20[0-9]{2}' || true)
 if [ -n "${VIOL//[$'\n']/}" ]; then
   echo "  HALT — a course credit carries a year or section token (standard: generic course, no year/section):"
   printf '%s\n' "$VIOL" | sed 's/^/        /' | head -8; fail=1
