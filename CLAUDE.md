@@ -34,3 +34,8 @@ shared. (This was asked and answered too many times — it is settled.)
   pigmentosa and an accessibility-first design *intent* — never an outcome claim about blind play.
 - **Pull back on disclaimers as a rule** — hedges, caveats, safety-flags, "note:" asides,
   in prose and in files. Say the thing plainly. Caveat only when it is load-bearing.
+
+## Canon vs shelf — settled (2026-08-03)
+- **The Claude Project shelf is a CACHE, never the finish line.** A deliverable that only reached the shelf is NOT done — the shelf lags this repo and is not canon.
+- **Default to canon.** Land docs, decisions, and builds in this git repo via the "deploy studio file" skill: the authenticated GitHub connector — `get_file_contents` for the SHA, `create_file` / `apply_patch_to_repo_file` / `append_chunk_to_repo_file` to write, then raw-verify. `git push` from a session container is blocked (403); the connector is the working lane and needs no open tab.
+- **Never end on a "ready-to-paste" handoff** when the connector can land it. Paste-handoffs die by closed tab or dead battery. Write it to canon, verify the bytes, then tell Matt what landed.
