@@ -283,3 +283,10 @@ that lives in a file nobody opens is a finding that has to be made twice.
 - **"Egress blocked" asserted from one denied host.** Egress is SELECTIVE — the studio face (raw.githubusercontent) is reachable; external image hosts (Wikimedia/NIST/USFA/DVIDS) are policy-denied. **Enforcer: `egress-probe.sh`** — cite it before any "egress blocked" claim.
 
 **Standing practice going forward:** when a session makes an error, it Harvest-backs it into a check (a script, a required declaration, or a Funes rule) before moving on — not a note, a check. If it can't become a check, name it a wish out loud (Funes charter).
+
+## 2026-08-03 — Standing lane: asset-ingest + storyboard (founder ruling)
+
+**Founder: "make this a standing permissible lane — locating relevant images arranged through storyboard expertise to leverage learning sciences and domain expertise within a situated learning experience that appeals to the four freedoms."** Codified in `asset-ingest-storyboard-lane.md`: five stages (Locate→Storyboard→Ground→Situate→Four Freedoms), the binary-safe ingest mechanism, dignity + provenance gates.
+
+- **INGEST FINDING (tested):** `drive_file_to_github` downloads the Drive file INTACT (34,459 B → base64) and writes via Zapier's connection layer (NOT domain-blocked, unlike raw-HTTP code actions). It failed on ONE thing: **`no github credential on this connection`.** The automated ingest is one credential away — attach a GitHub account to that Zapier connection (the "store a scoped token in Zapier" step), then it fires binary-safe, committing as walshero.
+- **FOUR FREEDOMS bound in** (Osterweil): fail (private/unscored read), experiment (predict→reveal, contrasting cases), fashion identity (read as the officer; crew debrief), effort (one case or the deck; blank is allowed).
