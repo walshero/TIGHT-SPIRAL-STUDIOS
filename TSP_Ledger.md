@@ -290,3 +290,11 @@ that lives in a file nobody opens is a finding that has to be made twice.
 
 - **INGEST FINDING (tested):** `drive_file_to_github` downloads the Drive file INTACT (34,459 B → base64) and writes via Zapier's connection layer (NOT domain-blocked, unlike raw-HTTP code actions). It failed on ONE thing: **`no github credential on this connection`.** The automated ingest is one credential away — attach a GitHub account to that Zapier connection (the "store a scoped token in Zapier" step), then it fires binary-safe, committing as walshero.
 - **FOUR FREEDOMS bound in** (Osterweil): fail (private/unscored read), experiment (predict→reveal, contrasting cases), fashion identity (read as the officer; crew debrief), effort (one case or the deck; blank is allowed).
+
+## 2026-08-04 — The Matt-eyes lane: a private parking lot (founder ruling)
+
+**Founder: "make sure that all Matt eyes stuff (creative writing drafts in progress, personal bills or receipts, etc) starts going to Matt dashboard that i dont link to VS the other lanes i share."** The studio grew a private sharing lane. Canon in `MATT-EYES-LANE.md`.
+
+- **Home stood up:** `walshero/matt-radar` (private) is the dashboard — `index.html` (parking lot / creative drafts / personal & financial) + `parking-lot/` for parked items; a root `.matt-eyes-home` marker names it as home. Financial docs (bills/receipts/scans) live in a private cloud folder, linked from the dashboard, never committed. The ADA credit appeal is parked there.
+- **NEAR-MISS → ENFORCER (fool-me-once):** the first plan was to keep personal material merely *unlinked* from the public face. "Unlinked" is not "private" — a public-Pages repo serves unlinked pages by URL. **Enforcer: `matt-eyes-lane-check.py`** — any file tagged `tsp:lane: matt-eyes` in a shared/public repo HALTs (exit 1); allowed only in the home (`.matt-eyes-home` marker). Self-testing (exit 2 if fixtures lie). Wired into `floor.yml` as a fast blocking step before the Studio-Eyes install, so a leak never reaches the Pages deploy.
+- **Orphan rule intact, no exemption needed:** Matt-eyes pages never live in the public repo (the gate guarantees it), and in the private home the dashboard is its own face — the "every page linked from the face" rule stays whole.
