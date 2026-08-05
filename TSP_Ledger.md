@@ -366,6 +366,21 @@ Convened five studio lenses (Registrar/Cora, Learning Scientist, Studio-Eyes, As
 - **VERIFIED:** both preship SHIP; JS parses; browser-driven end-to-end (Whose Draft: all 4 steps → meters/reveal → disclosure assembly + copy; AI-Resilient: 7 checks score correctly, redesign-move visibility toggles, all 3 policy stances assemble with fields woven, copy). TICK 3 markers baked in (Source: + Last-verified 2026-07-30). Wired into the hub under iSLO 1 (student game + faculty note) and cross-listed under iSLO 3; games count 24→25.
 - **HELD (unchanged):** did NOT open the PR (needs explicit ask), did NOT build the co-req support diagnostic, did NOT open the career/workforce lane. All await the founder's return/briefing.
 
+## 2026-08-03 — Merged the iSLO Suite (PR #43), then a Funes-aleph playtest + fixes
+
+**Founder: "Merge with funes alephs and ledger — full access."** Merged PR #43 into `main` as a merge commit (`5b14abc`): the full iSLO Suite — build-side games, faculty measure-side tools, and the GenAI-in-writing lane — across MassBay's 7 competencies.
+
+- **The merge also un-red main.** PR #43's baseline fix repaired a stale `floor-baseline.json` (3 pre-existing unbaselined failures: two comfort-gate canary fixtures + `soundings-TRUNK-v03`) that had kept the floor CI red on `main` for days. First green floor run on main in that window.
+- **Getting there:** resolved the merge conflict against a far-moved main (adopted the canonical **Flok** rename; kept **Whose Draft** and the built **Who Holds the Room**), and conformed all 9 pre-Phase-3 iSLO files to the studio's dark-mode kernel + version stamps.
+
+**Then a Funes-aleph playtest fleet (11 alephs, one per page)** drove every iSLO page headless through all interactions + edge cases + the Studio Eyes control in day/dusk/night, and read each for dignity/voice + source integrity. Record: `FUNES-PLAYTEST-2026-08-03.md`.
+
+- **One real regression, fixed (priority 0):** the dark kernel made `.slab h3` (which colors text with the `--brass-fill` *fill* token) dark-on-dark in night mode — 2.14:1. comfort-gate missed it (fill token, not a sampled text token). Forced a bright brass ink on the always-dark slab → **9.87:1** night, across 6 files.
+- **Correctness/integrity fixes:** islo-hub "four"→"five" un-normed outcomes + games count 25→**23** (reconciled to the page); update-the-model no longer wipes the player's posterior on a repeat reveal; score-the-room + scorer-norming retire a shown verdict when the pick changes; sticker-price Case 3 now reads "up from/down from" directionally and clamps the incident count to the pool (no more >100% rates); ai-resilient packet stamps the current date; close-the-loop clamps percent-at-benchmark to 0–100.
+- **Confirmed holding:** dignity/voice on every page (no verdict framing, the number does the work, **no blind-play claim**, assets-not-deficits, no dark patterns), contrast in all light modes, source integrity, zero crashes/dead-ends/console-errors.
+- **Knowingly left (minor, logged):** real-cost plural agreement + all-zero bar; the version-stamp stray-`</span>` tooling artifact; case-rail ARIA tablist semantics.
+
+All fixes browser-verified and gate-clean (comfort-gate, art-gate, JS parse). FERPA/voice floors intact. Fixes pushed as a follow-up off the merged main.
 
 ## 2026-08-03 — DECIDED: Student Attribution Standard (studio canon, adopted)
 When the studio publishes/links a student game: credit **first name + last initial** only, name the course **generically** (e.g., `EN195 Creative Writing (summer 6-week online)`), and carry **no year and no section number**. A student email granting permission = documented approval, logged in the approvals list. Presentation standard layered on the FERPA ruling (publication is consent); written as a check — a credit with a full surname, a 4-digit year, or a section token does not ship (exit 1). First application: *Barcelona Summers* (Hamish K.), approval on file. Standard doc: `student-attribution-standard.md`. Also published this turn: the Barcelona Summers guest cabinet on `arcade.html` (comfort-gate pass, links the student's own deploy).

@@ -244,7 +244,7 @@ footer a{color:var(--cool-ink); font-weight:600}
   </span>
   <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes — reading comfort">Studio Eyes</button>
 </header>
-<p class="se-stamp" style="margin:.45rem .9rem;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.76rem;opacity:.92;display:flex;align-items:center;gap:.45rem;flex-wrap:wrap"><p class="tag" id="seUpdated" style="margin:8px 0 0">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v11 <span style="opacity:.75">75e938c</span></span> </p>
+<p class="se-stamp" style="margin:.45rem .9rem;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.76rem;opacity:.92;display:flex;align-items:center;gap:.45rem;flex-wrap:wrap"><p class="tag" id="seUpdated" style="margin:8px 0 0">Last updated&hellip;</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v12 <span style="opacity:.75">654f0a6</span></span> </span> </p>
 <div class="stage">
   <p class="mark">Tight Spiral Productions · MassBay iSLO 2 — Quantitative Skills</p>
   <h1>Every number is a headline. <em>Read the fine print.</em></h1>
@@ -764,6 +764,10 @@ footer a{color:var(--cool-ink); font-weight:600}
     var getGuess = optGroup("p-guess");
     function pct(b,a){ if(b===0) return a>0? Infinity : 0; return (a-b)/b*100; }
     function sync(){
+      // a count can never exceed the pool it is drawn from — keep the model coherent
+      var Nn=+pool.value;
+      if(+after.value > Nn) after.value = Nn;
+      if(+before.value > Nn) before.value = Nn;
       $("p-before-r").textContent = num(+before.value);
       $("p-after-r").textContent = num(+after.value);
       $("p-pool-r").textContent = num(+pool.value);
@@ -785,7 +789,7 @@ footer a{color:var(--cool-ink); font-weight:600}
       var gLine = g ? ("You guessed it would look <b>"+(g==="big"?"still alarming":"smaller")+"</b>. ") : "";
       $("p-read").querySelector(".rb").innerHTML = gLine +
         "Both sentences are true: incidents went from <b>"+num(b)+"</b> to <b>"+num(a)+"</b> ("+pctTxt+") — and that is <b>"+
-        num(a)+" out of "+num(N)+"</b>, or <b class='big'>"+rateA.toFixed(2)+"%</b> of the pool, up from "+rateB.toFixed(2)+"%.";
+        num(a)+" out of "+num(N)+"</b>, or <b class='big'>"+rateA.toFixed(2)+"%</b> of the pool, "+(rateA>=rateB?"up from ":"down from ")+rateB.toFixed(2)+"%.";
       $("p-hides").innerHTML = "The percentage change hid the <b>counts</b> ("+num(b)+" &rarr; "+num(a)+") and the "+
         "<b>denominator</b> ("+num(N)+"). A big percentage on a tiny base is still a tiny thing; a small percentage on a "+
         "huge base can be enormous. <b>A percentage with no denominator is a rumour.</b>";
