@@ -1,0 +1,29 @@
+name: Studio Belt (reusable)
+# Hub-owned canon. Spokes call this via `uses:`. One belt, five repos.
+on:
+  workflow_call:
+jobs:
+  belt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the calling repo
+        uses: actions/checkout@v4
+        with:
+          path: repo
+      - name: Mount the hub (canon + ticks) — read-only
+        uses: actions/checkout@v4
+        with:
+          repository: walshero/TIGHT-SPIRAL-STUDIOS
+          ref: main
+          path: _studio
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install the eyes (headless Chromium for real-pixel contrast)
+        run: |
+          pip install --quiet playwright
+          python -m playwright install --with-deps chromium
+      - name: Run the belt against the calling repo
+        env:
+          STUDIO_CANON_SHA: ${{ github.sha }}
+        run: bash _studio/studio-belt.sh "$GITHUB_WORKSPACE/repo"

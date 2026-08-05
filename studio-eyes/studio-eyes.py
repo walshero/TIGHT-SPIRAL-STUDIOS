@@ -480,6 +480,62 @@ def audit(path, no_net=True):
     out.sort(key=lambda h: SEV.get(h.split()[0], 9))
     return out
 
+# ---------------------------------------------------------------- adaptivity
+# ADVISORY, not a HALT. Per the adaptive-system amendment (OS §3.1, founder ruling
+# 2026-08-02): the founder's profile is the DEFAULT preset, not the only one. A build
+# should hold contrast across the profiles a real user can actually select, and across
+# the OS preference queries their device sets. These grade each shipped profile and
+# report the gaps as advisories — so the fleet can be driven green over time, the way
+# the contrast floor itself was rolled in. Promotion to HALT is a founder call.
+
+def grade_adaptivity(path):
+    from playwright.sync_api import sync_playwright
+    warns = []
+    with sync_playwright() as p:
+        _exe = os.environ.get('SE_CHROME')
+        b = p.chromium.launch(**({'executable_path': _exe} if _exe else {}))
+        try:
+            ctx = b.new_context(viewport={'width':390,'height':844})
+            page = ctx.new_page()
+            page.goto('file://' + os.path.abspath(path), wait_until='load')
+            page.wait_for_timeout(250)
+
+            def contrast_only(label):
+                try:
+                    h, _ = audit_page(page, path, label)
+                except Exception as e:
+                    return [f"ADAPTIVITY [{label}] could not grade: {e}"]
+                # only CONTRAST travels across profiles; touch/emoji/image are mode-invariant
+                return [x.replace('CONTRAST', 'ADAPTIVITY', 1) for x in h if x.startswith('CONTRAST')]
+
+            # -- OS preference queries a real user's device sets --
+            page.emulate_media(contrast='more'); page.wait_for_timeout(60)
+            warns += contrast_only('prefers-contrast:more')
+            page.emulate_media(contrast='no-preference')
+
+            page.emulate_media(forced_colors='active'); page.wait_for_timeout(60)
+            warns += contrast_only('forced-colors')
+            page.emulate_media(forced_colors='none')
+
+            # -- Comfort Kernel v2 selectable profiles. Setting a profile a page does
+            #    not define is a no-op — only profiles the page actually ships grade. --
+            for dl in ('dusk', 'night'):
+                page.evaluate(f"()=>document.documentElement.setAttribute('data-light','{dl}')")
+                page.wait_for_timeout(60)
+                warns += contrast_only(f'profile:{dl}')
+            page.evaluate("()=>document.documentElement.removeAttribute('data-light')")
+            page.evaluate("()=>document.documentElement.classList.add('se-contrast')")
+            page.wait_for_timeout(60)
+            warns += contrast_only('profile:se-contrast')
+            page.evaluate("()=>document.documentElement.classList.remove('se-contrast')")
+        finally:
+            b.close()
+    seen, out = set(), []
+    for w in warns:
+        if w not in seen:
+            seen.add(w); out.append(w)
+    return out
+
 # ---------------------------------------------------------------- self-test
 
 def self_test(verbose=True):
@@ -541,6 +597,7 @@ def main():
         if not self_test(verbose=False):
             sys.exit(1)
 
+    do_profiles = '--no-profiles' not in args
     bad = 0
     for f in files:
         halts = audit(f)
@@ -554,6 +611,17 @@ def main():
                 print(f"       {h}")
             if len(halts) > 14:
                 print(f"       ... +{len(halts)-14} more")
+        # Adaptivity is ADVISORY: it never changes PASS/HALT or the exit code.
+        if do_profiles:
+            warns = grade_adaptivity(f)
+            if warns:
+                print(f"     ADAPTIVITY — {len(warns)} advisory (not a HALT; OS §3.1 selectable profiles):")
+                for w in warns[:10]:
+                    print(f"       {w}")
+                if len(warns) > 10:
+                    print(f"       ... +{len(warns)-10} more")
+            else:
+                print("     ADAPTIVITY — profiles hold (advisory)")
     print(f"\n  === {bad} of {len(files)} at HALT ===\n")
     sys.exit(1 if bad else 0)
 
