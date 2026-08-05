@@ -390,3 +390,13 @@ Swept 38 playable builds through `one-thing-gate.py` @1280×800 headless Chromiu
 **Correction to the record:** earlier work this session logged gate verdicts to a shelf-only `claude/FUNES-LEDGER.md` via a shelf-only `claude/funes-ledger.py` — neither file, nor that gate-verdict-table schema, has ever existed in this repo's history on any branch (checked: `git log --all` on both paths, zero hits). This repo's real post-stall practice is `funes-tendrils.py` / `FUNES-TENDRILS.md` (walks git state: unpushed work, stranded branches, orphan pages — not a gate-verdict ledger), and this file, `TSP_Ledger.md`, is the real running log. The shelf artifact was disconnected from repo canon and should not be treated as studio practice; this entry is the correction, made by checking source rather than the shelf, per the studio's own rule.
 
 **Commits:** `cda3e61` (first push), `beac0a0` (font-size + footer-padding + skip-link fix), `08eb68d` (index.html link). All raw-verified byte-for-byte after each push.
+
+## 2026-08-05 — Account survey: leaks / canon coherence / credit usage (posted once)
+
+**Founder: "account wide survey of how i store and reference docs and governance to check for leaks and optimization points per canon coherence AND credit usage … scan walshero and post ONCE and not always and set up best practices."** Read-only survey (cheap git-grep method, credit-conscious). Full report + standing best practices in `ACCOUNT-SURVEY-AND-BEST-PRACTICES.md`.
+
+- **Leaks: clean.** No hardcoded secrets/tokens/JWTs on main; `.gitignore` covers `.env`; Supabase keys are dormant/placeholder/publishable (public by design). One verify item: RLS INSERT-only on the en195-arcade table.
+- **NEW enforcer — `secret-scan-gate.py`** (self-testing, fool-me-once): makes "clean" a floor, not a hand-check. Wired into `floor.yml` report-only (arm to blocking later). Confirmed 0 HALT / 389 files.
+- **Canon coherence:** SSOT erosion, not contradiction — 7 handoff files (vs the registry's "one HANDOFF.md" rule), ledger ambiguity, dated root clutter, three `preship-gate` versions, and the big one: **34 enforcers, only ~4 wired** (the "runs if remembered" anti-pattern). Fixes recommended, NOT auto-executed (mass file moves would clobber the concurrently-active main) — awaiting go.
+- **Credit sinks named + fixed:** `actions_list` dumps ~390KB (use minimal/targeted status instead); 21% of the repo is dead `rescued/archive` weight; 3 HTML files >2MB; per-push weasyprint/playwright install (cache it).
+- **Scope note:** only TSP + matt-radar surveyed; the other 3 walshero repos need an approval-gated scope-add (add_repo was approval-gated overnight).
