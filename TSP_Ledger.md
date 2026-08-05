@@ -426,3 +426,12 @@ Swept 38 playable builds through `one-thing-gate.py` @1280×800 headless Chromiu
 **NOT TOUCHED (founder-gated):** the three locked trauma rails (2026-06-27), the descent math (Measurement seat re-derivation still pending per v5 spec), the index public framing, and any wire-in / flow-layer engine code.
 
 **PENDING — push the shelf block.** `cyl-viscosity-descent-block.md` is the design canon that ties Viscosity to the descent and is still SHELF-ONLY ("PUSH FIRST — no lane," per SHELF-ACTION-LIST). It should land in the repo so the canon is co-located with the build.
+
+## 2026-08-05 — Playtest pass (Studio Eyes + Fingers + agent playtester)
+
+Ran the studio's own quality engine (local Playwright, bridged to pre-installed Chromium; no LLM credits) over the flagship builds. Full findings in `PLAYTEST-REPORT.md`.
+
+- **Systemic finding:** the older ISLO suite (rubric-forge, close-the-loop, score-the-room, scorer-norming, update-the-model, whose-draft) fails the 44px touch floor — shared control styling at 26–42px. The just-shipped `en195-arcade.html` passes clean = the reference standard.
+- **Fixed:** `reading-the-fireground.html` (fireground branch) — nav/comfort buttons → 44px, skip target enlarged, focus-ring fallback. Studio Fingers now green; Studio Eyes 15 → 9 (remaining = studio-wide token-role/skip-link debt).
+- **Agent playtester:** all builds reach an end (playable). Caveat: it returned identical output across 4 ISLO files — exercising a shared overlay, not each game; a harness limit + shared-widget flag, not 4 bugs.
+- **Recommended (not auto-applied):** suite-wide 44px bump using arcade as reference; split token roles; wire Studio Fingers into floor.yml.
