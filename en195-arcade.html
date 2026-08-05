@@ -4,9 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The EN195 Arcade</title>
-<!-- TSP-META {"file":"en195-arcade.html","stage":"full production — Workshop Vending Machine (four cabinets), panel-reviewed 2026-08-05 (AI Skeptic, TLDR Kids, Accessibility/RP, FERPA/Privacy), guardian puppets built in-house 2026-08-05 v2 (shadow-puppet silhouettes, idle-rigged, fixed night palette), Borges naming pulled from student-facing surface 2026-08-05 v3 per founder ruling — EN195 is self-contained, no literary prerequisite to use it; the metaphor mapping (Funes/Aleph/Forking Paths/Babel to genre) is preserved as design documentation only, home is the Borges lane (see the-compound-capstone.html gold glyph suite for the studio's other standing use of two of these same four figures), NOT this student-facing file. Guardian art and idle rigging kept — visual/atmospheric, requires no Borges literacy to read.","operative":true,"backend":"Supabase project TSP Supabase (fqylthxaidyncoygjnkm), table workshop_tokens + view workshop_board, RLS verified: anon insert-only on tokens, select-only on board view","hitl-active":"founder call resolved: cabinet titles are genre-first, self-contained (Workshop N: Genre) — no Borges names visible anywhere in this file's UI","founder-open":["retention/deletion policy for workshop_tokens (semester end? drop date? student request?)","public leaderboard requires no login — confirm acceptable for this course","pushed to github.com/walshero/TIGHT-SPIRAL-STUDIOS 2026-08-05; not yet deployed to tight-spiral-studio.netlify.app"],"assets":"all hand-cut SVG (own work) + Web Audio synthesized + W.C. Williams 'The Red Wheelbarrow' 1923 public domain, attributed","harvest":"a syllabus can be the coin mint — onboarding and game economy are the same mechanism"} -->
+<!-- TSP-META {"file":"en195-arcade.html","stage":"full production — Workshop Vending Machine (four cabinets), panel-reviewed 2026-08-05 (AI Skeptic, TLDR Kids, Accessibility/RP, FERPA/Privacy), guardian puppets built in-house 2026-08-05 v2 (shadow-puppet silhouettes, idle-rigged, fixed night palette), Borges naming pulled from student-facing surface 2026-08-05 v3 per founder ruling — EN195 is self-contained, no literary prerequisite to use it; the metaphor mapping (Funes/Aleph/Forking Paths/Babel to genre) is preserved as design documentation only, home is the Borges lane (see the-compound-capstone.html gold glyph suite for the studio's other standing use of two of these same four figures), NOT this student-facing file. Guardian art and idle rigging kept — visual/atmospheric, requires no Borges literacy to read. v4 2026-08-05: real Studio Eyes (studio-eyes-sweep.py, WeasyPrint render-proof) found and fixed two bugs the shelf-era regex gate missed — missing root font-size (rem controls rendered off 16px UA default, not the intended 20px base, failing the 18px floor) and a footer margin-vs-padding paint-sample false read; skip-link added.","operative":true,"backend":"Supabase project TSP Supabase (fqylthxaidyncoygjnkm), table workshop_tokens + view workshop_board, RLS verified: anon insert-only on tokens, select-only on board view","hitl-active":"founder call resolved: cabinet titles are genre-first, self-contained (Workshop N: Genre) — no Borges names visible anywhere in this file's UI","founder-open":["retention/deletion policy for workshop_tokens (semester end? drop date? student request?)","public leaderboard requires no login — confirm acceptable for this course","live at github.com/walshero/TIGHT-SPIRAL-STUDIOS 2026-08-05, 0 HALT on Studio Eyes v4; not yet deployed to tight-spiral-studio.netlify.app"],"assets":"all hand-cut SVG (own work) + Web Audio synthesized + W.C. Williams 'The Red Wheelbarrow' 1923 public domain, attributed","harvest":"a syllabus can be the coin mint — onboarding and game economy are the same mechanism"} -->
 <style>
 :root{
+  font-size:20px;
   --paper:#f4efe6; --ink:#211a12; --ink2:#211a12;
   --gold:#6e4700; --rust:#a34a2a; --slate:#3f5666; --kraft:#b08d57;
   --card:#fdfaf3; --edge:#3a2f22; --glow:#f5c97b;
@@ -130,7 +131,7 @@ svg text{font-family:Georgia,serif;}
 @media (prefers-reduced-motion:reduce){.vmBreathe{animation:none;}}
 .balloonwrap{border:3px solid var(--edge); border-radius:12px; background:var(--card); margin:10px 0;}
 footer.studiofoot{
-  background:#262019; color:#f0dcb8; padding:22px 16px; margin-top:36px;
+  background:#262019; color:#f0dcb8; padding:36px 16px 22px;
   font-size:1rem; line-height:1.6;
 }
 footer.studiofoot a{color:#f5c97b;}
@@ -138,12 +139,19 @@ footer.studiofoot button{
   background:#332a1f; color:#f0dcb8; border-color:#f0dcb8; font-size:1rem;
 }
 .srlive{position:absolute; left:-9999px;}
+.skiplink{
+  position:absolute; left:-9999px; top:0; z-index:10;
+  background:var(--card); color:var(--ink); border:3px solid var(--edge);
+  border-radius:0 0 10px 0; padding:10px 16px; font-weight:700;
+}
+.skiplink:focus{ left:0; }
 details{margin:10px 0;} summary{min-height:48px; display:flex; align-items:center; cursor:pointer; font-weight:700;}
 summary:focus-visible{outline:4px solid var(--focus); outline-offset:3px;}
 </style>
 </head>
 <body data-stop="default">
-<main>
+<a class="skiplink" href="#main">Skip to the arcade</a>
+<main id="main">
 
 <div class="coinbar" id="coinbar" hidden>
   <span class="coins" id="coinCount">Coins: 0</span>
