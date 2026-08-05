@@ -415,3 +415,14 @@ Swept 38 playable builds through `one-thing-gate.py` @1280×800 headless Chromiu
 - **Canon coherence:** SSOT erosion, not contradiction — 7 handoff files (vs the registry's "one HANDOFF.md" rule), ledger ambiguity, dated root clutter, three `preship-gate` versions, and the big one: **34 enforcers, only ~4 wired** (the "runs if remembered" anti-pattern). Fixes recommended, NOT auto-executed (mass file moves would clobber the concurrently-active main) — awaiting go.
 - **Credit sinks named + fixed:** `actions_list` dumps ~390KB (use minimal/targeted status instead); 21% of the repo is dead `rescued/archive` weight; 3 HTML files >2MB; per-push weasyprint/playwright install (cache it).
 - **Scope note:** only TSP + matt-radar surveyed; the other 3 walshero repos need an approval-gated scope-add (add_repo was approval-gated overnight).
+## 2026-08-05 — Reconcile: The Viscosity is a CYL feature, not a standalone game
+
+**RECONCILED — Viscosity = CYL's felt descent renderer.** Founder confirmed the design intent: `the-viscosity.html` was built to be a *feature of Choose Your Leader*, not a peer arcade game. It is the embodied version of CYL's Beat-3 Maslow descent — the honeycomb STRETCHES (viscosity = the felt cost of scarcity) where the v5-slice currently paints a static ladder. This matches the shelf design block `cyl-viscosity-descent-block.md` and the v5-rebuild-spec's open problem (*"it's text, I don't feel it… I don't know where I am in the hierarchy"*). The intended payload also carries a **Jenova Chen flow layer**: the leader's actions modulate viscosity and move you between rungs (drop-downs / pull-ups) — impact you FEEL, continuously.
+
+**DEBT NAMED — the "unlinked" fix mis-framed it.** `tight-spiral-studio-os.md` logged "viscosity unlinked" as Release-Steward debt. That debt was closed by linking it from `index.html` as its *own room* (chip: "Motivation") — which is the mis-frame the founder just corrected. Reachable ✓, but positioned as a standalone game rather than the CYL mechanic it is.
+
+**CHEAP WINS TAKEN (this session, no sign-off needed):** (1) header note in `the-viscosity.html` recording its CYL parentage + founder-gated flow layer; (2) pointer in `choose-your-leader-map.md` glossary ("The descent" → felt-renderer prototype); (3) this ledger entry; (4) founder decisions queued in `STUDIO-COMMAND-CENTER.md` → OPEN — FOUNDER ONLY. No public framing or engine code touched.
+
+**NOT TOUCHED (founder-gated):** the three locked trauma rails (2026-06-27), the descent math (Measurement seat re-derivation still pending per v5 spec), the index public framing, and any wire-in / flow-layer engine code.
+
+**PENDING — push the shelf block.** `cyl-viscosity-descent-block.md` is the design canon that ties Viscosity to the descent and is still SHELF-ONLY ("PUSH FIRST — no lane," per SHELF-ACTION-LIST). It should land in the repo so the canon is co-located with the build.

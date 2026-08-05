@@ -128,6 +128,23 @@ task ceiling as a reason.) It is not a cleanup or audit tool.
 
 - **GATE 1 cold plays:** CYL v5 slice · Flok · The Viscosity. Two questions:
   *does it still do its job; did anything surprise me.*
+- **CYL × Viscosity — the felt-descent integration** (reconciled 2026-08-05; see TSP_Ledger).
+  Viscosity is CYL's descent renderer, not a standalone game. Five calls, founder-only:
+  1. **Flow direction.** Keep the descent **one-way** (rhetoric pulls down, noticing brakes —
+     the current locked design), or adopt the **Jenova Chen bidirectional flow** (leader impact
+     drops you down *and* pulls you up between rungs)? Bidirectional-without-player-input
+     **re-opens the three trauma rails (2026-06-27)** and needs the **Measurement seat**.
+  2. **Descent math.** v5 spec still parks the re-derived pull/brake/tier formula on the
+     Measurement seat before lock; a flow layer changes the inputs again. Sign-off needed.
+  3. **Feel sign-off (GATE 1).** The map gates *art for the descent planes* on a "does the
+     descent feel right" playtest. Play Viscosity; give the two-question verdict.
+  4. **Build go/no-go.** Approve a **wired feel-prototype** — pipe v5-slice's landing `tier`
+     into the Viscosity honeycomb + "leader impact = viscosity modulation," kept one-way-safe
+     with noticing as the pull-up. (Recommended: this is what earns the GATE 1 feel sign-off.)
+  5. **Public framing.** Leave The Viscosity on `index.html` as its own "room," or reframe it
+     as *CYL: the descent* / fold it in. Product call — no code either way.
+  Also: **push `cyl-viscosity-descent-block.md`** off the shelf into the repo (design canon,
+  currently "PUSH FIRST — no lane").
 - **Writerly Moves review session** — the two-taxonomy question.
 - **Drive: delete the `mwalsh@post` rows.** Claude cannot delete another account's files.
   Drive → Claude_files → sort by **Owner** → delete every post-owned row. The constitution
