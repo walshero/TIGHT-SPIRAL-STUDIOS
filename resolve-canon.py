@@ -62,7 +62,7 @@ USAGE
     python3 resolve-canon.py --aleph --evidence lanes.json # fold in lanes only an agent can reach
     python3 resolve-canon.py --lanes                       # lane roll call: LIVE / BLIND, by name
     python3 resolve-canon.py --ledger <name>               # what does the record say about this file?
-    python3 resolve-canon.py --row <file> <gate> <verdict> <detail>    # emit a well-formed ledger row
+    python3 resolve-canon.py --row <file> <gate> <verdict> <detail>   # emit a well-formed ledger row
 
 EVIDENCE FILE
 -------------
