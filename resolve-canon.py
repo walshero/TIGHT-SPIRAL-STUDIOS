@@ -810,4 +810,13 @@ if __name__ == "__main__":
             sys.exit(2)
         print(ledger_row(a[1], a[2], a[3], a[4],
                          a[5] if len(a) > 5 else "", a[6] if len(a) > 6 else ""))
-        sys.exi
+        sys.exit(0)
+
+    if a[0] == "--audit":
+        sys.exit(audit())
+    if len(a) >= 3 and a[1] == "--check":
+        sys.exit(check(a[0], a[2]))
+
+    r = resolve(a[0])
+    print(json.dumps(r, indent=2, default=str))
+    sys.exit(0 if r["verdict"] in ("OK", "SINGLE_LANE") else 1)
