@@ -590,4 +590,224 @@ def audit():
         if r["verdict"] == "NOT_FOUND":
             continue
         if r["found_in"] == ["shelf"]:
-            orphans.append(f"  {n:<44} {r['bytes']:>9,} B   SHELF-ONLY - no home i
+            orphans.append(f"  {n:<44} {r['bytes']:>9,} B   SHELF-ONLY - no home in any lane")
+        if r["verdict"] == "CHECK_CANON":
+            stubs.append(f"  {n:<44} {r['fossils'][0]}")
+        elif r["fossils"]:
+            drift.append(f"  {n:<44} canon={r['canon_lane']}  {r['fossils'][0][:60]}")
+        if r["verdict"] == "SINGLE_LANE" and r["canon_lane"] == "netlify":
+            singles.append(f"  {n:<44} NETLIFY ONLY - no backup")
+
+    print("=" * 74)
+    print("RESOLVE_CANON - FULL AUDIT")
+    print("=" * 74)
+    for title, rows, why in (
+        ("CANON MAY BE A STUB - DIFF THESE FIRST", stubs,
+         "A non-canon lane holds a MUCH bigger file. Never default to the smaller one."),
+        ("ORPHANS - shelf-only, no deploy lane", orphans,
+         "The shelf is a cache. These have no home and no gate can see them."),
+        ("SINGLE LANE - no backup", singles,
+         "One account change and it is gone."),
+        ("DRIFT - lanes disagree", drift,
+         "The shelf lags. If shelf != repo, the shelf is wrong."),
+    ):
+        print(f"\n## {title}  [{len(rows)}]")
+        print(f"   {why}")
+        for row in rows[:25]:
+            print(row)
+        if not rows:
+            print("   (clean)")
+    print("\n" + "=" * 74)
+    return 0
+
+
+def lanes_report(evidence=None):
+    status = lane_status(evidence)
+    print("=" * 74)
+    print("BABEL LANE ROLL CALL")
+    print("=" * 74)
+    print("A lane that is not named cannot be missed. That is the whole point.\n")
+    live = [k for k in BABEL_KEYS if status[k]["live"]]
+    blind = [k for k in BABEL_KEYS if not status[k]["live"]]
+    for k in BABEL_KEYS:
+        s = status[k]
+        mark = "LIVE " if s["live"] else "BLIND"
+        print(f"  {mark}  {k:<16} {s['role']:<9} {s['why']}")
+    print()
+    print(f"  LIVE:  {len(live)}/{len(BABEL_KEYS)}  {', '.join(live) if live else '(none)'}")
+    print(f"  BLIND: {len(blind)}/{len(BABEL_KEYS)}  {', '.join(blind) if blind else '(none)'}")
+    if blind:
+        print()
+        print("  This pass is INCOMPLETE. Every file below is resolved against LIVE lanes only.")
+        print("  Nothing here is evidence about the BLIND ones. Supply --evidence to close them.")
+    print("=" * 74)
+    return status, blind
+
+
+def aleph(evidence_path=None, watch=None):
+    """THE SESSION-START PASS.
+
+    Hash the trunk. Roll call every lane. Diff against the ledger. Print what you cannot
+    see, by name. This is the thing that was being done by hand.
+    """
+    evidence = load_evidence(evidence_path)
+    status, blind = lanes_report(evidence)
+
+    if not status["repo"]["live"]:
+        print("\nHALT - no repo lane. An Aleph pass without canon is a list of lies.")
+        print("       Run this from a clone of TIGHT-SPIRAL-STUDIOS.")
+        return 2
+
+    names = set(_build_tree().keys())
+    if status["shelf"]["live"]:
+        names |= {n for n in os.listdir(SHELF) if not n.startswith(".")}
+    names |= set(evidence.get("observations", {}).keys())
+    if watch:
+        names |= set(watch)
+
+    rows = read_ledger()
+    if rows is None:
+        print("\nWARNING - FUNES-LEDGER.md unreadable. Gate state cannot be checked this run.")
+
+    diverged, stranded, blind_files = [], [], []
+    stale, halts, unledgered, unverifiable = [], [], [], []
+    unwitnessed = 0
+
+    for n in sorted(names):
+        if n.startswith("."):
+            continue
+        r = resolve_lanes(n, evidence, status)
+        if r["verdict"] == "UNWITNESSED":
+            unwitnessed += 1
+        if r["verdict"] == "DIVERGED":
+            spread = "  ".join(f"{k}:{v['bytes']}B/{(v['md5'] or '')[:8]}"
+                               for k, v in sorted(r["holdings"].items()))
+            diverged.append(f"  {n:<40} {spread}")
+        elif r["verdict"] == "STRANDED":
+            only = r["held_by"][0]
+            stranded.append(f"  {n:<40} only in {only}  ({r['bytes']} B)  NO BACKUP")
+        elif r["verdict"] == "BLIND":
+            blind_files.append(f"  {n:<40} not in any LIVE lane; {len(r['blind_lanes'])} lanes blind")
+
+        for kind, msg in ledger_check(rows, n, r["md5"]):
+            line = f"  {n:<40} {msg}"
+            if kind == "STALE-STAMP":
+                stale.append(line)
+            elif kind == "STANDING-HALT":
+                halts.append(line)
+            elif kind == "UNVERIFIABLE":
+                unverifiable.append(line)
+            elif kind == "UNLEDGERED" and n in (watch or []):
+                unledgered.append(line)
+
+    print()
+    print("=" * 74)
+    print("ALEPH PASS")
+    print("=" * 74)
+
+    # A cross-lane finding needs two lanes. With one, the section is NOT COMPUTABLE, and
+    # saying so is the whole difference between a report and a reassurance.
+    n_live = sum(1 for k in BABEL_KEYS if status[k]["live"])
+    n_live += len({l for obs in evidence.get("observations", {}).values() for l in obs}
+                  - {k for k in BABEL_KEYS if status[k]["live"]})
+    cross_lane_ok = n_live >= 2
+    floor = ("NOT COMPUTABLE - only %d lane is live. Cross-lane findings need two. "
+             "This is not a clean result; it is an unasked question." % n_live)
+
+    sections = (
+        ("STANDING HALT - a gate said HALT and nobody cleared it", halts,
+         "This file is live and its own gate refused it. Highest priority, always.", True),
+        ("STALE STAMP - the record does not describe the shipped bytes", stale,
+         "A SHIP verdict against md5 X tells you nothing about a file whose md5 is Y.", True),
+        ("UNVERIFIABLE STAMP - the md5 column is prose, not a hash", unverifiable,
+         "A stamp nothing can check is a missing stamp wearing a stamp's clothes.", True),
+        ("DIVERGED - lanes hold different bytes", diverged,
+         "Diff from CONTENT. Never default to the newer, older, larger or smaller copy.",
+         cross_lane_ok),
+        ("STRANDED - exactly one lane holds it", stranded,
+         "One account change and it is gone. This is how the protocol itself nearly went.",
+         cross_lane_ok),
+        ("BLIND - not found in any LIVE lane", blind_files,
+         "NOT absence. Unchecked lanes remain. List the container and look.", True),
+        ("UNLEDGERED - watched file with no gate row", unledgered,
+         "A gate that does not log is a HALT.", True),
+    )
+    for title, items, why, computable in sections:
+        count = len(items) if computable else "-"
+        print(f"\n## {title}  [{count}]")
+        print(f"   {why}")
+        if not computable:
+            print(f"   {floor}")
+            continue
+        for row in items[:40]:
+            print(row)
+        if not items:
+            print("   (clean)")
+        if len(items) > 40:
+            print(f"   ... and {len(items) - 40} more NOT SHOWN. This output is truncated.")
+
+    if not cross_lane_ok and unwitnessed:
+        print(f"\n## UNWITNESSED  [{unwitnessed}]")
+        print("   Files held by the one lane that was live. Whether they have a backup is")
+        print("   UNKNOWN, not NO. Close a second lane and STRANDED becomes answerable.")
+
+    print("\n" + "=" * 74)
+    if halts or stale or unverifiable:
+        print("VERDICT: HALT. A live file is either refused by its own gate or unstamped.")
+        rc = 1
+    elif blind:
+        print("VERDICT: INCOMPLETE. Lanes were BLIND. Do not read this as a clean pass.")
+        rc = 3
+    else:
+        print("VERDICT: OK. Every named lane checked, every live file stamped.")
+        rc = 0
+    if blind:
+        print(f"         BLIND BY NAME: {', '.join(blind)}")
+    print("=" * 74)
+    return rc
+
+
+if __name__ == "__main__":
+    a = sys.argv[1:]
+    if not a or a[0] in ("-h", "--help"):
+        print(__doc__)
+        sys.exit(0)
+
+    if a[0] == "--lanes":
+        ev = {}
+        if "--evidence" in a:
+            ev = load_evidence(a[a.index("--evidence") + 1])
+        lanes_report(ev)
+        sys.exit(0)
+
+    if a[0] == "--aleph":
+        ep = a[a.index("--evidence") + 1] if "--evidence" in a else None
+        watch = []
+        if "--watch" in a:
+            watch = [w for w in a[a.index("--watch") + 1].split(",") if w]
+        sys.exit(aleph(ep, watch))
+
+    if a[0] == "--ledger":
+        if len(a) < 2:
+            print("usage: resolve-canon.py --ledger <name>")
+            sys.exit(2)
+        rows = read_ledger()
+        if rows is None:
+            print("HALT - ledger unreadable.")
+            sys.exit(2)
+        st = ledger_state(rows, a[1])
+        if not st:
+            print(f"UNLEDGERED - no gate has ever stamped {a[1]}.")
+            sys.exit(1)
+        for gate, r in sorted(st.items()):
+            print(f"{r['stamp']}  {gate:<24} {r['verdict']:<20} md5 {r['md5'][:12]}  commit {r['commit'] or '(none)'}")
+            print(f"    {r['detail'][:160]}")
+        sys.exit(0)
+
+    if a[0] == "--row":
+        if len(a) < 5:
+            print("usage: resolve-canon.py --row <file> <gate> <verdict> <detail> [commit] [md5]")
+            sys.exit(2)
+        print(ledger_row(a[1], a[2], a[3], a[4],
+                         a[5] if len(a) > 5 else "", a[6] if len(a) > 6 else ""))
+        sys.exi
