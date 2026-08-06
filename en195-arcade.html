@@ -970,4 +970,37 @@ document.getElementById('vmForm').addEventListener('submit', function(ev){
     on_time: onTime
   };
 
-  var btn = document.getElementById('vmSubmit
+  var btn = document.getElementById('vmSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Feeding the machine…';
+
+  fetch(SB_URL + '/rest/v1/workshop_tokens', {
+    method: 'POST',
+    headers: {
+      apikey: SB_ANON,
+      Authorization: 'Bearer ' + SB_ANON,
+      'Content-Type': 'application/json',
+      Prefer: 'return=minimal'
+    },
+    body: JSON.stringify(payload)
+  }).then(function(r){
+    if(!r.ok){ throw new Error('insert failed'); }
+    setCoins(coins + 1, w.title + ' token fed (' + groupName + (onTime ? ', on time)' : ', late)'));
+    ding();
+    feed.textContent = 'Token accepted. One coin minted. ' + (onTime ? 'You are on time.' : 'Marked late. Still counted, still yours.');
+    say(feed.textContent);
+    document.getElementById('vmForm').reset();
+    vmLoadBoard(vmCurrent);
+  }).catch(function(){
+    feed.textContent = 'The machine could not reach the server. Nothing was lost. Copy your text somewhere safe and try again in a moment.';
+    say(feed.textContent);
+  }).finally(function(){
+    btn.disabled = false;
+    btn.textContent = 'Feed the machine';
+  });
+});
+
+})();
+</script>
+</body>
+</html>
