@@ -385,4 +385,209 @@ def ledger_row(fname, gate, verdict, detail, commit="", hexmd5=""):
 def resolve(name, probe_netlify=True):
     """Check EVERY lane. Never short-circuit - 'found in one' is not 'checked all'."""
     found = {}
-    for fn, lane in ((in_repo, "repo"), (on_shelf, "shelf")
+    for fn, lane in ((in_repo, "repo"), (on_shelf, "shelf")):
+        r = fn(name)
+        if r:
+            found[lane] = r
+    if probe_netlify:
+        r = in_netlify(name)
+        if r:
+            found["netlify"] = r
+
+    if not found:
+        return {"verdict": "NOT_FOUND", "found_in": [], "name": name,
+                "note": "Absent from repo and shelf. Netlify may be UNREACHABLE from this "
+                        "container (egress block) - that is NOT proof of absence. Check by hand."}
+
+    canon_lane = next((l for l in PRECEDENCE if l in found), None)
+    canon = found[canon_lane]
+
+    out = {
+        "name":        name,
+        "found_in":    sorted(found.keys()),
+        "canon_lane":  canon_lane,
+        "address":     canon["address"],
+        "bytes":       canon["bytes"],
+        "md5":         canon["md5"],
+        "single_lane": len(found) == 1,
+        "fossils":     [],
+        "verdict":     "OK",
+    }
+
+    for lane, r in found.items():
+        if lane == canon_lane:
+            continue
+        if r["md5"] != canon["md5"]:
+            delta = r["bytes"] - canon["bytes"]
+            flag = ""
+            # THE WARRIORS RULE: the repo held a 2,277 B empty stub while the shelf held the
+            # real 19,577 B game. NEVER auto-default to the smaller file. If a non-canon lane
+            # is substantially BIGGER, canon may be the stub - stop and diff.
+            if delta > 2000:
+                flag = ("  *** LARGER THAN CANON - canon may be a STUB. DIFF BEFORE ANYTHING. "
+                        "(warriors-fantasy-arcade: repo had a 2,277 B stub, shelf had the real "
+                        "19,577 B game) ***")
+                out["verdict"] = "CHECK_CANON"
+            out["fossils"].append(f"{lane}: {r['bytes']} B ({delta:+d}) md5 {r['md5'][:8]}{flag}")
+
+    if out["single_lane"] and out["verdict"] == "OK":
+        out["verdict"] = "SINGLE_LANE"
+        out["note"] = ("NO BACKUP. One account change and this is gone. "
+                        "(Dad Energy lived only on Netlify for weeks - unaudited, unswept, "
+                       "and shipping a broken offline floor nobody could see.)")
+    return out
+
+
+# ---------------------------------------------------------------------------
+# RESOLVE_LANES - the Babel-wide version. AGREE / DIVERGED / STRANDED / BLIND.
+# ---------------------------------------------------------------------------
+def resolve_lanes(name, evidence=None, status=None, probe_netlify=False):
+    evidence = evidence or {}
+    status = status or lane_status(evidence)
+
+    holdings = {}   # lane -> {"bytes":, "md5":, "address":}
+
+    if status["repo"]["live"]:
+        r = in_repo(name)
+        if r:
+            holdings["repo"] = {"bytes": r["bytes"], "md5": r["md5"], "address": r["address"]}
+    if status["shelf"]["live"]:
+        r = on_shelf(name)
+        if r:
+            holdings["shelf"] = {"bytes": r["bytes"], "md5": r["md5"], "address": r["address"]}
+    if probe_netlify and status["netlify"]["live"]:
+        r = in_netlify(name)
+        if r:
+            holdings["netlify"] = {"bytes": r["bytes"], "md5": r["md5"], "address": r["address"]}
+
+    for lane, obs in (evidence.get("observations", {}).get(name, {}) or {}).items():
+        holdings[lane] = {"bytes": obs.get("bytes"), "md5": obs.get("md5"),
+                          "address": obs.get("address", "(from evidence)")}
+
+    blind = [k for k in BABEL_KEYS if not status[k]["live"]]
+
+    hashes = {h["md5"] for h in holdings.values() if h.get("md5")}
+
+    # THE COMPARISON FLOOR - added 2026-08-06, after the first real run.
+    #
+    # STRANDED means "only one lane holds it, so there is no backup." That claim requires
+    # at least TWO lanes you could actually have looked in. Run this from a clone with the
+    # shelf unmounted and egress blocked, and every one of 533 repo files comes back
+    # STRANDED. All 533 lines are arithmetically true and every one of them is noise: the
+    # finding is not about the files, it is about the eight blind lanes already printed at
+    # the top of the report. A check that fires on everything has told you nothing.
+    #
+    # Same for AGREE. One lane cannot agree with itself. "hashes are consistent" across a
+    # set of size one is a pass the run did not earn, and printing it as clean is the
+    # machine claiming ground it never walked.
+    checkable = sorted({k for k in BABEL_KEYS if status[k]["live"]} |
+                       set(evidence.get("observations", {}).get(name, {}) or {}))
+
+    if not holdings:
+        # THE ABSENCE RULE. A zero-result search is not evidence of absence. If ANY lane is
+        # blind, the honest verdict is BLIND, not ABSENT. The studio has declared a finished
+        # game lost this exact way.
+        verdict = "BLIND" if blind else "ABSENT"
+    elif len(checkable) < 2:
+        # Held, but by the only lane we could see. Not stranded - unwitnessed.
+        verdict = "UNWITNESSED"
+    elif len(holdings) == 1:
+        verdict = "STRANDED"
+    elif len(hashes) <= 1:
+        verdict = "AGREE"
+    else:
+        verdict = "DIVERGED"
+
+    canon_lane = next((l for l in PRECEDENCE if l in holdings), None)
+    if canon_lane is None and holdings:
+        canon_lane = sorted(holdings)[0]
+
+    return {
+        "name": name,
+        "verdict": verdict,
+        "checkable_lanes": checkable,
+        "held_by": sorted(holdings.keys()),
+        "blind_lanes": blind,
+        "canon_lane": canon_lane,
+        "md5": holdings[canon_lane]["md5"] if canon_lane else None,
+        "bytes": holdings[canon_lane]["bytes"] if canon_lane else None,
+        "holdings": holdings,
+    }
+
+
+def check(name, local_path):
+    """THE GATE. Is the file in my hand canon? If not: HALT."""
+    r = resolve(name)
+    if r["verdict"] == "NOT_FOUND":
+        print(f"HALT  {name}: not found in any checked lane.")
+        print(f"      {r['note']}")
+        return 2
+
+    local = open(local_path, "rb").read()
+    lmd5, lb = md5(local), len(local)
+
+    print(f"== resolve_canon: {name} ==")
+    print(f"   canon  : {r['canon_lane']:8} {r['bytes']:>9,} B  {r['md5']}")
+    print(f"   local  : {'(yours)':8} {lb:>9,} B  {lmd5}")
+
+    rows = read_ledger()
+    for kind, msg in ledger_check(rows, name, r["md5"]):
+        print(f"   LEDGER {kind}: {msg}")
+
+    if lmd5 == r["md5"]:
+        print("   MATCH - you are holding canon. Proceed.")
+        return 0
+
+    delta = lb - r["bytes"]
+    print()
+    print("   *** HALT - YOU ARE NOT HOLDING CANON ***")
+    print(f"   Your copy differs from {r['canon_lane']} by {delta:+,} bytes.")
+    if delta < 0:
+        print()
+        print("   Your copy is SMALLER. This is the exact shape of the v34-over-v43 clobber:")
+        print("   two hours of good work applied to a nine-version-stale file, then pushed")
+        print("   over canon. DIFF BEFORE YOU DO ANYTHING ELSE.")
+    print(f"   Canon: {r['address']}")
+    return 1
+
+
+def audit():
+    """Every file, every lane. Where is the studio drifting RIGHT NOW?"""
+    # BUG FOUND 2026-07-11: this used the GitHub CONTENTS API, which is rate-limited for
+    # unauthenticated callers. When it 403'd, the repo file list came back EMPTY and every
+    # shelf file was reported as an orphan - 111 instead of 48. An audit that lies is the
+    # exact disease this whole day was spent curing. GIT IS AUTHORITATIVE. Use it.
+    repo_files = set()
+    try:
+        # BUG FOUND 2026-07-13: this ls-tree was NOT recursive (-r missing). It read only the
+        # repo ROOT, so every file living in /studio, /archive, /writerly-moves, /rescued was
+        # invisible - 267 real files seen as 85, and 47 files that ARE deployed were reported
+        # as shelf-only ORPHANS. Same disease as the Contents-API bug it replaced: an audit
+        # that lies, just quieter. A file has a home if it lives ANYWHERE in the tree; match
+        # on BASENAME, not on root-level path.
+        out_ls = subprocess.run(["git", "ls-tree", "-r", "--name-only", "origin/main"],
+                                capture_output=True, text=True, timeout=30)
+        repo_paths = {l.strip() for l in out_ls.stdout.splitlines() if l.strip()}
+        repo_files = {os.path.basename(p) for p in repo_paths}
+    except Exception:
+        pass
+    if not repo_files:                      # git unavailable: FAIL LOUD, never guess
+        print("HALT - cannot read the repo file list (no git). An audit without canon is a")
+        print("       list of lies. Run this from a clone of the repo.")
+        return 2
+
+    names = set(repo_files)
+    if os.path.isdir(SHELF):
+        names |= set(os.listdir(SHELF))
+
+    orphans, drift, singles, stubs = [], [], [], []
+    for n in sorted(names):
+        if n.startswith("."):
+            continue
+        if n not in repo_files and not os.path.exists(os.path.join(SHELF, n)):
+            continue
+        r = resolve(n, probe_netlify=False)
+        if r["verdict"] == "NOT_FOUND":
+            continue
+        if r["found_in"] == ["shelf"]:
+            orphans.append(f"  {n:<44} {r['bytes']:>9,} B   SHELF-ONLY - no home i
