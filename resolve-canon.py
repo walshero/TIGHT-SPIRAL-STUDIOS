@@ -174,4 +174,215 @@ def _build_tree():
     /writerly-moves 404'd, so in_repo said 'absent' and audit() called it an ORPHAN.
     47 deployed files were listed as homeless. It also asked the network for something
     the clone already has on disk, and the raw CDN caches ~5min and will lie anyway.
-    GIT IS AUTHORITATIVE, AND IT IS RECURSIVE. Read the tree, once, and match
+    GIT IS AUTHORITATIVE, AND IT IS RECURSIVE. Read the tree, once, and match basename."""
+    global _TREE
+    if _TREE:
+        return _TREE
+    out = subprocess.run(["git", "ls-tree", "-r", "--name-only", "origin/main"],
+                         capture_output=True, text=True, timeout=30)
+    for p in out.stdout.splitlines():
+        p = p.strip()
+        if p:
+            _TREE.setdefault(os.path.basename(p), p)   # first wins; root paths sort first
+    return _TREE
+
+
+def git_available():
+    try:
+        out = subprocess.run(["git", "ls-tree", "-r", "--name-only", "origin/main"],
+                             capture_output=True, text=True, timeout=30)
+        return bool(out.stdout.strip())
+    except Exception:
+        return False
+
+
+def in_repo(name):
+    path = _build_tree().get(name)
+    if not path:
+        return None
+    blob = subprocess.run(["git", "show", f"origin/main:{path}"],
+                          capture_output=True, timeout=30).stdout
+    if not blob:
+        return None
+    return {"lane": "repo", "bytes": len(blob), "md5": md5(blob),
+            "address": f"{REPO_RAW}/{path}", "blob": blob}
+
+
+def in_netlify(name):
+    # NOTE: the container's egress blocks *.netlify.app. This will fail from inside the
+    # sandbox and succeed from a machine with open egress. A failure here is NOT proof of
+    # absence - that is exactly how a finished game (Dad Energy) got declared lost.
+    for path in (f"{NETLIFY}/{name}", NETLIFY + "/"):
+        b = fetch(path, timeout=10)
+        if b and len(b) > 200:
+            return {"lane": "netlify", "bytes": len(b), "md5": md5(b),
+                    "address": path, "blob": b, "unreliable": True}
+    return None
+
+
+def on_shelf(name):
+    p = os.path.join(SHELF, name)
+    if not os.path.exists(p):
+        return None
+    b = open(p, "rb").read()
+    return {"lane": "shelf", "bytes": len(b), "md5": md5(b), "address": p, "blob": b}
+
+
+# ---------------------------------------------------------------------------
+# LANE ROLL CALL
+#
+# BUG FOUND 2026-08-06 (the third lie, and the quietest): on_shelf() returns None both
+# when the file is not on the shelf AND when the shelf is not mounted. Run this script
+# from a machine without /mnt/project and EVERY file comes back repo-only, which the old
+# code then labelled SINGLE_LANE / no backup. Hundreds of false alarms, or worse, a real
+# stranded file buried in them. "Not mounted" and "not there" are different facts and
+# must never share a return value.
+# ---------------------------------------------------------------------------
+def lane_status(evidence=None):
+    evidence = evidence or {}
+    seen_in_evidence = set()
+    for obs in evidence.get("observations", {}).values():
+        seen_in_evidence |= set(obs.keys())
+
+    status = {}
+    for lane in BABEL:
+        k, probe = lane["key"], lane["probe"]
+        if probe == "git":
+            live = git_available()
+            why = "git ls-tree origin/main readable" if live else "no git clone here"
+        elif probe == "fs":
+            live = os.path.isdir(SHELF)
+            why = f"{SHELF} mounted" if live else f"{SHELF} NOT MOUNTED"
+        elif probe == "http":
+            live = fetch(NETLIFY + "/", timeout=8) is not None
+            why = "egress open" if live else "egress blocked or host down (NOT absence)"
+        elif probe == "evidence":
+            live = k in seen_in_evidence
+            why = "supplied by evidence file" if live else "no evidence supplied; agent-only lane"
+        else:
+            live = False
+            why = "no machine path; a human must look"
+        status[k] = {"live": live, "why": why, "role": lane["role"], "note": lane["note"]}
+    return status
+
+
+def load_evidence(path):
+    if not path:
+        return {}
+    if not os.path.exists(path):
+        print(f"HALT - evidence file not found: {path}")
+        print("       Running without it would report reachable lanes as BLIND. Fix the path.")
+        sys.exit(2)
+    with open(path) as f:
+        ev = json.load(f)
+    if "observations" not in ev:
+        print(f"HALT - evidence file has no 'observations' key: {path}")
+        sys.exit(2)
+    return ev
+
+
+# ---------------------------------------------------------------------------
+# THE FUNES LEDGER
+#
+# The ledger is canon for gate STATE. State = the LAST stamped line for a (file, gate).
+# Read it from git, not from the working tree: a dirty local ledger is exactly the kind of
+# uncommitted edit that vanished on 2026-08-05.
+# ---------------------------------------------------------------------------
+def read_ledger():
+    blob = None
+    path = _build_tree().get(LEDGER)
+    if path:
+        blob = subprocess.run(["git", "show", f"origin/main:{path}"],
+                              capture_output=True, timeout=30).stdout
+    if not blob and os.path.exists(LEDGER):
+        blob = open(LEDGER, "rb").read()
+    if not blob:
+        return None
+    rows = []
+    for line in blob.decode("utf-8", "replace").splitlines():
+        line = line.strip()
+        if not line.startswith("|"):
+            continue
+        cells = [c.strip() for c in line.strip("|").split("|")]
+        if len(cells) < 7:
+            continue
+        if cells[0].startswith("---") or cells[0].lower().startswith("stamp"):
+            continue
+        rows.append({"stamp": cells[0], "file": cells[1], "gate": cells[2],
+                     "verdict": cells[3], "detail": cells[4],
+                     "commit": cells[5], "md5": cells[6]})
+    return rows
+
+
+def ledger_state(rows, name):
+    """Last stamped line per gate for this file. Order in the file is the order of truth;
+    the ledger is append-only, so later lines win."""
+    state = {}
+    for r in rows:
+        if r["file"] == name:
+            state[r["gate"]] = r
+    return state
+
+
+HEX32 = re.compile(r"^[0-9a-f]{32}$")
+
+# The ledger cannot stamp its own current hash. Writing the row changes the bytes the row
+# would describe. Any self-referential file is structurally guaranteed to fail STALE-STAMP,
+# which means the finding carries no information. Found 2026-08-06 on the first real run:
+# the ledger was the loudest STALE-STAMP in the report and the only meaningless one.
+SELF_REFERENTIAL = {LEDGER}
+
+
+def ledger_check(rows, name, current_md5):
+    """Does the RECORD still describe these bytes? This is the half that was missing.
+
+    UNLEDGERED     - the file exists and no gate has ever stamped it.
+    STALE-STAMP    - the last stamp names a different md5. The verdict on record, whatever
+                     it says, describes bytes that are not the bytes now shipping.
+    STANDING-HALT  - the last verdict for some gate is HALT and has never been cleared.
+    UNVERIFIABLE   - the md5 column holds prose instead of a hash. A stamp that cannot be
+                     checked is not a weaker stamp, it is a missing one. Found 2026-08-06:
+                     a row shipped with 'see-next' in the hash column and no check caught
+                     it, because every check compared strings and 'see-next' is a string.
+    """
+    findings = []
+    if rows is None:
+        return [("BLIND", "ledger unreadable; cannot check the record")]
+    state = ledger_state(rows, name)
+    if not state:
+        return [("UNLEDGERED", "no gate has ever stamped this file")]
+    for gate, r in sorted(state.items()):
+        if r["verdict"].upper().startswith("HALT"):
+            findings.append(("STANDING-HALT",
+                             f"{gate} last said HALT ({r['stamp']}): {r['detail'][:90]}"))
+        stamped = r["md5"]
+        if stamped and not HEX32.match(stamped):
+            findings.append(("UNVERIFIABLE",
+                             f"{gate} row at {r['stamp']} carries '{stamped[:24]}' in the md5 "
+                             f"column, not a hash. This stamp can never be checked. Repair it."))
+            continue
+        if name in SELF_REFERENTIAL:
+            continue
+        if current_md5 and stamped and stamped != current_md5:
+            findings.append(("STALE-STAMP",
+                             f"{gate} stamped md5 {stamped[:8]} at {r['stamp']}; "
+                             f"live bytes are md5 {current_md5[:8]}. "
+                             f"The verdict on record does not describe the shipped file."))
+    return findings
+
+
+def ledger_row(fname, gate, verdict, detail, commit="", hexmd5=""):
+    """Emit a well-formed row. Pipes in the detail would silently corrupt the table."""
+    import datetime
+    stamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%MZ")
+    clean = detail.replace("|", "/")
+    return f"| {stamp} | {fname} | {gate} | {verdict} | {clean} | {commit} | {hexmd5} |"
+
+
+# ---------------------------------------------------------------------------
+# RESOLVE - unchanged behaviour, preserved for every existing caller
+# ---------------------------------------------------------------------------
+def resolve(name, probe_netlify=True):
+    """Check EVERY lane. Never short-circuit - 'found in one' is not 'checked all'."""
+    found = {}
+    for fn, lane in ((in_repo, "repo"), (on_shelf, "shelf")
