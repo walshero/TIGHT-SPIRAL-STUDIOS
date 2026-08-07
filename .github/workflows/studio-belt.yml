@@ -1,0 +1,21 @@
+name: Studio Belt
+
+# THE HUB RUNS THE BELT TOO. Added 2026-08-07.
+#
+# Until today it did not. belt.yml is `on: workflow_call` only, and the hub had no
+# stub calling it — so the belt ran on the three spokes and nowhere else. Between
+# them those spokes hold THREE html surfaces. The hub holds 131, including every
+# game. A belt that moves founder decisions into "all builds" was reaching about
+# two percent of the corpus, and no one could see that from inside any one repo.
+#
+# Same stub the spokes use, pointed at the hub's own reusable belt. One canon
+# writes, everyone reads — the hub included.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  belt:
+    uses: walshero/TIGHT-SPIRAL-STUDIOS/.github/workflows/belt.yml@main

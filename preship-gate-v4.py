@@ -61,8 +61,54 @@ def load_baseline():
     except Exception:
         return {}
 
+def key_for(path, repo):
+    """Baseline key = <repo>/<path relative to the repo root>.
+
+    Was the bare basename until 2026-08-07, when this gate went onto the studio
+    belt and started running against all five repos. Three of them ship an
+    index.html; keyed by basename they collide into one entry and the last one
+    written silently grants or denies the other two. Legacy basename entries are
+    still honoured on read (see known_for) so the existing baseline keeps working."""
+    ap  = os.path.abspath(path)
+    rel = os.path.relpath(ap, os.getcwd())
+    if rel.startswith(os.pardir):
+        rel = os.path.basename(ap)
+    return repo + '/' + rel.replace(os.sep, '/')
+
+def known_for(base, path, repo):
+    """Codes this file is allowed to carry. Repo-qualified key first, then the
+    legacy bare-basename key, so a baseline written before 2026-08-07 still counts."""
+    base = base or {}
+    return set(base.get(key_for(path, repo), [])) | set(base.get(os.path.basename(path), []))
+
 def code_of(halt):
     return halt.split()[0]
+
+LAST_CODES = []   # codes tripped by the most recent run(); --init reads this
+
+def init(paths, repo, merge=None):
+    """Freeze today's debt. This is the ONLY time the baseline may grow.
+
+    Re-seeded 2026-08-07: the previous baseline was written before this gate grew
+    its E1-CSS tooth, so 109 of 131 surfaces read as REGRESSIONS the moment the
+    gate went on the belt. A baseline that predates the gate's teeth is not a
+    baseline, it is a red wall."""
+    import io, contextlib
+    debt = dict(merge or {})
+    for p in paths:
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            run(p, False, None, repo)
+        if LAST_CODES:
+            debt[key_for(p, repo)] = list(LAST_CODES)
+    with open(BASELINE, 'w') as f:
+        json.dump(dict(sorted(debt.items())), f, indent=1)
+        f.write('\n')
+    tot = sum(len(v) for v in debt.values())
+    print('BASELINE WRITTEN - ' + str(len(debt)) + ' file(s) carrying ' +
+          str(tot) + ' known halts.')
+    print('These do not block. Everything else does. The ratchet is armed.')
+    return 0
 
 AA_BODY, AAA = 4.5, 7.0
 FONT_FLOOR_ABS, FONT_FLOOR_BODY = 18.0, 20.0
@@ -262,7 +308,7 @@ def floors(html, css, modes):
     return halts + ih, iw
 
 # ---------- run ----------
-def run(path, ratchet=False, base=None):
+def run(path, ratchet=False, base=None, repo=''):
     html = open(path, encoding='utf-8', errors='replace').read()
     css  = ''.join(re.findall(r'<style[^>]*>(.*?)</style>', html, re.S))
     modes = token_blocks(css)
@@ -304,10 +350,14 @@ def run(path, ratchet=False, base=None):
 
     fh, fw = floors(html, css, modes)
     halts += fh; warns += fw
+    # every code this file currently trips, before the ratchet forgives any of it.
+    # --init freezes exactly this set; nothing else may write the baseline.
+    global LAST_CODES
+    LAST_CODES = sorted({code_of(h) for h in halts})
 
     debt = []
     if ratchet:
-        known = set((base or {}).get(os.path.basename(path), []))
+        known = known_for(base, path, repo)
         keep = []
         for h in halts:
             if code_of(h) in known:
@@ -376,10 +426,16 @@ if __name__ == '__main__':
         sys.exit(2)
     self_test()
     args = [a for a in sys.argv[1:] if not a.startswith('--')]
+    repo = next((a.split('=', 1)[1] for a in sys.argv[1:] if a.startswith('--repo=')),
+                os.path.basename(os.getcwd()))
+    if '--init' in sys.argv:
+        # --merge keeps entries already frozen for OTHER repos; the belt seeds one
+        # repo at a time and a plain rewrite would drop the others' debt.
+        sys.exit(init(args, repo, load_baseline() if '--merge' in sys.argv else None))
     ratchet = '--ratchet' in sys.argv
     base = load_baseline() if ratchet else None
     if ratchet:
         tot = sum(len(v) for v in base.values())
         print('  RATCHET on: ' + str(len(base)) + ' files carrying ' + str(tot) +
               ' known halts. New halts and new files are held to the full floor.')
-    sys.exit(max(run(p, ratchet, base) for p in args))
+    sys.exit(max(run(p, ratchet, base, repo) for p in args))
