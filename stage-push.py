@@ -209,4 +209,10 @@ if __name__ == "__main__":
         sys.exit(after(a[1], a[2], a[3]))
 
     if a[0] == "landed":
-        if le
+        if len(a) < 2:
+            print("usage: stage-push.py landed <stage.json> [branch]")
+            sys.exit(2)
+        sys.exit(landed(a[1], a[2] if len(a) > 2 else "origin/main"))
+
+    print(f"unknown command: {a[0]}")
+    sys.exit(2)
