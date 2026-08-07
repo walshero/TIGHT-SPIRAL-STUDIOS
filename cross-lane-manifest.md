@@ -12,8 +12,8 @@ os-block-cross-lane-mount.md §12. v1 — 2026-07-10.*
 | doc | canonical ID / path | bytes | version | owner-lane | RW/RO by lane |
 |-----|--------------------|-------|---------|-----------|--------------|
 | Confluence trunk | **LATEST = Drive** `1ASstFxZrdobjUpPVK6uFMCfDYLN3yQFA` `confluence-TRUNK-v48-2026-07-14.html` (631,929 B) · repo `confluence-TRUNK.html` = **STALE v43** (598,114 B, md5 `8dcf9903`) · Drive `1034TofD…` = pointer | **v48** (Drive) · repo lags at v43 | Confluence RW | TSP: RO · **DO NOT edit repo copy — it is not canon** |
-| OS canon | `tight-spiral-studio-os.md` · **repo** (canon, landed 2026-07-12) | 168,264 (body 166,146) | 2026-07-05 · **INCOMPLETE — §12/§14 unmerged** | TSP RW | Confluence: RO (§6.4 only) · others: RO |
-| OS blocks (unmerged law) | `os-block-*.md` × 9 · repo | — | 07-04 → 07-11 | TSP RW | all: RO — **these GOVERN; the OS text does not contain them** |
+| OS canon | `tight-spiral-studio-os.md` · **repo** (canon, landed 2026-07-12) | grown to §16, reconciled 2026-08-08 | 2026-07-05 base · **all 13 os-blocks merged, see "CLOSED — OS merge" below** | TSP RW | Confluence: RO (§6.4 only) · others: RO |
+| OS blocks (folded into OS §15) | `os-block-*.md` × 13 · repo | — | 07-04 → 08-07 | TSP RW | all: RO — content now lives in the OS text; files stay as the per-topic origin record |
 | Visual Constitution | `tight-spiral-visual-constitution.md` | 10,141 | §13, 2026-07-04 | TSP RW | Confluence: RO · Leeder: RO · Capstone: — |
 | Kernel Track | OS `tight-spiral-studio-os.md §6.4` | — | 2026-07-02 | TSP RW | Confluence: RO · Capstone: RO |
 | Pipeline | `tight-spiral-pipeline.md` | 8,320 | 2026-07-02 | TSP RW | all: RO |
@@ -63,23 +63,24 @@ in Drive.**
 
 ---
 
-## OPEN FOUNDER GATE — OS merge (opened 2026-07-12)
+## CLOSED — OS merge (opened 2026-07-12, reconciled 2026-08-08)
 
 The OS was **404 in the repo** until 2026-07-12 — the one doc everything defers to had
-no canonical lane. It is now landed, **stale and unmerged**, with a warning header.
+no canonical lane. Founder's call, 2026-08-08: "Reconcile." All 13 `os-block-*.md`
+files are now merged into `tight-spiral-studio-os.md` §15, verified against the text
+line by line, not assumed. Most (9 of 13) turned out to already be merged by an
+earlier session — this table and the OS's own header just never caught up. Real
+findings, both fixed:
 
-Nine `os-block-*.md` files carry seven days of law that is **not in the OS text**.
-Three claim section numbers the OS already uses:
-
-| block | claims | OS already has |
+| block | claimed | what was actually true |
 |---|---|---|
-| `os-block-preship-gate.md` | §14 | §14 "Lane truth" |
-| `os-block-truth-ticks.md` | §11 | §11 "Standing working rules" |
-| `os-block-cross-lane-mount.md` + `os-block-pointer-memory.md` | §12 (both) | no §12 (jumps 11→13) |
+| `os-block-cross-lane-mount.md` + `os-block-pointer-memory.md` | both §12 | cross-lane-mount cleanly merged as §12.1-12.8; pointer-memory's content WAS merged too, but mislabeled "### 12.7", colliding with cross-lane-mount's real §12.7. Renumbered to §12.9. |
+| `os-block-preship-gate.md` | §14 | merged under §15 (not top-level §14, avoiding the OS's real, unrelated "## 14. Lane truth") - but its internal subheadings still read "§14.1"-"§14.6", confusable with the real §14 a few thousand lines away. Renumbered to 15.preship-gate.1-6. |
+| `os-block-truth-ticks.md` | §11 | merged cleanly as `### 15.truth-ticks`, no internal §11 labels. This collision never actually existed in the merged text. |
 
-**A mechanical merge overwrites live sections. Founder call owed.** Book as a build
-session. Do not delegate the section numbering — the blocks cross-reference each other
-by §, so a wrong guess corrupts silently.
+The 4 newer blocks (bodyguards, fidelity-gate, aleph-fleet, aleph-diagnose-repair) were
+genuinely unmerged as of 2026-08-07 and are now folded in alongside the rest, all under
+`### 15.xxx`.
 
 ---
 
