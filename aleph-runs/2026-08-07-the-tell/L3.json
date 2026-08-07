@@ -1,0 +1,69 @@
+{
+  "lens": "L3",
+  "surface": "the-tell.html",
+  "passed": [
+    "READABILITY-HIGH",
+    "DISCLOSURE-DUMP",
+    "H-OVERFLOW",
+    "JS-ERROR",
+    "EMOJI",
+    "NAV-MISSING",
+    "DEAD-CONTROL"
+  ],
+  "findings": [
+    {
+      "key": "VALUE-PROP-BURIED",
+      "severity": "major",
+      "anchor": "#scene (screen 1) at 390x844 — .se-stamp line 210, .artwrap line 239, h1#sceneh line 255, .foot line 315",
+      "problem": "At 390px nothing in the first screen says what this is or why it is worth a student's time. The name and category — 'The Tell, an async workshop game for EN195' — exist only in .foot, which renders at y=868, twenty-four pixels below the 844 fold. Above the fold a stranger gets, in order: Home/Studio Eyes chrome, a build stamp ('Last updated August 7, 2026 · v16 75e938c') at y=74, a 209px SVG, the kicker 'The reading room', and only then the h1 at y=371 — 44% of the first viewport spent before the headline. The h1 'Somebody read this before you.' is a hook, not a proposition: it refers to 'the piece' before any piece is introduced and never says this is a game, that it is for a writing workshop, or what you get. The actual payoff sentence — 'That's a workshop comment set — a real one, with evidence' — is on #close, the LAST screen, so the reason to spend the time is disclosed only after it has been spent.",
+      "fix": "Put the category and payoff above the fold on #scene. Concretely: move the build stamp (.se-stamp, line 210) below the fold or into .foot to reclaim ~50px, and add one line under h1#sceneh in the founder's existing words drawn from .foot — 'An async workshop game for EN195. You leave a workshop comment set with evidence on it.' That phrase already exists in the file (lines 316 and 301); it just needs to be at the top instead of the bottom.",
+      "framework": "NN/g above-the-fold and value proposition (Nielsen Norman Group); Nielsen heuristic #2, Match between system and the real world",
+      "evidence": "Measured in headless Chromium at 390x844: artwrap top=146 h=209; h1#sceneh top=371; #toLens top=749; .foot top=831; rendered Range for the phrase 'an async workshop game for EN195' top=868, bottom=883 — below the 844 fold. Readability of the visible prose is not the problem: Flesch-Kincaid grade 4.87 across all visible text (640 words), 5.15 for interface prose alone (517 words), Flesch Reading Ease 82.9, Gunning Fog 7.5 — comfortably at or under an EN195 community-college composition audience."
+    },
+    {
+      "key": "SOURCE-UNNAMED",
+      "severity": "major",
+      "anchor": ".read.prior .rl 'The last reader' (renderFlip, line 524) sourced from the PRESET object, lines 411-422; asserted on entry at h1#sceneh line 255 and the paragraph at line 256",
+      "problem": "The surface asserts a person. Screen 1 says 'Somebody read this before you. They tagged a moment in the piece', and the flip panel labels the opposing read 'The last reader' and quotes it in first person ('I lose whose eyes I am in', 'I am not sure what is at risk in this beat'). No such reader exists — the three reads per lens are hard-coded studio text in the PRESET object, and the HTML comment on line 21 says so ('preset prior-reader tags baked in') while the rendered page never does. The footer is scrupulous about provenance everywhere else: it names Matt's Workshop-Moves handout, Filament's 8+8 cut, and that 'The Spare Key' is original studio text. The one claim it does not source is the one the student is asked to weigh their own evidence against — and the verdict text explicitly asks them to ('is your evidence as strong as theirs? Whose points harder at the words?', line 517).",
+      "fix": "Name the source where it renders. In renderFlip (line 524), change the .rl text from 'The last reader' to 'The last reader — a studio-written sample read', or add a one-line .rl subtitle: 'Sample read, Tight Spiral, from Matt's Workshop Moves doc.' Either matches the attribution pattern .foot already uses on lines 317-318, and costs nothing in the fiction of the loop.",
+      "framework": "Tight Spiral studio floor, index.html lines 853-854: 'Where a build asserts a fact, it says where the fact came from and when it was checked. A number with no provenance is a rumour.'",
+      "evidence": "PRESET literal at lines 411-422 supplies all six 'last reader' calls and whys; renderFlip line 524 prints preset.why under the label 'The last reader'. Rendered page text searched at 390x844 across both lenses and all six spots: the strings 'preset', 'sample', 'studio-written' and 'example' never appear next to that read."
+    },
+    {
+      "key": "LABEL-AMBIGUOUS",
+      "severity": "major",
+      "anchor": "button#switchLens 'Read it the other way', line 292 in .controls on #board; handler line 435 calling startLens(), which resets state={} at line 428",
+      "problem": "This control silently destroys committed work and its label does not say so. 'Read it the other way' sits next to 'See your reads →' in the same .controls row on the board screen, so it reads as a sibling navigation option. Pressing it calls startLens(), which sets state={} — every spot the player has already called, committed and flipped is wiped, with no confirmation dialog, no warning, and no way back. Verified: after committing two of three reads the progress line said 'Tagged spots read: 2 of 3'; one tap on #switchLens produced 'Tagged spots read: 0 of 3', and switching back to the original lens still read 0 of 3. Nothing in the label predicts 'discard the reads you have written'.",
+      "fix": "Either make the label predict the outcome — 'Start over in the other lens' — or make the control non-destructive by keeping per-lens state (state = {writerly:{}, workshop:{}} keyed by lens instead of one flat object reset in startLens). If state is preserved, the existing label is correct as written. If any committed read exists, gate the reset behind a confirm step in the panel rather than firing on the first tap.",
+      "framework": "NN/g label prediction; Nielsen heuristic #5, Error Prevention; WCAG 2.2 SC 3.3.4 Error Prevention",
+      "evidence": "Scripted at 390x844: two spots committed via #commitCall, then click('#switchLens'). #progress before = 'Tagged spots read: 2 of 3. Tap a highlighted spot to call it.' After = 'Tagged spots read: 0 of 3.' No dialog fired. Switching back to writerly also returned 0 of 3."
+    },
+    {
+      "key": "TEXT-WALL",
+      "severity": "major",
+      "anchor": "#scene, the three prose blocks at lines 256-258, against the single .artwrap SVG at lines 239-254",
+      "problem": "The engine of this game — face-down tag, you commit a call plus your evidence, then flip to two reads side by side — is explained entirely in 100 words of prose on the entry screen while the one picture on that screen shows a static card lying on a page. The SVG depicts the setup, not the loop; the sequence and the payoff (two defensible reads next to each other, which is the whole pedagogical point and the thing the founder's handout is about) are carried by sentences the reader must hold in memory until screen 3. At 390px this reads as three stacked paragraphs from y=406 to y=748, above a call to action, with no diagram and no worked example.",
+      "fix": "Replace or supplement the .artwrap SVG on #scene with a three-beat cut-paper strip using the shapes already in this file: (1) the face-down card SVG already defined as faceDownSVG at line 438, (2) a card turned face-up beside a scrap of handwriting, (3) two cards side by side, one .accent2-bordered and one .gold-br-bordered, exactly matching the .read.you / .read.prior treatment on lines 171-172 so the picture pre-teaches the layout the player will meet. Then cut the paragraph at line 257 ('Your job: read, tap a tagged spot...') to the caption the strip needs.",
+      "framework": "Tight Spiral canon: prose where an image should carry the idea is a floor, not taste; NN/g 'How Users Read on the Web' (Nielsen) — users scan, they do not read instructional prose before acting",
+      "evidence": "Screen 1 at 390x844: 100 words in 10 sentences of body prose (measured), occupying y=406 to y=748; the single SVG occupies y=146 to y=355 (209px, 24.8% of the 844px viewport) and renders one card on one page. Flesch-Kincaid of that prose is 3.06 — the sentences are not hard, there are simply too many of them doing a diagram's job."
+    },
+    {
+      "key": "SOURCE-UNNAMED",
+      "severity": "minor",
+      "anchor": "p.se-stamp, line 210: 'Last updated…' + '· v16 75e938c', with the date computed by the inline script at line 211",
+      "problem": "The build stamp is the first factual claim on the page and neither half of it names a checkable source. The commit hash 75e938c resolves to no object in this repository, and the identical hash is stamped verbatim across more than twenty pages in this repo carrying version labels from v10 through v17 — so it identifies no particular build and cannot be the commit that produced v16 of this file. The date is not a recorded check date either: line 211 derives it from document.lastModified, which reports the file's transfer timestamp, so a byte-level redeploy that changes nothing substantive re-dates the page, and on any host that omits a Last-Modified header the browser substitutes the current time and the page claims it was updated today, every day.",
+      "fix": "Either make the stamp true or drop it. Truthful version: write the real short SHA of the commit that last touched the-tell.html into line 210 as part of the deploy step, and hard-code the check date as a literal string instead of reading document.lastModified — the studio floor asks for 'when it was checked', which is an editorial fact, not a file timestamp. Minimum version: delete the hash from line 210 and keep 'v16' alone, so the page stops naming a source it cannot back.",
+      "framework": "Tight Spiral studio floor, index.html lines 853-854: 'A number with no provenance is a rumour'; and the studio's own islo-hub correction precedent (2026-08-03)",
+      "evidence": "`git cat-file -t 75e938c` → 'fatal: Not a valid object name 75e938c'. `grep -ho \"v1[0-9]* .*75e938c\" *.html | sort | uniq -c` → the same hash paired with v10, v11, v12, v13, v14, v15, v16 and v17 across 20+ files. Rendered at 390x844 the stamp sits at y=74, above the h1 at y=371."
+    },
+    {
+      "key": "LABEL-AMBIGUOUS",
+      "severity": "minor",
+      "anchor": "button#cancelCall 'Not yet', built in openCall at line 492, handler at line 506",
+      "problem": "'Not yet' promises deferral and delivers deletion. The handler runs host.innerHTML='' — the card the player selected and, more to the point, whatever evidence they had typed into #why is discarded with no warning. On this surface writing the why is the work: the whole loop is commit-before-flip, and the textarea is where a student does the reasoning the game exists to train. A player who has drafted three sentences and taps a button labelled 'Not yet', expecting to come back to their draft, comes back to an empty panel.",
+      "fix": "Name the outcome: change the label at line 492 from 'Not yet' to 'Discard this call' — or keep the label and make it honest by stashing {picked, why} in a per-span draft object on cancel and repopulating the panel when openCall reopens that span. The second is three lines and preserves the founder's phrasing.",
+      "framework": "NN/g label prediction; Nielsen heuristic #5, Error Prevention",
+      "evidence": "Line 506: `wrap.querySelector('#cancelCall').addEventListener('click',function(){ host.innerHTML=''; });` — no read of why.value, no draft store, no confirm. Reopening the same tagspot rebuilds the panel from scratch with an empty #why."
+    }
+  ]
+}

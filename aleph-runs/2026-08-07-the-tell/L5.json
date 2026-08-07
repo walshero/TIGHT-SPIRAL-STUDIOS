@@ -1,0 +1,105 @@
+{
+  "lens": "L5",
+  "surface": "the-tell.html",
+  "passed": [
+    "PRACTICE-ABSENT",
+    "FEEDBACK-DELAYED",
+    "AGENCY-ABSENT",
+    "JS-ERROR",
+    "DEAD-END",
+    "REPLAY-BLOCKED",
+    "FEEDBACK-ABSENT"
+  ],
+  "findings": [
+    {
+      "key": "OUTCOME-UNMAPPED",
+      "severity": "major",
+      "anchor": ".foot (lines 315-318) and #scene — the only institutional reference on the surface is the string \"an async workshop game for EN195\"",
+      "problem": "No screen names a competency, an iSLO, or a rubric. islo-hub.html (line 419) files The Tell under Graduation Competency 1, Written & Oral Communication, and pairs that station with the AAC&U Written Communication VALUE rubric whose dimensions include Sources & Evidence — the exact thing this loop drills. None of that mapping exists inside the-tell.html. The hub's own blurb for the game says \"Ten craft moves,\" while the build ships an 8+8 deck (DECKS, lines 370-391), so the mapping is stale and owned by neither file. A student arriving from arcade.html cannot tell which outcome this practice feeds; a faculty member cannot say what evidence it produces.",
+      "fix": "Put one line on #scene naming the outcome this play feeds — Graduation Competency 1 (Written & Oral Communication) and the VALUE dimension the read-and-defend loop targets (Sources & Evidence) — and repeat it on #close next to the carry-out so the exported artifact carries its own outcome tag. Correct the islo-hub.html card from \"Ten craft moves\" to the shipped 8+8 deck so the map matches the build.",
+      "framework": "Biggs, constructive alignment (intended outcome must be declared before activity and assessment can be aligned to it); MassBay iSLO frame per islo-hub.html",
+      "evidence": "grep of the-tell.html for iSLO / competency / rubric / outcome returns nothing; islo-hub.html:419 links the-tell.html under Competency 1 with the blurb \"Ten craft moves, and the reader-test for each.\""
+    },
+    {
+      "key": "FEEDBACK-UNINFORMATIVE",
+      "severity": "major",
+      "anchor": "renderFlip(), lines 513-518 — var same=(mine.card===preset.card) and the two .verdict template strings",
+      "problem": "The entire response to the learner is computed from one string comparison of card ids. The learner's written why — which the header comment calls the engine of the build (\"WRITE YOUR WHY (the evidence)\") — is passed through esc() into the DOM and never read, scored, referenced, or responded to. The verdict is byte-identical for a strong call with quoted evidence and a nonsense one. Played at 390x844: calling Info Dump on the single word \"Marcus\" with the why \"abc\" returned \"Two reads. You called Info Dump; the last reader called Floating Camera. Both can be defended — that is the workshop.\" The learner gets a where-to-next prompt and no how-am-I-doing signal at all.",
+      "fix": "Author a per-(span, card) response line for each of the 8 cards on each tagged span — one sentence saying what would have to be in these words for that call to hold, and whether it is — and render it above the two reads. At minimum, split the 7 non-matching cards into defensible and not-supported-by-these-words sets per span, so the verdict stops being a single template.",
+      "framework": "Hattie & Timperley (2007) — of feed-up / feed-back / feed-forward, only feed-forward is present; Shute (2008) on specific formative feedback",
+      "evidence": "Headless playthrough: card=Info Dump on span N (\"Marcus\"), why=\"abc\" → verdict \"Both can be defended — that is the workshop.\""
+    },
+    {
+      "key": "MISCONCEPTION-UNADDRESSED",
+      "severity": "major",
+      "anchor": ".verdict.diff string, line 518: \"Both can be defended — that is the workshop.\"",
+      "problem": "No wrong read is ever surfaced. Whichever of the 8 cards the learner picks, the other seven are unconditionally endorsed as defensible. The build constructs its own near-miss and then declines to use it: span B, \"three of them,\" is preset as Overpacked Suitcase, and the predictable student misread — that a concrete count is automatically good specificity, i.e. World Detail That Matters from the other deck — is exactly the confusion the tag exists to correct. It is never named, contrasted, or refuted. A learner who arrives believing every concrete detail earns its keep finishes the game with that belief affirmed by the interface.",
+      "fix": "Author one named common miscall per span (the card students actually reach for, plus the reason these words do not support it) and show it after commit alongside the prior reader's read, explicitly marked as the miscall rather than as a second defensible read. Keep the two-defensible-reads frame only for the pairs that genuinely are.",
+      "framework": "Chi, conceptual change — an unaddressed misconception survives instruction; Hattie & Timperley on disconfirming feedback at the task level",
+      "evidence": "PRESET (lines 411-422) holds one model read per span and no distractor rationale; the diff branch has no per-card content."
+    },
+    {
+      "key": "RUBRIC-UNLINKED",
+      "severity": "major",
+      "anchor": ".verdict.same (line 517) \"is your evidence as strong as theirs? Whose points harder at the words?\" and the commit gate in openCall(): refresh() → why.value.trim().length>=3 (line 504)",
+      "problem": "The flip asks the learner twice to judge evidence strength, and #close calls the export \"a workshop comment set — a real one, with evidence\" that a peer group or instructor will read. The criteria for strong evidence appear nowhere on the surface. The only operational standard the build enforces is three characters: \"abc\" unlocked Commit & flip in playthrough. So the learner is asked to apply a standard they have never been shown, against a gate that encodes a different and much lower one.",
+      "fix": "Show the tests the flip is asking the learner to apply — two to four named criteria (quotes the actual words / names the effect on the reader / distinguishes it from the nearest card in the deck) — beside the #why label and repeat them inside the verdict as the frame for comparing the two whys. Replace the length>=3 gate with a criterion-tied check, e.g. the why must contain a fragment quoted from the tagged span.",
+      "framework": "Sadler (1989) — the learner must hold the criteria and standard to close the gap; AAC&U VALUE rubric practice as reproduced on islo-hub.html",
+      "evidence": "Playthrough: commitCall enabled with why=\"abc\"; no criteria text exists anywhere in the file (no rubric, criteria, or level language)."
+    },
+    {
+      "key": "ASSESSMENT-MISALIGNED",
+      "severity": "major",
+      "anchor": "buildCarry(), lines 538-551, and the #carry textarea on #close",
+      "problem": "The carry-out is the only artifact that leaves the game and the only thing a peer or instructor can read or score. It records the span, My call, My why, and the prior reader's card name — and drops the prior reader's why entirely, and never captures the comparison the flip demands. The taught skill is weigh two evidences and say which points harder at the words; the learner is never asked to write that judgement, so it is neither elicited nor exportable. What a scorer receives is a card label plus one sentence that no part of the system ever examined.",
+      "fix": "Add a short required field to the flip — \"which read holds on these words, and why\" — gated before the span counts as read, and write both whys plus that judgement into the carry-out text so the exported artifact contains the reasoning the activity teaches.",
+      "framework": "Biggs, constructive alignment — outcome, activity and what gets assessed must point at the same thing",
+      "evidence": "Verified carry-out from playthrough: each block is `— \"<span>\" / My call: X / My why: Y / Last reader: Z` with no prior-reader why and no comparison line."
+    },
+    {
+      "key": "TRANSFER-UNSUPPORTED",
+      "severity": "major",
+      "anchor": "PIECE (lines 395-408) and LENS_SPANS (line 423): writerly ['A','C','E'] vs workshop ['N','B','D']",
+      "problem": "One text only — \"The Spare Key\" — three spans per lens, and the two lenses' spans are disjoint, so no line in the piece is ever read through both decks. Screen 2 promises \"Same piece, two lenses,\" but switching lenses swaps in a different set of fragments; it is a different activity on the same prose, not the same fragment re-read. Nothing varies against a constant, so nothing generalises: the learner practices this passage, and never applies any card to a second piece where the surface features differ.",
+      "fix": "Make at least one span live in both decks (e.g. offer span C or D under both writerly and workshop) so a single line demonstrably takes two different defensible calls depending on the lens. Then add a second short piece with the same 8+8 decks and its own preset prior-reader tags, so each card is met in two contexts rather than one.",
+      "framework": "Gick & Holyoak — transfer requires multiple varied examples; Schwartz & Bransford, contrasting cases (variation must sit on a constant to teach a distinction)",
+      "evidence": "LENS_SPANS sets share no member; renderPiece() renders non-active spans as plain text, so a workshop player never sees spans A/C/E as taggable and vice versa."
+    },
+    {
+      "key": "SPLIT-ATTENTION",
+      "severity": "major",
+      "anchor": "openCall() → host.scrollIntoView({block:'center'}) line 494; #callHost is a sibling placed after .piece in #board",
+      "problem": "Measured at 390x844: opening the first tagged spot leaves the window at scrollY 929 with .piece occupying y −736.6 to −47.4 — zero pixels of the passage on screen while the learner chooses among 8 cards and writes their evidence. The panel carries only the isolated fragment (\"Marcus\"), but the calls depend on text that is now off-screen: Floating Camera needs the later run of \"he\" pronouns, Blurry Stakes needs the beat after the car passes. The learner must hold the passage in working memory or scroll back and push the panel out of view. The evidence and the field for writing about the evidence are never co-visible.",
+      "fix": "Quote the tagged span inside its full sentence or paragraph in the .quote block so the integrating context travels with the question; or at phone width render the call as a sheet over the lower half of the screen with the tagged paragraph pinned above it.",
+      "framework": "Mayer, spatial contiguity principle; Sweller, split-attention effect",
+      "evidence": "Playwright at 390x844: scrollY=929 after opening span N; .piece bounding box y=−736.6 h=689.2 (bottom edge 47.4px above the viewport top); callHost h=907.3 vs viewport 844."
+    },
+    {
+      "key": "OBJECTIVE-IMPLICIT",
+      "severity": "major",
+      "anchor": "#scene h1 + .hint (lines 255-258); #lensh and the two .lenscard blocks (lines 263-275); #closeh (line 300)",
+      "problem": "Every screen states the procedure — read, tap a spot, call the move, write why, flip — and no screen states what the learner should be able to do afterwards. The single statement of purpose is a negation: \"The point isn't a right answer.\" The lens picker asks \"What are you reading for?\" and offers two lenses with no basis for choosing between them and no account of what each one builds. #close reports what was produced (\"You left three reads on this piece\") rather than what changed in the reader. A student who finishes can describe what they did and cannot state what they learned.",
+      "fix": "Add one plain line of intended outcome on #scene (what a player should be able to do with a draft after this) and a matching one-line takeaway on #close naming the move just practiced; give each .lenscard one line on what that lens is for in the course, so the choice is informed rather than arbitrary.",
+      "framework": "Biggs — intended learning outcomes must be visible to the learner, not only to the designer; Mager on objectives stated as learner capability",
+      "evidence": "Playthrough text of all four screens contains no statement of the form \"after this you can…\"; the closest is the negative hint on #scene."
+    },
+    {
+      "key": "LABEL-AMBIGUOUS",
+      "severity": "major",
+      "anchor": "#switchLens \"Read it the other way\" (line 292) and #replayOther (line 311) → startLens() sets state={} (line 428)",
+      "problem": "Both controls silently discard every why the learner has written. Verified mid-play: progress \"Tagged spots read: 1 of 3\" → click Read it the other way → \"0 of 3\", the written evidence gone, no confirmation and no undo. The label predicts a second lens, not the destruction of work. On #close it is worse — state is wiped but #carry keeps the previous lens's text, so the visible artifact no longer corresponds to the game state and a learner who copies it after switching exports a note for a session that no longer exists. The written whys are the entire product of this activity; a control that deletes them uncued costs exactly what the game exists to create.",
+      "fix": "Key state per lens (state.writerly / state.workshop) so switching preserves what was already written and returning restores it; if the reset must stay, confirm before wiping and clear #carry whenever state clears.",
+      "framework": "Norman — mapping between a control's label and its effect; loss of learner-generated product defeats the generation effect the loop is built on",
+      "evidence": "Playwright: after commit on one span, #switchLens took progress from \"1 of 3\" to \"0 of 3\"; on #close, #replayOther reset progress to 0 of 3 while #carry still held the completed workshop-lens note."
+    },
+    {
+      "key": "COGNITIVE-LOAD-EXTRANEOUS",
+      "severity": "minor",
+      "anchor": "#nextSpot handler in renderFlip(), lines 527-530 — host.innerHTML=''; renderPiece(); renderProgress(); with no scroll restore",
+      "problem": "Pressing \"Back to the piece\" empties #callHost and re-renders, but nothing moves the viewport. Measured landing: scrollY 586 with .piece at y −393.6, so the top of the passage, the #progress counter, and the remaining tagspot \"three of them\" are all above the fold, and the button's own label — back to the piece — is not what happens. Between every spot the learner spends effort re-locating themselves in the text rather than on the reading, and the count that tells them how much is left is off-screen at the moment they need it.",
+      "fix": "After the flip closes, scroll the next unread .tagspot into view and move focus to it (or scroll .piece's top into view when none remain), so the return lands where the label promises.",
+      "framework": "Sweller — extraneous load from goal-search and navigation, effort spent on the interface rather than the idea",
+      "evidence": "Playwright: after #nextSpot, scrollY=586, .piece box y=−393.6 h=689.2; document height 1430."
+    }
+  ]
+}

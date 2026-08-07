@@ -1,0 +1,101 @@
+{
+  "lens": "L4",
+  "surface": "the-tell.html",
+  "passed": [
+    "MOTION-GRATUITOUS",
+    "EMOJI",
+    "H-OVERFLOW"
+  ],
+  "findings": [
+    {
+      "key": "IMAGE-FLOOR",
+      "severity": "blocker",
+      "anchor": ".artwrap svg (line 240-253) is the only real image on the surface; screens #board and #callHost carry none",
+      "problem": "The entry paint is 20.9% image at 390x844 and 6.7% at 1280x800, against founder canon C7's >50% floor. That is the known number, but it is the best screen in the file, not the worst. Measured across the actual play path: screen 2 (#lens) is 1.8% / 0.6%, screen 3 (#board) is 0.5% / 0.2%, and the call panel is 0.2% / 0.1%. The player spends essentially the whole game on #board and the call panel, and those two screens are 99.5%+ non-image. The file's own header comment (line 27) states the art plan as 'Cut-paper SVG cards = the image' — that plan is not implemented anywhere past the entry screen. Separately, the one image that exists does not carry the idea: it redraws the sentence directly beneath it (a card on a page) rather than doing work the prose cannot.",
+      "fix": "Draw the 16 deck cards as actual card faces (the DECKS[] entries at lines 371-390) and render .pick as a card, not a text row — that alone moves the call panel, the screen with the most dwell time, from 0.2% to the majority of the viewport. On #board, give the piece a header plate instead of the .ph text block. On entry, let the hero image show the thing the prose cannot: two different readers' tags on the same line, which is the game's whole premise, rather than one card on one page. Then re-measure entry, lens, board and call panel separately — a single entry-screen number hides the failure.",
+      "framework": "Founder canon C7 (>50% image floor); art-doctrine.md",
+      "evidence": "Headless Chromium, visible SVG area / viewport area: entry 68,680px of 329,160 = 20.9% (phone), 68,680 of 1,024,000 = 6.7% (laptop); #lens 6,088px = 1.8% / 0.6%; #board 1,682px = 0.5% / 0.2%; call panel 680px = 0.2% / 0.1%."
+    },
+    {
+      "key": "ART-PLACEHOLDER",
+      "severity": "major",
+      "anchor": "DECKS[] (lines 370-391) rendered through .pick (line 158) and the cardsHTML template at line 484",
+      "problem": "This is a card game whose cards have no faces. All 16 cards — 8 writerly, 8 workshop — render as a name span (.pn) plus a description span (.pd) inside a bordered rectangle. There is no card art, no cut-paper texture, no suit or mark, nothing that distinguishes 'Overpacked Suitcase' from 'Floating Camera' except the words. The header comment at line 27 declares 'Cut-paper SVG cards = the image' as the file's art spec; the spec was written and never drawn. The card-back motif that does exist is drawn twice, inconsistently: the hero card at lines 248-251 is a dashed inner frame plus a cross plus a circle, while the in-piece .facedown chip at line 438 is a cross only, no circle, no dashed frame. The same object — the face-down card, the central image of the game — has two different backs on two screens. That is machine-authored geometry that no hand ever unified.",
+      "fix": "Author the 16 card faces as cut-paper SVG, one mark per card, and make .pick render the face at readable size with the name beneath it (drop the .pd description onto the face or into a press-and-hold). Pick one card-back mark and use it in both the hero SVG and the .facedown chip so the back is the same object in both places. Per art-doctrine's open chair, ship the machine version and leave the chair open — but ship a drawn one, not a text row.",
+      "framework": "art-doctrine.md — 'Scaffolding, not masterpieces' / the open chair; the file's own art spec at line 27",
+      "evidence": "Line 484: cardsHTML += '<button class=\"pick\" ...><span class=\"pn\">'+c.n+'</span><span class=\"pd\">'+c.d+'</span></button>' — no <svg> in the card template. Measured call-panel image area at phone: 680px total, all of it the 34x20 chrome spiral."
+    },
+    {
+      "key": "ART-PLACEHOLDER",
+      "severity": "minor",
+      "anchor": ".artwrap (line 239) and its child <svg role=\"img\"> (line 240); .lenscard .li icons (lines 269, 273); .facedown (line 438)",
+      "problem": "Four machine-originated SVGs on this surface and not one carries the teaspoon imprint. art-doctrine.md is explicit: 'Every machine-originated artwork (Midjourney trace, Claude SVG) carries the teaspoon imprint until an artist takes the chair.' Nothing here is marked as scaffolding, so a reader cannot tell drawn-by-hand from drawn-by-machine — which is the exact distinction the imprint exists to make, and the exact signal an artist taking the chair needs. The provenance rule fails twice over on the hero: the doctrine says 'Provenance is written into each scene's aria-label', but the hero's aria-label is 'A face-down card resting on an open page.' — a description, no chain of who generated / traced / drew — and the wrapping div is aria-hidden=\"true\", so that aria-label never reaches assistive tech at all.",
+      "fix": "Add the teaspoon imprint to the hero SVG and the two .lenscard icons. Move provenance into the hero aria-label per doctrine ('Claude-drawn SVG, Super Sketchy Graphics, open chair'), and drop aria-hidden from .artwrap so role=\"img\" and its label actually resolve — right now the element is described and then hidden.",
+      "framework": "art-doctrine.md — brand system (teaspoon = Super Sketchy Graphics imprint) and provenance rules",
+      "evidence": "Line 239: <div class=\"artwrap\" aria-hidden=\"true\"> wrapping line 240: <svg viewBox=\"0 0 340 200\" role=\"img\" aria-label=\"A face-down card resting on an open page.\">. No teaspoon path exists anywhere in the file; the only brand SVG is the spiral at line 205."
+    },
+    {
+      "key": "COMPOSITION-UNRESOLVED",
+      "severity": "major",
+      "anchor": ".foot (line 191, markup at lines 315-319) sitting inside .wrap and therefore under every screen, worst on #lens",
+      "problem": "The colophon is the heaviest object on the page and it is on every screen. It is a solid --accent block with white type, the only large dark mass on a pale ground, and it sits directly below the content. On #lens — the screen whose entire job is one choice between two co-equal lens cards — the footer is 91,141px of visible area at phone against 32,979px per lens card. The colophon is 2.8x a lens card and 1.4x both lens cards combined; at laptop it is 94,808px against 53,498px. The eye lands on the darkest largest mass, which is the credits, and the two things the player is supposed to choose between are the lighter, smaller objects above it. There is no focal path to the decision.",
+      "fix": "Move .foot out of .wrap and render it only on the entry screen (#scene) and the close screen (#close), or collapse it to a one-line credit with a 'How this was made' disclosure. If it must stay on every screen, invert its weight — border and --ink text on --bg rather than a filled --accent slab — so the primary invitation is the darkest thing on the screen and the credits are the lightest.",
+      "framework": "Robin Williams, CRAP — contrast and proximity; focal path / visual hierarchy",
+      "evidence": "Visible-area measurement at 390x844 on #lens: .foot = 364x250 = 91,141px; each .lenscard = 364x91 = 32,979px. At 1280x800: .foot = 628x151 = 94,808px; each .lenscard = 628x85 = 53,498px."
+    },
+    {
+      "key": "COMPOSITION-UNRESOLVED",
+      "severity": "minor",
+      "anchor": "p.se-stamp (line 210) — 'Last updated August 7, 2026 · v16 75e938c'",
+      "problem": "Build telemetry is the second thing on the surface, above the kicker, above the hero art, above the H1, on every screen. It reads at top:74px in monospace across the full viewport width. Worse, it is placed outside <div class=\"wrap\"> (line 234), so at 1280px it starts at left:0 while every other element on the page starts at left:326px — a 326px misalignment against the page's only alignment edge, and it is the one element that breaks it. The first thing the eye resolves on entry is a git hash that is also the only thing not lined up with anything.",
+      "fix": "Move the .se-stamp inside .wrap so it shares the 660px measure and the left edge, and put it at the bottom next to the colophon rather than above the entry image. If it must stay at the top, right-align it into the chrome row as a small secondary item rather than a full-bleed band under it.",
+      "framework": "Robin Williams, CRAP — alignment; visual hierarchy",
+      "evidence": "Measured: .se-stamp at 1280px = left:0, width:1280, top:74. .wrap content (.foot, .lenscard) = left:326, width:628."
+    },
+    {
+      "key": "PALETTE-INCOHERENT",
+      "severity": "major",
+      "anchor": "--accent2 / --accent2-ink (lines 39, 51, 54); .go color:#fff (line 118) and .foot color:#fff (line 191) against .se-eyes color:var(--on-accent) (line 79)",
+      "problem": "Two separate breaks in the same system. First, the token-role split is nominal: --accent2 and --accent2-ink are set to the identical literal value in all three comfort stops (#2b3540 day, #26313c dusk, #9fb6cd night). --accent2 is used as a GROUND (.se-eyes background line 78, .se-btn[aria-pressed] background line 93) while --accent2-ink is used as TEXT (.piece .ph .k line 140, .copyout .ch line 186, .se-brand svg line 75). Because the values are the same colour, one colour is simultaneously a fill and an ink on the same screen — the exact thing the token law forbids. Splitting the name without splitting the value buys nothing. Second, the 'text on accent' role is expressed two different ways in one file: the chrome uses var(--on-accent) (line 79), but .go and .foot hardcode #fff (lines 118, 191) and then patch night mode by hand with two override rules (lines 119, 192). One role, two mechanisms, one of them outside the token system. In night mode the consequence shows: .foot, .go and .se-eyes all resolve to the same pale blue, so the colophon, the primary CTA and a chrome control wear one coat and colour ranks nothing.",
+      "fix": "Give --accent2-ink its own value per stop — it must be a colour that reads as ink against --surface, not the same hex as the fill it sits beside — or retire the token and use --ink where a text colour is meant. Replace the hardcoded #fff in .go and .foot with var(--on-accent) and delete the two html[data-light=\"night\"] override rules; --on-accent already carries the correct per-stop value. Then differentiate .foot's fill from .go's so a credit block and a primary button are not the same colour.",
+      "framework": "studio-type-contrast-standard.md §3 — token law: atmosphere OR text, never both",
+      "evidence": "Line 39: --accent2:#2b3540; --accent2-ink:#2b3540; · line 51: --accent2:#26313c; --accent2-ink:#26313c; · line 54: --accent2:#9fb6cd; --accent2-ink:#9fb6cd;. Line 47 defines --on-accent:#ffffff, used at line 79 but not at line 118 or 191."
+    },
+    {
+      "key": "TYPE-HIERARCHY-FLAT",
+      "severity": "major",
+      "anchor": ".where (113), .progress (151), .piece .ph .k (140), .call .ch (155), .read .rl (173), .copyout .ch (186) — plus the --ink2 tier",
+      "problem": "Six different structural roles are all typeset as bold sans micro-caps between .66rem and .8rem: 'where am I' (.where), progress state (.progress), the piece's provenance kicker (.ph .k), the panel title (.call .ch), a field label (.read .rl), and a section head (.copyout .ch). They differ by at most 0.14rem and one weight step, which no reader parses as rank — the reader has to rank them. The de-emphasis tier that would normally separate them is inert: --ink2 is set equal to --ink in all three stops (lines 37, 50, 53), so the seven rules that reach for var(--ink2) as a secondary colour (.beat, .se-panel h2, .se-tog .st, .lenscard .ld, .pick .pd, .read .rl, .progress) render identically to primary text. That equality is a deliberate RP-driven contrast decision and the header comment names it as a floor at line 26 — I am not scoring against the decision. The defect is that the design still routes its whole secondary tier through a colour that can never de-emphasise, and nothing was substituted. Concretely inverted at .piece .ph: the disclaimer kicker 'A NEUTRAL STUDIO PIECE — READ IT, THEN TAG IT' at .66rem/800 with .16em tracking wraps to two centred lines and orphans 'TAG IT', while the work's actual title '\"The Spare Key\"' sits below it on one line — the metadata outweighs the title in both area and tracking.",
+      "fix": "Collapse the six micro-caps treatments to two ranks and mark the difference with something that survives --ink2==--ink: size and space, not colour. Suggested — one screen-locator rank (.where) at .8rem/800 caps in --gold, one section-head rank (.ch, .rl, .k) at .72rem/700 caps in --ink with generous margin-bottom, and drop caps entirely from .progress and .pd so running state and card descriptions read as sentences rather than labels. At .piece .ph, put the title first and larger and demote the kicker to a single unwrapped line beneath it.",
+      "framework": "Typographic rank (size/weight/space/case, not colour); studio-type-contrast-standard.md §3",
+      "evidence": "Lines 37/50/53 all set --ink:X; --ink2:X with identical values. Rendered at 390px, .piece .ph .k wraps to two centred lines orphaning 'TAG IT' above the title."
+    },
+    {
+      "key": "TYPE-HIERARCHY-FLAT",
+      "severity": "minor",
+      "anchor": "--mono (line 46) applied to .se-home (73), .se-eyes (79), .se-btn (92), .se-tog .st (99), .se-rail a (107), .se-panel h2 (89), and the version stamp (210)",
+      "problem": "A third typeface runs the whole interface layer. studio-type-contrast-standard.md §7 retires monospace from product surfaces — 'It reads as \"code,\" not \"product.\" Monospace allowed only inside actual code/telemetry displays where the content IS code' — and specifies sans for buttons, nav, kickers, labels and chips. Here 'Home', 'Studio Eyes', 'Back', 'Default / Dusk / Warm-dark', 'A / A+ / A++' and the On/Off toggle states are all mono. The ranking consequence is direct: the page's primary navigation (.se-home, .se-rail a, 13px mono bold) and its build hash ('v16 75e938c', ~12px mono) share one family and near-one size, so the way out of the page and a commit SHA read at the same rank in the same voice. The stated two-family system (serif reads, sans operates) is present in the body and abandoned in the chrome.",
+      "fix": "Replace var(--mono) with var(--sans) on .se-home, .se-eyes, .se-btn, .se-tog .st, .se-rail a and .se-panel h2. Keep mono only on the version stamp, which is the one place the content genuinely is telemetry — at which point mono starts meaning something instead of meaning nothing.",
+      "framework": "studio-type-contrast-standard.md §7 — studio typeface pair; monospace retired from product surfaces",
+      "evidence": "Line 73: .se-home{ ... font-family:var(--mono); font-weight:700; font-size:13px; }. Line 210: the version stamp uses an inline ui-monospace stack at .76rem."
+    },
+    {
+      "key": "VOICE-NOT-FOUNDER",
+      "severity": "major",
+      "anchor": ".hint on #close (line 309); .copyout copy (line 304) and its echo in the copy handler (line 559)",
+      "problem": "Line 309 reads: 'Coming next (live relay): your read exports as a code the next player loads — the workshop chain becomes real, no server, still one offline file.' That is a decorative em dash into a rising tricolon, the exact machine cadence the founder ruled against on 2026-08-05, and it is spent advertising a feature that does not exist on this surface. The same tricolon runs twice more, verbatim: line 304 'paste into a Doc, an email, or your workshop group' and line 559 'Copied — paste it into a Doc, an email, or your workshop group.' Line 258 opens the entry hint on the not-X shape: 'The point isn't a right answer.' The idea underneath is the founder's own — his header note at line 9 says 'Not right-vs-wrong — two defensible reads side by side. That is the workshop, made async' — so what is wrong is the packaging, not the thought. Across the four visible screens there are seven decorative em dashes in body copy (lines 256, 257, 258, 301, 309, 316, 318) plus one in every preset why. Where the founder's own voice does survive it is audible and different: 'Whose points harder at the words?' (line 517) and 'You left three reads on this piece.' (line 300) are plain and specific with no dash and no triad.",
+      "fix": "Not mine to rewrite. Direction: cut line 309's forward-looking claim entirely — a shipping surface should not sell an unbuilt relay — or reduce it to one flat sentence with no dash and no triad. De-duplicate the 'Doc, an email, or your workshop group' triad down to one occurrence and let the other be plain. Then run the em-dash pass the founder called for: the ones at 257 and 301 are doing real appositive work and can stay; 256, 258, 309 and 318 are decorative and a period or a comma reads as him. Use lines 300 and 517 as the calibration sample — that is what this file sounds like when it sounds like him.",
+      "framework": "Founder voice ruling 2026-08-05; CLAUDE.md voice section (no invented or inflated claims; say the thing plainly)",
+      "evidence": "Line 309 verbatim: 'Coming next (live relay): your read exports as a code the next player loads — the workshop chain becomes real, no server, still one offline file.'"
+    },
+    {
+      "key": "TAP-TARGET",
+      "severity": "blocker",
+      "anchor": ".tagspot (line 142), the span[role=button] built in renderPiece() at lines 445-453",
+      "problem": "Cross-group finding, L1's floor — flagging it because a gate that measures block-level controls will miss this one. The tagged spots in the piece are the only way to start a turn, and they are inline spans, so they render at line height, not tap height: 24px tall at 390x844 and 25px at 1280x800, against the 44px floor. Because they are inline they also fragment across line breaks — at phone, span C splits into a 319px box and an 83px box, and span E splits into a 26x24px fragment and a 162x24px fragment. The 26px fragment is the word 'He' at the end of a line and it is a live, focusable control smaller than half the floor in both dimensions. Aesthetically the same defect: the game's central affordance is an 18x24px glyph glued to the end of a phrase rather than an object you can see and hit.",
+      "fix": "Keep the inline highlight as pure decoration on the phrase, and promote the face-down chip itself to a real <button> with min-width/min-height 44px placed after the highlighted run — inline-block, so it never fragments. That satisfies §2 and simultaneously gives the surface a visible card object where it currently has a glyph, which is the same fix the ART-PLACEHOLDER finding wants.",
+      "framework": "studio-type-contrast-standard.md §2 — tap-target floor, 44x44px, min-height AND min-width",
+      "evidence": "getClientRects() at 390x844 on #board: span A [279x24]; span C [319x24, 83x24]; span E [26x24, 162x24]. At 1280x800: all fragments 25px tall."
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+ "created": "2026-08-07",
+ "spots": {
+  "TAP-TARGET:the-tell.html": {
+   "first_seen": "2026-08-07",
+   "fix": "Measure during play, not at load: either fold the touch probe into playthrough-agent.py (which already drives breadth-first), or give studio-fingers a --drive mode that clicks bounded breadth-first and re-probes after each transition. Revealing hidden .screen elements is NOT sufficient - the controls are JS-built on transition, so they do not exist until the game is actually played.",
+   "key": "TAP-TARGET",
+   "last_seen": "2026-08-07",
+   "named_by": [
+    "L2",
+    "L4"
+   ],
+   "root_cause": "studio-fingers.py does page.goto() then evaluates PROBE immediately, so it measures the FIRST PAINT ONLY. TSP games use .screen{display:none}/.screen.on, and .tagspot controls are built by renderPiece() when the board opens. The gate's selector is NOT the problem - it already matches [role=\"button\"], which .tagspot sets. The gate simply never navigates past screen one, so EVERY control built after the entry screen in EVERY multi-screen game in the corpus has never been touch-measured.",
+   "scope": "corpus-wide, not this file",
+   "status": "open",
+   "surface": "the-tell.html",
+   "times": 1
+  }
+ },
+ "why": "Every time a non-tool lens catches a FLOOR defect the studio gates passed, the gate has a hole. Recorded here with a status so it cannot be forgotten between sessions. open -> hardened when the gate grows the tooth."
+}
