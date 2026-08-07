@@ -53,6 +53,13 @@ def live_controls(page):
         try:
             if not el.is_visible():          continue
             if not el.is_enabled():          continue
+            # mailto:/tel:/sms: hand off to the OS and correctly leave the DOM
+            # untouched — clicking one is supposed to change nothing on the
+            # page. Testing them as if a static page reaction proves they work
+            # produced a false DEAD-BUTTON on every contact link in the corpus.
+            href = el.get_attribute('href') or ''
+            if href.startswith(('mailto:', 'tel:', 'sms:')):
+                continue
             box = el.bounding_box()
             if not box or box['width'] < 8 or box['height'] < 8:  continue
             label = (el.inner_text() or el.get_attribute('aria-label') or
@@ -87,15 +94,19 @@ def play(path):
         ext = []
         def on_req(r):
             u = r.url
-            if not u.startswith('file:') and not u.startswith('data:'):
-                ext.append(u)
+            # mailto:/tel:/sms: are an OS handoff, not a network fetch — same
+            # exemption as the click-walker above, same reason.
+            if u.startswith(('file:', 'data:', 'mailto:', 'tel:', 'sms:')):
+                return
+            ext.append(u)
         ctx.on('request', on_req)
         page = ctx.new_page()
         page.on('pageerror', lambda e: card["js_errors"].append(str(e)[:120]))
         page.on('console', lambda m: card["js_errors"].append(m.text[:120])
                  if m.type == 'error' else None)
 
-        page.goto('file://' + os.path.abspath(path), wait_until='load')
+        start_url = 'file://' + os.path.abspath(path)
+        page.goto(start_url, wait_until='load')
         page.wait_for_timeout(SETTLE_MS)
 
         # opening-wall check: is the FIRST live control a preference toggle?
@@ -153,6 +164,25 @@ def play(path):
                 continue
             card["clicks"] += 1
             page.wait_for_timeout(SETTLE_MS)
+            # A CROSS-FILE NAV LINK IS NOT A DEAD BUTTON, AND ITS DESTINATION
+            # PAGE IS NOT THIS FILE. Found 2026-08-07: <a href="arcade.html">
+            # (a real, correct nav link) navigated the page away, and every
+            # click after that kept walking arcade.html's controls -> whatever
+            # IT linked to -> etc, all attributed to THIS file's report. That
+            # produced "dead buttons" quoting other games' text entirely
+            # (the-console.html's "north_trail", old-problems-at-new-speed's
+            # FAQ copy) under the-tell.html's card. Same shape as every other
+            # silent-failure this studio has found: a tool kept running past
+            # the point where its output stopped meaning what it claimed.
+            if page.url != start_url:
+                card["notes"].append(f"'{(lbl or '')[:24]}' navigates to another "
+                                     "page (expected for a nav link) — returning "
+                                     "to this file to keep testing it, not that one")
+                page.go_back()
+                if page.url != start_url:
+                    page.goto(start_url, wait_until='load')
+                page.wait_for_timeout(SETTLE_MS)
+                continue
             after = sig()
             if after == before:
                 # NOTHING in the DOM moved — a real dead button

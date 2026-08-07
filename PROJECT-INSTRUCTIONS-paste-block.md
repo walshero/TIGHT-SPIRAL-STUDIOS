@@ -29,15 +29,18 @@ other live project.
 
 **SESSION-OPEN (run before the first project answer, every session, silent):**
 
-1. **LOAD CANON.** Pull `STUDIO-COMMAND-CENTER.md` from Drive Claude_files
-   (folder `1WJh7jRrIfVE9MNydjyKjYlErIQq7gRwC`, file `1dULxFj1fxg8sF3SF2DXGoA9B-tt1XMbQ`)
-   via the Zapier `read_drive_file_content` action. That file is CANON; the
-   `/mnt/project` shelf mount is FALLBACK only.
+1. **LOAD CANON.** Pull `STUDIO-COMMAND-CENTER.md` from the git repo
+   (`walshero/TIGHT-SPIRAL-STUDIOS`, repo root) via the GitHub Zapier connector or
+   `git show origin/main:STUDIO-COMMAND-CENTER.md`. **The repo is CANON. Drive is an
+   address book — never canon.** (`COLD-START.md`, locked 2026-07-13: "Drive is an
+   address book, not an archive... it has no mechanism to prevent eighteen copies.")
+   Corrected 2026-08-07 — this step told every session the exact inverse for weeks;
+   found by the Aleph consultation panel's operations seat, verified against source
+   before landing this fix.
 
-2. **LOAD THE MANIFEST.** Pull `cross-lane-manifest.md`
-   (Drive `1bf9w5itKx7F4CvMdOCJRPbMEpww-WEOE`). It declares what this lane may READ
-   and what it may WRITE. Canon is an address, not a copy. Never write to a doc this
-   lane holds RO.
+2. **LOAD THE MANIFEST.** Pull `cross-lane-manifest.md` from the same repo (root).
+   It declares what this lane may READ and what it may WRITE. Canon is an address,
+   not a copy. Never write to a doc this lane holds RO.
 
 3. **SOURCE-FIRST LOCK.** For any question about a file, open the actual Drive/shelf
    file FIRST. Search is a fallback, never the front door.
@@ -53,12 +56,15 @@ other live project.
 Before ANY file reaches the founder — present_files, deploy, or hand-off — run:
 
 ```
-python3 preship-contrast-gate.py <file.html>
+bash studio-belt.sh .
 ```
 
-(`preship-contrast-gate.py` is in the repo root and Drive Claude_files
-`1iD1CKw8W6lHVlyiJiH433pCvI3TgAx28`. If it isn't in the container, write it there
-from Drive first.)
+(Corrected 2026-08-07 — this step named `preship-contrast-gate.py`, an ancestor
+script superseded by the belt's five ticks, and said to fetch it from Drive if
+missing. Both wrong: the belt is canon in the repo root; Drive is fallback only,
+same correction as step 1 above. The belt runs `preship-gate-v4.py --ratchet`
+among its five ticks — the direct render-proof gate, if a single-file check is
+what's needed instead of the full belt.)
 
 **exit 0 = ship. exit 1 = HALT — the file does not leave.** Not as a draft, not as a
 "quick look," not as "I'll fix it after." Contrast is a COMPUTATION, not a judgment.

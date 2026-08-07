@@ -18,6 +18,16 @@
    os-block-hollow-claim.md                        2026-07-11
    os-block-tick-rule.md                           2026-07-04
    os-block-bodyguard-gates.md                     2026-07-04
+   os-block-bodyguards.md                          2026-08-05
+   os-block-aleph-diagnose-repair.md               2026-08-05
+   os-block-fidelity-gate.md                       2026-08-05
+   os-block-aleph-fleet.md                         2026-08-07
+
+ RE-MEASURED 2026-08-07: this list had drifted to 9 of 13 real os-block files —
+ the mechanism built to compensate for OS staleness had itself gone stale, found
+ by the Aleph consultation panel's architect seat. The 4 lines above close that
+ gap. The section-number collisions below are UNCHANGED and still founder-owed —
+ adding a file to this list is bookkeeping; resolving §12/§14 is not.
 
  SECTION-NUMBER COLLISIONS — unresolved, founder call owed:
    - This document ALREADY HAS a §14 ("Lane truth"). preship-gate also claims §14.

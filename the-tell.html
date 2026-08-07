@@ -422,10 +422,17 @@ a:focus-visible, a:focus{ outline:3px solid var(--focus); outline-offset:2px; bo
   };
   var LENS_SPANS={ writerly:['A','C','E'], workshop:['N','B','D'] };
 
-  var lens=null, state={};   /* state[span] = {card, why} once flipped */
+  /* state[span] = {card, why} once flipped, kept PER LENS. "Read it the other
+     way" used to reassign state={} on every call, so switching lenses silently
+     wiped every card called and every why written in the lens you were leaving
+     - with no confirm. Found independently by three Aleph lenses (2026-08-07,
+     aleph-runs/2026-08-07-the-tell/): L2 as LABEL-AMBIGUOUS, L3 as the same,
+     L5 as ASSESSMENT-MISALIGNED. state is now a live reference into ALL_STATE,
+     never reassigned - switching swaps which bucket it points at. */
+  var lens=null, ALL_STATE={writerly:{}, workshop:{}}, state=null;
 
   function startLens(which){
-    lens=which; state={};
+    lens=which; state=ALL_STATE[which];
     $('lensLabel').textContent = which==='writerly' ? 'The reading \u2014 writerly moves' : 'The reading \u2014 workshop moves';
     renderPiece(); renderProgress(); $('callHost').innerHTML=''; $('toClose').disabled=true;
     show('board');
