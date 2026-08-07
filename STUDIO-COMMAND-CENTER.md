@@ -109,17 +109,23 @@ orphans). Fixed to recursive, and it **HALTs rather than guesses.**
 merge, the os-block reconciliation) — named plainly in the consultation's own synthesis
 as itself in tension with `BUILD-DEBT.md`'s ratio rule. Real player-facing fixes did
 land alongside it (the-tell.html's state-wipe bug, the-tell.html's false-positive
-dead-buttons noise, index.html's own entry gate, en195-apps' offline-floor break) — but
-**the next session's honest default is a ship, not another layer of process**, per the
-studio's own rule, applied to itself rather than exempted.
+dead-buttons noise, index.html's own entry gate, en195-apps' offline-floor break) —
+and, per the studio's own rule, the same session paid a first installment on its own
+debt rather than leaving it for the next one: `islo-hub.html`'s instruction-wall cut
+from 301 to 193 words / 2.56 to 1.98 screens (worst-tractable-first — the actual worst
+entry, `fys_fys-treasure-trove.html`, is a 9-chapter resource doc, not a layout fix; see
+`INSTRUCTION-WALL-QUEUE.md`), plus a real `one-thing-gate.py` bug found and fixed along
+the way (© / ® false-flagged as emoji on 5 corpus files).
 
-**Candidates already scoped, none requiring a founder judgment call:**
-- Pay down `INSTRUCTION-WALL-QUEUE.md` worst-first (33 of 74 root surfaces carry a
-  wall; `fys_fys-treasure-trove.html` is worst at 1,386 words / 18 screens).
+**Still open, worst-first:**
+- Keep paying down `INSTRUCTION-WALL-QUEUE.md` (32 of 74 root surfaces still carry a
+  wall after tonight's one fix; `old-problems-at-new-speed.html` is next at 240 words /
+  2.79 screens).
 - Close the corpus-wide touch blind spot: `studio-fingers.py` measures controls at page
   load only; every TSP game is `.screen{display:none}` with controls built by JS on
   transition, so no control after a game's entry screen has ever been touch-measured.
-  Root-caused, logged as OPEN in `aleph-blindspots.json`.
+  Root-caused, logged as OPEN in `aleph-blindspots.json`. Bigger lift than the queue
+  paydown — untouched tonight.
 
 ---
 
