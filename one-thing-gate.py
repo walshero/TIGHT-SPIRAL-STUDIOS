@@ -30,6 +30,20 @@ WALL_VISUAL_RATIO  = 0.20   # a visual smaller than this doesn't count as "a sce
 TABLEAU_FLOOR      = 0.50   # entry should be >=50% image (WARN here; studio-eyes = hard gate)
 LOAD_CTRL_WARN     = 3      # more than this many controls competing on entry = clutter
 
+# THE INSTRUCTION WALL (added 2026-08-07, founder-named defect)
+# "A wall of directions that were irrelevant and unreadable for my phone."
+# Two thresholds, both about travel-before-action rather than words-on-screen:
+INSTRUCTION_WORDS  = 60     # prose sitting ABOVE the first thing you can do
+SCREENS_TO_ACTION  = 1.0    # if the first control is more than one screen down, it is a wall
+
+# VIEWPORTS. The phone is BINDING - it is the founder's primary surface and the one
+# an RP reader uses. The laptop is measured too, because a defect that shows only on
+# the wide screen is still a defect, but the phone is the one that decides.
+# Until today this gate measured 1280x800 ONLY, so the studio's wall-detector was the
+# single instrument that never saw a phone. comfort-gate, comfort-audit and the SVG
+# floor all measure 390/330. This one did not.
+VIEWPORTS = [(390, 844, 'phone'), (1280, 800, 'laptop')]
+
 MEASURE_JS = r"""
 () => {
   const vw = window.innerWidth, vh = window.innerHeight, VA = vw*vh;
@@ -73,17 +87,63 @@ MEASURE_JS = r"""
   const hasHome = allctrl.some(e=>/\bhome\b/.test(navName(e)));
   const hasBack = allctrl.some(e=>/\bback\b/.test(navName(e)));
 
+  // THE WALL THE FOUNDER ACTUALLY HITS.
+  // Everything above measures the entry VIEWPORT. That misses the defect he named:
+  // "a wall of directions, irrelevant and unreadable on my phone." In-viewport prose
+  // actually goes DOWN on a narrow screen (less fits), so the old measure scored a
+  // phone wall as an improvement. The honest question is not how much text is on
+  // screen - it is HOW FAR YOU MUST TRAVEL BEFORE YOU CAN ACT.
+  // CHROME IS NOT THE ACTION. The comfort control, the nav rail, the skip link and the
+  // back/home buttons are furniture - they sit at y=0 on every studio page, so counting
+  // them as "the first thing you can do" reports 0 words before action for a page that
+  // is nothing but directions. The same pollution the 2026-08-03 ledger flagged for the
+  // invitation count, hitting a different measure. Furniture is excluded by container
+  // and by accessible name, never by tag.
+  const CHROME_NAME=/\b(comfort|settings|theme|dark|light|text size|bigger|softer|skip|back|home|menu)\b/i;
+  const chromeBox=e=>!!e.closest('nav,header,[class*="se-"],[id*="se-"],[class*="comfort"],[class*="skip"]');
+  const docCtrls=[...document.querySelectorAll('button,a[href],[role=button],[onclick],input,select,summary')]
+                   .filter(e=>vis(e))
+                   .filter(e=>{ const n=((e.textContent||'')+' '+(e.getAttribute('aria-label')||'')).trim();
+                                return !chromeBox(e) && !CHROME_NAME.test(n); });
+  let firstTop=null;
+  for (const e of docCtrls){ const t=e.getBoundingClientRect().top+window.scrollY;
+    if(firstTop===null||t<firstTop) firstTop=t; }
+  const screensToAction = firstTop===null ? null : +(firstTop/vh).toFixed(2);
+  let pre='';
+  if(firstTop!==null){
+    const w2=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+    while(w2.nextNode()){ const t=w2.currentNode, el=t.parentElement;
+      if(!el||!vis(el)||inCtrl(el)) continue;
+      if(el.getBoundingClientRect().top+window.scrollY < firstTop) pre+=' '+t.nodeValue; }
+  }
+  const proseBeforeAction=(pre.trim().match(/\S+/g)||[]).length;
+  // horizontal scroll is a phone-only failure and always a defect
+  const hOverflow = document.documentElement.scrollWidth > vw + 2;
+
   return { vw,vh, visualRatio:+visualRatio.toFixed(3), visualTag:vtag, hasHome, hasBack,
+           screensToAction, proseBeforeAction, hOverflow,
            ctrlCount:ctrls.length, primaryCount:primary.length, proseWords, emoji,
            primaryLabels:primary.map(e=>(e.textContent||'').trim().replace(/\s+/g,' ').slice(0,32)),
            ctrlLabels:ctrls.map(e=>(e.textContent||e.getAttribute('aria-label')||'').trim().replace(/\s+/g,' ').slice(0,22)).filter(Boolean).slice(0,24) };
 }
 """
 
-def grade(m):
+def grade(m, vp='laptop'):
     """Return (severity, CODE, message). The CODE is the ratchet's unit — it must
     stay stable while the message carries the counts that move build to build."""
     findings=[]
+    # --- the instruction wall. Phone-binding: a wall you must scroll past to act. ---
+    if m.get("proseBeforeAction", 0) > INSTRUCTION_WORDS:
+        findings.append(("CRITICAL" if vp == 'phone' else "HIGH", "INSTRUCTION-WALL",
+                         f"{m['proseBeforeAction']} words of directions sit above the first "
+                         f"control on {vp} - the player must read before they may act"))
+    if m.get("screensToAction") is not None and m["screensToAction"] > SCREENS_TO_ACTION:
+        findings.append(("CRITICAL" if vp == 'phone' else "HIGH", "ACTION-BELOW-FOLD",
+                         f"first control is {m['screensToAction']} screens down on {vp} - "
+                         f"nothing actionable is reachable without scrolling"))
+    if m.get("hOverflow"):
+        findings.append(("HIGH", "H-OVERFLOW",
+                         f"the page scrolls sideways at {m['vw']}px - content runs off {vp}"))
     if m["emoji"]>0:
         findings.append(("CRITICAL", "EMOJI", f"{m['emoji']} emoji on entry (studio floor: none, ever)"))
     if m["visualRatio"] < WALL_VISUAL_RATIO and m["proseWords"] > WALL_PROSE_WORDS:
@@ -153,20 +213,31 @@ def main(argv):
         try: browser=pw.chromium.launch()
         except Exception:
             browser=pw.chromium.launch(executable_path="/opt/pw-browsers/chromium")
-        page=browser.new_page(viewport={"width":1280,"height":800})
+        pages={vp:(browser.new_page(viewport={"width":w,"height":h}), w, h)
+               for w,h,vp in VIEWPORTS}
         print("="*72)
-        print("ONE-THING GATE  ·  entry-paint teeth  ·  1280x800"
+        print("ONE-THING GATE  ·  entry-paint teeth  ·  "
+              + " + ".join(f"{w}x{h} {vp}" for w,h,vp in VIEWPORTS)
               + ("  ·  RATCHET" if ratchet and not init else ""))
         print("="*72)
         for p in paths:
             url=pathlib.Path(p).resolve().as_uri()
-            try:
-                page.goto(url, wait_until="networkidle", timeout=15000)
-            except Exception:
-                page.goto(url, wait_until="load", timeout=15000)
-            page.wait_for_timeout(400)
-            m=page.evaluate(MEASURE_JS)
-            f=grade(m)
+            f=[]; seen=set(); shots={}
+            for w,h,vp in VIEWPORTS:
+                page=pages[vp][0]
+                try:
+                    page.goto(url, wait_until="networkidle", timeout=15000)
+                except Exception:
+                    page.goto(url, wait_until="load", timeout=15000)
+                page.wait_for_timeout(400)
+                mv=page.evaluate(MEASURE_JS)
+                shots[vp]=mv
+                # dedupe by CODE across viewports, keeping the worst severity. The phone
+                # runs first, so a phone CRITICAL is what survives for a shared code.
+                for s,c,msg in grade(mv, vp):
+                    if c in seen: continue
+                    seen.add(c); f.append((s,c,msg))
+            m=shots[VIEWPORTS[0][2]]          # the phone is the binding surface
             name=key_for(p, repo)
             if init:
                 frozen[name]=sorted({c for s,c,_ in f if s in BLOCKING})
@@ -180,9 +251,13 @@ def main(argv):
             if ratchet and not init and carried and sev<2:
                 verdict = "PASS (debt carried)"
             print(f"\n{name}   ->  {verdict}")
-            print(f"   entry: {m['visualRatio']*100:.0f}% image ({m['visualTag'] or 'none'}) · "
-                  f"{m['primaryCount']} primary invite(s) · {m['ctrlCount']} controls · "
-                  f"{m['proseWords']} prose words · {m['emoji']} emoji")
+            for w,h,vp in VIEWPORTS:
+                s=shots[vp]
+                sta = '-' if s.get('screensToAction') is None else f"{s['screensToAction']}"
+                print(f"   {vp:6s} {w:>4}px: {s['visualRatio']*100:3.0f}% image · "
+                      f"{s['primaryCount']} invite · {s['ctrlCount']} ctrl · "
+                      f"{s.get('proseBeforeAction',0):>4} words before first action · "
+                      f"{sta} screens to act")
             for s,c,msg in carried:
                 print(f"     [.] DEBT {c}: {msg}")
             for s,c,msg in live:

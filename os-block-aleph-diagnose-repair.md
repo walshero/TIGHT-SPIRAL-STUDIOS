@@ -1,5 +1,14 @@
 # OS BLOCK — The Aleph Diagnose→Repair Protocol
 
+> **SUPERSEDED OPERATIONALLY 2026-08-07 by `os-block-aleph-fleet.md`.** The thinking here
+> is intact and still canon — three independent lenses, agreement as the trust metric,
+> repair in confidence order, harden the tool that missed. What changed is that all of it
+> ran *by hand*, so it ended when the session ended. The fleet block adds two lenses
+> (aesthetic, learning science), a shared taxonomy so agreement is a count rather than a
+> judgement, a blind-spot register so the feedback tooth survives a stall, and a ledger so
+> a finding can be NEW / REPEAT / REGRESSED / FIXED. **Run the fleet block.** Read this one
+> for why.
+
 **One job:** turn "this file feels off" into a ranked, evidence-backed repair list —
 and make the diagnostic tools *sharper every time they miss*. This is the studio's
 repeatable quality loop, not a one-off review.

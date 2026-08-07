@@ -69,7 +69,19 @@ def play(path):
             "dead_buttons": [], "js_errors": [], "notes": [],
             "opening_wall": False, "reached_end": False, "dead_end": False}
     with sync_playwright() as p:
-        b = p.chromium.launch()
+        # A GATE THAT GOES BLIND MUST NOT READ AS CLEAN. Playwright resolves its browser
+        # by a build number pinned to the installed python package; when the package and
+        # the on-disk browsers drift (CI image refresh, pip upgrade) launch() raises
+        # "Executable doesn't exist at .../chromium_headless_shell-<n>/chrome" and this
+        # agent reported AGENT ERROR and moved on - which reads, downstream, as "nothing
+        # found". Same shape as the WeasyPrint exit-2 that rubber-stamped the corpus for
+        # weeks. Fall back to the stable path the image provides, exactly as
+        # one-thing-gate.py and studio-fingers.py already do. Found 2026-08-07 by the
+        # Aleph fleet's own "NOT LOOKED AT" check, which is the point of that check.
+        try:
+            b = p.chromium.launch()
+        except Exception:
+            b = p.chromium.launch(executable_path="/opt/pw-browsers/chromium")
         ctx = b.new_context(viewport=VIEWPORT)
         # offline floor: block every external request, same as Studio Eyes
         ext = []
