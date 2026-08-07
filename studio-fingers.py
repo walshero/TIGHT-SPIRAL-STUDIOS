@@ -179,4 +179,39 @@ def check(path):
 
     # ---- REPORT --------------------------------------------------------------------
     name = os.path.basename(path)
-    
+    print("=" * 74)
+    print(f"STUDIO FINGERS  {name}")
+    print("=" * 74)
+    if halts:
+        print(f"\n## HALT  [{len(halts)}]")
+        for h in halts:
+            print("  " + h)
+    else:
+        print("\n## HALT  [0]\n   (clean on every computable check)")
+    if notes:
+        print(f"\n## COWPATH  [{len(notes)}]")
+        print("   Conventional phone patterns this file does not follow. Not illegal.")
+        for n in notes:
+            print("  " + n)
+    print(f"\n## NOT COMPUTABLE FROM SOURCE  [{len(notcomp)}]")
+    print("   Named, not skipped. Silence is never agreement.")
+    for n in notcomp:
+        print("  " + n)
+    print(f"\n   targets measured: {len(sized)}   targets undecidable: {len(set(unsized))}")
+    print("=" * 74)
+    return 1 if halts else 0
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print(__doc__)
+        print("  studio-fingers.py <file.html> [more.html ...]")
+        sys.exit(2)
+    rc = 0
+    for p in sys.argv[1:]:
+        if not os.path.exists(p):
+            print(f"HALT - not found: {p}")
+            rc = max(rc, 2)
+            continue
+        rc = max(rc, check(p))
+    sys.exit(rc)
