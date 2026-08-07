@@ -8,7 +8,10 @@
 
 ## 1. The one-sentence version
 
-**You don't judge the leader. You judge what you were allowed to see.**
+*(Prior line here — "You don't judge the leader. You judge what you were allowed to
+see." — was founder-locked 2026-07-18, then objected and demoted per TSP_Ledger.md;
+removed from every live build 2026-08-08. Not reinstated; no replacement line
+authored yet.)*
 
 Choose Your Leader is a short, playable lesson in media literacy. It hands you a real quote from a U.S. president, asks how much you trust the person who said it, *then* shows you the facts the original audience couldn't see — and lets you feel how far the words pulled you before you knew the whole story.
 

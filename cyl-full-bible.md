@@ -265,10 +265,13 @@ Nominal ~64 min; fast reader ~55; completionist ~80.
 
 ### Beat 1.0 — Screen zero
 - **Screen:** near-black. Comfort corner live (Studio Eyes kernel v2 from
-  studio/props-room.html). Four lines: title; "You don't judge the leader. You judge
-  what you were allowed to see."; the honest price ("About an hour, in four evenings.
-  You can stop at any break and carry your place out with you."); "This game uses
-  sound. Everything spoken is also written."
+  studio/props-room.html). Three lines: title; the honest price ("About an hour, in
+  four evenings. You can stop at any break and carry your place out with you.");
+  "This game uses sound. Everything spoken is also written." (The prior fourth line,
+  "You don't judge the leader. You judge what you were allowed to see.," was
+  founder-locked 2026-07-18 then objected and demoted per TSP_Ledger.md; removed from
+  the title screen entirely 2026-08-08 across every build that still carried it — do
+  not reintroduce it from an older copy of this spec.)
 - **Controls:** [Turn on the set] (Enter — simultaneously the audio-unlock gesture,
   the diegetic knob, and the game's first beat) and [Watch with captions only], equal
   weight. Plain Words toggle here (FableVision, section 12). A quiet corner field
