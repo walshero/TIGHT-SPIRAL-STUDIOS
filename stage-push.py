@@ -25,6 +25,15 @@ This file holds it open. Before a single byte moves, the intended write is writt
 total bytes, total md5, git blob sha, and the exact boundary and md5 of every chunk. That
 record IS the forming path, made addressable. After the write, arithmetic closes it.
 
+THE RECORD MUST LAND TOO
+------------------------
+A staging record that lives only in the container is a forming path held open in a room
+that is about to be demolished. If the session dies between chunk 2 and chunk 3, the repo
+holds a truncated file and NOTHING anywhere says what it was supposed to become - which
+is the same blindness this file was written to end, one level up. So `stage` writes the
+record and then tells you to push it, and it is not optional. Records live at
+`.stage/<name>.stage.json` in the repo, alongside the file they describe.
+
 EXIT CODES
     0  the landed bytes are the intended bytes
     1  DIVERGED in transit - offset named, owning chunk named
@@ -98,6 +107,10 @@ def stage(local_path, repo_path, chunk_chars=DEFAULT_CHUNK):
     for c in chunks:
         mode = "seed  " if c["n"] == 1 else "append"
         print(f"    {mode} {c['n']}/{len(chunks)}  ->  total_bytes must be {c['cumulative_bytes']}")
+    print()
+    print("  LAND THIS RECORD IN THE SAME TURN, before chunk 1 moves. It is small and it")
+    print("  is the only thing that can tell a later session what a half-written file was")
+    print(f"  supposed to become:   push {out}  ->  repo {out}")
     print()
     print(f"  then:  stage-push.py landed {out}")
     return 0
@@ -196,10 +209,4 @@ if __name__ == "__main__":
         sys.exit(after(a[1], a[2], a[3]))
 
     if a[0] == "landed":
-        if len(a) < 2:
-            print("usage: stage-push.py landed <stage.json> [branch]")
-            sys.exit(2)
-        sys.exit(landed(a[1], a[2] if len(a) > 2 else "origin/main"))
-
-    print(f"unknown command: {a[0]}")
-    sys.exit(2)
+        if le
