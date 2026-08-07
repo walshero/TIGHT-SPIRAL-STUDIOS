@@ -51,6 +51,12 @@ if [ -n "$SURFACES" ] && [ -f "$BELT_DIR/comfort-gate.py" ]; then
 else echo "  (no HTML surfaces / gate not mounted — skipped)"; fi
 
 # TICK 2 — student attribution standard (mechanical: a course code must not carry a year or section token)
+# RATCHETED 2026-08-08 (was flat). Founder's call, re-coupling deploy to the belt: "real
+# teeth, not passive lip service." A flat tick would have frozen deploy on day one over 23
+# pre-existing lines nobody was checking, because the deploy this tick has always fired
+# under was decoupled until today - the same discovery that made ticks 1/3/4/5 ratchet
+# in the first place. Baseline: attribution-baseline.json, hub-owned, same shape as the
+# other four. Carried, not resolved.
 echo; echo "-- tick 2: student attribution standard --"
 HITS=$(grep -rInE 'EN[0-9]{3}' --include=*.html --include=*.md . 2>/dev/null | grep -vE '/(archive|rescued|node_modules)/' || true)
 # a violation = a course code on a line that ALSO carries a SECTION token or a TERM-YEAR (e.g. "Summer 2026").
@@ -59,8 +65,23 @@ HITS=$(grep -rInE 'EN[0-9]{3}' --include=*.html --include=*.md . 2>/dev/null | g
 CRED=$(printf '%s\n' "$HITS" | grep -viE 'syllabus|quoted|source|cite|policy|licen|per the|from the|\\bnote\\b' || true)
 VIOL=$(printf '%s\n' "$CRED" | grep -Ei 'sec(tion)?[ .#_-]?[0-9]|(spring|summer|fall|winter|autumn)[a-z]* 20[0-9]{2}' || true)
 if [ -n "${VIOL//[$'\n']/}" ]; then
-  echo "  HALT — a course credit carries a year or section token (standard: generic course, no year/section):"
-  printf '%s\n' "$VIOL" | sed 's/^/        /' | head -8; fail=1
+  NEW=""; DEBT_N=0
+  while IFS= read -r line; do
+    [ -z "$line" ] && continue
+    key="$(printf '%s\n' "$line" | cut -d: -f1,2 | sed 's#^\./##')"
+    if [ -f "$BELT_DIR/attribution-baseline.json" ] && \
+       python3 -c "import json,sys; d=json.load(open('$BELT_DIR/attribution-baseline.json')); sys.exit(0 if sys.argv[1] in d['debt'] else 1)" "$key" 2>/dev/null; then
+      DEBT_N=$((DEBT_N+1))
+    else
+      NEW="$NEW$line"$'\n'
+    fi
+  done <<< "$VIOL"
+  if [ -n "${NEW//[$'\n']/}" ]; then
+    echo "  HALT — a NEW course credit carries a year or section token (not in attribution-baseline.json):"
+    printf '%s' "$NEW" | sed 's/^/        /' | head -8; fail=1
+  else
+    echo "  pass (debt carried)  $DEBT_N pre-existing line(s), 0 new — see attribution-baseline.json"
+  fi
 else echo "  pass  no year/section token beside a course code"; fi
 
 # TICKS 3-5 all RATCHET against a hub-owned baseline. Measured before arming:
