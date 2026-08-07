@@ -27,8 +27,8 @@
 
 | words before you can act | screens to act | entry image | surface |
 |---:|---:|---:|---|
-| 1386 | 18.15 | 80% | `fys_fys-treasure-trove.html` |
-| 301 | 2.56 | 0% | `islo-hub.html` |
+| 1386 | 18.15 | 80% | `fys_fys-treasure-trove.html` — worst by far, but not a layout fix: it's a nine-chapter instructional-design resource, not a splash/hub. The wall IS the content (curriculum chapters), not misplaced chrome around a control that already exists elsewhere on the page. Shrinking it means deciding what a faculty reader can skip, which is an editorial call on the founder's own material — left alone, not skipped by oversight. |
+| 193 | 1.98 | 0% | `islo-hub.html` — spot-fixed 2026-08-08: moved the "how to read a station" + coverage-key explainer below the stations instead of above them (real content, just relocated — nothing cut). 301→193 words, 2.56→1.98 screens. Still over both thresholds; the remaining wall is the seven-outcome framing prose itself, which is founder-authored — cutting further is a content call, not a layout one. |
 | 240 | 2.79 | 56% | `old-problems-at-new-speed.html` |
 | 207 | 1.42 | 0% | `advantage-intake.html` |
 | 190 | 2.35 | 0% | `confluence-massbay-assessment.html` |

@@ -79,7 +79,10 @@ MEASURE_JS = r"""
     if(!el||!vis(el)||!inVp(el)||inCtrl(el)) continue; prose+=' '+t.nodeValue; }
   const proseWords=(prose.trim().match(/\S+/g)||[]).length;
 
-  const emoji=((document.body.innerText||'').match(/\p{Extended_Pictographic}/gu)||[]).length;
+  // \p{Extended_Pictographic} also matches the copyright and registered-trademark signs --
+  // real legal/citation glyphs used across the corpus for rubric attribution (AAC&U,
+  // etc.), not decorative emoji. Excluded.
+  const emoji=((document.body.innerText||'').match(/\p{Extended_Pictographic}/gu)||[]).filter(c=>c!=='©'&&c!=='®').length;
 
   // navigation floor: every game needs a Home control and a Back control (present in DOM, even if hidden on the home screen)
   const navName = el => ((el.textContent||'')+' '+(el.getAttribute('aria-label')||'')+' '+(el.getAttribute('title')||'')).toLowerCase();
