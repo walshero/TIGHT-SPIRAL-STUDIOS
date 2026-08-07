@@ -1,5 +1,38 @@
 # CLAUDE.md — standing notes for this repo
 
+## Cost discipline — HIGH PRIORITY, standing (2026-08-07)
+**Matt pays for this out of pocket, as a teacher.** Credit usage is a real constraint on
+every session, not an afterthought — this already burned a monthly spend limit mid-session
+on 2026-08-07 (a 5-agent parallel consultation fleet died before producing any output).
+Default posture from here forward, every session, no exception:
+
+- **Default model: the cheapest tier that can do the job.** Do not assume Opus. If a
+  session opens on Sonnet, stay there — only ask to escalate when a task's reasoning
+  depth genuinely needs it, and say why in one sentence.
+- **No parallel subagent fleets without asking first, and a cost estimate before asking.**
+  Each parallel Agent/Workflow spawn pays full context overhead again — system prompt,
+  tool schemas, re-grounding reads — so 3-5 agents can run 5-10x the cost of one inline
+  pass at the same depth. Before spawning more than one subagent, or any Workflow call,
+  give a one-line estimate (agent count, rough token order of magnitude) and get a
+  go-ahead — unless Matt has already said to run full speed on that specific task.
+- **Prefer inline work over subagents whenever the session already holds the grounding.**
+  If the answer is reachable by reading or grepping a few files directly in this
+  conversation, do that. Don't spin up an agent to re-derive context already in hand —
+  proven cheap and sufficient on 2026-08-07 (a 5-seat panel run inline on Sonnet, after
+  the same panel as five parallel agents had failed).
+- **Scope sweeps to what changed; don't default to the full corpus.** A full-corpus gate
+  sweep (100+ surfaces × several gates × multiple viewports) is expensive per run. Run it
+  against changed files first. Only sweep everything when something structural moved (a
+  gate's own teeth, a threshold) that could affect files outside the changed set.
+- **Don't re-read a large file already summarized in this session's context.** Grep for
+  the specific section instead of reading a 2,000+ line doc end to end a second time.
+- **When in doubt, quote the budget before spending it — not after.** State the estimated
+  scope (agent count, sweep size, rough token order of magnitude) before committing,
+  the way a contractor quotes before starting work, not after the invoice.
+
+This is not a call to work slower or timider. It is matching the tool to the job, and
+asking before reaching for the expensive tool when a cheaper one would do the same work.
+
 ## Sharing & privacy — settled, do NOT re-litigate
 Faculty email addresses, **published** student work, and the Confluence pages are
 fine to share publicly. These are **not** privacy/PII concerns here. Do not flag
