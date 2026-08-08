@@ -91,6 +91,9 @@ never rise. Reach zero and the surface leaves the baseline forever.
 - This clause's own check is `type-census.py` (see §1). It is not yet mounted as a belt
   tick; mounting it is a founder call, because it would arm an eighth tick.
 
+### RETRACTED, 2026-08-08, same day. The section immediately below is WRONG on its first
+### bullet. Left standing rather than deleted. See CORRECTION at the end of this file.
+
 ### STALE NUMBERS IN THIS DOCUMENT, recorded 2026-08-08, NOT silently changed
 
 Two clauses here disagree with what the studio actually ships. Recording the drift rather
@@ -105,3 +108,34 @@ practice stops being a standard.
   on 101 surfaces. `preship-gate-v4.py` parses neither; it looks for `:root` inside an
   `@media (prefers-color-scheme: dark)` block and for `html[data-comfort]`, which is why
   it has stood a false H-DARK-MISSING against `index.html` since 2026-08-03.
+
+---
+
+### CORRECTION, 2026-08-08, hours after the amendment above
+
+The bullet claiming section 2's 44x44px was stale and that "the belt ships 48px" is
+**retracted**. It was backwards.
+
+`studio-fingers.py` at repo root was retired the same day and its own postmortem is
+explicit: the 48px "house floor" was DERIVED FROM APPLE by an agent, while the founder's
+own 44x52 ruling had been sitting in `PLAYTEST-REPORT.md` and three rescued design docs
+since July. That invented number manufactured 66 surfaces and 121 halts of debt that never
+existed. Section 2 was right the whole time. The gate was wrong, this document was
+correct, and the amendment trusted the machine over the founder.
+
+The failure is the interesting part, which is why the wrong text stays visible above. The
+studio's own rule says that when the founder and a machine-produced number disagree, the
+machine is the suspect. An hour earlier this file was amended to say the opposite, on the
+authority of a gate that was retired before the ink dried.
+
+**Which touch gate is canon:** `studio-eyes/studio-fingers.py`, which RENDERS at a 412x915
+touch viewport. The root `studio-fingers.py` parsed source, shipped four false positives
+against one build in a single afternoon, and now exits 2 loudly rather than 0, because a
+gate that has gone blind must never read as clean.
+
+**Still genuinely uncovered, and still a founder call:** non-text contrast. WCAG 1.4.11
+wants 3:1 for control boundaries. Measured on the comfort block's own controls: border
+against fill 1.50 to 1.68, border against panel 1.91 to 2.07, across day, dusk and night.
+Only the high-contrast day stop clears. No clause in this document covers it and no gate
+in the studio checks it.
+
