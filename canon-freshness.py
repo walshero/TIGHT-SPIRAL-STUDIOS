@@ -40,6 +40,7 @@ RESIDENT_DOCS = [
     "tight-spiral-studio-os.md",
     "cross-lane-manifest.md",
     "CLAUDE.md",
+    "EXTERNAL-ASSESSOR-BRIEF.md",
 ]
 
 # --- CLASS 1: CLAIM-VS-CI -----------------------------------------------------
