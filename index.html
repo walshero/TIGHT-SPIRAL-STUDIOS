@@ -298,16 +298,18 @@ footer p{margin:0 0 7px}
 .rooms .room:nth-child(8n+7){--acc:#2f4a5c; --acc-ink:#2f4a5c}   /* steel   */
 .rooms .room:nth-child(8n+8){--acc:#8a3a1c; --acc-ink:#8a3a1c}   /* clay    */
 .room h3, .job h3{display:flex; align-items:center; gap:0}
-.hero-mark{width:clamp(120px,20vw,168px); height:auto; color:var(--brass-ink); flex:0 0 auto}
+.hero-mark{width:clamp(160px,40vw,480px); height:auto; color:var(--brass-ink); flex:0 0 auto}
 .stage-row{display:flex; align-items:flex-start; gap:clamp(20px,4vw,44px); justify-content:space-between}
 .stage-copy{flex:1 1 auto; min-width:0}
 .banner-mark{height:34px; width:auto; color:var(--brass-ink); display:block; margin-bottom:10px}
 .slab .banner-mark{color:var(--brass-fill)}
-/* Portrait: the dial stays VISIBLE — an image shown in landscape must show in portrait too.
-   Stack the stage and shrink the mark so it reads under the headline, never hidden. */
+/* Portrait: the mark stays VISIBLE and is now the largest thing painted on
+   entry, first in source order - an image shown in landscape must show in
+   portrait too, and here it must show FIRST, not shrunk and pushed after
+   all the hero text the way the old dial was. */
 @media (max-width:640px){
-  .stage-row{flex-direction:column; gap:16px}
-  .hero-mark{display:block; width:92px}
+  .stage-row{flex-direction:column; gap:20px; align-items:center}
+  .hero-mark{display:block; width:min(78vw,340px); margin:0 auto}
 }
 
 </style>
@@ -349,10 +351,46 @@ footer p{margin:0 0 7px}
 
 <!-- THE STAGE. Content on load. No gate, no wall, no ask. -->
 <div class="stage">
-<div class="stage-row"><div class="stage-copy">
+<div class="stage-row">
+<!-- 2026-08-08: the studio's own identity mark, first position, per
+     art-doctrine.md ("The logo is the tight spiral. Identity mark, first
+     position, unchanged") - same spiral drawn for cliche-cabinet.html,
+     ported here rather than redrawn (one mark, one source of truth).
+     Founder's call over the abstract dial icon this replaced: "go with
+     the tight spiral logo." Sized to actually read as a scene, not an
+     icon - the mobile rule below was shrinking the OLD mark to 92px and
+     placing it after all the hero text, so it never painted inside the
+     first-screen viewport on phone at all. Now first in source order and
+     the largest thing on entry at phone width. -->
+<svg class="hero-mark" viewBox="0 0 100 100" fill="none" aria-label="Tight Spiral Studios" role="img">
+  <path d="M50 6
+           A44 44 0 1 1 6 50
+           A38 38 0 1 1 82 50
+           A32 32 0 1 1 18 50
+           A26 26 0 1 1 74 50
+           A20 20 0 1 1 30 50
+           A14 14 0 1 1 66 50"
+        stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/>
+  <circle cx="50" cy="50" r="4.5" fill="currentColor"/>
+</svg>
+<div class="stage-copy">
   <p class="mark">Tight Spiral Productions</p>
   <h1>We build instruments that show you the rules <em>while they are being run on you.</em></h1>
   <p class="face-updated"><time id="faceUpdated">Last updated&hellip;</time> <span class="se-version" style="font:inherit;opacity:.85">&middot; v49 <span style="opacity:.75">e63e3b7</span></span> </span> </span> </span> </span> </span> </span> </span></p>
+  <!-- 2026-08-08: one real room card promoted above the fold, founder's call
+       (asked for "an easy splash fix" rather than trimming the lede). Flok is
+       the literal embodiment of the sentence in the h1 above it - same claim,
+       concrete instance - so it doubles as the page's one primary invitation,
+       not a second one competing with the grid below (that gate: exactly one
+       invitation on entry). Removed from .rooms below so it lives in one place. -->
+  <a class="room" href="the-console.html" style="display:block;margin:0 0 1.1rem">
+      <svg class="gmark" viewBox="0 0 48 48" aria-hidden="true"><line x1="10" y1="14" x2="10" y2="38" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="14" r="3.4" fill="currentColor"/><line x1="24" y1="10" x2="24" y2="38" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="20" r="3.4" fill="currentColor"/><line x1="38" y1="16" x2="38" y2="38" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="38" cy="30" r="3.4" fill="currentColor"/><line x1="6" y1="38" x2="42" y2="38" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h3>Flok</h3>
+      <p>You take a growth job at a social app and pull the levers yourself &mdash; the streak, the batch,
+         the infinite feed. Then it shows you your own telemetry.</p>
+      <div class="chips"><span class="chip c-live">Live</span><span class="chip c-note">Dark patterns</span></div>
+    </a>
+
   <p class="lede">Most software hides its machinery. Ours hands it to you and lets you turn it.
     <b>You pull the levers, then the seat turns around and shows you your own telemetry.</b></p>
   <p class="lede">Some of these are games. Some are assessment tools designed for a college.
@@ -362,28 +400,6 @@ footer p{margin:0 0 7px}
 
   <!-- The count is COMPUTED from the shelf, not remembered. Truth in advertising as arithmetic. -->
   </div>
-<svg class="hero-mark" viewBox="0 0 200 200" aria-hidden="true" role="img">
-  <circle cx="100" cy="100" r="88" fill="none" stroke="currentColor" stroke-width="2"/>
-  <circle cx="100" cy="100" r="70" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="1 7"/>
-  <!-- tick marks around the dial -->
-  <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
-    <line x1="100" y1="16" x2="100" y2="28"/>
-    <line x1="184" y1="100" x2="172" y2="100"/>
-    <line x1="100" y1="184" x2="100" y2="172"/>
-    <line x1="16" y1="100" x2="28" y2="100"/>
-    <line x1="159" y1="41" x2="151" y2="49"/>
-    <line x1="159" y1="159" x2="151" y2="151"/>
-    <line x1="41" y1="159" x2="49" y2="151"/>
-    <line x1="41" y1="41" x2="49" y2="49"/>
-  </g>
-  <!-- the needle: pointed at the constraint, not the center -->
-  <line x1="100" y1="100" x2="150" y2="62" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-  <circle cx="100" cy="100" r="6" fill="currentColor"/>
-  <!-- the hand you can turn -->
-  <circle cx="150" cy="62" r="10" fill="none" stroke="currentColor" stroke-width="2.5"/>
-  <line x1="150" y1="55" x2="150" y2="69" stroke="currentColor" stroke-width="2"/>
-  <line x1="143" y1="62" x2="157" y2="62" stroke="currentColor" stroke-width="2"/>
-</svg>
 </div>
 <div class="count">
     <div><b>33</b><span>builds, live</span></div>
@@ -405,14 +421,6 @@ footer p{margin:0 0 7px}
       <p>Five rooms for the five problems Borges already solved &mdash; branching, text, memory, vision,
          documentation. You feel each one from the inside, then watch it come back faster.</p>
       <div class="chips"><span class="chip c-live">Live</span><span class="chip c-note">Art piece</span></div>
-    </a>
-
-    <a class="room" href="the-console.html">
-      <svg class="gmark" viewBox="0 0 48 48" aria-hidden="true"><line x1="10" y1="14" x2="10" y2="38" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="14" r="3.4" fill="currentColor"/><line x1="24" y1="10" x2="24" y2="38" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="20" r="3.4" fill="currentColor"/><line x1="38" y1="16" x2="38" y2="38" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="38" cy="30" r="3.4" fill="currentColor"/><line x1="6" y1="38" x2="42" y2="38" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <h3>Flok</h3>
-      <p>You take a growth job at a social app and pull the levers yourself — the streak, the batch,
-         the infinite feed. Then it shows you your own telemetry.</p>
-      <div class="chips"><span class="chip c-live">Live</span><span class="chip c-note">Dark patterns</span></div>
     </a>
 
     <a class="room" href="choose-your-leader-full.html">
@@ -552,6 +560,12 @@ footer p{margin:0 0 7px}
       <h3>The EN195 Arcade</h3>
       <p>Pick up the coin. The Semester Machine always pays, and the Workshop Vending Machine (studio exception, live backend) mints a coin for every draft fed to it, four cabinets, one per workshop.</p>
       <div class="chips"><span class="chip c-live">Live</span><span class="chip c-note">Course &middot; live backend exception</span></div>
+    </a>
+    <a class="room" href="repos.html">
+      <svg class="gmark" viewBox="0 0 48 48" aria-hidden="true"><rect x="10" y="10" width="28" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2.2"/><rect x="10" y="21" width="28" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2.2"/><rect x="10" y="32" width="28" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2.2"/></svg>
+      <h3>Repos</h3>
+      <p>Every repo on this account, one always-live link. Public repos link to the live site or the repo page; private repos link to GitHub's own sign-in-gated page, nothing personal shown here.</p>
+      <div class="chips"><span class="chip c-live">Live</span></div>
     </a>
     <a class="room" href="sandbags.html">
       <svg class="gmark" viewBox="0 0 48 48" aria-hidden="true"><path d="M16 16 Q16 12 24 12 Q32 12 32 16 L34 36 L14 36 Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="10" y1="22" x2="38" y2="22" stroke-dasharray="3 3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 20 l3 -2 M36 24 l3 2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -781,7 +795,7 @@ footer p{margin:0 0 7px}
       <p>If you draw, any mark here is an open chair. Take one over, make it yours, and
         <b>your name stands in the file.</b> The contrast floors stay; the art inside them
         is the artist&rsquo;s.</p>
-      <svg viewBox="0 0 320 96" role="img" aria-label="The measure ladder: a teaspoon, a tablespoon, a cup — small truths compound into bigger vessels." style="display:block;max-width:320px;margin:14px 0 4px">
+      <svg viewBox="0 0 320 88" role="img" aria-label="The measure ladder: a teaspoon, a tablespoon, a cup — small truths compound into bigger vessels." style="display:block;max-width:320px;margin:14px 0 2px">
         <g fill="none" stroke="var(--brass-ink)" stroke-width="2.4" stroke-linecap="round">
           <ellipse cx="42" cy="58" rx="17" ry="11"/>
           <ellipse cx="42" cy="58" rx="8" ry="4.5" stroke-width="1.2"/>
@@ -793,10 +807,16 @@ footer p{margin:0 0 7px}
           <path d="M286 36 Q300 40 296 52 Q293 60 283 58" stroke-width="1.8"/>
           <path d="M240 44 L278 44" stroke-width="1.2" stroke-dasharray="3 4"/>
         </g>
-        <g font-family="var(--mono)" font-size="11" fill="var(--ink-3)" text-anchor="middle">
-          <text x="42" y="88">tsp</text><text x="140" y="88">tbsp</text><text x="259" y="94">cup</text>
-        </g>
       </svg>
+      <!-- Labels are HTML, not <text> in the viewBox: SVG text is frozen at the scale the
+           viewBox picks, so it rendered at 11.3px and broke the 18px floor. As HTML it rides
+           the page's own --fs control and the reader's zoom. Columns centre each label under
+           its vessel (tsp 13%, tbsp 44%, cup 81% of the 320-wide drawing).
+           --cool-ink, not --ink-3: this sits on .bench-top's --cool-fill ground, where
+           --ink-3 is 3.79:1. As SVG text that was invisible to the render gate. -->
+      <div style="display:grid; grid-template-columns:26.2% 35.1% 38.7%; max-width:320px; text-align:center; font-family:var(--mono); font-size:calc(18px * var(--fs)); color:var(--cool-ink); margin:0 0 4px">
+        <span>tsp</span><span>tbsp</span><span>cup</span>
+      </div>
       <p><b>Small truths first.</b> A teaspoon, then a tablespoon, then a cup.
         Mail the studio: <a href="mailto:walshero@gmail.com" style="color:inherit;text-decoration:underline;text-underline-offset:2px">walshero@gmail.com</a></p>
     </div>
@@ -862,7 +882,9 @@ footer p{margin:0 0 7px}
       <li><a href="comfort-control.html">comfort-control.html</a></li>
       <li><a href="en195-last-week.html">What Counts Now — EN195</a></li>
       <li><a href="en195-what-counts-now.html">What Counts Now — EN195</a></li>
+      <li><a href="en195-arcade-layout-preview.html">The EN195 Arcade — layout preview (compact header, narrow-screen furniture scale)</a></li>
       <li><a href="leeder-intake.html">Leeder Management — Project Intake · Tight Spiral Productions</a></li>
+      <li><a href="floor-specimen.html">18 vs 16 — and why that is the wrong question (type-floor specimen)</a></li>
       <li><a href="motion-specimen.html">Motion Specimen · Tight Spiral Studios</a></li>
       <li><a href="play-the-semester-flash.html">Play the Semester — EN195 Flash</a></li>
       <li><a href="sticker-price.html">Sticker Price — every number is a headline. Read the fine print. · Tig</a></li>

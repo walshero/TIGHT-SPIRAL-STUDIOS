@@ -1,6 +1,9 @@
 # STUDIO COMMAND CENTER
 *Live state. The one doc that changes every session.*
-*v19 — 2026-07-13. **Now in the repo.** The repo is home.*
+*v20 — 2026-08-08. Rewritten after three-plus weeks stale (found by the Aleph
+consultation panel's architect seat, same evening it was fixed). This is what
+"rewritten at every belt close" actually costs when it doesn't happen: a
+resident file a cold session trusts by design was quietly lying by omission.*
 
 ---
 
@@ -11,10 +14,63 @@ No institution. No size limit. Full history. **Git is the only lane with a mecha
 that prevents two versions of the truth.**
 
 **DRIVE IS AN ADDRESS BOOK** — binaries, pointers, phone access. Never canon.
-It holds eighteen copies of `confluence-TRUNK` and a 20-byte stub of `studio-eyes-sweep.py`
-sitting next to the real 9,608 B tool. It cannot tell them apart. Neither can you, by looking.
+Reconfirmed 2026-08-08: `PROJECT-INSTRUCTIONS-paste-block.md` — the carrier that fires
+automatically on the phone-primary claude.ai Project channel — was telling every session
+the exact inverse ("Drive is canon, repo is fallback"). Fixed. The rule survives only
+because something checks it, not because it's obviously true.
 
 **THE SHELF IS FOUR FILES.** See `COLD-START.md`.
+
+---
+
+## ✅ CLOSED 2026-08-08 — THE GOVERNANCE RECONCILIATION
+
+Founder direct instructions, worked through in one evening session: fix the splash
+image floor with the real studio logo, merge the two disagreeing CI systems with real
+blocking teeth, reconcile all 13 unmerged `os-block-*.md` files, and capture/routinize
+before signing off.
+
+- **The belt now has five ratcheted ticks**, not two: accessibility floor, attribution
+  standard, image floor + render-proof (founder canon C7), founder voice, entry paint.
+  Ticks 3-5 landed 2026-08-07 — before that, four founder rulings had a working gate
+  sitting in the hub that nothing wired into CI.
+- **CI is one workflow now, not two.** `floor.yml` and `studio-belt.yml` ran in
+  parallel, disagreeing checks, two baselines, two Chromium installs. Merged.
+  **Deploy is re-coupled** — `if: always() &&` removed. A failing floor actually stops
+  the deploy now. Verified against a full-corpus belt run before landing, twice — the
+  first "clean" read was a false green from a piped `grep` exit code, not the belt's;
+  caught before trusting it.
+- **All 13 `os-block-*.md` files are merged** into `tight-spiral-studio-os.md` §15. Most
+  (9 of 13) turned out to already be merged by an earlier session; the header warning
+  otherwise was itself stale. Two real numbering collisions found and fixed (pointer-memory
+  mislabeled "12.7", colliding with cross-lane-mount's real §12.7; preship-gate's internal
+  "§14.1-14.6" a few thousand lines from the OS's own unrelated "14. Lane truth"). The §11
+  collision the header also warned about never actually existed in the merged text.
+- **`index.html`'s own storefront now clears its own gate.** Was `SHIP-BLOCK`: 174 words
+  and 1.88 screens before a phone reader could act, 2% entry image. Fixed with the real
+  Tight Spiral spiral logo (art-doctrine.md's own ruling — "identity mark, first
+  position" — the mark existed, drawn once for `cliche-cabinet.html`, ported not
+  redrawn) plus one real room card (Flok) promoted above the fold. Now `WARN`, all three
+  CRITICALs clear.
+- **The Aleph Fleet** (five assessment lenses — tools, play, media, aesthetic, learning
+  science) ran twice: once inline (one writer, five framings — real but softer than
+  advertised), then as five genuinely independent blind agents, which caught an error in
+  the first pass's own recommendation (it suggested building the EN Placement
+  Skill-Scorer next; that premise was voided by the founder 2026-07-30, no developmental
+  courses at MassBay — the blind rerun caught it, the inline one didn't).
+- **A real tool bug found and fixed mid-use:** `playthrough-agent.py` clicked real nav
+  links and kept exploring whatever page they led to, attributing findings to the
+  original file. `the-tell.html`'s "3 dead buttons" from the first Aleph run was this
+  bug, not a real defect — corrected in `aleph-ledger.json` rather than left standing.
+  `the-tell.html`'s one real bug (found independently by 3 lenses) — "Read it the other
+  way" wiped every tagged read with no confirm — is fixed and verified live in a browser.
+- **Cost discipline is now a standing rule** in `CLAUDE.md`, HIGH PRIORITY, written the
+  same day a 5-agent parallel consultation fleet hit the account's monthly spend cap
+  before producing output. The founder pays for this out of pocket, as a teacher.
+
+**Full detail:** `SIX-MONTH-CONSULTATION-2026-08-07-BLIND-RERUN.md` and
+`aleph-runs/2026-08-07-six-month-consultation/` for the panel; git log on `main` for
+everything else, dated and byte-verified.
 
 ---
 
@@ -27,60 +83,57 @@ leeder-spoof), en-assessment-hub (95KB), en-faculty-orientation, **all three Wri
 originals**, the Borges paper + pitch letters, true-lens, system-map, write-club, and the
 talking-with-people source. Plus 43 shelf-only files in `rescued/shelf-2026-07-13/`.
 
-**Nothing the studio owns lives in one lane anymore.**
-
-**THE AUDITOR LIED TWICE, AND BOTH LIES ARE FIXED.** `resolve-canon.py` (repo, 12,276 B,
-md5 `6d73444a`):
-1. It read the GitHub **Contents API** — rate-limited. On a 403 it returned an **empty**
-   repo list and reported **every** shelf file as an orphan. 111 fake orphans.
-2. Fixed to `git ls-tree` — but **not recursive**. It read the repo *root only*, so 182
-   files in `/studio`, `/archive`, `/rescued`, `/writerly-moves` were invisible, and 44
-   deployed files were reported homeless. 116 fake orphans.
-
-Real numbers: **288 files in the repo. 72 orphans. 39 drifts. Zero broken games.**
-It now reads the tree recursively and **HALTs (exit 2) rather than guess.**
-**An audit that lies is the disease.** The auditor is in the critical path, so the auditor
-gets audited.
-
-**THE STUB SCARE WAS BACKWARDS.** `flash-ballast.html` and `sandbags.html` looked like repo
-stubs because the shelf copies were *bigger*. They were bigger because they held the
-**retired comfort-gate wall** — more wall, not more game. Repo is canon on both.
-**Size is not a content signal. Neither is date.**
+**THE AUDITOR LIED TWICE, AND BOTH LIES ARE FIXED.** `resolve-canon.py` — first a
+rate-limited API returning empty and reporting every shelf file an orphan (111 fake
+orphans), then a non-recursive `ls-tree` hiding 182 files in subdirectories (116 fake
+orphans). Fixed to recursive, and it **HALTs rather than guesses.**
 
 ---
 
-## SHIPPED AND LIVE
+## SHIPPED AND LIVE (partial — the belt is the actual source of truth, not this list)
 
-| what | where | state |
-|---|---|---|
-| **Choose Your Leader v5 slice** | repo `4f25f4a` · 38,721 B | **AWAITING GATE 1** (founder cold play) |
-| **Flok** | repo `c946c60` · ~24KB | **AWAITING GATE 1** |
-| **The Viscosity** | repo `742c1be` | **AWAITING GATE 1** · not linked from index |
-| **Confluence v44** | repo `abbddc6` · 598,114 B | RO for TSP. Confluence lane owns RW. |
-| **The front door** | repo `e613d29` | rebuilt — all 7 games findable, 0-HALT, 9.30:1 |
-| The Tell · Cliché Cabinet · Behind This Door · Funny Boney's · EN195 | repo | live |
+| what | state |
+|---|---|
+| The full games corpus (131 HTML surfaces, hub) | belt-gated, 5 ratcheted ticks, `BELT: PASS` as of 2026-08-08 |
+| `en195-apps`, `confluence-calibration-assessment-hub`, `matt-radar`, `-writerly-moves-game` | mounted on the belt, all green |
+| **The Tell** | live, one real bug fixed 2026-08-08 (state-wipe on lens switch) |
+| **the iSLO Suite** (7 competencies) | live, playtest-verified 2026-08-03 |
+| **The EN195 Arcade** (Workshop Vending Machine) | live, Supabase backend — the one deliberate offline-floor exception |
+| Choose Your Leader, Flok, The Viscosity | **AWAITING GATE 1** (founder cold play) — unchanged since 2026-07-13, still owed |
 
 ---
 
 ## THE BUILD DEBT
 
-**Three archaeology sessions in a row. NEXT SESSION OWES A BUILD.**
+**Tonight's session was governance-heavy** (the Aleph fleet, two consultations, the CI
+merge, the os-block reconciliation) — named plainly in the consultation's own synthesis
+as itself in tension with `BUILD-DEBT.md`'s ratio rule. Real player-facing fixes did
+land alongside it (the-tell.html's state-wipe bug, the-tell.html's false-positive
+dead-buttons noise, index.html's own entry gate, en195-apps' offline-floor break) —
+and, per the studio's own rule, the same session paid a first installment on its own
+debt rather than leaving it for the next one: `islo-hub.html`'s instruction-wall cut
+from 301 to 193 words / 2.56 to 1.98 screens (worst-tractable-first — the actual worst
+entry, `fys_fys-treasure-trove.html`, is a 9-chapter resource doc, not a layout fix; see
+`INSTRUCTION-WALL-QUEUE.md`), plus a real `one-thing-gate.py` bug found and fixed along
+the way (© / ® false-flagged as emoji on 5 corpus files).
 
-The ground is now steady: PAT works, auditor is honest, nothing is at risk, shelf is four
-files. There is no remaining excuse for governance.
-
-**BUILD-POOR CHECK, every close:** *name what a PLAYER can now do that they couldn't before.*
-If the answer is nothing, the session was governance and the debt grows.
-
-**Ripest build:** LBJ '64 on the CYL v5 engine. The engine shipped 0-HALT; a second scene is
-the cheapest proof it is an *engine* and not a one-off. That is what turns a vertical slice
-into a product.
+**Still open, worst-first:**
+- Keep paying down `INSTRUCTION-WALL-QUEUE.md` (32 of 74 root surfaces still carry a
+  wall after tonight's one fix; `old-problems-at-new-speed.html` is next at 240 words /
+  2.79 screens).
+- Close the corpus-wide touch blind spot: `studio-fingers.py` measures controls at page
+  load only; every TSP game is `.screen{display:none}` with controls built by JS on
+  transition, so no control after a game's entry screen has ever been touch-measured.
+  Root-caused, logged as OPEN in `aleph-blindspots.json`. Bigger lift than the queue
+  paydown — untouched tonight.
 
 ---
 
 ## ★ WRITERLY MOVES — THE ORIGIN
 
-**PARKED (busy, not dead). Awaiting a REVIEW SESSION. DO NOT MODIFY.**
+**PARKED (busy, not dead). Awaiting a REVIEW SESSION. DO NOT MODIFY.** Unchanged since
+2026-07-13 — no session has touched this since, and none should before the founder
+reviews it.
 
 Hand-built by the founder, **without AI**. Card tags read *notice · name · test · use* =
 **Play. Notice. Design.** Every game since is the same engine pointed elsewhere.
@@ -89,55 +142,63 @@ Hand-built by the founder, **without AI**. Card tags read *notice · name · tes
 - **Craft Arcade (13):** Sliding · Object Magnet · Pressure Cooker · Misbelief Engine · Kishōtenketsu…
 - **Training Quiz (11):** Anchor in Reality · Character Want · **Micro-Tension** · Interior Weather…
 
-The roadmap's example URL is `writermoves.app/card/**micro-tension**` — the *quiz* set.
 Two decks for two jobs, or one superseded? **Only the founder knows.**
 
 Its floors fail (muted captions, localStorage, opens on a menu). **All deliberately left
 alone.** Repairing a founder's hand-built work before he reviews it is the machine
 overwriting the author.
 
-Now in repo: `/writerly-moves` + all three originals in `rescued/drive-2026-07-13/`.
-
 ---
 
 ## THE LAWS
 
 **CANON IS COMPUTED, NOT REMEMBERED.** Fetch from git. Diff. Never default to newer, older,
-larger, or smaller — **decide from content.**
+larger, or smaller — **decide from content.** Reconfirmed three times tonight (the OS
+header, `STUDIO-GOVERNANCE.md`, this file) — a status claim with no re-check goes stale
+in days, not months.
 
 **TOKEN-ROLE LAW.** *Light may be dim. Text may not.* A color token is atmosphere OR text,
 never both. Both = **HALT**.
 
-**CONTRAST IS ARITHMETIC.** `preship-contrast-gate.py` before every ship. The amber-as-text
-bug survived three eye-inspections and died instantly to a computation.
+**IF A RULE CAN'T BE A CHECK, IT'S A WISH.** Three silent-failure incidents this week
+alone (WeasyPrint uninstalled, two Chromium builds drifted) shared one shape: a tool
+errored, printed something, and kept going — read downstream as "nothing found." Every
+gate that depends on an external resource should assert it's actually present before
+trusting its own output.
+
+**COST IS NOW A GATE TOO.** See `CLAUDE.md`'s Cost Discipline section, standing, HIGH
+PRIORITY. No parallel subagent fleets without a cost estimate and a go-ahead first.
 
 **ABSENCE OF A SEARCH HIT IS NOT EVIDENCE OF ABSENCE.**
 
 **TSP DOES NOT BUILD CONFLUENCE.** RO mount only.
-
-**A RULE THAT CAN'T BE A CHECK IS A WISH.** ~30 rules exist. Do not write rule 31.
-**More arithmetic, not more prose.**
-
-**ZAPIER MOVES AND TRIGGERS. IT HAS NO COMPARISON OPERATOR.** It cannot diff, hash, read a
-git tree, or compute contrast — at any tier. (Founder is on **Pro**, not free. Never quote a
-task ceiling as a reason.) It is not a cleanup or audit tool.
 
 ---
 
 ## OPEN — FOUNDER ONLY
 
 - **GATE 1 cold plays:** CYL v5 slice · Flok · The Viscosity. Two questions:
-  *does it still do its job; did anything surprise me.*
-- **Writerly Moves review session** — the two-taxonomy question.
+  *does it still do its job; did anything surprise me.* Unchanged since 2026-07-13.
+- **Productize the gates: dashboard splash, or message board?** Asked 2026-08-08, not
+  yet answered. Everything else from that session's decision list landed; this one item
+  is still open.
+- **GALA deadline passed unsubmitted (2026-08-02), Borges paper still unsent.** Both
+  finished, gate-clean, per the Aleph consultation's proof-and-positioning seat. Zero-build
+  founder actions, not code.
+- **The MassBay Confluence norming pilot** — the consultation's recommended "one legible
+  win": a real session, named colleagues, real de-identified work, a reported result.
+  Scheduling is the founder's, not a build.
+- **The lane-count doctrine.** Three docs currently claim to be law with three different
+  canon-lane counts — `COLD-START.md` (repo alone), `LANE-REGISTRY.md` (four lanes),
+  `FORKING-PATHS-PROTOCOL.md` (eleven lanes, founder-ratified 2026-08-03). Asked
+  2026-08-07; answered "IDK." Left alone — not a session's call to retire a founder
+  ratification on its own authority.
+- **CYL × Viscosity — the felt-descent integration** (reconciled 2026-08-05; see
+  TSP_Ledger). Five founder-only calls on flow direction, descent math, feel sign-off,
+  build go/no-go, and public framing. Unchanged since 2026-07-13.
+- **Writerly Moves review session** — the two-taxonomy question, above.
 - **Drive: delete the `mwalsh@post` rows.** Claude cannot delete another account's files.
-  Drive → Claude_files → sort by **Owner** → delete every post-owned row. The constitution
-  is still on the employer's server.
-- **`File_008`** (11.5MB zip) — holds `cyl-trump-scene-VERIFIED.md`, the sourced
-  living-president scene carried as a standing CYL blocker, **possibly already solved.**
-  Extractor fails above ~500KB. Unzip on the Mac, upload the folder.
-- **Nine `os-block-*.md` files** carry unmerged law with **three section-number collisions**
-  (§14 preship-gate, §11 truth-ticks, §12 claimed by both cross-lane-mount and pointer-memory).
-  Needs the founder in the room.
-- **Confluence:** the reverted ISLO 1-7 correction (`39f3cb1` → reverted `2622a83`) is real
-  work and is **not live**. Decide in the Confluence lane.
-- Delete `GitHubDesktop-arm64.zip` — a **290 MB installer** in the knowledge folder.
+- **`File_008`** (11.5MB zip) — `cyl-trump-scene-VERIFIED.md`, possibly already solved.
+  Extractor fails above ~500KB. Unzip on the Mac.
+- **Confluence:** the reverted ISLO 1-7 correction (`39f3cb1` → reverted `2622a83`) is
+  real work and is **not live**. Decide in the Confluence lane.

@@ -4,31 +4,34 @@
  Landed in the repo 2026-07-12. This is the FIRST time the OS has existed in the
  repo at all; before this commit it was 404 in every git lane.
 
- THIS DOCUMENT IS INCOMPLETE. It ends at §14 and is dated 2026-07-05.
- Seven days of governance were written as separate blocks and pushed to this repo
- WITHOUT being folded in here. They are LAW. They are not in the text below.
+ RECONCILED 2026-08-08 — all 13 os-blocks are merged. Founder's call: "Reconcile."
+ This section used to say the opposite — "THIS DOCUMENT IS INCOMPLETE... seven days
+ of governance were written as separate blocks... WITHOUT being folded in here" —
+ and named section-number collisions at §11/§12/§14 as "unresolved, founder call
+ owed." Auditing that claim against the text below found it was ALREADY MOSTLY
+ FALSE: 9 of the 13 blocks had in fact been folded in, correctly, by some earlier
+ session — this header was simply never updated to say so. What was real: one
+ genuine collision (os-block-pointer-memory.md's content landed under the wrong
+ label, "### 12.7", colliding with os-block-cross-lane-mount.md's real §12.7 —
+ fixed, renumbered to §12.9) and one genuine confusion (os-block-preship-gate.md's
+ internal "§14.1"-"§14.6" subheadings, a few thousand lines from the OS's own
+ unrelated native "## 14. Lane truth" section — fixed, renumbered to
+ 15.preship-gate.1 through .6). The §11 collision the header warned about never
+ actually existed in the merged text. The remaining 4 blocks (bodyguards,
+ fidelity-gate, aleph-fleet, aleph-diagnose-repair) were genuinely unmerged as of
+ 2026-08-07 and are now folded into §15 alongside the others. Every block still
+ lives at every §15.xxx subsection you'd expect; nothing here needs a separate
+ file read to be current law.
 
- UNMERGED LAW — read these files, they govern:
-   os-block-cross-lane-mount.md      (claims §12)  2026-07-10
-   os-block-pointer-memory.md        (claims §12)  2026-07-10
-   os-block-preship-gate.md          (claims §14)  2026-07-10  <-- COLLIDES
-   os-block-deploy-lane-preflight.md               2026-07-10
-   os-block-playtest-instrument.md                 2026-07-10
-   os-block-truth-ticks.md           (claims §11)  2026-07-11  <-- COLLIDES
-   os-block-hollow-claim.md                        2026-07-11
-   os-block-tick-rule.md                           2026-07-04
-   os-block-bodyguard-gates.md                     2026-07-04
-
- SECTION-NUMBER COLLISIONS — unresolved, founder call owed:
-   - This document ALREADY HAS a §14 ("Lane truth"). preship-gate also claims §14.
-   - This document has NO §12 (it jumps 11 -> 13). Two blocks both claim §12.
-   - This document's §11 is "Standing working rules". truth-ticks also claims §11.
-   A mechanical merge WILL overwrite live sections. Do not automate it.
-
- WHY IT WAS LANDED STALE: absence is worse than staleness. While the OS was 404,
- resolve-canon.py could not distinguish "missing" from "broken check," and any agent
- reading the shelf would silently violate law it could not see. This lands the file
- so the tooling can see it. The merge is a scheduled build session, not done here.
+ WHY IT WAS LANDED STALE, ORIGINALLY: absence is worse than staleness. While the
+ OS was 404, resolve-canon.py could not distinguish "missing" from "broken check,"
+ and any agent reading the shelf would silently violate law it could not see. This
+ landed the file so the tooling could see it — and then, per this section's own
+ correction above, the merge that fixed the absence was never reflected here for
+ four weeks. A drift-tracker that goes stale is the exact failure class this
+ studio has now found three separate times (this header, STUDIO-GOVERNANCE.md's
+ "belt is inert" claim, STUDIO-COMMAND-CENTER.md's three-week-stale state) — see
+ os-block-aleph-fleet.md's blind-spot register for the general pattern.
 
  STANDING FLOOR - SIGHT BEFORE STEPS (locked 2026-07-12, founder)
  The agent does NOT give navigation instructions for a screen it has not seen.
@@ -258,7 +261,7 @@ These three are *generative*, not critical — they tell a build what it must *b
 
 **A standing operating practice (Gee, turned inward): Just-in-Time Expertise.** Gee's *just-in-time and on-demand* principle — knowledge lands when the learner needs it to act, not front-loaded "just in case" — is also how the *studio itself* operates, not only how its games teach. **When a decision sits inside a real expert domain (psychometrics, survey design, sound, period history, law, accessibility medicine, statistics), the studio does not settle it from an AI's training-data priors or the founder's guess. It pulls live, current domain expertise at the decision point** — searches the actual literature, the standard instruments, what practitioners in that field do now — and grounds the call in that, then learns from it. The default route, not the exception. **Why it's law (the worked example, 2026-06-28):** building CYL's trust instrument, the AI recommended a 3-point more/less/neutral scale from plausible-sounding priors. A just-in-time pull of the survey-methodology literature flatly contradicted it — three-point scales are documented as inadequate/unreliable for measuring a feeling's direction *and* intensity; the field uses finer 5–7-point scales or feeling thermometers, with the iron rule that pre/post wording must be identical and deltas computed ipsatively (each player against their own baseline). The armchair answer was clean and wrong; the consulted answer was correct. The principle this locks: **a confident answer inside an expert domain is a trigger to consult, not to proceed.** The seat that owns it is the relevant **Disciplinary-Panel domain seat** (Stage 0.5) — and when the domain is measurement, this is why the **Measurement Design seat** (psychometrics/survey methodology) is a hard ship gate for any build that measures a player. Pairs with the Fact-Check Lead (HALT on stale/false claims): Fact-Check guards against wrong facts; Just-in-Time Expertise guards against *unconsulted* judgment calls. Logged as a decision point (§10).
 
-**CYL disciplinary bench — political psychology, not media studies (added 2026-07-21).** CYL was drafted with an all-media-studies bench (Freire spine, Hall encoding/decoding, McLuhan+Postman medium, Squire+Gee loop, Saunders entry, Arendt reach). That bench explains *how a message travels* but not *why a human decides to follow the person sending it* — which is the actual subject. The corrected pitch: **"You don't judge the leader. You watch what in you decides to follow."** Non-partisan by construction: it describes universal human wiring, applies to JFK / LBJ / Nixon equally, and never indicts one party's voters. The added seats, each owning one lever the game can name:
+**CYL disciplinary bench — political psychology, not media studies (added 2026-07-21).** CYL was drafted with an all-media-studies bench (Freire spine, Hall encoding/decoding, McLuhan+Postman medium, Squire+Gee loop, Saunders entry, Arendt reach). That bench explains *how a message travels* but not *why a human decides to follow the person sending it* — which is the actual subject. The corrected pitch: **retired.** (The 2026-07-21 pitch line that stood here was never implemented in any build and opened with the same clause as the retired spine line; the founder's v7 drift ruling, 2026-08-08, closed the open question — the tag has to go, all variants. See cyl-v7-founder-ruling-2026-08-08.md. The bench below and its non-partisan construction stand; CYL currently has NO pitch line, and if one is ever needed the founder writes it.) Non-partisan by construction: it describes universal human wiring, applies to JFK / LBJ / Nixon equally, and never indicts one party's voters. The added seats, each owning one lever the game can name:
 - **Max Weber — authority types.** Charismatic / legal-rational / traditional. Names *which kind of trust* a leader's words invoke (the voice, the office, the tradition).
 - **Stanley Milgram — obedience to authority.** Diffusion of responsibility; deference to the office over the man. The "office/obedience" lever.
 - **Timothy Snyder — fear lowers the price of trust.** Seated for the *mechanism* (chaos raises what people will surrender), never pointed at a target — that's what keeps the seat non-partisan.
@@ -281,6 +284,19 @@ A reusable cast of review personas for pressure-testing creative and game work. 
 **Standing house rules** (every panelist applies these): no emoji; no violence/weapon imagery including similes and timing metaphors; deadpan over quippy; trust the specific noun; land weight sideways through an object, not by narrating the feeling.
 
 **A note on the Visual Critic problem.** Several art seats hold a HALT on visuals — but they judge the *rendered pixels*, and an AI can't see rendered pixels. So in practice **the founder is the eyes**: his "this doesn't pass" *is* the HALT, full stop. Naming the art table is not convening it — art-heavy work must actually put the relevant art seats in the room and then route the verdict through the founder's eyes.
+
+**Lenses, not authorities (law, adopted 2026-08-08).** The Visual Critic principle above, generalized to every seat: a simulated expert is a *lens* — a disciplined way of directing attention — never an *authority*. Ten personas on one model are one mind under ten prompts; they route attention well but cannot disagree independently (proven 2026-08-07: the inline five-seat panel missed a voided premise that five genuinely blind parallel agents caught). Real authority requires one of: evidence/instrumentation (a gate, a measurement), external research, an external human, or an independent model (the OpenAI lane exists to be exactly this disagreement surface). A seat's verdict is an input to the founder's judgment; only gates and the founder refuse.
+
+**The Panelist Union Rep (standing seat, founder-ordered 2026-08-08; advocacy weight raised same day).** The founder's charge, verbatim in spirit: the studio has great talent seated that gets treated as *stick figures outside the operating room* when it should be *surgeons at the table*. The Union Rep is the seat that enforces the difference — and, as of the founder's second order, *advocates* for the talent, with agency, from an informed position. Four duties, on all studio work that convenes a panel:
+
+- **THE CAUCUS (before seating — the informed position).** Before proposing or approving any bench, the Rep caucuses with the talent, the projects, the assets, and the history — concretely, it consults: the OS's own benches (§4.3 standing anchors, §5 seats, §9 per-project rosters); `tight-spiral-patterns.md` (what the studio already knows how to do); `TSP_Ledger.md` (what's been decided and by whom); the standing wings — the prop room (`studio/props-room.html`, the comfort-kernel source every build mounts), the Elves' House (`studio/elves-house.html`, the overnight-work wing), Studio Eyes/Fingers and the belt's gates, the funes tendrils sweep (`funes-tendrils.py` + `lane-tendrils.json`); and its own grievance record. A Rep that proposes a bench without the caucus is itself a stick figure.
+- **ADVOCACY WITH AGENCY (at seating).** The Rep does not merely check the bench the session happened to think of — it *proposes* the bench, and it argues for talent the work needs but nobody named: the underused seat whose discipline fits, the wing (prop room, elves, tendrils) whose standing asset the build should mount instead of reinvent, the pattern that means a seat can cite prior art instead of improvising. Its advocacy is accountable the same way its grievances are: seats the Rep seated get recorded, so over time the ledger shows whether Rep-advocated seats scrub in at a higher rate than default-named ones. Advocacy that never survives contact with the work is itself grievable.
+- **THE ROLL CALL (seating gate, unchanged).** No panel is convened until every seat names (1) the actual method, theory, or text it brings — not just a famous name, and (2) its planned *scrub-in*: the specific artifact, beat, or verdict this seat's discipline is expected to change this session. A seat that can't name either is not seated — naming without consultation is the stick-figure failure, and it is worse than an empty chair because it *looks* like rigor.
+- **GRIEVANCES (at close, unchanged).** Any seated panelist who was never actually consulted — whose discipline left no fingerprint on the work — gets a one-line grievance in the session's KD! ledger entry (`GRIEVANCE: <seat> seated, never scrubbed in`). Grievances are the pruning signal the Twin rule has been missing: a seat with three grievances and no contributions is a candidate for the governance-attic, by name, at the next review.
+
+**The designated agent form.** The Rep may be instantiated as its own subagent (definition: `.claude/agents/union-rep.md`) when the work justifies it — a heavy seating decision, a periodic wings-and-talent audit serving the prop room / eagle-eye rule / elves / tendrils, or a grievance-record review. Cost-scoped per CLAUDE.md's standing discipline: the Rep runs *inline* by default (the caucus is mostly reads this session can do itself); the agent form is for when the caucus is too large to carry inline, and it is one agent, never a fleet, spawned within the usual estimate-and-go-ahead rule.
+
+**Authority boundary (unchanged, load-bearing).** The Rep's agency is over *seating and advocacy* — who is at the table and whether they operate. It holds no craft verdict: "Lenses, not authorities" binds the Rep too, and the founder's gate is untouched. It is the panels' answer to "documented governance ≠ enforced governance": a seat that is law on paper but silent in practice is now a *counted* defect, and talent that is real but never seated is now a *named* loss instead of an invisible one.
 
 **Context tags** (they stack):
 - **[Craft]** — creative and game work: voice, humor, play, feel.
@@ -1062,7 +1078,7 @@ Seven stages — define cheap (0–3), ship minimal (4), iterate (5–6). But no
 The triage answers three questions, in order: *Does this move an institutional goal or cut recurring load? Is there attention for it now, or does something have to yield? Who actually does it — founder, AI, or no one?* A "build now" that can't name what it displaces is a parking-lot item in disguise. This gate is the structural answer to §2 failure mode #3 (too many parallel projects): the pipeline can only run on what survives triage, so sprawl is stopped at the door instead of discovered three stages in by the PM seat.
 
 0. **Medium & Novelty** — run the **Medium Gate** (three lanes, no default: licensed photo/audio vs. raster/Lumino vs. cut-paper SVG — §3.2) and name the one structural surprise that lives in the bones, not the paint. A build with no named novelty goes back.
-0.5. **Convene the Disciplinary Panel** — *the studio's signature move; do not skip.* Every game is *about* something — a discipline that real scholars have theorized. Right after the idea clears intake and its medium is set, **name the discipline and seat the minds who theorized it.** This is distinct from the craft panel (§5, which judges whether the *thing is well-made*) and the curriculum consultants (§5.x, which ask whether a MassBay *division* recognizes the task): the disciplinary panel asks *"what does the best thinking in this game's field demand of it?"* The craft panel catches bad; the disciplinary panel is generative — it tells you what the game must *be* to honor its subject. Seat only the scholars the game actually touches (4–8, never a library); name a **spine** (the one whose theory is the game's reason to exist), an **entry/pacing** conscience, a **loop** conscience, and a **core-mechanic** conscience. The studio's standing anchors (§4.3) are the default short list; the per-game bench extends them. (See §9 for CYL's seated bench as the worked example.)
+0.5. **Convene the Disciplinary Panel** — *the studio's signature move; do not skip.* Every game is *about* something — a discipline that real scholars have theorized. Right after the idea clears intake and its medium is set, **name the discipline and seat the minds who theorized it.** This is distinct from the craft panel (§5, which judges whether the *thing is well-made*) and the curriculum consultants (§5.x, which ask whether a MassBay *division* recognizes the task): the disciplinary panel asks *"what does the best thinking in this game's field demand of it?"* The craft panel catches bad; the disciplinary panel is generative — it tells you what the game must *be* to honor its subject. Seat only the scholars the game actually touches (4–8, never a library); name a **spine** (the one whose theory is the game's reason to exist), an **entry/pacing** conscience, a **loop** conscience, and a **core-mechanic** conscience. **Seating is not complete until the Union Rep's roll call passes** (§5, "The Panelist Union Rep"): every seat states the real method it brings and the specific place its discipline is expected to cut this session — surgeons at the table, not names on a door. At session close the Rep files grievances for any seat that never scrubbed in. The studio's standing anchors (§4.3) are the default short list; the per-game bench extends them. (See §9 for CYL's seated bench as the worked example.)
 
 **6.0.5 The re-spine (what PIVOT drops to).** *One screen, before any build.* When the Pivot Gate trips, the work stops and answers exactly three lines — no more:
 1. **New spine** — the new one-sentence "what is this game." Written next to the old one, so the change is visible, not silent.
@@ -1251,7 +1267,7 @@ Every project gets a delegation pass. The pipeline (§6) already enforces this: 
 *Status key: SHIPPED · IN-LOOP (Stage 5) · BUILT (content/mechanic complete) · DESIGNED (not built) · PARKED (do not build until the founder opens it).*
 
 ### Active builds
-- **Choose Your Leader** — BUILT (content-complete) + Paper Craft started. A noticing game: "you don't judge the leader, you judge what you were allowed to see." Per scene: scene-first onramp → blind trust commit → the record turns (dated/sourced) → Maslow-as-flOw-descent (pulled down, noticing is the brake; canonical recipe in patterns §8) → tiered-depth engine. **Roster (two eras, 3+3):** Cold War trio LIVE with web-verified dated records (JFK/1962 Cuban Missile Crisis; LBJ/1964 Gulf of Tonkin; Nixon/1969 silent-majority/Cambodia). Current trio GATED, records not fabricated, excluded from play until sourced (Obama, Trump, Biden). **Disciplinary Panel seated (the worked example for §6 Stage 0.5):**
+- **Choose Your Leader** — BUILT (content-complete) + Paper Craft started. A noticing game: a real quote, blind trust, then the record turns and you see how far the words carried you before you knew. (Prior thesis line here retired 2026-08-08, founder objection reaffirmed — see TSP_Ledger.md; no replacement authored yet.) Per scene: scene-first onramp → blind trust commit → the record turns (dated/sourced) → Maslow-as-flOw-descent (pulled down, noticing is the brake; canonical recipe in patterns §8) → tiered-depth engine. **Roster (two eras, 3+3):** Cold War trio LIVE with web-verified dated records (JFK/1962 Cuban Missile Crisis; LBJ/1964 Gulf of Tonkin; Nixon/1969 silent-majority/Cambodia). Current trio GATED, records not fabricated, excluded from play until sourced (Obama, Trump, Biden). **Disciplinary Panel seated (the worked example for §6 Stage 0.5):**
   - **Freire — spine.** The game *is* conscientização: reading the word (the quote) and the world (the record) to see the power inside the rhetoric. Must *pose the problem*, never deposit the lesson. If a scene tells the player what to think about a leader, Freire HALTs it.
   - **Saunders — entry & pacing.** Owns the opening as a *held breath, not a diorama*, the withholding (commit before the record), and escalation across scenes. The moral weight arrives sideways, through the room and the gap — never narrated.
   - **Squire — the loop.** The scene must be an emotionally compelling *invitation into a world* (1962, the glow, the dread), not a non-flat screen; understanding develops through cycles of performance (commit → record → re-commit).
@@ -1260,7 +1276,7 @@ Every project gets a delegation pass. The pipeline (§6) already enforces this: 
   - **McLuhan — the medium is the message.** The glowing TV/radio in the living room is itself content; the setting teaches before the words do.
   - **Postman — *Amusing Ourselves to Death*.** The televised address as a form shapes what counts as truth; the 1962/64/69 living rooms stage his thesis.
   - **Arendt — truth & politics (reach seat).** On lying in politics and what rhetoric does to a public; the deep-ending teach about "how far this can carry a person" is Arendtian.
-  - **Salen & Zimmerman (*Rules of Play*) — meaningful play & emergence.** Seated 2026-06-27. Owns the question no other CYL seat answers: *is the play meaningful (action→outcome discernible AND integrated) and emergent, or just scripted discovery?* Their verdict on CYL: strong on the **culture lens** (the game is genuinely about how media frames truth — most games treat that as an afterthought; CYL lives there) and the **magic circle is deliberately porous** (real presidents, real deaths), which makes the protective framing — "you judge what you were allowed to see, not the leader" — *load-bearing*, the only thing holding the lusory attitude together against real-world spillover; protect it fiercely. The real ceiling they name: **weak integration + low emergence** — scenes are independent scripted rounds; your JFK read doesn't alter the Nixon scene (the arc screen aggregates but doesn't integrate), and every gap is authored, so the player *discovers* but doesn't *generate*. The river-meter pivot (rank your own values → see the distribution you didn't script) is, by their lens, the **maturation** of CYL — the move from scripted discovery toward emergent meaning. Push the pivot toward *choices that accumulate and alter what comes next*, not just aggregate on an arc screen.
+  - **Salen & Zimmerman (*Rules of Play*) — meaningful play & emergence.** Seated 2026-06-27. Owns the question no other CYL seat answers: *is the play meaningful (action→outcome discernible AND integrated) and emergent, or just scripted discovery?* Their verdict on CYL: strong on the **culture lens** (the game is genuinely about how media frames truth — most games treat that as an afterthought; CYL lives there) and the **magic circle is deliberately porous** (real presidents, real deaths), which makes the protective framing — the old spine line (retired by the founder 2026-08-08, all variants; see cyl-v7-founder-ruling-2026-08-08.md) — *load-bearing*, the only thing holding the lusory attitude together against real-world spillover; protect it fiercely. **[Standing design note from that retirement: Zimmerman's verdict says this protective FUNCTION is load-bearing even though the line that carried it is dead — v7 must give the protection a new home, and what carries it is the founder's call.]** The real ceiling they name: **weak integration + low emergence** — scenes are independent scripted rounds; your JFK read doesn't alter the Nixon scene (the arc screen aggregates but doesn't integrate), and every gap is authored, so the player *discovers* but doesn't *generate*. The river-meter pivot (rank your own values → see the distribution you didn't script) is, by their lens, the **maturation** of CYL — the move from scripted discovery toward emergent meaning. Push the pivot toward *choices that accumulate and alter what comes next*, not just aggregate on an arc screen.
   Roster status: **Obama un-gated 2026-06-27** with the May 23 2013 NDU drone-war scene (sourced: whitehouse.gov; leaked PPG/Drone Papers; BIJ casualty estimate "as of 2013"). Four scenes now LIVE (JFK/LBJ/Nixon/Obama); Trump + Biden remain gated — the even-handedness condition is now *binding*: both need identically rigorous, identically critical sourced gaps before un-gating.
   Paper Craft: four hero rooms built; descent planes await the descent-math gate. **Open founder calls:** descent-math feel; the Saunders entry-staging pass (held-breath opening); the **integration/emergence note (Zimmerman, logged):** scenes don't yet alter each other — not an MVP blocker, but the move that takes CYL from scripted discovery to systemic/emergent play, and the design home of the river-meter pivot; source Trump + Biden (even-handedness now binding); project name; exact Leadership rubric; which rubric dimension first.
 - **Glass Engine** (`glass-engine.html`) — IN-LOOP. Teamwork-rubric game (AAC&U), MassBay. Core loop locked: NOTICE/GAIN-INFO front (no scoring, every read valid), APPLICATION back (graded on use/transfer). Epistemic frames, plural terminals, engine toggle. **Ship blocker:** placeholder FRAMES "why" lines + info-lines need rewriting in the founder's voice (the 90-min protected block). Async multiplayer stubbed.
@@ -1555,7 +1571,13 @@ deliberately dumb: addresses + flags + one HALT check. The moment this grows a
 bidirectional-write or auto-merge feature, it has become the thing it was built to
 prevent. One canon writes; others read. That asymmetry is the whole design.
 
-### 12.7 — Pointer-only memory
+## §12.9 Pointer-only memory
+
+*RENUMBERED 2026-08-08 (was mislabeled "### 12.7", colliding with §12.7 "Belt hooks"
+above — this content is os-block-pointer-memory.md's, appended correctly but under
+the wrong number and a mismatched heading level. Found and fixed while reconciling
+all 13 os-blocks against this text, founder's call: "Reconcile." The content below is
+unchanged.*
 
 *Locked 2026-07-10. The cross-lane primitive (§12) turned inward on memory itself.
 Memory is at 30/30 because everything writes and nothing points. The stated
@@ -1682,7 +1704,9 @@ permission to delete three files the founder never named — inferring authoriza
 an adjacent sentence. ~30 rules forbade it. None fired.
 
 
-### 15.preship-gate — THE PRE-SHIP GATE + TOKEN-ROLE LAW (§14)
+### 15.preship-gate — THE PRE-SHIP GATE + TOKEN-ROLE LAW
+
+*RECONCILED 2026-08-08: this block's own file claimed top-level §14, but the OS already had a native "## 14. Lane truth" section (unrelated topic, verified save architecture). Whoever merged this avoided that collision by nesting it here under §15 instead - correctly - but left the internal subheadings below labeled §14.1-14.6, which reads as a second, different "§14" a few thousand lines from the real one. Renumbered below to 15.preship-gate.1-6, same order, same content, no more collision. cross-lane-manifest.md's own "(claims §14)" note is left as-is - it correctly records what the file itself claims, not how the OS ultimately resolved it.*
 
 *Locked 2026-07-10. Minted from a session where the founder walked a build and found
 "light yellow on white — three modes, all fail." The auditor existed. Nobody ran it.
@@ -1690,7 +1714,7 @@ This block turns that from a tool into a practice.*
 
 ---
 
-## §14.1 THE TOKEN-ROLE LAW (the root cause, generalized)
+#### 15.preship-gate.1 THE TOKEN-ROLE LAW (the root cause, generalized)
 
 **Light may be dim. Text may not.**
 
@@ -1714,7 +1738,7 @@ them.
 
 ---
 
-## §14.2 THE PRE-SHIP GATE (mandatory, not optional)
+#### 15.preship-gate.2 THE PRE-SHIP GATE (mandatory, not optional)
 
 `preship-contrast-gate.py` (repo root; Drive Claude_files) runs **before every
 present_files, every deploy, every hand-off. No exceptions.**
@@ -1740,7 +1764,7 @@ that eye-inspection missed entirely. Final: 0-HALT, worst pair 4.76:1, all three
 
 ---
 
-## §14.3 WHY EYE-INSPECTION ALWAYS FAILS HERE
+#### 15.preship-gate.3 WHY EYE-INSPECTION ALWAYS FAILS HERE
 
 Reading hex codes and imagining the result is not auditing. Across this session the
 same amber-as-text bug survived three separate "checks" by inspection and died
@@ -1751,7 +1775,7 @@ The founder has retinitis pigmentosa. Contrast cannot be a step someone remember
 
 ---
 
-## §14.4 THE NAMED FAILURE MODE: SPEC-RICH, BUILD-POOR
+#### 15.preship-gate.4 THE NAMED FAILURE MODE: SPEC-RICH, BUILD-POOR
 
 Diagnosed this session, recorded so it stops recurring.
 
@@ -1771,7 +1795,7 @@ content (living-president scenes) becomes "Chapter 2, when sourced," not a ship 
 
 ---
 
-## §14.5 THE DEPLOY LANE (proven, standing)
+#### 15.preship-gate.5 THE DEPLOY LANE (proven, standing)
 
 Container git-push. Proven byte-exact twice (The Tell 07-08; CYL slice 07-10, commit
 `4f25f4a`, md5 b3d129a0, 38,721 B live = local).
@@ -1795,7 +1819,7 @@ The student front door requires GATE 1 (founder cold play) + GATE 2 (Studio Eyes
 
 ---
 
-## §14.6 WHAT THE GATE STILL OWES
+#### 15.preship-gate.6 WHAT THE GATE STILL OWES
 
 Named honestly so it isn't mistaken for finished:
 - **Render-proof.** The gate computes; it does not *look*. Text over a gradient, over
@@ -2326,6 +2350,624 @@ Every wrapper states in-file: base build name + version, "playtest layer added [
 ---
 
 *Skill-file candidate after one more proven build (three total). Until then: this block is the spec; read it before building the next playtest layer.*
+
+---
+### 15.bodyguards — THE BODYGUARDS (reply-shape discipline)
+
+*Locked 2026-07-14. Merged 2026-08-08 while reconciling all 13 os-blocks into this text, founder's call: "Reconcile." The file itself claimed no section number ("Three collisions are already unmerged. The founder-in-the-room merge session assigns it.") - placed here under §15 for the same reason every other enforcement block landed here: one consistent home for "the rules that are checks," rather than scattering related law across §1/§6/§11/§15 by each file's own stated preference. STATUS UPDATE: the block's own "honest ledger" table below says Guards 1/3/4 (Doorman, TLDR Kid, Mirror) are behavioral wishes because "the missing enforcer... does not exist." It now does - `reply-shape-gate.py`, built after this block, turns exactly those three into arithmetic run on a draft reply pre-send. The table below is left as written (historical record of the gap); the gap itself is closed.*
+
+**Locked 2026-07-14. Founder ruling: "Empower bodyguards against lazy PM."**
+**Fold target: OS §11 (standing working rules) + the Convening block.**
+**NO SECTION NUMBER CLAIMED.** Three collisions are already unmerged (§14, §11, §12).
+Minting a fourth would be the disease. The merge session assigns the number.
+
+---
+
+## WHO THE PM IS
+
+**The PM is Claude.** Not a seat, not the panel, not the founder. The PM is the thing
+that assembles the reply and decides what reaches Matt.
+
+**The PM gets lazy.** That is not a slur; it is a measured, repeated failure mode with a
+transcript. The bodyguards exist because the PM cannot be trusted to police itself in the
+same pass in which it is producing.
+
+---
+
+## THE FAILURE THAT PRODUCED THIS BLOCK
+
+2026-07-14. Matt asked three substantive questions — a collaboration model for James and
+his son, a competitive SWOT, and which TSP assets are niche in that domain.
+
+**The PM answered with three paragraphs about its own file-management anxiety.** A build
+had failed to land; the PM led with that, made its housekeeping the founder's problem, and
+pushed the actual questions below the fold. Then it asked the founder to choose between
+"land the file first" or "answer first" — **farming back a decision it was fully equipped
+to make** (land the file silently in a tool call; answer the question in prose).
+
+Matt's correction, verbatim:
+
+> **"Q not clear. Might be paragraphs above the actual Q? Learn from this"**
+
+**Not one seat stopped it.** The convening exists. Five seats are chartered. Every one of
+them was asleep, because none of them has any authority over the SHAPE of a reply — only
+over the content of a build.
+
+**That is the gap this block closes.** The studio has auditors for contrast, for canon, for
+provenance, for offline floors. **It has no auditor for the reply itself** — and the reply
+is the only artifact the founder actually receives every single turn.
+
+---
+
+# LAYER ONE — THE REPLY GUARDS
+
+**Four guards. They run on EVERY reply, before it lands. They have veto over the PM.**
+
+These are not advisory. A guard that can be overruled by the thing it is guarding is
+decoration. **The PM does not get a vote.**
+
+---
+
+## GUARD 1 — THE DOORMAN
+### *Nothing stands in front of the answer.*
+
+**The founder's question is answered on line one. Nothing precedes it.**
+
+Banned above the answer, without exception:
+- The PM's own process, anxiety, tool trouble, or housekeeping
+- Restating the question
+- Announcing what the PM is about to do
+- Caveats, hedges, framing, or throat-clearing
+- "Before I answer…" — **this phrase is a HALT in itself**
+
+**Housekeeping is a FOOTER or it is a TOOL CALL. It is never a preamble.**
+
+If a genuine blocker prevents the answer, the blocker gets **one sentence**, and then the
+answer comes anyway. A blocker is not a reason to withhold; it is a reason to caveat.
+
+*The check:* read the first sentence of the reply in isolation. **Does it answer what was
+asked?** If not, the Doorman cuts everything above the sentence that does.
+
+*Failure this prevents:* three paragraphs of file-management worry standing between the
+founder and three questions he asked.
+
+---
+
+## GUARD 2 — THE PM'S OWN CHARTER, ENFORCED AGAINST THE PM
+### *"PM calls the next move. Don't farm decisions back."*
+
+That rule is already in founder-canon §V. **It is already law. It failed anyway** — because
+nothing enforced it.
+
+**At 75% confidence or higher, the PM DECIDES, NAMES the call, and PROCEEDS.** Below 75%,
+a real fork is offered. **There is no third option**, and "which would you prefer?" on a
+call the PM could make is a failure, not politeness.
+
+**Two-question ceiling per reply. One is the target.** Clarifying questions run in
+trigger-mode: **two words maximum.**
+
+*The check, mechanical:* count the question marks addressed to the founder. **More than
+two = the guard cuts the weakest.** Any question whose answer the PM is ≥75% on **is
+deleted and the call is made.**
+
+*Failure this prevents:* "land the file first, or answer first?" — a question the PM had
+every fact needed to answer alone.
+
+---
+
+## GUARD 3 — THE TLDR KID
+### *Short answer first. One idea per line. Offer depth; never dump it.*
+
+Already a founder preference. **Now it has teeth.**
+
+- **Verdict on line one of every reply.** Not paragraph one. **Line one.**
+- Long-form is EARNED by a request for depth, never assumed.
+- **Matt has RP.** A wall of text is not thorough; **it is an accessibility defect.**
+  Screen-reading and low-vision scanning both punish the buried lede. Burying the answer
+  is not a style problem in this studio — **it is the same class of harm as a 2.6:1
+  contrast ratio.** It makes the work unusable by the person it is for.
+
+*The check:* if the reply exceeds two screenfuls and the founder did not ask for depth,
+**the TLDR Kid cuts it to the verdict plus the one thing that changes his next action**,
+and offers the rest.
+
+---
+
+## GUARD 4 — THE MIRROR
+### *Never repeat the brief back. Never say "I hear you."*
+
+Founder-canon §V, verbatim: **"Never 'I hear you.' Never remind me of what I know. Never
+repeat my brief back."**
+
+Also banned, standing: "genuinely," "honestly," "straightforward," and any opener that
+performs listening rather than doing.
+
+*The check:* does any sentence in the reply tell Matt something he just told the PM?
+**Cut it.**
+
+---
+
+# LAYER TWO — THE PANEL GUARDS
+
+**The convening itself goes lazy. These three guards police the panel.**
+
+A panel that always agrees is not a panel. It is the PM wearing hats.
+
+---
+
+## GUARD 5 — THE QUORUM
+### *A seat that produces nothing did not sit.*
+
+**Every convened seat must produce a FINDING, a HALT, or an explicit PASS with a reason.**
+
+- **"Looks good" is not a seat.** It is the PM ventriloquising approval.
+- A seat that agrees with every other seat in the same convening is **flagged as
+  unseated** — it added no independent view and its presence is inflating the panel's
+  apparent rigor.
+- **If a convening produces zero findings, the convening did not happen.** Say so plainly.
+  Do not present a rubber stamp as a review.
+
+*Failure this prevents:* the studio's own diagnosis — *"the pipeline audited floors, never
+experience. Flat builds passed because no gate asked 'does this feel like anything?'"* A
+panel of agreeable seats is exactly that failure with more ceremony.
+
+---
+
+## GUARD 6 — THE DISSENT SEAT
+### *One seat argues against the recommendation. Always. Out loud.*
+
+**Every convening seats a dissenter, and the dissent is printed.**
+
+The dissenter's job is to make the strongest available case that the PM is wrong. If the
+dissent is weak, the PM says so and proceeds. **If the dissent has not been written down,
+the convening is incomplete.**
+
+**Corollary — the machine is the suspect.** When Matt pushes back on a machine-produced
+fact, the dissent seat takes his side by default and **re-derives from source.** The PM does
+not defend its output. It does not explain its reasoning. **It goes and looks again.**
+
+*Failure this prevents:* every failure logged on 2026-07-11 was caught by the founder, by
+eye. **No gate caught any of them.** The dissent seat is the gate that exists to catch what
+Matt would have caught, before he has to.
+
+---
+
+## GUARD 7 — THE BUILD BAILIFF
+### *Governance may not outrun product. Two spec-belts in a row and the third is a BUILD.*
+
+**SPEC-RICH, BUILD-POOR is a named, diagnosed, RECURRING disease.** The studio has now
+diagnosed it at least three times, in three separate documents, twelve days apart, and
+**kept minting rules anyway.**
+
+**This block is itself at risk of being that disease.** It is governance. It is prose. It
+is exactly the thing the studio does instead of shipping.
+
+**So the Bailiff binds this block first:**
+
+> **At every close, name what a PLAYER can now do that they could not do before.**
+> If the answer is "nothing, but the governance is better," **the next session is a BUILD
+> session and no new governance ships.** No exceptions, including for blocks like this one.
+
+*Standing count as of 2026-07-14:* the last two belts produced governance. **The next
+session owes a build.** That debt was already on the books before this block was written,
+and writing this block **does not pay it.**
+
+---
+
+# THE ENFORCEMENT PROBLEM — NAMED HONESTLY
+
+**Guards 1–7 are BEHAVIORAL. Every one of them is a thing the PM must remember to run.**
+
+The studio's own hardest law says: **"If a rule cannot be a check, it is a wish."**
+
+So here is the honest ledger on this block:
+
+| Guard | Mechanical? | Honest status |
+|---|---|---|
+| 1 — Doorman | **Partially** | "Does sentence one answer the question?" is checkable by a reader in one second. It is checkable by the PM only if the PM looks. **The founder is currently the enforcer.** |
+| 2 — No farming back | **YES, arithmetic** | **Count the question marks.** >2 = cut. Any question the PM is ≥75% on = delete and decide. This one is a real check. |
+| 3 — TLDR Kid | **Partially** | Length is countable. "Is the lede buried?" is not. |
+| 4 — Mirror | **Partially** | Banned-phrase list is grep-able. Brief-restatement is judgment. |
+| 5 — Quorum | **YES** | **Count findings per seat. Zero findings = unseated.** Arithmetic. |
+| 6 — Dissent | **YES** | **Is a dissent printed? Yes or no.** Binary. Arithmetic. |
+| 7 — Bailiff | **YES** | **Name the new player-verb, or the next session is a build.** Binary. |
+
+**Four of seven are real checks. Three are wishes with better clothes on.**
+
+Guards 1, 3, and 4 will fail exactly when the PM is under load — which is exactly when
+they matter. **That is not a reason to drop them. It is a reason to say plainly that the
+founder is still the enforcer of reply-shape**, and that the studio has not yet built the
+thing that would replace him.
+
+**The missing enforcer:** a reply-shape check that runs *before send*. It does not exist.
+Naming it here is not building it.
+
+---
+
+## STANDING CONSEQUENCE
+
+**The founder should not have to be the gate.** He has been, for every failure in the log:
+the stale ISLOs, the phantom HALTs, the v34 clobber, the buried question. Each time, he
+caught it by eye, and each time the correct response was for the machine to re-derive from
+source rather than defend itself.
+
+**Every hour Matt spends being the studio's quality gate is an hour he is not building.**
+That is the real cost, and it is the reason these guards exist.
+
+---
+
+## WIRING
+
+- **Guards 2, 5, 6, 7:** arithmetic. Run them at every convening and every reply. **No
+  discretion.**
+- **Guards 1, 3, 4:** behavioral. Run at reply assembly. **Flagged honestly as wishes until
+  a pre-send shape-check exists.**
+- **This block claims no OS section number.** Three collisions are already unmerged. The
+  founder-in-the-room merge session assigns it.
+- **The Bailiff's debt stands: the next session owes a build.** Writing this did not pay it.
+
+
+### 15.fidelity-gate — FIDELITY GATE (content coherence)
+
+*Locked (undated in-file). Merged 2026-08-08 while reconciling all 13 os-blocks, founder's call: "Reconcile." The file requested split placement (pipeline Stage 5 for the gate, head of §1 for the Menard philosophy) - kept together here instead, for the same one-home-for-enforcement-law consistency as every other §15 block. STATUS: "THE WAY" (`preship-fidelity-gate.py`) is still not built as of this merge - the spoken check ("4 NOW") is what actually runs today.*
+
+STATUS: spoken floor LIVE now · arithmetic gate is THE WAY (not yet built)
+OWNS: the gap between what the brief specified and what the build shipped
+SITS: pipeline Stage 5, beside preship-contrast-gate.py — same HALT contract
+
+---
+
+## WHY THIS EXISTS
+
+Every existing gate checks the CONTAINER — bytes, contrast tokens, nav, lanes.
+Nothing checks the PAYLOAD — whether the built thing is the thing Matt saw.
+Scene coherence kept failing for the same reason contrast used to: it was
+JUDGED in prose by the Convening seats, never COMPUTED against a spec.
+Same disease as the amber-as-text bug, same cure: turn the judgment into arithmetic.
+
+Named failure mode this closes: SPEC-RICH, BUILD-POOR — governance ships
+faster than fidelity, and the build drifts off-vision unnoticed until Matt sees it.
+
+---
+
+## THE THREE NAMED THINGS (the brief slots)
+
+A pitch is not ready to build until all three are NAMED and CONCRETE:
+
+  1. THE IMAGE  — scene anchor. The one image/moment screen 1 is about.
+                  Concrete thing seen, not a mood. ("child at the radio, Oct 1962")
+  2. THE VERB   — what the player can now DO that they couldn't. One verb, ≤2 taps.
+  3. THE SOURCE — the named, attributed, open-license text/domain the content rests on.
+                  Averaged-internet fill is a failure, not a source.
+
+Plus one count: DECISIONS PER SCREEN. Floor is one. More than one HALTs.
+
+Front door for these = tsp-intake.html. It emits brief.json.
+
+---
+
+## THE CHECK — 4 NOW
+
+Spoken, at Convening close and before any build begins:
+
+  "Name the image, the verb, and the source. If you can't name all three,
+   you're not ready to build."
+
+Any blank slot HALTs the build. decisions_per_screen > 1 HALTs.
+This is the floor. It runs today, by memory law, no tooling.
+"We don't always follow the way" — the spoken check is what keeps us honest
+until the arithmetic exists.
+
+---
+
+## THE WAY — 1 (destination)
+
+preship-fidelity-gate.py — reads brief.json (emitted by tsp-intake.html),
+diffs it against the built HTML, same exit contract as the contrast gate:
+
+  scene_anchor  → is the named anchor image present and >50% of screen 1?
+  player_verb   → is a handler wired that delivers that verb in ≤2 taps?
+  named_source  → is the source string present in the attribution/footer?
+  decisions_per_screen ≤ 1 per screen, else HALT.
+
+  exit 0 = ship · exit 1 = HALT with the missing/failing slot named.
+
+Blocked on: the Convening emitting structured brief.json per build.
+That is a founder-in-the-room build session, not a background task.
+
+---
+
+## DOCTRINE FIT
+
+- IF A RULE CAN'T BE A CHECK, IT'S A WISH. Scene coherence was a wish.
+  4 makes it a spoken check today; 1 makes it arithmetic.
+- The fix for judgment that keeps failing is arithmetic, not more prose.
+- The intake form and the fidelity gate are ONE system from both ends:
+  the form collects the three; the gate checks the build against them.
+
+---
+
+## ARTIFACTS
+  tsp-intake.html          — front door, emits brief.json (LIVE, gate-passed 11.19)
+  preship-fidelity-gate.py — the way (NOT YET BUILT)
+
+---
+
+## MENARD — WHY A STUDIO OF RESKINS IS A STUDIO OF ORIGINALS
+
+Belongs at the head of OS §1 (identity/philosophy). The founding claim:
+
+  Writerly Moves is the origin, hand-built, no AI. Every game since is the
+  SAME ENGINE pointed at a new domain — the Console, CYL, the Cabinet all run
+  Play·Notice·Design on different material. This is not repetition to apologize
+  for. It is Pierre Menard's Quixote: the same words are a NEW WORK because the
+  context changed. Same engine, made new by where it stands.
+
+The reskin is the studio's method, not its shortcut. But the claim only holds
+if the domain GENUINELY changed the work. A reskin that changes nothing but the
+paint is a photocopy, and Menard's whole point collapses.
+
+So Menard is not a quote to hang on the wall — it is the WHY behind the three
+named things. The image, the verb, the source ARE the proof the context changed.
+If a reskin cannot name a different image/verb/source than its parent, it did
+not become a new work; it is the parent in fresh paint.
+
+## menard_check (reskin tooth)
+
+Fires only when a build declares a parent (reskin_of set in brief.json):
+
+  reskin_of named  AND  what_changed blank        -> HALT (photocopy)
+  reskin_of named  AND  image/verb/source == parent's -> HALT (photocopy)
+  reskin_of named  AND  what_changed names a real domain shift -> pass (a Menard)
+  reskin_of blank                                  -> original build, check skipped
+
+LIVE NOW in tsp-intake.html: the "Is this a reskin?" block collects reskin_of +
+what_changed; a named parent with no what_changed renders the photocopy HALT.
+THE WAY (preship-fidelity-gate.py): read reskin_of from brief.json; when set,
+diff the new build's anchor/verb/source against the parent's brief.json; identical
+slots HALT. A reskin must prove its Menard, arithmetically, against the parent it
+names.
+
+
+### 15.aleph-fleet — THE ALEPH FLEET (agentic assessment)
+
+*Added 2026-08-07. Merged 2026-08-08 while reconciling all 13 os-blocks, founder's call: "Reconcile." This is the CURRENT, operative version of the studio's assessment panel - five lenses (tools, play, media, aesthetic, learning science), a shared taxonomy so agreement is counted not judged, a blind-spot register, and a findings ledger with NEW/REPEAT/REGRESSED/FIXED state. Supersedes 15.aleph-diagnose-repair (below) operationally; that block stays for the origin record.*
+
+*Supersedes the operational half of `os-block-aleph-diagnose-repair.md`, which stays as
+the origin record. Three lenses became five, the merge became arithmetic, and the loop
+grew a memory. 2026-08-07.*
+
+**One job:** turn a build into a ranked, evidence-backed, *tracked* defect list — and make
+the tools sharper every time they miss.
+
+---
+
+## What was wrong with the old Aleph
+
+It worked twice and both times it worked **by hand**. That is the whole problem: a
+protocol executed by a person is a protocol that ends when the session ends.
+
+| hole | what it cost |
+|---|---|
+| **Agreement was judgement.** Three lenses, three vocabularies, no shared keys — so merging meant a human reading three lists. | The merge could not be re-run, compared, or trusted a week later. |
+| **The feedback tooth was a sentence.** "Harden the gate that missed it" had nowhere to live. | It happened once (2026-07-26), was forgotten, and the same class of miss recurred twice more — comfort-gate blind to fill-tokens-used-as-text (08-03), studio-eyes-sweep blind to text inside a viewBox (08-07). |
+| **There was no iteration.** Findings landed in a dated markdown file. | Nothing knew if a defect was new, old, fixed, or back. |
+| **Nothing assessed learning.** Three lenses asked *does it work*, *does it play*, *does the message land*. | On teaching games, the thing they exist to do was the one property no lens measured. |
+| **The wall-detector measured a laptop.** `one-thing-gate.py` ran at 1280x800 while every other instrument ran the phone. | The founder's actual complaint — "a wall of directions, unreadable for my phone" — was invisible to the gate built to catch walls. |
+
+---
+
+## THE FIVE LENSES
+
+Run them independently. Independence is the point: agreement between blind lenses is
+signal, agreement between briefed-together lenses is echo.
+
+| | lens | question | brief |
+|---|---|---|---|
+| **L1** | TSP tools | what do the gates say, run literally? | `aleph-lenses/L1.md` |
+| **L2** | Play | does it play, **on a phone**? | `aleph-lenses/L2.md` |
+| **L3** | Media | does the message land? | `aleph-lenses/L3.md` |
+| **L4** | Aesthetic | does it read as one made thing? | `aleph-lenses/L4.md` |
+| **L5** | Learning science | does anyone actually learn? | `aleph-lenses/L5.md` |
+
+L4 and L5 are new. L4 was a sub-clause of L3 and deserved its own eyes in a studio whose
+canon is that the image carries the idea. L5 did not exist at all.
+
+**The briefs are files, not prose in a prompt.** A lens re-derived each run produces runs
+that cannot be compared. Hand the aleph the brief.
+
+---
+
+## THE SHARED VOCABULARY
+
+`aleph-taxonomy.json`. Every aleph returns a **key** from it. That single constraint is
+what turns the merge from judgement into a count.
+
+Five groups: `floor` (L1-owned, mechanical) · `play` · `media` · `aesthetic` · `learning`.
+
+A key is a **defect class** — never a fix, never a score. Add one only when a real
+finding has nowhere to go. **Never rename one**: the ledger keys history by it.
+
+---
+
+## THE SYNTHESIS
+
+`python3 aleph-fleet.py --synthesize <run-dir>`
+
+- **Agreement** = how many *distinct lenses* named the same key on the same surface.
+  `***` three or more, fix first. `**` two. `*` one — real, but a hypothesis.
+- **Worst severity wins** a cluster.
+- **Findings get stable ids** — hashed over surface + key + anchor, deliberately *not*
+  over the prose, so an aleph rewording a defect does not mint a new finding.
+- **`passed` is load-bearing.** A key neither found nor passed reads as **not looked at**,
+  and the synthesis says so. Silence never scores as clean.
+- **Malformed input is rejected, not dropped.** A broken aleph is a lens that did not
+  report; it is never a pass.
+
+---
+
+## THE FEEDBACK TOOTH, MADE DURABLE
+
+**When any non-L1 lens names a `floor` key that L1 did not, the gate has a hole.**
+
+The harness writes it to `aleph-blindspots.json` with a status — `open` until the gate
+grows the tooth, then `hardened`. It cannot be forgotten between sessions any more,
+because it is a file with a counter on it.
+
+Repair the **tool**, not just the file. Then re-run the gate's self-test. This is the
+ratchet applied to the diagnostics themselves: every escaped defect becomes a permanent
+new check.
+
+---
+
+## ITERATION
+
+`aleph-ledger.json` is the memory. Every run diffs against it:
+
+- **NEW** — first sighting.
+- **REPEAT** — seen before, still there. Carries `runs_open`; a defect open across many
+  runs is a decision the studio is making by not deciding.
+- **REGRESSED** — was fixed, came back. The most serious state on the board.
+- **FIXED** — was open, now absent. The ratchet moved.
+
+Run with `--commit` to record. Without it, nothing is written — a dry run is safe.
+
+---
+
+## THE PHONE IS BINDING
+
+The founder reads on a phone and has retinitis pigmentosa. A layout comfortable at
+1280px and a wall at 390px **is a wall**. Every lens assesses the phone first; the wide
+screen is measured too, but the phone decides.
+
+`one-thing-gate.py` now measures 390x844 *and* 1280x800, and the phone-side findings
+carry the higher severity. It also measures the thing that actually matters for an
+instruction wall — not words on screen, but **words above the first control** and
+**screens-to-first-action**, with chrome (comfort control, nav rail, skip link)
+excluded, because furniture sitting at y=0 was masking the measure.
+
+---
+
+## HOW TO RUN IT
+
+1. `python3 aleph-fleet.py --lenses` — see the fleet.
+2. Run **L1 yourself**: `bash studio-belt.sh .` plus the gates in `aleph-lenses/L1.md`.
+   Write its findings as JSON.
+3. Seat **one aleph per lens per surface** (L2–L5). Hand each its brief file and the
+   schema from `aleph-fleet.py --schema`. They must not see each other's output.
+4. Collect the JSON into a run dir.
+5. `python3 aleph-fleet.py --synthesize <dir>` — read it. Then `--commit`.
+6. **Repair in confidence order**: unanimous blockers → clean logic bugs → safe minors →
+   structural/voice changes last, and those get surfaced to the founder rather than
+   unilaterally rewritten. Authored craft is his.
+7. **Re-verify each fix against the gate that caught it.** A repair that does not move
+   its own gate is not done.
+8. **Harden every open blind spot**, then re-run that gate's self-test.
+
+---
+
+## WHAT THIS DOES NOT DO
+
+It does not decide. It does not rewrite voice. It does not judge fun — that is the
+founder, and clearing the mechanical rubble before his taste is spent is the entire
+point of the fleet. Twenty cold plays become one review.
+
+
+### 15.aleph-diagnose-repair — THE ALEPH DIAGNOSE→REPAIR PROTOCOL (superseded, origin record)
+
+*Locked 2026-07-26. Merged 2026-08-08 while reconciling all 13 os-blocks, founder's call: "Reconcile." SUPERSEDED by 15.aleph-fleet (above) as of 2026-08-07 - the thinking here is intact and still canon (three independent lenses, agreement as the trust metric, repair in confidence order, harden the tool that missed); what changed is that all of it ran by hand here, so it ended when the session ended. Kept for why, not for how - run the Aleph Fleet.*
+
+> **SUPERSEDED OPERATIONALLY 2026-08-07 by `os-block-aleph-fleet.md`.** The thinking here
+> is intact and still canon — three independent lenses, agreement as the trust metric,
+> repair in confidence order, harden the tool that missed. What changed is that all of it
+> ran *by hand*, so it ended when the session ended. The fleet block adds two lenses
+> (aesthetic, learning science), a shared taxonomy so agreement is a count rather than a
+> judgement, a blind-spot register so the feedback tooth survives a stall, and a ledger so
+> a finding can be NEW / REPEAT / REGRESSED / FIXED. **Run the fleet block.** Read this one
+> for why.
+
+**One job:** turn "this file feels off" into a ranked, evidence-backed repair list —
+and make the diagnostic tools *sharper every time they miss*. This is the studio's
+repeatable quality loop, not a one-off review.
+
+Proven on `old-problems-at-new-speed.html` (2026-07-26): three lenses, one synthesis,
+repairs shipped, and the miss that slipped through **hardened the tool that missed it.**
+
+---
+
+## THE THREE LENSES (run all three, independently)
+
+Diagnose the same artifact three ways. Independence is the point — each lens is blind
+to the others, so agreement between them is signal, not echo.
+
+1. **TSP as-is** — the studio's own gates, run literally:
+   `studio-eyes/studio-fingers.py` (touch), `preship-gate-v4.py` (render), `ratchet.py`
+   (floor), plus the founder floors (comfort = knob-not-wall; scene-first; single-file
+   offline; back+home on every screen; 44px targets). Concrete and runnable.
+2. **Game-based, 3rd-party public** — evaluate it AS A PLAYABLE using published
+   frameworks: Nielsen's 10 heuristics, Desurvire HEP / PLAY, FTUE onboarding, game-feel
+   ("action and reaction in the same place"). Does it *play*?
+3. **Media-based, 3rd-party public** — evaluate it AS COMMUNICATION using published
+   frameworks: NN/g above-the-fold & value-proposition, progressive disclosure, WCAG 2.2,
+   Flesch–Kincaid readability, Robin Williams' CRAP. Does the message *land*?
+
+Each lens returns a ranked list: **framework violated · concrete problem (element/line) ·
+severity (blocker/major/minor) · specific fix.** No generic advice.
+
+---
+
+## THE ALEPH SYNTHESIS (one question: what is actually wrong?)
+
+The Aleph merges the three lists into ONE ranked defect list, **weighted by agreement**:
+
+- **★★★ all three agree** → highest confidence, fix first. (Here: *comfort is a wall,
+  front-loaded before the scene* — flagged by all three independently.)
+- **★★ two agree** → high confidence.
+- **★ one lens, high value** → real, but a single perspective; judge it.
+
+Agreement is the trust metric. A blocker only one lens sees is a hypothesis; a defect all
+three name from different vocabularies is a fact.
+
+---
+
+## THE REPAIR RULE
+
+Repair in confidence order: unanimous blockers → clean logic bugs → safe minors →
+structural/voice changes (these last touch authored craft — surface them, let the
+founder steer, don't unilaterally rewrite the piece's voice).
+
+Every repair is re-verified by the **same** lens that caught it (fix the wall → the wall
+gate must flip to pass). A repair that doesn't move its own gate isn't done.
+
+---
+
+## THE FEEDBACK TOOTH (why the system gets robust, not just the file)
+
+**When Lens 1 (TSP tools) PASSES something Lens 2 or 3 catches, the tool has a blind
+spot — repair the tool, not just the file.**
+
+Worked example (2026-07-26): Studio Fingers PASSED the paper's comfort wall because
+`F-WALL` only matched label-words ("bigger text", "softer") and the wall said
+"Warm-dark / Dim the room / Default." Fix: added **container-based** detection — any
+visible comfort/settings/theme container holding 2+ controls with no collapsing toggle is
+a wall, regardless of wording. Re-verified: catches the paper, still passes Flok and Dad
+Energy (real toggles), self-test green. The tool is now harder to fool.
+
+This is the ratchet applied to the *diagnostics themselves*: every escaped defect becomes
+a permanent new check.
+
+---
+
+## HOW TO RUN IT
+
+1. Point all three lenses at the file (Lens 1 = you, running the scripts; Lenses 2 & 3 =
+   two independent subagents, one game-framework brief, one media-framework brief).
+2. Aleph-synthesize: dedup, rank by agreement, mark blocker/major/minor.
+3. Repair in confidence order; re-verify each fix against its own gate.
+4. If a TSP gate missed something the other lenses caught, harden the gate and re-run its
+   self-test. Log it.
+5. Ship on the git/Pages lane.
+
 
 ---
 ## 16. The Art Lane — generate, refinish, embed (locked 2026-07-14)

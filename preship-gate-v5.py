@@ -75,6 +75,16 @@ def check_taps(css, halts):
 def check_dark(html, halts):
     if re.search(r'prefers-color-scheme', html) or re.search(r'color-scheme\s*:\s*dark', html):
         return
+    # FALSE HALT KILLED 2026-08-08. This clause greps for the OS-driven mechanism only. It
+    # found 0 occurrences in index.html, reported "no measured dark path," and HALTed the
+    # studio's front door for five days -- while comfort-gate.py measured the SAME file's
+    # real painted pixels in day/dusk/night and passed it. index.html implements dark as
+    # [data-light=...] (15 occurrences), which is what studio doctrine REQUIRES: comfort is
+    # a live corner control, not an OS wall, and there are no opening walls. The gate was
+    # wrong and the file was right. A gate that cries wolf trains the studio to scroll past
+    # it, which disables every true finding it will ever make.
+    if re.search(r'\[data-(light|theme|comfort|mode)\s*[~^|$*]?=', html):
+        return
     halts.append("DARK no measured dark path (no prefers-color-scheme / color-scheme:dark)")
 
 def check_host(html, halts):

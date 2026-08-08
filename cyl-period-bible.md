@@ -2,7 +2,7 @@
 ### Art direction for the composite room: era-dated photographic environments + withheld figures
 
 *Tight Spiral Studios · walshero@gmail.com*
-*A production spec, not a built asset. The Lumino/photographic layers described here cannot be rendered in the offline sandbox — they are produced in an image-capable session and composited into `choose-your-leader-full.html`. The figures stay non-photographic in every case (the game's spine: you judge what you were allowed to see, not the face).*
+*A production spec, not a built asset. The Lumino/photographic layers described here cannot be rendered in the offline sandbox — they are produced in an image-capable session and composited into `choose-your-leader-full.html`. The figures stay non-photographic in every case — no real faces, ever. (The spine-line phrasing that used to close this sentence was retired by the founder 2026-08-08, all variants; see cyl-v7-founder-ruling-2026-08-08.md. The withheld-figure law itself stands untouched.)*
 
 ---
 

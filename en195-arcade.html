@@ -14,7 +14,7 @@
   --focus:#6e4700;
   color-scheme: light dark;
 }
-body[data-stop="softer"]{ --paper:#e6ddc9; --card:#efe6d2; }
+body[data-stop="softer"]{ --paper:#e6ddc9; --card:#efe6d2; --ink:#211a12; --ink2:#211a12; --gold:#6e4700; --rust:#a34a2a; --slate:#3f5666; --kraft:#b08d57; --edge:#3a2f22; --focus:#6e4700; }
 @media (prefers-color-scheme: dark){
   :root{
     --paper:#262019; --ink:#f0dcb8; --ink2:#f0dcb8;
@@ -61,6 +61,15 @@ input:focus-visible, select:focus-visible, textarea:focus-visible{outline:4px so
   font-weight:700;
 }
 .coins{font-size:1.1rem;}
+.coins.tokens{color:var(--ink2); font-weight:400;}
+.answerfx{display:flex; align-items:center; gap:10px; margin-bottom:8px;}
+.answerfx svg{flex:0 0 auto; width:44px; height:44px;}
+.answerfx .fxlabel{font-weight:700;}
+.coinroll{animation:coinRoll .6s cubic-bezier(.2,.9,.3,1.2);}
+@keyframes coinRoll{0%{transform:translateX(-60px) rotate(-90deg); opacity:0;}100%{transform:translateX(0) rotate(0deg); opacity:1;}}
+.batsustamp{animation:batsuStamp .45s cubic-bezier(.3,1.6,.4,1);}
+@keyframes batsuStamp{0%{transform:scale(1.7); opacity:0;}60%{transform:scale(.92); opacity:1;}100%{transform:scale(1); opacity:1;}}
+@media (prefers-reduced-motion:reduce){.coinroll,.batsustamp{animation:none;}}
 #comfortBtn{
   font-size:1rem; font-weight:700; min-height:48px;
   background:var(--gold); color:var(--paper);
@@ -72,6 +81,9 @@ body[data-stop="warmdark"] #comfortBtn{color:#262019;}
   padding:14px 16px; margin:10px 0; width:100%; text-align:left;
 }
 .cab .name{font-size:1.2rem; font-weight:700; display:block;}
+.cabrow{display:flex; align-items:flex-start; gap:12px;}
+.cabicon{flex:0 0 auto; width:40px; height:40px; margin-top:2px;}
+.cabtext{flex:1 1 auto; min-width:0;}
 .cab .cost{color:var(--gold); font-weight:700;}
 .cab.dark{border-style:dashed;}
 .cab.dark .name{font-style:italic;}
@@ -155,6 +167,7 @@ summary:focus-visible{outline:4px solid var(--focus); outline-offset:3px;}
 
 <div class="coinbar" id="coinbar" hidden>
   <span class="coins" id="coinCount">Coins: 0</span>
+  <span class="coins tokens" id="tokenCount" hidden>Tokens: 0</span>
   <button id="homeBtn" type="button" aria-label="Home. Back to the arcade floor.">Home</button>
   <button id="comfortBtn" type="button" aria-label="Change reading comfort. Current: Default">Comfort: Default</button>
 </div>
@@ -195,24 +208,39 @@ summary:focus-visible{outline:4px solid var(--focus); outline-offset:3px;}
 <!-- ============ HUB ============ -->
 <section class="screen" id="hub" aria-label="The arcade floor">
   <h1>The EN195 Arcade</h1>
-  <p>Playing what you <strong>know</strong> mints coins. Coins buy free play. The Semester Machine always pays.</p>
+  <p>Playing what you <strong>know</strong> mints coins. Coins buy free play. The Semester Machine always pays, in coins for the strongest reads or tokens to keep you moving.</p>
 
   <button class="cab" data-go="semester" type="button">
-    <span class="name">The Semester Machine</span>
-    <span>The playable syllabus. Five rounds, five coins.</span><br>
-    <span class="cost">Mints coins. Always free.</span>
+    <span class="cabrow">
+      <svg class="cabicon" aria-hidden="true" viewBox="0 0 40 40"><circle cx="20" cy="14" r="9" fill="var(--gold)" stroke="var(--edge)" stroke-width="2.5"/><path d="M4 30 Q12 24 20 30 T36 30" fill="none" stroke="var(--slate)" stroke-width="2.5" stroke-linecap="round"/></svg>
+      <span class="cabtext">
+        <span class="name">The Semester Machine</span>
+        <span>The playable syllabus. Five rounds, coins for the reads that land.</span><br>
+        <span class="cost">Mints coins. Always free.</span>
+      </span>
+    </span>
   </button>
 
   <button class="cab" data-go="sandbag" data-cost="1" type="button">
-    <span class="name">Sandbag Drop</span>
-    <span>Cut the flab. The balloon rises.</span><br>
-    <span class="cost">Costs 1 coin</span>
+    <span class="cabrow">
+      <svg class="cabicon" aria-hidden="true" viewBox="0 0 40 40"><ellipse cx="20" cy="16" rx="11" ry="13" fill="var(--rust)" stroke="var(--edge)" stroke-width="2.5"/><rect x="14" y="30" width="12" height="8" rx="2" fill="var(--kraft)" stroke="var(--edge)" stroke-width="2"/><line x1="11" y1="27" x2="15" y2="30" stroke="var(--edge)" stroke-width="1.6"/><line x1="29" y1="27" x2="25" y2="30" stroke="var(--edge)" stroke-width="1.6"/></svg>
+      <span class="cabtext">
+        <span class="name">Sandbag Drop</span>
+        <span>Cut the flab. The balloon rises.</span><br>
+        <span class="cost">Costs 1 coin</span>
+      </span>
+    </span>
   </button>
 
   <button class="cab" data-go="linebreak" data-cost="1" type="button">
-    <span class="name">Line Break</span>
-    <span>Break the line anywhere. Hear what it does.</span><br>
-    <span class="cost">Costs 1 coin</span>
+    <span class="cabrow">
+      <svg class="cabicon" aria-hidden="true" viewBox="0 0 40 40"><line x1="4" y1="20" x2="16" y2="20" stroke="var(--edge)" stroke-width="2.8" stroke-linecap="round"/><line x1="24" y1="20" x2="36" y2="20" stroke="var(--edge)" stroke-width="2.8" stroke-linecap="round"/><line x1="20" y1="8" x2="20" y2="32" stroke="var(--gold)" stroke-width="3" stroke-linecap="round" transform="rotate(20 20 20)"/></svg>
+      <span class="cabtext">
+        <span class="name">Line Break</span>
+        <span>Break the line anywhere. Hear what it does.</span><br>
+        <span class="cost">Costs 1 coin</span>
+      </span>
+    </span>
   </button>
 
   <div class="cab" style="border-style:dashed;">
@@ -225,27 +253,47 @@ summary:focus-visible{outline:4px solid var(--focus); outline-offset:3px;}
   </div>
 
   <button class="cab" data-vm="1" type="button">
-    <span class="name">Workshop 1: Creative Nonfiction</span>
-    <span>Groups ALPHA / BETA / GAMMA. Submit your draft and see who else has fed the machine.</span><br>
-    <span class="cost">Feed a token. Always free.</span>
+    <span class="cabrow">
+      <svg class="cabicon" aria-hidden="true" viewBox="0 0 40 40"><path d="M28 6 L14 20 L10 30 L20 26 L34 12 Z" fill="var(--kraft)" stroke="var(--edge)" stroke-width="2.2" stroke-linejoin="round"/><line x1="10" y1="30" x2="6" y2="34" stroke="var(--edge)" stroke-width="2.2" stroke-linecap="round"/></svg>
+      <span class="cabtext">
+        <span class="name">Workshop 1: Creative Nonfiction</span>
+        <span>Groups ALPHA / BETA / GAMMA. Submit your draft and see who else has fed the machine.</span><br>
+        <span class="cost">Feed a token. Always free.</span>
+      </span>
+    </span>
   </button>
 
   <button class="cab" data-vm="2" type="button">
-    <span class="name">Workshop 2: Poetry</span>
-    <span>Groups EARTH / WIND / FIRE. Submit your draft and see who else has fed the machine.</span><br>
-    <span class="cost">Feed a token. Always free.</span>
+    <span class="cabrow">
+      <svg class="cabicon" aria-hidden="true" viewBox="0 0 40 40"><path d="M20 6 C12 10 10 22 14 34 C18 24 14 20 20 14 C26 20 22 24 26 34 C30 22 28 10 20 6 Z" fill="var(--slate)" stroke="var(--edge)" stroke-width="2.2" stroke-linejoin="round"/></svg>
+      <span class="cabtext">
+        <span class="name">Workshop 2: Poetry</span>
+        <span>Groups EARTH / WIND / FIRE. Submit your draft and see who else has fed the machine.</span><br>
+        <span class="cost">Feed a token. Always free.</span>
+      </span>
+    </span>
   </button>
 
   <button class="cab" data-vm="3" type="button">
-    <span class="name">Workshop 3: 10-Minute Play</span>
-    <span>Batches 1&ndash;4. Submit your draft and see who else has fed the machine.</span><br>
-    <span class="cost">Feed a token. Always free.</span>
+    <span class="cabrow">
+      <svg class="cabicon" aria-hidden="true" viewBox="0 0 40 40"><ellipse cx="15" cy="20" rx="9" ry="11" fill="var(--rust)" stroke="var(--edge)" stroke-width="2.2"/><ellipse cx="25" cy="20" rx="9" ry="11" fill="var(--kraft)" stroke="var(--edge)" stroke-width="2.2"/><path d="M11 24 Q15 27 19 24" fill="none" stroke="var(--edge)" stroke-width="1.6" stroke-linecap="round"/><path d="M21 26 Q25 22 29 26" fill="none" stroke="var(--edge)" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <span class="cabtext">
+        <span class="name">Workshop 3: 10-Minute Play</span>
+        <span>Batches 1&ndash;4. Submit your draft and see who else has fed the machine.</span><br>
+        <span class="cost">Feed a token. Always free.</span>
+      </span>
+    </span>
   </button>
 
   <button class="cab" data-vm="4" type="button">
-    <span class="name">Workshop 4: Short Story</span>
-    <span>Batches 1&ndash;3. Submit your draft and see who else has fed the machine.</span><br>
-    <span class="cost">Feed a token. Always free.</span>
+    <span class="cabrow">
+      <svg class="cabicon" aria-hidden="true" viewBox="0 0 40 40"><path d="M20 12 C16 8 8 8 6 10 L6 30 C8 28 16 28 20 32 C24 28 32 28 34 30 L34 10 C32 8 24 8 20 12 Z" fill="var(--card)" stroke="var(--edge)" stroke-width="2.2" stroke-linejoin="round"/><line x1="20" y1="12" x2="20" y2="32" stroke="var(--edge)" stroke-width="1.6"/></svg>
+      <span class="cabtext">
+        <span class="name">Workshop 4: Short Story</span>
+        <span>Batches 1&ndash;3. Submit your draft and see who else has fed the machine.</span><br>
+        <span class="cost">Feed a token. Always free.</span>
+      </span>
+    </span>
   </button>
 
   <button type="button" id="ticketBtn">Print my coin ticket</button>
@@ -354,14 +402,22 @@ summary:focus-visible{outline:4px solid var(--focus); outline-offset:3px;}
 (function(){
 "use strict";
 var coins = 0;
+var tokens = 0; /* wooden nickels — a lesser token for a weaker answer, keeps play moving */
 var log = [];
 var live = document.getElementById('live');
 var coinCount = document.getElementById('coinCount');
+var tokenCount = document.getElementById('tokenCount');
 
 function say(t){ live.textContent = t; }
 function setCoins(n, why){
   coins = n;
   coinCount.textContent = 'Coins: ' + coins;
+  if(why){ log.push(why); }
+}
+function setTokens(n, why){
+  tokens = n;
+  tokenCount.hidden = false;
+  tokenCount.textContent = 'Tokens: ' + tokens;
   if(why){ log.push(why); }
 }
 function show(id){
@@ -386,6 +442,42 @@ function ding(){
     o.start(); o.stop(ctx.currentTime+0.55);
   }catch(e){}
 }
+
+/* maru batsu buzz — synthesized wrong-answer buzzer, "beh-beeeeht" */
+function buzz(){
+  try{
+    if(!ctx){ ctx = new AC(); }
+    var o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = 'square';
+    o.frequency.setValueAtTime(220, ctx.currentTime);
+    o.frequency.linearRampToValueAtTime(105, ctx.currentTime+0.38);
+    var lfo = ctx.createOscillator(), lfoGain = ctx.createGain();
+    lfo.frequency.setValueAtTime(26, ctx.currentTime);
+    lfoGain.gain.setValueAtTime(16, ctx.currentTime);
+    lfo.connect(lfoGain); lfoGain.connect(o.frequency);
+    g.gain.setValueAtTime(0.0001, ctx.currentTime);
+    g.gain.linearRampToValueAtTime(0.11, ctx.currentTime+0.03);
+    g.gain.setValueAtTime(0.11, ctx.currentTime+0.30);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.42);
+    o.connect(g); g.connect(ctx.destination);
+    lfo.start(); o.start();
+    lfo.stop(ctx.currentTime+0.42); o.stop(ctx.currentTime+0.42);
+  }catch(e){}
+}
+
+/* win / bad answer visuals — no emoji; hand-drawn SVG, matches the rest of the art */
+var COIN_SVG = '<svg class="coinroll" viewBox="0 0 40 40" role="img" aria-hidden="true">' +
+  '<ellipse cx="20" cy="21" rx="15" ry="7" fill="var(--gold)" stroke="var(--edge)" stroke-width="2.5"/>' +
+  '<ellipse cx="20" cy="18" rx="15" ry="7" fill="#ffe1a3" stroke="var(--edge)" stroke-width="2.5"/>' +
+  '</svg>';
+var BATSU_SVG = '<svg class="batsustamp" viewBox="0 0 40 40" role="img" aria-hidden="true">' +
+  '<line x1="9" y1="9" x2="31" y2="31" stroke="var(--rust)" stroke-width="5" stroke-linecap="round"/>' +
+  '<line x1="31" y1="9" x2="9" y2="31" stroke="var(--rust)" stroke-width="5" stroke-linecap="round"/>' +
+  '</svg>';
+var NICKEL_SVG = '<svg viewBox="0 0 40 40" role="img" aria-hidden="true" style="flex:0 0 auto;width:30px;height:30px;">' +
+  '<ellipse cx="20" cy="21" rx="12" ry="6" fill="var(--kraft)" stroke="var(--edge)" stroke-width="2.2"/>' +
+  '<ellipse cx="20" cy="18" rx="12" ry="6" fill="#d9c49a" stroke="var(--edge)" stroke-width="2.2"/>' +
+  '</svg>';
 
 /* comfort — corner button, 3 named stops, never a gate */
 var stops = ['default','softer','warmdark'];
@@ -481,7 +573,7 @@ function smStart(){ smIx = 0; smRender(); }
 function smRender(){
   var box = document.getElementById('smRound');
   if(smIx >= SM.length){
-    box.innerHTML = '<div class="feedback"><p><strong>Five rounds, five coins.</strong> You just played the whole syllabus. The machine is always here when you need more coins, or a reminder of how the semester runs.</p></div>';
+    box.innerHTML = '<div class="feedback"><p><strong>Five rounds down.</strong> You just played the whole syllabus, coins for the strongest reads and tokens for the rest, every round counted. The machine is always here when you need more coins, or a reminder of how the semester runs.</p></div>';
     var b = document.createElement('button'); b.type='button'; b.className='big';
     b.textContent = 'Back to the arcade floor';
     b.addEventListener('click', function(){ show('hub'); });
@@ -500,10 +592,22 @@ function smRender(){
 function smAnswer(i){
   var r = SM[smIx];
   var box = document.getElementById('smRound');
-  setCoins(coins+1, 'Semester Machine round ' + (smIx+1) + ': +1 coin');
-  ding();
-  say('Coin earned. You have ' + coins + ' coins.');
-  box.innerHTML = '<div class="feedback"><p>' + r.teach[i] + '</p><p><strong>+1 coin.</strong> Every answer moves you forward here. The feedback teaches, it never scores you.</p></div>';
+  var isBest = (i === r.best);
+  var fx, rewardLine;
+  if(isBest){
+    setCoins(coins+1, 'Semester Machine round ' + (smIx+1) + ': +1 coin (best answer)');
+    ding();
+    say('Coin earned. You have ' + coins + ' coins.');
+    fx = '<div class="answerfx">' + COIN_SVG + '<span class="fxlabel">Coin!</span></div>';
+    rewardLine = '<p><strong>+1 coin.</strong> That is the reading the room is built on.</p>';
+  } else {
+    setTokens(tokens+1, 'Semester Machine round ' + (smIx+1) + ': +1 token (not the strongest read)');
+    buzz();
+    say('Not quite. You still get a token to keep playing. ' + tokens + ' tokens so far.');
+    fx = '<div class="answerfx">' + BATSU_SVG + '<span class="fxlabel">Not quite</span></div>';
+    rewardLine = '<p>' + NICKEL_SVG + ' <strong>+1 token</strong> so you keep playing, but it is not a coin. Some reads are stronger than others, and this one was not the strongest.</p>';
+  }
+  box.innerHTML = '<div class="feedback">' + fx + '<p>' + r.teach[i] + '</p>' + rewardLine + '</div>';
   var b = document.createElement('button'); b.type='button'; b.className='big';
   b.textContent = (smIx+1 < SM.length) ? 'Next round' : 'Collect and finish';
   b.addEventListener('click', function(){ smIx++; smRender(); });
@@ -615,6 +719,7 @@ document.getElementById('lbBack').addEventListener('click', function(){ show('hu
 document.getElementById('ticketBtn').addEventListener('click', function(){
   var t = 'THE EN195 ARCADE: COIN TICKET\n';
   t += 'Coins in hand: ' + coins + '\n';
+  t += 'Tokens in hand: ' + tokens + '\n';
   t += '--------------------------\n';
   t += (log.length ? log.join('\n') : 'No plays yet. The coin on the floor is still yours.');
   t += '\n--------------------------\nThis ticket lives on your device only. If you fed the Workshop Vending Machine, that submission also went to the workshop server, separately from this ticket.\nTight Spiral Studios · Play. Notice. Design.';

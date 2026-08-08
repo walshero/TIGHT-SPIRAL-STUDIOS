@@ -1,0 +1,83 @@
+{
+ "lens": "L1",
+ "surface": "the-tell.html",
+ "passed": [
+  "CONTRAST-FLOOR",
+  "DEAD-END",
+  "EMOJI",
+  "FOCUS-INVISIBLE",
+  "FOCUS-LOST",
+  "H-OVERFLOW",
+  "JS-ERROR",
+  "NAV-MISSING",
+  "OFFLINE-BROKEN",
+  "OUTLINE-BROKEN",
+  "TAP-TARGET"
+ ],
+ "findings": [
+  {
+   "key": "TYPE-FLOOR",
+   "severity": "major",
+   "anchor": "stylesheet: 10/11/12/13/14/16px rules",
+   "problem": "Six distinct CSS font-size declarations sit under the 18px absolute floor (10, 11, 12, 13, 14, 16px).",
+   "fix": "Raise each to >=18px or bind to the page's --fs scale so the reader's size control moves them.",
+   "framework": "TSP type floor (18px absolute)",
+   "evidence": "preship-gate-v4 E1-CSS x6"
+  },
+  {
+   "key": "DARK-MISSING",
+   "severity": "blocker",
+   "anchor": ":root / color-scheme",
+   "problem": "No dark palette in any convention, while color-scheme declares dark. That tells the phone OS not to force-darken and then hands it light tokens on a dark surface.",
+   "fix": "Mount the comfort kernel dark palette, or drop the dark claim from color-scheme.",
+   "framework": "TSP dark floor",
+   "evidence": "preship-gate-v4 H-DARK-MISSING + H-DARK-PROMISE"
+  },
+  {
+   "key": "INSTRUCTION-WALL",
+   "severity": "blocker",
+   "anchor": "entry screen, prose above first non-chrome control",
+   "problem": "107 words of directions sit above the first control the player can actually use, measured at 390x844 with chrome excluded.",
+   "fix": "Move the first real choice above the fold; attach the directions to the moment they describe.",
+   "framework": "FTUE / NN-g above-the-fold",
+   "evidence": "one-thing-gate phone 390px: 107 words, 0.89 screens to act"
+  },
+  {
+   "key": "INVITATION-UNCLEAR",
+   "severity": "major",
+   "anchor": "entry: 'Studio Eyes' + 'Pick your lens'",
+   "problem": "Two co-equal primary invitations on entry where the studio floor is exactly one.",
+   "fix": "Demote the comfort control to chrome weight so 'Pick your lens' is the only primary.",
+   "framework": "TSP one-thing floor (2026-07-12)",
+   "evidence": "one-thing-gate primaryCount=2"
+  },
+  {
+   "key": "IMAGE-FLOOR",
+   "severity": "major",
+   "anchor": "entry tableau",
+   "problem": "Entry paints 21% image on phone and 7% on laptop against the >50% floor.",
+   "fix": "Raise the entry scene, or move prose below the first action.",
+   "framework": "Founder canon C7",
+   "evidence": "one-thing-gate visualRatio 0.21 phone / 0.07 laptop"
+  },
+  {
+   "key": "VOICE-NOT-FOUNDER",
+   "severity": "minor",
+   "anchor": "12 unmarked dashes across the file",
+   "problem": "Twelve unmarked em/en dashes, the machine-prose tic the founder ruled against on 2026-08-05.",
+   "fix": "Recast each as a period, comma, or colon unless it marks a genuine pivot.",
+   "framework": "Founder voice ruling 2026-08-05",
+   "evidence": "studio-voice-gate: 12 (baselined at 12)"
+  },
+  {
+   "key": "DEAD-CONTROL",
+   "severity": "blocker",
+   "anchor": "3 controls incl. north_trail entry buttons",
+   "problem": "playthrough-agent drove 31 clicks and found 3 controls that change nothing when pressed. Five more ('Why aren't builds moving', 'What is the studio, in o', 'What should it fix first', the replay glyph, 'Next') were visible but not clickable in place, which is an interception or overlay problem.",
+   "fix": "Trace each dead handler; for the not-clickable-in-place set, find what is covering them at the click point.",
+   "framework": "TSP playthrough floor",
+   "evidence": "playthrough-agent: DEAD BUTTONS (3), 5 click timeouts, end-reached yes, 0 JS errors",
+   "CORRECTED_2026-08-07": "FALSE POSITIVE - playthrough-agent.py cross-page navigation bug, not a the-tell.html defect. See aleph-ledger.json 759eb15ac34c."
+  }
+ ]
+}

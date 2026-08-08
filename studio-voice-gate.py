@@ -60,7 +60,34 @@ WHAT THIS GATE DOES NOT DO (v1.1 known gaps, stated not hidden)
 
 exit 0 = ship. exit 1 = HALT.
 """
-import re, sys, os
+import re, sys, os, json
+
+# ---- the ratchet -------------------------------------------------------------
+# Measured 2026-08-07 before mounting this gate on the belt: 101 of 131 surfaces
+# HALT. Armed flat, this gate would paint every repo red on every push and be
+# disarmed inside a week — the floor.yml lesson from July, repeated. So it
+# ratchets, and its unit is a per-file COUNT: the dash count may fall or hold,
+# never rise. Debt is carried, never forgiven, and the list only shrinks.
+BASELINE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'voice-baseline.json')
+
+def load_baseline():
+    if os.path.exists(BASELINE):
+        with open(BASELINE) as f:
+            return json.load(f).get('debt', {})
+    return None
+
+def key_for(p, repo):
+    """Baseline key = <repo>/<path relative to the repo root>.
+
+    NOT the bare basename. Three of the five repos ship an index.html; keyed by
+    basename they collide into one entry and the last one written silently grants
+    or denies the other two. The belt runs one gate against many repos, so the key
+    has to name the repo."""
+    ap = os.path.abspath(p)
+    rel = os.path.relpath(ap, os.getcwd())
+    if rel.startswith(os.pardir):
+        rel = os.path.basename(ap)
+    return repo + '/' + rel.replace(os.sep, '/')
 
 def strip_comments_track_founder(text):
     """Walk the file once. Blank out HTML comments and JS comments (so their
@@ -129,13 +156,52 @@ def em_dash_floor(raw):
         halts.append('H-VOICE-DASH line ' + str(line_no) + ': "...' + snippet + '..."')
     return halts
 
-def run(path):
+def run(path, ratchet=False, base=None, repo=''):
     raw = open(path, encoding='utf-8', errors='replace').read()
     halts = em_dash_floor(raw)
+    name  = key_for(path, repo) if ratchet else os.path.basename(path)
+    n     = len(halts)
 
     print()
-    print('  STUDIO VOICE - PRE-SHIP GATE v1.1 - ' + os.path.basename(path))
+    print('  STUDIO VOICE - PRE-SHIP GATE v1.1 - ' + name +
+          ('  ·  RATCHET' if ratchet else ''))
     print('  ' + '-' * 60)
+
+    if ratchet:
+        # A file the baseline never saw is NEW WORK and must meet the standard.
+        allowed = (base or {}).get(name)
+        if allowed is None:
+            if n:
+                print('  HALT - do not ship (NEW FILE - new work meets the standard):')
+                for h in halts:
+                    print('     ' + h)
+                print()
+                print('  ' + str(n) + ' unmarked dash(es), and this file carries no baseline debt.')
+                print()
+                return 1
+            print('  SHIP - no unmarked em/en dashes anywhere in the file.')
+            print()
+            return 0
+        if n > allowed:
+            print('  HALT - do not ship (REGRESSION - the ratchet turns one way):')
+            for h in halts:
+                print('     ' + h)
+            print()
+            print('  ' + str(n) + ' unmarked dash(es); the baseline carries ' +
+                  str(allowed) + '. A dash count may fall or hold, never rise.')
+            print()
+            return 1
+        if n:
+            print('  PASS (debt carried) - ' + str(n) + ' of ' + str(allowed) +
+                  ' baselined dash(es). Counted, not forgiven.')
+            if n < allowed:
+                print('  The ratchet moved: re-run --init to lock the gain in.')
+            print()
+            return 0
+        print('  SHIP - no unmarked em/en dashes anywhere in the file.')
+        print()
+        return 0
+
     if halts:
         print('  HALT - do not ship:')
         for h in halts:
@@ -148,8 +214,49 @@ def run(path):
     print()
     return 0
 
+
+def init(paths, repo='', merge=None):
+    """Freeze today's dash debt. This is the ONLY time the baseline may grow."""
+    debt = dict(merge or {})
+    for p in paths:
+        raw = open(p, encoding='utf-8', errors='replace').read()
+        n = len(em_dash_floor(raw))
+        if n:
+            debt[key_for(p, repo)] = n
+    with open(BASELINE, 'w') as f:
+        json.dump({
+            'created': '2026-08-07',
+            'why': ('Founder-voice debt frozen the day this gate was mounted on the studio '
+                    'belt. 101 of 131 surfaces carried unmarked dashes. These are CARRIED - '
+                    'counted, not forgiven. Any NEW dash blocks. The list may only shrink.'),
+            'rule': ("A file's dash count may fall or hold, never rise. Clear a file and it "
+                     'leaves the baseline forever.'),
+            'debt': dict(sorted(debt.items())),
+        }, f, indent=1)
+        f.write('\n')
+    print('BASELINE WRITTEN - ' + str(len(debt)) + ' file(s) carry known voice debt.')
+    print('These do not block. Everything else does. The ratchet is armed.')
+    return 0
+
+
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print('usage: studio-voice-gate.py <file.html> [more.html ...]')
+    args = [a for a in sys.argv[1:] if not a.startswith('--')]
+    repo = next((a.split('=', 1)[1] for a in sys.argv[1:] if a.startswith('--repo=')),
+                os.path.basename(os.getcwd()))
+    if not args:
+        print('usage: studio-voice-gate.py [--ratchet|--init] [--repo=NAME] '
+              '<file.html> [more.html ...]')
         sys.exit(2)
-    sys.exit(max(run(p) for p in sys.argv[1:]))
+    if '--init' in sys.argv:
+        # --merge keeps entries already frozen for OTHER repos; the belt seeds one
+        # repo at a time and a plain rewrite would drop the others' debt.
+        sys.exit(init(args, repo,
+                      load_baseline() if '--merge' in sys.argv else None))
+    ratchet = '--ratchet' in sys.argv
+    base = load_baseline() if ratchet else None
+    if ratchet and base is None:
+        print('HALT - --ratchet asked for but voice-baseline.json is missing.\n'
+              '       A gate that cannot find its baseline does not pass; it stops.',
+              file=sys.stderr)
+        sys.exit(2)
+    sys.exit(max(run(p, ratchet, base, repo) for p in args))

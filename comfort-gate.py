@@ -26,7 +26,7 @@ other way.
 Usage:  python3 comfort-gate.py <file.html> [<file.html> ...]
 Exit 0 = all passed · 1 = a file failed · 2 = harness error
 """
-import sys, re, os
+import sys, re, os, json
 try:
     from playwright.sync_api import sync_playwright
 except Exception as e:
@@ -104,9 +104,47 @@ def gate_file(pg_factory, path):
     pg.close()
     return fails
 
+# ---- the ratchet -------------------------------------------------------------
+# Added 2026-08-07 so this tick is MOUNTABLE ON THE HUB. Flat, it HALTs 23 of the
+# hub's 131 surfaces — which is why the hub had never run the belt at all, and why
+# every tick on it reached only the three files the spokes hold between them.
+#
+# The unit is a FILE, not a code: comfort-gate returns free-form failure strings,
+# and inventing a code scheme for them is a change to a founder-facing gate, not a
+# mounting chore. File-level is the same shape ratchet.py/floor-baseline.json
+# already use and the studio already armed. It is WEAKER than the code-level
+# ratchets on ticks 3-5: a new failure inside an already-red file is carried, not
+# caught. Burn the list down and that weakness goes with it.
+BASELINE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'comfort-baseline.json')
+
+def load_baseline():
+    if os.path.exists(BASELINE):
+        with open(BASELINE) as f:
+            return set(json.load(f).get('debt', []))
+    return None
+
+def key_for(path, repo):
+    ap  = os.path.abspath(path)
+    rel = os.path.relpath(ap, os.getcwd())
+    if rel.startswith(os.pardir):
+        rel = os.path.basename(ap)
+    return repo + '/' + rel.replace(os.sep, '/')
+
 def main(argv):
+    ratchet = '--ratchet' in argv
+    do_init = '--init' in argv
+    merge   = '--merge' in argv
+    repo    = next((a.split('=', 1)[1] for a in argv if a.startswith('--repo=')),
+                   os.path.basename(os.getcwd()))
+    argv    = [a for a in argv if not a.startswith('--')]
     if not argv:
-        print("usage: comfort-gate.py <file.html> [...]"); return 2
+        print("usage: comfort-gate.py [--ratchet|--init] [--repo=NAME] <file.html> [...]"); return 2
+    base = load_baseline() if (ratchet and not do_init) else set()
+    if ratchet and not do_init and base is None:
+        print("HALT - --ratchet asked for but comfort-baseline.json is missing.\n"
+              "       A gate that cannot find its baseline does not pass; it stops.")
+        return 2
+    frozen = set(load_baseline() or set()) if (do_init and merge) else set()
     with sync_playwright() as pw:
         try: browser = pw.chromium.launch()
         except Exception: browser = pw.chromium.launch(executable_path="/opt/pw-browsers/chromium")
@@ -120,11 +158,20 @@ def main(argv):
                     sink.append(u); r.abort()
             ctx.route("**/*", route)
             return ctx.new_page()
-        halted = 0
+        halted = 0; carried = 0
         for path in argv:
             fails = gate_file(factory, path)
             name = path.split('/')[-1]
+            k = key_for(path, repo)
+            if fails and do_init:
+                frozen.add(k)
             if fails:
+                if ratchet and not do_init and k in base:
+                    carried += 1
+                    print(f"\nDEBT  {name}  — carried by the ratchet, counted not forgiven")
+                    for f in fails[:3]:
+                        print("   " + f)
+                    continue
                 halted += 1
                 print(f"\nHALT  {name}")
                 for f in fails[:10]:
@@ -132,7 +179,22 @@ def main(argv):
             else:
                 print(f"\npass  {name}  — day/dusk/night all >=4.5, dark confirmed, offline, no emoji")
         browser.close()
-        print(f"\n=== {halted} HALT of {len(argv)} ===")
+        if do_init:
+            with open(BASELINE, 'w') as f:
+                json.dump({
+                    'created': '2026-08-07',
+                    'why': ('Accessibility-floor debt frozen the day the belt was mounted on '
+                            'the hub. Carried, not forgiven. Any NEW red file blocks. '
+                            'The list may only shrink.'),
+                    'rule': 'Fix a file, it leaves the baseline forever.',
+                    'debt': sorted(frozen),
+                }, f, indent=1)
+                f.write('\n')
+            print(f"\nBASELINE WRITTEN - {len(frozen)} file(s) carry known comfort debt.")
+            print("These do not block. Everything else does. The ratchet is armed.")
+            return 0
+        print(f"\n=== {halted} HALT of {len(argv)} ==="
+              + (f"  ({carried} carried as debt)" if carried else ""))
         return 1 if halted else 0
 
 if __name__ == "__main__":

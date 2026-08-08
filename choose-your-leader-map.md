@@ -8,7 +8,10 @@
 
 ## 1. The one-sentence version
 
-**You don't judge the leader. You judge what you were allowed to see.**
+*(Prior line here — "You don't judge the leader. You judge what you were allowed to
+see." — was founder-locked 2026-07-18, then objected and demoted per TSP_Ledger.md;
+removed from every live build 2026-08-08. Not reinstated; no replacement line
+authored yet.)*
 
 Choose Your Leader is a short, playable lesson in media literacy. It hands you a real quote from a U.S. president, asks how much you trust the person who said it, *then* shows you the facts the original audience couldn't see — and lets you feel how far the words pulled you before you knew the whole story.
 
@@ -135,7 +138,7 @@ These are the locked-call judgments the build is waiting on. None can be delegat
 
 - **Scene-first** — the rule that every game opens inside a scene the player notices, never with text. CYL's Beat 0.
 - **The gap** — the distance between what a leader said and what was true/happening at the time. The whole game trains noticing it.
-- **The descent / Maslow-descent** — the five-rung ladder rhetoric pulls you down; noticing is the brake. The studio's name for this mechanic.
+- **The descent / Maslow-descent** — the five-rung ladder rhetoric pulls you down; noticing is the brake. The studio's name for this mechanic. **Felt-renderer prototype:** `the-viscosity.html` builds this descent as *space* (the honeycomb stretches; legibility never drops; the crossing costs) — the embodied version of the current static ladder. Wiring it into CYL, plus the intended Jenova Chen flow layer (leader impact → viscosity; drop-downs/pull-ups), is founder-gated. Design block: `cyl-viscosity-descent-block.md` (shelf, not yet in repo).
 - **The brake** — noticing the gap, which arrests the fall. Measured as your trust dropping after the record turns.
 - **Gated** — a scene that is coded but excluded from play until its record is real, dated, sourced, and founder-approved.
 - **Glass Engine** — the principle that the learning mechanism is shown, not hidden. CYL's end-of-game depth rings.

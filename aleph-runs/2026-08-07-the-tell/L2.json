@@ -1,0 +1,97 @@
+{
+  "lens": "L2",
+  "surface": "the-tell.html",
+  "passed": [
+    "OPENING-WALL",
+    "FEEDBACK-ABSENT",
+    "FAIL-STATE-PUNITIVE",
+    "H-OVERFLOW",
+    "JS-ERROR",
+    "DEAD-CONTROL",
+    "DEAD-END",
+    "NAV-MISSING"
+  ],
+  "findings": [
+    {
+      "key": "INSTRUCTION-WALL",
+      "severity": "major",
+      "anchor": "#scene — .where kicker, h1#sceneh, the two <p>, and .hint, all stacked above button#toLens",
+      "problem": "At 390x844 the entry screen puts 99 words of rendered prose between the chrome and the first thing the player can do. The kicker, headline, two explanatory paragraphs and a 134px .hint box explain the whole rule set — face-down tags, call the move, write your why, then flip — before a single tap is permitted, and none of it is attached to the moment it describes. Two of these blocks are already duplicated later in the file where they belong: 'read, tap a tagged spot, call the move and say why' is restated by #progress on the board ('Tap a highlighted spot to call it'), and 'The point isn't a right answer' is restated by .verdict.diff on the flip ('Both can be defended — that is the workshop'). The player reads the manual on screen 1 and then reads it again in situ.",
+      "fix": "Cut #scene to h1#sceneh plus one line ('Their tag is face-down. You don't get to see it yet.') and #toLens — under 25 words. Delete the second <p> outright, since #progress already carries it at the point of use. Move the .hint block into the first .compare panel in renderFlip(), where the two reads actually sit side by side. Remove the .se-stamp version line ('Last updated … · v16 75e938c') from above the fold — it is build metadata occupying y=74–93 on the player's entry paint.",
+      "framework": "FTUE / onboarding practice (teach in the moment of use, never in a preamble); Nielsen #8 aesthetic and minimalist design; NN/g above the fold",
+      "evidence": "390x844 (binding). Measured by TreeWalker over rendered text nodes in #scene: 99 words between .se-chrome (bottom y=68) and #toLens (top y=749). Founder, 2026-08-07: 'a wall of directions that were irrelevant and unreadable for my phone.' Same 99 words at 1280x800, so this is not a narrow-screen artifact — the phone just makes it a full screen of it."
+    },
+    {
+      "key": "ACTION-BELOW-FOLD",
+      "severity": "major",
+      "anchor": "button#toLens on #scene",
+      "problem": "At default text size #toLens sits at y=749 with its bottom at y=805 in an 844px viewport — 0.89 screens down, and already clipped on any real phone browser, where the URL bar leaves roughly 750 CSS px visible. Turn on Studio Eyes A+ (html.se-a1, zoom:1.15) — the comfort control this page ships specifically for a reader with retinitis pigmentosa — and the only thing you can do on entry moves to y=963, 1.14 screens down. At A++ (html.se-a2) it is y=1126, 1.33 screens down. The page's own accessibility setting pushes its own entry action off the screen.",
+      "fix": "The INSTRUCTION-WALL cut fixes this: with #scene reduced to headline + one line + button, #toLens lands near y≈420 and stays fully in the first screen through A++. Add the assertion to the gate — at 390x844 with html.se-a2 applied, #toLens.getBoundingClientRect().bottom must be < innerHeight.",
+      "framework": "NN/g above the fold; Nielsen #7 flexibility and efficiency of use",
+      "evidence": "390x844 (binding). #toLens top y=749 / 0.89 screens at 100%; y=963 / 1.14 screens with html.se-a1; y=1126 / 1.33 screens with html.se-a2. Clean at 1280x800 (y=660, 0.83 screens) — this is a phone-only defect and the phone decides."
+    },
+    {
+      "key": "GAME-FEEL-DISPLACED",
+      "severity": "major",
+      "anchor": ".tagspot inside #pieceBody → #callHost (openCall(), the host.scrollIntoView({block:'center'}) call)",
+      "problem": "The player taps a highlighted phrase inside the piece — that is the whole action of this game — and the reaction paints in #callHost, 572px below it and outside .piece entirely. The handler then runs host.scrollIntoView({block:'center'}), which jumps the page to scrollY=929 and carries the words that were just tapped to viewport y=-627. Action and reaction are about 1.5 screens apart at 390 and are never co-visible: the player commits a read about a line they can no longer see. The panel re-prints the quote as a mitigation, but that is a copy of the evidence rather than the evidence in place.",
+      "fix": "Render the call panel inline — insert the .call node into #pieceBody immediately after the paragraph break following the tapped .tagspot, so the response opens where the finger landed and the surrounding sentences stay on screen. If it must remain in #callHost, replace scrollIntoView({block:'center'}) with an explicit scroll that pins the tapped .tagspot just below the 68px sticky .se-chrome and lets the panel run below it.",
+      "framework": "Game feel (Swink) — action and reaction in the same place, within the same moment; Nielsen #1 visibility of system status",
+      "evidence": "390x844. .tagspot[data-span=A] at y=302; .call opens at y=898 (572px gap); after the auto-scroll scrollY=929 and the tapped spot is at viewport y=-627, spotVisible=false. Same shape at 1280x800: spot y=246, panel y=703, spot at viewport y=-351."
+    },
+    {
+      "key": "FTUE-UNGUIDED",
+      "severity": "major",
+      "anchor": ".call .ch ('Call the move that is working') and .call .quote inside #callHost, positioned by host.scrollIntoView({block:'center'})",
+      "problem": "The call panel is 907px tall in an 844px viewport, so centering it puts its top at viewport y=-31, and the 68px sticky .se-chrome then covers the next 68px. A first-time player's first tap lands them on a bare stack of eight card names — the screenshot at 390 shows 'Anchor in Reality' as the topmost visible content — with both the instruction telling them what to do and the quoted line they are meant to judge scrolled out of sight. There is nothing on screen at that moment naming the task. It gets worse at the comfort sizes the page offers: at se-a1 the panel is 1112px and the quote is at viewport y=-96 (quoteVisible=false); at se-a2 the panel is 1329px and the quote is at y=-185.",
+      "fix": "Scroll the panel's top into view rather than its centre — scrollIntoView({block:'start'}) plus scroll-margin-top on .call equal to the .se-chrome height (68px) so the chrome does not eat it. Then make .call .ch and .call .quote a position:sticky sub-header inside .call (top: 68px) so the prompt and the words being judged stay on screen through the eight-card scroll.",
+      "framework": "Nielsen #1 visibility of system status and #6 recognition rather than recall; FTUE practice",
+      "evidence": "390x844. .call height 907px, panelTopViewport=-31, promptVisible=false; .quote nominally at y=2 but sits underneath the sticky .se-chrome band y=0–68 — confirmed by screenshot, where neither the prompt nor the quote paints. se-a1: panel 1112px, quote at y=-96, quoteVisible=false. se-a2: panel 1329px, quote at y=-185."
+    },
+    {
+      "key": "INVITATION-UNCLEAR",
+      "severity": "major",
+      "anchor": "button#lensWriterly and button#lensWorkshop inside #lens .lens",
+      "problem": "The screen where play actually begins offers two co-equal primary invitations and no default. Both .lenscard buttons render at identical 364x91 at 390px, with identical 3px --line2 border, identical --surface background, identical .lt/.ld type treatment, and no recommended path; the copy above them ('Same piece, two lenses. You can play the other one after.') explicitly refuses to rank them. A first-time player choosing between 'Writerly moves — the appreciative read' and 'Workshop moves — the reviewer's read' is choosing between two pieces of craft vocabulary they have not been taught yet. The same defect continues onto the board: on arrival #board .controls holds #toClose (primary, disabled) next to #switchLens (ghost, enabled), so the only enabled button-shaped control on the game screen is the one that discards progress, while the real invitation is an inline text span.",
+      "fix": "Make Writerly the marked default — give #lensWriterly the filled --accent treatment the .go buttons use, add 'Start here' to its .ld, and demote #lensWorkshop to the .lenscard outline it has now. Better still, drop the screen: send #toLens straight into the writerly board and let the existing #switchLens control introduce the second lens in the moment the player has something to compare, which is what a lens is for.",
+      "framework": "Nielsen #6 recognition rather than recall and #8 aesthetic and minimalist design; Desurvire HEP (the first choice should not require knowledge the game has not yet given)",
+      "evidence": "390x844: two .lenscard buttons, both 364x91, tops y=253 and y=355, identical computed border and background; 2 co-equal primary invitations, matching the surface measurement. 1280x800: both 628x85, same result."
+    },
+    {
+      "key": "TAP-TARGET",
+      "severity": "blocker",
+      "anchor": ".tagspot (CSS line 142) — specifically the span rendered for data-span=\"A\", 'where it had hung for eleven years', in #pieceBody",
+      "problem": "The only interactive element in the game itself is an inline <span class=\"tagspot\" role=\"button\" tabindex=\"0\">. .tagspot has no min-height and only padding:.02em .18em, so its hit area is whatever line box the text happens to occupy. At 390x844 at default text size span A fits on one line and measures 23.66px tall — 20px under the studio's 44px floor. Spans C and E clear the floor only by accident, because their text happens to wrap to two lines (55.02px). This is a tool blind spot: every other control on the page carries --tap:48px and passes, so a target-size sweep scoped to button/a elements never sees the one control the game is played with.",
+      "fix": "Give .tagspot a guaranteed 44px hit area that survives a single-line wrap — padding:.42em .3em with line-height:1.9 on the span, which keeps the inline highlight look. Alternative if the inline flow must not change: leave the phrase as plain marked text and promote the .facedown glyph to a real 44x44 <button> carrying the role, label and handler. Then add span[role=\"button\"], [tabindex=\"0\"] to the gate's target-size selector list so .tagspot is measured next run.",
+      "framework": "Apple HIG 44x44pt / Material 48dp; studio 44px floor",
+      "evidence": "390x844, getBoundingClientRect().height on .tagspot[data-span=A] = 23.66px, getClientRects().length = 1 (single line box). Spans C and E: 55.02px, 2 line boxes. At se-a2 all three wrap to 70.66px and pass — the defect is at the default size, which is what the gate measures."
+    },
+    {
+      "key": "LABEL-AMBIGUOUS",
+      "severity": "major",
+      "anchor": "button#switchLens ('Read it the other way') in #board .controls",
+      "problem": "The handler calls startLens(), whose second statement is state={}. Every read the player has written — the card call and the typed evidence — is destroyed, with no warning, no confirmation and no undo. The label promises a change of lens, not a wipe. It sits immediately to the left of 'See your reads →' at the foot of the board, which is exactly where a player scrolling down after a flip arrives, and it is the only enabled .go button there until all three spots are done.",
+      "fix": "Keep per-lens state — replace the single state={} with state={writerly:{},workshop:{}} keyed by lens, so switching preserves what was written and buildCarry() can export both. If that is too large for this slice, at minimum relabel to 'Start over in the other lens' and gate it behind a confirm when Object.keys(state).length > 0: 'You have 1 read written. Switching lenses clears it.'",
+      "framework": "Nielsen #5 error prevention and #3 user control and freedom (clearly marked exits, undo)",
+      "evidence": "390x844 and 1280x800, identical: committed one read, then clicked #switchLens. #progress went 'Tagged spots read: 1 of 3' → 'Tagged spots read: 0 of 3'; document.querySelectorAll('dialog,[role=alertdialog]').length === 0. Cross-group report — LABEL-AMBIGUOUS is L3's key, but the loss lands in play."
+    },
+    {
+      "key": "PROGRESS-ILLEGIBLE",
+      "severity": "minor",
+      "anchor": "p#progress in #board, and the .compare panel built by renderFlip()",
+      "problem": "The counter itself reads well — 'Tagged spots read: 1 of 3' — but it lives only at the top of the board (y=146) and is never repeated near the action. At the exact moment it increments, the commit that opens the flip, the page is at scrollY=781, putting the counter 635px above the viewport top. The player never sees the count change. The .compare panel they are looking at says nothing about how many spots remain, and #nextSpot reads 'Back to the piece →' with no count attached. After that button collapses the panel the page stays at scrollY=586, above which the next unread spot (y=459) has already scrolled past.",
+      "fix": "Build the remaining count into the flip's exit control in renderFlip(): 'Back to the piece — 2 spots left →', computed from LENS_SPANS[lens].length minus the done count, so progress reads where the player is standing. Keep the top counter. While there, have #nextSpot scroll the next unread .tagspot into view under the chrome instead of leaving the page where the panel was.",
+      "framework": "Nielsen #1 visibility of system status",
+      "evidence": "390x844. #progress top y=146; after #commitCall scrollY=781 and .compare top at viewport y=117 — the counter is off-screen at the moment it updates. After #nextSpot: scrollY=586, next unread .tagspot at y=459, nextSpotInView=false."
+    },
+    {
+      "key": "REPLAY-BLOCKED",
+      "severity": "minor",
+      "anchor": "the .tagspot.done branch of renderPiece(); button#replayOther on #close; the single show('lens') binding",
+      "problem": "Once a spot is flipped, renderPiece() re-renders it as .tagspot.done without tabIndex, without role=\"button\" and without a click or keydown handler, so a call cannot be reopened, revised or replayed. The player who wants to change their mind after seeing the prior reader's why has no move. And show('lens') is bound exactly once in the whole file, to #toLens on the entry screen, so once the first lens is picked the picker is unreachable: replaying the SAME lens means clicking 'Read it the other way' twice and destroying a full set of reads on the way through. #close offers only 'Read it the other way' — there is no 'read this one again'.",
+      "fix": "Keep .tagspot.done tap- and keyboard-reachable with aria-label 'Reopen your read' and a handler that calls openCall() pre-filled from state[span] — the commit-before-flip engine is already spent for that spot, so reopening costs nothing. Add a second button on #close, 'Read this lens again', calling startLens(lens).",
+      "framework": "Nielsen #3 user control and freedom; Desurvire HEP (the player can replay and refine)",
+      "evidence": "390x844. After commit, document.querySelector('.tagspot.done[role=button]') === null. Source: (html.match(/show\\('lens'\\)/g)).length === 1. Not a hard block — a full reload or two lens switches restores play — hence minor rather than major."
+    }
+  ]
+}

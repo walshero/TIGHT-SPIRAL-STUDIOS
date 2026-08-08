@@ -143,7 +143,18 @@ def audit_page(page, path):
 def run(files, headed=False):
     from playwright.sync_api import sync_playwright
     bad = 0
-    exe = os.environ.get('SF_CHROME')  # optional explicit chromium path
+    # A GATE THAT GOES BLIND MUST NOT READ AS CLEAN.
+    # SF_CHROME was an OPTIONAL override, so with it unset this fell through to
+    # playwright's pinned build number - and when the installed package and the
+    # on-disk browsers drift (CI image refresh, pip upgrade) launch() raises
+    # "Executable doesn't exist at .../chromium_headless_shell-<n>/...". Found
+    # 2026-08-07: this gate and playthrough-agent.py were BOTH dead from that one
+    # drift, which means TAP-TARGET had never actually been measured on this
+    # corpus - not "the gate passed it", but "the gate never ran". The Aleph
+    # fleet's L4 lens caught a 26x24px live target the touch gate should own.
+    # Default to the stable path the image provides; SF_CHROME still overrides.
+    exe = os.environ.get('SF_CHROME') or (
+        '/opt/pw-browsers/chromium' if os.path.exists('/opt/pw-browsers/chromium') else None)
     with sync_playwright() as p:
         launch = {}
         if exe: launch['executable_path'] = exe

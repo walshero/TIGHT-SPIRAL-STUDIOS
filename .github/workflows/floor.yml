@@ -16,6 +16,30 @@ name: Studio Eyes — Accessibility Floor
 #
 # A gate that does not block is not a gate. This is a KNOWN, DATED, SCHEDULED
 # exception — not a policy. (os-block-triple-sweep.md)
+#
+# MERGED 2026-08-08 — real teeth, not passive lip service. Founder's direct
+# instruction after finding this repo ran TWO separate, disagreeing CI systems on
+# every push: this file (ratchet.py + comfort-audit.mjs, hard-blocking, but its
+# deploy job DEPLOYED ANYWAY on failure via `if: always()`) and studio-belt.yml
+# (the belt's 5 ratcheted ticks, no deploy step of its own, running in parallel).
+# Two Chromium installs, two ratchets, two baseline files, for one founder claim.
+# One workflow now. What changed, concretely:
+#   - ratchet.py + comfort-audit.mjs RETIRED from CI. They checked real things,
+#     but the belt's ticks 1 and 3 (comfort-gate.py, preship-gate-v4.py) do the
+#     same job with per-repo-qualified baselines that are actively maintained
+#     today — floor-baseline.json (ratchet.py's) has not been touched since
+#     2026-07-26; gate-baseline.json (the belt's) was re-seeded 2026-08-07.
+#     Keeping both running was redundancy, not redundant safety — two gates that
+#     can disagree is a founder with two dashboards to reconcile, not one to trust.
+#   - The belt (all 5 ratcheted ticks) now runs INLINE in this job, not as a
+#     separate workflow. studio-belt.yml deleted — its only job was calling the
+#     same belt this file now calls directly.
+#   - DEPLOY IS RE-COUPLED. `if: always() &&` removed. A failing floor now
+#     actually stops the deploy — that is what "real teeth" means. This was
+#     verified safe before landing: a full belt run against the live corpus
+#     (all ~130 HTML surfaces) passed clean or debt-carried, zero HALTs, the
+#     same day this change was made. If a future push needs the emergency
+#     valve back, that is a founder call, made in the open, not a silent default.
 
 on:
   push:
@@ -49,34 +73,27 @@ jobs:
         run: python3 secret-scan-gate.py .
         continue-on-error: true
 
+      - name: CANON FRESHNESS — resident-doc claims vs live reality (report; never blocks)
+        run: python3 canon-freshness.py .
+        continue-on-error: true
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Install the eyes
+      - name: Install the eyes (render-proof + belt toolchain, one install for both)
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz-subset0
           pip install --quiet 'weasyprint==69.0' pillow playwright
           playwright install --with-deps chromium
-          npm install --silent axe-core playwright
-          npx playwright install chromium
 
       - name: STUDIO EYES — full report (never blocks; the whole picture)
         run: python3 studio-eyes-sweep.py .
         continue-on-error: true
 
-      - name: THE RATCHET — ARMED 2026-07-14. Blocks REGRESSIONS. This one refuses.
-        run: python3 ratchet.py
-
-      # ARMED 2026-07-28. The WeasyPrint sweep is blind to the LIVE dark comfort
-      # stop — it called the corpus clean while The Tell and The Viscosity showed
-      # light-on-light on the phone. This drives a real browser through every dark
-      # stop and lets axe-core (the known solution) judge contrast. Corpus is clean
-      # today, so this hard-blocks: any NEW dark-stop light-on-light fails the floor
-      # and skips deploy. Comp the eyes to a proven engine; don't re-derive WCAG.
-      - name: COMFORT AUDIT — dark-stop contrast in a real browser (axe-core). This one refuses.
-        run: node comfort-audit.mjs
+      - name: THE STUDIO BELT — 5 ratcheted ticks. THIS ONE REFUSES.
+        run: bash studio-belt.sh .
 
       - name: Screenshots — every screen, light + dark, iPhone 390x844
         if: always()
@@ -88,12 +105,12 @@ jobs:
 
   deploy:
     needs: floor
-    # DECOUPLED 2026-07-28: the render-proof gate (v4) is now ALIVE and, with the
-    # 18px E1 floor being near-universal + constant multi-agent pushes, a COUPLED
-    # deploy froze the live site on almost every new file. The floor job still runs
-    # and reports RED when the gate bites (full teeth as a signal / PR-gate) — but
-    # the live site is no longer held hostage. Re-couple by removing 'always() && '.
-    if: always() && github.ref == 'refs/heads/main'
+    # COUPLED 2026-08-08. A failing floor blocks deploy — that is the whole
+    # point of a gate. (History: coupled 2026-07-14 -> decoupled 2026-07-28 over
+    # the render-proof gate's near-universal 18px E1 floor freezing every push
+    # -> re-coupled here now that the corpus is verified clean against the
+    # current belt baselines, the same day this change landed.)
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
