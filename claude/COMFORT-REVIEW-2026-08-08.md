@@ -202,4 +202,138 @@ is right. The measurement says the comfort button should not have been in the he
 
 ---
 
-## FINDING 
+## FINDING 5 — FONT SIZE USES `zoom`, WHICH BREAKS THE PANEL
+
+    html.se-a1{ zoom:1.15; }
+    html.se-a2{ zoom:1.3; }
+
+`zoom` is non-standard, scales layout rather than type, and does not participate in the
+`calc()` positioning the panel. The panel is pinned at `top:calc(var(--tap) + 14px)`, a
+hardcoded 62px guess at the chrome's height.
+
+Measured at A++, panel open, 390x844:
+
+    chrome bottom     90.2px
+    panel top         80.6px
+    OVERLAP            9.6px
+
+At the largest font size — the setting a low-vision reader is most likely to choose — the
+panel slides under the header and its first row is covered. The comfort control breaks
+hardest for the person who needs it most.
+
+**Fix.** Drive font size with `font-size` on `:root`, not `zoom`, and position the panel
+from the chrome's measured height. This also restores the reader's own browser text-size
+preference as the base, the convention 69 of 75 root-level files already follow.
+
+---
+
+## FINDING 6 — `--focus` IS A DUAL-ROLE TOKEN
+
+Project instruction: "A color token is atmosphere OR text, never both."
+
+`--focus` is the focus-ring color AND the `.eyebrow` text color. As text:
+
+    day    6.20:1     clears AA, misses the house 7:1 AAA target
+    dusk   4.93:1     clears AA by 0.43
+    night 10.46:1     fine
+
+The only pair in the whole block that misses AAA, and it misses because it is being asked
+to be two things. Split it: `--focus` for rings, `--eyebrow` for the eyebrow.
+
+---
+
+## FINDING 7 — SCREEN READER OPTIONS WERE REMOVED
+
+The founder's definition of comfort ends with "screen reader options." The control offers
+none. It offers exactly three toggles across all 96 surfaces that carry them:
+
+    data-tog="se-reduce"     96 files
+    data-tog="se-contrast"   96 files
+    data-tog="se-cb"         96 files
+
+`.se-sr` is an `aria-live` status region — the panel announcing its own state changes. It
+is not an option a reader can set.
+
+**The studio had one and deleted it.** Git history:
+
+    0c6f16c  THE COMFORT CONTROL — one button, five stops, ending in CLEAR READER
+    b4e69df  COMFORT SWEEP — three games on the canonical five stops
+    bc423ed  Studio-wide v2 migration (49 pages) ... legacy comfort controls removed
+
+Clear Reader was the fifth stop and it was explicitly the screen-reader proxy. Its own
+spec, still live in `comfort-control.html`:
+
+> Tap Clear Reader and the game BECOMES its own outline. The colour goes. The layout
+> goes. The decoration goes. What is left is what a screen reader actually [gets] ...
+> if it is unplayable in Clear Reader, it is unplayable with a screen reader.
+
+Three files still carry it: `comfort-control.html`, `funny-boneys-factory.html`,
+`choose-your-leader-v6.html`. `funny-boneys-factory.html` line 286 carries the epitaph in
+a comment: *"(legacy Clear Reader stop removed with the old comfort control)."*
+
+So the v2 migration removed a working, spec'd, founder-facing capability from 49 pages and
+replaced it with "Colorblind cues," an item the founder did not name. No founder ruling is
+recorded for that removal. This is the most consequential finding in the review: Findings
+1 through 6 are defects, this is a capability the studio built and then quietly dropped.
+
+**Fix.** Restore Clear Reader as a stop in the shared block. The CSS still exists in
+`comfort-control.html` and can be lifted rather than rewritten.
+
+---
+
+## RECOMMENDATION
+
+**1. Recommended — one pass on the shared block, plus the check that would have caught
+Finding 2.**
+
+Seven edits: motion split, persistence, bottom-corner control, `font-size` instead of
+`zoom`, measured panel offset, token split, Clear Reader restored. Then propagate.
+Alongside it, extend the type check from one number to every rendered text node — a gate
+reporting "N of M visible text nodes below 18px" per surface, ratcheted against a baseline
+so today's debt is carried and only new debt blocks.
+
+Why: six of the seven are small and mechanical, and the seventh (Finding 2) is not a defect
+but a missing instrument. Fixing the block without building the check leaves the studio
+exactly where it is — a floor asserted in six documents and measured in none. The ratchet
+shape is already proven on five ticks, so this mounts a known pattern.
+
+Tradeoff: propagating to 101 surfaces is the expensive part, and the type baseline will be
+large and ugly on day one. That is the honest state of the corpus, and a baseline that
+reflects reality beats a floor that does not.
+
+**2. Simpler — Findings 1, 3 and 7 only.**
+
+Motion stop, persistence, and Clear Reader: the three things on the founder's own list that
+are broken or gone. Skip the rest. Most of the daily relief for a fraction of the work.
+
+**3. More advanced — one shared file the surfaces link, instead of 101 copies.**
+
+The single-file offline floor forces the block to be pasted into every surface, which is
+why nine files carry a bug fixed elsewhere and why 87 of 101 have the zoom version. One
+referenced file would make "fix once" true. That is a real change to the offline floor and
+a founder call, not a cleanup.
+
+**Ignore for now:** the contrast palette and tap-target sizing. Both measured clean.
+
+---
+
+## OPEN CALLS
+
+- **Arm the naming ruling?** Add `comfort kernel` to `retired-lines.json` as `render_only`,
+  matching the existing "studio eyes" entry. Two live surfaces (`index.html`,
+  `studio-aleph.html`) must be fixed FIRST — tick 6 is zero-tolerance with no ratchet and
+  deploy is coupled as of 2026-08-08, so arming it before the fix stops the site
+  publishing. The 77 source/doc/baseline occurrences stay legal under `render_only`.
+- **The 20px line in `studio-type-contrast-standard.md` v1.0.** Measured reality is 14.4 to
+  19px body, 10 to 13px chrome. Recommendation: keep 18px as the enforced absolute for
+  every rendered node, drop the separate 20px body line, let the reader's browser setting
+  supply the base. A floor that can be checked is the only kind that is real.
+- **Comfort control placement:** bottom corner (thumb arc, v1) or top chrome (reserved, v2).
+  Recommendation: bottom corner, chrome stays top.
+- **Clear Reader's removal was never ruled on.** Restoring it is Finding 7's fix, but the
+  founder should say whether it returns as a light-ladder stop or as its own toggle.
+- **One shared file vs 101 copies** (Recommendation 3).
+
+---
+
+Measured 2026-08-08. Nothing here is an opinion about how it looks.
