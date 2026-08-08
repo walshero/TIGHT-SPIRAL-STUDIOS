@@ -9,10 +9,10 @@
 | Material | Drive file ID | What it carries |
 |---|---|---|
 | **EN195-025 Spring 2026 Course Schedule** (.docx, read in full) | `1xA3LBvqr_QhyhejSiSNh2BHcOQ3AXC_e` | The richest sample: policy voice + week-by-week assignment prose + teaching asides |
-| EN195-025 Spring 2026 Course Schedule (.pdf mirror) | `1A978-ySdoVc_7KAiWkjIhbjGo75TElET` | same content, PDF |
+| EN195-025 course schedule (.pdf mirror) | `1A978-ySdoVc_7KAiWkjIhbjGo75TElET` | same content, PDF |
 | **Live Syllabus** (Google Doc, linked from the schedule) | `1WQd6sexfJGmneGKbp7iTBa5I3YCvm3MweHpeJWNJLoU` | The standalone syllabus: policies in Matt's voice |
-| Summer 2026 6-week EN195 Course Schedule (.docx) | `10fO5TJtlFHqH8b9kZO67LuDNJr_YD0jx` | Online/accelerated register (the summer 6-wk course the student-attribution standard names) |
-| EN195-700 Spring 2026 Course Schedule (.docx) | `1TcOkV1Oo00R3qemgCey_dq3efOE55SH1` | Online-section register |
+| EN195 accelerated 6-week course schedule (.docx) | `10fO5TJtlFHqH8b9kZO67LuDNJr_YD0jx` | Online/accelerated register (the summer 6-wk course the student-attribution standard names) |
+| EN195-700 course schedule (.docx) | `1TcOkV1Oo00R3qemgCey_dq3efOE55SH1` | Online-section register |
 | en-faculty-orientation.html | `1Pd-W7cTKEoFRppWKoAnXFteIrQRyK0Ib` | Faculty-facing voice (for the measure-side tools) |
 | en-assessment-hub.html | `1dMfLAqHcx9lPCUZohlLzCg4dfhRpdCAO` | Assessment-facing voice |
 | *Also seated elsewhere:* the English annual reports (`claude_seat-english-assessment.md`) for **report voice**; the founder's `ISLO-SCORING-REFLECTION-2026-mwalsh.md` (in-repo) for reflective voice. | | |
