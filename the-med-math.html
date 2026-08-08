@@ -90,7 +90,13 @@ html{-webkit-text-size-adjust:100%}
 body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:17px; line-height:1.55; -webkit-font-smoothing:antialiased}
 .wrap{max-width:760px; margin:0 auto; padding:0 22px 40px}
 
-.stage{padding:40px 0 22px; border-bottom:2px solid var(--ink-line)}
+.hero{display:block; width:100%; height:clamp(220px,38vh,340px); margin:6px 0 12px; color:var(--cool-ink); background:var(--paper-2); border:1.5px solid var(--ink-line); border-radius:5px}
+.hero svg{display:block; width:100%; height:100%}
+.stage{padding:0 0 12px; border-bottom:2px solid var(--ink-line)}
+.caveat{font-size:14.5px; line-height:1.5; color:var(--ink); margin:10px 0 0; padding:9px 13px; border-left:5px solid var(--warn-ink); background:var(--paper-2); border-radius:2px} .caveat b{color:var(--warn-ink)}
+.start{margin:14px 0 0}
+.below{margin:22px 0 0}
+.below .lede{font-size:clamp(16px,2.2vw,18px); line-height:1.55; color:var(--ink-2); margin:0 0 14px} .below .lede b{color:var(--ink); font-weight:600}
 .mark{font-family:var(--mono); font-size:11.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--brass-ink); font-weight:700; margin:0 0 14px}
 h1{font-family:var(--serif); font-size:clamp(30px,6vw,50px); line-height:1.06; margin:0 0 16px; letter-spacing:-.015em; font-weight:400}
 h1 em{font-style:italic; color:var(--cool-ink)}
@@ -192,7 +198,7 @@ html[data-light="night"] .case[data-acc="4"], html[data-light="night"] .rail but
   </span>
   <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Comfort">Comfort</button>
 </header>
-<p class="se-stamp" style="margin:.45rem .9rem 0;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.76rem;opacity:.92;display:flex;align-items:center;gap:.45rem;flex-wrap:wrap"><span id="seUpdated">Last updated&hellip;</span> <span class="se-version" style="font:inherit;opacity:.85">&middot; v1 <span style="opacity:.75">new</span></span></p>
+<p class="se-stamp" style="margin:.45rem .9rem 0;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.76rem;opacity:.92;display:flex;align-items:center;gap:.45rem;flex-wrap:wrap"><span id="seUpdated">Last updated&hellip;</span> <span class="se-version" style="font:inherit;opacity:.85">&middot; v3 <span style="opacity:.75">a5a0023</span></span> </span></p>
 <div class="se-panel" id="sePanel" role="dialog" aria-label="Comfort">
   <h2>Light</h2>
   <div class="se-prow" role="group" aria-label="Light level">
@@ -215,30 +221,46 @@ html[data-light="night"] .case[data-acc="4"], html[data-light="night"] .rail but
 
 <main class="wrap">
 
+<figure class="hero" role="img" aria-label="A clinical still: an IV drip line, a medicine cup holding two tablets, a graduated syringe, and a labeled vial.">
+  <svg viewBox="0 0 420 240" preserveAspectRatio="xMidYMid meet" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M24 214 H396" stroke-width="2" opacity="0.45"/>
+    <!-- IV pole + bag -->
+    <path d="M52 22 V206"/>
+    <path d="M52 30 H74"/>
+    <circle cx="74" cy="34" r="3"/>
+    <rect x="60" y="40" width="52" height="80" rx="8"/>
+    <path d="M86 40 V32"/>
+    <path d="M66 66 H106" opacity="0.75"/>
+    <path d="M68 80 H96 M68 90 H88" opacity="0.6"/>
+    <rect x="78" y="120" width="16" height="22" rx="3"/>
+    <circle cx="86" cy="131" r="2.6" fill="currentColor" stroke="none"/>
+    <path d="M86 142 C 86 176, 150 168, 176 196" opacity="0.85"/>
+    <!-- medicine cup -->
+    <path d="M170 168 H214 L208 210 H176 Z"/>
+    <path d="M176 180 H182 M176 192 H182 M176 202 H180" opacity="0.6"/>
+    <ellipse cx="188" cy="162" rx="9" ry="4"/>
+    <ellipse cx="200" cy="158" rx="7.5" ry="3.4"/>
+    <path d="M183 162 H193" opacity="0.6"/>
+    <!-- syringe -->
+    <rect x="250" y="70" width="120" height="26" rx="3"/>
+    <path d="M266 70 V78 M282 70 V78 M298 70 V78 M314 70 V78 M330 70 V78 M346 70 V78" opacity="0.6"/>
+    <path d="M250 83 H232"/>
+    <path d="M300 74 V92" opacity="0.85"/>
+    <path d="M370 76 H392"/>
+    <path d="M392 68 V104"/>
+    <!-- vial -->
+    <rect x="300" y="164" width="28" height="42" rx="3"/>
+    <rect x="305" y="154" width="18" height="10" rx="2"/>
+    <path d="M308 154 V150 H320 V154"/>
+    <path d="M305 182 H323 M305 190 H317" opacity="0.6"/>
+  </svg>
+</figure>
+
 <div class="stage">
   <p class="mark">Tight Spiral Productions · MassBay Health Sciences (Framingham) · iSLO 2</p>
   <h1>The med math: <em>the number a nurse has to get right.</em></h1>
-  <p class="lede">On the floor, a dosage is not a homework problem. It is a real amount going into a real person,
-    and the arithmetic is the last thing standing between an order and a mistake. This walks four of them the way
-    the floor walks them: <b>set up the units, do the math, then check whether the number even makes sense.</b></p>
-  <p class="lede">You do the calculating. The page only shows the work back and runs the safety check with you.
-    At the end you'll have an <b>SBAR handoff</b> you can say out loud.</p>
-  <p class="tag">Read the order · Set up the units · Check the number · Hand it off</p>
-
-  <svg class="hero-mark" viewBox="0 0 120 64" aria-hidden="true">
-    <rect x="16" y="20" width="26" height="34" rx="3" fill="none" stroke="currentColor" stroke-width="2.4"/>
-    <path d="M23 20 v-5 a3 3 0 0 1 3 -3 h6 a3 3 0 0 1 3 3 v5" fill="none" stroke="currentColor" stroke-width="2.4"/>
-    <path d="M29 30 v14 M22 37 h14" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
-    <circle cx="86" cy="34" r="16" fill="none" stroke="currentColor" stroke-width="2.4"/>
-    <path d="M86 24 v10 l7 5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>
-
-  <div class="safety">
-    <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 5 L34 30 H6 Z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><path d="M20 16 v7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/><circle cx="20" cy="27" r="1.8" fill="currentColor"/></svg>
-    <p><b>A teaching tool, not clinical guidance.</b> These are fictional practice cases with rounded numbers.
-      Real dosing is verified against the order, the label, a second nurse, and your facility's protocol. Nobody
-      gives a medication on the strength of a game. This is here to build the reasoning, not to replace the checks.</p>
-  </div>
+  <p class="caveat"><b>A teaching tool, not clinical guidance.</b> Fictional cases, rounded numbers.</p>
+  <button class="btn start" data-start="1">Start: read the first order &rsaquo;</button>
 </div>
 
 <div class="rail" id="rail" role="tablist" aria-label="Four dosage problems">
@@ -247,6 +269,18 @@ html[data-light="night"] .case[data-acc="4"], html[data-light="night"] .rail but
   <button data-acc="3" data-go="2" role="tab" aria-current="false"><span class="rn">Three</span><span class="rt">The IV Rate</span></button>
   <button data-acc="4" data-go="3" role="tab" aria-current="false"><span class="rn">Four</span><span class="rt">By Weight</span></button>
 </div>
+
+<section class="below">
+  <p class="lede">On the floor, a dosage is not a homework problem: it is a real amount going into a real person, and
+    the arithmetic is the last thing standing between an order and a mistake. You do the calculating; the page shows
+    the work back and runs the safety check with you: <b>set up the units, do the math, then check whether the number
+    even makes sense.</b> At the end you'll have an <b>SBAR handoff</b> you can say out loud.</p>
+  <div class="safety">
+    <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 5 L34 30 H6 Z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><path d="M20 16 v7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/><circle cx="20" cy="27" r="1.8" fill="currentColor"/></svg>
+    <p>Real dosing is verified against the order, the label, a second nurse, and your facility's protocol. Nobody
+      gives a medication on the strength of a game. This is here to build the reasoning, not to replace the checks.</p>
+  </div>
+</section>
 
 <section class="case" data-acc="1" id="case-0"></section>
 <section class="case" data-acc="2" id="case-1" hidden></section>
@@ -438,6 +472,7 @@ html[data-light="night"] .case[data-acc="4"], html[data-light="night"] .rail but
   }
   railBtns.forEach(function(b){ b.addEventListener("click", function(){ show(parseInt(b.getAttribute("data-go"),10)); }); });
   document.addEventListener("click",function(e){
+    var s=e.target.closest("[data-start]"); if(s){ show(0); var inp=$("in-0"); if(inp){ inp.focus(); var c=$("case-0"); if(c) c.scrollIntoView({behavior:"smooth", block:"start"}); } return; }
     var n=e.target.closest("[data-next]"); if(n){ show(parseInt(n.getAttribute("data-next"),10)); return; }
     var f=e.target.closest("[data-finish]"); if(f){ buildClose(); show("close"); }
   });
