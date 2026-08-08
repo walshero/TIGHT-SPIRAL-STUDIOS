@@ -483,3 +483,14 @@ followed here is kept as the record of the question as it stood:**
 **FLAGGED, NOT ANSWERED — the protection question.** Zimmerman's recorded verdict: the old framing was load-bearing for keeping real presidents/real deaths playable. The line is dead; the protective function needs a new home before the current-era trio expands. Founder's call.
 
 **NEXT SHIP:** the v7 descent-in-world build, Union Rep seating at open, per the ruling doc's order of work.
+
+---
+
+## 2026-08-08 — Legal-photo lane AUTHORIZED (founder: "Authorized to build and use legal photos")
+
+**RULED — the realism lane is live for the v7 build.** The standing sourcing rules bind unchanged (OS §16 Lane C + cyl-v5-image-lane.md): only named, verified license sources — PD-first (Library of Congress, National Archives, US-gov, Wikimedia Commons PD/CC0) — license verified on the item's own rights page, source URL + license string recorded in the mount, never an unlicensed grab, never a real leader's face in CYL (the room is the subject; the figure stays withheld). Provenance manifest lives beside the assets.
+
+**REACHABILITY MAPPED same hour (tested, not assumed) — PENDING one founder unlock:**
+- **This session's network policy BLOCKS the PD archives** (curl and WebFetch both refused on commons.wikimedia.org and loc.gov — proxy 403 / EGRESS_BLOCKED, logged). The image-lane doc now says environment policy governs, not a blanket "sandbox can't."
+- **Drive holds no period plates** (searched: images are arcade tiles, screenshots, AI one-offs; the "cyl/plates" a prior session referenced were its own local /tmp, gone with the container).
+- **Two unlocks, founder's choice:** (1) FREE — allow-list the archives (loc.gov, www.loc.gov, commons.wikimedia.org, upload.wikimedia.org, archives.gov) in this Claude Code environment's network settings; PD-first sourcing then runs from any session here. (2) PAID — Adobe Stock via the connected Adobe account (`asset_license_and_download_stock`); legally licensed but spends real money per asset, so per the cost rule it waits for an explicit per-use go-ahead. Until one opens, the v7 build's art mounts stay staged as asks, exactly like the fys hero plate.

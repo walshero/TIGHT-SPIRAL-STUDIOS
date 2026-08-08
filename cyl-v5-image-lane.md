@@ -32,7 +32,7 @@ This file was first written (2026‑07‑19) prescribing **AI‑generated photor
 | Step | Where | Who |
 |---|---|---|
 | **Art direction** (color science, per‑scene, withheld figure) | `cyl-period-bible.md` | Locked |
-| **Collage material — PD‑first** (real archival print/photo) | Library of Congress · National Archives · US Navy/DoD (US‑gov = public domain) | You / an image session (sandbox egress can't reach them) |
+| **Collage material — PD‑first** (real archival print/photo) | Library of Congress · National Archives · US Navy/DoD (US‑gov = public domain) · Wikimedia Commons PD/CC0 | You / any session whose network policy reaches the archives (founder authorized the legal‑photo lane 2026‑08‑08 — but reachability is per‑environment, tested not assumed: the 08‑08 CCR session found loc.gov and commons.wikimedia.org egress‑BLOCKED. Free unlock: allow‑list the archive domains in the environment's network settings. Paid fallback: Adobe Stock via the connected account, per‑use go‑ahead required. See TSP_Ledger 2026‑08‑08.) |
 | **Compose the collage** (cut, layer, grain, seam) | an image‑capable session (period print + optional Super Sketchy Graphics AI finishing) | You / an image session |
 | **Composite → base64 ≤400 KB/room → Studio Eyes → ship** | a code session (here) | Me — drop assets in the repo/Drive and I wire, gate, deploy |
 
