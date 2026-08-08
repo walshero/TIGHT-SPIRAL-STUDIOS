@@ -84,6 +84,71 @@ genuinely unmerged as of 2026-08-07 and are now folded in alongside the rest, al
 
 ---
 
+
+## GATES — the enforcement layer, declared 2026-08-08
+
+*Addresses only, per this file's own rule. Added after two TSP sessions built two
+different `studio-fingers.py` on the same day, neither having read this manifest — and
+neither of which this manifest could have stopped, because until now it governed docs and
+never named a single gate.*
+
+**The belt is the only thing with agency.** `studio-belt.sh` (9,725 B, `02c1ff5f`) runs the
+ticks; every tick BLOCKS on exit 1. **A gate that is not mounted on the belt does not run.**
+
+| # | tick | gate | bytes / blob | mode | owner |
+|---|------|------|--------------|------|-------|
+| 1 | accessibility floor | `comfort-gate.py` | 9,506 · `1db5f289` | ratchet | UNDECLARED |
+| 2 | student attribution | *(in-belt)* | — | ratchet | UNDECLARED |
+| 3 | >50% image + render | `preship-gate-v4.py` | 20,035 · `7d5d7b6f` | ratchet | UNDECLARED |
+| 4 | founder voice | `studio-voice-gate.py` | 11,728 · `b169aaf7` | ratchet | UNDECLARED |
+| 5 | entry paint | `one-thing-gate.py` | 16,873 · `7dca5f10` | ratchet | UNDECLARED |
+| 6 | retired lines | `retired-lines-gate.py` | 8,134 · `99da04ae` | flat | belt lane (2026-08-08) |
+| — | **NOT MOUNTED** | `studio-fingers.py` | 12,429 · `baee110d` | — | canon lane (2026-08-07) |
+| — | **NOT MOUNTED · DUPLICATE** | `studio-eyes/studio-fingers.py` | 13,124 · `c504d4e2` | — | studio-eyes lane |
+| — | not a tick (resolver) | `resolve-canon.py` | 38,353 · `34d58994` | — | canon lane |
+| — | not a tick (write path) | `stage-push.py` | 9,230 · `4d23328c` | — | canon lane |
+| — | not a tick (evidence) | `studio-eyes-sweep.py` | 15,619 · `9989f9a2` | — | UNDECLARED |
+| — | not a tick (provenance) | `art-gate.py` | 3,211 · `d62c0efb` | — | UNDECLARED |
+
+UNDECLARED is not a shrug. It is a **founder call outstanding**: a gate whose owner is not
+named cannot be safely edited by any session, which is how the studio ends up with two of
+them.
+
+### THE GAP THIS TABLE EXPOSES
+
+The duplicate was **not a cross-lane failure.** Both sessions were TSP. This manifest's
+whole model is lane-level RW/RO, and both held RW — so the rule that was supposed to
+prevent this could not even express the situation. **The real hazard is two concurrent
+sessions inside ONE lane**, and nothing in the studio arbitrates that.
+
+Two checks, cheap, in preference order:
+
+1. **A colliding basename is a HALT.** `resolve-canon.py` now records every basename held by
+   more than one path and prints them by name in the Aleph pass; a single root-level path
+   wins its basename, and a full path resolves exactly. Eight collide today. Before this,
+   the resolver picked canon alphabetically and had been resolving `workshop-in-a-box.html`
+   to a `rescued/` snapshot.
+2. **A gate declares its own tick.** If a gate's header names its belt number, an unmounted
+   gate is detectable by reading the gate rather than by remembering the belt.
+
+### STANDING HALTS AGAINST THE ENFORCEMENT LAYER
+
+- **Duplicate canon.** Two gates answer "can this be touched." Founder ruling needed on
+  which is canon; the other retires.
+- **`preship-gate-v5` DARK clause is false.** It greps for `prefers-color-scheme`, finds 0
+  in `index.html`, and reports "no measured dark path." That file implements dark as
+  `[data-light=…]` — **15 occurrences** — which is what studio doctrine requires: comfort
+  is a live corner control, not an OS wall. `comfort-gate` measures real painted pixels and
+  passes the same file. The gate is wrong, the file is right, and the HALT has stood since
+  2026-08-03. A gate that cries wolf trains the studio to scroll past it.
+- **Vocabulary boundary unenforced.** "Studio Eyes" is visible to a reader in **103 files**,
+  **62 of them non-studio surfaces**, including student-facing ones. `retired-lines-gate.py`
+  is the right home — it already converts a founder objection into a permanent check — but
+  its entries are global. It needs one optional `except_paths` field so a name that is
+  correct on `studio/` can be banned everywhere else.
+
+---
+
 ## HOW LANES USE THIS
 
 - **Session-open:** load this manifest; it declares every lane's read/write rights.
