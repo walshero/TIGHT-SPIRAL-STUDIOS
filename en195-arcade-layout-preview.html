@@ -612,4 +612,234 @@ var SM = [
  {q:"Workshop notes come back on your draft. In this course, revision means:",
   a:["Fix the typos and resubmit","Re-see the piece: cut, restructure, deepen","Explain why the original was right"],
   best:1,
-  teach:["Typos are proofreading, the last five minutes. Revi
+  teach:["Typos are proofreading, the last five minutes. Revision is re-vision: seeing the piece again: cutting, restructuring, deepening.",
+         "Exactly. Re-vision. Seeing the piece again: cutting, restructuring, deepening. The Sandbag Drop cabinet is this gear, made playable.",
+         "Defending is a fine instinct and a poor strategy. Revision is re-vision: seeing the piece again: cutting, restructuring, deepening."]},
+ {q:"Six weeks, one lap through four genres. Which four?",
+  a:["Creative nonfiction, poetry, the ten-minute play, short fiction","Novel, memoir, epic, screenplay","Essay, report, summary, review"],
+  best:0,
+  teach:["Yes. CNF, poetry, the ten-minute play, and short fiction. One lap, four genres, and every piece feeds the river that ends at your portfolio.",
+         "Those are book-length beasts, bigger water than six weeks holds. Here it's CNF, poetry, the ten-minute play, and short fiction.",
+         "Those live in other courses. Here it's CNF, poetry, the ten-minute play, and short fiction. Each one feeds your portfolio."]},
+ {q:"Everything flows to the sea. The course ends with:",
+  a:["Every draft you ever wrote, unrevised","Your revised best work plus an artist statement","A timed final exam"],
+  best:1,
+  teach:["The drafts matter as the riverbed, not the sea. The finish line is your revised best work plus an artist statement about your moves.",
+         "That's the sea: your revised best work plus an artist statement naming the moves you made. Reflection is the fifth craft action.",
+         "No timed exam here. The finish line is your revised best work plus an artist statement naming the moves you made."]}
+];
+var smIx = 0;
+function smStart(){ smIx = 0; smRender(); }
+function smRender(){
+  var box = document.getElementById('smRound');
+  if(smIx >= SM.length){
+    box.innerHTML = '<div class="feedback"><p><strong>Five rounds down.</strong> You just played the whole syllabus, coins for the strongest reads and tokens for the rest, every round counted. The machine is always here when you need more coins, or a reminder of how the semester runs.</p></div>';
+    var b = document.createElement('button'); b.type='button'; b.className='big';
+    b.textContent = 'Back to the arcade floor';
+    b.addEventListener('click', function(){ show('hub'); });
+    box.appendChild(b);
+    return;
+  }
+  var r = SM[smIx];
+  box.innerHTML = '<p><strong>Round ' + (smIx+1) + ' of 5.</strong></p><p>' + r.q + '</p>';
+  r.a.forEach(function(opt, i){
+    var b = document.createElement('button'); b.type='button'; b.className='big';
+    b.textContent = opt;
+    b.addEventListener('click', function(){ smAnswer(i); });
+    box.appendChild(b);
+  });
+}
+function smAnswer(i){
+  var r = SM[smIx];
+  var box = document.getElementById('smRound');
+  var isBest = (i === r.best);
+  var fx, rewardLine;
+  if(isBest){
+    setCoins(coins+1, 'Semester Machine round ' + (smIx+1) + ': +1 coin (best answer)');
+    ding();
+    say('Coin earned. You have ' + coins + ' coins.');
+    fx = '<div class="answerfx">' + COIN_SVG + '<span class="fxlabel">Coin!</span></div>';
+    rewardLine = '<p><strong>+1 coin.</strong> That is the reading the room is built on.</p>';
+  } else {
+    setTokens(tokens+1, 'Semester Machine round ' + (smIx+1) + ': +1 token (not the strongest read)');
+    buzz();
+    say('Not quite. You still get a token to keep playing. ' + tokens + ' tokens so far.');
+    fx = '<div class="answerfx">' + BATSU_SVG + '<span class="fxlabel">Not quite</span></div>';
+    rewardLine = '<p>' + NICKEL_SVG + ' <strong>+1 token</strong> so you keep playing, but it is not a coin. Some reads are stronger than others, and this one was not the strongest.</p>';
+  }
+  box.innerHTML = '<div class="feedback">' + fx + '<p>' + r.teach[i] + '</p>' + rewardLine + '</div>';
+  var b = document.createElement('button'); b.type='button'; b.className='big';
+  b.textContent = (smIx+1 < SM.length) ? 'Next round' : 'Collect and finish';
+  b.addEventListener('click', function(){ smIx++; smRender(); });
+  box.appendChild(b);
+}
+
+/* ============ SANDBAG DROP ============ */
+/* flab:true words are sandbags; cargo words teach if cut */
+var SB = [
+ {w:"The",f:false},{w:"balloon,",f:false},{w:"which",f:true},{w:"was",f:true},
+ {w:"very",f:true},{w:"extremely",f:true},{w:"large",f:false},{w:"in",f:true},
+ {w:"size,",f:true},{w:"slowly",f:false},{w:"began",f:true},{w:"to",f:true},
+ {w:"start",f:true},{w:"to",f:true},{w:"rise",f:false},{w:"up",f:true},
+ {w:"into",f:false},{w:"the",f:false},{w:"air",f:false},{w:"above.",f:true}
+];
+var sbCut = [];
+function sbStart(){
+  sbCut = SB.map(function(){ return false; });
+  var box = document.getElementById('sbWords');
+  box.innerHTML = '';
+  SB.forEach(function(item, i){
+    var b = document.createElement('button'); b.type='button'; b.className='word';
+    b.textContent = item.w;
+    b.setAttribute('aria-pressed','false');
+    b.addEventListener('click', function(){ sbToggle(i, b); });
+    box.appendChild(b);
+  });
+  document.getElementById('sbFeed').hidden = true;
+  sbLift();
+}
+function sbToggle(i, btn){
+  sbCut[i] = !sbCut[i];
+  btn.setAttribute('aria-pressed', sbCut[i] ? 'true' : 'false');
+  var feed = document.getElementById('sbFeed');
+  if(sbCut[i] && !SB[i].f){
+    feed.hidden = false;
+    feed.textContent = '"' + SB[i].w.replace(/[,.]/g,'') + '" is cargo. The sentence leans on it. You can put it back with another tap, or leave it out and see how the sentence walks.';
+  } else if(sbCut[i]){
+    feed.hidden = false;
+    feed.textContent = 'Sandbag dropped. Feel the sentence lighten.';
+  } else {
+    feed.hidden = true;
+  }
+  sbLift();
+}
+function sbLift(){
+  var flabTotal = 0, flabCut = 0;
+  SB.forEach(function(item,i){ if(item.f){ flabTotal++; if(sbCut[i]){ flabCut++; } } });
+  var lift = flabCut / flabTotal;
+  var bal = document.getElementById('balloon');
+  bal.setAttribute('transform','translate(0,' + (-120*lift) + ')');
+  say(flabCut + ' of ' + flabTotal + ' sandbags cut.');
+  if(flabCut === flabTotal){
+    var feed = document.getElementById('sbFeed');
+    feed.hidden = false;
+    feed.innerHTML = '<strong>The balloon clears the frame.</strong> Read what’s left: "The balloon, large, slowly rises into the air." Eleven sandbags gone and the sentence flies. This is the revision gear. Cutting is ascent.';
+  }
+}
+document.getElementById('sbBack').addEventListener('click', function(){ show('hub'); });
+
+/* ============ LINE BREAK ============ */
+var LB = ["so","much","depends","upon","a","red","wheel","barrow","glazed","with","rain","water","beside","the","white","chickens"];
+var LBteach = {
+ 3:"Breaking after “upon” is Williams’s own first move. The line leans forward off a preposition. That lean is enjambment: the sentence keeps falling into the next line.",
+ 6:"Breaking inside “wheelbarrow” splits a thing into two smaller things: wheel, then barrow. Williams did exactly this. The break makes you see the object in parts.",
+ 10:"Breaking inside “rainwater” is the same move as “wheel / barrow.” The compound comes apart and each half gets its own weight.",
+ 15:"Ending on “chickens” closes the poem with a full stop of an image: an end-stopped line. The music rests."
+};
+var lbBreaks = [];
+function lbStart(){
+  lbBreaks = [];
+  var box = document.getElementById('lbLine');
+  box.innerHTML = '';
+  LB.forEach(function(w, i){
+    var s = document.createElement('span');
+    s.textContent = w;
+    box.appendChild(s);
+    if(i < LB.length){
+      var g = document.createElement('button'); g.type='button'; g.className='gap';
+      g.textContent = '/';
+      g.setAttribute('aria-label','Break the line after “' + w + '”');
+      g.setAttribute('aria-pressed','false');
+      (function(ix, btn){
+        btn.addEventListener('click', function(){ lbToggle(ix, btn); });
+      })(i, g);
+      box.appendChild(g);
+    }
+  });
+  document.getElementById('lbFeed').hidden = true;
+}
+function lbToggle(i, btn){
+  var on = btn.getAttribute('aria-pressed') === 'true';
+  btn.setAttribute('aria-pressed', on ? 'false' : 'true');
+  var feed = document.getElementById('lbFeed');
+  feed.hidden = false;
+  if(on){
+    feed.textContent = 'Break removed after “' + LB[i] + '”. The line runs on. Hear it speed up.';
+  } else if(LBteach[i]){
+    feed.textContent = LBteach[i];
+  } else {
+    var next = LB[i+1] ? LB[i+1] : 'the end';
+    feed.textContent = 'A break after “' + LB[i] + '” puts a breath there and hands the next line’s first weight to “' + next + '”. Valid move. Every break changes the music, and this one slows the reader exactly here.';
+  }
+  say(feed.textContent);
+}
+document.getElementById('lbBack').addEventListener('click', function(){ show('hub'); });
+
+/* ============ TICKET (Carry-Out) ============ */
+document.getElementById('ticketBtn').addEventListener('click', function(){
+  var t = 'THE EN195 ARCADE: COIN TICKET\n';
+  t += 'Coins in hand: ' + coins + '\n';
+  t += 'Tokens in hand: ' + tokens + '\n';
+  t += '--------------------------\n';
+  t += (log.length ? log.join('\n') : 'No plays yet. The coin on the floor is still yours.');
+  t += '\n--------------------------\nThis ticket lives on your device only. If you fed the Workshop Vending Machine, that submission also went to the workshop server, separately from this ticket.\nTight Spiral Studios · Play. Notice. Design.';
+  document.getElementById('ticketText').textContent = t;
+  show('ticket');
+});
+document.getElementById('copyTicket').addEventListener('click', function(){
+  var t = document.getElementById('ticketText').textContent;
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(function(){ say('Ticket copied.'); });
+  }
+  say('Ticket ready. Select the text to copy if the button did not work.');
+});
+document.getElementById('tkBack').addEventListener('click', function(){ show('hub'); });
+
+/* ============ WORKSHOP VENDING MACHINE ============ */
+/* Studio exception: this cabinet alone talks to a live backend (Supabase),
+   because a shared, class-wide submission board cannot exist inside one
+   offline file. Everything else in this arcade stores nothing and calls
+   nothing. Keys below are the project's PUBLIC anon key, safe to ship
+   client-side — row-level security on the server is what actually protects
+   student full-text and email; the anon key can insert tokens and read only
+   the public leaderboard view, never the base table. */
+var SB_URL = 'https://fqylthxaidyncoygjnkm.supabase.co';
+var SB_ANON = 'sb_publishable_vVBDcyfO0700zijNHqLImw_MxKq2NeN';
+
+var WORKSHOPS = {
+  1: { title:'Workshop 1: Creative Nonfiction', genre:'Creative Nonfiction',
+       intro:'Groups ALPHA / BETA / GAMMA. Certify, paste your link and your full text, and feed the machine.',
+       groups:[
+         {name:'ALPHA', deadline:'2026-09-22T23:59:00-04:00'},
+         {name:'BETA',  deadline:'2026-09-22T23:59:00-04:00'},
+         {name:'GAMMA', deadline:'2026-09-22T23:59:00-04:00'}
+       ]},
+  2: { title:'Workshop 2: Poetry', genre:'Poetry',
+       intro:'Groups EARTH / WIND / FIRE. Certify, paste your link and your full text, and feed the machine.',
+       groups:[
+         {name:'EARTH', deadline:'2026-10-08T23:59:00-04:00'},
+         {name:'WIND',  deadline:'2026-10-08T23:59:00-04:00'},
+         {name:'FIRE',  deadline:'2026-10-08T23:59:00-04:00'}
+       ]},
+  3: { title:'Workshop 3: 10-Minute Play', genre:'10-Minute Play',
+       intro:'Batches 1–4, each on its own date. Certify, paste your link and your full text, and feed the machine.',
+       groups:[
+         {name:'Batch 1', deadline:'2026-10-29T23:59:00-04:00'},
+         {name:'Batch 2', deadline:'2026-11-03T23:59:00-05:00'},
+         {name:'Batch 3', deadline:'2026-11-12T23:59:00-05:00'},
+         {name:'Batch 4', deadline:'2026-11-17T23:59:00-05:00'}
+       ]},
+  4: { title:'Workshop 4: Short Story', genre:'Short Story',
+       intro:'Batches 1–3. Certify, paste your link and your full text, and feed the machine.',
+       groups:[
+         {name:'Batch 1', deadline:'2026-11-19T23:59:00-05:00'},
+         {name:'Batch 2', deadline:'2026-11-19T23:59:00-05:00'},
+         {name:'Batch 3', deadline:'2026-11-19T23:59:00-05:00'}
+       ]}
+};
+var vmCurrent = null;
+
+/* Splash art per cabinet — same hand-cut paper-SVG language as the rest of
+   the arcade (rounded shapes, var()-driven fills so it recolors correctly
+   across Default/Softer/Warm dark), no in-SVG text at all so there is no
+   font-scale floor to trip. Each is the compound metaphor made vis
