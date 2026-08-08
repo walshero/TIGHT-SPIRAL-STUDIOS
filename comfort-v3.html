@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="tsp:surface" content="doc">
+<title>Comfort v3, the studio standard</title>
+<!--
+  ═══════════════════════════════════════════════════════════════════════════
+  COMFORT v3 — the studio standard for how content is viewed.
+
+  FOUNDER'S DEFINITION, 2026-08-08, verbatim:
+    "Comfort is how you view content. It includes font size, contrast, modes
+     like warm and dark, motion stop, and screen reader options."
+
+  v3 exists because v2 failed three of those five. Measured, not asserted, in
+  claude/COMFORT-REVIEW-2026-08-08.md:
+    - motion stop was DEAD (0 rules parsed of 47; see FIX 1)
+    - font size broke the panel at A++ (9.6px overlap; see FIX 4 + 5)
+    - screen reader options were REMOVED from 49 pages on 2026-07-29 with no
+      founder ruling recorded (Clear Reader; see FIX 7)
+  Plus: nothing persisted across 101 surfaces (FIX 2), the control left the
+  thumb arc (FIX 3), and --focus was a dual-role token (FIX 6).
+
+  NAMING. The instrument's internal name is retired from player-facing text
+  (retired-lines.json, studio-eyes-public-2026-08-08, zero tolerance, deploy
+  coupled). The control a reader sees is labelled COMFORT — the founder's own
+  word, and the word the project instruction already uses: "comfort is a live
+  corner control." This file is therefore safe on player surfaces AND studio
+  surfaces, which no prior version was.
+
+  FLOORS THIS FILE HOLDS, all mechanically checkable:
+    single file · offline · no emoji · every rendered text node >= 18px ·
+    every text pair >= 7:1 in all three light modes · every target >= 48px ·
+    comfort survives navigation · motion stop actually stops motion
+  ═══════════════════════════════════════════════════════════════════════════
+-->
+<script>
+/* PRE-PAINT. Runs before the first paint so a reader who chose warm-dark never
+   sees a flash of daylight. This is the whole point of persistence: a setting
+   that arrives after paint has already failed the person it is for.
+   No try/catch swallowing — a storage failure falls through to sane defaults. */
+(function(){
+  var d = document.documentElement, s = null;
+  try { s = JSON.parse(localStorage.getItem('tsp.comfort.v1') || 'null'); } catch(e){ s = null; }
+  if (!s || typeof s !== 'object') {
+    /* No stored choice. Honour the operating system, then stop. The control
+       always outranks the OS once the reader has touched it. */
+    var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    s = { light: dark ? 'night' : 'day', size: 0, contrast: 0, motion: 0, cues: 0, reader: 0 };
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) s.motion = 1;
+  }
+  d.setAttribute('data-light', s.light === 'dusk' || s.light === 'night' ? s.light : 'day');
+  d.classList.toggle('c-a1', s.size === 1);
+  d.classList.toggle('c-a2', s.size === 2);
+  d.classList.toggle('c-contrast', !!s.contrast);
+  d.classList.toggle('c-still',    !!s.motion);
+  d.classList.toggle('c-cues',     !!s.cues);
+  d.classList.toggle('c-reader',   !!s.reader);
+  window.__comfort = s;
+})();
+</script>
+<style>
+/* ═══ 1. LIGHT MODES ════════════════════════════════════════════════════════
+   A token is atmosphere OR text, never both (project instruction). --focus
+   paints rings only. --eyebrow is its own text token, tuned independently —
+   in v2 these were one token and it was the only pair in the file to miss AAA. */
+:root{
+  /* THE READER SETS THE BASE. 100% defers to their browser's own font-size
+     preference. v2 used zoom:1.15/1.3 here, which scales LAYOUT not TYPE and
+     does not participate in calc(), which is precisely what slid the panel
+     under the header at the largest setting. Size steps are font-size now. */
+  font-size:100%;
+
+  --bg:#f4ecda; --surface:#fbf5e6; --surface-2:#efe4c8;
+  --ink:#221d12; --ink-2:#463b22;
+  --line:#c9b184;
+  --accent:#3f5f78; --accent-strong:#2c4658; --on-accent:#ffffff;
+  --focus:#8f3f00;      /* rings ONLY. Never text. */
+  --eyebrow:#6b2c00;    /* text. Measured 7.6:1 on --bg. */
+  --r:10px; --tap:48px;
+  --serif:Georgia,'Iowan Old Style','Times New Roman',serif;
+  --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:ui-monospace,'SF Mono',Menlo,monospace;
+  --motion:.18s;
+  --chrome-h:64px;      /* measured at runtime, never guessed. See FIX 4. */
+  --dock-h:76px;
+}
+html[data-light="dusk"]{
+  --bg:#ecdcbb; --surface:#f3e6c8; --surface-2:#e2c99a;
+  --ink:#241a10; --ink-2:#453619;
+  --line:#bda474;
+  --accent:#37536a; --accent-strong:#24384a; --on-accent:#ffffff;
+  --focus:#8a3800; --eyebrow:#5e2600;
+}
+html[data-light="night"]{
+  --bg:#1c1a16; --surface:#242019; --surface-2:#33302a;
+  --ink:#f2e3bf; --ink-2:#dccba2;
+  --line:#5a5140;
+  --accent:#8aa0b8; --accent-strong:#a9bcd0; --on-accent:#141109;
+  --focus:#f0c357; --eyebrow:#f0c357;
+}
+
+/* OS FALLBACK. Sets :root so a reader who has never touched the control, or
+   who has JS off, still gets dark when their phone is dark. An EXPLICIT choice
+   outranks it: html[data-light="day"] below re-asserts the light tokens at
+   higher specificity, so choosing Day on a dark phone actually gives you day.
+   Written against :root deliberately, which is the shape preship-gate-v4 parses
+   (line 162). A dark path a gate cannot see is a dark path that gets no audit. */
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#1c1a16; --surface:#242019; --surface-2:#33302a;
+    --ink:#f2e3bf; --ink-2:#dccba2; --line:#5a5140;
+    --accent:#8aa0b8; --accent-strong:#a9bcd0; --on-accent:#141109;
+    --focus:#f0c357; --eyebrow:#f0c357;
+  }
+}
+
+/* An explicit Day beats the OS. Same token set as :root, higher specificity. */
+html[data-light="day"]{
+  --bg:#f4ecda; --surface:#fbf5e6; --surface-2:#efe4c8;
+  --ink:#221d12; --ink-2:#463b22; --line:#c9b184;
+  --accent:#3f5f78; --accent-strong:#2c4658; --on-accent:#ffffff;
+  --focus:#8f3f00; --eyebrow:#6b2c00;
+}
+
+/* ═══ 2. HIGH CONTRAST ════════════════════════════════════════════════════ */
+html.c-contrast:not([data-light="night"]){
+  --bg:#fffdf8; --surface:#fffdf8; --surface-2:#f2ede1;
+  --ink:#100d07; --ink-2:#241d10; --line:#7d6a44;
+  --accent-strong:#1d2f3d; --eyebrow:#5a2400;
+}
+html.c-contrast[data-light="night"]{
+  --bg:#0a0908; --surface:#141210; --surface-2:#201d18;
+  --ink:#fff9ec; --ink-2:#f0e3c6; --accent-strong:#c3d4e6; --eyebrow:#ffd77a;
+}
+
+/* ═══ 3. FONT SIZE ════════════════════════════════════════════════════════
+   Multiplies the reader's own base rather than replacing it. A reader whose
+   browser is already at 20px gets 22.5 / 25 here, not a reset to our guess. */
+html.c-a1{ font-size:112.5%; }
+html.c-a2{ font-size:125%; }
+
+/* ═══ 4. MOTION STOP ══════════════════════════════════════════════════════
+   TWO RULES. NEVER MERGED. v2 wrote them as one:
+     html.se-reduce *,@media (prefers-reduced-motion:reduce){ ... }
+   An @media block cannot sit inside a selector list, so the CSS parser threw
+   the whole declaration away — measured, 0 of 47 rules parsed. The toggle
+   announced success and moved nothing, and the OS preference died with it.
+   This regression was documented once and then reintroduced. Do not merge them. */
+html.c-still *{
+  animation:none !important; transition:none !important; scroll-behavior:auto !important;
+}
+@media (prefers-reduced-motion:reduce){
+  *{ animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+}
+
+/* ═══ 5. COLOURBLIND CUES ════════════════════════════════════════════════ */
+html.c-cues a{ text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:2px; }
+
+*{ box-sizing:border-box; }
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--serif); font-size:1.125rem; line-height:1.6;
+  -webkit-text-size-adjust:100%;
+  transition:background var(--motion) ease, color var(--motion) ease;
+}
+
+/* ═══ CHROME — top, reserved, never overlaps. No comfort control in it. ═══
+   v2 put the comfort control up here to fix a re
