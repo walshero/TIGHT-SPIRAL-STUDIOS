@@ -82,6 +82,19 @@ fine to share publicly. These are **not** privacy/PII concerns here. Do not flag
 them, do not ask about them, do not hedge on them. The founder decides what gets
 shared. (This was asked and answered too many times — it is settled.)
 
+## Deliverables & durability — standing (2026-08-08)
+- **Phone-first delivery.** Anything handed to Matt defaults to a downloadable
+  attachment or a URL (raw GitHub link, canonical once merged) — never an inline
+  render-only view. He reviews from a phone; a render-only panel can't be copied,
+  selected, or downloaded there. A deliverable he can't move is not delivered.
+- **Make work stick, whenever possible.** Any decision, preference, instrument,
+  or promise made in conversation lands in canon (this repo) the same turn it's
+  made. A rule stated only in chat, a ledger line promised "at close," a
+  preference acknowledged but not written — each is a loss waiting for a
+  compaction or a dead battery. When something genuinely must stay pending (a
+  founder call not yet made), write the PENDING state itself into the tracking
+  doc, so the next session inherits the question instead of silence.
+
 ## Deploy lanes
 - **git / GitHub Pages is the primary lane.** Ship here by default.
 - **Netlify is one-off sharing only** — nothing the studio depends on. Prefer git
