@@ -40,12 +40,16 @@ MassBay is **~69% part-time / commuter** (1,437 FT / 3,141 PT, Data USA 2024) �
 ## Proposed first builds (iSLO-mapped, one per campus)
 Each makes the iSLOs concrete *inside the program*, using a real on-the-job number/decision:
 - **Ashland / Automotive — "Flat Rate" (iSLO 2 quantitative + iSLO 6 critical thinking + iSLO 3 tool use).** The flat-rate hour vs. real time; labor + parts + the diagnostic tree. The co-op "earn while you learn" number, made playable. Tightest identity, richest partnership story.
-- **Framingham / Health — "The Med Math" (iSLO 2 quantitative + iSLO 6 + iSLO 1 SBAR handoff).** Dosage/rate calculation is the highest-stakes real number a nurse computes; pair it with an SBAR handoff (communication) and a dignity beat (iSLO 5). Newest campus, fastest growth, #1 program.
+- **Framingham / Health — "The Med Math" (iSLO 2 quantitative + iSLO 6 + iSLO 1 SBAR handoff). SHIPPED 2026-08-08 (`the-med-math.html`).** Dosage/rate calculation is the highest-stakes real number a nurse computes; pair it with an SBAR handoff (communication) and a dignity beat (iSLO 5). Newest campus, fastest growth, #1 program. Four cases (a tablet dose, a liquid dose, an IV pump rate, a weight-based dose against a stated max), each worked by dimensional analysis so the units cancel, then a reasonableness/safety check keyed to the Rights of Medication Administration; closes on a copyable SBAR handoff assembled from the cases worked. Carries a load-bearing caveat on every screen: a teaching tool, not clinical guidance. Wired into `islo-hub.html` (iSLO 2 station) and the studio face; all gates green (voice, comfort day/dusk/night, art, touch, render-proof sweep 0 HALT).
 - **Wellesley / STEM — "Read the Data" (iSLO 2 + iSLO 3 + iSLO 6).** Biggest headcount (1,558) but broadest; a data-reasoning build reusing the Sticker Price / decomposition engine.
 
-## Recommendation & open decision
-All three are real and buildable. My lean for the **first** flagship: **Ashland / Automotive "Flat Rate"** — it has the most concrete partnership + co-op + placement story, the tightest campus identity, and it proves the studio's whole thesis ("your iSLOs live inside your program, not just in English"). **Framingham / Health "Med Math"** is an equally strong first if you want the newest, fastest-growing campus and the highest-stakes hook.
+## Decision & sequence
+**Founder chose Framingham / Health to lead (2026-08-08).** "The Med Math" shipped that day (see above) as the first career/workforce build, proving the lane's thesis inside the newest, fastest-growing campus and its #1-ranked program.
 
-**For the founder:** which campus/program leads — **Ashland/Automotive**, **Framingham/Health**, or **Wellesley/STEM**? Then I scaffold that build to the studio floor (single-file, gated, dignity-first, sourced), grounded in these real partnerships.
+**Remaining in the lane, in sequence:**
+- **Ashland / Automotive — "Flat Rate"** (iSLO 2 + 6 + 3). The flat-rate hour vs. real time; labor + parts + the diagnostic tree; the co-op "earn while you learn" number made playable. The richest partnership/placement story (99% placement, OEM programs, national All-Brand pilot).
+- **Wellesley / STEM — "Read the Data"** (iSLO 2 + 3 + 6). Biggest headcount (1,558); a data-reasoning build reusing the Sticker Price / decomposition engine.
+
+Each scaffolds to the studio floor the same way: single-file, gated, dignity-first, sourced, grounded in the real partnerships above.
 
 <!-- Repo context doc — sourced research for the career/workforce lane. Not linked from the public face until a build lands. Aggregate/public data only; no student PII. -->

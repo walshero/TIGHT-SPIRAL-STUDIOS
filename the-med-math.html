@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en" data-light="day">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Med Math: the number a nurse has to get right · Tight Spiral Productions</title>
+<meta name="description" content="A quantitative-reasoning game for MassBay Health Sciences students (Framingham). Work four real dosage problems the way the floor works them: set up the units, do the arithmetic, then run the safety check that asks whether the number even makes sense. Ends with an SBAR handoff you can say out loud. A teaching tool, never clinical guidance. Single-file, offline, contrast-gated.">
+
+<!-- tsp:outcome       MassBay iSLO 2 (Quantitative) core, with iSLO 6 (critical thinking / the safety check),
+                       iSLO 1 (SBAR handoff, communication), and iSLO 5 (patient dignity). Career/workforce lane,
+                       grounded in the Framingham Health Sciences campus (Associate + Practical Nursing).
+     tsp:source        Standard nursing dosage-calculation practice: dimensional analysis and the formula method
+                       (Desired / Have x Quantity); IV rate = volume / time; weight-based dose = mg/kg x kg. The
+                       reasonableness check follows the Rights of Medication Administration (right patient, drug,
+                       dose, route, time, documentation). SBAR is the standard nurse-to-nurse handoff framework.
+                       Grounding: MassBay Fact Book (Health Sciences enrollment, Framingham campus) + massbay.edu
+                       Health Sciences pages. Cases are FICTIONAL/composite teaching scenarios with rounded numbers.
+     tsp:last-verified 2026-08-08
+     tsp:safety        A teaching tool, NOT clinical guidance. Real dosing is verified against the order, the label,
+                       a second nurse, and facility protocol. Nobody gives a medication on the strength of a game.
+                       This caveat is load-bearing and stays visible.
+     tsp:dignity        The patient is a person, not a dose. A wrong number is why the check exists, not a verdict on
+                       the student. A starting point is never a verdict. The number does the work, never "you."
+     tsp:engine         predict-then-reveal + number-decomposition + case-rail, reused from sticker-price / whose-draft.
+     tsp:floor          single-file · offline · zero external hosts · contrast-gated 4.5:1 · no emoji · token-role law
+     THIS PAGE MAKES NO NETWORK CALLS. Nothing loads from anywhere. Nothing is collected. -->
+
+<style>
+:root{
+  --paper:#fbfaf7; --paper-2:#f1eee6; --rule:#d8d2c4;
+  --ink:#14181d; --ink-2:#3d4652; --ink-3:#5c6675;
+  --brass-ink:#6a4d12; --brass-fill:#d9a441;
+  --cool-ink:#274063; --cool-fill:#c3d2e6;
+  --live-ink:#1d5c3f; --warn-ink:#8a2f22;
+  --slab:#12161b; --slab-ink:#f4f1e8;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+}
+/* ══ TSP COMFORT KERNEL — Studio Eyes light ladder + comfort toggles ══ */
+:root{ --cool-line:#274063; --ink-line:#14181d; }
+html[data-light="dusk"]{
+  --paper:#e9ddc2; --paper-2:#ddceac; --rule:#c9b58a;
+  --ink:#171009; --ink-2:#352b1a; --ink-3:#4b4534;
+  --brass-ink:#5a3f0e; --cool-ink:#22384f; --cool-line:#22384f;
+  --live-ink:#184c33; --warn-ink:#7a281c; --ink-line:#2a2213;
+}
+html[data-light="night"]{ /* warm charcoal, never pure black */
+  --paper:#1b1814; --paper-2:#262019; --rule:#463f30;
+  --ink:#f3e7cb; --ink-2:#d9c9a2; --ink-3:#b8a887;
+  --brass-ink:#e0b25a; --cool-ink:#9fb6d0; --cool-line:#9fb6d0;
+  --cool-fill:#2c3f52; --brass-fill:#5c4514;
+  --live-ink:#7fc79e; --warn-ink:#e8967f; --ink-line:#5a4f3a;
+  --slab:#0f0d0a; --slab-ink:#f3e7cb;
+}
+:root{ --surface:var(--paper); --surface-2:var(--paper-2); --accent-strong:#1e3350; --on-accent:#ffffff; --focus:#8a3a1c; --tap:48px; }
+html.se-a1{ zoom:1.15; }
+html.se-a2{ zoom:1.3; }
+html.se-reduce *{ animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+html.se-contrast:not([data-light="night"]){ --paper:#ffffff; --paper-2:#f2ece0; --ink:#0e1114; --ink-2:#242c34; --ink-3:#3c434c; --rule:#b7ab92; }
+html.se-contrast[data-light="night"]{ --paper:#0c0b09; --paper-2:#17140f; --ink:#fff7e6; --ink-2:#ecdcb6; --ink-3:#cdbd97; }
+html.se-cb a{ text-decoration:underline; text-underline-offset:2px; }
+/* ═══ RESERVED CHROME + STUDIO EYES ═══ */
+.se-chrome{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px; padding:9px 14px; background:var(--surface); border-bottom:2px solid var(--ink-line); position:sticky; top:0; z-index:100; }
+.se-home{ justify-self:start; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap); padding:8px 12px; border:1.5px solid var(--rule); border-radius:8px; background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; }
+.se-brand{ justify-self:center; display:inline-flex; align-items:center; gap:9px; color:var(--ink); }
+.se-brand svg{ width:34px; height:20px; color:var(--cool-ink); flex:0 0 auto; }
+.se-brand .wm{ font-family:var(--serif); font-size:16px; letter-spacing:.01em; white-space:nowrap; color:var(--ink); }
+.se-eyes{ justify-self:end; display:inline-flex; align-items:center; gap:7px; min-height:var(--tap); padding:8px 13px; border:2px solid transparent; border-radius:8px; background:var(--accent-strong); color:var(--on-accent); font-family:var(--mono); font-weight:700; font-size:13px; cursor:pointer; }
+.se-home:focus-visible,.se-eyes:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+@media (max-width:560px){ .se-brand .wm{ display:none; } }
+.se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 14px); z-index:101; width:min(320px,calc(100vw - 24px)); background:var(--surface); color:var(--ink); border:2px solid var(--accent-strong); border-radius:10px; padding:15px; box-shadow:0 10px 34px rgba(0,0,0,.28); display:none; }
+.se-panel[data-open="1"]{ display:block; }
+.se-panel h2{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-2); margin:0 0 8px; }
+.se-prow{ display:flex; gap:6px; margin-bottom:14px; }
+.se-btn{ flex:1; min-height:var(--tap); padding:8px 4px; border:1.5px solid var(--rule); border-radius:8px; background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:12.5px; cursor:pointer; }
+.se-btn[aria-pressed="true"]{ background:var(--accent-strong); color:var(--on-accent); border-color:var(--accent-strong); }
+.se-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-tog{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:10px; min-height:var(--tap); padding:8px 11px; margin-bottom:6px; border:1.5px solid var(--rule); border-radius:8px; background:var(--surface-2); color:var(--ink); font-family:var(--sans); font-weight:600; font-size:14px; cursor:pointer; text-align:left; }
+.se-tog[aria-pressed="true"]{ border-color:var(--accent-strong); }
+.se-tog .st{ font-family:var(--mono); font-size:11px; color:var(--ink-2); }
+.se-tog[aria-pressed="true"] .st{ color:var(--cool-ink); font-weight:700; }
+.se-tog:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-sronly{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+.se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; border-top:2px solid var(--rule); background:var(--surface); }
+.se-rail a,.se-rail button{ min-height:var(--tap); padding:10px 18px; border:1.5px solid var(--rule); border-radius:8px; background:var(--surface-2); color:var(--ink); font-family:var(--mono); font-weight:700; font-size:13px; text-decoration:none; cursor:pointer; }
+.se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:17px; line-height:1.55; -webkit-font-smoothing:antialiased}
+.wrap{max-width:760px; margin:0 auto; padding:0 22px 40px}
+
+.stage{padding:40px 0 22px; border-bottom:2px solid var(--ink-line)}
+.mark{font-family:var(--mono); font-size:11.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--brass-ink); font-weight:700; margin:0 0 14px}
+h1{font-family:var(--serif); font-size:clamp(30px,6vw,50px); line-height:1.06; margin:0 0 16px; letter-spacing:-.015em; font-weight:400}
+h1 em{font-style:italic; color:var(--cool-ink)}
+.lede{font-size:clamp(17px,2.4vw,20px); line-height:1.5; color:var(--ink-2); margin:0 0 12px}
+.lede b{color:var(--ink); font-weight:600}
+.tag{font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); margin:18px 0 0}
+.hero-mark{display:block; width:clamp(120px,30vw,170px); height:auto; color:var(--brass-ink); margin:20px 0 4px}
+
+.safety{margin:20px 0 0; display:flex; gap:12px; align-items:flex-start; padding:14px 16px; border-left:5px solid var(--warn-ink); background:var(--paper-2); border-radius:2px}
+.safety svg{flex:0 0 auto; width:30px; height:30px; color:var(--warn-ink)}
+.safety p{margin:0; font-size:14.5px; color:var(--ink); line-height:1.55} .safety b{color:var(--warn-ink)}
+
+.rail{display:flex; gap:8px; margin:24px 0 0; flex-wrap:wrap}
+.rail button{flex:1 1 130px; text-align:left; cursor:pointer; background:var(--paper-2); color:var(--ink-2); border:1.5px solid var(--rule); border-top-width:5px; border-radius:3px; padding:10px 12px 11px; font-family:var(--sans); transition:border-color .12s, color .12s}
+.rail button .rn{display:block; font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); margin-bottom:3px}
+.rail button .rt{display:block; font-family:var(--serif); font-size:15px; line-height:1.15; color:var(--ink)}
+.rail button:hover{border-color:var(--acc,var(--cool-line))}
+.rail button:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
+.rail button[aria-current="true"]{border-color:var(--acc,var(--cool-ink)); color:var(--ink); background:var(--paper)}
+.rail button[data-done="1"] .rn::after{content:" · done"; color:var(--live-ink)}
+
+.case{padding:30px 0 0}
+.case[hidden]{display:none}
+.kicker{font-family:var(--mono); font-size:11px; letter-spacing:.15em; text-transform:uppercase; color:var(--acc-ink,var(--brass-ink)); font-weight:700; margin:0 0 8px}
+.case h2{font-family:var(--serif); font-size:clamp(22px,4vw,29px); font-weight:400; line-height:1.14; margin:0 0 6px}
+.order{border:2px solid var(--acc,var(--rule)); border-radius:4px; padding:14px 16px; margin:14px 0 0; background:var(--paper-2)}
+.order .ol{font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); margin:0 0 6px}
+.order p{margin:0; font-size:16px; color:var(--ink); line-height:1.5} .order b{color:var(--ink)}
+.dimdesc{font-size:15px; color:var(--ink-2); margin:16px 0 6px; line-height:1.55; max-width:62ch}
+
+.ask{display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; margin:14px 0 0}
+.ask label{display:block; font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); font-weight:700; margin:0 0 5px}
+.ask .unit{font-family:var(--mono); font-size:14px; color:var(--ink-2); padding-bottom:11px}
+input[type=number]{font-family:var(--mono); font-size:17px; padding:11px 12px; min-height:44px; box-sizing:border-box; border:1.5px solid var(--rule); border-radius:2px; background:var(--paper); color:var(--ink); width:130px}
+input[type=number]:focus-visible{outline:3px solid var(--cool-ink); outline-offset:1px; border-color:var(--ink)}
+.btn{font-family:var(--sans); font-size:16px; font-weight:600; padding:11px 20px; min-height:44px; box-sizing:border-box; background:var(--slab); color:var(--slab-ink); border:0; border-radius:2px; cursor:pointer}
+.btn:hover{background:#232b35}
+.btn:focus-visible{outline:3px solid var(--cool-ink); outline-offset:3px}
+.btn.ghost{background:var(--paper); color:var(--ink); border:1.5px solid var(--rule)}
+.btn.ghost:hover{border-color:var(--ink); background:var(--paper-2)}
+.btn[disabled]{opacity:.5; cursor:default}
+
+.reveal[hidden]{display:none}
+.verdict{border:2px solid var(--acc,var(--rule)); border-radius:4px; padding:16px 18px; margin:16px 0 0; background:var(--paper)}
+.verdict .vh{font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; font-weight:700; margin:0 0 8px}
+.verdict.right .vh{color:var(--live-ink)} .verdict.off .vh{color:var(--warn-ink)}
+.verdict p{margin:0 0 9px; font-size:15.5px; color:var(--ink); line-height:1.6} .verdict p:last-child{margin:0} .verdict b{color:var(--ink)}
+.work{font-family:var(--mono); font-size:14px; line-height:1.7; color:var(--ink-2); background:var(--paper-2); border:1.5px solid var(--rule); border-radius:3px; padding:12px 14px; margin:12px 0; white-space:pre-wrap; overflow-x:auto}
+.work b{color:var(--ink)}
+.check{border-left:5px solid var(--cool-ink); background:var(--paper-2); border-radius:2px; padding:11px 14px; margin:12px 0 0; font-size:14.5px; color:var(--ink); line-height:1.55}
+.check b{color:var(--cool-ink)}
+.dim{margin:16px 0 0; font-family:var(--mono); font-size:11.5px; letter-spacing:.04em; color:var(--ink-3); line-height:1.6} .dim b{color:var(--brass-ink)}
+.nav-row{display:flex; justify-content:space-between; gap:12px; margin:26px 0 0; padding-top:18px; border-top:1.5px solid var(--rule)}
+
+.close{padding:30px 0 0}
+.close[hidden]{display:none}
+.close h2{font-family:var(--serif); font-size:clamp(24px,4.6vw,34px); font-weight:400; margin:0 0 12px}
+.close .lede{max-width:64ch}
+.tally{display:flex; gap:16px; align-items:center; flex-wrap:wrap; padding:14px 16px; border:2px solid var(--rule); border-radius:4px; margin:20px 0 0; background:var(--paper)}
+.tally .tnum{font-family:var(--serif); font-size:38px; line-height:1; color:var(--ink)} .tally .tnum small{font-size:18px; color:var(--ink-3)}
+.tally .tband{font-family:var(--mono); font-size:12px; font-weight:700; color:var(--ink-2); line-height:1.5; flex:1 1 180px}
+
+.statement{border:2px solid var(--cool-ink); border-radius:4px; margin:22px 0 0; overflow:hidden}
+.statement .sth{padding:11px 16px; background:var(--paper-2); font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--cool-ink); font-weight:700; border-bottom:1.5px solid var(--rule)}
+.statement .stb{padding:16px 18px}
+#sbar{white-space:pre-wrap; font-family:var(--mono); font-size:13.5px; line-height:1.6; color:var(--ink); margin:0}
+.copybar{display:flex; gap:10px; align-items:center; margin:12px 0 0}
+.copied{font-family:var(--mono); font-size:12px; color:var(--live-ink); font-weight:700}
+
+.slab{background:var(--slab); color:var(--slab-ink); margin:26px 0 0; padding:24px 22px; border-radius:4px}
+.slab h3{font-family:var(--mono); font-size:12px; letter-spacing:.15em; text-transform:uppercase; color:#e0b25a; font-weight:700; margin:0 0 12px}
+.slab p{margin:0 0 10px; font-size:15px; color:#cdd4dd; line-height:1.6} .slab p:last-child{margin:0} .slab b{color:var(--slab-ink)}
+
+.src{margin-top:30px; padding-top:18px; border-top:1.5px solid var(--rule); font-size:13px; color:var(--ink-3); line-height:1.6}
+.src b{color:var(--ink-2)}
+footer{margin-top:20px; font-size:14px; color:var(--ink-3)}
+footer a{color:var(--cool-ink); font-weight:600}
+
+.case[data-acc="1"], .rail button[data-acc="1"]{--acc:#274063; --acc-ink:#274063}
+.case[data-acc="2"], .rail button[data-acc="2"]{--acc:#1d5c3f; --acc-ink:#1d5c3f}
+.case[data-acc="3"], .rail button[data-acc="3"]{--acc:#6a4d12; --acc-ink:#6a4d12}
+.case[data-acc="4"], .rail button[data-acc="4"]{--acc:#8a3a1c; --acc-ink:#8a3a1c}
+html[data-light="night"] .case[data-acc="1"], html[data-light="night"] .rail button[data-acc="1"]{--acc:#9fb6d0; --acc-ink:#9fb6d0}
+html[data-light="night"] .case[data-acc="2"], html[data-light="night"] .rail button[data-acc="2"]{--acc:#7fc79e; --acc-ink:#7fc79e}
+html[data-light="night"] .case[data-acc="3"], html[data-light="night"] .rail button[data-acc="3"]{--acc:#e0b25a; --acc-ink:#e0b25a}
+html[data-light="night"] .case[data-acc="4"], html[data-light="night"] .rail button[data-acc="4"]{--acc:#e8967f; --acc-ink:#e8967f}
+
+@media (prefers-reduced-motion:reduce){*{transition:none}}
+.sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+</style>
+</head>
+<body>
+
+<header class="se-chrome">
+  <a class="se-home" href="index.html" aria-label="Home, the studio front door">Home</a>
+  <span class="se-brand">
+    <svg viewBox="0 0 64 27" fill="none" stroke="currentColor" aria-hidden="true" focusable="false"><path d="M33.2 13.5 L33.3 13.6 L33.3 13.8 L33.4 13.9 L33.4 14.1 L33.4 14.3 L33.3 14.5 L33.3 14.7 L33.2 14.9 L33.1 15.0 L33.0 15.2 L32.8 15.4 L32.7 15.5 L32.5 15.7 L32.2 15.8 L32.0 15.9 L31.7 15.9 L31.5 16.0 L31.2 16.0 L30.9 15.9 L30.6 15.9 L30.3 15.8 L30.1 15.7 L29.8 15.5 L29.5 15.3 L29.3 15.1 L29.1 14.8 L28.9 14.5 L28.7 14.2 L28.6 13.9 L28.5 13.5 L28.4 13.1 L28.4 12.7 L28.4 12.3 L28.5 11.9 L28.6 11.5 L28.8 11.2 L29.0 10.8 L29.2 10.4 L29.5 10.1 L29.8 9.8 L30.2 9.5 L30.6 9.3 L31.1 9.1 L31.5 8.9 L32.0 8.8 L32.5 8.8 L33.0 8.8 L33.5 8.8 L34.0 8.9 L34.5 9.1 L35.0 9.3 L35.5 9.6 L35.9 9.9 L36.4 10.3 L36.7 10.8 L37.1 11.2 L37.3 11.8 L37.6 12.3 L37.7 12.9 L37.9 13.5 L37.9 14.1 L37.9 14.7 L37.8 15.4 L37.6 16.0 L37.4 16.6 L37.1 17.2 L36.8 17.8 L36.3 18.3 L35.8 18.8 L35.3 19.2 L34.7 19.6 L34.1 19.9 L33.4 20.2 L32.7 20.4 L32.0 20.5 L31.3 20.6 L30.5 20.5 L29.8 20.4 L29.0 20.2 L28.3 19.9 L27.6 19.5 L26.9 19.1 L26.3 18.6 L25.8 18.0 L25.3 17.4 L24.8 16.7 L24.4 16.0 L24.2 15.2 L23.9 14.3 L23.8 13.5 L23.8 12.6 L23.9 11.8 L24.0 10.9 L24.2 10.0 L24.6 9.2 L25.0 8.4 L25.5 7.7 L26.1 7.0 L26.8 6.3 L27.5 5.7 L28.3 5.3 L29.2 4.8 L30.1 4.5 L31.0 4.3 L32.0 4.2 L33.0 4.1 L34.0 4.2 L35.0 4.4 L35.9 4.7 L36.9 5.1 L37.8 5.6 L38.6 6.2 L39.4 6.8 L40.1 7.6 L40.8 8.4 L41.3 9.4 L41.8 10.3 L42.1 11.3 L42.4 12.4 L42.5 13.5" stroke-width="2.3" stroke-linecap="round"/><circle cx="32" cy="13.5" r="1.6" fill="currentColor" stroke="none"/></svg>
+    <span class="wm">Tight Spiral</span>
+  </span>
+  <button class="se-eyes" id="seEyes" aria-expanded="false" aria-controls="sePanel" aria-label="Studio Eyes, reading comfort">Studio Eyes</button>
+</header>
+<p class="se-stamp" style="margin:.45rem .9rem 0;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.76rem;opacity:.92;display:flex;align-items:center;gap:.45rem;flex-wrap:wrap"><span id="seUpdated">Last updated&hellip;</span> <span class="se-version" style="font:inherit;opacity:.85">&middot; v1 <span style="opacity:.75">new</span></span></p>
+<div class="se-panel" id="sePanel" role="dialog" aria-label="Studio Eyes">
+  <h2>Light</h2>
+  <div class="se-prow" role="group" aria-label="Light level">
+    <button class="se-btn" data-light-set="day"   aria-pressed="true">Default</button>
+    <button class="se-btn" data-light-set="dusk"  aria-pressed="false">Dusk</button>
+    <button class="se-btn" data-light-set="night" aria-pressed="false">Warm-dark</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="se-prow" role="group" aria-label="Text size">
+    <button class="se-btn" data-text="0" aria-pressed="true">A</button>
+    <button class="se-btn" data-text="1" aria-pressed="false">A+</button>
+    <button class="se-btn" data-text="2" aria-pressed="false">A++</button>
+  </div>
+  <h2>Comfort</h2>
+  <button class="se-tog" data-tog="se-contrast" aria-pressed="false">High contrast <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-reduce"   aria-pressed="false">Reduce motion <span class="st">Off</span></button>
+  <button class="se-tog" data-tog="se-cb"       aria-pressed="false">Colorblind cues <span class="st">Off</span></button>
+  <span class="se-sronly" id="seSr" role="status" aria-live="polite"></span>
+</div>
+
+<main class="wrap">
+
+<div class="stage">
+  <p class="mark">Tight Spiral Productions · MassBay Health Sciences (Framingham) · iSLO 2</p>
+  <h1>The med math: <em>the number a nurse has to get right.</em></h1>
+  <p class="lede">On the floor, a dosage is not a homework problem. It is a real amount going into a real person,
+    and the arithmetic is the last thing standing between an order and a mistake. This walks four of them the way
+    the floor walks them: <b>set up the units, do the math, then check whether the number even makes sense.</b></p>
+  <p class="lede">You do the calculating. The page only shows the work back and runs the safety check with you.
+    At the end you'll have an <b>SBAR handoff</b> you can say out loud.</p>
+  <p class="tag">Read the order · Set up the units · Check the number · Hand it off</p>
+
+  <svg class="hero-mark" viewBox="0 0 120 64" aria-hidden="true">
+    <rect x="16" y="20" width="26" height="34" rx="3" fill="none" stroke="currentColor" stroke-width="2.4"/>
+    <path d="M23 20 v-5 a3 3 0 0 1 3 -3 h6 a3 3 0 0 1 3 3 v5" fill="none" stroke="currentColor" stroke-width="2.4"/>
+    <path d="M29 30 v14 M22 37 h14" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="86" cy="34" r="16" fill="none" stroke="currentColor" stroke-width="2.4"/>
+    <path d="M86 24 v10 l7 5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+
+  <div class="safety">
+    <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 5 L34 30 H6 Z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><path d="M20 16 v7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/><circle cx="20" cy="27" r="1.8" fill="currentColor"/></svg>
+    <p><b>A teaching tool, not clinical guidance.</b> These are fictional practice cases with rounded numbers.
+      Real dosing is verified against the order, the label, a second nurse, and your facility's protocol. Nobody
+      gives a medication on the strength of a game. This is here to build the reasoning, not to replace the checks.</p>
+  </div>
+</div>
+
+<div class="rail" id="rail" role="tablist" aria-label="Four dosage problems">
+  <button data-acc="1" data-go="0" role="tab" aria-current="true"><span class="rn">One</span><span class="rt">The Tablet</span></button>
+  <button data-acc="2" data-go="1" role="tab" aria-current="false"><span class="rn">Two</span><span class="rt">The Liquid</span></button>
+  <button data-acc="3" data-go="2" role="tab" aria-current="false"><span class="rn">Three</span><span class="rt">The IV Rate</span></button>
+  <button data-acc="4" data-go="3" role="tab" aria-current="false"><span class="rn">Four</span><span class="rt">By Weight</span></button>
+</div>
+
+<section class="case" data-acc="1" id="case-0"></section>
+<section class="case" data-acc="2" id="case-1" hidden></section>
+<section class="case" data-acc="3" id="case-2" hidden></section>
+<section class="case" data-acc="4" id="case-3" hidden></section>
+
+<section class="close" id="close" hidden>
+  <p class="kicker" style="color:var(--brass-ink)">Read it back</p>
+  <h2>The number is only half the job. Now hand it off.</h2>
+  <p class="lede">A dose you can compute but can't communicate is not finished. Here is an SBAR handoff assembled
+    from the case you just worked, the way you'd give it to the next nurse. Read it out loud once; it should sound
+    like a person telling another person what matters.</p>
+
+  <div class="tally">
+    <div class="tnum"><span id="t-num">0</span><small> / 4 checked</small></div>
+    <div class="tband" id="t-band">Work the four problems and your handoff assembles here.</div>
+  </div>
+
+  <div class="statement">
+    <div class="sth">SBAR handoff (edit it to fit your patient)</div>
+    <div class="stb">
+      <p id="sbar"></p>
+      <div class="copybar"><button class="btn" id="copy">Copy it</button><span class="copied" id="copied" role="status" aria-live="polite"></span></div>
+    </div>
+  </div>
+
+  <div class="slab">
+    <h3>The whole skill, in one line</h3>
+    <p><b>Set up the units so they cancel, do the arithmetic, then ask whether the answer makes sense.</b> Most
+      dosage errors are not arithmetic slips; they are answers nobody stopped to sanity-check. Eight tablets for
+      one dose, a drip that would empty the bag in minutes, a pediatric dose bigger than an adult's: the math can
+      be "right" and the number still wrong for the person in the bed.</p>
+    <p>That is why the last step is not the calculator. It is you, asking: is this a reasonable amount for this
+      patient, this drug, this route? When the answer surprises you, stop and check. That pause is the skill.</p>
+  </div>
+
+  <div class="src">
+    <p><b>Where this comes from.</b> The methods are standard nursing dosage calculation: dimensional analysis and
+      the formula method (Desired / Have &times; Quantity), IV rate as volume over time, and weight-based dosing
+      (mg/kg &times; kg). The safety check follows the Rights of Medication Administration (right patient, drug, dose,
+      route, time, documentation); SBAR is the standard handoff framework. Grounded in MassBay's Health Sciences
+      programs at the Framingham campus. <b>Source:</b> standard nursing dosage-calculation and medication-safety
+      practice; MassBay Fact Book (Health Sciences) and Health Sciences program pages. <b>Last-verified 2026-08-08.</b>
+      Cases are fictional and rounded for teaching.</p>
+    <p><b>Outcome.</b> MassBay iSLO 2 (Quantitative Skills), with iSLO 6 (critical thinking, the safety check),
+      iSLO 1 (SBAR communication), and iSLO 5 (the patient is a person). Dignity-first: a wrong number is why the
+      check exists, not a verdict on you.</p>
+  </div>
+  <footer>
+    <p><a href="islo-hub.html">&lsaquo; the iSLO Suite</a> &nbsp;&middot;&nbsp;
+       <a href="sticker-price.html">Sticker Price</a> &nbsp;&middot;&nbsp;
+       <a href="real-cost.html">Real Cost</a> &nbsp;&middot;&nbsp; CC BY-NC-ND 4.0</p>
+  </footer>
+</section>
+
+</main>
+
+<nav class="se-rail" aria-label="Page navigation">
+  <a href="islo-hub.html" aria-label="Back to the iSLO Suite">Back</a>
+  <a href="index.html" aria-label="Home, the studio front door">Home</a>
+</nav>
+
+<script>
+/* Studio Eyes kernel */
+(function(){
+  var root=document.documentElement, sr=document.getElementById('seSr');
+  var u=document.getElementById('seUpdated');
+  if(u){ var d=new Date(document.lastModified);
+    u.textContent = isNaN(d.getTime()) ? 'Last updated recently'
+      : 'Last updated '+d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}); }
+  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
+  if(eyes&&panel){
+    function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
+    eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
+  }
+  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
+    root.setAttribute('data-light', b.getAttribute('data-light-set'));
+    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent=b.textContent.trim(); }); });
+  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
+    var n=b.getAttribute('data-text');
+    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
+    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
+    if(sr) sr.textContent='Text size '+b.textContent.trim(); }); });
+  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
+    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
+    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
+    b.querySelector('.st').textContent=on?'On':'Off';
+    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off'); }); });
+})();
+
+/* The Med Math */
+(function(){
+  "use strict";
+  var $=function(id){return document.getElementById(id);};
+
+  var ROUNDS=[
+    { acc:1, tab:"The Tablet", kick:"Problem one · tablets",
+      title:"A tablet dose",
+      order:"Order: give <b>500 mg</b> of a medication by mouth. On hand: <b>250 mg</b> tablets.",
+      q:"How many tablets do you give?", unit:"tablets", ans:2, step:0.5,
+      work:"Formula method  (Desired / Have) x Quantity\n\n  Desired (ordered) = 500 mg\n  Have (per tablet)  = 250 mg\n  Quantity          = 1 tablet\n\n  (500 mg / 250 mg) x 1 tablet = <b>2 tablets</b>\n\n  The mg units cancel; tablets remain. That is the tell that the setup is right.",
+      check:"Reasonable? Two tablets is an ordinary dose. If the math had said 8 or 10 tablets, that is the moment to stop: a whole-number pile that large usually means the wrong strength was pulled or the setup was flipped.",
+      sbar:{s:"a routine oral medication is due", a:"the ordered 500 mg comes to 2 tablets of the 250 mg strength on hand", r:"give 2 tablets by mouth and document"} },
+
+    { acc:2, tab:"The Liquid", kick:"Problem two · liquids",
+      title:"A liquid dose",
+      order:"Order: give <b>375 mg</b> of a liquid medication. On hand: <b>125 mg in every 5 mL</b>.",
+      q:"How many mL do you draw up?", unit:"mL", ans:15, step:0.5,
+      work:"Formula method  (Desired / Have) x Quantity\n\n  Desired = 375 mg\n  Have    = 125 mg\n  Quantity = 5 mL  (the volume that holds one 'Have')\n\n  (375 mg / 125 mg) x 5 mL = 3 x 5 mL = <b>15 mL</b>\n\n  mg cancels mg; mL is left standing. Units are the guardrail.",
+      check:"Reasonable? 15 mL is a real oral-liquid volume. A liquid answer in the hundreds of mL, or a fraction of a drop, is a units problem: check that the 5 mL rode along with the 125 mg and did not get dropped.",
+      sbar:{s:"a liquid medication is due", a:"the ordered 375 mg comes to 15 mL of the 125 mg per 5 mL concentration", r:"draw up 15 mL, verify the concentration on the label, and give"} },
+
+    { acc:3, tab:"The IV Rate", kick:"Problem three · IV pump",
+      title:"An IV pump rate",
+      order:"Order: infuse <b>1,000 mL</b> of IV fluid over <b>8 hours</b>. The pump is set in mL per hour.",
+      q:"What rate do you set on the pump?", unit:"mL/hr", ans:125, step:5,
+      work:"IV rate  =  total volume / total time\n\n  Volume = 1,000 mL\n  Time   = 8 hr\n\n  1,000 mL / 8 hr = <b>125 mL/hr</b>\n\n  The unit you want (mL/hr) falls out of the setup: mL on top, hr on the bottom.",
+      check:"Reasonable? 125 mL/hr is a common maintenance rate. If the rate came out at 1,000 or at 8, the volume and the time got swapped: a bag that empties in an hour, or a crawl that never finishes, are both the same setup error read two ways.",
+      sbar:{s:"maintenance IV fluids are running", a:"1,000 mL ordered over 8 hours sets the pump at 125 mL/hr", r:"set the pump to 125 mL/hr and check the site and the volume left"} },
+
+    { acc:4, tab:"By Weight", kick:"Problem four · weight-based",
+      title:"A weight-based dose",
+      order:"Order: give <b>15 mg per kg</b> of body weight. The patient weighs <b>20 kg</b>. The label's stated maximum for a single dose is <b>400 mg</b>.",
+      q:"How many mg is this dose?", unit:"mg", ans:300, step:5,
+      work:"Weight-based dose  =  dose per kg  x  weight\n\n  Dose per kg = 15 mg/kg\n  Weight      = 20 kg\n\n  15 mg/kg x 20 kg = <b>300 mg</b>\n\n  kg cancels kg; mg is the answer. Then compare against the stated max.",
+      check:"Reasonable? 300 mg is under the 400 mg ceiling, so it clears. Weight-based is where a decimal slip does the most harm: 3,000 mg or 30 mg would both be a factor of ten off, and the max on the label is the backstop that catches it. Always run the number against the max before you give it.",
+      sbar:{s:"a weight-based medication is due", a:"at 15 mg/kg for a 20 kg patient the dose is 300 mg, which is within the 400 mg single-dose maximum", r:"give 300 mg and document the weight the dose was based on"} },
+  ];
+
+  var done=new Array(ROUNDS.length).fill(false);
+  var got=new Array(ROUNDS.length).fill(null); // 'right' | 'off'
+
+  function renderCase(i){
+    var r=ROUNDS[i], el=$("case-"+i);
+    el.innerHTML=
+      '<p class="kicker">'+r.kick+'</p>'+
+      '<h2>'+r.title+'</h2>'+
+      '<div class="order"><p class="ol">The order</p><p>'+r.order+'</p></div>'+
+      '<p class="dimdesc">'+r.q+' Work it out, type your answer, then check it against the setup.</p>'+
+      '<div class="ask">'+
+        '<div><label for="in-'+i+'">Your answer</label><input type="number" id="in-'+i+'" step="'+r.step+'" min="0" inputmode="decimal" aria-label="Your answer for '+r.title+'"></div>'+
+        '<span class="unit">'+r.unit+'</span>'+
+        '<button class="btn" id="show-'+i+'">Check the number</button>'+
+      '</div>'+
+      '<div class="reveal" id="rev-'+i+'" hidden>'+
+        '<div class="verdict" id="vd-'+i+'"><p class="vh" id="vh-'+i+'"></p><p id="vt-'+i+'"></p></div>'+
+        '<div class="work">'+r.work+'</div>'+
+        '<div class="check"><b>The safety check.</b> '+r.check+'</div>'+
+        '<p class="dim">Trains &mdash; <b>quantitative setup</b> &middot; the reasonableness check that catches the dose the math got "right" and the patient got wrong.</p>'+
+      '</div>'+
+      '<div class="nav-row">'+
+        (i>0?'<button class="btn ghost" data-next="'+(i-1)+'">&lsaquo; Back</button>':'<span></span>')+
+        (i<ROUNDS.length-1?'<button class="btn ghost" data-next="'+(i+1)+'">Next problem &rsaquo;</button>':'<button class="btn" data-finish="1">Read the handoff &rsaquo;</button>')+
+      '</div>';
+
+    $("show-"+i).addEventListener("click",function(){
+      var v=parseFloat($("in-"+i).value);
+      var r2=ROUNDS[i];
+      var vd=$("vd-"+i), vh=$("vh-"+i), vt=$("vt-"+i);
+      if(isNaN(v)){
+        vd.className="verdict off"; vh.textContent="No number yet";
+        vt.innerHTML="Type what you worked out first, then check it. Guessing before you set up the units is the habit this is here to break.";
+        $("rev-"+i).hidden=false; return;
+      }
+      var right=Math.abs(v-r2.ans)<1e-9;
+      got[i]= right?'right':'off';
+      done[i]=true;
+      var rb=$("rail").querySelectorAll("button")[i]; if(rb) rb.setAttribute("data-done","1");
+      vd.className="verdict "+(right?'right':'off');
+      vh.textContent= right?"That's it":"Not yet";
+      vt.innerHTML= right
+        ? "You landed on <b>"+r2.ans+" "+r2.unit+"</b>. Here is the setup, so the answer is something you can defend, not just a number that matched."
+        : "You put <b>"+v+" "+r2.unit+"</b>; the setup gives <b>"+r2.ans+" "+r2.unit+"</b>. Being off is not the point of failure here; not noticing is. Read the work and see where the units went.";
+      $("rev-"+i).hidden=false;
+      $("rev-"+i).scrollIntoView({behavior:"smooth", block:"nearest"});
+    });
+  }
+  for(var i=0;i<ROUNDS.length;i++) renderCase(i);
+
+  var railBtns=Array.prototype.slice.call(document.querySelectorAll("#rail button"));
+  function show(i){
+    var isClose=(i==="close");
+    ROUNDS.forEach(function(_,k){ $("case-"+k).hidden = isClose ? true : (k!==i); });
+    $("close").hidden=!isClose;
+    railBtns.forEach(function(b){ var t=parseInt(b.getAttribute("data-go"),10); b.setAttribute("aria-current",(!isClose&&t===i)?"true":"false"); });
+    if(window.scrollTo) window.scrollTo(0,0);
+  }
+  railBtns.forEach(function(b){ b.addEventListener("click", function(){ show(parseInt(b.getAttribute("data-go"),10)); }); });
+  document.addEventListener("click",function(e){
+    var n=e.target.closest("[data-next]"); if(n){ show(parseInt(n.getAttribute("data-next"),10)); return; }
+    var f=e.target.closest("[data-finish]"); if(f){ buildClose(); show("close"); }
+  });
+
+  function buildClose(){
+    var n=done.filter(Boolean).length;
+    $("t-num").textContent=n;
+    $("t-band").textContent = n===0 ? "Work the four problems and your handoff assembles here."
+      : n<4 ? "You worked "+n+" of 4. The handoff below covers the ones you checked."
+      : "All four checked. Handoffs are how the number leaves your head and reaches the next nurse.";
+    var lines=["SBAR handoff (practice, on fictional cases):",""];
+    var any=false;
+    ROUNDS.forEach(function(r,i){
+      if(!done[i]) return;
+      any=true;
+      lines.push("["+r.tab+"]");
+      lines.push("  S (Situation): "+r.sbar.s+".");
+      lines.push("  B (Background): a medication order is in place; strengths and volumes read off the label.");
+      lines.push("  A (Assessment): "+r.sbar.a+".");
+      lines.push("  R (Recommendation): "+r.sbar.r+".");
+      lines.push("");
+    });
+    if(!any) lines=["Work at least one problem and its SBAR handoff assembles here."];
+    lines.push("Verify every dose against the order, the label, and facility protocol before giving it.");
+    $("sbar").textContent=lines.join("\n");
+  }
+
+  $("copy").addEventListener("click",function(){
+    var txt=$("sbar").textContent;
+    function ok(){ $("copied").textContent="Copied."; setTimeout(function(){ $("copied").textContent=""; },2500); }
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(ok,fb); } else fb();
+    function fb(){ var r=$("sbar"),sel=window.getSelection(),rng=document.createRange(); rng.selectNodeContents(r); sel.removeAllRanges(); sel.addRange(rng); try{document.execCommand("copy"); ok();}catch(e){ $("copied").textContent="Select the text and copy."; } sel.removeAllRanges(); }
+  });
+})();
+</script>
+</body>
+</html>
