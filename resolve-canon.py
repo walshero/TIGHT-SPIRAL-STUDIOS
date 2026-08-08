@@ -167,6 +167,8 @@ def fetch(url, timeout=20):
 
 
 _TREE = {}          # basename -> full repo path. Built once, from git.
+_COLLISIONS = {}    # basename -> [every path holding that basename]. Ambiguity is DATA.
+_ALL_PATHS = set()  # every path in the tree, so a full path can be asked for by name.
 
 def _build_tree():
     """BUG FOUND 2026-07-13 (the second lie): in_repo() used to fetch REPO_RAW/<name>,
@@ -184,6 +186,35 @@ def _build_tree():
         p = p.strip()
         if p:
             _TREE.setdefault(os.path.basename(p), p)   # first wins; root paths sort first
+
+    # COLLISION PASS - added 2026-08-08, after this resolver named the wrong file as canon.
+    #
+    # The line above carried the comment "root paths sort first." THAT IS FALSE. git sorts
+    # tree entries as strings, so `studio-eyes/studio-fingers.py` sorts BEFORE
+    # `studio-fingers.py` ('e' < 'f' at index 7) and won. The resolver silently resolved a
+    # nested file as canon for a root name, then reported the real root file as drifted.
+    # It was doing the same to workshop-in-a-box.html, which resolved to a rescued/ snapshot.
+    #
+    # Two fixes, and the second matters more:
+    #   1. A single ROOT-level path wins its basename. Root is the studio's front shelf.
+    #   2. Every collision is RECORDED and printed BY NAME. Resolving a colliding basename
+    #      is answering a question with more than one answer; a resolver that silently
+    #      picks one is worse than no resolver. Pass the full path to disambiguate.
+    _COLLISIONS.clear()
+    _ALL_PATHS.clear()
+    by_name = {}
+    for q in out.stdout.splitlines():
+        q = q.strip()
+        if q:
+            _ALL_PATHS.add(q)
+            by_name.setdefault(os.path.basename(q), []).append(q)
+    for nm, paths in by_name.items():
+        if len(paths) < 2:
+            continue
+        _COLLISIONS[nm] = sorted(paths)
+        roots = [r for r in paths if "/" not in r]
+        if len(roots) == 1:
+            _TREE[nm] = roots[0]
     return _TREE
 
 
@@ -198,6 +229,10 @@ def git_available():
 
 def in_repo(name):
     path = _build_tree().get(name)
+    if "/" in name:
+        _build_tree()
+        if name in _ALL_PATHS:
+            path = name      # a full path is never ambiguous; let a caller say what it means
     if not path:
         return None
     blob = subprocess.run(["git", "show", f"origin/main:{path}"],
@@ -731,6 +766,10 @@ def aleph(evidence_path=None, watch=None):
          "NOT absence. Unchecked lanes remain. List the container and look.", True),
         ("UNLEDGERED - watched file with no gate row", unledgered,
          "A gate that does not log is a HALT.", True),
+        ("AMBIGUOUS BASENAME - one name, more than one file",
+         [f"  {n:<40} {', '.join(ps)}" for n, ps in sorted(_COLLISIONS.items())],
+         "Resolving by basename here returns ONE answer to a question with several. "
+         "Root wins where a single root copy exists; otherwise ask by full path.", True),
     )
     for title, items, why, computable in sections:
         count = len(items) if computable else "-"
