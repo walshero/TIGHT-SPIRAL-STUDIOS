@@ -155,6 +155,22 @@ def play(path):
                 except Exception:
                     html, states = "", ""
                 return (visible_text(page), len(html), states)
+            # AN ALREADY-ACTIVE TOGGLE IS NOT A DEAD BUTTON. Found 2026-08-08:
+            # funny-boneys-factory's default lens (Spellcaster) and default
+            # audience (One sleepy cat) both open with aria-pressed="true";
+            # clicking the selected option of a toggle group legitimately
+            # changes nothing, and the no-DOM-delta test read that as dead.
+            # Same false-positive family as the mailto: links and the nav-link
+            # bleed — the tool asked "did anything change" without asking
+            # "should anything have changed."
+            try:
+                if (el.get_attribute("aria-pressed") == "true"
+                        or el.get_attribute("aria-selected") == "true"):
+                    card["notes"].append(f"'{(lbl or '')[:24]}' is an already-"
+                                         "active toggle — skipped, not dead")
+                    continue
+            except Exception:
+                pass
             before = sig()
             try:
                 el.click(timeout=1500)

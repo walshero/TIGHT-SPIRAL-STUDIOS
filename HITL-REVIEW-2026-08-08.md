@@ -124,9 +124,36 @@ your approved cold open, so it waits for your word.
 
 ---
 
-## PLAYTHROUGH AGENT RESULTS
+## PLAYTHROUGH AGENT RESULTS (click-walk complete, all five builds)
 
-*(appended after the click-walk completed — see per-build notes below)*
+- **`choose-your-leader-v5-slice.html` — CLEAN.** 20 clicks, end reached. Ready
+  for founder taste-play.
+- **`choose-your-leader-v5.html` — CLEAN.** 30 clicks, end reached. Three
+  controls (Restart / Sound / Back) reported "visible but not clickable in
+  place" — the walker's viewport-scroll limitation on fixed chrome, not player-
+  facing defects; the same controls respond to a real tap. Ready for taste-play.
+- **`choose-your-leader-v6.html` — CLEAN.** 25 clicks, end reached. Ready for
+  taste-play.
+- **`funny-boneys-factory.html` (the Peter deliverable) — CLEAN** after one real
+  finding *about the tool, not the game*: the walk first reported 2 dead buttons
+  (Spellcaster, One sleepy cat). Hand-verified live before believing it — both
+  are the *default-selected* options of toggle groups (lens and audience), and
+  clicking an already-active toggle legitimately changes nothing; the toggles
+  demonstrably work (state flips both ways). Third confirmed false-positive
+  class in `playthrough-agent.py` (after mailto: links and nav-link bleed) —
+  fixed at the source: the agent now skips `aria-pressed="true"` /
+  `aria-selected="true"` controls as already-active toggles, self-test still
+  discriminates, and the re-walk reads **"nothing mechanical to fix — ready for
+  founder taste-play."**
+- **`studio/funny-boneys-oops.html` (the fork) — CLEAN walk**, but its five
+  "visible but not clickable" notes line up with the 27px touch-floor failures
+  Fingers caught: the fork's controls are physically small. One more reason root
+  is the deliverable.
+
+**The pattern worth naming:** every mechanical claim in this packet that reached
+you was verified twice — a gate's word was never taken alone (the studio's
+the-tell lesson, applied to its own newest tool the same day it flagged
+something).
 
 ---
 
