@@ -442,4 +442,181 @@ html.c-reader .cr-note{
     reduced-motion setting went down with it. It is two separate rules now, and
     the comment above them says why they must never be merged again.</p>
   <p>Comfort persists. Across a hundred and one surfaces, nothing remembered
-    anything: every link followed put a reader who had
+    anything: every link followed put a reader who had chosen warm-dark back into
+    daylight. The setting is stored locally and applied before the first paint,
+    so there is no flash of the mode you did not ask for.</p>
+  <p>Clear Reader is back. It was the fifth stop of the original comfort control
+    and the studio's only screen-reader-facing option, and it was deleted from
+    forty-nine pages during a migration with no ruling recorded. It strips the
+    design and leaves the document.</p>
+  <p>Font size no longer breaks the panel. The old size steps used
+    <code>zoom</code>, which scales layout rather than type and does not appear in
+    the arithmetic that positioned the panel, so at the largest setting the panel
+    slid under the header by nine and a half pixels. Size is <code>font-size</code>
+    now, multiplying whatever base your browser already uses rather than replacing
+    it, and the panel measures the chrome instead of guessing at it.</p>
+
+  <h2 class="sec">What did not change</h2>
+  <p>The colour work. Every pair that carries text clears the studio's seven-to-one
+    target in all three modes, and warm-dark measures genuinely dark rather than
+    dimmed. Tap targets were already well above the forty-eight pixel floor. Both
+    were measured and both were left alone.</p>
+</main>
+
+<div class="dock">
+  <button class="dock-btn" id="dockBtn" aria-expanded="false" aria-controls="panel">
+    <svg class="dock-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="3.2"/>
+      <path d="M12 3.2v2.4M12 18.4v2.4M3.2 12h2.4M18.4 12h2.4M5.9 5.9l1.7 1.7M16.4 16.4l1.7 1.7M18.1 5.9l-1.7 1.7M7.6 16.4l-1.7 1.7" stroke-linecap="round"/>
+    </svg>
+    Comfort
+  </button>
+</div>
+
+<div class="panel" id="panel" role="dialog" aria-modal="false" aria-label="Comfort">
+  <div class="grp">
+    <h2 id="l-light">Light</h2>
+    <div class="row" role="group" aria-labelledby="l-light">
+      <button class="btn" data-light-set="day">Day</button>
+      <button class="btn" data-light-set="dusk">Dusk</button>
+      <button class="btn" data-light-set="night">Warm dark</button>
+    </div>
+  </div>
+
+  <div class="grp">
+    <h2>Screen reader</h2>
+    <button class="tog" data-tog="c-reader">Clear Reader <span class="st">Off</span></button>
+    <details class="why"><summary>What this does</summary>
+      <p class="note">Removes the design and leaves the document, which is close to what a
+        screen reader is handed. A way to check whether a page still makes sense without
+        its layout.</p></details>
+  </div>
+
+  <div class="grp">
+    <h2 id="l-size">Font size</h2>
+    <div class="row" role="group" aria-labelledby="l-size">
+      <button class="btn" data-size="0">Normal</button>
+      <button class="btn" data-size="1">Larger</button>
+      <button class="btn" data-size="2">Largest</button>
+    </div>
+    <details class="why"><summary>How sizes work</summary>
+      <p class="note">Sizes multiply your browser's own text setting rather than replacing
+        it.</p></details>
+  </div>
+
+  <div class="grp">
+    <h2>Reading</h2>
+    <button class="tog" data-tog="c-contrast">High contrast <span class="st">Off</span></button>
+    <button class="tog" data-tog="c-still">Motion stop <span class="st">Off</span></button>
+    <button class="tog" data-tog="c-cues">Underline links <span class="st">Off</span></button>
+  </div>
+
+  <span class="sr" id="say" role="status" aria-live="polite"></span>
+</div>
+
+<script>
+(function(){
+  var d = document.documentElement;
+  var S = window.__comfort || { light:'day', size:0, contrast:0, motion:0, cues:0, reader:0 };
+  var say = document.getElementById('say');
+  var btn = document.getElementById('dockBtn');
+  var panel = document.getElementById('panel');
+
+  var TOG = { 'c-contrast':'contrast', 'c-still':'motion', 'c-cues':'cues', 'c-reader':'reader' };
+
+  function save(){
+    try { localStorage.setItem('tsp.comfort.v1', JSON.stringify(S)); } catch(e){}
+  }
+  function announce(t){ if (say) say.textContent = t; }
+
+  /* FIX 4 — the panel is positioned from a MEASURED chrome and dock, never a
+     constant. Re-measured whenever the size step changes or the box reflows,
+     which is exactly the case v2's hardcoded 62px could not survive. */
+  function measure(){
+    var c = document.querySelector('.chrome'), k = document.querySelector('.dock');
+    if (c) d.style.setProperty('--chrome-h', Math.round(c.getBoundingClientRect().height) + 'px');
+    if (k) d.style.setProperty('--dock-h',   Math.round(k.getBoundingClientRect().height + 14) + 'px');
+  }
+  if (window.ResizeObserver){
+    var ro = new ResizeObserver(function(){ measure(); more(); });
+    var c = document.querySelector('.chrome'), k = document.querySelector('.dock');
+    if (c) ro.observe(c); if (k) ro.observe(k);
+  }
+  window.addEventListener('resize', measure, {passive:true});
+
+  /* A panel that clips with no scrollbar, no fade and no memory is a panel whose bottom
+     group does not exist. v3.0 hid 33.9% of itself at the largest size and what fell off
+     was Clear Reader. */
+  function more(){
+    panel.setAttribute('data-more', panel.scrollHeight - panel.clientHeight > 4 ? '1' : '0');
+  }
+  panel.addEventListener('scroll', function(){
+    panel.setAttribute('data-more',
+      (panel.scrollHeight - panel.clientHeight - panel.scrollTop) > 4 ? '1' : '0');
+  }, {passive:true});
+
+  function paintState(){
+    var el, i;
+    var L = document.querySelectorAll('[data-light-set]');
+    for (i=0;i<L.length;i++){ el=L[i]; el.setAttribute('aria-pressed', String(el.getAttribute('data-light-set') === S.light)); }
+    var Z = document.querySelectorAll('[data-size]');
+    for (i=0;i<Z.length;i++){ el=Z[i]; el.setAttribute('aria-pressed', String(Number(el.getAttribute('data-size')) === S.size)); }
+    var T = document.querySelectorAll('[data-tog]');
+    for (i=0;i<T.length;i++){
+      el=T[i];
+      var on = !!S[TOG[el.getAttribute('data-tog')]];
+      el.setAttribute('aria-pressed', String(on));
+      el.querySelector('.st').textContent = on ? 'On' : 'Off';
+    }
+    measure(); more();
+  }
+
+  function open(o){
+    panel.setAttribute('data-open', o ? '1' : '0');
+    btn.setAttribute('aria-expanded', String(o));
+    if (o) { measure(); more(); var f = panel.querySelector('.btn'); if (f) f.focus(); }
+  }
+  btn.addEventListener('click', function(){ open(panel.getAttribute('data-open') !== '1'); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && panel.getAttribute('data-open') === '1'){ open(false); btn.focus(); }
+  });
+  document.addEventListener('click', function(e){
+    if (panel.getAttribute('data-open') !== '1') return;
+    if (panel.contains(e.target) || btn.contains(e.target)) return;
+    open(false);
+  });
+
+  document.addEventListener('click', function(e){
+    var t = e.target.closest ? e.target.closest('[data-light-set],[data-size],[data-tog]') : null;
+    if (!t) return;
+    if (t.hasAttribute('data-light-set')){
+      S.light = t.getAttribute('data-light-set');
+      d.setAttribute('data-light', S.light);
+      announce(t.textContent.trim());
+    } else if (t.hasAttribute('data-size')){
+      S.size = Number(t.getAttribute('data-size'));
+      d.classList.toggle('c-a1', S.size === 1);
+      d.classList.toggle('c-a2', S.size === 2);
+      announce('Font size ' + t.textContent.trim());
+    } else {
+      var cls = t.getAttribute('data-tog');
+      var on = !d.classList.contains(cls);
+      d.classList.toggle(cls, on);
+      S[TOG[cls]] = on ? 1 : 0;
+      if (cls === 'c-still'){
+        /* An explicit choice outranks the phone IN BOTH DIRECTIONS. Turning motion stop
+           OFF on a reduced-motion phone has to actually restore motion, or the control is
+           a lie in the opposite direction from the one v2 shipped. */
+        S.motionSet = 1;
+        if (on) d.removeAttribute('data-motion'); else d.setAttribute('data-motion', 'go');
+      }
+      announce(t.textContent.replace(/On|Off/, '').trim() + (on ? ' on' : ' off'));
+    }
+    save(); paintState();
+  });
+
+  paintState();
+})();
+</script>
+</body>
+</html>
