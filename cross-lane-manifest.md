@@ -95,6 +95,9 @@ never named a single gate.*
 **The belt is the only thing with agency.** `studio-belt.sh` (9,725 B, `02c1ff5f`) runs the
 ticks; every tick BLOCKS on exit 1. **A gate that is not mounted on the belt does not run.**
 
+
+> **AMENDED 2026-08-08 — read the ruling below the table before trusting a row.**
+
 | # | tick | gate | bytes / blob | mode | owner |
 |---|------|------|--------------|------|-------|
 | 1 | accessibility floor | `comfort-gate.py` | 9,506 · `1db5f289` | ratchet | UNDECLARED |
@@ -113,6 +116,37 @@ ticks; every tick BLOCKS on exit 1. **A gate that is not mounted on the belt doe
 UNDECLARED is not a shrug. It is a **founder call outstanding**: a gate whose owner is not
 named cannot be safely edited by any session, which is how the studio ends up with two of
 them.
+
+### RULING 2026-08-08 — ownership settled, tick 7 mounted
+
+Founder: *"This is the belt lane."* The lane running this session owns the belt and its
+gates. Every UNDECLARED above is resolved to **belt lane**. Three moves landed the same
+turn, each byte-verified:
+
+| what | file | now | commit |
+|---|---|---|---|
+| **tick 7 mounted** | `studio-belt.sh` 11,095 · `a54da6c8` | `studio-fingers.py` runs as a **ratchet** | `7e5798b6` |
+| ratchet baseline | `fingers-baseline.json` 4,603 · `56986cc2` | 97 of 133 surfaces carry debt; **75 LAW-level failures** | `dfd1542d` |
+| DARK false halt killed | `preship-gate-v5.py` 6,105 · `3696c1be` | `[data-light\|theme\|comfort\|mode]=` counts as a dark path | `d243b0af` |
+| entry scope added | `retired-lines-gate.py` 9,714 · `3a3dee22` | `except_paths` + `render_only`, both optional | `99f841da` |
+| vocabulary boundary armed | `retired-lines.json` 2,411 · `8e8f908b` | "studio eyes" banned on player surfaces, permitted on `studio/` | `cbbbb421` |
+
+**`studio-fingers.py` is no longer unmounted.** The `NOT MOUNTED` marker in the table above
+is superseded for the root file; `studio-eyes/studio-fingers.py` remains a live duplicate
+and still needs a retire-or-merge call.
+
+**Why the tick is a ratchet and not flat.** 97 of 133 surfaces already fail the 48px house
+floor. A flat tick freezes deploy on day one over debt nobody was checking — the exact
+discovery that made ticks 1/3/4/5 ratchet. `law_failures_at_baseline: 75` is recorded
+separately in the baseline because those sit below **WCAG 2.5.8 AA**, not merely below house
+style. That number is the one that must reach zero.
+
+**Why the vocabulary entry is `render_only`.** The bug is a reader SEEING the internal name.
+A doc that *discusses* the ban is the record, not the violation — without this flag the gate
+would flag this manifest and the ledger that record it, eating its own homework. Verified on
+landing: `index.html` HALT, `arcade.html` HALT, `studio/tsp-home.html` clean, source scan
+clean.
+
 
 ### THE GAP THIS TABLE EXPOSES
 
