@@ -30,9 +30,35 @@
   surfaces, which no prior version was.
 
   FLOORS THIS FILE HOLDS, all mechanically checkable:
-    single file · offline · no emoji · every rendered text node >= 18px ·
-    every text pair >= 7:1 in all three light modes · every target >= 48px ·
-    comfort survives navigation · motion stop actually stops motion
+    single file · offline · no emoji · every rendered text node >= 18px
+    (type-census.py) · every target >= 44x44 per the founder's own ruling, measured by
+    studio-eyes/studio-fingers.py · comfort survives navigation · motion stop actually
+    stops motion. Contrast is measured by comfort-gate.py, which enforces 4.5; the 7:1
+    AAA target is aimed at, not claimed, because nothing gates it per-state.
+    THE 48px "house floor" IS RETIRED. It was derived from Apple by an agent against a
+    standing 44x52 founder ruling and manufactured 121 phantom halts.
+  v3.1, same day, after a seven-lens aleph pass. What the lenses caught that the
+  gates did not:
+    - one-thing-gate SHIP-BLOCKed this file (2 co-equal invitations), and with deploy
+      re-coupled that stopped the WHOLE SITE publishing. Home demoted to a text link.
+    - Clear Reader's all:revert resurrected display:none, [hidden] and visibility:hidden
+      content. Measured: a display:none block returned as a 350x63 box. Named-property
+      reset now, and [hidden] re-asserted. This block will be mounted by 101 surfaces.
+    - Clear Reader forced pure white at luminance 1.0 in every mode and persisted there.
+      Token-driven now, so it composes with day/dusk/night.
+    - Clear Reader collapsed .home to 22px, and collapsed a synthetic host control the
+      same way. Excluded and geometry re-asserted.
+    - the panel hid 19% of itself at Normal and 33.9% at Largest with no scrollbar and no
+      fade, and what fell off the bottom was the Screen reader group. Moved up under
+      Light, prose behind <details>, fade painted when there is more below.
+    - the panel scrolled SIDEWAYS at large sizes (scrollWidth 349 vs 336 client) with the
+      pressed button drawn cut off. Document overflow stayed 0, which is why no gate saw
+      it. Rows wrap and buttons carry min-width:0.
+    - control borders measured 1.50 to 2.07 against the 3:1 non-text floor (WCAG 1.4.11).
+      Split --line (decoration) from --control-edge (boundaries).
+    - the pressed toggle's status text measured 6.76:1 in night. Now --ink-2.
+    - motion stop could not be turned OFF on a reduced-motion phone, because the media
+      query was unconditional. An explicit choice now outranks the OS in both directions.
   ═══════════════════════════════════════════════════════════════════════════
 -->
 <script>
@@ -47,14 +73,19 @@
     /* No stored choice. Honour the operating system, then stop. The control
        always outranks the OS once the reader has touched it. */
     var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    s = { light: dark ? 'night' : 'day', size: 0, contrast: 0, motion: 0, cues: 0, reader: 0 };
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) s.motion = 1;
+    s = { light: dark ? 'night' : 'day', size: 0, contrast: 0, motion: 0, cues: 0, reader: 0,
+          motionSet: 0 };
   }
+  /* motionSet records whether the READER ever touched motion. Until they do, the OS
+     decides, live, through the media query. v3.0 copied the OS value into storage at first
+     load, which froze a phone-level preference into a page-level one and made it look like
+     a choice the reader had made. */
   d.setAttribute('data-light', s.light === 'dusk' || s.light === 'night' ? s.light : 'day');
   d.classList.toggle('c-a1', s.size === 1);
   d.classList.toggle('c-a2', s.size === 2);
   d.classList.toggle('c-contrast', !!s.contrast);
-  d.classList.toggle('c-still',    !!s.motion);
+  d.classList.toggle('c-still',    !!(s.motionSet && s.motion));
+  if (s.motionSet && !s.motion) d.setAttribute('data-motion', 'go');
   d.classList.toggle('c-cues',     !!s.cues);
   d.classList.toggle('c-reader',   !!s.reader);
   window.__comfort = s;
@@ -74,7 +105,8 @@
 
   --bg:#f4ecda; --surface:#fbf5e6; --surface-2:#efe4c8;
   --ink:#221d12; --ink-2:#463b22;
-  --line:#c9b184;
+  --line:#c9b184;          /* decorative rules ONLY. Never a control boundary. */
+  --control-edge:#463b22;  /* control boundaries. WCAG 1.4.11 wants 3:1; --line gave 1.6. */
   --accent:#3f5f78; --accent-strong:#2c4658; --on-accent:#ffffff;
   --focus:#8f3f00;      /* rings ONLY. Never text. */
   --eyebrow:#6b2c00;    /* text. Measured 7.6:1 on --bg. */
@@ -91,14 +123,14 @@ html[data-light="dusk"]{
   --ink:#241a10; --ink-2:#453619;
   --line:#bda474;
   --accent:#37536a; --accent-strong:#24384a; --on-accent:#ffffff;
-  --focus:#8a3800; --eyebrow:#5e2600;
+  --focus:#8a3800; --eyebrow:#5e2600; --control-edge:#453619;
 }
 html[data-light="night"]{
   --bg:#1c1a16; --surface:#242019; --surface-2:#33302a;
   --ink:#f2e3bf; --ink-2:#dccba2;
   --line:#5a5140;
   --accent:#8aa0b8; --accent-strong:#a9bcd0; --on-accent:#141109;
-  --focus:#f0c357; --eyebrow:#f0c357;
+  --focus:#f0c357; --eyebrow:#f0c357; --control-edge:#dccba2;
 }
 
 /* OS FALLBACK. Sets :root so a reader who has never touched the control, or
@@ -112,7 +144,7 @@ html[data-light="night"]{
     --bg:#1c1a16; --surface:#242019; --surface-2:#33302a;
     --ink:#f2e3bf; --ink-2:#dccba2; --line:#5a5140;
     --accent:#8aa0b8; --accent-strong:#a9bcd0; --on-accent:#141109;
-    --focus:#f0c357; --eyebrow:#f0c357;
+    --focus:#f0c357; --eyebrow:#f0c357; --control-edge:#dccba2;
   }
 }
 
@@ -120,396 +152,4 @@ html[data-light="night"]{
 html[data-light="day"]{
   --bg:#f4ecda; --surface:#fbf5e6; --surface-2:#efe4c8;
   --ink:#221d12; --ink-2:#463b22; --line:#c9b184;
-  --accent:#3f5f78; --accent-strong:#2c4658; --on-accent:#ffffff;
-  --focus:#8f3f00; --eyebrow:#6b2c00;
-}
-
-/* ═══ 2. HIGH CONTRAST ════════════════════════════════════════════════════ */
-html.c-contrast:not([data-light="night"]){
-  --bg:#fffdf8; --surface:#fffdf8; --surface-2:#f2ede1;
-  --ink:#100d07; --ink-2:#241d10; --line:#7d6a44;
-  --accent-strong:#1d2f3d; --eyebrow:#5a2400;
-}
-html.c-contrast[data-light="night"]{
-  --bg:#0a0908; --surface:#141210; --surface-2:#201d18;
-  --ink:#fff9ec; --ink-2:#f0e3c6; --accent-strong:#c3d4e6; --eyebrow:#ffd77a;
-}
-
-/* ═══ 3. FONT SIZE ════════════════════════════════════════════════════════
-   Multiplies the reader's own base rather than replacing it. A reader whose
-   browser is already at 20px gets 22.5 / 25 here, not a reset to our guess. */
-html.c-a1{ font-size:112.5%; }
-html.c-a2{ font-size:125%; }
-
-/* ═══ 4. MOTION STOP ══════════════════════════════════════════════════════
-   TWO RULES. NEVER MERGED. v2 wrote them as one:
-     html.se-reduce *,@media (prefers-reduced-motion:reduce){ ... }
-   An @media block cannot sit inside a selector list, so the CSS parser threw
-   the whole declaration away — measured, 0 of 47 rules parsed. The toggle
-   announced success and moved nothing, and the OS preference died with it.
-   This regression was documented once and then reintroduced. Do not merge them. */
-html.c-still *{
-  animation:none !important; transition:none !important; scroll-behavior:auto !important;
-}
-@media (prefers-reduced-motion:reduce){
-  *{ animation:none !important; transition:none !important; scroll-behavior:auto !important; }
-}
-
-/* ═══ 5. COLOURBLIND CUES ════════════════════════════════════════════════ */
-html.c-cues a{ text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:2px; }
-
-*{ box-sizing:border-box; }
-body{
-  margin:0; background:var(--bg); color:var(--ink);
-  font-family:var(--serif); font-size:1.125rem; line-height:1.6;
-  -webkit-text-size-adjust:100%;
-  transition:background var(--motion) ease, color var(--motion) ease;
-}
-
-/* ═══ CHROME — top, reserved, never overlaps. No comfort control in it. ═══
-   v2 put the comfort control up here to fix a real overlap bug, and silently
-   took a reach regression: Studio Fingers measures the one-hand thumb arc as
-   the bottom 40% of the screen, and v2 parked the most-used control at 3.9%.
-   The two goals were never in conflict. Chrome stays top. Comfort goes to the
-   thumb. */
-.chrome{
-  display:grid; grid-template-columns:auto 1fr; align-items:center; gap:12px;
-  padding:9px 16px; background:var(--surface); border-bottom:2px solid var(--ink);
-  position:sticky; top:0; z-index:60;
-}
-.home{
-  display:inline-flex; align-items:center; min-height:var(--tap); padding:10px 16px;
-  border:2px solid var(--line); border-radius:9px; background:var(--surface-2);
-  color:var(--ink); font-family:var(--sans); font-weight:700; font-size:1.125rem;
-  text-decoration:none;
-}
-.brand{ display:inline-flex; align-items:center; gap:10px; color:var(--ink); min-width:0; }
-.brand svg{ width:36px; height:22px; color:var(--accent-strong); flex:0 0 auto; }
-.brand .wm{ font-family:var(--serif); font-size:1.125rem; white-space:nowrap;
-  overflow:hidden; text-overflow:ellipsis; }
-@media (max-width:430px){ .brand .wm{ display:none; } }
-
-/* ═══ THE COMFORT DOCK — bottom corner, inside the thumb arc ═══════════════ */
-.dock{
-  position:fixed; right:max(14px, env(safe-area-inset-right));
-  bottom:max(14px, env(safe-area-inset-bottom)); z-index:70;
-}
-.dock-btn{
-  display:inline-flex; align-items:center; gap:9px;
-  min-height:56px; min-width:56px; padding:12px 20px;
-  border:2px solid var(--ink); border-radius:28px;
-  background:var(--accent-strong); color:var(--on-accent);
-  font-family:var(--sans); font-weight:700; font-size:1.125rem;
-  cursor:pointer; box-shadow:0 3px 14px rgba(0,0,0,.3);
-}
-/* Named .dock-glyph, not ".dock-btn svg". It is aria-hidden paint with no
-   independent hit area; the target is the 56px button around it. Naming a
-   decorative glyph inside a control selector makes it read as a control to any
-   source-level check, which is the same false positive studio-fingers.py
-   already fixed once for pseudo-elements ("a pseudo-element is paint, not a
-   target"). See claude/ALEPH-COMFORT-V3-2026-08-08.md for the proposed gate fix. */
-.dock-glyph{ width:24px; height:24px; flex:0 0 auto; }
-
-/* Panel opens UPWARD from the dock, and is positioned from a MEASURED height,
-   never a hardcoded constant. v2 pinned it at calc(var(--tap) + 14px) — a 62px
-   guess at the chrome — which is why it slid 9.6px under the header once zoom
-   changed the chrome's real height. */
-.panel{
-  position:fixed; z-index:71;
-  right:max(14px, env(safe-area-inset-right));
-  bottom:calc(max(14px, env(safe-area-inset-bottom)) + var(--dock-h));
-  width:min(340px, calc(100vw - 28px));
-  max-height:calc(100vh - var(--chrome-h) - var(--dock-h) - 32px);
-  overflow-y:auto;
-  background:var(--surface); color:var(--ink);
-  border:2px solid var(--accent-strong); border-radius:var(--r);
-  padding:16px; box-shadow:0 10px 34px rgba(0,0,0,.34);
-  display:none;
-}
-.panel[data-open="1"]{ display:block; }
-.panel h2{
-  font-family:var(--sans); font-size:1.125rem; font-weight:700;
-  color:var(--ink-2); margin:0 0 9px; letter-spacing:.01em;
-}
-.panel h2 + .row, .panel h2 + .tog{ margin-top:0; }
-.panel .grp + .grp{ margin-top:18px; border-top:2px solid var(--line); padding-top:16px; }
-.row{ display:flex; gap:7px; }
-.btn{
-  flex:1; min-height:var(--tap); padding:11px 6px;
-  border:2px solid var(--line); border-radius:9px;
-  background:var(--surface-2); color:var(--ink);
-  font-family:var(--sans); font-weight:700; font-size:1.125rem; cursor:pointer;
-}
-.btn[aria-pressed="true"]{ background:var(--accent-strong); color:var(--on-accent); border-color:var(--ink); }
-.tog{
-  display:flex; width:100%; align-items:center; justify-content:space-between; gap:12px;
-  min-height:var(--tap); padding:11px 14px; margin-top:8px;
-  border:2px solid var(--line); border-radius:9px;
-  background:var(--surface-2); color:var(--ink);
-  font-family:var(--sans); font-weight:600; font-size:1.125rem;
-  cursor:pointer; text-align:left;
-}
-.tog[aria-pressed="true"]{ border-color:var(--ink); }
-.tog .st{ font-family:var(--sans); font-size:1.125rem; font-weight:700; color:var(--ink-2); flex:0 0 auto; }
-.tog[aria-pressed="true"] .st{ color:var(--accent-strong); }
-.note{ font-size:1.125rem; color:var(--ink-2); margin:9px 0 0; line-height:1.5; }
-
-:where(a,button,summary,[tabindex]):focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
-.sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
-
-/* ═══ CONTENT ═════════════════════════════════════════════════════════════ */
-.wrap{ max-width:42rem; margin:0 auto; padding:26px 20px calc(var(--dock-h) + 40px); }
-.eyebrow{ font-family:var(--sans); font-size:1.125rem; font-weight:700;
-  letter-spacing:.08em; text-transform:uppercase; color:var(--eyebrow); margin:0 0 .3rem; }
-h1{ font-size:2rem; line-height:1.15; margin:.2rem 0 .7rem; font-weight:400; }
-h1 em{ color:var(--accent-strong); font-style:italic; }
-h2.sec{ font-size:1.375rem; margin:1.8rem 0 .5rem; font-weight:700; }
-p{ font-size:1.125rem; margin:0 0 1.05rem; }
-li{ font-size:1.125rem; margin:0 0 .5rem; }
-a{ color:var(--accent-strong); }
-/* 1em, not 1rem. Inside 1.125rem prose that resolves to 18px exactly, so an
-   inline code span cannot silently duck under the floor the way a rem-anchored
-   value does. Measured: 3 nodes at 16px before this change, 0 after. */
-code{ font-family:var(--mono); font-size:1em; background:var(--surface-2);
-  padding:1px 5px; border-radius:4px; }
-
-/* ═══ CLEAR READER ════════════════════════════════════════════════════════
-   Restored. Removed from 49 pages by the v2 migration (commit bc423ed,
-   "legacy comfort controls removed") with no founder ruling recorded, and
-   named by the founder on 2026-08-08 as part of what comfort means.
-
-   Its whole claim, from the original spec still live in comfort-control.html:
-   strip everything that is not meaning, and what survives is what a screen
-   reader actually gets. If a page is unplayable in Clear Reader, it is
-   unplayable with a screen reader. That turns an untestable assertion into a
-   visible, gateable one, which is why it is worth more than a checkbox.
-
-   all:revert beats specificity without !important warfare. Lifted from the
-   original rather than rewritten — it was correct. */
-html.c-reader body{
-  background:#ffffff !important; color:#000000 !important;
-  font-family:var(--sans) !important; font-size:1.1875rem !important;
-  line-height:1.65 !important; max-width:38em !important;
-  margin:0 auto !important; padding:20px 20px 96px !important;
-}
-html.c-reader body *:not(.dock):not(.dock *):not(.panel):not(.panel *):not(.cr-note):not(.cr-note *){
-  all:revert;
-  font-family:inherit !important; color:#000000 !important; background:#ffffff !important;
-  border-color:#595959 !important; box-shadow:none !important; text-shadow:none !important;
-  animation:none !important; transition:none !important;
-  max-width:100% !important; float:none !important; position:static !important;
-}
-/* Decoration is not meaning. If it carries no information, it goes. */
-html.c-reader body svg:not([role="img"]),
-html.c-reader body canvas, html.c-reader body video,
-html.c-reader body .decor,
-html.c-reader body [aria-hidden="true"]{ display:none !important; }
-/* Structure must be VISIBLE. That is the entire point of this stop. */
-html.c-reader body h1{ font-size:1.875rem !important; margin:26px 0 10px !important;
-  border-bottom:3px solid #000 !important; padding-bottom:5px !important; }
-html.c-reader body h2{ font-size:1.5rem !important; margin:24px 0 8px !important;
-  border-bottom:1px solid #595959 !important; padding-bottom:3px !important; }
-html.c-reader body h3{ font-size:1.25rem !important; margin:20px 0 6px !important; }
-html.c-reader body p, html.c-reader body li{ font-size:1.1875rem !important; margin:0 0 13px !important; }
-html.c-reader body ul, html.c-reader body ol{ padding-left:26px !important; margin:0 0 16px !important; }
-html.c-reader body li{ list-style:disc !important; }
-html.c-reader body ol li{ list-style:decimal !important; }
-html.c-reader body a{ color:#0000ee !important; text-decoration:underline !important; }
-/* The dock must survive its own stop, or the reader cannot get back out. */
-html.c-reader .dock-btn{ background:#000000 !important; color:#ffffff !important;
-  border-color:#000000 !important; }
-.cr-note{ display:none; }
-html.c-reader .cr-note{
-  display:block; border:2px solid #000; padding:12px 14px; margin:0 0 20px;
-  font-size:1.125rem; background:#ffffff; color:#000000;
-}
-</style>
-</head>
-<body>
-
-<header class="chrome">
-  <a class="home" href="index.html">Home</a>
-  <span class="brand">
-    <svg viewBox="0 0 64 27" fill="none" stroke="currentColor" aria-hidden="true" focusable="false"><path d="M33.2 13.5 L33.3 13.8 L33.4 14.1 L33.4 14.5 L33.3 14.9 L33.1 15.2 L32.8 15.5 L32.5 15.8 L32.0 15.9 L31.5 16.0 L30.9 15.9 L30.3 15.8 L29.8 15.5 L29.3 15.1 L28.9 14.5 L28.6 13.9 L28.4 13.1 L28.4 12.3 L28.6 11.5 L29.0 10.8 L29.5 10.1 L30.2 9.5 L31.1 9.1 L32.0 8.8 L33.0 8.8 L34.0 8.9 L35.0 9.3 L35.9 9.9 L36.7 10.8 L37.3 11.8 L37.7 12.9 L37.9 14.1 L37.8 15.4 L37.4 16.6 L36.8 17.8 L36.3 18.3 L35.3 19.2 L34.1 19.9 L32.7 20.4 L31.3 20.6 L29.8 20.4 L28.3 19.9 L26.9 19.1 L25.8 18.0 L24.8 16.7 L24.2 15.2 L23.8 13.5 L23.9 11.8 L24.2 10.0 L25.0 8.4 L26.1 7.0 L27.5 5.7 L29.2 4.8 L31.0 4.3 L33.0 4.1 L35.0 4.4 L36.9 5.1 L38.6 6.2 L40.1 7.6 L41.3 9.4 L42.1 11.3 L42.5 13.5" stroke-width="2.3" stroke-linecap="round"/><circle cx="32" cy="13.5" r="1.6" fill="currentColor" stroke="none"/></svg>
-    <span class="wm">Tight Spiral</span>
-  </span>
-</header>
-
-<main class="wrap">
-  <p class="cr-note">Clear Reader is on. This is the document with the design
-    removed: what is left is roughly what a screen reader is handed. If the page
-    stops making sense here, it does not make sense there either.</p>
-
-  <p class="eyebrow">The studio standard</p>
-  <h1>Comfort is <em>how you view content</em>.</h1>
-  <p>Font size, contrast, modes like warm and dark, motion stop, and screen
-    reader options. Five things. The control is in the bottom corner, where a
-    thumb already is, and it stays where you put it when you move to another
-    page.</p>
-
-  <h2 class="sec">What changed in v3</h2>
-  <p>Motion stop works. In v2 the rule that carried it was written as a selector
-    list containing an <code>@media</code> block, which no CSS parser accepts, so
-    the browser discarded it whole: zero of forty-seven rules survived. The button
-    reported success and moved nothing, and the operating system's own
-    reduced-motion setting went down with it. It is two separate rules now, and
-    the comment above them says why they must never be merged again.</p>
-  <p>Comfort persists. Across a hundred and one surfaces, nothing remembered
-    anything: every link followed put a reader who had chosen warm-dark back into
-    daylight. The setting is stored locally and applied before the first paint,
-    so there is no flash of the mode you did not ask for.</p>
-  <p>Clear Reader is back. It was the fifth stop of the original comfort control
-    and the studio's only screen-reader-facing option, and it was deleted from
-    forty-nine pages during a migration with no ruling recorded. It strips the
-    design and leaves the document.</p>
-  <p>Font size no longer breaks the panel. The old size steps used
-    <code>zoom</code>, which scales layout rather than type and does not appear in
-    the arithmetic that positioned the panel, so at the largest setting the panel
-    slid under the header by nine and a half pixels. Size is <code>font-size</code>
-    now, multiplying whatever base your browser already uses rather than replacing
-    it, and the panel measures the chrome instead of guessing at it.</p>
-
-  <h2 class="sec">What did not change</h2>
-  <p>The colour work. Every pair that carries text clears the studio's seven-to-one
-    target in all three modes, and warm-dark measures genuinely dark rather than
-    dimmed. Tap targets were already well above the forty-eight pixel floor. Both
-    were measured and both were left alone.</p>
-</main>
-
-<div class="dock">
-  <button class="dock-btn" id="dockBtn" aria-expanded="false" aria-controls="panel">
-    <svg class="dock-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
-      <circle cx="12" cy="12" r="3.2"/>
-      <path d="M12 3.2v2.4M12 18.4v2.4M3.2 12h2.4M18.4 12h2.4M5.9 5.9l1.7 1.7M16.4 16.4l1.7 1.7M18.1 5.9l-1.7 1.7M7.6 16.4l-1.7 1.7" stroke-linecap="round"/>
-    </svg>
-    Comfort
-  </button>
-</div>
-
-<div class="panel" id="panel" role="dialog" aria-modal="false" aria-label="Comfort">
-  <div class="grp">
-    <h2 id="l-light">Light</h2>
-    <div class="row" role="group" aria-labelledby="l-light">
-      <button class="btn" data-light-set="day">Day</button>
-      <button class="btn" data-light-set="dusk">Dusk</button>
-      <button class="btn" data-light-set="night">Warm dark</button>
-    </div>
-  </div>
-
-  <div class="grp">
-    <h2 id="l-size">Font size</h2>
-    <div class="row" role="group" aria-labelledby="l-size">
-      <button class="btn" data-size="0">Normal</button>
-      <button class="btn" data-size="1">Larger</button>
-      <button class="btn" data-size="2">Largest</button>
-    </div>
-    <p class="note">Sizes multiply your browser's own text setting rather than
-      replacing it.</p>
-  </div>
-
-  <div class="grp">
-    <h2>Reading</h2>
-    <button class="tog" data-tog="c-contrast">High contrast <span class="st">Off</span></button>
-    <button class="tog" data-tog="c-still">Motion stop <span class="st">Off</span></button>
-    <button class="tog" data-tog="c-cues">Underline links <span class="st">Off</span></button>
-  </div>
-
-  <div class="grp">
-    <h2>Screen reader</h2>
-    <button class="tog" data-tog="c-reader">Clear Reader <span class="st">Off</span></button>
-    <p class="note">Removes the design and leaves the document, which is close to
-      what a screen reader is handed. Useful on its own, and a way to check
-      whether a page still makes sense without its layout.</p>
-  </div>
-
-  <span class="sr" id="say" role="status" aria-live="polite"></span>
-</div>
-
-<script>
-(function(){
-  var d = document.documentElement;
-  var S = window.__comfort || { light:'day', size:0, contrast:0, motion:0, cues:0, reader:0 };
-  var say = document.getElementById('say');
-  var btn = document.getElementById('dockBtn');
-  var panel = document.getElementById('panel');
-
-  var TOG = { 'c-contrast':'contrast', 'c-still':'motion', 'c-cues':'cues', 'c-reader':'reader' };
-
-  function save(){
-    try { localStorage.setItem('tsp.comfort.v1', JSON.stringify(S)); } catch(e){}
-  }
-  function announce(t){ if (say) say.textContent = t; }
-
-  /* FIX 4 — the panel is positioned from a MEASURED chrome and dock, never a
-     constant. Re-measured whenever the size step changes or the box reflows,
-     which is exactly the case v2's hardcoded 62px could not survive. */
-  function measure(){
-    var c = document.querySelector('.chrome'), k = document.querySelector('.dock');
-    if (c) d.style.setProperty('--chrome-h', Math.round(c.getBoundingClientRect().height) + 'px');
-    if (k) d.style.setProperty('--dock-h',   Math.round(k.getBoundingClientRect().height + 14) + 'px');
-  }
-  if (window.ResizeObserver){
-    var ro = new ResizeObserver(measure);
-    var c = document.querySelector('.chrome'), k = document.querySelector('.dock');
-    if (c) ro.observe(c); if (k) ro.observe(k);
-  }
-  window.addEventListener('resize', measure, {passive:true});
-
-  function paintState(){
-    var el, i;
-    var L = document.querySelectorAll('[data-light-set]');
-    for (i=0;i<L.length;i++){ el=L[i]; el.setAttribute('aria-pressed', String(el.getAttribute('data-light-set') === S.light)); }
-    var Z = document.querySelectorAll('[data-size]');
-    for (i=0;i<Z.length;i++){ el=Z[i]; el.setAttribute('aria-pressed', String(Number(el.getAttribute('data-size')) === S.size)); }
-    var T = document.querySelectorAll('[data-tog]');
-    for (i=0;i<T.length;i++){
-      el=T[i];
-      var on = !!S[TOG[el.getAttribute('data-tog')]];
-      el.setAttribute('aria-pressed', String(on));
-      el.querySelector('.st').textContent = on ? 'On' : 'Off';
-    }
-    measure();
-  }
-
-  function open(o){
-    panel.setAttribute('data-open', o ? '1' : '0');
-    btn.setAttribute('aria-expanded', String(o));
-    if (o) { measure(); var f = panel.querySelector('.btn'); if (f) f.focus(); }
-  }
-  btn.addEventListener('click', function(){ open(panel.getAttribute('data-open') !== '1'); });
-  document.addEventListener('keydown', function(e){
-    if (e.key === 'Escape' && panel.getAttribute('data-open') === '1'){ open(false); btn.focus(); }
-  });
-  document.addEventListener('click', function(e){
-    if (panel.getAttribute('data-open') !== '1') return;
-    if (panel.contains(e.target) || btn.contains(e.target)) return;
-    open(false);
-  });
-
-  document.addEventListener('click', function(e){
-    var t = e.target.closest ? e.target.closest('[data-light-set],[data-size],[data-tog]') : null;
-    if (!t) return;
-    if (t.hasAttribute('data-light-set')){
-      S.light = t.getAttribute('data-light-set');
-      d.setAttribute('data-light', S.light);
-      announce(t.textContent.trim());
-    } else if (t.hasAttribute('data-size')){
-      S.size = Number(t.getAttribute('data-size'));
-      d.classList.toggle('c-a1', S.size === 1);
-      d.classList.toggle('c-a2', S.size === 2);
-      announce('Font size ' + t.textContent.trim());
-    } else {
-      var cls = t.getAttribute('data-tog');
-      var on = !d.classList.contains(cls);
-      d.classList.toggle(cls, on);
-      S[TOG[cls]] = on ? 1 : 0;
-      announce(t.textContent.replace(/On|Off/, '').trim() + (on ? ' on' : ' off'));
-    }
-    save(); paintState();
-  });
-
-  paintState();
-})();
-</script>
-</body>
-</html>
+  --accent:#3f5f78; --accent-stro
