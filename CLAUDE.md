@@ -33,6 +33,21 @@ Default posture from here forward, every session, no exception:
 This is not a call to work slower or timider. It is matching the tool to the job, and
 asking before reaching for the expensive tool when a cheaper one would do the same work.
 
+**Reaffirmed 2026-08-08, standing preference — factor this into every turn, not just
+big ones.** Matt's own words: *"Don't stray from optimal work, but factor account
+credit usage or I get locked out."* Two things, both true at once, neither cancels
+the other:
+- **Quality doesn't drop.** This is not permission to cut corners, skip verification,
+  or ship something worse to save tokens — "optimal work" stays the bar on every task,
+  including the ones in this file (belt runs verified against the literal PASS/HALT
+  line, gates self-tested, nothing landed unverified).
+- **But the account-lockout risk is real and already happened once** (2026-08-07,
+  mid-session). So the check above the checks: before any parallel fleet, any full
+  corpus sweep, any large re-read — ask "is this the cheapest path to the SAME
+  quality bar," not "is this the most thorough thing I could possibly do." Thoroughness
+  bought with tokens Matt doesn't have to spend isn't optimal work, it's a lockout
+  waiting to happen.
+
 ## Sharing & privacy — settled, do NOT re-litigate
 Faculty email addresses, **published** student work, and the Confluence pages are
 fine to share publicly. These are **not** privacy/PII concerns here. Do not flag
