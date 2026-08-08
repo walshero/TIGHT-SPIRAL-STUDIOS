@@ -48,7 +48,29 @@ the other:
   bought with tokens Matt doesn't have to spend isn't optimal work, it's a lockout
   waiting to happen.
 
-## Sharing & privacy — settled, do NOT re-litigate
+## Session-close lane sweep — standing (2026-08-08)
+`funes-tendrils.py` walks git mechanically and now names, on every run, the 5 lanes
+no CI sweep can reach (`lane-tendrils.json` is the registry). The session-connector
+lanes are THIS session's job at close, connectors permitting and cost-scoped (a
+spot-check, not an audit):
+- **Spoke repos** — anything unmerged/stranded on the 4 spokes' branches.
+- **Google Drive** — any TSP file modified more recently than its repo counterpart
+  (the v48-trunk loss shape). Drive is an address book; real work found there is a
+  loose end by definition.
+- **Zapier** — deploy-studio-file skill still points at GitHub Pages.
+Human-only lanes (project shelf, chats) can't be swept by anyone: mitigate by
+harvesting anything that matters into a repo doc BEFORE the chat closes, and a KD!
+ledger line for whatever landed only on the shelf. Skipping the sweep is allowed
+when cost or connectors dictate — but say so out loud; blind is not clean.
+
+## Panels — the Union Rep is seated (2026-08-08)
+Any studio work that convenes a panel follows the OS's "Panelist Union Rep" block
+(§5): at seating, every seat names its real method AND its planned scrub-in — the
+specific place its discipline will cut this session; at close, seats that never
+scrubbed in draw a logged grievance (`GRIEVANCE: <seat> seated, never scrubbed in`
+in the KD!/ledger entry). Three grievances, no contributions → governance-attic
+candidate. Seats are lenses, not authorities; naming without consulting is the
+stick-figure failure and it's now a counted defect.
 Faculty email addresses, **published** student work, and the Confluence pages are
 fine to share publicly. These are **not** privacy/PII concerns here. Do not flag
 them, do not ask about them, do not hedge on them. The founder decides what gets

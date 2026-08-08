@@ -144,9 +144,6 @@ def main():
     print("=" * 68)
     print("FUNES TENDRILS — loose ends down every forking path (post-stall sweep)")
     print("=" * 68)
-    if not loose and not notes:
-        print("  Clean. Every fork accounted for; nothing stranded.")
-        sys.exit(0)
     if loose:
         print(f"\n  {len(loose)} LOOSE END(S) — work that did not land:")
         for l in loose:
@@ -155,6 +152,33 @@ def main():
         print()
         for n in notes:
             print("  " + n)
+    if not loose and not notes:
+        print("  Git lanes clean. Every fork accounted for; nothing stranded.")
+
+    # UNWALKED LANES — the blind-gate lesson (belt tick 5) applied to memory:
+    # a lane this script cannot reach must be named LOUDLY, never silently
+    # implied clean. Losses have never been git-only (v48 trunk in Drive,
+    # 194-commit stranded governance lane, un-harvested chats). Registry:
+    # lane-tendrils.json. Session-connector lanes are walked at session close
+    # by a live session (CLAUDE.md); human-only lanes are walked by discipline.
+    lreg = os.path.join(os.path.dirname(os.path.abspath(__file__)), "lane-tendrils.json")
+    if os.path.isfile(lreg):
+        try:
+            import json
+            lanes = json.load(open(lreg, encoding="utf-8")).get("lanes", [])
+            unwalked = [l for l in lanes if l.get("reach") != "mechanical-ci"]
+            if unwalked:
+                print(f"\n  {len(unwalked)} LANE(S) THIS SWEEP CANNOT WALK — blind is not clean:")
+                for l in unwalked:
+                    print(f"   ◦ [{l['reach']}] {l['lane']}")
+                print("    Session-connector lanes: walk from a live session at close"
+                      " (CLAUDE.md session-close sweep). Human-only lanes: harvest"
+                      " before the chat dies; the shelf is a cache, not a lane.")
+        except Exception as e:
+            print(f"\n  WARN: lane-tendrils.json unreadable ({e}) — lane blindness is now itself invisible. Fix it.")
+    else:
+        print("\n  WARN: lane-tendrils.json missing — the unwalked-lane roster is gone. Fix it.")
+
     print("\n  Funes forgets nothing. Walk each one before the next stall inherits it.")
     sys.exit(1 if (gate and loose) else 0)
 
