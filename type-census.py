@@ -209,4 +209,20 @@ def main(argv):
                         'absolute since 2026-07-26; nothing ever counted. Carried, not '
                         'forgiven. Any surface whose count RISES blocks.'),
                 'rule': 'A count may fall or hold, never rise. Reach zero and the surface leaves.',
-     
+                'unit': 'visible text nodes rendering below the floor, per surface',
+                'counts': dict(sorted(frozen.items())),
+            }, f, indent=1)
+            f.write('\n')
+        total = sum(frozen.values())
+        print("\nBASELINE WRITTEN - %d surface(s), %d carried node(s) under the floor."
+              % (len(frozen), total))
+        print("These do not block. Any RISE does. The ratchet turns one way.")
+        return 0
+
+    print("-" * 74)
+    print("%d clean · %d debt-carried · %d HALT" % (clean, carried, halted))
+    return 1 if halted else 0
+
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv[1:]))
