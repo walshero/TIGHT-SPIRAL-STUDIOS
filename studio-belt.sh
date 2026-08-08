@@ -12,6 +12,7 @@
 #   4  founder voice                 studio-voice-gate.py    (ratchet, ruling 2026-08-05)
 #   5  entry paint / one invitation  one-thing-gate.py       (ratchet, locked 06-27 + 07-12)
 #   6  retired lines (founder bans)  retired-lines-gate.py   (flat, zero tolerance, 2026-08-08)
+#   7  touch floor / thumb reach     studio-fingers.py       (ratchet, 48px house floor, 2026-08-08)
 #
 # Ticks 3-5 added 2026-08-07. Until then the belt carried two ticks and none of the
 # four things the founder had actually ruled on: the image floor, the voice, the entry
@@ -148,6 +149,28 @@ else
   else
     echo "  HALT  a retired line resurfaced:"; grep -E '^\s+HALT' /tmp/rl.out | sed 's/^/        /' | head -10; fail=1
   fi
+fi
+
+echo; echo "-- tick 7: touch floor (studio-fingers) --"
+# Added 2026-08-08. STUDIO EYES answered "can this be SEEN" from the first belt; nothing
+# ever answered "can this be TOUCHED." A player holds the thing one-handed, with a thumb,
+# at arm's length. That is the shipping condition for every game the studio makes and it
+# was ungated. RATCHET, not flat: 97 of 133 surfaces fail the 48px house floor today
+# (fingers-baseline.json), and a flat tick would freeze deploy on day one over debt nobody
+# was checking -- the same discovery that made ticks 1/3/4/5 ratchet.
+if [ ! -f "$BELT_DIR/studio-fingers.py" ] || [ ! -f "$BELT_DIR/fingers-baseline.json" ]; then
+  echo "  (gate or baseline not mounted — skipped)"
+else
+  rc=0
+  for f in $SURFACES; do
+    n=$(python3 "$BELT_DIR/studio-fingers.py" "$f" 2>/dev/null | grep -oE '## HALT +\[[0-9]+\]' | grep -oE '[0-9]+' | head -1)
+    n=${n:-0}
+    was=$(python3 -c "import json,sys;print(json.load(open('$BELT_DIR/fingers-baseline.json'))['counts'].get('${f#./}',0))" 2>/dev/null || echo 0)
+    if [ "$n" -gt "$was" ]; then
+      echo "  HALT  ${f#./}: $n untouchable target(s), baseline $was — new debt"; rc=1
+    fi
+  done
+  if [ "$rc" -eq 0 ]; then echo "  pass  no new untouchable targets"; else fail=1; fi
 fi
 
 echo; echo "----------------------------------------------------------------------"
