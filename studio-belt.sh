@@ -13,6 +13,7 @@
 #   5  entry paint / one invitation  one-thing-gate.py       (ratchet, locked 06-27 + 07-12)
 #   6  retired lines (founder bans)  retired-lines-gate.py   (flat, zero tolerance, 2026-08-08)
 #   7  touch floor / thumb reach     studio-fingers.py       (ratchet, 48px house floor, 2026-08-08)
+#      REPOINTED same day -> studio-eyes/studio-fingers.py   (ratchet, RENDERS, 44px founder floor)
 #
 # Ticks 3-5 added 2026-08-07. Until then the belt carried two ticks and none of the
 # four things the founder had actually ruled on: the image floor, the voice, the entry
@@ -152,6 +153,35 @@ else
 fi
 
 echo; echo "-- tick 7: touch floor (studio-fingers) --"
+
+# REPOINTED 2026-08-08. Two sessions in one lane built two gates of this name; the merged
+# survivor is studio-eyes/studio-fingers.py, which RENDERS on a 412x915 touch viewport.
+# The source-parsing rival at repo root is RETIRED and now exits 2 — so the old block below
+# is held inert rather than deleted, because a retired gate that returns nothing would have
+# made this tick print "pass" forever. A silent pass is worse than no tick.
+# RATCHET: 31 of 113 surfaces carry real debt (fingers-baseline.json, re-frozen).
+if [ ! -f "$BELT_DIR/studio-eyes/studio-fingers.py" ] || [ ! -f "$BELT_DIR/fingers-baseline.json" ]; then
+  echo "  (gate or baseline not mounted — skipped)"
+elif ! python3 -c "import playwright" >/dev/null 2>&1; then
+  echo "  SKIPPED LOUD — playwright absent, this gate is BLIND. Not a pass."
+else
+  python3 "$BELT_DIR/studio-eyes/studio-fingers.py" $SURFACES >/tmp/sf.out 2>&1
+  if python3 - "$BELT_DIR/fingers-baseline.json" <<'PYSF'
+import json,re,sys
+base=json.load(open(sys.argv[1]))["counts"]
+cur={}; f=None
+for line in open('/tmp/sf.out',encoding='utf-8',errors='replace'):
+    m=re.match(r'\s+[\u2717\u2713] (\S+)',line)
+    if m: f=m.group(1); cur.setdefault(f,0); continue
+    if f and re.match(r'\s+F-',line): cur[f]+=1
+bad=[(k,v,base.get(k,0)) for k,v in cur.items() if v>base.get(k,0)]
+for k,v,w in bad: print(f"  HALT  {k}: {v} untouchable finding(s), baseline {w} — new debt")
+sys.exit(1 if bad else 0)
+PYSF
+  then echo "  pass  no new untouchable targets"; else fail=1; fi
+fi
+
+if false; then   # ---- OLD TICK 7 (source-parsing gate) RETIRED 2026-08-08, held inert ----
 # Added 2026-08-08. STUDIO EYES answered "can this be SEEN" from the first belt; nothing
 # ever answered "can this be TOUCHED." A player holds the thing one-handed, with a thumb,
 # at arm's length. That is the shipping condition for every game the studio makes and it
@@ -172,6 +202,7 @@ else
   done
   if [ "$rc" -eq 0 ]; then echo "  pass  no new untouchable targets"; else fail=1; fi
 fi
+fi               # ---- end inert old tick 7 ----
 
 echo; echo "----------------------------------------------------------------------"
 if [ "$fail" -ne 0 ]; then echo "BELT: HALT — a tick refused. This build does not ship."; else echo "BELT: PASS — all ticks clear."; fi
