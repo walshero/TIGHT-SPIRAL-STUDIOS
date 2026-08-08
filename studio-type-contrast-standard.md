@@ -1,5 +1,5 @@
 # Tight Spiral Productions — Type & Contrast Standard
-**Version 1.0** · authored 2026-07-26 · supersedes scattered per-file font rules and the memory-only nav/font floors
+**Version 1.1** · authored 2026-07-26 · amended 2026-08-08 (founder ruling on the font floor; see §1)
 
 This is the single source for how every TSP surface handles type, tap targets, contrast,
 and dark mode. It is written in arithmetic so a gate can enforce it. A rule that can't be a
@@ -11,12 +11,35 @@ retinitis pigmentosa; contrast and size are computation, not judgment.
 ---
 
 ## 1. FONT FLOOR (mobile-first, RP-first)
-- **Body text: 20px minimum.** Reading copy, prompts, card bodies, reveal text.
-- **Any on-screen text: 18px absolute minimum.** Nav buttons, kickers, footers, captions,
-  labels, chips, tags — everything a human reads. Nothing below 18px ships. Ever.
+
+**AMENDED 2026-08-08. The separate 20px body line is RETIRED. One floor now.**
+
+- **Every rendered text node: 18px absolute minimum.** Body, nav, kickers, footers,
+  captions, labels, chips, tags. Everything a human reads. Nothing below 18px ships.
+- **The reader's own browser text setting supplies the base.** Declare `font-size:100%`
+  on `:root` and scale with rem. A hardcoded px root overrides the one accessibility
+  control the reader already owns, and 69 of 75 root-level files already defer correctly.
 - Line-height for body >= 1.5.
-- Rationale: 18px is the smallest a phone-held screen stays readable with low vision.
-  Desktop can go bigger; the floor is set by the hardest case, not the easiest.
+- Rationale unchanged: 18px is the smallest a phone-held screen stays readable with low
+  vision. The floor is set by the hardest case.
+
+**Why the 20px line went.** On 2026-08-08 v1.0's font floor was measured against live
+surfaces for the first time in the eighteen days it had existed. Body text ran 14.4px to
+19px; chrome ran 10px to 13px; the share of visible text nodes rendering under 18px was
+43% to 96% depending on the surface, 243 of 289 on the front door. The comfort control's
+own panel labelled itself at 10.5px. Neither number in v1.0 had ever been met anywhere.
+
+The reason was not laxity, it was instrumentation. The only check pointed at this clause
+measured ONE value, the body base, as a SOFT warning (Studio Eyes E1). Between 84 and 96
+percent of what actually rendered was never looked at. Two numbers where nothing counted
+even one is not a stricter standard, it is a longer wish. Founder ruling: keep the floor
+that can be checked on every node, drop the one that cannot, and let the reader's own
+setting do the work the second number was reaching for.
+
+**This clause is now enforced.** `type-census.py` renders each surface at 390x844 and
+counts every visible leaf text node against the 18px floor, ratcheted per surface in
+`type-baseline.json`. Today's debt is carried; a RISE blocks. The count may fall or hold,
+never rise. Reach zero and the surface leaves the baseline forever.
 
 ## 2. TAP-TARGET FLOOR
 - **Interactive targets: 44x44px minimum** (buttons, toggles, choices, nav).
@@ -61,7 +84,24 @@ retinitis pigmentosa; contrast and size are computation, not judgment.
 - Two families, deliberately. Serif reads; sans operates.
 
 ## 8. ENFORCEMENT
-- `preship-gate-v5.py <file>` is the single gate. Exit 0 = SHIP. Exit 1 = HALT.
 - No file's own comment is trusted as proof of passing. Only a live gate run is proof.
-- The gate supersedes preship-contrast-gate.py, preship-gate-v3.py, preship-gate-v4.py.
-- Corpus sweep: `preship-gate-v5.py --sweep` runs every HTML file and prints a scorecard.
+- **The belt is the enforcement layer, not a single gate.** `studio-belt.sh <repo>` runs
+  every armed tick and blocks on any HALT. As of 2026-08-08 that is seven ticks, and
+  `floor.yml` re-coupled deploy the same day, so a HALT now stops the site publishing.
+- This clause's own check is `type-census.py` (see §1). It is not yet mounted as a belt
+  tick; mounting it is a founder call, because it would arm an eighth tick.
+
+### STALE NUMBERS IN THIS DOCUMENT, recorded 2026-08-08, NOT silently changed
+
+Two clauses here disagree with what the studio actually ships. Recording the drift rather
+than editing it, because both are founder calls, and a standard quietly rewritten to match
+practice stops being a standard.
+
+- **§2 says 44x44px. The belt ships 48px.** `studio-fingers.py` cites the stricter of
+  Apple 44 and Material 48 and calls 48 the house floor, with 24px flagged separately as
+  the WCAG 2.5.8 AA LAW line. Ninety-seven of 133 surfaces carry debt against 48 today and
+  75 of those sit below the 24px legal line. That 75 is the number that must reach zero.
+- **§5's convention line says `body.warm`.** The corpus uses `html[data-light="night"]`
+  on 101 surfaces. `preship-gate-v4.py` parses neither; it looks for `:root` inside an
+  `@media (prefers-color-scheme: dark)` block and for `html[data-comfort]`, which is why
+  it has stood a false H-DARK-MISSING against `index.html` since 2026-08-03.
