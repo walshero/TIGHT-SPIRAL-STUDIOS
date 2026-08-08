@@ -6,14 +6,20 @@
 #
 # THE TICKS — each one is a founder ruling with teeth:
 #   1  accessibility floor           comfort-gate.py         (flat)
-#   2  student attribution standard  inline grep             (flat, decided 2026-08-03)
+#   2  student attribution standard  inline grep             (ratchet, decided 2026-08-03,
+#                                                              ratcheted 2026-08-08 — see below)
 #   3  >50% image floor + render     preship-gate-v4.py      (ratchet, founder canon C7)
 #   4  founder voice                 studio-voice-gate.py    (ratchet, ruling 2026-08-05)
 #   5  entry paint / one invitation  one-thing-gate.py       (ratchet, locked 06-27 + 07-12)
+#   6  retired lines (founder bans)  retired-lines-gate.py   (flat, zero tolerance, 2026-08-08)
 #
 # Ticks 3-5 added 2026-08-07. Until then the belt carried two ticks and none of the
 # four things the founder had actually ruled on: the image floor, the voice, the entry
 # grammar. Each had a working gate sitting in the hub that nothing ever called.
+#
+# Tick 6 added 2026-08-08 for the same reason ticks 3-5 were: a founder ruling (CYL's
+# spine line, objected 2026-07-18) sat in TSP_Ledger.md with no gate checking for it,
+# and the line it killed kept shipping live for three weeks because nothing looked.
 #
 # WHY 3-5 RATCHET AND 1-2 DO NOT: measured before arming — voice HALTed 101 of 131
 # surfaces, entry-paint 31 of 38 builds (Tableau Sweep #2, 2026-08-03). A tick that
@@ -123,6 +129,24 @@ else
     echo "  pass  every entry clears the ratchet"
   else
     echo "  HALT  an entry regressed:"; grep -E '^\s+\[X\]|SHIP-BLOCK' /tmp/ot.out | sed 's/^/        /' | head -10; fail=1
+  fi
+fi
+
+# TICK 6 — retired lines (added 2026-08-08). Zero tolerance, no ratchet: a founder
+# objection that only lives in a ledger entry is a wish, not a rule. Checks every
+# live surface's RENDERED text (a player must never see a retired line again) and
+# every *.html/*.md SOURCE line for regeneration risk (a stale spec could put one
+# back), with a citation carve-out so the historical record in TSP_Ledger.md etc.
+# stays legible. Add an objection: append one entry to retired-lines.json.
+echo; echo "-- tick 6: retired lines (founder objections with teeth) --"
+if [ ! -f "$BELT_DIR/retired-lines-gate.py" ]; then echo "  (gate not mounted — skipped)"
+elif [ -n "$SURFACES" ] && ! python3 -c "import playwright" >/dev/null 2>&1; then
+  echo "  SKIPPED LOUD — playwright absent, the render pass is BLIND. Not a pass."
+else
+  if python3 "$BELT_DIR/retired-lines-gate.py" $SURFACES >/tmp/rl.out 2>&1; then
+    echo "  pass  no retired line found live or uncited in source"
+  else
+    echo "  HALT  a retired line resurfaced:"; grep -E '^\s+HALT' /tmp/rl.out | sed 's/^/        /' | head -10; fail=1
   fi
 fi
 
