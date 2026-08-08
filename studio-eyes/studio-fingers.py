@@ -21,6 +21,30 @@ CHECKS (each a HALT, exit 1):
 
 EXIT 0 = every hand lands.  EXIT 1 = HALT, do not ship.
 
+PORTED IN 2026-08-08 from the root studio-fingers.py, which retires. That gate parsed
+SOURCE; this one RENDERS, and every defect the source gate shipped came from guessing at
+geometry instead of measuring it. The engine here wins; what it lacked was bookkeeping.
+
+  F-ZOOM       an input renders under 16px, so iOS zooms the whole viewport on focus
+               and never zooms back                                          [CITED]
+  C-BUTTON     a <button> clears 44px but not the founder's 52px preference   [note]
+               (a NOTE because promoting it to a HALT broke this gate's own GOOD
+                canary on a 48px button - '52px buttons' is a remediation recommendation
+                in PLAYTEST-REPORT.md, not a ruling. Floors block; preferences inform.)
+  C-REACH      the largest control sits outside the bottom 40% thumb arc      [note]
+  C-EDGE       no env(safe-area-inset-*) on a page with fixed bottom chrome   [note]
+
+EVERY NUMBER DECLARES ITS AUTHORITY. This is the one thing the retiring gate got right:
+  [LAW]     WCAG 2.5.5 AAA target 44px; 2.5.8 AA 24px; 1.4.4 resize to 200%
+  [FOUNDER] "44px+ targets, 52px buttons" - PLAYTEST-REPORT.md, carried in three
+            rescued design docs since July. THIS IS CANON AND IT OUTRANKS APPLE.
+  [CITED]   iOS zooms inputs under 16px; comfortable one-thumb reach is the bottom 40%
+  [HOUSE]   nothing. A house number that contradicts a founder ruling is not a floor,
+            it is an invention - see the ledger entry for 2026-08-08 stamp-repair.
+
+A NOTE IS NOT A HALT. C-* findings print and do not block: they are conventional phone
+patterns, not floors, and a gate that blocks on convention is a gate people route around.
+
 Usage:
   python3 studio-fingers.py file1.html [file2.html ...]
   python3 studio-fingers.py --self-test        # canary: proves it discriminates
@@ -28,6 +52,9 @@ Usage:
 import os, sys, tempfile
 
 TAP_FLOOR = 44          # px, WCAG 2.5.5 AAA / founder floor
+BTN_FLOOR = 52          # px, FOUNDER floor for buttons specifically (PLAYTEST-REPORT.md)
+INPUT_FLOOR = 16        # px, CITED - below this iOS zooms the viewport on focus
+REACH_ARC = 0.60        # CITED - comfortable one-thumb arc starts below 60% of the height
 OVERFLOW_TOL = 2        # px slack for sub-pixel rounding
 
 # Runs in the page. Returns a plain dict of findings — no DOM handles escape.
@@ -66,12 +93,29 @@ PROBE = r"""
     el.tagName === 'A' && el.closest('p,li,dd,dt,blockquote,.fc-body,.prose,figcaption,footer,.foot,.credits,.credit,.byline,address,.bio-card,.award-card,.sec-hd');
 
   const sel = 'button,a[href],[role="button"],input:not([type="hidden"]),select,textarea,[onclick],[tabindex]:not([tabindex="-1"])';
+  out.vh = de.clientHeight;
+  out.zoomy = [];   // inputs under the iOS zoom floor
+  out.stubby = [];  // buttons under the founder button floor
+  out.primary = null;
   document.querySelectorAll(sel).forEach(el => {
     const r = vis(el);
     if (!r) return;
     if (inlineLink(el)) return;
     const m = Math.min(r.width, r.height);
     if (m < 44) out.small.push({ tag: el.tagName.toLowerCase(), name: name(el), px: Math.round(m) });
+  });
+
+  document.querySelectorAll('input:not([type="hidden"]),select,textarea').forEach(el => {
+    const r = vis(el); if (!r) return;
+    const fs = parseFloat(getComputedStyle(el).fontSize) || 16;
+    if (fs < 16) out.zoomy.push({ tag: el.tagName.toLowerCase(), name: name(el), fs: Math.round(fs) });
+  });
+  document.querySelectorAll('button,[role="button"]').forEach(el => {
+    const r = vis(el); if (!r) return;
+    const h = Math.round(r.height);
+    if (h >= 44 && h < 52) out.stubby.push({ name: name(el), px: h });
+    const a = r.width * r.height;
+    if (!out.primary || a > out.primary.a) out.primary = { a: a, top: Math.round(r.top), name: name(el) };
   });
 
   // comfort wall: display/comfort controls shown WITHOUT being summoned.
@@ -130,6 +174,10 @@ def audit_page(page, path):
         halts.append(f"F-TAP       <{s['tag']}> \"{s['name']}\" renders {s['px']}px — under the {TAP_FLOOR}px touch floor. "
                      "A thumb can't reliably hit it.")
 
+    for s in d.get('zoomy', []):
+        halts.append(f"F-ZOOM      <{s['tag']}> \"{s['name']}\" renders {s['fs']}px — under the {INPUT_FLOOR}px input floor. "
+                     "iOS zooms the whole viewport on focus and never zooms back. [CITED]")
+
     c = d['comfort']
     if (c['visibleOptions'] >= 2 and not c['hasToggle']) or c.get('wallContainer'):
         detail = (f"{c['visibleOptions']} display-option controls are shown UNASKED"
@@ -138,6 +186,26 @@ def audit_page(page, path):
         halts.append(f"F-WALL      {detail} and no comfort button gates them. "
                      "Comfort is a knob, not a wall — hide the options behind a single comfort button (never shown unasked).")
     return halts
+
+
+def notes_for(path, d):
+    """C-* notes. Conventional phone patterns, NOT floors. These never block."""
+    notes = []
+    p = d.get('primary')
+    for s in d.get('stubby', []):
+        notes.append(f"C-BUTTON    \"{s['name']}\" {s['px']}px — clears {TAP_FLOOR}px LAW, under the {BTN_FLOOR}px founder preference.")
+    if p and d.get('vh') and p['top'] < d['vh'] * REACH_ARC:
+        notes.append(f"C-REACH     the largest control (\"{p['name']}\") sits at {p['top']}px on a "
+                     f"{d['vh']}px screen — above the bottom-40% thumb arc. Top-left is a regrip "
+                     f"on a large phone. [CITED]")
+    try:
+        src = open(path, encoding='utf-8', errors='replace').read()
+    except Exception:
+        src = ''
+    if 'env(safe-area-inset' not in src and ('position:fixed' in src.replace(' ', '') or 'position:sticky' in src.replace(' ', '')):
+        notes.append("C-EDGE      fixed or sticky chrome with no env(safe-area-inset-*). On a notched "
+                     "phone it will sit under the home indicator. [CITED]")
+    return notes
 
 
 def run(files, headed=False):
@@ -178,6 +246,10 @@ def run(files, headed=False):
             except Exception as e:
                 halts = [f"F-ERROR     could not audit ({e})"]
             label = os.path.basename(f)
+            try:
+                notes = notes_for(f, page.evaluate(PROBE))
+            except Exception:
+                notes = []
             if halts:
                 bad += 1
                 print(f"  ✗ {label}")
@@ -185,6 +257,8 @@ def run(files, headed=False):
                     print(f"       {h}")
             else:
                 print(f"  ✓ {label}  — every hand lands")
+            for n in notes:
+                print(f"       {n}")
         browser.close()
     print(f"\n  === {bad} of {len(files)} at HALT ===\n")
     return 1 if bad else 0
