@@ -842,4 +842,225 @@ var vmCurrent = null;
 /* Splash art per cabinet — same hand-cut paper-SVG language as the rest of
    the arcade (rounded shapes, var()-driven fills so it recolors correctly
    across Default/Softer/Warm dark), no in-SVG text at all so there is no
-   font-scale floor to trip. Each is the compound metaphor made vis
+   font-scale floor to trip. Each is the compound metaphor made visible,
+   not decoration bolted on after the fact. */
+/* Cabinet guardians — shadow-puppet silhouettes, not illustration. Bold flat
+   shapes on a fixed dark ground (same always-night palette as the scene0
+   arcade intro), warm figures rigged with one idle motion each, so they read
+   as alive rather than as static icons. This is the honest version of "Lure
+   of the Labyrinth meets Animata" this studio can hand-author in raw SVG:
+   character + atmosphere (Lure) built as an articulated cut-paper puppet
+   (Animata's own shadow-puppet lineage), not painterly illustration — that
+   needs a real image model, which this file doesn't have access to. */
+var VM_ART = {
+  1: { // Funes — the Watcher: cannot close its eyes, cannot forget a leaf
+    label: 'A hooded, seated figure with branching antlers and five small eyes across its robe, all always open, plus one large eye at its chest that slowly blinks.',
+    svg: '<svg viewBox="0 0 680 260" role="img" aria-label="A hooded, seated figure with branching antlers and five small eyes across its robe, all always open, plus one large eye at its chest that slowly blinks." style="width:100%;height:auto;display:block;background:#262019;">' +
+      '<rect x="0" y="0" width="680" height="260" fill="#262019"/>' +
+      '<path d="M340 35 L340 8 M340 20 L310 -2 M340 20 L370 -2 M310 -2 L295 -18 M370 -2 L385 -18" stroke="#d4744e" stroke-width="5" stroke-linecap="round" fill="none" transform="translate(0,26)"/>' +
+      '<ellipse cx="340" cy="150" rx="112" ry="98" fill="#cfa96e"/>' +
+      '<ellipse cx="270" cy="215" rx="46" ry="34" fill="#cfa96e"/>' +
+      '<ellipse cx="410" cy="215" rx="46" ry="34" fill="#cfa96e"/>' +
+      '<circle cx="340" cy="80" r="40" fill="#cfa96e"/>' +
+      '<g fill="#f5c97b" stroke="#262019" stroke-width="2">' +
+      '<ellipse cx="270" cy="130" rx="9" ry="6"/><ellipse cx="405" cy="125" rx="9" ry="6"/>' +
+      '<ellipse cx="295" cy="190" rx="9" ry="6"/><ellipse cx="390" cy="195" rx="9" ry="6"/>' +
+      '<ellipse cx="340" cy="205" rx="9" ry="6"/>' +
+      '</g>' +
+      '<ellipse cx="340" cy="150" rx="24" ry="17" fill="#f5c97b" stroke="#f0dcb8" stroke-width="2"/>' +
+      '<g class="vmBlink" style="transform-box:fill-box; transform-origin:center;"><circle cx="340" cy="150" r="8" fill="#262019"/></g>' +
+      '</svg>' },
+  2: { // The Aleph — hooded figure, cloak open on a point that holds every point
+    label: 'A hooded figure with its cloak held open, revealing rings of light converging on a single bright point at its chest, which slowly pulses.',
+    svg: '<svg viewBox="0 0 680 260" role="img" aria-label="A hooded figure with its cloak held open, revealing rings of light converging on a single bright point at its chest, which slowly pulses." style="width:100%;height:auto;display:block;background:#262019;">' +
+      '<rect x="0" y="0" width="680" height="260" fill="#262019"/>' +
+      '<path d="M340 95 C 260 110, 210 160, 225 230 L 300 210 C 295 165, 310 125, 340 95 Z" fill="#7d9ab0"/>' +
+      '<path d="M340 95 C 420 110, 470 160, 455 230 L 380 210 C 385 165, 370 125, 340 95 Z" fill="#7d9ab0"/>' +
+      '<circle cx="340" cy="75" r="38" fill="#7d9ab0"/>' +
+      '<ellipse cx="340" cy="160" rx="58" ry="66" fill="#1c1a16"/>' +
+      '<circle cx="340" cy="160" r="42" fill="none" stroke="#7d9ab0" stroke-width="2"/>' +
+      '<circle cx="340" cy="160" r="28" fill="none" stroke="#7d9ab0" stroke-width="2"/>' +
+      '<circle cx="340" cy="160" r="15" fill="none" stroke="#d4744e" stroke-width="2"/>' +
+      '<g class="vmPulse" style="transform-box:fill-box; transform-origin:center;"><circle cx="340" cy="160" r="8" fill="#f5c97b"/></g>' +
+      '</svg>' },
+  3: { // Garden of Forking Paths — a marionette whose limbs fork into paths
+    label: 'A marionette on strings from a control bar overhead, its arms and legs each forking in two directions, arms swaying gently.',
+    svg: '<svg viewBox="0 0 680 260" role="img" aria-label="A marionette on strings from a control bar overhead, its arms and legs each forking in two directions, arms swaying gently." style="width:100%;height:auto;display:block;background:#262019;">' +
+      '<rect x="0" y="0" width="680" height="260" fill="#262019"/>' +
+      '<rect x="290" y="14" width="100" height="10" rx="5" fill="#f0dcb8"/>' +
+      '<line x1="305" y1="24" x2="322" y2="90" stroke="#f0dcb8" stroke-width="1.5"/>' +
+      '<line x1="375" y1="24" x2="358" y2="90" stroke="#f0dcb8" stroke-width="1.5"/>' +
+      '<line x1="340" y1="24" x2="340" y2="70" stroke="#f0dcb8" stroke-width="1.5"/>' +
+      '<circle cx="340" cy="90" r="32" fill="#cfa96e"/>' +
+      '<rect x="305" y="118" width="70" height="90" rx="18" fill="#cfa96e"/>' +
+      '<g class="vmSwayL" style="transform-origin:295px 140px;">' +
+      '<path d="M295 140 L225 168 M225 168 L175 150 M225 168 L185 205" stroke="#d4744e" stroke-width="7" stroke-linecap="round" fill="none"/>' +
+      '<rect x="163" y="140" width="24" height="24" rx="5" fill="#f5c97b"/><rect x="173" y="195" width="24" height="24" rx="5" fill="#f5c97b"/>' +
+      '</g>' +
+      '<g class="vmSwayR" style="transform-origin:385px 140px;">' +
+      '<path d="M385 140 L455 168 M455 168 L505 150 M455 168 L495 205" stroke="#7d9ab0" stroke-width="7" stroke-linecap="round" fill="none"/>' +
+      '<rect x="493" y="140" width="24" height="24" rx="5" fill="#f5c97b"/><rect x="483" y="195" width="24" height="24" rx="5" fill="#f5c97b"/>' +
+      '</g>' +
+      '<path d="M320 208 L280 236 M280 236 L245 222 M280 236 L255 260" stroke="#d4744e" stroke-width="6" stroke-linecap="round" fill="none"/>' +
+      '<path d="M360 208 L400 236 M400 236 L435 222 M400 236 L445 260" stroke="#7d9ab0" stroke-width="6" stroke-linecap="round" fill="none"/>' +
+      '</svg>' },
+  4: { // Library of Babel — a golem built of stacked, identical books
+    label: 'A humanoid figure built from stacked identical books, with a small door at its chest, breathing slowly.',
+    svg: '<svg viewBox="0 0 680 260" role="img" aria-label="A humanoid figure built from stacked identical books, with a small door at its chest, breathing slowly." style="width:100%;height:auto;display:block;background:#262019;">' +
+      '<rect x="0" y="0" width="680" height="260" fill="#262019"/>' +
+      '<circle cx="340" cy="70" r="36" fill="#cfa96e"/>' +
+      '<line x1="322" y1="58" x2="322" y2="82" stroke="#262019" stroke-width="2"/><line x1="340" y1="54" x2="340" y2="86" stroke="#262019" stroke-width="2"/><line x1="358" y1="58" x2="358" y2="82" stroke="#262019" stroke-width="2"/>' +
+      vmBabelRow(240, 112, 200, 30, 8) +
+      '<g class="vmBreathe" style="transform-box:fill-box; transform-origin:center;">' +
+      vmBabelRow(250, 148, 180, 32, 7) +
+      vmBabelRow(250, 184, 180, 32, 7) +
+      '<ellipse cx="340" cy="180" rx="16" ry="20" fill="#1c1a16" stroke="#f0dcb8" stroke-width="2"/>' +
+      '</g>' +
+      vmBabelRow(255, 222, 60, 34, 3) +
+      vmBabelRow(365, 222, 60, 34, 3) +
+      '</svg>' }
+};
+
+function vmBabelRow(x0, y, totalW, h, n){
+  var colors = ['#f5c97b','#d4744e','#7d9ab0','#cfa96e'];
+  var out = '', x = x0, gap = 3;
+  var w = (totalW - gap * (n - 1)) / n;
+  for(var i=0;i<n;i++){
+    out += '<rect x="' + x.toFixed(1) + '" y="' + y + '" width="' + w.toFixed(1) + '" height="' + h +
+      '" rx="3" fill="' + colors[i % colors.length] + '" stroke="#262019" stroke-width="2"/>';
+    x += w + gap;
+  }
+  return out;
+}
+
+function vmOpen(id){
+  vmCurrent = id;
+  var w = WORKSHOPS[id];
+  document.getElementById('vmTitle').textContent = w.title;
+  var art = VM_ART[id];
+  document.getElementById('vmArt').innerHTML =
+    '<div class="balloonwrap">' + art.svg + '</div>';
+  document.getElementById('vmIntro').textContent = w.intro;
+  var sel = document.getElementById('vmGroup');
+  sel.innerHTML = '';
+  w.groups.forEach(function(g){
+    var opt = document.createElement('option');
+    opt.value = g.name; opt.textContent = g.name;
+    sel.appendChild(opt);
+  });
+  document.getElementById('vmFeed').hidden = true;
+  document.getElementById('vmForm').reset();
+  vmLoadBoard(id);
+}
+
+function vmLoadBoard(id){
+  var box = document.getElementById('vmBoard');
+  box.innerHTML = '<p style="font-size:1.125rem;">Loading the board…</p>';
+  fetch(SB_URL + '/rest/v1/workshop_board?workshop=eq.' + id + '&order=rank_in_workshop.asc', {
+    headers: { apikey: SB_ANON, Authorization: 'Bearer ' + SB_ANON }
+  }).then(function(r){ return r.json(); }).then(function(rows){
+    if(!rows || !rows.length){
+      box.innerHTML = '<p style="font-size:1.125rem;">Nobody has fed this machine yet. Be first.</p>';
+      return;
+    }
+    var html = '';
+    rows.forEach(function(row, i){
+      var badge = (i < 3 && row.on_time) ? ' <span class="tag">Early #' + (i+1) + '</span>' : '';
+      var when = row.on_time ? 'On time' : 'Late';
+      var whenColor = row.on_time ? 'var(--slate)' : 'var(--rust)';
+      html += '<div class="cab" style="padding:10px 14px;">' +
+        '<span class="name" style="font-size:1.125rem;">' + vmEscape(row.student_first) + ' ' + vmEscape(row.student_last_initial) + '.' + '</span>' +
+        ' <span class="tag" style="font-weight:700; border-color:' + whenColor + ';">' + when + '</span>' +
+        ' <span class="tag">' + vmEscape(row.group_or_batch) + '</span>' + badge +
+        '</div>';
+    });
+    box.innerHTML = html;
+  }).catch(function(){
+    box.innerHTML = '<p style="font-size:1.125rem;">Could not reach the board right now. Your submission still went through if you saw a coin.</p>';
+  });
+}
+
+function vmEscape(s){
+  var d = document.createElement('div'); d.textContent = s == null ? '' : s;
+  return d.innerHTML;
+}
+
+document.querySelectorAll('.cab[data-vm]').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var id = parseInt(this.getAttribute('data-vm'), 10);
+    vmOpen(id);
+    show('vending');
+  });
+});
+document.getElementById('vmBack').addEventListener('click', function(){ show('hub'); });
+
+document.getElementById('vmForm').addEventListener('submit', function(ev){
+  ev.preventDefault();
+  var w = WORKSHOPS[vmCurrent];
+  var groupName = document.getElementById('vmGroup').value;
+  var group = w.groups.filter(function(g){ return g.name === groupName; })[0];
+  var certified = document.getElementById('vmCertify').checked;
+  var text = document.getElementById('vmText').value.trim();
+  var feed = document.getElementById('vmFeed');
+  feed.hidden = false;
+
+  if(!certified){
+    feed.textContent = 'Check the certification box. The machine only takes your own words.';
+    say(feed.textContent);
+    return;
+  }
+  if(!text){
+    feed.textContent = 'Paste the full text of your piece, even if you also pasted a link.';
+    say(feed.textContent);
+    return;
+  }
+
+  var onTime = group ? (new Date() <= new Date(group.deadline)) : true;
+  var payload = {
+    workshop: vmCurrent,
+    genre: w.genre,
+    group_or_batch: groupName,
+    student_first: document.getElementById('vmFirst').value.trim(),
+    student_last_initial: document.getElementById('vmLast').value.trim().slice(0,1).toUpperCase(),
+    student_email: document.getElementById('vmEmail').value.trim(),
+    doc_link: document.getElementById('vmLink').value.trim() || null,
+    full_text: text,
+    certified_original: true,
+    certified_at: new Date().toISOString(),
+    on_time: onTime
+  };
+
+  var btn = document.getElementById('vmSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Feeding the machine…';
+
+  fetch(SB_URL + '/rest/v1/workshop_tokens', {
+    method: 'POST',
+    headers: {
+      apikey: SB_ANON,
+      Authorization: 'Bearer ' + SB_ANON,
+      'Content-Type': 'application/json',
+      Prefer: 'return=minimal'
+    },
+    body: JSON.stringify(payload)
+  }).then(function(r){
+    if(!r.ok){ throw new Error('insert failed'); }
+    setCoins(coins + 1, w.title + ' token fed (' + groupName + (onTime ? ', on time)' : ', late)'));
+    ding();
+    feed.textContent = 'Token accepted. One coin minted. ' + (onTime ? 'You are on time.' : 'Marked late. Still counted, still yours.');
+    say(feed.textContent);
+    document.getElementById('vmForm').reset();
+    vmLoadBoard(vmCurrent);
+  }).catch(function(){
+    feed.textContent = 'The machine could not reach the server. Nothing was lost. Copy your text somewhere safe and try again in a moment.';
+    say(feed.textContent);
+  }).finally(function(){
+    btn.disabled = false;
+    btn.textContent = 'Feed the machine';
+  });
+});
+
+})();
+</script>
+</body>
+</html>
