@@ -63,14 +63,20 @@ harvesting anything that matters into a repo doc BEFORE the chat closes, and a K
 ledger line for whatever landed only on the shelf. Skipping the sweep is allowed
 when cost or connectors dictate — but say so out loud; blind is not clean.
 
-## Panels — the Union Rep is seated (2026-08-08)
+## Panels — the Union Rep is seated, with advocacy weight (2026-08-08, raised same day)
 Any studio work that convenes a panel follows the OS's "Panelist Union Rep" block
-(§5): at seating, every seat names its real method AND its planned scrub-in — the
-specific place its discipline will cut this session; at close, seats that never
-scrubbed in draw a logged grievance (`GRIEVANCE: <seat> seated, never scrubbed in`
-in the KD!/ledger entry). Three grievances, no contributions → governance-attic
-candidate. Seats are lenses, not authorities; naming without consulting is the
-stick-figure failure and it's now a counted defect.
+(§5), four duties: **caucus** first (consult the OS benches, patterns, ledger, the
+wings — prop room, elves, eyes/fingers, tendrils — and the grievance record before
+proposing a bench); **advocate with agency** (the Rep proposes the bench and argues
+for underused talent and standing assets the work should mount instead of
+reinvent — accountably: Rep-seated seats are recorded); **roll call** at seating
+(every seat names its real method AND its planned scrub-in); **grievances** at
+close (`GRIEVANCE: <seat> seated, never scrubbed in` in the KD!/ledger entry;
+three grievances, no contributions → governance-attic candidate). A designated
+agent form exists (`.claude/agents/union-rep.md`) for heavy seating decisions,
+wings-and-talent audits, or grievance reviews — inline by default, one agent
+never a fleet, cost discipline binds it. Seats are lenses, not authorities; the
+Rep included.
 Faculty email addresses, **published** student work, and the Confluence pages are
 fine to share publicly. These are **not** privacy/PII concerns here. Do not flag
 them, do not ask about them, do not hedge on them. The founder decides what gets
