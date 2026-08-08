@@ -240,4 +240,31 @@ The dead motion toggle and the missing memory are the two that actually cost the
 founder something every day. Both are small. This buys most of the daily relief for
 a fraction of the work and leaves the type question open.
 
-**3. More advanced — kernel v3 as a single shared file the s
+**3. More advanced — kernel v3 as a single shared file the surfaces link.**
+
+The single-file offline floor currently forces the kernel to be copy-pasted into
+every surface, which is why nine files carry a bug fixed elsewhere and why 87 of 101
+have the zoom version and 14 do not. A v3 that is one file, referenced, would make
+"fix once" true. It is a real change to the offline floor and a founder call, not a
+cleanup, so it is listed here rather than recommended.
+
+**What to ignore for now:** the contrast palette and the tap-target sizing. Both were
+measured and both are clean. Do not spend a pass on them.
+
+---
+
+## OPEN, NEEDS A FOUNDER CALL
+
+- **The 20px line in `studio-type-contrast-standard.md` v1.0.** Measured reality is
+  14.4 to 19px body, 10 to 13px chrome. Either the number moves to something the
+  studio will actually hold, or the corpus moves to the number. Recommendation: keep
+  18px as the enforced absolute for every rendered node, drop the separate 20px body
+  line, and let the reader's own browser setting supply the base. That is a floor
+  that can be checked, which is the only kind that is real.
+- **Comfort control: bottom corner (thumb arc, v1) vs top chrome (reserved, v2).**
+  Recommendation: bottom corner, chrome stays top.
+- Whether kernel v3 becomes a linked shared file (Recommendation 3).
+
+---
+
+Measured 2026-08-08. Nothing in this review is an opinion about how it looks.
