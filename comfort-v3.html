@@ -167,4 +167,167 @@ body{
 }
 
 /* ═══ CHROME — top, reserved, never overlaps. No comfort control in it. ═══
-   v2 put the comfort control up here to fix a re
+   v2 put the comfort control up here to fix a real overlap bug, and silently
+   took a reach regression: Studio Fingers measures the one-hand thumb arc as
+   the bottom 40% of the screen, and v2 parked the most-used control at 3.9%.
+   The two goals were never in conflict. Chrome stays top. Comfort goes to the
+   thumb. */
+.chrome{
+  display:grid; grid-template-columns:auto 1fr; align-items:center; gap:12px;
+  padding:9px 16px; background:var(--surface); border-bottom:2px solid var(--ink);
+  position:sticky; top:0; z-index:60;
+}
+.home{
+  display:inline-flex; align-items:center; min-height:var(--tap); padding:10px 16px;
+  border:2px solid var(--line); border-radius:9px; background:var(--surface-2);
+  color:var(--ink); font-family:var(--sans); font-weight:700; font-size:1.125rem;
+  text-decoration:none;
+}
+.brand{ display:inline-flex; align-items:center; gap:10px; color:var(--ink); min-width:0; }
+.brand svg{ width:36px; height:22px; color:var(--accent-strong); flex:0 0 auto; }
+.brand .wm{ font-family:var(--serif); font-size:1.125rem; white-space:nowrap;
+  overflow:hidden; text-overflow:ellipsis; }
+@media (max-width:430px){ .brand .wm{ display:none; } }
+
+/* ═══ THE COMFORT DOCK — bottom corner, inside the thumb arc ═══════════════ */
+.dock{
+  position:fixed; right:max(14px, env(safe-area-inset-right));
+  bottom:max(14px, env(safe-area-inset-bottom)); z-index:70;
+}
+.dock-btn{
+  display:inline-flex; align-items:center; gap:9px;
+  min-height:56px; min-width:56px; padding:12px 20px;
+  border:2px solid var(--ink); border-radius:28px;
+  background:var(--accent-strong); color:var(--on-accent);
+  font-family:var(--sans); font-weight:700; font-size:1.125rem;
+  cursor:pointer; box-shadow:0 3px 14px rgba(0,0,0,.3);
+}
+/* Named .dock-glyph, not ".dock-btn svg". It is aria-hidden paint with no
+   independent hit area; the target is the 56px button around it. Naming a
+   decorative glyph inside a control selector makes it read as a control to any
+   source-level check, which is the same false positive studio-fingers.py
+   already fixed once for pseudo-elements ("a pseudo-element is paint, not a
+   target"). See claude/ALEPH-COMFORT-V3-2026-08-08.md for the proposed gate fix. */
+.dock-glyph{ width:24px; height:24px; flex:0 0 auto; }
+
+/* Panel opens UPWARD from the dock, and is positioned from a MEASURED height,
+   never a hardcoded constant. v2 pinned it at calc(var(--tap) + 14px) — a 62px
+   guess at the chrome — which is why it slid 9.6px under the header once zoom
+   changed the chrome's real height. */
+.panel{
+  position:fixed; z-index:71;
+  right:max(14px, env(safe-area-inset-right));
+  bottom:calc(max(14px, env(safe-area-inset-bottom)) + var(--dock-h));
+  width:min(340px, calc(100vw - 28px));
+  max-height:calc(100vh - var(--chrome-h) - var(--dock-h) - 32px);
+  overflow-y:auto;
+  background:var(--surface); color:var(--ink);
+  border:2px solid var(--accent-strong); border-radius:var(--r);
+  padding:16px; box-shadow:0 10px 34px rgba(0,0,0,.34);
+  display:none;
+}
+.panel[data-open="1"]{ display:block; }
+.panel h2{
+  font-family:var(--sans); font-size:1.125rem; font-weight:700;
+  color:var(--ink-2); margin:0 0 9px; letter-spacing:.01em;
+}
+.panel h2 + .row, .panel h2 + .tog{ margin-top:0; }
+.panel .grp + .grp{ margin-top:18px; border-top:2px solid var(--line); padding-top:16px; }
+.row{ display:flex; gap:7px; }
+.btn{
+  flex:1; min-height:var(--tap); padding:11px 6px;
+  border:2px solid var(--line); border-radius:9px;
+  background:var(--surface-2); color:var(--ink);
+  font-family:var(--sans); font-weight:700; font-size:1.125rem; cursor:pointer;
+}
+.btn[aria-pressed="true"]{ background:var(--accent-strong); color:var(--on-accent); border-color:var(--ink); }
+.tog{
+  display:flex; width:100%; align-items:center; justify-content:space-between; gap:12px;
+  min-height:var(--tap); padding:11px 14px; margin-top:8px;
+  border:2px solid var(--line); border-radius:9px;
+  background:var(--surface-2); color:var(--ink);
+  font-family:var(--sans); font-weight:600; font-size:1.125rem;
+  cursor:pointer; text-align:left;
+}
+.tog[aria-pressed="true"]{ border-color:var(--ink); }
+.tog .st{ font-family:var(--sans); font-size:1.125rem; font-weight:700; color:var(--ink-2); flex:0 0 auto; }
+.tog[aria-pressed="true"] .st{ color:var(--accent-strong); }
+.note{ font-size:1.125rem; color:var(--ink-2); margin:9px 0 0; line-height:1.5; }
+
+:where(a,button,summary,[tabindex]):focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+.sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+
+/* ═══ CONTENT ═════════════════════════════════════════════════════════════ */
+.wrap{ max-width:42rem; margin:0 auto; padding:26px 20px calc(var(--dock-h) + 40px); }
+.eyebrow{ font-family:var(--sans); font-size:1.125rem; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--eyebrow); margin:0 0 .3rem; }
+h1{ font-size:2rem; line-height:1.15; margin:.2rem 0 .7rem; font-weight:400; }
+h1 em{ color:var(--accent-strong); font-style:italic; }
+h2.sec{ font-size:1.375rem; margin:1.8rem 0 .5rem; font-weight:700; }
+p{ font-size:1.125rem; margin:0 0 1.05rem; }
+li{ font-size:1.125rem; margin:0 0 .5rem; }
+a{ color:var(--accent-strong); }
+/* 1em, not 1rem. Inside 1.125rem prose that resolves to 18px exactly, so an
+   inline code span cannot silently duck under the floor the way a rem-anchored
+   value does. Measured: 3 nodes at 16px before this change, 0 after. */
+code{ font-family:var(--mono); font-size:1em; background:var(--surface-2);
+  padding:1px 5px; border-radius:4px; }
+
+/* ═══ CLEAR READER ════════════════════════════════════════════════════════
+   Restored. Removed from 49 pages by the v2 migration (commit bc423ed,
+   "legacy comfort controls removed") with no founder ruling recorded, and
+   named by the founder on 2026-08-08 as part of what comfort means.
+
+   Its whole claim, from the original spec still live in comfort-control.html:
+   strip everything that is not meaning, and what survives is what a screen
+   reader actually gets. If a page is unplayable in Clear Reader, it is
+   unplayable with a screen reader. That turns an untestable assertion into a
+   visible, gateable one, which is why it is worth more than a checkbox.
+
+   all:revert beats specificity without !important warfare. Lifted from the
+   original rather than rewritten — it was correct. */
+html.c-reader body{
+  background:#ffffff !important; color:#000000 !important;
+  font-family:var(--sans) !important; font-size:1.1875rem !important;
+  line-height:1.65 !important; max-width:38em !important;
+  margin:0 auto !important; padding:20px 20px 96px !important;
+}
+html.c-reader body *:not(.dock):not(.dock *):not(.panel):not(.panel *):not(.cr-note):not(.cr-note *){
+  all:revert;
+  font-family:inherit !important; color:#000000 !important; background:#ffffff !important;
+  border-color:#595959 !important; box-shadow:none !important; text-shadow:none !important;
+  animation:none !important; transition:none !important;
+  max-width:100% !important; float:none !important; position:static !important;
+}
+/* Decoration is not meaning. If it carries no information, it goes. */
+html.c-reader body svg:not([role="img"]),
+html.c-reader body canvas, html.c-reader body video,
+html.c-reader body .decor,
+html.c-reader body [aria-hidden="true"]{ display:none !important; }
+/* Structure must be VISIBLE. That is the entire point of this stop. */
+html.c-reader body h1{ font-size:1.875rem !important; margin:26px 0 10px !important;
+  border-bottom:3px solid #000 !important; padding-bottom:5px !important; }
+html.c-reader body h2{ font-size:1.5rem !important; margin:24px 0 8px !important;
+  border-bottom:1px solid #595959 !important; padding-bottom:3px !important; }
+html.c-reader body h3{ font-size:1.25rem !important; margin:20px 0 6px !important; }
+html.c-reader body p, html.c-reader body li{ font-size:1.1875rem !important; margin:0 0 13px !important; }
+html.c-reader body ul, html.c-reader body ol{ padding-left:26px !important; margin:0 0 16px !important; }
+html.c-reader body li{ list-style:disc !important; }
+html.c-reader body ol li{ list-style:decimal !important; }
+html.c-reader body a{ color:#0000ee !important; text-decoration:underline !important; }
+/* The dock must survive its own stop, or the reader cannot get back out. */
+html.c-reader .dock-btn{ background:#000000 !important; color:#ffffff !important;
+  border-color:#000000 !important; }
+.cr-note{ display:none; }
+html.c-reader .cr-note{
+  display:block; border:2px solid #000; padding:12px 14px; margin:0 0 20px;
+  font-size:1.125rem; background:#ffffff; color:#000000;
+}
+</style>
+</head>
+<body>
+
+<header class="chrome">
+  <a class="home" href="index.html">Home</a>
+  <span class="brand">
+    <svg vie
