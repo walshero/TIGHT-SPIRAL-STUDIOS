@@ -56,6 +56,34 @@ def compiled(retired):
 CONTEXT_WINDOW = 2  # lines of wrap-tolerance either side of a match
 
 
+def _skip(rid, path, retired, phase):
+    """Scope for a retired entry. Added 2026-08-08 for the vocabulary boundary.
+
+    Two optional keys, both absent by default -- an entry without them stays global and
+    zero-tolerance exactly as before:
+
+      except_paths  list of path fragments where the line is PERMITTED. "Studio Eyes" is
+                    the studio's own name for its reading-comfort instrument: correct on
+                    studio/ surfaces, wrong on a player's screen. Banning it globally would
+                    HALT 41 files where the words belong, and a gate that is red on files
+                    that are RIGHT is the crying-wolf failure this belt already learned
+                    once (see the ratchet note in studio-belt.sh).
+
+      render_only   the entry is checked in the RENDER pass only. For a vocabulary ban the
+                    bug is a reader SEEING the word; a doc that discusses the name is not
+                    the bug. Without this, banning "Studio Eyes" would flag the manifest
+                    and the ledger that record the ban -- the gate eating its own homework.
+    """
+    for r in retired:
+        if r.get("id") != rid:
+            continue
+        if phase == "source" and r.get("render_only"):
+            return True
+        norm = path.replace(os.sep, "/")
+        return any(frag in norm for frag in r.get("except_paths", []))
+    return False
+
+
 def source_scan(root, retired):
     """Every *.html / *.md source line (comments included) for regeneration
     risk. A hit survives only when a nearby line (+/- CONTEXT_WINDOW, to
@@ -76,6 +104,8 @@ def source_scan(root, retired):
         for i, line in enumerate(lines, 1):
             for rid, pat, reason in pats:
                 if not pat.search(line):
+                    continue
+                if _skip(rid, f, retired, "source"):
                     continue
                 lo, hi = max(0, i - 1 - CONTEXT_WINDOW), min(len(lines), i + CONTEXT_WINDOW)
                 context = "\n".join(lines[lo:hi])
@@ -110,6 +140,8 @@ def render_scan(files, retired):
             page.wait_for_timeout(200)
             text = page.evaluate("document.body.innerText || ''")
             for rid, pat, reason in pats:
+                if _skip(rid, f, retired, "render"):
+                    continue
                 if pat.search(text):
                     halts.append((f, rid, reason))
         browser.close()
