@@ -294,3 +294,209 @@ summary:focus-visible{outline:4px solid var(--focus); outline-offset:3px;}
   .coinbar{padding:5px 12px;}
   .cab{padding:11px 12px; margin:8px 0;}
   .cab .name{font-size:1.125rem;}
+  .cabicon{width:34px; height:34px;}
+  .cabrow{gap:10px;}
+  p{margin-bottom:.7rem;}
+}
+
+/* ═══ THE COMFORT DOCK — bottom corner, inside the thumb arc ═══
+   Lifted from comfort-v3.html (v3.1, all seven ticks clean). This also answers
+   the C-REACH note studio-fingers printed on this file: the most-used control
+   now sits in the bottom-40% arc, not at 480px of a 915px screen. */
+.dock{
+  position:fixed; right:max(14px, env(safe-area-inset-right));
+  bottom:max(14px, env(safe-area-inset-bottom)); z-index:70;
+}
+.dock-btn{
+  display:inline-flex; align-items:center; gap:9px;
+  min-height:56px; min-width:56px; padding:12px 20px; margin:0;
+  border:2px solid var(--edge); border-radius:28px;
+  background:var(--accent-strong); color:var(--on-accent);
+  font-family:var(--sans); font-weight:700; font-size:1.125rem;
+  cursor:pointer; box-shadow:0 3px 14px rgba(0,0,0,.3); text-align:center;
+}
+/* Named .dock-glyph, not ".dock-btn svg" — aria-hidden paint with no independent
+   hit area; the target is the 56px button around it. */
+.dock-glyph{ width:24px; height:24px; flex:0 0 auto; }
+
+/* Panel opens UPWARD from the dock, positioned from a MEASURED height, never a
+   hardcoded constant. Scrolls, paints a fade when there is more below. */
+.panel{
+  position:fixed; z-index:71;
+  right:max(14px, env(safe-area-inset-right));
+  bottom:calc(max(14px, env(safe-area-inset-bottom)) + var(--dock-h));
+  width:min(340px, calc(100vw - 28px));
+  max-height:calc(100dvh - var(--chrome-h) - var(--dock-h) - 24px);
+  overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin;
+  background:var(--surface); color:var(--ink);
+  border:2px solid var(--accent-strong); border-radius:var(--r);
+  padding:16px; box-shadow:0 10px 34px rgba(0,0,0,.34);
+  display:none;
+}
+.panel[data-open="1"]{ display:block; }
+.panel[data-more="1"]{
+  -webkit-mask-image:linear-gradient(to bottom, #000 calc(100% - 34px), transparent 100%);
+          mask-image:linear-gradient(to bottom, #000 calc(100% - 34px), transparent 100%);
+}
+.why{ margin-top:8px; }
+.why summary{ min-height:var(--tap); display:flex; align-items:center; cursor:pointer;
+  font-family:var(--sans); font-size:1.125rem; font-weight:600; color:var(--ink-2); }
+.panel h2{
+  font-family:var(--sans); font-size:1.125rem; font-weight:700;
+  color:var(--ink-2); margin:0 0 9px; letter-spacing:.01em;
+}
+.panel h2 + .row, .panel h2 + .tog{ margin-top:0; }
+.panel .grp + .grp{ margin-top:18px; border-top:2px solid var(--line); padding-top:16px; }
+/* wrap + min-width:0 on the children, or the panel scrolls sideways at Largest. */
+.row{ display:flex; gap:7px; flex-wrap:wrap; }
+.btn{
+  flex:1 1 auto; min-width:0; min-height:var(--tap); padding:11px 6px; margin:0;
+  border:2px solid var(--control-edge); border-radius:9px;
+  background:var(--surface-2); color:var(--ink);
+  font-family:var(--sans); font-weight:700; font-size:1.125rem; cursor:pointer;
+  text-align:center;
+}
+.btn[aria-pressed="true"]{ background:var(--accent-strong); color:var(--on-accent); border-color:var(--edge); }
+.tog{
+  display:flex; width:100%; align-items:center; justify-content:space-between; gap:12px;
+  min-height:var(--tap); padding:11px 14px; margin:8px 0 0;
+  border:2px solid var(--control-edge); border-radius:9px;
+  background:var(--surface-2); color:var(--ink);
+  font-family:var(--sans); font-weight:600; font-size:1.125rem;
+  cursor:pointer; text-align:left;
+}
+.tog[aria-pressed="true"]{ border-color:var(--edge); background:var(--surface); }
+.tog .st{ font-family:var(--sans); font-size:1.125rem; font-weight:700; color:var(--ink-2); flex:0 0 auto; }
+.note{ font-size:1.125rem; color:var(--ink-2); margin:9px 0 0; line-height:1.5; font-weight:400; }
+.sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+
+/* ═══ CLEAR READER — the screen-reader option, restored. ═══
+   Strip everything that is not meaning, and what survives is what a screen
+   reader actually gets. TOKEN-DRIVEN so it composes with the light ladder. */
+html.c-reader{ --cr-bg:#ffffff; --cr-ink:#141109; --cr-rule:#595959; --cr-link:#0000ee; }
+html.c-reader[data-light="dusk"]{  --cr-bg:#f6ecd6; --cr-ink:#1b1308; --cr-rule:#6b5a3a; --cr-link:#123a6b; }
+html.c-reader[data-light="night"]{ --cr-bg:#121110; --cr-ink:#f4ecd9; --cr-rule:#6e6552; --cr-link:#9fc4ea; }
+
+html.c-reader body{
+  background:var(--cr-bg) !important; color:var(--cr-ink) !important;
+  font-family:var(--sans) !important; font-size:1.1875rem !important;
+  line-height:1.65 !important; max-width:38em !important;
+  margin:0 auto !important; padding:20px 20px 96px !important;
+}
+
+/* NAMED PROPERTIES, not all:revert. all:revert resets display too, so a page's
+   display:none content, its [hidden] attributes and its visibility:hidden content
+   all become visible the moment the stop turns on — this arcade is built out of
+   hidden .screen sections, which is exactly the leak that must never happen. */
+html.c-reader body *:not(.dock):not(.dock *):not(.panel):not(.panel *):not(.cr-note):not(.cr-note *){
+  color:var(--cr-ink) !important;
+  background:transparent !important;
+  background-image:none !important;
+  border-color:var(--cr-rule) !important;
+  box-shadow:none !important; text-shadow:none !important;
+  animation:none !important; transition:none !important;
+  float:none !important; max-width:100% !important;
+  font-family:inherit !important; letter-spacing:normal !important;
+  text-transform:none !important; opacity:1 !important;
+}
+/* Hidden stays hidden. Belt and braces, because this is the failure that matters. */
+html.c-reader body [hidden]{ display:none !important; }
+html.c-reader body .screen{ display:none !important; }
+html.c-reader body .screen.on{ display:block !important; }
+
+/* Decoration is not meaning. If it carries no information, it goes. */
+html.c-reader body svg:not([role="img"]),
+html.c-reader body canvas, html.c-reader body video,
+html.c-reader body [aria-hidden="true"]{ display:none !important; }
+/* Structure must be VISIBLE. That is the entire point of this stop. */
+html.c-reader body h1{ font-size:1.875rem !important; margin:26px 0 10px !important;
+  border-bottom:3px solid var(--cr-ink) !important; padding-bottom:5px !important; }
+html.c-reader body h2{ font-size:1.5rem !important; margin:24px 0 8px !important;
+  border-bottom:1px solid var(--cr-rule) !important; padding-bottom:3px !important; }
+html.c-reader body p, html.c-reader body li{ font-size:1.1875rem !important; margin:0 0 13px !important; }
+html.c-reader body a{ color:var(--cr-link) !important; text-decoration:underline !important; }
+/* The dock must survive its own stop, or the reader cannot get back out. */
+html.c-reader .dock-btn{ background:var(--cr-ink) !important; color:var(--cr-bg) !important;
+  border-color:var(--cr-ink) !important; }
+.cr-note{ display:none; }
+html.c-reader .cr-note{
+  display:block; border:2px solid #000; padding:12px 14px; margin:0 0 20px;
+  font-size:1.1875rem; background:#ffffff; color:#000000;
+}
+</style>
+</head>
+<body>
+<a class="skiplink" href="#main">Skip to the arcade</a>
+
+<div class="coinbar" id="coinbar" hidden>
+  <span class="coins" id="coinCount" aria-label="Coins: 0"><svg class="barcoin" aria-hidden="true" viewBox="0 0 40 40"><ellipse cx="20" cy="23" rx="15" ry="8" fill="var(--gold)" stroke="var(--edge)" stroke-width="3"/><ellipse cx="20" cy="18" rx="15" ry="8" fill="#ffe1a3" stroke="var(--edge)" stroke-width="3"/></svg><span id="coinNum">0</span></span>
+  <span class="coins tokens" id="tokenCount" hidden aria-label="Tokens: 0"><svg class="barcoin" aria-hidden="true" viewBox="0 0 40 40"><ellipse cx="20" cy="23" rx="13" ry="7" fill="var(--kraft)" stroke="var(--edge)" stroke-width="3"/><ellipse cx="20" cy="18" rx="13" ry="7" fill="#d9c49a" stroke="var(--edge)" stroke-width="3"/></svg><span id="tokenNum">0</span></span>
+  <button id="homeBtn" type="button" aria-label="Home. Back to the arcade floor.">Home</button>
+</div>
+
+<main id="main">
+
+<p class="cr-note">Clear Reader is on. This is the arcade with the design removed:
+  what is left is roughly what a screen reader is handed. If the page stops making
+  sense here, it does not make sense there either.</p>
+
+<div aria-live="polite" class="srlive" id="live"></div>
+
+<!-- ============ SCENE 0 — the noticing beat ============ -->
+<section class="screen on" id="scene0" aria-label="An arcade at night">
+  <svg viewBox="0 0 680 420" role="img" aria-labelledby="s0t s0d" style="width:100%;height:auto;display:block;">
+    <title id="s0t">A paper arcade at night</title>
+    <desc id="s0d">Three cut-paper arcade cabinets glow warmly in a dark room. On the floor in front of them, one coin catches the light.</desc>
+    <rect x="0" y="0" width="680" height="420" fill="#262019"/>
+    <rect x="0" y="330" width="680" height="90" fill="#332a1f"/>
+    <!-- cabinets -->
+    <g>
+      <rect x="70" y="90" width="140" height="250" rx="10" fill="#3f5666" stroke="#f0dcb8" stroke-width="3"/>
+      <rect x="85" y="105" width="110" height="55" rx="6" fill="#f5c97b"/>
+      <rect x="90" y="175" width="100" height="80" rx="6" fill="#262019" stroke="#f0dcb8" stroke-width="2"/>
+    </g>
+    <g>
+      <rect x="270" y="110" width="140" height="230" rx="10" fill="#a34a2a" stroke="#f0dcb8" stroke-width="3"/>
+      <rect x="285" y="125" width="110" height="50" rx="6" fill="#f5c97b"/>
+      <rect x="290" y="190" width="100" height="72" rx="6" fill="#262019" stroke="#f0dcb8" stroke-width="2"/>
+    </g>
+    <g>
+      <rect x="470" y="100" width="140" height="240" rx="10" fill="#b08d57" stroke="#f0dcb8" stroke-width="3"/>
+      <rect x="485" y="115" width="110" height="52" rx="6" fill="#f5c97b"/>
+      <rect x="490" y="182" width="100" height="76" rx="6" fill="#262019" stroke="#f0dcb8" stroke-width="2"/>
+    </g>
+    <!-- the coin -->
+    <ellipse cx="340" cy="382" rx="26" ry="12" fill="#f5c97b" stroke="#6e4700" stroke-width="3"/>
+    <ellipse cx="340" cy="378" rx="26" ry="12" fill="#ffe1a3" stroke="#6e4700" stroke-width="3"/>
+    <path class="glint" d="M320 352 L328 366 M340 346 L340 362 M360 352 L352 366" stroke="#f5c97b" stroke-width="4" stroke-linecap="round" fill="none"/>
+  </svg>
+  <p style="margin-top:14px;">The arcade is dark, but the machines are on. Something is shining on the floor.</p>
+  <button class="big" id="pickUpCoin" type="button">Pick up the coin</button>
+</section>
+
+<!-- ============ HUB ============ -->
+<section class="screen" id="hub" aria-label="The arcade floor">
+  <h1>The EN195 Arcade</h1>
+  <p>Playing what you <strong>know</strong> mints coins. Coins buy free play. Strong reads pay coins; everything else pays a token.</p>
+
+  <button class="cab" data-go="semester" type="button">
+    <span class="cabrow">
+      <svg class="cabicon" aria-hidden="true" viewBox="0 0 40 40"><circle cx="20" cy="14" r="9" fill="var(--gold)" stroke="var(--edge)" stroke-width="2.5"/><path d="M4 30 Q12 24 20 30 T36 30" fill="none" stroke="var(--slate)" stroke-width="2.5" stroke-linecap="round"/></svg>
+      <span class="cabtext">
+        <span class="name">The Semester Machine</span>
+        <span>The playable syllabus. Five rounds, coins for the reads that land.</span><br>
+        <span class="cost">Mints coins. Always free.</span>
+      </span>
+    </span>
+  </button>
+
+  <button class="cab" data-go="sandbag" data-cost="1" type="button">
+    <span class="cabrow">
+      <svg class="cabicon" aria-hidden="true" viewBox="0 0 40 40"><ellipse cx="20" cy="16" rx="11" ry="13" fill="var(--rust)" stroke="var(--edge)" stroke-width="2.5"/><rect x="14" y="30" width="12" height="8" rx="2" fill="var(--kraft)" stroke="var(--edge)" stroke-width="2"/><line x1="11" y1="27" x2="15" y2="30" stroke="var(--edge)" stroke-width="1.6"/><line x1="29" y1="27" x2="25" y2="30" stroke="var(--edge)" stroke-width="1.6"/></svg>
+      <span class="cabtext">
+        <span class="name">Sandbag Drop</span>
+        <span>Cut the flab. The balloon rises.</span><br>
+        <span class="cost">Costs 1 coin</span>
+      </span>
+    </span>
+  </button>
