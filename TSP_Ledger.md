@@ -591,3 +591,61 @@ Lane note: two new connector actions landed today for small patches -
 `delete_line_from_repo_file` and `replace_substring_in_repo_file`, both requiring a
 unique match and an expected byte total before they will write, both tested on a
 scratch file before touching canon. A one-line fix no longer costs an 80KB re-upload.
+
+## 2026-08-09 — CYL spine fork: the shelf and the repo disagree about a founder ruling (PENDING — FOUNDER ONLY)
+
+**FOUND — a fourth working lane, invisible to chat-history search.** The founder
+enumerated the project's chat window rather than searching it by topic: three chats
+exist since Aug 3 (Zapier fireground assets 08-06, The Slip / EN195 / date gate
+08-06, timing belt strategy 08-07). None is CYL. The Aug 5-6 CYL modern-period work
+ran in Claude Code / Cowork sessions — a lane `conversation_search` cannot see, and
+the one doing most of the actual building right now.
+
+**THE CONTRADICTION.** Shelf doc `cyl-modern/SPINE-RULING-2026-08-06.md` records a
+founder-selected spine line — **"You judged. Now find out what that judgment was
+standing on."** — option 5 of a five-option slate, CYL-SPINE-02 bound with an
+in-place marker (claimed commit `6130158`), placement spec'd into `cyl-full-bible.md`
+Beat 1.0, plus a modern-period physics ruling (STANDING, route termination,
+confidence retired, 19→31 items). The repo's own 08-08 record says the opposite:
+"NOT YET DECIDED — no replacement thesis line authored" (this ledger, that morning),
+and the v7 drift ruling closes the day with *no thesis line exists for CYL today; if
+one is ever needed, the founder writes it.*
+
+**VERIFIED against the repo this session (2026-08-09):**
+- The line string appears NOWHERE in the tree — zero hits, whole repo.
+- `6130158` is not an object in this repo's git history (`git cat-file` fails).
+- Origin carries only `main` and the current session branch. Nothing stranded here.
+- `cyl-full-bible.md` Beat 1.0 carries no CYL-SPINE-02 marker — only the 08-08
+  correction that removed the retired line.
+
+If the shelf ruling is real, the work never reached this repo. The recovery target
+is off-repo: a git bundle or local clone on the Mac. Nothing recoverable from here.
+
+**THE FORK, enumerated, not collapsed (per FORKING-PATHS-PROTOCOL):**
+- **Path A — real and stranded.** The ruling happened in a Code session; the write
+  lane was denied, `/tmp` evaporated with the container, and the only surviving
+  record is the shelf copy that says so in its own header. The 08-08 sessions wrote
+  "not yet decided" because they had no memory of it.
+- **Path B — artifact.** A Code session drafted the five-option slate and recorded a
+  selection, but the founder selection never actually occurred — or occurred and was
+  superseded by the 08-08 v7 ruling.
+Opposite consequences: under A the founder already chose a line and the studio lost
+it (and the modern-period dossier work is real and stranded); under B the v7
+ruling's open call is correct, the shelf `cyl-modern/` docs are a fossil, and there
+is nothing to recover.
+
+**PENDING — the narrow founder question, only he can answer:** *On or around
+August 6, did you pick a spine line from a slate of five, and was it "You judged.
+Now find out what that judgment was standing on."?*
+- **If yes:** the line stands as a decided founder call (still read through the v7
+  ruling's frame), the modern-period work is stranded, and the recovery errand is a
+  Mac-side search for the git bundle / local clone. Trump/Biden retrieval work may
+  not need redoing.
+- **If no:** mark the shelf `cyl-modern/` docs as fossils so no future session
+  treats them as canon, and the v7 ruling's "no line exists" stands unqualified.
+
+**Guard note:** the candidate line is neither canon nor retired while this is open.
+It does not go into any build, and it does not go into `retired-lines.json`, until
+the founder answers. Either way the 08-08 v7 drift ruling governs the build — this
+fork decides only whether a line exists to recover and whether the modern-period
+sourcing work needs redoing.

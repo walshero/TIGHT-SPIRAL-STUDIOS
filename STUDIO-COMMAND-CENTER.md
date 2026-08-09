@@ -177,6 +177,14 @@ PRIORITY. No parallel subagent fleets without a cost estimate and a go-ahead fir
 
 ## OPEN — FOUNDER ONLY
 
+- **CYL spine fork (2026-08-09): did you pick a line on ~Aug 6?** Shelf doc
+  `cyl-modern/SPINE-RULING-2026-08-06.md` says you selected *"You judged. Now find
+  out what that judgment was standing on."* from a five-option slate; the repo's
+  08-08 record says no line was ever authored, and the line has zero trace in the
+  tree. One-word answer settles it — YES: the line and the modern-period work are
+  real and stranded (recovery target: git bundle / clone on the Mac); NO: the shelf
+  `cyl-modern/` docs are fossils to be marked. Full fork enumerated in
+  `TSP_Ledger.md`, 2026-08-09 entry.
 - **GATE 1 cold plays:** CYL v5 slice · Flok · The Viscosity. Two questions:
   *does it still do its job; did anything surprise me.* Unchanged since 2026-07-13.
 - **Productize the gates: dashboard splash, or message board?** Asked 2026-08-08, not
