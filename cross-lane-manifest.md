@@ -183,6 +183,64 @@ Two checks, cheap, in preference order:
 
 ---
 
+### RULING 2026-08-09 — tick 8 mounted (scope). Read this before the GATES table above.
+
+**The table above is amended a second time.** Tick 8 is real, mounted, and blocking.
+
+| what | file | now | commit |
+|---|---|---|---|
+| **tick 8 mounted** | `studio-belt.sh` 18,641 · `12a7ac24` | `scope-gate.py` runs; header and PREFLIGHT line say **8 ticks** | `17d61f10` |
+| the gate | `scope-gate.py` 16,404 · `83c1d04a` | clause A **flat**, clause B **ratchet**, self-test 14/14 | `6311c044` |
+| ratchet baseline | `scope-baseline.json` 458 · `c544e56f` | **5** dangling citations across 12 governance docs | `cbf791b6` |
+| the ruling it enforces | `claude/FERPA-SCOPE-RULING.md` 6,229 · `5158451d` | SCOPE section: what a sweep may RETRIEVE | `2ed2c106` |
+
+**One gate, two clauses, one question — what does a document reach for.**
+Clause **A** says do not reach past what you were asked for: no wide-corpus retrieval baked
+into an artifact. Clause **B** says do not point at what you cannot touch: no governance doc
+may name a file the trunk cannot reach. Split into two gates they would have *been* two
+gates, and this repo grew two `studio-fingers.py` in one day by splitting a question that
+was really one question.
+
+**Measured before arming, per the 48px lesson.** Clause A is at **zero** across 587 trunk
+files, so it is flat and there is no reason to ever add one. Clause B found **5** real
+dangling citations, so it ratchets. Only the documents that *define* the rule may say the
+forbidden query shape, and that allowlist prints on every run.
+
+**THE FIRST CATCH, AND IT IS THE STANDING INSTRUCTIONS.** The project instructions order
+every session, unprompted, to read three files at `claude/` paths. None of the three
+resolves in the trunk:
+
+```
+claude/forking-paths-protocol.md          -> trunk has FORKING-PATHS-PROTOCOL.md at root
+claude/founder-voice-provenance-manifest.md -> NOT IN THE REPO AT ALL. Shelf only.
+claude/FUNES-LEDGER.md                    -> trunk has FUNES-LEDGER.md at root
+```
+
+Two are wrong paths for files that exist. The third — the D3/D5 founder-voice rules the
+session-open protocol is told to obey — is not in the repo, so **founder voice provenance is
+computable from no lane the trunk can reach.** That needs a founder call, not a patch: the
+fix is either landing the document or correcting the instruction, and only one of those is
+mine to make. Same shape as the FERPA ruling, closed earlier today, three more times.
+
+*(Those three paths and the other baselined names are written inside a fenced block on
+purpose. A fenced block is a quotation, not a citation, and the gate strips it before
+tokenizing — otherwise naming the defect would itself trip the tick.)*
+
+**What tick 8 does NOT cover, printed by the gate on every run rather than implied:** it
+reads **artifacts**. It cannot see a query an agent types at runtime, which is the shape
+that actually caused the incident. That half lives in the standing instructions and has no
+arithmetic behind it yet. Snapshot trees (`rescued/`, `archive/`, `aleph-runs/`) are skipped
+by design — their citations dangle because history moved on.
+
+**Baseline is keyed to the REMOTE name, not the checkout directory.** A spoke with no
+baseline of its own prints `UNMEAS` and does **not** block, because nothing is "new" when
+there is no *was* — the ticks 1/3/4/5 lesson. Clause A halts everywhere regardless.
+
+**It caught itself once.** The tick's own comment spelled the forbidden query shape, and
+preflight halted the belt on the belt. Reworded rather than allowlisted.
+
+---
+
 ## HOW LANES USE THIS
 
 - **Session-open:** load this manifest; it declares every lane's read/write rights.
