@@ -961,16 +961,56 @@ function smAnswer(i){
 }
 
 /* ============ SANDBAG DROP ============ */
-/* flab:true words are sandbags; cargo words teach if cut */
-var SB = [
- {w:"The",f:false},{w:"balloon,",f:false},{w:"which",f:true},{w:"was",f:true},
- {w:"very",f:true},{w:"extremely",f:true},{w:"large",f:false},{w:"in",f:true},
- {w:"size,",f:true},{w:"slowly",f:false},{w:"began",f:true},{w:"to",f:true},
- {w:"start",f:true},{w:"to",f:true},{w:"rise",f:false},{w:"up",f:true},
- {w:"into",f:false},{w:"the",f:false},{w:"air",f:false},{w:"above.",f:true}
+/* v2, founder playtest ruling 2026-08-09: a clear win state, and five passages
+   that rotate. Per the studio text bank policy, the load-bearing prose is the
+   founder's own (Roslindale, The Van Story, the reaper draft); the machine
+   added the padding, clearly separable, and cutting it back out is the game.
+   WIN = every sandbag cut with the cargo intact: the balloon sails clear of
+   the frame and the writer's own sentence is read back. Cut cargo and the
+   balloon holds low until it is pasted back. flab:true words are sandbags. */
+var SB_SET = [
+ { win:'On Rockview Rd in JP, my grandfather, Boston Police, shared a duplex with a mob boss.',
+   words:[
+   {w:"On",f:false},{w:"Rockview",f:false},{w:"Rd",f:false},{w:"in",f:false},{w:"JP,",f:false},
+   {w:"my",f:false},{w:"grandfather,",f:false},{w:"who",f:true},{w:"was",f:true},{w:"basically",f:true},
+   {w:"Boston",f:false},{w:"Police,",f:false},{w:"actually",f:true},{w:"shared",f:false},{w:"a",f:false},
+   {w:"duplex",f:false},{w:"together",f:true},{w:"with",f:false},{w:"a",f:false},{w:"mob",f:false},{w:"boss.",f:false}
+ ]},
+ { win:'I don\'t remember what they stole, just the potten plants broken on the kitchen floor.',
+   words:[
+   {w:"I",f:false},{w:"don't",f:false},{w:"really",f:true},{w:"remember",f:false},{w:"what",f:false},
+   {w:"it",f:true},{w:"was",f:true},{w:"they",f:false},{w:"stole,",f:false},{w:"just",f:false},
+   {w:"the",f:false},{w:"potten",f:false},{w:"plants",f:false},{w:"left",f:true},{w:"broken",f:false},
+   {w:"on",f:false},{w:"the",f:false},{w:"kitchen",f:false},{w:"floor.",f:false}
+ ]},
+ { win:'Taiko drumming rattled the stained glass of the chapel.',
+   words:[
+   {w:"Taiko",f:false},{w:"drumming",f:false},{w:"loudly",f:true},{w:"rattled",f:false},{w:"and",f:true},
+   {w:"shook",f:true},{w:"the",f:false},{w:"stained",f:false},{w:"glass",f:false},{w:"of",f:false},
+   {w:"the",f:false},{w:"old",f:true},{w:"chapel.",f:false}
+ ]},
+ { win:'We called the police, we called the school, and we made our way to the bus station.',
+   words:[
+   {w:"We",f:false},{w:"called",f:false},{w:"the",f:false},{w:"police,",f:false},{w:"we",f:false},
+   {w:"also",f:true},{w:"called",f:false},{w:"the",f:false},{w:"school,",f:false},{w:"and",f:false},
+   {w:"then",f:true},{w:"we",f:false},{w:"quickly",f:true},{w:"made",f:false},{w:"our",f:false},
+   {w:"way",f:false},{w:"over",f:true},{w:"to",f:false},{w:"the",f:false},{w:"bus",f:false},{w:"station.",f:false}
+ ]},
+ { win:'Early morning, early enough to beat the Massachusetts traffic with an extra large milk no sugar.',
+   words:[
+   {w:"Early",f:false},{w:"in",f:true},{w:"the",f:true},{w:"morning,",f:false},{w:"early",f:false},
+   {w:"enough",f:false},{w:"to",f:false},{w:"totally",f:true},{w:"beat",f:false},{w:"the",f:false},
+   {w:"Massachusetts",f:false},{w:"traffic",f:false},{w:"with",f:false},{w:"an",f:false},{w:"extra",f:false},
+   {w:"very",f:true},{w:"large",f:false},{w:"milk",f:false},{w:"no",f:false},{w:"sugar.",f:false}
+ ]}
 ];
+var sbIx = -1;
+var SB = null;
 var sbCut = [];
 function sbStart(){
+  sbIx = (sbIx + 1) % SB_SET.length;
+  SB = SB_SET[sbIx].words;
+  document.getElementById('sbWhich').textContent = 'Passage ' + (sbIx + 1) + ' of ' + SB_SET.length;
   sbCut = SB.map(function(){ return false; });
   var box = document.getElementById('sbWords');
   box.innerHTML = '';
@@ -982,7 +1022,7 @@ function sbStart(){
     box.appendChild(b);
   });
   document.getElementById('sbFeed').hidden = true;
-  sbLift();
+  sbLift(true);
 }
 function sbToggle(i, btn){
   sbCut[i] = !sbCut[i];
@@ -997,19 +1037,31 @@ function sbToggle(i, btn){
   } else {
     feed.hidden = true;
   }
-  sbLift();
+  sbLift(false);
 }
-function sbLift(){
-  var flabTotal = 0, flabCut = 0;
-  SB.forEach(function(item,i){ if(item.f){ flabTotal++; if(sbCut[i]){ flabCut++; } } });
+function sbLift(quiet){
+  var flabTotal = 0, flabCut = 0, cargoCut = 0;
+  SB.forEach(function(item,i){
+    if(item.f){ flabTotal++; if(sbCut[i]){ flabCut++; } }
+    else if(sbCut[i]){ cargoCut++; }
+  });
   var lift = flabCut / flabTotal;
+  var win = (flabCut === flabTotal && cargoCut === 0);
   var bal = document.getElementById('balloon');
-  bal.setAttribute('transform','translate(0,' + (-120*lift) + ')');
-  say(flabCut + ' of ' + flabTotal + ' sandbags cut.');
-  if(flabCut === flabTotal){
-    var feed = document.getElementById('sbFeed');
+  bal.setAttribute('transform','translate(0,' + (win ? -260 : (-120*lift)) + ')');
+  if(!quiet){ say(flabCut + ' of ' + flabTotal + ' sandbags cut.'); }
+  var feed = document.getElementById('sbFeed');
+  if(win){
     feed.hidden = false;
-    feed.innerHTML = '<strong>The balloon clears the frame.</strong> Read what’s left: "The balloon, large, slowly rises into the air." Eleven sandbags gone and the sentence flies. This is the revision gear. Cutting is ascent.';
+    feed.innerHTML = '<strong>Lift-off. You win.</strong> Every sandbag gone and the cargo safe. Read what flies, the writer’s own sentence with nothing extra: “' + SB_SET[sbIx].win + '” Cutting is ascent.';
+    var nb = document.createElement('button'); nb.type='button'; nb.className='big';
+    nb.textContent = 'Next passage';
+    nb.addEventListener('click', function(){ sbStart(); });
+    feed.appendChild(nb);
+    say('Lift-off. You win. The sentence flies: ' + SB_SET[sbIx].win);
+  } else if(flabCut === flabTotal && cargoCut > 0){
+    feed.hidden = false;
+    feed.textContent = 'Every sandbag is gone, but the balloon dropped its cargo on the way up. Tap the dashed words to put back what the sentence leans on.';
   }
 }
 document.getElementById('sbBack').addEventListener('click', function(){ show('hub'); });
