@@ -566,3 +566,28 @@ none of the arcade's hidden screens, and the full coin round-trip.
 
 Still open, unchanged, the founder's call: retention and deletion policy for
 `workshop_tokens` - semester end, a fixed drop date, or on student request.
+
+## 2026-08-09 (later) — FOUNDER RULING from live playtest: Dusk is retired
+
+The founder played the arcade on his phone within the hour of the comfort mount
+landing and ruled, verbatim: *"Lots to like about the arcade this makes me want to
+kill dusk all together and have Day Warm Clear."*
+
+Landed on `en195-arcade.html` the same turn (v5.1): the light ladder is **Day / Warm
+dark**, the Dusk button, its token block, and its Clear Reader tokens are gone, and a
+stored dusk choice from another surface normalizes to day so the control's pressed
+state stays honest. **Clear Reader stays its own toggle**, not a third light stop -
+that is the standing 2026-08-08 ruling (it composes with warm dark instead of trading
+against it), and nothing in the playtest message overrules it. Belt PASS, type-census
+0 under 18px, night+Clear composition verified in a live browser. Pushed in six
+surgical connector commits, each byte-checked, repo sha256 equals local.
+
+Left open by scope, not by neglect: propagating the dusk retirement to
+`comfort-v3.html` (the standard the arcade lifted from) and to comfort-gate's
+day/dusk/night MODES list. The gate still passes this file as-is - its dusk pass just
+measures the day palette now. Next session's first errand.
+
+Lane note: two new connector actions landed today for small patches -
+`delete_line_from_repo_file` and `replace_substring_in_repo_file`, both requiring a
+unique match and an expected byte total before they will write, both tested on a
+scratch file before touching canon. A one-line fix no longer costs an 80KB re-upload.
