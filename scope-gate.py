@@ -368,4 +368,43 @@ def self_test():
 
     print("-- clause B noise filters --")
     body = URLS.sub(" ", CODE.sub(" ", "see https://raw.githubusercontent.com/w/T/main/x.html now"))
-    chk("URL tail not a citation", 
+    chk("URL tail not a citation",        bool(TOKEN.search(body)), False)
+    body2 = URLS.sub(" ", CODE.sub(" ", "read FORKING-PATHS-PROTOCOL.md today"))
+    chk("bare citation still found",      bool(TOKEN.search(body2)), True)
+    body3 = SLOT.sub(" ", "run it with --evidence <file.json> to close a lane")
+    chk("usage placeholder ignored",      bool(TOKEN.search(body3)), False)
+    body4 = SLOT.sub(" ", "see <the note in> resolve-canon.py for why")
+    chk("real name beside a slot kept",   bool(TOKEN.search(body4)), True)
+
+    print("-- governance selection --")
+    chk("root CLAUDE.md is governance",   is_gov("CLAUDE.md"), True)
+    chk("ruling is governance",           is_gov("claude/FERPA-SCOPE-RULING.md"), True)
+    chk("snapshot is skipped",            is_gov("rescued/shelf-2026-07-13/x-CHARTER.md"), False)
+    chk("html is not governance",         is_gov("index.html"), False)
+
+    print()
+    print("SELF-TEST " + ("PASS" if ok else "FAIL"))
+    return 0 if ok else 2
+
+
+if __name__ == "__main__":
+    a = sys.argv[1:]
+    if a and a[0] in ("-h", "--help"):
+        print(__doc__)
+        print("  scope-gate.py [ref]          scan and grade (default origin/main)")
+        print("  scope-gate.py --freeze [ref]  write scope-baseline.json")
+        print("  scope-gate.py --self-test     prove it discriminates")
+        sys.exit(0)
+    if a and a[0] == "--self-test":
+        sys.exit(self_test())
+
+    do_freeze = bool(a) and a[0] == "--freeze"
+    if do_freeze:
+        a = a[1:]
+    ref = a[0] if a else "origin/main"
+
+    res = scan(ref)
+    if res is None:
+        print(f"HALT - cannot read tree at {ref}. Run this from a clone.")
+        sys.exit(2)
+    sys.exit(freeze(res) if do_freeze else report(res, load_baseline()))
