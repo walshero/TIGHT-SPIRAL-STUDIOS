@@ -655,3 +655,31 @@ fresh also rotates. Passage counter shows N of 5.
 Traced live: cargo-hostage state, win at cargo restore, all five passages won in
 sequence, rotation wraps back to passage 1. Belt PASS, census 0 under 18px. Five
 surgical byte-checked connector commits; repo sha256 equals local.
+
+## 2026-08-09 (fifth playtest note) — FOUNDER RULING: 3x graphics, genre districts, feed the beings; Samorost pass banked
+
+Verbatim: *"The graphics should be much larger cs text. Like 3x current. I want to see
+genre related games located near the four current workshops, which players will use a
+week or 15 weeks from entry into this platform. This is for practice and playing so
+workshops should be for real. Feed those animated beings!!!! And more zany art like
+samarost"*
+
+Landed as v6, structure now, new art banked. The hub is four genre districts, each led
+by its guardian banner on the arcade floor - the beings left the vending back room and
+took the floor, idle rigs running, injected from VM_ART so the art lives once. In each
+district the practice cabinet sits above the real workshop, tagged "Practice, any week"
+and "For real"; Sandbag Drop guards Creative Nonfiction, Line Break guards Poetry, and
+the Play and Story districts carry honest "in the shop" slots until their practice
+cabinets exist. Cabinet icons went 40px to 120px (96px narrow), workshop copy trimmed
+to group names, and the server-exception note shrank to two sentences below the
+districts - the ruling was more picture, less prose, and the file obeys both ways.
+
+The Samorost-grade zany pass (guardian environments, secondary beings, richer icons) is
+deliberately NOT tonight's work: new art wants a fresh session, not the tail of this
+one. It is banked with teeth as `claude/HANDOFF-ARCADE-ART-SAMOROST.md` - founder words
+verbatim, art direction, and every floor that binds it.
+
+Traced live: four banners render on the hub with animations running, districts named,
+icons 3x, every cabinet still opens, sandbag and workshop flows intact. Belt PASS,
+census 0 under 18px. Six surgical byte-checked commits plus the handoff; repo sha256
+equals local.
