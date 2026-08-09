@@ -837,13 +837,21 @@ for(var c=0;c<cabs.length;c++){
     var go = this.getAttribute('data-go');
     var cost = parseInt(this.getAttribute('data-cost')||'0',10);
     if(cost > 0){
-      if(coins < cost){
-        say('That cabinet costs ' + cost + ' coin. The Semester Machine always pays. Play it to earn more.');
-        alertLine('That cabinet costs 1 coin. The Semester Machine always pays.');
+      /* THE SUBTRACTION. Founder ruling 2026-08-09: a coin opens the door, or two
+         tokens do - the wooden nickel finally buys something, but a coin stays
+         worth more, so the strong-read lesson survives. Coins spend first. */
+      var tokenCost = cost * 2;
+      if(coins >= cost){
+        setCoins(coins - cost, 'Spent 1 coin: ' + go);
+        say('One coin in. ' + coins + ' left.');
+      } else if(tokens >= tokenCost){
+        setTokens(tokens - tokenCost, 'Spent 2 tokens: ' + go);
+        say('Two tokens in. ' + tokens + ' left.');
+      } else {
+        say('That cabinet costs 1 coin or 2 tokens. The Semester Machine always pays. Play it to earn more.');
+        alertLine('That cabinet costs 1 coin or 2 tokens. The Semester Machine always pays.');
         return;
       }
-      setCoins(coins - cost, 'Spent 1 coin: ' + go);
-      say('One coin in. ' + coins + ' left.');
     }
     if(go==='semester'){ smStart(); }
     if(go==='sandbag'){ sbStart(); }
