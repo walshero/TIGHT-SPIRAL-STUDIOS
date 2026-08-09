@@ -150,3 +150,51 @@ because they will bite you if you re-derive rather than lift:
 ## WRITE-LANE HAZARDS. THESE COST REAL TIME TODAY.
 
 `git push` from a session container returns 403. The Zapier `GitHubCLIAPI` connector is
+the working lane. Three things that bit, all in one session:
+
+1. **Chunks are decoded INDEPENDENTLY.** A byte-offset split that lands mid-character
+   corrupts it. An em dash was cut across a boundary and landed as three replacement
+   characters inside `studio-belt.sh`, a live gate. **Split on LINE boundaries**, and
+   verify the reassembled sha256 locally before sending.
+2. **`expect_total_bytes` is the check that caught it** (16351 against 16345). Always
+   pass it. `success: true` is never proof.
+3. **A chunk can error and leave canon truncated.** It happened once today, leaving a
+   file at 12,471 bytes. Do not assume; call `verify_repo_binary` and compare the hash.
+   `apply_patch_to_repo_file` INSERTS ONLY, it cannot replace or delete, and its param is
+   a JSON string named `patch_json`.
+
+---
+
+## THE ORDER
+
+1. `bash studio-belt.sh en195-arcade.html` and record the baseline output.
+2. Mount comfort v3.1. Keep the puppet stage fixed-dark. Drop `:root{font-size:20px}`.
+3. `bash studio-belt.sh en195-arcade.html` again. It must still PASS, `type-census` must
+   still read 0 under 18px, and the `comfort-gate` DEBT line should now be GONE rather
+   than carried, because the dark path becomes visible to the gate.
+4. Push in line-safe chunks with `expect_total_bytes`. Byte-verify.
+5. Fold the layout preview into canon, delete `en195-arcade-layout-preview.html`, and
+   remove its line from `index.html`.
+6. Ledger it.
+
+## AND DO NOT
+
+Do not build a second runner, a new gate, or a new doc unless something measured demands
+it. The founder's words this session: *"No more stalking and empire building."* There are
+already about thirty rules and seven ticks. If a rule cannot be a check, it is a wish; if
+a check already exists, run it instead of writing another one.
+
+---
+
+Canon at handoff: `5f87478`. Verified this hour:
+
+    comfort-v3.html                    35100  6a753a4ed473f38d
+    type-census.py                      9641  6fe0fab8972f28dd
+    type-baseline.json                  8162  80fb5b804e0c6836
+    studio-belt.sh                     16345  0b5d9b7f9d6d4e88
+    studio-type-contrast-standard.md    8517  d8449e7ada71677b
+    en195-arcade.html                  57341  23e38d76d119b37b
+    en195-arcade-layout-preview.html   62331  09fe5aaada47ea93
+
+The vending machine has been waiting to breathe since 2026-08-05. Give it the five
+controls and get out of its way.
