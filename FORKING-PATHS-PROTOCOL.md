@@ -1,51 +1,42 @@
-# THE FORKING PATHS PROTOCOL — TSP standing rule
+# THE FORKING PATHS PROTOCOL — POINTER, NOT CANON
 
-Ratified by the founder 2026-08-03. Repo-lane copy (canon FILES home).
-Twin lives in Confluence project canon memory as `claude/forking-paths-protocol.md`.
-Read before computing canon in ANY session. If this protocol can't run, say BLIND — loudly.
+**Canon lives at `claude/forking-paths-protocol.md`. Read that file.**
 
-## The sentence that is the rule
-TSP is wired like the GARDEN OF FORKING PATHS: hold ALL PATHS AT ONCE,
-through BABEL (every lane), via the ALEPH (one view of all lanes simultaneously),
-with FUNES (hash-perfect memory of everything seen).
+This path held the protocol text from 2026-08-06 to 2026-08-09: 3430 B, md5
+`a731c5c34d5b65292c3d4309bf403c59`, blob `26db9524`, landed commit `c11ee6a`. Those bytes
+are carried forward verbatim at the canon path above, unedited. Nothing was lost here.
 
-## What each figure means operationally — a check, not a mood
-- BABEL = the full lane list. No lane silently skipped:
-  git repo · Netlify · Google Drive (walshero) · Google Drive (post.massbay) ·
-  Dropbox (ns:6905321) · project shelf · code sessions · chats · cowork ·
-  iOS Notes · OneDrive · founder canon (Matt's word on working vocabulary).
-  A zero-result search in one lane is NOT absence. Unreachable lane -> verdict BLIND, named.
-- ALEPH = one simultaneous view. Canon is never declared from a single lane.
-  The oracle's output is the whole garden: every copy, every lane, every hash, at once.
-  `single_lane` is itself a defect (NO BACKUP), never a proof of canon.
-- FUNES = the ledger of hashes. Canon is the content hash, never the filename or the
-  eyebrow (both lie — proven: a "v43" label on an Aug-2 file). Every new hash seen
-  gets recorded the same session. Funes is NOT omniscient: he remembers only what the
-  Aleph showed him. Ledger rows older than the last Aleph pass are stale by default.
-- FORKING PATHS = forks are data, not errors. When lanes disagree, do not collapse
-  prematurely to newest/biggest/oldest. Enumerate all forks with verdicts:
-  AGREE / DIVERGED / STRANDED / BLIND — then the founder (or the gate) picks the path.
-  Proven necessary 2026-08-03: newest bytes (repo, Aug-2) and canonical bytes
-  (v43, Drive Build Versions) had silently come apart; only the all-paths view saw it.
+## Why this file is a pointer and not a copy
 
-## VOICE runs under the same protocol
-- The founder's own pre-machine words are PRIMARY SOURCE. Machine prose is fallback,
-  HITL-edited by the founder.
-- Founder words are TAGGED to the principle they express (provenance-bound quote -> principle).
-- Authorship is claimed from content + naming signals, never from storage location.
-- Excluded as source text: copyrighted collected material (reference only) and
-  student work (FERPA-quarantined).
-- Voice baseline lane: Dropbox 1998–2021 (machine-writing-free).
-  Anchor: /mwalsh/All I wanna do is crawl.docx (2014).
-- TRUTH (provenance) precedes REPAIR (fixing machine prose "unlike him"). Always.
+The standing instructions order every session, unprompted, to run the Aleph pass **per
+`claude/forking-paths-protocol.md`**. No file existed at that address in any lane the repo
+could reach. Belt tick 8 (`scope-gate.py`, armed 2026-08-09) measured it: the instructions
+named three files at `claude/` paths and none of the three resolved in the trunk.
 
-## Session obligations (the runnable form)
-1. Before editing any named file: run the Aleph pass across all reachable lanes; hash everything found.
-2. Record new hashes in the FUNES ledger the same session they are seen.
-3. Declare every unreachable lane BLIND by name. Silence must never read as agreement.
-4. Nothing survives a chat unless pushed to a real lane, byte-verified, same turn.
-5. When the founder pushes back on a machine-produced fact, the machine is the suspect. Re-derive from source.
-6. ENFORCEMENT GAP (open): extend resolve-canon.py from repo-only to lane-aware —
-   emit AGREE/DIVERGED/STRANDED/BLIND across the Babel list. Until it lands, this
-   protocol runs by hand at session start. A rule that can't be a check is a wish;
-   this file is the spec for the check.
+A rule that points at a file nobody can fetch fails silently and forever. The session reads
+the instruction, finds nothing, proceeds. That is precisely how `claude/FERPA-SCOPE-RULING.md`
+went unread twice in one day by the agent whose enforcement clause names it.
+
+So the canon moved to the address the instruction already used, rather than the instruction
+being bent toward the canon. Founder: *"Make this write lane. I auth."*
+
+## Why a pointer and not a deletion
+
+Other repo documents cite this basename. Deleting it would turn every one of those into a
+dangling citation — trading one defect for several, and tick 8 would say so. A pointer keeps
+those citations resolving and costs a reader one hop.
+
+## Why not two copies
+
+ONE CANON WRITES, OTHERS READ. Two copies of a protocol is the exact failure this protocol
+exists to name, and this file has already been on the wrong side of it once: its own header
+claimed a repo home and a Confluence twin on a day when **neither existed**. Do not restore
+the text here. If you find yourself editing this file, you are editing the wrong one.
+
+## What decided it, from content
+
+The copy at this path still carried obligation 6 as an open enforcement gap. That gap closed
+2026-08-06 when `resolve-canon.py` went lane-aware. The fuller, current text lived only on
+the project shelf — the lane the studio instructions call a cache that lags and is never
+canon. The stale copy was the one at the addressable path, and nothing in the repo could
+see that. Decided from CONTENT, not from newer, larger, or older.
