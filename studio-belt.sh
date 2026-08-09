@@ -297,4 +297,20 @@ elif ! git rev-parse --git-dir >/dev/null 2>&1; then
 else
   if SCOPE_BASELINE="$BELT_DIR/scope-baseline.json" \
      python3 "$BELT_DIR/scope-gate.py" worktree >/tmp/scope.out 2>&1; then
-    echo "  pass  no wide retrieval, no new dangling citati
+    echo "  pass  no wide retrieval, no new dangling citation"
+    grep -E '^   (debt now|BASELINE MISMATCH)' /tmp/scope.out | sed 's/^   /        /'
+  else
+    grep -E '^   (HALT|NEW)|^HALT' /tmp/scope.out | sed 's/^/  /' | head -12
+    fail=1
+  fi
+fi
+
+echo; echo "----------------------------------------------------------------------"
+if [ "$fail" -ne 0 ]; then
+  echo "BELT: HALT — a tick refused. This build does not ship."
+  [ "$MODE" = file ] && echo "       PREFLIGHT caught it before the push. That is the whole point."
+else
+  echo "BELT: PASS — all ticks clear."
+  [ "$MODE" = file ] && echo "       Preflight only. Run the full belt before trusting a corpus-wide claim."
+fi
+exit $fail
