@@ -1020,41 +1020,80 @@ var LBteach = {
  10:"Breaking inside “rainwater” is the same move as “wheel / barrow.” The compound comes apart and each half gets its own weight.",
  15:"Ending on “chickens” closes the poem with a full stop of an image: an end-stopped line. The music rests."
 };
+/* v2, founder playtest ruling 2026-08-09: the game must CREATE what it teaches.
+   The poem is flattened to prose; the player holds seven scissors, Williams's own
+   break count for this poem. A cut spends a scissor and the poem re-forms below,
+   so enjambment is something you watch happen, not something you are told about.
+   Paste is free and returns the scissor, so nothing is ever lost to experiment. */
+var LB_SCISSORS = 7; /* Williams used seven breaks in this poem */
 var lbBreaks = [];
+function lbLeft(){
+  var n = 0;
+  for(var i=0;i<lbBreaks.length;i++){ if(lbBreaks[i]){ n++; } }
+  return LB_SCISSORS - n;
+}
+function lbCounter(){ document.getElementById('lbScissorNum').textContent = lbLeft(); }
+function lbPoemRender(){
+  var box = document.getElementById('lbPoem');
+  var lines = [], cur = [];
+  LB.forEach(function(w, i){
+    cur.push(w);
+    if(lbBreaks[i]){ lines.push(cur.join(' ')); cur = []; }
+  });
+  if(cur.length){ lines.push(cur.join(' ')); }
+  box.innerHTML = '';
+  lines.forEach(function(l){
+    var d = document.createElement('span'); d.className = 'pline';
+    d.textContent = l;
+    box.appendChild(d);
+  });
+}
 function lbStart(){
-  lbBreaks = [];
+  lbBreaks = LB.map(function(){ return false; });
   var box = document.getElementById('lbLine');
   box.innerHTML = '';
   LB.forEach(function(w, i){
     var s = document.createElement('span');
     s.textContent = w;
     box.appendChild(s);
-    if(i < LB.length){
-      var g = document.createElement('button'); g.type='button'; g.className='gap';
-      g.textContent = '/';
-      g.setAttribute('aria-label','Break the line after “' + w + '”');
-      g.setAttribute('aria-pressed','false');
-      (function(ix, btn){
-        btn.addEventListener('click', function(){ lbToggle(ix, btn); });
-      })(i, g);
-      box.appendChild(g);
-    }
+    var g = document.createElement('button'); g.type='button'; g.className='gap';
+    g.textContent = '/';
+    g.setAttribute('aria-label','Cut the line after “' + w + '”');
+    g.setAttribute('aria-pressed','false');
+    (function(ix, btn){
+      btn.addEventListener('click', function(){ lbToggle(ix, btn); });
+    })(i, g);
+    box.appendChild(g);
   });
   document.getElementById('lbFeed').hidden = true;
+  lbCounter(); lbPoemRender();
 }
 function lbToggle(i, btn){
-  var on = btn.getAttribute('aria-pressed') === 'true';
-  btn.setAttribute('aria-pressed', on ? 'false' : 'true');
   var feed = document.getElementById('lbFeed');
   feed.hidden = false;
-  if(on){
-    feed.textContent = 'Break removed after “' + LB[i] + '”. The line runs on. Hear it speed up.';
-  } else if(LBteach[i]){
-    feed.textContent = LBteach[i];
+  if(lbBreaks[i]){
+    /* PASTE — free, and the scissor comes home. */
+    lbBreaks[i] = false;
+    btn.setAttribute('aria-pressed','false');
+    btn.setAttribute('aria-label','Cut the line after “' + LB[i] + '”');
+    feed.textContent = 'Pasted. The line runs on past “' + LB[i] + '” and the scissor is back in your hand. ' + lbLeft() + ' left.';
   } else {
-    var next = LB[i+1] ? LB[i+1] : 'the end';
-    feed.textContent = 'A break after “' + LB[i] + '” puts a breath there and hands the next line’s first weight to “' + next + '”. Valid move. Every break changes the music, and this one slows the reader exactly here.';
+    if(lbLeft() <= 0){
+      feed.textContent = 'No scissors left. Paste a gold cut to take one back.';
+      say(feed.textContent);
+      return;
+    }
+    lbBreaks[i] = true;
+    btn.setAttribute('aria-pressed','true');
+    btn.setAttribute('aria-label','Paste: rejoin the line after “' + LB[i] + '”');
+    if(LBteach[i]){
+      feed.textContent = LBteach[i] + ' ' + lbLeft() + ' scissors left.';
+    } else {
+      var next = LB[i+1] ? LB[i+1] : 'the end';
+      feed.textContent = 'Cut. A breath lands after “' + LB[i] + '” and the next line opens on “' + next + '”. Watch the poem take shape below. ' + lbLeft() + ' scissors left.';
+    }
   }
+  lbCounter(); lbPoemRender();
   say(feed.textContent);
 }
 document.getElementById('lbBack').addEventListener('click', function(){ show('hub'); });
