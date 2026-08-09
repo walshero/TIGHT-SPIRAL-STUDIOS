@@ -139,4 +139,5 @@ agent believes it sent. That discipline now has a tool: `stage-push.py`.
 Obligation 6 is closed; obligation 3 is not. Declaring an unreachable lane BLIND by name is
 still a thing a session does by hand, and a session that simply forgets produces silence
 that reads as agreement. `scope-gate.py` closed the adjacent gap — a governance doc may no
-longer name a file the trunk cannot reach — but it reads artifacts, not runs. Nam
+longer name a file the trunk cannot reach — but it reads artifacts, not runs. Naming that
+here so the next session inherits the gap instead of rediscovering it.
