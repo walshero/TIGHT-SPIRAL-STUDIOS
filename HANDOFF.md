@@ -72,7 +72,7 @@ navigation instruction, ask what screen + what's visible, then guide from HIS vi
 - [URGENT before Jul 20] Console Post->Boost verb fix so gate passes; then GALA EasyChair submission.
 - [ACTIVE] Rotate the exposed PAT.
 - [ACTIVE] Matt to CREATE Drive folder STUDENT-WORK-PROTECTED by hand, register ID.
-- Matt's GATE 1 cold play of barcelona-summers.html v2 — undelegatable.
+- Matt's GATE 1 cold play of barcelona-summers.html v2 — undelegatable. (external lane: the student's own Netlify deploy at https://eclectic-youtiao-c065da.netlify.app/, not a repo file)
 - Send Borges paper to Chronicle of Higher Ed this month (Tier 1).
 - Email Pauline@academic-conferences.org for ECGBL abstract window.
 - Confirm MassBay SAM.gov + Grants.gov registration current.
