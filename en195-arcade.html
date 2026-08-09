@@ -24,7 +24,8 @@
      decides, live, through the media query. v3.0 copied the OS value into storage at first
      load, which froze a phone-level preference into a page-level one and made it look like
      a choice the reader had made. */
-  d.setAttribute('data-light', s.light === 'dusk' || s.light === 'night' ? s.light : 'day');
+  if (s.light !== 'night') s.light = 'day'; /* dusk retired 2026-08-09: a stored dusk (chosen on another surface) normalizes to day, so the control's pressed state stays honest */
+  d.setAttribute('data-light', s.light);
   d.classList.toggle('c-a1', s.size === 1);
   d.classList.toggle('c-a2', s.size === 2);
   d.classList.toggle('c-contrast', !!s.contrast);
