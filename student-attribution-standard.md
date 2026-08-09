@@ -45,6 +45,7 @@ Same force as a failed contrast gate: a credit that fails any of the three does 
 
 - **Game:** *Barcelona Summers — a noticing game.* Author on the live deploy: full name + a `7/8/2026` date.
 - **Approval:** email on file (documented approval). Log line owed.
+- **Log line PAID 2026-08-09.** Founder confirmed the approval in session. Recorded in `approvals-log.md`, which did not exist until today: clause 1 above has required an approvals log since 2026-08-03 and there was no log for the clause to point at, so the HALT it specifies could never have fired. The entry carries the credit-form name, the work, the generic course line, and the fact of written permission. It deliberately carries no email address, no full surname, and no quoted text from the student's message, because this repo is public and a log that leaked the surname would undo the standard it enforces.
 - **Studio credit under this standard:** `Barcelona Summers — Hamish K. · EN195 Creative Writing (summer 6-week online)`
 - **Caveat:** the game lives on the student's own Netlify deploy, which currently shows his full last name and a date. The studio arcade card can follow the standard, but the linked page won't unless the student trims it or the studio hosts a corrected copy. Matt's call.
 
