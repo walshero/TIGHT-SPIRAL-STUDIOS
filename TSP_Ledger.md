@@ -494,3 +494,35 @@ followed here is kept as the record of the question as it stood:**
 - **This session's network policy BLOCKS the PD archives** (curl and WebFetch both refused on commons.wikimedia.org and loc.gov — proxy 403 / EGRESS_BLOCKED, logged). The image-lane doc now says environment policy governs, not a blanket "sandbox can't."
 - **Drive holds no period plates** (searched: images are arcade tiles, screenshots, AI one-offs; the "cyl/plates" a prior session referenced were its own local /tmp, gone with the container).
 - **Two unlocks, founder's choice:** (1) FREE — allow-list the archives (loc.gov, www.loc.gov, commons.wikimedia.org, upload.wikimedia.org, archives.gov) in this Claude Code environment's network settings; PD-first sourcing then runs from any session here. (2) PAID — Adobe Stock via the connected Adobe account (`asset_license_and_download_stock`); legally licensed but spends real money per asset, so per the cost rule it waits for an explicit per-use go-ahead. Until one opens, the v7 build's art mounts stay staged as asks, exactly like the fys hero plate.
+
+---
+
+## 2026-08-08 — FOUNDER RULING: the vending machine leaderboard needs no login
+
+Founder, verbatim: **"No login needed."**
+
+This closes one of two founder-opens carried in `en195-arcade.html`'s TSP-META since
+2026-08-05: *"public leaderboard requires no login - confirm acceptable for this course."*
+Confirmed. It ships as built. The Supabase posture is unchanged and already matches:
+anon insert-only on `workshop_tokens`, select-only on the `workshop_board` view, RLS
+verified, and the anon key can never read the base table.
+
+**The design consequence, recorded once and not re-litigated.** With no account there is
+no server-side identity, so the board is self-declared: a name on it is a claim, not an
+authentication. Two students can pick the same name, and one can enter another's. For a
+six-week workshop board whose whole job is to make practice visible, that is the correct
+trade, and it is the founder's to make. The alternative buys identity with a login wall in
+front of a game, which is the friction this build exists to remove.
+
+Still open, and the last one on this file: retention and deletion policy for
+`workshop_tokens`. Semester end, a fixed drop date, or on student request.
+
+**Separate finding, same file, same day.** Measured against the type standard amended
+today: `en195-arcade.html` PASSES type-census at 0 of its visible text nodes under 18px,
+which makes it one of only six clean surfaces in a 134-surface corpus carrying 4,171
+nodes of debt. But it passes for the wrong reason. It hardcodes `font-size:20px` on
+`:root`, which is exactly what the amended standard rules against, because it overrides
+the one accessibility control the reader already owns. A reader who has set their browser
+to 24px gets 20px here. The number is right and the mechanism is wrong. It goes when
+comfort v3.1 mounts, and the count should hold at zero on a reader-controlled root.
+
