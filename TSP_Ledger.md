@@ -683,3 +683,20 @@ Traced live: four banners render on the hub with animations running, districts n
 icons 3x, every cabinet still opens, sandbag and workshop flows intact. Belt PASS,
 census 0 under 18px. Six surgical byte-checked commits plus the handoff; repo sha256
 equals local.
+
+## 2026-08-09 (sixth playtest note) — FOUNDER RULING: Comfort at the top AND the bottom, tucking, studio-wide
+
+Verbatim: *"Comfort should be like the homepage it's up at the top, but after you scroll
+up, it disappears that happens across the studio and you include them at the bottom too"*
+
+Landed as v6.1 on the arcade: a Comfort button now sits in the top bar beside Home,
+rides the tuck (slides away on scroll-down, returns on any scroll-up), and the thumb-arc
+dock stays at the bottom - two doors, one panel, aria state synced across both, the
+outside-click close excludes both buttons. Traced live: opens and closes from either
+end, tucks and returns with the bar, no overflow at 390px. Belt PASS, census 0 under
+18px. Four surgical byte-checked commits; repo sha256 equals local.
+
+The pattern is ruled STUDIO-WIDE: top-and-bottom comfort on every surface. That rides
+the existing comfort-standard propagation item (with the dusk retirement) - one
+next-session sweep updates comfort-v3.html and carries both rulings to the corpus,
+rather than patching 101 surfaces twice.
