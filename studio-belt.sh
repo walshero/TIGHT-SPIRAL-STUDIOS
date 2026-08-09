@@ -33,14 +33,76 @@
 # Env:   STUDIO_CANON_SHA (optional) — hub commit the belt was mounted from, for provenance.
 set -uo pipefail
 BELT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"   # hub scripts live beside this file
-TARGET="${1:-.}"; cd "$TARGET"
+# ---------------------------------------------------------------------------
+# TWO MODES. Added 2026-08-08 after the belt failed to prevent the exact thing
+# it exists for.
+#
+# WHAT WENT WRONG. comfort-v3.html was landed after running SIX of the seven
+# ticks by hand, one command each. The seventh, tick 5, exited 1. Deploy had
+# re-coupled that same day, so one unshipped file stopped the entire site
+# publishing, and nobody knew until a seven-lens review went looking hours
+# later. The gate that would have caught it in one line already existed.
+#
+# WHY IT WAS SKIPPED, and this is the whole point: the belt only accepted a
+# DIRECTORY and always walked all 133 surfaces. A full run is minutes. So the
+# complete check was too slow to use as a preflight, and every author fell back
+# to running gates one at a time from memory. A checklist you run from memory is
+# not a checklist. The completeness was real and it was never applied to the one
+# moment that needed it, which is the moment before a push.
+#
+# So: the belt now takes FILES. Same ticks, same baselines, same teeth, scoped
+# to what actually changed. Seconds instead of minutes. There is no longer a
+# reason to run a tick by hand, and no excuse for running six of seven.
+#
+#   studio-belt.sh                     the whole repo. CI does this.
+#   studio-belt.sh <dir>               another repo. Spokes do this.
+#   studio-belt.sh a.html b.html       PREFLIGHT. Do this before every push.
+#
+# Deliberately NOT a separate preflight script. Two runners of one belt is how
+# this repo got two studio-fingers gates in one day, and one of them shipped a
+# 48px floor that contradicted a founder ruling and manufactured 121 phantom
+# halts. One canon, extended.
+# ---------------------------------------------------------------------------
+MODE=dir
+if [ -f "${1:-}" ]; then
+  MODE=file
+  _abs=""
+  for _a in "$@"; do
+    [ -f "$_a" ] || { echo "studio-belt: no such file: $_a" >&2; exit 2; }
+    _abs="$_abs $(cd "$(dirname "$_a")" && pwd)/$(basename "$_a")"
+  done
+  cd "$(git rev-parse --show-toplevel 2>/dev/null || echo .)"
+  SURFACES=$(for _f in $_abs; do
+    case "$_f" in *.html) printf './%s\n' "${_f#$PWD/}";; esac
+  done | sort)
+  CHANGED=$(for _f in $_abs; do printf './%s\n' "${_f#$PWD/}"; done | sort)
+else
+  TARGET="${1:-.}"
+  # A BELT THAT CANNOT FIND ITS TARGET MUST NOT READ AS A PASS.
+  # Found by this file's own self-test, 2026-08-08: `studio-belt.sh nope.html`
+  # failed the -f test, fell through to directory mode, ran `cd nope.html`, got a
+  # shell error nobody reads, then belted the CURRENT directory and exited 0. A
+  # typo'd filename returned a green belt for a file that does not exist. This
+  # predates file mode; the original `cd "$TARGET"` was unguarded too.
+  if [ ! -d "$TARGET" ]; then
+    echo "studio-belt: '$TARGET' is neither an existing file nor a directory. REFUSING." >&2
+    echo "             Exit 2, loud. A gate that has gone blind must never read as clean." >&2
+    exit 2
+  fi
+  cd "$TARGET" || exit 2
+  SURFACES=$(find . -name '*.html' -not -path './.git/*' -not -path './archive/*' \
+    -not -path './rescued/*' -not -path '*/node_modules/*' -not -name 'confluence-TRUNK*.html' | sort)
+  CHANGED=""
+fi
+
 fail=0
 echo "======================================================================"
-echo "STUDIO BELT  ·  canon = hub@${STUDIO_CANON_SHA:-unknown}  ·  target = $(basename "$(pwd)")"
+if [ "$MODE" = file ]; then
+  echo "STUDIO BELT  ·  PREFLIGHT  ·  $(printf '%s' "$CHANGED" | grep -c . ) file(s)  ·  all 7 ticks"
+else
+  echo "STUDIO BELT  ·  canon = hub@${STUDIO_CANON_SHA:-unknown}  ·  target = $(basename "$(pwd)")"
+fi
 echo "======================================================================"
-
-SURFACES=$(find . -name '*.html' -not -path './.git/*' -not -path './archive/*' \
-  -not -path './rescued/*' -not -path '*/node_modules/*' -not -name 'confluence-TRUNK*.html' | sort)
 
 # The repo name qualifies every baseline key. Three of the five repos ship an
 # index.html; keyed by basename alone they collide into one entry and the last
@@ -66,7 +128,11 @@ else echo "  (no HTML surfaces / gate not mounted — skipped)"; fi
 # in the first place. Baseline: attribution-baseline.json, hub-owned, same shape as the
 # other four. Carried, not resolved.
 echo; echo "-- tick 2: student attribution standard --"
-HITS=$(grep -rInE 'EN[0-9]{3}' --include=*.html --include=*.md . 2>/dev/null | grep -vE '/(archive|rescued|node_modules)/' || true)
+if [ "$MODE" = file ]; then
+  HITS=$(printf '%s\n' $CHANGED | xargs -r grep -InE 'EN[0-9]{3}' 2>/dev/null || true)
+else
+  HITS=$(grep -rInE 'EN[0-9]{3}' --include=*.html --include=*.md . 2>/dev/null | grep -vE '/(archive|rescued|node_modules)/' || true)
+fi
 # a violation = a course code on a line that ALSO carries a SECTION token or a TERM-YEAR (e.g. "Summer 2026").
 # generic course lines ("EN195 Creative Writing (summer 6-week online)") and changelog dates ("2026-07-11") do NOT match.
 # only CREDIT lines count; drop source/provenance citations (a syllabus citation legitimately names a term)
@@ -85,125 +151,4 @@ if [ -n "${VIOL//[$'\n']/}" ]; then
     fi
   done <<< "$VIOL"
   if [ -n "${NEW//[$'\n']/}" ]; then
-    echo "  HALT — a NEW course credit carries a year or section token (not in attribution-baseline.json):"
-    printf '%s' "$NEW" | sed 's/^/        /' | head -8; fail=1
-  else
-    echo "  pass (debt carried)  $DEBT_N pre-existing line(s), 0 new — see attribution-baseline.json"
-  fi
-else echo "  pass  no year/section token beside a course code"; fi
-
-# TICKS 3-5 all RATCHET against a hub-owned baseline. Measured before arming:
-# voice 101/131 surfaces, entry-paint 31/38 builds (Tableau Sweep #2, 2026-08-03).
-# Armed flat they would paint every repo red on every push and be disarmed inside
-# a week — that is precisely how floor.yml lost its teeth in July. So today's debt
-# is CARRIED and only NEW debt blocks. The ratchet turns one way.
-
-# TICK 3 — the >50% image floor + the rest of the render-proof ratchet (founder canon C7)
-echo; echo "-- tick 3: image floor + render-proof ratchet (founder rule C7) --"
-if [ -n "$SURFACES" ] && [ -f "$BELT_DIR/preship-gate-v4.py" ]; then
-  while IFS= read -r f; do
-    [ -z "$f" ] && continue
-    if python3 "$BELT_DIR/preship-gate-v4.py" --ratchet "$f" >/tmp/pg.out 2>&1; then echo "  pass  $f"
-    else echo "  HALT  $f"; grep -E '^\s+H-|^\s+E1' /tmp/pg.out | sed 's/^/        /' | head -6; fail=1; fi
-  done <<< "$SURFACES"
-else echo "  (no HTML surfaces / gate not mounted — skipped)"; fi
-
-# TICK 4 — founder voice (founder ruling 2026-08-05: "the general voice here is not mine")
-echo; echo "-- tick 4: founder voice (unmarked em/en dashes) --"
-if [ -n "$SURFACES" ] && [ -f "$BELT_DIR/studio-voice-gate.py" ]; then
-  while IFS= read -r f; do
-    [ -z "$f" ] && continue
-    if python3 "$BELT_DIR/studio-voice-gate.py" --ratchet --repo="$REPO" "$f" >/tmp/vg.out 2>&1; then echo "  pass  $f"
-    else echo "  HALT  $f"; grep -E 'HALT|dash' /tmp/vg.out | sed 's/^/        /' | head -6; fail=1; fi
-  done <<< "$SURFACES"
-else echo "  (no HTML surfaces / gate not mounted — skipped)"; fi
-
-# TICK 5 — the entry paint: scene-first, ONE invitation (locked 2026-06-27 / 2026-07-12)
-# Needs a real browser. If playwright is absent the tick SKIPS LOUDLY — a gate that
-# has gone blind must never read as a pass (the ratchet.py exit-2 lesson).
-echo; echo "-- tick 5: entry paint — scene-first, one invitation --"
-if [ -z "$SURFACES" ]; then echo "  (no HTML surfaces — skipped)"
-elif [ ! -f "$BELT_DIR/one-thing-gate.py" ]; then echo "  (gate not mounted — skipped)"
-elif ! python3 -c "import playwright" >/dev/null 2>&1; then
-  echo "  SKIPPED LOUD — playwright absent, the entry gate is BLIND. Not a pass."
-else
-  if python3 "$BELT_DIR/one-thing-gate.py" --ratchet --repo="$REPO" $SURFACES >/tmp/ot.out 2>&1; then
-    echo "  pass  every entry clears the ratchet"
-  else
-    echo "  HALT  an entry regressed:"; grep -E '^\s+\[X\]|SHIP-BLOCK' /tmp/ot.out | sed 's/^/        /' | head -10; fail=1
-  fi
-fi
-
-# TICK 6 — retired lines (added 2026-08-08). Zero tolerance, no ratchet: a founder
-# objection that only lives in a ledger entry is a wish, not a rule. Checks every
-# live surface's RENDERED text (a player must never see a retired line again) and
-# every *.html/*.md SOURCE line for regeneration risk (a stale spec could put one
-# back), with a citation carve-out so the historical record in TSP_Ledger.md etc.
-# stays legible. Add an objection: append one entry to retired-lines.json.
-echo; echo "-- tick 6: retired lines (founder objections with teeth) --"
-if [ ! -f "$BELT_DIR/retired-lines-gate.py" ]; then echo "  (gate not mounted — skipped)"
-elif [ -n "$SURFACES" ] && ! python3 -c "import playwright" >/dev/null 2>&1; then
-  echo "  SKIPPED LOUD — playwright absent, the render pass is BLIND. Not a pass."
-else
-  if python3 "$BELT_DIR/retired-lines-gate.py" $SURFACES >/tmp/rl.out 2>&1; then
-    echo "  pass  no retired line found live or uncited in source"
-  else
-    echo "  HALT  a retired line resurfaced:"; grep -E '^\s+HALT' /tmp/rl.out | sed 's/^/        /' | head -10; fail=1
-  fi
-fi
-
-echo; echo "-- tick 7: touch floor (studio-fingers) --"
-
-# REPOINTED 2026-08-08. Two sessions in one lane built two gates of this name; the merged
-# survivor is studio-eyes/studio-fingers.py, which RENDERS on a 412x915 touch viewport.
-# The source-parsing rival at repo root is RETIRED and now exits 2 — so the old block below
-# is held inert rather than deleted, because a retired gate that returns nothing would have
-# made this tick print "pass" forever. A silent pass is worse than no tick.
-# RATCHET: 31 of 113 surfaces carry real debt (fingers-baseline.json, re-frozen).
-if [ ! -f "$BELT_DIR/studio-eyes/studio-fingers.py" ] || [ ! -f "$BELT_DIR/fingers-baseline.json" ]; then
-  echo "  (gate or baseline not mounted — skipped)"
-elif ! python3 -c "import playwright" >/dev/null 2>&1; then
-  echo "  SKIPPED LOUD — playwright absent, this gate is BLIND. Not a pass."
-else
-  python3 "$BELT_DIR/studio-eyes/studio-fingers.py" $SURFACES >/tmp/sf.out 2>&1
-  if python3 - "$BELT_DIR/fingers-baseline.json" <<'PYSF'
-import json,re,sys
-base=json.load(open(sys.argv[1]))["counts"]
-cur={}; f=None
-for line in open('/tmp/sf.out',encoding='utf-8',errors='replace'):
-    m=re.match(r'\s+[\u2717\u2713] (\S+)',line)
-    if m: f=m.group(1); cur.setdefault(f,0); continue
-    if f and re.match(r'\s+F-',line): cur[f]+=1
-bad=[(k,v,base.get(k,0)) for k,v in cur.items() if v>base.get(k,0)]
-for k,v,w in bad: print(f"  HALT  {k}: {v} untouchable finding(s), baseline {w} — new debt")
-sys.exit(1 if bad else 0)
-PYSF
-  then echo "  pass  no new untouchable targets"; else fail=1; fi
-fi
-
-if false; then   # ---- OLD TICK 7 (source-parsing gate) RETIRED 2026-08-08, held inert ----
-# Added 2026-08-08. STUDIO EYES answered "can this be SEEN" from the first belt; nothing
-# ever answered "can this be TOUCHED." A player holds the thing one-handed, with a thumb,
-# at arm's length. That is the shipping condition for every game the studio makes and it
-# was ungated. RATCHET, not flat: 97 of 133 surfaces fail the 48px house floor today
-# (fingers-baseline.json), and a flat tick would freeze deploy on day one over debt nobody
-# was checking -- the same discovery that made ticks 1/3/4/5 ratchet.
-if [ ! -f "$BELT_DIR/studio-fingers.py" ] || [ ! -f "$BELT_DIR/fingers-baseline.json" ]; then
-  echo "  (gate or baseline not mounted — skipped)"
-else
-  rc=0
-  for f in $SURFACES; do
-    n=$(python3 "$BELT_DIR/studio-fingers.py" "$f" 2>/dev/null | grep -oE '## HALT +\[[0-9]+\]' | grep -oE '[0-9]+' | head -1)
-    n=${n:-0}
-    was=$(python3 -c "import json,sys;print(json.load(open('$BELT_DIR/fingers-baseline.json'))['counts'].get('${f#./}',0))" 2>/dev/null || echo 0)
-    if [ "$n" -gt "$was" ]; then
-      echo "  HALT  ${f#./}: $n untouchable target(s), baseline $was — new debt"; rc=1
-    fi
-  done
-  if [ "$rc" -eq 0 ]; then echo "  pass  no new untouchable targets"; else fail=1; fi
-fi
-fi               # ---- end inert old tick 7 ----
-
-echo; echo "----------------------------------------------------------------------"
-if [ "$fail" -ne 0 ]; then echo "BELT: HALT — a tick refused. This build does not ship."; else echo "BELT: PASS — all ticks clear."; fi
-exit $fail
+    echo "  HALT �
