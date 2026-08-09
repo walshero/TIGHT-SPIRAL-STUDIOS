@@ -526,3 +526,43 @@ the one accessibility control the reader already owns. A reader who has set thei
 to 24px gets 20px here. The number is right and the mechanism is wrong. It goes when
 comfort v3.1 mounts, and the count should hold at zero on a reader-controlled root.
 
+
+## 2026-08-09 — Comfort v3.1 mounted on the arcade; layout preview folded in and deleted
+
+Executed per `claude/HANDOFF-VENDING-MACHINE-2026-08-08.md`. The Workshop Vending
+Machine (`en195-arcade.html`) now carries all five things the founder means by comfort -
+font size, contrast, modes like warm and dark, motion stop, and screen reader options -
+plus persistence applied pre-paint (`tsp.comfort.v1`), so a reader who chose warm dark
+never sees a flash of daylight. The block was LIFTED from `comfort-v3.html` (sha
+`6a753a4ed473f38d`, all seven ticks clean), not re-derived; the only host adaptation is
+measure() reading `.coinbar` instead of `.chrome`. The old three-stop `data-stop` ladder
+is gone - this was one of the last three files on that vocabulary.
+
+The belt ran before and after, per the handoff's first rule. Before: PASS with one
+`comfort-gate` DEBT line. After: PASS with the DEBT line GONE, not carried - the dark
+path is visible to the gate now (night body luminance measured dark, day/dusk/night all
+at or above 4.5). Both this file and the deleted preview were burned off
+`comfort-baseline.json` (25 entries to 23; the list may only shrink).
+
+The wrong-mechanism finding from 2026-08-08 is closed the way it predicted:
+`:root{font-size:20px}` is gone, the root is `font-size:100%`, and type-census still
+reads 0 visible nodes under 18px (body 18.0px at a default browser base, more at the
+reader's). The count held on a reader-controlled root.
+
+The one real design decision went the way the handoff proposed, uncontradicted: the
+puppet stage (scene0 and the four cabinet guardians) stays fixed-dark as its own scene.
+Comfort governs the chrome and the reading surfaces around it. The guardians still read.
+
+The layout preview (`en195-arcade-layout-preview.html`, 2026-08-06 v2) was folded in and
+deleted, its line removed from `index.html`. What it contributed: the reader-scale type
+ladder (body 1.125rem), the compact sticky coinbar with coin and token glyph counters
+that tucks on scroll-down and returns on scroll-up, the narrow-screen furniture layer,
+and one tightened hub sentence. Its comfort-button compaction was superseded by the
+v3.1 dock in the thumb arc - which also clears the C-REACH note studio-fingers carried
+on this file. The per-animation reduced-motion blocks were replaced by the two-rule
+comfort pair, so an explicit motion choice now outranks the OS in both directions -
+verified in a live browser, along with persistence across reload, Clear Reader leaking
+none of the arcade's hidden screens, and the full coin round-trip.
+
+Still open, unchanged, the founder's call: retention and deletion policy for
+`workshop_tokens` - semester end, a fixed drop date, or on student request.
