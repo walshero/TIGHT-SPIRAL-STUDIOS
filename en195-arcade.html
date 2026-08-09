@@ -1370,3 +1370,66 @@ document.getElementById('vmForm').addEventListener('submit', function(ev){
   }, {passive:true});
 
   function paintState(){
+    var el, i;
+    var L = document.querySelectorAll('[data-light-set]');
+    for (i=0;i<L.length;i++){ el=L[i]; el.setAttribute('aria-pressed', String(el.getAttribute('data-light-set') === S.light)); }
+    var Z = document.querySelectorAll('[data-size]');
+    for (i=0;i<Z.length;i++){ el=Z[i]; el.setAttribute('aria-pressed', String(Number(el.getAttribute('data-size')) === S.size)); }
+    var T = document.querySelectorAll('[data-tog]');
+    for (i=0;i<T.length;i++){
+      el=T[i];
+      var on = !!S[TOG[el.getAttribute('data-tog')]];
+      el.setAttribute('aria-pressed', String(on));
+      el.querySelector('.st').textContent = on ? 'On' : 'Off';
+    }
+    measure(); more();
+  }
+
+  function open(o){
+    panel.setAttribute('data-open', o ? '1' : '0');
+    btn.setAttribute('aria-expanded', String(o));
+    if (o) { measure(); more(); var f = panel.querySelector('.btn'); if (f) f.focus(); }
+  }
+  btn.addEventListener('click', function(){ open(panel.getAttribute('data-open') !== '1'); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && panel.getAttribute('data-open') === '1'){ open(false); btn.focus(); }
+  });
+  document.addEventListener('click', function(e){
+    if (panel.getAttribute('data-open') !== '1') return;
+    if (panel.contains(e.target) || btn.contains(e.target)) return;
+    open(false);
+  });
+
+  document.addEventListener('click', function(e){
+    var t = e.target.closest ? e.target.closest('[data-light-set],[data-size],[data-tog]') : null;
+    if (!t) return;
+    if (t.hasAttribute('data-light-set')){
+      S.light = t.getAttribute('data-light-set');
+      d.setAttribute('data-light', S.light);
+      announce(t.textContent.trim());
+    } else if (t.hasAttribute('data-size')){
+      S.size = Number(t.getAttribute('data-size'));
+      d.classList.toggle('c-a1', S.size === 1);
+      d.classList.toggle('c-a2', S.size === 2);
+      announce('Font size ' + t.textContent.trim());
+    } else {
+      var cls = t.getAttribute('data-tog');
+      var on = !d.classList.contains(cls);
+      d.classList.toggle(cls, on);
+      S[TOG[cls]] = on ? 1 : 0;
+      if (cls === 'c-still'){
+        /* An explicit choice outranks the phone IN BOTH DIRECTIONS. Turning motion stop
+           OFF on a reduced-motion phone has to actually restore motion. */
+        S.motionSet = 1;
+        if (on) d.removeAttribute('data-motion'); else d.setAttribute('data-motion', 'go');
+      }
+      announce(t.textContent.replace(/On|Off/, '').trim() + (on ? ' on' : ' off'));
+    }
+    save(); paintState();
+  });
+
+  paintState();
+})();
+</script>
+</body>
+</html>
