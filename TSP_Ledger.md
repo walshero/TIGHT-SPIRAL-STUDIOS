@@ -611,3 +611,23 @@ price tags state both prices; the reward line adds "Two tokens open a coin cabin
 the carry-out ticket logs token spends. Traced live: coin path, token path, honest
 block at 0 coins 0 tokens. Belt PASS, census 0 under 18px. Landed as v5.2 in six
 surgical byte-checked connector commits; repo sha256 equals local.
+
+## 2026-08-09 (third playtest note) — FOUNDER RULING: Line Break rebuilt; the game must create what it teaches
+
+Verbatim: *"Also line break game mechanic is lousy. Visually terrible because it doesnt
+create what it teaches. Enjambment. Providen prose and X number of scissors to cut lines
+and repopulate text below. Players can use free 'paste' to go back - enjambment game
+should be created by poets. Fails as is."*
+
+The diagnosis is exact: the old mechanic toggled slashes in a word row and NAMED what a
+break does, but no line was ever made - the one thing the game is titled for never
+appeared on screen. Rebuilt as v5.3 to the founder's sketch: the poem flattened back
+into prose, seven scissors in hand (Williams's own break count for The Red Wheelbarrow -
+the scarcity is the craft lesson), each cut spends a scissor and the poem re-forms live
+in a verse card below, paste is free and returns the scissor so nothing is lost to
+experiment, and an eighth cut is blocked until one comes back. The slash stays as the
+cut mark because it is the mark poets use to quote a break. Williams's teach notes kept.
+
+Traced live: seven cuts at Williams's own break points reproduce the poem line for line
+in the card; the eighth cut blocks; paste refunds. Belt PASS, census 0 under 18px.
+Landed in five surgical byte-checked connector commits; repo sha256 equals local.
