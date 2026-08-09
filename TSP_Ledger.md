@@ -631,3 +631,27 @@ cut mark because it is the mark poets use to quote a break. Williams's teach not
 Traced live: seven cuts at Williams's own break points reproduce the poem line for line
 in the card; the eighth cut blocks; paste refunds. Belt PASS, census 0 under 18px.
 Landed in five surgical byte-checked connector commits; repo sha256 equals local.
+
+## 2026-08-09 (fourth playtest note) — FOUNDER RULING: Sandbag Drop gets a win state and five rotating passages
+
+Verbatim: *"Also, the sandbag game should have a clear win state and should rotate 5
+pieces of prose."*
+
+Landed as v5.4. The five passages come from `games-text-bank.md` under its own policy -
+the load-bearing prose is the founder's writing, the machine adds clearly separable
+padding, and cutting the padding back out IS the game. Passages: the Rockview Rd duplex
+and the potten plants (A Roslindale Story), the Taiko drumming and the bus station (The
+Van Story), and the extra large milk no sugar (the reaper draft). A provenance line sits
+on the game screen: "Prose: Matt Walsh, from the studio text bank. The padding is the
+machine's; cutting it is the game."
+
+The win state is now unmistakable: cut every sandbag with the cargo intact and the
+balloon sails clear of the frame, "Lift-off. You win." and the writer's own sentence is
+read back with nothing extra. Cut cargo along the way and the balloon holds low with an
+honest message until the cargo is pasted back - so the win is cutting EXACTLY the flab,
+not cutting everything. A free Next passage button rotates forward; entering the cabinet
+fresh also rotates. Passage counter shows N of 5.
+
+Traced live: cargo-hostage state, win at cargo restore, all five passages won in
+sequence, rotation wraps back to passage 1. Belt PASS, census 0 under 18px. Five
+surgical byte-checked connector commits; repo sha256 equals local.
