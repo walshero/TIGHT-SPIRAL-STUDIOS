@@ -91,8 +91,16 @@ else
     exit 2
   fi
   cd "$TARGET" || exit 2
+  # studio-eyes/canary/ holds DELIBERATELY BROKEN gate fixtures (t01-t11, p01-p07)
+  # — each exists to make a gate's own self-test bite. They are exercised by
+  # --selftest, not by the corpus sweep. Sweeping them as corpus is how CI went
+  # red for four straight runs on 2026-08-09: tick 7's baseline was frozen
+  # against the 113 real surfaces, the find handed it 131 including 18 fixtures
+  # with baseline 0, and every fixture read as NEW debt. A fixture that STOPS
+  # failing is caught where it belongs: the owning gate's self-test.
   SURFACES=$(find . -name '*.html' -not -path './.git/*' -not -path './archive/*' \
-    -not -path './rescued/*' -not -path '*/node_modules/*' -not -name 'confluence-TRUNK*.html' | sort)
+    -not -path './rescued/*' -not -path '*/node_modules/*' -not -path './studio-eyes/canary/*' \
+    -not -name 'confluence-TRUNK*.html' | sort)
   CHANGED=""
 fi
 
