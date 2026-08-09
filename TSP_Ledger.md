@@ -591,3 +591,23 @@ Lane note: two new connector actions landed today for small patches -
 `delete_line_from_repo_file` and `replace_substring_in_repo_file`, both requiring a
 unique match and an expected byte total before they will write, both tested on a
 scratch file before touching canon. A one-line fix no longer costs an 80KB re-upload.
+
+## 2026-08-09 (later still) — FOUNDER RULING from playtest: the math needs subtraction; tokens buy play at 2:1
+
+Second playtest note of the night, verbatim: *"The math needs subtraction. If it costs
+a coin to play you should always have 1 zero 1 zero 1 tokens, right?"*
+
+Measured before answering: coin subtraction already worked (trace: 1 to 0 entering
+Sandbag, blocked at 0, earn 1, 0 again entering Line Break). What the instinct actually
+caught: TOKENS had no subtraction anywhere - they only climbed - while the reward line
+promised "+1 token so you keep playing." A student with five weak answers held five
+tokens, zero coins, and was locked out by a game that had just told them tokens keep
+them moving. The copy and the math disagreed.
+
+Founder chose, from three options: **2 tokens = 1 play.** Paid cabinets now cost 1 coin
+or 2 tokens, coins spend first, so the wooden nickel finally buys something and a coin
+stays worth more - the strong-read lesson survives. Blocked message, hub copy, and both
+price tags state both prices; the reward line adds "Two tokens open a coin cabinet";
+the carry-out ticket logs token spends. Traced live: coin path, token path, honest
+block at 0 coins 0 tokens. Belt PASS, census 0 under 18px. Landed as v5.2 in six
+surgical byte-checked connector commits; repo sha256 equals local.
