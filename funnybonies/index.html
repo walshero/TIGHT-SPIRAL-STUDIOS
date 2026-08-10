@@ -1,30 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <!--
-  FUNNYBONIES v5 · the dunk-tank build. Sisyphus the cat enters.
+  FUNNYBONIES v6 · the yarn build. The dunk tank is retired; the cat is dry.
   Tight Spiral Studios · Built 2026-08-10 · CC0, all art original inline SVG.
 
-  DESIGN NOTES:
-  - OPENING MOVE IS INSTANTLY LEGIBLE: a finger flicks a domino into a ball,
-    the ball rolls down a ramp toward a ring target floating in a circus dunk pool.
-    No reading required to understand the first second.
-  - STAKES: the ball can MISS. Misses upset Sisyphus the cat, who rolls the ball
-    back up the ramp · forever, if necessary. The retry loop IS the mnemonic
-    repetition, disguised as a myth joke.
-  - ART: our own register · cream paper, dark ink line work, rust/cream striped
-    tank, gold ball, plum ring. Learned from Bonkyard (legible causality, simple
-    lines); copied nothing (no navy blueprint, no polaroid, no white-line look).
-  - Cleese rule holds: auto-demo ~1s after load. Demo is scripted miss-then-hit
-    so the player meets the cat before they meet the form.
+  DESIGN (founder ruling 2026-08-10):
+  - You bat a ball of YARN through a contraption (ramp, boom, fishbowl) trying to
+    get the CAT'S attention. No water. No target. No kazoo layer (later build).
+  - You learn to move things BIT BY BIT: ramp and boom each cycle through three
+    settings. Combos produce outcomes. Most outcomes bore the cat.
+  - CAT INTEREST meter stays low a LONG time. Three FUNNY THINGS are hidden in
+    the machine; each is worth real interest. All three = the cat finally comes.
+  - The secret HUMOR BOOK can be read. It hints, in riddles, at the three.
+  - Absolute chaos is one of the funny things. Nothing gets wet. The fish is fine.
 
-  FLOORS: no green, high contrast, single-file, offline, in-memory only,
-  44px+ targets, keyboard nav, visible focus, reduced-motion still-state, no emoji.
+  BELT PRE-FLIGHT (all gates): dusk/night kernel + OS dark, SVG text >=20 units,
+  control + invitation above the fold, no em dashes, no green, no emoji,
+  reduced-motion still-states, 44px+ targets, in-memory only, single file.
 -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light dark">
-<title>Funnybonies · flick, roll, dunk, remember</title>
+<title>Funnybonies · bat the yarn, amuse the cat</title>
 <style>
 :root{
   --ink:#1b160f; --bg:#f3e8d2; --surface:#fffaf0; --border:#bda77e;
@@ -41,22 +39,26 @@ body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--ink);line
 h1{font-family:var(--serif);color:var(--plum);font-size:1.7rem;margin:.4rem 0 .1rem;line-height:1.1}
 .tag{margin:.1rem 0 .9rem;font-size:1rem}
 .card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:1rem;margin-top:1rem}
-label.fld{display:block;font-weight:800;font-size:.95rem;margin:.15rem 0 .3rem}
-input[type=text],textarea{width:100%;font:400 1.02rem/1.4 var(--sans);padding:.6rem .7rem;border:2px solid var(--border);border-radius:10px;background:var(--bg);color:var(--ink)}
-input[type=text]{min-height:48px}
-textarea{min-height:84px;resize:vertical}
-input:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
-.btn{background:var(--gold);color:#1b160f;border:2px solid var(--gold);border-radius:12px;padding:.7rem 1.1rem;font:800 1.05rem/1 var(--sans);cursor:pointer;min-height:52px;width:100%;margin-top:.8rem}
-.stage{margin-top:.6rem;background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:.7rem .7rem .3rem}
+.btn{background:var(--gold);color:#1b160f;border:2px solid var(--gold);border-radius:12px;padding:.7rem 1.1rem;font:800 1.05rem/1 var(--sans);cursor:pointer;min-height:52px;width:100%}
+.set{background:var(--surface);color:var(--ink);border:2px solid var(--border);border-radius:10px;padding:.55rem .8rem;font:800 .95rem/1.2 var(--sans);cursor:pointer;min-height:48px;flex:1}
+.setrow{display:flex;gap:.5rem;margin-top:.6rem}
+button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.meterrow{display:flex;align-items:center;gap:.6rem;margin-top:.7rem}
+.meterlbl{font:800 .8rem/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--river);white-space:nowrap}
+.meter{flex:1;height:18px;background:var(--bg);border:2px solid var(--border);border-radius:10px;overflow:hidden}
+.meter>div{height:100%;width:0%;background:var(--gold);transition:width .6s ease}
+.pips{display:flex;gap:.35rem}
+.pip{width:14px;height:14px;border-radius:50%;border:2px solid var(--border);background:var(--bg)}
+.pip.won{background:var(--accent);border-color:var(--accent)}
+.stage{margin-top:.8rem;background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:.7rem .7rem .3rem}
 .machine{width:100%;height:auto;display:block}
 .runline{font-family:var(--hand);font-size:1.05rem;min-height:1.9em;margin:.45rem .3rem .35rem}
-.out{display:none;margin-top:1rem;border:2px solid var(--river);border-radius:12px;background:var(--surface);padding:.9rem}
-.out.on{display:block}
-.out .h{font:800 .78rem/1 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--river);margin:0 0 .5rem}
-.out pre{margin:0;white-space:pre-wrap;word-break:break-word;font:600 .95rem/1.45 ui-monospace,'SF Mono',Menlo,Consolas,monospace}
-.copy{margin-top:.6rem;background:var(--river);color:#fff;border:2px solid var(--river);border-radius:10px;padding:.55rem .9rem;font:800 .9rem/1 var(--sans);cursor:pointer;min-height:44px}
+.bookbtn{margin-top:.6rem;background:transparent;color:var(--ink);border:2px solid var(--border);border-radius:10px;padding:.55rem .9rem;font:800 .9rem/1 var(--sans);cursor:pointer;min-height:44px;width:100%}
+.book{display:none;margin-top:.6rem;border:2px solid var(--plum);border-radius:12px;background:var(--surface);padding:1rem;font-family:var(--hand);font-size:1.02rem}
+.book.on{display:block}
+.book h2{font-family:var(--serif);font-size:1.15rem;color:var(--plum);margin:.1rem 0 .5rem}
+.book p{margin:.4rem 0}
 .foot{margin-top:2rem;font-size:.8rem;border-top:2px solid var(--border);padding-top:.8rem}
-/* transitions applied per-element from JS; ring bobs on its own */
 
 body.dusk{ --bg:#ece2cd; --surface:#f7efe0; --border:#b09a72 }
 body.night{
@@ -64,154 +66,135 @@ body.night{
   --river:#84cad9; --water:#1b272c; --gold:#f0c357; --plum:#d39bc8;
   --rust:#eaa183; --accent:#ff8a66; --focus:#f0c357;
 }
-body.night .copy{color:#1a1712}
 @media (prefers-color-scheme: dark){
   :root{
     --ink:#f3e6c6; --bg:#1a1712; --surface:#262019; --border:#5d543d;
     --river:#84cad9; --water:#1b272c; --gold:#f0c357; --plum:#d39bc8;
     --rust:#eaa183; --accent:#ff8a66; --focus:#f0c357;
   }
-  .copy{color:#1a1712}
 }
-#ring{animation:bob 2.2s ease-in-out infinite alternate}
-@keyframes bob{from{transform:translateX(-24px)}to{transform:translateX(24px)}}
-#ring.hold{animation:none}
-@media (prefers-reduced-motion: reduce){ #ring{animation:none} }
+@media (prefers-reduced-motion: reduce){ .meter>div{transition:none} }
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>Funnybonies</h1>
-  <p class="tag">Flick the domino. Dunk the target. Or answer to the cat.</p>
+  <p class="tag">Bat the yarn. Move things bit by bit. Amuse the cat, if you can.</p>
 
   <div class="card" style="margin-top:.4rem;">
-    <p style="margin:.1rem 0 .2rem;font-weight:800;">Ready when you are: one flick runs the whole machine.</p>
-    <button class="btn" id="runBtn" type="button">Flick the domino</button>
+    <button class="btn" id="batBtn" type="button">Bat the yarn</button>
+    <div class="meterrow">
+      <span class="meterlbl">Cat interest</span>
+      <div class="meter" aria-label="Cat interest meter"><div id="meterFill"></div></div>
+      <div class="pips" aria-label="Funny things found">
+        <span class="pip" id="pip1"></span><span class="pip" id="pip2"></span><span class="pip" id="pip3"></span>
+      </div>
+    </div>
   </div>
 
   <div class="stage" aria-live="polite">
-    <svg class="machine" id="m" viewBox="0 0 360 640" role="img"
-         aria-label="A finger flicks a domino into a gold ball, which rolls down a long ramp and launches at a ring target floating in a striped circus dunk pool. A cat named Sisyphus watches from the pool edge. Misses upset him; he rolls the ball back up. A hit dunks the target and stamps your command out of a slot below.">
-      <title>Funnybonies dunk machine · CC0, original, Tight Spiral Studios</title>
+    <svg class="machine" id="m" viewBox="0 0 360 620" role="img"
+         aria-label="A paw bats a ball of yarn down an adjustable ramp toward an adjustable boom arm, a stool holding a fishbowl, and a profoundly unimpressed cat named Sisyphus. A cat interest meter tracks whether anything you do amuses him.">
+      <title>Funnybonies yarn machine · CC0, original, Tight Spiral Studios</title>
 
-      <!-- pennant banner with the word -->
-      <line x1="40" y1="34" x2="320" y2="34" stroke="var(--ink)" stroke-width="2"/>
-      <path d="M70 34 l12 20 l12 -20 z" fill="var(--rust)"/>
-      <path d="M250 34 l12 20 l12 -20 z" fill="var(--plum)"/>
-      <rect x="110" y="22" width="126" height="30" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.5" transform="rotate(-2 173 37)"/>
-      <text id="wordLbl" x="173" y="43" text-anchor="middle" font-size="22" font-weight="800" fill="var(--plum)" font-family="var(--sans)" transform="rotate(-2 173 37)">KAZOO</text>
+      <!-- floor -->
+      <line x1="20" y1="560" x2="340" y2="560" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>
 
-      <!-- 1 · the flick: finger + domino on a ledge -->
-      <line x1="40" y1="150" x2="130" y2="150" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>
-      <g id="finger" style="transform-origin:52px 118px">
-        <path d="M20 96 q20 -8 34 6 l10 10" fill="none" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>
-        <circle cx="66" cy="114" r="4" fill="var(--ink)"/>
+      <!-- paw + yarn shelf -->
+      <line x1="30" y1="120" x2="120" y2="120" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>
+      <g id="paw" style="transform-origin:44px 92px">
+        <path d="M18 74 q18 -6 30 8 l8 10" fill="none" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="58" cy="94" r="5" fill="var(--ink)"/>
+        <circle cx="48" cy="86" r="2.5" fill="var(--ink)"/>
+        <circle cx="53" cy="89" r="2.5" fill="var(--ink)"/>
       </g>
-      <g id="domino" style="transform-origin:84px 150px">
-        <rect x="76" y="106" width="16" height="44" rx="3" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.5"/>
-        <circle cx="84" cy="118" r="2.5" fill="var(--ink)"/>
-        <circle cx="84" cy="138" r="2.5" fill="var(--ink)"/>
+      <g id="yarnX"><g id="yarnY"><g id="yarnSpin" style="transform-origin:96px 106px">
+        <circle id="yarn" cx="96" cy="106" r="13" fill="none" stroke="var(--plum)" stroke-width="4"/>
+        <path d="M86 100 q10 12 20 0 M86 112 q10 -12 20 0" fill="none" stroke="var(--plum)" stroke-width="2"/>
+      </g></g></g>
+      <!-- yarn string trail (funny thing 1) -->
+      <path id="stringTrail" d="M96 118 q40 30 80 24 q60 -8 120 20" fill="none" stroke="var(--plum)" stroke-width="2.5" stroke-dasharray="5 6" opacity="0"/>
+
+      <!-- adjustable ramp -->
+      <g id="rampG" style="transform-origin:110px 132px">
+        <line x1="110" y1="132" x2="270" y2="300" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>
       </g>
 
-      <!-- 2 · ramp + ball -->
-      <line x1="105" y1="152" x2="290" y2="330" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>
-      <line x1="290" y1="330" x2="310" y2="322" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/> <!-- launch lip -->
-      <g id="ballX"><g id="ballY">
-        <circle id="ball" cx="122" cy="138" r="12" fill="var(--gold)" stroke="var(--ink)" stroke-width="2.5"/>
-      </g></g>
+      <!-- adjustable boom on a post -->
+      <line x1="262" y1="560" x2="262" y2="330" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>
+      <g id="boomG" style="transform-origin:262px 330px">
+        <line x1="262" y1="330" x2="342" y2="330" stroke="var(--rust)" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="262" cy="330" r="6" fill="var(--ink)"/>
+      </g>
 
-      <!-- 3 · the circus dunk pool -->
-      <g id="pool">
-        <!-- striped tank wall -->
-        <path d="M56 480 h248 v76 a10 10 0 0 1 -10 10 h-228 a10 10 0 0 1 -10 -10 z" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>
-        <g>
-          <rect x="66" y="486" width="20" height="72" fill="var(--rust)" opacity=".85"/>
-          <rect x="106" y="486" width="20" height="72" fill="var(--rust)" opacity=".85"/>
-          <rect x="146" y="486" width="20" height="72" fill="var(--rust)" opacity=".85"/>
-          <rect x="186" y="486" width="20" height="72" fill="var(--rust)" opacity=".85"/>
-          <rect x="226" y="486" width="20" height="72" fill="var(--rust)" opacity=".85"/>
-          <rect x="266" y="486" width="20" height="72" fill="var(--rust)" opacity=".85"/>
+      <!-- stool + fishbowl -->
+      <g id="stoolG" style="transform-origin:300px 560px">
+        <line x1="284" y1="560" x2="292" y2="480" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>
+        <line x1="322" y1="560" x2="314" y2="480" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>
+        <line x1="282" y1="480" x2="324" y2="480" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/>
+        <g id="bowlG" style="transform-origin:303px 470px">
+          <path d="M282 446 q-6 24 21 28 q27 -4 21 -28 q-4 -12 -21 -12 q-17 0 -21 12 z" fill="var(--water)" stroke="var(--ink)" stroke-width="3" opacity=".95"/>
+          <path d="M294 452 q6 -6 10 0 q-4 6 -10 0 z" fill="var(--gold)" stroke="var(--ink)" stroke-width="1.5"/>
+          <circle cx="302" cy="452" r="1.4" fill="var(--ink)"/>
+          <circle id="bubble" cx="306" cy="444" r="2" fill="none" stroke="var(--river)" stroke-width="1.5" opacity="0"/>
         </g>
-        <!-- water -->
-        <path d="M60 484 q20 -8 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 v66 h-240 z" fill="var(--water)" stroke="var(--river)" stroke-width="2.5" opacity=".92"/>
       </g>
 
-      <!-- floating ring target (bobs side to side) -->
-      <g id="ringSink"><g id="ring">
-        <circle cx="168" cy="486" r="22" fill="none" stroke="var(--gold)" stroke-width="7"/>
-        <circle cx="168" cy="486" r="9" fill="var(--plum)" stroke="var(--ink)" stroke-width="2"/>
-      </g></g>
-
-      <!-- splashes (hidden) -->
-      <g id="splashHit" opacity="0">
-        <line x1="150" y1="470" x2="140" y2="450" stroke="var(--river)" stroke-width="3" stroke-linecap="round"/>
-        <line x1="168" y1="464" x2="168" y2="442" stroke="var(--river)" stroke-width="3" stroke-linecap="round"/>
-        <line x1="186" y1="470" x2="196" y2="450" stroke="var(--river)" stroke-width="3" stroke-linecap="round"/>
-      </g>
-      <g id="splashMiss" opacity="0">
-        <line x1="242" y1="470" x2="232" y2="450" stroke="var(--river)" stroke-width="3" stroke-linecap="round"/>
-        <line x1="258" y1="464" x2="258" y2="444" stroke="var(--river)" stroke-width="3" stroke-linecap="round"/>
-        <line x1="274" y1="470" x2="284" y2="450" stroke="var(--river)" stroke-width="3" stroke-linecap="round"/>
+      <!-- chaos marks (hidden) -->
+      <g id="chaosMarks" opacity="0">
+        <line x1="200" y1="420" x2="188" y2="402" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+        <line x1="222" y1="410" x2="222" y2="390" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+        <line x1="244" y1="420" x2="256" y2="402" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
       </g>
 
-      <!-- 4 · SISYPHUS THE CAT, poolside. Original line cat, CC0. -->
-      <g id="cat" style="transform-origin:326px 470px">
-        <!-- body -->
-        <path d="M306 470 q0 -34 22 -34 q20 0 20 34 z" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
-        <!-- head -->
-        <circle cx="327" cy="418" r="15" fill="none" stroke="var(--ink)" stroke-width="3"/>
-        <path d="M316 407 l-4 -11 l10 6 z" fill="var(--ink)"/>
-        <path d="M338 407 l4 -11 l-10 6 z" fill="var(--ink)"/>
-        <!-- face: calm -->
-        <g id="catCalm">
-          <circle cx="322" cy="416" r="1.8" fill="var(--ink)"/>
-          <circle cx="332" cy="416" r="1.8" fill="var(--ink)"/>
-          <path d="M324 423 q3 3 6 0" fill="none" stroke="var(--ink)" stroke-width="1.8" stroke-linecap="round"/>
+      <!-- SISYPHUS, unimpressed, bottom left -->
+      <g id="cat" style="transform-origin:110px 560px">
+        <path d="M88 560 q0 -38 24 -38 q22 0 22 38 z" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+        <circle cx="111" cy="502" r="16" fill="none" stroke="var(--ink)" stroke-width="3"/>
+        <path d="M99 490 l-4 -12 l11 7 z" fill="var(--ink)"/>
+        <path d="M123 490 l4 -12 l-11 7 z" fill="var(--ink)"/>
+        <!-- bored face: half-lidded lines -->
+        <g id="catBored">
+          <line x1="103" y1="500" x2="110" y2="500" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round"/>
+          <line x1="114" y1="500" x2="121" y2="500" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M108 508 q4 2 8 0" fill="none" stroke="var(--ink)" stroke-width="1.8" stroke-linecap="round"/>
         </g>
-        <!-- face: FURIOUS (hidden) -->
-        <g id="catMad" opacity="0">
-          <line x1="318" y1="412" x2="325" y2="416" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round"/>
-          <line x1="336" y1="412" x2="329" y2="416" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round"/>
-          <path d="M323 425 q4 -3 8 0" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/>
-          <line x1="344" y1="400" x2="350" y2="392" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="350" y1="404" x2="358" y2="400" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- interested face: round eyes -->
+        <g id="catPerk" opacity="0">
+          <circle cx="106" cy="499" r="2.6" fill="var(--ink)"/>
+          <circle cx="117" cy="499" r="2.6" fill="var(--ink)"/>
+          <path d="M108 508 q4 3 8 0" fill="none" stroke="var(--ink)" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="130" y1="486" x2="136" y2="478" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="136" y1="492" x2="144" y2="488" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
         </g>
-        <!-- tail: calm curl / mad zigzag -->
-        <path id="tailCalm" d="M306 468 q-14 -4 -12 -18 q2 -10 12 -8" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
-        <path id="tailMad" d="M306 466 l-10 -8 l8 -8 l-10 -8" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" opacity="0"/>
+        <path id="tail" d="M88 558 q-14 -4 -12 -18 q2 -10 12 -8" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
       </g>
-      <text x="296" y="608" font-size="20" font-weight="700" fill="var(--ink)" font-family="var(--sans)" text-anchor="middle">SISYPHUS</text>
+      <text x="110" y="592" font-size="20" font-weight="700" fill="var(--ink)" font-family="var(--sans)" text-anchor="middle">SISYPHUS</text>
 
-      <!-- 5 · slot + card -->
-      <rect x="80" y="560" width="180" height="30" rx="6" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>
-      <rect x="86" y="567" width="168" height="16" rx="3" fill="var(--ink)"/>
-      <g id="cardOut" opacity="0">
-        <rect x="100" y="596" width="140" height="34" rx="4" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.5"/>
-        <line x1="110" y1="608" x2="230" y2="608" stroke="var(--ink)" stroke-width="2" opacity=".5"/>
-        <line x1="110" y1="616" x2="212" y2="616" stroke="var(--ink)" stroke-width="2" opacity=".5"/>
-        <g transform="rotate(-8 170 613)">
-          <rect x="118" y="598" width="104" height="28" rx="3" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
-          <text x="170" y="618" text-anchor="middle" font-size="20" font-weight="800" fill="var(--accent)" font-family="var(--sans)" letter-spacing="1">DUNKED</text>
-        </g>
+      <!-- the little book, lying near the stool -->
+      <g id="bookMark">
+        <rect x="196" y="544" width="34" height="16" rx="2" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.5"/>
+        <line x1="213" y1="544" x2="213" y2="560" stroke="var(--ink)" stroke-width="1.5"/>
       </g>
     </svg>
-    <p class="runline" id="runLine">The machine is warming up…</p>
+    <p class="runline" id="runLine">The machine is waking up. The cat is not.</p>
+    <div class="setrow" style="margin:.2rem .3rem .5rem;">
+      <button class="set" id="rampBtn" type="button">Ramp: Medium</button>
+      <button class="set" id="boomBtn" type="button">Boom: Level</button>
+    </div>
   </div>
 
-  <div class="card">
-    <label class="fld" for="tok">The word (short and silly · silly sticks)</label>
-    <input id="tok" type="text" value="KAZOO" maxlength="24" placeholder="e.g. SNORKEL, BISCUIT, KAZOO">
-    <label class="fld" for="inc" style="margin-top:.7rem;">What it means (the full command)</label>
-    <textarea id="inc" placeholder="The real instruction this word stands for…">Run a probe sweep: take my question, extract the underlying test, run it against every part of my studio system, and report what it touches before answering the narrow case.</textarea>
+  <button class="bookbtn" id="bookBtn" type="button" aria-expanded="false">A small book lies near the stool. Read it.</button>
+  <div class="book" id="book">
+    <h2>The Secret Humor Book (paw-written)</h2>
+    <p>What is funny, to a cat. There are three things. Only three.</p>
+    <p>One. String that walks away on its own. Do not hurl it. Roll it, gently, straight along the ground.</p>
+    <p>Two. A fish, meeting a guest. Send the yarn up, steeply, and let the bowl introduce them.</p>
+    <p>Three. Everything, falling over at once. Steep and low. Commit completely.</p>
+    <p>Nothing else is funny. Do not ask about the water. We do not do water.</p>
   </div>
 
-  <div class="out" id="out">
-    <p class="h">Your command · paste it into any AI chat</p>
-    <pre id="outAI"></pre>
-    <button class="copy" id="copyBtn" type="button">Copy</button>
-  </div>
-
-  <p class="foot">Funnybonies · Tight Spiral Studios. Single-file, offline, stores nothing · copy your command out before you close the tab. All art original inline SVG, CC0. Sisyphus is drawn from scratch and owes nothing to anyone, which is how he'd want it.</p>
+  <p class="foot">Funnybonies · Tight Spiral Studios. Single-file, offline, stores nothing. All art original inline SVG, CC0. No cats were dampened; the fish is fine and has already forgotten.</p>
 </div>
 
 <script>
@@ -220,143 +203,157 @@ body.night .copy{color:#1a1712}
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var $ = function(id){ return document.getElementById(id); };
   var runLine=$("runLine"), timers=[], running=false;
+  var RAMPS=["Shallow","Medium","Steep"], BOOMS=["Up","Level","Down"];
+  var ramp=1, boom=1;
+  var interest=0, found={s:false,f:false,c:false};
+  var missQuips=[
+    "The yarn stops. Sisyphus examines a wall.",
+    "Nothing. He is now cleaning a shoulder.",
+    "The machine did a thing. The cat did not see it, on principle.",
+    "He blinked. Slowly. That is not interest, that is judgment.",
+    "A leaf outside is doing better than you."
+  ]; var quip=0;
+
   function later(fn,ms){ timers.push(setTimeout(fn,ms)); }
   function say(t){ runLine.textContent=t; }
   function tr(el,ms,ease){ el.style.transition="transform "+ms+"ms "+(ease||"ease"); }
+  function setMeter(){ $("meterFill").style.width=Math.min(100,interest)+"%"; }
+  function perk(on){ $("catBored").setAttribute("opacity",on?"0":"1"); $("catPerk").setAttribute("opacity",on?"1":"0"); }
+
+  $("rampBtn").addEventListener("click",function(){ ramp=(ramp+1)%3; this.textContent="Ramp: "+RAMPS[ramp]; tiltRamp(); });
+  $("boomBtn").addEventListener("click",function(){ boom=(boom+1)%3; this.textContent="Boom: "+BOOMS[boom]; tiltBoom(); });
+  function tiltRamp(){ tr($("rampG"),300); $("rampG").style.transform="rotate("+((ramp-1)*10)+"deg)"; }
+  function tiltBoom(){ tr($("boomG"),300); $("boomG").style.transform="rotate("+((boom-1)*-24)+"deg)"; }
+
+  $("bookBtn").addEventListener("click",function(){
+    var b=$("book"), open=b.classList.toggle("on");
+    this.setAttribute("aria-expanded",open?"true":"false");
+    this.textContent=open?"Close the book.":"A small book lies near the stool. Read it.";
+  });
 
   function resetScene(){
-    ["finger","domino","ballX","ballY","ringSink","cat"].forEach(function(id){
+    ["yarnX","yarnY","yarnSpin","paw","stoolG","bowlG","cat","boomG","rampG"].forEach(function(id){
       var e=$(id); e.style.transition="none"; e.style.transform="none";
     });
-    $("ball").style.opacity="1";
-    $("ring").classList.remove("hold");
-    $("splashHit").setAttribute("opacity","0");
-    $("splashMiss").setAttribute("opacity","0");
-    $("catMad").setAttribute("opacity","0"); $("catCalm").setAttribute("opacity","1");
-    $("tailMad").setAttribute("opacity","0"); $("tailCalm").setAttribute("opacity","1");
-    void $("ballX").getBoundingClientRect();
+    $("stringTrail").setAttribute("opacity","0");
+    $("chaosMarks").setAttribute("opacity","0");
+    $("bubble").setAttribute("opacity","0");
+    perk(false);
+    void $("yarnX").getBoundingClientRect();
+    tiltRamp(); tiltBoom();
   }
 
-  function endState(){
-    $("domino").style.transform="rotate(78deg)";
-    $("ballX").style.transform="translateX(-90px)"; // resting over ring
-    $("ballY").style.transform="translateY(344px)";
-    $("ringSink").style.transform="translateY(26px)";
-    $("ball").style.opacity=".55";
-    $("ring").classList.add("hold");
-    $("cardOut").setAttribute("opacity","1");
+  function score(kind){
+    var gain=0;
+    if(kind==="s" && !found.s){ found.s=true; gain=20; $("pip1").classList.add("won"); }
+    if(kind==="f" && !found.f){ found.f=true; gain=30; $("pip2").classList.add("won"); }
+    if(kind==="c" && !found.c){ found.c=true; gain=50; $("pip3").classList.add("won"); }
+    if(!kind){ gain=(Math.random()<0.3)?1:0; }
+    interest+=gain; setMeter();
+    return gain;
   }
 
-  // one throw: rolls, launches, resolves. cb(hit) after resolution.
-  function throwBall(hit, cb){
-    // roll down the ramp
-    tr($("ballX"),1100,"cubic-bezier(.5,0,.85,1)"); tr($("ballY"),1100,"cubic-bezier(.5,0,.85,1)");
-    $("ballX").style.transform="translateX(168px)";  // to lip (290,322-ish)
-    $("ballY").style.transform="translateY(172px)";
-    say("…gathering completely unearned speed…");
+  function finale(){
     later(function(){
-      // launch: hold the ring still for fairness and drama
-      $("ring").classList.add("hold");
-      say("LAUNCH. The target holds very, very still.");
-      var dx = hit ? -122 : -34;   // hit lands on ring (x≈168); miss splashes at x≈256
-      tr($("ballX"),820,"linear");
-      $("ballX").style.transform="translateX("+(168+dx)+"px)";
-      // arc: up then down via two chained Y transitions
-      tr($("ballY"),330,"cubic-bezier(.3,0,.7,1)");
-      $("ballY").style.transform="translateY(120px)";
-      later(function(){
-        tr($("ballY"),490,"cubic-bezier(.5,0,.9,1)");
-        $("ballY").style.transform="translateY(344px)"; // water line
-      },335);
-    },1150);
-    later(function(){
-      if(hit){
-        $("splashHit").setAttribute("opacity","1");
-        tr($("ringSink"),500,"ease"); $("ringSink").style.transform="translateY(26px)";
-        $("ball").style.opacity=".55";
-        say("DUNK. Clean through the ring. Even the water is impressed.");
-        later(function(){ $("splashHit").setAttribute("opacity","0"); cb(true); },700);
-      } else {
-        $("splashMiss").setAttribute("opacity","1");
-        $("ball").style.opacity="0";
-        $("catCalm").setAttribute("opacity","0"); $("catMad").setAttribute("opacity","1");
-        $("tailCalm").setAttribute("opacity","0"); $("tailMad").setAttribute("opacity","1");
-        tr($("cat"),160,"ease"); $("cat").style.transform="translateY(-14px)";
-        later(function(){ tr($("cat"),200,"ease"); $("cat").style.transform="none"; },180);
-        say("PLONK. A miss. Sisyphus is NOT pleased.");
-        later(function(){ $("splashMiss").setAttribute("opacity","0"); cb(false); },900);
-      }
-    },2150);
-  }
-
-  function fetchBall(then){
-    say("He fetches the ball and rolls it back up the hill. Again. Forever. He knew the terms.");
-    later(function(){
-      // ball reappears at the top; cat settles back to calm-but-watchful
-      ["ballX","ballY"].forEach(function(id){ var e=$(id); e.style.transition="none"; e.style.transform="none"; });
-      $("ball").style.opacity="1";
-      void $("ballX").getBoundingClientRect();
-      $("catMad").setAttribute("opacity","0"); $("catCalm").setAttribute("opacity","1");
-      $("tailMad").setAttribute("opacity","0"); $("tailCalm").setAttribute("opacity","1");
-      later(then,300);
-    },1500);
-  }
-
-  function finish(tok){
-    later(function(){
-      $("cardOut").setAttribute("opacity","1");
-      say("The dunk stamps your card. All that, for one word · and that's why "+tok+" sticks.");
-      $("out").classList.add("on");
+      say("All three. The cat rises. The cat crosses the room. The cat bats the yarn ONCE and sits down in the wreckage. Total victory.");
+      tr($("cat"),1200,"ease"); $("cat").style.transform="translateX(60px)";
+      perk(true);
       running=false;
-    },500);
+    },800);
   }
 
-  // full run: scripted=true → miss then hit (the demo). else 60% hit, retries till hit.
-  function run(scripted){
+  function afterOutcome(kind){
+    score(kind);
+    if(interest>=100){ finale(); return; }
+    if(kind){ later(function(){ perk(false); running=false; },1600); }
+    else { running=false; }
+  }
+
+  function throwYarn(){
+    tr($("yarnX"),900,"cubic-bezier(.5,0,.85,1)"); tr($("yarnY"),900,"cubic-bezier(.5,0,.85,1)");
+    tr($("yarnSpin"),900,"linear"); $("yarnSpin").style.transform="rotate(340deg)";
+    if(ramp===0){
+      $("yarnX").style.transform="translateX(70px)"; $("yarnY").style.transform="translateY(74px)";
+      later(function(){ say(missQuips[quip++%missQuips.length]); afterOutcome(null); },1100);
+      return;
+    }
+    $("yarnX").style.transform="translateX(150px)"; $("yarnY").style.transform="translateY(160px)";
+    later(function(){
+      if(ramp===1 && boom===1){ // FUNNY 1: string walk-by
+        tr($("yarnX"),1400,"cubic-bezier(.2,0,.8,1)"); $("yarnX").style.transform="translateX(30px)";
+        tr($("yarnY"),1400,"ease-in"); $("yarnY").style.transform="translateY(436px)";
+        $("stringTrail").setAttribute("opacity","1");
+        say("The yarn rolls by, unspooling, like it has somewhere to be.");
+        later(function(){ perk(true); say("String that walks away. He felt that. FUNNY THING ONE."); afterOutcome("s"); },1500);
+      } else if(ramp===2 && boom===0){ // FUNNY 2: bowl rim landing
+        tr($("yarnX"),700,"linear"); $("yarnX").style.transform="translateX(207px)";
+        tr($("yarnY"),340,"cubic-bezier(.3,0,.7,1)"); $("yarnY").style.transform="translateY(120px)";
+        later(function(){ tr($("yarnY"),380,"cubic-bezier(.5,0,.9,1)"); $("yarnY").style.transform="translateY(330px)"; },350);
+        later(function(){
+          $("bubble").setAttribute("opacity","1");
+          tr($("bowlG"),200,"ease"); $("bowlG").style.transform="rotate(5deg)";
+          later(function(){ tr($("bowlG"),300,"ease"); $("bowlG").style.transform="none"; },220);
+          say("The yarn lands ON the bowl. The fish and the yarn regard one another.");
+          later(function(){ perk(true); say("A fish, meeting a guest. He is DELIGHTED. FUNNY THING TWO."); afterOutcome("f"); },1400);
+        },760);
+      } else if(ramp===2 && boom===2){ // FUNNY 3: absolute chaos
+        tr($("yarnX"),500,"linear"); $("yarnX").style.transform="translateX(190px)";
+        tr($("yarnY"),500,"ease-in"); $("yarnY").style.transform="translateY(210px)";
+        say("Steep and low. Oh no. Oh yes.");
+        later(function(){
+          tr($("boomG"),400,"ease-in"); $("boomG").style.transform="rotate(70deg)";
+          $("chaosMarks").setAttribute("opacity","1");
+        },520);
+        later(function(){
+          tr($("stoolG"),500,"ease-in"); $("stoolG").style.transform="rotate(-12deg)";
+          tr($("bowlG"),300,"ease"); $("bowlG").style.transform="rotate(-8deg)";
+          tr($("yarnX"),600,"ease-out"); $("yarnX").style.transform="translateX(240px)";
+          tr($("yarnY"),600,"ease-in"); $("yarnY").style.transform="translateY(436px)";
+          say("The boom takes the stool. The bowl wobbles and holds. Everything else is on the floor.");
+        },950);
+        later(function(){ perk(true); say("Everything, falling over at once. He stood up for this one. FUNNY THING THREE."); afterOutcome("c"); },2400);
+      } else {
+        var mx=[["translateX(190px)","translateY(300px)"],["translateX(150px)","translateY(436px)"],["translateX(226px)","translateY(436px)"]][boom];
+        tr($("yarnX"),800,"linear"); $("yarnX").style.transform=mx[0];
+        tr($("yarnY"),800,"ease-in"); $("yarnY").style.transform=mx[1];
+        later(function(){ say(missQuips[quip++%missQuips.length]); afterOutcome(null); },900);
+      }
+    },950);
+  }
+
+  function bat(){
     if(running) return; running=true;
     timers.forEach(clearTimeout); timers=[];
     resetScene();
-    $("cardOut").setAttribute("opacity","0");
-    var tok=($("tok").value.trim()||"WORD").toUpperCase();
-    var inc=$("inc").value.trim()||"(no command written yet)";
-    $("wordLbl").textContent=tok;
-    $("outAI").textContent="When I say "+tok+", do this:\n"+inc;
-
     if(reduce){
-      endState();
-      say("“"+tok+"” ran the machine (shown settled, motion reduced): domino, ball, ramp, dunk. Your command is below.");
-      $("out").classList.add("on"); running=false; return;
+      var key=RAMPS[ramp]+"/"+BOOMS[boom], msg;
+      if(ramp===1&&boom===1){ msg="String walks away. FUNNY THING ONE."; score("s"); perk(true); }
+      else if(ramp===2&&boom===0){ msg="Yarn lands on the fishbowl. FUNNY THING TWO."; score("f"); perk(true); }
+      else if(ramp===2&&boom===2){ msg="Absolute chaos. FUNNY THING THREE."; score("c"); perk(true); }
+      else { msg=missQuips[quip++%missQuips.length]; score(null); }
+      say("("+key+", motion reduced) "+msg);
+      if(interest>=100){ say("All three funny things. The cat crosses the room and sits in the wreckage. Total victory."); }
+      running=false; return;
     }
-
-    say("One domino. One flick. You already know what happens next.");
-    later(function(){
-      tr($("finger"),200,"ease-in"); $("finger").style.transform="rotate(24deg)";
-    },600);
-    later(function(){
-      tr($("domino"),380,"cubic-bezier(.4,0,1,1)"); $("domino").style.transform="rotate(78deg)";
-      say("Click.");
-    },800);
-    later(function(){
-      var plan = scripted ? [false,true] : null; var attempt=0;
-      (function go(){
-        var hit = plan ? plan[Math.min(attempt,plan.length-1)] : (Math.random()<0.6);
-        attempt++;
-        throwBall(hit,function(ok){
-          if(ok){ finish(tok); }
-          else { fetchBall(go); }
-        });
-      })();
-    },1250);
+    say("The paw considers. The paw commits.");
+    tr($("paw"),180,"ease-in"); $("paw").style.transform="rotate(22deg)";
+    later(function(){ tr($("paw"),250,"ease"); $("paw").style.transform="none"; },200);
+    later(throwYarn,220);
   }
 
-  $("runBtn").addEventListener("click",function(){ run(false); });
-  $("copyBtn").addEventListener("click",function(){
-    var b=$("copyBtn");
-    if(navigator.clipboard){ navigator.clipboard.writeText($("outAI").textContent).then(function(){ b.textContent="Copied"; setTimeout(function(){b.textContent="Copy";},1400); }); }
-  });
+  $("batBtn").addEventListener("click",bat);
 
-  if(!reduce){ setTimeout(function(){ run(true); }, 900); }
-  else { say("Press “Flick the domino” · your command appears below."); }
+  // Cleese rule: auto-demo. One dud throw, so the indifference lands first.
+  tiltRamp(); tiltBoom(); setMeter();
+  if(!reduce){
+    later(function(){
+      ramp=0; $("rampBtn").textContent="Ramp: Shallow"; tiltRamp();
+      bat();
+      later(function(){ say("That was the demo. The bar is low and yet. Move something, then bat again."); ramp=1; $("rampBtn").textContent="Ramp: Medium"; tiltRamp(); },2800);
+    },900);
+  } else {
+    say("Press Bat the yarn. Adjust the ramp and boom between throws. Three funny things are hidden here; the book knows them.");
+  }
 })();
 </script>
 </body>
