@@ -312,34 +312,15 @@ summary:focus-visible{outline:4px solid var(--focus); outline-offset:3px;}
   p{margin-bottom:.7rem;}
 }
 
-/* ═══ THE COMFORT DOCK — bottom corner, inside the thumb arc ═══
-   Lifted from comfort-v3.html (v3.1, all seven ticks clean). This also answers
-   the C-REACH note studio-fingers printed on this file: the most-used control
-   now sits in the bottom-40% arc, not at 480px of a 915px screen. */
-.dock{
-  position:fixed; right:max(14px, env(safe-area-inset-right));
-  bottom:max(14px, env(safe-area-inset-bottom)); z-index:70;
-}
-.dock-btn{
-  display:inline-flex; align-items:center; gap:9px;
-  min-height:56px; min-width:56px; padding:12px 20px; margin:0;
-  border:2px solid var(--edge); border-radius:28px;
-  background:var(--accent-strong); color:var(--on-accent);
-  font-family:var(--sans); font-weight:700; font-size:1.125rem;
-  cursor:pointer; box-shadow:0 3px 14px rgba(0,0,0,.3); text-align:center;
-}
-/* Named .dock-glyph, not ".dock-btn svg" — aria-hidden paint with no independent
-   hit area; the target is the 56px button around it. */
-.dock-glyph{ width:24px; height:24px; flex:0 0 auto; }
-
-/* Panel opens UPWARD from the dock, positioned from a MEASURED height, never a
-   hardcoded constant. Scrolls, paints a fade when there is more below. */
+/* THE DOCK IS RETIRED. Founder playtest ruling 2026-08-09: "Just top of page. We
+   don't even need it at bottom." Comfort lives in the tucking top bar only; the
+   panel drops DOWN from the bar, positioned from its MEASURED height. */
 .panel{
   position:fixed; z-index:71;
   right:max(14px, env(safe-area-inset-right));
-  bottom:calc(max(14px, env(safe-area-inset-bottom)) + var(--dock-h));
+  top:calc(var(--chrome-h) + 8px);
   width:min(340px, calc(100vw - 28px));
-  max-height:calc(100dvh - var(--chrome-h) - var(--dock-h) - 24px);
+  max-height:calc(100dvh - var(--chrome-h) - 24px);
   overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin;
   background:var(--surface); color:var(--ink);
   border:2px solid var(--accent-strong); border-radius:var(--r);
