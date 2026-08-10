@@ -676,7 +676,7 @@ if(LIVE_HOST)
 fetch('https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:json')
   .then(r=>r.text()).then(t=>{
     const json=JSON.parse(t.substring(t.indexOf('(')+1,t.lastIndexOf(')')));
-    const rows=json.table.rows.map(r=>({key:r.c[0]&&r.c[0].v,unit:r.c[2]&&r.c[2].v,rent:r.c[3]&&r.c[3].v})).filter(r=>r.key);
+    const rows=json.table.rows.map(r=>({key:r.c[0]&&r.c[0].v,unit:r.c[2]&&r.c[2].v,rent:r.c[3]&&(r.c[3].f||r.c[3].v)})).filter(r=>r.key);
     ROUTES.slice(1).forEach(k=>{
       const mine=rows.filter(r=>r.key===k);
       const tb=document.querySelector(`[data-rents="${k}"]`);
