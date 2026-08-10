@@ -76,4 +76,103 @@ CREDIT_INITIAL = [re.compile(NAME_INITIAL + SEP + r'EN\s?\d{3}'),
 # a gap you can see.
 
 # Even in credit shape, a course TITLE can look like a surname. This list is printed on
-# every run; i
+# every run; it is not a quiet exemption.
+NOT_A_NAME = {"Creative", "Writing", "English", "Composition", "Literature", "Studies",
+              "Online", "Summer", "Spring", "Fall", "Winter", "Guest", "Cabinet",
+              "Student", "Course", "Communication", "Arts", "Report", "Provost"}
+
+
+
+
+def read(path):
+    try:
+        return open(path, "rb").read().decode("utf-8", "replace")
+    except OSError:
+        return ""
+
+
+def authorized_names(log_text):
+    """First-name + initial pairs the log names. The log is the only source of consent a
+    gate may consult; a name absent here is a name without permission, by definition."""
+    return {f"{m.group(1)} {m.group(2)}." for m in INITIAL.finditer(log_text)}
+
+
+def credits_in(text):
+    """Every place a name and a course code sit together in CREDIT SHAPE. Returns
+    (snippet, [Firstname L.], [Firstname Surname])."""
+    flat = re.sub(r'\s+', ' ', text)
+    initials, fulls, where = [], [], []
+    for rx in CREDIT_INITIAL:
+        for m in rx.finditer(flat):
+            g = [x for x in m.groups() if x]
+            if len(g) >= 2:
+                initials.append(f"{g[-2]} {g[-1]}.")
+                where.append(flat[max(0, m.start() - 40):m.end() + 40])
+    if not (initials or fulls):
+        return []
+    return [(" | ".join(where)[:220], initials, fulls)]
+
+
+def check(paths, log_text, verbose=True):
+    ok_names = authorized_names(log_text)
+    halts, seen = [], 0
+    for p in paths:
+        text = read(p)
+        if not text:
+            continue
+        for block, initials, fulls in credits_in(text):
+            seen += 1
+            for n in initials:
+                if n not in ok_names:
+                    halts.append(("C-APPROVAL", p, n, block))
+    if verbose:
+        print(f"== approvals-gate: {len(paths)} surface(s), {seen} student credit(s) found ==")
+        print(f"   authorized in {LOG}: {', '.join(sorted(ok_names)) or '(none)'}")
+        for code, p, n, block in halts:
+            print(f"   HALT  {code}  {p}")
+            print(f"         name: {n}")
+            print(f"         near: {block[:150]}")
+        if not halts:
+            print("   pass  every student credit is named in the approvals log")
+        print("   LIMIT: reads shipped surfaces only. Nothing here can watch an agent")
+        print("          open a student portfolio at runtime; that half of the founder's")
+        print("          ruling has no arithmetic. Narrow retrieval is the mitigation.")
+        print("   LIMIT: byline FORM (attribution standard clause 2, no full surname) is")
+        print("          NOT checked here. A machine cannot tell a course title from a")
+        print("          surname without a roster, and a roster is the thing the ruling")
+        print("          forbids holding. Named as a gap rather than faked as a check.")
+    return 1 if halts else 0
+
+
+def self_test():
+    """Prove it discriminates. Canaries, not vibes."""
+    log = "- **Credit form:** Hamish K.\n- Course: EN195 Creative Writing (summer 6-week online)\n"
+    ok = True
+
+    def chk(label, got, want):
+        nonlocal ok
+        good = got == want
+        ok &= good
+        print(f"   {'PASS' if good else 'FAIL'}  {label}  (got {got!r}, want {want!r})")
+
+    print("-- log parsing --")
+    chk("log yields the authorized name", authorized_names(log), {"Hamish K."})
+
+    print("-- detection --")
+    good = '<div>Guest cabinet &middot; Hamish K. &middot; EN195 Creative Writing (summer 6-week online)</div>'
+    bad1 = '<div>Guest cabinet &middot; Dolores V. &middot; EN195 Creative Writing (summer online)</div>'
+    none = '<p>EN195 Creative Writing is a six-week online course.</p>'
+    staff = '<p>Taught by Matt Walsh. Office hours Tuesday.</p>'
+    chk("authorized credit passes",   check([], log, False) or _one(good, log), 0)
+    chk("unlogged name halts",        _one(bad1, log), 1)
+    chk("a title beside a code is clean", _one('<title>What Counts Now — EN195</title>', log), 0)
+    chk("course code alone is clean", _one(none, log), 0)
+    chk("no course code, no credit",  _one(staff, log), 0)
+
+    print("-- prose near a course code is NOT a credit (the 157-false-positive lesson) --")
+    prose = ('<p>a constant deep channel runs through all five years for Written Communication '
+             'and EN101, per the AY24-25 Annual Report; briefing to Provost Jackson.</p>')
+    chk("real prose from the corpus is clean", _one(prose, log), 0)
+    chk("  and yields no credit at all",       credits_in(prose), [])
+
+    p
