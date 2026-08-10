@@ -335,4 +335,134 @@
     <h2>Photography in progress</h2>
     <p class="sub">Interior and exterior photos of The Royal are being shot now. In the meantime the numbers below are current, and the super is happy to show units in person.</p>
   </section>
-  <section id="royal-rents"
+  <section id="royal-rents" style="padding-top:0;">
+    <div class="rents-wrap">
+      <h2>Current rents</h2>
+      <table><thead><tr><th scope="col">Unit</th><th scope="col">Monthly rent</th></tr></thead>
+        <tbody data-rents="royal">
+          <tr><td>Studio</td><td class="price">$1,750–$2,100</td></tr>
+          <tr><td>1 Bedroom</td><td class="price">$2,400</td></tr>
+          <tr><td>2 Bedroom</td><td class="price">$2,600</td></tr>
+          <tr><td>3 Bedroom</td><td class="price">$3,700</td></tr>
+          <tr><td>4 Bedroom</td><td class="price">$4,200</td></tr>
+        </tbody></table>
+      <span class="livebadge">Showing saved prices</span>
+      <p class="gal-hint" style="margin-top:1rem;">Heat and hot water included.</p>
+    </div>
+    <div class="amen"><span>Green Line C at door</span><span>On-site laundry</span><span>Restored originals</span><span>Coolidge Corner 2 blocks</span><span>On-site super</span></div>
+  </section>
+</div>
+</main>
+
+<footer>
+  <div class="cols">
+    <div><span class="wordmark">Leeder<span style="color:#7fd0de">.</span></span>
+      <p>318 Harvard Street, Rm. 23<br>Brookline, MA 02446</p></div>
+    <div><p><a href="tel:6172328700">(617) 232-8700</a><br>
+      <a href="mailto:mlbuckley@leedermgt.com">mlbuckley@leedermgt.com</a></p></div>
+    <div><p><a href="https://leedermanagement.com/wp-content/uploads/2022/03/Application-rental.pdf">Rental application (PDF)</a></p></div>
+  </div>
+  <p class="note">Design prototype v2. Rents load live from the Leeder Rents Google Sheet when reachable.</p>
+</footer>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <img id="lb-img" src="" alt="">
+  <p id="lb-cap"></p>
+  <div class="lb-controls">
+    <button id="lb-prev">← Previous</button>
+    <button id="lb-close">Close (Esc)</button>
+    <button id="lb-next">Next →</button>
+  </div>
+</div>
+
+<script>
+/* ---------- galleries ---------- */
+const W='https://leedermanagement.com/wp-content/uploads/';
+const D=id=>'https://drive.google.com/thumbnail?id='+id+'&sz=w1600';
+const GALLERIES={
+  bowdoin:[
+    [W+'2022/10/bowdoin-street-2.jpg','Renovated kitchen'],
+    [W+'2022/02/bowdoin-street-3.jpg','Living area with hardwood floors'],
+    [W+'2022/02/bowdoin-street-4.jpg','Bedroom with large windows'],
+    [W+'2022/02/bowdoin-street-5.jpg','Sunlit interior'],
+    [W+'2022/02/bowdoin-street-6.jpg','Living room detail'],
+    [W+'2022/02/bowdoin-street-1.jpg','Exterior at the State House']
+  ],
+  cambridge:[
+    [W+'2022/10/concord-avenue-1.png','Craigie Arms exterior'],
+    [W+'2022/10/concord-ave-2.png','Building entrance'],
+    [W+'2022/10/concord-avenue-3.png','Facade detail'],
+    [W+'2022/11/concord-avenue-4.jpg','Concord Avenue view'],
+    [W+'2022/02/concord-avenue-5.jpg','The building in context'],
+    [D('1VdX4NCYadD8o04b8thH0qBW-nnOa6EKU'),'Craigie Arms — street view'],
+    [D('1HSmIvLgmhgYZDORPLcpEgBRCwHsU_UoK'),'Craigie Arms — angle view'],
+    [D('10gFAdo5q3eVWsaRV-bzMn6d4lRRw_vAl'),'Craigie Arms — detail']
+  ],
+  perkins:[
+    [D('1KT_mAL9dsOjXBJk5QszQvPcecAxYG8kY'),'Perkins Square'],
+    [D('1bC0xen5rQD_WIUzFvtFyJbpa7s3z_8Lz'),'Building exterior'],
+    [D('1l4oyBNmD_jqLVXj1_KrJpt-pt_h53be8'),'Balcony'],
+    [W+'2022/11/jamaica-plain-neighborhood-2.png','Jamaica Pond neighborhood']
+  ]
+};
+let lbList=[], lbIndex=0;
+Object.entries(GALLERIES).forEach(([key,items])=>{
+  const wrap=document.querySelector(`[data-gallery="${key}"]`); if(!wrap) return;
+  items.forEach(([src,cap],i)=>{
+    const b=document.createElement('button');
+    b.setAttribute('aria-label','View photo: '+cap);
+    b.innerHTML=`<img loading="lazy" src="${src}" alt="${cap}">`;
+    b.addEventListener('click',()=>openLB(items,i));
+    wrap.appendChild(b);
+  });
+});
+const lb=document.getElementById('lightbox'), lbImg=document.getElementById('lb-img'), lbCap=document.getElementById('lb-cap');
+function openLB(list,i){ lbList=list; lbIndex=i; renderLB(); lb.classList.add('open'); document.getElementById('lb-close').focus(); }
+function renderLB(){ const [src,cap]=lbList[lbIndex]; lbImg.src=src; lbImg.alt=cap; lbCap.textContent=cap+'  ('+(lbIndex+1)+' of '+lbList.length+')'; }
+function stepLB(d){ lbIndex=(lbIndex+d+lbList.length)%lbList.length; renderLB(); }
+document.getElementById('lb-prev').onclick=()=>stepLB(-1);
+document.getElementById('lb-next').onclick=()=>stepLB(1);
+document.getElementById('lb-close').onclick=()=>lb.classList.remove('open');
+document.addEventListener('keydown',e=>{
+  if(!lb.classList.contains('open')) return;
+  if(e.key==='Escape') lb.classList.remove('open');
+  if(e.key==='ArrowLeft') stepLB(-1);
+  if(e.key==='ArrowRight') stepLB(1);
+});
+
+/* ---------- hash routing ---------- */
+const ROUTES=['home','bowdoin','cambridge','perkins','royal'];
+function route(){
+  let key=(location.hash||'#/').replace('#/','')||'home';
+  if(!ROUTES.includes(key)) key='home';
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+key).classList.add('active');
+  document.querySelectorAll('nav [data-nav]').forEach(a=>a.toggleAttribute('aria-current',a.dataset.nav===key));
+  window.scrollTo({top:0});
+}
+window.addEventListener('hashchange',route);
+document.addEventListener('click',e=>{
+  const a=e.target.closest('[data-nav]');
+  if(a){ location.hash='#/'+ (a.dataset.nav==='home'?'':a.dataset.nav); }
+});
+route();
+
+/* ---------- live rents from Google Sheet ---------- */
+const SHEET_ID='1FUsWJI9MjuG2P_VWChVxBb1Cip4ui3dEIgb7yaJH_Pg';
+fetch('https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:json')
+  .then(r=>r.text()).then(t=>{
+    const json=JSON.parse(t.substring(t.indexOf('(')+1,t.lastIndexOf(')')));
+    const rows=json.table.rows.map(r=>({key:r.c[0]&&r.c[0].v,unit:r.c[2]&&r.c[2].v,rent:r.c[3]&&r.c[3].v})).filter(r=>r.key);
+    ROUTES.slice(1).forEach(k=>{
+      const mine=rows.filter(r=>r.key===k);
+      const tb=document.querySelector(`[data-rents="${k}"]`);
+      if(mine.length&&tb) tb.innerHTML=mine.map(r=>`<tr><td>${r.unit}</td><td class="price">${r.rent}</td></tr>`).join('');
+      const from=document.querySelector(`[data-from="${k}"]`);
+      if(mine.length&&from) from.textContent=mine[0].rent.split('–')[0];
+    });
+    document.querySelectorAll('.livebadge').forEach(b=>{b.textContent='Prices live from Google Sheet'; b.classList.add('live');});
+  }).catch(()=>{});
+</script>
+</body>
+</html>
