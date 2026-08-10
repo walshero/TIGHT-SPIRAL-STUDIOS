@@ -67,4 +67,29 @@ removed. Both canaries were run before this handoff was written.
 5. **Two sessions in one lane.** 13 commits from another TSP session landed mid-work on
    2026-08-09, one of them editing `studio-belt.sh` while this session was re-seeding it.
    Nothing was clobbered, and that was ordering luck. Second occurrence in two days. The
-   lane model has RW and RO and cannot express two sessions insi
+   lane model has RW and RO and cannot express two sessions inside one lane. Highest risk
+   item on the board and the least defined. Do not open it at the end of a long session.
+
+## ONLY MATT CAN DO THESE
+
+- Rotate the exposed PAT. Still marked ACTIVE on `HANDOFF.md`.
+- Create the Drive folder STUDENT-WORK-PROTECTED and register the ID.
+- Hamish's own deploy still shows his full last name and a date. The arcade card follows the
+  standard; the page it links does not, and the studio has no write access there. One email.
+  Consent is settled and on file; this is presentation only.
+- The GALA item on `HANDOFF.md` is marked urgent before Jul 20 and is three weeks past.
+  Either it is done and the list is stale, or it is not and the list is the only thing
+  that knows.
+
+## THE PATTERN, BECAUSE IT REPEATED FIVE TIMES IN TWO DAYS
+
+Every failure this session was a rule that named something nobody could reach, and nothing
+could tell. The FERPA ruling lived in one lane and was cited from another. The standing
+instructions named three files at paths that did not resolve. The attribution standard
+required a log that did not exist. The manifest described resolved problems as open. The
+belt's ratchet key pointed at a directory name that was not the repo. Belt tick 8 clause B
+now catches the citation form of this. The others are still caught only by somebody looking.
+
+Second pattern, same period: four times an agent typed a byte count instead of computing it
+(425, 701, 175, 619). Three landed wrong-asserted. The fourth was aborted by the guard. The
+arithmetic works. Read the number off the record; never type it.
