@@ -1104,30 +1104,48 @@ function sbLift(quiet){
 document.getElementById('sbBack').addEventListener('click', function(){ show('hub'); });
 
 /* ============ LINE BREAK ============ */
-var LB = ["so","much","depends","upon","a","red","wheel","barrow","glazed","with","rain","water","beside","the","white","chickens"];
-var LBteach = {
- 3:"Breaking after “upon” is Williams’s own first move. The line leans forward off a preposition. That lean is enjambment: the sentence keeps falling into the next line.",
- 6:"Breaking inside “wheelbarrow” splits a thing into two smaller things: wheel, then barrow. Williams did exactly this. The break makes you see the object in parts.",
- 10:"Breaking inside “rainwater” is the same move as “wheel / barrow.” The compound comes apart and each half gets its own weight.",
- 15:"Ending on “chickens” closes the poem with a full stop of an image: an end-stopped line. The music rests."
-};
-/* v2, founder playtest ruling 2026-08-09: the game must CREATE what it teaches.
-   The poem is flattened to prose; the player holds seven scissors, Williams's own
-   break count for this poem. A cut spends a scissor and the poem re-forms below,
-   so enjambment is something you watch happen, not something you are told about.
-   Paste is free and returns the scissor, so nothing is ever lost to experiment. */
-var LB_SCISSORS = 7; /* Williams used seven breaks in this poem */
+/* v3, founder playtest ruling 2026-08-09: WCW is crazy hard to START with for
+   enjambment, and the opening look must be a block of prose and nothing else.
+   The trainer is the founder's own line from the text bank - free ground where
+   every cut is expressive and nothing canonical can be gotten wrong. The famous
+   one is the second passage, teach notes intact. Counter, poem card, feedback
+   and the next button all stay hidden until the first cut: clean entry paint. */
+var LB_SET = [
+ { scissors:5,
+   attrib:'Prose: Matt Walsh, from the studio text bank.',
+   next:'Next: a famous one',
+   words:["I've","pictured","this","so","many","times","I","almost","have","a","memory","of","there","being","a","photograph."],
+   teach:{} },
+ { scissors:7,
+   attrib:'Text: William Carlos Williams, "The Red Wheelbarrow" (1923, public domain). Williams used seven breaks.',
+   next:'Back to the training line',
+   words:["so","much","depends","upon","a","red","wheel","barrow","glazed","with","rain","water","beside","the","white","chickens"],
+   teach:{
+    3:"Breaking after “upon” is Williams’s own first move. The line leans forward off a preposition. That lean is enjambment: the sentence keeps falling into the next line.",
+    6:"Breaking inside “wheelbarrow” splits a thing into two smaller things: wheel, then barrow. Williams did exactly this. The break makes you see the object in parts.",
+    10:"Breaking inside “rainwater” is the same move as “wheel / barrow.” The compound comes apart and each half gets its own weight.",
+    15:"Ending on “chickens” closes the poem with a full stop of an image: an end-stopped line. The music rests."
+   } }
+];
+var lbIx = 0;
 var lbBreaks = [];
+function lbWords(){ return LB_SET[lbIx].words; }
 function lbLeft(){
   var n = 0;
   for(var i=0;i<lbBreaks.length;i++){ if(lbBreaks[i]){ n++; } }
-  return LB_SCISSORS - n;
+  return LB_SET[lbIx].scissors - n;
 }
 function lbCounter(){ document.getElementById('lbScissorNum').textContent = lbLeft(); }
+function lbReveal(){
+  document.getElementById('lbCount').hidden = false;
+  document.getElementById('lbPoemLabel').hidden = false;
+  document.getElementById('lbPoem').hidden = false;
+  document.getElementById('lbNext').hidden = false;
+}
 function lbPoemRender(){
   var box = document.getElementById('lbPoem');
   var lines = [], cur = [];
-  LB.forEach(function(w, i){
+  lbWords().forEach(function(w, i){
     cur.push(w);
     if(lbBreaks[i]){ lines.push(cur.join(' ')); cur = []; }
   });
@@ -1139,11 +1157,12 @@ function lbPoemRender(){
     box.appendChild(d);
   });
 }
-function lbStart(){
-  lbBreaks = LB.map(function(){ return false; });
+function lbLoad(){
+  var W = lbWords();
+  lbBreaks = W.map(function(){ return false; });
   var box = document.getElementById('lbLine');
   box.innerHTML = '';
-  LB.forEach(function(w, i){
+  W.forEach(function(w, i){
     var s = document.createElement('span');
     s.textContent = w;
     box.appendChild(s);
@@ -1156,18 +1175,27 @@ function lbStart(){
     })(i, g);
     box.appendChild(g);
   });
+  /* The clean start: a block of prose and nothing else. */
+  document.getElementById('lbCount').hidden = true;
+  document.getElementById('lbPoemLabel').hidden = true;
+  document.getElementById('lbPoem').hidden = true;
   document.getElementById('lbFeed').hidden = true;
-  lbCounter(); lbPoemRender();
+  var nb = document.getElementById('lbNext');
+  nb.hidden = true; nb.textContent = LB_SET[lbIx].next;
+  document.getElementById('lbAttrib').innerHTML = '<em>' + LB_SET[lbIx].attrib + '</em>';
+  lbCounter();
 }
+function lbStart(){ lbIx = 0; lbLoad(); }
 function lbToggle(i, btn){
   var feed = document.getElementById('lbFeed');
+  var W = lbWords(), T = LB_SET[lbIx].teach;
   feed.hidden = false;
   if(lbBreaks[i]){
     /* PASTE — free, and the scissor comes home. */
     lbBreaks[i] = false;
     btn.setAttribute('aria-pressed','false');
-    btn.setAttribute('aria-label','Cut the line after “' + LB[i] + '”');
-    feed.textContent = 'Pasted. The line runs on past “' + LB[i] + '” and the scissor is back in your hand. ' + lbLeft() + ' left.';
+    btn.setAttribute('aria-label','Cut the line after “' + W[i] + '”');
+    feed.textContent = 'Pasted. The line runs on past “' + W[i] + '” and the scissor is back in your hand. ' + lbLeft() + ' left.';
   } else {
     if(lbLeft() <= 0){
       feed.textContent = 'No scissors left. Paste a gold cut to take one back.';
@@ -1176,17 +1204,22 @@ function lbToggle(i, btn){
     }
     lbBreaks[i] = true;
     btn.setAttribute('aria-pressed','true');
-    btn.setAttribute('aria-label','Paste: rejoin the line after “' + LB[i] + '”');
-    if(LBteach[i]){
-      feed.textContent = LBteach[i] + ' ' + lbLeft() + ' scissors left.';
+    btn.setAttribute('aria-label','Paste: rejoin the line after “' + W[i] + '”');
+    if(T[i]){
+      feed.textContent = T[i] + ' ' + lbLeft() + ' scissors left.';
     } else {
-      var next = LB[i+1] ? LB[i+1] : 'the end';
-      feed.textContent = 'Cut. A breath lands after “' + LB[i] + '” and the next line opens on “' + next + '”. Watch the poem take shape below. ' + lbLeft() + ' scissors left.';
+      var next = W[i+1] ? W[i+1] : 'the end';
+      feed.textContent = 'Cut. A breath lands after “' + W[i] + '” and the next line opens on “' + next + '”. Watch the poem take shape below. ' + lbLeft() + ' scissors left.';
     }
   }
+  lbReveal();
   lbCounter(); lbPoemRender();
   say(feed.textContent);
 }
+document.getElementById('lbNext').addEventListener('click', function(){
+  lbIx = (lbIx + 1) % LB_SET.length;
+  lbLoad();
+});
 document.getElementById('lbBack').addEventListener('click', function(){ show('hub'); });
 
 /* ============ TICKET (Carry-Out) ============ */
