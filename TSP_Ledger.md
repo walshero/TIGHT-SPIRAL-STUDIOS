@@ -728,3 +728,25 @@ Traced live: clean start confirmed (all machinery hidden), first cut reveals and
 the line, trainer at 5, Williams at 7 with the upon note firing, cycle runs both ways.
 Belt PASS, census 0 under 18px. Four surgical byte-checked commits; repo sha256 equals
 local.
+
+## 2026-08-09 (eighth playtest note) — FOUNDER RULING: the dock is retired; Comfort at the top of the page only
+
+Verbatim: *"I'm still seeing the comfort button standing in the lower right when I
+scroll. Just top of page. We don't even need it at bottom please"*
+
+Landed as v6.3. The bottom dock left the DOM, its CSS, and Clear Reader's exclusions;
+Comfort lives only in the tucking top bar, and the panel now drops down from the bar's
+measured height instead of floating up from the corner. This overrides two earlier
+positions in order: the v3 thumb-arc placement (C-REACH) and last hour's top-and-bottom
+reading - the founder saw both live and chose top only. The studio-wide comfort pattern
+is likewise top-only, riding the same propagation item.
+
+One pre-existing quirk surfaced while verifying: the coinbar's hidden attribute has
+never actually hidden it (the .coinbar display:flex rule wins over [hidden]), so the top
+bar - and now Comfort - shows on the entry scene and always has. The entry gate has
+carried it all along. Left as-is: it matches the ruling, and closing it is a one-line
+CSS guard if the founder ever wants the entry scene bare.
+
+Traced live: no dock anywhere on scroll, panel opens under the bar, night applies,
+Clear Reader keeps the top bar as its exit. Belt PASS, census 0 under 18px. Eight
+surgical byte-checked commits; repo sha256 equals local.
