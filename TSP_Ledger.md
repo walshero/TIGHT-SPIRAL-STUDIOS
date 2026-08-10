@@ -657,3 +657,24 @@ NOT become canon as written. The v7 ruling's state stands — no spine line exis
 if one is ever needed, the founder writes it. The fork's remaining live stake
 narrows to the modern-period dossier work (real-and-stranded vs fossil); the line
 itself is settled: not approved as-is.
+
+## 2026-08-10 — FOUNDER BUILD ORDER: CYL v7, the full six, the felt drop, CLASS not politics
+
+**Verbatim:** "Merge this lane with this doc as needed and create the latest
+Cohesive full 6 President 20 minute plus Maslow drop like Jenova Chen flow so
+you feel how choices affect class! Not politics, wealth and power."
+
+**Unpacked (binding, extends the 08-08 v7 drift ruling):**
+1. **Full six presidents in one cohesive build** — the Cold War trio plus the
+   current-era trio. This is the founder ordering the current-era scenes INTO the
+   build; the standing sourcing rule still binds HOW (records real, dated,
+   sourced, even-handed — never fabricated), and his cold play remains the final
+   gate on the records themselves.
+2. **20+ minutes** — a full arc, not a slice.
+3. **The Maslow drop is FELT, Jenova Chen flow** — the descent as something the
+   player moves through and feels thicken (the 08-05/08-08 rulings' viscosity
+   mechanic, now ordered into the main game, not staged beside it).
+4. **THE FRAME IS CLASS, NOT POLITICS.** The gap the game teaches is what wealth
+   and power did to where the player's household stands — never which party was
+   right. Records are chosen and written on the class/wealth/power axis;
+   partisan scoring of any president is out of scope by founder order.
