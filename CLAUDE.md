@@ -112,6 +112,16 @@ shared. (This was asked and answered too many times — it is settled.)
 ## Face
 - `index.html` accounts for **every** page in the repo — nothing is orphaned.
   Keep it that way: new pages get linked from the face.
+- **Lead the studio with the most-developed games (standing, 2026-08-10).** The first
+  thing a visitor sees on the face should be the studio's best, most-complete work —
+  the flagship and the polished builds up front; experiments, seasonal one-offs, and
+  anything marked "In build" trail at the end. Order "The Games" by development level,
+  not by recency.
+- **Not-ready-for-public / art pieces live on Matt's dashboard (`matt-radar`), not the
+  public face.** When a build isn't ready for the public studio, move it off the face
+  and into the dashboard repo rather than leaving it live. (Precedent 2026-08-10:
+  "Borges Was Here" / `old-problems-at-new-speed.html` pulled from the face and moved
+  to the dashboard; the `borges-paper.md` design paper stays as internal canon.)
 
 ## Voice — settled
 - **No invented or inflated claims.** Use the founder's actual words; if a claim isn't
