@@ -50,6 +50,49 @@ closes.
 
 ---
 
+# SOURCE — do not draw from student work at all
+
+**Founder ruling, 2026-08-10, verbatim:**
+> "Don't draw from student work unless specifically authorized by me. End of FERPA problems."
+
+**This sits ABOVE everything below it and is read first.** THE CHECK governs when a flag may
+fire. SCOPE governs what a sweep may retrieve. This governs whether the studio touches student
+work in the first place, and it is upstream of both. Nearly every FERPA question this studio
+has argued about dissolves here, because a question about a record you never drew from does
+not arise. That is the founder's point and it is the reason this section is short.
+
+## THE SOURCE CHECK
+
+**Default: NO.** Student work is not a source. Not for a build, not for a corpus, not for a
+voice sample, not for an example, not for a sweep, not for a test fixture, not for context.
+
+**The only exception is specific authorization from Matt, and it has to be findable.**
+"Specifically authorized" means an entry in `approvals-log.md` naming the work. Authorization
+that lives only in a chat, only in a mailbox, or only in an agent's memory does not exist for
+any purpose a gate can check, which is the same as not existing. If you believe you have
+permission and there is no log entry, you do not have permission yet. Write the entry or stop.
+
+**Already-authorized work stays authorized.** This does not retract anything. *Barcelona
+Summers* is credited on `arcade.html` with written permission on file and a log entry, and it
+is unaffected. Publication is consent, per THE CHECK, for work already in the world.
+
+**This is still not an escalation.** Same de-escalation as everything below: drawing from
+student work without authorization is a SOURCING defect by the agent, never labeled FERPA,
+never CRITICAL, never an emergency. The correct report is one line and a narrower action.
+
+## WHAT HAS A CHECK AND WHAT DOES NOT
+
+Belt tick 9 (`approvals-gate.py`) enforces the checkable half: a shipping surface that carries
+a student credit with no matching entry in `approvals-log.md` does not ship, exit 1.
+
+The other half is a runtime discipline and it has no arithmetic behind it, stated plainly
+rather than implied. Nothing can watch an agent decide to open a student portfolio. What the
+studio can do is what it did on 2026-08-09: narrow retrieval so the corpus is never handed to
+an errand that did not ask for it. SCOPE below is that mechanism. This section is the reason
+for it.
+
+---
+
 # SCOPE — what a sweep may RETRIEVE
 
 **Amendment, 2026-08-09, at recurrences 30 and 31. Founder direction: "Yes, build."**

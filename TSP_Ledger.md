@@ -706,3 +706,60 @@ rather than patching 101 surfaces twice.
 ## 2026-08-10 — Session-close lane sweep (the standing CLAUDE.md sweep, run before idling)
 
 **Swept via live connectors, cost-scoped per the rule.** Spokes: matt-radar and the writerly-moves repo clean; en195-apps clean (the offline-floor fix branch is fully merged, pointer just undeleted). **One real strand found:** the Confluence hub repo carries an unmerged branch (github-pages-deployment-setup, tip 08690e4, 2026-07-19/20) holding a complete Supabase real-data backend — schema, RLS policies for the four-role model, reliability views, magic-link auth behind a demo-mode fallback, plus a one-shot setup script. Three weeks stranded, the classic built-never-merged shape. NOT merged by this session: TSP is read-only in the Confluence lane; the merge is a Confluence-lane call, founder's to route. Zapier: clean — deploy-studio-file still targets GitHub Pages with SHA-safe verification. Drive: no TSP file newer than its repo counterpart; two items worth routing, named by title without paths so tick 8 reads this as prose, not citation: a founder-authored "Silent Majority World Building" doc (mwalsh account, modified 2026-08-06, Drive id 1R9qM2FybyxEOmrTumoaWuRceKhyx0WUtogs2Ol4GIak) — founder's own words for the Nixon '69 world, exactly what the CYL lane's words-only copy policy wants, routed to whichever lane now owns CYL; and a LAND-THE-BUNDLE note (2026-08-06, id 1J2HboNm70Lg_e7JXHa38WBYVN6M0fDqF) that whoever owns the bundle handoff should glance at once. Human-only lanes (shelf, chats) not walkable by anyone — mitigation stays harvest discipline.
+
+## 2026-08-09 (seventh playtest note) — FOUNDER RULING: train before Williams; the start is a block of prose and nothing else
+
+Verbatim: *"wCw is crazy hard to start with for enjambment. Train on this and retry the
+look. The Start Should be a block of prose and nothing else. Keep it clean."*
+
+Landed as v6.2. Line Break now opens on a trainer passage - the founder's own line from
+the text bank, "I've pictured this so many times I almost have a memory of there being
+a photograph." - five scissors, no teach notes, free ground where every cut is
+expressive and there is no canonical poem to feel wrong against. Williams is the second
+passage, reached by a Next button, with his seven scissors and the teach notes intact.
+
+The look retried: the entry paint is the clean prose block and nothing else. The intro
+paragraph is gone entirely; the scissors counter, poem card, feedback, and next button
+all stay hidden until the first cut reveals them. The cut marks lost their dashed boxes
+- quiet gold slashes in the text now, 44px targets held - so the block reads as prose
+instead of a picket fence.
+
+Traced live: clean start confirmed (all machinery hidden), first cut reveals and breaks
+the line, trainer at 5, Williams at 7 with the upon note firing, cycle runs both ways.
+Belt PASS, census 0 under 18px. Four surgical byte-checked commits; repo sha256 equals
+local.
+
+## 2026-08-09 (eighth playtest note) — FOUNDER RULING: the dock is retired; Comfort at the top of the page only
+
+Verbatim: *"I'm still seeing the comfort button standing in the lower right when I
+scroll. Just top of page. We don't even need it at bottom please"*
+
+Landed as v6.3. The bottom dock left the DOM, its CSS, and Clear Reader's exclusions;
+Comfort lives only in the tucking top bar, and the panel now drops down from the bar's
+measured height instead of floating up from the corner. This overrides two earlier
+positions in order: the v3 thumb-arc placement (C-REACH) and last hour's top-and-bottom
+reading - the founder saw both live and chose top only. The studio-wide comfort pattern
+is likewise top-only, riding the same propagation item.
+
+One pre-existing quirk surfaced while verifying: the coinbar's hidden attribute has
+never actually hidden it (the .coinbar display:flex rule wins over [hidden]), so the top
+bar - and now Comfort - shows on the entry scene and always has. The entry gate has
+carried it all along. Left as-is: it matches the ruling, and closing it is a one-line
+CSS guard if the founder ever wants the entry scene bare.
+
+Traced live: no dock anywhere on scroll, panel opens under the bar, night applies,
+Clear Reader keeps the top bar as its exit. Belt PASS, census 0 under 18px. Eight
+surgical byte-checked commits; repo sha256 equals local.
+
+## 2026-08-09 - FOUNDER RULING (live playtest, ninth of the night): the first screen goes organic, and the type gets a director
+
+The founder, from his phone, looking at the entry screen: "First Screen - can we make the arcade more like samarost on the splash? Organic? Also look at the typing for home and comfort, out of the box. Whose job is that on staff? We aren't pro yet hire in." His screenshot showed the ruling's evidence: "Comfort" clipped off the right edge of the top bar at his font size, and Home/Comfort wearing the browser's stock box.
+
+Three fixes and a hire, landed as arcade v6.4:
+
+1. Scene0 rebuilt organic. The three rectangles are now rounded stump-forms grown out of two rolling mounds - moss caps, mushrooms at their feet, drifting spores, a curling tendril with a swaying frond, and a small round being with glinting eyes watching the coin from beside the third cabinet. Hand-cut SVG, own work, fixed-dark stage kept, idle animations ride the motion pair. The deep Samorost pass across the rest of the arcade stays banked in claude/HANDOFF-ARCADE-ART-SAMOROST.md.
+2. The coinbar wraps instead of clipping. The bar was a no-wrap flex row, so at a reader-enlarged base font the last button simply left the screen. flex-wrap added, padding tightened; render-proofed at 390px with a 24px base - Comfort's right edge lands at 378px of 390, zero horizontal overflow, and the panel opens below the measured bar (ResizeObserver keeps --chrome-h honest at any wrap height).
+3. Home and Comfort out of the stock box. Pill cut, 2px edge, quiet ground, letter-spaced; the 1.125rem type floor and 44px tap floor held - fit was fixed with wrap and padding, never by shrinking text.
+4. The staffing answer, plainly: that job belonged to nobody. Studio Eyes proves the floors (18px, contrast, paint) and the comfort standard governs the controls, but no seat owned whether the type is any good - fit at the reader's own font size, chrome that looks designed rather than shipped. So the studio hired in: the Art and Type Director seat now exists at .claude/agents/type-director.md, owning typography fit at reader-enlarged bases (24px is the working proxy for the founder's phone) and art continuity against the Samorost brief. One agent, never a fleet, cost discipline binds it, lenses not authorities.
+
+Verification: belt PASS all ticks, type census PASS (every visible node >= 18px at 390x844), six surgical connector ops each with simulated expect_total_bytes (93661 / 94053 / 94492 / 95158 / 95204 / 98583 - all matched), remote sha256 28775bf7 equals local byte for byte, hire file seeded at 3077 bytes verified.
