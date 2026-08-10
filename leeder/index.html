@@ -533,4 +533,159 @@
             <select name="Felony conviction"><option>No</option><option>Yes</option></select></label>
           <label>Are you a registered sex offender?
             <select name="Registered offender"><option>No</option><option>Yes</option></select></label>
-        </div
+        </div>
+        <div class="frow">
+          <label>If yes to either, details <textarea name="Conviction details"></textarea></label>
+        </div>
+        <p class="hint">Base rent is due on the first of each month in advance. The applicant authorizes Leeder Management to obtain a consumer credit report and conduct a criminal background check, per the terms on the printed form. Submitting this application confirms the information given is true.</p>
+      </fieldset>
+      <div class="privacy">Your answers stay on your device. Emailing opens your own mail app with the application filled in, addressed to Meg at Leeder Management. Sensitive numbers are left out of email on purpose.</div>
+      <div class="actions">
+        <button type="button" class="btn primary" id="emailapp">Email application to Meg</button>
+        <button type="button" class="btn outline" id="printapp">Print or save as PDF</button>
+      </div>
+    </form>
+  </section>
+</div>
+</main>
+
+<footer>
+  <div class="cols">
+    <div><span class="wordmark">Leeder<span style="color:#7fd0de">.</span></span>
+      <p>318 Harvard Street, Rm. 23<br>Brookline, MA 02446</p></div>
+    <div><p><a href="tel:6172328700">(617) 232-8700</a><br>
+      <a href="mailto:mlbuckley@leedermgt.com">mlbuckley@leedermgt.com</a></p></div>
+    <div><p><a href="https://leedermanagement.com/wp-content/uploads/2022/03/Application-rental.pdf">Rental application (PDF)</a></p></div>
+  </div>
+  <p class="note">Design prototype v2. Rents load live from the Leeder Rents Google Sheet when reachable.</p>
+</footer>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <img id="lb-img" alt="">
+  <p id="lb-cap"></p>
+  <div class="lb-controls">
+    <button id="lb-prev">← Previous</button>
+    <button id="lb-close">Close (Esc)</button>
+    <button id="lb-next">Next →</button>
+  </div>
+</div>
+
+<script>
+/* ---------- galleries (all images vendored in img/) ---------- */
+const GALLERIES={
+  bowdoin:[
+    ['img/bowdoin-street-2.jpg','Renovated kitchen'],
+    ['img/bowdoin-street-3.jpg','Living area with hardwood floors'],
+    ['img/bowdoin-street-4.jpg','Bedroom with large windows'],
+    ['img/bowdoin-street-5.jpg','Sunlit interior'],
+    ['img/bowdoin-street-6.jpg','Living room detail'],
+    ['img/bowdoin-street-1.jpg','Exterior at the State House'],
+    ['img/beacon-hill-neighborhood.jpg','Beacon Hill, out the front door']
+  ],
+  cambridge:[
+    ['img/concord-avenue-1.png','Craigie Arms exterior'],
+    ['img/concord-ave-2.png','Building entrance'],
+    ['img/concord-avenue-3.png','Facade detail'],
+    ['img/concord-avenue-4.jpg','Concord Avenue view'],
+    ['img/concord-avenue-5.jpg','The building in context'],
+    ['img/craigie-arms-1.jpg','Craigie Arms street view'],
+    ['img/craigie-arms-3.avif','Craigie Arms angle view'],
+    ['img/craigie-arms-4.avif','Craigie Arms detail'],
+    ['img/cambridge-neighborhood.jpg','The Cambridge neighborhood']
+  ],
+  perkins:[
+    ['img/perkins-primary.avif','Perkins Square'],
+    ['img/perkins-building.avif','Building exterior'],
+    ['img/perkins-balcony.avif','Balcony'],
+    ['img/jamaica-plain-neighborhood.png','Jamaica Pond, a block away']
+  ],
+  royal:[
+    ['img/brookline-neighborhood-1.jpeg','Coolidge Corner, two blocks away'],
+    ['img/cambridge-neighborhood.jpg','On the Green Line C: Boston and Cambridge without a car']
+  ]
+};
+let lbList=[], lbIndex=0;
+Object.entries(GALLERIES).forEach(([key,items])=>{
+  const wrap=document.querySelector(`[data-gallery="${key}"]`); if(!wrap) return;
+  items.forEach(([src,cap],i)=>{
+    const b=document.createElement('button');
+    b.setAttribute('aria-label','View photo: '+cap);
+    b.innerHTML=`<img loading="lazy" src="${src}" alt="${cap}">`;
+    b.addEventListener('click',()=>openLB(items,i));
+    wrap.appendChild(b);
+  });
+});
+const lb=document.getElementById('lightbox'), lbImg=document.getElementById('lb-img'), lbCap=document.getElementById('lb-cap');
+function openLB(list,i){ lbList=list; lbIndex=i; renderLB(); lb.classList.add('open'); document.getElementById('lb-close').focus(); }
+function renderLB(){ const [src,cap]=lbList[lbIndex]; lbImg.src=src; lbImg.alt=cap; lbCap.textContent=cap+'  ('+(lbIndex+1)+' of '+lbList.length+')'; }
+function stepLB(d){ lbIndex=(lbIndex+d+lbList.length)%lbList.length; renderLB(); }
+document.getElementById('lb-prev').onclick=()=>stepLB(-1);
+document.getElementById('lb-next').onclick=()=>stepLB(1);
+document.getElementById('lb-close').onclick=()=>lb.classList.remove('open');
+document.addEventListener('keydown',e=>{
+  if(!lb.classList.contains('open')) return;
+  if(e.key==='Escape') lb.classList.remove('open');
+  if(e.key==='ArrowLeft') stepLB(-1);
+  if(e.key==='ArrowRight') stepLB(1);
+});
+
+/* ---------- hash routing ---------- */
+const ROUTES=['home','bowdoin','cambridge','perkins','royal','apply'];
+function route(){
+  let key=(location.hash||'#/').replace('#/','')||'home';
+  if(!ROUTES.includes(key)) key='home';
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+key).classList.add('active');
+  document.querySelectorAll('nav [data-nav]').forEach(a=>a.toggleAttribute('aria-current',a.dataset.nav===key));
+  const phone=matchMedia('(max-width:700px)').matches;
+  window.scrollTo({top:phone?document.getElementById('main').offsetTop:0});
+}
+window.addEventListener('hashchange',route);
+document.addEventListener('click',e=>{
+  const a=e.target.closest('[data-nav]');
+  if(a){ location.hash='#/'+ (a.dataset.nav==='home'?'':a.dataset.nav); }
+});
+route();
+
+/* ---------- application: email to Meg or print ---------- */
+function appBody(){
+  const skip=new Set(['SSN','Credit card #']);
+  const lines=[];
+  document.querySelectorAll('#appform input, #appform select, #appform textarea').forEach(el=>{
+    if(skip.has(el.name)) return;
+    const v=(el.value||'').trim();
+    if(v) lines.push(el.name+': '+v);
+  });
+  return lines.join('\n');
+}
+document.getElementById('emailapp').addEventListener('click',()=>{
+  const name=(document.querySelector('#appform [name="Name"]').value||'applicant').trim();
+  const prop=document.querySelector('#appform [name="Property"]').value;
+  const subject='Rental application: '+name+' ('+prop+')';
+  const body='Hello Meg,\n\nPlease find my rental application below.\n\n'+appBody()+
+    '\n\nI understand the terms on the application form and confirm this information is true.\n';
+  location.href='mailto:mlbuckley@leedermgt.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+});
+document.getElementById('printapp').addEventListener('click',()=>{ window.print(); });
+
+/* ---------- live rents from Google Sheet (only on real hosts; offline-safe) ---------- */
+const SHEET_ID='1FUsWJI9MjuG2P_VWChVxBb1Cip4ui3dEIgb7yaJH_Pg';
+const LIVE_HOST=/(\.github\.io|leedermanagement\.com)$/.test(location.hostname);
+if(LIVE_HOST)
+fetch('https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:json')
+  .then(r=>r.text()).then(t=>{
+    const json=JSON.parse(t.substring(t.indexOf('(')+1,t.lastIndexOf(')')));
+    const rows=json.table.rows.map(r=>({key:r.c[0]&&r.c[0].v,unit:r.c[2]&&r.c[2].v,rent:r.c[3]&&r.c[3].v})).filter(r=>r.key);
+    ROUTES.slice(1).forEach(k=>{
+      const mine=rows.filter(r=>r.key===k);
+      const tb=document.querySelector(`[data-rents="${k}"]`);
+      if(mine.length&&tb) tb.innerHTML=mine.map(r=>`<tr><td>${r.unit}</td><td class="price">${r.rent}</td></tr>`).join('');
+      const line=document.querySelector(`[data-rentline="${k}"]`);
+      if(mine.length&&line) line.textContent=mine.map(r=>`${r.unit} ${r.rent}`).join(' · ');
+    });
+    document.querySelectorAll('.livebadge').forEach(b=>{b.textContent='Prices live from Google Sheet'; b.classList.add('live');});
+  }).catch(()=>{});
+</script>
+</body>
+</html>
