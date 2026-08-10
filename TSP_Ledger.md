@@ -649,3 +649,11 @@ It does not go into any build, and it does not go into `retired-lines.json`, unt
 the founder answers. Either way the 08-08 v7 drift ruling governs the build — this
 fork decides only whether a line exists to recover and whether the modern-period
 sourcing work needs redoing.
+
+**ADDENDUM 2026-08-10 (founder, verbatim): "I don't love that pitch either exactly
+like that."** — said of the shelf's candidate line ("You judged. Now find out what
+that judgment was standing on."). Effect: whichever fork path is true, the line does
+NOT become canon as written. The v7 ruling's state stands — no spine line exists;
+if one is ever needed, the founder writes it. The fork's remaining live stake
+narrows to the modern-period dossier work (real-and-stranded vs fossil); the line
+itself is settled: not approved as-is.
