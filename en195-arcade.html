@@ -1505,16 +1505,15 @@ document.getElementById('vmForm').addEventListener('submit', function(ev){
   }
   function announce(t){ if (say) say.textContent = t; }
 
-  /* The panel is positioned from a MEASURED chrome and dock, never a constant. */
+  /* The panel is positioned from a MEASURED chrome, never a constant. */
   function measure(){
-    var c = document.querySelector('.coinbar'), k = document.querySelector('.dock');
+    var c = document.querySelector('.coinbar');
     if (c) d.style.setProperty('--chrome-h', Math.round(c.getBoundingClientRect().height) + 'px');
-    if (k) d.style.setProperty('--dock-h',   Math.round(k.getBoundingClientRect().height + 14) + 'px');
   }
   if (window.ResizeObserver){
     var ro = new ResizeObserver(function(){ measure(); more(); });
-    var c = document.querySelector('.coinbar'), k = document.querySelector('.dock');
-    if (c) ro.observe(c); if (k) ro.observe(k);
+    var c = document.querySelector('.coinbar');
+    if (c) ro.observe(c);
   }
   window.addEventListener('resize', measure, {passive:true});
 
