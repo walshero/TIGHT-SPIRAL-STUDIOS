@@ -678,3 +678,40 @@ you feel how choices affect class! Not politics, wealth and power."
    and power did to where the player's household stands — never which party was
    right. Records are chosen and written on the class/wealth/power axis;
    partisan scoring of any president is out of scope by founder order.
+
+## 2026-08-10 — SHIPPED: choose-your-leader-v7.html, the full six and the felt drop
+
+**The build order executed same session it was given.** Single file, 1.58 MB,
+offline, no storage, no audio. Six presidents in one cohesive 20+ minute arc:
+JFK 1962 / LBJ 1964 / Nixon 1969 (records carried from v5-b canon) + Obama 2013
+/ Trump 2017 / Biden 2022 (records sourced and web-verified this session;
+sources carried in-file per scene; founder cold play is the final record gate).
+Even-handedness held by construction: both post-2016 scenes are an economic
+promise measured against the documented record of where wealth and power
+landed. The frame is class, not politics, per the founder order: every record
+turns twice (what was hidden, who paid by household).
+
+**The felt drop is in the main game for the first time.** Between addresses the
+player walks the household: three rooms at fixed angles (the shift, the shelf,
+the back room) whose distance stretches with altitude spent and whose steps
+shrink (the-viscosity vocabulary, mounted not reinvented). Altitude is the
+running mean of landing tiers, so the descent ACCUMULATES across scenes: the
+Zimmerman integration note (scenes should alter each other) gets its first
+real answer, and trust spent on unexamined power is felt as distance in the
+next walk. Noticing brakes it. Chen flow: the world's thickness adapts to the
+player's own reads, never to a score.
+
+**Gates:** full belt preflight PASS, all seven ticks (comfort/dark, attribution,
+image floor + render, voice, entry paint, retired lines, touch floor) on both
+the build and the updated face. Playwright click-walk verified the six-scene
+loop end to end on a phone viewport: altitude carry, era shift after Nixon,
+sources rendering, warm dark, Home, zero console errors. Founder MJ plates
+mounted from v6 with provenance verbatim; modern scenes are CSS-composed
+rooms (no plates exist; archive egress blocked, see 08-08 entry). All studio-
+drafted copy is marked in TSP-META as awaiting founder words; the six address
+quotes carry the voice gate's verbatim marker as sourced transcript language,
+dashes the transcripts' own. No thesis line exists and none is used.
+
+**Open, founder-only, unchanged:** GATE 1 cold play (now on v7); record
+approval for the three current-era scenes; the protection-function home
+(Zimmerman); which build goes to Scot.
