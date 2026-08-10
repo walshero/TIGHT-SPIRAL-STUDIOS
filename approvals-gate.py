@@ -175,4 +175,39 @@ def self_test():
     chk("real prose from the corpus is clean", _one(prose, log), 0)
     chk("  and yields no credit at all",       credits_in(prose), [])
 
-    p
+    print()
+    print("SELF-TEST " + ("PASS" if ok else "FAIL"))
+    return 0 if ok else 2
+
+
+def _one(html, log):
+    """Run the check over one in-memory snippet."""
+    import tempfile
+    with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as f:
+        f.write(html)
+        p = f.name
+    try:
+        return check([p], log, verbose=False)
+    finally:
+        os.unlink(p)
+
+
+if __name__ == "__main__":
+    a = sys.argv[1:]
+    if a and a[0] in ("-h", "--help"):
+        print(__doc__)
+        print("  approvals-gate.py <surface.html> [...]   check surfaces")
+        print("  approvals-gate.py --self-test            prove it discriminates")
+        print("  env APPROVALS_LOG=<path>                 where the log lives")
+        sys.exit(0)
+    if a and a[0] == "--self-test":
+        sys.exit(self_test())
+    if not a:
+        print("usage: approvals-gate.py <surface.html> [...]")
+        sys.exit(2)
+    log_text = read(LOG)
+    if not log_text:
+        print(f"HALT - {LOG} not readable. The ruling requires a findable authorization")
+        print("       record; with no log, no student credit can be cleared. Not a pass.")
+        sys.exit(2)
+    sys.exit(check(a, log_text))
