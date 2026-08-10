@@ -1,1 +1,104 @@
-PLACEHOLDER-WILL-VERIFY-TRANSPORT
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leeder Management — Boston Apartments</title>
+<style>
+  :root{
+    --bg:#fbfbf9; --ink:#12161b; --text:#242a31; --dim:#5b6470;
+    --teal:#0e6d80; --teal-dark:#0a5261; --sky:#e8f2f4; --line:#e3e1da; --white:#ffffff;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{transition:none !important; animation:none !important;} }
+  body{background:var(--bg); color:var(--text); font-size:1.12rem; line-height:1.65;
+    font-family:"Avenir Next","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;}
+  img{display:block; width:100%;}
+  a{color:var(--teal-dark);}
+  .skip{position:absolute; left:-999px; top:0; background:var(--ink); color:#fff; padding:1rem 2rem; z-index:99;}
+  .skip:focus{left:0;}
+
+  /* NAV */
+  nav{position:sticky; top:0; z-index:30; background:rgba(251,251,249,.94); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line); display:flex; align-items:center; gap:1.6rem; padding:.8rem 4vw; flex-wrap:wrap;}
+  .wordmark{font-weight:800; font-size:1.35rem; letter-spacing:.01em; color:var(--ink); text-decoration:none;}
+  .wordmark span{color:var(--teal);}
+  nav .links{display:flex; gap:.4rem; flex-wrap:wrap;}
+  nav .links a{color:var(--text); text-decoration:none; font-size:1.05rem; font-weight:600;
+    padding:.5rem .9rem; border-radius:99px;}
+  nav .links a:hover{background:var(--sky);}
+  nav .links a[aria-current]{background:var(--teal); color:#fff;}
+  nav .links a:focus-visible{outline:3px solid var(--teal); outline-offset:3px;}
+  nav .apply{margin-left:auto;}
+  .btn{display:inline-block; font-size:1.1rem; font-weight:700; padding:.85rem 1.7rem; border-radius:10px;
+    text-decoration:none; border:2px solid transparent; cursor:pointer;}
+  .btn.primary{background:var(--teal); color:#fff;}
+  .btn.primary:hover{background:var(--teal-dark);}
+  .btn.light{background:#fff; color:var(--ink); border-color:#fff;}
+  .btn.outline{border-color:var(--ink); color:var(--ink);}
+  .btn:focus-visible{outline:4px solid var(--teal); outline-offset:3px;}
+
+  .page{display:none;} .page.active{display:block; animation:fade .35s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;}}
+
+  /* HERO */
+  .hero{position:relative; min-height:72vh; display:flex; align-items:flex-end;}
+  .hero>img{position:absolute; inset:0; height:100%; object-fit:cover;}
+  .hero .scrim{position:absolute; inset:0; background:linear-gradient(10deg, rgba(10,14,18,.82) 20%, rgba(10,14,18,.05) 65%);}
+  .hero .inner{position:relative; padding:3.5rem 5vw; max-width:66rem;}
+  .kicker{display:inline-block; background:var(--teal); color:#fff; font-weight:700; font-size:.95rem;
+    letter-spacing:.14em; text-transform:uppercase; padding:.35rem .9rem; border-radius:6px; margin-bottom:1.1rem;}
+  h1{font-size:clamp(2.5rem,6vw,4.6rem); line-height:1.04; color:#fff; font-weight:800; letter-spacing:-.015em;}
+  .hero p{color:#e8edf0; font-size:1.35rem; max-width:48ch; margin-top:1.2rem;}
+  .cta-row{display:flex; gap:1rem; margin-top:2rem; flex-wrap:wrap;}
+
+  section{padding:4.5rem 5vw;}
+  h2{font-size:clamp(1.9rem,3.4vw,2.6rem); font-weight:800; letter-spacing:-.01em; color:var(--ink);}
+  .sub{color:var(--dim); font-size:1.25rem; max-width:64ch; margin-top:.7rem;}
+
+  /* HOME CARDS */
+  .cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.8rem; margin-top:2.6rem;}
+  .card{background:var(--white); border:1px solid var(--line); border-radius:16px; overflow:hidden;
+    text-decoration:none; color:inherit; display:flex; flex-direction:column;
+    transition:transform .18s ease, box-shadow .18s ease;}
+  .card:hover{transform:translateY(-5px); box-shadow:0 14px 30px rgba(15,40,50,.14);}
+  .card:focus-visible{outline:4px solid var(--teal); outline-offset:3px;}
+  .card .imgwrap{aspect-ratio:16/10; overflow:hidden; background:var(--ink); position:relative;}
+  .card img{height:100%; object-fit:cover; transition:transform .4s ease;}
+  .card:hover img{transform:scale(1.045);}
+  .card .chip{position:absolute; top:1rem; left:1rem; background:rgba(255,255,255,.92); color:var(--ink);
+    font-weight:700; font-size:.92rem; padding:.3rem .8rem; border-radius:99px;}
+  .card .body{padding:1.4rem 1.5rem 1.6rem;}
+  .card h3{font-size:1.45rem; font-weight:800; color:var(--ink);}
+  .card p{color:var(--dim); margin:.5rem 0 .9rem; font-size:1.05rem;}
+  .card .from{font-weight:700; color:var(--teal-dark); font-size:1.12rem;}
+  .card .placeholder{position:absolute; inset:0; display:flex; flex-direction:column; gap:.5rem;
+    align-items:center; justify-content:center; background:linear-gradient(140deg,#123a44,#0e6d80); color:#dff2f5;}
+  .card .placeholder strong{font-size:3rem; font-weight:800;}
+
+  /* VALUE ROW */
+  .values{background:var(--ink); color:#dfe5ea;}
+  .values h2{color:#fff;}
+  .values .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:2rem; margin-top:2.2rem;}
+  .values h3{color:#7fd0de; font-size:1.2rem; margin-bottom:.35rem;}
+
+  /* PROPERTY PAGES */
+  .prop-head{display:grid; grid-template-columns:1.15fr .85fr; gap:2.5rem; align-items:center; padding:3.5rem 5vw 1rem;}
+  @media (max-width:920px){ .prop-head{grid-template-columns:1fr;} }
+  .prop-head img{border-radius:16px; aspect-ratio:16/11; object-fit:cover; box-shadow:0 16px 36px rgba(15,40,50,.18);}
+  .prop-head .kicker{margin-bottom:.9rem;}
+  .prop-head h1{color:var(--ink); font-size:clamp(2.2rem,4.6vw,3.6rem);}
+  .prop-head p{margin-top:1rem; font-size:1.25rem; color:var(--dim); max-width:52ch;}
+
+  .gallery{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1rem; margin-top:2rem;}
+  .gallery button{border:0; padding:0; border-radius:12px; overflow:hidden; cursor:pointer; aspect-ratio:4/3;
+    background:#dfe3e6; transition:transform .15s ease;}
+  .gallery button:hover{transform:scale(1.02);}
+  .gallery button:focus-visible{outline:4px solid var(--teal); outline-offset:3px;}
+  .gallery img{height:100%; object-fit:cover;}
+  .gal-hint{color:var(--dim); font-size:1rem; margin-top:.8rem;}
+
+  /* RENTS */
+  .rents-wrap{background:var(--sky); border-radius:20px; padding:2.5rem 2.5rem 2rem; margin-top:1rem;}
+  table{
