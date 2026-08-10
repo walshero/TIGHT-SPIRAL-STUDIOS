@@ -134,6 +134,10 @@ h1 em{font-style:italic; color:var(--cool-ink)}
 .lvbtn[aria-pressed="true"]{background:var(--slab); color:var(--slab-ink); border-color:var(--slab)}
 .lvbtn:focus-visible{outline:3px solid var(--cool-ink); outline-offset:2px}
 .btn{font-family:var(--sans); font-size:16px; font-weight:600; padding:11px 20px; background:var(--slab); color:var(--slab-ink); border:0; border-radius:2px; cursor:pointer}
+/* the ONE entry invitation — filled, bold, >=48px tall, first-screen */
+.cta-start{display:inline-flex; align-items:center; justify-content:center; gap:.4em; min-height:52px; margin:18px 0 4px; padding:14px 24px; font-family:var(--sans); font-size:16px; font-weight:600; line-height:1.2; background:var(--slab,#12161b); color:var(--slab-ink,#f4f1e8); border:0; border-radius:2px; text-decoration:none; cursor:pointer}
+.cta-start:hover{background:#232b35}
+.cta-start:focus-visible{outline:3px solid var(--focus,#8a3a1c); outline-offset:3px}
 .btn:hover{background:#232b35}
 .btn:focus-visible{outline:3px solid var(--cool-ink); outline-offset:3px}
 .btn.ghost{background:var(--paper); color:var(--ink); border:1.5px solid var(--rule)}
@@ -238,6 +242,7 @@ button,[role=button],.btn,input:not([type=checkbox]):not([type=radio]):not([type
   <p class="lede">No microphone, no recording, nothing stored. And it <b>never scores accent or dialect</b>:
     only the choices a speaker can change. That's the honest way to do this offline, and the fair way to do it at all.</p>
   <p class="tag">Read the delivery · Score on the rubric · Meet the normed score</p>
+  <button class="cta-start" id="startCta" type="button">Start: score the first delivery &rsaquo;</button>
 
   <svg class="hero-mark" viewBox="0 0 120 64" aria-hidden="true">
     <path d="M40 22 h10 l14 -10 v40 l-14 -10 h-10 z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
@@ -459,6 +464,20 @@ button,[role=button],.btn,input:not([type=checkbox]):not([type=radio]):not([type
       : "Exact on <b>"+exact+"/"+scored+"</b>, within one on <b>"+within+"/"+scored+"</b>. "+
         (within===scored ? "That's a calibrated reader of the room." : "The gaps are where the rubric language is worth a second read.");
   }
+})();
+</script>
+
+<script>
+/* entry CTA — launches the first real interaction (reuses the page's own engine) */
+(function(){
+  var c=document.getElementById('startCta'); if(!c) return;
+  c.addEventListener('click', function(){
+    var t=document.getElementById('case-0')||document.getElementById('pick')||document.querySelector('.case,.pick,.sec');
+    if(!t) return;
+    t.scrollIntoView({behavior:'smooth', block:'start'});
+    var f=t.querySelector('input,select,textarea,button,[role="button"],a[href]');
+    if(f) setTimeout(function(){ try{ f.focus(); }catch(e){} }, 80);
+  });
 })();
 </script>
 </body>

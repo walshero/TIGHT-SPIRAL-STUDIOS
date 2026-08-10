@@ -139,6 +139,10 @@ input[type=range]{flex:1 1 220px; accent-color:var(--cool-ink); height:26px}
 .numin{font-family:var(--mono); font-size:18px; padding:9px 12px; border:1.5px solid var(--rule); border-radius:2px; background:var(--paper); color:var(--ink); width:150px}
 .numin:focus-visible{outline:3px solid var(--cool-ink); outline-offset:1px; border-color:var(--ink)}
 .btn{font-family:var(--sans); font-size:16px; font-weight:600; padding:11px 20px; background:var(--slab); color:var(--slab-ink); border:0; border-radius:2px; cursor:pointer}
+/* the ONE entry invitation — filled, bold, >=48px tall, first-screen */
+.cta-start{display:inline-flex; align-items:center; justify-content:center; gap:.4em; min-height:52px; margin:18px 0 4px; padding:14px 24px; font-family:var(--sans); font-size:16px; font-weight:600; line-height:1.2; background:var(--slab,#12161b); color:var(--slab-ink,#f4f1e8); border:0; border-radius:2px; text-decoration:none; cursor:pointer}
+.cta-start:hover{background:#232b35}
+.cta-start:focus-visible{outline:3px solid var(--focus,#8a3a1c); outline-offset:3px}
 .btn:hover{background:#232b35}
 .btn:focus-visible{outline:3px solid var(--cool-ink); outline-offset:3px}
 .btn.ghost{background:var(--paper); color:var(--ink); border:1.5px solid var(--rule)}
@@ -250,6 +254,7 @@ html[data-light="night"] .slab h3{ color:#e0b25a; }
   <p class="lede"><b>You set every number.</b> The page only multiplies, divides, and adds what you tell it:
     no claim about anyone's prices, and no verdict about you. Guess first, then watch it come apart.</p>
   <p class="tag">Guess · Do the arithmetic · See what it hid · Say it plainly</p>
+  <button class="cta-start" id="startCta" type="button">Start: read the first cost &rsaquo;</button>
 
   <svg class="hero-mark" viewBox="0 0 120 64" aria-hidden="true">
     <line x1="12" y1="52" x2="108" y2="52" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
@@ -583,6 +588,20 @@ html[data-light="night"] .slab h3{ color:#e0b25a; }
     }
     $("summary").innerHTML=html;
   }
+})();
+</script>
+
+<script>
+/* entry CTA — launches the first real interaction (reuses the page's own engine) */
+(function(){
+  var c=document.getElementById('startCta'); if(!c) return;
+  c.addEventListener('click', function(){
+    var t=document.getElementById('case-0')||document.getElementById('pick')||document.querySelector('.case,.pick,.sec');
+    if(!t) return;
+    t.scrollIntoView({behavior:'smooth', block:'start'});
+    var f=t.querySelector('input,select,textarea,button,[role="button"],a[href]');
+    if(f) setTimeout(function(){ try{ f.focus(); }catch(e){} }, 80);
+  });
 })();
 </script>
 </body>
