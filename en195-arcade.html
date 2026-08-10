@@ -1546,18 +1546,15 @@ document.getElementById('vmForm').addEventListener('submit', function(ev){
   function open(o){
     panel.setAttribute('data-open', o ? '1' : '0');
     btn.setAttribute('aria-expanded', String(o));
-    if (btnTop) btnTop.setAttribute('aria-expanded', String(o));
     if (o) { measure(); more(); var f = panel.querySelector('.btn'); if (f) f.focus(); }
   }
   btn.addEventListener('click', function(){ open(panel.getAttribute('data-open') !== '1'); });
-  if (btnTop) btnTop.addEventListener('click', function(){ open(panel.getAttribute('data-open') !== '1'); });
   document.addEventListener('keydown', function(e){
     if (e.key === 'Escape' && panel.getAttribute('data-open') === '1'){ open(false); btn.focus(); }
   });
   document.addEventListener('click', function(e){
     if (panel.getAttribute('data-open') !== '1') return;
     if (panel.contains(e.target) || btn.contains(e.target)) return;
-    if (btnTop && btnTop.contains(e.target)) return;
     open(false);
   });
 
