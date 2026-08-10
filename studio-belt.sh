@@ -117,6 +117,20 @@ echo "======================================================================"
 # index.html; keyed by basename alone they collide into one entry and the last
 # one written silently grants or denies the other two.
 REPO="$(basename "$(pwd)")"
+# ...but the CHECKOUT DIRECTORY is not the repo. Every ratchet baseline in this
+# hub is keyed `TIGHT-SPIRAL-STUDIOS/<path>`, written from a checkout that
+# happened to be named that. Clone the same repo into `tsp-repo` and every
+# lookup misses, every surface reads baseline 0, and ticks 3/4/5 go red on files
+# nobody touched. Measured 2026-08-09: index.html and arcade.html HALTed all
+# three ticks under REPO=tsp-repo and passed all three under
+# REPO=TIGHT-SPIRAL-STUDIOS, same bytes, same gates, same run. The inverse is
+# worse than noise - two repos cloned into same-named directories would grant
+# each other's debt. So the key comes from the REMOTE, which is the repo's
+# actual name, and falls back to the directory only when there is no remote.
+_remote="$(git remote get-url origin 2>/dev/null || true)"
+if [ -n "$_remote" ]; then
+  REPO="$(basename "${_remote%.git}")"
+fi
 
 # TICK 1 — accessibility floor (comfort-gate: real-pixel contrast · dark · offline · no emoji)
 echo; echo "-- tick 1: accessibility floor (comfort-gate) --"
@@ -178,7 +192,7 @@ echo; echo "-- tick 3: image floor + render-proof ratchet (founder rule C7) --"
 if [ -n "$SURFACES" ] && [ -f "$BELT_DIR/preship-gate-v4.py" ]; then
   while IFS= read -r f; do
     [ -z "$f" ] && continue
-    if python3 "$BELT_DIR/preship-gate-v4.py" --ratchet "$f" >/tmp/pg.out 2>&1; then echo "  pass  $f"
+    if python3 "$BELT_DIR/preship-gate-v4.py" --ratchet --repo="$REPO" "$f" >/tmp/pg.out 2>&1; then echo "  pass  $f"
     else echo "  HALT  $f"; grep -E '^\s+H-|^\s+E1' /tmp/pg.out | sed 's/^/        /' | head -6; fail=1; fi
   done <<< "$SURFACES"
 else echo "  (no HTML surfaces / gate not mounted — skipped)"; fi
