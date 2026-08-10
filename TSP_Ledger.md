@@ -655,3 +655,9 @@ fresh also rotates. Passage counter shows N of 5.
 Traced live: cargo-hostage state, win at cargo restore, all five passages won in
 sequence, rotation wraps back to passage 1. Belt PASS, census 0 under 18px. Five
 surgical byte-checked connector commits; repo sha256 equals local.
+
+---
+
+## 2026-08-10 — Session-close lane sweep (the standing CLAUDE.md sweep, run before idling)
+
+**Swept via live connectors, cost-scoped per the rule.** Spokes: matt-radar and the writerly-moves repo clean; en195-apps clean (the offline-floor fix branch is fully merged, pointer just undeleted). **One real strand found:** the Confluence hub repo carries an unmerged branch (github-pages-deployment-setup, tip 08690e4, 2026-07-19/20) holding a complete Supabase real-data backend — schema, RLS policies for the four-role model, reliability views, magic-link auth behind a demo-mode fallback, plus a one-shot setup script. Three weeks stranded, the classic built-never-merged shape. NOT merged by this session: TSP is read-only in the Confluence lane; the merge is a Confluence-lane call, founder's to route. Zapier: clean — deploy-studio-file still targets GitHub Pages with SHA-safe verification. Drive: no TSP file newer than its repo counterpart; two items worth routing, named by title without paths so tick 8 reads this as prose, not citation: a founder-authored "Silent Majority World Building" doc (mwalsh account, modified 2026-08-06, Drive id 1R9qM2FybyxEOmrTumoaWuRceKhyx0WUtogs2Ol4GIak) — founder's own words for the Nixon '69 world, exactly what the CYL lane's words-only copy policy wants, routed to whichever lane now owns CYL; and a LAND-THE-BUNDLE note (2026-08-06, id 1J2HboNm70Lg_e7JXHa38WBYVN6M0fDqF) that whoever owns the bundle handoff should glance at once. Human-only lanes (shelf, chats) not walkable by anyone — mitigation stays harvest discipline.
