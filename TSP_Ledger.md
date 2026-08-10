@@ -750,3 +750,16 @@ CSS guard if the founder ever wants the entry scene bare.
 Traced live: no dock anywhere on scroll, panel opens under the bar, night applies,
 Clear Reader keeps the top bar as its exit. Belt PASS, census 0 under 18px. Eight
 surgical byte-checked commits; repo sha256 equals local.
+
+## 2026-08-09 - FOUNDER RULING (live playtest, ninth of the night): the first screen goes organic, and the type gets a director
+
+The founder, from his phone, looking at the entry screen: "First Screen - can we make the arcade more like samarost on the splash? Organic? Also look at the typing for home and comfort, out of the box. Whose job is that on staff? We aren't pro yet hire in." His screenshot showed the ruling's evidence: "Comfort" clipped off the right edge of the top bar at his font size, and Home/Comfort wearing the browser's stock box.
+
+Three fixes and a hire, landed as arcade v6.4:
+
+1. Scene0 rebuilt organic. The three rectangles are now rounded stump-forms grown out of two rolling mounds - moss caps, mushrooms at their feet, drifting spores, a curling tendril with a swaying frond, and a small round being with glinting eyes watching the coin from beside the third cabinet. Hand-cut SVG, own work, fixed-dark stage kept, idle animations ride the motion pair. The deep Samorost pass across the rest of the arcade stays banked in claude/HANDOFF-ARCADE-ART-SAMOROST.md.
+2. The coinbar wraps instead of clipping. The bar was a no-wrap flex row, so at a reader-enlarged base font the last button simply left the screen. flex-wrap added, padding tightened; render-proofed at 390px with a 24px base - Comfort's right edge lands at 378px of 390, zero horizontal overflow, and the panel opens below the measured bar (ResizeObserver keeps --chrome-h honest at any wrap height).
+3. Home and Comfort out of the stock box. Pill cut, 2px edge, quiet ground, letter-spaced; the 1.125rem type floor and 44px tap floor held - fit was fixed with wrap and padding, never by shrinking text.
+4. The staffing answer, plainly: that job belonged to nobody. Studio Eyes proves the floors (18px, contrast, paint) and the comfort standard governs the controls, but no seat owned whether the type is any good - fit at the reader's own font size, chrome that looks designed rather than shipped. So the studio hired in: the Art and Type Director seat now exists at .claude/agents/type-director.md, owning typography fit at reader-enlarged bases (24px is the working proxy for the founder's phone) and art continuity against the Samorost brief. One agent, never a fleet, cost discipline binds it, lenses not authorities.
+
+Verification: belt PASS all ticks, type census PASS (every visible node >= 18px at 390x844), six surgical connector ops each with simulated expect_total_bytes (93661 / 94053 / 94492 / 95158 / 95204 / 98583 - all matched), remote sha256 28775bf7 equals local byte for byte, hire file seeded at 3077 bytes verified.
