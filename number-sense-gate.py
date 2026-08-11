@@ -48,6 +48,8 @@ for f in sorted(root.rglob('*.html')):
             if not PRICE.match(price):
                 halts.append(f'{rel} [{key}]: malformed price "{price}"')
     for raw in TDP.findall(src):
+        if '${' in raw:
+            continue  # JS template literal in the row-builder script, not rendered content
         text = html.unescape(re.sub(r'<[^>]+>', '', raw)).strip()
         if not PRICE.match(text):
             halts.append(f'{rel} td.price: malformed price "{text}"')
