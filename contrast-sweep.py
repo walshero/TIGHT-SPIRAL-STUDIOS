@@ -103,12 +103,26 @@ for arg in ([a for a in sys.argv[1:] if not a.startswith("--")] or ["."]):
     p = pathlib.Path(arg)
     if p.is_dir():
         targets += sorted(q for q in p.rglob("*.html")
-                          if not any(part.startswith(".") or part in ("node_modules", "archive", "rescued")
+                          if not any(part.startswith(".") or part in ("node_modules", "archive", "rescued", "canary")
                                      for part in q.parts))
     elif p.is_file() and p.suffix == ".html":
         targets.append(p)
 
+# RATCHET. Measured before arming, per house rule: flat, this tick HALTs 10 of the hub's
+# surfaces on debt nobody had ever looked at, and a tick that is red on every push is a
+# tick everyone learns to scroll past. Today's debt is CARRIED in contrast-baseline.json
+# and only NEW debt blocks. The baseline may only SHRINK; fix a file and it leaves forever.
+RATCHET = "--ratchet" in sys.argv
+SEED = "--seed" in sys.argv
+REPO = next((a.split("=", 1)[1] for a in sys.argv if a.startswith("--repo=")), "")
+BASE_PATH = pathlib.Path(__file__).with_name("contrast-baseline.json")
+base = {}
+if BASE_PATH.exists():
+    import json
+    base = json.loads(BASE_PATH.read_text()).get("counts", {})
+
 halts, measured, pages = [], 0, 0
+per_file = {}
 launch = {"executable_path": CHROMIUM} if CHROMIUM else {}
 with sync_playwright() as pw:
     browser = pw.chromium.launch(**launch)
