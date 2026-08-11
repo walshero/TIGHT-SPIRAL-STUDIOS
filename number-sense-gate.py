@@ -20,7 +20,14 @@ import pathlib
 import re
 import sys
 
-root = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else '.')
+args = sys.argv[1:] or ['.']
+targets = []
+for a in args:
+    p = pathlib.Path(a)
+    if p.is_dir():
+        targets.extend(sorted(p.rglob('*.html')))
+    elif p.is_file() and p.suffix == '.html':
+        targets.append(p)
 PRICE = re.compile(r'^\$\d{1,3},\d{3}(–\$\d{1,3},\d{3})?$')
 SPAN = re.compile(r'data-rentline="([^"]+)"[^>]*>(.*?)</span>', re.S)
 TDP = re.compile(r'<td class="price">(.*?)</td>', re.S)
