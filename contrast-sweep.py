@@ -160,6 +160,29 @@ with sync_playwright() as pw:
             ctx.close()
     browser.close()
 
+if SEED:
+    import json
+    BASE_PATH.write_text(json.dumps({"note": "carried contrast debt, measured 2026-08-11. "
+                                             "May only SHRINK. Fix a file and it leaves forever.",
+                                     "counts": dict(sorted(per_file.items()))}, indent=1) + "\n")
+    print(f"contrast-sweep: SEEDED {len(per_file)} file(s) of carried debt into {BASE_PATH.name}")
+    sys.exit(0)
+
+if RATCHET:
+    new = {k: (v, base.get(k, 0)) for k, v in per_file.items() if v > base.get(k, 0)}
+    if new:
+        print("CONTRAST-SWEEP HALTS (NEW debt only; carried debt is in contrast-baseline.json):")
+        for k, (now, was) in sorted(new.items()):
+            print(f"  HALT {k}: {now} failing element(s), baseline {was}")
+            for h in sorted(set(halts)):
+                if k.endswith(h.split(" [")[0].lstrip("./")):
+                    print("        " + h)
+        sys.exit(1)
+    carried = sum(base.get(k, 0) for k in per_file)
+    print(f"contrast-sweep: {pages} page(s), {measured} elements, {len(MODES)} modes - "
+          f"no NEW contrast debt ({carried} element(s) carried)")
+    sys.exit(0)
+
 if halts:
     print("CONTRAST-SWEEP HALTS:")
     for h in sorted(set(halts)):
