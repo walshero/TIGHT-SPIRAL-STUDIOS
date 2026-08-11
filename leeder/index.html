@@ -685,7 +685,7 @@ fetch('https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:json'
       const tb=document.querySelector(`[data-rents="${k}"]`);
       if(mine.length&&tb) tb.innerHTML=mine.map(r=>`<tr><td>${r.unit}</td><td class="price">${r.rent}</td></tr>`).join('');
       const line=document.querySelector(`[data-rentline="${k}"]`);
-      if(mine.length&&line) line.textContent=mine.map(r=>`${r.unit} ${r.rent}`).join(' · ');
+      if(mine.length&&line) line.textContent=mine.map(r=>(r.unit+' '+r.rent).split(' ').join(' ')).join(' · ');
     });
     document.querySelectorAll('.livebadge').forEach(b=>{b.textContent='Prices live from Google Sheet'; b.classList.add('live');});
   }).catch(()=>{});
