@@ -15,6 +15,7 @@
 #   7  touch floor / thumb reach     studio-fingers.py       (ratchet, 48px house floor, 2026-08-08)
 #      REPOINTED same day -> studio-eyes/studio-fingers.py   (ratchet, RENDERS, 44px founder floor)
 #   8  scope / what a doc reaches for scope-gate.py           (A flat + B ratchet, 2026-08-09)
+#   9  number sense / layout         number-sense-gate.py    (flat, zero tolerance, 2026-08-11)
 #
 # Ticks 3-5 added 2026-08-07. Until then the belt carried two ticks and none of the
 # four things the founder had actually ruled on: the image floor, the voice, the entry
