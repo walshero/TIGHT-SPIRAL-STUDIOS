@@ -375,7 +375,7 @@ else
   if [ "$MODE" = file ]; then CS_TARGET="$SURFACES"; else CS_TARGET="."; fi
   if [ -z "$CS_TARGET" ]; then
     echo "  (no HTML surfaces — skipped)"
-  elif python3 "$BELT_DIR/contrast-sweep.py" $CS_TARGET >/tmp/cs.out 2>&1; then
+  elif python3 "$BELT_DIR/contrast-sweep.py" --ratchet --repo="$REPO" $CS_TARGET >/tmp/cs.out 2>&1; then
     tail -1 /tmp/cs.out | sed 's/^/  pass  /'
   else
     echo "  HALT  text failed the 4.5:1 floor somewhere the old eyes never looked:"
