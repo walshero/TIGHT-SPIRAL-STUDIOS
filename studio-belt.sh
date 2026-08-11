@@ -353,6 +353,36 @@ else
   fi
 fi
 
+# TICK 10 — contrast across every route and every light mode (added 2026-08-11).
+# FLAT, but SCOPED: only pages that declare a dark mode. Tick 1's comfort-gate already
+# checks contrast per file and it is a good gate; it missed this because of WHAT IT
+# LOOKED AT, not how hard it looked. It sets html[data-light] and measures the page as
+# loaded. Two blind spots followed, and both shipped:
+#   - it never emulates prefers-color-scheme:dark, and a media query adds NO specificity,
+#     so a later equal-specificity base rule silently beats the whole dark block. Card
+#     headings measured 1.16:1 on a real phone while CI read green.
+#   - it never changes route, and in a single-page site every other page is display:none
+#     at load, so four property pages and the rental application had never been measured.
+# This tick fixes both and carries no selector list. Left as a separate tick rather than
+# folded into comfort-gate so its per-file ratchet is not re-seeded by a change in what
+# gets measured — that would read every carried file as new debt and freeze the corpus.
+echo; echo "-- tick 10: contrast sweep (every route, every mode, every painted word) --"
+if [ ! -f "$BELT_DIR/contrast-sweep.py" ]; then
+  echo "  (gate not mounted — skipped)"
+elif ! python3 -c "import playwright" >/dev/null 2>&1; then
+  echo "  SKIPPED LOUD — playwright absent, this gate is BLIND. Not a pass."
+else
+  if [ "$MODE" = file ]; then CS_TARGET="$SURFACES"; else CS_TARGET="."; fi
+  if [ -z "$CS_TARGET" ]; then
+    echo "  (no HTML surfaces — skipped)"
+  elif python3 "$BELT_DIR/contrast-sweep.py" $CS_TARGET >/tmp/cs.out 2>&1; then
+    tail -1 /tmp/cs.out | sed 's/^/  pass  /'
+  else
+    echo "  HALT  text failed the 4.5:1 floor somewhere the old eyes never looked:"
+    grep -E 'HALT' /tmp/cs.out | sed 's/^/        /' | head -10; fail=1
+  fi
+fi
+
 echo; echo "----------------------------------------------------------------------"
 if [ "$fail" -ne 0 ]; then
   echo "BELT: HALT — a tick refused. This build does not ship."
