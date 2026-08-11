@@ -152,6 +152,8 @@ with sync_playwright() as pw:
                     measured += 1
                     cr = contrast(fg, bg)
                     if cr < FLOOR:
+                        key = f'{REPO}/{f.as_posix().lstrip("./")}' if REPO else f.as_posix()
+                        per_file[key] = per_file.get(key, 0) + 1
                         halts.append(f'{f} [{mode}] {route or "home"} {c["tag"]}{c["cls"]} '
                                      f'contrast {cr:.2f} {c["size"]}px/{c["weight"]} '
                                      f'"{c["text"]}" fg {c["fg"]} on {c["bg"]}')
