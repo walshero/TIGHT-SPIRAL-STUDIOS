@@ -769,3 +769,126 @@ Verification: belt PASS all ticks, type census PASS (every visible node >= 18px 
 ## 2026-08-10 — Founder-ordered review: the FableVision + Filament network-strategy spec
 
 **Reviewed against today's studio, verdict: the doc has aged WELL on its spine and gone stale on its pilot pick.** The brake ("do not build a partner network until a real student plays a real game, with captured evidence") is MORE true now than when written - the studio still has zero verified student plays; GATE 1 cold plays owed since 07-13; the blind consultation's proof seat independently reached the same one-legible-win conclusion. Aged well: Alpha/Beta/Gold DID graduate into the patterns file as Fidelity Tiers, and the doc's brake-first structure kept it from ever being read as a scaling green light. Gone stale: it names "CYL or EN195" as the fall pilot candidates, but CYL is now mid-v7 redesign in another lane - the realistic fall pilot is the EN195 arcade, which is his own course's build and under active polish. TIME-CRITICAL: "this fall" is now weeks away; the pilot call (which game, which section, capture engage/learn/change) is the single most time-sensitive founder decision in the studio - unmade, it slips a semester and every parked door (NEH, IES SBIR, verticals, the Paul Reynolds note) slips with it. Also still open from the doc's own list: the Reynolds peer note (costs nothing), the knowledge-gate and garden-test mechanics' formal graduation, the Alpha/Beta/Gold naming into OS §6 (patterns has it; the OS pipeline section never adopted it).
+## 2026-08-09 — CYL spine fork: the shelf and the repo disagree about a founder ruling (PENDING — FOUNDER ONLY)
+
+**FOUND — a fourth working lane, invisible to chat-history search.** The founder
+enumerated the project's chat window rather than searching it by topic: three chats
+exist since Aug 3 (Zapier fireground assets 08-06, The Slip / EN195 / date gate
+08-06, timing belt strategy 08-07). None is CYL. The Aug 5-6 CYL modern-period work
+ran in Claude Code / Cowork sessions — a lane `conversation_search` cannot see, and
+the one doing most of the actual building right now.
+
+**THE CONTRADICTION.** Shelf doc `cyl-modern/SPINE-RULING-2026-08-06.md` records a
+founder-selected spine line — **"You judged. Now find out what that judgment was
+standing on."** — option 5 of a five-option slate, CYL-SPINE-02 bound with an
+in-place marker (claimed commit `6130158`), placement spec'd into `cyl-full-bible.md`
+Beat 1.0, plus a modern-period physics ruling (STANDING, route termination,
+confidence retired, 19→31 items). The repo's own 08-08 record says the opposite:
+"NOT YET DECIDED — no replacement thesis line authored" (this ledger, that morning),
+and the v7 drift ruling closes the day with *no thesis line exists for CYL today; if
+one is ever needed, the founder writes it.*
+
+**VERIFIED against the repo this session (2026-08-09):**
+- The line string appears NOWHERE in the tree — zero hits, whole repo.
+- `6130158` is not an object in this repo's git history (`git cat-file` fails).
+- Origin carries only `main` and the current session branch. Nothing stranded here.
+- `cyl-full-bible.md` Beat 1.0 carries no CYL-SPINE-02 marker — only the 08-08
+  correction that removed the retired line.
+
+If the shelf ruling is real, the work never reached this repo. The recovery target
+is off-repo: a git bundle or local clone on the Mac. Nothing recoverable from here.
+
+**THE FORK, enumerated, not collapsed (per FORKING-PATHS-PROTOCOL):**
+- **Path A — real and stranded.** The ruling happened in a Code session; the write
+  lane was denied, `/tmp` evaporated with the container, and the only surviving
+  record is the shelf copy that says so in its own header. The 08-08 sessions wrote
+  "not yet decided" because they had no memory of it.
+- **Path B — artifact.** A Code session drafted the five-option slate and recorded a
+  selection, but the founder selection never actually occurred — or occurred and was
+  superseded by the 08-08 v7 ruling.
+Opposite consequences: under A the founder already chose a line and the studio lost
+it (and the modern-period dossier work is real and stranded); under B the v7
+ruling's open call is correct, the shelf `cyl-modern/` docs are a fossil, and there
+is nothing to recover.
+
+**PENDING — the narrow founder question, only he can answer:** *On or around
+August 6, did you pick a spine line from a slate of five, and was it "You judged.
+Now find out what that judgment was standing on."?*
+- **If yes:** the line stands as a decided founder call (still read through the v7
+  ruling's frame), the modern-period work is stranded, and the recovery errand is a
+  Mac-side search for the git bundle / local clone. Trump/Biden retrieval work may
+  not need redoing.
+- **If no:** mark the shelf `cyl-modern/` docs as fossils so no future session
+  treats them as canon, and the v7 ruling's "no line exists" stands unqualified.
+
+**Guard note:** the candidate line is neither canon nor retired while this is open.
+It does not go into any build, and it does not go into `retired-lines.json`, until
+the founder answers. Either way the 08-08 v7 drift ruling governs the build — this
+fork decides only whether a line exists to recover and whether the modern-period
+sourcing work needs redoing.
+
+**ADDENDUM 2026-08-10 (founder, verbatim): "I don't love that pitch either exactly
+like that."** — said of the shelf's candidate line ("You judged. Now find out what
+that judgment was standing on."). Effect: whichever fork path is true, the line does
+NOT become canon as written. The v7 ruling's state stands — no spine line exists;
+if one is ever needed, the founder writes it. The fork's remaining live stake
+narrows to the modern-period dossier work (real-and-stranded vs fossil); the line
+itself is settled: not approved as-is.
+
+## 2026-08-10 — FOUNDER BUILD ORDER: CYL v7, the full six, the felt drop, CLASS not politics
+
+**Verbatim:** "Merge this lane with this doc as needed and create the latest
+Cohesive full 6 President 20 minute plus Maslow drop like Jenova Chen flow so
+you feel how choices affect class! Not politics, wealth and power."
+
+**Unpacked (binding, extends the 08-08 v7 drift ruling):**
+1. **Full six presidents in one cohesive build** — the Cold War trio plus the
+   current-era trio. This is the founder ordering the current-era scenes INTO the
+   build; the standing sourcing rule still binds HOW (records real, dated,
+   sourced, even-handed — never fabricated), and his cold play remains the final
+   gate on the records themselves.
+2. **20+ minutes** — a full arc, not a slice.
+3. **The Maslow drop is FELT, Jenova Chen flow** — the descent as something the
+   player moves through and feels thicken (the 08-05/08-08 rulings' viscosity
+   mechanic, now ordered into the main game, not staged beside it).
+4. **THE FRAME IS CLASS, NOT POLITICS.** The gap the game teaches is what wealth
+   and power did to where the player's household stands — never which party was
+   right. Records are chosen and written on the class/wealth/power axis;
+   partisan scoring of any president is out of scope by founder order.
+
+## 2026-08-10 — SHIPPED: choose-your-leader-v7.html, the full six and the felt drop
+
+**The build order executed same session it was given.** Single file, 1.58 MB,
+offline, no storage, no audio. Six presidents in one cohesive 20+ minute arc:
+JFK 1962 / LBJ 1964 / Nixon 1969 (records carried from v5-b canon) + Obama 2013
+/ Trump 2017 / Biden 2022 (records sourced and web-verified this session;
+sources carried in-file per scene; founder cold play is the final record gate).
+Even-handedness held by construction: both post-2016 scenes are an economic
+promise measured against the documented record of where wealth and power
+landed. The frame is class, not politics, per the founder order: every record
+turns twice (what was hidden, who paid by household).
+
+**The felt drop is in the main game for the first time.** Between addresses the
+player walks the household: three rooms at fixed angles (the shift, the shelf,
+the back room) whose distance stretches with altitude spent and whose steps
+shrink (the-viscosity vocabulary, mounted not reinvented). Altitude is the
+running mean of landing tiers, so the descent ACCUMULATES across scenes: the
+Zimmerman integration note (scenes should alter each other) gets its first
+real answer, and trust spent on unexamined power is felt as distance in the
+next walk. Noticing brakes it. Chen flow: the world's thickness adapts to the
+player's own reads, never to a score.
+
+**Gates:** full belt preflight PASS, all seven ticks (comfort/dark, attribution,
+image floor + render, voice, entry paint, retired lines, touch floor) on both
+the build and the updated face. Playwright click-walk verified the six-scene
+loop end to end on a phone viewport: altitude carry, era shift after Nixon,
+sources rendering, warm dark, Home, zero console errors. Founder MJ plates
+mounted from v6 with provenance verbatim; modern scenes are CSS-composed
+rooms (no plates exist; archive egress blocked, see 08-08 entry). All studio-
+drafted copy is marked in TSP-META as awaiting founder words; the six address
+quotes carry the voice gate's verbatim marker as sourced transcript language,
+dashes the transcripts' own. No thesis line exists and none is used.
+
+**Open, founder-only, unchanged:** GATE 1 cold play (now on v7); record
+approval for the three current-era scenes; the protection-function home
+(Zimmerman); which build goes to Scot.
