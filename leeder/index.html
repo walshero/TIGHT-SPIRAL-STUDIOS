@@ -744,6 +744,19 @@ document.getElementById('emailapp').addEventListener('click',()=>{
 });
 document.getElementById('printapp').addEventListener('click',()=>{ window.print(); });
 
+document.getElementById('sendmsg').addEventListener('click',()=>{
+  const f=document.getElementById('contactform');
+  const get=n=>{const el=f.querySelector('[name="'+n+'"]'); return el?el.value.trim():'';};
+  const who=((get('First name')+' '+get('Last name')).trim())||'Website visitor';
+  const lines=[];
+  ['First name','Last name','Email','Phone','Building','Message'].forEach(n=>{
+    const v=get(n); if(v) lines.push(n+': '+v);
+  });
+  const body=lines.join('\r\n')+'\r\n\r\nSent from leedermanagement.com';
+  window.location.href='mailto:mlbuckley@leedermgt.com?subject='+
+    encodeURIComponent('Website enquiry: '+who)+'&body='+encodeURIComponent(body);
+});
+
 /* ---------- live rents from Google Sheet (only on real hosts; offline-safe) ---------- */
 const SHEET_ID='1FUsWJI9MjuG2P_VWChVxBb1Cip4ui3dEIgb7yaJH_Pg';
 const LIVE_HOST=/(\.github\.io|leedermanagement\.com)$/.test(location.hostname);
