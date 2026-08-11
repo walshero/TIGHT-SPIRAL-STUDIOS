@@ -34,14 +34,14 @@ TDP = re.compile(r'<td class="price">(.*?)</td>', re.S)
 
 halts = []
 checked = 0
-for f in sorted(root.rglob('*.html')):
+for f in targets:
     if any(part.startswith('.') or part == 'node_modules' for part in f.parts):
         continue
     src = f.read_text(encoding='utf-8', errors='replace')
     if 'data-rentline' not in src:
         continue
     checked += 1
-    rel = f.relative_to(root)
+    rel = f
     for key, raw in SPAN.findall(src):
         text = html.unescape(re.sub(r'<[^>]+>', '', raw)).strip()
         if re.search(r'\b(null|undefined|NaN)\b', text, re.I):
