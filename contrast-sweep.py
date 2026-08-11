@@ -99,7 +99,7 @@ def contrast(a, b):
 
 
 targets = []
-for arg in (sys.argv[1:] or ["."]):
+for arg in ([a for a in sys.argv[1:] if not a.startswith("--")] or ["."]):
     p = pathlib.Path(arg)
     if p.is_dir():
         targets += sorted(q for q in p.rglob("*.html")
