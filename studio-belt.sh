@@ -328,6 +328,30 @@ else
   fi
 fi
 
+# TICK 9 — number sense / layout (added 2026-08-11). FLAT, zero tolerance. The
+# founder's phone rendered 'Studio $1,750–$2,100 · 1 / Bedroom $2,400' — a rent
+# line wrapping BETWEEN a number and its unit at large text size, right after a
+# backend type bug rendered 'Studio null'. Two failures, one lesson: the eyes
+# checked color and size but never whether numbers READ as coherent units.
+# Rule: inside a unit+price pair only non-breaking spaces; wraps only at the
+# mid-dot separators; every price well-formed ($X,XXX or an en-dash range); no
+# junk tokens (null/undefined/NaN) ever. Scoped to pages carrying data-rentline
+# — pages without priced inventory pass untouched.
+echo; echo "-- tick 9: number sense (a number never wraps away from its label) --"
+if [ ! -f "$BELT_DIR/number-sense-gate.py" ]; then
+  echo "  (gate not mounted — skipped)"
+else
+  if [ "$MODE" = file ]; then NS_TARGET="$SURFACES"; else NS_TARGET="."; fi
+  if [ -z "$NS_TARGET" ]; then
+    echo "  (no HTML surfaces — skipped)"
+  elif python3 "$BELT_DIR/number-sense-gate.py" $NS_TARGET >/tmp/ns.out 2>&1; then
+    tail -1 /tmp/ns.out | sed 's/^/  pass  /'
+  else
+    echo "  HALT  a number wrapped away from its label:"
+    grep -E 'HALT' /tmp/ns.out | sed 's/^/        /' | head -8; fail=1
+  fi
+fi
+
 echo; echo "----------------------------------------------------------------------"
 if [ "$fail" -ne 0 ]; then
   echo "BELT: HALT — a tick refused. This build does not ship."
