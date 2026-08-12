@@ -718,7 +718,13 @@ function route(){
   document.getElementById('page-'+key).classList.add('active');
   document.querySelectorAll('nav [data-nav]').forEach(a=>a.toggleAttribute('aria-current',a.dataset.nav===key));
   const phone=matchMedia('(max-width:700px)').matches;
-  window.scrollTo({top:phone?document.getElementById('main').offsetTop:0});
+  if(!phone){ window.scrollTo({top:0}); return; }
+  // Measure AFTER the browser has laid the nav out. Reading offsetTop synchronously gave a
+  // pre-wrap value, so at large text sizes the scroll stopped short and the nav stayed put.
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    const m=document.getElementById('main');
+    window.scrollTo({top:m.getBoundingClientRect().top+window.scrollY});
+  }));
 }
 window.addEventListener('hashchange',route);
 document.addEventListener('click',e=>{
