@@ -686,7 +686,9 @@ Object.entries(GALLERIES).forEach(([key,items])=>{
 });
 const lb=document.getElementById('lightbox'), lbImg=document.getElementById('lb-img'), lbCap=document.getElementById('lb-cap');
 function openLB(list,i){ lbList=list; lbIndex=i; renderLB(); lb.classList.add('open'); document.getElementById('lb-close').focus(); }
-function renderLB(){ const [src,cap]=lbList[lbIndex]; lbImg.src=src; lbImg.alt=cap; lbCap.textContent=cap+'  ('+(lbIndex+1)+' of '+lbList.length+')'; }
+function renderLB(){ const src=lbList[lbIndex]; lbImg.src=src;
+  lbImg.alt='Photo '+(lbIndex+1)+' of '+lbList.length;
+  lbCap.textContent=(lbIndex+1)+' of '+lbList.length; }
 function stepLB(d){ lbIndex=(lbIndex+d+lbList.length)%lbList.length; renderLB(); }
 document.getElementById('lb-prev').onclick=()=>stepLB(-1);
 document.getElementById('lb-next').onclick=()=>stepLB(1);
