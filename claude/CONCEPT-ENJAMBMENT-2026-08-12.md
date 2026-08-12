@@ -125,6 +125,34 @@ build that has to hold the motion pair and the reader's enlarged base font from 
 first paint — the founder plays on a phone at an enlarged base, and the studio's
 accessibility-first intent is the reason the arcade exists in this shape.
 
+## BUILT — `enjambment.html` v1, same day
+
+Steps 1 to 3 of the sequence above are playable at `enjambment.html`, with the
+three findings built in **as answers to be playtested, not as settled law**. The
+belt accelerates and the poem's own turn jams it; the rest arrives at the reader's
+pace; the meter round offers both real scansions of line 1 and marks neither wrong;
+the setting is the poem's woods with a salvaged broadcast sign in them.
+
+Gate state: art-gate pass, preship-gate-v5 SHIP (0 halts), studio-voice-gate SHIP,
+one-thing-gate WARN. Headless playtest drives both rounds end to end in both modes
+with no JS errors.
+
+**The one open WARN is real debt, not a nit:** `SUB-50-TABLEAU`, entry tableau 0%
+image. All scenery in this file is CSS, because the 2026-08-01 art ruling bars
+hand-authored SVG scene art and this session has no MJ lane. one-thing-gate counts
+only `img/svg/canvas/video` as a visual, so a CSS scene reads as no scene at all.
+The honest fix is a real plate from the founder's own Midjourney lane, in the
+Samorost idiom already banked. Until then the entry is a competent CSS scene that
+the gate cannot see and will keep flagging.
+
+**Motion stop turned out to be a second playable mode, not a setting.** The first
+headless run with reduced motion produced a frozen belt: words never reached the
+head, so the poem could never be cut and the turn never came. A dead game, on the
+setting an RP reader is most likely to have on. The still mode is Line Break v3's
+own shape, which is the strongest argument yet for the absorb-Line-Break question
+below: the accessible version of ENJAMBMENT *is* Line Break, so the two cabinets
+are already the same cabinet in different weather.
+
 ## OPEN — founder calls needed
 
 - **PENDING:** Is the belt the hook (accelerate → fail → earn the pause) or the loop

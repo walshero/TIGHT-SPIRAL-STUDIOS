@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en" data-light="day">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Enjambment</title>
+<!-- TSP-META {"file":"enjambment.html","stage":"v1 playtest build 2026-08-12 — EN195 Poetry district. Promotes Line Break v3's scissors philosophy (the cut re-forms the poem live, enjambment is watched not described) into a full cabinet with the belt, the jam, the earned pause and the meter round, per claude/CONCEPT-ENJAMBMENT-2026-08-12.md. Three concept findings are built in as answers to be playtested, not as settled law: (1) the Lucy belt is the HOOK not the loop — it accelerates until the poem's own turn jams it, and the failure is what buys the silence; (2) the meter round scores the PULSE, not the parse — line 1 is offered in two real scansions, both played, neither marked wrong, because Frost's opening line genuinely scans two ways and an answer-key would teach something false; (3) Times Square is the delivery device, not the world — the setting is the poem's own context (New England woods at night) with a salvaged broadcast sign standing in it, which is the founder's stated intent that the setting represent the poem. Comfort v3.1 lifted verbatim from en195-arcade.html (top-only per the 08-09 ruling, Day/Warm dark, dusk retired, font-size:100% + rem multipliers so the reader's browser supplies the base). Sound is its own control and starts OFF-by-default only in the sense that it needs the Start gesture. MOTION STOP IS A SECOND PLAYABLE MODE, not a switch that kills the game: headless playtest found that with reduced motion the belt simply froze, so the words never reached the head, the poem could never be cut and the turn never arrived — a dead game, on the one setting an RP reader is most likely to have on. The still mode is Line Break v3's proven shape instead: the whole passage holds still as prose and the reader taps the word each line should end on, with the same live re-forming poem below and the same jam at the turn, no clock and no motion. Mode is decided at the top of every round from the live motion state. Other defects the same playtest caught and fixed: cut head moved from 50% to 38% of the sign (a phone showed only about three words of lookahead, which made the belt feel unfair rather than fast); round 2 finished at four cuts on a four-line passage and dumped the tail into a fifth monster line (N cuts make N+1 lines); Mending Wall's break indices were off by one so no match mark could ever fire; the beat lamps painted in normal flow at the top of the scene and read as three extra moons; the "cut here" label sat on top of the moving text; the footer's attribution counted as 74 words of entry prose and tripped one-thing-gate's wall; and .cutbtn's display:block outranked the UA [hidden] rule so a hidden CUT button kept painting. All scenery is CSS — no inline SVG at or above the art-gate floor — so the Samorost-grade art can arrive later through the MJ lane instead of being hand-authored here against the 2026-08-01 ruling.","operative":true,"assets":"Robert Frost, 'Nothing Gold Can Stay' (New Hampshire, 1923) and 'Mending Wall' opening (North of Boston, 1914) — both US public domain, attributed in-file. Bass and beat synthesized in-file with Web Audio. All scenery CSS, no raster or vector plates.","founder-open":["belt as hook vs belt as loop — does the jam land, or does it want sustained speed pressure?","does the two-scansion answer read as honest or as dodging a right answer?","does the woods-with-a-broadcast-sign setting hold, or does he want the Times Square room outright?","should this absorb Line Break in the arcade, or do both cabinets stand?"],"harvest":"a poem's own turn is a better stop condition than a timer — the machine fails where the poem changes its mind"} -->
+<script>
+/* PRE-PAINT COMFORT BOOT — lifted from en195-arcade.html. Runs before first paint
+   so a reader who chose Warm dark never sees a flash of daylight. No try/catch
+   swallowing beyond storage itself; a storage failure falls through to defaults. */
+(function(){
+  var d = document.documentElement, s = null;
+  try { s = JSON.parse(localStorage.getItem('tsp.comfort.v1') || 'null'); } catch(e){ s = null; }
+  if (!s || typeof s !== 'object') {
+    var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    s = { light: dark ? 'night' : 'day', size: 0, contrast: 0, motion: 0, cues: 0, reader: 0, motionSet: 0 };
+  }
+  if (s.light !== 'night') s.light = 'day'; /* dusk retired 2026-08-09 */
+  d.setAttribute('data-light', s.light);
+  d.classList.toggle('c-a1', s.size === 1);
+  d.classList.toggle('c-a2', s.size === 2);
+  d.classList.toggle('c-contrast', !!s.contrast);
+  d.classList.toggle('c-still',    !!(s.motionSet && s.motion));
+  if (s.motionSet && !s.motion) d.setAttribute('data-motion', 'go');
+  d.classList.toggle('c-cues',     !!s.cues);
+  d.classList.toggle('c-reader',   !!s.reader);
+  window.__comfort = s;
+})();
+</script>
+<style>
+/* ═══ COMFORT v3.1 — lifted from en195-arcade.html, same tokens, same ladder.
+   The belt stage is its own fixed-night scene (the sign has to glow against
+   something), exactly as the arcade's puppet stage is. Comfort governs the
+   chrome and every reading surface around it. ═══ */
+:root{
+  font-size:100%;   /* THE READER SETS THE BASE. rem multipliers do the rest. */
+  --paper:#f4efe6; --ink:#211a12; --ink2:#211a12;
+  --gold:#6e4700; --rust:#a34a2a; --slate:#3f5666; --kraft:#b08d57;
+  --card:#fdfaf3; --edge:#3a2f22; --glow:#f5c97b;
+  --focus:#6e4700;
+  --surface:#fdfaf3; --surface-2:#efe6d2;
+  --ink-2:#211a12;
+  --line:#b08d57;
+  --control-edge:#3a2f22;
+  --accent-strong:#3f5666; --on-accent:#ffffff;
+  --r:10px; --tap:48px;
+  --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+  --motion:.18s;
+  --chrome-h:64px;
+  color-scheme: light;
+}
+html[data-light="night"]{
+  --paper:#262019; --ink:#f0dcb8; --ink2:#f0dcb8;
+  --gold:#f5c97b; --card:#332a1f; --edge:#f0dcb8;
+  --rust:#d4744e; --slate:#7d9ab0; --kraft:#cfa96e; --focus:#f5c97b;
+  --surface:#332a1f; --surface-2:#3f362a;
+  --ink-2:#dccba2; --line:#5a5140; --control-edge:#f0dcb8;
+  --accent-strong:#a9bcd0; --on-accent:#141109;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#262019; --ink:#f0dcb8; --ink2:#f0dcb8;
+    --gold:#f5c97b; --card:#332a1f; --edge:#f0dcb8;
+    --rust:#d4744e; --slate:#7d9ab0; --kraft:#cfa96e; --focus:#f5c97b;
+    --surface:#332a1f; --surface-2:#3f362a;
+    --ink-2:#dccba2; --line:#5a5140; --control-edge:#f0dcb8;
+    --accent-strong:#a9bcd0; --on-accent:#141109;
+    color-scheme: dark;
+  }
+}
+html[data-light="day"]{
+  --paper:#f4efe6; --ink:#211a12; --ink2:#211a12;
+  --gold:#6e4700; --rust:#a34a2a; --slate:#3f5666; --kraft:#b08d57;
+  --card:#fdfaf3; --edge:#3a2f22; --focus:#6e4700;
+  --surface:#fdfaf3; --surface-2:#efe6d2;
+  --ink-2:#211a12; --line:#b08d57; --control-edge:#3a2f22;
+  --accent-strong:#3f5666; --on-accent:#ffffff;
+  color-scheme: light;
+}
+html.c-contrast:not([data-light="night"]){
+  --paper:#fffdf8; --card:#fffdf8; --surface:#fffdf8; --surface-2:#f2ede1;
+  --ink:#100d07; --ink2:#100d07; --ink-2:#241d10;
+  --edge:#241d10; --control-edge:#241d10; --line:#7d6a44;
+  --accent-strong:#1d2f3d;
+}
+html.c-contrast[data-light="night"]{
+  --paper:#0a0908; --card:#141210; --surface:#141210; --surface-2:#201d18;
+  --ink:#fff9ec; --ink2:#fff9ec; --ink-2:#f0e3c6;
+  --edge:#f0e3c6; --control-edge:#f0e3c6;
+  --accent-strong:#c3d4e6; --gold:#ffd77a;
+}
+html.c-a1{ font-size:112.5%; }
+html.c-a2{ font-size:125%; }
+/* MOTION STOP — two rules, never merged. An @media block cannot sit inside a
+   selector list; merged, the parser discards the whole declaration. */
+html.c-still *{
+  animation:none !important; transition:none !important; scroll-behavior:auto !important;
+}
+@media (prefers-reduced-motion:reduce){
+  html:not([data-motion="go"]) *{
+    animation:none !important; transition:none !important; scroll-behavior:auto !important;
+  }
+}
+html.c-cues a{ text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:2px; }
+
+*{box-sizing:border-box;}
+/* An author display: rule outranks the UA's [hidden]{display:none}, so .cutbtn's
+   display:block kept painting a hidden button. State this once, loudly. */
+[hidden]{display:none !important;}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:Georgia,'Times New Roman',serif;
+  font-size:1.125rem; line-height:1.6;
+  min-height:100vh;
+  transition:background var(--motion) ease, color var(--motion) ease;
+}
+main{max-width:680px; margin:0 auto; padding:16px 16px 48px;}
+h1,h2,h3{font-weight:700; line-height:1.25;}
+h1{font-size:1.5rem; margin:0 0 .4rem;}
+h2{font-size:1.25rem; margin:0 0 .5rem;}
+h3{font-size:1.125rem; margin:0 0 .4rem;}
+p{margin:0 0 .9rem; max-width:68ch;}
+button{
+  font-family:inherit; font-size:1.125rem; line-height:1.4;
+  min-height:48px; min-width:48px;
+  padding:12px 20px; margin:6px 4px;
+  background:var(--card); color:var(--ink);
+  border:3px solid var(--edge); border-radius:10px;
+  cursor:pointer; text-align:left;
+}
+button:hover{border-color:var(--gold);}
+button:focus-visible{outline:4px solid var(--focus); outline-offset:3px;}
+.big{display:block; width:100%; font-size:1.1875rem; font-weight:700; text-align:center;}
+.screen{display:none;}
+.screen.on{display:block;}
+.sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap;}
+.skiplink{
+  position:absolute; left:-9999px; top:0; z-index:99;
+  background:var(--card); color:var(--ink); padding:12px 18px;
+  border:3px solid var(--edge); border-radius:0 0 10px 0; font-weight:700;
+}
+.skiplink:focus{left:0;}
+
+/* ═══ TOP CHROME — Comfort lives here and only here (08-09 ruling). ═══ */
+.coinbar{
+  display:flex; align-items:center; gap:8px; flex-wrap:wrap; row-gap:6px;
+  background:var(--paper); border-bottom:3px solid var(--edge);
+  padding:5px 16px; font-weight:700;
+  position:sticky; top:0; z-index:20;
+  transition:transform .22s ease;
+}
+.coinbar.tucked{transform:translateY(-110%);}
+.coinbar button{
+  margin:0; padding:8px 16px; white-space:nowrap; font-size:1.125rem;
+  min-height:44px; min-width:44px;
+  border-width:2px; border-radius:999px; background:transparent;
+  letter-spacing:.02em;
+}
+.barlabel{font-size:1.125rem; white-space:nowrap;}
+#homeBtn{margin-left:auto;}
+
+.panel{
+  position:fixed; z-index:71;
+  right:max(14px, env(safe-area-inset-right));
+  top:calc(var(--chrome-h) + 8px);
+  width:min(340px, calc(100vw - 28px));
+  max-height:calc(100dvh - var(--chrome-h) - 24px);
+  overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin;
+  background:var(--surface); color:var(--ink);
+  border:2px solid var(--accent-strong); border-radius:var(--r);
+  padding:16px; box-shadow:0 10px 34px rgba(0,0,0,.34);
+  display:none;
+}
+.panel[data-open="1"]{display:block;}
+.panel[data-more="1"]{
+  -webkit-mask-image:linear-gradient(to bottom, #000 calc(100% - 34px), transparent 100%);
+          mask-image:linear-gradient(to bottom, #000 calc(100% - 34px), transparent 100%);
+}
+.panel h2{font-family:var(--sans); font-size:1.125rem; font-weight:700; color:var(--ink-2); margin:0 0 9px;}
+.panel .grp + .grp{margin-top:18px; border-top:2px solid var(--line); padding-top:16px;}
+.row{display:flex; gap:7px; flex-wrap:wrap;}
+.btn{
+  flex:1 1 auto; min-width:0; min-height:var(--tap); padding:11px 6px; margin:0;
+  border:2px solid var(--control-edge); border-radius:9px;
+  background:var(--surface-2); color:var(--ink);
+  font-family:var(--sans); font-weight:700; font-size:1.125rem; cursor:pointer; text-align:center;
+}
+.btn[aria-pressed="true"]{background:var(--accent-strong); color:var(--on-accent); border-color:var(--edge);}
+.tog{
+  display:flex; width:100%; align-items:center; justify-content:space-between; gap:12px;
+  min-height:var(--tap); padding:11px 14px; margin:8px 0 0;
+  border:2px solid var(--control-edge); border-radius:9px;
+  background:var(--surface-2); color:var(--ink);
+  font-family:var(--sans); font-weight:600; font-size:1.125rem; cursor:pointer; text-align:left;
+}
+.tog[aria-pressed="true"]{border-color:var(--edge); background:var(--surface);}
+.tog .st{font-family:var(--sans); font-size:1.125rem; font-weight:700; color:var(--ink-2); flex:0 0 auto;}
+.why{margin-top:8px;}
+.why summary{min-height:var(--tap); display:flex; align-items:center; cursor:pointer;
+  font-family:var(--sans); font-size:1.125rem; font-weight:600; color:var(--ink-2);}
+.note{font-size:1.125rem; color:var(--ink-2); margin:9px 0 0; line-height:1.5; font-weight:400;}
+
+/* ═══ THE STAGE — the poem's own context, not Times Square.
+   New England woods at night, a salvaged broadcast sign standing in them.
+   Fixed-night like the arcade's puppet stage: the sign has to glow against
+   something. Every bit of it is CSS — no inline SVG at the art-gate floor —
+   so the real art can arrive later through the MJ lane. ═══ */
+.stage{
+  position:relative; overflow:hidden;
+  background:linear-gradient(#0b1220 0%, #16233a 52%, #1d2b3d 100%);
+  border:3px solid var(--edge); border-radius:var(--r);
+  padding:0; margin:0 0 16px;
+  min-height:310px;
+}
+.stars{position:absolute; inset:0 0 52% 0; opacity:.85;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 30%, #ffeec2 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 34% 14%, #ffeec2 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 57% 38%, #fff4d6 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 73% 20%, #ffeec2 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 88% 44%, #fff4d6 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 22% 55%, #ffeec2 50%, transparent 51%);
+}
+.moon{position:absolute; right:8%; top:7%; width:34px; height:34px; border-radius:50%;
+  background:#f6e6bd; box-shadow:0 0 26px 7px rgba(246,230,189,.28);}
+.ridge{position:absolute; left:0; right:0; bottom:0; height:46%;
+  background:linear-gradient(#16291f, #0e1c15);}
+.pines{position:absolute; left:0; right:0; bottom:0; height:58%;}
+/* Pines read as SILHOUETTE: darker than the ridge behind them, not the same
+   value. At equal value the whole lower half painted as one black band. */
+.pine{position:absolute; bottom:0; background:#050d0a;
+  clip-path:polygon(50% 0%, 100% 100%, 0% 100%);}
+.pine.b{background:#08120d;}
+.snow{position:absolute; left:0; right:0; bottom:0; height:16%;
+  background:linear-gradient(rgba(226,236,240,.14), rgba(226,236,240,.30));}
+
+/* the salvaged sign, on its two posts */
+/* The sign stands IN the woods, on the horizon, with sky above it. Pinned to the
+   top it covered its own moon and stars and the scene read as a sign on a void. */
+.signwrap{position:absolute; left:50%; top:22%; transform:translateX(-50%);
+  width:min(92%, 560px);}
+.sign{
+  background:#0d0f0c; border:3px solid #6b5a34; border-radius:8px;
+  box-shadow:0 0 22px rgba(245,201,123,.22), inset 0 0 18px rgba(0,0,0,.7);
+  padding:12px 0; overflow:hidden; position:relative;
+}
+.posts{display:flex; justify-content:space-between; width:56%; margin:0 auto;}
+.post{width:9px; height:44px; background:#3a3325; border-radius:0 0 3px 3px;}
+/* The viewport is taller than its line so the "cut here" label has its own band
+   underneath. At equal heights the label sat on top of the moving text and you
+   could not read the words you were about to cut. */
+.viewport{position:relative; overflow:hidden; height:3.7em;}
+.strip{
+  position:absolute; left:0; top:0; white-space:nowrap;
+  font-family:'Courier New',Courier,monospace; font-weight:700;
+  font-size:1.125rem; line-height:2.5em; letter-spacing:.02em;
+  color:#f8d68a; text-shadow:0 0 9px rgba(248,214,138,.55);
+  will-change:transform;
+}
+.strip .w{padding:0 .18em;}
+.strip .w.cutmark{color:#ffe9b8; border-left:3px solid #ffcf6b; margin-left:2px;}
+.head{position:absolute; left:38%; top:0; bottom:0; width:3px; margin-left:-1px;
+  background:linear-gradient(transparent, #ffcf6b 18%, #ffcf6b 82%, transparent);
+  opacity:.95;}
+.headlabel{position:absolute; left:38%; bottom:3px; transform:translateX(-50%);
+  font-family:var(--sans); font-size:1.125rem; font-weight:700; color:#ffcf6b;
+  background:rgba(13,15,12,.92); padding:0 8px; border-radius:4px; white-space:nowrap;}
+.stage.jammed .sign{box-shadow:0 0 6px rgba(245,201,123,.10), inset 0 0 22px rgba(0,0,0,.85);}
+.stage.jammed .strip{color:#8d7a52; text-shadow:none;}
+
+/* ═══ STATIC CUT MODE — the motion-stop twin of the belt. ═══
+   A reader with motion stopped had a FROZEN belt, which is not a calmer game,
+   it is a dead one: the words never reach the head, so the poem can never be
+   cut and the turn never arrives. The accessible version is not "the belt but
+   slower", it is Line Break v3's proven shape — the whole passage sits still as
+   prose and the reader taps the word they want the line to end on. Same cut,
+   same live re-forming poem below, same jam at the turn, no motion and no clock. */
+.stage.still .viewport, .stage.still .head, .stage.still .headlabel{display:none;}
+.stage:not(.still) .blockcut{display:none;}
+.stage.still .beatrow, .stage.still .posts{display:none;}
+/* The still passage is as tall as the passage, and at the reader's largest base
+   that is much taller than the belt's fixed scene. So in this mode the sign stops
+   being an absolutely-placed prop and becomes a panel the stage grows around; the
+   woods stay as a horizon band top and bottom instead of a full-height backdrop. */
+.stage.still{min-height:0;}
+.stage.still .signwrap{position:static; transform:none; width:auto; padding:14px 12px;}
+.stage.still .stars{inset:0 0 auto 0; height:64px;}
+.stage.still .ridge{height:74px;}
+.stage.still .pines{height:96px;}
+.stage.still .snow{height:26px;}
+.stage.still .moon{top:14px;}
+.stage.still .sign{position:relative; z-index:2;}
+.blockcut{padding:8px 10px; color:#f8d68a;
+  font-family:'Courier New',Courier,monospace; font-size:1.125rem; line-height:2.05;}
+.cw{
+  background:transparent; border:0; color:inherit;
+  font-family:inherit; font-size:1.125rem; font-weight:700;
+  min-height:44px; min-width:44px; padding:4px 3px; margin:0;
+  border-radius:4px; cursor:pointer; text-align:center;
+}
+.cw:hover{background:rgba(255,207,107,.20);}
+.cw.cutmark{border-right:3px solid #ffcf6b; color:#ffe9b8;}
+.cw:disabled{opacity:.55; cursor:default;}
+
+/* the beat lamp — an instrument, it reports the bass, it is not decoration */
+/* The lamps belong on the ground under the sign, not loose in the sky: in normal
+   flow they painted at the top of the stage and read as three extra moons. */
+.beatrow{position:absolute; left:0; right:0; bottom:10px; z-index:2;
+  display:flex; align-items:center; justify-content:center; gap:11px;}
+.lamp{width:16px; height:16px; border-radius:50%; background:#2b2820; border:2px solid #7d6a3f;}
+.lamp.lit{background:#ffcf6b; box-shadow:0 0 12px 3px rgba(255,207,107,.6);}
+.lamp.lit.accent{background:#ffe9b8; box-shadow:0 0 16px 5px rgba(255,233,184,.75);}
+
+/* ═══ THE POEM THE PLAYER IS MAKING — Line Break v3's rule: the cut re-forms
+   the poem live below, so enjambment is watched rather than described. ═══ */
+.versecard{
+  background:var(--card); border:3px solid var(--edge); border-radius:var(--r);
+  padding:14px 16px; margin:0 0 16px;
+}
+.poemline{margin:0 0 .28rem; font-size:1.125rem; line-height:1.5;}
+.poemline .num{color:var(--ink-2); font-family:var(--sans); font-size:1rem; font-weight:700;
+  display:inline-block; min-width:2.1em;}
+.poemline.pending{color:var(--ink-2); font-style:italic;}
+.poemline.turnline{border-left:5px solid var(--gold); padding-left:10px; margin-left:-3px;}
+
+.cutbtn{
+  display:block; width:100%; text-align:center; font-size:1.375rem; font-weight:700;
+  min-height:68px; letter-spacing:.04em;
+  background:var(--card); border:3px solid var(--gold); color:var(--ink);
+}
+.cutbtn:disabled{opacity:.5; cursor:default; border-color:var(--line);}
+.hint{font-family:var(--sans); font-size:1.0625rem; color:var(--ink-2); margin:.35rem 0 0; text-align:center;}
+
+.compare{display:grid; grid-template-columns:1fr; gap:14px; margin:0 0 16px;}
+@media (min-width:620px){ .compare{grid-template-columns:1fr 1fr;} }
+.compare .col{background:var(--card); border:3px solid var(--edge); border-radius:var(--r); padding:14px 16px;}
+.compare h3{font-family:var(--sans); font-size:1.0625rem; color:var(--ink-2); margin:0 0 .5rem;
+  text-transform:uppercase; letter-spacing:.05em;}
+.matchmark{color:var(--gold); font-weight:700;}
+
+/* scansion */
+.scanline{font-family:'Courier New',Courier,monospace; font-size:1.1875rem; line-height:1.35;
+  margin:0 0 .2rem; white-space:nowrap; overflow-x:auto;}
+.syl{display:inline-block; text-align:center; padding:0 .12em;}
+.syl .mark{display:block; font-size:1.0625rem; font-weight:700; color:var(--gold); line-height:1;}
+.syl.on{background:var(--surface-2); border-radius:5px;}
+.taprow{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:.6rem 0 0;}
+
+.callout{border-left:5px solid var(--gold); background:var(--surface-2);
+  padding:12px 14px; border-radius:0 var(--r) var(--r) 0; margin:0 0 16px;}
+.callout p:last-child{margin-bottom:0;}
+footer{border-top:3px solid var(--line); margin-top:26px; padding-top:14px;}
+footer p{font-size:1.0625rem; color:var(--ink-2);}
+
+/* ═══ CLEAR READER — strip everything that is not meaning. ═══ */
+html.c-reader{ --cr-bg:#ffffff; --cr-ink:#141109; --cr-rule:#595959; }
+html.c-reader[data-light="night"]{ --cr-bg:#121110; --cr-ink:#f4ecd9; --cr-rule:#6e6552; }
+html.c-reader body{background:var(--cr-bg); color:var(--cr-ink); font-family:Georgia,serif;}
+html.c-reader .stage, html.c-reader .beatrow{display:none;}
+html.c-reader .versecard, html.c-reader .compare .col, html.c-reader .callout{
+  background:transparent; border:0; border-left:3px solid var(--cr-rule); border-radius:0; padding:0 0 0 14px;
+}
+html.c-reader button{background:transparent; color:var(--cr-ink); border:2px solid var(--cr-rule);}
+</style>
+</head>
+<body>
+<a class="skiplink" href="#main">Skip to the game</a>
+
+<div class="coinbar" id="coinbar">
+  <span class="barlabel">Enjambment</span>
+  <button type="button" id="comfortTop" aria-expanded="false" aria-controls="panel">Comfort</button>
+  <button type="button" id="soundBtn" aria-pressed="false" hidden>Sound off</button>
+  <button type="button" id="homeBtn" onclick="location.href='en195-arcade.html'">Arcade</button>
+</div>
+
+<div class="panel" id="panel" role="dialog" aria-modal="false" aria-label="Comfort">
+  <div class="grp">
+    <h2 id="l-light">Light</h2>
+    <div class="row" role="group" aria-labelledby="l-light">
+      <button class="btn" type="button" data-light-set="day">Day</button>
+      <button class="btn" type="button" data-light-set="night">Warm dark</button>
+    </div>
+  </div>
+  <div class="grp">
+    <h2>Screen reader</h2>
+    <button class="tog" type="button" data-tog="c-reader">Clear Reader <span class="st">Off</span></button>
+    <details class="why"><summary>What this does</summary>
+      <p class="note">Removes the design and leaves the document, which is close to what a
+        screen reader is handed. A way to check whether a page still makes sense without
+        its layout.</p></details>
+  </div>
+  <div class="grp">
+    <h2 id="l-size">Font size</h2>
+    <div class="row" role="group" aria-labelledby="l-size">
+      <button class="btn" type="button" data-size="0">Normal</button>
+      <button class="btn" type="button" data-size="1">Larger</button>
+      <button class="btn" type="button" data-size="2">Largest</button>
+    </div>
+    <details class="why"><summary>How sizes work</summary>
+      <p class="note">Sizes multiply your browser's own text setting rather than replacing it.</p></details>
+  </div>
+  <div class="grp">
+    <h2>Reading</h2>
+    <button class="tog" type="button" data-tog="c-contrast">High contrast <span class="st">Off</span></button>
+    <button class="tog" type="button" data-tog="c-still">Motion stop <span class="st">Off</span></button>
+    <button class="tog" type="button" data-tog="c-cues">Underline links <span class="st">Off</span></button>
+    <details class="why"><summary>About motion stop</summary>
+      <p class="note">Stops the belt from scrolling and silences the beat. The poem still
+        arrives, one line at a time, at your pace.</p></details>
+  </div>
+</div>
+
+<p class="sr" id="say" role="status" aria-live="polite"></p>
+
+<main id="main">
+
+<!-- ══ ENTRY. Scene first, one invitation. ══ -->
+<section class="screen on" id="s-entry" aria-label="Start">
+  <div class="stage" aria-hidden="true">
+    <div class="stars"></div><div class="moon"></div>
+    <div class="ridge"></div>
+    <div class="pines" id="pines0"></div>
+    <div class="snow"></div>
+    <div class="signwrap">
+      <div class="sign"><div class="viewport"><div class="strip" style="left:14px">NOTHING GOLD CAN STAY</div></div></div>
+      <div class="posts"><div class="post"></div><div class="post"></div></div>
+    </div>
+  </div>
+  <button class="big cutbtn" type="button" id="startBtn">Start the belt</button>
+</section>
+
+<!-- ══ THE BELT ══ -->
+<section class="screen" id="s-belt" aria-label="The belt">
+  <div class="stage" id="stage1">
+    <div class="stars" aria-hidden="true"></div><div class="moon" aria-hidden="true"></div>
+    <div class="ridge" aria-hidden="true"></div>
+    <div class="pines" id="pines1" aria-hidden="true"></div>
+    <div class="snow" aria-hidden="true"></div>
+    <div class="signwrap">
+      <div class="sign">
+        <div class="viewport" id="viewport">
+          <div class="strip" id="strip"></div>
+          <div class="head" aria-hidden="true"></div>
+          <div class="headlabel" aria-hidden="true">cut here</div>
+        </div>
+        <div class="blockcut" id="block1" role="group" aria-label="Tap the word each line should end on"></div>
+      </div>
+      <div class="posts" aria-hidden="true"><div class="post"></div><div class="post"></div></div>
+    </div>
+    <div class="beatrow" id="beatrow" aria-hidden="true"></div>
+  </div>
+
+  <button class="cutbtn" type="button" id="cutBtn">CUT</button>
+  <p class="hint" id="beltHint">Space bar works too. Cut where you think the line ends.</p>
+
+  <div class="versecard">
+    <h2 id="poemlabel">Your poem so far</h2>
+    <div id="poemOut" role="group" aria-labelledby="poemlabel">
+      <p class="poemline pending">Nothing yet. The first cut makes the first line.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ THE JAM — the poem's own turn stops the machine. ══ -->
+<section class="screen" id="s-jam" aria-label="The belt jams">
+  <div class="callout">
+    <h2>The belt jams.</h2>
+    <p id="jamCopy">The sign goes dark and the woods are quiet. Whatever you cut is what you
+      cut. Look at it before anything moves again.</p>
+  </div>
+  <div class="versecard">
+    <h2 id="jamlabel">What you made</h2>
+    <div id="jamOut" role="group" aria-labelledby="jamlabel"></div>
+  </div>
+  <div class="callout" id="turnBox" hidden>
+    <h3>The turn</h3>
+    <p>The next line leaves the tree entirely. Five lines of a garden in spring, and then
+      a fall out of Eden. That leap is the turn, and the poem does not announce it. It
+      just takes it, in six syllables, on the same three beats as everything before.</p>
+  </div>
+  <button class="big cutbtn" type="button" id="jamNext">Let the rest arrive</button>
+</section>
+
+<!-- ══ THE REST — reader's pace, no belt. ══ -->
+<section class="screen" id="s-rest" aria-label="The rest of the poem">
+  <div class="versecard">
+    <h2 id="restlabel">Nothing Gold Can Stay</h2>
+    <div id="restOut" role="group" aria-labelledby="restlabel"></div>
+  </div>
+  <p class="hint" id="restHint">One line at a time. Take as long as you want.</p>
+  <button class="big cutbtn" type="button" id="restNext">Next line</button>
+</section>
+
+<!-- ══ COMPARE ══ -->
+<section class="screen" id="s-compare" aria-label="Your breaks against Frost's">
+  <h1>Where you cut, and where Frost cut</h1>
+  <p id="compareLede"></p>
+  <div class="compare">
+    <div class="col"><h3>Your breaks</h3><div id="colMine"></div></div>
+    <div class="col"><h3>Frost's breaks</h3><div id="colFrost"></div></div>
+  </div>
+  <div class="callout">
+    <p><strong>This poem is end-stopped.</strong> Almost every line finishes its own
+      grammar, so the break and the sense land together and each line reads like a
+      pronouncement. That is why cutting it felt findable even at speed. The sentence
+      was helping you.</p>
+    <p>Enjambment is the opposite deal, and it is next.</p>
+  </div>
+  <button class="big cutbtn" type="button" id="toPulse">Hear the meter</button>
+</section>
+
+<!-- ══ THE PULSE — score the pulse, not the parse. ══ -->
+<section class="screen" id="s-pulse" aria-label="The meter">
+  <h1>Three beats, eight times</h1>
+  <p>Every line in that poem runs on three stresses. Tap along with the bass and watch
+    where they land.</p>
+  <div class="versecard">
+    <div class="scanline" id="scanA"></div>
+    <p class="note" id="scanCap">Reading A. The three-beat pulse, even and plain.</p>
+    <div class="taprow">
+      <button type="button" id="playA">Play reading A</button>
+      <button type="button" id="playB">Play reading B</button>
+      <button type="button" id="tapBtn">Tap the beat</button>
+    </div>
+    <p class="hint" id="tapReport">&nbsp;</p>
+  </div>
+  <div class="callout">
+    <h3>Both of those are real readings</h3>
+    <p>A keeps the three-beat pulse and lets <em>first</em> go by lightly. B leans on
+      <em>first</em> and gets four stresses in six syllables. Say them both out loud.
+      A sounds like a rule being stated, B sounds like someone insisting. The line
+      supports either, and which one you hear is a reading, not an error.</p>
+    <p>That is worth knowing before anyone hands you the words <em>iamb</em> and
+      <em>trochee</em>. A foot is a name for a pattern somebody heard. Line 1 starts on
+      a stressed syllable, <em>NA-ture's</em>, which is a trochee, and it is why the
+      poem opens like a door being pushed rather than eased.</p>
+  </div>
+  <button class="big cutbtn" type="button" id="toEnj">Now the hard one</button>
+</section>
+
+<!-- ══ ENJAMBMENT PROPER ══ -->
+<section class="screen" id="s-enj" aria-label="Enjambment">
+  <h1>Where the sentence does not stop</h1>
+  <p>Here are the first four lines of another Frost poem, as one unbroken sentence.
+    Nothing in the grammar will tell you where the lines end, because the sentence
+    never stops. Listen for the five beats instead.</p>
+  <div class="stage" id="stage2">
+    <div class="stars" aria-hidden="true"></div><div class="moon" aria-hidden="true"></div>
+    <div class="ridge" aria-hidden="true"></div>
+    <div class="pines" id="pines2" aria-hidden="true"></div>
+    <div class="snow" aria-hidden="true"></div>
+    <div class="signwrap">
+      <div class="sign">
+        <div class="viewport" id="viewport2">
+          <div class="strip" id="strip2"></div>
+          <div class="head" aria-hidden="true"></div>
+          <div class="headlabel" aria-hidden="true">cut here</div>
+        </div>
+        <div class="blockcut" id="block2" role="group" aria-label="Tap the word each line should end on"></div>
+      </div>
+      <div class="posts" aria-hidden="true"><div class="post"></div><div class="post"></div></div>
+    </div>
+    <div class="beatrow" id="beatrow2" aria-hidden="true"></div>
+  </div>
+  <button class="cutbtn" type="button" id="cutBtn2">CUT</button>
+  <p class="hint" id="enjHint">Three cuts make four lines. Five beats a line this time, and the bass
+    will tell you more than the words do.</p>
+  <div class="versecard">
+    <h2 id="enjlabel">Your poem so far</h2>
+    <div id="poemOut2" role="group" aria-labelledby="enjlabel">
+      <p class="poemline pending">Nothing yet.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CLOSE ══ -->
+<section class="screen" id="s-close" aria-label="What enjambment does">
+  <h1>That is enjambment</h1>
+  <div class="compare">
+    <div class="col"><h3>Your breaks</h3><div id="colMine2"></div></div>
+    <div class="col"><h3>Frost's breaks</h3><div id="colFrost2"></div></div>
+  </div>
+  <div class="callout">
+    <p>The sentence ran straight through all four line endings without pausing once. So
+      the breaks are not doing grammar. They are doing something the punctuation cannot.
+      Frost ends a line on <em>wall</em>, and the word hangs there a beat before the
+      sentence picks it up again. He ends another on <em>under it</em>, and you sit in the
+      dark under the wall for a moment before <em>spills</em> arrives.</p>
+    <p>End-stopped lines land like statements. Enjambed lines hand you a word, hold it,
+      then keep going. Same poet, same meter, opposite feeling. The only difference
+      is where the line stopped and the sentence did not.</p>
+  </div>
+  <div class="callout">
+    <h3>Take it to your own draft</h3>
+    <p>Flatten a poem you are working on into one prose block. Read it aloud and cut it
+      where your breath cuts it. Then cut the same block again, on purpose, one word
+      earlier than your breath wants, and see which word you just left hanging at the
+      end of the line, and whether it deserved to be there.</p>
+  </div>
+  <div class="row" style="gap:10px; margin-top:10px;">
+    <button type="button" id="againBtn">Run the belt again</button>
+    <button type="button" onclick="location.href='en195-arcade.html'">Back to the arcade</button>
+  </div>
+</section>
+
+<footer id="sitefoot" hidden>
+  <p>Robert Frost, &ldquo;Nothing Gold Can Stay&rdquo; (<em>New Hampshire</em>, 1923) and the opening
+     of &ldquo;Mending Wall&rdquo; (<em>North of Boston</em>, 1914). Both are in the United States public
+     domain. The bass and the beat are synthesized in this file with Web Audio; the scenery is CSS.
+     Nothing on this page is stored or sent anywhere. It runs in memory and forgets you when you close it.</p>
+</footer>
+</main>
+
+<script>
+/* ═══ COMFORT v3.1 — lifted from en195-arcade.html. Top bar only. ═══ */
+(function(){
+  var d = document.documentElement;
+  var S = window.__comfort || { light:'day', size:0, contrast:0, motion:0, cues:0, reader:0 };
+  var say = document.getElementById('say');
+  var btn = document.getElementById('comfortTop');
+  var panel = document.getElementById('panel');
+  var TOG = { 'c-contrast':'contrast', 'c-still':'motion', 'c-cues':'cues', 'c-reader':'reader' };
+
+  function save(){ try { localStorage.setItem('tsp.comfort.v1', JSON.stringify(S)); } catch(e){} }
+  function announce(t){ if (say) say.textContent = t; }
+  function measure(){
+    var c = document.querySelector('.coinbar');
+    if (c) d.style.setProperty('--chrome-h', Math.round(c.getBoundingClientRect().height) + 'px');
+  }
+  if (window.ResizeObserver){
+    var ro = new ResizeObserver(function(){ measure(); more(); });
+    var c0 = document.querySelector('.coinbar'); if (c0) ro.observe(c0);
+  }
+  window.addEventListener('resize', measure, {passive:true});
+  function more(){ panel.setAttribute('data-more', panel.scrollHeight - panel.clientHeight > 4 ? '1':'0'); }
+  panel.addEventListener('scroll', function(){
+    panel.setAttribute('data-more', (panel.scrollHeight - panel.clientHeight - panel.scrollTop) > 4 ? '1':'0');
+  }, {passive:true});
+
+  function paintState(){
+    var el,i;
+    var L = document.querySelectorAll('[data-light-set]');
+    for (i=0;i<L.length;i++){ el=L[i]; el.setAttribute('aria-pressed', String(el.getAttribute('data-light-set')===S.light)); }
+    var Z = document.querySelectorAll('[data-size]');
+    for (i=0;i<Z.length;i++){ el=Z[i]; el.setAttribute('aria-pressed', String(Number(el.getAttribute('data-size'))===S.size)); }
+    var T = document.querySelectorAll('[data-tog]');
+    for (i=0;i<T.length;i++){
+      el=T[i];
+      var on = !!S[TOG[el.getAttribute('data-tog')]];
+      el.setAttribute('aria-pressed', String(on));
+      el.querySelector('.st').textContent = on ? 'On' : 'Off';
+    }
+    measure(); more();
+  }
+  function open(o){
+    panel.setAttribute('data-open', o ? '1':'0');
+    btn.setAttribute('aria-expanded', String(o));
+    if (o){ measure(); more(); var f = panel.querySelector('.btn'); if (f) f.focus(); }
+  }
+  btn.addEventListener('click', function(){ open(panel.getAttribute('data-open') !== '1'); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && panel.getAttribute('data-open') === '1'){ open(false); btn.focus(); }
+  });
+  document.addEventListener('click', function(e){
+    if (panel.getAttribute('data-open') !== '1') return;
+    if (panel.contains(e.target) || btn.contains(e.target)) return;
+    open(false);
+  });
+  document.addEventListener('click', function(e){
+    var t = e.target.closest ? e.target.closest('[data-light-set],[data-size],[data-tog]') : null;
+    if (!t) return;
+    if (t.hasAttribute('data-light-set')){
+      S.light = t.getAttribute('data-light-set');
+      d.setAttribute('data-light', S.light);
+      announce(t.textContent.trim());
+    } else if (t.hasAttribute('data-size')){
+      S.size = Number(t.getAttribute('data-size'));
+      d.classList.toggle('c-a1', S.size===1);
+      d.classList.toggle('c-a2', S.size===2);
+      announce('Font size ' + t.textContent.trim());
+    } else {
+      var cls = t.getAttribute('data-tog');
+      var on = !d.classList.contains(cls);
+      d.classList.toggle(cls, on);
+      S[TOG[cls]] = on ? 1:0;
+      if (cls === 'c-still'){
+        S.motionSet = 1;
+        if (on) d.removeAttribute('data-motion'); else d.setAttribute('data-motion','go');
+        window.__stillChanged && window.__stillChanged();
+      }
+      announce(t.textContent.replace(/On|Off/,'').trim() + (on ? ' on':' off'));
+    }
+    save(); paintState();
+  });
+  measure(); paintState();
+
+  /* top bar tucks on scroll-down, returns on scroll-up */
+  var last = 0, bar = document.getElementById('coinbar');
+  window.addEventListener('scroll', function(){
+    var y = window.scrollY || 0;
+    bar.classList.toggle('tucked', y > 70 && y > last);
+    last = y;
+  }, {passive:true});
+})();
+
+/* ═══ MOTION — one truth, read from the live computed state, never a guess. ═══ */
+function motionStopped(){
+  var d = document.documentElement;
+  if (d.classList.contains('c-still')) return true;
+  if (d.getAttribute('data-motion') === 'go') return false;
+  return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches);
+}
+
+/* ═══ BASS — synthesized in-file. The beat is driven by the SAME clock as the
+   belt, so the bass does not merely accompany the meter, it reports it: the
+   lamps tick once per stress, and when the belt speeds up the meter speeds up
+   with it because they are the same number. ═══ */
+var Audio_ = (function(){
+  var ctx = null, on = false;
+  function ensure(){
+    if (ctx) return ctx;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    ctx = new AC();
+    return ctx;
+  }
+  return {
+    enable:function(){ on = true; var c = ensure(); if (c && c.state === 'suspended') c.resume(); return !!c; },
+    disable:function(){ on = false; },
+    isOn:function(){ return on; },
+    hit:function(accent){
+      if (!on || motionStopped()) return;
+      var c = ensure(); if (!c) return;
+      var t = c.currentTime;
+      var o = c.createOscillator(), g = c.createGain();
+      o.type = 'triangle';
+      o.frequency.setValueAtTime(accent ? 58 : 78, t);
+      o.frequency.exponentialRampToValueAtTime(accent ? 41 : 55, t + 0.16);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(accent ? 0.42 : 0.24, t + 0.012);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + (accent ? 0.30 : 0.20));
+      o.connect(g); g.connect(c.destination);
+      o.start(t); o.stop(t + 0.34);
+    }
+  };
+})();
+
+(function(){
+  var sb = document.getElementById('soundBtn');
+  sb.addEventListener('click', function(){
+    if (Audio_.isOn()){ Audio_.disable(); sb.textContent = 'Sound off'; sb.setAttribute('aria-pressed','false'); }
+    else { Audio_.enable(); sb.textContent = 'Sound on'; sb.setAttribute('aria-pressed','true'); }
+  });
+})();
+
+/* ═══ SCENERY — pines placed once, from a fixed table so every visit is the
+   same woods. CSS shapes, no SVG: the art-gate floor stays clean and the real
+   plates can arrive later through the MJ lane. ═══ */
+(function(){
+  var PINES = [[3,58,86],[11,40,62],[19,72,104],[28,34,54],[37,64,92],[46,44,70],
+               [56,78,112],[65,38,60],[74,68,98],[83,46,72],[92,60,88],[97,36,56]];
+  ['pines0','pines1','pines2'].forEach(function(id){
+    var host = document.getElementById(id); if (!host) return;
+    PINES.forEach(function(p, i){
+      var el = document.createElement('div');
+      el.className = 'pine' + (i % 2 ? ' b' : '');
+      el.style.left = p[0] + '%';
+      el.style.width = p[1] + 'px';
+      el.style.height = p[2] + 'px';
+      el.style.marginLeft = (-p[1] / 2) + 'px';
+      host.appendChild(el);
+    });
+  });
+})();
+
+/* ═══ THE POEMS ═══ */
+var GOLD = {
+  title:"Nothing Gold Can Stay",
+  words:("Nature's first green is gold, Her hardest hue to hold. Her early leaf's a flower; "+
+         "But only so an hour. Then leaf subsides to leaf. So Eden sank to grief, "+
+         "So dawn goes down to day. Nothing gold can stay.").split(' '),
+  /* index of the LAST word of each of Frost's lines */
+  breaks:[4,9,14,19,24,29,35,39],
+  lines:["Nature's first green is gold,","Her hardest hue to hold.","Her early leaf's a flower;",
+         "But only so an hour.","Then leaf subsides to leaf.","So Eden sank to grief,",
+         "So dawn goes down to day.","Nothing gold can stay."],
+  beats:3,
+  turnWord:25   /* "So" of "So Eden sank to grief" — where the poem leaves the tree */
+};
+var WALL = {
+  title:"Mending Wall (opening)",
+  words:("Something there is that doesn't love a wall, That sends the frozen-ground-swell under it, "+
+         "And spills the upper boulders in the sun; And makes gaps even two can pass abreast.").split(' '),
+  /* index of the LAST word of each line: wall,(7) it,(13) sun;(21) abreast.(29) */
+  breaks:[7,13,21,29],
+  lines:["Something there is that doesn't love a wall,","That sends the frozen-ground-swell under it,",
+         "And spills the upper boulders in the sun;","And makes gaps even two can pass abreast."],
+  beats:5
+};
+
+function show(id){
+  var all = document.querySelectorAll('.screen');
+  for (var i=0;i<all.length;i++) all[i].classList.remove('on');
+  document.getElementById(id).classList.add('on');
+  /* The entry is a scene and ONE invitation. The attribution and the sound
+     control are real, but they are not the first thing a player should have to
+     read past: they belong to the game, not to the door. (one-thing-gate names
+     both as entry-paint defects, and it is right.) */
+  var entry = (id === 's-entry');
+  document.getElementById('sitefoot').hidden = entry;
+  document.getElementById('soundBtn').hidden = entry;
+  window.scrollTo(0,0);
+}
+function announce(t){ var s = document.getElementById('say'); if (s) s.textContent = t; }
+
+/* ═══ THE BELT ENGINE ═══
+   One engine, two passages. The strip translates left at a speed that climbs on
+   every cut and creeps with time, which is the Lucy contract: it is not that you
+   are slow, it is that the belt does not stop wanting more. The cut lands on the
+   word boundary nearest the head at the instant you press, so a late press cuts
+   late — the mistake is legible in the poem you end up with. */
+function Belt(cfg){
+  var strip = document.getElementById(cfg.strip);
+  var viewport = document.getElementById(cfg.viewport);
+  var lampHost = document.getElementById(cfg.lamps);
+  var out = document.getElementById(cfg.out);
+  var cutBtn = document.getElementById(cfg.cut);
+  var P = cfg.poem;
+
+  /* The cut head sits at 38% of the sign, not the middle. A reader deciding where
+     a line ends needs to see the words that are COMING, and at 50% a phone showed
+     about three words of lookahead — not enough to judge a line ending, which made
+     the belt feel unfair rather than fast. Must stay in step with .head/.headlabel
+     in the CSS or the mark lies about where the cut lands. */
+  var HEAD = 0.38;
+  var blockHost = document.getElementById(cfg.block);
+  var stageEl = document.getElementById(cfg.stage);
+  var hintEl = cfg.hint ? document.getElementById(cfg.hint) : null;
+  var spans = [], edges = [], offset = 0, speed = 0, base = 0;
+  var lastCut = -1, cuts = [], running = false, raf = 0, prev = 0;
+  var beatAcc = 0, beatIdx = 0, jammed = false, still = false;
+
+  function build(){
+    strip.textContent = '';
+    spans = [];
+    P.words.forEach(function(w, i){
+      var s = document.createElement('span');
+      s.className = 'w'; s.textContent = w;
+      strip.appendChild(s); spans.push(s);
+    });
+    lampHost.textContent = '';
+    for (var b=0;b<P.beats;b++){
+      var l = document.createElement('div'); l.className = 'lamp'; lampHost.appendChild(l);
+    }
+    /* measure after layout */
+    edges = spans.map(function(s){ return s.offsetLeft + s.offsetWidth; });
+  }
+
+  /* STATIC MODE — the whole passage as still prose, every word a cut point. */
+  function buildStatic(){
+    blockHost.textContent = '';
+    P.words.forEach(function(w, i){
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'cw';
+      b.textContent = w;
+      b.setAttribute('data-i', i);
+      b.setAttribute('aria-label', 'End the line after ' + w);
+      blockHost.appendChild(b);
+      blockHost.appendChild(document.createTextNode(' '));
+    });
+  }
+  blockHost.addEventListener('click', function(e){
+    if (!running || !still) return;
+    var t = e.target.closest ? e.target.closest('.cw') : null;
+    if (!t) return;
+    var i = Number(t.getAttribute('data-i'));
+    if (i <= lastCut) return;
+    for (var k = 0; k <= i; k++){ var b = blockHost.querySelector('.cw[data-i="'+k+'"]'); if (b) b.disabled = true; }
+    lastCut = i; cuts.push(i);
+    t.classList.add('cutmark');
+    paint();
+    announce('Line ' + cuts.length + ': ' + lineFor(cuts.length > 1 ? cuts[cuts.length-2] + 1 : 0, i));
+    Audio_.hit(true);
+    if (cfg.onCut) cfg.onCut(cuts);
+    /* The turn still stops the machine, it just stops on the reader's own cut. */
+    if (P.turnWord != null && (cuts.length >= 5 || i >= P.turnWord - 1)) jam();
+  });
+
+  function lineFor(from, to){
+    return P.words.slice(from, to + 1).join(' ');
+  }
+
+  function paint(){
+    out.textContent = '';
+    if (!cuts.length){
+      var p0 = document.createElement('p');
+      p0.className = 'poemline pending';
+      p0.textContent = 'Nothing yet. The first cut makes the first line.';
+      out.appendChild(p0); return;
+    }
+    var from = 0;
+    cuts.forEach(function(c, i){
+      var p = document.createElement('p');
+      p.className = 'poemline';
+      var n = document.createElement('span'); n.className = 'num'; n.textContent = (i+1) + '.';
+      p.appendChild(n);
+      p.appendChild(document.createTextNode(lineFor(from, c)));
+      out.appendChild(p);
+      from = c + 1;
+    });
+  }
+
+  /* the beat interval in seconds: one line's worth of belt travel, divided by
+     the number of stresses in a line. Same clock as the belt by construction. */
+  function beatGap(){
+    var avgLine = (edges[edges.length-1] || 1) / P.lines.length;
+    return (avgLine / Math.max(speed, 1)) / P.beats;
+  }
+
+  function tick(ts){
+    if (!running) return;
+    if (!prev) prev = ts;
+    var dt = Math.min((ts - prev) / 1000, 0.05);
+    prev = ts;
+
+    if (!motionStopped()){
+      speed += cfg.creep * dt;                 /* the belt wants more, always */
+      offset += speed * dt;
+      strip.style.transform = 'translateX(' + (-offset) + 'px)';
+
+      beatAcc += dt;
+      var gap = beatGap();
+      if (beatAcc >= gap){
+        beatAcc -= gap;
+        var lamps = lampHost.children;
+        for (var i=0;i<lamps.length;i++) lamps[i].className = 'lamp';
+        var accent = (beatIdx % P.beats) === 0;
+        if (lamps[beatIdx % P.beats]) lamps[beatIdx % P.beats].className = 'lamp lit' + (accent ? ' accent' : '');
+        Audio_.hit(accent);
+        beatIdx++;
+      }
+    }
+
+    /* the poem's own turn stops the machine — not a timer, not a miss counter */
+    if (P.turnWord != null && !jammed){
+      var head = viewport.clientWidth * HEAD;
+      var turnEdge = spans[P.turnWord].offsetLeft;
+      if (turnEdge - offset <= head){ jam(); return; }
+    }
+    /* or the belt simply runs out */
+    if (offset > (edges[edges.length-1] || 0) + viewport.clientWidth * HEAD){
+      if (cfg.onEnd) { running = false; cfg.onEnd(cuts); return; }
+    }
+    raf = requestAnimationFrame(tick);
+  }
+
+  function jam(){
+    jammed = true; running = false;
+    cancelAnimationFrame(raf);
+    document.getElementById(cfg.stage).classList.add('jammed');
+    var lamps = lampHost.children;
+    for (var i=0;i<lamps.length;i++) lamps[i].className = 'lamp';
+    announce('The belt jams.');
+    if (cfg.onJam) cfg.onJam(cuts);
+  }
+
+  function cut(){
+    /* In static mode there is no head and no edge table: the block's own word
+       buttons are the cut points, so the CUT button and the space bar do nothing. */
+    if (!running || still) return;
+    var head = viewport.clientWidth * HEAD;
+    var target = offset + head;
+    var best = -1, bestD = Infinity;
+    for (var i = lastCut + 1; i < edges.length; i++){
+      var d = Math.abs(edges[i] - target);
+      if (d < bestD){ bestD = d; best = i; }
+    }
+    if (best < 0) return;
+    lastCut = best;
+    cuts.push(best);
+    spans[best].classList.add('cutmark');
+    speed *= cfg.ramp;              /* every cut makes the next one harder */
+    paint();
+    announce('Line ' + cuts.length + ': ' + lineFor(cuts.length > 1 ? cuts[cuts.length-2] + 1 : 0, best));
+    if (cfg.onCut) cfg.onCut(cuts);
+  }
+
+  cutBtn.addEventListener('click', cut);
+
+  return {
+    start:function(){
+      lastCut = -1; cuts = []; jammed = false; beatAcc = 0; beatIdx = 0; prev = 0;
+      stageEl.classList.remove('jammed');
+      /* Mode is decided at the top of every round from the LIVE motion state, so
+         a reader who turns motion stop on mid-game gets the still version on the
+         next round rather than a belt they cannot use. */
+      still = motionStopped();
+      stageEl.classList.toggle('still', still);
+      cutBtn.hidden = still;
+      if (hintEl) hintEl.textContent = still
+        ? 'Motion is stopped, so the passage holds still. Tap the word you want each line to end on.'
+        : (cfg.hintText || 'Space bar works too. Cut where you think the line ends.');
+      paint();
+      running = true;
+      if (still){ buildStatic(); return; }
+      build();
+      base = Math.max(74, viewport.clientWidth * 0.22);
+      speed = base; offset = -viewport.clientWidth * HEAD;
+      strip.style.transform = 'translateX(' + (-offset) + 'px)';
+      raf = requestAnimationFrame(tick);
+    },
+    isStill:function(){ return still; },
+    stop:function(){ running = false; cancelAnimationFrame(raf); },
+    cut:cut,
+    cuts:function(){ return cuts; },
+    lineFor:lineFor
+  };
+}
+
+/* ═══ ROUND 1 ═══ */
+var belt1 = Belt({
+  strip:'strip', viewport:'viewport', lamps:'beatrow', out:'poemOut',
+  cut:'cutBtn', stage:'stage1', block:'block1', hint:'beltHint',
+  poem:GOLD, ramp:1.16, creep:5,
+  onJam:function(cuts){
+    var out = document.getElementById('jamOut');
+    out.textContent = '';
+    if (!cuts.length){
+      var p = document.createElement('p');
+      p.className = 'poemline pending';
+      p.textContent = 'You never cut. The whole thing went past as one long line, which is also a choice, and a poem can be written that way.';
+      out.appendChild(p);
+    } else {
+      var from = 0;
+      cuts.forEach(function(c,i){
+        var p = document.createElement('p'); p.className='poemline';
+        var n = document.createElement('span'); n.className='num'; n.textContent=(i+1)+'.';
+        p.appendChild(n); p.appendChild(document.createTextNode(belt1.lineFor(from,c)));
+        out.appendChild(p); from = c+1;
+      });
+    }
+    document.getElementById('turnBox').hidden = false;
+    setTimeout(function(){ show('s-jam'); }, 620);
+  }
+});
+
+document.getElementById('startBtn').addEventListener('click', function(){
+  Audio_.enable();
+  var sb = document.getElementById('soundBtn');
+  sb.textContent = 'Sound on'; sb.setAttribute('aria-pressed','true');
+  show('s-belt');
+  setTimeout(function(){ belt1.start(); }, 60);
+});
+
+document.addEventListener('keydown', function(e){
+  if (e.code !== 'Space' && e.key !== ' ') return;
+  var t = e.target;
+  if (t && (t.tagName === 'BUTTON' || t.tagName === 'SUMMARY' || t.tagName === 'A')) return;
+  if (document.getElementById('s-belt').classList.contains('on')){ e.preventDefault(); belt1.cut(); }
+  else if (document.getElementById('s-enj').classList.contains('on')){ e.preventDefault(); belt2.cut(); }
+});
+
+/* ═══ THE REST — reader's pace. This is the pause the jam bought. ═══ */
+var restIdx = 5;   /* lines 6, 7, 8 (zero-indexed 5,6,7) */
+document.getElementById('jamNext').addEventListener('click', function(){
+  restIdx = 5;
+  document.getElementById('restOut').textContent = '';
+  show('s-rest');
+  addRestLine();
+});
+function addRestLine(){
+  var out = document.getElementById('restOut');
+  if (restIdx > 7){
+    document.getElementById('restHint').textContent = 'That is the whole poem.';
+    document.getElementById('restNext').textContent = 'See where Frost cut';
+    return;
+  }
+  var p = document.createElement('p');
+  p.className = 'poemline' + (restIdx === 5 ? ' turnline' : '');
+  p.textContent = GOLD.lines[restIdx];
+  out.appendChild(p);
+  for (var b=0;b<GOLD.beats;b++){
+    (function(k){ setTimeout(function(){ Audio_.hit(k===0); }, k*340); })(b);
+  }
+  announce(GOLD.lines[restIdx]);
+  restIdx++;
+  if (restIdx > 7){
+    document.getElementById('restHint').textContent = 'That is the whole poem.';
+    document.getElementById('restNext').textContent = 'See where Frost cut';
+  }
+}
+document.getElementById('restNext').addEventListener('click', function(){
+  if (restIdx > 7 && document.getElementById('restNext').textContent === 'See where Frost cut'){
+    buildCompare(); show('s-compare'); return;
+  }
+  addRestLine();
+});
+
+/* ═══ COMPARE — show the difference, do not score it. ═══ */
+function renderCol(host, lines, marks){
+  host.textContent = '';
+  lines.forEach(function(t,i){
+    var p = document.createElement('p'); p.className = 'poemline';
+    var n = document.createElement('span'); n.className='num'; n.textContent=(i+1)+'.';
+    p.appendChild(n);
+    if (marks && marks[i]){
+      var m = document.createElement('span'); m.className='matchmark'; m.textContent='• ';
+      p.appendChild(m);
+    }
+    p.appendChild(document.createTextNode(t));
+    host.appendChild(p);
+  });
+}
+function buildCompare(){
+  var cuts = belt1.cuts();
+  var mine = [], from = 0;
+  cuts.forEach(function(c){ mine.push(belt1.lineFor(from,c)); from = c+1; });
+  if (from <= 24) mine.push(belt1.lineFor(from, 24));
+  var frostFive = GOLD.lines.slice(0,5);
+  var marks = mine.map(function(t,i){ return frostFive[i] === t; });
+  var hits = cuts.filter(function(c){ return GOLD.breaks.indexOf(c) >= 0; }).length;
+  renderCol(document.getElementById('colMine'), mine, marks);
+  renderCol(document.getElementById('colFrost'), frostFive, null);
+  var lede = document.getElementById('compareLede');
+  if (!cuts.length){
+    lede.textContent = 'You let the belt run. Here is what it was carrying.';
+  } else {
+    lede.textContent = 'You made ' + cuts.length + ' cut' + (cuts.length===1?'':'s') +
+      ' before the jam, and ' + hits + ' of them landed where Frost put a line ending.';
+  }
+}
+
+/* ═══ THE PULSE — two real scansions of line 1, both played, neither marked wrong. ═══ */
+var SCAN_A = [['Na','/'],["ture's",'˘'],['first','˘'],['green','/'],['is','˘'],['gold','/']];
+var SCAN_B = [['Na','/'],["ture's",'˘'],['first','/'],['green','/'],['is','˘'],['gold','/']];
+function renderScan(data){
+  var host = document.getElementById('scanA');
+  host.textContent = '';
+  data.forEach(function(s,i){
+    var w = document.createElement('span'); w.className='syl'; w.setAttribute('data-i',i);
+    var m = document.createElement('span'); m.className='mark'; m.textContent=s[1];
+    w.appendChild(m); w.appendChild(document.createTextNode(s[0]));
+    host.appendChild(w);
+  });
+}
+function playScan(data, label){
+  renderScan(data);
+  document.getElementById('scanCap').textContent = label;
+  var host = document.getElementById('scanA');
+  data.forEach(function(s,i){
+    setTimeout(function(){
+      var all = host.querySelectorAll('.syl');
+      for (var k=0;k<all.length;k++) all[k].classList.remove('on');
+      if (all[i]) all[i].classList.add('on');
+      if (s[1] === '/') Audio_.hit(i === 0);
+    }, i * 400);
+  });
+  setTimeout(function(){
+    var all = host.querySelectorAll('.syl');
+    for (var k=0;k<all.length;k++) all[k].classList.remove('on');
+  }, data.length * 400 + 350);
+}
+document.getElementById('toPulse').addEventListener('click', function(){
+  renderScan(SCAN_A); show('s-pulse');
+});
+document.getElementById('playA').addEventListener('click', function(){
+  playScan(SCAN_A, 'Reading A. Three stresses, even and plain. This is the trimeter pulse.');
+});
+document.getElementById('playB').addEventListener('click', function(){
+  playScan(SCAN_B, 'Reading B. Four stresses. The word "first" gets its own weight and the line leans.');
+});
+(function(){
+  var taps = [], btn = document.getElementById('tapBtn'), rep = document.getElementById('tapReport');
+  btn.addEventListener('click', function(){
+    var now = (window.performance && performance.now) ? performance.now() : Number(new Date());
+    taps.push(now);
+    if (taps.length > 6) taps.shift();
+    Audio_.hit(false);
+    if (taps.length < 3){ rep.textContent = 'Keep going.'; return; }
+    var gaps = [];
+    for (var i=1;i<taps.length;i++) gaps.push(taps[i]-taps[i-1]);
+    var avg = gaps.reduce(function(a,b){return a+b;},0)/gaps.length;
+    var spread = Math.max.apply(null,gaps) - Math.min.apply(null,gaps);
+    rep.textContent = spread < avg*0.34
+      ? 'That is a steady pulse, about ' + Math.round(60000/avg) + ' beats a minute. Three of those is one line.'
+      : 'Uneven so far. There is no wrong answer here; just find something you could walk to.';
+  });
+})();
+
+/* ═══ ROUND 2 — enjambment proper. No jam: this one runs to the end. ═══ */
+var belt2 = Belt({
+  strip:'strip2', viewport:'viewport2', lamps:'beatrow2', out:'poemOut2',
+  cut:'cutBtn2', stage:'stage2', block:'block2', hint:'enjHint',
+  hintText:'Three cuts make four lines. Five beats a line this time, and the bass will tell you more than the words do.',
+  poem:WALL, ramp:1.10, creep:4,
+  /* N cuts make N+1 lines. A four-line passage is finished by the THIRD cut;
+     firing at four dumped the whole tail into a fifth monster line. */
+  onCut:function(cuts){ if (cuts.length >= WALL.lines.length - 1) setTimeout(finishTwo, 600); },
+  onEnd:function(){ finishTwo(); }
+});
+function finishTwo(){
+  belt2.stop();
+  var cuts = belt2.cuts(), mine = [], from = 0;
+  cuts.forEach(function(c){ mine.push(belt2.lineFor(from,c)); from = c+1; });
+  if (from < WALL.words.length) mine.push(belt2.lineFor(from, WALL.words.length-1));
+  var marks = mine.map(function(t,i){ return WALL.lines[i] === t; });
+  renderCol(document.getElementById('colMine2'), mine, marks);
+  renderCol(document.getElementById('colFrost2'), WALL.lines, null);
+  show('s-close');
+}
+document.getElementById('toEnj').addEventListener('click', function(){
+  show('s-enj');
+  setTimeout(function(){ belt2.start(); }, 60);
+});
+document.getElementById('againBtn').addEventListener('click', function(){
+  belt2.stop();
+  document.getElementById('turnBox').hidden = true;
+  show('s-entry');
+});
+
+/* Motion stop mid-belt must actually stop the belt and silence the bass. The
+   engine reads motionStopped() every frame, so nothing to do but re-announce. */
+window.__stillChanged = function(){
+  announce(motionStopped() ? 'Belt stopped.' : 'Belt running.');
+};
+</script>
+</body>
+</html>
