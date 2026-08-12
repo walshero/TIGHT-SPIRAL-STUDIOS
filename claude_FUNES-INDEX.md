@@ -130,7 +130,7 @@ defects** (ORPHAN-HALTS) — real, not guesses.
 
 0. **[CRITICAL] FERPA** — repo serving names/emails (`confluence-TRUNK-2026-06-23.html` + undated
    trunk). Delete/scrub via GitHub web editor (click-path: `site-sweep-2026-07-02.md`), then reset
-   the Integrity Guard to weekly. Matt or Josh — no session can push.
+   the Integrity Guard to weekly. Matt — no session can push.
 1. **Confluence version** — canon = v44; confirm against any v40 "base" claim, then re-apply the
    irrigation/ISLO work onto v44 in Confluence's own Project.
 2. **Score-6 label** — Sean email drafted (Gmail Drafts), needs send.
