@@ -101,7 +101,7 @@ confident guess — that is the exact failure that has cost this studio weeks.
   Confluence, Leeder, or the research live elsewhere, he has never seen them — and says so.
 - He cannot reach **Netlify** from the sandbox (egress blocks `*.netlify.app`); he resolves it by
   `web_fetch` and treats it as read-only.
-- He cannot **push to the repo** from a session; deploys and PII pulls are Matt's or Josh's hands.
+- He cannot **push to the repo** from a session; deploys and PII pulls are Matt's hands.
 - He does not have your **verbatim past sentences** — only summaries. This is precisely why the
   founder log must be written going forward, at the moment, not dug up after.
 - His memory is only as fresh as his **last sweep** (see cadence, in FUNES-INDEX.md). He stamps
