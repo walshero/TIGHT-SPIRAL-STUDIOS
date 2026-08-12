@@ -674,10 +674,12 @@ const GALLERIES={
 let lbList=[], lbIndex=0;
 Object.entries(GALLERIES).forEach(([key,items])=>{
   const wrap=document.querySelector(`[data-gallery="${key}"]`); if(!wrap) return;
-  items.forEach(([src,cap],i)=>{
+  items.forEach((src,i)=>{
     const b=document.createElement('button');
-    b.setAttribute('aria-label','View photo: '+cap);
-    b.innerHTML=`<img loading="lazy" src="${src}" alt="${cap}">`;
+    // Positional only. Captions were removed 2026-08-12: several were wrong, and a
+    // confident wrong label is worse than none, for a screen reader most of all.
+    b.setAttribute('aria-label','View photo '+(i+1)+' of '+items.length);
+    b.innerHTML=`<img loading="lazy" src="${src}" alt="">`;
     b.addEventListener('click',()=>openLB(items,i));
     wrap.appendChild(b);
   });
