@@ -755,8 +755,52 @@ route();
    driver's license number in plaintext across a public network. Name + license number is
    "personal information" under G.L. c. 93H s.1, and 201 CMR 17.04(3) requires encryption in
    transit. There is now no send path at all: the browser fills the form, the applicant prints
-   it, and nothing leaves the device. Do not reintroduce a mailto here. */
-document.getElementById('printapp').addEventListener('click',()=>{ window.print(); });
+   it, and nothing leaves the device. Do not reintroduce a mailto that carries the FIELD VALUES.
+   The mailto below opens an EMPTY, pre-addressed draft. The applicant attaches the PDF themselves:
+   the mailto scheme has no attachment parameter (RFC 6068) and no browser can add one, so any
+   design that claims to send the form for you is either lying or has a backend. */
+const nextstep = document.getElementById('nextstep');
+const nexthead = document.getElementById('nextstep-head');
+function revealNextStep(){
+  if(!nextstep.hidden) return;
+  nextstep.hidden = false;
+  nexthead.focus();                       // land the caret and the screen reader on the instruction
+}
+
+// Grow every textarea to fit its content before the page is painted to PDF. Browsers print a
+// textarea clipped to its box, so a long answer to "if yes to either, details" would be silently
+// truncated in the saved file, and the applicant would never know half the answer had been eaten.
+addEventListener('beforeprint',()=>{
+  document.querySelectorAll('#appform textarea').forEach(t=>{
+    t.dataset.h = t.style.height;
+    t.style.height = 'auto';
+    t.style.height = t.scrollHeight + 'px';
+  });
+});
+addEventListener('afterprint',()=>{
+  document.querySelectorAll('#appform textarea').forEach(t=>{ t.style.height = t.dataset.h || ''; });
+  revealNextStep();
+});
+
+document.getElementById('printapp').addEventListener('click',()=>{
+  window.print();
+  // afterprint is not reliable everywhere (older Safari never fires it, and a cancelled dialog is
+  // indistinguishable from a save anyway). The panel is instructions, not a claim that anything
+  // succeeded, so showing it either way is honest and never leaves someone stranded.
+  setTimeout(revealNextStep, 1200);
+});
+
+// Pre-address the draft. Subject carries the name and building so Meg can file it; the body says
+// nothing but "attached". No field values ride along in the message itself.
+document.getElementById('mailmeg').addEventListener('click',e=>{
+  const f = document.getElementById('appform');
+  const nm = (f.querySelector('[name="Name"]').value || '').trim();
+  const pr = f.querySelector('[name="Property"]').value;
+  const subject = 'Rental application' + (nm ? ' - ' + nm : '') + (pr ? ' (' + pr + ')' : '');
+  const body = 'Hello Meg,\n\nMy completed rental application is attached as a PDF.\n\nThank you,\n' + (nm || '');
+  e.currentTarget.href = 'mailto:mlbuckley@leedermgt.com?subject=' + encodeURIComponent(subject) +
+                         '&body=' + encodeURIComponent(body);
+});
 
 document.getElementById('sendmsg').addEventListener('click',()=>{
   const f=document.getElementById('contactform');
