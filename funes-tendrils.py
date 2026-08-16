@@ -117,7 +117,7 @@ def report(root):
         except Exception:
             idx = ""
         # gate fixtures are deliberately unlinked (same exclusion the eyes use)
-        FIXTURES = ("comfort-gate-canary-",)
+        FIXTURES = ("comfort-gate-canary-", "art-exec-canary-")
         orphans = []
         for h in sorted(glob.glob(os.path.join(root, "*.html"))):
             b = os.path.basename(h)
