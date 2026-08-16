@@ -69,6 +69,13 @@ Gates live at repo root and are shared by the whole studio: `c1-check.py`,
 There is **no `studio-kernel/`, no pin, no sync** — one repo means the gates are
 simply *here*. (That apparatus was scaffolding for the retired two-repo split.)
 
+**Backlog — JS-executing render-proof variant.** `studio-eyes-sweep.py` renders
+static HTML via WeasyPrint and does not run JavaScript, so the JS-driven SPA is
+covered only by C1 (the shell). Build a headless-Chromium variant (`studio-eyes-spa`)
+that loads the running page and checks *rendered* contrast + the color-scheme
+declaration on the live DOM, so the SPA gets full render-proof like the
+self-contained companions do.
+
 ---
 
 ## 5 · THE PANEL — mapped to assessment
