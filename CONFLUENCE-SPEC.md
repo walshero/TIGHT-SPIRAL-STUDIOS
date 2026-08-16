@@ -143,3 +143,22 @@ seat that owes a missing fact, it never invents one.
 - **Land the same turn.** Push, fetch back, match the hash — or it doesn't exist.
 - **A rule that can't be a check is a wish.** New floor → new gate tooth.
 - **Gates run in CI.** A regression fails the build (the ratchet only turns one way).
+
+## 10 · FUNES SYNC — memory across chats *(adopted 2026-07-23)*
+
+The Confluence lane uses the studio's Funes mechanism so no chat re-derives context
+or loses a decision to a dead session. Three moves, per `claude_FUNES-CHARTER.md`:
+
+- **Open** — emit the *canon-as-of-today + open loops* card: current version/lane of
+  anything about to be touched, and the decided-but-unlanded items. Read prior state
+  with `python3 handoff.py read`.
+- **During** — turn every "we should remember to…" into a **check** (a gate tooth),
+  or name it a wish out loud and file it. Inherits the OS blocks:
+  `os-block-truth-ticks` (TICK 5: land at creation), `os-block-pointer-memory`
+  (canon pointers), and the preship/floor gates.
+- **Close** — emit the **founder log**: every ruling made this session, in the
+  founder's words, dated, appended to **`TSP_Ledger.md`** (never rewritten — history
+  is git's job). Carry state with `python3 handoff.py save`.
+
+One ledger, one Funes: Confluence rulings land in `TSP_Ledger.md` alongside the rest
+of the studio — it is a lane, not a separate memory.
