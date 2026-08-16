@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Enjambment</title>
-<!-- TSP-META {"file": "enjambment.html", "stage": "v1 playtest build 2026-08-12 — EN195 Poetry district. Promotes Line Break v3's scissors philosophy (the cut re-forms the poem live, enjambment is watched not described) into a full cabinet with the belt, the jam, the earned pause and the meter round, per claude/CONCEPT-ENJAMBMENT-2026-08-12.md. Three concept findings are built in as answers to be playtested, not as settled law: (1) the Lucy belt is the HOOK not the loop — it accelerates until the poem's own turn jams it, and the failure is what buys the silence; (2) the meter round scores the PULSE, not the parse — line 1 is offered in two real scansions, both played, neither marked wrong, because Frost's opening line genuinely scans two ways and an answer-key would teach something false; (3) Times Square is the delivery device, not the world — the setting is the poem's own context (New England woods at night) with a salvaged broadcast sign standing in it, which is the founder's stated intent that the setting represent the poem. Comfort v3.1 lifted verbatim from en195-arcade.html (top-only per the 08-09 ruling, Day/Warm dark, dusk retired, font-size:100% + rem multipliers so the reader's browser supplies the base). Sound is its own control and starts OFF-by-default only in the sense that it needs the Start gesture. MOTION STOP IS A SECOND PLAYABLE MODE, not a switch that kills the game: headless playtest found that with reduced motion the belt simply froze, so the words never reached the head, the poem could never be cut and the turn never arrived — a dead game, on the one setting an RP reader is most likely to have on. The still mode is Line Break v3's proven shape instead: the whole passage holds still as prose and the reader taps the word each line should end on, with the same live re-forming poem below and the same jam at the turn, no clock and no motion. Mode is decided at the top of every round from the live motion state. Other defects the same playtest caught and fixed: cut head moved from 50% to 38% of the sign (a phone showed only about three words of lookahead, which made the belt feel unfair rather than fast); round 2 finished at four cuts on a four-line passage and dumped the tail into a fifth monster line (N cuts make N+1 lines); Mending Wall's break indices were off by one so no match mark could ever fire; the beat lamps painted in normal flow at the top of the scene and read as three extra moons; the “cut here” label sat on top of the moving text; the footer's attribution counted as 74 words of entry prose and tripped one-thing-gate's wall; and .cutbtn's display:block outranked the UA [hidden] rule so a hidden CUT button kept painting. All scenery is CSS — no inline SVG at or above the art-gate floor — so the Samorost-grade art can arrive later through the MJ lane instead of being hand-authored here against the 2026-08-01 ruling.", "operative": true, "assets": "Robert Frost, 'Nothing Gold Can Stay' (New Hampshire, 1923) and 'Mending Wall' opening (North of Boston, 1914) — both US public domain, attributed in-file. Bass and beat synthesized in-file with Web Audio. All scenery CSS, no raster or vector plates.", "founder-open": ["belt as hook vs belt as loop — does the jam land, or does it want sustained speed pressure?", "does the two-scansion answer read as honest or as dodging a right answer?", "does the woods-with-a-broadcast-sign setting hold, or does he want the Times Square room outright?", "should this absorb Line Break in the arcade, or do both cabinets stand?"], "harvest": "a poem's own turn is a better stop condition than a timer — the machine fails where the poem changes its mind; and a metronome only a hearing player can perceive is not a metronome, it is a sound effect", "v2": "2026-08-13, three founder playtest rulings, all landed. (1) 'Enjambment moves much too quickly' — intrinsic base 74 to 58 px/s and vw*0.22 to vw*0.15, per-cut ramp 1.16 to 1.07, creep 5 to 1.8 (round two 1.10/4 to 1.06/1.5), and rather than guess a constant and ask again next week the speed is now a THREE-WAY CONTROL the founder sets (Slow default / Steady / Lucy), remembered in tsp.enjambment.speed, so the next playtest note can name a setting instead of a feeling. (2) 'I think I made 5th cut in time twice but guess not?' — he was right and it was a real bug, not a miss: the jam fired in the SAME FRAME the turn word reached the head, flipping running false before the click handler could run, so a cut made at the turn was swallowed in silence. Three fixes: the sign now STUTTERS visibly for a full line-length before the turn so the seizure is watched arriving; the jam itself is a 750ms GRACE window during which a cut still lands (verified headless — a press during grace registers); and a press that genuinely cannot land now says so out loud instead of doing nothing. (3) 'If a player has sound off or is Deaf, they should hear the metronome... we need visuals of stomping stumpy' — the bass WAS the meter, so with sound off the poem had no pulse at all. STOMPING STUMPY is a stump on a piston at the foot of the sign, and per the founder's own guess it is the engine that drives the belt, so the meter is diegetic rather than an overlay: it slams on every stress, slams harder on the one that starts the line, flashes its ground plate and puffs a ring on the accent. The lamps are now NUMBERED so the beat can be counted by eye, the meter lesson and the after-the-jam pause each get their own stomper, and the pulse round rebuilds its lamp row per reading so Reading B literally grows a fourth lamp. Verified headless with audio OFF. Also landed: the close-up the founder asked for ('Fail state should show close up of where the cut was made vs where it needed to be') — per line, the words around the cut with your solid gold mark and the line's real dashed ending in the same view, the words that moved highlighted between them, and a plain caption naming them ('You cut 2 words early. \"to hold.\" belonged to this line'). It wraps rather than scrolls: as a nowrap strip it clipped at the phone's right edge and in every cut-early case Frost's dashed mark scrolled off screen, which is the one thing the view exists to show beside your own — and the word spans needed real space text nodes between them or the row was a single unbreakable inline run that overflowed the card and the page with it.", "v3": "2026-08-13b, founder ruling on the cut itself: “I don’t like the slice mechanism. You should be able to mark the line to cut ahead of time so that the beat slicing guillotine is only armed when player arms it, or player can choose to manually tap guillotine mechanism itself if they are listening and playing on beat.” Right call, and it dissolves the speed complaint at its root rather than tuning around it: deciding where a line ends is a JUDGEMENT, and press-at-the-instant tested reaction time instead, which is why no belt speed ever felt correct. The thin cut head is now a guillotine with two honest ways to work it. ARM AHEAD: every upcoming word is a real button, tap one before it reaches the blade and the rail lights, the word carries the mark, and the blade falls there BY ITSELF with no press at all (headless-verified: arming word 4 produced “Nature’s first green is gold,” exactly, untouched). Tap the marked word again to take the mark back off. HAND-TAPPED: tap the guillotine mechanism itself, or the big button, or the space bar, and the blade drops now at whatever boundary is under it — the rhythm play, for a player riding the beat. Both routes run through one commit path so an armed drop and a hand drop cannot drift apart, and the cut itself stomps and sounds, so the slice IS a beat. Words already past the blade refuse the mark. Blade moved from 38% to 30% of the sign because lookahead is now the resource that matters: you need to SEE the word you intend to mark. Static mode was already tap-the-word, so the two modes are finally the same idea in different weather, which is the strongest argument yet that this cabinet absorbs Line Break rather than sitting beside it.", "v4": "2026-08-13c, founder ruling: “Option B skin for now. No MJ in studio as we can do better than we have so far with proper execution.” Overrides the art panel's recommendation of Option A, which is the founder's gate working as designed (the Visual Critic HALT runs through his eyes; seats are lenses, not authorities). Skin is now Times Square and the zipper: night city, towers with window columns, dim far-plane neon, wet asphalt, a steel housing on a scaffold, and the ticker as an LED zipper. All CSS, no plates, no generated art. The Legibility seat's HALT against B was real and was answered by EXECUTION, then MEASURED rather than asserted: LED type sits at 13.0:1 against its housing (studio floor 7:1) and is 7.0x the luminance of the brightest neon in frame, with the brightest building effectively black at 0.003. Four moves do it: neon pushed to the far plane, dim and glowing outward rather than lit flat; a hard black bezel around the housing so nothing bright touches the moving line; luminance ranked rather than merely hue-separated, since real neon at distance is chromatic but dark; and depth built from static paint rather than blur filters, which the Technical Artist seat would have had to price per frame behind a moving ticker. One execution failure caught and fixed in the same pass: the first skyline crossed two repeating gradients for windows and painted the lower half as one magenta mesh, because a grid reads as a grid. Windows became columns of light in one direction at a spacing that differs per tower, with roof lines catching the city glow so the stepped silhouette reads. GOVERNANCE CONSEQUENCE, recorded in claude/RULING-NO-MJ-AND-SKIN-B-2026-08-13.md: art-gate.py's law names MJ as one of only two legal lanes and MJ is now closed, so the law is stale. No gate teeth were changed this session; the amendment is pending the founder's own words. This file ships clean either way because its scenery is CSS and touches no SVG at the gate's floor."} -->
+<!-- TSP-META {"file": "enjambment.html", "stage": "v1 playtest build 2026-08-12 — EN195 Poetry district. Promotes Line Break v3's scissors philosophy (the cut re-forms the poem live, enjambment is watched not described) into a full cabinet with the belt, the jam, the earned pause and the meter round, per claude/CONCEPT-ENJAMBMENT-2026-08-12.md. Three concept findings are built in as answers to be playtested, not as settled law: (1) the Lucy belt is the HOOK not the loop — it accelerates until the poem's own turn jams it, and the failure is what buys the silence; (2) the meter round scores the PULSE, not the parse — line 1 is offered in two real scansions, both played, neither marked wrong, because Frost's opening line genuinely scans two ways and an answer-key would teach something false; (3) Times Square is the delivery device, not the world — the setting is the poem's own context (New England woods at night) with a salvaged broadcast sign standing in it, which is the founder's stated intent that the setting represent the poem. Comfort v3.1 lifted verbatim from en195-arcade.html (top-only per the 08-09 ruling, Day/Warm dark, dusk retired, font-size:100% + rem multipliers so the reader's browser supplies the base). Sound is its own control and starts OFF-by-default only in the sense that it needs the Start gesture. MOTION STOP IS A SECOND PLAYABLE MODE, not a switch that kills the game: headless playtest found that with reduced motion the belt simply froze, so the words never reached the head, the poem could never be cut and the turn never arrived — a dead game, on the one setting an RP reader is most likely to have on. The still mode is Line Break v3's proven shape instead: the whole passage holds still as prose and the reader taps the word each line should end on, with the same live re-forming poem below and the same jam at the turn, no clock and no motion. Mode is decided at the top of every round from the live motion state. Other defects the same playtest caught and fixed: cut head moved from 50% to 38% of the sign (a phone showed only about three words of lookahead, which made the belt feel unfair rather than fast); round 2 finished at four cuts on a four-line passage and dumped the tail into a fifth monster line (N cuts make N+1 lines); Mending Wall's break indices were off by one so no match mark could ever fire; the beat lamps painted in normal flow at the top of the scene and read as three extra moons; the “cut here” label sat on top of the moving text; the footer's attribution counted as 74 words of entry prose and tripped one-thing-gate's wall; and .cutbtn's display:block outranked the UA [hidden] rule so a hidden CUT button kept painting. All scenery is CSS — no inline SVG at or above the art-gate floor — so the Samorost-grade art can arrive later through the MJ lane instead of being hand-authored here against the 2026-08-01 ruling.", "operative": true, "assets": "Robert Frost, 'Nothing Gold Can Stay' (New Hampshire, 1923) and 'Mending Wall' opening (North of Boston, 1914) — both US public domain, attributed in-file. Bass and beat synthesized in-file with Web Audio. All scenery CSS, no raster or vector plates.", "founder-open": ["belt as hook vs belt as loop — does the jam land, or does it want sustained speed pressure?", "does the two-scansion answer read as honest or as dodging a right answer?", "does the woods-with-a-broadcast-sign setting hold, or does he want the Times Square room outright?", "should this absorb Line Break in the arcade, or do both cabinets stand?"], "harvest": "a poem's own turn is a better stop condition than a timer — the machine fails where the poem changes its mind; and a metronome only a hearing player can perceive is not a metronome, it is a sound effect", "v2": "2026-08-13, three founder playtest rulings, all landed. (1) 'Enjambment moves much too quickly' — intrinsic base 74 to 58 px/s and vw*0.22 to vw*0.15, per-cut ramp 1.16 to 1.07, creep 5 to 1.8 (round two 1.10/4 to 1.06/1.5), and rather than guess a constant and ask again next week the speed is now a THREE-WAY CONTROL the founder sets (Slow default / Steady / Lucy), remembered in tsp.enjambment.speed, so the next playtest note can name a setting instead of a feeling. (2) 'I think I made 5th cut in time twice but guess not?' — he was right and it was a real bug, not a miss: the jam fired in the SAME FRAME the turn word reached the head, flipping running false before the click handler could run, so a cut made at the turn was swallowed in silence. Three fixes: the sign now STUTTERS visibly for a full line-length before the turn so the seizure is watched arriving; the jam itself is a 750ms GRACE window during which a cut still lands (verified headless — a press during grace registers); and a press that genuinely cannot land now says so out loud instead of doing nothing. (3) 'If a player has sound off or is Deaf, they should hear the metronome... we need visuals of stomping stumpy' — the bass WAS the meter, so with sound off the poem had no pulse at all. STOMPING STUMPY is a stump on a piston at the foot of the sign, and per the founder's own guess it is the engine that drives the belt, so the meter is diegetic rather than an overlay: it slams on every stress, slams harder on the one that starts the line, flashes its ground plate and puffs a ring on the accent. The lamps are now NUMBERED so the beat can be counted by eye, the meter lesson and the after-the-jam pause each get their own stomper, and the pulse round rebuilds its lamp row per reading so Reading B literally grows a fourth lamp. Verified headless with audio OFF. Also landed: the close-up the founder asked for ('Fail state should show close up of where the cut was made vs where it needed to be') — per line, the words around the cut with your solid gold mark and the line's real dashed ending in the same view, the words that moved highlighted between them, and a plain caption naming them ('You cut 2 words early. \"to hold.\" belonged to this line'). It wraps rather than scrolls: as a nowrap strip it clipped at the phone's right edge and in every cut-early case Frost's dashed mark scrolled off screen, which is the one thing the view exists to show beside your own — and the word spans needed real space text nodes between them or the row was a single unbreakable inline run that overflowed the card and the page with it.", "v3": "2026-08-13b, founder ruling on the cut itself: “I don’t like the slice mechanism. You should be able to mark the line to cut ahead of time so that the beat slicing guillotine is only armed when player arms it, or player can choose to manually tap guillotine mechanism itself if they are listening and playing on beat.” Right call, and it dissolves the speed complaint at its root rather than tuning around it: deciding where a line ends is a JUDGEMENT, and press-at-the-instant tested reaction time instead, which is why no belt speed ever felt correct. The thin cut head is now a guillotine with two honest ways to work it. ARM AHEAD: every upcoming word is a real button, tap one before it reaches the blade and the rail lights, the word carries the mark, and the blade falls there BY ITSELF with no press at all (headless-verified: arming word 4 produced “Nature’s first green is gold,” exactly, untouched). Tap the marked word again to take the mark back off. HAND-TAPPED: tap the guillotine mechanism itself, or the big button, or the space bar, and the blade drops now at whatever boundary is under it — the rhythm play, for a player riding the beat. Both routes run through one commit path so an armed drop and a hand drop cannot drift apart, and the cut itself stomps and sounds, so the slice IS a beat. Words already past the blade refuse the mark. Blade moved from 38% to 30% of the sign because lookahead is now the resource that matters: you need to SEE the word you intend to mark. Static mode was already tap-the-word, so the two modes are finally the same idea in different weather, which is the strongest argument yet that this cabinet absorbs Line Break rather than sitting beside it.", "v4": "2026-08-13c, founder ruling: “Option B skin for now. No MJ in studio as we can do better than we have so far with proper execution.” Overrides the art panel's recommendation of Option A, which is the founder's gate working as designed (the Visual Critic HALT runs through his eyes; seats are lenses, not authorities). Skin is now Times Square and the zipper: night city, towers with window columns, dim far-plane neon, wet asphalt, a steel housing on a scaffold, and the ticker as an LED zipper. All CSS, no plates, no generated art. The Legibility seat's HALT against B was real and was answered by EXECUTION, then MEASURED rather than asserted: LED type sits at 13.0:1 against its housing (studio floor 7:1) and is 7.0x the luminance of the brightest neon in frame, with the brightest building effectively black at 0.003. Four moves do it: neon pushed to the far plane, dim and glowing outward rather than lit flat; a hard black bezel around the housing so nothing bright touches the moving line; luminance ranked rather than merely hue-separated, since real neon at distance is chromatic but dark; and depth built from static paint rather than blur filters, which the Technical Artist seat would have had to price per frame behind a moving ticker. One execution failure caught and fixed in the same pass: the first skyline crossed two repeating gradients for windows and painted the lower half as one magenta mesh, because a grid reads as a grid. Windows became columns of light in one direction at a spacing that differs per tower, with roof lines catching the city glow so the stepped silhouette reads. GOVERNANCE CONSEQUENCE, recorded in claude/RULING-NO-MJ-AND-SKIN-B-2026-08-13.md: art-gate.py's law names MJ as one of only two legal lanes and MJ is now closed, so the law is stale. No gate teeth were changed this session; the amendment is pending the founder's own words. This file ships clean either way because its scenery is CSS and touches no SVG at the gate's floor.", "v5": "2026-08-14, founder ruling: the motionless / alternate version should still have animation and learning-science-based design. Correct on both counts, and the blanket motion kill was over-broad on its own terms. Reduced motion is about VESTIBULAR triggers (things that travel, scroll, parallax, zoom, spin); it was never about removing feedback. The old rule killed every animation AND transition, which took the teaching cues out with the motion and handed the accessible reader a worse-taught game, the exact inversion of an accessibility-first studio. Now everything still stops by default and elements marked .mo-safe keep a narrow non-vestibular vocabulary, ENFORCED rather than trusted: the allow-list pins transition-property to opacity/colour/background/border/box-shadow, so a .mo-safe element cannot animate a transform even by accident (verified in the browser: computed transition-property on the stomper's plate contains no transform). Still mode stops being a fallback and becomes a designed alternate. THE INSTRUMENTS SURVIVE: the stomper and the numbered lamps used to be hidden outright in still mode, so the reader most likely to need the beat shown was the one who got no beat at all; both now sit in a row under the passage, and the stomper takes the beat in light rather than travel. LEARNING-SCIENCE DESIGN, four things, each doing real work rather than decorating the claim: (1) DUAL CODING, reader-paced - after every cut the line you just made plays its own stresses, lamps counting them, stomper taking them, bass sounding them if sound is on, driven by your action and never by a clock you must keep up with; (2) PREVIEW BEFORE COMMITMENT - pointing at or focusing a word shows the line that word would make as a ghost in the poem card, so the consequence is visible before the choice, which is the cheapest feedback in the game; (3) WORKED EXAMPLE WITH SELF-COMPLETION, opt-in - 'Show me the first one' points out where line 1 ends and says why, then the reader makes the cut themselves and the guidance is faded rather than repeated; (4) SELF-EXPLANATION - one unstored, ungraded prompt on the compare screen asking why they ended a line where they did, because putting the reason into words is the part that does the work. Note for the next session: the first preview in a headless run can look wrong; it is not. The real cursor sits where Start was clicked, so the browser fires a genuine mouseover for the word under the pointer. Park the mouse before asserting on preview."} -->
 <script>
 /* PRE-PAINT COMFORT BOOT — lifted from en195-arcade.html. Runs before first paint
    so a reader who chose Warm dark never sees a flash of daylight. No try/catch
@@ -95,13 +95,30 @@ html.c-a1{ font-size:112.5%; }
 html.c-a2{ font-size:125%; }
 /* MOTION STOP — two rules, never merged. An @media block cannot sit inside a
    selector list; merged, the parser discards the whole declaration. */
-html.c-still *{
+/* WHAT MOTION STOP ACTUALLY MEANS. Founder ruling 2026-08-14: the motionless
+   version should still have animation and learning-science design. He is right,
+   and the blanket kill was over-broad on its own terms. Reduced motion is about
+   VESTIBULAR triggers: things that travel, scroll, parallax, zoom or spin. It was
+   never about removing feedback. Killing every transition took the cues with the
+   motion and left the accessible reader a worse-taught game, which is the exact
+   inversion of an accessibility-first studio.
+   So: everything still stops by default, and elements marked .mo-safe keep a
+   narrow, non-vestibular vocabulary. The allow-list is enforced below rather than
+   trusted, so a .mo-safe element CANNOT animate a transform even by accident. */
+html.c-still *:not(.mo-safe){
   animation:none !important; transition:none !important; scroll-behavior:auto !important;
 }
 @media (prefers-reduced-motion:reduce){
-  html:not([data-motion="go"]) *{
+  html:not([data-motion="go"]) *:not(.mo-safe){
     animation:none !important; transition:none !important; scroll-behavior:auto !important;
   }
+}
+/* The whole permitted vocabulary: light and colour, never position or scale. */
+html.c-still .mo-safe, html:not([data-motion="go"]) .mo-safe{
+  animation:none !important;
+  transition-property:opacity, color, background-color, border-color, box-shadow !important;
+  transition-duration:.15s !important;
+  transition-timing-function:ease !important;
 }
 html.c-cues a{ text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:2px; }
 
@@ -351,7 +368,22 @@ button:focus-visible{outline:4px solid var(--focus); outline-offset:3px;}
    same live re-forming poem below, same jam at the turn, no motion and no clock. */
 .stage.still .viewport, .stage.still .head, .stage.still .headlabel{display:none;}
 .stage:not(.still) .blockcut{display:none;}
-.stage.still .beatrow, .stage.still .posts{display:none;}
+.stage.still .posts{display:none;}
+/* THE INSTRUMENTS SURVIVE MOTION STOP. They used to be hidden outright, which
+   left the still reader with a prose block and no meter at all: the one player
+   most likely to need the beat shown got the version with no beat. In belt mode
+   the wrapper is display:contents so the absolute placement is untouched; in
+   still mode it becomes a row under the passage. */
+.instr{display:contents;}
+.stage.still .instr{display:flex; align-items:flex-end; gap:14px; padding:0 12px 12px;}
+.stage.still .engine{display:block; position:relative; left:auto; bottom:auto; flex:0 0 auto;}
+.stage.still .beatrow{position:relative; left:auto; right:auto; bottom:auto;
+  justify-content:flex-start; flex:1 1 auto;}
+/* The stomp without travel: the plate and the stump take the beat in light only,
+   which is the .mo-safe vocabulary. Nothing moves, the beat still lands. */
+.engine.tap .plate{background:#ffcf6b; border-color:#ffe9b8;}
+.engine.tap .stump{background:linear-gradient(#d8b06a,#8d6f38);}
+.engine.tap.accent .plate{background:#fff3d6; border-color:#ffffff;}
 /* The still passage is as tall as the passage, and at the reader's largest base
    that is much taller than the belt's fixed scene. So in this mode the sign stops
    being an absolutely-placed prop and becomes a panel the stage grows around; the
@@ -373,7 +405,15 @@ button:focus-visible{outline:4px solid var(--focus); outline-offset:3px;}
   border-radius:4px; cursor:pointer; text-align:center;
 }
 .cw:hover{background:rgba(255,207,107,.20);}
-.cw.cutmark{border-right:3px solid #ffcf6b; color:#ffe9b8;}
+.cw.cutmark{border-right:4px solid #ffcf6b; color:#ffe9b8; background:rgba(255,207,107,.16);}
+/* the blade landing, in the .mo-safe vocabulary: a flash of light, no travel */
+.cw.fell{background:rgba(255,231,184,.55); color:#1a1408;}
+/* PREVIEW BEFORE COMMITMENT. Focusing or hovering a word shows the line it would
+   make, so the reader sees the consequence before choosing it. */
+.cw:focus-visible{outline:3px solid #ffcf6b; outline-offset:2px;}
+.cw.peek{background:rgba(255,207,107,.20);}
+.poemline.ghost{color:var(--ink-2); font-style:italic; opacity:.85;}
+.poemline.ghost .num{font-style:normal;}
 .cw:disabled{opacity:.55; cursor:default;}
 
 /* ═══ THE METER, SEEN ═══
@@ -423,7 +463,7 @@ button:focus-visible{outline:4px solid var(--focus); outline-offset:3px;}
   opacity:0; transform:scale(.4);}
 .engine.stomp.accent .ring{animation:puff .42s ease-out;}
 @keyframes puff{0%{opacity:.85; transform:scale(.4);} 100%{opacity:0; transform:scale(3.6);}}
-.stage.still .engine{display:none;}
+/* .stage.still .engine no longer hidden: see THE INSTRUMENTS SURVIVE MOTION STOP */
 /* The meter lesson gets its own small stage so the stomper can appear away from
    the belt: same absolute geometry, a shorter ground to stand on. */
 .metercard{position:relative; height:100px; margin:0 0 10px;
@@ -458,6 +498,10 @@ button:focus-visible{outline:4px solid var(--focus); outline-offset:3px;}
 .cuview .cuw.moved{background:var(--surface-2); border-radius:4px; color:var(--rust); font-weight:700;}
 .cuview .yours{border-left:4px solid var(--gold); margin-left:3px; padding-left:3px;}
 .cuview .theirs{border-left:4px dashed var(--slate); margin-left:3px; padding-left:3px;}
+textarea{width:100%; font-family:inherit; font-size:1.125rem; line-height:1.5;
+  min-height:92px; padding:10px 12px; color:var(--ink); background:var(--surface-2);
+  border:2px solid var(--control-edge); border-radius:9px;}
+textarea:focus-visible{outline:4px solid var(--focus); outline-offset:3px;}
 .culegend{font-family:var(--sans); font-size:1.0625rem; color:var(--ink-2); margin:.3rem 0 0;}
 .cuhead{font-family:var(--sans); font-size:1.0625rem; font-weight:700; color:var(--ink-2);
   text-transform:uppercase; letter-spacing:.05em; margin:0 0 .3rem;}
@@ -602,10 +646,12 @@ html.c-reader button{background:transparent; color:var(--cr-ink); border:2px sol
       </div>
       <div class="posts" aria-hidden="true"><div class="post"></div><div class="post"></div></div>
     </div>
-    <div class="engine" id="engine1" aria-hidden="true">
-      <div class="rod"></div><div class="stump"></div><div class="plate"></div><div class="ring"></div>
+    <div class="instr">
+      <div class="engine" id="engine1" aria-hidden="true">
+        <div class="rod"></div><div class="stump mo-safe"></div><div class="plate mo-safe"></div><div class="ring"></div>
+      </div>
+      <div class="beatrow" id="beatrow" aria-hidden="true"></div>
     </div>
-    <div class="beatrow" id="beatrow" aria-hidden="true"></div>
   </div>
 
   <button class="cutbtn" type="button" id="cutBtn">DROP THE BLADE</button>
@@ -616,6 +662,11 @@ html.c-reader button{background:transparent; color:var(--cr-ink); border:2px sol
     <button class="btn" type="button" data-speed="1.7">Lucy</button>
   </div>
   <p class="hint" id="beltHint">Tap a word before it reaches the blade to mark where the line ends, and the guillotine falls there on its own. Or ride the beat and drop the blade yourself, by tapping it or pressing the space bar.</p>
+
+  <div id="wexWrap" hidden>
+    <button type="button" id="wexBtn">Show me the first one</button>
+    <p class="hint" id="wexNote">A worked example: the first line pointed out once, then you take the rest.</p>
+  </div>
 
   <div class="versecard">
     <h2 id="poemlabel">Your poem so far</h2>
@@ -653,7 +704,7 @@ html.c-reader button{background:transparent; color:var(--cr-ink); border:2px sol
   </div>
   <div class="metercard">
     <div class="engine" id="engine4" aria-hidden="true">
-      <div class="rod"></div><div class="stump"></div><div class="plate"></div><div class="ring"></div>
+      <div class="rod"></div><div class="stump mo-safe"></div><div class="plate mo-safe"></div><div class="ring"></div>
     </div>
     <div class="beatrow" id="beatrow4" aria-hidden="true"></div>
   </div>
@@ -678,6 +729,13 @@ html.c-reader button{background:transparent; color:var(--cr-ink); border:2px sol
       was helping you.</p>
     <p>Enjambment is the opposite deal, and it is next.</p>
   </div>
+  <div class="callout">
+    <h3>One question, and nothing is stored</h3>
+    <p><label for="selfEx">Pick a line you cut and say why you ended it there.</label></p>
+    <textarea id="selfEx" rows="3"></textarea>
+    <p class="note">Nothing here is saved or sent anywhere. Putting the reason into words is
+      the part that does the work, which is why the box is here and why it is not graded.</p>
+  </div>
   <button class="big cutbtn" type="button" id="toPulse">Hear the meter</button>
 </section>
 
@@ -688,7 +746,7 @@ html.c-reader button{background:transparent; color:var(--cr-ink); border:2px sol
     where they land.</p>
   <div class="metercard">
     <div class="engine" id="engine3" aria-hidden="true">
-      <div class="rod"></div><div class="stump"></div><div class="plate"></div><div class="ring"></div>
+      <div class="rod"></div><div class="stump mo-safe"></div><div class="plate mo-safe"></div><div class="ring"></div>
     </div>
     <div class="beatrow" id="beatrow3" aria-hidden="true"></div>
   </div>
@@ -744,10 +802,12 @@ html.c-reader button{background:transparent; color:var(--cr-ink); border:2px sol
       </div>
       <div class="posts" aria-hidden="true"><div class="post"></div><div class="post"></div></div>
     </div>
-    <div class="engine" id="engine2" aria-hidden="true">
-      <div class="rod"></div><div class="stump"></div><div class="plate"></div><div class="ring"></div>
+    <div class="instr">
+      <div class="engine" id="engine2" aria-hidden="true">
+        <div class="rod"></div><div class="stump mo-safe"></div><div class="plate mo-safe"></div><div class="ring"></div>
+      </div>
+      <div class="beatrow" id="beatrow2" aria-hidden="true"></div>
     </div>
-    <div class="beatrow" id="beatrow2" aria-hidden="true"></div>
   </div>
   <button class="cutbtn" type="button" id="cutBtn2">DROP THE BLADE</button>
   <p class="hint" id="enjHint">Three cuts make four lines. Five beats a line this time, and the bass
@@ -1217,7 +1277,7 @@ function Belt(cfg){
     lampHost.textContent = '';
     for (var b=0;b<P.beats;b++){
       /* NUMBERED, so the meter can be counted by eye and not only heard. */
-      var l = document.createElement('div'); l.className = 'lamp';
+      var l = document.createElement('div'); l.className = 'lamp mo-safe';
       l.textContent = String(b + 1); lampHost.appendChild(l);
     }
     /* measure after layout */
@@ -1237,6 +1297,64 @@ function Belt(cfg){
       blockHost.appendChild(document.createTextNode(' '));
     });
   }
+  /* THE STILL MODE'S OWN INSTRUMENTS. It used to hide the meter entirely, so the
+     reader most likely to need the beat shown was the one who got no beat. Here
+     the stomper takes the beat in light rather than travel, and the lamps count
+     it, which is the .mo-safe vocabulary doing real teaching work. */
+  function tapEngine(accent){
+    if (!engineEl) return;
+    engineEl.className = 'engine tap' + (accent ? ' accent' : '');
+    clearTimeout(stompT);
+    stompT = setTimeout(function(){ engineEl.className = 'engine'; }, accent ? 210 : 160);
+  }
+  /* DUAL CODING, READER-PACED. After a cut the line you just made plays its own
+     stresses: lamps count them, the stomper takes them, the bass sounds them if
+     sound is on. It runs off your action, never off a clock you have to keep up
+     with, which is what makes it a still-mode instrument rather than a timer. */
+  function playLineBeats(){
+    for (var b = 0; b < P.beats; b++){
+      (function(k){
+        setTimeout(function(){
+          var lamps = lampHost.children;
+          for (var i = 0; i < lamps.length; i++) lamps[i].className = 'lamp mo-safe';
+          if (lamps[k]) lamps[k].className = 'lamp mo-safe lit' + (k === 0 ? ' accent' : '');
+          tapEngine(k === 0);
+          Audio_.hit(k === 0);
+        }, k * 330);
+      })(b);
+    }
+  }
+
+  /* PREVIEW BEFORE COMMITMENT. Focus or hover a word and the poem card shows the
+     line that word would make, as a ghost. Seeing the consequence before choosing
+     is the cheapest feedback in the game and it costs the reader nothing. */
+  function peek(i){
+    if (!running || !still || i <= lastCut) return;
+    var from = cuts.length ? cuts[cuts.length-1] + 1 : 0;
+    paint();
+    var p = document.createElement('p');
+    p.className = 'poemline ghost';
+    var n = document.createElement('span'); n.className = 'num';
+    n.textContent = (cuts.length + 1) + '.';
+    p.appendChild(n);
+    p.appendChild(document.createTextNode(lineFor(from, i)));
+    out.appendChild(p);
+  }
+  function unpeek(){ if (running && still) paint(); }
+  blockHost.addEventListener('mouseover', function(e){
+    var t = e.target.closest ? e.target.closest('.cw') : null;
+    if (t && !t.disabled){ t.classList.add('peek'); peek(Number(t.getAttribute('data-i'))); }
+  });
+  blockHost.addEventListener('mouseout', function(e){
+    var t = e.target.closest ? e.target.closest('.cw') : null;
+    if (t){ t.classList.remove('peek'); unpeek(); }
+  });
+  blockHost.addEventListener('focusin', function(e){
+    var t = e.target.closest ? e.target.closest('.cw') : null;
+    if (t && !t.disabled) peek(Number(t.getAttribute('data-i')));
+  });
+  blockHost.addEventListener('focusout', unpeek);
+
   blockHost.addEventListener('click', function(e){
     if (!running || !still) return;
     var t = e.target.closest ? e.target.closest('.cw') : null;
@@ -1246,12 +1364,15 @@ function Belt(cfg){
     for (var k = 0; k <= i; k++){ var b = blockHost.querySelector('.cw[data-i="'+k+'"]'); if (b) b.disabled = true; }
     lastCut = i; cuts.push(i);
     t.classList.add('cutmark');
+    /* the blade landing, in light: no travel, still an event */
+    t.classList.add('fell');
+    setTimeout(function(){ t.classList.remove('fell'); }, 260);
     paint();
     announce('Line ' + cuts.length + ': ' + lineFor(cuts.length > 1 ? cuts[cuts.length-2] + 1 : 0, i));
-    Audio_.hit(true);
+    playLineBeats();
     if (cfg.onCut) cfg.onCut(cuts);
     /* The turn still stops the machine, it just stops on the reader's own cut. */
-    if (P.turnWord != null && (cuts.length >= 5 || i >= P.turnWord - 1)) jam();
+    if (P.turnWord != null && (cuts.length >= 5 || i >= P.turnWord - 1)) setTimeout(jam, 380);
   });
 
   function lineFor(from, to){
@@ -1301,9 +1422,9 @@ function Belt(cfg){
       if (beatAcc >= gap){
         beatAcc -= gap;
         var lamps = lampHost.children;
-        for (var i=0;i<lamps.length;i++) lamps[i].className = 'lamp';
+        for (var i=0;i<lamps.length;i++) lamps[i].className = 'lamp mo-safe';
         var accent = (beatIdx % P.beats) === 0;
-        if (lamps[beatIdx % P.beats]) lamps[beatIdx % P.beats].className = 'lamp lit' + (accent ? ' accent' : '');
+        if (lamps[beatIdx % P.beats]) lamps[beatIdx % P.beats].className = 'lamp mo-safe lit' + (accent ? ' accent' : '');
         stomp(accent);
         Audio_.hit(accent);
         beatIdx++;
@@ -1349,7 +1470,7 @@ function Belt(cfg){
     stageEl.classList.remove('turning');
     stageEl.classList.add('jammed');
     var lamps = lampHost.children;
-    for (var i=0;i<lamps.length;i++) lamps[i].className = 'lamp';
+    for (var i=0;i<lamps.length;i++) lamps[i].className = 'lamp mo-safe';
     announce('The belt jams.');
     if (cfg.onJam) cfg.onJam(cuts);
   }
@@ -1394,11 +1515,23 @@ function Belt(cfg){
       stageEl.classList.toggle('still', still);
       cutBtn.hidden = still;
       if (hintEl) hintEl.textContent = still
-        ? 'Motion is stopped, so the passage holds still. Tap the word you want each line to end on.'
+        ? 'Motion is stopped, so the passage holds still and the belt waits on you. Point at a word to see the line it would make, then tap it to bring the blade down. The lamps count the beat of every line you finish.'
         : (cfg.hintText || 'Tap a word before it reaches the blade to mark where the line ends, and the guillotine falls there on its own. Or ride the beat and drop the blade yourself.');
+      if (cfg.worked) document.getElementById(cfg.worked).hidden = !still;
       paint();
       running = true;
-      if (still){ buildStatic(); return; }
+      if (still){
+        buildStatic();
+        /* the lamps are built here as well, because build() never runs in this
+           mode and the meter has to exist for the reader who chose stillness */
+        lampHost.textContent = '';
+        for (var sb = 0; sb < P.beats; sb++){
+          var sl = document.createElement('div');
+          sl.className = 'lamp mo-safe'; sl.textContent = String(sb + 1);
+          lampHost.appendChild(sl);
+        }
+        return;
+      }
       build();
       /* Founder ruling 2026-08-13: "Enjambment moves much too quickly." The
          intrinsic base drops, the per-cut ramp and the creep both soften, and
@@ -1419,7 +1552,7 @@ function Belt(cfg){
 /* ═══ ROUND 1 ═══ */
 var belt1 = Belt({
   strip:'strip', viewport:'viewport', lamps:'beatrow', out:'poemOut',
-  cut:'cutBtn', stage:'stage1', block:'block1', hint:'beltHint', engine:'engine1', guillo:'guillo1',
+  cut:'cutBtn', stage:'stage1', block:'block1', hint:'beltHint', engine:'engine1', guillo:'guillo1', worked:'wexWrap',
   poem:GOLD, ramp:1.07, creep:1.8,
   onJam:function(cuts){
     var out = document.getElementById('jamOut');
@@ -1442,6 +1575,26 @@ var belt1 = Belt({
     setTimeout(function(){ show('s-jam'); }, 620);
   }
 });
+
+/* WORKED EXAMPLE WITH SELF-COMPLETION. The strongest thing the still mode can
+   offer a reader who does not yet know what a line ending is: show the first one,
+   say why, and let them make the cut themselves. Guidance is faded after line 1
+   rather than repeated, which is the whole point of a worked example. */
+(function(){
+  var btn = document.getElementById('wexBtn');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    var w = document.querySelector('#block1 .cw[data-i="' + GOLD.breaks[0] + '"]');
+    if (!w || w.disabled) return;
+    w.classList.add('peek');
+    w.focus();
+    document.getElementById('wexNote').textContent =
+      'Line 1 ends on \u201cgold,\u201d because the sentence finishes there and the rhyme lands on it. ' +
+      'Tap that word to bring the blade down, then the rest are yours.';
+    btn.disabled = true;
+    announce('Worked example: line 1 ends after gold.');
+  });
+})();
 
 document.getElementById('startBtn').addEventListener('click', function(){
   Audio_.enable();
@@ -1556,7 +1709,7 @@ function buildLamps(rowId, n){
   var row = document.getElementById(rowId);
   row.textContent = '';
   for (var b = 0; b < n; b++){
-    var l = document.createElement('div'); l.className = 'lamp';
+    var l = document.createElement('div'); l.className = 'lamp mo-safe';
     l.textContent = String(b + 1); row.appendChild(l);
   }
 }
@@ -1567,8 +1720,8 @@ function stompAt(engId, rowId, accent, idx){
   clearTimeout(_stompT[engId]);
   _stompT[engId] = setTimeout(function(){ eng.className = 'engine'; }, accent ? 150 : 110);
   var lamps = row.children;
-  for (var i = 0; i < lamps.length; i++) lamps[i].className = 'lamp';
-  if (lamps[idx]) lamps[idx].className = 'lamp lit' + (accent ? ' accent' : '');
+  for (var i = 0; i < lamps.length; i++) lamps[i].className = 'lamp mo-safe';
+  if (lamps[idx]) lamps[idx].className = 'lamp mo-safe lit' + (accent ? ' accent' : '');
 }
 function buildLamps3(n){ buildLamps('beatrow3', n); }
 function stomp3(accent, idx){ stompAt('engine3', 'beatrow3', accent, idx); }
