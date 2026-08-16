@@ -1,5 +1,13 @@
 # PANEL — ENJAMBMENT art skin, 2026-08-13
 
+> **CLOSED, same day.** Founder ruled Option B and closed the Midjourney lane:
+> *"Option B skin for now. No MJ in studio as we can do better than we have so far
+> with proper execution."* The panel recommended A; the founder's eyes are the
+> Visual Critic HALT and they outrank the bench, which is the gate working as
+> designed. Full answer and its governance consequence:
+> `claude/RULING-NO-MJ-AND-SKIN-B-2026-08-13.md`. The material conflict is
+> **narrowed, not closed** — MJ is out, hand-cut status still pending.
+
 *Founder: "Also change the art skin. Let hit full staff discuss."*
 *Convened inline, not as an agent fleet: the caucus was reads this session could do
 itself, which is the cost-scoped default in the OS's own Rep clause. One panel, no
