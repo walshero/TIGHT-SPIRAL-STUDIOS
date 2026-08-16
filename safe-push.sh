@@ -62,6 +62,20 @@ if [ "${F##*.}" = "html" ]; then
     [ "$SAFE_PUSH_FORCE" != "1" ] && exit 1
   fi
   echo "  art-gate: pass"
+  # THE EXECUTION BAR (founder ruling 2026-08-13, affirmed 2026-08-14: the studio
+  # needs processes and assets for producing quality art). art-gate says where art
+  # may COME FROM; this says whether it was MADE well enough to ship. It only
+  # inspects files that mark a scene, so a page without one is untouched.
+  if command -v python3 >/dev/null 2>&1 && python3 -c "import playwright" >/dev/null 2>&1; then
+    if ! python3 art-execution-gate.py "$F" >/dev/null 2>&1; then
+      echo "  *** HALT - art-execution-gate (type dominance / cross-hatch / flat layer) ***"
+      python3 art-execution-gate.py "$F" 2>/dev/null | sed 's/^/     /'
+      [ "$SAFE_PUSH_FORCE" != "1" ] && exit 1
+    fi
+    echo "  art-execution-gate: pass"
+  else
+    echo "  art-execution-gate: SKIPPED (no playwright in this environment) - blind is not clean"
+  fi
 fi
 
 # 3. PUSH
