@@ -31,4 +31,9 @@
 **SHIP PATH:** draft here → hand to Claude Code → gates fire + land to git (push,
 fetch back, match hash) → then it exists. **Unfired gate = HALTED by default.**
 
+**SESSION-CLOSE (Funes):** before ending, emit the **founder log** — every ruling
+made this session, in the founder's words, dated — appended to `TSP_Ledger.md`
+(never rewritten). This is how the chat syncs to studio memory; a decision not in
+the ledger did not happen. One ledger, one Funes — Confluence is a lane in it.
+
 ────────────────────────────────────────────────────────────
