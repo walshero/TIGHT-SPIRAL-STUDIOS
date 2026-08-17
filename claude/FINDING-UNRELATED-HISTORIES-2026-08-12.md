@@ -1,81 +1,69 @@
-# FINDING — `main` and the arcade branch are UNRELATED HISTORIES, and `main` is the stale one (2026-08-12)
+# RETRACTED : this finding was wrong. See the correction below.
 
-*Recorded because the session-start tendrils hook prints a line about this every
-run, and the line reads backwards. A session that trusts it will "fix" the wrong
-branch.*
+> **RETRACTED 2026-08-14.** The claim in this document, that `origin/main` and
+> `claude/en195-poetry-arcade-1aunsp` are unrelated histories and that main is the
+> stale one, **was false**, and it was false because of my own error. The document
+> is kept rather than deleted so the mistake stays legible, but **do not act on
+> anything below the correction.**
 
-## What the hook says
+---
 
-```
-[STRANDED] claude/en195-poetry-arcade-1aunsp: 50 commit(s) not in origin/main,
-51 behind — STALE BASE, do not fast-merge
-```
+## THE CORRECTION
 
-Read plainly, that says: *your branch is behind main, rebase onto main.* I acted on
-that reading this session and told the founder the branch needed rebasing. **That is
-wrong and would have destroyed six days of work.**
+**What actually happened.** This session never ran `git fetch`. Every judgement in
+the original finding was computed against the container's **clone-time
+remote-tracking ref**, which was stale and pointed at a different lineage
+(root `6e16918`). One `git fetch origin` on 2026-08-14 replaced it with the real
+`origin/main`, and every number changed:
 
-## What is actually true
-
-The two refs have **no common ancestor at all**:
-
-```
-$ git merge-base HEAD origin/main   # no output, exit 1
-$ git rev-list --max-parents=0 HEAD         → b5277d8   (branch root)
-$ git rev-list --max-parents=0 origin/main  → 6e16918   (main root)
-```
-
-Two separate root commits. So "50 ahead / 51 behind" is **not divergence** — with no
-merge base, every commit on each side counts against the other. The numbers are an
-artifact of unrelated lineage, not a measure of staleness. `git rev-list --count` is
-51 on each side: two independent 51-commit histories in one repo.
-
-## Which one carries the current work
-
-**The branch.** Not main.
-
-| | branch tip | `origin/main` tip |
+| | Claimed (stale ref) | Actually true (after fetch) |
 |---|---|---|
-| newest commit | 2026-08-12 | **2026-08-06** |
-| `en195-arcade.html` | **98,583 B** (v6.4) | 57,341 B (pre-v6) |
+| Shared ancestor | none, `merge-base` exit 1 | **`d1bda1c`** |
+| Root commit | different roots | **identical root `b5277d8`** |
+| Branch position | 50 ahead, 51 behind, unrelated | **10 ahead, 25 behind** |
+| `origin/main` tip | 2026-08-06, "stale" | current, carrying PRs #24, #25, #48, #49, #50 |
+| Files only on main | 1 (`en195-arcade-layout-preview.html`) | **14**, including the whole `confluence-hub/` lane, `c1-check.py`, `the-break-room-v2.html`, and a GitHub Actions workflow |
 
-Tree diff branch → main is 195 files, **16,579 deletions against 1,792 insertions** —
-main has strictly less. Present on the branch and absent from main: the whole
-08-07 → 08-10 stream, including `SIX-MONTH-CONSULTATION-2026-08-07*.md`,
-`aleph-fleet.py` and the aleph runs, `HITL-REVIEW-2026-08-08.md`,
-`HANDOFF-2026-08-10-tick9.md`, `PRD-CHOOSE-YOUR-LEADER.md`, and both hired-in agent
-seats (`.claude/agents/type-director.md`, `.claude/agents/union-rep.md`).
+So the branch was never stranded on an orphan lineage. It was an ordinary feature
+branch that had fallen behind, and **50 of its 60 "unique" commits were already in
+main.** The 10 genuinely unique ones were this session's ENJAMBMENT work.
 
-**Exactly one file exists on main and not on the branch:**
-`en195-arcade-layout-preview.html` — and that file's own disposition is already
-recorded in the branch's arcade TSP-META: *"Layout preview
-(en195-arcade-layout-preview.html, 2026-08-06 v2) folded in same day and deleted."*
-It was absorbed on purpose. **Nothing on main is at risk.**
+**What the error would have cost.** The original document told the next session, in
+bold, *"Do not rebase this branch onto `origin/main`"* and *"the direction is
+branch → main (main takes the branch's content)."* Acting on that after the fetch
+would have taken the branch's tree wholesale and **deleted 14 files of real work,
+including a live CI workflow and an entire hub lane.** The advice was confidently
+wrong in the destructive direction.
 
-## Why this happened (probable)
+**Resolution.** `git merge origin/main` into the branch on 2026-08-14: clean, zero
+conflicts, 20 files changed, all additions. Both sides verified present, gates
+re-run green on the merged tree, and the game regression-tested in both modes.
 
-CLAUDE.md records that `git push` from a session container is 403-blocked and that
-the GitHub connector is the working lane. `origin/main`'s history is the connector
-lane's lineage; this container's repo is a separate lineage that was initialized
-rather than cloned from that ref. Both are real; they simply never shared a root.
+## WHAT I GOT RIGHT, AND WHY IT STILL MISLED
 
-## Standing correction for future sessions
+The original finding was correct that the tendrils hook's "N behind" line is
+unverified and should not be trusted on its own. It then made exactly the mistake
+it was warning about: it *trusted a ref* instead of refreshing it, and dressed the
+result in measurements. Numbers computed from a stale input are not evidence; they
+are the same guess with more decimal places.
 
-1. **Do not rebase this branch onto `origin/main`.** There is no base to rebase onto,
-   and main is six days behind on content.
-2. **Read the hook's "N behind" as unverified.** Before acting on it, run
-   `git merge-base HEAD origin/main`. Exit 1 means the counts are meaningless as a
-   staleness signal — compare **dates and tree content** instead.
-3. **If the two lanes are ever to be reconciled**, the direction is branch → main
-   (main takes the branch's content), and it is a founder call, not a mechanical
-   fast-forward. `en195-arcade-layout-preview.html` is the only file needing an
-   explicit keep/drop decision, and it is already ruled *drop* (folded in 08-06).
+## THE RULE THAT REPLACES THIS DOCUMENT
 
-## Meta — how the error was caught
+1. **`git fetch origin` before any claim about a remote branch.** A
+   remote-tracking ref in a fresh container is a snapshot from clone time and can
+   be arbitrarily wrong. Nothing about `origin/*` is knowable without it.
+2. **`git merge-base` exiting 1 is a claim about your refs, not about history.**
+   Unrelated histories are rare; a stale ref is common. Suspect the ref first.
+3. **Never propose "take one side's tree wholesale" across a divergence you have
+   not fetched.** Enumerate what only the other side has, by name, and say what
+   happens to each file.
+4. The tendrils hook still computes against whatever ref it finds. Its "behind"
+   count remains advisory. **Fetch, then judge.**
 
-The founder's challenge was *"this is a fresh chat. what could be stale?"* The
-container clone being fresh is not what the hook was measuring, and neither was the
-chat — but the question forced a verification that the hook's own phrasing had
-discouraged. **A mechanical signal that reports a number without reporting its
-validity is a hollow claim.** `funes-tendrils.py` should either run the merge-base
-check before printing "behind", or label the count as lineage-relative.
+## ORIGINAL DOCUMENT (SUPERSEDED, DO NOT ACT ON)
+
+The original text claimed unrelated roots (`b5277d8` vs `6e16918`), a 16,579-line
+deletion delta against main, and that `en195-arcade-layout-preview.html` was the only
+file at risk. The root pair was real for the stale ref; everything concluded from
+it was not. It has been removed rather than left in place to be skimmed and acted
+on by mistake.
