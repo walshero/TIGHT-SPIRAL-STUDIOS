@@ -892,3 +892,17 @@ dashes the transcripts' own. No thesis line exists and none is used.
 **Open, founder-only, unchanged:** GATE 1 cold play (now on v7); record
 approval for the three current-era scenes; the protection-function home
 (Zimmerman); which build goes to Scot.
+
+## 2026-07-23 — Founder log: Confluence adopted into the one repo; playtest team seated; Funes sync adopted (logged, binding)
+
+Logged from the Claude Code + Confluence-project sessions, in the founder's words the day made.
+
+- **One repo.** "One repo. Bring it in." Confluence consolidated into `walshero/TIGHT-SPIRAL-STUDIOS` as a **lane** (`confluence-hub/` + the `confluence-*.html` files), retiring the separate private `confluence-calibration-assessment-hub` repo. "Confluence will be its own entity, but it can benefit from TSP assets like panel, aleph." (PR #24, merged.)
+- **Trunk floors fix — authorized.** C1 + warm-ink + sub-18px fonts fixed on canon; **`--pine-lt` FOUNDER-WAIVED**. Re-applied to current canon after main advanced mid-flight. (PR #25, merged.) Residuals baselined: `'Tour'` 4.19 contrast, `<body>` paint-mismatch.
+- **Companion floor fix.** Sub-18px chrome fonts lifted to 18px (PR #49). Correction logged: the dark palette (`html[data-light="night"]`) and comfort control (Studio Eyes panel) were **present, not lost** — `preship-gate-v4`'s H-DARK tooth doesn't recognize the `data-light` convention (false positive). The force-darken bug is not present.
+- **Playtest team seated.** "Seat a new kind of playtesting team… each role should be comprised of template characters that represent the diversity of those individuals in real life." Roles: student / faculty evaluator / chair-lead / coordinator / reviewer, each a spread of **composite template characters** — "diversity is coverage, not decoration"; no real individuals named. (PR #48.)
+- **Names ruling (re-affirmed).** "Don't make up names. Use clearly marked sample, and for MassBay model, use actual people or position."
+- **First playtest run** on the companion (pinned `5f7fb1d8`): F1 metaphor-only nav, F2 mixed audience signal, F3 no auto-dark (discoverability), F4 unglossed jargon; accessibility otherwise strong. Method: simulated; disposition axes want real humans.
+- **Adopt Funes.** "Adopt the TSP mechanism for synching chats with funes ledger and os." The Confluence lane now syncs to this ledger (founder log at close), carries state via `handoff.py`, and runs the Funes open card (canon-as-of-today + open loops). This entry is the first sync.
+
+**Open loops (Funes board):** PRs #48/#49 pending merge · auto-dark decision (companion F3) · trunk version banner + cross-lane manifest still say v44 (stale; canon is `01b053f8`) · `preship-gate-v4` is not in CI so the H-DARK/font teeth don't block (the companion regression slipped this way) · `HANDOFF.md` is stale (2026-07-16).

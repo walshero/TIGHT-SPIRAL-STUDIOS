@@ -91,12 +91,21 @@
     nav .links{gap:.1rem .2rem;}
     nav .links a{padding:.55rem .7rem;}
     .applylink{padding:.55rem .5rem;}
-    .hero>img{height:24vh; min-height:140px;}
+    .hero>img{height:18vh; min-height:110px; max-height:170px;}
     .hero .inner{padding:1.2rem 5vw 1.6rem;}
     .brandlogo{height:44px; margin-bottom:.8rem;}
-    .hero h1{font-size:1.9rem;}
+    /* At large text sizes the uppercase, letter-spaced kicker wrapped to three lines and
+       pushed the headline, the button and the phone number off screen. It only repeats the
+       four neighbourhoods already in the nav, so on phones it goes. */
+    .hero .kicker{display:none;}
+    .hero h1{font-size:1.6rem; line-height:1.12;}
     .hero p{font-size:1.15rem; margin-top:.7rem;}
     .cta-row{margin-top:1rem;}
+    /* Action before prose on phones: the button must survive a big text setting. */
+    .hero .inner{display:flex; flex-direction:column;}
+    .hero .inner h1{order:1;}
+    .hero .inner .cta-row{order:2;}
+    .hero .inner p{order:3; margin-top:1.1rem;}
     .prop-head{padding-top:1.2rem; gap:1.2rem;}
     .prop-head h1{font-size:1.9rem;}
     .prop-head p{font-size:1.15rem;}
@@ -195,8 +204,19 @@
   .appform .hint{font-size:1.125rem; color:var(--dim); margin-top:.5rem;}
   .appform .actions{display:flex; gap:1rem; flex-wrap:wrap; margin-top:2rem;}
   .appform .privacy{background:var(--sky); border-radius:12px; padding:1rem 1.3rem; margin-top:1.4rem; font-size:1.125rem;}
+  /* The last-step panel. Colours come from the tokens, never from literals: the system-dark block
+     at the foot of this sheet redefines the tokens, so a var() rule follows the palette no matter
+     where it sits in the cascade. Literals here would repeat the 1.16:1 heading bug of 2026-08-11. */
+  .nextstep{background:var(--sky); border:2px solid var(--teal); border-radius:14px;
+    padding:1.4rem 1.5rem 1.6rem; margin-top:2rem; color:var(--text);}
+  .nextstep h3{font-size:1.35rem; font-weight:800; color:var(--text); margin-bottom:.6rem;}
+  .nextstep h3:focus-visible{outline:4px solid var(--teal); outline-offset:4px;}
+  .nextstep ol{margin:.6rem 0 0 1.3rem; font-size:1.125rem;}
+  .nextstep li{margin-bottom:.7rem;}
+  .nextstep .after{margin-top:1.3rem; font-size:1.125rem;}
+  .nextstep .btn{margin-top:1.1rem;}
   @media print{
-    nav,footer,#lightbox,.skip,.appform .actions,.appform .privacy,.apply-intro .gal-hint{display:none !important;}
+    nav,footer,#lightbox,.skip,.appform .actions,.appform .privacy,.nextstep,.apply-intro .gal-hint{display:none !important;}
     .page{display:none !important;} #page-apply{display:block !important;}
     body{background:#fff; color:#000; font-size:11pt;}
     .appform fieldset{break-inside:avoid; border:1px solid #000; background:#fff; margin-top:.6rem; padding:.6rem .8rem;}
@@ -470,21 +490,18 @@
 <div class="page" id="page-apply">
   <section class="apply-intro" style="padding-bottom:0;">
     <h2>Rental application</h2>
-    <p class="sub">Fill this out on screen, then choose a button at the bottom: send it straight to Meg by email, or print it (or save it as a PDF) to bring with you. Nothing is stored on this website.</p>
-    <p class="gal-hint">Prefer paper? <a href="application-rental.pdf">Download the original PDF form</a>.</p>
+    <p class="sub">Fill this out on screen, then save it as a PDF with the button at the bottom. We will show you how to email it to Meg, or you can bring it to the office. Nothing is stored on this website and nothing is sent from it.</p>
+    <p class="gal-hint">Prefer paper? <a href="application-rental.pdf">Download the printable PDF form</a>.</p>
   </section>
   <section style="padding-top:1rem;">
     <form class="appform" id="appform">
       <fieldset><legend>About you</legend>
         <div class="frow">
-          <label>Full name <input name="Name" autocomplete="name"></label>
-          <label>Date of birth <input name="Date of birth" autocomplete="bday" placeholder="MM/DD/YYYY"></label>
+          <label class="full">Full name <input name="Name" autocomplete="name"></label>
           <label>Cell phone <input name="Cell phone" type="tel" autocomplete="tel"></label>
           <label>Email <input name="Email" type="email" autocomplete="email"></label>
-          <label>Driver's license # <input name="License #"></label>
-          <label>Social Security # <input name="SSN" data-private="1" placeholder="Leave blank if emailing"></label>
         </div>
-        <p class="hint">For your security, the Social Security number is never included in the email. Provide it on the printed copy or at lease signing.</p>
+        <p class="hint">We do not ask for your date of birth, Social Security number, or driver&rsquo;s license number on this application. If we offer you an apartment, we will collect what a credit and background check needs at that point, in person or on paper.</p>
       </fieldset>
       <fieldset><legend>Which building?</legend>
         <div class="frow">
@@ -547,8 +564,7 @@
           <label>Reference phone <input name="Reference phone" type="tel"></label>
           <label>Emergency contact <input name="Emergency contact"></label>
           <label>Emergency phone <input name="Emergency phone" type="tel"></label>
-          <label>Credit reference <input name="Credit reference"></label>
-          <label>Credit card # <input name="Credit card #" data-private="1" placeholder="Leave blank if emailing"></label>
+          <label class="full">Credit reference <input name="Credit reference"></label>
         </div>
       </fieldset>
       <fieldset><legend>Disclosures</legend>
@@ -561,12 +577,21 @@
         <div class="frow">
           <label>If yes to either, details <textarea name="Conviction details"></textarea></label>
         </div>
-        <p class="hint">Base rent is due on the first of each month in advance. The applicant authorizes Leeder Management to obtain a consumer credit report and conduct a criminal background check, per the terms on the printed form. Submitting this application confirms the information given is true.</p>
+        <p class="hint">An applicant for employment or for housing or an occupational or professional license with a sealed record on file with the commissioner of probation may answer &ldquo;no record&rdquo; with respect to an inquiry herein relative to prior arrests, criminal court appearances or convictions.</p>
+        <p class="hint">Base rent is due on the first of each month in advance. The applicant authorizes Leeder Management to obtain a consumer credit report and conduct a criminal background check. Signing this application confirms the information given is true.</p>
       </fieldset>
-      <div class="privacy">Your answers stay on your device. Emailing opens your own mail app with the application filled in, addressed to Meg at Leeder Management. Sensitive numbers are left out of email on purpose.</div>
+      <div class="privacy">Your answers stay on your device. This website does not store or send anything you type here. Saving the file and sending it are entirely under your control.</div>
       <div class="actions">
-        <button type="button" class="btn primary" id="emailapp">Email application to Meg</button>
-        <button type="button" class="btn outline" id="printapp">Print or save as PDF</button>
+        <button type="button" class="btn primary" id="printapp">Save as PDF</button>
+      </div>
+      <div class="nextstep" id="nextstep" hidden>
+        <h3 id="nextstep-head" tabindex="-1">Saved it? Here is the last step.</h3>
+        <ol>
+          <li>In the print window, choose <strong>Save as PDF</strong> (on an iPhone, tap the share icon, then <strong>Save to Files</strong>) and pick where to put it.</li>
+          <li>Open a new email to Meg with the button below, <strong>attach the PDF you just saved</strong>, and send it.</li>
+        </ol>
+        <a class="btn primary" id="mailmeg" href="mailto:mlbuckley@leedermgt.com">Open an email to Meg</a>
+        <p class="after">A website cannot attach the file for you, so that last step is yours. If it is easier, bring the printed form to the office at 318 Harvard Street, Rm. 23, Brookline, or call (617) 232-8700 and we will walk you through it.</p>
       </div>
     </form>
   </section>
@@ -655,45 +680,40 @@
 /* ---------- galleries (all images vendored in img/) ---------- */
 const GALLERIES={
   bowdoin:[
-    ['img/bowdoin-street-2.jpg','Renovated kitchen'],
-    ['img/bowdoin-street-3.jpg','Living area with hardwood floors'],
-    ['img/bowdoin-street-4.jpg','Bedroom with large windows'],
-    ['img/bowdoin-street-5.jpg','Sunlit interior'],
-    ['img/bowdoin-street-6.jpg','Living room detail'],
-    ['img/bowdoin-street-1.jpg','Exterior at the State House'],
-    ['img/beacon-hill-neighborhood.jpg','Beacon Hill, out the front door']
+    'img/bowdoin-street-2.jpg','img/bowdoin-street-3.jpg','img/bowdoin-street-4.jpg',
+    'img/bowdoin-street-5.jpg','img/bowdoin-street-6.jpg','img/bowdoin-street-1.jpg',
+    'img/beacon-hill-neighborhood.jpg'
   ],
   cambridge:[
-    ['img/concord-avenue-1.png','Craigie Arms exterior'],
-    ['img/concord-ave-2.png','Building entrance'],
-    ['img/concord-avenue-3.png','Facade detail'],
-    ['img/concord-avenue-4.jpg','Concord Avenue view'],
-    ['img/concord-avenue-5.jpg','The building in context'],
-    ['img/craigie-arms-1.jpg','Craigie Arms street view'],
-    ['img/cambridge-neighborhood.jpg','The Cambridge neighborhood']
+    'img/concord-avenue-1.png','img/concord-ave-2.png','img/concord-avenue-3.png',
+    'img/concord-avenue-4.jpg','img/concord-avenue-5.jpg','img/craigie-arms-1.jpg',
+    'img/cambridge-neighborhood.jpg'
   ],
   perkins:[
-    ['img/jamaica-plain-neighborhood.png','Jamaica Pond, a block away']
+    'img/jamaica-plain-neighborhood.png'
   ],
   royal:[
-    ['img/brookline-neighborhood-1.jpeg','Coolidge Corner, two blocks away'],
-    ['img/cambridge-neighborhood.jpg','On the Green Line C: Boston and Cambridge without a car']
+    'img/brookline-neighborhood-1.jpeg','img/cambridge-neighborhood.jpg'
   ]
 };
 let lbList=[], lbIndex=0;
 Object.entries(GALLERIES).forEach(([key,items])=>{
   const wrap=document.querySelector(`[data-gallery="${key}"]`); if(!wrap) return;
-  items.forEach(([src,cap],i)=>{
+  items.forEach((src,i)=>{
     const b=document.createElement('button');
-    b.setAttribute('aria-label','View photo: '+cap);
-    b.innerHTML=`<img loading="lazy" src="${src}" alt="${cap}">`;
+    // Positional only. Captions were removed 2026-08-12: several were wrong, and a
+    // confident wrong label is worse than none, for a screen reader most of all.
+    b.setAttribute('aria-label','View photo '+(i+1)+' of '+items.length);
+    b.innerHTML=`<img loading="lazy" src="${src}" alt="">`;
     b.addEventListener('click',()=>openLB(items,i));
     wrap.appendChild(b);
   });
 });
 const lb=document.getElementById('lightbox'), lbImg=document.getElementById('lb-img'), lbCap=document.getElementById('lb-cap');
 function openLB(list,i){ lbList=list; lbIndex=i; renderLB(); lb.classList.add('open'); document.getElementById('lb-close').focus(); }
-function renderLB(){ const [src,cap]=lbList[lbIndex]; lbImg.src=src; lbImg.alt=cap; lbCap.textContent=cap+'  ('+(lbIndex+1)+' of '+lbList.length+')'; }
+function renderLB(){ const src=lbList[lbIndex]; lbImg.src=src;
+  lbImg.alt='Photo '+(lbIndex+1)+' of '+lbList.length;
+  lbCap.textContent=(lbIndex+1)+' of '+lbList.length; }
 function stepLB(d){ lbIndex=(lbIndex+d+lbList.length)%lbList.length; renderLB(); }
 document.getElementById('lb-prev').onclick=()=>stepLB(-1);
 document.getElementById('lb-next').onclick=()=>stepLB(1);
@@ -714,7 +734,13 @@ function route(){
   document.getElementById('page-'+key).classList.add('active');
   document.querySelectorAll('nav [data-nav]').forEach(a=>a.toggleAttribute('aria-current',a.dataset.nav===key));
   const phone=matchMedia('(max-width:700px)').matches;
-  window.scrollTo({top:phone?document.getElementById('main').offsetTop:0});
+  if(!phone){ window.scrollTo({top:0}); return; }
+  // Measure AFTER the browser has laid the nav out. Reading offsetTop synchronously gave a
+  // pre-wrap value, so at large text sizes the scroll stopped short and the nav stayed put.
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    const m=document.getElementById('main');
+    window.scrollTo({top:m.getBoundingClientRect().top+window.scrollY});
+  }));
 }
 window.addEventListener('hashchange',route);
 document.addEventListener('click',e=>{
@@ -723,26 +749,58 @@ document.addEventListener('click',e=>{
 });
 route();
 
-/* ---------- application: email to Meg or print ---------- */
-function appBody(){
-  const skip=new Set(['SSN','Credit card #']);
-  const lines=[];
-  document.querySelectorAll('#appform input, #appform select, #appform textarea').forEach(el=>{
-    if(skip.has(el.name)) return;
-    const v=(el.value||'').trim();
-    if(v) lines.push(el.name+': '+v);
-  });
-  return lines.join('\n');
+/* ---------- application: print only ----------
+   The email path was REMOVED 2026-08-12. Meg asked to receive completed forms rather than
+   emailed field text, and the mailto body was carrying the applicant's name together with a
+   driver's license number in plaintext across a public network. Name + license number is
+   "personal information" under G.L. c. 93H s.1, and 201 CMR 17.04(3) requires encryption in
+   transit. There is now no send path at all: the browser fills the form, the applicant prints
+   it, and nothing leaves the device. Do not reintroduce a mailto that carries the FIELD VALUES.
+   The mailto below opens an EMPTY, pre-addressed draft. The applicant attaches the PDF themselves:
+   the mailto scheme has no attachment parameter (RFC 6068) and no browser can add one, so any
+   design that claims to send the form for you is either lying or has a backend. */
+const nextstep = document.getElementById('nextstep');
+const nexthead = document.getElementById('nextstep-head');
+function revealNextStep(){
+  if(!nextstep.hidden) return;
+  nextstep.hidden = false;
+  nexthead.focus();                       // land the caret and the screen reader on the instruction
 }
-document.getElementById('emailapp').addEventListener('click',()=>{
-  const name=(document.querySelector('#appform [name="Name"]').value||'applicant').trim();
-  const prop=document.querySelector('#appform [name="Property"]').value;
-  const subject='Rental application: '+name+' ('+prop+')';
-  const body='Hello Meg,\n\nPlease find my rental application below.\n\n'+appBody()+
-    '\n\nI understand the terms on the application form and confirm this information is true.\n';
-  location.href='mailto:mlbuckley@leedermgt.com?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+
+// Grow every textarea to fit its content before the page is painted to PDF. Browsers print a
+// textarea clipped to its box, so a long answer to "if yes to either, details" would be silently
+// truncated in the saved file, and the applicant would never know half the answer had been eaten.
+addEventListener('beforeprint',()=>{
+  document.querySelectorAll('#appform textarea').forEach(t=>{
+    t.dataset.h = t.style.height;
+    t.style.height = 'auto';
+    t.style.height = t.scrollHeight + 'px';
+  });
 });
-document.getElementById('printapp').addEventListener('click',()=>{ window.print(); });
+addEventListener('afterprint',()=>{
+  document.querySelectorAll('#appform textarea').forEach(t=>{ t.style.height = t.dataset.h || ''; });
+  revealNextStep();
+});
+
+document.getElementById('printapp').addEventListener('click',()=>{
+  window.print();
+  // afterprint is not reliable everywhere (older Safari never fires it, and a cancelled dialog is
+  // indistinguishable from a save anyway). The panel is instructions, not a claim that anything
+  // succeeded, so showing it either way is honest and never leaves someone stranded.
+  setTimeout(revealNextStep, 1200);
+});
+
+// Pre-address the draft. Subject carries the name and building so Meg can file it; the body says
+// nothing but "attached". No field values ride along in the message itself.
+document.getElementById('mailmeg').addEventListener('click',e=>{
+  const f = document.getElementById('appform');
+  const nm = (f.querySelector('[name="Name"]').value || '').trim();
+  const pr = f.querySelector('[name="Property"]').value;
+  const subject = 'Rental application' + (nm ? ' - ' + nm : '') + (pr ? ' (' + pr + ')' : '');
+  const body = 'Hello Meg,\n\nMy completed rental application is attached as a PDF.\n\nThank you,\n' + (nm || '');
+  e.currentTarget.href = 'mailto:mlbuckley@leedermgt.com?subject=' + encodeURIComponent(subject) +
+                         '&body=' + encodeURIComponent(body);
+});
 
 document.getElementById('sendmsg').addEventListener('click',()=>{
   const f=document.getElementById('contactform');
