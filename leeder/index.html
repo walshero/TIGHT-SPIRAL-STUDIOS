@@ -114,6 +114,15 @@
 
   section{padding:4.5rem 5vw;}
   h2{font-size:clamp(1.9rem,3.4vw,2.6rem); font-weight:800; letter-spacing:-.01em; color:var(--ink);}
+  /* Apply and Contact had NO h1 at all - they opened at h2, so a screen-reader user landing there
+     got a document with no title. They now carry a real h1, which must NOT inherit the hero h1
+     (white, clamped to 3.4rem) or it would be invisible on a light page.
+     Colour is var(--text), NOT var(--ink). --ink is near-black in every palette, so in dark mode
+     it renders 1.04:1 on the dark page background - the contrast sweep caught exactly that on the
+     first build of this rule. h2 gets away with --ink only because a separate override list
+     restates it for dusk/night/system-dark, and that list is the thing people forget to update.
+     A token that flips with the palette needs no list. */
+  h1.pagetitle{font-size:clamp(1.9rem,3.4vw,2.6rem); font-weight:800; letter-spacing:-.01em; color:var(--text);}
   .sub{color:var(--dim); font-size:1.25rem; max-width:64ch; margin-top:.7rem;}
 
   /* HOME CARDS */
