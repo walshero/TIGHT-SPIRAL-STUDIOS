@@ -830,7 +830,11 @@ document.getElementById('printapp').addEventListener('click',()=>{
 document.getElementById('mailmeg').addEventListener('click',e=>{
   const f = document.getElementById('appform');
   const nm = (f.querySelector('[name="Name"]').value || '').trim();
-  const pr = f.querySelector('[name="Property"]').value;
+  // Renamed from "Property" to "Building" in v18 so the screen form matches the printed one.
+  // Read it defensively: an empty value is now possible, because the select gained a neutral
+  // "Please choose" first option - it used to silently default to Perkins Square.
+  const bEl = f.querySelector('[name="Building"]');
+  const pr = bEl ? bEl.value.trim() : '';
   const subject = 'Rental application' + (nm ? ' - ' + nm : '') + (pr ? ' (' + pr + ')' : '');
   const body = 'Hello Meg,\n\nMy completed rental application is attached as a PDF.\n\nThank you,\n' + (nm || '');
   e.currentTarget.href = 'mailto:mlbuckley@leedermgt.com?subject=' + encodeURIComponent(subject) +
