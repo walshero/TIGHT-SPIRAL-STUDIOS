@@ -391,6 +391,42 @@ else
   fi
 fi
 
+# TICK 11 — intent: does this build know what it is for? (added 2026-08-22).
+# TWO CLAUSES, ONE QUESTION, the TICK 8 shape. A says name the spec you are built
+# against; B says name the player you are built for.
+# THE INCIDENT: the founder halted Funnybonies on 2026-08-12 with "we are so far from
+# vision." A search of the repo then found rescued/shelf-2026-07-13/funny-boneys-factory
+# -spec.md, a 28KB panel-reviewed GDD for that exact game, in the trunk the whole time,
+# never opened. Seven builds were made from a screenshot instead. EVERY ONE OF THEM
+# PASSED EVERY TICK ON THIS BELT, because ticks 1 through 10 are all artifact-quality
+# checks and not one of them asks whether the artifact matches its spec or serves its
+# named player. The pipeline has fidelity at Stage 3 and Stage 5, but the pipeline is
+# paper and the belt is automation, so the cheap floors ran on every push while the
+# expensive judgment was skipped by any session that started by writing code.
+# RATCHET ON PRESENCE (122 of 123 surfaces declared nothing the day this armed; flat
+# would paint the repo red and be disarmed inside a week, which is how floor.yml lost
+# its teeth in July), FLAT ON CONTRADICTION (a spec-source the repo cannot reach, an
+# audience that names nobody, or an audience sharing no word with its own spec).
+# WHAT IT CANNOT DO, said out loud: it reads a DECLARATION. A build can name a spec it
+# does not follow and this tick will pass it. It makes skipping the spec VISIBLE. It
+# does not grade fidelity, and nothing here excuses reading the spec first.
+# TWIN RULE PAID: the inert OLD TICK 7 block was pruned in the same push.
+echo; echo "-- tick 11: intent (names its spec, names its player) --"
+if [ -z "$SURFACES" ]; then echo "  (no HTML surfaces — skipped)"
+elif [ ! -f "$BELT_DIR/intent-gate.py" ]; then echo "  (gate not mounted — skipped)"
+elif [ ! -f "$BELT_DIR/intent-baseline.json" ]; then
+  echo "  SKIPPED LOUD — no intent-baseline.json, this gate is UNMEASURED. Not a pass."
+else
+  if INTENT_BASELINE="$BELT_DIR/intent-baseline.json" \
+     python3 "$BELT_DIR/intent-gate.py" --ratchet --repo="$REPO" $SURFACES >/tmp/ig.out 2>&1; then
+    echo "  pass  no new undeclared build, no self-contradicting declaration"
+    grep -c '^   clean' /tmp/ig.out | sed 's/^/        surfaces declaring intent: /'
+  else
+    echo "  HALT  a build does not know what it is for:"
+    grep -E '^   (HALT|NEW)' /tmp/ig.out | sed 's/^   /        /' | head -10; fail=1
+  fi
+fi
+
 echo; echo "----------------------------------------------------------------------"
 if [ "$fail" -ne 0 ]; then
   echo "BELT: HALT — a tick refused. This build does not ship."
