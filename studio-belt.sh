@@ -117,7 +117,7 @@ fi
 fail=0
 echo "======================================================================"
 if [ "$MODE" = file ]; then
-  echo "STUDIO BELT  ·  PREFLIGHT  ·  $(printf '%s' "$CHANGED" | grep -c . ) file(s)  ·  all 8 ticks"
+  echo "STUDIO BELT  ·  PREFLIGHT  ·  $(printf '%s' "$CHANGED" | grep -c . ) file(s)  ·  all 11 ticks"
 else
   echo "STUDIO BELT  ·  canon = hub@${STUDIO_CANON_SHA:-unknown}  ·  target = $(basename "$(pwd)")"
 fi
