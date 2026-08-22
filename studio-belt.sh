@@ -280,28 +280,11 @@ PYSF
   then echo "  pass  no new untouchable targets"; else fail=1; fi
 fi
 
-if false; then   # ---- OLD TICK 7 (source-parsing gate) RETIRED 2026-08-08, held inert ----
-# Added 2026-08-08. STUDIO EYES answered "can this be SEEN" from the first belt; nothing
-# ever answered "can this be TOUCHED." A player holds the thing one-handed, with a thumb,
-# at arm's length. That is the shipping condition for every game the studio makes and it
-# was ungated. RATCHET, not flat: 97 of 133 surfaces fail the 48px house floor today
-# (fingers-baseline.json), and a flat tick would freeze deploy on day one over debt nobody
-# was checking -- the same discovery that made ticks 1/3/4/5 ratchet.
-if [ ! -f "$BELT_DIR/studio-fingers.py" ] || [ ! -f "$BELT_DIR/fingers-baseline.json" ]; then
-  echo "  (gate or baseline not mounted — skipped)"
-else
-  rc=0
-  for f in $SURFACES; do
-    n=$(python3 "$BELT_DIR/studio-fingers.py" "$f" 2>/dev/null | grep -oE '## HALT +\[[0-9]+\]' | grep -oE '[0-9]+' | head -1)
-    n=${n:-0}
-    was=$(python3 -c "import json,sys;print(json.load(open('$BELT_DIR/fingers-baseline.json'))['counts'].get('${f#./}',0))" 2>/dev/null || echo 0)
-    if [ "$n" -gt "$was" ]; then
-      echo "  HALT  ${f#./}: $n untouchable target(s), baseline $was — new debt"; rc=1
-    fi
-  done
-  if [ "$rc" -eq 0 ]; then echo "  pass  no new untouchable targets"; else fail=1; fi
-fi
-fi               # ---- end inert old tick 7 ----
+# TOMBSTONE - OLD TICK 7 (source-parsing touch gate). Retired 2026-08-08 when the
+# rendered-pixel tick above replaced it; held inert as dead code until 2026-08-22,
+# pruned then to pay the twin rule for TICK 11. Its lesson survives in the tick that
+# replaced it: a touch floor must be measured on rendered pixels, never parsed from
+# source. History: git log -S 'OLD TICK 7' studio-belt.sh
 
 # TICK 8 — scope: what a document reaches for (added 2026-08-09).
 # TWO CLAUSES, ONE QUESTION. A says do not reach past what you were asked for; B says do
