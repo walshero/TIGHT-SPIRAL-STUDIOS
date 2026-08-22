@@ -287,7 +287,9 @@ def freeze(paths, root, allpaths, bynames, repo):
             n += len(notes)
     rec = {"repo": repo, "count": n, "surfaces": len(debt), "debt": debt}
     with open(BASELINE, "w") as f:
-        json.dump(rec, f, indent=2, sort_keys=True)
+        # compact on purpose: 122 near-identical entries, and a diff nobody can read
+        # is a diff nobody reviews. One line, sorted, stable across re-freezes.
+        f.write(json.dumps(rec, separators=(",", ":"), sort_keys=True) + "\n")
     print("FROZE " + BASELINE + ": " + str(n) + " undeclared field(s) across " +
           str(len(debt)) + " surface(s).")
     print("This number must fall. It is debt, not a standard.")
