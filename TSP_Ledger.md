@@ -3,6 +3,30 @@
 
 ---
 
+## 2026-08-22 - Funnybonies v8 + TICK 11: the belt learns to ask what a build is for
+
+**THE FINDING (2026-08-12, acted on today).** The founder halted Funnybonies: *"we are so far from vision. Peter wanted a game that would make kids laugh. I've not yet delivered."* A repo search then found `rescued/shelf-2026-07-13/funny-boneys-factory-spec.md`, a 28KB panel-reviewed GDD for that exact game, dated 2026-06-30, in the trunk the entire time. Never opened. Seven builds were made from a screenshot. Full account: `funnybonies/STOCK-TAKE-2026-08-12.md`.
+
+**HARVEST, the one thing it proved.** A simulated audience cannot teach calibration. The construct is the delta between predicted-funny and actually-funny; replace real watchers with a cat holding a hidden answer key and you have built lock-picking. The kid stops being the author, the laugh stops being social. The construct dies the instant the audience is fake.
+
+**HARVEST-BACK, the one thing the system should now catch.** All seven wrong builds PASSED EVERY BELT TICK. Ticks 1-10 are all artifact-quality checks and not one asks whether the artifact matches its spec or serves its named player. The pipeline has fidelity at Stage 3 and Stage 5, but the pipeline is paper and the belt is automation, so the cheap floors ran on every push while the expensive judgment was skipped by any session that started by writing code. Work flows to the automation.
+
+**PROBE SWEEP.** Same failure class elsewhere: `funny-boneys-factory.html` is a mnemonic tool for adults and was labeled "the Peter deliverable" in the 2026-08-08 HITL packet. Peter asked for a game for kids. That mislabel predates this session and is corrected in canon here.
+
+**GRADUATED (one per build, per the rate governor): TICK 11, intent.** `intent-gate.py` + `intent-baseline.json`, wired into `studio-belt.sh`. Two clauses, one question, the TICK 8 shape. A: a build must carry `<meta name="spec-source">` and that spec must resolve in the repo. B: it must carry `<meta name="audience">`, the player must not be a nobody-word (everyone / users / general / tbd), and it must share a content word with its own spec. Calibrated to TICK 8's shape and TICK 8B's definition of reachable, so the repo keeps one definition. **Presence RATCHETS, contradiction is FLAT.** Baseline: **244 undeclared fields across 122 of 123 surfaces.** Exactly one surface declares what it is for and who it is for, and it is the one built today. Debt, not a standard; it may only shrink. Self-test carries 13 canaries including the incident itself; applied retroactively the gate HALTs the v7 lineage, since `PRD-v7.md` never says "kids" once.
+
+**LIMIT, in the gate's own docstring.** It reads a DECLARATION, not fidelity. A build can name a spec it does not follow and this tick will pass it. Two greps do not replace reading the spec. They make skipping it visible, which is the whole ask.
+
+**TWIN RULE PAID.** The inert OLD TICK 7 block (source-parsing touch gate, retired 2026-08-08, dead code inside `if false`) pruned to a tombstone. 1350 bytes of unreachable shell that still read like a live tick.
+
+**BUILT - Funnybonies v8.0 "The Gap"** at `/funnybonies/`, replacing v7 (KILL per the stock-take). Spec link and re-spine written BEFORE the build: `funnybonies/SPEC-LINK-v8.md`. The GDD core loop with step 1 moved off the screen and into the room: the kid builds a chain reaction out of household objects on a real table, chains 3 to 8 beats, predicts each beat's laugh, runs it for real people, and each watcher takes the phone and marks the beats that got THEM. The app computes the delta and names the biggest surprise. **It knows nothing about what is funny.** No editor, no simulated audience, no oracle. The distinction the seven builds got wrong, now in the code: the builder's prediction is self-report by design because it is the claim under test; the actual must come from someone else.
+
+**LOOK - fresh per GDD section 4**, which forbids inheriting a prior build's palette. v8 drops the cream-and-ink register carried unchanged through v1-v7. New register: butcher paper and grease pencil, one hot accent. Your guess is drawn in pencil dashes; the real laugh burns in as hot fill. The entry scene states the thesis wordlessly: a machine on a table, and the person beside it is the one laughing. **The laugh belongs to a person, never to the app.**
+
+**OPEN, founder's call.** v8 exists to answer one question: does calibration play work? One kid, three watchers, one table. If the gap screen produces the moment the design is betting on (the part they were proudest of is not the one that landed, and they want to run it again), the four judgment calls in GDD section 6.6 get made with evidence. If it does not, no editor was going to save it.
+
+---
+
 ## 2026-07-23 — CYL v5: spine objection + game-design panel (logged, binding)
 
 **DECIDED — The mechanic is the spine, not a sentence.** Game-design panel (Romero, Blow, Chen, Meier; Hocking on ludonarrative fit) advised: CYL's spine is the re-rate DELTA — rate blind → the record turns → rate again → SEE THE GAP between your two readings — not a thesis line. Implemented in `choose-your-leader-v5.html` (presentation only; ipsative capture unchanged): descent now shows the two readings on one 7-point scale with the gap between them; the 5→1 rung ladder and "rung X of 5" removed; "skill" language cut; ends on a Saunders mercy coda ("Be easy on the person in the chair — that was you, and you did fine with what you had."); honesty rings + MEASUREMENT_PENDING kept.
