@@ -17,6 +17,14 @@
 #   8  scope / what a doc reaches for scope-gate.py           (A flat + B ratchet, 2026-08-09)
 #   9  number sense / layout         number-sense-gate.py    (flat, zero tolerance, 2026-08-11)
 #  10  contrast, every route+mode    contrast-sweep.py       (flat, scoped to dark-mode pages, 2026-08-11)
+#  11  intent / spec + audience      intent-gate.py          (presence ratchet + contradiction flat, 2026-08-22)
+#
+# Tick 11 added 2026-08-22, and it is the first tick that grades the BELT'S OWN BLIND
+# SPOT rather than a surface. Ticks 1-10 are all artifact-quality checks. Seven wrong
+# Funnybonies builds passed all of them while being the wrong game for the wrong player,
+# because nothing here had ever been asked whether a build matches its spec or serves
+# its audience. A 28KB panel-reviewed GDD for that exact game sat in the trunk unopened
+# the whole time. Two greps do not replace reading the spec; they make skipping it visible.
 #
 # Ticks 3-5 added 2026-08-07. Until then the belt carried two ticks and none of the
 # four things the founder had actually ruled on: the image floor, the voice, the entry
