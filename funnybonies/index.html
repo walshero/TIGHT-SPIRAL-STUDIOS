@@ -1,763 +1,539 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<!--
-  FUNNYBONIES v7 · the place. Samorost-register animated storytelling.
-  Tight Spiral Studios · Built 2026-08-10 · CC0, all art original inline SVG.
-  Built to funnybonies/PRD-v7.md. Founder rated v6 at 3/10: a diagram that moved.
-  v7 is a ROOM that breathes.
-
-  WHAT CHANGED FROM v6
-  - THREE LAYERS: back wall with a window and a light beam, mid contraption,
-    front floorboards and rug. Props exist because someone lives here.
-  - AMBIENT LIFE: fish circles, tail ticks, leaf bobs, dust drifts in the beam,
-    the book's page corner flutters. The scene moves when you do not.
-  - A RIGGED CAT: ears, lids, pupils, tail. His pupils TRACK the yarn with an
-    80ms lag. States: asleep, bored, judging, perked, delighted.
-  - WORDLESS CAUSALITY: each funny thing is staged with anticipation, the pause,
-    overshoot and settle. Captions are garnish now, not the story.
-  - POKE THE WORLD: tap the fish, the cat, the book, the leaf, the yarn.
-  - CONSEQUENCE LINGERS: chaos leaves the room wrecked until the next throw.
-
-  FLOORS: no green, no emoji, single file, offline, in-memory only, dusk/night
-  kernel + OS dark, SVG text >= 20 units, one invitation above the fold,
-  44px+ targets, visible focus, reduced-motion still-states, no em dashes.
--->
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="color-scheme" content="light dark">
-<title>Funnybonies · bat the yarn, amuse the cat</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Funny Boney's Factory: The Gap</title>
+<meta name="description" content="Build a chain reaction out of things on your table. Guess which part gets the laugh. Find out how close you were.">
+<meta name="spec-source" content="rescued/shelf-2026-07-13/funny-boneys-factory-spec.md">
+<meta name="audience" content="kids, grades 3 to 6, with real watchers in the room">
 <style>
+/* ===========================================================
+   Funny Boney's Factory: The Gap  ·  v8.0
+   Built against GDD v2 (funny-boneys-factory-spec.md).
+   Audience: kids, grades 3 to 6, with real people watching.
+   Register: butcher paper and grease pencil, one hot accent.
+   Your guess is drawn in pencil. The real laugh burns in.
+   No storage of any kind. In memory only.
+   =========================================================== */
 :root{
-  --ink:#1b160f; --bg:#f3e8d2; --surface:#fffaf0; --border:#bda77e;
-  --river:#0f5566; --water:#cfe2e8; --gold:#c08a09; --plum:#5a2a52;
-  --rust:#8a3216; --accent:#d84a2e;
-  --wall:#e8d7b8; --wall2:#dcc7a2; --floorc:#d3b98f; --rug:#c08a6a;
-  --serif:Georgia,'Times New Roman',serif;
-  --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
-  --hand:'Segoe Print','Bradley Hand','Marker Felt','Comic Sans MS',cursive;
-  --focus:#c08a09;
+  color-scheme: light dark;
+  --paper:#E6D8BC; --paper2:#DCCBA9; --card:#EFE4CE;
+  --ink:#241F1A; --pencil:#7A6B57; --rule:#B8A585;
+  --hot:#C63D22; --hot-ink:#A32E17; --plum:#5E2F4E; --onhot:#FFFFFF;
+  --pad:18px; --r:14px;
 }
-*{box-sizing:border-box}
-body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.55;font-size:18px}
-.wrap{max-width:480px;margin:0 auto;padding:1rem 1rem 4rem}
-h1{font-family:var(--serif);color:var(--plum);font-size:1.7rem;margin:.4rem 0 .1rem;line-height:1.1}
-.tag{margin:.1rem 0 .7rem;font-size:1rem}
-.card{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:1rem;margin-top:.4rem}
-.btn{background:var(--gold);color:#1b160f;border:2px solid var(--gold);border-radius:12px;padding:.7rem 1.1rem;font:800 1.05rem/1 var(--sans);cursor:pointer;min-height:54px;width:100%}
-.set{background:var(--surface);color:var(--ink);border:2px solid var(--border);border-radius:10px;padding:.55rem .8rem;font:800 .95rem/1.2 var(--sans);cursor:pointer;min-height:48px;flex:1}
-.setrow{display:flex;gap:.5rem;margin:.5rem 0 .2rem}
-button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
-.meterrow{display:flex;align-items:center;gap:.6rem;margin-top:.7rem}
-.meterlbl{font:800 .8rem/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--river);white-space:nowrap}
-.meter{flex:1;height:18px;background:var(--bg);border:2px solid var(--border);border-radius:10px;overflow:hidden}
-.meter>div{height:100%;width:0%;background:var(--gold);transition:width .8s cubic-bezier(.2,.8,.3,1)}
-.pips{display:flex;gap:.35rem}
-.pip{width:15px;height:15px;border-radius:50%;border:2px solid var(--border);background:var(--bg);transition:background .4s,border-color .4s}
-.pip.won{background:var(--accent);border-color:var(--accent)}
-.stage{margin-top:.7rem;border:2px solid var(--border);border-radius:14px;overflow:hidden;background:var(--wall)}
-.machine{width:100%;height:auto;display:block}
-.runline{font-family:var(--hand);font-size:1.05rem;min-height:2.6em;margin:0;padding:.5rem .7rem .55rem;background:var(--surface);border-top:2px solid var(--border)}
-.bookbtn{margin-top:.6rem;background:transparent;color:var(--ink);border:2px solid var(--border);border-radius:10px;padding:.55rem .9rem;font:800 .9rem/1 var(--sans);cursor:pointer;min-height:46px;width:100%}
-.book{display:none;margin-top:.6rem;border:2px solid var(--plum);border-radius:12px;background:var(--surface);padding:1rem;font-family:var(--hand);font-size:1.02rem}
-.book.on{display:block}
-.book h2{font-family:var(--serif);font-size:1.15rem;color:var(--plum);margin:.1rem 0 .5rem}
-.book p{margin:.4rem 0}
-.foot{margin-top:1.6rem;font-size:.8rem;border-top:2px solid var(--border);padding-top:.8rem}
-.hot{cursor:pointer}
-
-body.dusk{ --bg:#ece2cd; --surface:#f7efe0; --border:#b09a72; --wall:#ddcaa8; --wall2:#cfb894; --floorc:#c4a87e; --rug:#b57f61 }
-body.night{
-  --ink:#f3e6c6; --bg:#1a1712; --surface:#262019; --border:#5d543d;
-  --river:#84cad9; --water:#1b272c; --gold:#f0c357; --plum:#d39bc8;
-  --rust:#eaa183; --accent:#ff8a66; --focus:#f0c357;
-  --wall:#241f18; --wall2:#2c261d; --floorc:#1d1a13; --rug:#3d2c22;
-}
+/* the OS-applied palette. dark ground, chalk line, the same hot. */
 @media (prefers-color-scheme: dark){
   :root{
-    --ink:#f3e6c6; --bg:#1a1712; --surface:#262019; --border:#5d543d;
-    --river:#84cad9; --water:#1b272c; --gold:#f0c357; --plum:#d39bc8;
-    --rust:#eaa183; --accent:#ff8a66; --focus:#f0c357;
-    --wall:#241f18; --wall2:#2c261d; --floorc:#1d1a13; --rug:#3d2c22;
+    --paper:#131110; --paper2:#1D1A17; --card:#1A1714;
+    --ink:#EFE6D4; --pencil:#9C8E79; --rule:#3A342C;
+    --hot:#F06A45; --hot-ink:#F58A6A; --plum:#C79ABA; --onhot:#1B0F09;
   }
 }
+body.dusk{
+  --paper:#2B2620; --paper2:#37302A; --card:#332C26;
+  --ink:#EADFC9; --pencil:#A2937D; --rule:#4A423A;
+  --hot:#E4603C; --hot-ink:#F3835F; --plum:#C094B2; --onhot:#1B0F09;
+}
+body.night{
+  --paper:#131110; --paper2:#1D1A17; --card:#1A1714;
+  --ink:#EFE6D4; --pencil:#9C8E79; --rule:#3A342C;
+  --hot:#F06A45; --hot-ink:#F58A6A; --plum:#C79ABA; --onhot:#1B0F09;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--paper); color:var(--ink);
+  font:400 20px/1.45 "Avenir Next","Segoe UI",Roboto,system-ui,-apple-system,sans-serif;
+  -webkit-text-size-adjust:100%;
+  padding:0 0 40px;
+}
+/* paper tooth, drawn not photographed */
+body::before{
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
+  background-image:
+    repeating-linear-gradient(94deg, transparent 0 6px, rgba(122,107,87,.055) 6px 7px),
+    repeating-linear-gradient(3deg, transparent 0 9px, rgba(122,107,87,.04) 9px 10px);
+}
+.wrap{position:relative; z-index:1; max-width:560px; margin:0 auto; padding:0 var(--pad)}
 
-/* ---------- AMBIENT LIFE. The room breathes. ---------- */
-#fishOrbit{transform-origin:302px 372px;animation:orbit 7s linear infinite}
-@keyframes orbit{to{transform:rotate(360deg)}}
-#tailRest{transform-origin:80px 556px;animation:tick 2.6s ease-in-out infinite}
-#cat.asleep #tailRest{animation:none}
-@keyframes tick{0%,62%{transform:rotate(0)}72%{transform:rotate(-9deg)}82%{transform:rotate(4deg)}100%{transform:rotate(0)}}
-#leafG{transform-origin:302px 60px;animation:bob 4.3s ease-in-out infinite}
-@keyframes bob{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(6deg)}}
-.mote{animation:drift 13s linear infinite}
-.mote:nth-of-type(2){animation-duration:17s;animation-delay:-4s}
-.mote:nth-of-type(3){animation-duration:11s;animation-delay:-8s}
-@keyframes drift{0%{transform:translate(0,0);opacity:0}12%{opacity:.75}88%{opacity:.5}100%{transform:translate(-72px,320px);opacity:0}}
-#pageCorner{transform-origin:214px 548px;animation:flutter 9s ease-in-out infinite}
-@keyframes flutter{0%,86%,100%{transform:rotate(0)}90%{transform:rotate(-13deg)}94%{transform:rotate(5deg)}}
-#cat.asleep #catBody{transform-origin:108px 560px;animation:breathe 3.4s ease-in-out infinite}
-@keyframes breathe{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.035)}}
-#yarnIdle{transform-origin:96px 136px}
-#yarnIdle.shiver{animation:shiver .55s ease-in-out}
-@keyframes shiver{0%,100%{transform:rotate(0)}25%{transform:rotate(-7deg)}60%{transform:rotate(5deg)}}
+h1{font-size:34px; line-height:1.1; margin:14px 0 6px; letter-spacing:-.5px}
+h2{font-size:26px; line-height:1.2; margin:0 0 4px}
+p{margin:0 0 14px}
+.lede{font-size:21px; margin:0 0 16px}
+.tiny{font-size:18px}
 
-/* ---------- THE CAT RIG ---------- */
-#lidL,#lidR{transition:transform .3s cubic-bezier(.3,.7,.4,1)}
-#eyesOpen,#eyesShut{transition:opacity .3s}
-#cat.asleep #eyesOpen{opacity:0} #cat.asleep #eyesShut{opacity:1}
-#cat.bored  #lidL,#cat.bored  #lidR{transform:translateY(7px)}
-#cat.judge  #lidL,#cat.judge  #lidR{transform:translateY(9.5px)}
-#cat.perk   #lidL,#cat.perk   #lidR{transform:translateY(0)}
-#cat.glee   #lidL,#cat.glee   #lidR{transform:translateY(-1.5px)}
-#cat.blink  #lidL,#cat.blink  #lidR{transform:translateY(14px)}
-#earL{transform-origin:96px 482px} #earR{transform-origin:122px 482px}
-#earL,#earR{transition:transform .28s cubic-bezier(.2,1.4,.5,1)}
-#cat.asleep #earL{transform:rotate(-13deg)} #cat.asleep #earR{transform:rotate(11deg)}
-#cat.judge #earR{transform:rotate(30deg)}
-#cat.perk #earL,#cat.glee #earL{transform:rotate(-4deg)}
-#cat.perk #earR,#cat.glee #earR{transform:rotate(4deg)}
-#cat.earflick #earR{transform:rotate(24deg)}
-#pupLg,#pupRg{transition:transform .22s ease}
-#sparks{opacity:0;transition:opacity .18s}
-#cat.perk #sparks,#cat.glee #sparks{opacity:1}
-#cat{transition:transform .4s cubic-bezier(.2,1.3,.4,1)}
-#cat.glee{transform:translateY(-5px)}
-#catTailCurl{opacity:0;transition:opacity .3s}
-#cat.perk #catTailCurl,#cat.glee #catTailCurl{opacity:1}
-#cat.perk #tailRest,#cat.glee #tailRest{opacity:0}
-#tailRest{transition:opacity .3s}
-#cat.perk #tailRest,#cat.glee #tailRest{animation:none}
+/* ---- controls ---- */
+button{font:inherit; color:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent}
+.primary{
+  display:block; width:100%; min-height:60px; padding:16px 20px;
+  background:var(--hot); color:var(--onhot); border:none; border-radius:var(--r);
+  font-size:22px; font-weight:700; letter-spacing:.2px;
+  box-shadow:0 3px 0 rgba(36,31,26,.35);
+}
+.primary:active{transform:translateY(2px); box-shadow:0 1px 0 rgba(36,31,26,.35)}
+.primary[disabled]{background:var(--rule); color:var(--ink); opacity:.85; box-shadow:none}
+.ghost{
+  min-height:52px; padding:12px 18px; background:transparent; color:var(--ink);
+  border:2.5px solid var(--ink); border-radius:var(--r); font-size:20px; font-weight:600;
+}
+.navbar{display:flex; gap:10px; padding:12px 0 8px}
+.navbar button{flex:1}
+button:focus-visible, [tabindex]:focus-visible{outline:4px solid var(--plum); outline-offset:3px}
 
-/* travel-arc hints when you move something bit by bit */
-.arc{opacity:0;transition:opacity .35s}
-.arc.flash{opacity:.55}
+/* ---- screens ---- */
+.screen{display:none}
+.screen.on{display:block}
+
+/* ---- part tray ---- */
+.tray{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:10px 0 18px}
+.part{
+  min-height:104px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:2px; background:var(--card); border:2.5px solid var(--ink); border-radius:var(--r);
+  padding:8px 4px;
+}
+.part:active{background:var(--paper2)}
+.part span{font-size:18px; font-weight:600; text-align:center; line-height:1.15}
+.part svg{width:52px; height:52px; display:block}
+
+/* ---- the chain ---- */
+.chain{margin:6px 0 18px; padding:0; list-style:none}
+.beat{
+  display:flex; align-items:center; gap:14px; width:100%; text-align:left;
+  background:var(--card); border:2.5px solid var(--ink); border-radius:var(--r);
+  padding:12px 14px; min-height:76px; margin:0;
+}
+.beat svg.glyph{width:48px; height:48px; flex:0 0 48px}
+.beat .nm{flex:1; font-size:20px; font-weight:600}
+.beat .rm{
+  flex:0 0 48px; height:48px; border:2.5px solid var(--ink); border-radius:10px;
+  background:transparent; font-size:24px; font-weight:700; line-height:1;
+}
+.link{display:flex; justify-content:center; padding:2px 0}
+.link svg{width:26px; height:26px}
+.empty{
+  border:3px dashed var(--rule); border-radius:var(--r); padding:26px 18px;
+  text-align:center; font-size:20px; color:var(--ink); margin:6px 0 18px;
+}
+
+/* ---- laugh dial ---- */
+.dialrow{
+  display:flex; align-items:center; gap:12px; width:100%; text-align:left;
+  background:var(--card); border:2.5px solid var(--ink); border-radius:var(--r);
+  padding:10px 12px; min-height:84px; margin:0 0 10px;
+}
+.dialrow.picked{border-color:var(--hot); box-shadow:inset 0 0 0 2px var(--hot)}
+.dialrow svg.glyph{width:46px; height:46px; flex:0 0 46px}
+.dialrow .col{flex:1; min-width:0; display:block}
+.dialrow .nm{font-size:19px; font-weight:600; display:block}
+.dialrow .val{font-size:18px; display:block}
+.dialrow svg.dial{width:56px; height:46px; flex:0 0 56px}
+
+/* ---- gap chart ---- */
+.gaprow{margin:0 0 16px}
+.gaphead{display:flex; align-items:center; gap:12px; margin-bottom:5px}
+.gaphead svg{width:40px; height:40px; flex:0 0 40px}
+.gaphead .nm{font-size:19px; font-weight:600}
+.track{display:block; width:100%; height:23px; margin:0 0 6px}
+.pbar{display:block; height:23px; min-width:12px; border:3px dashed var(--pencil); border-radius:6px}
+.abar{display:block; height:23px; min-width:12px; background:var(--hot); border-radius:6px}
+.rowsay{font-size:18px; margin:3px 0 0}
+.score{
+  border:3px solid var(--ink); border-radius:var(--r); padding:16px 18px;
+  background:var(--card); margin:4px 0 18px;
+}
+.score .big{font-size:46px; font-weight:800; line-height:1; color:var(--hot-ink)}
+.score .cap{font-size:19px; margin-top:6px}
+.key{display:flex; gap:18px; flex-wrap:wrap; font-size:18px; margin:0 0 16px}
+.key i{display:inline-block; width:26px; height:14px; margin-right:7px; vertical-align:-2px}
+.key .kp{border:2.5px dashed var(--pencil)}
+.key .ka{background:var(--hot)}
+
+.note{border-left:5px solid var(--plum); padding:6px 0 6px 14px; margin:0 0 18px; font-size:19px}
+.foot{border-top:2px solid var(--rule); margin-top:26px; padding-top:14px; font-size:18px}
+.count{font-size:19px; margin:0 0 14px}
 
 @media (prefers-reduced-motion: reduce){
-  #fishOrbit,#tailRest,#leafG,.mote,#pageCorner,#cat.asleep #catBody,#yarnIdle.shiver{animation:none}
-  .meter>div,#lidL,#lidR,#earL,#earR,#pupLg,#pupRg,#cat{transition:none}
+  *{animation:none !important; transition:none !important}
+  .primary:active{transform:none}
 }
 </style>
 </head>
 <body>
+
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+<defs>
+  <g id="g-dom"><path d="M14 44 L20 16 L28 18 L23 46 Z"/><path d="M28 45 L33 17 L41 19 L37 47 Z"/><path d="M42 46 L47 18 L55 20 L51 48 Z"/></g>
+  <g id="g-ramp"><path d="M8 50 L56 18"/><path d="M8 50 L56 50"/><path d="M44 50 L44 26"/></g>
+  <g id="g-marb"><circle cx="32" cy="32" r="17"/><path d="M22 24 A14 14 0 0 1 32 19"/></g>
+  <g id="g-tube"><path d="M14 12 C14 34 26 42 50 42"/><path d="M30 12 C30 22 36 26 50 26"/><path d="M50 22 L50 46"/></g>
+  <g id="g-lev"><path d="M10 30 L54 38"/><path d="M32 34 L24 52 L40 52 Z"/><circle cx="13" cy="24" r="6"/></g>
+  <g id="g-cup"><path d="M17 18 L23 50 L41 50 L47 18 Z"/><path d="M17 18 L47 18"/><path d="M47 24 C57 24 57 38 47 38"/></g>
+  <g id="g-book"><path d="M12 44 L52 44 L52 52 L12 52 Z"/><path d="M15 34 L49 34 L49 43 L15 43 Z"/><path d="M18 24 L46 24 L46 33 L18 33 Z"/></g>
+  <g id="g-ball"><path d="M32 10 C46 10 50 24 44 34 C40 41 34 42 32 42 C30 42 24 41 20 34 C14 24 18 10 32 10 Z"/><path d="M32 42 L32 48"/><path d="M28 54 C34 50 34 58 40 54"/></g>
+  <g id="g-fan"><rect x="12" y="12" width="40" height="40" rx="6"/><circle cx="32" cy="32" r="4"/><path d="M32 28 L32 15"/><path d="M35 34 L47 41"/><path d="M29 34 L17 41"/></g>
+  <g id="g-str"><path d="M8 20 C18 8 24 34 34 22 C42 12 48 40 58 30"/><circle cx="8" cy="20" r="4"/></g>
+  <g id="g-bell"><path d="M20 42 C20 24 24 16 32 16 C40 16 44 24 44 42 Z"/><path d="M15 42 L49 42"/><circle cx="32" cy="49" r="4"/><path d="M32 16 L32 11"/></g>
+  <g id="g-box"><path d="M14 24 L32 16 L50 24 L32 32 Z"/><path d="M14 24 L14 44 L32 52 L32 32 Z"/><path d="M50 24 L50 44 L32 52"/></g>
+  <g id="g-arrow"><path d="M32 8 L32 50"/><path d="M20 38 L32 52 L44 38"/></g>
+</defs>
+</svg>
+
 <div class="wrap">
-  <h1>Funnybonies</h1>
-  <p class="tag">Bat the yarn. Move things bit by bit. Amuse the cat, if you can.</p>
 
-  <div class="card">
-    <button class="btn" id="batBtn" type="button">Bat the yarn</button>
-    <div class="meterrow">
-      <span class="meterlbl">Cat interest</span>
-      <div class="meter" aria-label="Cat interest meter"><div id="meterFill"></div></div>
-      <div class="pips" aria-label="Funny things found">
-        <span class="pip" id="pip1"></span><span class="pip" id="pip2"></span><span class="pip" id="pip3"></span>
-      </div>
-    </div>
+<!-- ============ SCREEN 0 : the table ============ -->
+<section class="screen on" id="s0" aria-labelledby="t0">
+  <h1 id="t0">Funny Boney's Factory</h1>
+  <p class="lede">Build a chain reaction out of stuff on your table. Guess which part gets the laugh. Then find out.</p>
+
+  <svg viewBox="0 0 360 440" width="100%" style="display:block;margin:0 0 16px" role="img"
+       aria-label="A drawing of a room. A lamp hangs over a table. On the table a machine made of dominoes, a ramp, a lever, a marble and a cup. Beside the table a person is laughing at it.">
+    <!-- back wall: lamp, light, a crooked picture -->
+    <g fill="none" stroke="var(--pencil)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M104 0 L104 54"/>
+      <path d="M78 102 L104 54 L130 102 Z"/>
+      <path d="M86 112 L80 124"/><path d="M104 116 L104 130"/><path d="M122 112 L128 124"/>
+      <rect x="228" y="100" width="58" height="46" rx="3" transform="rotate(-4 257 123)"/>
+      <path d="M240 134 C250 116 262 142 276 118" transform="rotate(-4 257 123)"/>
+    </g>
+    <!-- the table -->
+    <g fill="none" stroke="var(--ink)" stroke-width="3.4" stroke-linecap="round">
+      <path d="M8 336 L352 336"/><path d="M44 336 L28 412"/><path d="M312 336 L328 412"/>
+    </g>
+    <!-- the machine, standing on the table -->
+    <g fill="none" stroke="var(--ink)" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round">
+      <g transform="translate(2,283) scale(1.1)"><use href="#g-dom"/></g>
+      <g transform="translate(58,268) scale(1.3)"><use href="#g-lev"/></g>
+      <g transform="translate(126,277) scale(1.18)"><use href="#g-ramp"/></g>
+      <g transform="translate(186,287) scale(.98)"><use href="#g-marb"/></g>
+      <g transform="translate(228,277) scale(1.18)"><use href="#g-cup"/></g>
+    </g>
+    <!-- the watcher. the laugh belongs to a person, not to the machine. -->
+    <g fill="none" stroke="var(--ink)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="318" cy="216" r="23"/>
+      <path d="M318 239 L318 336"/>
+      <path d="M318 262 L296 286"/>
+      <path d="M318 262 L344 280"/>
+      <path d="M305 208 C309 201 315 201 319 208"/>
+      <path d="M323 208 C327 201 333 201 337 208"/>
+    </g>
+    <g fill="none" stroke="var(--hot)" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round">
+      <ellipse cx="320" cy="227" rx="8" ry="10"/>
+      <path d="M296 192 L284 180"/>
+      <path d="M289 206 L275 201"/>
+      <path d="M307 178 L301 163"/>
+    </g>
+  </svg>
+
+  <button class="primary" id="startBtn">Start a machine</button>
+
+  <div class="foot tiny">
+    <p>Nothing you make here is saved anywhere. Close the tab and it is gone. No accounts, no server, nothing sent.</p>
+    <p>Built against the Funny Boney's Factory design document, v2. Tight Spiral Studios.</p>
   </div>
+</section>
 
-  <div class="stage">
-    <svg class="machine" id="m" viewBox="0 0 360 640" role="img"
-         aria-label="A room. A window with a bobbing leaf spills light across the floor. On a shelf sits a ball of yarn and a paw ready to bat it down an adjustable ramp toward a boom arm and a stool holding a fishbowl. On the rug below, a cat named Sisyphus watches, unimpressed, and his eyes follow the yarn wherever it goes.">
-      <title>Funnybonies · the room · CC0, original, Tight Spiral Studios</title>
-      <defs>
-        <clipPath id="eyeClip">
-          <circle cx="100" cy="497" r="6.4"/><circle cx="118" cy="497" r="6.4"/>
-        </clipPath>
-        <clipPath id="bowlClip"><circle cx="302" cy="372" r="25"/></clipPath>
-        <clipPath id="beamClip"><polygon points="240,126 328,126 214,470 62,470"/></clipPath>
-        <linearGradient id="beamGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="var(--gold)" stop-opacity=".30"/>
-          <stop offset="1" stop-color="var(--gold)" stop-opacity=".04"/>
-        </linearGradient>
-      </defs>
-
-      <!-- ============ BACK LAYER: the wall ============ -->
-      <rect x="0" y="0" width="360" height="472" fill="var(--wall)"/>
-      <g stroke="var(--wall2)" stroke-width="3">
-        <line x1="150" y1="0" x2="150" y2="472"/><line x1="228" y1="0" x2="228" y2="472"/>
-        <line x1="306" y1="0" x2="306" y2="472"/>
-      </g>
-      <!-- crooked little picture -->
-      <g transform="rotate(-4 178 74)">
-        <rect x="150" y="44" width="56" height="60" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>
-        <path d="M157 94 l13 -21 l11 13 l9 -15 l15 23 z" fill="var(--wall2)" stroke="var(--ink)" stroke-width="2"/>
-      </g>
-      <!-- window, upper right, so the light falls across the cat -->
-      <rect x="236" y="28" width="96" height="98" fill="var(--water)" stroke="var(--ink)" stroke-width="4"/>
-      <g id="leafG">
-        <path d="M330 42 q-18 10 -30 20" fill="none" stroke="var(--rust)" stroke-width="3" stroke-linecap="round"/>
-        <path d="M300 62 q-16 -8 -22 6 q16 12 22 -6 z" fill="var(--rust)" stroke="var(--ink)" stroke-width="2"/>
-      </g>
-      <line x1="284" y1="28" x2="284" y2="126" stroke="var(--ink)" stroke-width="4"/>
-      <line x1="236" y1="77" x2="332" y2="77" stroke="var(--ink)" stroke-width="4"/>
-      <rect x="228" y="126" width="112" height="8" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>
-      <!-- the beam of light, and dust living inside it -->
-      <polygon points="240,126 328,126 214,470 62,470" fill="url(#beamGrad)"/>
-      <g clip-path="url(#beamClip)">
-        <circle class="mote" cx="268" cy="146" r="2.6" fill="var(--gold)"/>
-        <circle class="mote" cx="296" cy="178" r="2" fill="var(--gold)"/>
-        <circle class="mote" cx="258" cy="236" r="2.4" fill="var(--gold)"/>
-      </g>
-
-      <!-- ============ FLOOR ============ -->
-      <rect x="0" y="470" width="360" height="170" fill="var(--floorc)"/>
-      <line x1="0" y1="470" x2="360" y2="470" stroke="var(--ink)" stroke-width="4"/>
-      <g stroke="var(--ink)" stroke-width="1.5" opacity=".35">
-        <line x1="0" y1="510" x2="360" y2="510"/><line x1="0" y1="556" x2="360" y2="556"/>
-        <line x1="0" y1="604" x2="360" y2="604"/>
-        <line x1="86" y1="470" x2="70" y2="510"/><line x1="250" y1="510" x2="238" y2="556"/>
-        <line x1="150" y1="556" x2="140" y2="604"/>
-      </g>
-      <ellipse cx="112" cy="572" rx="98" ry="26" fill="var(--rug)" stroke="var(--ink)" stroke-width="3"/>
-      <ellipse cx="112" cy="572" rx="84" ry="18" fill="none" stroke="var(--ink)" stroke-width="1.5" opacity=".5"/>
-
-      <!-- ============ MID LAYER: the contraption ============ -->
-      <rect x="12" y="150" width="116" height="9" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>
-      <path d="M22 159 l0 16 l18 -16 z" fill="var(--ink)" opacity=".6"/>
-      <!-- the paw, reaching in from off frame -->
-      <g id="paw" style="transform-origin:28px 120px">
-        <path d="M0 130 q28 -16 52 -8" fill="none" stroke="var(--ink)" stroke-width="8" stroke-linecap="round"/>
-        <ellipse cx="66" cy="122" rx="15" ry="12" fill="var(--surface)" stroke="var(--ink)" stroke-width="3.5"/>
-        <path d="M57 117 q4 -6 8 -1 M68 116 q5 -6 9 3" fill="none" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round"/>
-      </g>
-      <!-- ramp, with a hinge that looks like a hinge -->
-      <path id="rampArc" class="arc" d="M232 268 a180 180 0 0 1 -34 60" fill="none" stroke="var(--ink)" stroke-width="2" stroke-dasharray="4 6"/>
-      <g id="rampG" style="transform-origin:110px 158px">
-        <line x1="110" y1="158" x2="258" y2="298" stroke="var(--ink)" stroke-width="6" stroke-linecap="round"/>
-        <line x1="150" y1="176" x2="146" y2="186" stroke="var(--ink)" stroke-width="2" opacity=".5"/>
-        <line x1="196" y1="220" x2="192" y2="230" stroke="var(--ink)" stroke-width="2" opacity=".5"/>
-      </g>
-      <circle cx="110" cy="158" r="6" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>
-      <circle cx="110" cy="158" r="1.8" fill="var(--ink)"/>
-      <!-- boom on its post, with counterweight -->
-      <line x1="258" y1="470" x2="258" y2="316" stroke="var(--ink)" stroke-width="6" stroke-linecap="round"/>
-      <path id="boomArc" class="arc" d="M330 290 a76 76 0 0 1 0 52" fill="none" stroke="var(--ink)" stroke-width="2" stroke-dasharray="4 6"/>
-      <g id="boomG" style="transform-origin:258px 316px">
-        <line x1="234" y1="316" x2="336" y2="316" stroke="var(--rust)" stroke-width="7" stroke-linecap="round"/>
-        <circle id="cWeight" cx="230" cy="316" r="9" fill="var(--rust)" stroke="var(--ink)" stroke-width="3"/>
-        <rect x="330" y="308" width="10" height="16" rx="2" fill="var(--rust)" stroke="var(--ink)" stroke-width="2.5"/>
-      </g>
-      <circle cx="258" cy="316" r="7" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>
-      <!-- stool -->
-      <g id="stoolG" style="transform-origin:302px 470px">
-        <line x1="278" y1="400" x2="270" y2="470" stroke="var(--ink)" stroke-width="6" stroke-linecap="round"/>
-        <line x1="326" y1="400" x2="334" y2="470" stroke="var(--ink)" stroke-width="6" stroke-linecap="round"/>
-        <line x1="274" y1="436" x2="330" y2="436" stroke="var(--ink)" stroke-width="4"/>
-        <rect x="266" y="390" width="72" height="10" rx="3" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>
-      </g>
-      <!-- the fishbowl. The fish is fine. The fish is always fine. -->
-      <g id="bowlG" style="transform-origin:302px 390px">
-        <path d="M279 350 q-9 26 23 40 q32 -14 23 -40 z" fill="var(--water)" stroke="var(--ink)" stroke-width="3.5"/>
-        <g clip-path="url(#bowlClip)">
-          <g id="fishOrbit">
-            <g id="fishG" transform="translate(0,-13)">
-              <path d="M296 372 q7 -7 13 0 q-6 7 -13 0 z" fill="var(--gold)" stroke="var(--ink)" stroke-width="1.6"/>
-              <path d="M296 372 l-6 -4 l0 8 z" fill="var(--gold)" stroke="var(--ink)" stroke-width="1.4"/>
-              <circle cx="305" cy="371" r="1.5" fill="var(--ink)"/>
-            </g>
-          </g>
-        </g>
-        <path d="M281 356 q10 -5 20 0 q10 5 20 0" fill="none" stroke="var(--river)" stroke-width="2.5" opacity=".8"/>
-        <circle id="bubble" cx="308" cy="352" r="3" fill="none" stroke="var(--river)" stroke-width="2" opacity="0"/>
-      </g>
-
-      <!-- ============ FRONT LAYER ============ -->
-      <g id="bookG">
-        <rect x="188" y="546" width="48" height="14" rx="2" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>
-        <path id="pageCorner" d="M214 548 l20 -2 l0 6 z" fill="var(--surface)" stroke="var(--ink)" stroke-width="2"/>
-        <line x1="188" y1="554" x2="236" y2="554" stroke="var(--ink)" stroke-width="1.5" opacity=".6"/>
-      </g>
-
-      <!-- SISYPHUS -->
-      <g id="catScale" transform="translate(108,560) scale(1.2) translate(-108,-560)">
-      <g id="cat" class="asleep">
-        <path id="tailRest" d="M80 556 q-24 -2 -28 -18 q-4 -16 12 -20" fill="none" stroke="var(--ink)" stroke-width="6" stroke-linecap="round"/>
-        <path id="catTailCurl" d="M80 556 q-26 -8 -22 -34 q3 -18 20 -16" fill="none" stroke="var(--ink)" stroke-width="6" stroke-linecap="round"/>
-        <path id="catBody" d="M80 560 q0 -50 29 -50 q29 0 29 50 z" fill="var(--surface)" stroke="var(--ink)" stroke-width="4" stroke-linejoin="round"/>
-        <ellipse cx="114" cy="556" rx="9" ry="5" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>
-        <ellipse cx="130" cy="556" rx="9" ry="5" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>
-        <g id="earL"><path d="M94 490 l-4 -22 l19 11 z" fill="var(--surface)" stroke="var(--ink)" stroke-width="3.5" stroke-linejoin="round"/></g>
-        <g id="earR"><path d="M124 490 l6 -22 l-18 12 z" fill="var(--surface)" stroke="var(--ink)" stroke-width="3.5" stroke-linejoin="round"/></g>
-        <circle cx="109" cy="500" r="23" fill="var(--surface)" stroke="var(--ink)" stroke-width="4"/>
-        <g id="eyesOpen">
-          <circle cx="100" cy="497" r="6.4" fill="var(--bg)" stroke="var(--ink)" stroke-width="2"/>
-          <circle cx="118" cy="497" r="6.4" fill="var(--bg)" stroke="var(--ink)" stroke-width="2"/>
-          <g id="pupLg" style="transform-origin:100px 497px"><circle id="pupL" cx="100" cy="497" r="3.1" fill="var(--ink)"/></g>
-          <g id="pupRg" style="transform-origin:118px 497px"><circle id="pupR" cx="118" cy="497" r="3.1" fill="var(--ink)"/></g>
-          <g clip-path="url(#eyeClip)">
-            <rect id="lidL" x="92" y="478" width="17" height="13" fill="var(--ink)"/>
-            <rect id="lidR" x="110" y="478" width="17" height="13" fill="var(--ink)"/>
-          </g>
-        </g>
-        <g id="eyesShut" opacity="0" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round">
-          <path d="M93 495 q7 7 14 0"/><path d="M111 495 q7 7 14 0"/>
-        </g>
-        <path d="M105 508 l8 0 l-4 5 z" fill="var(--ink)"/>
-        <path d="M109 513 q-5 5 -9 1 M109 513 q5 5 9 1" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/>
-        <g stroke="var(--ink)" stroke-width="1.8" stroke-linecap="round" opacity=".75">
-          <line x1="102" y1="510" x2="80" y2="506"/><line x1="102" y1="513" x2="80" y2="516"/>
-          <line x1="116" y1="510" x2="138" y2="506"/><line x1="116" y1="513" x2="138" y2="516"/>
-        </g>
-        <g id="sparks" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round">
-          <line x1="140" y1="474" x2="150" y2="462"/><line x1="150" y1="486" x2="163" y2="480"/>
-          <line x1="78" y1="474" x2="68" y2="462"/>
-        </g>
-      </g>
-      </g>
-
-      <!-- the string it leaves behind when it walks away -->
-      <path id="stringTrail" d="M96 150 q-10 180 -30 300 q-10 60 40 106" fill="none" stroke="var(--plum)" stroke-width="3" stroke-dasharray="7 7" opacity="0"/>
-
-      <!-- THE YARN -->
-      <g id="yarnX"><g id="yarnY"><g id="yarnSquash" style="transform-origin:96px 136px"><g id="yarnSpin" style="transform-origin:96px 136px"><g id="yarnIdle">
-        <circle cx="96" cy="136" r="14" fill="var(--plum)" stroke="var(--ink)" stroke-width="3"/>
-        <path d="M84 130 q12 14 24 0 M84 142 q12 -14 24 0" fill="none" stroke="var(--bg)" stroke-width="2.2" opacity=".85"/>
-        <rect class="hot" id="tapYarn" x="70" y="110" width="52" height="52" fill="transparent" role="button" tabindex="0" aria-label="Tap the yarn"/>
-      </g></g></g></g></g>
-
-      <!-- impact dust for the chaos -->
-      <g id="chaosDust" opacity="0">
-        <circle cx="268" cy="452" r="9" fill="none" stroke="var(--ink)" stroke-width="2.5" opacity=".6"/>
-        <circle cx="300" cy="462" r="13" fill="none" stroke="var(--ink)" stroke-width="2.5" opacity=".45"/>
-        <circle cx="238" cy="440" r="7" fill="none" stroke="var(--ink)" stroke-width="2.5" opacity=".5"/>
-      </g>
-
-      <!-- tap targets. Curiosity is always rewarded. -->
-      <rect class="hot" id="tapFish" x="272" y="342" width="60" height="56" fill="transparent" role="button" tabindex="0" aria-label="Tap the fish"/>
-      <rect class="hot" id="tapCat" x="66" y="466" width="84" height="106" fill="transparent" role="button" tabindex="0" aria-label="Tap the cat"/>
-      <rect class="hot" id="tapBook" x="184" y="524" width="58" height="52" fill="transparent" role="button" tabindex="0" aria-label="Open the humor book"/>
-      <rect class="hot" id="tapLeaf" x="232" y="24" width="104" height="106" fill="transparent" role="button" tabindex="0" aria-label="Tap the leaf outside the window"/>
-    </svg>
-    <p class="runline" id="runLine">Afternoon. The cat is asleep on the rug. The yarn waits on the shelf.</p>
+<!-- ============ SCREEN 1 : build the chain ============ -->
+<section class="screen" id="s1" aria-labelledby="t1">
+  <div class="navbar">
+    <button class="ghost" id="backBtn">Back</button>
+    <button class="ghost" id="homeBtn" aria-label="Start over from the beginning">Start over</button>
   </div>
+  <h2 id="t1">What happens, in order</h2>
+  <p class="tiny">Tap the parts you actually used. Three at least, eight at most.</p>
 
-  <div class="setrow">
-    <button class="set" id="rampBtn" type="button">Ramp: Medium</button>
-    <button class="set" id="boomBtn" type="button">Boom: Level</button>
+  <div class="tray" id="tray"></div>
+
+  <ol class="chain" id="chain" aria-live="polite"></ol>
+  <div class="empty" id="chainEmpty">Nothing here yet. Tap a part above.</div>
+
+  <button class="primary" id="toPredict" disabled>Add 3 more to keep going</button>
+</section>
+
+<!-- ============ SCREEN 2 : predict ============ -->
+<section class="screen" id="s2" aria-labelledby="t2">
+  <div class="navbar">
+    <button class="ghost back">Back</button>
+    <button class="ghost home" aria-label="Start over from the beginning">Start over</button>
   </div>
+  <h2 id="t2">Your guess, in pencil</h2>
+  <p class="tiny">Tap each part until it shows how big a laugh you think it gets. Do not tell anybody your guesses.</p>
+  <div id="dials"></div>
+  <button class="primary" id="toShow">Locked in. Go show them</button>
+</section>
 
-  <button class="bookbtn" id="bookBtn" type="button" aria-expanded="false">A small book lies near the stool. Read it.</button>
-  <div class="book" id="book">
-    <h2>The Secret Humor Book (paw-written)</h2>
-    <p>What is funny, to a cat. There are three things. Only three.</p>
-    <p>One. String that walks away on its own. Do not hurl it. Roll it, gently, straight along the ground.</p>
-    <p>Two. A fish, meeting a guest. Send the yarn up, steeply, and let the bowl introduce them.</p>
-    <p>Three. Everything, falling over at once. Steep and low. Commit completely.</p>
-    <p>Nothing else is funny. Do not ask about the water. We do not do water.</p>
+<!-- ============ SCREEN 3 : run it ============ -->
+<section class="screen" id="s3" aria-labelledby="t3">
+  <div class="navbar">
+    <button class="ghost back">Back</button>
+    <button class="ghost home" aria-label="Start over from the beginning">Start over</button>
   </div>
+  <h2 id="t3">Run it for them</h2>
+  <svg viewBox="0 0 360 190" width="100%" style="display:block;margin:8px 0 16px" role="img"
+       aria-label="A drawing of three people watching, laughing.">
+    <g fill="none" stroke="var(--ink)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="70" cy="52" r="17"/><path d="M70 70 L70 122"/><path d="M70 84 L46 104"/><path d="M70 84 L94 104"/><path d="M70 122 L52 158"/><path d="M70 122 L88 158"/>
+      <circle cx="164" cy="44" r="17"/><path d="M164 62 L164 118"/><path d="M164 76 L140 96"/><path d="M164 76 L188 96"/><path d="M164 118 L146 156"/><path d="M164 118 L182 156"/>
+      <circle cx="258" cy="56" r="17"/><path d="M258 74 L258 124"/><path d="M258 88 L234 106"/><path d="M258 88 L282 106"/><path d="M258 124 L240 158"/><path d="M258 124 L276 158"/>
+    </g>
+    <g fill="none" stroke="var(--hot)" stroke-width="3.6" stroke-linecap="round">
+      <path d="M62 48 C66 42 74 42 78 48"/><path d="M156 40 C160 34 168 34 172 40"/><path d="M250 52 C254 46 262 46 266 52"/>
+      <path d="M312 100 C322 88 332 88 342 100"/><path d="M304 80 C318 60 340 60 352 80"/>
+    </g>
+  </svg>
+  <p>Set your machine up and let it go. Say nothing about which part you think is the funny one.</p>
+  <p class="tiny">One watcher is enough. More is better.</p>
+  <button class="primary" id="toMark">They watched it</button>
+</section>
 
-  <p class="foot">Funnybonies · Tight Spiral Studios. Single file, offline, stores nothing. All art original inline SVG, CC0. No cats were dampened; the fish is fine and has already forgotten.</p>
+<!-- ============ SCREEN 4 : the watcher marks ============ -->
+<section class="screen" id="s4" aria-labelledby="t4">
+  <div class="navbar">
+    <button class="ghost back">Back</button>
+    <button class="ghost home" aria-label="Start over from the beginning">Start over</button>
+  </div>
+  <h2 id="t4">Hand the phone over</h2>
+  <p class="tiny" id="watcherLine">Watcher 1. Tap every part that made you laugh. If none did, that is a real answer. Tap nothing and press done.</p>
+  <div id="marks"></div>
+  <button class="primary" id="watcherDone">Done. Pass it to the next watcher</button>
+  <div class="navbar"><button class="ghost" id="allDone">Done. That was the last watcher</button></div>
+</section>
+
+<!-- ============ SCREEN 5 : the gap ============ -->
+<section class="screen" id="s5" aria-labelledby="t5">
+  <div class="navbar">
+    <button class="ghost back">Back</button>
+    <button class="ghost home" aria-label="Start over from the beginning">Start over</button>
+  </div>
+  <h2 id="t5">The gap</h2>
+  <div class="key">
+    <span><i class="kp"></i>what you guessed</span>
+    <span><i class="ka"></i>what actually landed</span>
+  </div>
+  <div id="gapRows"></div>
+  <div class="score" role="status" aria-live="polite">
+    <div class="big" id="gapNum">0.0</div>
+    <div class="cap" id="gapCap"></div>
+  </div>
+  <div class="note" id="gapNote"></div>
+  <button class="primary" id="again">Change the machine and run it again</button>
+  <div class="navbar"><button class="ghost home" aria-label="Start over from the beginning">Start over</button></div>
+  <div class="foot tiny"><p>This app does not know what is funny. It only holds up your guess next to what the watchers said, and shows the distance.</p></div>
+</section>
+
 </div>
 
 <script>
 (function(){
-  "use strict";
-  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var $ = function(id){ return document.getElementById(id); };
-  var svg=$("m"), runLine=$("runLine"), timers=[], running=false;
-  var RAMPS=["Shallow","Medium","Steep"], BOOMS=["Up","Level","Down"];
-  var ramp=1, boom=1, interest=0, wrecked=false;
-  var found={s:false,f:false,c:false};
-  var missQuips=[
-    "The yarn stops. Sisyphus examines a wall.",
-    "Nothing. He is now cleaning a shoulder.",
-    "The machine did a thing. The cat did not see it, on principle.",
-    "He blinked. Slowly. That is not interest, that is judgment.",
-    "A leaf outside is doing better than you."
-  ]; var quip=0;
+"use strict";
 
-  function later(fn,ms){ timers.push(setTimeout(fn,ms)); }
-  function say(t){ runLine.textContent=t; }
-  function tr(el,ms,ease){ el.style.transition="transform "+ms+"ms "+(ease||"ease"); }
-  function setMeter(){ $("meterFill").style.width=Math.min(100,interest)+"%"; }
+var PARTS = [
+  {id:"g-dom",  n:"Dominoes"},
+  {id:"g-ramp", n:"Ramp"},
+  {id:"g-marb", n:"Marble"},
+  {id:"g-tube", n:"Tube"},
+  {id:"g-lev",  n:"Lever"},
+  {id:"g-cup",  n:"Cup"},
+  {id:"g-book", n:"Books"},
+  {id:"g-ball", n:"Balloon"},
+  {id:"g-fan",  n:"Fan"},
+  {id:"g-str",  n:"String"},
+  {id:"g-bell", n:"Bell"},
+  {id:"g-box",  n:"Box"}
+];
+var GUESS = ["no laugh","a little one","a good one","the biggest laugh"];
+var MAXB = 8, MINB = 3;
 
-  /* ---------- the cat's states ---------- */
-  var cat=$("cat"), stateTimer=null;
-  var pupScale=1;
-  function setState(s){
-    cat.className.baseVal="";
-    cat.classList.add(s);
-    pupScale = (s==="perk"||s==="glee") ? 1.34 : 1;
-  }
-  function flash(s,ms,back){
-    setState(s);
-    clearTimeout(stateTimer);
-    stateTimer=setTimeout(function(){ setState(back||"bored"); }, ms);
-  }
-  function blink(){
-    if(cat.classList.contains("asleep")) return;
-    cat.classList.add("blink");
-    setTimeout(function(){ cat.classList.remove("blink"); },170);
-  }
+var S = { beats:[], round:1, watchers:0, lastGap:null, marking:[] };
 
-  /* ---------- PUPIL TRACKING. This does more acting than any caption. ---------- */
-  var lookAt={x:96,y:136}, pupil={x:96,y:136}, override=0;
-  var EYES=[{id:"pupLg",cx:100,cy:497},{id:"pupRg",cx:118,cy:497}];
-  var ctm=null;
-  function refreshCTM(){ try{ ctm=svg.getScreenCTM().inverse(); }catch(e){ ctm=null; } }
-  refreshCTM(); window.addEventListener("resize",refreshCTM);
-  var spt=svg.createSVGPoint();
-  function yarnCenter(){
-    if(!ctm) return null;
-    var r=$("yarnIdle").getBoundingClientRect();
-    if(!r.width) return null;
-    spt.x=r.left+r.width/2; spt.y=r.top+r.height/2;
-    var p=spt.matrixTransform(ctm);
-    return {x:p.x,y:p.y};
-  }
-  function trackLoop(){
-    if(override<=0){
-      var c=yarnCenter();
-      if(c){ lookAt.x=c.x; lookAt.y=c.y; }
-    } else { override--; }
-    pupil.x += (lookAt.x-pupil.x)*0.13;   /* the 80ms lag */
-    pupil.y += (lookAt.y-pupil.y)*0.13;
-    for(var i=0;i<EYES.length;i++){
-      var e=EYES[i], dx=pupil.x-e.cx, dy=pupil.y-e.cy;
-      var len=Math.sqrt(dx*dx+dy*dy)||1;
-      var pull=Math.min(1,len/70)*3.0;
-      $(e.id).style.transform="translate("+(dx/len*pull).toFixed(2)+"px,"+(dy/len*pull).toFixed(2)+"px) scale("+pupScale+")";
-    }
-    requestAnimationFrame(trackLoop);
-  }
-  function lookAtPoint(x,y,frames){ lookAt.x=x; lookAt.y=y; override=frames||90; }
-  if(!reduce){ requestAnimationFrame(trackLoop); }
-  else { EYES.forEach(function(e){ $(e.id).style.transform="translate(1px,1.4px)"; }); }
+function $(id){ return document.getElementById(id); }
+function glyph(pid, cls, stroke){
+  return '<svg class="'+cls+'" viewBox="0 0 64 64" aria-hidden="true" focusable="false" fill="none" '+
+         'stroke="'+stroke+'" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">'+
+         '<use href="#'+pid+'"/></svg>';
+}
+function show(n){
+  var all = document.querySelectorAll(".screen");
+  for (var i=0;i<all.length;i++) all[i].classList.remove("on");
+  $("s"+n).classList.add("on");
+  window.scrollTo(0,0);
+  var h = $("s"+n).querySelector("h1,h2");
+  if (h){ h.setAttribute("tabindex","-1"); h.focus(); }
+}
 
-  /* ---------- adjusting things, bit by bit ---------- */
-  function tiltRamp(hint){
-    var a=(ramp-1)*11;
-    tr($("rampG"),380,"cubic-bezier(.3,1.5,.5,1)");
-    $("rampG").style.transform="rotate("+a+"deg)";
-    if(hint) hintArc("rampArc");
+/* ---------- screen 1: the tray and the chain ---------- */
+function drawTray(){
+  var h = "";
+  for (var i=0;i<PARTS.length;i++){
+    h += '<button class="part" data-add="'+i+'">'+glyph(PARTS[i].id,"","var(--ink)")+
+         '<span>'+PARTS[i].n+'</span></button>';
   }
-  function tiltBoom(hint){
-    var a=(boom-1)*-26;
-    tr($("boomG"),380,"cubic-bezier(.3,1.5,.5,1)");
-    $("boomG").style.transform="rotate("+a+"deg)";
-    if(hint) hintArc("boomArc");
+  $("tray").innerHTML = h;
+}
+function partLabel(b, idx){
+  var same = 0, seen = 0;
+  for (var i=0;i<S.beats.length;i++){ if (S.beats[i].p===b.p){ same++; if(i<=idx) seen=same; } }
+  return PARTS[b.p].n + (same>1 ? " "+seen : "");
+}
+function drawChain(){
+  var h = "";
+  for (var i=0;i<S.beats.length;i++){
+    if (i>0) h += '<li class="link">'+glyph("g-arrow","","var(--pencil)")+'</li>';
+    h += '<li><div class="beat">'+glyph(PARTS[S.beats[i].p].id,"glyph","var(--ink)")+
+         '<span class="nm">'+(i+1)+'. '+partLabel(S.beats[i],i)+'</span>'+
+         '<button class="rm" data-rm="'+i+'" aria-label="Remove '+partLabel(S.beats[i],i)+'">x</button>'+
+         '</div></li>';
   }
-  function hintArc(id){
-    var a=$(id); a.classList.add("flash");
-    setTimeout(function(){ a.classList.remove("flash"); },900);
-  }
-  $("rampBtn").addEventListener("click",function(){
-    ramp=(ramp+1)%3; this.textContent="Ramp: "+RAMPS[ramp]; tiltRamp(true);
-    lookAtPoint(200,240,70);
-  });
-  $("boomBtn").addEventListener("click",function(){
-    boom=(boom+1)%3; this.textContent="Boom: "+BOOMS[boom]; tiltBoom(true);
-    lookAtPoint(300,316,70);
-  });
+  $("chain").innerHTML = h;
+  $("chainEmpty").style.display = S.beats.length ? "none" : "block";
+  var ok = S.beats.length >= MINB;
+  $("toPredict").disabled = !ok;
+  $("toPredict").textContent = ok ? "Next: your guess"
+    : "Add " + (MINB - S.beats.length) + " more to keep going";
+}
 
-  /* ---------- the book ---------- */
-  function toggleBook(){
-    var b=$("book"), btn=$("bookBtn"), open=b.classList.toggle("on");
-    btn.setAttribute("aria-expanded",open?"true":"false");
-    btn.textContent=open?"Close the book.":"A small book lies near the stool. Read it.";
-    if(open) b.scrollIntoView({block:"nearest"});
+/* ---------- screen 2: the pencil guess ---------- */
+function dialSvg(v){
+  var arcs = [
+    'M14 34 C20 26 28 26 34 34',
+    'M8 30 C18 16 32 16 42 30',
+    'M4 26 C18 4 38 4 50 26'
+  ], out = '';
+  for (var i=0;i<v;i++) out += '<path d="'+arcs[i]+'"/>';
+  if (!v) out = '<path d="M12 32 L44 32" stroke="var(--pencil)"/>';
+  return '<svg class="dial" viewBox="0 0 56 46" aria-hidden="true" focusable="false" fill="none" '+
+         'stroke="var(--hot)" stroke-width="4" stroke-linecap="round">'+out+'</svg>';
+}
+function drawDials(){
+  var h = "";
+  for (var i=0;i<S.beats.length;i++){
+    var b = S.beats[i];
+    h += '<button class="dialrow'+(b.pred>0?" picked":"")+'" data-dial="'+i+'" '+
+         'aria-label="'+partLabel(b,i)+'. Your guess: '+GUESS[b.pred]+'. Tap to change.">'+
+         glyph(PARTS[b.p].id,"glyph","var(--ink)")+
+         '<span class="col"><span class="nm">'+(i+1)+'. '+partLabel(b,i)+'</span>'+
+         '<span class="val">'+GUESS[b.pred]+'</span></span>'+ dialSvg(b.pred) +'</button>';
   }
-  $("bookBtn").addEventListener("click",toggleBook);
+  $("dials").innerHTML = h;
+}
 
-  /* ---------- poke the world ---------- */
-  function hot(id,fn){
-    var el=$(id);
-    el.addEventListener("click",fn);
-    el.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); fn(); } });
+/* ---------- screen 4: a watcher marks ---------- */
+function drawMarks(){
+  var h = "";
+  for (var i=0;i<S.beats.length;i++){
+    var on = S.marking[i];
+    h += '<button class="dialrow'+(on?" picked":"")+'" data-mark="'+i+'" '+
+         'aria-pressed="'+(on?"true":"false")+'" aria-label="'+partLabel(S.beats[i],i)+
+         '. '+(on?"marked as funny":"not marked")+'">'+
+         glyph(PARTS[S.beats[i].p].id,"glyph","var(--ink)")+
+         '<span class="col"><span class="nm">'+(i+1)+'. '+partLabel(S.beats[i],i)+'</span>'+
+         '<span class="val">'+(on?"that one got me":"tap if this made you laugh")+'</span></span>'+
+         '<svg class="dial" viewBox="0 0 56 46" aria-hidden="true" focusable="false" fill="none" '+
+         'stroke="var(--hot)" stroke-width="4.5" stroke-linecap="round">'+
+         (on?'<path d="M12 26 L23 37 L44 12"/>':'<circle cx="28" cy="23" r="13" stroke="var(--pencil)"/>')+
+         '</svg></button>';
   }
-  hot("tapFish",function(){
-    var f=$("fishG");
-    f.style.transition="transform .5s cubic-bezier(.3,1.4,.4,1)";
-    f.style.transform="translate(0,-13px) scale(1.35)";
-    setTimeout(function(){ f.style.transform="translate(0,-13px)"; },520);
-    $("bubble").setAttribute("opacity","1");
-    setTimeout(function(){ $("bubble").setAttribute("opacity","0"); },900);
-    lookAtPoint(302,372,110);
-    say("The fish does a lap at speed. The cat's eyes follow it. This costs you nothing and means nothing.");
-  });
-  hot("tapCat",function(){
-    if(cat.classList.contains("asleep")){ setState("bored"); say("He opens one eye's worth of attention. It closes again, spiritually."); return; }
-    flash("earflick",700);
-    say("One ear swivels toward you. He does not otherwise dignify it.");
-  });
-  hot("tapBook",toggleBook);
-  hot("tapLeaf",function(){
-    lookAtPoint(300,62,200);
-    say("The leaf waves. He watches the leaf with more genuine interest than he has ever shown this machine.");
-  });
-  hot("tapYarn",function(){
-    if(running) return;
-    var y=$("yarnIdle"); y.classList.remove("shiver"); void y.getBoundingClientRect(); y.classList.add("shiver");
-    lookAtPoint(96,136,60);
-    say("The yarn shivers. One strand lifts, thinks better of it, and settles.");
-  });
+  $("marks").innerHTML = h;
+  $("watcherLine").textContent = "Watcher " + (S.watchers+1) +
+    ". Tap every part that made you laugh. If none did, that is a real answer. Tap nothing and press done.";
+}
+/* both done buttons commit the pass on screen. one continues, one finishes. */
+function commitWatcher(){
+  for (var i=0;i<S.beats.length;i++) if (S.marking[i]) S.beats[i].laughs++;
+  S.watchers++; S.marking = [];
+}
 
-  /* ---------- scoring ---------- */
-  function score(kind){
-    var gain=0;
-    if(kind==="s"){ if(!found.s){ found.s=true; gain=20; $("pip1").classList.add("won"); } else gain=2; }
-    if(kind==="f"){ if(!found.f){ found.f=true; gain=30; $("pip2").classList.add("won"); } else gain=2; }
-    if(kind==="c"){ if(!found.c){ found.c=true; gain=50; $("pip3").classList.add("won"); } else gain=2; }
-    if(!kind){ gain=(Math.random()<0.3)?1:0; }
-    interest=Math.min(100,interest+gain); setMeter();
-    return gain;
+/* ---------- screen 5: the gap ---------- */
+function actualScale(b){ return S.watchers ? (b.laughs / S.watchers) * 3 : 0; }
+function drawGap(){
+  var h = "", worst = -1, wi = 0, total = 0;
+  for (var i=0;i<S.beats.length;i++){
+    var b = S.beats[i], a = actualScale(b), d = Math.abs(b.pred - a);
+    total += d; if (d > worst){ worst = d; wi = i; }
+    var pw = (b.pred/3)*100, aw = (a/3)*100;
+    h += '<div class="gaprow"><div class="gaphead">'+glyph(PARTS[b.p].id,"","var(--ink)")+
+         '<span class="nm">'+(i+1)+'. '+partLabel(b,i)+'</span></div>'+
+         '<span class="track"><span class="pbar" style="width:'+pw.toFixed(1)+'%"></span></span>'+
+         '<span class="track"><span class="abar" style="width:'+aw.toFixed(1)+'%"></span></span>'+
+         '<p class="rowsay">You guessed '+GUESS[b.pred]+'. '+
+         b.laughs+' of '+S.watchers+' laughed.</p></div>';
   }
-  function allThree(){ return found.s&&found.f&&found.c; }
+  $("gapRows").innerHTML = h;
 
-  /* ---------- resetting the room ---------- */
-  function resetRoom(instant){
-    var ms=instant?0:640;
-    ["stoolG","bowlG","boomG","rampG"].forEach(function(id){
-      var e=$(id); e.style.transition=instant?"none":"transform "+ms+"ms cubic-bezier(.3,1.3,.4,1)"; e.style.transform="none";
-    });
-    $("chaosDust").setAttribute("opacity","0");
-    $("stringTrail").setAttribute("opacity","0");
-    $("bubble").setAttribute("opacity","0");
-    wrecked=false;
-    later(function(){ tiltRamp(); tiltBoom(); },ms);
+  var gap = S.beats.length ? total / S.beats.length : 0;
+  $("gapNum").textContent = gap.toFixed(1);
+  var cap = "You were off by " + gap.toFixed(1) + " out of 3, across " + S.beats.length +
+            " parts and " + S.watchers + " watcher" + (S.watchers===1?"":"s") + ".";
+  if (S.lastGap !== null){
+    var diff = S.lastGap - gap;
+    if (diff > 0.05) cap += " Last round you were off by " + S.lastGap.toFixed(1) +
+      ". You read them better this time.";
+    else if (diff < -0.05) cap += " Last round you were off by " + S.lastGap.toFixed(1) +
+      ". Further off this time, which happens.";
+    else cap += " Same as last round.";
   }
-  function parkYarn(){
-    ["yarnX","yarnY","yarnSquash","yarnSpin"].forEach(function(id){
-      var e=$(id); e.style.transition="none"; e.style.transform="none";
-    });
-    $("yarnIdle").setAttribute("opacity","1");
-    void $("yarnX").getBoundingClientRect();
-  }
+  $("gapCap").textContent = cap;
 
-  /* ---------- squash and stretch ---------- */
-  function squash(amount,ms){
-    var s=$("yarnSquash");
-    tr(s,ms||140,"ease-out");
-    s.style.transform="scale("+(1+amount)+","+(1-amount)+")";
-    later(function(){ tr(s,180,"cubic-bezier(.3,1.6,.5,1)"); s.style.transform="none"; },ms||140);
-  }
-  function stretch(amount,ms){
-    var s=$("yarnSquash");
-    tr(s,ms||160,"ease-in");
-    s.style.transform="scale("+(1-amount)+","+(1+amount)+")";
-  }
+  var b2 = S.beats[wi], a2 = actualScale(b2), note;
+  if (worst < 0.35) note = "No big surprises. You read this room close.";
+  else if (a2 > b2.pred) note = "The surprise: " + partLabel(b2,wi) +
+    ". You guessed " + GUESS[b2.pred] + " and " + b2.laughs + " of " + S.watchers +
+    " laughed at it. That part is doing more work than you thought.";
+  else note = "The surprise: " + partLabel(b2,wi) + ". You guessed " + GUESS[b2.pred] +
+    " and " + b2.laughs + " of " + S.watchers +
+    " laughed. The part you were proudest of is not the one landing.";
+  $("gapNote").textContent = note;
+  S.lastGap = gap;
+}
 
-  /* ---------- THE THREE FUNNY THINGS ---------- */
+/* ---------- wiring ---------- */
+function reset(){ S = { beats:[], round:1, watchers:0, lastGap:null, marking:[] }; drawChain(); }
+function newRound(){
+  for (var i=0;i<S.beats.length;i++){ S.beats[i].pred = 0; S.beats[i].laughs = 0; }
+  S.round++; S.watchers = 0; drawChain();
+}
 
-  function funnyString(done){
-    say("It comes off the ramp gently, and keeps going.");
-    tr($("yarnX"),900,"cubic-bezier(.4,0,.7,1)"); tr($("yarnY"),900,"cubic-bezier(.4,0,.8,1)");
-    tr($("yarnSpin"),900,"linear");
-    $("yarnX").style.transform="translateX(150px)";
-    $("yarnY").style.transform="translateY(168px)";
-    $("yarnSpin").style.transform="rotate(320deg)";
-    later(function(){
-      squash(0.35,130);
-      tr($("yarnY"),300,"cubic-bezier(.3,1.4,.5,1)"); $("yarnY").style.transform="translateY(430px)";
-    },900);
-    later(function(){
-      $("stringTrail").setAttribute("opacity","1");
-      tr($("yarnX"),2200,"cubic-bezier(.15,0,.5,1)"); $("yarnX").style.transform="translateX(-6px)";
-      tr($("yarnSpin"),2200,"linear"); $("yarnSpin").style.transform="rotate(-560deg)";
-      say("It rolls right past his nose, unspooling, like it has somewhere better to be.");
-    },1240);
-    later(function(){ setState("bored"); },1600);
-    later(function(){
-      setState("perk");
-      say("String that walks away on its own. He felt that one.");
-    },2500);
-    later(function(){ done("s"); },3500);
-  }
+$("tray").addEventListener("click", function(e){
+  var t = e.target.closest("[data-add]"); if (!t) return;
+  if (S.beats.length >= MAXB) return;
+  S.beats.push({ p:+t.getAttribute("data-add"), pred:0, laughs:0 });
+  drawChain();
+});
+$("chain").addEventListener("click", function(e){
+  var t = e.target.closest("[data-rm]"); if (!t) return;
+  S.beats.splice(+t.getAttribute("data-rm"), 1); drawChain();
+});
+$("dials").addEventListener("click", function(e){
+  var t = e.target.closest("[data-dial]"); if (!t) return;
+  var i = +t.getAttribute("data-dial");
+  S.beats[i].pred = (S.beats[i].pred + 1) % 4;
+  drawDials();
+});
+$("marks").addEventListener("click", function(e){
+  var t = e.target.closest("[data-mark]"); if (!t) return;
+  var i = +t.getAttribute("data-mark");
+  S.marking[i] = !S.marking[i]; drawMarks();
+});
 
-  function funnyFish(done){
-    say("Up the ramp, off the boom, and up.");
-    tr($("yarnX"),820,"cubic-bezier(.4,0,.8,1)"); tr($("yarnY"),820,"cubic-bezier(.4,0,.85,1)");
-    tr($("yarnSpin"),820,"linear");
-    $("yarnX").style.transform="translateX(155px)";
-    $("yarnY").style.transform="translateY(174px)";
-    $("yarnSpin").style.transform="rotate(300deg)";
-    later(function(){
-      tr($("yarnX"),1000,"linear"); $("yarnX").style.transform="translateX(206px)";
-      tr($("yarnY"),480,"cubic-bezier(.15,.6,.4,1)"); $("yarnY").style.transform="translateY(60px)";
-      squash(0.28,120);
-      say("It goes up. It goes up quite a lot, actually.");
-    },840);
-    later(function(){
-      tr($("yarnY"),520,"cubic-bezier(.55,0,.85,1)"); $("yarnY").style.transform="translateY(196px)";
-      stretch(0.22,200);
-    },1330);
-    later(function(){
-      $("yarnSquash").style.transform="none";
-      $("fishOrbit").style.animationPlayState="paused";
-      tr($("bowlG"),160,"ease-out"); $("bowlG").style.transform="rotate(4deg)";
-      later(function(){ tr($("bowlG"),200,"ease"); $("bowlG").style.transform="rotate(-2deg)"; },170);
-      later(function(){ tr($("bowlG"),260,"ease"); $("bowlG").style.transform="none"; },380);
-      lookAtPoint(302,350,140);
-      say("It lands on the rim. Balances. Does not fall in.");
-    },1860);
-    later(function(){
-      $("bubble").setAttribute("opacity","1");
-      say("The fish stops. The yarn stops. They regard one another.");
-    },2500);
-    later(function(){
-      setState("glee");
-      $("fishOrbit").style.animationPlayState="";
-      $("bubble").setAttribute("opacity","0");
-      say("A fish, meeting a guest. He is delighted, and furious about being delighted.");
-    },3500);
-    later(function(){ done("f"); },4500);
-  }
+$("startBtn").onclick    = function(){ reset(); show(1); };
+$("toPredict").onclick   = function(){ drawDials(); show(2); };
+$("toShow").onclick      = function(){ show(3); };
+$("toMark").onclick      = function(){ S.marking = []; drawMarks(); show(4); };
+$("watcherDone").onclick = function(){ commitWatcher(); drawMarks(); };
+$("allDone").onclick     = function(){ commitWatcher(); drawGap(); show(5); };
+$("again").onclick   = function(){ newRound(); show(1); };
+$("backBtn").onclick = function(){ show(0); };
 
-  function funnyChaos(done){
-    say("Steep and low. Oh no.");
-    tr($("yarnX"),700,"cubic-bezier(.4,0,.9,1)"); tr($("yarnY"),700,"cubic-bezier(.4,0,.9,1)");
-    tr($("yarnSpin"),700,"linear");
-    $("yarnX").style.transform="translateX(158px)";
-    $("yarnY").style.transform="translateY(180px)";
-    $("yarnSpin").style.transform="rotate(420deg)";
-    later(function(){
-      squash(0.3,110);
-      tr($("boomG"),420,"cubic-bezier(.4,0,.9,1)"); $("boomG").style.transform="rotate(74deg)";
-      $("chaosDust").setAttribute("opacity","1");
-      say("The boom goes over. The boom takes the stool with it.");
-    },720);
-    later(function(){
-      tr($("stoolG"),260,"ease-out"); $("stoolG").style.transform="rotate(-9deg)";
-    },1140);
-    later(function(){
-      tr($("stoolG"),520,"cubic-bezier(.5,0,.9,1)"); $("stoolG").style.transform="rotate(-26deg) translateY(16px)";
-      tr($("bowlG"),620,"cubic-bezier(.4,0,.8,1)"); $("bowlG").style.transform="translate(-64px,80px) rotate(-16deg)";
-      tr($("yarnX"),620,"ease-out"); $("yarnX").style.transform="translateX(196px)";
-      tr($("yarnY"),620,"cubic-bezier(.4,0,.9,1)"); $("yarnY").style.transform="translateY(432px)";
-    },1540);
-    later(function(){
-      tr($("bowlG"),320,"cubic-bezier(.2,1.6,.4,1)"); $("bowlG").style.transform="translate(-70px,74px) rotate(0deg)";
-      squash(0.4,140);
-      setState("perk");
-      say("The bowl lands upright. Water sloshes. Stays in. The fish spins once and is completely fine.");
-    },2160);
-    later(function(){
-      setState("glee");
-      say("Everything, falling over at once. He stood up for this one.");
-      wrecked=true;
-      lookAtPoint(272,430,150);
-    },3100);
-    later(function(){ lookAtPoint(109,497,240); say("He looks at the wreckage. Then he looks at you."); },4000);
-    later(function(){ done("c"); },5100);
-  }
+var backs = document.querySelectorAll(".ghost.back");
+for (var i=0;i<backs.length;i++) backs[i].onclick = function(){
+  var cur = +document.querySelector(".screen.on").id.slice(1);
+  show(Math.max(0, cur-1));
+};
+var homes = document.querySelectorAll("#homeBtn, .ghost.home");
+for (var j=0;j<homes.length;j++) homes[j].onclick = function(){ reset(); show(0); };
 
-  function missThrow(done){
-    var dist=[[70,74],[150,168],[158,180]][ramp];
-    tr($("yarnX"),900,"cubic-bezier(.4,0,.8,1)"); tr($("yarnY"),900,"cubic-bezier(.4,0,.85,1)");
-    tr($("yarnSpin"),900,"linear");
-    $("yarnX").style.transform="translateX("+dist[0]+"px)";
-    $("yarnY").style.transform="translateY("+dist[1]+"px)";
-    $("yarnSpin").style.transform="rotate(300deg)";
-    if(ramp>0){
-      later(function(){
-        var end=[[190,300],[120,430],[210,430]][boom];
-        tr($("yarnX"),700,"linear"); $("yarnX").style.transform="translateX("+end[0]+"px)";
-        tr($("yarnY"),700,"cubic-bezier(.4,0,.9,1)"); $("yarnY").style.transform="translateY("+end[1]+"px)";
-      },900);
-      later(function(){ squash(0.3,130); },1560);
-    } else {
-      later(function(){ squash(0.25,130); },900);
-    }
-    later(function(){
-      flash("judge",1400);
-      later(blink,500);
-      say(missQuips[quip++%missQuips.length]);
-    },ramp>0?1700:1050);
-    later(function(){ done(null); },ramp>0?2800:2200);
-  }
-
-  /* ---------- the finale ---------- */
-  function finale(){
-    later(function(){
-      say("");
-      $("fishOrbit").style.animationPlayState="paused";
-    },400);
-    later(function(){
-      setState("perk");
-      tr(cat,1900,"cubic-bezier(.4,0,.5,1)");
-      cat.style.transform="translate(120px,4px)";
-      say("He gets up. He actually gets up.");
-    },1000);
-    later(function(){
-      setState("glee");
-      say("He crosses the room, bats the yarn once, and sits down in the middle of the wreckage.");
-    },2900);
-    later(function(){
-      tr($("yarnX"),700,"cubic-bezier(.2,1.4,.4,1)");
-      $("yarnX").style.transform="translateX(240px)";
-    },3200);
-    later(function(){
-      setState("bored");
-      $("fishOrbit").style.animationPlayState="";
-      say("That was the whole point. He knew it the entire time.");
-      running=false;
-    },4400);
-  }
-
-  /* ---------- one throw ---------- */
-  function bat(){
-    if(running) return; running=true;
-    timers.forEach(clearTimeout); timers=[];
-    resetRoom(!wrecked);
-    parkYarn();
-
-    if(reduce){
-      var key=RAMPS[ramp]+" and "+BOOMS[boom], msg;
-      if(ramp===1&&boom===1){ msg="The yarn rolls the length of the floor past the cat, unspooling as it goes. String that walks away on its own. Funny thing one."; score("s"); setState("perk"); }
-      else if(ramp===2&&boom===0){ msg="The yarn arcs off the boom and balances on the fishbowl rim. The fish stops. They regard one another. Funny thing two."; score("f"); setState("glee"); }
-      else if(ramp===2&&boom===2){ msg="The boom goes over and takes the stool with it. The bowl lands upright, the fish is fine, the room is a wreck. Funny thing three."; score("c"); setState("glee"); wrecked=true; }
-      else { msg=missQuips[quip++%missQuips.length]; score(null); setState("judge"); }
-      say("("+key+") "+msg);
-      if(allThree()) say("All three found. He crosses the room, bats the yarn once, and sits down in the wreckage. That was the whole point.");
-      running=false; return;
-    }
-
-    setState("bored");
-    say("The paw considers. The paw commits.");
-    tr($("paw"),170,"ease-in"); $("paw").style.transform="rotate(24deg)";
-    later(function(){ tr($("paw"),320,"cubic-bezier(.3,1.5,.5,1)"); $("paw").style.transform="none"; },190);
-
-    later(function(){
-      var fn=missThrow;
-      if(ramp===1&&boom===1) fn=funnyString;
-      else if(ramp===2&&boom===0) fn=funnyFish;
-      else if(ramp===2&&boom===2) fn=funnyChaos;
-      fn(function(kind){
-        score(kind);
-        if(allThree() && interest>=100){ finale(); return; }
-        if(kind){ later(function(){ setState("bored"); running=false; },900); }
-        else { running=false; }
-      });
-    },240);
-  }
-  $("batBtn").addEventListener("click",bat);
-
-  /* ---------- opening: he is asleep, and you wake him for nothing ---------- */
-  tiltRamp(); tiltBoom(); setMeter();
-  if(!reduce){
-    later(function(){
-      ramp=0; $("rampBtn").textContent="Ramp: Shallow"; tiltRamp();
-      say("The paw considers. The paw commits.");
-      tr($("paw"),170,"ease-in"); $("paw").style.transform="rotate(24deg)";
-      later(function(){ tr($("paw"),320,"cubic-bezier(.3,1.5,.5,1)"); $("paw").style.transform="none"; },190);
-      tr($("yarnX"),800,"cubic-bezier(.4,0,.8,1)"); tr($("yarnY"),800,"cubic-bezier(.4,0,.85,1)");
-      tr($("yarnSpin"),800,"linear");
-      later(function(){
-        $("yarnX").style.transform="translateX(70px)";
-        $("yarnY").style.transform="translateY(74px)";
-        $("yarnSpin").style.transform="rotate(220deg)";
-      },240);
-      later(function(){ squash(0.25,130); setState("bored"); say("He wakes up. He looks."); },1100);
-      later(function(){ blink(); say("He has already decided how this ends."); },2100);
-      later(function(){
-        ramp=1; $("rampBtn").textContent="Ramp: Medium"; tiltRamp(true);
-        say("Move the ramp or the boom, then bat the yarn again. Three things in this room are funny to a cat. The book knows them.");
-      },3400);
-    },900);
-  } else {
-    setState("bored");
-    say("Press Bat the yarn. Change the ramp and the boom between throws. Three things in this room are funny to a cat, and the book below knows all three.");
-  }
+drawTray(); drawChain();
 })();
 </script>
 </body>
