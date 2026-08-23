@@ -108,8 +108,17 @@ else
   # against the 113 real surfaces, the find handed it 131 including 18 fixtures
   # with baseline 0, and every fixture read as NEW debt. A fixture that STOPS
   # failing is caught where it belongs: the owning gate's self-test.
+  # 2026-08-23: the exclusion above covered ONLY studio-eyes/canary/. Eight more
+  # deliberately-broken fixtures live at the repo ROOT as *-canary-*.html, were swept
+  # as corpus, and HALTed tick 1 on every run. Tick 1 is FLAT, so the belt refused, the
+  # floor job failed, deploy is gated on floor, and NOTHING HAS SHIPPED TO PAGES since.
+  # Funnybonies v8 sat on main for a day while the live site served v7. This is the
+  # SAME failure class the comment above already records from 2026-08-09; the fix that
+  # day named one directory instead of the pattern, so it only half-landed. A fixture
+  # that stops failing is caught by the owning gate's self-test, never by the sweep.
   SURFACES=$(find . -name '*.html' -not -path './.git/*' -not -path './archive/*' \
     -not -path './rescued/*' -not -path '*/node_modules/*' -not -path './studio-eyes/canary/*' \
+    -not -name '*-canary-*.html' -not -name 'canary-*.html' \
     -not -name 'confluence-TRUNK*.html' | sort)
   CHANGED=""
 fi
