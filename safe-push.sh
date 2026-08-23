@@ -78,6 +78,23 @@ if [ "${F##*.}" = "html" ]; then
   fi
 fi
 
+# 2b. THE STALE FUSE — repo-wide, not per-file (founder ruling 2026-08-17,
+#     "configure with teeth"). A REGISTRY that describes a corpus which has since
+#     moved is the failure that let canon-manifest.json declare a superseded gate
+#     canonical for three weeks. Registry drift HALTs; baseline drift only reports,
+#     because a debt snapshot ageing as the corpus moves is normal and halting on
+#     it would fire every commit and train everyone to ignore the alarm.
+if [ -f stale-fuse.py ]; then
+  if ! python3 stale-fuse.py --verify --all >/dev/null 2>&1; then
+    echo "  *** HALT - stale-fuse: a registry describes a corpus that has moved ***"
+    python3 stale-fuse.py --verify --all 2>/dev/null | sed 's/^/     /'
+    [ "$SAFE_PUSH_FORCE" != "1" ] && exit 1
+  fi
+  echo "  stale-fuse: registries fresh"
+else
+  echo "  stale-fuse: SKIPPED (tool absent) - blind is not clean"
+fi
+
 # 3. PUSH
 git add "$F"
 git -c user.email="walshero@gmail.com" -c user.name="Tight Spiral Studios" commit -q -m "$MSG"

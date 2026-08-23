@@ -28,7 +28,10 @@
       "canonical": "preship-gate-v4.py",
       "why": "v4 'render-proof teeth' — newest pre-ship gate and the one actually run this session (the CYL gates). A MANUAL tool invoked by hand before ship, NOT wired into floor.yml — so --wiring will WARN unwired, which is honest.",
       "siblings": [],
-      "superseded": ["preship-gate-v3.py", "preship-contrast-gate.py"],
+      "superseded": [
+        "preship-gate-v3.py",
+        "preship-contrast-gate.py"
+      ],
       "status": "canonical = v4 (supersedes v3.1 + the contrast gate). RULED 2026-07-27: preship-contrast-gate.py (v2) is a REGEX CSS parser — the guess-the-cascade approach v3/v4 explicitly replaced (every historical bug traced to it) — and it emits emoji, violating the no-emoji floor. Its token-contrast logic is a strict subset of the render-proof v4. Retired. Its only reference lives in archived rescued/ code (not live), so --refs stays clean (archive dirs are excluded from the scan). NOTE: no 'preship-gate-v2.py' exists — the handoff's 'v2 referenced by 11 files' is false in this repo."
     }
   ],
@@ -39,8 +42,14 @@
       "script": "staging-sandbox.py",
       "role": "render-truth floor (rendered DOM: overflow, tap-target, landmark, axe)",
       "mode": "blocking",
-      "blocking_scope": ["index.html"],
-      "report_scope": ["choose-your-leader-v5.html", "the-console.html", "reading-the-fireground.html"],
+      "blocking_scope": [
+        "index.html"
+      ],
+      "report_scope": [
+        "choose-your-leader-v5.html",
+        "the-console.html",
+        "reading-the-fireground.html"
+      ],
       "promotion": {
         "founder_go": true,
         "confidence": 0.7,
@@ -55,8 +64,15 @@
       "role": "accessibility gate — JS / dynamic-state (real browser)",
       "mode": "report",
       "blocking_scope": [],
-      "report_scope": ["index.html"],
-      "promotion": {"founder_go": false, "confidence": 0.0, "evidence": "self-test not yet executed green in CI here (needs playwright+Chromium at runtime); hold until a green CI run is observed.", "date": "2026-07-27"}
+      "report_scope": [
+        "index.html"
+      ],
+      "promotion": {
+        "founder_go": false,
+        "confidence": 0.0,
+        "evidence": "self-test not yet executed green in CI here (needs playwright+Chromium at runtime); hold until a green CI run is observed.",
+        "date": "2026-07-27"
+      }
     },
     {
       "id": "axe-audit",
@@ -64,8 +80,18 @@
       "role": "industry a11y engine (axe-core: names/roles/ARIA/landmarks)",
       "mode": "report",
       "blocking_scope": [],
-      "report_scope": ["index.html", "choose-your-leader-v5.html", "the-console.html", "reading-the-fireground.html"],
-      "promotion": {"founder_go": false, "confidence": 0.0, "evidence": "index.html is axe-clean, but the wider corpus shows violations (landmark-one-main, region, page-has-heading-one). Promote per-build as each clears.", "date": "2026-07-27"}
+      "report_scope": [
+        "index.html",
+        "choose-your-leader-v5.html",
+        "the-console.html",
+        "reading-the-fireground.html"
+      ],
+      "promotion": {
+        "founder_go": false,
+        "confidence": 0.0,
+        "evidence": "index.html is axe-clean, but the wider corpus shows violations (landmark-one-main, region, page-has-heading-one). Promote per-build as each clears.",
+        "date": "2026-07-27"
+      }
     },
     {
       "id": "contrast-plus",
@@ -73,19 +99,48 @@
       "role": "APCA + WCAG 1.4.11 non-text (the gaps WCAG-2.x-text misses)",
       "mode": "report",
       "blocking_scope": [],
-      "report_scope": ["index.html", "choose-your-leader-v5.html", "the-console.html"],
-      "promotion": {"founder_go": false, "confidence": 0.0, "evidence": "flagged --ink-3 Lc 71.2 in the softer stop; APCA thresholds not yet ruled canon. Hold until the APCA floor is ratified.", "date": "2026-07-27"}
+      "report_scope": [
+        "index.html",
+        "choose-your-leader-v5.html",
+        "the-console.html"
+      ],
+      "promotion": {
+        "founder_go": false,
+        "confidence": 0.0,
+        "evidence": "flagged --ink-3 Lc 71.2 in the softer stop; APCA thresholds not yet ruled canon. Hold until the APCA floor is ratified.",
+        "date": "2026-07-27"
+      }
     }
   ],
   "families_awaiting_founder_declaration": [
-    {"family": "preship-gate-v*.py", "note": "handoff: v2 is referenced by 11 files though v3/v4 exist. Declare the WIRED one canon, list the rest superseded."},
-    {"family": "index.html / your-rp-world.html (shelf vs repo)", "note": "repo is canon over shelf (resolve-canon precedence); guard should HALT any tool reading the shelf copy as current."},
-    {"family": "choose-your-leader-v*.html", "note": "v5 = three-broadcast canon (ratified 2026-07-26); v6 parked; slices are sources."}
+    {
+      "family": "preship-gate-v*.py",
+      "note": "handoff: v2 is referenced by 11 files though v3/v4 exist. Declare the WIRED one canon, list the rest superseded."
+    },
+    {
+      "family": "index.html / your-rp-world.html (shelf vs repo)",
+      "note": "repo is canon over shelf (resolve-canon precedence); guard should HALT any tool reading the shelf copy as current."
+    },
+    {
+      "family": "choose-your-leader-v*.html",
+      "note": "v5 = three-broadcast canon (ratified 2026-07-26); v6 parked; slices are sources."
+    }
   ],
   "principles": [
     "canon = what is WIRED + versioned, established by check; never inferred from a README, a handoff, or prose (that inference put the Studio Eyes role in backwards on the first pass).",
     "repo > shelf: if a shelf copy differs from repo, the shelf is stale.",
     "a role's canon is DECLARED here once; it is ENFORCED ONLY when canon-guard --refs/--wiring run in CI. THAT WIRING DOES NOT YET EXIST (workflow-scope paste, founder). Until it does, this manifest is ADVISORY and CAN rot — do not claim it 'cannot rot' (red-team #1, 2026-07-26).",
     "do not mark a sibling superseded until the founder rules — an unratified supersession enforced in CI is worse than none."
-  ]
+  ],
+  "_fuse": {
+    "kind": "registry",
+    "mode": "names",
+    "inputs": [
+      "*.py",
+      "*.sh"
+    ],
+    "digest": "341790d4f3767d9ced6535cf67370d7303e7fa933c68a4c438b7a03409317263",
+    "generated": "2026-08-23",
+    "regen": "canon-guard.py --wiring; manifest is hand-edited today, see claude/FINDING-STALE-STATE-CLASS-2026-08-17.md"
+  }
 }

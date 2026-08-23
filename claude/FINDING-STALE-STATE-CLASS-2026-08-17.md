@@ -99,6 +99,34 @@ known field cannot be confused with a call.
 4. Only then wire `canon-guard.py` into the belt. Wiring it now would wire a gate
    that is both stale and crying wolf.
 
+## BUILT, 2026-08-17 ("Go. configure with teeth")
+
+`stale-fuse.py`, wired into `safe-push.sh` before the push. All 18 files stamped;
+`--audit` reports every stored-state file in the root now carries a fuse.
+
+**Three kinds, because one set of teeth would have built an alarm that screams.**
+REGISTRY drift HALTs. BASELINE drift is reported only, since a debt snapshot ageing
+as the corpus moves is normal and halting on it would fire every commit. POLICY
+(hand-authored rules derived from nothing) carries no digest at all: a glob there
+would be theatre, and saying so is better than faking coverage.
+
+**A design flaw caught by using it, not by reasoning about it.** The first cut
+digested file CONTENTS for registries, so editing any script drifted
+`canon-manifest.json` and would have HALTed every push touching a tool. But a
+registry of files asserts WHICH file holds a role; editing a tool's body does not
+change that. Registries now digest the file NAME SET. Proven on the live repo:
+appending a line to `preship-gate-v5.py` exits 0, while landing a
+`preship-gate-v6.py` exits 1 and names both registries. That second case is exactly
+the event that made canon-manifest wrong in the first place, and it can no longer
+happen silently.
+
+The selftest is live end-to-end, not a fixture, and it caught the semantic change
+when the mode was added rather than passing through it.
+
+**Layer 2 is seeded, not done.** `stale-fuse.py` carries the first real
+`TSP-ROLE` / `TSP-SUPERSEDES` header. Two files in the corpus now declare lineage;
+about thirty to go before `canon-manifest.json` can be derived instead of written.
+
 ## STANDING RULE THIS EARNS
 
 **Stored state without a fuse is a claim with no expiry date.** Any file a gate
