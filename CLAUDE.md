@@ -95,6 +95,32 @@ shared. (This was asked and answered too many times — it is settled.)
   founder call not yet made), write the PENDING state itself into the tracking
   doc, so the next session inherits the question instead of silence.
 
+## Version on the surface - founder rule, standing (2026-08-23)
+**Every build states its version beside its title, on the screen.** Not only in a commit
+message, not only in a file comment. Founder's words: *"From now on, include version
+numbers clearly on app next to title."*
+
+The pattern, as shipped in `funnybonies/index.html` v8.1:
+- a `.ver` chip inside the `h1`, e.g. `<h1>Funny Boney's Factory <span class="ver">v8.1</span></h1>`
+- the same version in `<title>`, so a screenshot identifies its own build
+- the same version in the file's build banner comment
+- all three must agree; a build that disagrees with itself about its version is worse
+  than one that says nothing
+
+Style floors still bind: the chip is 20px, uses `--hot-ink` (which clears 4.5:1 on paper
+and on the dark ground), and never wraps away from the title.
+
+**Why it is a rule and not a preference:** a version you cannot see from the phone you are
+holding is a version nobody can report a bug against. The founder reviews on a phone, often
+from a bookmark, sometimes against a stale CDN copy. Without a visible version there is no
+way to tell "this build is wrong" from "I am looking at last week's build" - which is
+exactly what happened on 2026-08-23, when v8 sat on main for a day while the live site
+served v7 and nothing on either screen said which was which.
+
+TICK 12 CANDIDATE (not built): a grep for a version token beside the title. Deliberately
+not built the same day as TICK 11 - the recursion loop's rate governor allows one graduation
+per build, and TICK 11 graduated 2026-08-22.
+
 ## Deploy lanes
 - **git / GitHub Pages is the primary lane.** Ship here by default.
 - **Netlify is one-off sharing only** — nothing the studio depends on. Prefer git
