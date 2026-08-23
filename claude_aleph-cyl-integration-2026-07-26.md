@@ -1,0 +1,91 @@
+# ALEPH CONVENED — CYL through build (integrate Nixon; assemble the three-broadcast instrument)
+
+*Convened 2026-07-26. Chair: David Noonan (PM). Vantage: the Aleph point — all seats at once.*
+*Object: integrate `choose-your-leader-nixon-slice.html` by assembling the spec'd three-broadcast CYL, vs. the v6 single-room engine on the face.*
+*Docs of record (repo, verified 2026-07-26): `cyl-v5-rebuild-spec.md`, `cyl-period-bible.md`, `cyl-v5-image-lane.md`, `cyl-sound-period-bible.md`, `choose-your-leader-v5.html`, `choose-your-leader-v5-slice.html` (JFK '62), `choose-your-leader-nixon-slice.html` (Nixon '69), `choose-your-leader-v6.html`.*
+*Floor: no emoji. Every note leaves as verb·owner·when, or the word WISH. Lens reads cited; inferences flagged.*
+
+---
+
+## FUNES OPENS (memory / canon — repo-cited)
+
+- **Spec canon** (`cyl-v5-rebuild-spec.md`): go-forward CYL = the **v5 four-beat engine rebuilt as a three-broadcast shell** — `choose-your-leader-full.html` with slots `room.jfk62`, `room.lbj64`, `room.nixon69` (§3.3–3.4).
+- **Delivered**: JFK '62 slice + Nixon '69 slice — both the FULL four-beat structure, period-sourced (Nixon: Public Papers of the Presidents 1969 pp.901–909; FRUS 1969–76 vol.VI doc.144).
+- **Not built**: LBJ '64 (period bible Scene 2); `choose-your-leader-full.html` (verified absent from tree).
+- **Divergence**: `v6` ("October 22, 1962," ExComm room — a spatial/tap-the-objects engine, a *different* instrument) shipped to the studio face this session as "CYL latest."
+
+---
+
+## THE SEATS
+
+- **Todd Gitlin** — media framing (*The Whole World Is Watching*, 1980). The three broadcasts are the thesis: one instrument received across a decade of collapsing trust; Nixon '69 is the keystone (names distrust, then the record shows the manufactured majority). → **CHECK:** shell keeps the three-broadcast spine; each reveal shows the *manufacture*, not just the speech. · build · v-next
+- **George Saunders** — craft / moment-to-moment (*A Swim in a Pond in the Rain*). The power is the gap between blind reaction and re-reaction. → **CHECK:** every "record turns" beat must move one of the player's own prior ratings; instrument the delta so an unearned turn is visible. · build · v-next
+- **Jared Cooney Horvath** — reception / retention science (cognitive neuroscientist, University of Melbourne; *Stop Talking, Start Influencing: 12 Insights from Brain Science to Make Your Message Stick*, 2019). His floor: a message changes a mind only if the original judgment was genuinely *encoded* — a committed, effortful read — so the new information forces re-consolidation, not a re-skim. Cognitive load: one idea per beat, or nothing sticks (backs the C6 "<50 words per screen" floor). On the Nixon reveal: the *manufactured-majority* angle is a case study in his own subject — a message engineered so a manufactured consensus *feels* real — so it teaches the reception mechanic the game is built on. → **CHECK:** the blind beat must extract an effortful, committed judgment before the reveal (not a lazy tap), so the blind→post delta is real reconsolidation; and each beat carries one idea. · build · v-next
+- **Alfred Hitchcock** — storyboards / suspense-as-withheld-information. "Never a face" is the bomb under the table. → **CHECK:** each scene ships a 3-frame board — room (receiver POV) / glow / the turn (match-cut felt→record). · build+sourcing · v-next
+- **Mad Men design staff** — period production design. Hold the film-stock arc: Kodachrome-cool '62 → cold B&W bulletin '64 → unstable early color '69. Shapes not emblems; no faces. → **CHECK:** each room to the bible's stock; PD-first (LOC/NARA); per-asset provenance in alt. · sourcing · v-next
+- **Aleph-selected — Sourcing** (institutional-PD-first, `cyl-v5-image-lane.md`). → **CHECK:** source+verify PD plates for 3 rooms + preludes; provenance; base64 embed. · sourcing · v-next
+- **Aleph-selected — The Design Bench (two axes):** PHYSICS = PARTIAL→PASS only if the Maslow descent animates from the player's own read (Zimmerman). IMMEDIACY = PASS — scene-first, verb REACT on first touch (Arcade/No Crusts). Filament: Glass Engine rides *inside* REACT, never a side-panel.
+- **On standby — Cora (Registrar):** CYL placed under ISLO #5 on `islo-hub.html`; convene only if the shell asserts a rubric mapping.
+
+**Two axes, answered (three-broadcast engine):** PHYSICS PARTIAL→PASS (animated-descent check); IMMEDIACY PASS.
+
+---
+
+## CONVERGENT RULING (all seats)
+
+> **CYL is the three-broadcast instrument.** Assemble the shell `choose-your-leader-full.html`:
+> JFK '62 (built) + Nixon '69 (built) + LBJ '64 (build), on the v5 four-beat engine, each scene to
+> the period bible, PD-sourced and embedded. **The Nixon slice is dropped in as scene 3 — not
+> archived.** v6's ExComm room is a different instrument (the room where the call is *made*, not
+> *received*); it does not replace the arc.
+
+---
+
+## CHECK TABLE (build order)
+
+| verb | what | owner | when |
+|---|---|---|---|
+| ASSEMBLE | `choose-your-leader-full.html` — engine + 3 scene slots + shared beats + instrument | build | v-next |
+| DROP-IN | Nixon '69 → scene 3 (reconcile tokens/comfort to shell) | build | v-next |
+| DROP-IN | JFK '62 → scene 1 | build | v-next |
+| BUILD | LBJ '64 (unbuilt) to period-bible Scene 2 (cold B&W bulletin, midnight) | build | v-next |
+| SOURCE | PD plates (LOC/NARA) for 3 rooms + preludes; provenance; base64 embed | sourcing | v-next |
+| ANIMATE | Maslow descent driven by the player's own read (physics axis) | build | v-next |
+| INSTRUMENT | delta between blind reaction and re-reaction, per scene | build | v-next |
+| GATE | preship-gate-v4 SHIP every comfort mode; then GATE 1 on Matt's phone | build/Matt | before ship |
+| DECIDE-FACE | face → full shell once assembled; v5 companion; v6 dispositioned | Matt | on ship |
+
+---
+
+## NAMED WISHES
+- **WISH:** per-scene bespoke period sound (`cyl-sound-period-bible.md`); scenes ship silent-capable.
+- **WISH:** v6's ExComm room kept as a fourth "room where it's made" companion.
+- (resolved) Horvath's lens — seated 2026-07-26 as Jared Cooney Horvath (reception/retention science); read folded into the seats above.
+
+---
+
+## FOUNDER LOG — ratified 2026-07-26
+
+Matt, this session, in his words:
+- *"Why not integrate Nixon slice?"*
+- *"All hands on deck moving CYL thru build w founders mad men attention to detail to build game AND studio assets needed to attain vision."*
+- Ratification (*"Ok"*): **v5 three-broadcast is canon CYL; v6 is parked as a separate instrument, not the flagship.** Proceed with ASSEMBLE. Nixon slice is integrated as scene 3, not archived.
+- Horvath named 2026-07-26: **Jared Cooney Horvath** (reception/retention science). Seat filled; his read (encode-before-reveal; one idea per beat; leans the manufactured-majority reveal) folded into the build spec.
+
+Ruling recorded the day it was made, per the founder-canon close.
+
+---
+
+## FUNES CORRECTION — 2026-07-26 (verified after the convening; the convening's premise was wrong)
+
+A file-mapping pass (git + byte-level) overturned the factual basis of the ruling above. Recorded here because the reliability floor demands the correction sit next to the claim, not replace it silently.
+
+- **The "Nixon slice" is a reverted 10,000-byte stub**, not a realized scene. `choose-your-leader-nixon-slice.html` ends mid-CSS at line 170 — no `</style>`, no `<body>`, no `<script>`, no scene data. Git: `seed (1/5)` → `append (2/5)` → **`Revert "append (2/5)"`** (`0106b00`). Its only real content is the header comment stating the intended reveal thesis (manufactured "silent majority").
+- **`choose-your-leader-v5.html` is already the complete three-broadcast game.** JFK '62 (scene 1), LBJ '64 (scene 2), Nixon '69 (scene 3) all exist as data-driven `SCENES[]` objects on one shared engine/instrument/comfort/nav, with the §3.3 asset slots wired. LBJ is NOT unbuilt; the shell is NOT missing; Nixon already exists as scene 3.
+
+**What this changes:**
+- The build order's ASSEMBLE / DROP-IN / BUILD-LBJ rows are largely **already done** inside `v5.html`. The real work is refinement + a face/reveal decision, not construction.
+- **`v5.html` gate fix shipped 2026-07-26:** cooled the `--label` text token from warm sand `#d8b98a` to cool `#b9c4d0` (RP H-HUE floor). Preship gate v4 now **SHIP, worst pair 5.99**.
+- **Open decision — the Nixon reveal:** `v5.html` currently reveals Nixon via the *secret Cambodia bombing* angle. The stub header proposes the *manufactured-majority* angle (orchestrated telegram-and-poll response; Public Papers 1969 pp.901–909; FRUS 1969–76 vol.VI doc.144). Two historically real reveals — a founder + sourcing call, not a merge.
+- **Open decision — the face:** per the ratification (v5 three-broadcast is canon; v6 parked), the studio face should point at `v5.html`, not `v6.html`. Awaiting the go before flipping the live front door a second time.
+- The Nixon *slice* stub can be archived (its thesis is preserved here); nothing is lost.
