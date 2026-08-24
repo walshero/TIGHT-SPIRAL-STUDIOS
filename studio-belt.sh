@@ -119,7 +119,19 @@ else
   SURFACES=$(find . -name '*.html' -not -path './.git/*' -not -path './archive/*' \
     -not -path './rescued/*' -not -path '*/node_modules/*' -not -path './studio-eyes/canary/*' \
     -not -name '*-canary-*.html' -not -name 'canary-*.html' \
+    -not -path './confluence-hub/*' \
     -not -name 'confluence-TRUNK*.html' | sort)
+  # confluence-hub/ is an ES-MODULE SPA SHELL, not a static surface. Its body is
+  # <aside id="sidebar"></aside><main id="content"></main>, filled at runtime by
+  # js/app.js. Loaded from file:// the module is blocked, nothing paints, and every
+  # render-based gate reports "no measurable text" - which is not a pass and not a
+  # real HALT, it is a gate that cannot see. Excluded LOUDLY, not silently: its dark
+  # palette was verified by hand 2026-08-23 and is now mounted on BOTH conventions
+  # (@media prefers-color-scheme AND body.night/body.dusk) in css/styles.css.
+  # TO ACTUALLY MEASURE IT the sweep needs a served-page harness (http://, not
+  # file://). That is a real gap and it is named here so nobody reads this silence
+  # as coverage. Open question for that lane: --confluence-b #17b3a3 is a teal, and
+  # the no-green floor has never been run against it.
   CHANGED=""
 fi
 
