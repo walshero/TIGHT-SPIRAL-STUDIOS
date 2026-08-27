@@ -37,9 +37,16 @@
 # call. Not every lesson becomes a tick. This one lives in the deploy lane, and it
 # runs AFTER a write instead of before, which is the whole point.
 #
-# Usage:
-#   ./verify-push.sh funnybonies/index.html [more paths...]
-#   ./verify-push.sh --self-test        prove it bites
+# Usage (invoke with bash, never ./ - see the mode note below):
+#   bash verify-push.sh funnybonies/index.html [more paths...]
+#   bash verify-push.sh --self-test        prove it bites
+#
+# FILE MODE. Every script in this repo is committed 100644, because the connector is
+# the only write lane out of the session sandbox and it cannot set an exec bit. So
+# nothing here may DEPEND on being executable. Found 2026-08-27 by the stop hook:
+# a local chmod +x showed as the only uncommitted change in the tree, and chasing it
+# revealed that this file's own self-test invoked $SELF directly and would therefore
+# have failed on any fresh clone. The gate's canary was broken for everyone but me.
 #
 # Exit: 0 remote matches local · 1 DRIFT · 2 usage or unreadable
 set -uo pipefail
