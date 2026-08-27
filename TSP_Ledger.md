@@ -3,6 +3,35 @@
 
 ---
 
+## 2026-08-27 - CHECKED IS NOT SHIPPED: one failure class, four costumes
+
+**THE INCIDENT.** Funnybonies v9.1 was verified hard: belt clean on all eleven ticks, full flow driven in a headless browser, zero JS errors, screenshots read by eye. It was then pushed to main through the GitHub connector with the literal string `PLACEHOLDER` as the file content. **The write succeeded.** The connector returned a commit sha and a green result. `funnybonies/index.html` on main became an 11 byte file and stayed destroyed until someone happened to look. Nothing was permanently lost only because the verified build still existed in the session sandbox.
+
+**WHY NOTHING CAUGHT IT.** Every check in this repo grades **a file in a working tree**. The belt reads the worktree. Studio Eyes renders the worktree. Eleven ticks all ask *is this file good*. Not one of them can see the moment of **transmission**, because `git push` is blocked from the session sandbox, so bytes do not move mechanically, they are **retyped into a tool call**. Verification and transmission were decoupled and the gap between them was unwatched.
+
+**PROBE SWEEP - the same class, four times in four costumes, all within three weeks:**
+
+| When | Costume | What was checked | What actually shipped |
+|---|---|---|---|
+| 2026-08-06 to 08-24 | The 18 day outage | the belt, locally | Pages served an 18 day old site |
+| 2026-08-23 | Site Watch | HTTP 200 liveness | a stale site, reported SUCCESS |
+| 2026-08-22 | Seven wrong builds | artifact quality | the wrong game for the wrong player |
+| 2026-08-27 | PLACEHOLDER | the local file | 11 bytes of nothing |
+
+**One sentence covers all four: THE THING THAT WAS CHECKED WAS NOT THE THING THAT SHIPPED.** A green result is a claim about what a tool did. It is never proof of what arrived. This is the same shape as the belt's own oldest law, *a gate that has gone blind must never read as clean*, pointed one step further downstream: **a gate that was never looking at the shipped artifact was blind the whole time.**
+
+**GRADUATED: `verify-push.sh`.** One mechanical comparison, no judgment. Fetch the remote, compare the content hash of each named path against the verified local file. Content-identical or HALT. Two canaries, one of them the incident itself. Run it after **every** connector write, before reporting anything as shipped.
+
+**Deliberately NOT a belt tick.** The belt reads files in a tree; it cannot see a tool call. **Not every lesson becomes a tick.** Some failures live outside what the belt can look at, and pretending otherwise is how a repo ends up with gates that grade the wrong thing. This one lives in the deploy lane and runs AFTER a write, which is the whole point.
+
+**IT CAUGHT ITSELF, TWICE, ON ITS FIRST LIVE RUN.** First it flagged real drift on its own push: the pushed copy had a hyphen where the local copy had an em dash, and the em dash was a house floor violation in the local file, so the remote copy was the correct one. Then it produced a **false** HALT on a file whose bytes were identical and whose only difference was a local `chmod +x`, because `git diff` also reports index state and file mode. Corrected to compare content hashes. **A false HALT is worse than no gate**, because a gate that cries wolf is one somebody disarms inside a week, and that is this repo's single most repeated lesson.
+
+**THE STANDING RULE, now in `CLAUDE.md`:** never report a push as landed on a connector's success message. Pass `expect_total_bytes` on the way out, run `verify-push.sh` on the way back, and say nothing about shipping until it prints clean.
+
+**WHAT IT COST TO LEARN THIS:** two minutes of a destroyed file and a full re-push. Cheap, this time, and only because the sandbox still held the verified copy. The next one will not be.
+
+---
+
 ## 2026-08-22 - Funnybonies v8 + TICK 11: the belt learns to ask what a build is for
 
 **THE FINDING (2026-08-12, acted on today).** The founder halted Funnybonies: *"we are so far from vision. Peter wanted a game that would make kids laugh. I've not yet delivered."* A repo search then found `rescued/shelf-2026-07-13/funny-boneys-factory-spec.md`, a 28KB panel-reviewed GDD for that exact game, dated 2026-06-30, in the trunk the entire time. Never opened. Seven builds were made from a screenshot. Full account: `funnybonies/STOCK-TAKE-2026-08-12.md`.
