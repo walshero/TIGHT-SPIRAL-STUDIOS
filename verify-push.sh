@@ -66,14 +66,14 @@ self_test(){
   ) || { echo "  self-test could not build a fixture"; exit 2; }
 
   echo "-- canary 1: local matches remote --"
-  if ( cd "$tmp" && "$SELF" a.txt >/dev/null 2>&1 ); then
+  if ( cd "$tmp" && bash "$SELF" a.txt >/dev/null 2>&1 ); then
     echo "   PASS  clean tree reads as verified"
   else echo "   FAIL  clean tree should pass"; ok=0; fi
 
   echo "-- canary 2: THE INCIDENT, remote holds a placeholder --"
   ( cd "$tmp" && printf 'PLACEHOLDER' > a.txt && git commit -qam wreck && git push -q origin main )
   ( cd "$tmp" && printf 'real content\n' > a.txt )   # local is the good copy
-  if ( cd "$tmp" && "$SELF" a.txt >/dev/null 2>&1 ); then
+  if ( cd "$tmp" && bash "$SELF" a.txt >/dev/null 2>&1 ); then
     echo "   FAIL  a destroyed remote read as verified"; ok=0
   else echo "   PASS  drift HALTs"; fi
 
