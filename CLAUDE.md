@@ -95,6 +95,21 @@ shared. (This was asked and answered too many times — it is settled.)
   founder call not yet made), write the PENDING state itself into the tracking
   doc, so the next session inherits the question instead of silence.
 
+## Art: the studio-cut lane is open - founder rule, standing (2026-08-27)
+Founder's words, asking for a game: *"And we want art."* The MJ lane closed 08-13 and
+licensed photography cannot ride in an offline single-file game, so for two weeks the
+only compliant build was a build with no art. `art-gate.py` now has a THIRD lane:
+
+- **STUDIO-CUT** - art cut in the studio, marked `data-art-class="studio-cut"`, and
+  **proved by `art-execution-gate.py`** rather than by its own label. art-gate runs the
+  execution gate on the file and HALTs if it HALTs, measures no scene, or cannot open a
+  browser. A marker that clears a gate by being present is a gate gone blind.
+
+This is not a reversal of the 08-01 ban. That ban was a proxy for a quality bar nobody
+could measure; the execution gate measures it now (type dominance, cross-hatch, flat
+layers). Bad hand-cut art still does not ship - it now fails for being bad rather than
+for being hand-cut. Full ruling: `claude/RULING-STUDIO-CUT-ART-LANE-2026-08-27.md`.
+
 ## Status ladder - founder rule, standing (2026-08-27)
 **LAB is a real status and most builds belong in it.** Founder's words: *"Many games
 have to be placed in lab status. All the cliche cowpath games - put in lab not as done
