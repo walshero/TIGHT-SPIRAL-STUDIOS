@@ -154,3 +154,42 @@ per build, and TICK 11 graduated 2026-08-22.
 - **The Claude Project shelf is a CACHE, never the finish line.** A deliverable that only reached the shelf is NOT done — the shelf lags this repo and is not canon.
 - **Default to canon.** Land docs, decisions, and builds in this git repo via the "deploy studio file" skill: the authenticated GitHub connector — `get_file_contents` for the SHA, `create_file` / `apply_patch_to_repo_file` / `append_chunk_to_repo_file` to write, then raw-verify. `git push` from a session container is blocked (403); the connector is the working lane and needs no open tab.
 - **Never end on a "ready-to-paste" handoff** when the connector can land it. Paste-handoffs die by closed tab or dead battery. Write it to canon, verify the bytes, then tell Matt what landed.
+
+## CHECKED IS NOT SHIPPED - standing, non-negotiable (2026-08-27)
+
+**Never report a push as landed on the strength of a connector's success message.**
+A green result is a claim about what a tool did. It is never proof of what arrived.
+
+The procedure, every connector write, no exceptions:
+1. **Assert on the way out.** Pass `expect_total_bytes` with the byte count of the
+   verified local file. The connector refuses the write on a mismatch. This already
+   saved a recovery push that was 63 bytes short of the file it claimed to be.
+2. **Compare on the way back.** Run `./verify-push.sh <path>...`. It fetches the
+   remote and compares content hashes against the verified local file. Content
+   identical or it HALTs.
+3. **Say nothing about shipping until step 2 prints clean.**
+
+**Why this is a rule.** On 2026-08-27 a connector write sent the literal string
+`PLACEHOLDER` as file content and destroyed `funnybonies/index.html` on main. The write
+succeeded and returned a commit sha. Nothing objected, because every gate in this repo
+grades a file in a working tree and none of them can see the moment of transmission:
+`git push` is blocked from the sandbox, so bytes are RETYPED into a tool call rather
+than moved mechanically.
+
+**The failure class, which this repo hit four times in three weeks:** the 18 day deploy
+outage (checked the belt, not the live URL), Site Watch reporting SUCCESS over a stale
+site (checked liveness, not freshness), seven Funnybonies builds passing every tick while
+being the wrong game (checked the artifact, not the intent), and PLACEHOLDER (checked the
+local file, not the bytes sent). **The thing that was checked was not the thing that
+shipped.** Full account: `TSP_Ledger.md`, 2026-08-27.
+
+**Corollary, and it generalises past the connector:** for anything that leaves this
+sandbox, verify the ARRIVED artifact, never the sending. Landing bytes on main is not
+shipping, so check the live URL. Publishing an artifact is not rendering, so confirm it
+opens. This is the belt's oldest law pointed one step downstream: a gate that has gone
+blind must never read as clean, and a gate that was never looking at the shipped
+artifact was blind the whole time.
+
+**Not a belt tick, on purpose.** The belt reads files in a tree and cannot see a tool
+call. Not every lesson becomes a tick; some failures live outside what the belt can look
+at, and pretending otherwise produces gates that grade the wrong thing.
