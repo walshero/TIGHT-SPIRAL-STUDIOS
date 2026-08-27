@@ -142,3 +142,57 @@ game → Netlify. **Un-pushable → flagged LOUDLY as un-backed-up, never silent
 > **A zero-result search is not evidence of absence. When a search comes back empty,
 > LIST THE CONTAINER AND LOOK.** It lied about Drive files. It lied about Dad Energy.
 > Both times I believed it.
+
+---
+
+## THREE CORRECTIONS, MEASURED 2026-08-26 — not argued, run
+
+### 1. Google Drive is TWO lanes, not one
+
+The table above names one Drive lane. There are two identities:
+**`walshero@gmail.com`** and **`mwalsh@post.massbay.edu`**. A session holding one is
+**read-only on the other's files** — trashing a post.massbay-owned file from a
+walshero-authenticated connector returns *"The caller does not have permission,"* and the
+founder granting permission in chat does not change it, because the limit is which account
+the connector is authenticated as, not what the founder allows.
+
+**A fifth lane was hiding inside the fourth.** That is the exact shape that produced this
+registry: asserting a thing is reachable because *a* lane reaches it.
+
+### 2. The Cowork lane is NOT write-blind — three handoffs said otherwise
+
+| capability | Cowork lane, measured |
+|---|---|
+| anonymous `git clone` / read at HEAD | **yes** |
+| run the repo's own gates on that clone | **yes** — fingers self-test 3/3, playthrough agent run |
+| GitHub **REST API** / Issues / Actions | **no** — 403, "not enabled for this session" |
+| `git push` from the container | **no** — proxy 403, "not in this session's authorized repository set" |
+| **Zapier GitHub connector** | **YES — 55 actions, and it is the write lane** |
+
+`CLAUDE.md` has said since 2026-08-03 that the connector is the working lane and `git push`
+is blocked. Three consecutive handoffs were nevertheless written as uploads on the belief
+that this lane could not land. It can. **"No push credential" is not the same claim as
+"cannot write," and conflating them cost three handoffs.**
+
+### 3. The connector has a hard ~1 MB ceiling, and it reports blindness as a clean miss
+
+GitHub's Contents API refuses to return content for files above roughly 1 MB — it answers
+with metadata and an **empty body**. Every connector action that does read-modify-write
+(`replace_substring_in_repo_file`, `apply_patch_to_repo_file`) is therefore blind on large
+files, and returns `Expected exactly 1 occurrence but found 0` with the log line
+`File fetched, size: 0 bytes`.
+
+**A tool that goes blind must not read as a clean miss.** Guard worth adding: treat
+`size: 0` on a known-non-empty file as an error, never as zero occurrences.
+
+**Above the ceiling, therefore unreachable from any connector-only lane:**
+
+| file | bytes |
+|---|---|
+| `choose-your-leader-full.html` | 3,511,595 |
+| `old-problems-at-new-speed.html` | 3,414,081 |
+| `choose-your-leader-v6.html` | 2,104,575 |
+| `choose-your-leader-v7.html` | 1,586,332 |
+
+Those four need a lane with a working tree, or a small applier landed under `patches/`
+and run there. Everything under 1 MB lands directly.
