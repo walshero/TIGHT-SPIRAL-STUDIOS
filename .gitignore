@@ -56,3 +56,11 @@ package-lock.json
 .stage/*.js
 .stage/*.py
 .stage/*.log
+
+# Artifact publish builds are DERIVED from the real single-file games by
+# artifact-build.py (the runtime supplies its own document skeleton, so ours must
+# be stripped or the <style> and boot script are stripped with it). Committing them
+# would put a second copy of every game in the repo, and a second copy is a second
+# place to drift. The source is canon; the artifact build is a lane. Regenerate
+# with: python3 artifact-build.py --check <game>.html
+*.artifact.html
