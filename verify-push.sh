@@ -85,7 +85,7 @@ self_test(){
 SELF="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
 [ "${1:-}" = "--self-test" ] && { self_test; exit $?; }
 
-[ $# -ge 1 ] || { echo "usage: verify-push.sh <path> [path...]" >&2; exit 2; }
+[ $# -ge 1 ] || { echo "usage: bash verify-push.sh <path> [path...]" >&2; exit 2; }
 git rev-parse --git-dir >/dev/null 2>&1 || {
   echo "verify-push: not a git checkout. REFUSING, loud." >&2; exit 2; }
 
