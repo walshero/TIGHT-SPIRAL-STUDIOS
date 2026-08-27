@@ -30,6 +30,14 @@
 
 **WHAT IT COST TO LEARN THIS:** two minutes of a destroyed file and a full re-push. Cheap, this time, and only because the sandbox still held the verified copy. The next one will not be.
 
+**CAUGHT ITSELF A THIRD TIME, AND THIS ONE IS THE SHARPEST.** The stop hook flagged a single modified file, `verify-push.sh`, from a local `chmod +x`. Chasing that mode bit found a real defect in the gate's own canary: every script in this repo is committed `100644`, because the connector is the only write lane out of the sandbox and it cannot set an exec bit. The self-test invoked `"$SELF"` directly, so it passed in the session that wrote it and would have failed on any fresh clone. **The gate's canary was broken for everyone but me.** That is the same failure class the gate exists to catch, one level up: the thing that was tested was not the thing anyone else would run. Fixed in three `bash ` insertions and written into the file's own header, so the next reader inherits the reason and not just the rule.
+
+**THE GUARD FIRED BEFORE A HUMAN LOOKED.** The first push of that fix asserted `expect_total_bytes: 6428` while the payload carried only the header edit. The connector refused the write at 6413, exactly the 15 bytes of the three `bash ` insertions that had not been sent. No sha returned, no green result to misread, nothing landed. **This is what the assertion is for**, and it is the second time in one day it stopped a short write from being reported as a complete one.
+
+**LANE CLOSED 2026-08-27, verified rather than assumed.** Three commits: `e7c8686` (the file mode note), `be5c267` (both canaries invoked with bash), `be6783d` (the usage line matches). Then `verify-push.sh` clean on five paths, self-test PASS at mode 644, `HEAD` against `origin/main` at `0 0`, working tree empty. **Every one of those is a check on the arrived artifact, not on the sending.**
+
+**AND THE DISTINCTION THE GATE EXISTS TO HOLD:** committed is not deployed. All five files are content-identical on main and the live site still serves the old build, because Pages remains stopped at the floor job by tick 2 (5 governance records read as student attributions) and tick 5 (2 regressed entry paints). Those are separate facts and this entry states them separately on purpose. **Landing bytes on main is not shipping.** Founder call still open on both ticks.
+
 ---
 
 ## 2026-08-22 - Funnybonies v8 + TICK 11: the belt learns to ask what a build is for
