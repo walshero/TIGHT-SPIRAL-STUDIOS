@@ -1,3 +1,14 @@
+# RETIRED: blocking.html was killed 2026-08-27
+
+> **The build this panel reviewed no longer exists.** Founder ruling, same day:
+> *"Kill blocking. It's too light on specs."* The file is deleted and unlinked from
+> the face; git history keeps it if it is ever wanted. The panel record is kept rather
+> than deleted because the two findings in it outlived the build: the flagship's
+> production claim had gone stale, and a persistent footer is entry paint on every
+> build unless something takes it off the door. Both of those are still true.
+
+---
+
 # PANEL, blocking.html, production review, 2026-08-27
 
 *Founder: "Tsp full studio production." Convened inline, no agent fleet: the caucus

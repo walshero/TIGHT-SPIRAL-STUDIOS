@@ -95,6 +95,25 @@ shared. (This was asked and answered too many times — it is settled.)
   founder call not yet made), write the PENDING state itself into the tracking
   doc, so the next session inherits the question instead of silence.
 
+## Status ladder - founder rule, standing (2026-08-27)
+**LAB is a real status and most builds belong in it.** Founder's words: *"Many games
+have to be placed in lab status. All the cliche cowpath games - put in lab not as done
+game."*
+
+The ladder, in order: **Lab** (real, playable, an experiment kept on the bench on
+purpose - allowed to fail the gates) -> **In build** (worked on right now) -> **Live**
+(playable end to end, gates green, the studio stands behind it) -> **Full production**
+(the measured state in `production-gate.py`).
+
+Two rules that bind:
+- **State the status on the surface, not only on the face.** A `.tsp-lab` chip inside
+  the `<h1>`, same position and style floor as the version chip. A player who opens a
+  build from a bookmark never sees index.html.
+- **No promotion by relabelling.** A Lab build reaches Live when the gates go green and
+  somebody plays it, never by editing a chip.
+
+Full ruling, the ladder table, and the PENDING sweep question: `claude/RULING-LAB-STATUS-2026-08-27.md`.
+
 ## Version on the surface - founder rule, standing (2026-08-23)
 **Every build states its version beside its title, on the screen.** Not only in a commit
 message, not only in a file comment. Founder's words: *"From now on, include version
