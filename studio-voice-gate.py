@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-STUDIO VOICE - PRE-SHIP GATE  v1.1
+STUDIO VOICE - PRE-SHIP GATE  v1.2
 Tight Spiral Studios
 
 Sibling to studio-eyes-sweep.py ("Studio Eyes" - verifies founder VISION in the
@@ -42,8 +42,39 @@ Every em dash (—) or spaced en dash (word – word) in the file HALTS, UNLESS:
       (data-founder-quote / data-founder-source / data-founder-verbatim on
       an ancestor tag, or a same-line marker comment /* FOUNDER-VERBATIM */
       immediately before a JS string literal)
-A flagged dash is not automatically wrong - it means a human clears it:
-rewrite without it, or confirm it is Matt's own language and mark it.
+  (d) it sits between /* SOURCE-VERBATIM-BEGIN */ and /* SOURCE-VERBATIM-END */
+      (or the HTML-comment forms). See below.
+
+QUOTED SOURCE TEXT (v1.2, 2026-08-27)
+--------------------------------------
+A poem is not studio voice. Dickinson's dashes and Crane's dashes are the poems;
+rewriting one to clear this gate would be falsifying a text the studio is putting
+in front of students to read closely. The founder-verbatim marker already encodes
+the right idea - "this is quoted, not ours, and not editable" - but it clears one
+string literal at a time and it is named for Matt. A poem bank is dozens of lines.
+
+So v1.2 adds a REGION marker with an honest name:
+
+    /* SOURCE-VERBATIM-BEGIN  Sandburg 1916, Dickinson 1891 - public domain */
+    ... poem data, rendered exactly as published ...
+    /* SOURCE-VERBATIM-END */
+
+Everything between is blanked before the dash scan, the same way a comment is.
+
+The teeth that keep this from becoming a loophole:
+  - It is a REGION, so it is visible in a diff as a region. Wrapping the whole
+    file would be obvious on sight, and reviewable.
+  - It does not nest and it does not span files. An unclosed BEGIN blanks to end
+    of file, which is exactly the kind of thing a reviewer notices.
+  - It clears nothing by itself. A human still has to decide that the text inside
+    really is quoted source, and write down which source, in the marker.
+The alternative - writing the dash as a \\u2014 escape so the regex stops seeing the
+character - would pass silently with nobody deciding anything. That is a gate gone
+blind, which this repo has a standing rule against.
+
+A flagged dash is not automatically wrong - it means a human clears it: rewrite
+without it, confirm it is Matt's own language and mark it, or mark the region as
+quoted source.
 
 WHAT THIS GATE DOES NOT DO (v1.1 known gaps, stated not hidden)
 ------------------------------------------------------------------
@@ -96,18 +127,37 @@ def strip_comments_track_founder(text):
     NEXT string/text run instead of flagging it. Returns the scannable text
     with founder-verbatim spans replaced by spaces (cleared) and ordinary
     comments replaced by spaces (irrelevant), everything else left intact."""
+    def blank(seg):
+        # blank to spaces but KEEP newlines, so reported line numbers stay true.
+        # Without this every halt after the first comment is reported on the wrong
+        # line, which has been the case since v1 and is fixed here in v1.2.
+        return re.sub(r'[^\n]', ' ', seg)
     out = []
     i = 0
     n = len(text)
     pending_founder_clear = False
+    # SOURCE-VERBATIM regions are blanked wholesale. Cheapest correct way to do
+    # that in a single pass: find the spans first, then blank as we walk over them.
+    src_spans = []
+    for m in re.finditer(r'SOURCE-VERBATIM-BEGIN', text, re.I):
+        e = re.search(r'SOURCE-VERBATIM-END', text[m.end():], re.I)
+        # an unclosed BEGIN blanks to end of file, on purpose: loud, not silent
+        src_spans.append((m.start(), m.end() + e.end() if e else n))
+    def in_source(pos):
+        return any(a <= pos < b for a, b in src_spans)
     while i < n:
+        if in_source(i):
+            end = next(b for a, b in src_spans if a <= i < b)
+            out.append(blank(text[i:end]))
+            i = end
+            continue
         if text.startswith('<!--', i):
             end = text.find('-->', i)
             end = end + 3 if end != -1 else n
             comment_body = text[i:end]
             if re.search(r'data-founder-(quote|verbatim|source)|FOUNDER-VERBATIM', comment_body, re.I):
                 pending_founder_clear = True
-            out.append(' ' * (end - i))
+            out.append(blank(text[i:end]))
             i = end
             continue
         if text.startswith('/*', i):
@@ -116,13 +166,13 @@ def strip_comments_track_founder(text):
             comment_body = text[i:end]
             if re.search(r'FOUNDER-VERBATIM', comment_body, re.I):
                 pending_founder_clear = True
-            out.append(' ' * (end - i))
+            out.append(blank(text[i:end]))
             i = end
             continue
         if text.startswith('//', i):
             end = text.find('\n', i)
             end = end if end != -1 else n
-            out.append(' ' * (end - i))
+            out.append(blank(text[i:end]))
             i = end
             continue
         # not a comment start - check if we owe a founder-verbatim clear on
@@ -136,7 +186,7 @@ def strip_comments_track_founder(text):
                 else:
                     j += 1
             j = min(j + 1, n)
-            out.append(' ' * (j - i))
+            out.append(blank(text[i:j]))
             i = j
             pending_founder_clear = False
             continue
@@ -163,7 +213,7 @@ def run(path, ratchet=False, base=None, repo=''):
     n     = len(halts)
 
     print()
-    print('  STUDIO VOICE - PRE-SHIP GATE v1.1 - ' + name +
+    print('  STUDIO VOICE - PRE-SHIP GATE v1.2 - ' + name +
           ('  ·  RATCHET' if ratchet else ''))
     print('  ' + '-' * 60)
 
