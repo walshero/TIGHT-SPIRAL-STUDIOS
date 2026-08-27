@@ -6,6 +6,9 @@ It PLAYS the game. Studio Eyes measures pixels; this drives the interface and
 watches for the mechanical failures a founder's thumb currently catches on cold play:
 
   DEAD BUTTON      an interactive element that, when clicked, changes nothing
+  INERT TOUCH      the PAGE changed but the WORLD did not — a line printed outside
+                   the scene container while the scene itself stayed byte-identical
+                   (only computed when a world selector is supplied; see --world)
   JS ERROR         an uncaught exception fired during play (console/pageerror)
   DEAD END         a state with zero live controls before any "end/done/replay" signal
   NO PROGRESS      N clicks in and the visible text never changed (stuck loop)
@@ -70,11 +73,40 @@ def live_controls(page):
     return out
 
 
-def play(path):
+def world_sig(page, sel):
+    """Signature of the DIEGETIC container only.
+
+    THE DEFECT THIS CLOSES, found 2026-08-26: sig() below is PAGE-scoped, so a
+    control that prints a paragraph into a text holder BELOW the picture reads as
+    alive while the room is byte-identical. cyl-v5.html returned CLEAN / "nothing
+    mechanical to fix" on the exact build the founder walked and rejected; the same
+    file fails every interaction binary. The tool was not wrong, its oracle was
+    page-shaped. A touch is only a touch if the WORLD moved.
+
+    Returns None when no world is named, and every pre-2026-08-26 verdict is then
+    reproduced byte-for-byte — this check is additive, never a redefinition of
+    DEAD BUTTON.
+    """
+    if not sel:
+        return None
+    try:
+        return page.eval_on_selector(sel,
+            'el => el.outerHTML + "|" + (el.innerText || "") + "|" + '
+            'Array.from(el.querySelectorAll('
+            '"[aria-pressed],[aria-selected],[aria-checked],.active,.on,.selected,'
+            '[data-done],[data-state],[data-taken]")).map(e => (e.className||"") + '
+            '(e.getAttribute("aria-pressed")||"") + (e.getAttribute("data-taken")||"") + '
+            '(e.getAttribute("data-done")||"")).join("~")')
+    except Exception:
+        return None
+
+
+def play(path, world=None, touches=None):
     from playwright.sync_api import sync_playwright
     card = {"file": os.path.basename(path), "clicks": 0,
             "dead_buttons": [], "js_errors": [], "notes": [],
-            "opening_wall": False, "reached_end": False, "dead_end": False}
+            "opening_wall": False, "reached_end": False, "dead_end": False,
+            "inert_touches": [], "world": None, "touches": None}
     with sync_playwright() as p:
         # A GATE THAT GOES BLIND MUST NOT READ AS CLEAN. Playwright resolves its browser
         # by a build number pinned to the installed python package; when the package and
@@ -108,6 +140,23 @@ def play(path):
         start_url = 'file://' + os.path.abspath(path)
         page.goto(start_url, wait_until='load')
         page.wait_for_timeout(SETTLE_MS)
+
+        # THE WORLD: named on the command line, or declared by the page itself via
+        # <meta name="tsp:world" content="#room">. Self-describing HTML is preferred —
+        # a per-file config lane is one more thing to keep in sync, and this studio has
+        # already lost canon twice to two copies of the same fact.
+        if world is None:
+            try:
+                world = page.get_attribute('meta[name=\"tsp:world\"]', 'content')
+            except Exception:
+                world = None
+        if touches is None:
+            try:
+                touches = page.get_attribute('meta[name=\"tsp:touches\"]', 'content')
+            except Exception:
+                touches = None
+        card["world"] = world
+        card["touches"] = touches
 
         # opening-wall check: is the FIRST live control a preference toggle?
         first = live_controls(page)
@@ -172,6 +221,7 @@ def play(path):
             except Exception:
                 pass
             before = sig()
+            wbefore = world_sig(page, world)
             try:
                 el.click(timeout=1500)
             except Exception as e:
@@ -200,6 +250,7 @@ def play(path):
                 page.wait_for_timeout(SETTLE_MS)
                 continue
             after = sig()
+            wafter = world_sig(page, world)
             if after == before:
                 # NOTHING in the DOM moved — a real dead button
                 if lbl and lbl not in card["dead_buttons"]:
@@ -207,6 +258,32 @@ def play(path):
                 stuck += 1
             else:
                 stuck = 0
+                # The page moved. Did the WORLD? Only asked when a world is named,
+                # and never when the world element itself was replaced wholesale
+                # (wbefore None means it did not exist yet — a screen change, not
+                # an inert touch).
+                # ONLY CONTROLS THAT ARE SUPPOSED TO ACT ON THE WORLD ARE JUDGED
+                # AGAINST IT. Found 2026-08-26 on the first real run: naming a world
+                # and judging EVERY control against it reported 22 inert touches on
+                # cyl-v5, and 20 of them were the legibility panel — a type-size knob
+                # is SUPPOSED to leave the room alone. The first fix reached for
+                # PREF_WORDS and was wrong in shape: a word list cannot say what a
+                # control is FOR, and "Medium (20px)" is in no word list. The rule is
+                # structural. A control is subject to the world test when --touches
+                # names it, or, absent that, when it lives INSIDE the world. Anything
+                # else is OUT OF SCOPE, not inert.
+                # Same lesson as the already-active toggle and the nav-link bleed:
+                # ask "should anything have changed" before "did anything change."
+                if wbefore is not None and wafter is not None and wafter == wbefore:
+                    try:
+                        if touches:
+                            subject = el.evaluate('(e, s) => e.matches(s)', touches)
+                        else:
+                            subject = el.evaluate('(e, s) => !!e.closest(s)', world)
+                    except Exception:
+                        subject = False
+                    if subject and lbl and lbl not in card["inert_touches"]:
+                        card["inert_touches"].append(lbl or '(unlabeled)')
             after_text = after[0]
             # rebind for the end-word / seen-text checks below
             after = after_text
@@ -228,7 +305,8 @@ def render(card):
     L = []
     L.append(f"┌─ {f}")
     verdict = "CLEAN" if (not card["dead_buttons"] and not card["js_errors"]
-                          and not card["opening_wall"] and not card["dead_end"]) else "NOTES"
+                          and not card["opening_wall"] and not card["dead_end"]
+                          and not card["inert_touches"]) else "NOTES"
     L.append(f"│  verdict: {verdict}   clicks: {card['clicks']}   "
              f"end-reached: {'yes' if card['reached_end'] else 'no'}")
     if card["opening_wall"]:
@@ -243,6 +321,13 @@ def render(card):
         else:
             L.append(f"│  ✗ DEAD BUTTONS ({len(card['dead_buttons'])}): "
                      + ", ".join(card['dead_buttons'][:6]))
+    if card["inert_touches"]:
+        scope = card['touches'] or ("controls inside " + str(card['world']))
+        L.append(f"│  ✗ INERT TOUCHES ({len(card['inert_touches'])}) in world "
+                 f"'{card['world']}' (scope: {scope}): "
+                 + ", ".join(card['inert_touches'][:6]))
+        L.append("│    the page changed but the world did not — text appeared outside "
+                 "the scene while the scene stayed byte-identical")
     if card["js_errors"]:
         uniq = list(dict.fromkeys(card["js_errors"]))[:4]
         L.append(f"│  ✗ JS ERRORS ({len(card['js_errors'])}): " + " | ".join(uniq))
@@ -266,6 +351,15 @@ def self_test():
     clean = ('<!doctype html><body><h1 id=s>scene</h1>'
              '<button onclick="document.getElementById(\'s\').textContent=\'the end, play again\'">go</button>'
              '</body>')
+    # THIRD CANARY: the page moves, the world does not. This is the cyl-v5 shape —
+    # a line prints under the picture and the picture never changes.
+    inert = ('<!doctype html><meta name="tsp:world" content="#room">'
+             '<meta name="tsp:touches" content=".prop">'
+             '<body><div id="room"><h1>the room</h1></div><div id="holder"></div>'
+             '<button class="prop" onclick="document.getElementById(\'holder\').textContent='
+             '\'a line appeared. the end.\'">notice the television</button>'
+             '<button onclick="document.body.style.fontSize=\'20px\'">Medium (20px)</button>'
+             '</body>')
     ok = True
     for name, html, expect_dead in [("dead-canary", dead, True),
                                     ("clean-canary", clean, False)]:
@@ -277,13 +371,41 @@ def self_test():
         if verdict == "FAIL": ok = False
         print(f"  [{verdict}] {name}: dead_buttons={c['dead_buttons']} "
               f"(expected {'≥1' if expect_dead else '0'})")
-    print("SELFTEST", "PASS — the agent catches a dead button and clears a clean game"
-          if ok else "FAIL — do not trust results")
+    fp = os.path.join(tempfile.gettempdir(), "inert-canary.html")
+    open(fp, 'w').write(inert)
+    c = play(fp)
+    got_inert = len(c["inert_touches"]) > 0
+    got_dead = len(c["dead_buttons"]) > 0
+    v = "PASS" if (got_inert and not got_dead) else "FAIL"
+    if v == "FAIL": ok = False
+    if c["inert_touches"] != ['notice the television']:
+        ok = False; v = "FAIL"
+    print(f"  [{v}] inert-canary: inert_touches={c['inert_touches']} "
+          f"dead_buttons={c['dead_buttons']} (expected EXACTLY the in-scope prop — "
+          "the out-of-scope type knob must not be reported)")
+    # FOURTH: the same page with NO world named must reproduce the old verdict exactly.
+    c2 = play(fp, world="")
+    v2 = "PASS" if not c2["inert_touches"] else "FAIL"
+    if v2 == "FAIL": ok = False
+    print(f"  [{v2}] no-world regression: inert_touches={c2['inert_touches']} "
+          "(expected 0 — additive check must be silent when no world is named)")
+    print("SELFTEST", "PASS — dead button caught, clean game cleared, inert touch caught, "
+          "no-world behaviour unchanged" if ok else "FAIL — do not trust results")
     return 0 if ok else 1
 
 
 def main():
     args = sys.argv[1:]
+    world = None
+    touches = None
+    if '--world' in args:
+        i = args.index('--world')
+        world = args[i + 1] if len(args) > i + 1 else None
+        del args[i:i + 2]
+    if '--touches' in args:
+        i = args.index('--touches')
+        touches = args[i + 1] if len(args) > i + 1 else None
+        del args[i:i + 2]
     if not args or args[0] == '--selftest':
         return self_test()
     if args[0] == '--dir':
@@ -293,7 +415,7 @@ def main():
     print(f"PLAYTHROUGH AGENT — {len(files)} game(s)\n")
     for path in files:
         try:
-            print(render(play(path)))
+            print(render(play(path, world, touches)))
         except Exception as e:
             print(f"┌─ {os.path.basename(path)}\n│  AGENT ERROR: {str(e)[:100]}\n└" + "─"*40)
         print()
