@@ -95,10 +95,19 @@ for p in "$@"; do
     fail=1; continue
   fi
   rb=$(git cat-file -s "$REF:$p")
-  if git diff --quiet "$REF" -- "$p"; then
-    echo "  ok    $p  $lb bytes, byte-identical at $REF"
+  # CONTENT hash, not `git diff`. Corrected on this gate's own first live run,
+  # 2026-08-27: `git diff` also reports index state and file mode, so it HALTed on
+  # a file whose bytes were identical and whose only difference was a local chmod.
+  # A gate that cries wolf is a gate somebody disarms inside a week. Compare what
+  # the rule is actually about, which is content.
+  lh=$(git hash-object "$p")
+  rh=$(git rev-parse "$REF:$p" 2>/dev/null)
+  if [ "$lh" = "$rh" ]; then
+    echo "  ok    $p  $lb bytes, content-identical at $REF"
   else
     echo "  HALT  $p DRIFT. local $lb bytes, $REF $rb bytes."
+    echo "        local  $lh"
+    echo "        remote $rh"
     echo "        The bytes you verified are NOT the bytes that shipped."
     fail=1
   fi
