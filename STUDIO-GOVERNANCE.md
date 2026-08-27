@@ -67,3 +67,26 @@ written and pushed that way on 2026-08-07. Keep the Zapier limitation; drop the 
 
 **Standing correction, and the reason this table has dates in it:** a status section
 without a measurement date is a suspicion. Re-measure before trusting this block.
+
+## "Full production" is a measured state, not a label (2026-08-27)
+
+Founder: *"Tsp full studio production."* The stamp had been in use for weeks, was
+worn by exactly one file, and was **defined nowhere**. Inside that gap the flagship
+drifted out of compliance and nothing noticed: `en195-arcade.html` claimed
+production and "0 HALT", while failing art-gate and SHIP-BLOCKING its own entry
+gate on two co-equal invitations.
+
+**The definition lives in `production-gate.py`, not here.** It is executable, it
+self-tests, and `--audit` measures every file claiming the stamp. A prose copy of
+the bar in this document would be a second place for it to rot, which is the whole
+lesson of `claude/FINDING-STALE-STATE-CLASS-2026-08-17.md`. Read the gate.
+
+Two things worth carrying in prose, because they are rulings rather than checks:
+
+- **The stamp is not self-awarded.** Two lines of the bar can only be closed by the
+  founder: a panel has to have argued with the build, and he has to have opened it.
+  `founder-playtested` is a DECLARED field, not inferred from the notes, because the
+  first cut of the gate passed a brand-new build by matching the panel document the
+  session had just written about it.
+- **Production does not mean finished.** It means the open questions are written
+  down. `founder-open` is a required field.
