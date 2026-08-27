@@ -967,3 +967,21 @@ Logged from the Claude Code + Confluence-project sessions, in the founder's word
 - **Adopt Funes.** "Adopt the TSP mechanism for synching chats with funes ledger and os." The Confluence lane now syncs to this ledger (founder log at close), carries state via `handoff.py`, and runs the Funes open card (canon-as-of-today + open loops). This entry is the first sync.
 
 **Open loops (Funes board):** PRs #48/#49 pending merge · auto-dark decision (companion F3) · trunk version banner + cross-lane manifest still say v44 (stale; canon is `01b053f8`) · `preship-gate-v4` is not in CI so the H-DARK/font teeth don't block (the companion regression slipped this way) · `HANDOFF.md` is stale (2026-07-16).
+
+## 2026-07-23 — Built the true-pixel contrast checker; v48 has real invisible text (logged, binding)
+
+"Build pixel checkers needed so studio stops failing contrast (regular and dark mode)."
+
+- **BUILT `studio-eyes-pixel.py`** — a real-Chromium true-pixel contrast gate. Loads the
+  page (executes JS), viewport-tiled screenshots, reads the ACTUALLY-painted background
+  behind each text run (quantized-mode sampling, robust to anti-aliased glyphs), with
+  `elementFromPoint` occlusion so closed overlays / hidden nav are not false-flagged.
+  Checks **light AND dark**. Self-test teeth (gold-on-gold HALTs, black-on-white passes)
+  refuse to certify if broken. Fixes WeasyPrint's body-grounding, which caused BOTH false
+  positives (dark-ground text) and the gold-on-gold false negatives.
+- **VALIDATED:** companion = SHIP (true-pixel clean, light+dark). Trunk v48 = HALT with
+  REAL defects the WeasyPrint gate missed: `'Skip tour'` studio-green-on-green (1.0:1,
+  invisible), `'Next'` white-on-white (1.08:1), `'What Confluence is'` green heading 3.86:1.
+- **CONSEQUENCE:** v48 (Drive canon) is NOT contrast-clean — the FERPA-class invisibility
+  the manifest warned of is real and present. The v48 promotion (PR #52) must clear these
+  before ship. The checker can run in CI (floor.yml already installs playwright + chromium).
