@@ -114,3 +114,68 @@ That is a design defect, not a threshold defect. Fix by reading the deployed sha
 - **Drive fossil `1YH6MmJ8RByOhF9slL41dmsPv1nNV5eey`.** Pointer landed beside it as `tsp-opportunity-bridge-POINTER.html` (`1crfbsiiDp9JFNVExq2UsSbvoCqUgHc5o`). The fossil itself is owned by **mwalsh@post.massbay.edu** and cannot be trashed from a walshero-authenticated connector. One minute from that account, or connect it as a second Drive connection.
 - **`index.html` / `preship-gate-v5` HALT** — 23 days, not re-verified this session.
 - **The Carry (CYL v6 Beat 0)** — the agent's first real catch: no room feedback when the carry budget is full, and an external Google Fonts fetch that breaks the offline floor. Build debt, not tool debt.
+
+---
+
+## 8 · THE DEFECT WAS NEVER FIXED — IT WAS CARRIED FORWARD AND MULTIPLIED
+
+Everything above was diagnosed against a **Drive copy** of v5 (67,049 B). The trunk has
+superseded it twice. `choose-your-leader-v7.html` is the current build, and it does not
+share v5's anchors at all — no `#stageHolder`, no `.notice-hit`. **Correcting my own
+reading: an analysis run on one lane's copy of a build is an analysis of that lane, not of
+the studio.** The 08-24 handoff made the same class of error in the other direction.
+
+**Run against v7, with its real anchors, today:**
+
+```
+python3 playthrough-agent.py --world '#roomStage' \
+        --touches '#noticeRow button, #noticeRow [role=button]' choose-your-leader-v7.html
+
+✗ INERT TOUCHES (8) in world '#roomStage':
+  The television, The evening paper, The telephone, The doorway,
+  The bulletin, The wall map
+✗ DEAD BUTTONS (2): 'The shift / Ask for the hours you need', 'The back room'
+```
+
+**Eight props print a line beneath the plate while the plate stays byte-identical.** The
+shape the founder rejected in v5 was not repaired in v6 or v7 — it was inherited and
+scaled from three props to eight. That is the actual state of the current build, and it is
+the first time the studio has had a number for it.
+
+### The two lines that turn the check on permanently
+
+```html
+<meta name="tsp:world"   content="#roomStage">
+<meta name="tsp:touches" content="#noticeRow button, #noticeRow [role=button]">
+```
+
+Verified locally: with these in the head, the agent reports the same eight inert touches
+**with no flags at all**. Built to apply, per the studio way.
+
+### LANE DEFECT, NEW: the connector cannot write a file over 1 MB
+
+The write attempt returned `Expected exactly 1 occurrence but found 0`, with the log line
+`File fetched, size: 0 bytes`. GitHub's Contents API refuses to return content above ~1 MB
+— it answers with metadata and an empty body — so every connector action that does
+read-modify-write (`replace_substring_in_repo_file`, `apply_patch_to_repo_file`) is blind
+on large files, **and reports that blindness as "substring not found" rather than as a
+failure to read.** A tool that goes blind must not read as a clean miss. Worth a guard:
+treat `size: 0` on a non-empty file as an error, never as zero occurrences.
+
+**Four surfaces are above the ceiling and therefore unreachable from this lane:**
+
+| file | bytes |
+|---|---|
+| `choose-your-leader-full.html` | 3,511,595 |
+| `old-problems-at-new-speed.html` | 3,414,081 |
+| `choose-your-leader-v6.html` | 2,104,575 |
+| `choose-your-leader-v7.html` | 1,586,332 |
+
+The v7 declaration therefore landed as an applier, not an edit:
+`patches/2026-08-26-cyl-v7-declares-its-world.patch` (728 B).
+
+**Durable fix, not built, founder's call:** the agent could fall back to a small
+`tsp-worlds.json` registry when a build declares no meta — self-describing HTML first,
+sidecar only for builds the write lane cannot reach. That keeps large builds declarable
+from any lane. Not built today: it is a second graduation for the same tool in one pass,
+and the rate governor binds. Named here so it is inherited, not rediscovered.
