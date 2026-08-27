@@ -914,6 +914,53 @@ Two seats that sit *above* the line-level panel. They don't review words or pixe
 
 ---
 
+## 5.4.4b Studio Fingers measures the WORLD, not the page (locked 2026-08-26)
+
+**Every touch check names a diegetic container.** A control that changes text *outside*
+that container has not moved the world, whatever the page-level diff says. Two findings,
+kept distinct so no historical verdict is redefined:
+
+- **DEAD BUTTON** — nothing moved anywhere.
+- **INERT TOUCH** — the page moved, the world did not.
+
+**Scope is structural, never a word list.** A control is subject to the world test only
+when it is named as a touch (`<meta name="tsp:touches">` or `--touches`) or lives inside
+the world (`<meta name="tsp:world">` or `--world`). A preference knob is **out of scope,
+not inert**. Self-describing HTML first; the CLI flags are an override, not the interface.
+
+**Why this is law and not a preference.** `playthrough-agent.py` returned *"nothing
+mechanical to fix — ready for founder taste-play"* on the exact build the founder had
+walked and rejected, and kept returning it for eighteen days. Its oracle was page-shaped:
+a prop printed a paragraph into a holder below the picture, so page text moved and the
+control read alive while the room stayed byte-identical. The tool was not wrong about what
+it measured. It was measuring the wrong thing.
+
+*Earned the hard way: run against `choose-your-leader-v7.html` with its real anchors, the
+same shape returns **eight** inert touches — the defect was never repaired, it was
+inherited through v6 and scaled from three props to eight.*
+
+---
+
+## 5.4.4c The "should anything have changed" rule (locked 2026-08-26)
+
+Three times now a studio tool has reported a defect by asking *did anything change*
+without asking *should anything have changed*:
+
+1. **The already-active toggle** (2026-08-08) — clicking the selected option of a toggle
+   group legitimately changes nothing; read as dead.
+2. **The nav-link bleed** (2026-08-07) — a correct cross-file link navigated away, and
+   every later click was attributed to the wrong file.
+3. **The preference knob** (2026-08-26) — a type-size control is *supposed* to leave the
+   room alone; twenty of twenty-two first-run "inert touches" were the legibility panel.
+
+**Standing requirement.** Any check that compares a before-state to an after-state must
+state, in its own comments, which controls it considers **in scope** — and that scope must
+be structural (containment, or an explicit declaration), never a word list. A word list
+cannot say what a control is *for*: `Medium (20px)` is in no word list, and the fix that
+reached for one would have passed its own canary and rotted quietly.
+
+---
+
 ## 5.4.5 The self-staffing panel — triggers, not picking (locked 2026-06-27)
 
 The roster is rich on purpose; it does **not** all convene at once. Bloat is not caused by *having* many seats — it's caused by *seating* many at once, every time. The fix is dynamism: **the build's own properties summon its panel.** You stop choosing seats from a list; you describe the build, and the seats whose triggers fire wake up. The rest stay dormant — costing nothing, not in the founder's head, waiting in the system for their condition. This is how the panel scales without taxing attention: a seat can exist for months and never convene until its trigger is met (the Continuity Keeper sleeps until a third game ships; the FERPA Steward sleeps until identifiable student data appears).
