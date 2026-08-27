@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en" data-light="day">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blocking</title>
+<!-- TSP-META {"file":"blocking.html","stage":"v1 playtest build 2026-08-23, EN195 10-Minute Play district, the practice slot that has been empty since the districts landed 2026-08-09. Founder brief: a game for creating tension in a ten-minute play, using simple blocking, dialogue and stage directions, fun. THE MECHANIC CREATES WHAT IT TEACHES (the founder's own 2026-08-09 Line Break ruling): the eight lines never change and the player only chooses where two bodies stand, so the player discovers by doing that identical dialogue staged two ways is two different plays. Students write plays as radio, talking heads with no bodies; this makes the body the only variable. THE PAYOFF is that the staging is written back as real stage-direction prose, so the player leaves holding the sentences they will need to write, produced by their own choices rather than copied from a model. The tension engine is dramaturgy, not vibes: change of distance beats absolute distance; holding ground while the other approaches is the strongest single move a body can make; both still is the scene dying; and whoever stands between the other and the door has the power. Every verdict names its reason in craft language. Comfort v3.1 lifted from enjambment.html. Motion stop is a designed alternate per the 2026-08-14 ruling, not a deletion.","operative":true,"assets":"All CSS, no plates, no generated art, per the art bible material law (Midjourney closed 2026-08-13). Dialogue is studio-authored SCAFFOLD, see text-policy below.","text-policy":"games-text-bank.md POLICY says load-bearing prose in studio games is Matt's own. He has no play dialogue in the bank (the bank is memoir prose), so these eight lines are machine-authored scaffold and are marked as such rather than quietly shipped as canon. This is honest rather than convenient, and the design makes it cheap to fix: the mechanic REQUIRES neutral lines, because the whole lesson is that blocking supplies the meaning. The scene is a slot. Eight of his own lines drop in with no other change, and the open chair is named on the page.","founder-open":["replace the eight scaffold lines with your own; the mechanic needs them neutral, not good","does the tension meter read as honest, or does it need to stop scoring and just describe?","should this absorb into the arcade Play district as the practice cabinet above Workshop 3?"],"harvest":"a fixed script with a movable body is the cheapest possible proof that staging is writing"} -->
+<script>
+/* PRE-PAINT COMFORT BOOT, lifted from enjambment.html. Runs before first paint so
+   a reader who chose Warm dark never sees a flash of daylight. */
+(function(){
+  var d = document.documentElement, s = null;
+  try { s = JSON.parse(localStorage.getItem('tsp.comfort.v1') || 'null'); } catch(e){ s = null; }
+  if (!s || typeof s !== 'object') {
+    var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    s = { light: dark ? 'night' : 'day', size: 0, contrast: 0, motion: 0, cues: 0, reader: 0, motionSet: 0 };
+  }
+  if (s.light !== 'night') s.light = 'day';
+  d.setAttribute('data-light', s.light);
+  d.classList.toggle('c-a1', s.size === 1);
+  d.classList.toggle('c-a2', s.size === 2);
+  d.classList.toggle('c-contrast', !!s.contrast);
+  d.classList.toggle('c-still',    !!(s.motionSet && s.motion));
+  if (s.motionSet && !s.motion) d.setAttribute('data-motion', 'go');
+  d.classList.toggle('c-cues',     !!s.cues);
+  d.classList.toggle('c-reader',   !!s.reader);
+  window.__comfort = s;
+})();
+</script>
+<style>
+:root{
+  font-size:100%;
+  --paper:#f4efe6; --ink:#211a12; --ink2:#211a12;
+  --gold:#6e4700; --rust:#a34a2a; --slate:#3f5666; --kraft:#b08d57;
+  --card:#fdfaf3; --edge:#3a2f22; --focus:#6e4700;
+  --surface:#fdfaf3; --surface-2:#efe6d2; --ink-2:#211a12;
+  --line:#b08d57; --control-edge:#3a2f22;
+  --accent-strong:#3f5666; --on-accent:#ffffff;
+  --r:10px; --tap:48px;
+  --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
+  --motion:.18s; --chrome-h:64px;
+  color-scheme: light;
+}
+html[data-light="night"]{
+  --paper:#262019; --ink:#f0dcb8; --ink2:#f0dcb8;
+  --gold:#f5c97b; --card:#332a1f; --edge:#f0dcb8;
+  --rust:#d4744e; --slate:#7d9ab0; --kraft:#cfa96e; --focus:#f5c97b;
+  --surface:#332a1f; --surface-2:#3f362a; --ink-2:#dccba2;
+  --line:#5a5140; --control-edge:#f0dcb8;
+  --accent-strong:#a9bcd0; --on-accent:#141109;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#262019; --ink:#f0dcb8; --ink2:#f0dcb8;
+    --gold:#f5c97b; --card:#332a1f; --edge:#f0dcb8;
+    --rust:#d4744e; --slate:#7d9ab0; --kraft:#cfa96e; --focus:#f5c97b;
+    --surface:#332a1f; --surface-2:#3f362a; --ink-2:#dccba2;
+    --line:#5a5140; --control-edge:#f0dcb8;
+    --accent-strong:#a9bcd0; --on-accent:#141109;
+    color-scheme: dark;
+  }
+}
+html[data-light="day"]{
+  --paper:#f4efe6; --ink:#211a12; --ink2:#211a12;
+  --gold:#6e4700; --rust:#a34a2a; --slate:#3f5666; --kraft:#b08d57;
+  --card:#fdfaf3; --edge:#3a2f22; --focus:#6e4700;
+  --surface:#fdfaf3; --surface-2:#efe6d2; --ink-2:#211a12;
+  --line:#b08d57; --control-edge:#3a2f22;
+  --accent-strong:#3f5666; --on-accent:#ffffff;
+  color-scheme: light;
+}
+html.c-contrast:not([data-light="night"]){
+  --paper:#fffdf8; --card:#fffdf8; --surface:#fffdf8; --surface-2:#f2ede1;
+  --ink:#100d07; --ink2:#100d07; --ink-2:#241d10;
+  --edge:#241d10; --control-edge:#241d10; --line:#7d6a44; --accent-strong:#1d2f3d;
+}
+html.c-contrast[data-light="night"]{
+  --paper:#0a0908; --card:#141210; --surface:#141210; --surface-2:#201d18;
+  --ink:#fff9ec; --ink2:#fff9ec; --ink-2:#f0e3c6;
+  --edge:#f0e3c6; --control-edge:#f0e3c6; --accent-strong:#c3d4e6; --gold:#ffd77a;
+}
+html.c-a1{ font-size:112.5%; }
+html.c-a2{ font-size:125%; }
+
+/* MOTION STOP is a design, not a deletion (founder ruling 2026-08-14). Reduced
+   motion is about vestibular triggers: travel, scroll, parallax, zoom, spin. It was
+   never about removing feedback. Everything stops by default; .mo-safe elements keep
+   a narrow non-vestibular vocabulary, and the allow-list is ENFORCED below so a
+   marked element cannot animate a transform even by accident. */
+html.c-still *:not(.mo-safe){
+  animation:none !important; transition:none !important; scroll-behavior:auto !important;
+}
+@media (prefers-reduced-motion:reduce){
+  html:not([data-motion="go"]) *:not(.mo-safe){
+    animation:none !important; transition:none !important; scroll-behavior:auto !important;
+  }
+}
+html.c-still .mo-safe, html:not([data-motion="go"]) .mo-safe{
+  animation:none !important;
+  transition-property:opacity, color, background-color, border-color, box-shadow !important;
+  transition-duration:.15s !important; transition-timing-function:ease !important;
+}
+html.c-cues a{ text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:2px; }
+
+*{box-sizing:border-box;}
+[hidden]{display:none !important;}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:Georgia,'Times New Roman',serif;
+  font-size:1.125rem; line-height:1.6; min-height:100vh;
+  transition:background var(--motion) ease, color var(--motion) ease;
+}
+main{max-width:680px; margin:0 auto; padding:16px 16px 48px;}
+h1,h2,h3{font-weight:700; line-height:1.25;}
+h1{font-size:1.5rem; margin:0 0 .4rem;}
+h2{font-size:1.25rem; margin:0 0 .5rem;}
+h3{font-size:1.125rem; margin:0 0 .4rem;}
+p{margin:0 0 .9rem; max-width:68ch;}
+button{
+  font-family:inherit; font-size:1.125rem; line-height:1.4;
+  min-height:48px; min-width:48px; padding:12px 20px; margin:6px 4px;
+  background:var(--card); color:var(--ink);
+  border:3px solid var(--edge); border-radius:10px; cursor:pointer; text-align:left;
+}
+button:hover{border-color:var(--gold);}
+button:focus-visible{outline:4px solid var(--focus); outline-offset:3px;}
+.big{display:block; width:100%; text-align:center; font-size:1.1875rem; font-weight:700;}
+.screen{display:none;} .screen.on{display:block;}
+.sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap;}
+.skiplink{position:absolute; left:-9999px; top:0; z-index:99; background:var(--card);
+  color:var(--ink); padding:12px 18px; border:3px solid var(--edge); border-radius:0 0 10px 0; font-weight:700;}
+.skiplink:focus{left:0;}
+
+.coinbar{
+  display:flex; align-items:center; gap:8px; flex-wrap:wrap; row-gap:6px;
+  background:var(--paper); border-bottom:3px solid var(--edge);
+  padding:5px 16px; font-weight:700; position:sticky; top:0; z-index:20;
+  transition:transform .22s ease;
+}
+.coinbar.tucked{transform:translateY(-110%);}
+.coinbar button{margin:0; padding:8px 16px; white-space:nowrap; font-size:1.125rem;
+  min-height:44px; min-width:44px; border-width:2px; border-radius:999px;
+  background:transparent; letter-spacing:.02em;}
+.barlabel{font-size:1.125rem; white-space:nowrap;}
+#homeBtn{margin-left:auto;}
+.panel{
+  position:fixed; z-index:71; right:max(14px, env(safe-area-inset-right));
+  top:calc(var(--chrome-h) + 8px); width:min(340px, calc(100vw - 28px));
+  max-height:calc(100dvh - var(--chrome-h) - 24px);
+  overflow-y:auto; overscroll-behavior:contain;
+  background:var(--surface); color:var(--ink);
+  border:2px solid var(--accent-strong); border-radius:var(--r);
+  padding:16px; box-shadow:0 10px 34px rgba(0,0,0,.34); display:none;
+}
+.panel[data-open="1"]{display:block;}
+.panel h2{font-family:var(--sans); font-size:1.125rem; color:var(--ink-2); margin:0 0 9px;}
+.panel .grp + .grp{margin-top:18px; border-top:2px solid var(--line); padding-top:16px;}
+.row{display:flex; gap:7px; flex-wrap:wrap;}
+.btn{flex:1 1 auto; min-width:0; min-height:var(--tap); padding:11px 6px; margin:0;
+  border:2px solid var(--control-edge); border-radius:9px; background:var(--surface-2);
+  color:var(--ink); font-family:var(--sans); font-weight:700; font-size:1.125rem;
+  cursor:pointer; text-align:center;}
+.btn[aria-pressed="true"]{background:var(--accent-strong); color:var(--on-accent); border-color:var(--edge);}
+.tog{display:flex; width:100%; align-items:center; justify-content:space-between; gap:12px;
+  min-height:var(--tap); padding:11px 14px; margin:8px 0 0;
+  border:2px solid var(--control-edge); border-radius:9px; background:var(--surface-2);
+  color:var(--ink); font-family:var(--sans); font-weight:600; font-size:1.125rem; text-align:left;}
+.tog[aria-pressed="true"]{border-color:var(--edge); background:var(--surface);}
+.tog .st{font-family:var(--sans); font-size:1.125rem; font-weight:700; color:var(--ink-2);}
+.why{margin-top:8px;}
+.why summary{min-height:var(--tap); display:flex; align-items:center; cursor:pointer;
+  font-family:var(--sans); font-size:1.125rem; font-weight:600; color:var(--ink-2);}
+.note{font-size:1.125rem; color:var(--ink-2); margin:9px 0 0; line-height:1.5;}
+
+/* ═══ THE SET ═══
+   A black box with one warm special. Everything is CSS: the art bible's material
+   law, with Midjourney closed 2026-08-13 and hand-authored SVG scene art still
+   HALTing at the art-gate floor. Theatre wants this anyway: the brightest thing in
+   a black box is the person talking, which is exactly what art-execution-gate's
+   TYPE DOMINANCE check requires. */
+.stage{
+  position:relative; overflow:hidden; min-height:250px;
+  background:radial-gradient(120% 90% at 50% 22%, #2b2620 0%, #14110d 55%, #0a0806 100%);
+  border:3px solid var(--edge); border-radius:var(--r); margin:0 0 14px;
+}
+.floor{position:absolute; left:0; right:0; bottom:0; height:44%;
+  background:linear-gradient(#171410, #0c0a07); border-top:2px solid #342c22;}
+.backwall{position:absolute; left:0; right:0; top:0; height:56%;
+  background:linear-gradient(#1c1813, #14110d);}
+.doorframe{position:absolute; left:6%; bottom:44%; width:58px; height:96px;
+  border:3px solid #6b5a34; border-bottom:0; border-radius:3px 3px 0 0;
+  background:linear-gradient(#0b0906, #100d09);}
+.doorlight{position:absolute; left:6%; bottom:44%; width:58px; height:96px;
+  background:linear-gradient(rgba(255,206,130,.16), transparent 70%);}
+.windowframe{position:absolute; right:8%; bottom:52%; width:64px; height:52px;
+  border:3px solid #4a4438; background:linear-gradient(#1d2430, #12161d);}
+.tabletop{position:absolute; left:38%; bottom:30%; width:96px; height:9px;
+  margin-left:-48px; background:#5a4a30; border-radius:2px;}
+.tableleg{position:absolute; bottom:22%; width:7px; height:9%; background:#3d3220;}
+.chairback{position:absolute; left:62%; bottom:30%; width:38px; height:34px;
+  border:3px solid #56472e; border-bottom:0; background:transparent;}
+
+/* the marks, and the two bodies standing on them */
+.marks{position:absolute; left:0; right:0; bottom:14%; height:2px; background:#2e2820;}
+.actor{position:absolute; bottom:14%; width:34px; margin-left:-17px;
+  display:flex; flex-direction:column; align-items:center;
+  transition:left .34s cubic-bezier(.3,.7,.3,1);}
+.actor .head{width:17px; height:17px; border-radius:50%;}
+.actor .body{width:22px; height:44px; border-radius:9px 9px 3px 3px; margin-top:2px;}
+.actor .tag{font-family:var(--sans); font-size:1.125rem; font-weight:700;
+  margin-top:4px; letter-spacing:.03em; white-space:nowrap;}
+.actor.m .head, .actor.m .body{background:linear-gradient(#e8c98a,#9a7c42);}
+.actor.m .tag{color:#f0d9a4;}
+.actor.r .head, .actor.r .body{background:linear-gradient(#9fc0d8,#4f6f8a);}
+.actor.r .tag{color:#b9d4e8;}
+.actor.speaking .head{box-shadow:0 0 0 4px rgba(255,214,150,.5);}
+/* Two bodies on one mark used to stack exactly, overprinting both name tags into
+   an unreadable smear, and "standing in the same place" is a MEANINGFUL state in
+   this game rather than an edge case. They share the mark and stand shoulder to
+   shoulder on it. */
+.actor.coloc.m{margin-left:-34px;}
+.actor.coloc.r{margin-left:0px;}
+
+/* THE LINE, and it is the brightest thing in the box on purpose */
+.saidwrap{position:absolute; left:4%; right:4%; top:8px; z-index:3;}
+.said{
+  background:rgba(6,5,4,.86); border:2px solid #4a4034; border-radius:8px;
+  padding:10px 12px; min-height:74px;
+}
+.said .who{font-family:var(--sans); font-size:1.125rem; font-weight:700;
+  letter-spacing:.08em; color:#c9b183; margin:0 0 2px;}
+.said .line{font-size:1.25rem; line-height:1.4; color:#fff3d8; margin:0;}
+.said .idle{color:#8d8069; font-style:italic; font-size:1.125rem;}
+
+/* ═══ THE CONTROLS ═══ */
+.placer{background:var(--card); border:3px solid var(--edge); border-radius:var(--r);
+  padding:12px 14px; margin:0 0 12px;}
+.placer h3{font-family:var(--sans); font-size:1.0625rem; letter-spacing:.05em;
+  text-transform:uppercase; color:var(--ink-2); margin:0 0 .35rem;}
+.markrow{display:flex; gap:6px; flex-wrap:wrap; margin:0 0 10px;}
+.markbtn{flex:1 1 auto; min-width:0; min-height:var(--tap); margin:0; padding:10px 4px;
+  border:2px solid var(--control-edge); border-radius:9px; background:var(--surface-2);
+  color:var(--ink); font-family:var(--sans); font-weight:700; font-size:1.0625rem; text-align:center;}
+.markbtn[aria-pressed="true"]{background:var(--accent-strong); color:var(--on-accent); border-color:var(--edge);}
+.beatcount{font-family:var(--sans); font-size:1.0625rem; color:var(--ink-2); margin:0 0 .3rem;}
+
+/* the tension read-out: an instrument, it reports data, it is not scenery */
+.meter{background:var(--card); border:3px solid var(--edge); border-radius:var(--r);
+  padding:12px 14px; margin:0 0 12px;}
+.bar{height:16px; border:2px solid var(--control-edge); border-radius:8px;
+  background:var(--surface-2); overflow:hidden;}
+.bar span{display:block; height:100%; width:0%; background:var(--rust);
+  transition:width .3s ease;}
+.verdict{font-size:1.125rem; margin:.5rem 0 0;}
+.spark{display:flex; align-items:flex-end; gap:4px; height:46px; margin:.6rem 0 0;}
+/* No min-height here: the bars are not interactive, and a sub-44px min-height
+   declaration is indistinguishable from a too-small tap target to the gate.
+   The floor is enforced in JS instead, where it belongs. */
+.spark i{flex:1 1 auto; background:var(--kraft); border-radius:2px 2px 0 0;}
+
+/* ═══ THE SCRIPT THE PLAYER WROTE ═══ */
+.script{background:var(--card); border:3px solid var(--edge); border-radius:var(--r);
+  padding:14px 16px; margin:0 0 14px;}
+.sd{font-style:italic; color:var(--ink-2); margin:0 0 .55rem; padding-left:2.2em; text-indent:-2.2em;}
+.cue{font-family:var(--sans); font-weight:700; letter-spacing:.08em;
+  font-size:1.0625rem; color:var(--ink-2); margin:.7rem 0 .1rem; padding-left:2.2em;}
+.dlg{margin:0 0 .3rem; padding-left:2.2em;}
+.callout{border-left:5px solid var(--gold); background:var(--surface-2);
+  padding:12px 14px; border-radius:0 var(--r) var(--r) 0; margin:0 0 14px;}
+.callout p:last-child{margin-bottom:0;}
+.hint{font-family:var(--sans); font-size:1.0625rem; color:var(--ink-2); text-align:center; margin:.35rem 0 0;}
+footer{border-top:3px solid var(--line); margin-top:26px; padding-top:14px;}
+footer p{font-size:1.0625rem; color:var(--ink-2);}
+
+html.c-reader .stage{display:none;}
+html.c-reader .script, html.c-reader .callout, html.c-reader .placer, html.c-reader .meter{
+  background:transparent; border:0; border-left:3px solid var(--line); border-radius:0; padding:0 0 0 14px;
+}
+</style>
+</head>
+<body>
+<a class="skiplink" href="#main">Skip to the game</a>
+
+<div class="coinbar" id="coinbar">
+  <span class="barlabel">Blocking</span>
+  <button type="button" id="comfortTop" aria-expanded="false" aria-controls="panel">Comfort</button>
+  <button type="button" id="homeBtn" onclick="location.href='en195-arcade.html'">Arcade</button>
+</div>
+
+<div class="panel" id="panel" role="dialog" aria-modal="false" aria-label="Comfort">
+  <div class="grp">
+    <h2 id="l-light">Light</h2>
+    <div class="row" role="group" aria-labelledby="l-light">
+      <button class="btn" type="button" data-light-set="day">Day</button>
+      <button class="btn" type="button" data-light-set="night">Warm dark</button>
+    </div>
+  </div>
+  <div class="grp">
+    <h2>Screen reader</h2>
+    <button class="tog" type="button" data-tog="c-reader">Clear Reader <span class="st">Off</span></button>
+    <details class="why"><summary>What this does</summary>
+      <p class="note">Removes the design and leaves the document, which is close to what a
+        screen reader is handed.</p></details>
+  </div>
+  <div class="grp">
+    <h2 id="l-size">Font size</h2>
+    <div class="row" role="group" aria-labelledby="l-size">
+      <button class="btn" type="button" data-size="0">Normal</button>
+      <button class="btn" type="button" data-size="1">Larger</button>
+      <button class="btn" type="button" data-size="2">Largest</button>
+    </div>
+  </div>
+  <div class="grp">
+    <h2>Reading</h2>
+    <button class="tog" type="button" data-tog="c-contrast">High contrast <span class="st">Off</span></button>
+    <button class="tog" type="button" data-tog="c-still">Motion stop <span class="st">Off</span></button>
+    <button class="tog" type="button" data-tog="c-cues">Underline links <span class="st">Off</span></button>
+    <details class="why"><summary>About motion stop</summary>
+      <p class="note">The actors stop sliding and simply appear on their marks. Nothing else
+        changes: the same eight beats, the same staging choices, the same script at the end.</p></details>
+  </div>
+</div>
+
+<p class="sr" id="say" role="status" aria-live="polite"></p>
+
+<main id="main">
+
+<!-- ══ ENTRY: a set, and one invitation ══ -->
+<section class="screen on" id="s-entry" aria-label="Start">
+  <div class="stage" aria-hidden="true">
+    <div class="backwall"></div><div class="floor"></div>
+    <div class="doorframe"></div><div class="doorlight"></div>
+    <div class="windowframe"></div>
+    <div class="tabletop"></div>
+    <div class="tableleg" style="left:30%"></div><div class="tableleg" style="left:45%"></div>
+    <div class="chairback"></div>
+    <div class="marks"></div>
+    <div class="saidwrap"><div class="said"><p class="who">THE SET</p>
+      <p class="line">A door. A table. A chair. A window.</p></div></div>
+    <div class="actor m" style="left:22%"><div class="head"></div><div class="body"></div><div class="tag">MAGGIE</div></div>
+    <div class="actor r" style="left:72%"><div class="head"></div><div class="body"></div><div class="tag">RAY</div></div>
+  </div>
+  <button class="big" type="button" id="startBtn">Block the scene</button>
+</section>
+
+<!-- ══ THE STAGING ══ -->
+<section class="screen" id="s-play" aria-label="Block the scene">
+  <div class="stage" id="stage1">
+    <div class="backwall" aria-hidden="true"></div><div class="floor" aria-hidden="true"></div>
+    <div class="doorframe" aria-hidden="true"></div><div class="doorlight" aria-hidden="true"></div>
+    <div class="windowframe" aria-hidden="true"></div>
+    <div class="tabletop" aria-hidden="true"></div>
+    <div class="tableleg" style="left:30%" aria-hidden="true"></div>
+    <div class="tableleg" style="left:45%" aria-hidden="true"></div>
+    <div class="chairback" aria-hidden="true"></div>
+    <div class="marks" aria-hidden="true"></div>
+    <div class="saidwrap">
+      <div class="said" id="said">
+        <p class="who" id="saidWho">BEAT 1</p>
+        <p class="line idle" id="saidLine">Put them where you want them, then play the beat.</p>
+      </div>
+    </div>
+    <div class="actor m mo-safe" id="actM" style="left:22%"><div class="head"></div><div class="body"></div><div class="tag">MAGGIE</div></div>
+    <div class="actor r mo-safe" id="actR" style="left:72%"><div class="head"></div><div class="body"></div><div class="tag">RAY</div></div>
+  </div>
+
+  <div class="placer">
+    <p class="beatcount" id="beatCount">Beat 1 of 8</p>
+    <h3>Maggie stands at</h3>
+    <div class="markrow" id="rowM" role="group" aria-label="Where Maggie stands"></div>
+    <h3>Ray stands at</h3>
+    <div class="markrow" id="rowR" role="group" aria-label="Where Ray stands"></div>
+    <button class="big" type="button" id="playBeat">Play the beat</button>
+    <p class="hint" id="playHint">Leaving someone where they are is a choice too, and often the strongest one.</p>
+  </div>
+
+  <div class="meter" data-art-class="instrument">
+    <h3 style="font-family:var(--sans);font-size:1.0625rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-2);margin:0 0 .4rem;">Tension</h3>
+    <div class="bar" role="img" aria-labelledby="verdict"><span id="bar"></span></div>
+    <p class="verdict" id="verdict">Nothing has happened yet. That is the lowest tension there is.</p>
+    <div class="spark" id="spark" aria-hidden="true"></div>
+  </div>
+</section>
+
+<!-- ══ THE SCRIPT YOU WROTE ══ -->
+<section class="screen" id="s-script" aria-label="The script you wrote">
+  <h1>You just wrote the stage directions</h1>
+  <p id="scriptLede"></p>
+  <div class="script" id="scriptOut"></div>
+  <div class="callout">
+    <p><strong>You did not choose a single word of dialogue.</strong> Every italic line in
+      that script came from where you put two people. That is the whole argument: staging
+      is writing, and a play that only exists from the neck up is a radio play.</p>
+  </div>
+  <button class="big" type="button" id="toFlat">Now watch it die</button>
+</section>
+
+<!-- ══ THE FLAT STAGING, for contrast ══ -->
+<section class="screen" id="s-flat" aria-label="The same scene, unstaged">
+  <h1>The same eight lines, nobody moving</h1>
+  <p>Identical dialogue. Both of them planted at the table for all eight beats, which is
+    how most first drafts are staged, because most first drafts are not staged at all.</p>
+  <div class="script" id="flatOut"></div>
+  <div class="callout">
+    <p>Read the two side by side. The words did not change. The play did.</p>
+  </div>
+  <button class="big" type="button" id="toTeach">What made the difference</button>
+</section>
+
+<!-- ══ THE FOUR LEVERS ══ -->
+<section class="screen" id="s-teach" aria-label="The four levers">
+  <h1>Four levers, and they are all bodies</h1>
+  <div class="callout">
+    <h3>1. Change beats distance</h3>
+    <p>Two people standing close is not tense. Two people <em>getting</em> closer is. The
+      audience reads the move, not the position, so a scene with no movement has no reading
+      to give them.</p>
+  </div>
+  <div class="callout">
+    <h3>2. Holding still is the strongest move</h3>
+    <p>When one crosses to the other and the other does not move, the one who stayed wins the
+      moment. It costs nothing to write and it is the single most reliable tension beat in a
+      two-hander.</p>
+  </div>
+  <div class="callout">
+    <h3>3. Whoever owns the door owns the scene</h3>
+    <p>Put a body between somebody and the way out and the stakes rise without a word of
+      dialogue changing. This is why the set is a set and not a backdrop.</p>
+  </div>
+  <div class="callout">
+    <h3>4. Both still is the scene dying</h3>
+    <p>If nobody moves for two beats running, you have written radio. The fix is not a better
+      line. The fix is a body.</p>
+  </div>
+  <div class="callout">
+    <h3>Take it to your own ten minutes</h3>
+    <p>Open your draft. Find a page with no stage directions on it at all, which will not take
+      long. Ask one question of every beat: who moves, and who refuses to. Write the answer
+      in. You will not have to change a word of what they say.</p>
+  </div>
+  <div class="row" style="gap:10px;margin-top:10px;">
+    <button type="button" id="againBtn">Block it again, differently</button>
+    <button type="button" onclick="location.href='en195-arcade.html'">Back to the arcade</button>
+  </div>
+</section>
+
+<footer id="sitefoot" hidden>
+  <p><strong>About the eight lines.</strong> They are deliberately flat, because the game only
+    works if the words carry no tension of their own and the bodies have to supply all of it.
+    They are studio scaffold, not Matt's writing, and the studio's text policy says the
+    load-bearing prose in a game should be his. So this is an open chair: eight of his own
+    neutral lines drop straight in, and nothing else about the game changes. Everything here
+    runs in memory and stores nothing.</p>
+</footer>
+</main>
+
+<script>
+/* ═══ COMFORT v3.1, lifted from enjambment.html. Top bar only. ═══ */
+(function(){
+  var d = document.documentElement;
+  var S = window.__comfort || { light:'day', size:0, contrast:0, motion:0, cues:0, reader:0 };
+  var say = document.getElementById('say');
+  var btn = document.getElementById('comfortTop');
+  var panel = document.getElementById('panel');
+  var TOG = { 'c-contrast':'contrast', 'c-still':'motion', 'c-cues':'cues', 'c-reader':'reader' };
+  function save(){ try { localStorage.setItem('tsp.comfort.v1', JSON.stringify(S)); } catch(e){} }
+  function measure(){
+    var c = document.querySelector('.coinbar');
+    if (c) d.style.setProperty('--chrome-h', Math.round(c.getBoundingClientRect().height) + 'px');
+  }
+  window.addEventListener('resize', measure, {passive:true});
+  function paintState(){
+    var el,i;
+    var L = document.querySelectorAll('[data-light-set]');
+    for (i=0;i<L.length;i++){ el=L[i]; el.setAttribute('aria-pressed', String(el.getAttribute('data-light-set')===S.light)); }
+    var Z = document.querySelectorAll('[data-size]');
+    for (i=0;i<Z.length;i++){ el=Z[i]; el.setAttribute('aria-pressed', String(Number(el.getAttribute('data-size'))===S.size)); }
+    var T = document.querySelectorAll('[data-tog]');
+    for (i=0;i<T.length;i++){
+      el=T[i];
+      var on = !!S[TOG[el.getAttribute('data-tog')]];
+      el.setAttribute('aria-pressed', String(on));
+      el.querySelector('.st').textContent = on ? 'On' : 'Off';
+    }
+    measure();
+  }
+  function open(o){
+    panel.setAttribute('data-open', o ? '1':'0');
+    btn.setAttribute('aria-expanded', String(o));
+    if (o){ measure(); var f = panel.querySelector('.btn'); if (f) f.focus(); }
+  }
+  btn.addEventListener('click', function(){ open(panel.getAttribute('data-open') !== '1'); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && panel.getAttribute('data-open') === '1'){ open(false); btn.focus(); }
+  });
+  document.addEventListener('click', function(e){
+    if (panel.getAttribute('data-open') !== '1') return;
+    if (panel.contains(e.target) || btn.contains(e.target)) return;
+    open(false);
+  });
+  document.addEventListener('click', function(e){
+    var t = e.target.closest ? e.target.closest('[data-light-set],[data-size],[data-tog]') : null;
+    if (!t) return;
+    if (t.hasAttribute('data-light-set')){
+      S.light = t.getAttribute('data-light-set'); d.setAttribute('data-light', S.light);
+    } else if (t.hasAttribute('data-size')){
+      S.size = Number(t.getAttribute('data-size'));
+      d.classList.toggle('c-a1', S.size===1); d.classList.toggle('c-a2', S.size===2);
+    } else {
+      var cls = t.getAttribute('data-tog');
+      var on = !d.classList.contains(cls);
+      d.classList.toggle(cls, on); S[TOG[cls]] = on ? 1:0;
+      if (cls === 'c-still'){
+        S.motionSet = 1;
+        if (on) d.removeAttribute('data-motion'); else d.setAttribute('data-motion','go');
+      }
+    }
+    save(); paintState();
+  });
+  measure(); paintState();
+  var last = 0, bar = document.getElementById('coinbar');
+  window.addEventListener('scroll', function(){
+    var y = window.scrollY || 0;
+    bar.classList.toggle('tucked', y > 70 && y > last); last = y;
+  }, {passive:true});
+})();
+
+function announce(t){ var s = document.getElementById('say'); if (s) s.textContent = t; }
+function show(id){
+  var all = document.querySelectorAll('.screen');
+  for (var i=0;i<all.length;i++) all[i].classList.remove('on');
+  document.getElementById(id).classList.add('on');
+  /* The entry is a set and ONE invitation. The note about the scaffold lines is
+     real and belongs to the game, not to the door: as entry prose it is a wall,
+     and one-thing-gate is right to call it one. */
+  document.getElementById('sitefoot').hidden = (id === 's-entry');
+  window.scrollTo(0,0);
+}
+
+/* ═══ THE SET, AS DATA ═══
+   Four marks on one line, the door at index 0. A single axis is what makes the
+   dramaturgy computable: distance is |a-b|, and "between you and the way out" is
+   simply a lower index. */
+var MARKS = [
+  { key:'door',   label:'the door',   x:14 },
+  { key:'table',  label:'the table',  x:38 },
+  { key:'chair',  label:'the chair',  x:62 },
+  { key:'window', label:'the window', x:84 }
+];
+
+/* ═══ THE SCENE ═══
+   Eight lines that mean nothing on their own. That is the design requirement, not a
+   shortcut: if the dialogue carried its own tension the player could not learn that
+   the bodies were doing the work. Studio scaffold, marked as such in the footer and
+   in the file meta; the studio's text policy wants Matt's prose here and the scene
+   is built as a slot so eight of his lines drop in unchanged. */
+var BEATS = [
+  { who:'MAGGIE', line:"You're early." },
+  { who:'RAY',    line:"You said any time." },
+  { who:'MAGGIE', line:"I did say that." },
+  { who:'RAY',    line:"I brought your dish back." },
+  { who:'MAGGIE', line:"You could have kept it." },
+  { who:'RAY',    line:"I didn't want to keep it." },
+  { who:'MAGGIE', line:"Okay." },
+  { who:'RAY',    line:"Okay." }
+];
+
+var state = { i:0, m:1, r:3, prevM:1, prevR:3, tension:8, history:[], staged:[], lastCat:'', repeat:0 };
+
+function buildMarkRow(hostId, which){
+  var host = document.getElementById(hostId);
+  host.textContent = '';
+  MARKS.forEach(function(mk, idx){
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'markbtn';
+    b.textContent = mk.label.replace('the ', '');
+    b.setAttribute('data-which', which);
+    b.setAttribute('data-idx', String(idx));
+    b.setAttribute('aria-label', (which === 'm' ? 'Maggie' : 'Ray') + ' stands at ' + mk.label);
+    host.appendChild(b);
+  });
+}
+function paintMarks(){
+  var all = document.querySelectorAll('.markbtn');
+  for (var i=0;i<all.length;i++){
+    var w = all[i].getAttribute('data-which');
+    var idx = Number(all[i].getAttribute('data-idx'));
+    all[i].setAttribute('aria-pressed', String((w === 'm' ? state.m : state.r) === idx));
+  }
+  var aM = document.getElementById('actM'), aR = document.getElementById('actR');
+  aM.style.left = MARKS[state.m].x + '%';
+  aR.style.left = MARKS[state.r].x + '%';
+  var same = state.m === state.r;
+  aM.classList.toggle('coloc', same);
+  aR.classList.toggle('coloc', same);
+}
+document.addEventListener('click', function(e){
+  var t = e.target.closest ? e.target.closest('.markbtn') : null;
+  if (!t) return;
+  var idx = Number(t.getAttribute('data-idx'));
+  if (t.getAttribute('data-which') === 'm') state.m = idx; else state.r = idx;
+  paintMarks();
+  announce((t.getAttribute('data-which') === 'm' ? 'Maggie' : 'Ray') + ' at ' + MARKS[idx].label);
+});
+
+/* ═══ THE TENSION ENGINE ═══
+   Dramaturgy, not vibes, and every verdict names its reason in craft language so the
+   player can argue with it. The rules, in order of how much they matter:
+     - CHANGE beats position. An approach is pressure; a position is furniture.
+     - HOLDING GROUND while the other crosses is the strongest single beat available
+       to a two-hander, and it is the one students never write.
+     - THE DOOR is power. A body between someone and the exit raises stakes silently.
+     - BOTH STILL is the scene dying, and it must cost, or the game would teach that
+       doing nothing is safe. */
+function judge(){
+  var prevDist = Math.abs(state.prevM - state.prevR);
+  var dist = Math.abs(state.m - state.r);
+  var movedM = state.m !== state.prevM;
+  var movedR = state.r !== state.prevR;
+  var hadDoor = state.prevM < state.prevR ? 'M' : (state.prevR < state.prevM ? 'R' : null);
+  var hasDoor = state.m < state.r ? 'M' : (state.r < state.m ? 'R' : null);
+  var gainedDoor = hasDoor && hasDoor !== hadDoor;
+  var d = 0, why = '', cat = '';
+
+  /* Taking the exit is the loudest thing on the stage, so it reads FIRST. The
+     earlier build filed a cross to the door under "gives ground" whenever it
+     happened to increase the gap, which described the geometry and missed the play. */
+  if (gainedDoor){
+    cat = 'door';
+    d = 20;
+    why = (hasDoor === 'M' ? 'Maggie' : 'Ray') + ' puts a body between the other one and the way out. '
+        + 'Nothing was said about it and the stakes went up anyway.';
+  } else if (!movedM && !movedR){
+    cat = 'stillstill'; d = -12;
+    why = 'Neither of them moves. Two beats of that and the audience starts reading the exit sign.';
+  } else if (movedM && movedR && dist < prevDist){
+    cat = 'collide'; d = 14;
+    why = 'They both come in. That is a collision, and it can only happen once.';
+  } else if (movedM && movedR && dist > prevDist){
+    cat = 'bothout'; d = -10;
+    why = 'They both back off. The play just let itself off the hook.';
+  } else if (dist < prevDist){
+    cat = 'hold'; d = 22;
+    why = (movedM ? 'Maggie' : 'Ray') + ' closes the distance and ' + (movedM ? 'Ray' : 'Maggie')
+        + ' does not move. Holding still under an approach is the strongest thing a body can do in a scene.';
+  } else if (dist > prevDist){
+    cat = 'yield'; d = 8;
+    why = (movedM ? 'Maggie' : 'Ray') + ' gives ground and is allowed to. The air goes out slowly, '
+        + 'which is its own kind of pressure.';
+  } else {
+    cat = 'parallel'; d = 6;
+    why = 'They move together and keep the same gap. Nobody has won anything yet.';
+  }
+
+  /* HABITUATION. An audience adapts: the same move twice lands softer, three times
+     lands almost not at all. Without this the meter pinned at 100 by the fourth beat
+     and stopped teaching, which also happens to be false about how tension works.
+     It is what forces a player to VARY the staging to build a scene. */
+  state.repeat = (cat === state.lastCat) ? state.repeat + 1 : 0;
+  state.lastCat = cat;
+  if (state.repeat === 1 && d > 0){
+    d = Math.round(d * 0.5);
+    why += ' The same move again, so it lands softer.';
+  } else if (state.repeat >= 2 && d > 0){
+    d = Math.round(d * 0.25);
+    why += ' Three times running. The audience has stopped noticing.';
+  }
+
+  /* A scene leaks. Tension is not a bucket you fill, it is a thing you keep doing. */
+  d -= 3;
+
+  if (dist === 0){
+    d += 8;
+    why += ' They are standing on the same mark. Somebody has to move.';
+  }
+
+  state.tension = Math.max(0, Math.min(100, state.tension + d));
+  return why;
+}
+
+/* ═══ THE PAYOFF ═══
+   The player's choices, written back as the stage-direction prose they will have to
+   write themselves. Nobody is copying a model here: these sentences describe what
+   they actually did. Pronouns are avoided on purpose; the names carry it. */
+function stageDirection(){
+  var movedM = state.m !== state.prevM;
+  var movedR = state.r !== state.prevR;
+  var out;
+  if (movedM && movedR){
+    out = 'MAGGIE crosses to ' + MARKS[state.m].label + '. RAY crosses to ' + MARKS[state.r].label + '.';
+  } else if (movedM){
+    out = 'MAGGIE crosses to ' + MARKS[state.m].label + '. RAY does not move.';
+  } else if (movedR){
+    out = 'RAY crosses to ' + MARKS[state.r].label + '. MAGGIE does not move.';
+  } else {
+    out = 'Neither of them moves.';
+  }
+  var hadDoor = state.prevM < state.prevR ? 'M' : (state.prevR < state.prevM ? 'R' : null);
+  var hasDoor = state.m < state.r ? 'M' : (state.r < state.m ? 'R' : null);
+  if (hasDoor && hasDoor !== hadDoor){
+    out += ' ' + (hasDoor === 'M' ? 'MAGGIE' : 'RAY') + ' is between '
+        + (hasDoor === 'M' ? 'RAY' : 'MAGGIE') + ' and the door.';
+  }
+  if (state.m === state.r) out += ' They are standing in the same place.';
+  return out;
+}
+
+function paintMeter(why){
+  document.getElementById('bar').style.width = state.tension + '%';
+  document.getElementById('verdict').textContent = why;
+  var sp = document.getElementById('spark');
+  sp.textContent = '';
+  state.history.forEach(function(v){
+    var i = document.createElement('i');
+    i.style.height = Math.max(3, Math.round(v * 0.44)) + 'px';
+    sp.appendChild(i);
+  });
+}
+
+function playBeat(){
+  var b = BEATS[state.i];
+  var why = judge();
+  var sd = stageDirection();
+  state.staged.push({ who:b.who, line:b.line, sd:sd });
+  state.history.push(state.tension);
+
+  document.getElementById('saidWho').textContent = b.who;
+  var lineEl = document.getElementById('saidLine');
+  lineEl.classList.remove('idle');
+  lineEl.textContent = b.line;
+  document.getElementById('actM').classList.toggle('speaking', b.who === 'MAGGIE');
+  document.getElementById('actR').classList.toggle('speaking', b.who === 'RAY');
+  paintMeter(why);
+  announce(sd + ' ' + b.who + ': ' + b.line);
+
+  state.prevM = state.m; state.prevR = state.r;
+  state.i++;
+  if (state.i >= BEATS.length){
+    document.getElementById('beatCount').textContent = 'That is the scene.';
+    var pb = document.getElementById('playBeat');
+    pb.textContent = 'Read what you wrote';
+    pb.onclick = function(){ buildScript(); show('s-script'); };
+    document.getElementById('playHint').textContent = 'Eight beats, eight staging choices, one script.';
+    return;
+  }
+  document.getElementById('beatCount').textContent = 'Beat ' + (state.i + 1) + ' of ' + BEATS.length
+    + '  ·  next line is ' + BEATS[state.i].who + '’s';
+}
+
+function renderScript(host, rows){
+  host.textContent = '';
+  rows.forEach(function(r){
+    var sd = document.createElement('p'); sd.className = 'sd';
+    sd.textContent = '(' + r.sd + ')';
+    host.appendChild(sd);
+    var cue = document.createElement('p'); cue.className = 'cue'; cue.textContent = r.who;
+    host.appendChild(cue);
+    var dl = document.createElement('p'); dl.className = 'dlg'; dl.textContent = r.line;
+    host.appendChild(dl);
+  });
+}
+function buildScript(){
+  renderScript(document.getElementById('scriptOut'), state.staged);
+  var moves = state.staged.filter(function(r){ return r.sd.indexOf('Neither') !== 0; }).length;
+  var still = state.staged.length - moves;
+  var peak = Math.max.apply(null, state.history.concat([0]));
+  document.getElementById('scriptLede').textContent =
+    'Eight beats. ' + moves + ' of them moved somebody, ' + still + ' held everyone still, '
+    + 'and your tension peaked at ' + peak + '.';
+}
+document.getElementById('toFlat').addEventListener('click', function(){
+  var flat = BEATS.map(function(b, i){
+    return { who:b.who, line:b.line,
+             sd: i === 0 ? 'MAGGIE and RAY are at the table.' : 'Neither of them moves.' };
+  });
+  renderScript(document.getElementById('flatOut'), flat);
+  show('s-flat');
+});
+document.getElementById('toTeach').addEventListener('click', function(){ show('s-teach'); });
+
+function resetGame(){
+  state = { i:0, m:1, r:3, prevM:1, prevR:3, tension:8, history:[], staged:[], lastCat:'', repeat:0 };
+  document.getElementById('saidWho').textContent = 'BEAT 1';
+  var lineEl = document.getElementById('saidLine');
+  lineEl.className = 'line idle';
+  lineEl.textContent = 'Put them where you want them, then play the beat.';
+  document.getElementById('beatCount').textContent = 'Beat 1 of ' + BEATS.length
+    + '  ·  first line is ' + BEATS[0].who + '’s';
+  var pb = document.getElementById('playBeat');
+  pb.textContent = 'Play the beat';
+  pb.onclick = playBeat;
+  document.getElementById('playHint').textContent =
+    'Leaving someone where they are is a choice too, and often the strongest one.';
+  document.getElementById('actM').classList.remove('speaking');
+  document.getElementById('actR').classList.remove('speaking');
+  paintMarks();
+  paintMeter('Nothing has happened yet. That is the lowest tension there is.');
+}
+
+buildMarkRow('rowM', 'm');
+buildMarkRow('rowR', 'r');
+resetGame();
+document.getElementById('startBtn').addEventListener('click', function(){ show('s-play'); });
+document.getElementById('againBtn').addEventListener('click', function(){ resetGame(); show('s-play'); });
+</script>
+</body>
+</html>

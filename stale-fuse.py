@@ -143,6 +143,12 @@ def stamp(path, kind, inputs, regen=None, today=None, mode=None):
         "digest": dg,
         "generated": today or datetime.date.today().isoformat(),
     }
+    # In names mode the file list IS the state, so storing it costs almost nothing and
+    # turns "a registry drifted" into "playthrough-agent.py appeared". The first live
+    # catch of this tool could only say that something moved, which is loud but not
+    # actionable. An alarm you cannot act on gets muted.
+    if mode == "names":
+        fuse["files"] = _files_for(inputs, path)
     if regen:
         fuse["regen"] = regen
     d["_fuse"] = fuse
@@ -182,6 +188,16 @@ def verify(paths, quiet=False):
             tag = "STALE-HALT" if kind == "registry" else "drifted"
             print("  %-10s %-28s %s over %d file(s), generated %s"
                   % (tag, p, kind, n, fuse.get("generated", "?")))
+            was = fuse.get("files")
+            if was is not None:
+                now = set(_files_for(fuse.get("inputs", []), p))
+                old = set(was)
+                added = sorted(now - old)
+                gone = sorted(old - now)
+                if added: print("             appeared: %s" % ", ".join(added))
+                if gone:  print("             gone:     %s" % ", ".join(gone))
+                if not added and not gone:
+                    print("             same file set; a listed input changed identity (rename in place?)")
             if fuse.get("regen"):
                 print("             regenerate with: %s" % fuse["regen"])
             if kind == "registry":
