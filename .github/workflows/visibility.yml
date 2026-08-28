@@ -1,0 +1,60 @@
+# VISIBILITY — dedicated true-pixel contrast watch over ALL TSP assets
+# (root *.html + confluence-hub/*.html). Real Chromium, light + dark.
+#
+# WHY separate from floor.yml: floor.yml runs studio-eyes-sweep.py (WeasyPrint),
+# which grounds text to <body> and misses gold-on-gold / white-on-white
+# invisibility. This runs studio-eyes-pixel.py — it reads the actually-painted
+# background in a real browser. Nightly full sweep + on-demand; PR checks only
+# the HTML the PR changed (fast).
+name: visibility
+
+on:
+  schedule:
+    - cron: '0 6 * * *'      # nightly full-corpus sweep
+  workflow_dispatch:          # fire by hand from the phone
+  pull_request:
+    paths: ['**/*.html', 'studio-eyes-pixel.py', 'pixel-ratchet.py']
+
+jobs:
+  pixel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+
+      - name: Install the pixel eyes
+        run: |
+          pip install --quiet playwright pillow
+          python -m playwright install --with-deps chromium
+
+      - name: Seed baseline on first run
+        run: '[ -f pixel-baseline.json ] || python3 pixel-ratchet.py --init'
+
+      - name: PR — only the HTML this PR changed
+        if: github.event_name == 'pull_request'
+        run: |
+          CHANGED=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD" | grep -E '\.html$' || true)
+          if [ -z "$CHANGED" ]; then echo "no HTML changed"; exit 0; fi
+          echo "checking: $CHANGED"
+          python3 pixel-ratchet.py $CHANGED
+
+      - name: Nightly / manual — full corpus
+        if: github.event_name != 'pull_request'
+        run: python3 pixel-ratchet.py
+
+      - name: Publish the report
+        if: always()
+        run: python3 studio-eyes-pixel.py $(ls *.html confluence-hub/*.html 2>/dev/null) > pixel-report.txt 2>&1 || true
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: visibility-report
+          path: |
+            pixel-report.txt
+            pixel-baseline.json
+          retention-days: 30
