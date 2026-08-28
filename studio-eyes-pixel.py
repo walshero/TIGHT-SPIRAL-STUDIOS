@@ -102,24 +102,33 @@ COLLECT_VP = r"""
 }
 """
 
-def mode_bg(img, el):
-    """Dominant (quantized-mode) painted color inside the element box = true bg."""
+def mode_bg(img, el, tc):
+    """True painted background inside the element box.
+    The dominant colour band that is NOT the text colour = the background — so a
+    small button whose glyphs fill most of its box is grounded to the button
+    fill, not to its own text. If NO band is far from the text colour, the box is
+    essentially one colour with the text: that IS invisible text, so we return
+    the dominant colour (~text) and contrast reads ~1:1 and is flagged."""
     W, H = img.size
     x0 = max(0, el["x"]); y0 = max(0, el["y"])
     x1 = min(W, el["x"] + el["w"]); y1 = min(H, el["y"] + el["h"])
     if x1 <= x0 or y1 <= y0:
         return None
     sx = max(1, (x1 - x0) // 40); sy = max(1, (y1 - y0) // 40)
-    buckets = collections.defaultdict(list)
+    far = collections.defaultdict(list)    # pixels NOT the text colour (candidate bg)
+    allb = collections.defaultdict(list)   # every pixel (fallback = invisible case)
     px = img.load()
     for yy in range(y0, y1, sy):
         for xx in range(x0, x1, sx):
             p = px[xx, yy]
             key = (p[0] >> 4, p[1] >> 4, p[2] >> 4)   # quantize /16
-            buckets[key].append(p)
-    if not buckets:
+            allb[key].append(p)
+            if max(abs(p[0]-tc[0]), abs(p[1]-tc[1]), abs(p[2]-tc[2])) > 40:
+                far[key].append(p)
+    src = far if far else allb
+    if not src:
         return None
-    best = max(buckets.values(), key=len)             # most-frequent band = bg
+    best = max(src.values(), key=len)
     n = len(best)
     return (sum(p[0] for p in best)//n, sum(p[1] for p in best)//n, sum(p[2] for p in best)//n)
 
@@ -131,12 +140,18 @@ VH = 1000   # viewport height per tile
 def check(page, url):
     """Viewport-tiled true-pixel sweep across modes x widths for one url."""
     fails = []
+    FREEZE = ("*,*::before,*::after{animation:none!important;"
+              "transition:none!important;animation-duration:0s!important;"
+              "animation-delay:0s!important;transition-duration:0s!important}")
     for mode in MODES:
-        page.emulate_media(color_scheme=mode)
+        page.emulate_media(color_scheme=mode, reduced_motion="reduce")
         for w in WIDTHS:
             page.set_viewport_size({"width": w, "height": VH})
             page.goto(url, wait_until="load")
-            page.wait_for_timeout(200)
+            # measure the SETTLED UI: kill transitions/animations so overlays are
+            # sampled at their final opacity, not a mid-fade blend.
+            page.add_style_tag(content=FREEZE)
+            page.wait_for_timeout(300)
             doch = page.evaluate("Math.max(document.documentElement.scrollHeight, innerHeight)")
             seen = set()
             y = 0
@@ -151,7 +166,7 @@ def check(page, url):
                     if el["id"] in seen:
                         continue
                     seen.add(el["id"])
-                    bg = mode_bg(img, el)                   # viewport-relative box
+                    bg = mode_bg(img, el, el["color"])      # viewport-relative box
                     if bg is None:
                         continue
                     cr = contrast(el["color"], bg)
