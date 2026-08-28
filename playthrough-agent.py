@@ -101,6 +101,36 @@ def world_sig(page, sel):
         return None
 
 
+SIDECAR = 'tsp-worlds.json'
+
+
+def sidecar_world(path):
+    """Look up a build's world in tsp-worlds.json — the FALLBACK, not the interface.
+
+    A build should declare its own world in its head. This exists for one reason:
+    GitHub's Contents API refuses to return files over ~1MB, so the connector write
+    lane is blind on the studio's largest builds (choose-your-leader-full 3.5MB,
+    old-problems-at-new-speed 3.4MB, CYL v6 2.1MB, CYL v7 1.6MB) and physically
+    cannot add a meta tag to them. Without this, the world check is unusable on
+    exactly the surfaces that carry the most touches.
+
+    Precedence: CLI flags > the build's own meta > this file. Never the reverse —
+    two copies of one fact is the failure this studio keeps paying for, so the
+    sidecar loses every tie and every resolution from here prints a note.
+    Delete an entry the day its build can declare itself.
+    """
+    import json
+    fp = os.path.join(os.path.dirname(os.path.abspath(__file__)), SIDECAR)
+    if not os.path.exists(fp):
+        return (None, None)
+    try:
+        reg = json.load(open(fp, encoding='utf-8'))
+    except Exception:
+        return (None, None)
+    entry = reg.get(os.path.basename(path)) or {}
+    return (entry.get('world'), entry.get('touches'))
+
+
 def play(path, world=None, touches=None):
     from playwright.sync_api import sync_playwright
     card = {"file": os.path.basename(path), "clicks": 0,
@@ -155,6 +185,15 @@ def play(path, world=None, touches=None):
                 touches = page.get_attribute('meta[name=\"tsp:touches\"]', 'content')
             except Exception:
                 touches = None
+        if world is None:
+            sw, st = sidecar_world(path)
+            if sw:
+                world = sw
+                if touches is None:
+                    touches = st
+                card["notes"].append(
+                    f"world '{world}' resolved from {SIDECAR} — this build does not "
+                    "declare its own; a sidecar world is never silent")
         card["world"] = world
         card["touches"] = touches
 
