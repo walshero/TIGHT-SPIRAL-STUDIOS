@@ -12,6 +12,30 @@
 # HALT = R1 (invisible/low-contrast RENDERED text) / R2 / H4 / EM. C1+E1 are warns.
 # Run locally (needs weasyprint) or in CI: python3 floor-status.py [dir]
 # ROBUST: never raises to the caller — visibility must never block a deploy.
+#
+# ── 2026-08-28: THE RIBBON WILL NOT ACCUSE A PAGE THE ENGINE CANNOT SEE ────────
+# The founder opened workshop-wall.html and read "DRAFT · 4 contrast issues the
+# founder cannot read on this page." There were none. Measured in a real browser,
+# day and night, 390 and 1100: 62 text elements, ZERO below floor, and the exact
+# text the ribbon accused ('Comfort') sits at 12.46:1 and 16.49:1 against the
+# 2.86:1 the sweep reported. your-rp-world.html the same: 15 elements, zero.
+#
+# WHY IT WAS WRONG, and it is not staleness. Neither file had changed since the
+# ribbon was written. studio-eyes-sweep.py renders with WeasyPrint, which does not
+# execute JavaScript, and it says so itself in its own output:
+#     "JS present — engine does not execute it; hand-verify script-driven states"
+# Every studio page boots its comfort kernel from a pre-paint script. With no JS
+# that boot never runs, so the engine measured a state no browser ever paints, and
+# reported a stop ("softer") that had been retired the day before. This function
+# then took that self-declared hand-verify-me warning and printed it on the live
+# site as a finding about what the founder can read.
+#
+# So the policy, and it is the studio's oldest rule pointed the other way: a gate
+# that has gone blind must never read as clean — and a blind gate must never
+# ACCUSE either. A measurement carrying its own "I could not see this" warning
+# does not get to write on a shipped page. Such pages are still listed on the
+# dashboard, under their own heading, marked unverified. The dashboard is a place
+# to go looking; the ribbon is a claim made to a reader who did not ask.
 
 import sys, os, re, subprocess, html as H
 
@@ -51,12 +75,30 @@ def ribbon(name, nr1):
         '</a>' % (RIBBON_MARK, issue)
     )
 
+def engine_was_blind(src):
+    """True when the sweep could not have seen what a browser paints.
+
+    Identical test to studio-eyes-sweep.py's own JS-present warning, on purpose:
+    if the sweep says hand-verify this, the ribbon does not get to skip the hand.
+    Every studio page boots its comfort kernel from a pre-paint script, so on those
+    pages a no-JS engine measures a state that is never shipped to anyone."""
+    return "<script" in src.lower()
+
+
 def inject(name, nr1):
-    """Idempotent: replace an existing ribbon or insert one before </body>."""
+    """Idempotent: replace an existing ribbon or insert one before </body>.
+
+    Returns True on write, False on failure, and the string "blind" when the page
+    was spared because the measurement behind it could not execute the page."""
     try:
         src = open(name, encoding="utf-8", errors="replace").read()
     except Exception:
         return False
+    if engine_was_blind(src):
+        # Do not accuse a page the engine could not read. Clear any ribbon a
+        # previous run left there, so an old false claim does not outlive the rule.
+        strip_ribbon(name)
+        return "blind"
     new = ribbon(name, nr1)
     if RIBBON_MARK in src:
         src = re.sub(r'<a href="floor-status\.html" id="%s".*?</a>' % RIBBON_MARK,
@@ -79,6 +121,10 @@ def strip_ribbon(name):
     if RIBBON_MARK in src:
         src = re.sub(r'\n?<a href="floor-status\.html" id="%s".*?</a>\n?' % RIBBON_MARK,
                      "", src, flags=re.S)
+        # the ribbon ships a companion script that pads the body for its height;
+        # left behind it pads for nothing and still names the ribbon in the source
+        src = re.sub(r"\n?<script>\(function\(\)\{\s*var r=document\.getElementById\('%s'\);"
+                     r".*?\}\)\(\);</script>\n?" % RIBBON_MARK, "", src, flags=re.S)
         try:
             open(name, "w", encoding="utf-8").write(src)
         except Exception:
@@ -154,11 +200,14 @@ def main():
         open("floor-status.html", "w", encoding="utf-8").write(dashboard(files))
     except Exception as e:
         print("floor-status: could not write dashboard (%s)" % e)
-    marked = 0
+    marked, spared = 0, []
     swept = set(files.keys())
     for n, d in files.items():
         if d["hard"] and os.path.exists(n):
-            if inject(n, len(d["r1"])):
+            r = inject(n, len(d["r1"]))
+            if r == "blind":
+                spared.append(n)
+            elif r:
                 marked += 1
         elif os.path.exists(n):
             strip_ribbon(n)   # was failing, now clean -> pull the ribbon
@@ -167,6 +216,13 @@ def main():
         strip_ribbon(f)
     print("floor-status: %d HALT pages marked draft; floor-status.html written (%d files swept)."
           % (marked, len(files)))
+    if spared:
+        # Loud, not silent. These pages may still have a real defect; what we know
+        # is that this measurement could not see them, so it does not get to say.
+        print("floor-status: %d HALT page(s) NOT marked - the engine could not execute "
+              "them, so the finding is unverified, not proven:" % len(spared))
+        for n in spared:
+            print("    %s  (hand-verify in a browser; the ribbon is a claim, not a note)" % n)
 
 if __name__ == "__main__":
     try:
