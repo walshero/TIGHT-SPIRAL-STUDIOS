@@ -995,3 +995,15 @@ computer-permitted path in Drive."
 (Google Drive, git, filesystem), resolve it **by content from that lane before
 escalating**. Escalate only what genuinely cannot be verified from a reachable
 lane. A conflict is "unresolved" only after the computable lanes are exhausted.
+
+## 2026-07-23 — Founder ruling: v48 is Confluence trunk canon; promoted (logged, binding)
+
+"Confirmed. v48 is canon — log it and prep the promotion."
+
+- CANON = confluence-TRUNK-v48-2026-07-14.html (Drive, 631,929 B). Verified by content:
+  its own changelog shows v44 reconciled both lane forks (Git + Claude-project) onto the
+  Git base; v45-v48 on top. The repo v43 lineage (and the earlier #25 floors fix) are SUPERSEDED.
+- PROMOTED: confluence-TRUNK.html = prepped v48. api.anthropic.com scholar-review fetch gated
+  dormant (window.SC_LIVE); color-scheme:light declared (phone force-darken fix); 359 sub-18px
+  fonts raised. Confirmed contrast-clean by the true-pixel checker EXCEPT the founder-WAIVED
+  --pine-lt heading (earlier "invisible text" was checker artifact, since corrected).
