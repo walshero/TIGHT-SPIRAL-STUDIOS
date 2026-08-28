@@ -78,6 +78,8 @@ COLLECT_VP = r"""
     const cs = getComputedStyle(el);
     if (el.checkVisibility && !el.checkVisibility({checkOpacity: true, checkVisibilityCSS: true})) continue;
     if (cs.visibility === 'hidden' || cs.display === 'none' || parseFloat(cs.opacity) === 0) continue;
+    // WCAG exempts disabled / inactive controls from contrast.
+    if (el.closest('[disabled], [aria-disabled="true"], fieldset:disabled')) continue;
     const m = (cs.color.match(/[\d.]+/g) || []).map(Number);
     if (m.length < 3) continue;
     if (m.length >= 4 && m[3] === 0) continue;
