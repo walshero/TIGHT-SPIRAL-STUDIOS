@@ -67,18 +67,71 @@ Lab tag in the shelf. Verified: per-file preship halt counts are **identical
 before and after** the stamping, so the status was added without touching what
 the builds are.
 
-## PENDING: the founder said "many games," and named one set
+## The sweep, run 2026-08-27 (the founder said it three times)
 
-Only the Cliché Cowpaths were named. The rest of the corpus has not been ruled
-on. The candidates, on the same evidence the cowpaths were judged by (playable
-pages wearing **Live** that do not clear today's gates) are not yet enumerated,
-because enumerating them is a full-corpus gate sweep and cost discipline says
-scope to what changed.
+The first cut of this ruling parked the rest of the corpus as a PENDING question
+for the founder. He restated the instruction twice more in the same session, which
+is the answer: **"Many games have to be placed in lab status."** The sweep was run
+and applied.
 
-**The question the next session inherits:** run the sweep and bring the founder a
-list of Live-chipped builds with their halt counts, so he can rule on the rest in
-one pass rather than one at a time. Do not move anything to Lab on the studio's
-own judgement. The ladder is his vocabulary and the calls are his.
+**Method, and its honest limits.** Every room card on the face carrying a `c-live`
+chip was measured against `preship-gate-v5.py` (static, no browser, cheap) and
+`art-gate.py`. `studio-voice-gate.py` was deliberately NOT used as a trigger: it
+runs on a ratchet and carries debt by design, so measuring against it flat would
+demote nearly the whole corpus for a reason the studio already decided to pay
+down over time rather than all at once.
+
+**Result: 33 Live-chipped surfaces measured. 25 failed a shipping gate.**
+
+| holds Live (every gate green) | |
+|---|---|
+| `choose-your-leader-v7.html` · `the-compound-capstone.html` · `en195-hub.html` · `en195-arcade.html` · `enjambment.html` · `enjambment-skins.html` · `repos.html` · `workshop-wall.html` | 8 |
+
+**19 games moved to Lab**, band on the build and chip on the face: `the-console`,
+`old-problems-at-new-speed`, `choose-your-leader-full`, `choose-your-leader-v6`,
+`reading-the-fireground`, `the-tell`, `soundings-TRUNK-v03`, `behind-this-door`,
+`dad-energy`, `warriors-fantasy-arcade`, `how-an-idea-travels`,
+`funnybonies/index`, `fys_fys-treasure-trove`, `sandbags`, `review-bench`,
+`course-river`, `flash-ballast`, `play-the-semester`, `studio/play-the-studio`.
+
+**Six surfaces failed gates and were NOT moved**, because Lab is a status for a
+game and calling a runbook an experiment on the bench would be using the founder's
+word for something he did not point it at: `arcade.html` and `islo-hub.html` (both
+indexes), `en195.html` (a course front door), `workshop-in-a-box.html` (a kit),
+`tight-spiral-runbook.html` and `studio/tight-spiral-system-map.html` (documents).
+**Open for the founder:** these wear Live while failing the gates. Does the ladder
+extend to non-game surfaces, or do documents need their own word?
+
+## The flagship was fixed rather than demoted
+
+`en195-arcade.html` failed only `art-gate`, on 5,158 bytes of hand-cut scene art,
+and it had failed that way for weeks with no legal remedy short of deleting the
+art. The studio-cut lane opened the same day gave it one, and the lane does not
+take a marker's word for it: the art was marked `data-art-class="studio-cut"`,
+its scene marked `data-scene`, and `art-execution-gate.py` **passed it** on type
+dominance, cross-hatch and flat layers. The art was never the problem. The rule
+that banned it had gone stale. The flagship holds Live on measurement.
+
+## How the status mounts, and why retrofits differ
+
+A new build carries a `.tsp-lab` chip inside its `<h1>`, beside the version chip.
+That is the pattern, and `cliche-hunter.html` and the five cliché builds use it.
+
+The 19 retrofits carry a **`.tsp-labband`** instead: a status band directly after
+`<body>`. Their heading structures have nothing in common. One builds its title
+from a JS template, one carries four `h1` elements, and three have **no `h1` at
+all**. Rewriting the title markup of nineteen shipped games to add a label is a
+large blast radius for a label. The band's colours are fixed rather than
+tokenised, at 13.4:1, because these files do not share a palette and a status that
+inherits an unknown token can arrive invisible.
+
+**One defect, caught by rendering rather than by reading.** The first pass matched
+`<body>` inside a prose comment in `old-problems-at-new-speed.html` and mounted
+the band inside that comment, where it never rendered. Same shape as the comfort
+slice that stopped one line short in the Cliché Hunter build: a pattern matched in
+source is not a thing on screen. All 19 were then rendered headless and the band
+confirmed present, sized and visible; 12 were clicked through to confirm the games
+still respond.
 
 ## What this does not change
 
