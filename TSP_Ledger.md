@@ -985,3 +985,13 @@ Logged from the Claude Code + Confluence-project sessions, in the founder's word
 - **CONSEQUENCE:** v48 (Drive canon) is NOT contrast-clean — the FERPA-class invisibility
   the manifest warned of is real and present. The v48 promotion (PR #52) must clear these
   before ship. The checker can run in CI (floor.yml already installs playwright + chromium).
+
+## 2026-07-23 — Standing rule: COMPUTE-BEFORE-ESCALATE (founder correction, binding)
+
+"In the future, don't take days waffling about canon issues when you have a
+computer-permitted path in Drive."
+
+**Rule.** When a canon question arises AND a permitted, computable lane exists
+(Google Drive, git, filesystem), resolve it **by content from that lane before
+escalating**. Escalate only what genuinely cannot be verified from a reachable
+lane. A conflict is "unresolved" only after the computable lanes are exhausted.
