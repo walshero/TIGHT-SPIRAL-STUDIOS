@@ -185,6 +185,15 @@ def play(path, world=None, touches=None):
                 touches = page.get_attribute('meta[name=\"tsp:touches\"]', 'content')
             except Exception:
                 touches = None
+        if world is None:
+            sw, st = sidecar_world(path)
+            if sw:
+                world = sw
+                if touches is None:
+                    touches = st
+                card["notes"].append(
+                    f"world '{world}' resolved from {SIDECAR} — this build does not "
+                    "declare its own; a sidecar world is never silent")
         card["world"] = world
         card["touches"] = touches
 
