@@ -1007,3 +1007,29 @@ lane. A conflict is "unresolved" only after the computable lanes are exhausted.
   dormant (window.SC_LIVE); color-scheme:light declared (phone force-darken fix); 359 sub-18px
   fonts raised. Confirmed contrast-clean by the true-pixel checker EXCEPT the founder-WAIVED
   --pine-lt heading (earlier "invisible text" was checker artifact, since corrected).
+
+## 2026-07-23 — SESSION CLOSE: Confluence→one repo, v48 promoted, visibility gate built (Funes close)
+
+Arc of the Code + Confluence sessions, all landed to canon (main `ac9c5d8`):
+- **One repo.** Confluence is a lane in `TIGHT-SPIRAL-STUDIOS` (hub #24, spec, gates). The
+  separate private repo is retired.
+- **Trunk.** v48 (Drive canon) PROMOTED to the repo (#52): api.anthropic.com scholar-review
+  fetch gated dormant, color-scheme:light (phone force-darken fix), 359 sub-18px fonts raised.
+  Contrast-clean by true-pixel EXCEPT the founder-WAIVED --pine-lt. Superseded the v43-lineage
+  #25 floors fix.
+- **Companion** floor-clean (#49). **Playtest team** seated + first pass (#48).
+- **Funes adopted** for the Confluence lane — this ledger + handoff.py are the memory.
+- **Standing rule** #51: compute-before-escalate on canon.
+- **Visibility gate** #53: `studio-eyes-pixel.py` true-pixel contrast (light+dark, self-test
+  teeth), `pixel-ratchet.py` + `visibility.yml` across all 86 assets incl. Confluence. Iterated
+  to accuracy (occlusion, non-text grounding, animation-freeze, WCAG disabled-exempt). Correction
+  logged: the earlier "invisible text" in v48 was a checker artifact; fixed the checker, not the trunk.
+
+OPEN LOOPS (Funes board):
+- `pixel-baseline.json` UNSEEDED — trigger `visibility.yml` once (Actions → Run workflow) and
+  commit the uploaded artifact; the ratchet blocks new invisibility only once the baseline is committed.
+- v48 is light-only by design — decide if a dark palette is wanted (the H-DARK-PROMISE question).
+- `HANDOFF.md` stale (2026-07-16); `preship-gate-v4` still not wired into `floor.yml` CI.
+- Old private repo `confluence-calibration-assessment-hub`: safe to archive (one stray bogus
+  branch `claude/rule-compute-before-escalate` dies with it).
+- v48 version banner + cross-lane manifest row still under-count — update to the promoted v48.
