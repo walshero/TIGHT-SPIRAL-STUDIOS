@@ -410,7 +410,8 @@ def self_test():
     print(f"    GOOD canary clean          : {'PASS' if ok_good else 'FAIL -> '+str(r['good'])}")
     print(f"    BAD1 (tap/viewport/wall)   : {'PASS' if ok_bad1 else 'FAIL -> got '+str(sorted(codes1))}")
     print(f"    BAD2 (missing meta view)   : {'PASS' if ok_bad2 else 'FAIL -> got '+str(sorted(codes2))}")
-    return 0 if (ok_good and ok_bad1 and ok_bad2) else 1
+    print(f"    BAD3 (tap AFTER transition): {'PASS' if ok_bad3 else 'FAIL -> got '+str(sorted(codes3))}")
+    return 0 if (ok_good and ok_bad1 and ok_bad2 and ok_bad3) else 1
 
 
 def main():
