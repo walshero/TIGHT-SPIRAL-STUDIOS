@@ -2,8 +2,16 @@
 
 ## COMFORT WORK IS PAUSED — founder ruling, standing (2026-08-29)
 **No build asks the player about their preferences. No comfort button, no light row, no
-text-size row, no legibility panel. No walls.** One universal home: one palette, one type
-scale, one dark rule, the same everywhere.
+text-size row, no legibility panel. No walls.**
+
+**Palette is PER GAME** — a game's palette serves the game (CYL's era ladder is canon), and
+the **Colour & Palette Lead** owns it. What is universal is the absence of a wall, not the
+hue. Per-game palette work is NOT paused.
+
+**The universal home is NAVIGATION:** top of every game `<header class="se-chrome">` carries
+**Studio** (`index.html`) and **Cabinet** (`arcade.html`); bottom `<nav class="se-rail">`
+carries **Back** and **Home**. The bottom rail is already right on ~63 surfaces; the top
+needs Cabinet added in the same header the Comfort button is cut from — one edit, not two.
 
 - **Do not start** a new palette, light mode, type-scale experiment or comfort-kernel
   version. Existing kernels are frozen as they stand. The pause lifts only when the
