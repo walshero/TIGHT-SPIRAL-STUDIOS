@@ -157,10 +157,90 @@ PROBE = r"""
 }
 """
 
+# Set by audit_page, read by notes_for on the very next call for the same file.
+# A module global for one string is not elegant; a silent advance would be worse.
+ADVANCED_NOTE = None
+
+ENTRY_SEL = ('button, a[href], [role=button], [onclick], '
+             'input[type=button], input[type=submit]')
+
+
+def advance_past_entry(page):
+    """Click a lone entry control so the gate measures the SCENE, not the door.
+
+    THE DEFECT THIS CLOSES, named by the Aleph fleet 2026-08-07 as TAP-TARGET and
+    proven by canary 2026-08-28: this gate probed at first paint only. TSP builds
+    create their controls on transition, so on a page whose room is revealed by one
+    click the gate measured the entry screen and printed "every hand lands" over two
+    20px controls it never saw. Its own three canaries were first-paint pages, so
+    they shared the blind spot and could not catch it. A green self-test was, on this
+    question, evidence of nothing.
+
+    THE NARROW REPAIR, and why it is narrow: advance ONLY when the page opens with
+    exactly ONE live in-page control. One control is a door. Two or more is a choice,
+    and a gate that guesses which choice to make is a gate inventing a playthrough.
+    The alternative considered and rejected was a per-file reach recipe: on a corpus
+    sweep of 100+ surfaces a recipe gets filled for three and leaves the rest blind
+    while LOOKING covered, which is worse than a known blind spot.
+
+    MEASURED REACH, recorded so nobody mistakes this for a closed finding: on
+    2026-08-28 this advanced past an entry gate on ZERO of fourteen sampled corpus
+    surfaces. Every real TSP build opens with more than one live control. This is
+    insurance and a permanent canary, not coverage. The fleet's TAP-TARGET finding
+    stays OPEN; the durable fix is geometry measured at every state the crawler in
+    playthrough-agent.py already visits.
+
+    Never follows a link off this file (that was the nav-link bleed, 2026-08-07).
+    Returns the control's name when it advanced, None otherwise. Never silent.
+    """
+    try:
+        live = [e for e in page.query_selector_all(ENTRY_SEL)
+                if e.is_visible() and e.is_enabled()]
+    except Exception:
+        return None
+    if len(live) != 1:
+        return None
+    el = live[0]
+    href = (el.get_attribute('href') or '')
+    if href and not href.startswith('#'):
+        return None
+    try:
+        name = (el.inner_text() or el.get_attribute('aria-label') or '').strip()[:34]
+        before = page.url
+        el.click(timeout=1500)
+        page.wait_for_timeout(300)
+        if page.url != before:
+            page.goto(before, wait_until='load')
+            page.wait_for_timeout(200)
+            return None
+    except Exception:
+        return None
+    return name
+
+
 def audit_page(page, path):
+    global ADVANCED_NOTE
+    ADVANCED_NOTE = None
     page.goto('file://' + os.path.abspath(path), wait_until='load')
     page.wait_for_timeout(200)
     d = page.evaluate(PROBE)
+
+    # Measure the door, then the room, and take the union of the TOUCH floors only.
+    # Deliberately not merged: metaViewport, overflow and the comfort wall are
+    # properties of how the page OPENS, and first paint is the honest moment for them.
+    name = advance_past_entry(page)
+    if name:
+        ADVANCED_NOTE = name
+        d2 = page.evaluate(PROBE)
+        def _k(x):
+            return (x.get('tag'), x.get('name'), x.get('px'), x.get('fs'))
+        for field in ('small', 'zoomy'):
+            seen = {_k(x) for x in d.get(field, [])}
+            for x in d2.get(field, []):
+                if _k(x) not in seen:
+                    d.setdefault(field, []).append(x)
+                    seen.add(_k(x))
+
     halts = []
 
     if not d['metaViewport']:
