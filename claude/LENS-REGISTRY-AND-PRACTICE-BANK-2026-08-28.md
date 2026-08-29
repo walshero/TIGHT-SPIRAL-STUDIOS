@@ -14,7 +14,82 @@ needs mounting.
 
 ## PART A: THE LENS REGISTRY
 
-**Thirteen lenses across four workshops.** All are the founder's own, from the current
+### A0 · THE READER ROLES, which are the actual "Read as X" instructions
+
+**Correction, and worth recording.** The first cut of this file mined the four workshop
+instruction documents and reported that the lenses lived there. Founder: *"Lenses live in
+Google Docs. See course schedule and docs with instructions. No forms."* He is right. The
+named roles are in the **Course Schedule**, in Workshop 4, and they are sharper than
+anything in the instruction docs. I looked in the instruction files and the Forms and
+stopped before the schedule, which is the document the syllabus links first.
+
+**The three roles, verbatim:**
+
+> **Reader Roles**
+> Each pass, take one of these three reader roles. Use a different role on each of your
+> first three pieces.
+>
+> 1. **The Compression Reader**: Where does the piece earn its brevity, and where could it
+>    cut? Look for the line that does the work of three, the wind-up before the real first
+>    sentence, the explaining the scene already shows.
+> 2. **The Image Reader**: What can you see, hear, and touch, and where does it blur? Look
+>    for the concrete detail that lands, the named feeling that should be shown instead,
+>    the abstraction with no picture under it.
+> 3. **The Turn Reader**: Does the ending arrive late and quiet, or does it just stop? Look
+>    for where the story turns, whether the last line lands sideways on an object or
+>    gesture, whether the close is earned by what came before.
+
+**These are proper roles, not focus areas.** They have names, they are taken one at a
+time, and they rotate. Each carries three specific things to hunt for. That is a deck of
+cards, already written.
+
+### A0.1 · THE LOOP HE ALREADY DESIGNED
+
+This is the most important line in everything mined so far, and it is a parenthesis in
+his own schedule:
+
+> *"(Optional: practice these same three moves as a writer in Matt's practice arcade,
+> extra credit. **The role you read for is the move you practiced.**)"*
+
+**He has already specified the connective tissue between the arcade and the workshop.**
+Read as the Compression Reader, then practice compression as a writer. The role and the
+move are the same object seen from two sides. Nothing in the arcade currently closes that
+loop, and no design meeting needs to invent it.
+
+The EN195 Arcade is also already **Extra Credit Option 2** in the live course, linked to
+`walshero.github.io/TIGHT-SPIRAL-STUDIOS/`, worth five points, *"equivalent to a full
+Discussion Board assignment."*
+
+### A0.2 · THE FOURTH PASS: calibration, and it is outcome 4
+
+The fourth piece in Workshop 4 is not a response to the writing at all:
+
+> *"This time you aren't responding to the piece itself. Read the writer's draft WITHOUT
+> reading the comments, reflect and take a few notes on your own elsewhere, THEN review the
+> comments already made. Comment on the workshop itself. **Do your notes match the previous
+> readers?** Respond to commenters and to the author where you have something valuable to
+> add."*
+
+Read blind, commit privately, then meet the record and measure the gap. **That is the
+Choose Your Leader mechanic pointed at criticism**, and it is the clearest existing answer
+to outcome 4, the uncovered quarter of the course.
+
+### A0.3 · THE PARKED INSTRUCTION IS SETTLED BY HIS OWN SCHEDULE
+
+Assignment 3.06, verbatim, on the free verse poem:
+
+> *"You may be tempted to rhyme, but I'm actually going to require you **not to rhyme**.
+> Often we focus on rhyme and meter at the expense of meaning, metaphor, turns, other
+> sounds and textures of language, etc."*
+
+The corpus recommended dropping the rhyme-and-meter framing on inference from his feedback.
+This is not inference. **His course requires students not to rhyme, and names the reason
+as the exact cost that framing would impose.** Treating this as closed unless he says
+otherwise.
+
+---
+
+**Thirteen lenses across four workshops**, plus the three named roles above.** All are the founder's own, from the current
 instruction documents. The shape is identical every time and is worth naming, because it
 is a reusable game structure:
 
@@ -71,6 +146,11 @@ And the reason, which is a game mechanic waiting to happen:
 > actors and directors and stage managers and lighting and sound all do."*
 
 Also here, from Sellers: *"Happy Man + All Desires Fulfilled = Boring. No tension."*
+
+The schedule additionally assigns **Responding to Plays and Screenplays**, seven questions
+from Sellers: the story of the scene; the psychology of the people; conflicts in the
+dialogue; conflicts in the action; conflicts in the setting; what changes over the play;
+and *"What images do you see in your mind as you listen to the dialogue?"*
 
 ### A4 · FLASH FICTION (Workshop 4): four lenses, and the most developed set in the course
 
@@ -309,11 +389,17 @@ Not a design. The pieces a design now has in hand.
 1. **Station Seven: exemplar or anti-model?** Blocks its use either way.
 2. **May the bank quote his own creative work** (the Montserrat poem, other pieces)?
    CNF-03 is a deliberate hole until this is answered.
-3. **Spring 2026 workshops:** I mined the current instruction set, which is the Summer 2026
-   generation. The Spring section forms exist in Drive as Google **Forms**, whose question
-   text the read tool does not return. If Spring's lenses differ, say so and I will find
-   another route into them.
-4. **Should CNF get named lenses?** It is the only workshop without them, and a game that
+3. **Spring 2026:** still not mined. The Summer 2026 schedule is now read in full and is
+   the source of the reader roles above. The Spring 2026 schedule is a separate document I
+   have not located; a title search returns the Summer one. **Point me at it and I will
+   mine it the same way.** Whatever it holds is additive, not a correction, since these
+   roles are current.
+4. **Instruction docs linked from the schedule and not yet read**, any of which may hold
+   more lenses: *Reading a Poem, 20 Strategies* (a PDF resource); *What Is Creative
+   Nonfiction?*; the *Secret World* and *Moving Images* assignments; *How to Write a
+   10-minute Play*; the *Play/Screenplay* section of Sellers Ch 10; *Portfolio Guidelines*;
+   *A Student Cried in My Poetry Workshop*. Say which are worth the read.
+5. **Should CNF get named lenses?** It is the only workshop without them, and a game that
    invents four would be putting words in the course's mouth unless he authors them.
-5. **Bank size:** eleven usable pieces here. What is the right number per genre before this
+6. **Bank size:** eleven usable pieces here. What is the right number per genre before this
    becomes a build?
