@@ -271,6 +271,10 @@ def audit_page(page, path):
 def notes_for(path, d):
     """C-* notes. Conventional phone patterns, NOT floors. These never block."""
     notes = []
+    if ADVANCED_NOTE:
+        notes.append(f"C-ENTRY     opened with one control (\"{ADVANCED_NOTE}\") and advanced "
+                     "past it before measuring — the touch floors below cover the scene, "
+                     "not just the door.")
     p = d.get('primary')
     for s in d.get('stubby', []):
         notes.append(f"C-BUTTON    \"{s['name']}\" {s['px']}px — clears {TAP_FLOOR}px LAW, under the {BTN_FLOOR}px founder preference.")
