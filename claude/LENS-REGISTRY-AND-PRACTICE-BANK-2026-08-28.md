@@ -234,10 +234,9 @@ directly: this is eating "fruit." Ask for the one dish, the one sound, the one h
 "three shirts" and "traffic near the bridge" get equal weight. His 5% Cut, and Slide.
 
 **CNF-03 · FOUNDER · lens: Immersion**
-> Quoted from the founder's own poem *The Road to Montserrat*, held in Drive and shared
-> with a student in a portfolio response. **Not reproduced here** pending his answer to
-> the permission question in the corpus (§8.6). Placeholder retained deliberately so the
-> slot is not quietly filled with something weaker.
+> Hole filled. Founder granted permission 2026-08-28: *"You can use Monserrat and China
+> gold."* Both pieces now sit in **B5** below, where their genres are named honestly:
+> neither is creative nonfiction.
 
 ---
 
@@ -365,6 +364,125 @@ a file called "Model Text" will be imitated.
 
 ---
 
+### B5 · FOUNDER PIECES
+
+**Permission, verbatim, 2026-08-28:** *"You can use Monserrat and China gold."* Granted in
+session, recorded here. Two pieces of the founder's own creative work, reproduced exactly.
+Neither is student work and neither needs a licence.
+
+These are the bank's only pieces that **demonstrate the moves working**, rather than
+failing. That matters: every other entry is something to repair, and a critique game built
+only on repairs teaches half of what he teaches.
+
+---
+
+**FND-01 · FOUNDER · "China Gold" · lenses: The Image Reader, The Turn Reader**
+
+<!-- SOURCE-VERBATIM-BEGIN Matt Walsh, "China Gold," reproduced exactly with permission 2026-08-28 -->
+> Before it burned down
+> I used to go to China Gold with Sophie and my mom
+> for fried rice and egg rolls
+> under a three-paneled painting
+> of fine-ridged mountains rising up from the moss-like trees and the mist —
+> and barely discernible on the mountain path: a crouching figure with a walking stick,
+> proof of man's existence.
+>
+> "You can go there," Sophie said, drinking from a tiny patterned cup,
+> though I'm not sure I believed her then.
+>
+> Years later, climbing Cloud Path in the mountains of western Sichuan
+> I ascended into the mist with my walking stick
+> over a crumbling staircase, past a rain-slick temple,
+> and then I saw myself over the chasm, out in the sky,
+> my massive twelve-year-old self cracking open a fortune cookie, oblivious,
+> and I yelled to me, hands cupped around my mouth,
+> all the things that I should know
+> all the things about to come...
+> but the boy in the booth couldn't hear the man on the mountain.
+> The boy just played with toothpicks and chunks of pineapple
+> until it was time to pay the bill and go home.
+<!-- SOURCE-VERBATIM-END -->
+
+**This is the answer key to his own corpus, in one poem.**
+
+- **The universal and the distinct.** Nobody else's childhood is this one. Not "a
+  restaurant" but China Gold, before it burned down; not "food" but fried rice and egg
+  rolls; not "a cup" but a tiny patterned cup. Compare **POE-01**, the studio draft built
+  to be true of millions. **Same genre, same territory, opposite ends of the move.** That
+  pairing is the single best teaching object in the bank.
+- **The turn, and it clicks backward.** The painting's crouching figure with a walking
+  stick is planted in stanza one as decoration. Years later he *is* that figure, on that
+  path, with that stick. His own Turn Reader test: cut the turn and the poem is nothing.
+- **The last line lands sideways on an object.** Toothpicks, pineapple, the bill. Exactly
+  what the Turn Reader is told to look for.
+- **Sophie's line is the hinge and it is dialogue, not statement.** *"You can go there."*
+  The poem never explains it. Nothing is on the nose.
+- **Ambiguity of feeling, not of event.** You always know what happened. What it costs him
+  is left open, which is the distinction he draws and few pieces get right.
+
+*Playable as:* the paired specimen for universal/distinct, and the worked example for the
+Turn Reader before a player takes that role.
+
+---
+
+**FND-02 · FOUNDER · "The Road to Monserrat" · lenses: The Turn Reader, The Compression Reader**
+
+*A prose poem, not nonfiction. Reproduced exactly, including the title's spelling, which
+differs from the spelling inside the piece. Not corrected: it is his file.*
+
+<!-- SOURCE-VERBATIM-BEGIN Matt Walsh, "The Road to Monserrat," reproduced exactly with permission 2026-08-28 -->
+> Himmler and the Nazis drove on Montserrat for the Holy Grail, a column of sedans sewing
+> up the switchbacks over Catalonia, Wagner's *Parsifal* blaring from a radio. Himmler
+> counts the teeth of the mountain spine and dreams of seizing the black madonna.
+>
+> That morning while the soldiers provisioned, one of Franco's indignant peasants removed
+> the spark plugs from the munitions truck. At a seaside vista an hour later. another had
+> poured sand in a gas tank. As they ascended the mountain, the entourage braked frequently
+> and with polysyllabic curses for the boulders and dead trees that children and
+> grandmothers had pushed in front of them.
+>
+> But here they come now, marching across the esplanade in the October light. The abbot
+> happens to be away, so Ripol Noble greets them in German and receives them in the
+> monastery square, where it is cool, and the midday sky is white. Here he directs
+> Himmler's men to the library, to the black madonna, to the monastery vaults.
+>
+> There is one monk, let's say Sebastian, who fears for the work he's been transcribing:
+> it predates the other manuscripts, and fears that its truth, once seen, will reveal him
+> as someone who would share that truth, and so he has eaten the pages.
+>
+> I think about Sebastian, and suddenly he's in a classroom in Florida, he's the librarian
+> there, and the Moms for Liberty are pulling the books from the shelves and into a cart
+> with wheels. The books disappear into the cart. The Moms for Liberty pull Sebastian by
+> his long robe. They pull him by his long beard, opening his mouth, and Linda has her
+> whole arm in up to the elbow and pulls out the pages that he's torn out and swallowed,
+> yellow slick with bile like the yolk of an egg, and she drops them into the cart with
+> wheels, and pushes the monk, who's leaning in anyway for his pages, into the cart with
+> wheels, with the rest of the books, and he is gone, and there is no sound, other than the
+> squeak of wheels over the frayed carpet
+<!-- SOURCE-VERBATIM-END -->
+
+**What it teaches:**
+
+- **The turn is a hinge between two centuries**, and it is announced by four plain words:
+  *"I think about Sebastian."* The writer steps into his own poem and the whole thing
+  changes register. A Turn Reader can name the exact word where it happens.
+- **The swallowed pages are planted, then paid.** Sebastian eats them in 1940; Linda pulls
+  them out in a Florida classroom. Same object, two eras. This is his "click backward,"
+  built across a historical gap.
+- **The last line lands sideways on an object**, again: the squeak of wheels over frayed
+  carpet. No summary, no moral.
+- **Compression Reader material.** *"let's say Sebastian"* invents a character in three
+  words and never apologises for it. The whole second paragraph is sabotage rendered as a
+  list, no scene needed.
+- **No closing punctuation.** The piece stops rather than ends. Worth asking a player
+  whether that is a turn that lands or a piece that just stops, since that is exactly the
+  question the Turn Reader is handed, and this one is arguable.
+
+*Playable as:* the hardest specimen in the bank, and the one where two readers will
+disagree. That disagreement is the point: a reading is a position, not a verdict.
+
+---
+
 ## PART C: HOW THIS GETS PLAYED
 
 Not a design. The pieces a design now has in hand.
@@ -387,8 +505,9 @@ Not a design. The pieces a design now has in hand.
 ## OPEN, for the founder
 
 1. **Station Seven: exemplar or anti-model?** Blocks its use either way.
-2. **May the bank quote his own creative work** (the Montserrat poem, other pieces)?
-   CNF-03 is a deliberate hole until this is answered.
+2. **Permission: ANSWERED 2026-08-28.** *"You can use Monserrat and China gold."* Both are
+   in B5. Open only in scope: does the grant extend to his other creative work, or is it
+   these two pieces?
 3. **Spring 2026:** still not mined. The Summer 2026 schedule is now read in full and is
    the source of the reader roles above. The Spring 2026 schedule is a separate document I
    have not located; a title search returns the Summer one. **Point me at it and I will
