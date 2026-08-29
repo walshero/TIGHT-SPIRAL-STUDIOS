@@ -967,3 +967,69 @@ Logged from the Claude Code + Confluence-project sessions, in the founder's word
 - **Adopt Funes.** "Adopt the TSP mechanism for synching chats with funes ledger and os." The Confluence lane now syncs to this ledger (founder log at close), carries state via `handoff.py`, and runs the Funes open card (canon-as-of-today + open loops). This entry is the first sync.
 
 **Open loops (Funes board):** PRs #48/#49 pending merge · auto-dark decision (companion F3) · trunk version banner + cross-lane manifest still say v44 (stale; canon is `01b053f8`) · `preship-gate-v4` is not in CI so the H-DARK/font teeth don't block (the companion regression slipped this way) · `HANDOFF.md` is stale (2026-07-16).
+
+## 2026-07-23 — Built the true-pixel contrast checker; v48 has real invisible text (logged, binding)
+
+"Build pixel checkers needed so studio stops failing contrast (regular and dark mode)."
+
+- **BUILT `studio-eyes-pixel.py`** — a real-Chromium true-pixel contrast gate. Loads the
+  page (executes JS), viewport-tiled screenshots, reads the ACTUALLY-painted background
+  behind each text run (quantized-mode sampling, robust to anti-aliased glyphs), with
+  `elementFromPoint` occlusion so closed overlays / hidden nav are not false-flagged.
+  Checks **light AND dark**. Self-test teeth (gold-on-gold HALTs, black-on-white passes)
+  refuse to certify if broken. Fixes WeasyPrint's body-grounding, which caused BOTH false
+  positives (dark-ground text) and the gold-on-gold false negatives.
+- **VALIDATED:** companion = SHIP (true-pixel clean, light+dark). Trunk v48 = HALT with
+  REAL defects the WeasyPrint gate missed: `'Skip tour'` studio-green-on-green (1.0:1,
+  invisible), `'Next'` white-on-white (1.08:1), `'What Confluence is'` green heading 3.86:1.
+- **CONSEQUENCE:** v48 (Drive canon) is NOT contrast-clean — the FERPA-class invisibility
+  the manifest warned of is real and present. The v48 promotion (PR #52) must clear these
+  before ship. The checker can run in CI (floor.yml already installs playwright + chromium).
+
+## 2026-07-23 — Standing rule: COMPUTE-BEFORE-ESCALATE (founder correction, binding)
+
+"In the future, don't take days waffling about canon issues when you have a
+computer-permitted path in Drive."
+
+**Rule.** When a canon question arises AND a permitted, computable lane exists
+(Google Drive, git, filesystem), resolve it **by content from that lane before
+escalating**. Escalate only what genuinely cannot be verified from a reachable
+lane. A conflict is "unresolved" only after the computable lanes are exhausted.
+
+## 2026-07-23 — Founder ruling: v48 is Confluence trunk canon; promoted (logged, binding)
+
+"Confirmed. v48 is canon — log it and prep the promotion."
+
+- CANON = confluence-TRUNK-v48-2026-07-14.html (Drive, 631,929 B). Verified by content:
+  its own changelog shows v44 reconciled both lane forks (Git + Claude-project) onto the
+  Git base; v45-v48 on top. The repo v43 lineage (and the earlier #25 floors fix) are SUPERSEDED.
+- PROMOTED: confluence-TRUNK.html = prepped v48. api.anthropic.com scholar-review fetch gated
+  dormant (window.SC_LIVE); color-scheme:light declared (phone force-darken fix); 359 sub-18px
+  fonts raised. Confirmed contrast-clean by the true-pixel checker EXCEPT the founder-WAIVED
+  --pine-lt heading (earlier "invisible text" was checker artifact, since corrected).
+
+## 2026-07-23 — SESSION CLOSE: Confluence→one repo, v48 promoted, visibility gate built (Funes close)
+
+Arc of the Code + Confluence sessions, all landed to canon (main `ac9c5d8`):
+- **One repo.** Confluence is a lane in `TIGHT-SPIRAL-STUDIOS` (hub #24, spec, gates). The
+  separate private repo is retired.
+- **Trunk.** v48 (Drive canon) PROMOTED to the repo (#52): api.anthropic.com scholar-review
+  fetch gated dormant, color-scheme:light (phone force-darken fix), 359 sub-18px fonts raised.
+  Contrast-clean by true-pixel EXCEPT the founder-WAIVED --pine-lt. Superseded the v43-lineage
+  #25 floors fix.
+- **Companion** floor-clean (#49). **Playtest team** seated + first pass (#48).
+- **Funes adopted** for the Confluence lane — this ledger + handoff.py are the memory.
+- **Standing rule** #51: compute-before-escalate on canon.
+- **Visibility gate** #53: `studio-eyes-pixel.py` true-pixel contrast (light+dark, self-test
+  teeth), `pixel-ratchet.py` + `visibility.yml` across all 86 assets incl. Confluence. Iterated
+  to accuracy (occlusion, non-text grounding, animation-freeze, WCAG disabled-exempt). Correction
+  logged: the earlier "invisible text" in v48 was a checker artifact; fixed the checker, not the trunk.
+
+OPEN LOOPS (Funes board):
+- `pixel-baseline.json` UNSEEDED — trigger `visibility.yml` once (Actions → Run workflow) and
+  commit the uploaded artifact; the ratchet blocks new invisibility only once the baseline is committed.
+- v48 is light-only by design — decide if a dark palette is wanted (the H-DARK-PROMISE question).
+- `HANDOFF.md` stale (2026-07-16); `preship-gate-v4` still not wired into `floor.yml` CI.
+- Old private repo `confluence-calibration-assessment-hub`: safe to archive (one stray bogus
+  branch `claude/rule-compute-before-escalate` dies with it).
+- v48 version banner + cross-lane manifest row still under-count — update to the promoted v48.
