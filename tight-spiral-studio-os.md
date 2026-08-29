@@ -936,17 +936,51 @@ would, on 73 surfaces.
 ### The law
 
 1. **No build asks the player about their preferences.** No comfort button, no light row,
-   no text-size row, no legibility panel. One universal home: one palette, one type
-   scale, one dark rule, mounted the same way everywhere.
-2. **The kernel stays and the default must be excellent**, because there is no longer an
+   no text-size row, no legibility panel.
+
+2. **PALETTE IS PER GAME, and it is somebody's job.** *(Founder correction, same day — the
+   first draft of this ruling said "one palette everywhere" and that was wrong.)* A game's
+   palette serves the game: CYL's era ladder is canon in the period bible, where 1962 is
+   Kodachrome-cool and 1969 is warm and fraying, and flattening that would destroy an
+   argument the rooms are making. **The Colour & Palette Lead (§5, Art Execution) owns the
+   per-game palette** and is seated on any build that needs one. What is universal is the
+   *absence of a wall*, never the hue.
+
+3. **THE UNIVERSAL HOME IS NAVIGATION, NOT LOOK.** Founder's words: *"at the top of each
+   game you can go home to studio or cabinet — at bottom of game home and back."* Every
+   game surface carries the same two rails, in the same places:
+
+   | rail | element | contents |
+   |---|---|---|
+   | top | `<header class="se-chrome">` | **Studio** (`index.html`) &nbsp;·&nbsp; **Cabinet** (`arcade.html`) |
+   | bottom | `<nav class="se-rail">` | **Back** (`history.back()`) &nbsp;·&nbsp; **Home** (`index.html`) |
+
+   The studio is the front door; the cabinet is the shelf of games. Two ways out at the
+   top, two at the bottom, and a player is never more than one control from either.
+   **The bottom rail already exists and is correct on ~63 surfaces.** The top rail exists
+   with a single Home link on ~64 and needs the Cabinet added — in the same header the
+   Comfort button is being cut from, so it is one edit, not two.
+
+4. **The kernel stays and the default must be excellent**, because there is no longer an
    escape hatch. `data-light` responders, the contrast floor, `prefers-color-scheme`
    honoured — all unchanged. A surface that opens wrong can no longer be corrected by
    the player, so it must not open wrong.
-3. **Confluence is exempt.** Dashboards may carry preference controls; that carve-out was
+
+5. **Confluence is exempt.** Dashboards may carry preference controls; that carve-out was
    already the founder's standing position and it survives.
-4. **Comfort work is PAUSED.** No new palettes, no new light modes, no type-scale
-   experiments, no comfort-kernel versions. Existing kernels are frozen as they stand.
-   This pause is lifted by the founder, in writing, and by nobody else.
+
+6. **Comfort work is PAUSED.** No new light modes, no type-scale experiments, no
+   comfort-kernel versions, no new *global* palette systems. Per-game palettes are design
+   work and are NOT paused — they are the Colour & Palette Lead's job, per item 2. This
+   pause is lifted by the founder, in writing, and by nobody else.
+
+### The combined transformation, proven before it was armed
+
+On `choose-your-leader-nixon-slice.html`, 16,614 → 15,362 B: comfort wall removed, top
+chrome changed from a lone `Home` to **Studio + Cabinet**, then both gates re-run.
+`comfort-gate.py`: *"pass — day/dusk/night all >=4.5, dark confirmed, offline, no emoji."*
+`studio-fingers.py`: *"every hand lands,"* no new F-code. The cut and the nav are one
+edit to one element, and together they cost the belt nothing.
 
 ### Why this is a simplification and not a retreat from accessibility
 
