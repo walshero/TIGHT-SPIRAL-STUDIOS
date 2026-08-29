@@ -1,5 +1,23 @@
 # CLAUDE.md — standing notes for this repo
 
+## COMFORT WORK IS PAUSED — founder ruling, standing (2026-08-29)
+**No build asks the player about their preferences. No comfort button, no light row, no
+text-size row, no legibility panel. No walls.** One universal home: one palette, one type
+scale, one dark rule, the same everywhere.
+
+- **Do not start** a new palette, light mode, type-scale experiment or comfort-kernel
+  version. Existing kernels are frozen as they stand. The pause lifts only when the
+  founder lifts it in writing.
+- **Delete the WALL, never the KERNEL.** The wall is the UI that asks. The kernel is the
+  CSS that responds to `data-light` and holds the contrast floor — `comfort-gate.py`
+  measures the kernel and never clicks a control, so removing walls keeps the belt green.
+  Proven 2026-08-29 on `choose-your-leader-nixon-slice.html`: wall out, gate still passes.
+- **The default must now be excellent**, because the player has no escape hatch left.
+- **Confluence is exempt** — dashboards may keep preference controls.
+
+Full ruling and the scope note (two dialects, 67 surfaces, 4 above the 1 MB ceiling):
+`tight-spiral-studio-os.md` §3.1.1.
+
 ## Cost discipline — HIGH PRIORITY, standing (2026-08-07)
 **Matt pays for this out of pocket, as a teacher.** Credit usage is a real constraint on
 every session, not an afterthought — this already burned a monthly spend limit mid-session
