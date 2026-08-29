@@ -70,6 +70,20 @@ navigation instruction, ask what screen + what's visible, then guide from HIS vi
 - [URGENT] Build render-proof teeth into preship gate per HANDOFF-render-proof-gate.md. Sweep corpus.
 - [URGENT] Rebuild your-rp-world.html warm mode; then founder GATE 1 cold play (undelegatable).
 - [URGENT before Jul 20] Console Post->Boost verb fix so gate passes; then GALA EasyChair submission.
+- [CLOSED 2026-08-28] GALA 2026 is over and the shape of the miss is the point. The verb fix
+  SHIPPED 2026-07-19 (`BUILD-DEBT.md`), two weeks inside the window. The GALA 2026 Serious
+  Games Competition deadline was 2 August 2026 and the call states it will not be extended.
+  It passed unsubmitted, as `STUDIO-COMMAND-CENTER.md` already recorded. So the blocker
+  cleared and the submission never went, because THIS LINE READ AS DONE the moment the verb
+  fix landed: a pending item hiding behind a finished one. Next windows: GALA 2027
+  competition closes early August 2027, conference November 2027, EasyChair. ECGBL 2027
+  games close around May 2027. ECGBL 2026 (Darmstadt, 30 Sep to 2 Oct 2026) has had its
+  games track closed since 3 May and its paper track is effectively closed, though the call
+  page still shows abstracts as accepting; that is the live question for the Pauline email
+  below, which makes it a two-minute send with a specific ask. Flok is competition-ready per
+  `tsp-opportunity-bridge.html` and now has a full year of runway. The 2026-08-07 Aleph run
+  already argued against the competition lane as the primary evidence bet, so this is a
+  calendar loss, not a strategy loss.
 - [ACTIVE] Rotate the exposed PAT.
 - [ACTIVE] Matt to CREATE Drive folder STUDENT-WORK-PROTECTED by hand, register ID.
 - Matt's GATE 1 cold play of barcelona-summers.html v2 — undelegatable. (external lane: the student's own Netlify deploy at https://eclectic-youtiao-c065da.netlify.app/, not a repo file)
