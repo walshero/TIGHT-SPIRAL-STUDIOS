@@ -404,6 +404,8 @@ def self_test():
     ok_good = len(r['good']) == 0
     ok_bad1 = {'F-TAP','F-VIEWPORT','F-WALL'}.issubset(codes1)
     ok_bad2 = 'F-METAVIEW' in codes2
+    codes3 = {h.split()[0] for h in r['bad3']}
+    ok_bad3 = 'F-TAP' in codes3
     print("  self-test:")
     print(f"    GOOD canary clean          : {'PASS' if ok_good else 'FAIL -> '+str(r['good'])}")
     print(f"    BAD1 (tap/viewport/wall)   : {'PASS' if ok_bad1 else 'FAIL -> got '+str(sorted(codes1))}")
