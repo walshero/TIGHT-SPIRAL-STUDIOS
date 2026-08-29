@@ -95,6 +95,27 @@ shared. (This was asked and answered too many times — it is settled.)
   founder call not yet made), write the PENDING state itself into the tracking
   doc, so the next session inherits the question instead of silence.
 
+## Founder's creative work is available to the studio - standing (2026-08-28)
+Founder's words: *"Draw from my creative work. I'll say no if it doesn't work."* Broadening
+an earlier same-session grant (*"You can use Monserrat and China gold"*). His own poems,
+flash and drafts may be drawn on for text banks, practice pieces and game content. **He
+holds the veto per piece**, so mount work with its title and provenance visible and expect
+individual pieces to come back out.
+
+Three things this does NOT change:
+- **Student work stays closed.** The 2026-08-10 ruling ("Don't draw from student work
+  unless specifically authorized by me") is untouched. This grant is about HIS writing.
+- **Reproduce exactly, slips included.** Several pieces are drafts. Do not silently correct
+  a tense slip, a doubled word or a missing quotation mark; those are often the most useful
+  thing in a practice piece, and correcting an author's draft without asking is the machine
+  overwriting the author.
+- **Name the draft as a draft.** A piece shown to students as a finished exemplar when it is
+  a club-session draft teaches the wrong lesson, which is the same defect flagged in the
+  Station Seven "Model Text" file.
+
+Source: the *Creative writing club* folder in Drive. Five pieces are mounted in
+`claude/LENS-REGISTRY-AND-PRACTICE-BANK-2026-08-28.md` (§B5).
+
 ## Art: the studio-cut lane is open - founder rule, standing (2026-08-27)
 Founder's words, asking for a game: *"And we want art."* The MJ lane closed 08-13 and
 licensed photography cannot ride in an offline single-file game, so for two weeks the

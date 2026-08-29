@@ -366,9 +366,20 @@ a file called "Model Text" will be imitated.
 
 ### B5 · FOUNDER PIECES
 
-**Permission, verbatim, 2026-08-28:** *"You can use Monserrat and China gold."* Granted in
-session, recorded here. Two pieces of the founder's own creative work, reproduced exactly.
-Neither is student work and neither needs a licence.
+**Permission, verbatim, 2026-08-28:** *"You can use Monserrat and China gold."* Then,
+broadened the same session: ***"Draw from my creative work. I'll say no if it doesn't
+work."*** Standing grant, recorded here and in CLAUDE.md. His own creative work is
+available to the bank; he holds the veto per piece.
+
+Source: the **Creative writing club** folder in his Drive, which holds dozens of short
+pieces. Five are mounted below. Reproduced exactly, including slips.
+
+**Three of the five are DRAFTS, and that is the point.** The bank previously had two poles
+and nothing between them: machine-written strawmen to repair, and finished work to admire.
+Students do not workshop either of those. **They workshop a real draft by a real writer
+that is good and unfinished at the same time**, and until now the bank had none, because
+the only source for one is student work and that is closed. His drafts fill the gap
+nothing else could.
 
 These are the bank's only pieces that **demonstrate the moves working**, rather than
 failing. That matters: every other entry is something to repair, and a critique game built
@@ -483,6 +494,122 @@ disagree. That disagreement is the point: a reading is a position, not a verdict
 
 ---
 
+**FND-03 · FOUNDER · "Paella off Las Ramblas" · DRAFT · lenses: The Image Reader, Needs of the Reader**
+
+<!-- SOURCE-VERBATIM-BEGIN Matt Walsh, "Paella off Las Ramblas," draft, reproduced exactly with standing permission 2026-08-28 -->
+> We first heard about the missing backpacker in Barcelona, at the start of our adventure,
+> in a small paella restaurant in a labyrinth of alleyways between Las Ramblas and Olympic
+> Park, a place that wasn't in the guidebooks yet, but probably would be soon enough.
+>
+> We, that's Robert and me, spending Robert's small inheritance from his grandmother in a
+> summer of travel with no end in sight. We'll go until the money's gone, or maybe we'll
+> get jobs tending bar in Greece, like the Kiwis we met the night before. Anything is
+> possible.
+>
+> We're drinking rioja and munching on salted almonds with the British couple we met at our
+> pension. They were arguing about something on the walk to the restaurant, and now they're
+> not talking, and I'm wishing Robert didn't invite them along in the first place. She's
+> sulking, arms crossed, staring out the open window like we weren't even there.
+>
+> "So you haven't heard?" the Brit says, not really a question. "She's one of yours, they
+> say. A Texan even"
+>
+> "It's easy to go missing," Robert said. I notice how his complexion has changed in just
+> these few weeks. "I mean, what if he doesn't want to be found? What's wrong with that?"
+>
+> "It's more than that," the Brit said. There were witnesses."
+<!-- SOURCE-VERBATIM-END -->
+
+**Strengths first, which is his own rule.** The world is specific and load-bearing: a
+labyrinth of alleyways, rioja and salted almonds, a couple who were arguing on the walk and
+are now not talking. That last detail does character work without a word of explanation.
+*"I notice how his complexion has changed in just these few weeks"* is the whole trip in
+one clause.
+
+**Open questions a reader would raise, as observations rather than verdicts:**
+- **Tense.** *"the Brit says"* and *"Robert said"* sit in the same exchange. Deliberate, or
+  drift?
+- **The missing backpacker is "she," then "he."** *"She's one of yours"* then *"what if he
+  doesn't want to be found?"* Two people, or one slip?
+- **A quotation mark is missing** before *"There were witnesses."*
+
+*Playable as:* **the best Needs of the Reader specimen in the bank.** Every one of those is
+a place a real reader stumbles, and none is a matter of taste. It also pairs with Barcelona
+Summers: same city, same noticing.
+
+---
+
+**FND-04 · FOUNDER · "A: Brad, I heard Jill left you" · lenses: Dialogue, The Turn Reader, Audience Experience**
+
+**Content note for the founder's call:** implied assault and blackmail, one obscenity. His
+own syllabus explicitly distinguishes *"writing that endorses violence and hate"* from
+*"writing that explores the impact these can have."* This is plainly the second. Flagged
+because it is his decision what a student-facing surface carries, not mine.
+
+Not reproduced in full here; it runs to roughly seventy exchanges and lives at its Drive
+location. **What it is:** a complete story told **entirely in text messages**, two voices,
+no narration, no interiority, no stage directions.
+
+**Why it is the strongest dialogue specimen available:**
+- **Dialogue carries one hundred percent of the load.** The 10-minute-play workshop's
+  Dialogue lens has no better example anywhere in the course materials.
+- **The turn is real and it is late and quiet**, exactly as the Turn Reader asks. A
+  friendly check-in reveals itself as something else. Cut the turn and there is no story,
+  which is his own test.
+- **Nothing is on the nose.** The threat is never named. The horror arrives through what
+  the sender chooses to send.
+- **Negative space as a device.** Image placeholders stand where images would be. The
+  reader supplies them, and that is worse.
+- **The typos are in character, not errors.** Worth a player deciding which is which, which
+  is itself the Compression Reader's discrimination.
+- **The last word lands sideways**, one syllable, no summary.
+
+*Playable as:* the audience-experience specimen. A reader holds the whole thread; a person
+receiving it has only the present message. That is the two-seats problem the play workshop
+names, in a form students already live in.
+
+---
+
+**FND-05 · FOUNDER · "a sentient and lonely chicken tender buys a stranger's diary" · DRAFT · lenses: The Image Reader, The Turn Reader**
+
+<!-- SOURCE-VERBATIM-BEGIN Matt Walsh, untitled draft opening, reproduced exactly with standing permission 2026-08-28 -->
+> Poulina stretched in the morning light that filtered through the oak trees in the yard.
+> Another inadequate night's sleep, filled with dreams of inadequacy, in an inadequate
+> world. She drifted up and out of her greasy cardboard sleeve and ambled over the sticks
+> and leaves and acorns towards civilization.
+>
+> She heard the chip chip chatter of a squirrel announcing its territory, and saw why: a
+> bulldog, off-leash, traipsing through the woods.
+>
+> *Your name in Max*, Poulina thought, and you smell me. You smell the oils of my deep
+> fried floury skin, my thyme and paprika aura, and deeper, up into your nostrils and into
+> your brain and back through a thousand generations of your kind and what your kind was,
+> you smell me — you smell the chicken flesh, salty and plump enough to pull you from the
+> gravity of your human, to pull you all the way to me, sniffing, thinking it's too good to
+> be true. Thinking, I'm gonna eat this thing. But you're right. It is too good to be true.
+>
+> *Max*, she whispers, whispers to his inner core. *I am fist.  I am fire. I am pain.* And
+> Max whelps like like a handbrake and scampers back around to his human on the tamped
+> earthen path, leash in hand, hand on hips, waiting for what always comes back.
+<!-- SOURCE-VERBATIM-END -->
+
+**The smell passage is the Image Reader's best specimen in the bank.** It goes from surface
+to nostril to brain to *a thousand generations of your kind* without leaving the dog's
+body. That is not description; it is a camera moving.
+
+**And the register break is the craft move:** *"I am fist. I am fire. I am pain."* Three
+sentences after a comic premise, and they are not funny at all.
+
+**Open questions:**
+- **Is there a turn, or is this an opening?** The title promises a diary that never arrives.
+  Run his own test: cut the last paragraph and does the piece change? Two readers will
+  disagree, which is the point.
+- **Two slips to notice:** *"Your name in Max"* and *"whelps like like a handbrake."* Whether
+  a reader catches them is a decent measure of whether they are reading closely.
+- **"whelps"** may be intentional for "yelps." A player deciding is doing real work.
+
+---
+
 ## PART C: HOW THIS GETS PLAYED
 
 Not a design. The pieces a design now has in hand.
@@ -505,9 +632,10 @@ Not a design. The pieces a design now has in hand.
 ## OPEN, for the founder
 
 1. **Station Seven: exemplar or anti-model?** Blocks its use either way.
-2. **Permission: ANSWERED 2026-08-28.** *"You can use Monserrat and China gold."* Both are
-   in B5. Open only in scope: does the grant extend to his other creative work, or is it
-   these two pieces?
+2. **Permission: ANSWERED and BROADENED 2026-08-28.** *"Draw from my creative work. I'll
+   say no if it doesn't work."* Standing. Five pieces mounted. **Two need his eye:** the
+   content note on FND-04, and whether he is comfortable with drafts of his shown to
+   students as drafts, slips included, which is what FND-03 and FND-05 are.
 3. **Spring 2026:** still not mined. The Summer 2026 schedule is now read in full and is
    the source of the reader roles above. The Spring 2026 schedule is a separate document I
    have not located; a title search returns the Summer one. **Point me at it and I will
