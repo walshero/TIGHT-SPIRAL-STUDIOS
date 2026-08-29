@@ -372,7 +372,17 @@ work."*** Standing grant, recorded here and in CLAUDE.md. His own creative work 
 available to the bank; he holds the veto per piece.
 
 Source: the **Creative writing club** folder in his Drive, which holds dozens of short
-pieces. Five are mounted below. Reproduced exactly, including slips.
+pieces. **Four** are mounted below. Reproduced exactly, including slips.
+
+**VETO EXERCISED, 2026-08-28.** A fifth piece was mounted and pulled the same session on
+the founder's instruction: *"Skip Brad Andy."* It is not reproduced, quoted, summarised or
+named further here, and **it is not to be re-added by a later pass.** This is the veto in
+the standing grant working exactly as written, on the first piece it was needed for. The
+entry carried a content note flagging the decision as his; he made it.
+
+That leaves the **Dialogue lens without a founder specimen.** The gap is real and is not
+being quietly filled: the club folder holds other pieces, and picking a replacement is a
+choice to bring to him rather than make alone.
 
 **Three of the five are DRAFTS, and that is the point.** The bank previously had two poles
 and nothing between them: machine-written strawmen to repair, and finished work to admire.
@@ -539,38 +549,7 @@ Summers: same city, same noticing.
 
 ---
 
-**FND-04 · FOUNDER · "A: Brad, I heard Jill left you" · lenses: Dialogue, The Turn Reader, Audience Experience**
-
-**Content note for the founder's call:** implied assault and blackmail, one obscenity. His
-own syllabus explicitly distinguishes *"writing that endorses violence and hate"* from
-*"writing that explores the impact these can have."* This is plainly the second. Flagged
-because it is his decision what a student-facing surface carries, not mine.
-
-Not reproduced in full here; it runs to roughly seventy exchanges and lives at its Drive
-location. **What it is:** a complete story told **entirely in text messages**, two voices,
-no narration, no interiority, no stage directions.
-
-**Why it is the strongest dialogue specimen available:**
-- **Dialogue carries one hundred percent of the load.** The 10-minute-play workshop's
-  Dialogue lens has no better example anywhere in the course materials.
-- **The turn is real and it is late and quiet**, exactly as the Turn Reader asks. A
-  friendly check-in reveals itself as something else. Cut the turn and there is no story,
-  which is his own test.
-- **Nothing is on the nose.** The threat is never named. The horror arrives through what
-  the sender chooses to send.
-- **Negative space as a device.** Image placeholders stand where images would be. The
-  reader supplies them, and that is worse.
-- **The typos are in character, not errors.** Worth a player deciding which is which, which
-  is itself the Compression Reader's discrimination.
-- **The last word lands sideways**, one syllable, no summary.
-
-*Playable as:* the audience-experience specimen. A reader holds the whole thread; a person
-receiving it has only the present message. That is the two-seats problem the play workshop
-names, in a form students already live in.
-
----
-
-**FND-05 · FOUNDER · "a sentient and lonely chicken tender buys a stranger's diary" · DRAFT · lenses: The Image Reader, The Turn Reader**
+**FND-04 · FOUNDER · "a sentient and lonely chicken tender buys a stranger's diary" · DRAFT · lenses: The Image Reader, The Turn Reader**
 
 <!-- SOURCE-VERBATIM-BEGIN Matt Walsh, untitled draft opening, reproduced exactly with standing permission 2026-08-28 -->
 > Poulina stretched in the morning light that filtered through the oak trees in the yard.
@@ -633,9 +612,12 @@ Not a design. The pieces a design now has in hand.
 
 1. **Station Seven: exemplar or anti-model?** Blocks its use either way.
 2. **Permission: ANSWERED and BROADENED 2026-08-28.** *"Draw from my creative work. I'll
-   say no if it doesn't work."* Standing. Five pieces mounted. **Two need his eye:** the
-   content note on FND-04, and whether he is comfortable with drafts of his shown to
-   students as drafts, slips included, which is what FND-03 and FND-05 are.
+   say no if it doesn't work."* Standing. Five pieces mounted. One resolved: the content-note piece was
+   vetoed ("Skip Brad Andy") and removed. **One still open:** whether he is comfortable
+   with drafts of his shown to students AS drafts, slips included, which is what FND-03
+   and FND-04 are.
+7. **The Dialogue lens now has no founder specimen**, following the veto. Want me to pull
+   a replacement from the club folder, or leave that lens on studio-written pieces?
 3. **Spring 2026:** still not mined. The Summer 2026 schedule is now read in full and is
    the source of the reader roles above. The Spring 2026 schedule is a separate document I
    have not located; a title search returns the Summer one. **Point me at it and I will
