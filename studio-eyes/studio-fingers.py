@@ -371,6 +371,20 @@ BAD2 = """<!doctype html><html lang=en><head><meta charset=utf-8><title>bad2</ti
 <style>button{min-height:48px;min-width:48px}</style></head>
 <body><button>Play</button></body></html>"""
 
+# BAD3 is the canary that was written BEFORE the fix and proved the defect: a 20px
+# control that exists only AFTER a transition. Against the pre-2026-08-28 gate this
+# page printed "every hand lands" over two controls it never saw, because the gate
+# probed at first paint and the gate's own three canaries were all first-paint pages.
+# A self-test whose canaries share the gate's blind spot proves nothing about it.
+BAD3 = """<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>bad3</title>
+<style>#scene{display:none}.enter{min-width:200px;min-height:56px;font-size:18px}
+.prop{width:20px;height:20px;font-size:11px;padding:0}</style></head>
+<body><div id=entry><button class=enter onclick="entry.style.display='none';scene.style.display='block'">Step into the room</button></div>
+<div id=scene><button class=prop>tv</button><button class=prop>chair</button></div>
+</body></html>"""
+
+
 def self_test():
     from playwright.sync_api import sync_playwright
     r = {}
