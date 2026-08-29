@@ -391,7 +391,7 @@ def self_test():
     exe = os.environ.get('SF_CHROME')
     with tempfile.TemporaryDirectory() as td:
         paths = {}
-        for k, html in (('good',GOOD), ('bad1',BAD1), ('bad2',BAD2)):
+        for k, html in (('good',GOOD), ('bad1',BAD1), ('bad2',BAD2), ('bad3',BAD3)):
             paths[k] = os.path.join(td, k+'.html'); open(paths[k],'w').write(html)
         with sync_playwright() as p:
             b = p.chromium.launch(**({'executable_path': exe} if exe else {}))
