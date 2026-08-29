@@ -1,0 +1,63 @@
+# Repairs the room beat of choose-your-leader-v7.html.
+#
+# A/B VERIFIED 2026-08-28 against the PUBLISHED file, the PUBLISHED agent and the
+# PUBLISHED sidecar, downloaded fresh into an empty directory:
+#   A  pristine v7 from main  -> INERT TOUCHES (8): television, evening paper,
+#      telephone, doorway, bulletin, wall map
+#   B  this patch applied     -> no INERT line at all; the sidecar note still prints,
+#      so the world check was live and the zero is real, not a silent skip
+# Result: 1,585,968 -> 1,587,667 B, md5 ae8fea30f1201ba7568632d9ea4c57f9
+# The 2 DEAD BUTTONS on a later screen ("The shift", "The back room") are untouched
+# by this patch and remain open debt.
+#
+# Apply with:  git apply patches/2026-08-28-v7-noticing-is-additive.patch
+# Then:        python3 playthrough-agent.py choose-your-leader-v7.html
+#              (expect no INERT TOUCHES line)
+#
+# WHY A PATCH AND NOT AN EDIT: the file is 1.6 MB. GitHub's Contents API returns an
+# empty body above ~1 MB, so the connector write lane cannot read-modify-write it.
+# See LANE-REGISTRY.md, correction 3.
+diff --git a/choose-your-leader-v7.html b/choose-your-leader-v7.html
+--- a/choose-your-leader-v7.html
++++ b/choose-your-leader-v7.html
+@@
+-.chiprow{
++.marks{position:absolute;left:10px;bottom:10px;display:flex;gap:6px}
++.mark{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
++ font:600 12px/1 system-ui;background:#f2efe6;color:#14181a;border:2px solid #14181a}
++.stage[data-noticed]{outline:2px solid rgba(242,239,230,.28);outline-offset:-2px}
++.chiprow{
+@@
+     b.addEventListener("click",()=>{
+-      row.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed","false"));
+-      b.setAttribute("aria-pressed","true");
+-      const out=$("noticeOut"); out.hidden=false;
+-      out.innerHTML="<p><b>"+n.t+".</b> "+n.s+"</p>";
+-      $("toAddress").hidden=false;
++      /* NOTICING IS ADDITIVE, AND IT MARKS THE ROOM. Repaired 2026-08-28.
++         The previous handler cleared every other chip (so noticing the paper
++         un-noticed the television), overwrote noticeOut (so the first read was
++         gone by the second), and revealed the onward button on the FIRST touch
++         (so the room was answered before it was looked at). Studio Fingers reads
++         those three as F3 KEEP, F2 TAKE and F4 COST; the founder read them as
++         "the clicking not intuitive or rewarding." The screen's own instruction
++         is "Tap whatever your eye goes to. Every read is valid." - a radio button
++         contradicted it. A touch is only a touch if the WORLD moved, so each
++         noticed thing now leaves a mark ON THE PLATE and the marks accumulate. */
++      if(b.getAttribute("aria-pressed")==="true") return;
++      b.setAttribute("aria-pressed","true");
++      const out=$("noticeOut"); out.hidden=false;
++      const line=document.createElement("p");
++      line.innerHTML="<b>"+n.t+".</b> "+n.s;
++      out.appendChild(line);
++      const stage=$("roomStage");
++      let marks=stage.querySelector(".marks");
++      if(!marks){ marks=document.createElement("div"); marks.className="marks";
++                  marks.setAttribute("aria-hidden","true"); stage.appendChild(marks); }
++      const pip=document.createElement("span");
++      pip.className="mark"; pip.textContent=String(marks.children.length+1);
++      marks.appendChild(pip);
++      const seen=row.querySelectorAll('.chip[aria-pressed="true"]').length;
++      stage.setAttribute("data-noticed",String(seen));
++      if(seen>=2) $("toAddress").hidden=false;
+     });
