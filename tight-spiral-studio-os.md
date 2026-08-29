@@ -914,6 +914,62 @@ Two seats that sit *above* the line-level panel. They don't review words or pixe
 
 ---
 
+## 3.1.1 NO COMFORT WALLS — founder ruling, locked 2026-08-29
+
+**Founder's words:** *"Trying to build warmth and comfort and dark is giving me more bugs to deal with. Changing font sizes is more bugs. Let's simplify across studio. Remove any 'comfort wall' in apps that ask you about prefs. No walls! ... PAUSE comfort work."*
+
+### The distinction the ruling turns on, and it is provable
+
+**The WALL** is the interface that asks the player about their preferences — the Comfort
+button, the Studio Eyes panel, the Light row, the Text-size row, the Legibility drawer.
+
+**The KERNEL** is the CSS that makes a page render correctly in day, dusk and night, and
+the defaults it opens in. It is what `comfort-gate.py` measures.
+
+**These are separable, and the belt only needs the second.** `comfort-gate.py` reaches
+night by `document.documentElement.setAttribute('data-light', m)` — it never clicks a
+control. **Measured 2026-08-29 on `choose-your-leader-nixon-slice.html`:** the wall
+removed (−1,334 B), gate re-run, *"pass — day/dusk/night all >=4.5, dark confirmed,
+offline, no emoji."* Deleting the wall does not turn the belt red. Deleting the kernel
+would, on 73 surfaces.
+
+### The law
+
+1. **No build asks the player about their preferences.** No comfort button, no light row,
+   no text-size row, no legibility panel. One universal home: one palette, one type
+   scale, one dark rule, mounted the same way everywhere.
+2. **The kernel stays and the default must be excellent**, because there is no longer an
+   escape hatch. `data-light` responders, the contrast floor, `prefers-color-scheme`
+   honoured — all unchanged. A surface that opens wrong can no longer be corrected by
+   the player, so it must not open wrong.
+3. **Confluence is exempt.** Dashboards may carry preference controls; that carve-out was
+   already the founder's standing position and it survives.
+4. **Comfort work is PAUSED.** No new palettes, no new light modes, no type-scale
+   experiments, no comfort-kernel versions. Existing kernels are frozen as they stand.
+   This pause is lifted by the founder, in writing, and by nobody else.
+
+### Why this is a simplification and not a retreat from accessibility
+
+The founder has retinitis pigmentosa and the comfort system was built for him. It is
+being removed **because it stopped paying**: sixty-seven of eighty-five surfaces carry a
+wall, in two dialects, each a separate maintenance surface, each a source of the
+font-floor and dark-mode HALTs that have been costing more than they returned. `§5.6`
+already said sensory settings ship *"in its best-practice default with a reachable
+toggle, never as a wall that stops the work."* This ruling keeps the default, drops the
+toggle, and moves the accessibility burden where it belongs: **into the default, checked
+by a gate, instead of into a control the player has to find.** For a player who cannot
+easily find controls, a good default is worth more than a knob.
+
+### Standing scope note for whoever removes them
+
+Two dialects, not sixty-seven: `#seEyes` + `#sePanel` (60 surfaces, "Comfort — reading
+options") and the Legibility drawer (8 surfaces). Four surfaces are above the connector's
+1 MB ceiling and need a working tree. **Remove wall markup and wall JS only; never touch
+a `data-light` rule.** Gate-verify every file after the cut — a removal that turns a
+surface red is a removal that gets reverted, not argued about.
+
+---
+
 ## 5.4.4b Studio Fingers measures the WORLD, not the page (locked 2026-08-26)
 
 **Every touch check names a diegetic container.** A control that changes text *outside*
