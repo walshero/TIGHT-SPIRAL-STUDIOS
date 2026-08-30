@@ -56,3 +56,73 @@ State = the last stamped line for a (file, gate). Founder = canon for practice.
 | 2026-08-29T18:17Z | HANDOFF.md | gala-closed | CORRECTED | byte-verified 6016 -> 7225 B / md5 99bc054c, delta +1209 insert-only, commit 2c47452d. Founder: 'Yes. Approved.' GALA 2026 IS OVER AND THE SHAPE OF THE MISS IS THE FINDING. Verified against the primary source, not memory: the GALA 2026 Serious Games Competition deadline was 2 August 2026 and the call states it will not be extended; conference 17-20 Nov, L'Aquila; paper tracks closed 29 Jun / 13 Jul / 17 Jul; everything via EasyChair. THE BLOCKER HAD ALREADY CLEARED: BUILD-DEBT.md records the Post->Boost verb fix SHIPPED 2026-07-19, two weeks inside the window. The work got done and the submission never went, because the pending line read 'verb fix so gate passes; then GALA EasyChair submission' and looked finished the moment the verb fix landed. A PENDING ITEM HIDING BEHIND A FINISHED ONE, the same defect class as every stale record this month and the sixth instance in the run. The dead line stands above the closure rather than being rewritten. ECGBL 2026 checked too: Darmstadt 30 Sep - 2 Oct, games closed 3 May, paper track effectively closed (final papers 5 Aug, author payment 26 Aug) while the call page still shows abstracts as accepting - stale or a genuine late window, unresolvable from here, so it becomes the specific ask for the Pauline email already on the list. Next windows: GALA 2027 competition early Aug 2027, ECGBL 2027 games around May 2027. Flok is competition-ready with a year of runway and the 2026-08-07 Aleph run already argued against this lane as the primary evidence bet, so this is a calendar loss, not a strategy loss. CONTAINER NOTE: the session container was RECLAIMED between turns. A first pass of these checks ran in an empty directory and returned zero hits for everything, which is exactly the shape the protocol forbids trusting - A ZERO-RESULT SEARCH IS NOT EVIDENCE OF ABSENCE. Re-cloned, re-ran; those results were void and are not carried. Trunk had moved 18 days to 1c05a27 since the lane closed at 6b0536be, and the ledger had grown to 47 rows from other sessions; HANDOFF.md itself was untouched at 6016 B / 392e7734, so no reconciliation was needed. Tick 8 after the edit: PASS, debt 1, no new dangling citation. CLOCK DISAGREEMENT, recorded rather than resolved: the harness reported the date as 2026-08-28 and the container clock reports 2026-08-29T18:17Z. This stamp is the COMPUTED one. The HANDOFF closure line landed carrying the harness date. Neither was verified against a third source; a stamp nobody can compute is the same species as a byte count nobody computed. STILL UNCONFIRMED, and the founder said 'I think': PAT ROTATION. STUDIO-FINGERS-WORLD-SCOPE-2026-08-26.md records it at 41 days with no evidence it happened, the only carried item with blast radius outside the studio. Computed what could be computed: ZERO token-shaped strings in the current trunk, which proves no token sits in a file and proves nothing about GitHub. The evidence is the token's CREATED DATE; if it predates 2026-07-16 it was never rotated. Not marked done. | 2c47452d | 99bc054c |
 | 2026-08-29T20:11Z | no-walls:batch-01 | no-walls-sweep | SHIP | FIRST AUTOMATED BATCH UNDER OS 3.1.1. 20 surfaces cut, 985,858 -> 925,407 B (-60,451). Per file: advantage-intake.html 59105->56071; ai-resilient-assignment.html 39495->36424; arcade.html 29888->26847; behind-this-door.html 67952->64968; choose-your-leader-nixon-slice.html 17069->14046; choose-your-leader-v5-b.html 57686->54747; choose-your-leader-v5-slice.html 50235->47010; choose-your-leader-v5.html 54888->51899; cliche-cabinet.html 125629->122718; cliche-city.html 41755->38771; cliche-cowpaths.html 24752->21729; cliche-field.html 54696->51566; cliche-line.html 46885->43901; close-the-loop.html 39288->36217; course-river.html 42812->39828; dad-energy.html 96799->93773; en195-hub.html 24890->21849; en195-last-week.html 47486->44502; en195-what-counts-now.html 47156->44172; en195.html 17392->14369. GATES: comfort-gate 0 HALT of 20 BEFORE and 0 HALT of 20 AFTER; studio-fingers 4 of 20 at HALT before and 4 after with NO NEW F-CODE (pre-existing debt: advantage-intake F-ZOOM x1, ai-resilient-assignment F-TAP x29 F-ZOOM x6, cliche-field F-VIEWPORT x1, close-the-loop F-ZOOM x32). Nothing was landed that had not passed both before and after. MIRRORED: all 20 to walshero/tss-playtest at the same filenames, then re-cloned and sha256-compared against the gate-verified local copies — 20 of 20 byte-identical. tss-playtest/index.html NOT touched. no-walls.html rebuilt from the full cumulative list (4225 B, md5 d020c45a, comfort-gate pass). METHOD DEVIATION, DELIBERATE, COST RULE: canon landing used github_replace_substring_in_repo_file (surgical, every call carrying expect_total_bytes) rather than get_file_contents + github_create_or_update_file, and the mirror used github_copy_files_between_repos rather than 20 content writes. Sending ~925 KB of file bodies twice through tool params would have cost roughly ten times the tokens of the whole run; CLAUDE.md cost discipline is standing and the founder has been locked out mid-session once. VERIFICATION WAS NOT WEAKENED, it was strengthened: every edit was byte-guarded server-side, and every landed file was then re-fetched from origin/main and sha256-compared to the local gate-verified copy — 20 of 20 match. Cost of the deviation: mirror commit messages read 'mirror — no walls: <file>' because that action formats as '<prefix>: <path>', not 'mirror: <file> — no walls'. SKIPPED, NOT CUT, 8 files. THREE ABOVE THE 1 MB CEILING and unreachable through the connector, needing a working tree: choose-your-leader-full.html 3,513,010 B, choose-your-leader-v6.html 2,105,990 B, old-problems-at-new-speed.html 3,415,496 B. FOUR WHERE THE CUT LEFT WALL TOKENS BEHIND, meaning a second wall shape lives in the file that the standard transform does not reach, so the file was left whole per the skip-if-you-cannot-tell rule: how-an-idea-travels.html, table-four.html, trail-notes.html, and choose-your-leader-full.html (also oversize). TWO DIALECT B, Legibility-toggle shape with no se-panel and no se-home / se-rail at all: enjambment.html, enjambment-skins.html — these need a hand pass and a decision about whether they get rails. ONE HELD ON PURPOSE: comfort-kernel-v2.html carries a standard dialect-A wall and would cut cleanly, but the file is the named kernel specimen and 3.1.1 freezes existing kernels as they stand; whether its panel is the wall or the specimen itself is a founder call, not a sweep call. NEEDING A HAND-SET TOP RAIL: ai-resilient-assignment.html and close-the-loop.html were cut a-c only — their headers do not carry the standard se-home Home anchor, so Studio|Cabinet could not be set by pattern. Eleven more in the remaining queue have the same header shape and will land the same way: islo-hub, reading-the-fireground, real-cost, rubric-forge, score-the-room, scorer-norming, sticker-price, update-the-model, who-holds-the-room, whose-draft, workshop-wall. BOTTOM RAILS: all 20 cut files already carry nav.se-rail; none invented. REMAINING: 43 surfaces still carry a wall (41 dialect A, 2 dialect B), of which 34 are clean standard-dialect files queued for the next runs. Note for the next run: 'Legibility' in the inventory grep is a FALSE POSITIVE on text-rendering:optimizeLegibility in CSS — count walls with seEyes/sePanel, or the queue reads 45 when it is 43. | 13a76a78 | d020c45a |
 | 2026-08-30T15:33Z | claude/CREDENTIAL-GRAVEYARD-2026-08-30.md | write-lane | SHIP | byte-verified 6888 B / md5 30df34c2bf32108fdb4bd22385849cb5, seeded 4500 B commit 0182f60c then appended to 6888 B commit 6e3823b4, matches_total true, fetched back from origin/main and diffed IDENTICAL. WHAT IT CLOSES: the exposed deploy PAT has been an open HANDOFF line for roughly six weeks and had already survived one reminder. A second reminder is not an intervention. Replaced with a check. THE MECHANISM, VERIFIED BY EXECUTION NOT ASSUMPTION: 'did Matt rotate it' is not computable from here; 'is the leaked credential still alive' is. GET https://api.github.com/user returns 200 while a credential works and 401 once it does not, and Zapier halts a run on 4xx - so the notify step is reachable ONLY while the leak persists and silence IS the all-clear. Proven by running it: an unauthenticated GET through Webhooks by Zapier returned 'Requires authentication' and errored the step. Same execution answered the open plan question - Webhooks by Zapier is a Premium app and it RUNS on this account. GENERALIZED PER FOUNDER SELECTION (option 5): the durable object is a registry, not a Zap. CREDENTIAL GRAVEYARD sheet built in Drive, id 1g3uhyoL5NtuzC_DWdYCtenS2yI-8aCrMhlA0Nb8PJA4, read back and verified; 11 columns, row 3 is the deploy PAT. Second leaked credential is a ROW, not a build. THE REGISTRY'S ONE RULE IS ARITHMETIC, NOT PROSE: a graveyard is not an inventory, and the failure mode of any such sheet is quietly becoming the parking lot for LIVE secrets in a Drive doc that syncs to a laptop and is one share-link from public. Guard: exposure_date REQUIRED, Zap filters on it, so a live credential parked here gets no row that passes and no watch - parking buys nothing. Secrets are NOT in the sheet; secret_ref names a Zapier Storage key. Guard already doing real work on day one: the sheet's own no-secrets banner row carries no exposure_date and is skipped by the same filter. NOT DONE, AND WHY: Google Sheets is NOT connected to the Zapier account (needs_auth true), so the Zap cannot be assembled from here; the doc carries the seven steps field by field with UI locations and a display-scaling warning on the Google consent window. No credential was requested in chat - that is how this one leaked. THE REAL OBSTACLE NAMED: six weeks of reminders failed because deleting the deploy PAT breaks the Zapier GitHub push lane, the studio's only write lane. The task is not 'rotate a token' but a three-move sequence in one sitting with ~15 minutes of write-lane downtime. BLIND: exposure date ~2026-07-16 is derived from session count, not a source record, and is tilde-marked; GitHub notifications go to the walshero address and the mailbox reachable here is post.massbay.edu, so the mail lane is BLIND by name, not clean. | 6e3823b4 | 30df34c2bf32108fdb4bd22385849cb5 |
+
+---
+
+## 2026-08-30 — NO WALLS: the tool, and the reason three lanes could not finish the job
+
+**Landed:** `nowalls.py` (7,819 B, commit `9705250`) — the demolition made repeatable.
+
+**What was actually wrong.** The 08-29 run cut 20 surfaces in 70 minutes at 3-4 connector
+commits each. The 08-30 run fired at 12:06 UTC and after 3.5 hours had landed nothing —
+still PENDING, zero commits, nothing mirrored. The method was the defect, not the agent:
+hand-editing a surface through four surgical connector calls is slow enough that a run
+does not finish inside its own budget. One local pass, one write per file, is 4x fewer
+calls and the whole remaining corpus fits in one run.
+
+**Four dialects of the same wall, and only measurement found them.**
+1. flat handler run (arcade shape) — the 08-29 run handled this one.
+2. `if(eyes&&panel){ ... }` guarded block — 12 files. A flat line-matcher walks straight
+   past it.
+3. `if(!eyes||!panel) return;` early return — `trail-notes.html`.
+4. `$('seEyes')` instead of `getElementById`.
+
+**THE FINDING THAT MATTERS, and it is the "should anything have changed" rule again,
+pointed at a new surface.** Dialect 3 passed every string check. `seEyes` and `sePanel`
+left the file with the `var` line, so nothing named the wall any more — and the page threw
+`eyes is not defined` on load. **A wall can be gone from the markup and still break the
+page.** Only a Chromium load with a `pageerror` listener caught it. Grep proves absence of
+a string; it cannot prove the page still runs. Same shape as INERT TOUCH (2026-08-26): the
+oracle was reading the wrong artifact.
+
+**Guardrails that earned their place by refusing.** The first version bracketed the panel
+with `<div[^>]*id="sePanel".*?</div>` — non-greedy, so it stopped at the first inner
+`</div>` and left half the panel standing. The leftover check refused all 40 files rather
+than shipping a half-cut panel. The kernel check compares `<style>` blocks byte-for-byte
+and the `<html>` tag; a token-count check was tried first and refuses everything, because
+`se-a1` / `se-contrast` / `data-light` live in BOTH the kernel (keep) and the handlers
+(cut). Counting cannot separate them. Bracketing can.
+
+**Measured, on the 36 surfaces the tool cut:**
+- `comfort-gate.py` — **0 HALT of 36.** Kernel intact on every one, day/dusk/night all
+  >= 4.5, dark confirmed.
+- `studio-fingers.py` — 7 at HALT, and **all 7 already HALTed before the cut with the same
+  codes**. C-BUTTON drops 43 -> 36: the seven that disappear are the Comfort buttons.
+  No new finding introduced.
+- Chromium load — no pageerror on any of the 36; `#seEyes` and `#sePanel` gone from the
+  DOM; `header.se-chrome` carries both **Studio** and **Cabinet**.
+- 4 refused, correctly: `enjambment.html`, `enjambment-skins.html` (no `se-chrome`),
+  `workshop-wall.html` (non-standard Home link), `the-compound-capstone.html` (a fifth
+  dialect, not yet read).
+
+**Inventory correction.** The run's own grep used an unanchored `Legibility`, which matches
+`text-rendering:optimizeLegibility` and reported two already-clean CYL slices as walls.
+Anchored to `(^|[^a-zA-Z])Legibility` the count is **43 standing, 40 reachable, 3 above the
+1 MB connector ceiling**. Two lanes had been counting a CSS property as a wall.
+
+**LANE FINDING — the push refusal is now a quoted sentence, not an inference.**
+`git push` from this container returns, verbatim:
+
+> *access denied by the git proxy: walshero/TIGHT-SPIRAL-STUDIOS is not in this session's
+> authorized repository set, so the proxy will not inject a credential for it. To fix, add
+> the repository to the session's sources.*
+
+`GH_TOKEN` and `GITHUB_TOKEN` are both set and `git ls-remote` succeeds. **Read works,
+write is refused at the proxy by repository allowlist — not by a missing credential.**
+That is a one-time founder action in this session's sources, and it retires the whole
+retyping lane: the PLACEHOLDER incident (2026-08-27), the five-chunk base64 ritual that
+corrupted canon twice (2026-08-06), the 1 MB ceiling that keeps three CYL builds out of
+reach, and the 3-4-commits-per-file cost that stalled two runs. Every one of those is a
+symptom of bytes being retyped into a tool call instead of moved by git. This is the
+highest-leverage unlanded item in the repo and it costs a click.
+
