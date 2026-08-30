@@ -1033,3 +1033,54 @@ OPEN LOOPS (Funes board):
 - Old private repo `confluence-calibration-assessment-hub`: safe to archive (one stray bogus
   branch `claude/rule-compute-before-escalate` dies with it).
 - v48 version banner + cross-lane manifest row still under-count — update to the promoted v48.
+
+## 2026-08-30 — No walls, the last two builds; and a gate that measures a floor it never grades
+
+**Shipped.** `found.html` v1.2 and `cliche-hunter.html` v1.1 join the no-walls sweep
+that landed 36 surfaces in `40199c9`. Both were cut on 08-28, the day before the
+comfort ruling, so both shipped with the wall everything else had already lost.
+
+Out: the Comfort button, the light row, the size row, the four toggles, their CSS,
+their JS, and the `--chrome-h` token that only the panel ever read. In: Studio and
+Cabinet in the top bar; Back, EN195 Arcade and Home in a bottom rail hidden on the
+entry screen the way the footer already is.
+
+**The ruling's claim, tested rather than assumed.** "Delete the WALL, never the
+KERNEL — comfort-gate.py measures the kernel and never clicks a control, so removing
+walls keeps the belt green." True on both files: wall gone, comfort-gate passes,
+day/dusk/night all >=4.5. Both playthroughs were rewritten to set the preference in
+storage and reload, because with the wall gone that is the only path into the kernel
+a player has, and a test that drives a control nobody can reach is testing furniture.
+
+**One defect this caused, caught by a gate and not by eye.** The new navigation was
+set in the same 700 weight as each game's one invitation. `one-thing-gate` counts a
+primary invitation by size AND weight, so it reported five co-equal invitations on
+entry and SHIP-BLOCKed both files. It was right about more than the arithmetic:
+furniture dressed like the action *is* the defect. Nav gave up the weight, kept the
+44px target and the 18px floor, and both went back to 1 invite / 3 controls.
+
+**Also fixed:** `found.html`'s footer still claimed nine public-domain sources and
+five studio ones. Those are v1.0 figures; the shelf has held three and fifteen since
+v1.1. The footer is now asserted against the source data rather than typed. This is
+the sixteen-versus-eighteen error from 08-28, one file lower down, and it survived
+because the assembler asserted the META and nothing asserted the prose.
+
+**PENDING — a gate that measures a floor and never grades it.** `one-thing-gate.py`
+computes `hasHome` and `hasBack` at lines 90-91, names them "navigation floor: every
+game needs a Home control and a Back control", returns them at line 126 — and never
+turns either into a finding. Both new builds passed that gate for two days with no
+Back control anywhere in the DOM. This is the belt's oldest law pointed at the belt:
+a gate that has gone blind must never read as clean, and a measure that is taken and
+never graded was blind the whole time.
+
+Not fixed here, on purpose and on cost grounds: adding teeth to a gate is a change to
+the gate's own teeth, which under the cost-discipline rule triggers a full-corpus
+sweep rather than a changed-files sweep (67+ surfaces). That is a quotable job, not a
+side effect of a two-file change. **The estimate, so the next session can just decide:
+one gate edit plus one corpus sweep, single inline pass, no subagents.** The 08-29
+ruling makes navigation universal, so the sweep would be finding real gaps, not noise.
+
+**Verified, not reported.** `bash verify-push.sh found.html cliche-hunter.html` →
+content-identical at origin/main. The Found artifact was republished to its existing
+URL and read back: v1.2, no `comfortTop`, no `data-light-set`, no panel, Studio and
+Cabinet and Back present, `tsp.comfort.v1` still read by the boot script.
