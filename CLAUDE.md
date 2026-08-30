@@ -1,5 +1,31 @@
 # CLAUDE.md — standing notes for this repo
 
+## COMFORT WORK IS PAUSED — founder ruling, standing (2026-08-29)
+**No build asks the player about their preferences. No comfort button, no light row, no
+text-size row, no legibility panel. No walls.**
+
+**Palette is PER GAME** — a game's palette serves the game (CYL's era ladder is canon), and
+the **Colour & Palette Lead** owns it. What is universal is the absence of a wall, not the
+hue. Per-game palette work is NOT paused.
+
+**The universal home is NAVIGATION:** top of every game `<header class="se-chrome">` carries
+**Studio** (`index.html`) and **Cabinet** (`arcade.html`); bottom `<nav class="se-rail">`
+carries **Back** and **Home**. The bottom rail is already right on ~63 surfaces; the top
+needs Cabinet added in the same header the Comfort button is cut from — one edit, not two.
+
+- **Do not start** a new palette, light mode, type-scale experiment or comfort-kernel
+  version. Existing kernels are frozen as they stand. The pause lifts only when the
+  founder lifts it in writing.
+- **Delete the WALL, never the KERNEL.** The wall is the UI that asks. The kernel is the
+  CSS that responds to `data-light` and holds the contrast floor — `comfort-gate.py`
+  measures the kernel and never clicks a control, so removing walls keeps the belt green.
+  Proven 2026-08-29 on `choose-your-leader-nixon-slice.html`: wall out, gate still passes.
+- **The default must now be excellent**, because the player has no escape hatch left.
+- **Confluence is exempt** — dashboards may keep preference controls.
+
+Full ruling and the scope note (two dialects, 67 surfaces, 4 above the 1 MB ceiling):
+`tight-spiral-studio-os.md` §3.1.1.
+
 ## Cost discipline — HIGH PRIORITY, standing (2026-08-07)
 **Matt pays for this out of pocket, as a teacher.** Credit usage is a real constraint on
 every session, not an afterthought — this already burned a monthly spend limit mid-session
@@ -115,6 +141,46 @@ Three things this does NOT change:
 
 Source: the *Creative writing club* folder in Drive. Five pieces are mounted in
 `claude/LENS-REGISTRY-AND-PRACTICE-BANK-2026-08-28.md` (§B5).
+
+## Always say where to play it - founder rule, standing (2026-08-29)
+**Founder's words: *"Always tell me where to play and give link. Always."***
+
+Every turn that produces or changes a build ends with **the live URL, written out in
+full**. Not "it is pushed." Not "it is on main." Not a file card, not an artifact, not a
+promise to send one. The URL itself, in the reply. A build the founder cannot reach is a
+build that does not exist, and "landed on main" has now been mistaken for "shipped"
+enough times in this repo to have its own ledger entry.
+
+**THE PLAY LANE: `walshero/tss-playtest`, branch-mode Pages.**
+**https://walshero.github.io/tss-playtest/** and the root `index.html` there is always
+the current playable. Stood up 2026-08-29 because the main repo's Pages had been dead
+since 08-12 and the founder had no way to open his own game.
+
+Why a second repo rather than fixing the first, which is the obvious objection:
+- **Branch-mode Pages needs no workflow at all.** No Actions run, no floor job, no belt.
+  Push a file, it is live in about a minute.
+- **It cannot be blocked by another lane's debt.** The structural bug in the main repo is
+  that `deploy: needs: floor` runs the belt over the WHOLE corpus, so one HALT anywhere
+  stops the site for every project. A playtest lane must never inherit that.
+- **The main repo's CI cannot be repaired from a session anyway.** The connector token
+  carries no `workflow` scope, so any write to `.github/workflows/` returns 404. Fixing
+  `floor.yml` is a founder-on-github.com job, which is the screen-hunting this studio
+  exists to remove.
+
+**It is a publishing surface, not a second canon.** Canon stays here. Push to canon
+first, then mirror with `copy_files_between_repos`, which moves bytes machine to machine
+instead of retyping them into a tool call, then verify the blob hashes match on both.
+
+**Delivery lanes, ranked by what actually works, measured not assumed:**
+1. The playtest URL above. The only lane confirmed to reach him.
+2. `SendUserFile`. **FAILED 2026-08-29**, founder's words: *"I can't manage these html
+   files you drop. Won't play."* Never route a playable through a file card.
+3. claude.ai artifact links. **FAILED 2026-08-27**, *"Doesn't open."* Cause unknown and
+   untestable from a session sandbox.
+4. The main repo's own Pages. Dead since 2026-08-12, and **the cause is not the belt**:
+   the floor workflow does not fire on pushes at all, so there are no runs to fail.
+   Reading the belt locally will never show this. Ask GitHub what deployed.
+5. Raw GitHub serves `text/plain`, so it never plays. Drive is archive only.
 
 ## Art: the studio-cut lane is open - founder rule, standing (2026-08-27)
 Founder's words, asking for a game: *"And we want art."* The MJ lane closed 08-13 and
