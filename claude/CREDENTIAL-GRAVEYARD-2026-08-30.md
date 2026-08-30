@@ -93,4 +93,46 @@ left-hand rail.
    guard described above. It is one condition; do not add more.
 
 5. **Storage by Zapier — Get Value.** Key: the loop's `secret_ref`. This returns the
-   cr
+   credential value for this row without it ever appearing in the sheet.
+
+6. **Webhooks by Zapier — Custom Request.** Method GET. URL: the loop's `endpoint`.
+   Headers: name = the loop's `auth_header_name`, value = the loop's `auth_scheme`
+   followed by a space followed by step 5's value. Add a second header,
+   `User-Agent: tsp-graveyard`, because GitHub's API rejects requests without one.
+
+7. **Email by Zapier (or Gmail) — Send Outbound Email.** To yourself. Subject:
+   `STILL ALIVE: {{label}}`. Body: the label, the exposure_date, and the notes column.
+   This step is unreachable when the credential is dead, which is the point.
+
+### Filling in the secret
+
+Do not paste any credential into a Claude chat. That is how this one got exposed.
+Put the deploy PAT into Storage by Zapier under the key `GRAVEYARD_TSP_DEPLOY_PAT`
+yourself: zapier.com/app/dashboard, Storage is reachable from the app search box at
+the top of the page, and the "Set Value" form takes a key and a value directly.
+
+Only the burned credential goes in. Never the replacement.
+
+## The thing the watchdog does not fix
+
+The watchdog tells you the token is alive. It does not tell you why you have not
+killed it. The likely answer, and the reason six weeks of reminders have not worked:
+deleting the deploy PAT breaks the Zapier GitHub push lane, which is the only write
+lane this studio has. So the task is not "rotate a token," it is a three-move
+sequence that has to happen in one sitting or the studio loses its ability to write:
+
+1. github.com/settings/personal-access-tokens — delete `TSP fine grain token deploy`.
+2. Same page, Generate new token. Same repository scope, same permissions.
+3. zapier.com/app/connections — find the GitHub connection, Reconnect, paste the new
+   token. Then push one trivial commit and byte-verify it landed.
+
+Fifteen minutes with the push lane down, not zero. That is the real cost, and naming
+it is more useful than another reminder.
+
+## Provenance
+
+Exposure date `~2026-07-16` in the sheet is approximate. It was derived from session
+count, not from a source record, and it is marked with a tilde for that reason. If a
+real date matters later, the mail lane holds it and this session could not reach that
+mailbox — GitHub notifications go to the `walshero` address, and the connected
+mailbox here is the post.massbay.edu one. That lane is BLIND by name, not clean.
