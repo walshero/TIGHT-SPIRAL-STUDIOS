@@ -357,30 +357,6 @@ a:focus-visible, a:focus{ outline:3px solid var(--focus); outline-offset:2px; bo
 (function(){
   "use strict";
   var root=document.documentElement, sr=document.getElementById('seSr');
-  var eyes=document.getElementById('seEyes'), panel=document.getElementById('sePanel');
-  function setOpen(o){ panel.setAttribute('data-open',o?'1':'0'); eyes.setAttribute('aria-expanded',String(o)); }
-  eyes.addEventListener('click',function(){ setOpen(panel.getAttribute('data-open')!=='1'); });
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.getAttribute('data-open')==='1'){ setOpen(false); eyes.focus(); }});
-  // light
-  [].forEach.call(document.querySelectorAll('[data-light-set]'),function(b){ b.addEventListener('click',function(){
-    root.setAttribute('data-light', b.getAttribute('data-light-set'));
-    [].forEach.call(document.querySelectorAll('[data-light-set]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
-    if(sr) sr.textContent=b.textContent.trim();
-  });});
-  // text size
-  [].forEach.call(document.querySelectorAll('[data-text]'),function(b){ b.addEventListener('click',function(){
-    var n=b.getAttribute('data-text');
-    root.classList.remove('se-a1','se-a2'); if(n==='1') root.classList.add('se-a1'); if(n==='2') root.classList.add('se-a2');
-    [].forEach.call(document.querySelectorAll('[data-text]'),function(x){ x.setAttribute('aria-pressed',String(x===b)); });
-    if(sr) sr.textContent='Text size '+b.textContent.trim();
-  });});
-  // toggles
-  [].forEach.call(document.querySelectorAll('[data-tog]'),function(b){ b.addEventListener('click',function(){
-    var cls=b.getAttribute('data-tog'), on=!root.classList.contains(cls);
-    root.classList.toggle(cls,on); b.setAttribute('aria-pressed',String(on));
-    b.querySelector('.st').textContent=on?'On':'Off';
-    if(sr) sr.textContent=b.textContent.replace(/On|Off/,'').trim()+(on?' on':' off');
-  });});
   /* NO STORAGE. Single-file, offline, zero-persistence is studio law. */
 })();
 </script>
