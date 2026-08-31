@@ -11,7 +11,7 @@ os-block-cross-lane-mount.md §12. v1 — 2026-07-10.*
 
 | doc | canonical ID / path | bytes | version | owner-lane | RW/RO by lane |
 |-----|--------------------|-------|---------|-----------|--------------|
-| Confluence trunk | **LATEST = Drive** `1ASstFxZrdobjUpPVK6uFMCfDYLN3yQFA` `confluence-TRUNK-v48-2026-07-14.html` (631,929 B) · repo `confluence-TRUNK.html` = **STALE v43** (598,114 B, md5 `8dcf9903`) · Drive `1034TofD…` = pointer | **v48** (Drive) · repo lags at v43 | Confluence RW | TSP: RO · **DO NOT edit repo copy — it is not canon** |
+| Confluence trunk | **CANON = repo** `confluence-TRUNK.html` (v48, promoted 2026-07-23, main `ac9c5d8` / PR #52; surface label corrected to v48 on 2026-08-31) · `_confluence-v48-canon.html` = pre-promotion Drive snapshot, kept for reference · Drive `1ASstFxZrdobjUpPVK6uFMCfDYLN3yQFA` `confluence-TRUNK-v48-2026-07-14.html` (631,929 B) = superseded source · Drive `1034TofD…` = pointer | **v48** (repo) | TSP RW | all: RO — **edit the repo copy; it is canon** |
 | OS canon | `tight-spiral-studio-os.md` · **repo** (canon, landed 2026-07-12) | grown to §16, reconciled 2026-08-08 | 2026-07-05 base · **all 13 os-blocks merged, see "CLOSED — OS merge" below** | TSP RW | Confluence: RO (§6.4 only) · others: RO |
 | OS blocks (folded into OS §15) | `os-block-*.md` × 13 · repo | — | 07-04 → 08-07 | TSP RW | all: RO — content now lives in the OS text; files stay as the per-topic origin record |
 | Visual Constitution | `tight-spiral-visual-constitution.md` | 10,141 | §13, 2026-07-04 | TSP RW | Confluence: RO · Leeder: RO · Capstone: — |

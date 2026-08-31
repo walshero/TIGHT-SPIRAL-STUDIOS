@@ -1034,6 +1034,55 @@ OPEN LOOPS (Funes board):
   branch `claude/rule-compute-before-escalate` dies with it).
 - v48 version banner + cross-lane manifest row still under-count — update to the promoted v48.
 
+## 2026-08-31 — Confluence "v43 vs v48": the label lagged the code, and the manifest lagged both
+
+**THE QUESTION.** Founder: *"confluence is currently v48 to my knowledge but TSP repo shows v43?"*
+
+**WHAT WAS ACTUALLY TRUE.** Three different answers were on the shelf at once, and none of
+them was v43-the-code:
+
+- **The code is v48.** `confluence-TRUNK.html` on main carries the v45–v48 work — the
+  `.rlx-*` reliability engine, `.oax-*` open asks, the v46 truth pass. Promoted 2026-07-23
+  under the founder ruling logged in this file (main `ac9c5d8`, PR #52).
+- **The face said v44.** The promotion moved the code and never bumped the shipped label.
+  Header eyebrow and the About info-box both read `v44`; `<title>` carried no version at
+  all. A v48 build wore a v44 face for five weeks. The file's own changelog header says
+  *"Bump the eyebrow on ship"* — that step was skipped, and nothing measures it.
+- **`cross-lane-manifest.md` said v43.** Its Confluence row still declared the repo copy
+  **STALE v43** (598,114 B, md5 `8dcf9903`), named Drive as canon, and carried a standing
+  **"DO NOT edit repo copy — it is not canon."** That row was correct until 2026-07-23 and
+  was never updated by the promotion that falsified it. It is the most likely source of
+  the founder's "repo shows v43" — the address book outranked the file.
+
+**FIXED.** Eyebrow `v44→v48`; About Version `v44→v48`; version added to `<title>` so a
+screenshot identifies its own build; a correction entry written into the in-file changelog.
+Manifest row rewritten: repo is canon, Drive snapshot superseded, RW returned to TSP.
+`index.html` no longer bills `_confluence-v48-canon.html` as "canon snapshot" — it is the
+pre-promotion Drive snapshot, kept for reference; the promoted trunk is the canon.
+`canon-freshness.py` and `canon-guard.py` clean after.
+
+**NOT A LOSS, ON PURPOSE.** The trunk differs from the snapshot in two more places that
+look like drift and are not: 359 sub-18px fonts raised to 1rem, and the scholar-review
+fetch gated dormant behind `window.SC_LIVE` instead of the snapshot's `SC_CONFIG` endpoint
+stub. Both were the promotion's own prep, logged 2026-07-23.
+
+**THE LESSON, WHICH THIS REPO ALREADY WROTE DOWN.** "Version on the surface" (2026-08-23)
+exists because a version you cannot see from the phone you are holding is a version nobody
+can report a bug against. That rule was written for the games; Confluence is the case that
+proves it generalises — and it landed with a TICK 12 CANDIDATE (a grep for a version token
+beside the title) deliberately unbuilt. This is the second surface in eight days where a
+build disagreed with itself about its own version. Recorded as the standing argument for
+building TICK 12 when the rate governor next allows a graduation.
+
+**A SECOND CLASS, DISTINCT FROM CHECKED-IS-NOT-SHIPPED.** PLACEHOLDER was "the thing
+checked was not the thing shipped." This is quieter: a **resident doc that outlived the
+decision that falsified it.** `canon-freshness.py` reports contradictions between doc
+claims and live reality — it did not catch this, because "STALE v43, 598,114 B" is not a
+pointer to a missing file, it is a false *claim about a file that exists*. The manifest is
+address-only by design (§12), which is exactly why a byte count and a version string sitting
+in it were unpoliceable. Candidate teeth: when a manifest row names a file **in this repo**
+with bytes or an md5, check them.
+
 ## 2026-08-30 — No walls, the last two builds; and a gate that measures a floor it never grades
 
 **Shipped.** `found.html` v1.2 and `cliche-hunter.html` v1.1 join the no-walls sweep
