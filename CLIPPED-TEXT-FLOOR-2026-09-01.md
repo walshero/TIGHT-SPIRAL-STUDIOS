@@ -144,6 +144,49 @@ were closed. Four hits, all real, none fixed here:
 Left unfixed on purpose: each needs a design call (does the stage scroll, or does the
 type shrink?), and three more games is a different job from the one that was asked for.
 
+## Second report, same day: the bottom rail's labels
+
+Founder, on a phone screenshot: *"The back and home texts are not at the same height.
+This is studio design weakness?"* Yes, and it is the same shape as the card — house
+chrome that nobody measured.
+
+`.se-rail a,.se-rail button{min-height:var(--tap); padding:10px 18px}` — one rule for
+two elements that do not lay out the same way. `min-height` fills the box for both, but
+a `<button>` **centres** its label inside that box and an `<a>`, blockified as a flex
+item, leaves its text at the top. Measured on `the-console.html` at 412px: identical
+48px boxes, glyphs 4.5px apart.
+
+Not a one-off. **44 of the 97 surfaces carrying `.se-rail` had it**, up to 5.3px
+(`the-compound-capstone.html`, `network-strategy-spec.html`). The 53 that were fine
+split two ways: some already used `display:flex;align-items:center` on both — the house
+had the right answer and it just never propagated — and the rest were `<a>` + `<a>`,
+which match each other by accident because neither is centred.
+
+Fixed on all 44 by converging them onto the shape that already worked
+(`display:inline-flex;align-items:center;justify-content:center;line-height:1`). Verified:
+spread is now 0.0px on every one, and studio-fingers' HALT count across those files is
+unchanged at 6 — all pre-existing debt (inline links under the tap floor, 13px inputs,
+one sideways-scrolling page), none of it the rail.
+
+**C-ALIGN**, a new studio-fingers note, keeps it from coming back. A NOTE, not a HALT,
+by that gate's own law: floors block, preferences inform, and a 4px offset never stopped
+a thumb. It measures where the GLYPHS sit, not the boxes — the boxes were always
+identical, which is exactly why nothing caught this. Two false positives were closed
+before it was trustworthy, and both taught the rule its shape:
+
+- **it compares label CENTRES, not tops.** A label that wraps to two lines starts higher
+  than a one-line neighbour; that is wrapping, not misalignment
+  (`warriors-fantasy-arcade.html`, a correct 3-button row).
+- **prose is not a row.** Two links in one sentence share a parent and can share a box
+  top while sitting on different lines (`islo-hub.html`'s source note). Same inline-link
+  exemption the touch floor already applies.
+
+Canary BAD4/GOOD4 is the studio's own rail in both states — it must fire on the defect
+and stay silent on the fix. 5/5.
+
+**The instrument here was the founder's eye on a phone, and that is the finding.** An eye
+should not be the first instrument twice in one day.
+
 ## Still open
 
 - **Studio Fingers still measures first paint only** for its own floors (F-TAP, F-ZOOM).

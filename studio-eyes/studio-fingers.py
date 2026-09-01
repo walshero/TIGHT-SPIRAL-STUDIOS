@@ -33,6 +33,18 @@ geometry instead of measuring it. The engine here wins; what it lacked was bookk
                 in PLAYTEST-REPORT.md, not a ruling. Floors block; preferences inform.)
   C-REACH      the largest control sits outside the bottom 40% thumb arc      [note]
   C-EDGE       no env(safe-area-inset-*) on a page with fixed bottom chrome   [note]
+  C-ALIGN      two controls sitting side by side in one row wear their labels at
+               different heights                                             [note]
+               (A NOTE, not a floor: a 4px offset never stopped a thumb. But the
+                studio's own bottom rail carried it on 44 of 97 surfaces, because
+                `.se-rail a,.se-rail button{min-height:48px}` fills the box for both
+                and only a <button> CENTRES its label in it — an <a>, blockified as
+                a flex item, leaves its text at the top. One rule, two layout models,
+                nobody measuring. Found by the founder's eye on a phone screenshot
+                2026-09-01, which is the failure: an eye should not be the first
+                instrument. The surfaces that were already right used
+                display:flex;align-items:center on both, which is now the fix
+                everywhere.)
 
 EVERY NUMBER DECLARES ITS AUTHORITY. This is the one thing the retiring gate got right:
   [LAW]     WCAG 2.5.5 AAA target 44px; 2.5.8 AA 24px; 1.4.4 resize to 200%
@@ -150,6 +162,47 @@ PROBE = r"""
     const ctrls = Array.prototype.slice.call(el.querySelectorAll(sel)).filter(vis);
     if (ctrls.length >= 2) wallContainer = true;
   });
+  // ---- C-ALIGN: labels in one control row, measured where the GLYPHS actually sit.
+  // Box geometry is not enough — the two controls here are the same 48px box and it is
+  // the text inside that is off. Range.getBoundingClientRect() reads the painted line.
+  out.rows = [];
+  const rowsSeen = new Set();
+  document.querySelectorAll(sel).forEach(el => {
+    const parent = el.parentElement;
+    if (!parent || rowsSeen.has(parent)) return;
+    rowsSeen.add(parent);
+    // PROSE IS NOT A ROW. Two links in one sentence share a parent and can share a box
+    // top while sitting on different lines of the paragraph — that is running text, not
+    // a control row, and it read as a 9px misalignment in islo-hub's source note. Same
+    // inline-link exemption the touch floor already applies, for the same reason.
+    const kids = Array.prototype.slice.call(parent.querySelectorAll(':scope > ' + sel))
+      .filter(k => vis(k) && (k.textContent || '').trim() && !inlineLink(k));
+    if (kids.length < 2) return;
+    const boxes = kids.map(k => k.getBoundingClientRect());
+    // one visual ROW: tops within a few px of each other. A column is not a row.
+    const tops = boxes.map(b => b.top);
+    if (Math.max.apply(null, tops) - Math.min.apply(null, tops) > 4) return;
+    // COMPARE CENTRES, NOT TOPS. A label that wraps to two lines legitimately starts
+    // higher than a one-line neighbour — that is wrapping, not misalignment, and
+    // measuring tops called a correct 3-button row in warriors-fantasy-arcade broken.
+    // Two labels centred in their boxes share a centre whatever their line count.
+    const glyph = kids.map(k => {
+      const rng = document.createRange(); rng.selectNodeContents(k);
+      const tr = rng.getBoundingClientRect();
+      return tr.height > 0 ? (tr.top + tr.height / 2) - k.getBoundingClientRect().top : null;
+    }).filter(v => v !== null);
+    if (glyph.length < 2) return;
+    const spread = Math.max.apply(null, glyph) - Math.min.apply(null, glyph);
+    if (spread <= 2) return;
+    out.rows.push({
+      row: parent.tagName.toLowerCase() + (typeof parent.className === 'string' && parent.className
+            ? '.' + parent.className.trim().split(/\s+/).join('.') : ''),
+      spread: Math.round(spread * 10) / 10,
+      items: kids.map((k, i) => ({ tag: k.tagName.toLowerCase(), name: name(k),
+                                   mid: Math.round(glyph[i] * 10) / 10 }))
+    });
+  });
+
   out.comfort.visibleOptions = visibleOptions;
   out.comfort.hasToggle = hasToggle;
   out.comfort.wallContainer = wallContainer;
@@ -282,6 +335,11 @@ def notes_for(path, d):
         notes.append(f"C-REACH     the largest control (\"{p['name']}\") sits at {p['top']}px on a "
                      f"{d['vh']}px screen — above the bottom-40% thumb arc. Top-left is a regrip "
                      f"on a large phone. [CITED]")
+    for row in d.get('rows', []):
+        who = ", ".join(f"<{i['tag']}> \"{i['name'][:14]}\" centred at {i['mid']}px" for i in row['items'][:4])
+        notes.append(f"C-ALIGN     {row['row']}: label centres sit {row['spread']}px apart in one "
+                     f"row ({who}). A <button> centres its label inside min-height; a blockified "
+                     f"<a> leaves it at the top. Give both display:flex;align-items:center.")
     try:
         src = open(path, encoding='utf-8', errors='replace').read()
     except Exception:
@@ -385,20 +443,47 @@ BAD3 = """<!doctype html><html lang=en><head><meta charset=utf-8>
 </body></html>"""
 
 
+# THE RAIL DEFECT, isolated. One rule, two layout models: the <button> centres its
+# label inside the 48px box, the blockified <a> leaves it at the top. This is the
+# studio's own bottom rail as it stood on 44 of 97 surfaces on 2026-09-01.
+BAD4 = ("<!doctype html><meta name=viewport content='width=device-width,initial-scale=1'>"
+        "<style>body{margin:0;font-family:system-ui;line-height:1.4}"
+        ".se-rail{display:flex;gap:10px;justify-content:center;padding:20px}"
+        ".se-rail a,.se-rail button{min-height:48px;padding:10px 18px;border:1.5px solid #888;"
+        "border-radius:8px;font-size:13px;text-decoration:none;color:#111;background:#eee}"
+        ".se-rail a:focus-visible,.se-rail button:focus-visible{outline:3px solid #000}"
+        "</style><body><h1>scene</h1>"
+        "<nav class='se-rail'><button type=button>Back</button><a href='#x'>Home</a></nav>"
+        "</body>")
+
+# The same rail, centred the way the surfaces that were already right do it. Must be
+# silent: a note that fires on the fix is a note nobody keeps.
+GOOD4 = BAD4.replace("border-radius:8px;font-size:13px",
+                     "border-radius:8px;display:inline-flex;align-items:center;"
+                     "justify-content:center;line-height:1;font-size:13px")
+
+
 def self_test():
     from playwright.sync_api import sync_playwright
     r = {}
     exe = os.environ.get('SF_CHROME')
     with tempfile.TemporaryDirectory() as td:
         paths = {}
-        for k, html in (('good',GOOD), ('bad1',BAD1), ('bad2',BAD2), ('bad3',BAD3)):
+        for k, html in (('good',GOOD), ('bad1',BAD1), ('bad2',BAD2), ('bad3',BAD3),
+                        ('bad4',BAD4), ('good4',GOOD4)):
             paths[k] = os.path.join(td, k+'.html'); open(paths[k],'w').write(html)
         with sync_playwright() as p:
             b = p.chromium.launch(**({'executable_path': exe} if exe else {}))
             ctx = b.new_context(viewport={'width':412,'height':915}, is_mobile=True, has_touch=True)
             pg = ctx.new_page()
-            for k in paths: r[k] = audit_page(pg, paths[k])
+            probes = {}
+            for k in paths:
+                r[k] = audit_page(pg, paths[k])
+                probes[k] = pg.evaluate(PROBE)
             b.close()
+    # C-ALIGN is a NOTE, so it never reaches audit_page's halts — grade it where it lives.
+    align = {k: [n for n in notes_for(paths_k, probes[k]) if n.startswith('C-ALIGN')]
+             for k, paths_k in (('bad4', __file__), ('good4', __file__), ('good', __file__))}
     codes1 = {h.split()[0] for h in r['bad1']}
     codes2 = {h.split()[0] for h in r['bad2']}
     ok_good = len(r['good']) == 0
@@ -406,12 +491,14 @@ def self_test():
     ok_bad2 = 'F-METAVIEW' in codes2
     codes3 = {h.split()[0] for h in r['bad3']}
     ok_bad3 = 'F-TAP' in codes3
+    ok_bad4 = len(align['bad4']) == 1 and not align['good4'] and not align['good']
     print("  self-test:")
     print(f"    GOOD canary clean          : {'PASS' if ok_good else 'FAIL -> '+str(r['good'])}")
     print(f"    BAD1 (tap/viewport/wall)   : {'PASS' if ok_bad1 else 'FAIL -> got '+str(sorted(codes1))}")
     print(f"    BAD2 (missing meta view)   : {'PASS' if ok_bad2 else 'FAIL -> got '+str(sorted(codes2))}")
     print(f"    BAD3 (tap AFTER transition): {'PASS' if ok_bad3 else 'FAIL -> got '+str(sorted(codes3))}")
-    return 0 if (ok_good and ok_bad1 and ok_bad2 and ok_bad3) else 1
+    print(f"    BAD4 (rail labels off/on)  : {'PASS' if ok_bad4 else 'FAIL -> bad4='+str(align['bad4'])+' good4='+str(align['good4'])+' good='+str(align['good'])}")
+    return 0 if (ok_good and ok_bad1 and ok_bad2 and ok_bad3 and ok_bad4) else 1
 
 
 def main():
