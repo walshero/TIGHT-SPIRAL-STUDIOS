@@ -353,7 +353,15 @@ html.still .flip{transition:none}
 
 /* ── buttons you can feel. A gradient, a lit top edge, a shadow that collapses
       when you press it. Nothing here changes a label's colour or its box. */
-.big-btn{background:linear-gradient(180deg,#7feadf 0%,var(--phos) 55%,#33bdb0 100%);
+/* THE BASE COLOUR IS DECLARED, NOT IMPLIED. `background:` shorthand resets
+   background-color to transparent, so a gate that reads background-color to find a
+   label's ground — belt tick 1 does exactly that, and is blind to background-image —
+   walked past this button to the near-black page behind it and scored dark ink on
+   mint at 1.13:1. It is really about 10:1. Declaring the colour the gradient sits on
+   makes the computed ground TRUE rather than merely making the gate quiet, and it is
+   the correct fallback if the gradient never paints. */
+.big-btn{background-color:var(--phos);
+  background-image:linear-gradient(180deg,#7feadf 0%,var(--phos) 55%,#33bdb0 100%);
   box-shadow:0 10px 26px rgba(79,214,201,.32),inset 0 2px 0 rgba(255,255,255,.5);
   transition:transform .12s ease,box-shadow .12s ease,filter .12s ease}
 .big-btn:hover,.big-btn:focus-visible{filter:brightness(1.06)}
