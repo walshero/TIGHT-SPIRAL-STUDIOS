@@ -1084,3 +1084,70 @@ ruling makes navigation universal, so the sweep would be finding real gaps, not 
 content-identical at origin/main. The Found artifact was republished to its existing
 URL and read back: v1.2, no `comfortTop`, no `data-light-set`, no panel, Studio and
 Cabinet and Back present, `tsp.comfort.v1` still read by the boot script.
+
+## 2026-09-01 — Mail Drop shipped and REACHABLE; a delivery gap named; a corpus compliance sweep
+
+**Mail Drop v1.0 (Lab)** built, gated and landed on canon (`bc10760`), then mirrored to
+the play lane. The design note lives in the file's own TSP-META; the short version is
+that the founder chose sorting after being warned it repeats Cliche Hunter, so the
+third class of mail (ODD, no right answer, the tally refuses to grade it) is what keeps
+it from being that. The honest limit stopped being a line of dialogue and became a rule.
+
+**THE DELIVERY GAP, and it is the important part of this entry.** Found and Cliche
+Hunter had been on canon for days with NO playable URL at all. Neither was ever mirrored
+to `tss-playtest`. The 2026-08-29 rule says every turn that changes a build ends with a
+live URL, and the reason that rule exists is this exact failure, which happened again
+anyway. Landing on main kept reading as shipping. All three games are on the lane now,
+plus `en195-arcade.html`, because Mail Drop's rail links to it and a 404 on the one
+surface the founder opens is worse than no rail.
+
+**What was verified, and what could not be.** Blob hashes identical three ways: canon
+working tree, lane clone, and what the GitHub API reports for `origin/main`. The Pages
+run for that exact commit (`3ecb192`, run #86) completed with conclusion SUCCESS.
+**NOT verified: the live page itself.** This sandbox's proxy answers 403 to CONNECT for
+`walshero.github.io`, so no session can open a Pages URL from here. That is a permanent
+blind lane for this environment and it should be written down rather than rediscovered:
+deploy evidence is the strongest proof available from a session, and it is still not the
+same as having opened the page. Someone with a browser has to look.
+
+**CORPUS COMPLIANCE SWEEP against the two standing rulings** (static, whole corpus,
+89 surfaces, cheap):
+
+*Comfort walls, 11 remaining.* Four are defensible: `confluence-massbay-assessment.html`
+(Confluence is exempt by the ruling's own text), and `comfort-kernel.html`,
+`comfort-v3.html`, `comfort-control.html` (they ARE the comfort specimens; a specimen
+without its controls is not a specimen). **Seven are real and out of compliance:**
+`en195-arcade.html`, `enjambment.html`, `choose-your-leader-full.html`,
+`choose-your-leader-v6.html`, `old-problems-at-new-speed.html`,
+`the-compound-capstone.html`, `workshop-wall.html`. Plus `enjambment.artifact.html`,
+which is a build product and fixes itself when its source does.
+
+*Navigation floor, 18 surfaces missing a Back and/or Home.* **Thirteen are gate test
+fixtures** (`art-exec-canary-*`, `comfort-gate-canary-*`, `floor-specimen.html`) or dev
+pages (`art-pitches`, `repos`, `enjambment-skins`). Only a few are real, and
+`enjambment.html` is the one that matters: a real game, missing Home, and carrying a
+wall.
+
+**This REFRAMES the 2026-08-30 pending note.** I wrote that one-thing-gate "measures the
+navigation floor and never grades it" as if that were simple blindness. It is more
+likely a design stall: naive teeth would HALT the gate's own canaries, so grading it
+needs a fixture exemption first. The job is not "add an assert," it is "add an assert
+plus an exemption rule for fixtures," and that is worth knowing before someone quotes it
+as a one-liner.
+
+**A TRAP FOUND AND NOT SPRUNG, which is the reusable part.** The obvious next move was
+to run this session's proven `unwall.py` over `enjambment.html`, since its chrome is the
+same dialect as Found and Cliche Hunter, and all six anchors matched exactly. It would
+have broken the game. In found.html and cliche-hunter.html every `.btn`, `.row`, `.tog`,
+`.why` and `.note` belongs to the comfort panel, so deleting the panel CSS is safe. In
+`enjambment.html` the GAME reuses three of them: 8 `.btn` against the panel's 5, 3
+`.row` against 2, 6 `.note` against 3. Deleting the panel's CSS block there removes
+styling the game depends on, and nothing would have failed loudly. A correct unwall of
+this file must keep `.btn`, `.row` and `.note` and drop only `.panel`, `.tog` and
+`.why`. NOT DONE, deliberately: it is a bespoke edit to a real game, made unattended,
+with no way to get a founder look at the result. Named here so the next session inherits
+the trap rather than the crater.
+
+**Quoted, not spent:** the seven real walls are one bespoke pass each (the shared-class
+check above has to be run per file, and `en195-arcade.html` is the second dialect on top
+of that), plus a changed-files gate run. Single inline pass, no subagents.
