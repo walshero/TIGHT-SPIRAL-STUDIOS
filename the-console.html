@@ -16,7 +16,8 @@
   --feed-bg:#f4f5f7;--feed-ink:#14171c;--feed-dim:#61697a;--feed-accent:#2452e6;
   /* STUDIO EYES v2 chrome tokens — day = the console's native cool dark */
   --surface:#121b26;--surface-2:#0e1620;--line:#2c4256;--ink-2:#93a6b8;
-  --accent-strong:#4fd6c9;--on-accent:#04211e;--focus:#4fd6c9;
+  --brand-ink:#6f93ff;--brand-fill:#2452e6;
+  --accent-strong:#4fd6c9;--accent-ink:#7ee6dc;--on-accent:#04211e;--focus:#4fd6c9;
   --tap:44px;--tap:48px;--r:10px;
   --mono:ui-monospace,"SF Mono",Menlo,monospace;--serif:Georgia,"Times New Roman",serif;
 }
@@ -25,22 +26,24 @@
    Night is warm charcoal — never pure black. The diegetic phone (--feed-*)
    is a prop inside the fiction and keeps its own light. ── */
 html[data-light="dusk"]{
+  --brand-ink:#8fa9ff;
   --void:#1a1512;--panel:#241d16;--panel-2:#1d1712;--edge:#463a2b;
   --ink:#f0e6d0;--dim:#b9a887;
   --phos:#5ad6b0;--phos-deep:#0d5c48;--phos-ink:#5ad6b0;
   --amber:#f2bc5f;--amber-fill:#f2bc5f;
   --red:#ff8a70;--red-ink:#ff8a70;--green:#6bd98a;--green-fill:#6bd98a;
   --surface:#241d16;--surface-2:#1d1712;--line:#4d4030;--ink-2:#b9a887;
-  --accent-strong:#5ad6b0;--on-accent:#0b201a;--focus:#5ad6b0;
+  --accent-strong:#5ad6b0;--accent-ink:#7fe3c6;--on-accent:#0b201a;--focus:#5ad6b0;
 }
 html[data-light="night"]{
+  --brand-ink:#9db4ff;
   --void:#171310;--panel:#201b14;--panel-2:#19150f;--edge:#42392b;
   --ink:#f2e3bf;--dim:#c6b48d;
   --phos:#e9c169;--phos-deep:#5f4a12;--phos-ink:#e9c169;
   --amber:#f0c357;--amber-fill:#f0c357;
   --red:#ff9078;--red-ink:#ff9078;--green:#8fd9a3;--green-fill:#8fd9a3;
   --surface:#201b14;--surface-2:#19150f;--line:#4a3f2c;--ink-2:#c6b48d;
-  --accent-strong:#e9c169;--on-accent:#241a06;--focus:#f0c357;
+  --accent-strong:#e9c169;--accent-ink:#f0cd84;--on-accent:#241a06;--focus:#f0c357;
 }
 /* ── STUDIO EYES toggles ── */
 html.se-a1{ zoom:1.15; }
@@ -60,12 +63,14 @@ html,body{margin:0;padding:0;background:var(--void);color:var(--ink);
   -webkit-text-size-adjust:100%;overflow-x:hidden}
 body{line-height:1.4}
 :focus-visible{outline:3px solid var(--phos);outline-offset:3px;border-radius:8px}
+.screen:focus,.screen:focus-visible{outline:none}
 /* Legacy corner Comfort control and corner Home chip removed 2026-07-29:
    nav + comfort now live in the Studio Eyes reserved chrome and bottom rail. */
 html.big{font-size:19px}
 html.still *{animation:none!important;transition:none!important}
-.app-shell{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:12px 16px 16px;max-width:560px;margin:0 auto;position:relative;z-index:1}
+body{display:flex;flex-direction:column;min-height:100dvh}
+.app-shell{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:12px 16px 16px;max-width:560px;width:100%;margin:0 auto;position:relative;z-index:1}
 /* SCENE LAYER — a full-bleed atmospheric backdrop behind the console. It is a
    sibling of the content (never an ancestor of any text), so it carries the scene
    without changing any text's computed ground. */
@@ -84,8 +89,6 @@ html.still *{animation:none!important;transition:none!important}
 .screen{display:none;width:100%;flex-direction:column;align-items:center;text-align:center}
 .screen.on{display:flex;animation:pop .4s cubic-bezier(.2,.9,.3,1.2)}
 @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
-.logo{font-size:clamp(64px,20vw,120px);font-weight:900;letter-spacing:-.04em;line-height:.9;color:var(--feed-accent)}
-.logo .dot{color:var(--amber)}
 .hire-badge{margin:22px 0 8px;display:inline-flex;align-items:center;gap:10px;
   background:var(--panel);border:1px solid var(--edge);border-radius:40px;padding:12px 22px;
   color:var(--ink);font-weight:700;font-size:clamp(16px,4.5vw,20px)}
@@ -200,16 +203,30 @@ html.still .meter-fill{transition:none}
 .act-hint.good{color:var(--green)}
 .flip-wrap{width:100%;max-width:340px;margin:12px auto 0;perspective:1000px;transition:opacity .3s}
 .flip-wrap.locked{opacity:.3;pointer-events:none}
-.flip{position:relative;transform-style:preserve-3d;transition:transform .5s;cursor:pointer;min-height:68px}
+/* THE CARD SIZES TO ITS TALLEST FACE. It used to stack the two faces with
+   position:absolute;inset:0 over a min-height:68px box — so the card was ALWAYS
+   68px tall, however long the research on the back ran, and the answer to "why does
+   this work?" was sliced through the middle. Absolutely-positioned faces contribute
+   nothing to their container's height; grid-stacked ones do. Same 3D flip, but the
+   row is now max(front, back), so the text decides the box instead of the box
+   deciding how much text you get to read. */
+.flip{position:relative;transform-style:preserve-3d;transition:transform .5s;cursor:pointer;
+  min-height:0;display:grid;grid-template-columns:minmax(0,1fr)}
 html.still .flip{transition:none}
 .flip.flipped{transform:rotateY(180deg)}
-.flip-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;
+/* the 68px floor moved OFF .flip and onto the faces. .flip is the grid item the
+   collapse shrinks, and an item carrying a min-height cannot shrink — the locked
+   card stopped collapsing and started clipping its own front face instead. The
+   floor belongs to what is drawn, not to what animates. */
+.flip-face{grid-area:1/1;min-width:0;min-height:68px;backface-visibility:hidden;border-radius:14px;
   border:1px solid var(--edge);background:var(--panel-2);padding:12px 16px;display:flex;align-items:center;justify-content:center;gap:10px}
 .flip-front{color:var(--dim);font-size:14px;font-weight:700}
 .flip-back{transform:rotateY(180deg);flex-direction:column;align-items:flex-start;text-align:left}
 .flip-back .fact{color:var(--ink);font-size:13px;line-height:1.4}
 .flip-back .cite{color:var(--phos-ink);font-size:11px;margin-top:5px}
-.advance{width:100%;max-width:340px;margin:14px auto 0;opacity:.3;pointer-events:none;transition:opacity .3s}
+.advance{width:100%;max-width:340px;margin:14px auto 0;pointer-events:none;transition:opacity .3s}
+.big-btn.advance:not(.ready){background:var(--panel-2);color:var(--dim);border:1px solid var(--edge);
+  box-shadow:none;text-shadow:none}
 .advance.ready{opacity:1;pointer-events:auto}
 .rankcard{width:100%;max-width:360px;background:linear-gradient(160deg,var(--panel),var(--panel-2));
   border:2px solid var(--phos);border-radius:22px;padding:34px 26px;box-shadow:0 0 40px rgba(79,214,201,.25)}
@@ -241,10 +258,20 @@ html.still .flip{transition:none}
 #sc-train .meter-wrap{margin-bottom:7px}
 #sc-train .act-zone{min-height:56px}
 #sc-train .act-hint{margin-top:6px;min-height:18px;font-size:13px;line-height:1.34}
-#sc-train .flip-wrap{margin-top:7px;max-height:120px;overflow:hidden;transition:max-height .3s,margin .3s,opacity .3s}
 /* the "why does this work?" card is locked until you hit the target — collapse it while
-   locked so play fits the smallest screens, then it opens as the earned reveal. */
-#sc-train .flip-wrap.locked{max-height:0;margin-top:0;opacity:0}
+   locked so play fits the smallest screens, then it opens as the earned reveal.
+   THE COLLAPSE MUST NOT SURVIVE THE REVEAL. This was max-height:120px;overflow:hidden,
+   a number picked once against one font size — it clipped the reveal at every zoom
+   stop, and worse at se-a2. 0fr -> 1fr collapses just as smoothly and, when open,
+   the row IS the content: there is no ceiling left to grow into. */
+/* minmax(0,1fr), not the implicit auto column: an auto grid column sizes to the
+   face's MAX-CONTENT, so "Why does this work?" pushed the card 3px past its own
+   340px wrap and clipped its own front face. Same defect as the one being fixed,
+   turned on its side — found by the crawler on the first run after the fix. */
+#sc-train .flip-wrap{display:grid;grid-template-rows:1fr;grid-template-columns:minmax(0,1fr);
+  overflow:hidden;margin-top:7px;
+  transition:grid-template-rows .3s,margin .3s,opacity .3s}
+#sc-train .flip-wrap.locked{grid-template-rows:0fr;margin-top:0;opacity:0}
 #sc-train .big-btn.advance{margin-top:9px}
 
 /* ═══ STUDIO EYES v2 — RESERVED CHROME (grid row, never overlaps content) ═══ */
@@ -255,7 +282,7 @@ html.still .flip{transition:none}
   padding:8px 12px;border:1.5px solid var(--line);border-radius:8px;background:var(--surface-2);
   color:var(--ink);font-family:var(--mono);font-weight:700;font-size:13px;text-decoration:none}
 .se-brand{justify-self:center;display:inline-flex;align-items:center;gap:9px;color:var(--ink)}
-.se-brand svg{width:34px;height:20px;color:var(--accent-strong);flex:0 0 auto}
+.se-brand svg{width:34px;height:20px;color:var(--accent-ink);flex:0 0 auto}
 .se-brand .wm{font-family:var(--serif);font-size:16px;letter-spacing:.01em;white-space:nowrap}
 .se-eyes{justify-self:end;display:inline-flex;align-items:center;gap:7px;min-height:var(--tap);
   padding:8px 13px;border:2px solid transparent;border-radius:8px;background:var(--accent-strong);
@@ -280,7 +307,7 @@ html.still .flip{transition:none}
   background:var(--surface-2);color:var(--ink);font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;text-align:left}
 .se-tog[aria-pressed="true"]{border-color:var(--accent-strong)}
 .se-tog .st{font-family:var(--mono);font-size:11px;color:var(--ink-2)}
-.se-tog[aria-pressed="true"] .st{color:var(--accent-strong);font-weight:700}
+.se-tog[aria-pressed="true"] .st{color:var(--accent-ink);font-weight:700}
 .se-tog:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 .se-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 
@@ -289,9 +316,104 @@ html.still .flip{transition:none}
   color:var(--dim);letter-spacing:.04em;margin:14px 0 0}
 .se-rail{position:relative;z-index:1;display:flex;gap:10px;justify-content:center;padding:20px;
   border-top:2px solid var(--line);margin-top:14px}
-.se-rail a,.se-rail button{min-height:var(--tap);padding:10px 18px;border:1.5px solid var(--line);border-radius:8px;
+.se-rail a,.se-rail button{display:inline-flex;align-items:center;justify-content:center;line-height:1;min-height:var(--tap);padding:10px 18px;border:1.5px solid var(--line);border-radius:8px;
   background:var(--surface-2);color:var(--ink);font-family:var(--mono);font-weight:700;font-size:13px;text-decoration:none;cursor:pointer}
 .se-rail a:focus-visible,.se-rail button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   FLOK SKIN — the cheap slickness a studio puts on before anyone sees it.
+   No new tokens for comfort, no new stops, no wall: this is per-game palette and
+   surface work, which the 2026-08-29 pause explicitly leaves open. Every colour
+   below resolves through the existing day/dusk/night kernel, so all three stops
+   keep their contrast, and every animation dies under html.still and
+   prefers-reduced-motion via the global rules at the top of this sheet.
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── the room. A vignette and a fine grain give the flat void a floor and a
+      ceiling. Both are painted by the existing .scene-bg sibling, so no text's
+      computed ground changes and the contrast floor reads exactly what it read. */
+.scene-bg::after{content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(120% 90% at 50% 40%,rgba(0,0,0,0) 45%,rgba(0,0,0,.55) 100%),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.014) 0 1px,rgba(0,0,0,0) 1px 3px)}
+
+/* ── the brand. A flat wordmark on a flat ground is a wireframe; an icon tile
+      beside it is an app. The tile is decoration, the "f" is text on it, and at
+      this size it clears the large-text floor several times over. */
+.brandmark{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:4px}
+.brand-tile{flex:0 0 auto;width:clamp(56px,15vw,86px);height:clamp(56px,15vw,86px);
+  border-radius:clamp(16px,4.4vw,24px);display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(155deg,#4f7bff 0%,#2f5cf0 42%,#1636a8 100%);
+  box-shadow:0 14px 34px rgba(36,82,230,.45),inset 0 2px 0 rgba(255,255,255,.42),
+             inset 0 -3px 10px rgba(0,0,0,.28)}
+.brand-tile svg{width:62%;height:62%;display:block}
+.logo{font-size:clamp(52px,15vw,88px);font-weight:900;letter-spacing:-.045em;line-height:.86;
+  color:var(--brand-ink);text-shadow:0 0 34px rgba(79,123,255,.42)}
+.logo .dot{color:var(--amber)}
+
+/* ── buttons you can feel. A gradient, a lit top edge, a shadow that collapses
+      when you press it. Nothing here changes a label's colour or its box. */
+/* THE BASE COLOUR IS DECLARED, NOT IMPLIED. `background:` shorthand resets
+   background-color to transparent, so a gate that reads background-color to find a
+   label's ground — belt tick 1 does exactly that, and is blind to background-image —
+   walked past this button to the near-black page behind it and scored dark ink on
+   mint at 1.13:1. It is really about 10:1. Declaring the colour the gradient sits on
+   makes the computed ground TRUE rather than merely making the gate quiet, and it is
+   the correct fallback if the gradient never paints. */
+.big-btn{background-color:var(--phos);
+  background-image:linear-gradient(180deg,#7feadf 0%,var(--phos) 55%,#33bdb0 100%);
+  box-shadow:0 10px 26px rgba(79,214,201,.32),inset 0 2px 0 rgba(255,255,255,.5);
+  transition:transform .12s ease,box-shadow .12s ease,filter .12s ease}
+.big-btn:hover,.big-btn:focus-visible{filter:brightness(1.06)}
+.big-btn:active{transform:translateY(2px);box-shadow:0 3px 12px rgba(79,214,201,.3),inset 0 2px 0 rgba(255,255,255,.35)}
+html.still .big-btn{transition:none}
+.big-btn.ghost{background:transparent;box-shadow:none}
+.big-btn.ghost:active{transform:translateY(1px)}
+
+.act-btn,.knob{transition:transform .12s ease,box-shadow .12s ease,border-color .2s ease}
+.act-btn{box-shadow:0 0 0 0 rgba(79,214,201,.5),inset 0 1px 0 rgba(255,255,255,.06)}
+.act-btn:hover,.act-btn:focus-visible{box-shadow:0 0 22px rgba(79,214,201,.28),inset 0 1px 0 rgba(255,255,255,.08)}
+.act-btn:active,.knob:active{transform:translateY(2px) scale(.99)}
+html.still .act-btn,html.still .knob{transition:none}
+
+/* ── the meter is the whole game, so make it read like an instrument: sunk into
+      the panel, lit from inside, and it flares the moment you clear the line. */
+.meter{box-shadow:inset 0 2px 6px rgba(0,0,0,.55);overflow:hidden}
+.meter-fill{background:linear-gradient(90deg,var(--phos-deep) 0%,var(--phos) 72%,#a8f2ea 100%);
+  box-shadow:0 0 18px rgba(79,214,201,.55)}
+.meter-fill::after{content:"";position:absolute;inset:0;border-radius:16px;
+  background:linear-gradient(180deg,rgba(255,255,255,.34),rgba(255,255,255,0) 55%)}
+.meter.hit{box-shadow:inset 0 2px 6px rgba(0,0,0,.55),0 0 0 2px var(--phos-deep),0 0 26px rgba(79,214,201,.4)}
+.meter-target{box-shadow:0 0 10px rgba(242,182,75,.7)}
+
+/* ── the phone is a prop; props read as real when they carry a highlight and a
+      home bar. Both are decoration inside an aria-hidden frame. */
+.phone{box-shadow:0 30px 70px rgba(0,0,0,.62),0 0 0 1px rgba(255,255,255,.06)}
+.phone::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:26px;
+  background:linear-gradient(158deg,rgba(255,255,255,.5) 0%,rgba(255,255,255,0) 26%)}
+.phone-home{height:5px;width:38%;margin:7px auto 8px;border-radius:3px;background:#c9ced8}
+.feed-card{box-shadow:0 1px 2px rgba(16,22,32,.06),0 6px 16px rgba(16,22,32,.05)}
+.fc-media{border-radius:12px}
+
+/* ── the promotion is the reward beat. Give it a glow behind the star and one
+      slow sheen across the card, then let it sit still. */
+.rankcard{position:relative;overflow:hidden}
+.rankcard::before{content:"";position:absolute;left:50%;top:8%;width:230px;height:230px;
+  transform:translateX(-50%);pointer-events:none;
+  background:radial-gradient(circle,rgba(242,182,75,.30) 0%,rgba(242,182,75,0) 68%)}
+.rankcard::after{content:"";position:absolute;top:0;bottom:0;width:85%;left:-95%;pointer-events:none;
+  background:linear-gradient(100deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.055) 38%,
+             rgba(255,255,255,.10) 50%,rgba(255,255,255,.055) 62%,rgba(255,255,255,0) 100%);
+  animation:sheen 1.5s cubic-bezier(.35,.6,.4,1) .2s 1 forwards}
+@keyframes sheen{to{left:130%}}
+.rankcard .star{filter:drop-shadow(0 0 16px rgba(242,182,75,.55))}
+.rankcard .title{text-shadow:0 2px 18px rgba(0,0,0,.5)}
+
+/* ── small depth on the cards that carry the writing */
+.brief{box-shadow:0 8px 22px rgba(0,0,0,.35)}
+.hire-badge{box-shadow:0 8px 22px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.05)}
+.flip-face{box-shadow:0 8px 22px rgba(0,0,0,.35)}
+.tele-row{box-shadow:0 8px 22px rgba(0,0,0,.3)}
 </style>
 <style>
 /* LAB STATUS BAND - founder ruling 2026-08-27, "put in lab not as done game."
@@ -331,14 +453,11 @@ html.still .flip{transition:none}
     <span class="wm">Tight Spiral</span>
   </span>
 </header>
-<p class="se-stamp" style="margin:.45rem .9rem;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.76rem;opacity:.92;display:flex;align-items:center;gap:.45rem;flex-wrap:wrap"><p class="se-updated" id="seUpdated">Last updated recently</p> <span class="se-version" style="font:inherit;opacity:.85">&middot; v23 <span style="opacity:.75">75e938c</span></span>  </p>
-
-
 <div class="scene-bg" aria-hidden="true"></div>
 <div class="app-shell">
 
 <section class="screen on" id="sc-hire" aria-label="Your job">
-  <div class="logo">flok<span class="dot">.</span></div>
+  <div class="brandmark"><span class="brand-tile" aria-hidden="true"><svg viewBox="0 0 48 48" role="presentation" focusable="false"><circle cx="33" cy="15" r="6.5" fill="#fff"/><circle cx="19" cy="25" r="5" fill="#fff" opacity=".82"/><circle cx="9" cy="34" r="3.6" fill="#fff" opacity=".6"/></svg></span><div class="logo">flok<span class="dot">.</span></div></div>
   <div class="hire-badge"><span class="pulse-dot" aria-hidden="true"></span>Now hiring: Growth Operator</div>
   <div class="job-meter">
     <div class="job-line">Your job: make people use flok more. One number matters — how much they use it. That's the meter.</div>
@@ -369,6 +488,7 @@ html.still .flip{transition:none}
       <div class="feed-more" id="feedMore">&mdash; end &mdash;</div>
       <div class="burst" id="burst" aria-hidden="true">+1</div>
     </div>
+    <div class="phone-home" aria-hidden="true"></div>
   </div>
   <div class="meter-wrap">
     <div class="meter-label"><span>Engagement</span><span class="now" id="meterNow">0%</span></div>
@@ -420,6 +540,7 @@ html.still .flip{transition:none}
 </span>
 
 <!-- BOTTOM NAV RAIL — Back + Home -->
+<p class="se-stamp" style="margin:.45rem .9rem;justify-content:center;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.76rem;opacity:.92;display:flex;align-items:center;gap:.45rem;flex-wrap:wrap"><span class="se-updated" id="seUpdated">Last updated recently</span> <span class="se-version" style="font:inherit;opacity:.85">&middot; v23 <span style="opacity:.75">75e938c</span></span>  </p>
 <nav class="se-rail" aria-label="Page navigation">
   <button type="button" onclick="history.back()" aria-label="Back">Back</button>
   <a href="index.html" aria-label="Home">Home</a>
@@ -528,6 +649,7 @@ function setMeter(v){
     hit=true;
     document.getElementById('advanceBtn').classList.add('ready');
     document.getElementById('flipWrap').classList.remove('locked');
+    document.getElementById('meterAria').classList.add('hit');
     const h=document.getElementById('actHint');h.textContent='Target hit.';h.classList.add('good');
   }
 }
@@ -548,6 +670,7 @@ function paintTrain(){
   document.getElementById('factCite').textContent=L.cite;
   document.getElementById('flip').classList.remove('flipped');
   document.getElementById('flipWrap').classList.add('locked');
+  document.getElementById('meterAria').classList.remove('hit');
   document.getElementById('advanceBtn').classList.remove('ready');
   const h=document.getElementById('actHint');
   h.innerHTML='<b class="lever-tag">'+L.name+' &mdash; '+L.tag+'.</b> '+(L.bridge?L.bridge+' ':'')+L.hint;

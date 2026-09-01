@@ -93,7 +93,7 @@
     "file": "p05-grouped-selector.html",
     "expect": "PASS",
     "code": null,
-    "why": "BUG 4: '.a,.b{background}' \u2014 neither key was findable, so both fell through to page."
+    "why": "BUG 4: '.a,.b{background}' — neither key was findable, so both fell through to page."
   },
   {
     "file": "p06-second-style-block.html",
@@ -118,5 +118,23 @@
     "expect": "PASS",
     "code": null,
     "why": "A real game: scene first, >50% image, comfort in the corner. Must not HALT."
+  },
+  {
+    "file": "t13-clipped-text.html",
+    "expect": "HALT",
+    "code": "CLIPPED_TEXT",
+    "why": "Flok's research card, reduced to its bones. Nine floors green and the answer unreadable: a 68px box holding 85px of text, sliced by absolutely-positioned faces that cannot size their own container."
+  },
+  {
+    "file": "p09-legit-clips.html",
+    "expect": "PASS",
+    "code": null,
+    "why": "FALSE-POSITIVE TRAP for floor 11: a scroll window, a closed disclosure, sr-only text, an ellipsis label, a parked skip link, a closed <details> and an SVG label. Seven boxes that clip on purpose — the last three were live false positives on the first corpus sweep. HALTing any of them is how a gate gets routed around. A hard single-line slice with no ellipsis is deliberately NOT in here: by this floor's own rule that is a defect, and enjambment-skins.html is the corpus surface that carries one."
+  },
+  {
+    "file": "p10-text-on-gradient.html",
+    "expect": "PASS",
+    "code": null,
+    "why": "FALSE-POSITIVE TRAP the image/gradient floor never had: dark ink on a light gradient and white on a dark one, both correct. px_bg_under counted the glyphs as their own backdrop, so ANY text on a gradient read ~1:1 and HALTed. t03 proved the floor could fail a bad file; nothing proved it could pass a good one."
   }
 ]

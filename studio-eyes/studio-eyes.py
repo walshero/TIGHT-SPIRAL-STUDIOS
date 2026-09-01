@@ -36,6 +36,15 @@ FALSE-POSITIVE traps: files that are CORRECT and that v2 wrongly HALTed.
 runs before any audit. If the auditor cannot grade its own canary, IT REFUSES
 TO RUN. A tool that gates the studio must first gate itself.
 
+FLOOR 11 — CLIPPED TEXT (added 2026-09-01)
+------------------------------------------
+Ten floors graded the glyphs this tool could see. None asked whether the reader can
+read them. Flok shipped its research card sliced through the middle for weeks with
+every floor green. The measurement lives in _CLIP_BODY below, is spliced into PROBE,
+and is exported as CLIP_PROBE so playthrough-agent.py can run the same arithmetic at
+every state its crawler visits — because this auditor measures FIRST PAINT, and the
+card that caused this floor sits behind three clicks.
+
 USAGE
     studio-eyes.py --self-test              validate the auditor
     studio-eyes.py <file.html> [...]        audit (self-test runs first)
@@ -49,6 +58,17 @@ WCAG_TEXT = 4.5
 WCAG_LARGE = 3.0
 STOP_SEP_MIN = 0.12
 MIN_TARGET = 44
+CLIP_TOL = 2          # px of sub-pixel slack before a glyph counts as cut off
+# A BOX vs A WINDOW. Both clip; only one is broken. A box was meant to hold its
+# content and doesn't; a window shows a slice of something long on purpose (a feed, a
+# list, a transcript). The separation is not a judgment call, it is a ratio, and it is
+# not close: measured on the-console.html 2026-09-01, the broken research card held
+# 76px of text in a 68px box (1.12) and the diegetic phone feed held 699px in 150px
+# (4.66). Nobody designs a box to show 80% of a sentence; nobody designs a window to
+# show 20% of a feed. Under 2.0 the box was meant to fit and HALTs; over it, the shape
+# is a window and the finding is reported as a note instead of blocking.
+# [HOUSE] — declared, not derived from any founder ruling, and it contradicts none.
+CLIP_WINDOW_RATIO = 2.0
 
 # ---------------------------------------------------------------- colour math
 
@@ -86,9 +106,143 @@ def flatten(fg, bg):
 # This runs INSIDE the browser. It is the whole point: the page tells us what
 # it actually painted, instead of us deducing it from source text.
 
+
+# ---------------------------------------------------------------- the clip probe
+# ONE CANON WRITES, OTHERS READ. This body is spliced into PROBE below AND exported
+# as CLIP_PROBE, which playthrough-agent.py runs at every state its crawler visits.
+# Two copies of one measurement is the failure this studio keeps paying for, so
+# there is exactly one — and the crawler reads it from here or says out loud that
+# it could not.
+_CLIP_BODY = r"""
+  // ---- CLIPPED TEXT: words the page renders and then hides behind a clip box.
+  //
+  // FLOOR 11, added 2026-09-01 after Flok shipped its research card unreadable and
+  // every one of floors 1-10 stayed green. "Why does this work?" flipped open onto a
+  // 68px box holding 85px of research: the first line was sliced through the x-height
+  // and the citation was cut in half. Contrast was perfect. The touch target was
+  // 340x68. The focus ring was there. NOTHING in this auditor had ever been asked the
+  // one question that mattered — CAN YOU ACTUALLY READ IT — because every floor graded
+  // the glyphs it could see and none looked for the glyphs that had been thrown away.
+  // A tool built for a founder with retinitis pigmentosa that cannot see text
+  // disappear is looking through the wrong end of itself.
+  //
+  // ARITHMETIC, not judgment: for every visible text node, walk up to the nearest
+  // ancestor that does not paint everything inside it, and ask whether the text's
+  // painted box escapes that ancestor's padding box. If it does, those pixels were
+  // computed, laid out, and then discarded by the compositor. Nobody can read them.
+  //
+  // WHAT IS NOT A DEFECT — each of these is a false-positive trap in the canary,
+  // because a gate that cries wolf is a gate people route around:
+  //   - a SCROLL WINDOW (overflow auto/scroll on the escaping axis). The content is
+  //     off-view but reachable; that is a window, not a clip.
+  //   - a COLLAPSED DISCLOSURE (the clip box is ~0 on that axis). A closed accordion
+  //     is not hiding text, it is waiting. Flok's own locked card is this shape, and
+  //     the defect was in the OPEN state, never the closed one.
+  //   - VISUALLY-HIDDEN text (sr-only: a 1px box, or parked off-canvas). Written for
+  //     a screen reader, deliberately not painted.
+  //   - DELIBERATE TRUNCATION (text-overflow other than clip). An ellipsis is a
+  //     designer saying "there is more"; a hard slice says nothing at all.
+  //   - anything [hidden] or aria-hidden — already declared not-for-reading.
+  // A HIDDEN BACKFACE IS NOT PAINTED, and its projected box lies. On a flip card the
+  // face turned away still has visibility:visible and opacity:1, and under perspective
+  // its axis-aligned box is a few px WIDER than the card — which read as the front face
+  // clipping itself by 2px on a card that was flipped away and invisible. Found on the
+  // first crawler run after fixing the-console.html, 2026-09-01.
+  // Exact, not a guess: accumulate the transform chain and read the z-component of the
+  // transformed normal. rotateY(180deg) once is -1 (turned away); twice is +1 (facing
+  // the reader), which is precisely how a .flip-back inside a .flip.flipped works.
+  const facingAway = (el, stopAt) => {
+    let p = el, seenHidden = false, m = new DOMMatrix();
+    while (p && p !== stopAt) {
+      const cs = getComputedStyle(p);
+      if (cs.backfaceVisibility === 'hidden') seenHidden = true;
+      if (cs.transform && cs.transform !== 'none') m = new DOMMatrix(cs.transform).multiply(m);
+      p = p.parentElement;
+    }
+    return seenHidden && m.m33 < 0;
+  };
+  const clipBoxOf = (el) => {
+    let p = el.parentElement;
+    while (p) {
+      const cs = getComputedStyle(p);
+      if (cs.overflowX !== 'visible' || cs.overflowY !== 'visible') return { el: p, cs };
+      p = p.parentElement;
+    }
+    return null;
+  };
+  const walker2 = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const seenClip = new Set();
+  let m;
+  while (m = walker2.nextNode()) {
+    const t = (m.textContent || '').trim();
+    if (!t) continue;
+    const el = m.parentElement;
+    if (!el || seenClip.has(el)) continue;
+    seenClip.add(el);
+    const cs = getComputedStyle(el);
+    if (cs.display === 'none' || cs.visibility === 'hidden' || parseFloat(cs.opacity) === 0) continue;
+    if (el.closest('[hidden]') || el.closest('[aria-hidden="true"]')) continue;
+    // SVG lays out on a viewBox, not a scroll box. This arithmetic does not describe
+    // it, and every SVG label in the corpus read as clipped when it was not.
+    if (el.closest('svg')) continue;
+    // A CLOSED <details> is a disclosure, not a clip — same forgiveness as any other
+    // collapsed drawer, and Chromium keeps its children laid out so the box math
+    // otherwise reports the whole runbook as cut off.
+    if (el.closest('details:not([open])')) continue;
+    const box = clipBoxOf(el);
+    if (!box) continue;
+    // The PAGE overflowing is studio-fingers' F-VIEWPORT floor, not this one. Reporting
+    // it here says nothing new and buries the real finding under one line per word.
+    if (box.el === document.body || box.el === document.documentElement) continue;
+    const r = el.getBoundingClientRect();
+    if (r.width < 1 || r.height < 1) continue;
+    const cr = box.el.getBoundingClientRect();
+    // sr-only / off-canvas: a 1px box, or parked outside the viewport entirely.
+    if (cr.width <= 4 || cr.height <= 4) continue;
+    if (cr.right <= 0 || cr.bottom <= 0 || cr.left >= innerWidth) continue;
+    // PARKED, not clipped: a skip link at top:-40px, or anything else pushed off the
+    // top/left origin until it is summoned. Content BELOW the fold is not parked —
+    // the reader scrolls to it — so only the negative side is forgiven.
+    if (r.bottom <= 0 || r.right <= 0) continue;
+    // clipping happens at the PADDING box, inside the borders.
+    const bw = (v) => parseFloat(v) || 0;
+    const cTop    = cr.top    + bw(box.cs.borderTopWidth);
+    const cBottom = cr.bottom - bw(box.cs.borderBottomWidth);
+    const cLeft   = cr.left   + bw(box.cs.borderLeftWidth);
+    const cRight  = cr.right  - bw(box.cs.borderRightWidth);
+    const scrolls = (o) => o === 'auto' || o === 'scroll';
+    const overY = Math.max(r.bottom - cBottom, cTop - r.top);
+    const overX = Math.max(r.right - cRight, cLeft - r.left);
+    const lostY = scrolls(box.cs.overflowY) ? 0 : overY;
+    const lostX = scrolls(box.cs.overflowX) ? 0 : overX;
+    const lost = Math.max(lostY, lostX);
+    if (lost <= 2) continue;
+    if (cs.textOverflow && cs.textOverflow !== 'clip') continue;
+    if (facingAway(el, box.el.parentElement)) continue;
+    const nm = (e) => e.tagName.toLowerCase() + (e.className && typeof e.className === 'string'
+                 ? '.' + e.className.trim().split(/\s+/).join('.') : '');
+    // MEASURE THE AXIS THAT ACTUALLY OVERFLOWED. Judging a sideways-scrolling ticker
+    // by its height called a 453px-wide marquee in a 278px box a broken box.
+    const vertical = lostY >= lostX;
+    const boxH = Math.round(cr.height), needH = Math.round(box.el.scrollHeight);
+    const boxW = Math.round(cr.width),  needW = Math.round(box.el.scrollWidth);
+    const span = vertical ? boxH : boxW, need = vertical ? needH : needW;
+    out.clipped.push({ text: t.slice(0, 40), sel: nm(el), by: Math.round(lost),
+                       axis: vertical ? 'Y' : 'X',
+                       boxH: span, needH: need, clipSel: nm(box.el),
+                       // a window shows a slice of something long on purpose; a box
+                       // was meant to hold what is in it. See CLIP_WINDOW_RATIO.
+                       window: span > 0 && (need / span) > 2.0 });
+  }
+"""
+
+# Standalone form: same arithmetic, returns just the findings. For any harness that
+# has a page and wants the one question floors 1-10 never asked.
+CLIP_PROBE = "() => {\n  const out = {clipped:[]};\n" + _CLIP_BODY + "\n  return out.clipped;\n}"
+
 PROBE = r"""
 () => {
-  const out = {texts:[], targets:[], stops:[], firstScreen:null, emoji:[], tokens:{}};
+  const out = {texts:[], targets:[], stops:[], firstScreen:null, emoji:[], tokens:{}, clipped:[]};
 
   // ---- every visible text node, with its REAL computed colour and the REAL
   // ---- chain of ancestors that paint behind it.
@@ -127,7 +281,18 @@ PROBE = r"""
       color: cs.color,
       chain: chain,
       large: (fs >= 24 || (fs >= 18.66 && bold)),
-      rect: {x:r.x, y:r.y, w:r.width, h:r.height}
+      rect: {x:r.x, y:r.y, w:r.width, h:r.height},
+      // THE BOX IS NOT THE TEXT. Sampling an element's border box for the pixels
+      // "behind the glyphs" reads whatever shows through its rounded corners and
+      // padding — on Flok's primary button that was the near-black page seen through
+      // a 16px radius, reported as the darkest thing behind dark-on-mint ink and
+      // HALTed at 1.1:1. A Range over the element's contents is the actual painted
+      // line box, and nothing outside the text can leak into it.
+      trect: (() => { const g = document.createRange(); g.selectNodeContents(el);
+        const b = g.getBoundingClientRect();
+        return (b.width >= 2 && b.height >= 2)
+          ? {x:b.x, y:b.y, w:b.width, h:b.height}
+          : {x:r.x, y:r.y, w:r.width, h:r.height}; })()
     });
 
     // emoji, in RENDERED text (not source) — catches JS-injected ones too
@@ -244,16 +409,63 @@ PROBE = r"""
     }
   }
   out.stops = [...bodyClasses];
+
+"""
+
+# resume: the rest of the page probe, with the clip body spliced in above.
+PROBE = PROBE + _CLIP_BODY + r"""
   return out;
 }
 """
 
 # ---------------------------------------------------------------- audit core
 
+# ── the ground shot ──────────────────────────────────────────────────────────
+# TWO DEFECTS THIS CLOSES, both found 2026-09-01 by putting a gradient on Flok's
+# primary button and measuring what the floor said about it (1.1:1, on dark ink over
+# mint that is 10:1 to any eye):
+#
+#   1. THE BOX WAS NOT THE TEXT. px_bg_under was handed the element's border box, so
+#      it sampled whatever showed through the button's 16px rounded corners — the
+#      near-black page — and called it the backdrop. Fixed by sampling `trect`, a
+#      Range over the element's contents. See the probe.
+#   2. THE GLYPHS WERE THEIR OWN BACKDROP. Even cropped tight, the darkest pixel
+#      "behind" dark ink is the ink. Fixed here, by painting the page again with the
+#      glyphs made invisible and sampling THAT.
+#
+# Measured on canary p10 with both fixes off, one on, and both on: 1.08 / 1.00 / 8.84.
+# Neither fix is sufficient alone — the first crop hides the second defect behind a
+# worse number, which is exactly why one bug masked the other for so long.
+#
+# Nobody had noticed because this floor shipped with a HALT canary (t03) and no PASS
+# canary: the side that wrongly blocks a correct build was never once exercised.
+#
+# The fix is the doctrine this whole tool was rebuilt on — ASK THE RENDERER rather
+# than guess. Paint the page again with the glyphs made invisible and sample THAT.
+# -webkit-text-fill-color is the right instrument and `color` is not: it blanks the
+# glyph fill only, so currentColor still resolves and every border, SVG and shadow
+# that derives from it paints exactly as it did. Layout is untouched, so the rects
+# collected from the live page still land where they landed.
+GROUND_CSS = ("*,*::before,*::after{-webkit-text-fill-color:transparent!important;"
+              "text-shadow:none!important;-webkit-text-stroke-width:0!important}")
+
+def ground_screenshot(page):
+    """The page as painted, minus the glyphs. One shot serves every text on it."""
+    page.evaluate("""(css)=>{let el=document.getElementById('se-ground-probe');
+        if(!el){el=document.createElement('style');el.id='se-ground-probe';
+        document.head.appendChild(el);} el.textContent=css;}""", GROUND_CSS)
+    try:
+        return page.screenshot()
+    finally:
+        page.evaluate("()=>{const el=document.getElementById('se-ground-probe');"
+                      "if(el) el.remove();}")
+
+
 def px_bg_under(png_bytes, rect, dpr=1):
     """Sample the ACTUAL painted pixels behind a text box.
     This is the check the old gate confessed it could not do: text on a photo
-    or a gradient. Returns the WORST-CASE (most extreme) backdrop found."""
+    or a gradient. Returns the WORST-CASE (most extreme) backdrop found.
+    Feed it a ground_screenshot, never a plain one — see above."""
     try:
         from PIL import Image
     except ImportError:
@@ -310,8 +522,8 @@ def audit_page(page, path, mode_label):
 
         if gimg:  # text sits on an image/gradient -> MEASURE THE PIXELS
             if shot is None:
-                shot = page.screenshot()
-            got = px_bg_under(shot, t['rect'])
+                shot = ground_screenshot(page)
+            got = px_bg_under(shot, t.get('trect') or t['rect'])
             if got:
                 lo, hi = got
                 r = min(ratio(fgc, lo), ratio(fgc, hi))
@@ -342,6 +554,16 @@ def audit_page(page, path, mode_label):
     # -- 4. EMOJI
     for e in d['emoji']:
         halts.append(f"EMOJI in rendered text: \"{e}\"")
+
+    # -- 4b. CLIPPED TEXT (floor 11) — words rendered and then thrown away.
+    # See the probe for why this floor exists and what it deliberately forgives.
+    for c in d.get('clipped', []):
+        if c.get('window'):
+            continue          # a window, not a box — see CLIP_WINDOW_RATIO
+        halts.append(f"CLIPPED_TEXT [{mode_label}] {c['sel']} \"{c['text'][:28]}\" is cut off "
+                     f"by {c['by']}px inside {c['clipSel']} "
+                     f"({c['boxH']}px box holding {c['needH']}px of content). "
+                     f"Text that is laid out and then discarded is text nobody can read.")
 
     # -- 5. NO OPENING WALL
     fs = d['firstScreen']
@@ -447,7 +669,9 @@ def audit(path, no_net=True):
                 if sb:
                     lums[s] = lum(flatten(sb,(255,255,255)))
                 h2, _ = audit_page(page, path, s)
-                halts += [x for x in h2 if x.startswith('CONTRAST')]
+                # CLIPPED_TEXT travels with CONTRAST through the stop re-runs: a stop
+                # that changes the type scale can slice a box that fit at the default.
+                halts += [x for x in h2 if x.startswith(('CONTRAST', 'CLIPPED_TEXT'))]
             page.evaluate("()=>{document.body.className='';}")
 
             ks = list(lums.items())
@@ -464,15 +688,15 @@ def audit(path, no_net=True):
                 page.emulate_media(color_scheme=scheme)
                 page.wait_for_timeout(80)
                 h3, _ = audit_page(page, path, f'prefers-{scheme}')
-                halts += [x for x in h3 if x.startswith('CONTRAST')]
+                halts += [x for x in h3 if x.startswith(('CONTRAST', 'CLIPPED_TEXT'))]
             page.emulate_media(color_scheme='light')
         finally:
             b.close()
 
     # dedupe, then order by severity. The headline defect must lead: a preference
     # gate on first paint is a WALL, and reporting its button size first buries it.
-    SEV = {'OPENING_WALL':0, 'OFFLINE':1, 'EMOJI':2, 'CONTRAST':3,
-           'TOKEN_ROLE':4, 'STOP_SEPARATION':5, 'FOCUS':6, 'TOUCH_TARGET':7}
+    SEV = {'OPENING_WALL':0, 'CLIPPED_TEXT':1, 'OFFLINE':2, 'EMOJI':3, 'CONTRAST':4,
+           'TOKEN_ROLE':5, 'STOP_SEPARATION':6, 'FOCUS':7, 'TOUCH_TARGET':8}
     out, s = [], set()
     for x in halts:
         if x not in s:
