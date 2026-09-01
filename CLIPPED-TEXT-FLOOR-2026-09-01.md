@@ -187,6 +187,36 @@ and stay silent on the fix. 5/5.
 **The instrument here was the founder's eye on a phone, and that is the finding.** An eye
 should not be the first instrument twice in one day.
 
+## Third find, from skinning the game: the contrast floor could not pass a gradient
+
+Putting a gradient on Flok's primary button HALTed the contrast floor at **1.1:1** on
+dark ink over mint — about 10:1 to any eye. Two separate defects, stacked, and the
+first hid the second:
+
+1. **The box was not the text.** `px_bg_under` was handed the element's *border box*,
+   so it sampled whatever showed through the button's 16px rounded corners — the
+   near-black page — and called that the backdrop. Now it samples a Range over the
+   element's contents: the actual painted line box, with nothing outside it.
+2. **The glyphs were their own backdrop.** Cropped tight, the darkest pixel "behind"
+   dark ink is the ink. Now the page is painted a second time with the glyphs made
+   invisible and *that* is sampled. `-webkit-text-fill-color` is the right instrument
+   and `color` is not: it blanks the glyph fill only, so `currentColor` still resolves
+   and every border, SVG and shadow derived from it paints exactly as before. Layout
+   is untouched, so the rects still land where they landed.
+
+Measured on the new canary with both fixes off, one on, and both on: **1.08 / 1.00 /
+8.84**. Neither fix is sufficient alone.
+
+**Why nobody hit this:** the floor shipped with a HALT canary (`t03-text-on-photo`) and
+**no PASS canary**. The side that wrongly blocks a correct build was never once
+exercised — the same gap as floor 11's, found the same day, for the same reason. This
+floor has effectively barred the whole corpus from putting text on a gradient since it
+was written. `p10-text-on-gradient.html` is the trap it was missing; `t03` still HALTs.
+
+`the-console.html` now reads **PASS** on Studio Eyes for the first time — the standing
+`TOKEN_ROLE --accent-strong` HALT is paid off too, by splitting the dual-role token into
+`--accent-strong` (decoration) and `--accent-ink` (text), which is what the law asks for.
+
 ## Still open
 
 - **Studio Fingers still measures first paint only** for its own floors (F-TAP, F-ZOOM).

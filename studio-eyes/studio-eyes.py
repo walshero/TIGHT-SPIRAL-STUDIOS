@@ -281,7 +281,18 @@ PROBE = r"""
       color: cs.color,
       chain: chain,
       large: (fs >= 24 || (fs >= 18.66 && bold)),
-      rect: {x:r.x, y:r.y, w:r.width, h:r.height}
+      rect: {x:r.x, y:r.y, w:r.width, h:r.height},
+      // THE BOX IS NOT THE TEXT. Sampling an element's border box for the pixels
+      // "behind the glyphs" reads whatever shows through its rounded corners and
+      // padding — on Flok's primary button that was the near-black page seen through
+      // a 16px radius, reported as the darkest thing behind dark-on-mint ink and
+      // HALTed at 1.1:1. A Range over the element's contents is the actual painted
+      // line box, and nothing outside the text can leak into it.
+      trect: (() => { const g = document.createRange(); g.selectNodeContents(el);
+        const b = g.getBoundingClientRect();
+        return (b.width >= 2 && b.height >= 2)
+          ? {x:b.x, y:b.y, w:b.width, h:b.height}
+          : {x:r.x, y:r.y, w:r.width, h:r.height}; })()
     });
 
     // emoji, in RENDERED text (not source) — catches JS-injected ones too
@@ -409,10 +420,52 @@ PROBE = PROBE + _CLIP_BODY + r"""
 
 # ---------------------------------------------------------------- audit core
 
+# ── the ground shot ──────────────────────────────────────────────────────────
+# TWO DEFECTS THIS CLOSES, both found 2026-09-01 by putting a gradient on Flok's
+# primary button and measuring what the floor said about it (1.1:1, on dark ink over
+# mint that is 10:1 to any eye):
+#
+#   1. THE BOX WAS NOT THE TEXT. px_bg_under was handed the element's border box, so
+#      it sampled whatever showed through the button's 16px rounded corners — the
+#      near-black page — and called it the backdrop. Fixed by sampling `trect`, a
+#      Range over the element's contents. See the probe.
+#   2. THE GLYPHS WERE THEIR OWN BACKDROP. Even cropped tight, the darkest pixel
+#      "behind" dark ink is the ink. Fixed here, by painting the page again with the
+#      glyphs made invisible and sampling THAT.
+#
+# Measured on canary p10 with both fixes off, one on, and both on: 1.08 / 1.00 / 8.84.
+# Neither fix is sufficient alone — the first crop hides the second defect behind a
+# worse number, which is exactly why one bug masked the other for so long.
+#
+# Nobody had noticed because this floor shipped with a HALT canary (t03) and no PASS
+# canary: the side that wrongly blocks a correct build was never once exercised.
+#
+# The fix is the doctrine this whole tool was rebuilt on — ASK THE RENDERER rather
+# than guess. Paint the page again with the glyphs made invisible and sample THAT.
+# -webkit-text-fill-color is the right instrument and `color` is not: it blanks the
+# glyph fill only, so currentColor still resolves and every border, SVG and shadow
+# that derives from it paints exactly as it did. Layout is untouched, so the rects
+# collected from the live page still land where they landed.
+GROUND_CSS = ("*,*::before,*::after{-webkit-text-fill-color:transparent!important;"
+              "text-shadow:none!important;-webkit-text-stroke-width:0!important}")
+
+def ground_screenshot(page):
+    """The page as painted, minus the glyphs. One shot serves every text on it."""
+    page.evaluate("""(css)=>{let el=document.getElementById('se-ground-probe');
+        if(!el){el=document.createElement('style');el.id='se-ground-probe';
+        document.head.appendChild(el);} el.textContent=css;}""", GROUND_CSS)
+    try:
+        return page.screenshot()
+    finally:
+        page.evaluate("()=>{const el=document.getElementById('se-ground-probe');"
+                      "if(el) el.remove();}")
+
+
 def px_bg_under(png_bytes, rect, dpr=1):
     """Sample the ACTUAL painted pixels behind a text box.
     This is the check the old gate confessed it could not do: text on a photo
-    or a gradient. Returns the WORST-CASE (most extreme) backdrop found."""
+    or a gradient. Returns the WORST-CASE (most extreme) backdrop found.
+    Feed it a ground_screenshot, never a plain one — see above."""
     try:
         from PIL import Image
     except ImportError:
@@ -469,8 +522,8 @@ def audit_page(page, path, mode_label):
 
         if gimg:  # text sits on an image/gradient -> MEASURE THE PIXELS
             if shot is None:
-                shot = page.screenshot()
-            got = px_bg_under(shot, t['rect'])
+                shot = ground_screenshot(page)
+            got = px_bg_under(shot, t.get('trect') or t['rect'])
             if got:
                 lo, hi = got
                 r = min(ratio(fgc, lo), ratio(fgc, hi))
