@@ -1,0 +1,87 @@
+{
+  "lens": "L4",
+  "surface": "flash-compression-blockout.html",
+  "passed": [
+    "ART-PLACEHOLDER",
+    "MOTION-GRATUITOUS",
+    "EMOJI",
+    "H-OVERFLOW",
+    "JS-ERROR",
+    "OFFLINE-BROKEN",
+    "DARK-MISSING",
+    "NAV-MISSING",
+    "FOCUS-INVISIBLE",
+    "TAP-TARGET",
+    "DEAD-END",
+    "SOURCE-UNNAMED",
+    "TEXT-WALL"
+  ],
+  "findings": [
+    {
+      "key": "COMPOSITION-UNRESOLVED",
+      "severity": "blocker",
+      "anchor": ".bezel (line 172) inside .stage (line 169, 289) - all six .card .stage regions",
+      "framework": "art-bible.md section 3, THE FRAME SERVES THE MECHANIC and A DARK BEZEL AROUND TYPE; the file's own stated intent, 'identical frame and identical type position, so the comparison is ground and light rather than layout'",
+      "problem": "The caption bezel is auto-height and bottom-anchored inside a fixed 205px stage, so on the phone it eats 52 to 64 percent of every frame and buries the exact shape each card was drawn to argue. Measured occlusion at 390x844, percentage of each element hidden under the bezel: Slide - .mark, .tick k1, .tick k2 and the lower plane .pl p2 all 100 percent hidden, which means the card whose own body copy says 'the ticks below are the only thing that says a move happened' shows no ticks and no moved plane at all. Start After the Storm - .floor and .floorlight (the wedge of light across the floor, the card's whole thesis) 100 percent hidden, .fig 67 percent hidden; at 1280x800 the wedge is still 100 percent hidden, so this scene never renders its argument at any width. World Detail That Matters - .table and .pool 100 percent hidden. First Domino - .ground and .shadow 100 percent hidden, every tile cut off at 50 percent, so five dominoes stand on nothing. Interior Weather - .ground 100 percent, band .b3 100 percent, .fig 73 percent. Backstory Snap - all four .fr frames 86 percent hidden, the strip 77 percent. The 'identical type position' claim is also false as rendered: the bezel top sits at 99px on cards 1 and 3 and at 74px on cards 2, 4, 5 and 6, a 25px swing driven by caption wrap, so the founder is comparing layout after all. At the A++ text setting the bezel takes 88 percent of Start After the Storm and 76 percent of three others. A blockout exists so the founder can compare ground and light; in this one the ground is invisible in all six.",
+      "fix": "Take the caption out of the picture plane. Give .bezel a fixed reserved band (e.g. height:76px, or move .cn/.cw into .body directly under the frame) and lift .stage art up out of it, so the bezel top edge is at the same y in all six and the scene keeps at least 140px of clear painting height at 390px and at A++. Then re-author each scene inside the surviving band: the ground line, the shadow, the light wedge, the measure ticks and the film frames must all sit above the bezel top, not behind it. Cap caption text to one line at 390px or let the card body carry the gloss.",
+      "evidence": "Playwright, chromium-1194, 390x844 DPR2: stage 358x205, bezel 106px (cards 1,3) / 131px (cards 2,4,5,6) = 52 to 64 percent of frame. Per-element hidden percentages listed above measured from getBoundingClientRect against bezel top. A++ (html.se-a2): bezel share 64/88/76/76/64/76 percent."
+    },
+    {
+      "key": "TYPE-FLOOR",
+      "severity": "blocker",
+      "anchor": ".body p (line 187), .src, .anchor .q (line 271), .halt li (line 278), h3 (line 161), .lead (line 163)",
+      "framework": "art-bible.md section 4, '18px minimum on every rendered text node'; this file's own header floor line, '18px minimum on every rendered text node'",
+      "problem": "36 rendered text nodes are under the 18px absolute floor. The six card body paragraphs - the paragraphs that explain what each composition is doing, i.e. the actual deliverable of a Stage 0 review - render at 16.32px, because .body p sets font-size:1.02rem against a 16px root rather than against the 1.1875rem body. The provenance lines .src are 16.32px, the four Michelle Ross craft anchors .anchor .q are 16.32px, every founder-call item in .halt li is 16.00px, the model heading h3 is 17.60px, and .lead is 17.28px. The file asserts the floor in its own header comment and then breaks it 36 times. This is not a rounding matter for a reader with retinitis pigmentosa: the smallest type on the page is carrying the open founder calls.",
+      "fix": "Delete the sub-1rem font-size declarations and set them in rem against the intended base: .body p, .anchor .q -> 1.0625rem (17px) is still short, so go to 1.125rem (18px) minimum; .halt li -> 1.125rem; h3 -> 1.25rem; .lead -> 1.1875rem or larger than body, not smaller. Then re-run the type census; nothing may render below 18px at 100 percent base.",
+      "evidence": "Computed font-size census in chromium at 390px viewport, 100 percent base: 36 nodes below 18px, minimum 16.00px (.halt li and its strongs), 19 nodes at 16.32px."
+    },
+    {
+      "key": "COMPOSITION-UNRESOLVED",
+      "severity": "major",
+      "anchor": ".chip (line 177) and its z-index:3 against .bezel z-index:4",
+      "framework": "Robin Williams CRAP - proximity and contrast; art-bible.md section 3, TYPE DOMINANCE",
+      "problem": "The count chip is the highest-contrast object in every frame - 18px/800 in --type-lit inside a 3px --type-lit border on near-black, sitting alone in empty ground at top right - so the eye lands on a mechanics tag before it lands on either the lit shape or the card name. In a Stage 0 blockout the question is whether the composition argues the card; 'One per piece' is the least important thing in the frame and it is ranked first. Proximity fails too: at 1280x800 the chip's right edge is 632px from the frame's left while the painted art stops at 238px (First Domino), 280px (Slide), 304px (World Detail), 324px (Backstory Snap) - the chip floats 300 to 400px away from anything it belongs to, in dead gradient. And because .chip is z-index:3 under a z-index:4 bezel, at the A++ text setting the growing bezel slides over the chip and renders 'One per piece' as ghost text lying across 'Start After the Storm' - two strings overlapping in the same 40px band.",
+      "fix": "Move the chip out of the picture plane and into the .body row beside .src, or dock it into the bezel as a leading token before .cn so it inherits the caption's rank instead of outranking it. If it stays in frame, drop the --type-lit border to --v3, reduce it to 18px/500, and give it the same z-index as the bezel so it can never be overlapped by type. Separately, right-anchor or centre the scene art (or reflow it in percentages) so it fills the frame at 642px instead of hugging the left 37 percent."
+    },
+    {
+      "key": "COMPOSITION-UNRESOLVED",
+      "severity": "major",
+      "anchor": ".s-storm .fig (line 214) and .s-wea .fig (line 239)",
+      "framework": "art-bible.md section 3, SILHOUETTE BEFORE DETAIL and RANK LUMINANCE, DO NOT JUST SEPARATE HUE",
+      "problem": "Both figures are painted --v0 and both are standing on --v0. In Start After the Storm the .room gradient reaches var(--v0) at 100 percent, so the figure at right is the same value as the wall behind it and has no silhouette at all - at 1280x800 it reads as a smudge, and at 390px its remaining third is against the bezel's rgba(8,7,5,.90), black on black. In Interior Weather the figure is --v0 on a --v1 ground that is itself 100 percent hidden on the phone, so the figure's feet dissolve into the caption bar and the person appears to stand on the type. The bible's own test is whether shapes read as themselves in solid black; these two do not read against black because they are black on black.",
+      "fix": "Rank the figures by luminance against what is behind them. Either lift both .fig fills to --v1 or --v2 where they overlap a --v0 field, or set a light rim - a 2px --v3 edge on the side facing the light source - so the silhouette survives. In Start After the Storm, stop the .room gradient at --v1 rather than --v0 so the figure has a value step to stand against, and give the figure a ground contact (a --v0 shadow ellipse on the lit floor) that is above the bezel top."
+    },
+    {
+      "key": "IMAGE-FLOOR",
+      "severity": "major",
+      "anchor": ".hero (line 151) and the six .stage regions; whole document",
+      "framework": "Founder canon C7, a screen should be more than half image",
+      "problem": "The entry paint at 390x844 is 21 percent image: a 364x190 hero, then an h1, a lead, a button and a 60-word prose block before the fold. Across the whole document the frames are 19.4 percent of the phone page by area - and only 9.4 percent once the black caption bars sitting inside those frames are subtracted, because more than half of every 'image' is a text panel. This is a surface whose entire subject is art direction, and it is roughly ninety percent prose. The hero also does not earn its slot: it is a pixel-for-pixel restatement of Scene 1 (same rank of tiles, same tipped --lit tile, same --v2 ground), so the entry image announces one card rather than a deck of six, and Card 1 arrives as a repeat.",
+      "fix": "Redraw the hero as the deck rather than one card - six frames in a rank, values stepping v4 to v1, one lit - so the entry image carries the idea 'six scenes, one frame' that the h1 currently has to say in words. Then move the standing prose (the Stage 0 explanation, the two-kinds-of-card note) below the six, and let the six frames start higher in the document. Getting the caption out of the frame (finding 1) alone lifts net image from 9.4 to about 19 percent; a taller stage and an earlier deck start is what gets it toward the floor."
+    },
+    {
+      "key": "PALETTE-INCOHERENT",
+      "severity": "major",
+      "anchor": ".bezel background rgba(8,7,5,.90) (line 173), .bezel .cw color #f2e7cf (line 175), .chip background rgba(8,7,5,.92) (line 179), html[data-light=\"dusk\"] block (lines 63-66)",
+      "framework": "studio token-role law, a token is TEXT or GROUND or DECORATION never two; art-bible.md section 4, a real dark path measured not asserted",
+      "problem": "Three things break the one-system read. First, the most important surface in the design - the dark bezel that holds every word of card type - is built from raw literals (rgba(8,7,5,.90), rgba(8,7,5,.92)) and its secondary line is a hardcoded #f2e7cf, while the file's own comment says every scene builds from the value tokens and never from a one-off hex. Because those literals sit outside the token system, the High contrast toggle changes nothing inside any of the six stages: html.se-contrast redefines only --bg, --surface, --surface-2, --ink, --ink2, --ink-fill, --line and --line2, none of which any scene or bezel uses. A reader who turns on High contrast gets identical card art and identical card captions. Second, the dusk mode does not redefine a single one of --v0 through --lit or --type-lit, so dusk and day render pixel-identical scene art - two of the three light modes are one mode as far as the art is concerned. Third, --type-lit is doing two roles at once: it is the caption text colour and it is the chip's 3px border, which is exactly the TEXT-or-DECORATION collision the studio's law forbids, and it is why the chip's border reads as loud as the type.",
+      "fix": "Tokenise the bezel: add --bezel:#080705e6 and --bezel-2 (the caption's secondary text) to :root and to each of the three light blocks plus se-contrast, and replace the three literals. Give se-contrast an override for --v0..--lit and --type-lit so the comfort toggle actually reaches the art. Give dusk its own --v ladder (a warmer, one-step-lighter ramp) so dusk is a real third ground rather than a chrome-only change. Split --type-lit into --type-lit (text only) and a separate --edge-lit for the chip border, and drop the chip border a step to --v3."
+    },
+    {
+      "key": "TYPE-HIERARCHY-FLAT",
+      "severity": "major",
+      "anchor": "h1 / .bezel .cn (line 174) / h2 / .go, and the 18px band",
+      "framework": "Robin Williams CRAP - contrast and repetition; rank, not size alone",
+      "problem": "The page has two sizes doing everything. The whole top of the hierarchy spans 3.2px: h1 at 23.20px/700, the card name .cn at 21.00px/800, h2 at 20.80px/700, the primary invitation .go at 20.00px/800. A card name is therefore ranked above the section heading that contains all six cards, and the h1 is only 2.2px clear of it. Below that, eleven separate roles land on exactly 18px - the count chip (800), the card caption gloss .cw (400), .sub, .note, the panel headings (800), the panel buttons (700), the comfort toggle label and state, the craft-anchor caption .c (800), the halt heading h3 (800), the footer and the rail links - so weight is carrying the entire distinction and weight only varies 400/500/700/800 across the same size. Nothing is ranked; the reader ranks it. The six card captions compound this: all six are the same two-sentence shape in the same 21px/18px pair in the same position, so in the type layer the six cards read as one card printed six times, which is the opposite of what a six-option blockout needs.",
+      "fix": "Open the ladder. Set h1 to 2.1rem, h2 to 1.6rem, .cn to 1.25rem (below h2, since a card name is subordinate to the section that holds six of them), and push the 18px band apart: caption gloss and body at 1.125rem, chip and provenance at 1.0625rem in a different family or letter-spacing rather than the same sans at the same size, panel headings at 1.25rem. Then differentiate the six captions by length as well as content - one short, one long - so the type layer stops rendering them as identical."
+    },
+    {
+      "key": "VOICE-NOT-FOUNDER",
+      "severity": "major",
+      "anchor": ".body p in card 3 ('World Detail That Matters'), .bezel .cw in cards 3 and 5, .lead",
+      "framework": "founder ruling 2026-08-05, the general voice on studio surfaces was not his; the machine tells are the decorative em dash, the tricolon, and 'it's not X, it's Y'",
+      "problem": "The 'it's not X, it's Y' construction and its negation cousins run through the page seven times in a short document, and twice they are in the rendered card captions themselves, which are the copy the founder is being asked to sign off. Quoting: card 3 body, 'The card is not \"put objects in.\" It is which one gets the light.' Card 3 caption, 'Not a token, not a totem.' Card 5 caption, 'History implied in a flash, not delivered.' Card 1 body, 'Depth is three values, not a filter.' Lead, 'Six cards. One frame. Ground and light are the only things that vary.' Sub, 'Stage 0 blockout, not the game and not a skin.' Card 6 body, 'the reader measures it, the narrator never mentions it.' Two of them are also decorative alliteration ('Not a token, not a totem'). The em dash rule is honoured - zero em dashes and zero en dashes in rendered copy, correctly - but the same machine rhythm arrived through the negation-antithesis door instead. Because every caption is the same [definition. + gloss beginning 'The reader' or 'The image'] shape, the voice defect and the type-hierarchy defect reinforce each other: the six cards sound identical as well as looking identical.",
+      "fix": "Not mine to rewrite. Flag these seven lines for the founder's hand, and set a rule for the caption slot: no negation constructions in .cw, no two captions sharing a subject ('The reader...' appears twice), and let caption length vary. The direction to aim at is the one line on the page that already sounds like him - 'you never see the storm, you see the wedge it threw across the floor' - which is positive, concrete and does not define by what it is not."
+    }
+  ]
+}

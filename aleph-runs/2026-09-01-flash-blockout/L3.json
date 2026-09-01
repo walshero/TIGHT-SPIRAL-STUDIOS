@@ -1,0 +1,83 @@
+{
+  "lens": "L3",
+  "surface": "flash-compression-blockout.html",
+  "passed": [
+    "VALUE-PROP-BURIED",
+    "READABILITY-HIGH",
+    "LABEL-AMBIGUOUS",
+    "H-OVERFLOW",
+    "TAP-TARGET",
+    "FOCUS-INVISIBLE",
+    "FOCUS-LOST",
+    "JS-ERROR",
+    "DEAD-CONTROL",
+    "OFFLINE-BROKEN",
+    "DARK-MISSING",
+    "EMOJI"
+  ],
+  "findings": [
+    {
+      "key": "OUTLINE-BROKEN",
+      "severity": "blocker",
+      "anchor": "div.stage[role=\"img\"] x6 and article.card x6 (lines 342, 357, 374, 389, 405, 420)",
+      "problem": "Every card's NAME, its one-line rule, and its singular/plural count chip are inside a container carrying role=\"img\". Under ARIA 1.2 an img is name-from-author with presentational children, so the accessible name is the aria-label only, and all seven aria-labels describe the picture and never say the card. A screen-reader or magnifier reader is handed six pictures called \"a rank of pale tiles standing on a dark ground\", \"a dark room\", \"four objects on a dark table\" and never learns that they are First Domino, Start After the Storm, World Detail That Matters, Interior Weather, Backstory Snap, Slide. The six article.card elements have no heading and no accessible name either, so the outline goes H1 -> H2 The six -> H2 The published model with nothing in between: the deck itself contributes zero outline nodes. The page's own legend (\"A round chip with one dot means once per piece\") points at a chip that assistive tech never receives, so the singular/plural distinction the whole intake spec turns on is invisible to the stated reader. This is the founder-with-RP surface and the deck is nameless on it.",
+      "fix": "Move the card name, the rule line and the count chip OUT of the role=\"img\" subtree. Give each article.card an <h3> as its first child carrying the card name (\"First Domino\"), put the chip and the one-line rule in a normal block beneath the stage, and add aria-labelledby on the article pointing at that h3. Keep role=\"img\" on the scene alone with the picture description. This also gives the founder six real headings to skip between at 390px, which he currently does not have.",
+      "framework": "WCAG 2.2 SC 1.3.1 Info and Relationships, SC 2.4.6 Headings and Labels; WAI-ARIA 1.2 role=img (children presentational)",
+      "evidence": "Playwright aria_snapshot of the first card at 390x844: `- article: - 'img \"Blockout: a rank of pale tiles standing on a dark ground. The leftmost tile, the brightest in the frame, has tipped...\"': One per piece First Domino The first thing that tips, that makes everything after it fall.` The card text is the img's content, not an exposed node. CDP Accessibility.getFullAXTree: no image node's accessible name contains \"First Domino\", \"Slide\", \"One per piece\" or \"Many per piece\". All six <article> elements measured hasHeading:false, aria-label:null. Rendered outline: H1 / H2 The six / H2 The published model / H3 \"Palate Cleanser\" / H2 Before mechanics / H3 Founder calls this draft cannot make."
+    },
+    {
+      "key": "SOURCE-UNNAMED",
+      "severity": "blocker",
+      "anchor": "div.model (lines 435-471): h3, the .sub syllabus paragraph, the four .anchor blocks",
+      "problem": "The model-text block makes four kinds of factual claim and sources none of them to anything checkable. (1) The citation is `\"Palate Cleanser,\" Michelle Ross, 2019` - author and year, no venue, no issue, no URL, no date the text was checked. Four direct quotations are lifted from it and pinned to positions (\"sentence two\", \"sentence one\", \"the pivot\") with nothing a reader can open to verify the wording or the position. (2) \"366 words.\" is a bare count. The string appears in no other file in the repo; nothing says who counted or when. This is the islo-hub failure class exactly (\"25 games mapped\" against 23 actual, corrected 2026-08-03). (3) The syllabus placement claim is highly specific - the 6-week online section, the flash unit, beside Kincaid's \"Girl\" and Garcia Marquez's \"One of These Days\"; the 15-week section, early, in class, beside the Secret World assignment - and none of it is corroborated anywhere in the repo. \"Michelle Ross\", \"Kincaid\", \"Girl\" and \"One of These Days\" appear in no other file, and en195.html says of the syllabus itself: \"The full EN195 syllabus, coming to the arcade. Held.\" The named source does not exist yet. (4) The four craft readings that map story moments onto cards, and the \"that may be a seventh card\" argument, are analytic claims delivered in the same voice and weight as Matt's own card definitions, with no line saying who made them. The page's only authorship disclosure (.foot) covers the ART only: \"Scene art is machine-drawn CSS (Claude), teaspoon lane.\" So on a page whose entire HALT panel is about keeping the founder's hand distinct from the machine's, the readings of a published story are unattributed.",
+      "fix": "In div.model, add a citation line under the h3 giving venue, issue or date, and URL, plus the date the quotations were checked against the published text. Replace \"366 words.\" with a counted figure that names who counted and when, or drop the number. Either cite the syllabus by file and date, or mark the placement claim UNVERIFIED until en195.html actually carries the syllabus - it currently says the syllabus is held. Add one sentence in the same block, at the same weight as the story's attribution, naming who wrote the four craft readings and the seventh-card argument.",
+      "framework": "Tight Spiral studio floor, index.html lines 892-893: \"Where a build asserts a fact, it says where the fact came from and when it was checked. A number with no provenance is a rumour.\"",
+      "evidence": "grep across the repo: \"palate cleanser|michelle ross\" matches only flash-compression-blockout.html; \"366 words\" matches only flash-compression-blockout.html; \"One of These Days\" matches only flash-compression-blockout.html. en195.html line 183: \"SyllabusThe full EN195 syllabus, coming to the arcade.Held\". Rendered h3 text: '\"Palate Cleanser,\" Michelle Ross, 2019' - no venue, no URL, no access date."
+    },
+    {
+      "key": "SOURCE-UNNAMED",
+      "severity": "major",
+      "anchor": "the seven aria-labels on svg.hero and div.stage[role=\"img\"]; div.foot (line 493)",
+      "problem": "art-doctrine.md sets the rule in its own words - step 3 of the pipeline: \"Provenance is written into each scene's aria-label.\" None of the seven scene aria-labels on this page contains \"Claude\", \"machine\", \"CSS\" or \"teaspoon\". Every one of them opens \"Blockout:\" and then describes the picture. So the reader who takes the page through assistive tech - the stated founder, on a phone, with RP - is told what each scene shows and never told that a machine drew it. The single rendered sentence that does disclose it (\"Scene art is machine-drawn CSS (Claude), teaspoon lane\") sits in div.foot at y=6,167 on a 6,742px page: 91.5% down, screen 7.3 of 8 at 390x844, and past y=9,700 once the reader turns on A++. The disclosure the doctrine cares most about is the one thing on the page a skimming founder will never reach. The teaspoon imprint the doctrine requires on every machine-originated artwork (\"carries the teaspoon imprint until an artist takes the chair\") renders nowhere; the word appears once, in that same footer.",
+      "fix": "Append the provenance chain to all seven aria-labels, e.g. \"... Machine-drawn CSS blockout, Claude, 2026-09-01. Open chair.\" Lift one line of disclosure into the .sub paragraph that already sits above the fold (y=497-713, measured fully visible at 390x844) so \"every scene below is machine-drawn CSS, and the chair is open\" is read before the first scene rather than after the last. Render the teaspoon imprint on the stage or in the card frame, per art-doctrine.md's brand section.",
+      "framework": "art-doctrine.md, \"SCAFFOLDING, NOT MASTERPIECES\" step 3 and \"PROVENANCE RULES\"; NN/g above-the-fold",
+      "evidence": "All 7 aria-labels checked; zero contain provenance terms. Element positions measured at 390x844: .sub top 497 h 216 (above fold, 844); .foot top 6167 of scrollHeight 6742. At html.se-a2 (A++) scrollHeight 10,680."
+    },
+    {
+      "key": "DISCLOSURE-DUMP",
+      "severity": "major",
+      "anchor": "document body; div.halt at y=5,344",
+      "problem": "The whole model arrives at once. At 390x844 the page is 6,742px - 8.0 screens - with nothing collapsed, nothing deferred, and exactly one in-page jump (.go -> #six, which lands at y=1,003, 118px past where you already were). Six full card blocks, then a 1,579px model-text section, then a six-item HALT panel, all open, in one continuous scroll. The consequence is not abstract: div.halt, \"Founder calls this draft cannot make\", is the ask of this page - six decisions only Matt can make, including that the deck is not locked - and it sits at y=5,344, 79% of the way down, behind everything else. At the A++ text size an RP reader is likely to choose, the page is 10,680px and the HALT starts past screen ten of twelve. A founder skimming on a phone reads six scenes and a story reading, and stops before he is asked for anything.",
+      "fix": "Put the six open founder calls, as a count and a list of titles, in the first screen - directly under the .go button - with an anchor link down to the full HALT panel. Collapse the model-text section and the per-card craft notes behind disclosures that open on tap, so the default scroll is hero, six scenes, the ask. Add the same anchor to the sticky chrome so the HALT is one tap from anywhere.",
+      "framework": "Nielsen, progressive disclosure; NN/g mobile above-the-fold",
+      "evidence": "390x844: scrollHeight 6,742px = 8.0 viewports. .halt top 5,344 (79.3%). .model top 3,685, height 1,579. Zero <details>, zero collapsibles, one in-page anchor (#six at y=1,003). With html.se-a2: scrollHeight 10,680px = 12.6 viewports."
+    },
+    {
+      "key": "TEXT-WALL",
+      "severity": "major",
+      "anchor": "div.model (1,579px) and div.halt (798px)",
+      "problem": "This page argues, correctly and in its own copy, that a drawn scene settles a card faster than a sentence - \"The composition argues the card before a word does.\" It then spends 2,377px, 35% of its own height, making its two hardest arguments in unbroken prose with no image or diagram in either block. The HALT's \"Three cards, one move\" is a slot-competition picture described in a sentence: Start After the Storm, Cut to Heat and Sliding contending for one seat. \"The taxonomy fork is unanswered\" is a two-set overlap picture described in a sentence: 13 Craft Arcade moves against 11 Training Quiz moves that \"barely overlap\", with this deck of six drawn from neither cleanly - the one thing a founder needs to SEE to rule on it. And the model section is literally a mapping - four story moments onto four of the six cards - rendered as four stacked quote boxes with no visual tie back to the six scenes the reader just looked at, so the card art and the card evidence never touch.",
+      "fix": "Draw the two HALT arguments in the same flat-shape CSS vocabulary the six scenes already use: a slot diagram showing the locked six against the contending moves (Overpack the Suitcase, Flash Forward, Cut to Heat, Sliding), and a two-circle overlap for 13-vs-11 with the six named in their region. In div.model, put each anchor beside a thumbnail of its card's scene so the story evidence and the drawn card are read together rather than 2,700px apart.",
+      "framework": "Mayer multimedia principle; Tight Spiral canon C7 (image-carried idea)",
+      "evidence": "div.model height 1,579px, div.halt height 798px at 390x844; zero <svg>, <img> or CSS-scene elements inside either. Page total 6,742px, so the two prose blocks are 35.3% of the surface. The claims they carry check out against writerly-moves/README.md (13 Craft Arcade moves, 11 Training Quiz moves, Cut to Heat and Sliding both in the 13) - the sourcing is fine; the medium is wrong."
+    },
+    {
+      "key": "SOURCE-UNNAMED",
+      "severity": "minor",
+      "anchor": "div.wrap > p.sub, first screen (y=497)",
+      "problem": "\"A rejected blockout costs minutes. A rejected finished skin costs a day, and the studio has paid the day version twice.\" A count of studio history, on the first screen, with no source and no instances. The claim is TRUE - art-bible.md lines 60-63 carries it - but the art bible also names both instances, \"(the woods in ENJAMBMENT; the Samorost pass in the arcade)\", and the blockout drops the source and both instances, leaving a bare \"twice\" that reads as assertion. This is the cheapest possible fix and it is the sentence doing the most persuasive work on the page.",
+      "fix": "Name them: \"...paid the day version twice, the woods in ENJAMBMENT and the Samorost pass in the arcade (art-bible.md section 2, checked 2026-09-01).\" Two instances are more persuasive than the number was.",
+      "framework": "Tight Spiral studio floor, index.html: \"A number with no provenance is a rumour.\"",
+      "evidence": "art-bible.md line 61: \"rejected finished skin costs a day. The studio has now paid the day version twice (the woods in ENJAMBMENT; the Samorost pass in the arcade). Both were built without a signed blockout.\" Rendered .sub carries neither the citation nor the instances."
+    },
+    {
+      "key": "NAV-MISSING",
+      "severity": "minor",
+      "anchor": "nav.se-rail (line 503) and header.se-chrome (line 294)",
+      "problem": "The rail carries Studio (index.html) and Cabinet (arcade.html) - two destinations, no back. The sticky chrome carries Studio again. So the page ships home three times and back zero times, where the sibling surface it was built from, studio/flash-compression-game-intake.html, ships Back and Home. On a document this long (8 screens at 390px, 12.6 at A++) a founder who followed the #six anchor or scrolled into the HALT has no in-page way back to the top either.",
+      "fix": "Rule on it rather than reflex-adding a JS history stub, which is dead on a directly-opened file. Either match the intake spec's rail (Back + Home) or add a Back-to-top control in the rail, which is the one this document actually needs.",
+      "framework": "Tight Spiral floor: a screen without both back and home",
+      "evidence": "Controls enumerated at 390x844: a.se-home -> index.html, button#seOpen, a.go -> #six, nav.se-rail a -> index.html, nav.se-rail a -> arcade.html. No back control and no back-to-top anywhere in the document."
+    }
+  ]
+}

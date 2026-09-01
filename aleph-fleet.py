@@ -258,8 +258,17 @@ def cmd_synthesize(rundir, commit=False, stamp=None):
             r['state'] = 'REPEAT'
             r['runs_open'] = prev.get('runs_open', 1) + 1
 
+    # FIXED is scoped to what THIS RUN actually looked at. `checked` holds every
+    # (surface, key) a lens opened, found or not -- the same load-bearing `passed`
+    # discipline applied one level up. Without this scope a run stamps every OTHER
+    # surface's open findings FIXED purely by absence, and the ledger reads as a
+    # ratchet that moved while nothing was even opened.
+    # Found 2026-09-01 by the flash-blockout run: it assessed one new file and
+    # reported 30 the-tell.html defects "fixed". A surface nobody opened has no
+    # news, and no news is never good news.
     fixed = [dict(v, id=i) for i, v in known.items()
-             if i not in seen_now and v.get('state') != 'FIXED']
+             if i not in seen_now and v.get('state') != 'FIXED'
+             and checked.get((v.get('surface'), v.get('key')))]
 
     print()
     print('=' * 74)

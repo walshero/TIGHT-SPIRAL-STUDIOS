@@ -1,0 +1,77 @@
+{
+  "lens": "L2",
+  "surface": "flash-compression-blockout.html",
+  "passed": [
+    "OPENING-WALL",
+    "INSTRUCTION-WALL",
+    "ACTION-BELOW-FOLD",
+    "INVITATION-UNCLEAR",
+    "FTUE-UNGUIDED",
+    "FEEDBACK-ABSENT",
+    "FAIL-STATE-PUNITIVE",
+    "REPLAY-BLOCKED",
+    "DEAD-CONTROL",
+    "DEAD-END",
+    "JS-ERROR",
+    "OFFLINE-BROKEN",
+    "EMOJI",
+    "FOCUS-INVISIBLE",
+    "FOCUS-LOST"
+  ],
+  "findings": [
+    {
+      "key": "COMPOSITION-UNRESOLVED",
+      "severity": "blocker",
+      "anchor": ".stage .bezel, against .s-slide .tick / .s-snap .fr / .s-wea .fig / .s-storm .fig",
+      "problem": "At 390x844 the caption bezel buries the subject of every scene. Measured coverage of each scene's own subject shapes at 390px: Slide's two measure ticks 100% and its displaced plane p2 100%; Backstory Snap's four film frames 86% each and the dashed tear 73%; Interior Weather's figure 73%; Start After the Storm's figure 67% and door 63%; First Domino's five tiles 50% each; World Detail's four objects 22-63%. The bezel occupies 52-64% of the 205px stage. The cause is that every scene is positioned in fixed pixels from the stage bottom while the bezel is also bottom-anchored and grows to two lines, and the @media (max-width:520px) rule cuts .stage from 230px to 205px without moving a single scene coordinate. The worst case is not device-dependent at all: Slide's ticks are 100% covered at 1280x800 too, and that card's own body copy says 'The ticks below are the only thing that says a move happened, which is the card' - so scene 6 does not draw its subject at any width. This is a Stage 0 blockout whose entire deliverable is composition, ground value, light source and where the type sits (art-bible.md section 2), and on the founder's device most of the composition does not reach his eye. He cannot sign a blockout he cannot see, and the file's own claim, 'identical frame and identical type position, so the comparison is ground and light,' is false on the phone because the bezel eats a different amount of each scene.",
+      "fix": "Reserve the caption band instead of overlaying it. Give .stage a bottom padding equal to the bezel's height and position every scene shape inside that reduced box, or split .card into a grid of a fixed-height scene row plus a caption row so .bezel never sits on top of art. Concretely: set .stage{height:230px; padding-bottom:135px} with .stage>* positioned against the padded box, keep 230px at 390px rather than dropping to 205px, and move .s-slide .mark/.tick up to bottom:150px so the ticks that carry the card are visible. Then re-measure coverage at 390: no subject shape should be more than 10% behind the bezel.",
+      "framework": "Desurvire HEP (game usability: the screen must show what the player is asked to judge); art-bible.md section 2, blockout = composition, ground value, light source, type position; section 3, 'a dark bezel around type' is a legibility device, not a mask",
+      "evidence": "Chromium 390x844, computed getBoundingClientRect intersection of each scene shape with .bezel: s-slide k1 18px h / 18px covered (100%), k2 100%, p2 80/80 (100%); s-snap f1-f4 72/84 (86%), tear 94/128 (73%); s-wea fig 67/92 (73%); s-storm fig 75/112 (67%), door 86/136 (63%); s-dom t1-t5 34/68 (50%). Same measurement at 1280x800: worst non-Slide coverage 45%. Bezel height 106-131px against a 205px stage."
+    },
+    {
+      "key": "H-OVERFLOW",
+      "severity": "blocker",
+      "anchor": ".se-panel (width:min(340px,calc(100vw - 24px)); right:12px) under html.se-a2{zoom:1.3}",
+      "problem": "At text size A++ on a 390px phone the Reading panel renders 442px wide inside a 390px viewport, anchored to the right, so its left edge sits at -68px and 68px of the panel is permanently off the left of the screen. Because the panel is position:fixed there is no sideways scroll to recover it. Measured at 390x844: panel left -68, right 374, width 442. The 'Default' light button is cut in half and reads 'efault'; all three section headings truncate to 'ht', 't size' and 'mfort'; the comfort toggles read 'gh contrast' and 'educe motion'. This is the accessibility control itself breaking at the exact setting a reader with retinitis pigmentosa is most likely to choose, and it is a tool blind spot: the comfort gate measures the default text size, so nothing in the belt has ever rendered this panel at A++. Two smaller things in the same control: pressing Escape does not dismiss the panel (verified data-open stays '1'), which the sibling file studio/flash-compression-game-intake.html does handle, so this is a regression against the studio's own kernel; and at default size the open panel covers the top half of .go, the page's single primary invitation.",
+      "fix": "Stop sizing the panel against vw while zoom is in play. Replace width:min(340px,calc(100vw - 24px)); right:12px with left:12px; right:12px; width:auto; max-width:340px so the panel can never exceed the viewport at any zoom, and add max-height:calc(100vh - 90px); overflow-y:auto. Restore the Escape handler from the intake file: document.addEventListener('keydown', e => { if(e.key==='Escape' && panel.getAttribute('data-open')==='1'){ setOpen(false); open.focus(); } }). Then harden the comfort gate to run its phone pass three times, at A, A+ and A++, because a gate that only sees the default size cannot see this class of defect.",
+      "framework": "Nielsen heuristic 7, flexibility and efficiency of use, and heuristic 1, visibility of system status; WCAG 2.1 SC 1.4.10 Reflow (content must not require two-dimensional scrolling at 320 CSS px equivalent); Apple HIG / Material touch target reachability",
+      "evidence": "Chromium 390x844 with html.se-a2 (zoom:1.3): .se-panel getBoundingClientRect left=-68, right=374, width=442, viewport width 390. Screenshot p390_app_panel.png shows the Default button and all three panel headings clipped at the left screen edge. Escape test: .se-panel[data-open] === '1' after keydown Escape."
+    },
+    {
+      "key": "GAME-FEEL-DISPLACED",
+      "severity": "major",
+      "anchor": "a.go[href=\"#six\"] -> h2#six, against .se-chrome{position:sticky;top:0}",
+      "problem": "The page has exactly one in-content control and its reaction paints behind the furniture. Tapping 'Look at the six scenes' scrolls to y=1003, which puts h2#six at viewport top 0 while the sticky chrome occupies 0-72px, so the section heading the button names is 100% hidden and the top of the first scene, including the upper edge of its 'One per piece' chip, is also behind the chrome. No scroll-margin-top or scroll-padding-top is set anywhere in the file (computed scroll-margin-top on #six is 0px). The founder taps a button labelled with a destination, and the destination's own title never appears; he lands mid-artwork with no confirmation that the tap did what it said. For a reader with retinitis pigmentosa, whose orientation depends on landmarks landing where he expects them, a jump that hides the landmark it promised is worse than no jump.",
+      "fix": "Add html{scroll-padding-top:calc(var(--tap) + 34px)} so every in-page anchor clears the sticky chrome, or scope it: #six{scroll-margin-top:96px}. Verify by clicking .go at 390x844 and asserting h2#six top >= .se-chrome bottom.",
+      "framework": "Swink, game feel: the reaction belongs where the eye already is, in the same moment as the action; Nielsen heuristic 1, visibility of system status",
+      "evidence": "Chromium 390x844: after click on .go, scrollY=1003, h2#six getBoundingClientRect().top = 0, .se-chrome bottom = 72, so obscured = true. Screenshot p390_after_go.png. getComputedStyle(#six).scrollMarginTop = '0px'."
+    },
+    {
+      "key": "PROGRESS-ILLEGIBLE",
+      "severity": "major",
+      "anchor": "article.card x6, and h2#six as the only positional landmark",
+      "problem": "The page is 6,742px at 390x844, which is 8.0 phone screens, and 10,680px at A++, which is 12.7 screens. Inside it sit six cards in a deliberately identical frame at a pitch of roughly 440px, and nothing anywhere says which one you are on or how many are left: no numbering, no '3 of 6', no index, no in-page contents. The single positional landmark, h2#six, appears once at 1003px and is then hidden under the sticky chrome by the page's own jump link (see the GAME-FEEL-DISPLACED finding), so after the one tap the surface offers the reader no way to locate himself at all. The identical-frame decision is correct for a blockout and should stay; it just means position has to be carried by something other than the frame, and here nothing carries it. The founder is being asked to compare six scenes and rule on them, and on the phone he can hold at most one and a half in view at once with no running count.",
+      "fix": "Number the deck. Put an ordinal in each stage next to the existing count chip ('1 of 6' through '6 of 6') as text, not colour, so it also survives warm-dark and the aria-label. Add a short contents list of the six card names directly under h2#six, each linking to its card, so the founder can jump to one by name and jump back. Both are text-only and cost nothing against the single-file, in-memory floor.",
+      "framework": "Nielsen heuristic 1, visibility of system status, and heuristic 6, recognition rather than recall; NN/g above the fold, orientation on long scrolls",
+      "evidence": "Chromium 390x844: document.scrollHeight 6742 against clientHeight 844 = 8.0 screens; at html.se-a2 scrollHeight 10680 = 12.7 screens. Six .stage elements at scroll tops 1055, 1497, 1964, 2381, 2800, 3194. Zero occurrences of an ordinal, count, or index in the rendered text of the six cards."
+    },
+    {
+      "key": "NAV-MISSING",
+      "severity": "major",
+      "anchor": "nav.se-rail and a.se-home in .se-chrome",
+      "problem": "The surface has home twice and back zero times. The chrome carries 'Studio' (index.html); the bottom rail carries 'Studio' (index.html) and 'Cabinet' (arcade.html), which are two home-class destinations, not a back. The sibling file this one is built against, studio/flash-compression-game-intake.html, ships the correct pattern and even comments it in its own CSS as 'BOTTOM NAV RAIL - Back + Home'. This file dropped the Back. The floor key is defined as 'a screen without both back and home', so this is a floor break that no gate caught, which makes it a tool blind spot as well as a defect. On a 6,742px phone page the practical cost is real: whatever sent the founder here, the only way back is the OS gesture, and the studio floor exists precisely so a reader is never dependent on that.",
+      "fix": "Add a Back control to nav.se-rail as the first item, matching the intake file: a button that calls history.back() with a text label, sized to var(--tap), with the same focus-visible ring as its siblings. Keep Studio as home and Cabinet as the third item. Then add a rail assertion to the floor gate so 'back and home' is checked by name rather than by counting links, since two links to two home destinations currently satisfies a naive count.",
+      "framework": "Nielsen heuristic 3, user control and freedom (a clearly marked emergency exit); studio floor key NAV-MISSING; the Comfort Kernel v2 rail pattern as shipped in studio/flash-compression-game-intake.html",
+      "evidence": "flash-compression-blockout.html lines 503-506: <nav class=\"se-rail\"><a href=\"index.html\">Studio</a><a href=\"arcade.html\">Cabinet</a></nav>. No history.back(), no element with the text 'Back', anywhere in the file. Compare studio/flash-compression-game-intake.html rail, which renders Back then Home."
+    },
+    {
+      "key": "AGENCY-ABSENT",
+      "severity": "major",
+      "anchor": ".halt 'Founder calls this draft cannot make' at scroll 5296, against article.card x6 at 1055-3194",
+      "problem": "This is a review artifact whose declared audience is 'Matt Walsh, founder, reviewing card art direction at Stage 0', and it gives the reviewer nothing to review with. The six decisions it explicitly asks him for sit in one block at 5,296px, screen 7 of 8 at default size and roughly screen 10 at A++, about 4,000px below the art they are about. Three of those six calls are about specific cards - 'Start After the Storm overlaps Cut to Heat and Sliding, one has to win the slot'; 'First Domino is filed Core Craft, Start After the Storm is filed Practice and Process'; the Palate Cleanser ending 'may be a seventh card' - and none of them links to the card it concerns, and no card links to the gate it is blocked by. So the one act the surface exists to produce, a ruling, requires the founder to hold a scene in memory across 4,000px of scrolling on a phone. I am reporting reviewer agency, not teaching; L5 owns whether the eventual game teaches. I am also not filing against the blockout framing itself, which is right: art-bible.md section 2 names the blockout as the stage the studio keeps skipping and the intake's 'cards before mechanics, non-negotiable' makes building mechanics now the wrong move. The defect is that a correctly-scoped review artifact was built without the reviewer's own affordances.",
+      "fix": "Cross-link the art and the decisions in both directions, which costs nothing against the single-file, in-memory floor. Give each .halt li an id and an anchor to the card or cards it blocks; give each article.card a one-line footer under .src that links to the gate it is waiting on ('blocked by: the taxonomy fork'), and give the cards with no open gate an explicit 'no open gate' so silence is not ambiguous. Add scroll-padding-top at the same time so those anchors do not land under the chrome. If a ruling affordance is wanted later, the honest in-floor version is a per-card marker the founder can set and then read back in one summary block before he leaves the page, not a stored preference.",
+      "framework": "Nielsen heuristic 6, recognition rather than recall (do not make the reviewer hold a scene in memory across screens); Desurvire HEP, meaningful player choice; art-bible.md section 2, 'Show the founder. Nothing gets textured before a blockout is signed' - there is no signing affordance",
+      "evidence": "Chromium 390x844: .halt block at scroll top 5296 of a 6742px page; six .stage elements at 1055-3194; page body 982 words. Zero anchors between any article.card and any .halt li in the source."
+    }
+  ]
+}

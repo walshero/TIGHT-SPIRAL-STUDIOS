@@ -1,0 +1,110 @@
+{
+  "lens": "L5",
+  "surface": "flash-compression-blockout.html",
+  "passed": [
+    "COGNITIVE-LOAD-EXTRANEOUS",
+    "FEEDBACK-UNINFORMATIVE",
+    "FEEDBACK-DELAYED",
+    "ASSESSMENT-MISALIGNED",
+    "RUBRIC-UNLINKED",
+    "AGENCY-ABSENT",
+    "JS-ERROR",
+    "H-OVERFLOW",
+    "OFFLINE-BROKEN",
+    "EMOJI",
+    "OPENING-WALL"
+  ],
+  "findings": [
+    {
+      "key": "SPLIT-ATTENTION",
+      "severity": "blocker",
+      "anchor": ".stage .bezel, all six article.card, measured at 390px viewport in Chromium",
+      "problem": "The bezel carrying the card name and definition is painted INSIDE the stage and covers 52-64% of the 205px scene at phone width, so the explanatory text in .body names shapes the reader cannot see. Measured visibility of the referent above the bezel line: .s-slide .p2 (the displaced plane) 0%, .s-slide .mark and both .tick 0% - and that card's body reads 'The ticks below are the only thing that says a move happened, which is the card.' .s-storm .floorlight 0% - and that body reads 'you never see the storm, you see the wedge it threw across the floor.' .s-det .pool 0%. .s-wea .ground 0%, .s-wea .fig 27% - body: 'The figure is the smallest and darkest thing.' .s-dom .ground and .shadow 0%. .s-snap .fr frames 14% each. Separately, the bezel is not a fixed height: three-line definitions render 131px and two-line 106px, so the file's own claim of 'identical frame and identical type position, so the comparison is ground and light rather than layout' is false - visible art area varies 12% card to card and covaries with definition length, confounding the one comparison this blockout exists to enable. The phone is binding and on the phone five of six cards argue for a shape that is not on screen.",
+      "fix": "Move .cn and .cw out of .stage into .body, directly above the explanatory paragraph, so text and referent are adjacent instead of stacked. If the bezel-over-art look is wanted, reserve it: raise .stage to 205px + a FIXED 132px bezel band at <=520px, keep every scene element above that band, and hold the bezel height constant across all six so the frame really is identical.",
+      "framework": "Mayer, spatial contiguity principle; Sweller, split-attention effect",
+      "evidence": "Chromium 390x844: stageH 205 for all six; bezelH 106 / 131 / 106 / 131 / 131 / 131; pctCovered 52 / 64 / 52 / 64 / 64 / 64."
+    },
+    {
+      "key": "OBJECTIVE-IMPLICIT",
+      "severity": "major",
+      "anchor": ".model .note ('Why this story earns the model slot') against .model .anchor:nth-of-type(2)",
+      "problem": "The surface's own evidence contradicts its own teaching claim, in adjacent blocks. The note states: 'The two singular cards fire in the first two sentences and never fire again, which is what \"one per piece\" means, shown rather than asserted.' But the surface's own First Domino anchor is labelled 'First Domino · the middle', not sentence one or two. So the only demonstration of what SINGULAR means is falsified by the annotation printed six lines above it. A reader cannot tell from this surface whether 'one per piece' means fires once anywhere, or fires early, or fires in the first two sentences.",
+      "fix": "Pick one and make the annotation agree: either re-anchor First Domino to the early sentence where the causal tip actually occurs and keep the 'first two sentences' claim, or drop that clause from the note and state plainly that singular means fires once at any position, then say why that matters for First Domino.",
+      "framework": "Biggs, constructive alignment - the stated claim, the worked evidence, and the definition must point at the same thing",
+      "evidence": "Anchor positions as printed: 'Start After the Storm · sentence two', 'First Domino · the middle', 'World Detail That Matters · sentence one', 'Interior Weather · the pivot'."
+    },
+    {
+      "key": "OBJECTIVE-IMPLICIT",
+      "severity": "major",
+      "anchor": ".note ('Two kinds of card, marked by shape') and the six .chip elements",
+      "problem": "The singular/plural distinction is marked on every card and argued for none, and on five of the six the mark carries no craft information. 'Start After the Storm · one per piece' is a tautology: a piece has one opening, so the constraint cannot be violated and therefore teaches nothing a writer could get wrong. The four 'many per piece' cards state the default condition of essentially every craft move - the studio's own Craft Arcade carries thirteen moves and marks none of them with a count. First Domino is the only card where singularity is a contestable claim a writer could break (a piece can carry a decoy first cause alongside the real one, and choosing between them is the craft), and the surface never makes that argument. As it stands the shape chip is a counting rule dressed as a craft distinction. The model text does not rescue it: only two plural cards are anchored at all and each is anchored exactly once, so 'many per piece' is demonstrated zero times. The vocabulary is also doubled without being equated - the chip says 'One per piece' and 'Many per piece' while the .src line under the same card says 'singular' and 'plural'.",
+      "fix": "Give each card one sentence stating the craft consequence of its count, e.g. First Domino singular because a second one splits the causal spine and the reader loses which cause is doing the work. Drop the chip from cards where the count is definitional rather than chosen (Start After the Storm), and either delete 'many per piece' or replace it with the actual claim about ordering that the spec already makes ('Order them, let them lock the world in'). Use one vocabulary, not two.",
+      "framework": "Biggs, constructive alignment; Gee, semiotic domains - a marked attribute in a domain must carry a claim the domain recognises"
+    },
+    {
+      "key": "MISCONCEPTION-UNADDRESSED",
+      "severity": "major",
+      "anchor": ".model .anchor:nth-of-type(4) - '\"It was a feeling I hadn't known I was missing.\" / Interior Weather · the pivot'",
+      "problem": "The anchor demonstrates the exact thing the card forbids. The card definition on this same page reads 'The felt state made visible. The image holds the feeling so you never state it.' The quoted line contains no image and states the feeling directly and abstractly ('a feeling', 'missing'). It is the definition's negation offered as its worked example. Interior Weather is the objective correlative, and naming the emotion instead of building its carrier is the single most common novice failure of that move; the one worked instance on this surface endorses the error rather than correcting it. Anyone learning Interior Weather from these four anchors learns that an emotion sentence counts.",
+      "fix": "Re-anchor to the carrier, not the report: the lemon sorbet in the little blue goblet if the story's cold, clean, private taste is what holds the state, or drop the anchor entirely and mark Interior Weather 'no clean instance in this model'. If the story genuinely has no imaged felt state, that is a finding about the model text, not a reason to force the card.",
+      "framework": "Misconception surfacing; Gee, discipline-recognised naming (the spec's own Learning Scientist seat: 'a real flash writer would call this work by its name')"
+    },
+    {
+      "key": "MISCONCEPTION-UNADDRESSED",
+      "severity": "major",
+      "anchor": ".s-wea scene (Interior Weather card art: .sky, .band b1-b3, .glow over .fig)",
+      "problem": "The card's metaphor is drawn as literal weather - graded sky, horizontal cloud bands, a glow - hanging over a small human figure. That is pathetic fallacy, which is the standard novice substitute for the objective correlative this card actually names. The body copy reinforces it: 'the state is around the person'. A learner given this image will look for sky, rain and light to carry interior state, which is the move's most common failure, rather than for an object, a room condition, or a bodily particular doing the holding. Stage 0 is where the metaphor is locked, so this is the cheapest possible moment to catch it. Judging the depicted concept only; the rendering is L4's.",
+      "fix": "Draw the state in a carrier rather than in the sky: the same figure with one nearby object rendered at the extreme value of the scene (an over-lit glass, a chair pushed too far from a table), so the composition argues 'the feeling is in the thing' rather than 'the feeling is the weather'. Or, if the sky reading is the founder's intent, rename the card, because Interior Weather as defined is not weather.",
+      "framework": "Misconception surfacing; Mayer, coherence - the representation must instantiate the idea, not its nearest wrong neighbour"
+    },
+    {
+      "key": "MISCONCEPTION-UNADDRESSED",
+      "severity": "minor",
+      "anchor": ".model .anchor:nth-of-type(1) - '\"that's the room in which I realized I would leave your father\" / Start After the Storm · sentence two'",
+      "problem": "The anchor conflates retrospective framing with mid-consequence entry, and the card as worded permits the conflation. The card says 'Begin when everything but the action is over. The reader walks in mid-consequence' - the theatre principle assumes the consequence is still live and unresolved in the present of the piece. In 'Palate Cleanser' a mother is telling a grown daughter about a decades-old postcard: the storm is over and so is the consequence, fully settled and narrated from safety. Read as this anchor reads it, the card is satisfied by any story with a retrospective narrator, which is most published flash, so it stops discriminating and stops being teachable - the learner cannot fail to play it.",
+      "fix": "Add the discriminator to the definition: the consequence must still be unresolved in the present of the piece, not merely reported from after it. Then either re-anchor to a line where the daughter's present is under pressure, or keep this anchor and mark it explicitly as the frame variant, naming the difference. Either way the card needs a wrong-answer example beside the right one.",
+      "framework": "Misconception surfacing; Gee, semiotic domains - a move that nothing can violate is not a move"
+    },
+    {
+      "key": "PRACTICE-ABSENT",
+      "severity": "major",
+      "anchor": ".model, the four .anchor blocks (.q quote followed immediately by .c card name)",
+      "problem": "The surface says 'Four of the six cards are in it, and a reader can find them' and then finds them for the reader. Each quote is printed with its card name in the adjacent line, so the noticing is complete before the reader's eye reaches it. The Master Canon's loop runs Notice, then Name; this format inverts it and delivers Name and Notice simultaneously, which is recognition, not retrieval. Nothing on this surface asks the reader to produce, choose, predict or explain, and the studio's own prior art already does it the right way round - the Craft Arcade's Spot and Diagnose modes present the problem and withhold the label, and the writerly-moves README calls Diagnose 'the most pedagogically sophisticated thing in the whole repo'. This is a teaching-format decision being locked at Stage 0, not a mechanic, so 'cards before mechanics' does not shield it.",
+      "fix": "Withhold the label behind a disclosure: keep each .q quote visible and move the .c card name into a <details><summary>Which card?</summary> beneath it, or print the four quotes first and the four card names as an unkeyed list below them. No JavaScript, no scoring, no mechanic - it costs a markup change and restores Notice before Name.",
+      "framework": "Writerly Moves Master Canon loop (Notice, Name, Experiment, Feedback, Revise, Reflect); retrieval practice and the generation effect; Bjork, desirable difficulty"
+    },
+    {
+      "key": "TRANSFER-UNSUPPORTED",
+      "severity": "major",
+      "anchor": ".model section, 'Palate Cleanser' as the sole model text; .src of the Backstory Snap and Slide cards",
+      "problem": "One 366-word story, one narrator, one retrospective frame is the entire evidence base for a six-card deck that is about to be locked. Nothing varies, so nothing generalises: a reader learns what these cards look like in Michelle Ross's voice, not what they are. Two of the six cards get no worked instance anywhere on the surface - Backstory Snap and Slide are anchored nowhere, and Slide's own provenance line admits 'example still owed in Matt's voice'. The deck lock is therefore being argued from evidence that covers four of six cards in one context. The studio's own Craft Arcade sets a higher bar already: an excerpt plus a lens for each of its thirteen moves.",
+      "fix": "Before the Stage 0.5 disciplinary bench, add one anchor per card from a second model the syllabus already pairs with this one - Kincaid's 'Girl' and Garcia Marquez's 'One of These Days' are named in this file's own .sub - so every card in the locked deck has at least two instances in two voices, and the two currently unevidenced cards have at least one.",
+      "framework": "Transfer; varied practice - one worked context teaches the context, varied contexts teach the principle"
+    },
+    {
+      "key": "OUTCOME-UNMAPPED",
+      "severity": "major",
+      "anchor": "whole surface; specifically the .halt list 'Founder calls this draft cannot make'",
+      "problem": "The surface names a course (EN195) and two syllabus positions for the model text, but no competency, no iSLO, and no rubric appears anywhere. Six open founder calls are listed in .halt - deck lock, three-cards-one-move, the taxonomy fork, deck placement, the parked lane, palette - and not one of them is 'what does a played card produce that a scorer could rate'. The intake spec this file cites as its source of truth carries the locked principle 'this is not gamification. Learning principles drive the instructional design' and names Confluence as the assessment layer underneath, so the outcome is meant to exist; the deck-lock artifact is where it should be attached, and it is not. Without it the lock criterion for which cards survive is taste, and taste cannot be checked at the Stage 0.5 bench.",
+      "fix": "Add a seventh item to the .halt list and hold it as a founder call: name the iSLO each card serves (Written Communication and Critical Thinking are the plausible two) and, per card, the one observable thing a student produces when they play it. That is the lock criterion the deck is currently missing.",
+      "framework": "Biggs, constructive alignment; MassBay iSLO map (islo-hub.html)"
+    },
+    {
+      "key": "DEAD-CONTROL",
+      "severity": "minor",
+      "anchor": ".se-tog[data-tog=\"se-reduce\"] - the 'Reduce motion' toggle in the Reading panel",
+      "problem": "The stylesheet defines no transition, no animation and no @keyframes anywhere in the file. The only occurrences of those properties are the two suppression rules themselves (line 106 html.se-reduce, line 107 the prefers-reduced-motion media query). Pressing Reduce motion sets aria-pressed, flips the label to 'on', and announces 'Reduce motion on.' to the live region while changing nothing on screen. A comfort control that reports a state change it did not make teaches a reader that the comfort panel is decorative. Cross-group report: this is L1's floor key, and the gate appears to check that the suppression rule exists rather than that there is motion to suppress.",
+      "fix": "Remove the toggle from this surface since there is no motion, or leave it and label it as reserved. If the kernel is meant to ship the toggle unconditionally, the gate should assert that at least one animation or transition is declared whenever the toggle is present.",
+      "framework": "Formative feedback (Shute) - a response must be true of the system state it reports",
+      "evidence": "grep -n 'transition|animation|scroll-behavior|@keyframes' returns only lines 106 and 107, both suppression rules."
+    },
+    {
+      "key": "NAV-MISSING",
+      "severity": "minor",
+      "anchor": "nav.se-rail (lines 503-506) and a.se-home in .se-chrome",
+      "problem": "The taxonomy floor requires both back and home on a screen. This surface carries two homes and no back: .se-home in the chrome goes to index.html, the rail's first link goes to index.html, and the rail's second link goes to arcade.html, which is a lateral destination, not a return. The intake spec that this file names as its source of truth renders 'Back / Home' in the same kernel slot. Cross-group report; L1 owns the ruling on whether Cabinet counts.",
+      "fix": "Restore the kernel pair in nav.se-rail - a Back control alongside Studio - or, if the studio has ruled that two named destinations satisfy the floor, record that ruling so the key stops reading as a break.",
+      "framework": "n/a - floor key, reported as a possible tool blind spot"
+    }
+  ]
+}

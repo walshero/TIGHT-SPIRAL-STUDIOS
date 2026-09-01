@@ -54,7 +54,7 @@
   --rust:#8a3a1c; --focus:#8a5c00;
   /* scene values. Every scene builds from these, never from a one-off hex. */
   --v0:#14110b; --v1:#2c2519; --v2:#4a3f2a; --v3:#8d7a52; --v4:#e8d9b4; --lit:#f7e6bb;
-  --type-lit:#fffaf0;
+  --type-lit:#fffaf0; --bezel:#0d0b07; --bezel-ink:#fffaf0; --bezel-ink2:#efe3c6;
   --tap:48px; --r:12px;
   --serif:Georgia,'Iowan Old Style','Times New Roman',serif;
   --sans:system-ui,-apple-system,'Segoe UI',sans-serif;
@@ -64,6 +64,9 @@
 html[data-light="dusk"]{
   --bg:#e2d7bd; --surface:#f7f1e6; --surface-2:#e8ddc4; --ink:#2c2618; --ink2:#2c2618; --ink-fill:#2c2618;
   --line:#ccbf9f; --line2:#a89b70;
+  /* dusk gets its own scene ladder. Without these, dusk and day rendered identical art. */
+  --v0:#100e09; --v1:#26200f; --v2:#443a24; --v3:#83714a; --v4:#e3d3ab; --lit:#f4e2b4;
+  --type-lit:#fffdf6; --bezel:#0a0906; --bezel-ink:#fffdf6; --bezel-ink2:#ece0c0;
 }
 /* ---- LIGHT: WARM-DARK (night). Warm charcoal, never pure black. ---- */
 html[data-light="night"]{
@@ -73,6 +76,7 @@ html[data-light="night"]{
   --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a; --rust:#f0b494; --focus:#f0c357;
   --v0:#0c0b08; --v1:#1e1a12; --v2:#3b3324; --v3:#7a6a47; --v4:#cbb894; --lit:#e6d4a8;
   --type-lit:#fff8e8;
+  --bezel:#050403; --bezel-ink:#fff8e8; --bezel-ink2:#e8dcbe;
 }
 /* ---- THE REAL DARK PATH. Phone OS dark mode lands here unless the reader has chosen. ----
    Bare :root on purpose. An explicit reader choice still wins on specificity below. */
@@ -84,7 +88,8 @@ html[data-light="night"]{
     --gold:#f0c357; --gold-br:#f0c357; --gold-pale:#332c1a; --rust:#f0b494; --focus:#f0c357;
     --v0:#0c0b08; --v1:#1e1a12; --v2:#3b3324; --v3:#7a6a47; --v4:#cbb894; --lit:#e6d4a8;
     --type-lit:#fff8e8;
-  }
+    --bezel:#050403; --bezel-ink:#fff8e8; --bezel-ink2:#e8dcbe;
+}
 }
 /* ---- READER CHOICE WINS. Higher specificity than the bare :root above. ---- */
 html[data-light="day"]{
@@ -97,9 +102,10 @@ html[data-light="day"]{
 }
 /* ---- TOGGLE: high contrast ---- */
 html.se-contrast:not([data-light="night"]){ --bg:#fbfaf7; --surface:#fbfaf7; --surface-2:#f0ece2; --ink:#141109; --ink2:#141109; --ink-fill:#141109; --line:#a8904f; --line2:#a8904f; }
+html.se-contrast{ --bezel:#000000; --bezel-ink:#ffffff; --bezel-ink2:#f4ecd8; }
 html.se-contrast[data-light="night"]{ --bg:#0e0d0b; --surface:#161410; --surface-2:#221f19; --ink:#fff7e6; --ink2:#fff7e6; --ink-fill:#fff7e6; }
 /* ---- TOGGLE: text size ---- */
-html{ font-size:100%; }
+html{ font-size:100%; scroll-padding-top:calc(var(--tap) + 40px); }
 html.se-a1{ zoom:1.15; }
 html.se-a2{ zoom:1.3; }
 /* ---- TOGGLE: reduce motion ---- */
@@ -129,7 +135,8 @@ body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-hei
 
 /* ===== READING PANEL ===== */
 .se-panel{ position:fixed; right:12px; top:calc(var(--tap) + 18px); z-index:101;
-  width:min(340px,calc(100vw - 24px)); background:var(--surface); color:var(--ink);
+  left:12px; right:12px; width:auto; max-width:340px; margin-left:auto;
+  background:var(--surface); color:var(--ink);
   border:3px solid var(--accent2); border-radius:var(--r); padding:16px;
   box-shadow:0 10px 34px rgba(0,0,0,.32); display:none; font-family:var(--sans); }
 .se-panel[data-open="1"]{ display:block; }
@@ -158,33 +165,39 @@ body{ font-family:var(--serif); background:var(--bg); color:var(--ink); line-hei
 .where{ font:800 18px/1.3 var(--sans); letter-spacing:.06em; text-transform:uppercase; color:var(--gold); margin-bottom:.6rem; }
 h1{ font-size:1.7rem; line-height:1.16; margin:.2rem 0 .5rem; }
 h2{ font-size:1.3rem; margin:2rem 0 .6rem; }
-h3{ font-size:1.1rem; margin:0 0 .4rem; }
+h3{ font-size:1.25rem; margin:0 0 .4rem; }
 p{ margin:0 0 .9rem; }
-.lead{ font-size:1.08rem; }
+.lead{ font-size:1.25rem; }
 .sub{ font:400 18px/1.5 var(--sans); }
+.cite{ font:400 18px/1.5 var(--sans); color:var(--ink2); }
+.cite .url{ font-family:var(--mono); font-size:18px; overflow-wrap:anywhere; }
 
 /* ===== THE STAGE. One frame, six scenes, identical type position. ===== */
 .card{ border:3px solid var(--ink-fill); border-radius:var(--r); background:var(--surface);
   margin:1rem 0 1.8rem; overflow:hidden; }
-.stage{ position:relative; height:230px; background:var(--v1); overflow:hidden; }
-.stage > *{ position:absolute; }
+.stage{ background:var(--v1); }
+/* The scene is its own box at a FIXED height. The caption band is reserved BELOW it,
+   never painted over it, so no shape a card is drawn to argue can be occluded and
+   "identical type position" is true as rendered rather than only claimed. */
+.scene{ position:relative; height:230px; overflow:hidden; }
+.scene > *{ position:absolute; }
 /* The dark bezel: hard dark between scenery and words. art-bible section 3. */
-.bezel{ position:absolute; left:0; right:0; bottom:0; z-index:4; padding:.75rem .9rem;
-  background:rgba(8,7,5,.90); border-top:3px solid var(--v0); }
-.bezel .cn{ font:800 21px/1.2 var(--sans); color:var(--type-lit); }
-.bezel .cw{ font:400 18px/1.4 var(--sans); color:#f2e7cf; margin-top:.2rem; }
+.bezel{ display:flex; flex-wrap:wrap; align-items:baseline; gap:0 12px; padding:.8rem .9rem;
+  background:var(--bezel); border-top:3px solid var(--v0); }
+.bezel .cn{ font:800 21px/1.25 var(--sans); color:var(--bezel-ink); margin:0; flex:1 1 auto; }
+.bezel .cw{ font:400 18px/1.4 var(--sans); color:var(--bezel-ink2); margin:.25rem 0 0; flex:1 0 100%; }
 /* Count chip: shape AND label, never colour alone. */
-.chip{ position:absolute; top:10px; right:10px; z-index:3; display:inline-flex; align-items:center; gap:8px;
-  padding:7px 12px; font:800 18px/1.1 var(--sans);
-  background:rgba(8,7,5,.92); color:var(--type-lit); border:3px solid var(--type-lit); }
+.chip{ display:inline-flex; align-items:center; gap:8px; flex:0 0 auto;
+  padding:6px 11px; font:800 18px/1.1 var(--sans);
+  background:var(--bezel); color:var(--bezel-ink); border:3px solid var(--bezel-ink); }
 .chip.one{ border-radius:999px; }
 .chip.many{ border-radius:3px; }
-.chip .g{ display:inline-block; width:11px; height:11px; background:var(--v4); flex:0 0 auto; }
+.chip .g{ display:inline-block; width:11px; height:11px; background:var(--bezel-ink2); flex:0 0 auto; }
 .chip.one .g{ border-radius:50%; }
-.chip.many .g{ width:4px; box-shadow:6px 0 0 var(--v4), 12px 0 0 var(--v4); }
+.chip.many .g{ width:4px; box-shadow:6px 0 0 var(--bezel-ink2), 12px 0 0 var(--bezel-ink2); }
 
 .body{ padding:.95rem 1rem 1.1rem; }
-.body p{ margin:0 0 .7rem; font-size:1.02rem; }
+.body p{ margin:0 0 .7rem; font-size:1.15rem; }
 .body p:last-child{ margin-bottom:0; }
 .src{ font:700 18px/1.4 var(--sans); color:var(--ink2);
   border-top:2px solid var(--line2); padding-top:.6rem; margin-top:.85rem; }
@@ -204,7 +217,7 @@ p{ margin:0 0 .9rem; }
 .s-dom .shadow{ left:32px; bottom:66px; width:206px; height:9px; background:var(--v0); opacity:.55; }
 
 /* -- SCENE 2 · START AFTER THE STORM. Light from an offstage door. -- */
-.s-storm .room{ inset:0; background:linear-gradient(180deg,var(--v1) 0%, var(--v0) 100%); }
+.s-storm .room{ inset:0; background:linear-gradient(180deg,var(--v2) 0%, var(--v1) 100%); }
 .s-storm .door{ left:0; top:24px; width:104px; height:136px;
   background:linear-gradient(100deg,var(--lit) 0%, var(--v4) 55%, transparent 100%); }
 .s-storm .jamb{ left:104px; top:16px; width:8px; height:152px; background:var(--v0); }
@@ -235,7 +248,7 @@ p{ margin:0 0 .9rem; }
 .s-wea .b3{ top:80px; height:14px; }
 .s-wea .glow{ left:50%; bottom:146px; margin-left:-50px; width:100px; height:38px; border-radius:50%;
   background:var(--lit); opacity:.30; }
-.s-wea .ground{ left:0; right:0; bottom:0; height:70px; background:var(--v1); }
+.s-wea .ground{ left:0; right:0; bottom:0; height:70px; background:var(--v3); }
 .s-wea .fig{ left:50%; bottom:64px; margin-left:-21px; width:42px; height:92px;
   background:var(--v0); border-radius:18px 18px 2px 2px; }
 .s-wea .fig::after{ content:''; position:absolute; left:7px; top:-22px; width:28px; height:28px;
@@ -268,25 +281,25 @@ p{ margin:0 0 .9rem; }
 .model h3{ margin-top:0; }
 .anchor{ border-left:6px solid var(--gold-br); background:var(--gold-pale); padding:.65rem .85rem;
   margin:.6rem 0; border-radius:0 8px 8px 0; }
-.anchor .q{ font-style:italic; font-size:1.02rem; color:var(--ink); }
+.anchor .q{ font-style:italic; font-size:1.15rem; color:var(--ink); }
 .anchor .c{ font:800 18px/1.35 var(--sans); color:var(--gold); margin-top:.35rem; }
 .note{ font:400 18px/1.5 var(--sans); background:var(--gold-pale); border:2px solid var(--gold-br);
   border-radius:10px; padding:.75rem .9rem; margin:.9rem 0; color:var(--ink); }
 .halt{ border:3px solid var(--rust); border-radius:var(--r); background:var(--surface); padding:.95rem 1rem; margin:1rem 0; }
 .halt h3{ color:var(--rust); font-family:var(--sans); font-size:18px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; }
 .halt ul{ margin:.5rem 0 0; padding-left:1.2rem; }
-.halt li{ margin:.55rem 0; font-size:1rem; }
+.halt li{ margin:.55rem 0; font-size:1.15rem; }
 
-.se-rail{ display:flex; gap:10px; justify-content:center; padding:20px; border-top:2px solid var(--line2); font-family:var(--sans); }
-.se-rail a{ min-height:var(--tap); display:inline-flex; align-items:center; padding:11px 20px;
+.se-rail{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; padding:20px; border-top:2px solid var(--line2); font-family:var(--sans); }
+.se-rail a,.se-rail button{ min-height:var(--tap); display:inline-flex; align-items:center; padding:11px 20px;
   border:2px solid var(--line2); border-radius:8px; background:var(--surface-2); color:var(--ink);
   font-family:var(--sans); font-weight:500; font-size:18px; text-decoration:none; }
-.se-rail a:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.se-rail a:focus-visible,.se-rail button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 .foot{ margin-top:1.5rem; padding:1rem; background:var(--accent); color:var(--on-accent);
   border-radius:var(--r); font-family:var(--sans); font-size:18px; line-height:1.5; }
 .foot .up{ display:block; margin-top:.55rem; font-weight:700; }
 .sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
-@media (max-width:520px){ h1{font-size:1.45rem;} .wrap{padding:1rem .8rem 2rem;} .stage{height:205px;} }
+@media (max-width:520px){ h1{font-size:1.45rem;} .wrap{padding:1rem .8rem 2rem;} .scene{height:205px;} }
 </style>
 </head>
 <body>
@@ -315,7 +328,6 @@ p{ margin:0 0 .9rem; }
   </div>
   <h2>Comfort</h2>
   <button class="se-tog" data-tog="se-contrast" aria-pressed="false"><span class="lbl">High contrast</span> <span class="st">off</span></button>
-  <button class="se-tog" data-tog="se-reduce" aria-pressed="false"><span class="lbl">Reduce motion</span> <span class="st">off</span></button>
 </div>
 
 <div class="wrap">
@@ -339,12 +351,17 @@ p{ margin:0 0 .9rem; }
   <h2 id="six">The six</h2>
 
   <article class="card">
-    <div class="stage s-dom" role="img" aria-label="Blockout: a rank of pale tiles standing on a dark ground. The leftmost tile, the brightest in the frame, has tipped. The rank behind it recedes into darker values.">
-      <div class="sky"></div><div class="ground"></div>
+    <div class="stage">
+      <div class="scene s-dom" role="img" aria-label="Blockout: a rank of pale tiles standing on a dark ground. The leftmost tile, the brightest in the frame, has tipped. The rank behind it recedes into darker values. Machine-drawn CSS by Claude for Tight Spiral Studios; open chair.">
+        <div class="sky"></div><div class="ground"></div>
       <div class="shadow"></div>
       <div class="t t5"></div><div class="t t4"></div><div class="t t3"></div><div class="t t2"></div><div class="t t1"></div>
-      <span class="chip one"><span class="g"></span>One per piece</span>
-      <div class="bezel"><div class="cn">First Domino</div><div class="cw">The first thing that tips, that makes everything after it fall.</div></div>
+      </div>
+      <div class="bezel">
+        <h3 class="cn">First Domino</h3>
+        <span class="chip one"><span class="g"></span>One per piece</span>
+        <p class="cw">The first thing that tips, that makes everything after it fall.</p>
+      </div>
     </div>
     <div class="body">
       <p>The tipped tile is the brightest thing in the frame and the rank darkens as it goes back,
@@ -354,13 +371,18 @@ p{ margin:0 0 .9rem; }
   </article>
 
   <article class="card">
-    <div class="stage s-storm" role="img" aria-label="Blockout: a dark room. Light enters from an open door at the left edge and throws a wedge across the floor. A figure stands in the dark at the right, already inside.">
-      <div class="room"></div>
+    <div class="stage">
+      <div class="scene s-storm" role="img" aria-label="Blockout: a dark room. Light enters from an open door at the left edge and throws a wedge across the floor. A figure stands in the dark at the right, already inside. Machine-drawn CSS by Claude for Tight Spiral Studios; open chair.">
+        <div class="room"></div>
       <div class="door"></div><div class="jamb"></div>
       <div class="floor"></div><div class="floorlight"></div>
       <div class="fig"></div>
-      <span class="chip one"><span class="g"></span>One per piece</span>
-      <div class="bezel"><div class="cn">Start After the Storm</div><div class="cw">Begin when everything but the action is over. The reader walks in mid-consequence.</div></div>
+      </div>
+      <div class="bezel">
+        <h3 class="cn">Start After the Storm</h3>
+        <span class="chip one"><span class="g"></span>One per piece</span>
+        <p class="cw">Begin when everything but the action is over. The reader walks in mid-consequence.</p>
+      </div>
     </div>
     <div class="body">
       <p>The light source is <em>offstage</em>. The door is the brightest shape and the event that
@@ -371,12 +393,17 @@ p{ margin:0 0 .9rem; }
   </article>
 
   <article class="card">
-    <div class="stage s-det" role="img" aria-label="Blockout: four objects on a dark table. One is lit bright and sits in a pool of light. The other three are dimmer and further back.">
-      <div class="wall"></div><div class="table"></div>
+    <div class="stage">
+      <div class="scene s-det" role="img" aria-label="Blockout: four objects on a dark table. One is lit bright and sits in a pool of light. The other three are dimmer and further back. Machine-drawn CSS by Claude for Tight Spiral Studios; open chair.">
+        <div class="wall"></div><div class="table"></div>
       <div class="pool"></div>
       <div class="o o1"></div><div class="o o2"></div><div class="o o3"></div><div class="o o4"></div>
-      <span class="chip many"><span class="g"></span>Many per piece</span>
-      <div class="bezel"><div class="cn">World Detail That Matters</div><div class="cw">A concrete detail doing real work. Not a token, not a totem.</div></div>
+      </div>
+      <div class="bezel">
+        <h3 class="cn">World Detail That Matters</h3>
+        <span class="chip many"><span class="g"></span>Many per piece</span>
+        <p class="cw">A concrete detail doing real work. Not a token, not a totem.</p>
+      </div>
     </div>
     <div class="body">
       <p>Four objects, one lit. The card is not "put objects in." It is <em>which one gets the
@@ -386,13 +413,18 @@ p{ margin:0 0 .9rem; }
   </article>
 
   <article class="card">
-    <div class="stage s-wea" role="img" aria-label="Blockout: horizontal bands of weather across a graded sky, a soft glow above a small dark figure standing on low ground.">
-      <div class="sky"></div>
+    <div class="stage">
+      <div class="scene s-wea" role="img" aria-label="Blockout: horizontal bands of weather across a graded sky, a soft glow above a small dark figure standing on low ground. Machine-drawn CSS by Claude for Tight Spiral Studios; open chair.">
+        <div class="sky"></div>
       <div class="band b1"></div><div class="band b2"></div><div class="band b3"></div>
       <div class="glow"></div>
       <div class="ground"></div><div class="fig"></div>
-      <span class="chip many"><span class="g"></span>Many per piece</span>
-      <div class="bezel"><div class="cn">Interior Weather</div><div class="cw">The felt state made visible. The image holds the feeling so you never state it.</div></div>
+      </div>
+      <div class="bezel">
+        <h3 class="cn">Interior Weather</h3>
+        <span class="chip many"><span class="g"></span>Many per piece</span>
+        <p class="cw">The felt state made visible. The image holds the feeling so you never state it.</p>
+      </div>
     </div>
     <div class="body">
       <p>The figure is the smallest and darkest thing. The weather is the biggest. The composition
@@ -402,12 +434,17 @@ p{ margin:0 0 .9rem; }
   </article>
 
   <article class="card">
-    <div class="stage s-snap" role="img" aria-label="Blockout: a dark film strip of four frames. The second frame is lit bright and a dashed outline marks it as torn out of the strip.">
-      <div class="bg"></div><div class="strip"></div>
+    <div class="stage">
+      <div class="scene s-snap" role="img" aria-label="Blockout: a dark film strip of four frames. The second frame is lit bright and a dashed outline marks it as torn out of the strip. Machine-drawn CSS by Claude for Tight Spiral Studios; open chair.">
+        <div class="bg"></div><div class="strip"></div>
       <div class="fr f1"></div><div class="fr f2"></div><div class="fr f3"></div><div class="fr f4"></div>
       <div class="tear"></div>
-      <span class="chip many"><span class="g"></span>Many per piece</span>
-      <div class="bezel"><div class="cn">Backstory Snap</div><div class="cw">History implied in a flash, not delivered. The reader infers the weight.</div></div>
+      </div>
+      <div class="bezel">
+        <h3 class="cn">Backstory Snap</h3>
+        <span class="chip many"><span class="g"></span>Many per piece</span>
+        <p class="cw">History implied in a flash, not delivered. The reader infers the weight.</p>
+      </div>
     </div>
     <div class="body">
       <p>One frame lit out of four, and the dashed edge says it was <em>taken</em>, not screened.
@@ -417,12 +454,17 @@ p{ margin:0 0 .9rem; }
   </article>
 
   <article class="card">
-    <div class="stage s-slide" role="img" aria-label="Blockout: two long horizontal planes, the lower one offset to the right of the upper. A measure line below marks the two positions with ticks.">
-      <div class="bg"></div>
+    <div class="stage">
+      <div class="scene s-slide" role="img" aria-label="Blockout: two long horizontal planes, the lower one offset to the right of the upper. A measure line below marks the two positions with ticks. Machine-drawn CSS by Claude for Tight Spiral Studios; open chair.">
+        <div class="bg"></div>
       <div class="pl p1"></div><div class="pl p2"></div>
       <div class="mark"></div><div class="tick k1"></div><div class="tick k2"></div>
-      <span class="chip many"><span class="g"></span>Many per piece</span>
-      <div class="bezel"><div class="cn">Slide</div><div class="cw">A shift in status, distance, or relation that moves the piece without announcing it.</div></div>
+      </div>
+      <div class="bezel">
+        <h3 class="cn">Slide</h3>
+        <span class="chip many"><span class="g"></span>Many per piece</span>
+        <p class="cw">A shift in status, distance, or relation that moves the piece without announcing it.</p>
+      </div>
     </div>
     <div class="body">
       <p>Two planes, same size, one displaced. The ticks below are the only thing that says a move
@@ -434,13 +476,20 @@ p{ margin:0 0 .9rem; }
   <h2>The published model</h2>
   <div class="model">
     <h3>"Palate Cleanser," Michelle Ross, 2019</h3>
-    <p class="sub">366 words. Assigned reading per the EN195 syllabus in two different positions:
+    <p class="cite">Published in <cite>Cheap Pop</cite>, 2019. Text read from the course copy at
+    <span class="url">docs.google.com/document/d/12J9kL9dfksRrcROMhhmVBKjN9LZ472aGSYMMlLE58pI</span>,
+    verified 2026-09-01; the four quotations below were checked against it that day. Word count
+    366, counted from that text.</p>
+    <p class="sub">Assigned reading per the EN195 syllabus in two different positions:
     the 6-week online section reads it in the flash unit beside Kincaid's "Girl" and
     García Márquez's "One of These Days," and the 15-week section reads it early, in class,
     beside the Secret World assignment. A mother tells her grown daughter about a postcard.</p>
 
     <p><strong>Four of the six cards are in it, and a reader can find them.</strong>
     Short anchors only. The story is the students' to read whole.</p>
+    <p class="sub"><strong>Whose readings these are:</strong> the card definitions above are Matt's,
+    set live 2026-06-29. The four mappings below are the machine's proposal and are not ruled on.
+    They are the first thing to argue with.</p>
 
     <div class="anchor">
       <div class="q">"that's the room in which I realized I would leave your father"</div>
@@ -455,8 +504,8 @@ p{ margin:0 0 .9rem; }
       <div class="c">World Detail That Matters · sentence one</div>
     </div>
     <div class="anchor">
-      <div class="q">"It was a feeling I hadn't known I was missing."</div>
-      <div class="c">Interior Weather · the pivot</div>
+      <div class="q">"your grin vanished. Your face reddened."</div>
+      <div class="c">Interior Weather · the close</div>
     </div>
 
     <div class="note"><strong>Why this story earns the model slot.</strong> The two singular cards
@@ -501,6 +550,7 @@ p{ margin:0 0 .9rem; }
 </div>
 
 <nav class="se-rail">
+  <button type="button" id="seBack">Back</button>
   <a href="index.html">Studio</a>
   <a href="arcade.html">Cabinet</a>
 </nav>
@@ -545,6 +595,11 @@ p{ margin:0 0 .9rem; }
       b.querySelector('.st').textContent = on?'on':'off';
       sr.textContent=b.querySelector('.lbl').textContent+(on?' on.':' off.');
     });
+  });
+
+  var back=document.getElementById('seBack');
+  if(back) back.addEventListener('click',function(){
+    if(history.length>1){ history.back(); } else { location.href='index.html'; }
   });
 
   var u=document.getElementById('seUpdated');

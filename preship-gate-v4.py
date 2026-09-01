@@ -249,13 +249,43 @@ def svg_text_floor(html):
                          ' units or move the label to HTML.')
     return halts
 
+def root_px(css):
+    """The px value one rem resolves to. rem is ROOT-relative, never body-relative --
+    the whole reason the rem tooth below exists."""
+    m = re.search(r'(?:^|[{}\s,])(?:html|:root)\s*\{[^}]*?font-size\s*:\s*([\d.]+)(%|px|rem|em)', css, re.S)
+    if not m:
+        return 16.0
+    v, unit = float(m.group(1)), m.group(2)
+    if unit == 'px':
+        return v
+    if unit == '%':
+        return 16.0 * v / 100.0
+    return 16.0 * v          # rem/em on the root both resolve against the 16px initial
+
+
 def css_text_floor(css):
+    """ADDED 2026-09-01, the rem tooth. Found by aleph L4 on flash-compression-blockout.html:
+    36 rendered text nodes sat under the floor at 16.00-16.32px and this gate passed the
+    file clean, because it only ever matched 'font-size:Npx'. The author had set
+    body{font-size:1.1875rem} and then written child rules in rem believing rem inherited
+    the body size. It does not -- rem is root-relative, so every 1.02rem child resolved
+    against the 16px root, not the 19px body. A floor that only reads one unit is a floor
+    with a door in it. em is deliberately NOT flagged: it is context-dependent and cannot
+    be resolved statically without lying."""
     halts = []
     for m in re.finditer(r'font-size\s*:\s*([\d.]+)px', css):
         v = float(m.group(1))
         if v < FONT_FLOOR_ABS:
             halts.append('E1-CSS font-size ' + format(v, '.0f') + 'px < ' +
                          str(FONT_FLOOR_ABS) + 'px floor.')
+    rpx = root_px(css)
+    for m in re.finditer(r'font-size\s*:\s*([\d.]+)rem', css):
+        px = float(m.group(1)) * rpx
+        if px < FONT_FLOOR_ABS:
+            halts.append('E1-REM font-size ' + m.group(1) + 'rem resolves to ' +
+                         format(px, '.2f') + 'px against a ' + format(rpx, '.0f') +
+                         'px root < ' + str(FONT_FLOOR_ABS) + 'px floor. rem is '
+                         'root-relative, not body-relative.')
     return sorted(set(halts))
 
 def image_floor(html):
@@ -400,8 +430,9 @@ def run(path, ratchet=False, base=None, repo=''):
 
 # ---------- self-test teeth: a gate that cannot fail a bad file is a wall ----------
 BAD = ('<html><head><meta name="color-scheme" content="light dark"></head>'
-       '<style>:root{--p:#fff;--i:#111}body{background:var(--p);color:var(--i)}'
-       '.scene{}</style><body><div class="scene">'
+       '<style>:root{--p:#fff;--i:#111}html{font-size:100%}'
+       'body{background:var(--p);color:var(--i);font-size:1.1875rem}'
+       '.scene{}.body p{font-size:1.02rem}</style><body><div class="scene">'
        '<svg viewBox="0 0 100 60"><text font-size="3">tiny</text></svg>'
        '</div></body></html>')
 
@@ -415,10 +446,12 @@ def self_test():
     got = ' '.join(fh)
     ok_svg  = 'E1-SVG' in got
     ok_dark = 'H-DARK-PROMISE' in got
-    if not (ok_svg and ok_dark):
-        print('  SELF-TEST FAILED - svg:%s dark:%s -> the gate is not biting' % (ok_svg, ok_dark))
+    ok_rem  = 'E1-REM' in got
+    if not (ok_svg and ok_dark and ok_rem):
+        print('  SELF-TEST FAILED - svg:%s dark:%s rem:%s -> the gate is not biting'
+              % (ok_svg, ok_dark, ok_rem))
         sys.exit(3)
-    print('  self-test ok: svg scale tooth bites, dark-promise tooth bites')
+    print('  self-test ok: svg scale tooth bites, dark-promise tooth bites, rem tooth bites')
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
