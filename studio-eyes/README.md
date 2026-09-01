@@ -33,7 +33,7 @@ cannot grade its own canary, **it refuses to audit anything.**
 
 A tool that gates the studio must first gate itself.
 
-## What it checks (ten floors, all HALT)
+## What it checks (eleven floors, all HALT)
 
 1. CONTRAST — every text node vs its **actually rendered** ground, in every stop
 2. **Text on images/gradients** — samples the real pixels under the glyphs
@@ -45,3 +45,29 @@ A tool that gates the studio must first gate itself.
 8. FOCUS VISIBLE — tabs to every control, checks for a real ring
 9. TOUCH TARGETS — 44px floor, measured on the rendered box
 10. DARK MODE — re-runs everything under `prefers-color-scheme: dark`
+11. **CLIPPED TEXT** — text laid out and then thrown away by a clip box
+
+## Floor 11, and the limit it does not hide
+
+Added 2026-09-01. Flok's research card shipped unreadable for weeks with floors
+1-10 green: `Why does this work?` flipped open onto a 68px box holding 85px of
+research, so the first line was sliced through the x-height and the citation was
+cut in half. Contrast 12:1. Target 340x68. Focus ring present. **Nothing here had
+ever been asked whether you can actually read it** — every floor graded the glyphs
+it could see, and none looked for the glyphs the compositor had thrown away.
+
+A box and a window both clip; only one is broken. The separation is a ratio, not a
+judgment: measured on that file, the broken card held 76px in a 68px box (1.12) and
+the diegetic phone feed held 699px in 150px (4.66). Under `CLIP_WINDOW_RATIO` (2.0)
+the box was meant to fit and HALTs; over it, the shape is a window and the finding
+is reported without blocking. Scroll windows, closed disclosures, sr-only text and
+ellipsis truncation are forgiven, and `canary/p09-legit-clips.html` is the trap that
+keeps them forgiven.
+
+**This floor would not have caught the bug that caused it, and says so.** Studio Eyes
+measures first paint. Flok's card sits behind three clicks (start, hit the target,
+flip), so at first paint it is empty and collapsed and the floor correctly finds
+nothing. The measurement itself is exported as `CLIP_PROBE` and run by
+`playthrough-agent.py` at **every state its crawler already visits** — which is where
+the real card was found, and where a regression in the first fix was caught the same
+afternoon. One canon writes, others read.

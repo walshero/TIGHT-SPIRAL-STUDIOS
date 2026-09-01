@@ -5,6 +5,11 @@ THE PLAYTHROUGH AGENT  —  Tight Spiral Productions
 It PLAYS the game. Studio Eyes measures pixels; this drives the interface and
 watches for the mechanical failures a founder's thumb currently catches on cold play:
 
+  CLIPPED TEXT     text laid out and then thrown away by a clip box — measured in
+                   EVERY state this crawler reaches, which is the whole point (see
+                   load_clip_probe below: the belt's floors all grade first paint,
+                   and a defect that only exists after three clicks is invisible to
+                   every one of them)
   DEAD BUTTON      an interactive element that, when clicked, changes nothing
   INERT TOUCH      the PAGE changed but the WORLD did not — a line printed outside
                    the scene container while the scene itself stayed byte-identical
@@ -29,7 +34,55 @@ Usage:  python3 playthrough-agent.py <file.html> [file2.html ...]
 """
 import sys, os, glob, re
 
+# ── THE CLIP MEASUREMENT IS NOT OURS. It lives in studio-eyes.py (floor 11) and this
+# agent READS it. One canon writes, others read: a second copy of that arithmetic here
+# would drift from the floor it is supposed to mirror, and the studio has already paid
+# for two copies of one fact more than once.
+#
+# WHY IT IS RUN FROM HERE AT ALL, recorded so the split is not mistaken for duplication:
+# studio-eyes and studio-fingers both measure FIRST PAINT. Flok's research card was
+# unreadable for weeks behind three clicks (start -> hit the target -> flip), so every
+# floor in the belt graded a card that was empty and collapsed and reported green.
+# studio-fingers' own docstring named the durable fix in August and left it open:
+# "geometry measured at every state the crawler in playthrough-agent.py already
+# visits." This is that. The crawler was already walking the states; nobody was
+# measuring them.
+def load_clip_probe():
+    """Return studio-eyes' CLIP_PROBE, or None. NEVER silent — a check that went
+    missing must not read as a check that found nothing."""
+    import importlib.util
+    here = os.path.dirname(os.path.abspath(__file__))
+    fp = os.path.join(here, 'studio-eyes', 'studio-eyes.py')
+    if not os.path.exists(fp):
+        return None
+    try:
+        spec = importlib.util.spec_from_file_location('studio_eyes_canon', fp)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return getattr(mod, 'CLIP_PROBE', None)
+    except Exception:
+        return None
+
+
+CLIP_PROBE = load_clip_probe()
+
 MAX_CLICKS = 40          # breadth-first click budget per game
+# A CONTROL THAT KEEPS ANSWERING IS WORTH PRESSING AGAIN.
+# Added 2026-09-01. The walker clicked each LABEL once, so any state behind a
+# repeated action was unreachable — and games are made of repeated actions. Flok's
+# research card unlocks when the engagement meter passes its target, which takes
+# seven or eight presses of one button; nine single clicks got the crawler onto the
+# training screen and left it standing there with the card still locked. It reported
+# what it saw and what it saw was a locked card.
+#
+# This is not a per-file recipe (the failure mode studio-fingers named and rejected —
+# a recipe gets filled for three builds and leaves the rest blind while LOOKING
+# covered). It is one mechanical rule that reads the same on every surface: after the
+# breadth-first pass runs out of NEW controls, press the ones that are still ANSWERING
+# again, while they keep answering, up to a cap. A repeat that changes nothing is not
+# a dead button — a maxed-out meter legitimately stops moving — so repeats are exempt
+# from that finding.
+REPEAT_MAX = 12          # presses of any one control, once breadth is exhausted
 SETTLE_MS  = 350         # wait after each click for the DOM to react
 VIEWPORT   = {"width": 400, "height": 840}   # phone, matches Studio Eyes
 
@@ -131,12 +184,42 @@ def sidecar_world(path):
     return (entry.get('world'), entry.get('touches'))
 
 
+def sample_clips(page, card, where):
+    """Run the clip floor against the state we are standing in right now.
+
+    LET THE STATE SETTLE FIRST. A box measured mid-transition is a frame, not a
+    layout: a card 350ms into a 500ms flip projects an axis-aligned box a couple of
+    px wider than the card really is, and that read as the front face clipping
+    itself by 2px on a card that was correct. Wait for the page's own animations to
+    finish, bounded — a looping decorative animation must not hang the crawler.
+    """
+    if CLIP_PROBE is None:
+        return
+    try:
+        page.wait_for_function(
+            "() => document.getAnimations().every(a => a.playState !== 'running')",
+            timeout=900)
+    except Exception:
+        pass          # a looping animation never settles; measure anyway
+    try:
+        found = page.evaluate(CLIP_PROBE)
+    except Exception:
+        return
+    for c in found or []:
+        key = (c.get('sel'), c.get('text'))
+        if key in card["_clip_seen"]:
+            continue
+        card["_clip_seen"].add(key)
+        card["clipped_text"].append({**c, "state": where})
+
+
 def play(path, world=None, touches=None):
     from playwright.sync_api import sync_playwright
     card = {"file": os.path.basename(path), "clicks": 0,
             "dead_buttons": [], "js_errors": [], "notes": [],
             "opening_wall": False, "reached_end": False, "dead_end": False,
-            "inert_touches": [], "world": None, "touches": None}
+            "inert_touches": [], "world": None, "touches": None,
+            "clipped_text": [], "_clip_seen": set(), "clip_blind": CLIP_PROBE is None}
     with sync_playwright() as p:
         # A GATE THAT GOES BLIND MUST NOT READ AS CLEAN. Playwright resolves its browser
         # by a build number pinned to the installed python package; when the package and
@@ -197,6 +280,8 @@ def play(path, world=None, touches=None):
         card["world"] = world
         card["touches"] = touches
 
+        sample_clips(page, card, 'first paint')
+
         # opening-wall check: is the FIRST live control a preference toggle?
         first = live_controls(page)
         if first and PREF_WORDS.search(first[0][1] or ''):
@@ -207,6 +292,9 @@ def play(path, world=None, touches=None):
         seen_text = set()
         stuck = 0
         clicked_labels = set()
+        responsive = set()       # labels whose last press moved the page
+        repeats = {}             # label -> presses spent in the persistence pass
+        blocked = set()          # labels that were visible but refused the click
         while card["clicks"] < MAX_CLICKS:
             ctrls = live_controls(page)
             if not ctrls:
@@ -222,10 +310,26 @@ def play(path, world=None, touches=None):
                 key = lbl or 'unlabeled'
                 if key not in clicked_labels:
                     target = (el, lbl); break
+            repeat = False
+            if target is None:
+                # PERSISTENCE PASS: breadth is spent; press what is still answering.
+                for el2, lbl2 in ctrls:
+                    key = lbl2 or 'unlabeled'
+                    # A CONTROL THAT REFUSED THE CLICK WAS NOT EXERCISED. The label was
+                    # burned before the click, so a control that is visible but not yet
+                    # live — Flok's research card is pointer-events:none until the meter
+                    # passes its target — was crossed off the list and never tried again,
+                    # even after the very presses that unlocked it. "Not clickable in
+                    # place" usually means "not clickable YET".
+                    live = key in responsive or key in blocked
+                    if live and repeats.get(key, 0) < REPEAT_MAX:
+                        target = (el2, lbl2); repeat = True; break
             if target is None:
                 card["reached_end"] = True      # all controls exercised, no crash
                 break
             el, lbl = target
+            if repeat:
+                repeats[lbl or 'unlabeled'] = repeats.get(lbl or 'unlabeled', 0) + 1
             clicked_labels.add(lbl or 'unlabeled')
             # signature = visible text + full DOM outerHTML length + count of
             # aria-pressed/selected/checked/.active/.on nodes. A response is ANY
@@ -264,6 +368,7 @@ def play(path, world=None, touches=None):
             try:
                 el.click(timeout=1500)
             except Exception as e:
+                blocked.add(lbl or 'unlabeled')
                 card["notes"].append(f"click timed out on '{(lbl or '')[:24]}' "
                                      "— visible but not clickable in place")
                 continue
@@ -290,12 +395,19 @@ def play(path, world=None, touches=None):
                 continue
             after = sig()
             wafter = world_sig(page, world)
+            sample_clips(page, card, f"after '{(lbl or 'unlabeled')[:24]}'")
             if after == before:
-                # NOTHING in the DOM moved — a real dead button
-                if lbl and lbl not in card["dead_buttons"]:
+                # NOTHING in the DOM moved — a real dead button, UNLESS this was a
+                # repeat press: a control that already proved it works and has run out
+                # of room (a meter at its ceiling, a list fully loaded) is finished,
+                # not dead. Judging it here would manufacture a defect out of success.
+                responsive.discard(lbl or 'unlabeled')
+                if not repeat and lbl and lbl not in card["dead_buttons"]:
                     card["dead_buttons"].append(lbl or '(unlabeled)')
                 stuck += 1
             else:
+                responsive.add(lbl or 'unlabeled')
+                blocked.discard(lbl or 'unlabeled')
                 stuck = 0
                 # The page moved. Did the WORLD? Only asked when a world is named,
                 # and never when the world element itself was replaced wholesale
@@ -336,6 +448,9 @@ def play(path, world=None, touches=None):
             card["notes"].append(f"OFFLINE FLOOR: {len(ext)} external request(s) "
                                  f"e.g. {ext[0][:60]}")
         b.close()
+    # the dedupe set is bookkeeping, not a finding — drop it so the card stays a
+    # plain, serializable dict for anything downstream that wants to print or store it.
+    card.pop("_clip_seen", None)
     return card
 
 
@@ -345,9 +460,32 @@ def render(card):
     L.append(f"┌─ {f}")
     verdict = "CLEAN" if (not card["dead_buttons"] and not card["js_errors"]
                           and not card["opening_wall"] and not card["dead_end"]
-                          and not card["inert_touches"]) else "NOTES"
+                          and not card["inert_touches"]
+                          and not [c for c in card["clipped_text"]
+                                   if not c.get("window")]) else "NOTES"
     L.append(f"│  verdict: {verdict}   clicks: {card['clicks']}   "
              f"end-reached: {'yes' if card['reached_end'] else 'no'}")
+    if card.get("clip_blind"):
+        L.append("│  ! CLIP FLOOR NOT RUN — studio-eyes/studio-eyes.py did not yield "
+                 "CLIP_PROBE. This card says nothing about clipped text; it did not look.")
+    boxes = [c for c in card["clipped_text"] if not c.get("window")]
+    windows = [c for c in card["clipped_text"] if c.get("window")]
+    if boxes:
+        L.append(f"│  ✗ CLIPPED TEXT ({len(boxes)}) — laid out, then thrown away:")
+        for c in boxes[:6]:
+            L.append(f"│      \"{c['text'][:34]}\" cut by {c['by']}px in {c['clipSel']} "
+                     f"({c['boxH']}px box, {c['needH']}px of content) · {c['state']}")
+    if windows:
+        # A WINDOW IS NOT SILENT EITHER. It does not block — a feed cropped by a phone
+        # frame is a prop, not a defect — but a gate that drops what it saw is a gate
+        # that decided for you. Named once per container, with the ratio that classed it.
+        seen = []
+        for c in windows:
+            k = c["clipSel"]
+            if k in seen: continue
+            seen.append(k)
+            L.append(f"│  · window (not a defect): {k} shows {c['boxH']}px of "
+                     f"{c['needH']}px · {c['state']}")
     if card["opening_wall"]:
         L.append("│  ✗ OPENING WALL — first control is a preference toggle, not the scene")
     if card["dead_buttons"]:
@@ -399,6 +537,23 @@ def self_test():
              '\'a line appeared. the end.\'">notice the television</button>'
              '<button onclick="document.body.style.fontSize=\'20px\'">Medium (20px)</button>'
              '</body>')
+    # FIFTH CANARY: the FLOK SHAPE. First paint is clean — the card is empty and
+    # collapsed. One click fills it and opens it onto a box too short to hold it.
+    # studio-eyes at first paint reports green on this file and is not wrong; it is
+    # looking at a state where nothing is clipped yet. If this canary passes, the
+    # crawler is measuring states, not just doors.
+    clipped = ('<!doctype html><style>'
+               'body{background:#10151c;color:#f2f6fb;font-family:system-ui}'
+               '.card{height:0;overflow:hidden;width:300px;border:1px solid #33465e}'
+               '.card.open{height:60px}'   # 60px box, ~76px of text: the Flok ratio (1.27)
+               '.fact{font-size:13px;line-height:1.4;padding:8px}'
+               '</style><body><h1>scene</h1>'
+               '<div class="card" id="c"><div class="fact" id="f"></div></div>'
+               '<button onclick="document.getElementById(\'f\').textContent='
+               '\'Unpredictable rewards drive the most persistent checking, the same '
+               'schedule that makes slot machines compulsive. The end.\';'
+               'document.getElementById(\'c\').className=\'card open\'">why does this work?</button>'
+               '</body>')
     ok = True
     for name, html, expect_dead in [("dead-canary", dead, True),
                                     ("clean-canary", clean, False)]:
@@ -428,8 +583,22 @@ def self_test():
     if v2 == "FAIL": ok = False
     print(f"  [{v2}] no-world regression: inert_touches={c2['inert_touches']} "
           "(expected 0 — additive check must be silent when no world is named)")
+    fp = os.path.join(tempfile.gettempdir(), "clipped-canary.html")
+    open(fp, 'w').write(clipped)
+    c3 = play(fp)
+    first_paint_clean = not any(x["state"] == "first paint" for x in c3["clipped_text"])
+    # must be classed a BOX, not a window — a window would not block and this defect must.
+    caught_later = any(x["state"] != "first paint" and not x.get("window")
+                       for x in c3["clipped_text"])
+    v3 = "PASS" if (caught_later and first_paint_clean and not c3.get("clip_blind")) else "FAIL"
+    if v3 == "FAIL": ok = False
+    print(f"  [{v3}] clipped-canary: clipped_text="
+          f"{[(x['state'], x['by'], 'window' if x.get('window') else 'box') for x in c3['clipped_text']]} "
+          "(expected 0 at first paint, >=1 after the click — proving the crawler "
+          "measures states, not just the door)")
     print("SELFTEST", "PASS — dead button caught, clean game cleared, inert touch caught, "
-          "no-world behaviour unchanged" if ok else "FAIL — do not trust results")
+          "no-world behaviour unchanged, clipped text caught in a state no "
+          "first-paint floor can reach" if ok else "FAIL — do not trust results")
     return 0 if ok else 1
 
 

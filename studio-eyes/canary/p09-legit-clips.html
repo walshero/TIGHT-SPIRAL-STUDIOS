@@ -1,0 +1,46 @@
+<!DOCTYPE html><html><head>
+<!-- a test fixture, not a game: the SVG below is a clip-floor trap, not scene art,
+     and the >50% image floor must not grade a fixture as a failed game. -->
+<meta name="tsp:surface" content="fixture">
+<style>
+/* FALSE-POSITIVE TRAP for floor 11. Four boxes that clip on purpose and are all correct.
+   If the clip floor HALTs any of these it is crying wolf, and a gate that cries wolf is
+   a gate people learn to route around — that is how floor.yml lost its teeth in July. */
+body{background:#10151c;color:#f2f6fb;font-family:system-ui;margin:0}
+.scene{padding:24px}
+.scene h1{color:#f2f6fb;font-size:28px}
+/* 1. a scroll WINDOW: off-view but reachable with a thumb */
+.feed{height:80px;width:300px;overflow-y:auto;background:#0e1620;border:1px solid #33465e;padding:8px}
+.feed p{color:#f2f6fb;font-size:14px;margin:0 0 10px}
+/* 2. a CLOSED disclosure: not hiding text, waiting */
+.drawer{max-height:0;overflow:hidden;width:300px}
+.drawer p{color:#f2f6fb;font-size:14px}
+/* 3. sr-only: written for a screen reader, deliberately not painted */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* 4. deliberate truncation: the ellipsis is a promise that there is more */
+.label{width:180px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+       color:#f2f6fb;font-size:14px;background:#0e1620;padding:6px}
+/* 5-8 added 2026-09-01 from the first corpus sweep. Each of these HALTed on the
+   floor's first draft and each was correct on the page. A false positive found in
+   the wild that does not become a canary is a false positive that comes back. */
+/* 5. a skip link parked above the origin until it is focused */
+.skip{position:absolute;top:-60px;left:0;background:#0e1620;color:#f2f6fb;padding:8px;
+      display:inline-flex;align-items:center;min-height:48px}
+.skip:focus{top:0}
+/* 6. a closed <details>: Chromium keeps the children laid out inside a 64px box */
+.step{background:#0e1620;border:1px solid #33465e;width:300px;overflow:hidden;padding:6px}
+.step summary{color:#f2f6fb;font-size:14px}
+.step p{color:#f2f6fb;font-size:14px}
+</style></head><body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="scene"><h1>The room is dark. A television is the only light.</h1>
+<div class="feed"><p>day 41 of the loaf. the crumb opened up.</p><p>best trail is the one nobody photographs.</p><p>found a box from 2009. not ok.</p></div>
+<div class="drawer"><p>The answer, once you have earned it.</p></div>
+<p class="sr">Engagement meter, 60 percent of target.</p>
+<div class="label">north_trail posted a very long caption that will not fit on one line</div>
+<details class="step"><summary>Step one</summary><p>Say the idea out loud, however rough it sounds to you right now.</p></details>
+<!-- 8. an SVG label: laid out on a viewBox, not a scroll box -->
+<svg width="300" height="60" viewBox="0 0 300 60"><rect width="300" height="60" fill="#0e1620"/><text x="8" y="34" fill="#f2f6fb" font-size="14">COMMUNITY &#183; PUBLIC WRITING</text></svg>
+<p id="main" style="color:#f2f6fb;font-size:14px">Main content starts here.</p>
+</div>
+</body></html>

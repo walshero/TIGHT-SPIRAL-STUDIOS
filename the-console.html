@@ -200,10 +200,22 @@ html.still .meter-fill{transition:none}
 .act-hint.good{color:var(--green)}
 .flip-wrap{width:100%;max-width:340px;margin:12px auto 0;perspective:1000px;transition:opacity .3s}
 .flip-wrap.locked{opacity:.3;pointer-events:none}
-.flip{position:relative;transform-style:preserve-3d;transition:transform .5s;cursor:pointer;min-height:68px}
+/* THE CARD SIZES TO ITS TALLEST FACE. It used to stack the two faces with
+   position:absolute;inset:0 over a min-height:68px box — so the card was ALWAYS
+   68px tall, however long the research on the back ran, and the answer to "why does
+   this work?" was sliced through the middle. Absolutely-positioned faces contribute
+   nothing to their container's height; grid-stacked ones do. Same 3D flip, but the
+   row is now max(front, back), so the text decides the box instead of the box
+   deciding how much text you get to read. */
+.flip{position:relative;transform-style:preserve-3d;transition:transform .5s;cursor:pointer;
+  min-height:0;display:grid;grid-template-columns:minmax(0,1fr)}
 html.still .flip{transition:none}
 .flip.flipped{transform:rotateY(180deg)}
-.flip-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;
+/* the 68px floor moved OFF .flip and onto the faces. .flip is the grid item the
+   collapse shrinks, and an item carrying a min-height cannot shrink — the locked
+   card stopped collapsing and started clipping its own front face instead. The
+   floor belongs to what is drawn, not to what animates. */
+.flip-face{grid-area:1/1;min-width:0;min-height:68px;backface-visibility:hidden;border-radius:14px;
   border:1px solid var(--edge);background:var(--panel-2);padding:12px 16px;display:flex;align-items:center;justify-content:center;gap:10px}
 .flip-front{color:var(--dim);font-size:14px;font-weight:700}
 .flip-back{transform:rotateY(180deg);flex-direction:column;align-items:flex-start;text-align:left}
@@ -241,10 +253,20 @@ html.still .flip{transition:none}
 #sc-train .meter-wrap{margin-bottom:7px}
 #sc-train .act-zone{min-height:56px}
 #sc-train .act-hint{margin-top:6px;min-height:18px;font-size:13px;line-height:1.34}
-#sc-train .flip-wrap{margin-top:7px;max-height:120px;overflow:hidden;transition:max-height .3s,margin .3s,opacity .3s}
 /* the "why does this work?" card is locked until you hit the target — collapse it while
-   locked so play fits the smallest screens, then it opens as the earned reveal. */
-#sc-train .flip-wrap.locked{max-height:0;margin-top:0;opacity:0}
+   locked so play fits the smallest screens, then it opens as the earned reveal.
+   THE COLLAPSE MUST NOT SURVIVE THE REVEAL. This was max-height:120px;overflow:hidden,
+   a number picked once against one font size — it clipped the reveal at every zoom
+   stop, and worse at se-a2. 0fr -> 1fr collapses just as smoothly and, when open,
+   the row IS the content: there is no ceiling left to grow into. */
+/* minmax(0,1fr), not the implicit auto column: an auto grid column sizes to the
+   face's MAX-CONTENT, so "Why does this work?" pushed the card 3px past its own
+   340px wrap and clipped its own front face. Same defect as the one being fixed,
+   turned on its side — found by the crawler on the first run after the fix. */
+#sc-train .flip-wrap{display:grid;grid-template-rows:1fr;grid-template-columns:minmax(0,1fr);
+  overflow:hidden;margin-top:7px;
+  transition:grid-template-rows .3s,margin .3s,opacity .3s}
+#sc-train .flip-wrap.locked{grid-template-rows:0fr;margin-top:0;opacity:0}
 #sc-train .big-btn.advance{margin-top:9px}
 
 /* ═══ STUDIO EYES v2 — RESERVED CHROME (grid row, never overlaps content) ═══ */

@@ -181,9 +181,15 @@ button{ font-family:var(--sans); }
 @media(min-width:600px){ .cards{ grid-template-columns:1fr 1fr; } }
 .flip{ perspective:1000px; background:none; border:none; padding:0; cursor:pointer; min-height:96px; }
 .flip:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; border-radius:12px; }
-.flipinner{ position:relative; width:100%; min-height:96px; transition:transform .55s; transform-style:preserve-3d; }
+/* THE CARD SIZES TO ITS TALLEST FACE. Stacking the faces with position:absolute over
+   a fixed min-height means the box is set by the SHORT face and the long one spills
+   past the card border — silently at 100%, and at WCAG 1.4.4's own 200% resize all
+   four cards here pushed their answer outside the frame. Grid-stacked faces share one
+   cell, so the row is max(front, back) and the text sets the box. Same fix, same day,
+   as the Flok research card (the-console.html). */
+.flipinner{ position:relative; width:100%; min-height:96px; display:grid; transition:transform .55s; transform-style:preserve-3d; }
 .flip.flipped .flipinner{ transform:rotateY(180deg); }
-.face{ position:absolute; inset:0; backface-visibility:hidden; border:2px solid var(--gold-br); border-radius:12px; padding:.8rem .9rem; display:flex; flex-direction:column; justify-content:center; }
+.face{ grid-area:1/1; min-width:0; backface-visibility:hidden; border:2px solid var(--gold-br); border-radius:12px; padding:.8rem .9rem; display:flex; flex-direction:column; justify-content:center; }
 .face.front{ background:var(--gold-soft); }
 .face.back{ background:var(--surface); transform:rotateY(180deg); }
 .face .t{ font:800 1rem/1.2 var(--serif); color:var(--gold); }
