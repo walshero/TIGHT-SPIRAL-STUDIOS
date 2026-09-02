@@ -100,35 +100,66 @@ jobs:
       # authority, and arming a new floor on a corpus with standing debt is how a tick
       # becomes something everyone scrolls past. Scoped to what the push changed, per
       # the cost ruling: a 40-click crawl across 115 surfaces is not a per-push expense.
+      # A STEP THAT CANNOT SEE MUST NOT REPORT SUCCESS. The first version of this
+      # swallowed git's stderr and emitted an empty list, so on run 1124 all three
+      # gates below printed "no changed surfaces", exited 0, and measured NOTHING —
+      # in green. The cause: actions/checkout is shallow (fetch-depth 1), so the
+      # push's BEFORE commit is not in the local object store and the diff failed.
+      # Fetching that ONE commit by SHA costs under a second and keeps the checkout
+      # cheap; a full-history checkout would pay for this on every job in the file.
+      # The three states are now distinguishable, which is the whole point: a clean
+      # push and a blind gate must never print the same thing.
       - name: Changed surfaces on this push
         id: changed
         run: |
           BEFORE='${{ github.event.before }}'
-          case "$BEFORE" in ''|0000000000000000000000000000000000000000) BEFORE=HEAD~1;; esac
-          CHANGED=$(git diff --name-only "$BEFORE" '${{ github.sha }}' -- '*.html' 2>/dev/null \
-                    | grep -v '^studio-eyes/canary/' || true)
-          echo "list<<EOF" >> "$GITHUB_OUTPUT"; echo "$CHANGED" >> "$GITHUB_OUTPUT"; echo "EOF" >> "$GITHUB_OUTPUT"
-          echo "changed surfaces:"; echo "${CHANGED:-  (none)}"
+          HEAD_SHA='${{ github.sha }}'
+          case "$BEFORE" in ''|0000000000000000000000000000000000000000) BEFORE='';; esac
+          RESOLVED=no; CHANGED=''
+          if [ -n "$BEFORE" ]; then
+            git fetch --depth=1 --no-tags origin "$BEFORE" || echo "  fetch of $BEFORE failed"
+            if git cat-file -e "${BEFORE}^{commit}" 2>/dev/null; then
+              RESOLVED=yes
+              CHANGED=$(git diff --name-only "$BEFORE" "$HEAD_SHA" -- '*.html' \
+                        | grep -v '^studio-eyes/canary/' || true)
+            fi
+          fi
+          {
+            echo "resolved=$RESOLVED"
+            echo "list<<EOF"; echo "$CHANGED"; echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+          if [ "$RESOLVED" = no ]; then
+            echo "::warning::COULD NOT RESOLVE THE CHANGED SET ($BEFORE..$HEAD_SHA)."
+            echo "COULD NOT RESOLVE THE CHANGED SET. The state-aware floors below did"
+            echo "NOT RUN. This is a BLIND run, not a clean one."
+          elif [ -z "$CHANGED" ]; then
+            echo "resolved the range; no .html surface changed on this push"
+          else
+            echo "changed surfaces:"; echo "$CHANGED"
+          fi
         continue-on-error: true
 
       - name: STUDIO EYES v3 — self-test (only when the auditor itself moved)
+        if: steps.changed.outputs.resolved == 'yes'
         run: |
-          git diff --name-only '${{ github.event.before }}' '${{ github.sha }}' 2>/dev/null \
+          git diff --name-only '${{ github.event.before }}' '${{ github.sha }}' \
             | grep -q '^studio-eyes/' || { echo "auditor unchanged — self-test skipped"; exit 0; }
           python3 studio-eyes/studio-eyes.py --self-test
         continue-on-error: true
 
       - name: STUDIO EYES v3 — JS/dynamic-state floors incl. CLIPPED TEXT (report)
+        if: steps.changed.outputs.resolved == 'yes'
         run: |
           FILES='${{ steps.changed.outputs.list }}'
-          [ -n "$FILES" ] || { echo "no changed surfaces"; exit 0; }
+          [ -n "$FILES" ] || { echo "no .html surface changed on this push"; exit 0; }
           python3 studio-eyes/studio-eyes.py --no-self-test $FILES
         continue-on-error: true
 
       - name: PLAYTHROUGH — clipped text in every state the crawler reaches (report)
+        if: steps.changed.outputs.resolved == 'yes'
         run: |
           FILES='${{ steps.changed.outputs.list }}'
-          [ -n "$FILES" ] || { echo "no changed surfaces"; exit 0; }
+          [ -n "$FILES" ] || { echo "no .html surface changed on this push"; exit 0; }
           python3 playthrough-agent.py $FILES
         continue-on-error: true
 
