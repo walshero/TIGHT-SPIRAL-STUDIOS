@@ -1,44 +1,78 @@
-# Playthrough Sweep — 2026-08-31
+# Playthrough Sweep — 2026-09-07
 
-**Run:** 2026-08-31T11:12Z · repo commit `b8516a2` · agent `playthrough-agent.py` (reporter, always exits 0 — never a deploy gate)
+**Run:** 2026-09-07T11:23Z · repo commit `2aaa91a` · agent `playthrough-agent.py` (reporter, always exits 0 — never a deploy gate)
 **Surfaces swept (5):** index.html · arcade.html · choose-your-leader-v7.html · choose-your-leader-v6.html · the-tell.html
-**Prior report:** none. `reports/playthrough-latest.md` returned HTTP 404 and no `reports/` directory exists on `main`.
+**Prior report:** `reports/playthrough-latest.md` @ 2026-08-31 (HTTP 200, 13,524 B) — first real diff in this lane.
 
-## Classification — BASELINE
+## Classification
 
-This is the first run of this lane. There is nothing to diff against, so **every finding below is BASELINE**, not NEW. Next week's run is the first that can say NEW / REPEAT / FIXED.
+- **NEW: 2** — v7 clipped text (3 lines); index.html JS error count drifted 8 → 9
+- **REPEAT: 5 finding lines** across 3 surfaces (index Studio dead · arcade Cabinet dead · arcade OFFLINE FLOOR · v7 DEAD BUTTONS 2 · v7 INERT TOUCHES 8)
+- **FIXED: 0** — nothing from 2026-08-31 has gone away
+- **CLEAN:** choose-your-leader-v6.html (clean both runs)
 
-- **NEW:** none (no prior record)
-- **REPEAT:** none (no prior record)
-- **FIXED:** none (no prior record)
-- **BASELINE findings:** 5 finding lines across 4 surfaces; 1 surface CLEAN
+---
 
-### Cross-check against the documented 2026-08-28 known state
+## NEW — the two lines worth your eyes
 
-The v7 known-issue note (eight inert touches — television, evening paper, telephone, doorway, bulletin, wall map — plus two dead buttons) reproduces **exactly**: `INERT TOUCHES (8)` on those six labels, `DEAD BUTTONS (2)`. So choose-your-leader-v7.html has **not drifted** since 2026-08-28. Treat those ten as REPEAT-in-spirit from next run onward; their disappearance is the FIXED signal to shout about.
+### 1. choose-your-leader-v7.html — CLIPPED TEXT (3), and it is text being thrown away
 
-## Findings at a glance
+```
+"The shelf"                        cut by 5px in div.walkbox (400px box, 417px of content) · after 'Walk the house'
+"The back room"                    cut by 5px in div.walkbox (400px box, 417px of content) · after 'Walk the house'
+"Touch the thing you were fixing"  cut by 5px in div.walkbox (400px box, 417px of content) · after 'Walk the house'
+```
 
-| Surface | Verdict | Finding lines | Baseline state |
-|---|---|---|---|
-| index.html | NOTES | DEAD BUTTONS (1): Studio · JS ERRORS (8) | not previously reported — worth eyes |
-| arcade.html | NOTES | DEAD BUTTONS (1): Cabinet · OFFLINE FLOOR (1 external request) | not previously reported |
-| choose-your-leader-v7.html | NOTES | DEAD BUTTONS (2) · INERT TOUCHES (8) in world `#roomStage` | matches documented 2026-08-28 state |
-| choose-your-leader-v6.html | CLEAN | none | clean |
-| the-tell.html | NOTES | 0 asserted findings; 14 controls flagged VERIFY BY EYE | not a defect claim |
+**Read this carefully before filing it as a regression — it is not one.** `choose-your-leader-v7.html`
+last changed on **2026-08-26** (commit `e7c8686`); it is byte-identical to the build the baseline swept.
+What changed is the *instrument*: the CLIPPED TEXT detector landed **2026-09-01** in commit `23bce7d`
+("Flok: the research card sizes to its text, not the other way round"), one day after the baseline run.
 
-### The two that would be NEW if we had a prior week
+So this is a **pre-existing defect newly visible**, not new breakage. That makes it more actionable, not
+less — it has been shipping since at least 2026-08-26 and nobody could see it. It is also the same
+defect class documented in `CLIPPED-TEXT-FLOOR-2026-09-01.md`: a fixed pixel number deciding how much
+text a reader gets. Three walk options in the walkbox lose their last 5px. Anyone reading at increased
+text size loses more, which is the part that matters.
 
-1. **index.html — 8 JS errors on the front door.** Three distinct undefined references: `start is not defined`, `onHasParentDirectory is not defined`, `addRow is not defined`. This is the studio's front door throwing on load-path interaction. Highest-value line in the sweep.
-2. **arcade.html — OFFLINE FLOOR breach.** One external request to `https://eclectic-youtiao-c065da.netlify.app/`. The arcade is not offline-clean; a student on a dead connection loses whatever that call feeds.
+### 2. index.html — JS errors 8 → 9 on the front door
 
-Also standing: the `Studio` button is dead on index.html and the `Cabinet` button is dead on arcade.html — the two halves of the same nav chrome, each dead on the other's page.
+Same three distinct undefined references as the baseline (`start is not defined`,
+`onHasParentDirectory is not defined`, `addRow is not defined`) — but one more thrown instance.
+`index.html` took three commits on **2026-09-01** (`1c21667` Mail Drop, `24cf8f7` bottom rail,
+`ab40b70` merge). The count moved with the build. Low severity per instance, but it is the studio's
+front door and the trend is the wrong direction.
 
-### Not findings
+## REPEAT — 5 finding lines, summarised not listed
 
-- the-tell.html's 14 no-DOM-change controls are reported by the agent as **likely select-state** (canvas/style redraw), explicitly *not asserted dead*. They need a human eye, not a fix ticket.
-- choose-your-leader-v6.html logged one click timeout on `Sound` (visible but not clickable in place) and still scored CLEAN.
-- The v7 line `world '#roomStage' resolved from tsp-worlds.json` is expected and correct — the sidecar world file doing its job.
+Everything documented at 2026-08-28 and confirmed at 2026-08-31 reproduces exactly:
+
+| Surface | Repeat finding lines |
+|---|---|
+| index.html | DEAD BUTTONS (1): Studio |
+| arcade.html | DEAD BUTTONS (1): Cabinet · OFFLINE FLOOR (1 external request, eclectic-youtiao-c065da.netlify.app) |
+| choose-your-leader-v7.html | DEAD BUTTONS (2) · INERT TOUCHES (8) in world `#roomStage` |
+
+The v7 known state — eight inert touches (television, evening paper, telephone, doorway, bulletin,
+wall map) plus two dead buttons — **reproduces exactly, ten of ten**. v7 has still not drifted. Their
+disappearance remains the FIXED signal worth shouting about; it has not happened yet.
+
+## FIXED — none
+
+No finding from 2026-08-31 has cleared. Stated plainly so the absence is on the record.
+
+## Run notes
+
+- **The five-surface invocation did not finish in one pass.** `index`, `arcade`, `v7` and `v6`
+  completed; the run hit a 9-minute ceiling before `the-tell.html`. `the-tell.html` was swept in a
+  second invocation of the same agent, exit 0, and its card is reproduced below unedited. All five
+  surfaces are covered; the cards are simply from two invocations, not one.
+- Click depth rose on three surfaces versus baseline (v7 23 → 40, v6 20 → 40, the-tell 30 → 40).
+  Deeper traversal is part of why the v7 walkbox state was reached this week.
+- `world '#roomStage' resolved from tsp-worlds.json` on v7 — expected and correct, the sidecar doing
+  its job.
+- `the-tell.html`'s 14 no-DOM-change controls are again reported as **likely select-state**
+  (canvas/style redraw), explicitly *not asserted dead*. Unchanged from baseline. Not a fix ticket.
+- `choose-your-leader-v6.html` again logged one click timeout on `Sound` and still scored CLEAN.
 
 ## Raw agent cards
 
@@ -48,7 +82,7 @@ PLAYTHROUGH AGENT — 5 game(s)
 ┌─ index.html
 │  verdict: NOTES   clicks: 40   end-reached: yes
 │  ✗ DEAD BUTTONS (1): Studio
-│  ✗ JS ERRORS (8): start is not defined | onHasParentDirectory is not defined | addRow is not defined
+│  ✗ JS ERRORS (9): start is not defined | onHasParentDirectory is not defined | addRow is not defined
 │  · 'Cabinet' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
 │  · 'Flok
 
@@ -70,6 +104,9 @@ Reading the mo' navigates to another page (expected for a nav link) — returnin
 │  · 'Found
 
 A letter, a paten' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
+│  · 'Mail Drop
+
+Nib has read ' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
 │  · 'Cliché Hunter
 
 A cliché ' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
@@ -150,8 +187,6 @@ Every' navigates to another page (expected for a nav link) — returning to this
 │  · 'ADVANTAGE RELOCATION · M' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
 │  · 'THE STUDIO ITSELF
 The Ru' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
-│  · 'The Runbook & the Gates
-' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
 └────────────────────────────────────────
 
 ┌─ arcade.html
@@ -182,7 +217,11 @@ GUES' navigates to another page (expected for a nav link) — returning to this 
 └────────────────────────────────────────
 
 ┌─ choose-your-leader-v7.html
-│  verdict: NOTES   clicks: 23   end-reached: yes
+│  verdict: NOTES   clicks: 40   end-reached: yes
+│  ✗ CLIPPED TEXT (3) — laid out, then thrown away:
+│      "The shelf" cut by 5px in div.walkbox (400px box, 417px of content) · after 'Walk the house'
+│      "The back room" cut by 5px in div.walkbox (400px box, 417px of content) · after 'Walk the house'
+│      "Touch the thing you were fixing" cut by 5px in div.walkbox (400px box, 417px of content) · after 'Walk the house'
 │  ✗ DEAD BUTTONS (2): The shift
 Ask for the hours you need
 The, The back room
@@ -192,10 +231,76 @@ Touch the thing you were f
 │  · world '#roomStage' resolved from tsp-worlds.json — this build does not declare its own; a sidecar world is never silent
 │  · 'Day' is an already-active toggle — skipped, not dead
 │  · 'Text A' is an already-active toggle — skipped, not dead
+│  · 'The television' is an already-active toggle — skipped, not dead
+│  · 'The television' is an already-active toggle — skipped, not dead
+│  · 'The television' is an already-active toggle — skipped, not dead
+│  · 'The television' is an already-active toggle — skipped, not dead
+│  · 'The television' is an already-active toggle — skipped, not dead
+│  · 'The television' is an already-active toggle — skipped, not dead
+│  · 'The television' is an already-active toggle — skipped, not dead
+│  · 'The television' is an already-active toggle — skipped, not dead
+│  · 'The television' is an already-active toggle — skipped, not dead
+│  · 'The television' is an already-active toggle — skipped, not dead
+│  · 'The television' is an already-active toggle — skipped, not dead
+│  · 'The evening paper' is an already-active toggle — skipped, not dead
+│  · 'The evening paper' is an already-active toggle — skipped, not dead
+│  · 'The evening paper' is an already-active toggle — skipped, not dead
+│  · 'The evening paper' is an already-active toggle — skipped, not dead
+│  · 'The evening paper' is an already-active toggle — skipped, not dead
+│  · 'The evening paper' is an already-active toggle — skipped, not dead
+│  · 'The evening paper' is an already-active toggle — skipped, not dead
+│  · 'The evening paper' is an already-active toggle — skipped, not dead
+│  · 'The evening paper' is an already-active toggle — skipped, not dead
+│  · 'The evening paper' is an already-active toggle — skipped, not dead
+│  · 'The evening paper' is an already-active toggle — skipped, not dead
+│  · 'The telephone' is an already-active toggle — skipped, not dead
+│  · 'The telephone' is an already-active toggle — skipped, not dead
+│  · 'The telephone' is an already-active toggle — skipped, not dead
+│  · 'The telephone' is an already-active toggle — skipped, not dead
+│  · 'The telephone' is an already-active toggle — skipped, not dead
+│  · 'The telephone' is an already-active toggle — skipped, not dead
+│  · 'The telephone' is an already-active toggle — skipped, not dead
+│  · 'The telephone' is an already-active toggle — skipped, not dead
+│  · 'The telephone' is an already-active toggle — skipped, not dead
+│  · 'The telephone' is an already-active toggle — skipped, not dead
+│  · 'The telephone' is an already-active toggle — skipped, not dead
+│  · 'The doorway' is an already-active toggle — skipped, not dead
+│  · 'The doorway' is an already-active toggle — skipped, not dead
+│  · 'The doorway' is an already-active toggle — skipped, not dead
+│  · 'The doorway' is an already-active toggle — skipped, not dead
+│  · 'The doorway' is an already-active toggle — skipped, not dead
+│  · 'The doorway' is an already-active toggle — skipped, not dead
+│  · 'The doorway' is an already-active toggle — skipped, not dead
+│  · 'The doorway' is an already-active toggle — skipped, not dead
+│  · 'The doorway' is an already-active toggle — skipped, not dead
+│  · 'The doorway' is an already-active toggle — skipped, not dead
+│  · 'The doorway' is an already-active toggle — skipped, not dead
+│  · 'The bulletin' is an already-active toggle — skipped, not dead
+│  · 'The bulletin' is an already-active toggle — skipped, not dead
+│  · 'The bulletin' is an already-active toggle — skipped, not dead
+│  · 'The bulletin' is an already-active toggle — skipped, not dead
+│  · 'The bulletin' is an already-active toggle — skipped, not dead
+│  · 'The bulletin' is an already-active toggle — skipped, not dead
+│  · 'The bulletin' is an already-active toggle — skipped, not dead
+│  · 'The bulletin' is an already-active toggle — skipped, not dead
+│  · 'The bulletin' is an already-active toggle — skipped, not dead
+│  · 'The bulletin' is an already-active toggle — skipped, not dead
+│  · 'The bulletin' is an already-active toggle — skipped, not dead
+│  · 'The wall map' is an already-active toggle — skipped, not dead
+│  · 'The wall map' is an already-active toggle — skipped, not dead
+│  · 'The wall map' is an already-active toggle — skipped, not dead
+│  · 'The wall map' is an already-active toggle — skipped, not dead
+│  · 'The wall map' is an already-active toggle — skipped, not dead
+│  · 'The wall map' is an already-active toggle — skipped, not dead
+│  · 'The wall map' is an already-active toggle — skipped, not dead
+│  · 'The wall map' is an already-active toggle — skipped, not dead
+│  · 'The wall map' is an already-active toggle — skipped, not dead
+│  · 'The wall map' is an already-active toggle — skipped, not dead
+│  · 'The wall map' is an already-active toggle — skipped, not dead
 └────────────────────────────────────────
 
 ┌─ choose-your-leader-v6.html
-│  verdict: CLEAN   clicks: 20   end-reached: yes
+│  verdict: CLEAN   clicks: 40   end-reached: yes
 │  · 'Home' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
 │  · 'Default' is an already-active toggle — skipped, not dead
 │  · 'A' is an already-active toggle — skipped, not dead
@@ -207,11 +312,22 @@ On' is an already-active toggle — skipped, not dead
 On' is an already-active toggle — skipped, not dead
 │  · click timed out on 'Sound' — visible but not clickable in place
 │  · 'Back' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
+│  · 'Sound' is an already-active toggle — skipped, not dead
+│  · 'Sound' is an already-active toggle — skipped, not dead
+│  · 'Sound' is an already-active toggle — skipped, not dead
+│  · 'Sound' is an already-active toggle — skipped, not dead
+│  · 'Sound' is an already-active toggle — skipped, not dead
+│  · 'Sound' is an already-active toggle — skipped, not dead
+│  · 'Sound' is an already-active toggle — skipped, not dead
+│  · 'Sound' is an already-active toggle — skipped, not dead
+│  · 'Sound' is an already-active toggle — skipped, not dead
+│  · 'Sound' is an already-active toggle — skipped, not dead
+│  · 'Sound' is an already-active toggle — skipped, not dead
 │  nothing mechanical to fix — ready for founder taste-play
 └────────────────────────────────────────
 
 ┌─ the-tell.html
-│  verdict: NOTES   clicks: 30   end-reached: yes
+│  verdict: NOTES   clicks: 40   end-reached: yes
 │  ? 14 controls showed no DOM change on click — LIKELY select-state (canvas/style redraw); VERIFY BY EYE, not asserted dead
 │  · 'Studio' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
 │  · 'Cabinet' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
