@@ -18,6 +18,7 @@
 #   9  number sense / layout         number-sense-gate.py    (flat, zero tolerance, 2026-08-11)
 #  10  contrast, every route+mode    contrast-sweep.py       (flat, scoped to dark-mode pages, 2026-08-11)
 #  11  intent / spec + audience      intent-gate.py          (presence ratchet + contradiction flat, 2026-08-22)
+#  12  stored state that rotted     stale-fuse.py           (REPORT, not armed — arm it green, 2026-09-12)
 #
 # Tick 11 added 2026-08-22, and it is the first tick that grades the BELT'S OWN BLIND
 # SPOT rather than a surface. Ticks 1-10 are all artifact-quality checks. Seven wrong
@@ -138,7 +139,7 @@ fi
 fail=0
 echo "======================================================================"
 if [ "$MODE" = file ]; then
-  echo "STUDIO BELT  ·  PREFLIGHT  ·  $(printf '%s' "$CHANGED" | grep -c . ) file(s)  ·  all 11 ticks"
+  echo "STUDIO BELT  ·  PREFLIGHT  ·  $(printf '%s' "$CHANGED" | grep -c . ) file(s)  ·  all 12 ticks"
 else
   echo "STUDIO BELT  ·  canon = hub@${STUDIO_CANON_SHA:-unknown}  ·  target = $(basename "$(pwd)")"
 fi
@@ -163,6 +164,61 @@ if [ -n "$_remote" ]; then
   REPO="$(basename "${_remote%.git}")"
 fi
 
+# ── carried() ─────────────────────────────────────────────────────────────────
+# A BASELINE MUST ANNOUNCE ITSELF ON EVERY RUN.
+#
+# Added 2026-09-12, closing the no-look/no-teeth lane. A ratchet buys teeth by
+# carrying today's debt so only NEW debt refuses — and the instant that carried
+# debt stops being printed, the ratchet has rebuilt the blindness it was invented
+# to escape. Measured that day: 7,405 findings carried across 629 surface-slots
+# in 11 baselines (type 4,171 · voice 2,443 · contrast 248 · fingers 194 · rest
+# smaller), every one frozen 2026-08-23, and TEN of the eleven were announced by
+# nothing. A tick passing over 4,171 carried findings and a tick passing over
+# none printed the same word: "pass".
+#
+# The first count taken this session said 4,613. It was wrong low, because it
+# read `counts`/`files` and several baselines key their debt on `debt`. Even the
+# measurement of the invisible debt was itself a no-look. This helper reads all
+# three keys; that is why it exists rather than a number in a document.
+#
+# That is the same defect as a gate that did not look reporting clean — absence
+# and cleanliness sharing one representation, one altitude up.
+#
+# Prints size and age. Changes no verdict. Tick 12 is what says whether the
+# snapshot still describes the corpus at all.
+carried() {   # carried <baseline.json> <noun>
+  python3 - "$BELT_DIR/$1" "$2" <<'PYCARRIED'
+import json, sys, os, datetime
+bf, noun = sys.argv[1], sys.argv[2]
+name = os.path.basename(bf)
+if not os.path.exists(bf):
+    print(f"        carrying: no {name} — this tick baselines NOTHING"); sys.exit(0)
+try:
+    d = json.load(open(bf))
+except Exception:
+    print(f"        carrying: {name} UNREADABLE — its exemptions are UNKNOWN, not zero"); sys.exit(0)
+c = d.get("counts") or d.get("files") or d.get("debt") or {}
+if isinstance(c, dict):
+    n, tot = len(c), sum(v for v in c.values() if isinstance(v, int))
+elif isinstance(c, list):
+    n, tot = len(c), len(c)
+else:
+    n, tot = 0, 0
+stamp = (d.get("_fuse") or {}).get("generated") or d.get("frozen") or d.get("created") or ""
+age = ""
+if stamp:
+    try:
+        days = (datetime.date.today() - datetime.date.fromisoformat(str(stamp)[:10])).days
+        age = f", frozen {str(stamp)[:10]} ({days}d ago)"
+    except Exception:
+        age = f", frozen {stamp}"
+if tot or n:
+    print(f"        carrying: {tot} {noun} across {n} surface(s){age} — may only shrink")
+else:
+    print(f"        carrying: nothing{age}")
+PYCARRIED
+}
+
 # TICK 1 — accessibility floor (comfort-gate: real-pixel contrast · dark · offline · no emoji)
 echo; echo "-- tick 1: accessibility floor (comfort-gate) --"
 if [ -n "$SURFACES" ] && [ -f "$BELT_DIR/comfort-gate.py" ]; then
@@ -173,6 +229,7 @@ if [ -n "$SURFACES" ] && [ -f "$BELT_DIR/comfort-gate.py" ]; then
     else echo "  HALT  $f"; grep -iE 'HALT|emoji|contrast|light-on' /tmp/cg.out | sed 's/^/        /' | head -6; fail=1; fi
   done <<< "$SURFACES"
 else echo "  (no HTML surfaces / gate not mounted — skipped)"; fi
+carried comfort-baseline.json "contrast finding(s)"
 
 # TICK 2 — student attribution standard (mechanical: a course code must not carry a year or section token)
 # RATCHETED 2026-08-08 (was flat). Founder's call, re-coupling deploy to the belt: "real
@@ -226,6 +283,8 @@ if [ -n "$SURFACES" ] && [ -f "$BELT_DIR/preship-gate-v4.py" ]; then
     if python3 "$BELT_DIR/preship-gate-v4.py" --ratchet --repo="$REPO" "$f" >/tmp/pg.out 2>&1; then echo "  pass  $f"
     else echo "  HALT  $f"; grep -E '^\s+H-|^\s+E1' /tmp/pg.out | sed 's/^/        /' | head -6; fail=1; fi
   done <<< "$SURFACES"
+  carried floor-baseline.json "render finding(s)"
+  carried type-baseline.json "type finding(s)"
 else echo "  (no HTML surfaces / gate not mounted — skipped)"; fi
 
 # TICK 4 — founder voice (founder ruling 2026-08-05: "the general voice here is not mine")
@@ -236,6 +295,7 @@ if [ -n "$SURFACES" ] && [ -f "$BELT_DIR/studio-voice-gate.py" ]; then
     if python3 "$BELT_DIR/studio-voice-gate.py" --ratchet --repo="$REPO" "$f" >/tmp/vg.out 2>&1; then echo "  pass  $f"
     else echo "  HALT  $f"; grep -E 'HALT|dash' /tmp/vg.out | sed 's/^/        /' | head -6; fail=1; fi
   done <<< "$SURFACES"
+  carried voice-baseline.json "unmarked dash(es)"
 else echo "  (no HTML surfaces / gate not mounted — skipped)"; fi
 
 # TICK 5 — the entry paint: scene-first, ONE invitation (locked 2026-06-27 / 2026-07-12)
@@ -248,7 +308,7 @@ elif ! python3 -c "import playwright" >/dev/null 2>&1; then
   echo "  SKIPPED LOUD — playwright absent, the entry gate is BLIND. Not a pass."
 else
   if python3 "$BELT_DIR/one-thing-gate.py" --ratchet --repo="$REPO" $SURFACES >/tmp/ot.out 2>&1; then
-    echo "  pass  every entry clears the ratchet"
+    echo "  pass  every entry clears the ratchet"; carried one-thing-baseline.json "entry finding(s)"
   else
     echo "  HALT  an entry regressed:"; grep -E '^\s+\[X\]|SHIP-BLOCK' /tmp/ot.out | sed 's/^/        /' | head -10; fail=1
   fi
@@ -299,6 +359,7 @@ for k,v,w in bad: print(f"  HALT  {k}: {v} untouchable finding(s), baseline {w} 
 sys.exit(1 if bad else 0)
 PYSF
   then echo "  pass  no new untouchable targets"; else fail=1; fi
+  carried fingers-baseline.json "untouchable target(s)"
 fi
 
 # TOMBSTONE - OLD TICK 7 (source-parsing touch gate). Retired 2026-08-08 when the
@@ -428,6 +489,45 @@ else
   else
     echo "  HALT  a build does not know what it is for:"
     grep -E '^   (HALT|NEW)' /tmp/ig.out | sed 's/^   /        /' | head -10; fail=1
+  fi
+fi
+
+# TICK 12 — stored state that knows when it rotted (stale-fuse)
+# MOUNTED 2026-09-12, closing the no-look/no-teeth lane.
+#
+# stale-fuse.py was built 2026-08-17 on the founder ruling "Go. configure with
+# teeth." It works: its self-test passes, `--verify --all` exits 1 on registry
+# drift, and every one of the eleven baselines above carries the _fuse it stamped.
+# It was mounted on NOTHING. Belt: 0 references. floor.yml: 0 references. The
+# tool built to make stale state loud was itself the quietest thing in the repo —
+# the third recorded instance of "a gate not on the belt does not run".
+#
+# REPORT, NOT ARMED, AND THE REASON IS THE RULE THIS LANE CLOSED ON:
+# arm a gate green or do not arm it. On the day this mounted, `--verify --all`
+# found 2 REGISTRY files stale (canon-manifest.json, canon-vocab.json, both
+# generated 2026-08-27) and all 11 baselines drifted. Six ticks above were already
+# red on every push. A seventh red tick on a belt nobody can get green does not add
+# teeth, it adds noise — and noise is precisely how this belt lost its teeth in
+# July. So it prints, loudly, and it does NOT say "pass".
+#
+# ARM IT (add `fail=1` to the non-zero branch below) THE DAY THE BELT CAN BE
+# GREEN. That is the trigger, recorded so it is not forgotten. Registry drift is
+# the cheapest of the seven to clear — the output names the regenerate command for
+# each — but canon-manifest is CURATED, and re-stamping it to buy green without a
+# human deciding what the three new scripts are would be manufacturing a pass.
+# That call is the founder's.
+echo; echo "-- tick 12: stored state that knows when it rotted (stale-fuse) --"
+if [ ! -f "$BELT_DIR/stale-fuse.py" ]; then
+  echo "  SKIPPED LOUD — stale-fuse.py not mounted. Baseline freshness is UNKNOWN. Not a pass."
+else
+  python3 "$BELT_DIR/stale-fuse.py" --verify --all >/tmp/sf12.out 2>&1; _fuse_rc=$?
+  grep -E '^  (STALE-HALT|drifted|NO FUSE)' /tmp/sf12.out | sed 's/^/      /' | head -14
+  if [ "$_fuse_rc" -ne 0 ]; then
+    echo "  REPORTED, NOT ARMED — a REGISTRY describes a corpus that has moved."
+    echo "                        This is NOT a pass. It does not block yet, by the"
+    echo "                        arming rule in this tick's comment."
+  else
+    echo "  pass  every registry still describes the corpus it names"
   fi
 fi
 
