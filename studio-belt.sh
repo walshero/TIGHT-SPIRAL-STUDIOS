@@ -164,6 +164,49 @@ if [ -n "$_remote" ]; then
   REPO="$(basename "${_remote%.git}")"
 fi
 
+# THE RATCHET KEY IS CASE-SENSITIVE AND THE CHECKOUT NAME IS NOT.
+#
+# Found 2026-09-12. Every baseline keys its debt "<REPO>/<file>", and REPO comes
+# from the checkout. GitHub serves the same repo under any casing, so a clone from
+# .../tight-spiral-studios derives a key that never matches TIGHT-SPIRAL-STUDIOS/…
+# and EVERY ratchet then reports EVERY carried finding as new debt. Measured that
+# day on the same file, same gate, changing only the casing: HALT vs PASS. Locally
+# the belt showed ticks 3 and 4 red across 44 and 84 surfaces; in CI, which checks
+# out the canonical casing, both are green across 116.
+#
+# This is the other half of the lane's defect. A gate that cannot find its baseline
+# does not go quiet — it cries wolf on everything, and a gate that fires on
+# everything has told you nothing. Same collapse, opposite sign: "carried" and
+# "new" sharing one representation.
+#
+# So: adopt the casing the baselines actually use, say so when it differs, and when
+# NOTHING matches, say THAT loudly rather than printing a wall of phantom regressions
+# that reads like a broken corpus.
+_canon_repo="$(python3 - "$BELT_DIR" "$REPO" <<'PYREPO'
+import json, glob, os, sys
+belt, repo = sys.argv[1], sys.argv[2]
+pref = set()
+for f in glob.glob(os.path.join(belt, '*baseline*.json')):
+    try: d = json.load(open(f))
+    except Exception: continue
+    for c in (d.get('counts'), d.get('files'), d.get('debt'), d):
+        if isinstance(c, dict):
+            for k in c:
+                if isinstance(k, str) and '/' in k and not k.startswith('_'):
+                    pref.add(k.split('/', 1)[0])
+for p in sorted(pref):
+    if p.lower() == repo.lower():
+        print(p); break
+PYREPO
+)"
+if [ -n "$_canon_repo" ] && [ "$_canon_repo" != "$REPO" ]; then
+  echo "  note  ratchet key: '$REPO' -> '$_canon_repo' (adopting baseline casing)"
+  REPO="$_canon_repo"
+elif [ -z "$_canon_repo" ]; then
+  echo "  WARNING — no baseline key matches repo '$REPO'. Every ratchet below will"
+  echo "            report CARRIED debt as NEW. That is a cry-wolf run, not a red one."
+fi
+
 # ── carried() ─────────────────────────────────────────────────────────────────
 # A BASELINE MUST ANNOUNCE ITSELF ON EVERY RUN.
 #

@@ -121,17 +121,47 @@ broke it in the same push. A rule you apply only when it is convenient is a pref
 
 ## The open quote, for whoever takes the next lane
 
-Going green is one job with a known shape, not an open-ended one:
+**CORRECTED 2026-09-12, after this document's first version was wrong about it.**
 
-| red tick | what it is | cheapest honest path |
+The first version of this table said seven red ticks, put 44 surfaces under the image
+floor and 84 under the voice floor, and concluded that two of them "need a founder scope
+ruling". **There is no scope ruling.** Ticks 3 and 4 are GREEN in CI, 116 surfaces each.
+
+The false numbers came from running the belt in this container, where the clone is
+`.../tight-spiral-studios` and every baseline keys its debt `TIGHT-SPIRAL-STUDIOS/<file>`.
+GitHub serves the same repo under any casing; the ratchet key is case-sensitive. So every
+carried finding read as new debt. Same file, same gate, changing only the casing: **HALT
+vs PASS.** CI checks out the canonical casing and never saw it.
+
+That is this lane's own defect, third sign, caught inside the document written to close
+the lane: a gate that cannot find its baseline does not go quiet — it cries wolf on
+everything, and a gate that fires on everything has told you nothing. "Carried" and "new"
+were sharing one representation. `studio-belt.sh` now adopts the baseline's casing, says
+so when it differs, and says **loudly** when nothing matches instead of printing a wall of
+phantom regressions that reads like a broken corpus.
+
+### The real red set — CI run 1128, main @ `1059695`, 2026-09-07
+
+| red tick | what is actually failing | size |
 |---|---|---|
-| 12 · stale-fuse | 2 registries stale since 08-27 | a human declares the 3 new scripts, then re-stamp |
-| 11 · intent | builds with no `spec-source` / `audience` meta | add the two metas, or baseline them deliberately |
-| 10 · contrast | 1 new failing element, `funnybonies/index.html` | fix the element |
-| 5 · entry paint | 4 surfaces SHIP-BLOCK | 4 entry-screen fixes |
-| 3 · image floor | 44 surfaces under the 50% floor | the largest; needs a founder scope call |
-| 4 · voice | 84 surfaces, 42 NEW | needs a founder scope call |
-| 2 · attribution | 1 NEW course credit | one line |
+| 1 · comfort-gate | `funnybonies/index.html`, `index.html` | 2 surfaces |
+| 2 · attribution | one NEW course credit carrying a year/section token | 1 line |
+| 5 · entry paint | `en195-hub` · `enjambment-skins` · `floor-status` · `funnybonies/index` | 4 surfaces |
+| 10 · contrast sweep | `funnybonies/index.html`, 1 failing element, baseline 0 | 1 element |
+| 11 · intent | 3 builds with no `spec-source` / `audience` meta | 6 metas |
+| 12 · stale-fuse | 2 registries stale since 08-27 *(reported, not armed)* | 1 human call |
 
-Three of those are single edits. Two need a scope ruling. The belt cannot mean anything until
-that list is empty, and **every gate this lane built is worth exactly nothing until it is.**
+**`funnybonies/index.html` is in three of the five.** `index.html` is in one more. The belt
+is not red because the corpus is broken; it is red because one recent build is, plus three
+entry screens, six missing meta tags and a single credit line.
+
+Going green is a morning's work by one person. It requires **no ruling, no scope
+negotiation, and no re-baselining** — which is the opposite of what the first version of
+this document said, and the reason it is worth saying twice: *the estimate that says a
+job is too big to start deserves the same verification as the finding that says a build
+is broken.* This one was wrong because a tool measured the wrong thing quietly, which is
+the sentence this whole lane is about.
+
+Until that list is empty, every gate this lane built is worth nothing — including the
+clipped-text floor that found a real defect in `choose-your-leader-v7` on 09-07 and has
+sat unfixed since.
