@@ -254,13 +254,37 @@ html.still .flip{transition:none}
 .rankcard .title{font-size:clamp(30px,8vw,46px);font-weight:900;margin:14px 0 6px;line-height:1}
 .rankcard .of{color:var(--dim);font-size:15px;font-weight:600}
 .rankcard .star{font-size:56px;line-height:1;margin-bottom:10px;color:var(--amber)}
-.tele{width:100%;max-width:380px;display:grid;gap:12px;margin:22px auto 0}
-.tele-row{background:var(--panel);border:1px solid var(--edge);border-radius:16px;padding:18px;display:flex;justify-content:space-between;align-items:center;text-align:left}
-.tele-row .what{color:var(--dim);font-size:14px;font-weight:700;max-width:18ch}
-.tele-row .num{font-size:clamp(30px,9vw,44px);font-weight:900;color:var(--phos-ink);font-variant-numeric:tabular-nums}
-.tele-row.warn .num{color:var(--amber)}
+/* ══ TWO CONSTRUCTS, NEVER BLURRED — Horvath, the studio's measurement
+   constitution, applied to screen grammar (panel 2026-09-13) ══════════════
+   Flok has exactly the two constructs the CYL bible names, and it was painting
+   them the same:
+     1. THE DESCENT      what YOU did. Measured. taps, rewards, screens, alerts.
+     2. THE DISPLACEMENT what the machine did. Authored. the meter, the cohort,
+                         the rank ladder.
+   Both were --phos-ink teal in tabular numerals on the same panel card, so the
+   screen that says "it measured you" was dressed exactly like the screen that
+   measured the cohort. The player could not tell which number was about them.
+   Worse, two of the four rows carried .warn amber with no stated rule — a
+   grammar with no grammar.
+   Now: teal is the machine's colour and nothing else. Your numbers are --ink,
+   plain, uncelebrated. The two languages meet exactly once, at the turn. */
+.tele{width:100%;max-width:380px;display:grid;gap:10px;margin:22px auto 0}
+.tele-row{background:var(--panel);border:1px solid var(--edge);border-radius:16px;padding:16px 18px;display:flex;justify-content:space-between;align-items:baseline;gap:14px;text-align:left}
+.tele-row .what{color:var(--dim);font-size:14px;font-weight:700;max-width:20ch;text-wrap:pretty}
+.tele-row .num{font-size:clamp(28px,8vw,40px);font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1}
+
+/* THE LESSON IS THE RATIO, NOT THE ROWS. 14 taps and 3 rewards were two
+   unrelated facts in two boxes; the variable-ratio schedule — the whole thing
+   lever 1 teaches — lives in the relationship between them, and the screen
+   had thrown the relationship away. One card, both numbers, the ratio named. */
+.tele-pair{background:var(--panel);border:1px solid var(--edge);border-radius:16px;padding:16px 18px;text-align:left}
+.tele-pair .line{display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+.tele-pair .what{color:var(--dim);font-size:14px;font-weight:700}
+.tele-pair .num{font-size:clamp(28px,8vw,40px);font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1}
+.tele-pair .line+.line{margin-top:8px;padding-top:10px;border-top:1px solid var(--edge)}
+.tele-pair .read{color:var(--ink);font-size:13px;font-weight:700;margin-top:12px;text-wrap:pretty;opacity:.92}
 .reveal-line{color:var(--ink);font-size:clamp(18px,5vw,23px);font-weight:800;line-height:1.4;max-width:26ch;margin:26px auto 0}
-.big-glyph{font-size:52px;color:var(--amber)}
+.big-glyph{font-size:44px;color:var(--dim);opacity:.7}
 .tiny{color:var(--dim);font-size:11px;margin-top:20px;letter-spacing:.04em}
 .job-meter{width:100%;max-width:320px;margin:8px auto 30px}
 .job-line{color:var(--ink);font-size:clamp(17px,4.8vw,21px);font-weight:800;margin-bottom:14px}
@@ -551,10 +575,13 @@ html.still .act-btn,html.still .knob{transition:none}
   <div class="big-glyph" aria-hidden="true">&#9680;</div>
   <p class="reveal-line">While you trained the machine, it measured you.</p>
   <div class="tele">
-    <div class="tele-row"><span class="what">Times you tapped Boost</span><span class="num" id="tTaps">0</span></div>
-    <div class="tele-row warn"><span class="what">Rewards you actually got</span><span class="num" id="tRewards">0</span></div>
+    <div class="tele-pair">
+      <div class="line"><span class="what">You tapped Boost</span><span class="num" id="tTaps">0</span></div>
+      <div class="line"><span class="what">It paid off</span><span class="num" id="tRewards">0</span></div>
+      <p class="read" id="tRatio"></p>
+    </div>
     <div class="tele-row"><span class="what">Screens you scrolled past the end</span><span class="num" id="tScreens">0</span></div>
-    <div class="tele-row warn"><span class="what">Alerts you fired at the cohort</span><span class="num" id="tAlerts">0</span></div>
+    <div class="tele-row"><span class="what">Alerts you fired at the cohort</span><span class="num" id="tAlerts">0</span></div>
   </div>
   <p class="reveal-line" style="color:var(--amber)">The cohort was people like you.</p>
   <button class="big-btn ghost" type="button" onclick="restart()" style="margin-top:26px">Start over</button>
@@ -858,6 +885,14 @@ function afterRank(){
   else{
     document.getElementById('tTaps').textContent=T.taps;
     document.getElementById('tRewards').textContent=T.rewards;
+    // name the schedule the player just lived through, in their own numbers
+    var r=document.getElementById('tRatio');
+    if(T.rewards>0&&T.taps>0){
+      r.textContent='About one in '+Math.max(2,Math.round(T.taps/T.rewards))
+        +'. That is the schedule you were taught to build.';
+    }else if(T.taps>0){
+      r.textContent='It never paid off. You kept tapping anyway.';
+    }else{ r.textContent=''; }
     document.getElementById('tScreens').textContent=T.screens;
     document.getElementById('tAlerts').textContent=T.alerts;
     go('flip-seat');
