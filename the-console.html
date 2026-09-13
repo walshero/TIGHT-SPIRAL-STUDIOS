@@ -198,8 +198,28 @@ html.still .meter-fill{transition:none}
 .knob-switch{width:84px;height:48px;border-radius:24px}
 .knob-switch::after{top:4px;left:4px;width:40px;height:40px}
 .knob.armed .knob-switch::after{left:40px}
-.act-hint{color:var(--dim);font-size:15px;margin-top:12px;min-height:22px;font-weight:700}
-.act-hint .lever-tag{color:var(--ink);font-weight:800}
+/* ── THE HINT IS THREE THINGS, NOT ONE PARAGRAPH ──────────────────────────
+   It was one centred blob holding the lever's name, why it works, and the thing
+   to touch. Two faults, and the second is the one you feel:
+
+   1. NO WIDTH. As a centred flex item it shrank to fit its own text, so its left
+      edge sat at 16px while the brief, the phone, the meter and the Boost button
+      all sat at 36px. Measured. Nothing lined up with anything.
+   2. CENTRED PROSE. Centring a multi-sentence block destroys the left edge the
+      eye returns to on every line. Sentences then start mid-line — "…a reward
+      trick. Your" / "…checking back. Tap" — and the last line strands one word.
+
+   Now: one left edge shared with the column, and each of the three jobs in its
+   own place. What it is · why it works · what to touch. The rule on the last one
+   is the phos the Boost button is drawn in, so the eye can find the instruction
+   without reading the rest first. */
+.act-hint{width:100%;max-width:340px;margin:12px auto 0;text-align:left;
+  color:var(--dim);font-size:15px;min-height:22px;font-weight:700;
+  display:flex;flex-direction:column;gap:5px}
+.act-hint .hint-tag,.act-hint .lever-tag{color:var(--ink);font-weight:800;text-wrap:balance}
+.act-hint .hint-why{font-weight:600;text-wrap:pretty}
+.act-hint .hint-do{color:var(--ink);font-weight:700;text-wrap:pretty;
+  border-left:3px solid var(--phos);padding-left:10px}
 .act-hint.good{color:var(--green)}
 .flip-wrap{width:100%;max-width:340px;margin:12px auto 0;perspective:1000px;transition:opacity .3s}
 .flip-wrap.locked{opacity:.3;pointer-events:none}
@@ -244,7 +264,12 @@ html.still .flip{transition:none}
 .tiny{color:var(--dim);font-size:11px;margin-top:20px;letter-spacing:.04em}
 .job-meter{width:100%;max-width:320px;margin:8px auto 30px}
 .job-line{color:var(--ink);font-size:clamp(17px,4.8vw,21px);font-weight:800;margin-bottom:14px}
-.job-how{color:var(--ink);font-size:clamp(14px,3.9vw,16px);font-weight:600;margin-top:14px;line-height:1.4}
+.job-how{color:var(--ink);font-size:clamp(14px,3.9vw,16px);font-weight:600;margin-top:14px;line-height:1.4;
+  text-align:left;text-wrap:pretty}
+/* short display lines: let the browser even out the last line instead of
+   stranding a single word on it. Alignment unchanged — these are statements. */
+.job-line,.hire-sub,.reveal-line,.rankcard .title{text-wrap:balance}
+.brief-task,.flip-back .fact{text-wrap:pretty}
 
 /* ── Training fits ONE screen on a phone — no page scroll; only the feed is a window. ── */
 #sc-train{padding-top:4px}
@@ -673,7 +698,9 @@ function paintTrain(){
   document.getElementById('meterAria').classList.remove('hit');
   document.getElementById('advanceBtn').classList.remove('ready');
   const h=document.getElementById('actHint');
-  h.innerHTML='<b class="lever-tag">'+L.name+' &mdash; '+L.tag+'.</b> '+(L.bridge?L.bridge+' ':'')+L.hint;
+  h.innerHTML='<b class="hint-tag">'+L.name+' &mdash; '+L.tag+'.</b>'
+            +(L.bridge?'<span class="hint-why">'+L.bridge+'</span>':'')
+            +'<span class="hint-do">'+L.hint+'</span>';
   h.classList.remove('good');
   document.documentElement.classList.remove('seen-on');
   stopStreakClock();
@@ -771,7 +798,9 @@ function clearBell(){
   // paid out the instant the dot hits zero. That reflex is the whole product.
   bellCount=0;setBell(0,false);
   const h=document.getElementById('actHint');
-  if(!h.classList.contains('good'))h.innerHTML='<b class="lever-tag">You cleared it.</b> That reflex to zero the dot is the hook. Now plant a batch on the cohort — a sample lands back on you.';
+  if(!h.classList.contains('good'))h.innerHTML='<b class="hint-tag">You cleared it.</b>'
+    +'<span class="hint-why">That reflex to zero the dot is the hook.</span>'
+    +'<span class="hint-do">Now plant a batch on the cohort — a sample lands back on you.</span>';
   bump(12);
 }
 function doRelease(){
