@@ -18,11 +18,23 @@ the panel standing and the leftover check refused all 40 files. A nested block
 needs a matcher, not a lazy quantifier. The refusal is the reason nothing shipped
 broken; keep it.
 
+DEFECT FOUND AND CLOSED 2026-09-14 (two more dialects, both found by SKIP, not by
+a bad write — the refusal did its job again):
+  5a. HEADER GLYPH. workshop-wall.html writes the home link as
+      `<a class="se-home" ...>&#8962; Home</a>`. HOME_RE required `>\s*Home` and
+      missed it, so the file refused as "does not carry the standard Home link".
+      HOME_RE now allows one optional leading entity before Home.
+  5b. MODERN forEach. the-compound-capstone.html binds handlers as
+      `document.querySelectorAll('[data-tog]').forEach(function(b){...})` with no
+      `[].forEach.call(` wrapper. cut_handler matched only the wrapped form, so the
+      handlers survived and the leftover check refused the file. cut_handler now
+      matches both dialects.
+
 Skips, loudly, rather than guessing.
 """
 import re, sys
 
-HOME_RE = re.compile(r'<a class="se-home" href="index\.html"[^>]*>\s*Home\s*</a>')
+HOME_RE = re.compile(r'<a class="se-home" href="index\.html"[^>]*>\s*(?:&[#\w]+;\s*)?Home\s*</a>')
 NEWNAV  = ('<a class="se-home" href="index.html" aria-label="The studio">Studio</a>'
            '<a class="se-home" href="arcade.html" aria-label="The cabinet">Cabinet</a>')
 BTN_RE  = re.compile(r'[ \t]*<button[^>]*id="seEyes"[^>]*>.*?</button>[ \t]*\n?', re.S)
@@ -62,10 +74,17 @@ def cut_handler(src, needle):
     statement, plus its own comment line, by balancing parentheses."""
     m = re.search(r'\[\]\.forEach\.call\(document\.querySelectorAll\(\'\[' +
                   re.escape(needle) + r'\]\'\)', src)
-    if not m:
-        return src, 0
-    start = m.start()
-    i = src.index('(', start)
+    if m:
+        start = m.start()
+        i = src.index('(', start)
+    else:
+        # modern dialect: document.querySelectorAll('[x]').forEach(function(b){...});
+        m = re.search(r'document\.querySelectorAll\(\'\[' + re.escape(needle) +
+                      r'\]\'\)\.forEach\(', src)
+        if not m:
+            return src, 0
+        start = m.start()
+        i = src.index('.forEach(', start) + len('.forEach')
     depth = 0
     while i < len(src):
         if src[i] == '(':
