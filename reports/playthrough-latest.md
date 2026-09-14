@@ -1,78 +1,57 @@
-# Playthrough Sweep — 2026-09-07
+# Playthrough Sweep — 2026-09-14
 
-**Run:** 2026-09-07T11:23Z · repo commit `2aaa91a` · agent `playthrough-agent.py` (reporter, always exits 0 — never a deploy gate)
+**Run:** 2026-09-14T11:24Z · repo commit `03e3684` · agent `playthrough-agent.py` (reporter, always exits 0 — never a deploy gate)
 **Surfaces swept (5):** index.html · arcade.html · choose-your-leader-v7.html · choose-your-leader-v6.html · the-tell.html
-**Prior report:** `reports/playthrough-latest.md` @ 2026-08-31 (HTTP 200, 13,524 B) — first real diff in this lane.
+**Prior report:** `reports/playthrough-latest.md` @ 2026-09-07 (HTTP 200, 20,898 B)
 
 ## Classification
 
-- **NEW: 2** — v7 clipped text (3 lines); index.html JS error count drifted 8 → 9
-- **REPEAT: 5 finding lines** across 3 surfaces (index Studio dead · arcade Cabinet dead · arcade OFFLINE FLOOR · v7 DEAD BUTTONS 2 · v7 INERT TOUCHES 8)
-- **FIXED: 0** — nothing from 2026-08-31 has gone away
-- **CLEAN:** choose-your-leader-v6.html (clean both runs)
+- **NEW: 0**
+- **REPEAT: 7 finding lines** across 3 surfaces — every finding from 2026-09-07 reproduces
+- **FIXED: 0** — nothing has cleared
+- **CLEAN:** choose-your-leader-v6.html (clean three runs running)
 
----
+**No drift, and it is provable rather than asserted.** The finding lines of both reports were
+compared as sets, per surface: zero added, zero removed, on all five. Stronger than that — the
+entire raw agent-card block of this run is **byte-identical** to 2026-09-07's, md5 `ef99147cf086`
+on both. Same instrument, same builds, same output, down to the character.
 
-## NEW — the two lines worth your eyes
+No ledger row was written for this run. `FUNES-LEDGER.md` is append-only, and a row saying nothing
+happened is the kind of entry that makes a ledger unreadable. Rows on change, silence otherwise.
 
-### 1. choose-your-leader-v7.html — CLIPPED TEXT (3), and it is text being thrown away
-
-```
-"The shelf"                        cut by 5px in div.walkbox (400px box, 417px of content) · after 'Walk the house'
-"The back room"                    cut by 5px in div.walkbox (400px box, 417px of content) · after 'Walk the house'
-"Touch the thing you were fixing"  cut by 5px in div.walkbox (400px box, 417px of content) · after 'Walk the house'
-```
-
-**Read this carefully before filing it as a regression — it is not one.** `choose-your-leader-v7.html`
-last changed on **2026-08-26** (commit `e7c8686`); it is byte-identical to the build the baseline swept.
-What changed is the *instrument*: the CLIPPED TEXT detector landed **2026-09-01** in commit `23bce7d`
-("Flok: the research card sizes to its text, not the other way round"), one day after the baseline run.
-
-So this is a **pre-existing defect newly visible**, not new breakage. That makes it more actionable, not
-less — it has been shipping since at least 2026-08-26 and nobody could see it. It is also the same
-defect class documented in `CLIPPED-TEXT-FLOOR-2026-09-01.md`: a fixed pixel number deciding how much
-text a reader gets. Three walk options in the walkbox lose their last 5px. Anyone reading at increased
-text size loses more, which is the part that matters.
-
-### 2. index.html — JS errors 8 → 9 on the front door
-
-Same three distinct undefined references as the baseline (`start is not defined`,
-`onHasParentDirectory is not defined`, `addRow is not defined`) — but one more thrown instance.
-`index.html` took three commits on **2026-09-01** (`1c21667` Mail Drop, `24cf8f7` bottom rail,
-`ab40b70` merge). The count moved with the build. Low severity per instance, but it is the studio's
-front door and the trend is the wrong direction.
-
-## REPEAT — 5 finding lines, summarised not listed
-
-Everything documented at 2026-08-28 and confirmed at 2026-08-31 reproduces exactly:
-
-| Surface | Repeat finding lines |
-|---|---|
-| index.html | DEAD BUTTONS (1): Studio |
-| arcade.html | DEAD BUTTONS (1): Cabinet · OFFLINE FLOOR (1 external request, eclectic-youtiao-c065da.netlify.app) |
-| choose-your-leader-v7.html | DEAD BUTTONS (2) · INERT TOUCHES (8) in world `#roomStage` |
-
-The v7 known state — eight inert touches (television, evening paper, telephone, doorway, bulletin,
-wall map) plus two dead buttons — **reproduces exactly, ten of ten**. v7 has still not drifted. Their
-disappearance remains the FIXED signal worth shouting about; it has not happened yet.
+## NEW — none
 
 ## FIXED — none
 
-No finding from 2026-08-31 has cleared. Stated plainly so the absence is on the record.
+The v7 known state — eight inert touches (television, evening paper, telephone, doorway, bulletin,
+wall map), two dead buttons, and the three clipped walkbox lines — **reproduces exactly, three weeks
+running**. Its disappearance is still the signal worth shouting about, and it still has not happened.
+v7 last changed 2026-08-26; nothing has touched it since, so the stability is expected rather than
+reassuring. The inert touches are a build defect waiting on a fix, not a finding that has settled.
+
+## REPEAT — 7 finding lines, summarised not listed
+
+| Surface | Repeat finding lines |
+|---|---|
+| index.html | DEAD BUTTONS (1): Studio · JS ERRORS (9): `start`, `onHasParentDirectory`, `addRow` undefined |
+| arcade.html | DEAD BUTTONS (1): Cabinet · OFFLINE FLOOR (1 external request, eclectic-youtiao-c065da.netlify.app) |
+| choose-your-leader-v7.html | CLIPPED TEXT (3) in `div.walkbox` (400px box, 417px of content) · DEAD BUTTONS (2) · INERT TOUCHES (8) in world `#roomStage` |
+
+The index.html JS error count held at 9. It moved 8 → 9 last week; it did not move again, so that
+drift has settled rather than continued.
 
 ## Run notes
 
-- **The five-surface invocation did not finish in one pass.** `index`, `arcade`, `v7` and `v6`
-  completed; the run hit a 9-minute ceiling before `the-tell.html`. `the-tell.html` was swept in a
-  second invocation of the same agent, exit 0, and its card is reproduced below unedited. All five
-  surfaces are covered; the cards are simply from two invocations, not one.
-- Click depth rose on three surfaces versus baseline (v7 23 → 40, v6 20 → 40, the-tell 30 → 40).
-  Deeper traversal is part of why the v7 walkbox state was reached this week.
+- **All five surfaces completed in a single invocation** this week. Last week's run needed two passes
+  because it hit a 9-minute shell ceiling; the agent was backgrounded here, so no ceiling applied.
+  ~15 minutes wall clock for the five.
 - `world '#roomStage' resolved from tsp-worlds.json` on v7 — expected and correct, the sidecar doing
   its job.
 - `the-tell.html`'s 14 no-DOM-change controls are again reported as **likely select-state**
-  (canvas/style redraw), explicitly *not asserted dead*. Unchanged from baseline. Not a fix ticket.
+  (canvas/style redraw), explicitly *not asserted dead*. Unchanged from the last two runs. Not a fix
+  ticket.
 - `choose-your-leader-v6.html` again logged one click timeout on `Sound` and still scored CLEAN.
+- Click depth steady: 40 on index, v7, v6 and the-tell; 10 on arcade.
 
 ## Raw agent cards
 
