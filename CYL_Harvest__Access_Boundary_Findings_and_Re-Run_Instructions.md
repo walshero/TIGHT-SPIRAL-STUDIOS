@@ -1,3 +1,5 @@
+> **CORRECTION NOTE — 2026-09-15 (founder ruling, recorded by the Archivist seat).** This report's verdict that v6 is "UNVERIFIABLE" is stale and superseded. v6 is confirmed: `choose-your-leader-v6.html` is in this repo; `cyl-v6-rebuild-spec.md` (2026-07-06) and `cyl-v6-carry-and-fingers-bench.md` (2026-08-22) are in the CYL Drive folder; v7 (`choose-your-leader-v7.html`, 2026-08-10) builds on it. The access-boundary finding below (chats are machine-unreachable) still stands and is the reason this report could not see the build. Per house rule this is a correction note, not a silent rewrite. Current CYL direction: `cyl-commitment-bench.md` (2026-09-15, two-scene redesign).
+
 # HARVEST OPERATION: Choose Your Leader (CYL) — Findings Report
 
 ## TL;DR
