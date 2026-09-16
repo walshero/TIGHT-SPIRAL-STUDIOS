@@ -1151,3 +1151,96 @@ the trap rather than the crater.
 **Quoted, not spent:** the seven real walls are one bespoke pass each (the shared-class
 check above has to be run per file, and `en195-arcade.html` is the second dialect on top
 of that), plus a changed-files gate run. Single inline pass, no subagents.
+
+## 2026-09-16 — CYL two-scene alpha v0.2 on canon; the survey is gone; repo found ahead of Drive
+
+**WHAT LANDED (branch `claude/cyl-two-scene-alpha`, commits `476700f`, `a87c921`, this entry).**
+`choose-your-leader-two-scene.html` — Kennedy, October 22, 1962 and Georgia, January 2, 2021,
+playable end to end, 471,960 B, md5 `211cbff10c9719a8eb7cb2daec73b9c6` at v0.2. Live preview
+for the phone: https://claude.ai/artifact/13YqM2czAWEMZuqvCZEp6u (version 3). `cyl-commitment-bench.md` —
+the 2026-09-15 convening plus §9 (Hitchcock/Gitlin) and §10 (Horvath; founder chose option 5).
+`CYL_Harvest…md` — correction note prepended: v6 is confirmed, the UNVERIFIABLE verdict is superseded.
+
+**THE FOUNDER'S REDESIGN, in one line.** Build for the informed citizen in a threatened democracy;
+map institutional outcomes afterward, never build toward them. Scope locked to two scenes. Audio in.
+Newscast first, then the paper. Fog is real claims people made, not a both-sides scoreboard.
+Single-file-offline released for these builds — but ONLY the portability half: nothing about the
+player is stored or sent, restated as its own floor (Governance seat).
+
+**THE MECHANIC, as it now stands.** Beat 0 The Carry (PROP 002, unchanged): six objects, three
+slots. Beat 2 The Standing Order (PROP 003, new): one order from era-plausible acts, stamped on the
+room, plus a FORECAST of what it meets — the record lands on the forecast (Horvath: predict, observe,
+update; a prediction about the world, not about yourself). Confidence is diegetic — read off how
+public the order is, never asked; hypercorrection is the reason. The fog flag is folded into the
+order screen (one thing at a time). Beat 4: your order is standing, anything to add — stand or
+countermand, countermanded orders struck through on the plate, never erased. Before the river, a
+one-tap recall of the 1962 order; a cross-scene read (loud/quiet × held/missed) sits above the river.
+The five-point trust scale is retired from these builds: it was measurement dressed as play, and it
+was leading because the record always corrected. Kennedy's record can now confirm a cautious path.
+
+**THE FINDING THAT REORDERED THE BUILD.** Georgia is not a modern-mechanic scene. The v6 §3
+two-readings-side-by-side mechanic assumes no settled record; for January 2, 2021 the record is
+unusually complete (courts, the AG, CISA, the state's own hand count and audits, a recording). Side
+by side would manufacture parity. Georgia runs the Cold War mechanic — the record turns. Even-
+handedness amended: it is a selection rule, not a symmetry rule. The two-readings mechanic is
+parked, not deleted, for a genuinely unsettled scene. Georgia forecasts COST, not outcome (the
+player already knows the count stands — Hitchcock's suspense, Horvath's prediction error, both kept).
+
+**LEADERSHIP INSTRUMENT, settled by not buying one.** There is no AAC&U Leadership VALUE rubric —
+verified, the set is 16. The absence is the finding: leadership is not a rubric-grain construct. The
+Standing Order makes CYL a situational judgment test; scored descriptively, never against a key, no
+predictive-validity claim. Anchor rubric when the map is run: Problem Solving. Honest-claim ceiling
+drafted in the bench §3 and shipped in the instructor panel; founder signature still owed.
+
+**ART.** 1962 room, broadcast and chair are the v7 release plates (`room.scene.jfk62`,
+`insert.leader.jfk62`, `prop.emptychair`, founder MJ generations, Super Sketchy Graphics, not for
+reuse), re-encoded through Chromium canvas from 1.1 MB to 295 KB, images unaltered, era treatment
+via CSS filter as in v7. The Carry's six objects were remapped to what the plate actually shows
+(set, hi-fi console, side-table telephone, coffee table, empty sofa seat, framed print; the swivel
+chair with its back to you is the player) — Reference Wrangler, nothing drawn from assumption.
+The Georgia office is an interim studio SVG plate, tagged, awaiting a period image.
+NOTE for the next session: `art/cyl/plates/*.jpg` in this repo are NOT readable as JPEG by ffmpeg
+(headers begin with an XMP block); the images embedded in `choose-your-leader-v7.html` decode
+cleanly and are the same plates. Not diagnosed further; named so nobody loses an hour to it.
+
+**FLOORS HONORED, from CLAUDE.md.** No walls: the text-size and contrast controls that were in
+v0.1 are out; sound stays as a permission toggle, off, never autoplay. Studio chrome: Studio and
+Cabinet up top, Back and Home below. All non-quote copy is tagged studio-draft-awaiting-founder-
+words in TSP-META, on the wrap, and in the footer (v7 ruling #2). No emoji, no faces, no scores.
+Transcript parity on every audio event; audio slots wired, clips NOT placed.
+
+**RIGHTS, two positions, not one.** The October 22, 1962 ADDRESS is US-government work, public
+domain — use it; a network NEWSCAST of it is not clean. The January 2, 2021 recording (Washington
+Post / Georgia Public Broadcasting) needs a real rights opinion, not a bench guess — Brief F. The
+transcript floor makes the accessible build and the clearance-safe build the same build.
+
+**CANON HYGIENE.** The Drive CYL folder was BEHIND this repo (July docs; the repo has v7 and the
+Aug 8 drift ruling). `cyl-commitment-bench.md` was first deposited to Drive (ID
+`1IGrRZv9-2GR9kly7bMUQeGc-qLIccrx2`); the repo copy is canonical and the Drive copy is to be replaced
+by a pointer once this branch is on origin. Stale and marked: `cyl-v5-pipeline-run-and-aacu-map.md`
+(headline claim rests on the retired ipsative delta; open call 6 still names a leadership rubric).
+Continuity catch: the v6 spec says "day eight," the Carry bench says "day six"; the record is
+briefing Oct 16, address Oct 22 — six days, counted from the briefing; the build says six.
+
+**VERIFIED, and how.** Headless Chromium walk of both rooms, every beat, forecast hit and miss
+paths, countermand path, recall, river; zero page errors; no horizontal scroll at 400px; rail
+present on play screens. Byte-identical scratchpad ↔ repo copy at every commit. **NOT verified:**
+the live page on a phone (the standing blind lane); the Georgia cost sources by the Fact-Check
+Lead (Alpha fidelity until Briefs B, E, G run).
+
+**DECISIONS OWED (founder).** (1) Version — v7 amendment or v8; stamped v6-engine pending.
+(2) Who sits in the Georgia chair — built as the Secretary of State's desk, unnamed, no face;
+flagged as an assumption. (3) Proceed on Georgia audio with the transcript floor while Brief F
+runs — bench recommends yes. (4) Sign the honest-claim ceiling. (5) Three slots or two; does the
+sixth object stay slot-costing. (6) Land `claude/cyl-two-scene-alpha` on main through the belt.
+
+**GRIEVANCES.** Reference Wrangler seated late — the first cut drew a 1962 room from assumption
+(v5 SVG) before the release plates were checked; corrected same day. Fact-Check Lead seated for the
+Georgia cost line but not scrubbed in — sources named, not opened. Union Rep: caucus was run
+inline, no fleet, cost discipline held (single Sonnet-class inline passes, one playwright walk per
+build, plates re-encoded once).
+
+**LANE SWEEP at close.** Spoke repos: `tss-playtest` not touched; the play-lane mirror of this
+build is owed once the branch lands. Drive: one loose end, the bench doc, pointer owed (above).
+Zapier: not touched. Project shelf: the stale CYL harvest doc lives there too; corrected here,
+still stale there — human-only lane, KD!.
