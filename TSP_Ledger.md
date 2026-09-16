@@ -1276,3 +1276,9 @@ go-back and let-stand paths, recall, river; zero page errors; no horizontal scro
 **Owed:** founder cold play on the phone (Walkthrough Gate); Fact-Check pass on the four articles
 per scene and the aperture lines (Briefs B, E, G); a period plate for the 2021 kitchen; landing on
 main. The Carry (PROP 002) goes back to the props room as a pattern for literal rationing only.
+
+**v0.3.1, same day — founder from the phone: "What was in the air: I can't read these. I asked for tap and pop out."** The
+openable rule had been applied to the newspaper only. Now it is a rule: every dense card list — the prelude, the paper, the
+week's record cards — is a list of tappable lines that pop out one at a time at large type (1.25rem serif on cream, date and
+count on top) with Back to the list / Previous / Next, and nothing scrolls inside the sheet. `openList()` is the one renderer;
+a future dense list uses it or it does not ship. Headless walk clean; the phone is still the founder's to confirm.
