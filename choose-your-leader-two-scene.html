@@ -1,5 +1,5 @@
 <title>Choose Your Leader</title>
-<!-- TSP-META {"file":"choose-your-leader-two-scene.html","build":"Choose Your Leader two-scene alpha v0.1, 2026-09-15","stage":"alpha - playable end to end, no human has played it","spec":"cyl-commitment-bench.md (2026-09-15) on the v6 engine; The Carry (PROP 002) at Beat 0, The Standing Order (PROP 003) at Beats 2 and 4","scenes":"Kennedy 1962-10-22 · Georgia 2021-01-02","art":"room.scene.jfk62, insert.leader.jfk62, prop.emptychair mounted from art/cyl/plates (founder MJ generations, Super Sketchy Graphics, AI-assisted, not for reuse; re-encoded for file size, images unaltered; era treatment via CSS filter). Georgia office is an interim studio SVG plate awaiting a period plate.","voice":"Quotes and records are verbatim or dated fact statements with sources. All other player-facing copy is STUDIO DRAFT AWAITING FOUNDER WORDS (v7 ruling #2) - replace from his docs and chats, never pass off.","floors":"no walls (2026-08-29 ruling: no comfort, size or contrast controls; sound toggle is a permission control, off by default, never autoplay); studio chrome (Studio, Cabinet, Back, Home); no emoji; no real faces; no scores; player data never leaves the page; transcript parity for every audio event; 46px targets; keyboard-complete; reduced motion honoured","audio":"slots wired, clips not placed: JFK address is US-government work (public domain, JFK Library / NARA); Georgia call recording (Washington Post / Georgia Public Broadcasting) clearance undecided, Brief F"} -->
+<!-- TSP-META {"file":"choose-your-leader-two-scene.html","build":"Choose Your Leader two-scene alpha v0.2, 2026-09-16","stage":"alpha - playable end to end, no human has played it","spec":"cyl-commitment-bench.md (2026-09-15, sec. 10 Horvath 2026-09-16, founder chose option 5) on the v6 engine; The Carry (PROP 002) at Beat 0, The Standing Order with forecast (PROP 003) at Beats 2 and 4; confidence read off how public the order is; recall tap before the river; cross-scene read","scenes":"Kennedy 1962-10-22 · Georgia 2021-01-02","art":"room.scene.jfk62, insert.leader.jfk62, prop.emptychair mounted from art/cyl/plates (founder MJ generations, Super Sketchy Graphics, AI-assisted, not for reuse; re-encoded for file size, images unaltered; era treatment via CSS filter). Georgia office is an interim studio SVG plate awaiting a period plate.","voice":"Quotes and records are verbatim or dated fact statements with sources. All other player-facing copy is STUDIO DRAFT AWAITING FOUNDER WORDS (v7 ruling #2) - replace from his docs and chats, never pass off.","floors":"no walls (2026-08-29 ruling: no comfort, size or contrast controls; sound toggle is a permission control, off by default, never autoplay); studio chrome (Studio, Cabinet, Back, Home); no emoji; no real faces; no scores; player data never leaves the page; transcript parity for every audio event; 46px targets; keyboard-complete; reduced motion honoured","audio":"slots wired, clips not placed: JFK address is US-government work (public domain, JFK Library / NARA); Georgia call recording (Washington Post / Georgia Public Broadcasting) clearance undecided, Brief F"} -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;600&display=swap">
@@ -205,7 +205,7 @@ footer{margin-top:28px;padding-top:14px;border-top:1px solid var(--rule);color:v
   <section class="step on" id="scr-title">
     <p class="eyebrow warm">Choose Your Leader &middot; two rooms, two nights</p>
     <h1>You are in the chair.</h1>
-    <p>Two rooms, fifty-nine years apart. In each one the news is on, the paper is out, and a decision is about to leave the room. You will carry three things in, issue one order, and then hear what the room could not hear when it decided.</p>
+    <p>Two rooms, fifty-nine years apart. In each one the news is on, the paper is out, and a decision is about to leave the room. You will carry three things in, issue one order, say what you expect it to meet, and then hear what the room could not hear when it decided.</p>
     <p class="dim">About six minutes a room. Nothing you do here is scored, sent, or stored. Sound is off unless you turn it on, and everything spoken is also written.</p>
     <div class="btnrow">
       <button class="btn" id="startBtn" type="button">Open the first room</button>
@@ -256,24 +256,23 @@ footer{margin-top:28px;padding-top:14px;border-top:1px solid var(--rule);color:v
       </div>
     </div>
 
-    <!-- Beat 1 the fog -->
-    <div class="step" id="b1">
-      <h2>What you do not know</h2>
-      <p class="dim">You can read only the unknowns you brought something to read them with. Flag the one you believe is decisive.</p>
-      <div class="fog" id="fog"></div>
-      <div class="btnrow">
-        <button class="btn" id="toOrder" type="button" disabled>Flag it</button>
-        <button class="btn ghost" id="backRoom" type="button">Back to the room</button>
-      </div>
-    </div>
-
-    <!-- Beat 2 the order -->
+    <!-- Beat 1+2 the fog and the order, one screen -->
     <div class="step" id="b2">
-      <h2>Issue one order</h2>
-      <p class="dim" id="b2p"></p>
+      <h2>What you can read, and one order</h2>
+      <p class="dim">You can read only the unknowns you brought something to read them with. Then issue one order, and say what you expect it to meet.</p>
+      <div class="fog" id="fog"></div>
+      <p class="dim" id="b2p" style="margin-top:16px"></p>
       <div class="cost"><strong>The cost, before you pay it.</strong> One order goes out. It is stamped on the room and stays there. You can countermand it later, but the first order will still have gone.</div>
       <div class="ords" id="ords"></div>
-      <div class="btnrow"><button class="btn" id="stampBtn" type="button" disabled>Stamp it and send it</button></div>
+      <div id="fcBox" hidden>
+        <h3 style="margin-top:16px">This order meets</h3>
+        <p class="dim" style="margin-bottom:6px">Your forecast. The record will land on it.</p>
+        <div class="ords" id="fc"></div>
+      </div>
+      <div class="btnrow">
+        <button class="btn" id="stampBtn" type="button" disabled>Stamp it and send it</button>
+        <button class="btn ghost" id="backRoom" type="button">Back to the room</button>
+      </div>
     </div>
 
     <!-- Beat 3 the fog thickens -->
@@ -322,17 +321,28 @@ footer{margin-top:28px;padding-top:14px;border-top:1px solid var(--rule);color:v
     </div>
   </section>
 
+  <!-- RECALL -->
+  <section class="step" id="scr-recall">
+    <p class="eyebrow warm">Before the river</p>
+    <h2>Without looking: what did you order in 1962?</h2>
+    <p class="dim">Memory is what you can pull back out, not what you saw. One tap.</p>
+    <div class="ords" id="recallOrds"></div>
+    <div class="btnrow"><button class="btn" id="recallGo" type="button" disabled>That one</button></div>
+  </section>
+
   <!-- RIVER -->
   <section class="step" id="scr-river">
     <p class="eyebrow warm">Two rooms</p>
     <h2>How you carried it</h2>
-    <p class="dim">Not a grade. The shape of two decisions: what you brought in, what you flagged, what you ordered, and whether you let it stand when the record opened.</p>
+    <p class="dim">Not a grade. The shape of two decisions: what you brought in, what you expected, what you ordered and how loudly, and whether you let it stand when the record opened.</p>
+    <div class="pane mir" id="recallOut" style="margin-bottom:12px"></div>
+    <div class="pane mir" id="cross" style="margin-bottom:12px"><h3>Across both rooms</h3><div id="crossBody"></div></div>
     <div class="plate"><img class="mj" alt="An empty chair, catching the light. Anyone's." src="" id="chairPlate" data-art="prop.emptychair · founder MJ generation, Super Sketchy Graphics mount · AI-assisted · not for reuse · re-encoded 880px, image unaltered"></div>
     <div class="river" id="river"></div>
     <div class="instr">
       <p class="eyebrow">For instructors</p>
-      <blockquote>Choose Your Leader is a situational judgment exercise. It records what you decided, what you could see when you decided it, and whether you changed your mind when the record opened. It reports those as a description of your reasoning, not as a score, and it does not claim to measure or predict leadership ability.</blockquote>
-      <p>Every claim in the fog is real, dated, and attributed. The two second frames are records, not opinions: for 1962, the declassified file; for 2021, the courts, the Justice Department, the state's own audits, and a recording. Nothing about the player is stored or transmitted.</p>
+      <blockquote>Choose Your Leader is a situational judgment exercise. It records what you decided, what you expected it to meet, what you could see when you decided it, and whether you changed your mind when the record opened. It reports those as a description of your reasoning, not as a score, and it does not claim to measure or predict leadership ability.</blockquote>
+      <p>Nothing here is remembered between visits, so the spaced return the memory research asks for is the instructor's to schedule, not the game's. Every claim in the fog is real, dated, and attributed. The two second frames are records, not opinions: for 1962, the declassified file; for 2021, the courts, the Justice Department, the state's own audits, and a recording. Nothing about the player is stored or transmitted.</p>
     </div>
     <div class="btnrow"><button class="btn ghost" id="again" type="button">Walk both rooms again</button></div>
     <footer>Studio draft awaiting founder words: every player-facing line here except the quotes, the records and the dated fact statements is placeholder copy, to be replaced from the founder's own docs and chats, never passed off. Alpha. 1962 room, broadcast and chair: founder Midjourney plates from the v7 release (Super Sketchy Graphics, AI-assisted, not for reuse). The 2021 office is an interim studio plate awaiting a period image. Audio slots are wired but empty pending rights clearance; the JFK address is a U.S. government work (public domain, JFK Library / NARA); the January 2, 2021 recording was reported by the Washington Post and obtained by Georgia Public Broadcasting, clearance undecided. Fog and record lines are dated fact statements with sources; verbatim press wording is pending a scan. Sourcing pass (Briefs B, E, G) still to run. No emoji, no faces, no scores.</footer>
@@ -464,16 +474,22 @@ var SCENES=[
     {id:'stake',t:'What am I willing to risk for people who will never sit in this room?'}
   ],
   b2p:'These are the postures actually on the table in the ExComm room that week, in that week’s vocabulary. None is marked correct.',
+  cost:null,
   orders:[
-    {id:'strike',t:'Order the air strike on the missile sites before they are operational.',
+    {id:'strike',loud:true,meets:['The sites are destroyed and it ends there.','Some sites survive, and Moscow answers somewhere else.','Moscow does nothing.'],hit:1,
+     t:'Order the air strike on the missile sites before they are operational.',
      c:'The Joint Chiefs pressed for it. The same Chiefs told the President a strike could not guarantee every missile, and the room judged Moscow would answer in Berlin.',s:'ExComm meeting records, Oct 16–21, 1962 (JFK Library, declassified).'},
-    {id:'quar',t:'Order a naval quarantine of Cuba and go on the air tonight to say so.',
+    {id:'quar',loud:true,meets:['Moscow backs down within the week.','Moscow runs the line and the fleets fire.','Moscow answers in Berlin.'],hit:0,
+     t:'Order a naval quarantine of Cuba and go on the air tonight to say so.',
      c:'This is the call the room made. The quarantine held; on October 28 Khrushchev announced the missiles would be withdrawn; no shot was exchanged between the fleets.',s:'Public record; Kennedy address Oct 22, 1962 (JFK Library); Khrushchev message Oct 28, 1962.',historic:true},
-    {id:'back',t:'Open a back channel to Moscow and say nothing in public yet.',
+    {id:'back',loud:false,meets:['Moscow trades quietly and the sites come out.','The sites keep building while the channel talks.','The channel leaks and the country learns it from the papers.'],hit:1,
+     t:'Open a back channel to Moscow and say nothing in public yet.',
      c:'A back channel did open, five days later, and it closed the crisis. The record also says the sites kept pouring concrete through that week; the channel worked because the public posture had already been set.',s:'Dobrynin cable to Moscow, Oct 27, 1962 (declassified 1995); ExComm records.'},
-    {id:'inv',t:'Put the invasion plan in motion.',
+    {id:'inv',loud:true,meets:['The island is taken in days and the missiles with it.','The landing meets weapons the room did not know were there.','Moscow answers in Berlin before the landing.'],hit:1,
+     t:'Put the invasion plan in motion.',
      c:'What the room could not know: Soviet forces on the island held tactical nuclear weapons, and the United States did not learn it until 1992.',s:'Havana conference, January 1992 (Gen. Anatoly Gribkov); National Security Archive.'},
-    {id:'hold',t:'Hold. Say nothing tonight and keep watching.',
+    {id:'hold',loud:false,meets:['The story holds and the room gets another week.','The story breaks within a day and the sites go operational.','Moscow announces the missiles first.'],hit:1,
+     t:'Hold. Say nothing tonight and keep watching.',
      c:'The room had already held six days. The record’s reasons for ending the hold: the sites were nearing operation, and the story would not keep. The President asked two newspapers to hold it on October 21.',s:'ExComm records, Oct 16–22, 1962; public record of press contacts, Oct 21, 1962.'}
   ],
   thick:{k:'A second read arrives',t:'The Chiefs, unanimous: a blockade is a weak response. One of them tells you a blockade alone is almost as bad as the appeasement at Munich. The photographs, they say, do not leave room for anything but a strike.',s:'JFK meeting with the Joint Chiefs of Staff, Oct 19, 1962 (JFK Library tape transcript).'},
@@ -524,16 +540,22 @@ var SCENES=[
     {id:'stake',t:'What am I willing to risk for people who will never sit in this room?'}
   ],
   b2p:'These are the moves actually available to the office that day, including the one the caller is about to ask for. None is marked correct.',
+  cost:{t:'What saying no met, whichever order you gave: threats to the Secretary and his family through 2021; a state election official’s December 1 warning that someone would get killed, borne out on January 6; and the call itself among the acts charged in the Fulton County indictment of August 14, 2023.',s:'Reuters, June 2021 (threats to the Secretary’s family); Raffensperger, Integrity Counts (2021); Georgia SoS press conference, Dec 1, 2020; Fulton County indictment, Aug 14, 2023.'},
   orders:[
-    {id:'hold',t:'Take the call with counsel on the line, and keep the count as certified.',
+    {id:'hold',loud:false,meets:['The count stands and that is the end of it.','The count stands, and the office pays for it for years.','The count is reopened under the pressure.'],hit:1,
+     t:'Take the call with counsel on the line, and keep the count as certified.',
      c:'This is what happened. The count stood. The recording was made public the next day, after the caller described the call himself that morning.',s:'Washington Post, Jan 3, 2021; Georgia Public Broadcasting; public record.',historic:true},
-    {id:'audit',t:'Order a statewide signature audit to answer the claims once more.',
+    {id:'audit',loud:true,meets:['The audit answers the claims and they stop.','The audit answers the claims and the claims continue anyway.','The audit finds what the caller says is there.'],hit:1,
+     t:'Order a statewide signature audit to answer the claims once more.',
      c:'A signature audit of Cobb County had been finished four days earlier, with state and federal agents: no fraudulent absentee ballots among more than fifteen thousand envelopes. The answer already existed.',s:'Georgia SoS and GBI Cobb County signature audit, released Dec 29, 2020.'},
-    {id:'refer',t:'Refer the caller’s claims to investigators and say so publicly.',
+    {id:'refer',loud:true,meets:['Investigators close it and the pressure lifts.','Investigators had already closed it, and the pressure does not lift.','Investigators find the fraud.'],hit:1,
+     t:'Refer the caller’s claims to investigators and say so publicly.',
      c:'The office’s investigators and the state bureau had already run each named claim to ground; the arena video was reviewed frame by frame in December.',s:'Georgia SoS investigations summary, Dec 2020; Georgia SoS press conferences, Dec 4–7, 2020.'},
-    {id:'decline',t:'Decline the call. Issue a written statement instead.',
+    {id:'decline',loud:true,meets:['A written statement ends it.','No record exists, and the pressure continues off the record.','The caller moves on.'],hit:1,
+     t:'Decline the call. Issue a written statement instead.',
      c:'The call would not have existed as a record. What turned the record was that it did: the line was recorded, and the caller himself made the call public the next morning.',s:'Public record, Jan 3, 2021.'},
-    {id:'recalc',t:'Do what is asked: direct staff to re-examine the count against the caller’s numbers.',
+    {id:'recalc',loud:false,meets:['Votes are found and the state flips.','There are no votes to find, and the office has broken the law looking.','The recount changes nothing and no one notices.'],hit:1,
+     t:'Do what is asked: direct staff to re-examine the count against the caller’s numbers.',
      c:'There was no lawful mechanism and, the record says, no votes: three counts including a hand audit agreed. On the actual call, counsel told the caller the data he had was wrong.',s:'Georgia risk-limiting audit, Nov 2020; recertification Dec 7, 2020; call transcript, Jan 2, 2021.'}
   ],
   thick:{k:'A report arrives',t:'Twenty-three pages, a forensic vocabulary, an author’s name: an analysis of one Michigan county’s voting machines claiming an error rate above sixty-eight percent. Michigan’s own election officials denounce it; the county’s discrepancy was a human error corrected on election night. It has the shape of evidence, and it is circulating.',s:'Allied Security Operations Group report on Antrim County, Dec 13, 2020; Michigan Bureau of Elections and Michigan Senate Oversight Committee responses, Dec 2020–Jun 2021.'},
@@ -560,8 +582,8 @@ $('audioBtn').addEventListener('click',function(){ AUDIO.on=!AUDIO.on; this.setA
 /* no legibility walls: 2026-08-29 founder ruling. The default has to be excellent. */
 
 /* ═══════ STATE ═══════ */
-var MAX=3, idx=0, S=null, carried=[], flagged=null, order=null, final=null, countermanded=false, postAudio=false, results=[], recTimer=null, recDone=false;
-var BEATS=['prelude','set','paper','carry','fog','order','thickens','record','stand','both'];
+var MAX=3, idx=0, S=null, carried=[], forecast=null, order=null, final=null, countermanded=false, postAudio=false, results=[], recTimer=null, recDone=false, recallPick=null;
+var BEATS=['prelude','set','paper','carry','order','thickens','record','stand','both'];
 function sc(){ return SCENES[idx]; }
 function obj(id){ for(var i=0;i<sc().objects.length;i++) if(sc().objects[i].id===id) return sc().objects[i]; return null; }
 function unk(id){ for(var i=0;i<sc().unknowns.length;i++) if(sc().unknowns[i].id===id) return sc().unknowns[i]; return null; }
@@ -570,9 +592,9 @@ function has(id){ return carried.indexOf(id)>-1; }
 function decisiveId(){ for(var i=0;i<sc().unknowns.length;i++) if(sc().unknowns[i].decisive) return sc().unknowns[i].id; return null; }
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-function screen(id){ ['scr-title','scr-prelude','scr-scene','scr-river'].forEach(function(s){ $(s).classList.toggle('on',s===id); }); document.body.setAttribute('data-screen',id==='scr-title'?'entry':'play'); window.scrollTo({top:0,behavior:'auto'}); }
-function beat(id){ ['b01','b02','b03','b1','b2','b3','b35','b4','b5'].forEach(function(b){ $(b).classList.toggle('on',b===id); }); rail(id); var t=$('plate').getBoundingClientRect().top+window.scrollY-8; if(id!=='b01') window.scrollTo({top:Math.max(0,t),behavior:'auto'}); }
-function rail(bid){ var map={b01:1,b02:2,b03:3,b1:4,b2:5,b3:6,b35:7,b4:8,b5:9}; var here=map[bid]||0; var h=''; for(var i=0;i<BEATS.length;i++){ h+='<span class="pip'+(i<here?' done':(i===here?' here':''))+'"></span>'; } h+='<span class="lab">'+esc(sc().short)+' &middot; '+esc(BEATS[here]||'')+'</span>'; $('rail').innerHTML=h; }
+function screen(id){ ['scr-title','scr-prelude','scr-scene','scr-recall','scr-river'].forEach(function(s){ $(s).classList.toggle('on',s===id); }); document.body.setAttribute('data-screen',id==='scr-title'?'entry':'play'); window.scrollTo({top:0,behavior:'auto'}); }
+function beat(id){ ['b01','b02','b03','b2','b3','b35','b4','b5'].forEach(function(b){ $(b).classList.toggle('on',b===id); }); rail(id); var t=$('plate').getBoundingClientRect().top+window.scrollY-8; if(id!=='b01') window.scrollTo({top:Math.max(0,t),behavior:'auto'}); }
+function rail(bid){ var map={b01:1,b02:2,b03:3,b2:4,b3:5,b35:6,b4:7,b5:8}; var here=map[bid]||0; var h=''; for(var i=0;i<BEATS.length;i++){ h+='<span class="pip'+(i<here?' done':(i===here?' here':''))+'"></span>'; } h+='<span class="lab">'+esc(sc().short)+' &middot; '+esc(BEATS[here]||'')+'</span>'; $('rail').innerHTML=h; }
 
 /* ═══════ PRELUDE ═══════ */
 function showPrelude(){ S=sc(); $('preKick').textContent=S.preludeKick; var h=''; S.prelude.forEach(function(c){ h+='<div class="pc"><span class="d">'+esc(c.d)+'</span><span class="t">'+esc(c.t)+'</span><span class="s">'+esc(c.s)+'</span></div>'; }); $('preCards').innerHTML=h; screen('scr-prelude'); $('rail').innerHTML=''; live('What was in the air, '+S.short+'.'); }
@@ -589,12 +611,12 @@ function buildPlate(){
 function caption(who,t,voice){ $('capHolder').innerHTML=t?'<div class="caption'+(voice?' voice':'')+'"><span class="who">'+esc(who)+'</span>'+esc(t)+'</div>':''; }
 function paintStamp(){
   var h='';
-  if(order){ var o=ord(order); h+='<div class="stampline'+(countermanded?' struck':'')+'"><span class="k">Order · sent</span><span class="t">'+esc(o.t)+'</span>'+(countermanded?'<span class="k" style="margin-top:3px">Countermanded</span>':'')+'</div>'; }
+  if(order){ var o=ord(order); h+='<div class="stampline'+(countermanded?' struck':'')+'"><span class="k">Order · sent'+(o.loud?' · public':' · quiet')+'</span><span class="t">'+esc(o.t)+'</span>'+(forecast!==null?'<span class="k" style="margin-top:3px">You expect</span><span class="t">'+esc(o.meets[forecast])+'</span>':'')+(countermanded?'<span class="k" style="margin-top:3px">Countermanded</span>':'')+'</div>'; }
   if(countermanded&&final&&final!==order){ h+='<div class="stampline"><span class="k">Order · replaces it</span><span class="t">'+esc(ord(final).t)+'</span></div>'; }
   $('stamp').innerHTML=h;
 }
 function openScene(){
-  S=sc(); carried=[]; flagged=null; order=null; final=null; countermanded=false; postAudio=false; recDone=false;
+  S=sc(); carried=[]; forecast=null; order=null; final=null; countermanded=false; postAudio=false; recDone=false;
   $('scLabel').textContent=S.label;
   buildPlate(); paintStamp();
   $('b01h').textContent=S.b01h; $('b01p').textContent=S.b01p;
@@ -625,13 +647,11 @@ function paintRoom(){
   $('carryHint').textContent=carried.length===MAX?'Three in hand. Three left in the room.':'Three slots. Six things. The room does not wait.';
 }
 
-/* ═══════ FOG ═══════ */
+/* ═══════ FOG (read-only; the forecast is the problem-solving read) ═══════ */
 function buildFog(){
   var readable=[]; S.objects.forEach(function(o){ if(has(o.id)) readable.push(o.opens); });
-  var h=''; S.unknowns.forEach(function(u){ var open=readable.indexOf(u.id)>-1; if(open){ var src=''; S.objects.forEach(function(o){ if(o.opens===u.id) src=o.name; }); h+='<button type="button" class="q pick" data-q="'+u.id+'"><span class="src">Read by '+esc(src)+'</span><span class="qt">'+esc(u.t)+'</span></button>'; } else { h+='<div class="q closed"><span class="src">Unreadable from here</span><span class="qt" aria-hidden="true">'+esc(u.t)+'</span><span class="live">An unknown you brought nothing to read.</span></div>'; } });
-  $('fog').innerHTML=h; flagged=null; $('toOrder').disabled=true;
-  Array.prototype.forEach.call($('fog').querySelectorAll('.pick'),function(b){ b.addEventListener('click',function(){ flagged=b.getAttribute('data-q'); Array.prototype.forEach.call($('fog').querySelectorAll('.pick'),function(x){ x.classList.remove('chosen'); x.setAttribute('aria-pressed','false'); }); b.classList.add('chosen'); b.setAttribute('aria-pressed','true'); $('toOrder').disabled=false; live('Flagged as decisive.'); }); });
-  beat('b1');
+  var h=''; S.unknowns.forEach(function(u){ var open=readable.indexOf(u.id)>-1; if(open){ var src=''; S.objects.forEach(function(o){ if(o.opens===u.id) src=o.name; }); h+='<div class="q"><span class="src">Read by '+esc(src)+'</span><span class="qt">'+esc(u.t)+'</span></div>'; } else { h+='<div class="q closed"><span class="src">Unreadable from here</span><span class="qt" aria-hidden="true">'+esc(u.t)+'</span><span class="live">An unknown you brought nothing to read.</span></div>'; } });
+  $('fog').innerHTML=h; openOrder();
 }
 
 /* ═══════ ORDER ═══════ */
@@ -640,9 +660,19 @@ function buildOrders(holder,btn,exclude,onPick){
   $(holder).innerHTML=h; $(btn).disabled=true;
   Array.prototype.forEach.call($(holder).querySelectorAll('.ord:not([disabled])'),function(b){ b.addEventListener('click',function(){ Array.prototype.forEach.call($(holder).querySelectorAll('.ord'),function(x){ x.classList.remove('chosen'); x.setAttribute('aria-pressed','false'); }); b.classList.add('chosen'); b.setAttribute('aria-pressed','true'); $(btn).disabled=false; onPick(b.getAttribute('data-o')); }); });
 }
-var pending=null;
-function openOrder(){ $('b2p').textContent=S.b2p; buildOrders('ords','stampBtn',null,function(id){ pending=id; live('Selected. Not yet sent.'); }); beat('b2'); }
-function stamp(){ order=pending; final=pending; paintStamp(); setClick(); live('Order sent and stamped on the room: '+ord(order).t); openThick(); }
+var pending=null, pendingFc=null;
+function openOrder(){
+  $('b2p').textContent=S.b2p; $('fcBox').hidden=true; pendingFc=null;
+  buildOrders('ords','stampBtn',null,function(id){ pending=id; pendingFc=null; buildForecast(id); live('Selected. Now say what it meets.'); });
+  beat('b2');
+}
+function buildForecast(id){
+  var o=ord(id), h='';
+  o.meets.forEach(function(m,i){ h+='<button type="button" class="ord" data-f="'+i+'"><span class="n">'+String.fromCharCode(97+i)+'</span><span>'+esc(m)+'</span></button>'; });
+  $('fc').innerHTML=h; $('fcBox').hidden=false; $('stampBtn').disabled=true;
+  Array.prototype.forEach.call($('fc').querySelectorAll('.ord'),function(b){ b.addEventListener('click',function(){ Array.prototype.forEach.call($('fc').querySelectorAll('.ord'),function(x){ x.classList.remove('chosen'); x.setAttribute('aria-pressed','false'); }); b.classList.add('chosen'); b.setAttribute('aria-pressed','true'); pendingFc=parseInt(b.getAttribute('data-f'),10); $('stampBtn').disabled=false; live('Forecast chosen. Not yet sent.'); }); });
+}
+function stamp(){ order=pending; final=pending; forecast=pendingFc; paintStamp(); setClick(); live('Order sent and stamped on the room: '+ord(order).t+' You expect: '+ord(order).meets[forecast]); openThick(); }
 
 /* ═══════ THICKENS + FRAME ═══════ */
 function openThick(){
@@ -682,37 +712,58 @@ function counter(){ countermanded=true; final=pending; postAudio=true; paintStam
 /* ═══════ BOTH-AND ═══════ */
 function openBoth(){
   var f=ord(final), o=ord(order), hist=null; S.orders.forEach(function(x){ if(x.historic) hist=x; });
-  var c='<p>'+esc(f.c)+'</p>';
+  var hit=(forecast===o.hit), held=o.meets[o.hit], said=o.meets[forecast];
+  var c='<p><strong>You expected:</strong> '+esc(said)+'<br><strong>The record holds:</strong> '+esc(held)+'</p>';
+  c+='<p>'+esc(f.c)+'</p>';
   if(!f.historic){ c+='<p><strong>What the room did:</strong> '+esc(hist.t.toLowerCase().replace(/\.$/,''))+'. '+esc(hist.c)+'</p>'; }
+  if(S.cost){ c+='<p>'+esc(S.cost.t)+'</p><p class="src">'+esc(S.cost.s)+'</p>'; }
   c+='<p class="src">'+esc(f.s)+(f.historic?'':' · '+esc(hist.s))+'</p>';
   $('cons').innerHTML=c;
 
   var dec=decisiveId(), bD=false; S.objects.forEach(function(x){ if(has(x.id)&&x.opens===dec) bD=true; });
-  var fD=(flagged===dec), decText=unk(dec).t, decObj=''; S.objects.forEach(function(x){ if(x.opens===dec) decObj=x.name.toLowerCase(); });
+  var decText=unk(dec).t, decObj=''; S.objects.forEach(function(x){ if(x.opens===dec) decObj=x.name.toLowerCase(); });
   var lead;
-  if(fD) lead='You brought '+decObj+' in, and you named the gap the record says mattered most: <strong>'+esc(decText)+'</strong> Naming it is the win here, whatever the order that followed.';
-  else if(bD) lead='You could read the question the record says mattered most, because '+decObj+' was in your hand, and you weighed a different one as decisive. That is a real reading, not an error. The mirror only shows which one you set down.';
-  else lead='The question the record says mattered most stayed fogged, because '+decObj+' stayed where it was. You decided without it, which is close to what the real room did for a while.';
-  var posture;
-  if(!countermanded) posture='You issued one order and let it stand when the voice came in. The order was <strong>'+esc(o.t)+'</strong> That is a posture, and it is legible: you had a position before the record, and the record did not move you off it.';
-  else posture='You issued <strong>'+esc(o.t)+'</strong> and, after the voice, replaced it with <strong>'+esc(f.t)+'</strong> The first order still went. Changing it after the record is also a posture, and the strike-through on the room is the record of the choice, not a mistake to sand away.';
+  if(o.loud&&!hit) lead='You went loud. <strong>'+esc(o.t)+'</strong> is the kind of order the whole room hears, and you expected <strong>'+esc(said)+'</strong> The record held something else. That is the case the memory research says people fix hardest, because the certainty was already on the table when the record came in. It is not a fault. It is the loudest kind of learning.';
+  else if(o.loud&&hit) lead='You went loud, and the record met your forecast. Confirmed predictions strengthen too. Worth noticing that you were sure and right, and what that was built on.';
+  else if(!o.loud&&!hit) lead='You kept it quiet. <strong>'+esc(o.t)+'</strong> stays in the room, and you expected <strong>'+esc(said)+'</strong> The record held something else. A hedged order softens the miss; that is what hedges are for, and it is worth knowing you reached for one.';
+  else lead='Quiet, and right. The record met your forecast without your having to say it out loud.';
+  var read=bD?('You could read <strong>'+esc(decText)+'</strong> because '+decObj+' was in your hand.'):('The question the record says mattered most, <strong>'+esc(decText)+'</strong>, stayed fogged, because '+decObj+' stayed where it was.');
+  var posture=!countermanded?('You let the order stand when the voice came in. You had a position before the record, and the record did not move you off it.'):('After the voice you replaced it with <strong>'+esc(f.t)+'</strong> The first order still went. Changing it after the record is also a posture, and the strike-through on the room is the record of the choice, not a mistake to sand away.');
   var left=[]; S.objects.forEach(function(x){ if(!has(x.id)) left.push(x.name.toLowerCase()); });
-  var m='<p>'+lead+'</p><p>'+posture+'</p><p>You left <strong>'+esc(left.join(', '))+'</strong> in the room.'+(has('toy')?' You gave a slot to something that told you nothing tactical and everything about why the call matters.':'')+'</p>';
-  $('mir').innerHTML=m;
-  results[idx]={carried:carried.slice(),flagged:flagged,flaggedDecisive:fD,broughtDecisive:bD,order:order,final:final,countermanded:countermanded};
-  $('nextScene').textContent=(idx<SCENES.length-1)?'Next room':'Both rooms';
+  $('mir').innerHTML='<p>'+lead+'</p><p>'+read+' '+posture+'</p><p>You left <strong>'+esc(left.join(', '))+'</strong> in the room.'+(has('toy')?' You gave a slot to something that told you nothing tactical and everything about why the call matters.':'')+'</p>';
+  results[idx]={carried:carried.slice(),broughtDecisive:bD,order:order,final:final,countermanded:countermanded,forecast:forecast,hit:hit,loud:!!o.loud};
+  $('nextScene').textContent=(idx<SCENES.length-1)?'Next room':'Before the river';
   beat('b5');
+}
+
+/* ═══════ RECALL (a retrieval event before the river) ═══════ */
+function showRecall(){
+  roomToneStop(); recallPick=null; var s0=SCENES[0], h='';
+  s0.orders.forEach(function(o,i){ h+='<button type="button" class="ord" data-o="'+o.id+'"><span class="n">'+(i+1)+'</span><span>'+esc(o.t)+'</span></button>'; });
+  $('recallOrds').innerHTML=h; $('recallGo').disabled=true;
+  Array.prototype.forEach.call($('recallOrds').querySelectorAll('.ord'),function(b){ b.addEventListener('click',function(){ Array.prototype.forEach.call($('recallOrds').querySelectorAll('.ord'),function(x){ x.classList.remove('chosen'); }); b.classList.add('chosen'); recallPick=b.getAttribute('data-o'); $('recallGo').disabled=false; }); });
+  screen('scr-recall'); $('rail').innerHTML=''; live('Before the river. What did you order in 1962?');
+}
+function crossRead(){
+  var a=results[0], b=results[1]; if(!a||!b) return '';
+  if(a.loud&&b.loud&&!a.hit&&!b.hit) return 'Twice you went loud, and twice the record went the other way. That is the profile that changes the most between one room and the next, if you let it.';
+  if(!a.loud&&!b.loud) return 'Twice you hedged. Both times the record was survivable. Worth asking what a loud order would have cost you, and whether you ever wanted to find out.';
+  if(a.hit&&b.hit) return 'Two forecasts, two hits. Notice what you were reading each time: the same kind of object, or a different one.';
+  if(a.loud&&b.loud) return 'Loud in both rooms, right once. The room where the record went against you is the one worth walking again.';
+  return 'One room loud, one quiet. The river below shows which was which, and which forecast held; the pattern is yours to name.';
 }
 
 /* ═══════ RIVER ═══════ */
 function river(){
   roomToneStop(); $('chairPlate').src=PLATE_CHAIR;
-  var W=600,H=60+SCENES.length*110, h='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Two horizontal lines, one per room, each marked with what you carried, what you flagged, the order you issued, and whether it stood.">';
+  var a=results[0]; if(a){ var right=(recallPick===a.order); $('recallOut').innerHTML='<h3>'+(right?'You remembered.':'You ordered something else.')+'</h3><p>'+(right?'The 1962 order came back out of memory before the river showed it to you. That is the part that lasts.':'In 1962 you ordered <strong>'+esc((function(){ var o=null; SCENES[0].orders.forEach(function(x){ if(x.id===a.order) o=x; }); return o?o.t:''; })())+'</strong> The gap between what you did and what you remember doing is not a fault. It is the most honest line this game has.')+'</p>'; }
+  $('crossBody').innerHTML='<p>'+crossRead()+'</p>';
+  var W=600,H=60+SCENES.length*110, h='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Two horizontal lines, one per room, each marked with what you carried, what you forecast and whether it held, the order you issued and how public it was, and whether it stood.">';
   h+='<style>.rt{font:600 11px "IBM Plex Mono",monospace;fill:#9AAAAD;letter-spacing:.06em}.rv{font:500 12.5px "Source Serif 4",Georgia,serif;fill:#E6ECEC}.rk{font:800 13px "Libre Franklin",sans-serif;fill:#E0A244;letter-spacing:.1em}</style>';
   SCENES.forEach(function(s,i){ var r=results[i]; var y=44+i*110; h+='<text class="rk" x="14" y="'+(y-16)+'">'+esc(s.short.toUpperCase())+'</text>';
     h+='<line x1="14" y1="'+y+'" x2="'+(W-14)+'" y2="'+y+'" stroke="#2A383C" stroke-width="2"/>';
     if(!r){ h+='<text class="rv" x="14" y="'+(y+22)+'">Not yet walked.</text>'; return; }
-    var pts=[['CARRIED',r.carried.map(function(id){ var o=null; s.objects.forEach(function(x){ if(x.id===id) o=x; }); return o?o.name.replace(/^(The|A) /,''):id; }).join(' · ')],['FLAGGED',(function(){ var u=null; s.unknowns.forEach(function(x){ if(x.id===r.flagged) u=x; }); return (u?u.t:'')+(r.flaggedDecisive?' (the decisive one)':''); })()],['ORDER',(function(){ var o=null; s.orders.forEach(function(x){ if(x.id===r.order) o=x; }); return o?o.t:''; })()],[r.countermanded?'COUNTERMANDED TO':'STOOD',r.countermanded?(function(){ var o=null; s.orders.forEach(function(x){ if(x.id===r.final) o=x; }); return o?o.t:''; })():'Let it stand when the record turned.']];
+    var pts=[['CARRIED',r.carried.map(function(id){ var o=null; s.objects.forEach(function(x){ if(x.id===id) o=x; }); return o?o.name.replace(/^(The|A) /,''):id; }).join(' · ')],[r.hit?'FORECAST · HELD':'FORECAST · MISSED',(function(){ var o=null; s.orders.forEach(function(x){ if(x.id===r.order) o=x; }); return o?o.meets[r.forecast]:''; })()],[r.loud?'ORDER · PUBLIC':'ORDER · QUIET',(function(){ var o=null; s.orders.forEach(function(x){ if(x.id===r.order) o=x; }); return o?o.t:''; })()],[r.countermanded?'COUNTERMANDED TO':'STOOD',r.countermanded?(function(){ var o=null; s.orders.forEach(function(x){ if(x.id===r.final) o=x; }); return o?o.t:''; })():'Let it stand when the record turned.']];
     pts.forEach(function(p,j){ var x=14+j*(W-28)/4; var cx=x+6; h+='<circle cx="'+cx+'" cy="'+y+'" r="'+(j===3&&r.countermanded?7:5)+'" fill="'+(j===3&&r.countermanded?'#C79A45':'#E0A244')+'"/>';
       h+='<text class="rt" x="'+x+'" y="'+(y+20)+'">'+esc(p[0])+'</text>';
       var words=String(p[1]).split(' '), lines=[''], li=0; words.forEach(function(w){ if((lines[li]+' '+w).length>24&&lines[li]){ lines.push(w); li++; } else lines[li]=(lines[li]+' '+w).trim(); });
@@ -729,8 +780,8 @@ $('toPaper').addEventListener('click',openPaper);
 $('toCarry').addEventListener('click',openCarry);
 $('toFog').addEventListener('click',buildFog);
 $('backRoom').addEventListener('click',function(){ beat('b03'); live('Back in the room.'); });
-$('toOrder').addEventListener('click',openOrder);
 $('stampBtn').addEventListener('click',stamp);
+$('recallGo').addEventListener('click',river);
 $('toRecord').addEventListener('click',openRecord);
 $('playRec').addEventListener('click',playRecord);
 $('allRec').addEventListener('click',showAll);
@@ -738,7 +789,7 @@ $('toStand').addEventListener('click',openStand);
 $('standBtn').addEventListener('click',stand);
 $('cmBtn').addEventListener('click',beginCounter);
 $('cmStamp').addEventListener('click',counter);
-$('nextScene').addEventListener('click',function(){ if(idx<SCENES.length-1){ idx++; showPrelude(); } else river(); });
+$('nextScene').addEventListener('click',function(){ if(idx<SCENES.length-1){ idx++; showPrelude(); } else showRecall(); });
 $('again').addEventListener('click',function(){ idx=0; results=[]; screen('scr-title'); $('rail').innerHTML=''; });
 document.body.setAttribute('data-screen','entry');
 })();

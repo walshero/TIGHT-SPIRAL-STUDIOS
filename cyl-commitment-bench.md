@@ -306,4 +306,28 @@ Kennedy is therefore the harder scene, not the reference scene. Moving it from s
 
 **Canon note, 2026-09-15:** this bench was first deposited to Drive; the repo copy is canonical and the Drive copy is a pointer. The stale harvest doc named in §4 is `CYL_Harvest__Access_Boundary_Findings_and_Re-Run_Instructions.md` in this repo and now carries a correction note.
 
+---
+
+## 10. Addendum — Horvath on the core mechanic (2026-09-16), and the founder's pick
+
+*Founder asked what Horvath says about the core mechanic of the scene. He was summoned back alone. Then the founder chose option 5 below, which overrides the "do not build until the single-scene loop is founder-locked" caveat; that override is a founder call and is recorded as one.*
+
+**Horvath:** the core is not the order, it is *predict, observe, update* — the only sequence the brain treats as learning. An order is a prediction about yourself; the record cannot contradict it. A prediction about the *world* — what the order will meet — is what the record can land on, and a prediction error is what memory is built from. So the stamp carries a forecast: one tap, three era-plausible outcomes, none flagged. The record turn stops being exposure and becomes an error signal; stand-or-countermand becomes the update.
+
+Confidence is not optional — hypercorrection (errors made with high confidence are the ones people fix) is the strongest finding in the field — but it does not need a slider. It is already diegetic in the order sets: a public order is high-confidence, a quiet one is hedged. Read it off how loud the order is, never ask.
+
+Load: three selection tasks before the peak is more than working memory holds in six minutes. The fog flag adds a choice without adding information, because what you carried already fixes what you can read. Fold it; the forecast is the problem-solving read; Beats 1 and 2 become one screen, which is the founder's own one-thing rule honored instead of nodded at.
+
+Retrieval: memory is what you pull back out. Before the river, one tap — what did you order in 1962? — and then the river. A wrong answer is the most honest line in the game.
+
+On the two open calls: Kennedy must be able to confirm (confirmed predictions strengthen too), but the biggest effect is the loud order that meets a contradicting record, so both paths must be real. In Georgia the player already knows the count stands, so the forecast is about *cost*: what did saying no meet? Threats to the office and the family, the December 1 warning borne out, the 2023 indictment. Hitchcock keeps his suspense; the prediction error survives.
+
+What he cannot have: the delayed test. The privacy floor forbids remembering the player. The instructor panel says so; the instructor is the spacing.
+
+**Recommendation as put to the founder:** (1) forecast at the stamp, fog folded, confidence diegetic, recall tap, Georgia forecasts cost; (2) turns the record turn into a prediction error and cuts a beat; (3) Brief E grows — every order needs a sourced outcome; Brief A gets a paragraph, because the forecast replaces the flag as the problem-solving read; (4) simpler: recall tap only; (5) advanced: the forecast-confidence read across both scenes — a player loud and contradicted twice gets a different mirror than one who hedged twice.
+
+**Founder chose 5.** Built 2026-09-16 as two-scene alpha v0.2: forecast on the stamp (public/quiet marked), fog read-only on the order screen, per-scene mirror on hit/miss × loud/quiet, a sourced cost line in every Georgia consequence, the recall tap, and a cross-scene read above the river. The honest-claim ceiling gains four words: *what you expected it to meet*.
+
+**Brief E amended:** sourced outcome per order, both scenes, plus the Georgia cost line (Reuters June 2021; *Integrity Counts*, 2021; Georgia SoS, Dec 1, 2020; Fulton County indictment, Aug 14, 2023) — all Alpha fidelity until the Fact-Check Lead runs them. **Brief A amended:** the problem-solving facet now reads off the forecast, not a flag.
+
 Tight Spiral Productions · walshero@gmail.com
