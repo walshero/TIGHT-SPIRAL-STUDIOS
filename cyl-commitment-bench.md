@@ -330,4 +330,34 @@ What he cannot have: the delayed test. The privacy floor forbids remembering the
 
 **Brief E amended:** sourced outcome per order, both scenes, plus the Georgia cost line (Reuters June 2021; *Integrity Counts*, 2021; Georgia SoS, Dec 1, 2020; Fulton County indictment, Aug 14, 2023) — all Alpha fidelity until the Fact-Check Lead runs them. **Brief A amended:** the problem-solving facet now reads off the forecast, not a flag.
 
+---
+
+## 11. The rethink — the player is the citizen (founder ruling, 2026-09-16)
+
+**Founder:** "Why would I be carrying the coffee table or the picture into the next level. This is poor game design. What choices REALLY matter here? We need a rethink for this game to land."
+
+**The diagnosis, accepted.** The Carry was attention-allocation wearing an inventory costume. It half-worked when the objects were a telephone and a newspaper and collapsed the moment the release plate's real furniture went in. Nobody carries a coffee table into a decision. The bench fixed the picture (Reference Wrangler) and nobody re-asked whether the verb survived. Grievance recorded.
+
+**The mismatch underneath it.** The mandate says build *for the informed citizen*. The v6 spine seated the player *in the leader's chair*. They pulled against each other all week. The plate settles it: a living room, a swivel chair with its back to you, facing the set. A citizen's chair.
+
+**Ruling: the player is the citizen, not the leader.** This reverses the v6 spine for these two scenes. The two nights become a matched pair:
+- **October 22, 1962** — a leader asks for your trust on evidence you cannot see (no photographs are shown in the address; they go to the UN three days later). The record vindicates the trust.
+- **January 2–3, 2021** — a leader asks for your distrust on evidence you can see but cannot evaluate (a 23-page report, an arena video), after the record has already checked it. The record refutes the distrust.
+
+Mirror images. Not both-sides: the pair teaches a *method* — how you decide whom to believe when you cannot check yourself. The retired v5 line stays retired; this is not rating trust, it is acting on a claim in front of someone who will remember.
+
+**The choices that really matter, for a citizen in that chair:**
+1. **Who do you turn to.** One aperture, not three carries. The set, the hi-fi on the shortwave band (Radio Moscow — genuinely what listeners heard), the telephone, the paper. In 2021: cable, the group chat (which is where the report arrives — the fog thickens through the aperture), the state's own site, the paper. The objects are apertures, not inventory.
+2. **What do you say tonight, and to whom.** The Standing Order becomes **the Standing Word**: an act with a named person on it — your kids, your mother, the neighbor, your brother, the group chat. Loud (said to someone) or quiet (kept). That is a commitment with a cost citizens actually pay.
+3. **What would change your mind.** Horvath's forecast, rephrased as the citizen's tool: name the falsifier. "Nothing would" is a legible posture and the mirror reads it warmly.
+Then the record turns — the week of October 23–28, or the tape on the morning of January 3 — and lands on the falsifier. Then: **do you go back to the person you told?**
+
+**What this dissolves.** The Georgia-chair call (§7.2) is moot: the player is at a kitchen table on the evening of January 2 while the senators announce; the tape drops next morning. Hitchcock keeps his suspense. The v7 class-representation order finally has a home; three homes hearing one broadcast never worked from the President's desk.
+
+**What survives from v0.2:** the plates, newscast-then-paper, the address as the claim beat with the transcript floor, the forecast logic and the loud/quiet mirror, the recall tap, the river. **What goes:** pins-as-inventory, the six-unknown lattice, the presidential order menu, the 2021 office.
+
+**Founder's UI rule for the paper (same turn):** the articles are fine at that size *if* you can tap one and open it larger. Do not overwhelm with context; make it openable and viewable. Use newspaper-like functions — a front page, an article page, turn the page, back to the front — not scrolling. The medium mimics the medium.
+
+**Build:** two-scene alpha v0.3, "the citizen's chair." PROP 003 amended from The Standing Order to The Standing Word; PROP 002 (The Carry) withdrawn from this build and returned to the props room as a pattern for scenes where physical rationing is literal (a triage bay, a go-bag), never as a stand-in for attention.
+
 Tight Spiral Productions · walshero@gmail.com
