@@ -1244,3 +1244,35 @@ build, plates re-encoded once).
 build is owed once the branch lands. Drive: one loose end, the bench doc, pointer owed (above).
 Zapier: not touched. Project shelf: the stale CYL harvest doc lives there too; corrected here,
 still stale there — human-only lane, KD!.
+
+## 2026-09-16 (later) — v0.3, the citizen's chair: the Carry withdrawn, the player is the citizen
+
+**FOUNDER RULING, same day:** "Why would I be carrying the coffee table or the picture into the
+next level. This is poor game design. What choices REALLY matter here?" Accepted in full; the
+rethink and the ruling are `cyl-commitment-bench.md` §11. The Carry was attention-allocation
+wearing an inventory costume and it collapsed when real furniture went in. The v6 leader's chair
+and the founder's citizen mandate had been pulling against each other all week; the plate settled
+it (a swivel chair with its back to you, facing the set). **The player is the citizen.** The two
+nights become a matched pair — trust asked without evidence and vindicated; distrust asked against
+checked evidence and refuted — and the game teaches a method, not a posture.
+
+**v0.3 (`choose-your-leader-two-scene.html`, 470,324 B).** Beats: the set speaks; the paper —
+front page, tap a headline to open it large, Turn the page / Previous / Front page, no scrolling
+inside the sheet (founder's rule: openable, viewable, newspaper-like functions, never overwhelming);
+the claim (the address as the leader's ask, with what is NOT shown named; the eleven senators'
+statement for 2021); who do you turn to — one aperture (set / hi-fi shortwave to Radio Moscow /
+telephone / paper; cable / the group chat where the Michigan report arrives / the state's own site
+/ paper); what do you say tonight and to whom — the Standing Word, with a named person and
+loud/kept; what would change your mind — the falsifier; the record turns and lands on the
+falsifier (Oct 23–28 cards; the tape on the morning of Jan 3 with transcript floor); do you go
+back to the person you told; record + mirror; recall; river with a cross-scene read keyed on
+posture (trust / distrust / check / none) across the two rooms. The telephone aperture in 1962 is
+a fictional composite and says so in its source line.
+
+**Verified:** headless walk of both rooms through every beat including the paper's open/turn/fold,
+go-back and let-stand paths, recall, river; zero page errors; no horizontal scroll at 400px.
+**Not verified:** a phone; the newspaper items and the 2021 cost line by the Fact-Check Lead.
+
+**Owed:** founder cold play on the phone (Walkthrough Gate); Fact-Check pass on the four articles
+per scene and the aperture lines (Briefs B, E, G); a period plate for the 2021 kitchen; landing on
+main. The Carry (PROP 002) goes back to the props room as a pattern for literal rationing only.
