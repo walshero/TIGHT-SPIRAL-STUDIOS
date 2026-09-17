@@ -136,5 +136,8 @@ Runs on the WEEKLY hook, inside the Tableau or Integrity Guard sweep:
 4. This registry is stored state and can rot: it takes a `stale-fuse` entry like
    the other 18 files the moment the comparator lands.
 
-Until `statute-gate.py` exists, this file is itself DISCIPLINE — named plainly,
-same as the Convening's comparator. Two builds, one Code-lane session.
+Status 2026-09-17, same afternoon as the ruling: both gates are BUILT, selftested
+in both directions, landed byte-verified (commits `1cfdfdb`, `4fecfee`), run clean
+against the live repo, and WIRED to the WEEKLY hook as Integrity Guard step 6b.
+First live statute run: BLOCKS CLEAN; R6 counted 14 uncensused gate-shaped
+scripts — that list is the sweep's standing homework.
