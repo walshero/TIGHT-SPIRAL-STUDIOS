@@ -85,7 +85,7 @@ Also on PUSH: C1 color-scheme (`c1-check.py`, `floor.yml` + `confluence-hub.yml`
 
 | Law | Check | Status |
 |---|---|---|
-| The sentence before anything is authored | none yet | DISCIPLINE |
+| The sentence before anything is authored | `convening-gate.py` (SENTENCE check) | WIRED — weekly audit via Integrity Guard step 6b; PRE-WRITE by invocation |
 | Five standing seats sign the findings file | signature lines in `convening/<build>-CONVENING.md` | DISCIPLINE — **comparator not built; the named next Code-lane build** |
 
 ### Bound to DEVICE (the founder — real, unlogged)
