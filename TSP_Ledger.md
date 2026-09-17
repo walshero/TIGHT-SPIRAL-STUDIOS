@@ -9,7 +9,7 @@
 
 **DECIDED - the hook principle.** The studio has six hooks: PUSH (the belt, 12 ticks), WEEKLY (five Monday sweeps, verified live on the scheduler), DAILY, SESSION-START (loads mechanically, executes by compliance), PRE-WRITE (the Convening, new), DEVICE (the founder). A law binds to one or it is a wish, however well written.
 
-**GRADUATED: `LAWS-REGISTRY.md`** (repo root, commit 9455449, byte-verified). Census v1: 13 laws WIRED to PUSH, five to WEEKLY, the compliance laws named DISCIPLINE instead of pretending, seven wishes named with their cheapest honest hooks, ~50 uncensused scripts marked UNVERIFIED. Spec for `statute-gate.py` (the weekly tooth that flags any law with no firing record) included; NOT built - it and the Convening comparator are one Code-lane session.
+**GRADUATED: `LAWS-REGISTRY.md`** (repo root, commit 9455449, byte-verified). Census v1: 13 laws WIRED to PUSH, five to WEEKLY, the compliance laws named DISCIPLINE instead of pretending, seven wishes named with their cheapest honest hooks, ~50 uncensused scripts marked UNVERIFIED. Spec for `statute-gate.py` (the weekly tooth that flags any law with no firing record) included. SAME-DAY UPDATE: both gates built, selftested both directions, landed byte-verified (commits 1cfdfdb, 4fecfee), first live run BLOCKS CLEAN, and wired to the WEEKLY hook as Integrity Guard step 6b. The Aleph sweep was re-fired manually the same afternoon.
 
 **FIRST CATCH, while building it:** the Aleph drift sweep's last run ABANDONED 2026-09-14 while its four siblings SUCCEEDED. A sweep that abandons unnoticed is a blind gate reading as present. Needs eyes.
 
