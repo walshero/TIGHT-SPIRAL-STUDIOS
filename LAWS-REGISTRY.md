@@ -25,7 +25,7 @@ Verified this session, with evidence. A law binds to one of these or it is a wis
 | **WEEKLY** | Mondays, scheduled tasks | Aleph drift sweep 10:00 UTC, Fingers 11:00, Tableau belt 12:00, canon decay 13:00, Integrity Guard 13:00 — all read live from the scheduler today |
 | **DAILY** | noon UTC | "No walls, universal home" — SUCCEEDED today |
 | **SESSION-START** | every session, semi-mechanically | project instructions load mechanically; the Aleph pass (`claude/forking-paths-protocol.md`) executes by agent compliance — the load is guaranteed, the execution is not |
-| **PRE-WRITE** | before a draft is authored | THE CONVENING (OS §6 0.5-A). Newest hook; comparator NOT built; holds by discipline |
+| **PRE-WRITE** | before a draft is authored | THE CONVENING (OS §6 0.5-A). Comparator built same day: `convening-gate.py`, audited weekly by Integrity Guard step 6b |
 | **DEVICE** | when a file reaches the founder | the founder's eyes and hands — the one human hook, real but unlogged |
 
 **Standing finding at creation: the Aleph drift sweep's last run was ABANDONED
