@@ -3,6 +3,16 @@
 
 ---
 
+## 2026-09-17 - THE CONVENING: the panel moves before authoring (voice-session ruling, landed)
+
+**DECIDED.** Months of builds missed founder vision because the seats that would catch it speak only when invoked by name. The bug is missing signatures, not missing seats - and ship-time signatures are still too late. Founder: "Those other things don't matter if these things aren't there. We need to see these things so that they inform the drafts that I receive."
+
+**THE REORDER.** Old: build -> gate -> ship -> founder catches the miss by eye. New: **sentence -> convene -> findings -> build against findings -> gate -> ship.** Mechanical gates unchanged, no longer first. "Full TSP treatment" now means the Convening, invoked by name.
+
+**FIVE STANDING SEATS, blocking, every build:** Coordinator (Horvath - what cognitive work does this ask, is it the work named), Stranger (widened from visibility to comprehension - owns C6), **Osterweil (new seat, founder-ruled)** - the freedom-of-play test, Aleph, and **Studio Voice promoted to a seat**, sourced from the real corpus: MW Knowledge Base, sabbatical folder, the 2012 MIT and 2018 sabbatical reports (already in walshero Claude_files; FERPA fence: name/path search, never fullText).
+
+**Spec, checks, and open items:** `claude/CONVENING-HANDOFF-2026-09-17.md` (commit f1736a7, byte-verified). The comparator that makes the findings file a required input is NOT built yet; until then the Convening holds by discipline.
+
 ## 2026-08-27 - CHECKED IS NOT SHIPPED: one failure class, four costumes
 
 **THE INCIDENT.** Funnybonies v9.1 was verified hard: belt clean on all eleven ticks, full flow driven in a headless browser, zero JS errors, screenshots read by eye. It was then pushed to main through the GitHub connector with the literal string `PLACEHOLDER` as the file content. **The write succeeded.** The connector returned a commit sha and a green result. `funnybonies/index.html` on main became an 11 byte file and stayed destroyed until someone happened to look. Nothing was permanently lost only because the verified build still existed in the session sandbox.
