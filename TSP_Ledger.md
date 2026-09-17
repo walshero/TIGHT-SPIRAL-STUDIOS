@@ -3,6 +3,16 @@
 
 ---
 
+## 2026-09-17 - LAWS REGISTRY: a law is only law when it names its hook
+
+**THE QUESTION.** Same session as the Convening, the founder asked why Stage 0.5 could be law since July and never fire: "Law, but didn't fire. That seems problematic. How can we address systematically." The answer is structural: 0.5 was bound to a moment that exists only in prose ("right after intake"), and nothing in the machinery ever arrives at a prose moment. Contrast never fails this way because a push is a real event.
+
+**DECIDED - the hook principle.** The studio has six hooks: PUSH (the belt, 12 ticks), WEEKLY (five Monday sweeps, verified live on the scheduler), DAILY, SESSION-START (loads mechanically, executes by compliance), PRE-WRITE (the Convening, new), DEVICE (the founder). A law binds to one or it is a wish, however well written.
+
+**GRADUATED: `LAWS-REGISTRY.md`** (repo root, commit 9455449, byte-verified). Census v1: 13 laws WIRED to PUSH, five to WEEKLY, the compliance laws named DISCIPLINE instead of pretending, seven wishes named with their cheapest honest hooks, ~50 uncensused scripts marked UNVERIFIED. Spec for `statute-gate.py` (the weekly tooth that flags any law with no firing record) included; NOT built - it and the Convening comparator are one Code-lane session.
+
+**FIRST CATCH, while building it:** the Aleph drift sweep's last run ABANDONED 2026-09-14 while its four siblings SUCCEEDED. A sweep that abandons unnoticed is a blind gate reading as present. Needs eyes.
+
 ## 2026-09-17 - THE CONVENING: the panel moves before authoring (voice-session ruling, landed)
 
 **DECIDED.** Months of builds missed founder vision because the seats that would catch it speak only when invoked by name. The bug is missing signatures, not missing seats - and ship-time signatures are still too late. Founder: "Those other things don't matter if these things aren't there. We need to see these things so that they inform the drafts that I receive."
