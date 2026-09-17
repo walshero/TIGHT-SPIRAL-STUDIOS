@@ -141,3 +141,19 @@ still a thing a session does by hand, and a session that simply forgets produces
 that reads as agreement. `scope-gate.py` closed the adjacent gap — a governance doc may no
 longer name a file the trunk cannot reach — but it reads artifacts, not runs. Naming that
 here so the next session inherits the gap instead of rediscovering it.
+
+## AMENDMENT 2026-09-17 — THE CONVENING RIDES THE ALEPH PASS
+
+Founder ruling of this date (ledger, two entries; `LAWS-REGISTRY.md`; OS §6 0.5-A):
+a law is only law when it names a hook, and SESSION-START is the Aleph pass. So the
+pass gains one arithmetic step. From the clone, after the resolver:
+
+    python3 convening-gate.py --audit
+    python3 statute-gate.py .
+
+Read the output before any other work. A convening HALT means a build in flight has
+an unsigned seat or no findings file — that build is OUT OF PROCESS and authoring on
+it stops until the seats sign. A statute HALT means the registry's own claims broke.
+"No convening/ directory" with no build in flight is a fact, not a failure. The
+weekly twin of this step is Integrity Guard step 6b; this one exists so a session
+does not author for six days on a build the Monday sweep would have stopped.
