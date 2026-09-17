@@ -69,7 +69,8 @@ Also on PUSH: C1 color-scheme (`c1-check.py`, `floor.yml` + `confluence-hub.yml`
 | Touch floor, corpus-wide | Fingers weekly sweep | WIRED |
 | Canon decay / floors | canon decay sweep | WIRED |
 | Governance integrity | Studio Integrity Guard | WIRED |
-| Cross-lane canon drift | Aleph drift sweep | WIRED — **last run ABANDONED 2026-09-14; needs eyes** |
+| Cross-lane canon drift | Aleph drift sweep | WIRED — **last run ABANDONED 2026-09-14; re-fired 2026-09-17; the Integrity Guard now checks sibling-sweep outcomes weekly** |
+| Statute sweep — every law names its hook | Integrity Guard step 6b, Mondays 13:00 | WIRED — `statute-gate.py` + `convening-gate.py --audit`, added 2026-09-17 |
 
 ### Bound to SESSION-START (loads mechanically, executes by compliance)
 
