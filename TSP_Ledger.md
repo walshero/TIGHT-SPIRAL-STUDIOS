@@ -1282,3 +1282,15 @@ openable rule had been applied to the newspaper only. Now it is a rule: every de
 week's record cards — is a list of tappable lines that pop out one at a time at large type (1.25rem serif on cream, date and
 count on top) with Back to the list / Previous / Next, and nothing scrolls inside the sheet. `openList()` is the one renderer;
 a future dense list uses it or it does not ship. Headless walk clean; the phone is still the founder's to confirm.
+
+## 2026-09-17 — v0.4 from the top: the belt measured the splash and agreed with the founder
+
+Founder from the phone: the splash was still machine language; "The chair is yours" said nothing; redesign from the top by the
+OS. Ran the belt's own gates against v0.3.1 before touching a line: `one-thing-gate.py` SHIP-BLOCK (103 words before the first
+control, 0% image on entry, two co-equal invitations); `studio-voice-gate.py` HALT (three unmarked em dashes). v0.4: the entry is
+the 1962 room at 62vh with the date, one line and *Sit down*; the sound toggle moved out of the chrome into the scene; the prelude
+screen is gone and its facts are the paper's inside pages; every dense list uses one renderer that opens large and turns pages;
+no em dashes; every studio line cut to the fact. Gates after: one-thing WARN only (phone 56% image, 1 invite, 19 words), voice
+SHIP, retired PASS, structure PASS. `cyl-commitment-bench.md` §12 carries the detail. `python3 -m pip install playwright` was
+needed once in this container for the browser gates; the browsers at /opt/pw-browsers already matched. Verified headless, both
+rooms; the phone is the founder's.

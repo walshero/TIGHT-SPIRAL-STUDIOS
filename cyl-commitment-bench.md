@@ -360,4 +360,23 @@ Then the record turns — the week of October 23–28, or the tape on the mornin
 
 **Build:** two-scene alpha v0.3, "the citizen's chair." PROP 003 amended from The Standing Order to The Standing Word; PROP 002 (The Carry) withdrawn from this build and returned to the props room as a pattern for scenes where physical rationing is literal (a triage bay, a go-bag), never as a stand-in for attention.
 
+---
+
+## 12. From the top: the front door, by the OS (2026-09-17)
+
+**Founder, from the phone:** "The machine language hasn't changed in the splash. The chair is yours says nothing. Redesign from the top with new TSP OS."
+
+**What the belt said when asked.** `one-thing-gate.py` on v0.3.1: SHIP-BLOCK. CRITICAL INSTRUCTION-WALL, 103 words above the first control; CRITICAL WALL, 0% image on entry; HIGH MULTI-INVITE, two co-equal buttons (the sound chip and the start). `studio-voice-gate.py`: HALT, three unmarked em dashes. The splash was a title card in studio voice, which the OS forbids twice over: the scene-first floor (open in a scene, notice something, no text) and the AI-Skeptic seat (no wrapped bows, no tricolons, nothing that sounds finished).
+
+**What changed (v0.4).**
+- The entry is the 1962 room at 62vh (v7's own `.stage` / `.scrim` grammar), the date line, one line, one button: *Sit down.* No headline, no paragraph, no reassurance. Disclosures live in the instructor panel and footer where they belong.
+- The sound toggle left the chrome; it sits in the scene header, where it matters. Entry controls: Studio, Cabinet, Sit down.
+- The prelude screen is gone. Its five dated facts are the paper's inside pages, under a rule that says *Inside*. One renderer, `paperList()`, for the paper, the inside pages and the record: tap a line, it opens large; Front page / Previous / Turn the page; nothing scrolls inside.
+- Every em dash is gone. Every studio line was cut to the fact and stopped: the mirror says what you named, whether it happened, what you did; the cross-scene read says what you did in each room and what the record held. No "that is the whole skill," no "most honest line," no "not a fault." The AI-Skeptic's list, applied.
+- Gates after: one-thing WARN only (phone 56% image, 1 invitation, 19 words; laptop 35% image, sub-50 warn owned by studio-eyes); voice SHIP; retired lines PASS; structure PASS.
+
+**Founder's words in the build:** none yet beyond the rulings that shaped it. Every remaining studio line stays tagged studio-draft-awaiting-founder-words. The entry lines ("The set is warming up. Nobody has gone to bed.") are v7's shipped copy, same tag.
+
+**Still owed:** the founder's cold play on the phone; the Fact-Check pass; a period plate for the kitchen; landing on main.
+
 Tight Spiral Productions · walshero@gmail.com
