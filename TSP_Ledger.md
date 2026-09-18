@@ -3,6 +3,17 @@
 
 ---
 
+## 2026-09-18 - CYL reconvened: sentence ratified, scope ADVANCED, five decisions ruled
+
+**First convening under OS 0.5-A ran to completion.** Findings: `convening/CYL-CONVENING.md` (gate-passed, five seats + Conductor). The founder ruled all five decisions same day:
+
+1. **SENTENCE, founder verbatim:** "The player notices their household in a new light with each address, and notices what wealth and power - through politics - did to where they stand." NOTICES twice; "through politics" reads as conduit, class frame stands, partisan scoring stays out of scope.
+2. **Scope ADVANCED:** (a) GATE 1 cold play on v7 incl. Osterweil's refusal case + record approval for the modern trio; (b) founder-words pass; (c) modern plates commission. (d) route-budget blocked on 3.
+3. **The 08-09 fork: "Idk."** Converts to an evidence errand - Mac-side search for the bundle next linked session. Found = stranded, recover; a real search finding nothing = fossil, mark cyl-modern docs.
+4-5. **"Still me."** Founder runs the first survivable session himself; no build to Scot yet. The Skeptic's concession 5 (a person OTHER than the founder) stands UNMET, dissent preserved.
+
+**GRADUATED: `convening/CYL-FOUNDER-WORDS-WORKLIST.md`** - every studio-drafted string in v7 (6 scenes x 10 fields + 8 screens of chrome), extracted mechanically, keyed for dictation, landed in two byte-checked chunks (14,254 B, md5 d8187063). The founder-words pass now has a worklist instead of a vibe.
+
 ## 2026-09-17 - LAWS REGISTRY: a law is only law when it names its hook
 
 **THE QUESTION.** Same session as the Convening, the founder asked why Stage 0.5 could be law since July and never fire: "Law, but didn't fire. That seems problematic. How can we address systematically." The answer is structural: 0.5 was bound to a moment that exists only in prose ("right after intake"), and nothing in the machinery ever arrives at a prose moment. Contrast never fails this way because a push is a real event.
