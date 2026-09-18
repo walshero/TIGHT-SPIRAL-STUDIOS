@@ -228,3 +228,166 @@ FOUNDER WORDS:
 FOUNDER WORDS:
 
 **trump17.words** (studio draft):
+> This tax bill costs the man signing it and pays the room listening to him.
+
+FOUNDER WORDS:
+
+**trump17.life** (studio draft):
+> Independent analyses found the opposite skew: the largest, permanent benefits went to corporations and top earners. The corporate rate cut was permanent while the wage-earner's cuts were written to expire, and provisions on pass-through income and estates favored real-estate businesses like the president's own.
+
+FOUNDER WORDS:
+
+**trump17.whoPaid** (studio draft):
+> Who carried it: the cut on the pay stub had an expiration date. The cut on the corporate ledger did not. Same law, two clocks, sorted by what a household owns.
+
+FOUNDER WORDS:
+
+**trump17.walkNote** (studio draft):
+> The shelf math is the same as 1962: the household that buys this week's groceries this week feels every price first.
+
+FOUNDER WORDS:
+
+**trump17.notice1** — "The flat screen" (studio draft):
+> Muted, captioned. The applause is text on a black bar.
+
+FOUNDER WORDS:
+
+**trump17.notice2** — "The pay stub" (studio draft):
+> Folded in a pocket. The promise on the screen is about this piece of paper.
+
+FOUNDER WORDS:
+
+**trump17.notice3** — "The vending machine" (studio draft):
+> Prices went up in the spring. They did not come down.
+
+FOUNDER WORDS:
+
+**trump17.notice4** — "The parking lot" (studio draft):
+> Through the window: the plant's lot, and past it, the highway to somewhere the money goes.
+
+FOUNDER WORDS:
+
+## SCENE biden22
+
+**biden22.roomLine** (studio draft):
+> A small apartment, evening. The announcement replays on a phone propped against a mug.
+
+FOUNDER WORDS:
+
+**biden22.reach** (studio draft):
+> Plainspoken, sympathetic, naming a weight millions actually carry. It sounds like relief arriving.
+
+FOUNDER WORDS:
+
+**biden22.words** (studio draft):
+> The degree was a ticket to the middle class; the debt broke that promise; this order restores it.
+
+FOUNDER WORDS:
+
+**biden22.life** (studio draft):
+> The authority behind the promise was contested from the start: the Speaker of the President's own party had said publicly a year earlier that a president does not have the power for debt forgiveness. Millions applied and re-planned around it. The Supreme Court struck the plan down in June 2023; under it, the promised relief never arrived.
+
+FOUNDER WORDS:
+
+**biden22.whoPaid** (studio draft):
+> Who carried it: the households that budgeted around an announcement. Wealth absorbs a reversed promise; a paycheck re-plans around it. The debt stayed on the same kitchen tables it started on.
+
+FOUNDER WORDS:
+
+**biden22.walkNote** (studio draft):
+> The back room again. The thing you were fixing is still there. It has been sixty years and it has not moved. You are just further from it.
+
+FOUNDER WORDS:
+
+**biden22.notice1** — "The phone" (studio draft):
+> The clip is forty seconds of an eighteen-minute speech. That is the version most people will meet.
+
+FOUNDER WORDS:
+
+**biden22.notice2** — "The loan statement" (studio draft):
+> On the table, the balance that was supposed to be a ticket somewhere.
+
+FOUNDER WORDS:
+
+**biden22.notice3** — "The calculator app" (studio draft):
+> Open. Someone here has already re-planned two years around this promise.
+
+FOUNDER WORDS:
+
+**biden22.notice4** — "The window" (studio draft):
+> A city where the degree was supposed to be the way up, and the rent is the way it is.
+
+FOUNDER WORDS:
+
+
+## SCREEN CHROME — the frame the player reads between scenes
+
+**s-entry** (studio draft unless verbatim-marked in the build):
+> October 22, 1962 · 6:58 p.m.
+> The set is warming up. Nobody has gone to bed.
+> Sit down
+
+FOUNDER WORDS (line by line, only where a line should change):
+
+**s-room** (studio draft unless verbatim-marked in the build):
+> Tap whatever your eye goes to. Every read is valid.
+> The room goes quiet. Listen.
+
+FOUNDER WORDS (line by line, only where a line should change):
+
+**s-address** (studio draft unless verbatim-marked in the build):
+> With only this, how much do you trust the person saying it?
+> Not much
+> Some
+> Mostly
+> Fully
+
+FOUNDER WORDS (line by line, only where a line should change):
+
+**s-record** (studio draft unless verbatim-marked in the build):
+> The words
+> The record
+> Same words. Now you can see the frame. How much do you trust them?
+> Not much
+> Some
+> Mostly
+> Fully
+
+FOUNDER WORDS (line by line, only where a line should change):
+
+**s-drop** (studio draft unless verbatim-marked in the build):
+> This is how far rhetoric can carry a person. The thing being measured is the message's reach, never your worth.
+> Walk the house
+
+FOUNDER WORDS (line by line, only where a line should change):
+
+**s-walk** (studio draft unless verbatim-marked in the build):
+> Arrows or tap a room. Enter to act.
+> Back to the set
+
+FOUNDER WORDS (line by line, only where a line should change):
+
+**s-shift** (studio draft unless verbatim-marked in the build):
+> The set changes. The rules do not.
+> The next three addresses are within living memory. Same game: a real quote, your read, then the dated record, and who carried the cost, by household.
+> This is not a game about parties. It is a game about wealth, power, and what they do to the floor under a family.
+> Go on
+
+FOUNDER WORDS (line by line, only where a line should change):
+
+**s-arc** (studio draft unless verbatim-marked in the build):
+> Six addresses · sixty years
+> Where you held, where it pulled
+> What was this measuring?
+> Two commitments per scene: before the record, and after. The distance between them is the measure. Pull = how far the words alone moved you. Brake = how much the record pulled you back. That is noticing,, and noticing is the skill. Your floor in the walk was your running altitude: the rooms never moved; the distance did. Records are dated and sourced in-scene. No score is kept on you as a person; nothing is stored; nothing leaves this file.
+> Play again
+
+FOUNDER WORDS (line by line, only where a line should change):
+
+## HOW TO USE THIS FILE
+
+Dictate or write replacements by key ("jfk62.whoPaid: ...", "s-entry line 3:
+..."). A blank FOUNDER WORDS section after your pass means the studio draft is
+BLESSED as-is and loses its awaiting-founder-words status. The build edit that
+applies your words is mechanical and runs through the belt as a repair, not a
+reconvene — the strings change voice, not what the player does or notices.
