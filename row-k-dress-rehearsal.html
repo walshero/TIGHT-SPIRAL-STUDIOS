@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Row K: Dress Rehearsal</title>
+<!--
+  ROW K v4 - a staging game. Tight Spiral Productions.
+  Three scenes: Ernesto (elevator), Vera (book club), Frank (the basement cat).
+  v4 changes (founder notes 2026-09-17): Fran the stage manager gives backstage
+  feedback the moment a card is picked; two new scenes added, linear progression.
+  v5 ship fix: CHANGE THIS from the review returns to the review (BACK TO CURTAIN),
+  never advances through the remaining choices.
+  v5r2 fix: color-scheme declared per stop and dark-mode devices open at the night
+  stop, so no host auto-darkening can repaint the page into white-on-white.
+  v5r3 (founder notes): scene picker added to the splash so any scene is two taps
+  from anywhere, no replay required.
+  v6 (founder order + Mamet seat): Scene 3 rewritten entirely. The diner secret
+  failed on scale - broke-ness lives in small paper (wallets, coupons) that cannot
+  project past Row 1. Mamet-seat principles applied: drama is what the character
+  DOES; evidence at body scale or bigger; objects earn their place by being used.
+  New scene: Coach Baxter, fired this morning, gives the pregame speech anyway.
+  v7 (founder ruling: option 5, advanced): ink plates. Each scene's splash draws
+  itself in ink. One plate per scene is the standing authoring cost of a new scene.
+  v8 (founder note: Baxter is cheesy): Scene 3 rewritten to the register of the
+  course's sample plays, The Sculptor's Funeral and Family 2.0.
+  v9 (founder riff): Scene 3 is now FRANK AND THE BASEMENT CAT - a concealed
+  tenderness, so the three scenes carry three emotional colors: fear, bluff, love.
+  New opening flow: a program (lobby) screen lists the three scenes with no
+  graphics; choosing one draws the ink plate and scrolls down to a proscenium
+  whose curtains open sloppily-on-purpose, revealing the situation on stage.
+  v10 (founder notes): verbless fragments fixed in scene copy (a cat waits; chairs
+  sit). Curtain animation rebuilt on animation principles - anticipation squeeze,
+  curtains GATHER to the sides with pleats bunching via scaleX, overshoot and
+  bouncy settle (spring bezier), then staged beats: situation text rises in and
+  footlights fade up. Old linear stutter removed.
+  v10r2 (founder notes): curtains lightened to a rose velvet so the folds read;
+  fold lines are now irregular curved SVG drapery, not ruled stripes, and they
+  crowd naturally when the curtain gathers. Amber footlight floor glow removed.
+  v10r3 (founder notes): the verdict now shows the staged card above each
+  audience reaction, so the feedback is directly comparable to the choice.
+  v11 DARK HOST LAW (founder order, permanent, studio-wide): a dark-preferring
+  device never sees a light palette - the comfort ladder forks into three
+  dark-side brightness stops (warm dark, deep dark, black), color-scheme: dark
+  at every stop, so no host auto-darkening can ever repaint the page into
+  white-on-white. Dark-side stop separation is spaced by perceived lightness
+  (CIE L* steps of ~8+), since the 0.12 luminance floor is unreachable near
+  black. Runtime contrast audit (every screen x every stop, computed styles)
+  joins the preship gate.
+  v11r2 BACKDROP-AS-ELEMENT (device-truth screenshot, 2026-09-18): the artifact
+  viewer discards the body background and paints its own light sheet, so the
+  dark ladder's cream ink floated on the viewer's light canvas - white on
+  white. Element backgrounds survive the viewer, so the page backdrop is now a
+  real fixed div#backdrop at z-index:0 with content above it (a forced opaque
+  body background paints over a negative-z pseudo-element, so ::before is not
+  enough). Never trust body background alone. Same pass: header now wraps at
+  phone width - COMFORT was pushed off-screen at 390px.
+  v12 (founder notes): the at-rise description moves above the stage; the ink
+  plate moves inside the proscenium and draws itself once revealed. Curtains
+  now open like someone is pulling them - two short tugs with slack-back
+  between, then one long haul (one, two, threeeee), swing and settle.
+  v12r2 (founder order): studio branding landed - spiral mark Direction B
+  (teal #0f5f5a on burnt orange #c05a1e) with wordmark and tagline in a
+  footer on every screen. First repo deploy of this build.
+  Craft target: stagecraft / show-don't-tell for the stage (EN195 Workshop 3, Lens 3).
+  Floors: single-file offline, no network fetches, no emoji, scene-first,
+  one decision per screen, 20px body / 18px min, 48px targets, back+home nav,
+  three comfort stops, reduced-motion support, keyboard operable.
+-->
+<style>
+  :root{
+    --paper:#FAF6EE; --ink:#1F1B16; --amber:#E8A13D; --amber-soft:#F3D9AE;
+    --slotline:#5A5245; --card:#FFFFFF; --good:#284F2E; --goodink:#F5F1E8;
+    color-scheme: light;
+  }
+  body[data-comfort="2"]{ --paper:#D9CFBC; --card:#EDE5D4; }
+  body[data-comfort="3"]{ --paper:#14110D; --ink:#F5F1E8; --card:#241F18;
+    --slotline:#B8AE9C; --amber-soft:#4A3A1E; color-scheme: dark; }
+  /* DARK HOST LAW: a dark-preferring device never sees a light palette, so the
+     host has nothing to repaint. The comfort ladder forks into three dark-side
+     brightness stops: warm dark, deep dark, black. */
+  body[data-scheme="dark"]{
+    --paper:#3D362B; --ink:#F5F1E8; --card:#4A4336;
+    --slotline:#B8AE9C; --amber-soft:#4A3A1E; color-scheme: dark;
+  }
+  body[data-scheme="dark"][data-comfort="2"]{ --paper:#211C15; --card:#2E2820; }
+  body[data-scheme="dark"][data-comfort="3"]{ --paper:#0B0906; --card:#1A1611; }
+  *{box-sizing:border-box; margin:0;}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:Georgia,'Times New Roman',serif;
+    font-size:20px; line-height:1.45; padding:0 16px 40px;
+  }
+  /* BACKDROP-AS-ELEMENT LAW: some viewers discard or force the page's body
+     background, orphaning text from its floor. Element backgrounds provably
+     survive, so the backdrop is a real fixed element layered above the body
+     background and below the content. Never trust body background alone. */
+  #backdrop{ position:fixed; inset:0; background:var(--paper); z-index:0; }
+  header, main, footer{ position:relative; z-index:1; }
+  button{
+    font:inherit; color:var(--ink); cursor:pointer;
+    min-height:48px; border-radius:10px;
+  }
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important;} }
+
+  header{
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px;
+    padding:14px 0; max-width:760px; margin:0 auto;
+    border-bottom:2px solid var(--ink);
+  }
+  .navbtn{
+    background:var(--card); border:2px solid var(--ink); padding:8px 18px;
+    font-family:Verdana,Arial,sans-serif; font-size:18px; font-weight:bold;
+  }
+  h1{ font-family:Verdana,Arial,sans-serif; font-size:26px; letter-spacing:3px; }
+  h1 small{
+    display:block; font-size:18px; letter-spacing:2px; font-weight:normal;
+    font-family:Verdana,Arial,sans-serif;
+  }
+
+  main{ max-width:760px; margin:0 auto; }
+
+  .stepline{
+    text-align:center; font-family:Verdana,Arial,sans-serif; font-size:18px;
+    font-weight:bold; letter-spacing:2px; margin:18px 0 6px;
+  }
+
+  /* Lobby: tonight's program, names only, no graphics */
+  .lobby-note{ text-align:center; font-style:italic; margin:8px 0 20px; }
+  .lobbybtn{
+    display:block; width:100%; max-width:560px; margin:0 auto 14px;
+    background:var(--card); border:2px solid var(--ink); padding:16px 20px;
+    text-align:center; font-family:Verdana,Arial,sans-serif; font-size:18px;
+    font-weight:bold; letter-spacing:2px;
+  }
+  .lobbybtn .sname{
+    display:block; font-size:22px; letter-spacing:2px; margin-top:4px;
+  }
+
+  /* Proscenium: curtains pulled open by hand to reveal the scene's ink plate */
+  .proscenium{
+    position:relative; border:3px solid var(--ink); border-radius:12px;
+    overflow:hidden; margin:14px 0 6px; background:var(--paper);
+  }
+  .pros-inner{
+    min-height:240px; display:flex; align-items:center; justify-content:center;
+    padding:40px 13% 44px;
+  }
+  .valance{
+    position:absolute; top:0; left:0; right:0; height:22px; z-index:3;
+    background:#A34E40; border-bottom:4px solid #7C3A30;
+  }
+  /* Curtains GATHER to the sides like pulled drapes: rose velvet with
+     irregular curved fold lines that crowd together as the fabric bunches. */
+  .curtain{
+    position:absolute; top:0; bottom:0; width:53%; z-index:2;
+    background:#C96F5F;
+  }
+  .curtain svg{ width:100%; height:100%; display:block; }
+  /* Someone is PULLING these: two short tugs, the fabric slackens back a
+     little after each, then one long haul - one, two, threeeee - with a
+     swing and settle at the end. Timing functions are set per segment so
+     each tug snaps and each slack drifts. */
+  .curtain.cl{
+    left:0; transform-origin:left center; border-right:4px solid #8E4237;
+    animation:pull 2.2s 0.6s forwards;
+  }
+  .curtain.cr{
+    right:0; transform-origin:right center; border-left:4px solid #8E4237;
+    animation:pull 2.2s 0.75s forwards;
+  }
+  @keyframes pull{
+    0%{ transform:scaleX(1); animation-timing-function:cubic-bezier(0.5,0,0.2,1); }
+    12%{ transform:scaleX(0.78); animation-timing-function:ease-in-out; }
+    26%{ transform:scaleX(0.83); animation-timing-function:cubic-bezier(0.5,0,0.2,1); }
+    38%{ transform:scaleX(0.58); animation-timing-function:ease-in-out; }
+    54%{ transform:scaleX(0.63); animation-timing-function:cubic-bezier(0.4,0,0.15,1); }
+    86%{ transform:scaleX(0.06); animation-timing-function:ease-out; }
+    93%{ transform:scaleX(0.17); animation-timing-function:ease-in-out; }
+    100%{ transform:scaleX(0.12); }
+  }
+  /* The plate waits behind the curtain and inks itself as the reveal lands */
+  .pros-inner .draw{ animation-delay:2.4s; }
+  .pros-inner .draw.d2{ animation-delay:2.9s; }
+  .pros-inner .draw.d3{ animation-delay:3.4s; }
+  @media (prefers-reduced-motion: reduce){
+    .curtain.cl, .curtain.cr{ animation:none; transform:scaleX(0.12); }
+  }
+
+  .scenenav{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin:10px 0 4px; }
+  .scenebtn{
+    background:var(--card); border:2px solid var(--ink); padding:10px 20px;
+    font-family:Verdana,Arial,sans-serif; font-size:18px; font-weight:bold;
+    letter-spacing:1px;
+  }
+  .scenebtn[aria-pressed="true"]{ background:var(--amber-soft); border-width:3px; }
+
+  .secret{
+    margin:18px auto 10px; text-align:center;
+    background:var(--amber); color:#1F1B16;
+    border:3px solid #1F1B16; border-radius:12px; padding:18px 20px;
+  }
+  .secret .tag{
+    font-family:Verdana,Arial,sans-serif; font-size:18px; font-weight:bold;
+    letter-spacing:2px;
+  }
+  .secret .body{ font-size:22px; margin-top:6px; }
+
+  .scene-line{ text-align:center; font-style:italic; margin:16px auto 18px; }
+
+  /* Ink plate: the scene sketches itself onto the splash */
+  .plate-wrap{ display:flex; justify-content:center; margin:6px 0 10px; color:var(--ink); }
+  .plate-wrap svg{ height:150px; max-width:100%; }
+  .draw{
+    fill:none; stroke:currentColor; stroke-width:3;
+    stroke-linecap:round; stroke-linejoin:round;
+    stroke-dasharray:600; stroke-dashoffset:600;
+    animation:drawon 1.5s ease-out forwards;
+  }
+  .draw.d2{ animation-delay:0.5s; }
+  .draw.d3{ animation-delay:1s; }
+  @keyframes drawon{ to{ stroke-dashoffset:0; } }
+  @media (prefers-reduced-motion: reduce){
+    .draw{ animation:none; stroke-dashoffset:0; }
+  }
+
+  .prompt{ text-align:center; font-size:22px; margin:20px 0 6px; }
+  .subprompt{ text-align:center; font-style:italic; margin-bottom:18px; }
+
+  .bank{ display:flex; flex-direction:column; gap:14px; }
+  .cardbtn{
+    background:var(--card); border:2px solid var(--ink); padding:16px 18px;
+    text-align:left; font-size:20px; width:100%;
+  }
+  .cardbtn[aria-pressed="true"]{
+    background:var(--amber-soft); border-width:3px; font-weight:bold;
+  }
+  .cardbtn .onstage{
+    display:block; font-family:Verdana,Arial,sans-serif; font-size:18px;
+    font-weight:bold; letter-spacing:1px; margin-top:8px;
+  }
+
+  .franbox{
+    margin-top:16px; background:var(--card); border:2px dashed var(--slotline);
+    border-radius:12px; padding:14px 18px;
+  }
+  .franbox .who{
+    font-family:Verdana,Arial,sans-serif; font-size:18px; font-weight:bold;
+    letter-spacing:1px; display:block; margin-bottom:4px;
+  }
+  .franbox p{ font-style:italic; }
+
+  .advance-row{
+    display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin:26px 0 8px;
+  }
+  .bigbtn{
+    background:var(--ink); color:var(--paper); border:3px solid var(--ink);
+    font-family:Verdana,Arial,sans-serif; font-size:22px; font-weight:bold;
+    letter-spacing:3px; padding:14px 44px;
+  }
+  .bigbtn[disabled]{ opacity:0.55; cursor:not-allowed; }
+
+  .review-item{
+    background:var(--card); border:2px solid var(--ink); border-radius:12px;
+    padding:14px 18px; margin-bottom:14px;
+  }
+  .review-item .cat{
+    font-family:Verdana,Arial,sans-serif; font-size:18px; font-weight:bold;
+    letter-spacing:2px;
+  }
+  .review-item .swap{
+    margin-top:10px; background:var(--card); border:2px solid var(--ink);
+    padding:8px 16px; font-family:Verdana,Arial,sans-serif; font-size:18px;
+    font-weight:bold;
+  }
+
+  .row-react{
+    background:var(--card); border:2px solid var(--ink); border-radius:12px;
+    padding:14px 18px; margin-bottom:12px;
+  }
+  .row-react .who{
+    font-family:Verdana,Arial,sans-serif; font-size:18px; font-weight:bold;
+    letter-spacing:1px; display:block; margin-bottom:2px;
+  }
+  .row-react .staged{
+    background:var(--amber-soft); border-radius:8px; padding:10px 14px;
+    margin:6px 0 12px;
+  }
+  .banner{
+    border:3px solid var(--ink); border-radius:12px; padding:18px 20px;
+    text-align:center; margin:18px 0;
+    background:var(--amber); color:#1F1B16;
+  }
+  .banner.win{ background:var(--good); color:var(--goodink); border-color:var(--good); }
+  .banner .head{
+    font-family:Verdana,Arial,sans-serif; font-size:22px; font-weight:bold;
+    letter-spacing:2px; display:block; margin-bottom:6px;
+  }
+  .houselights{ text-align:center; font-style:italic; margin:16px 0 22px; }
+  .hidden{ display:none; }
+
+  /* Mnemonic icons: eye = OBJECT (seen), footprints = MOVE (watched), speech = LINE (heard) */
+  .icn{ display:block; color:var(--ink); }
+  .iconrow{ display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin:22px 0 10px; }
+  .iconchip{
+    text-align:center; background:var(--card); border:2px solid var(--ink);
+    border-radius:12px; padding:14px 18px; min-width:130px;
+    font-family:Verdana,Arial,sans-serif; font-size:18px; font-weight:bold;
+    letter-spacing:1px;
+  }
+  .iconchip .icn{ width:44px; height:44px; margin:0 auto 8px; }
+  .iconchip .sense{ display:block; font-family:Georgia,serif; font-weight:normal;
+    font-style:italic; letter-spacing:0; margin-top:4px; }
+  .choice-icn{ width:60px; height:60px; margin:16px auto 0; }
+  .cathead{ display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+  .cathead .icn{ width:28px; height:28px; }
+  .who-row{ display:flex; align-items:flex-start; gap:10px; margin-bottom:4px; }
+  .who-row .icn{ width:26px; height:26px; flex:none; margin-top:2px; }
+
+  /* Studio brand: spiral mark Direction B - teal spiral on burnt orange.
+     The mark is atmosphere; the wordmark and tagline are ink on paper. */
+  footer{
+    max-width:760px; margin:34px auto 0; padding:18px 0 8px;
+    border-top:2px solid var(--ink);
+    display:flex; align-items:center; justify-content:center; gap:14px;
+  }
+  .spiralmark{ width:48px; height:48px; flex:none; display:block; }
+  .studioname{
+    display:block; font-family:Verdana,Arial,sans-serif; font-size:18px;
+    font-weight:bold; letter-spacing:2px;
+  }
+  .studiotag{ display:block; font-style:italic; font-size:18px; }
+</style>
+</head>
+<body data-comfort="1">
+<div id="backdrop" aria-hidden="true"></div>
+
+<header>
+  <div style="display:flex; gap:10px;">
+    <button class="navbtn" id="homeBtn" type="button">HOME</button>
+    <button class="navbtn" id="backBtn" type="button">BACK</button>
+  </div>
+  <h1>ROW K<small>DRESS REHEARSAL</small></h1>
+  <button class="navbtn" id="comfortBtn" type="button" aria-label="Comfort: cycle three lighting stops">COMFORT</button>
+</header>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-object" viewBox="0 0 24 24">
+      <path d="M2 12 C 7 5, 17 5, 22 12 C 17 19, 7 19, 2 12 Z"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <circle cx="12" cy="12" r="3.2" fill="currentColor"/>
+    </symbol>
+    <symbol id="i-move" viewBox="0 0 24 24">
+      <ellipse cx="8" cy="7.5" rx="2.9" ry="4.4" fill="currentColor" transform="rotate(-12 8 7.5)"/>
+      <ellipse cx="8.9" cy="14.6" rx="1.7" ry="2.1" fill="currentColor" transform="rotate(-12 8.9 14.6)"/>
+      <ellipse cx="16" cy="12.5" rx="2.9" ry="4.4" fill="currentColor" transform="rotate(12 16 12.5)"/>
+      <ellipse cx="15.1" cy="19.6" rx="1.7" ry="2.1" fill="currentColor" transform="rotate(12 15.1 19.6)"/>
+    </symbol>
+    <symbol id="i-line" viewBox="0 0 24 24">
+      <path d="M5 3 h14 a2 2 0 0 1 2 2 v9 a2 2 0 0 1 -2 2 h-8 l-5 5 v-5 h-1 a2 2 0 0 1 -2 -2 v-9 a2 2 0 0 1 2 -2 Z"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M8 8 h8 M8 11.5 h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<main id="stage" aria-live="polite"></main>
+
+<footer>
+  <svg class="spiralmark" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+    <rect x="1.5" y="1.5" width="45" height="45" rx="11" fill="#c05a1e"/>
+    <path d="M26 25 a2 2 0 0 1 -4 0 a4 4 0 0 1 8 0 a6 6 0 0 1 -12 0 a8 8 0 0 1 16 0 a10 10 0 0 1 -20 0"
+          fill="none" stroke="#0f5f5a" stroke-width="3.4" stroke-linecap="round"/>
+  </svg>
+  <div>
+    <span class="studioname">TIGHT SPIRAL STUDIOS</span>
+    <span class="studiotag">Play. Notice. Design.</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var SCENES = [
+    {
+      name:"ERNESTO AND THE ELEVATOR",
+      secret:"Ernesto is claustrophobic. The audience must never be told. They must see it.",
+      scene:"INT. OFFICE LOBBY. Ernesto and his boss Diane wait for a very small elevator. Diane is in a hurry. You will stage his secret in three choices:",
+      who:"Ernesto",
+      plate:'<rect class="draw" x="60" y="15" width="120" height="130" rx="6"/><line class="draw d2" x1="120" y1="15" x2="120" y2="145"/><path class="draw d2" d="M95 78 h14 M131 78 h14"/><circle class="draw d3" cx="205" cy="58" r="8"/><path class="draw d3" d="M205 42 v-14 m-6 6 l6 -6 l6 6"/>',
+      cards:{
+        OBJECT:[
+          {id:"o1", kind:"TELL", text:"A banner over the elevator: WELCOME BACK, ERNESTO, WHO IS CLAUSTROPHOBIC."},
+          {id:"o2", kind:"INVISIBLE", text:"The memory of the hallway closet, summer of 1998."},
+          {id:"o3", kind:"SHOW", text:"A rubber door wedge, worn smooth, in Ernesto's jacket pocket."}
+        ],
+        MOVE:[
+          {id:"m1", kind:"TELL", text:"Ernesto turns to the audience and mouths: SMALL. SPACES. NO."},
+          {id:"m2", kind:"INVISIBLE", text:"Ernesto's pulse climbs to 140."},
+          {id:"m3", kind:"SHOW", text:"Ernesto presses the call button, then drifts backward, step by step, until he is holding the stairwell door open."}
+        ],
+        LINE:[
+          {id:"l1", kind:"TELL", text:"ERNESTO: As you know, Diane, I have been claustrophobic since the incident."},
+          {id:"l2", kind:"INVISIBLE", text:"ERNESTO (thinking): Not the elevator. Not today. Not ever."},
+          {id:"l3", kind:"SHOW", text:"ERNESTO: Eleven floors is nothing. Good for the heart. I'll beat you up there."}
+        ]
+      },
+      react:{
+        OBJECT:{
+          TELL:      {who:"MARGE, ROW C, RETIRED STAGE MANAGER", say:"The banner told us before the actors got a word in. Save the ink."},
+          INVISIBLE: {who:"MARGE, ROW C, RETIRED STAGE MANAGER", say:"I could not see the memory from Row C, dear. Nobody can. There are no seats inside a memory."},
+          SHOW:      {who:"MARGE, ROW C, RETIRED STAGE MANAGER", say:"The wedge. Did everyone clock the wedge? The man carries his own doorstop. That is a person with a policy."}
+        },
+        MOVE:{
+          TELL:      {who:"DEV, ROW K, THEATER MAJOR, TAKES NOTES IN THE DARK", say:"He mouthed it directly at us. My notes just say YES, WE GATHERED."},
+          INVISIBLE: {who:"DEV, ROW K, THEATER MAJOR, TAKES NOTES IN THE DARK", say:"There was a long stretch where, per my notes, nothing happened. Apparently it happened inside his chest."},
+          SHOW:      {who:"DEV, ROW K, THEATER MAJOR, TAKES NOTES IN THE DARK", say:"He never let that stairwell door shut. Not once. Watch the blocking, people. That is a choice."}
+        },
+        LINE:{
+          TELL:      {who:"PAUL, ROW Q, CAME WITH MARGE", say:"He said AS YOU KNOW and then told her a thing she knows. I do that at work. It is not drama."},
+          INVISIBLE: {who:"PAUL, ROW Q, CAME WITH MARGE", say:"I believe he was thinking? It is very hard to hear thinking from Row Q."},
+          SHOW:      {who:"PAUL, ROW Q, CAME WITH MARGE", say:"I honestly thought he just liked stairs. Wait. The elevator. The door. Oh. OH."}
+        }
+      },
+      winBody:"Three rows walked out arguing about a man and a door wedge. That is staging."
+    },
+    {
+      name:"VERA AT BOOK CLUB",
+      secret:"Vera has not read the book. The audience must never be told. They must see it.",
+      scene:"INT. LIVING ROOM, BOOK CLUB NIGHT. Five chairs sit in a circle. Everyone holds the same novel. Vera holds it tightest. You will stage her secret in three choices:",
+      who:"Vera",
+      plate:'<path class="draw" d="M40 60 c25 -14 50 -14 60 -4 c10 -10 35 -10 60 4 v70 c-25 -12 -50 -12 -60 -2 c-10 -10 -35 -10 -60 2 z"/><line class="draw d2" x1="100" y1="56" x2="100" y2="128"/><circle class="draw d2" cx="72" cy="86" r="9"/><path class="draw d3" d="M182 95 h36 v24 a12 12 0 0 1 -12 12 h-12 a12 12 0 0 1 -12 -12 z"/><path class="draw d3" d="M218 100 a10 10 0 1 1 0 18"/>',
+      cards:{
+        OBJECT:[
+          {id:"o1", kind:"TELL", text:"A name tag reading: VERA. DID NOT READ THE BOOK."},
+          {id:"o2", kind:"INVISIBLE", text:"The guilt Vera has been carrying since Tuesday."},
+          {id:"o3", kind:"SHOW", text:"Vera's copy: spine uncracked, price sticker still on the cover."}
+        ],
+        MOVE:[
+          {id:"m1", kind:"TELL", text:"Each time the plot is mentioned, Vera shakes her head NO at the audience."},
+          {id:"m2", kind:"INVISIBLE", text:"Vera vividly imagines what chapter seven might contain."},
+          {id:"m3", kind:"SHOW", text:"Every time a question lands near her, Vera lifts her cup and drinks. The cup has been empty since scene one."}
+        ],
+        LINE:[
+          {id:"l1", kind:"TELL", text:"VERA: I did not read the book, everyone. Not one page."},
+          {id:"l2", kind:"INVISIBLE", text:"VERA (thinking): Please do not ask me about the ending."},
+          {id:"l3", kind:"SHOW", text:"VERA: I loved... the themes. The way it... progressed. Forward."}
+        ]
+      },
+      react:{
+        OBJECT:{
+          TELL:      {who:"MARGE, ROW C, RETIRED STAGE MANAGER", say:"The name tag did the whole plot's job. I read it from Row C without my glasses."},
+          INVISIBLE: {who:"MARGE, ROW C, RETIRED STAGE MANAGER", say:"Guilt is not a prop, dear. Forty years backstage and I never once hung guilt from a batten."},
+          SHOW:      {who:"MARGE, ROW C, RETIRED STAGE MANAGER", say:"That spine never cracked. Price sticker still on. I gasped at a book, and I would do it again."}
+        },
+        MOVE:{
+          TELL:      {who:"DEV, ROW K, THEATER MAJOR, TAKES NOTES IN THE DARK", say:"She shook her head directly at us. My notes say: SUBTLE AS A FIRE DRILL."},
+          INVISIBLE: {who:"DEV, ROW K, THEATER MAJOR, TAKES NOTES IN THE DARK", say:"Per my notes, she sat there. Imagining is not blocking. I cannot underline stillness."},
+          SHOW:      {who:"DEV, ROW K, THEATER MAJOR, TAKES NOTES IN THE DARK", say:"She drank every time a question got close. The cup was empty the whole time. Immaculate."}
+        },
+        LINE:{
+          TELL:      {who:"PAUL, ROW Q, CAME WITH MARGE", say:"She announced she did not read it. Bold. Honest. Also, no play."},
+          INVISIBLE: {who:"PAUL, ROW Q, CAME WITH MARGE", say:"Whatever she was worried about, I could not hear it. I was in Row Q, not in her head."},
+          SHOW:      {who:"PAUL, ROW Q, CAME WITH MARGE", say:"'The way it progressed. Forward.' I have said those exact words. I had also not read the book."}
+        }
+      },
+      winBody:"Three rows walked out arguing about a price sticker and an empty cup. That is staging."
+    },
+    {
+      name:"FRANK AND THE BASEMENT CAT",
+      secret:"Frank, the building superintendent, loves the stray cat in the basement. No tenant may ever know. The audience must never be told. They must see it.",
+      scene:"INT. BASEMENT, OUTSIDE THE BOILER ROOM. Frank tapes up a NO PETS notice while Mrs. Petrocelli from 4B watches him. Behind the boiler, a cat waits. You will stage his secret in three choices:",
+      who:"Frank",
+      plate:'<rect class="draw" x="56" y="14" width="88" height="132" rx="3"/><path class="draw" d="M144 14 l44 16 v104 l-44 -4"/><circle class="draw d2" cx="158" cy="146" r="7"/><circle class="draw d2" cx="190" cy="138" r="7"/><path class="draw d2" d="M163 143 l22 -5"/><circle class="draw d3" cx="104" cy="112" r="15"/><path class="draw d3" d="M93 102 l-5 -11 l11 5 M115 102 l5 -11 l-11 5"/><path class="draw d3" d="M88 112 h-13 M88 119 h-13 M120 122 c15 5 20 -8 11 -15"/>',
+      cards:{
+        OBJECT:[
+          {id:"o1", kind:"TELL", text:"A sign taped to the boiler room door: FRANK'S CAT LIVES HERE. TELL NO ONE."},
+          {id:"o2", kind:"INVISIBLE", text:"The warm feeling in Frank's chest. Category: unbearable."},
+          {id:"o3", kind:"SHOW", text:"Beside the furnace: a tuna can opened with the good can opener, and a moving blanket folded into a bed."}
+        ],
+        MOVE:[
+          {id:"m1", kind:"TELL", text:"Frank turns to the audience, points at the boiler room, and rocks an invisible kitten in his arms."},
+          {id:"m2", kind:"INVISIBLE", text:"Frank decides, internally, that the cat's name is Duchess."},
+          {id:"m3", kind:"SHOW", text:"Mid-rant about building rules, Frank props the boiler-room door with his wrench. The gap is exactly cat-width."}
+        ],
+        LINE:[
+          {id:"l1", kind:"TELL", text:"FRANK: I love that cat. Tell no one, Mrs. Petrocelli."},
+          {id:"l2", kind:"INVISIBLE", text:"FRANK (thinking): She likes the tuna in oil. Not water. Oil."},
+          {id:"l3", kind:"SHOW", text:"FRANK: That animal better be gone by Friday. ... There's weather coming Friday."}
+        ]
+      },
+      react:{
+        OBJECT:{
+          TELL:      {who:"MARGE, ROW C, RETIRED STAGE MANAGER", say:"The sign announces the secret and then asks us to keep it. Bold strategy. Save the tape."},
+          INVISIBLE: {who:"MARGE, ROW C, RETIRED STAGE MANAGER", say:"A feeling in a chest is not a prop, dear. I cannot light the inside of a man."},
+          SHOW:      {who:"MARGE, ROW C, RETIRED STAGE MANAGER", say:"The good can opener. For his own lunch he uses the church key. For the cat, the good one. I saw the blanket folded in thirds and understood his entire heart."}
+        },
+        MOVE:{
+          TELL:      {who:"DEV, ROW K, THEATER MAJOR, TAKES NOTES IN THE DARK", say:"He rocked an invisible kitten. At us. My notes say: BABY, IMPLIED."},
+          INVISIBLE: {who:"DEV, ROW K, THEATER MAJOR, TAKES NOTES IN THE DARK", say:"He named the cat, apparently. Inside. What the house saw was a man staring at a boiler."},
+          SHOW:      {who:"DEV, ROW K, THEATER MAJOR, TAKES NOTES IN THE DARK", say:"He propped the door mid-rant and kept yelling. The wrench said one thing while the mouth said another. That is theater."}
+        },
+        LINE:{
+          TELL:      {who:"PAUL, ROW Q, CAME WITH MARGE", say:"He told Mrs. Petrocelli to tell no one. Mrs. Petrocelli. The whole building knew by Thursday."},
+          INVISIBLE: {who:"PAUL, ROW Q, CAME WITH MARGE", say:"Tuna in oil, not water. Could not hear it from Row Q. The cat knows, though."},
+          SHOW:      {who:"PAUL, ROW Q, CAME WITH MARGE", say:"'There's weather coming Friday.' He gave the cat an extension and called it a forecast. I had to sit a minute."}
+        }
+      },
+      winBody:"Three rows walked out arguing about a wrench and a folded blanket. That is staging."
+    }
+  ];
+
+  // Fran reacts backstage the moment a card goes on stage - before the house sees anything.
+  var FRAN = {
+    OBJECT:{
+      TELL:      "I can build it, hon. I am just saying: it hands them the whole secret before the actors breathe. This will be tricky at curtain.",
+      INVISIBLE: "Walk me through this one. How do I hang that from a batten? What does the light hit?",
+      SHOW:      "Prop shop says easy. And it says something without saying it. Curious choice. I like where your head is."
+    },
+    MOVE:{
+      TELL:      "The actors can do that, sure. Whether the house should be handed it that flat is your call, boss.",
+      INVISIBLE: "I have no cue for what happens inside a person. Nothing on my board reaches in there.",
+      SHOW:      "Good blocking. The back row will catch that. This one is doing quiet work."
+    },
+    LINE:{
+      TELL:      "Easy to deliver. It does announce the thing, though. This will be tricky when the lights come up.",
+      INVISIBLE: "Nobody can hear thinking past the orchestra pit, hon. But you are the playwright.",
+      SHOW:      "Ooh. That line says one thing and means another. I will cue it tight."
+    }
+  };
+
+  var VERDICTS = {
+    win:  {cls:"win", head:"THE HOUSE KNOWS, AND NOBODY TOLD THEM."},
+    seminar:{cls:"", head:"A VERY INFORMATIVE EVENING.",
+           body:"The audience knows everything and felt nothing. Like a memo, with lighting."},
+    invisible:{cls:"", head:"IF THEY CAN'T SEE IT OR HEAR IT, IT ISN'T THERE.",
+           body:"Part of this play happened where there are no seats."},
+    told: {cls:"", head:"TOLD IS NOT SHOWN.",
+           body:"The parts you staged worked. The parts you announced died on arrival."}
+  };
+
+  var PROMPTS = {
+    OBJECT:{n:1, ask:"Put one OBJECT on the stage.", sub:"Something the audience can see."},
+    MOVE:{n:2, ask:"one MOVE.", sub:"Something the audience watches them do."},
+    LINE:{n:3, ask:"one LINE.", sub:"Something the audience can hear."}
+  };
+
+  var ORDER = ["lobby","secret","OBJECT","MOVE","LINE","review","verdict"];
+  var CATS = ["OBJECT","MOVE","LINE"];
+  var state = { sceneIdx:0, step:"lobby", picked:{OBJECT:null, MOVE:null, LINE:null} };
+
+  var stage = document.getElementById("stage");
+
+  function scene(){ return SCENES[state.sceneIdx]; }
+
+  function el(tag, cls, text){
+    var e = document.createElement(tag);
+    if(cls) e.className = cls;
+    if(text) e.textContent = text;
+    return e;
+  }
+
+  function cardById(cat, id){
+    return scene().cards[cat].filter(function(c){ return c.id===id; })[0];
+  }
+
+  var SVGNS = "http://www.w3.org/2000/svg";
+  function icon(cat, cls){
+    var s = document.createElementNS(SVGNS,"svg");
+    s.setAttribute("class","icn"+(cls?" "+cls:""));
+    s.setAttribute("aria-hidden","true");
+    s.setAttribute("focusable","false");
+    var u = document.createElementNS(SVGNS,"use");
+    u.setAttribute("href","#i-"+cat.toLowerCase());
+    s.appendChild(u);
+    return s;
+  }
+
+  function go(step){
+    state.step = step;
+    render();
+    window.scrollTo(0,0);
+  }
+
+  function render(){
+    stage.innerHTML = "";
+    if(state.step==="lobby") renderLobby();
+    else if(state.step==="secret") renderSecret();
+    else if(CATS.indexOf(state.step)>=0) renderChoice(state.step);
+    else if(state.step==="review") renderReview();
+    else renderVerdict();
+  }
+
+  function renderLobby(){
+    stage.appendChild(el("p","stepline","TONIGHT'S PROGRAM"));
+    stage.appendChild(el("p","lobby-note","Three scenes. Three secrets. Choose one and stage it."));
+    SCENES.forEach(function(sc, i){
+      var b = el("button","lobbybtn","SCENE "+(i+1));
+      b.type = "button";
+      b.appendChild(el("span","sname",sc.name));
+      b.addEventListener("click", function(){
+        state.sceneIdx = i;
+        state.fromReview = false;
+        state.picked = {OBJECT:null, MOVE:null, LINE:null};
+        go("secret");
+      });
+      stage.appendChild(b);
+    });
+  }
+
+  function renderSecret(){
+    stage.appendChild(el("p","stepline","SCENE "+(state.sceneIdx+1)+" OF "+SCENES.length+": "+scene().name));
+
+    var nav = el("div","scenenav");
+    SCENES.forEach(function(sc, i){
+      var b = el("button","scenebtn","SCENE "+(i+1));
+      b.type = "button";
+      b.setAttribute("aria-pressed", i===state.sceneIdx ? "true" : "false");
+      b.setAttribute("aria-label","Go to scene "+(i+1)+": "+sc.name);
+      b.addEventListener("click", function(){
+        if(i===state.sceneIdx) return;
+        state.sceneIdx = i;
+        state.fromReview = false;
+        state.picked = {OBJECT:null, MOVE:null, LINE:null};
+        go("secret");
+      });
+      nav.appendChild(b);
+    });
+    stage.appendChild(nav);
+
+    var s = el("div","secret");
+    s.appendChild(el("span","tag","THE SECRET"));
+    s.appendChild(el("p","body",scene().secret));
+    stage.appendChild(s);
+
+    // At rise, above the stage - the reader sees the situation before the reveal.
+    stage.appendChild(el("p","scene-line",scene().scene));
+
+    // The proscenium: curtains pulled open by hand to reveal the scene's ink plate.
+    // Fold lines are irregular curves so the fabric bunches naturally when gathered.
+    var FOLDS_L = '<svg viewBox="0 0 100 160" preserveAspectRatio="none" aria-hidden="true">'
+      +'<path d="M9 0 C 5 46, 13 98, 8 160 M22 0 C 27 38, 18 112, 24 160 M33 0 C 29 62, 38 118, 32 160'
+      +' M48 0 C 53 44, 44 104, 50 160 M62 0 C 58 56, 67 116, 60 160 M77 0 C 82 48, 73 102, 79 160'
+      +' M90 0 C 87 64, 94 122, 88 160" fill="none" stroke="#8E4237" stroke-width="2.6"/>'
+      +'<path d="M13 0 C 9 50, 17 100, 12 160 M52 0 C 57 46, 48 106, 54 160 M81 0 C 86 50, 77 104, 83 160"'
+      +' fill="none" stroke="#EBB3A4" stroke-width="1.3"/></svg>';
+    var FOLDS_R = '<svg viewBox="0 0 100 160" preserveAspectRatio="none" aria-hidden="true">'
+      +'<path d="M11 0 C 15 52, 7 108, 13 160 M25 0 C 21 44, 30 114, 23 160 M39 0 C 44 58, 35 120, 41 160'
+      +' M53 0 C 49 40, 58 100, 51 160 M68 0 C 72 54, 63 112, 70 160 M82 0 C 78 46, 87 106, 80 160'
+      +' M93 0 C 96 60, 90 124, 95 160" fill="none" stroke="#8E4237" stroke-width="2.6"/>'
+      +'<path d="M18 0 C 22 52, 14 108, 20 160 M58 0 C 54 44, 63 104, 56 160 M87 0 C 91 50, 83 110, 89 160"'
+      +' fill="none" stroke="#EBB3A4" stroke-width="1.3"/></svg>';
+
+    var pros = el("div","proscenium");
+    var inner = el("div","pros-inner");
+    var pw = el("div","plate-wrap");
+    pw.innerHTML = '<svg viewBox="0 0 240 160" aria-hidden="true" focusable="false">'+scene().plate+'</svg>';
+    inner.appendChild(pw);
+    pros.appendChild(inner);
+    var cl = el("div","curtain cl"); cl.innerHTML = FOLDS_L;
+    var cr = el("div","curtain cr"); cr.innerHTML = FOLDS_R;
+    pros.appendChild(cl);
+    pros.appendChild(cr);
+    pros.appendChild(el("div","valance"));
+    stage.appendChild(pros);
+
+    var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if(!reduced){
+      setTimeout(function(){
+        if(state.step==="secret" && pros.isConnected){
+          pros.scrollIntoView({behavior:"smooth", block:"center"});
+        }
+      }, 1100);
+    }
+
+    var icons = el("div","iconrow");
+    [["OBJECT","they see it"],["MOVE","they watch it"],["LINE","they hear it"]].forEach(function(pair){
+      var chip = el("div","iconchip");
+      chip.appendChild(icon(pair[0]));
+      chip.appendChild(document.createTextNode("ONE "+pair[0]));
+      chip.appendChild(el("span","sense",pair[1]));
+      icons.appendChild(chip);
+    });
+    stage.appendChild(icons);
+
+    var row = el("div","advance-row");
+    var b = el("button","bigbtn","TO THE STAGE");
+    b.type = "button";
+    b.addEventListener("click", function(){ go("OBJECT"); });
+    row.appendChild(b);
+    stage.appendChild(row);
+  }
+
+  function renderChoice(cat){
+    var p = PROMPTS[cat];
+    stage.appendChild(el("p","stepline","CHOICE "+p.n+" OF 3"));
+    stage.appendChild(icon(cat,"choice-icn"));
+    var ask = (cat==="OBJECT") ? "Put one OBJECT on the stage."
+            : (cat==="MOVE") ? "Give "+scene().who+" one MOVE."
+            : "Give "+scene().who+" one LINE.";
+    stage.appendChild(el("p","prompt",ask));
+    var sub = (cat==="OBJECT") ? "Something the audience can see."
+            : (cat==="MOVE") ? "Something the audience watches "+scene().who+" do."
+            : "Something the audience can hear.";
+    stage.appendChild(el("p","subprompt",sub));
+
+    var bank = el("div","bank");
+    scene().cards[cat].forEach(function(c){
+      var b = el("button","cardbtn",c.text);
+      b.type = "button";
+      b.setAttribute("aria-pressed", state.picked[cat]===c.id ? "true" : "false");
+      if(state.picked[cat]===c.id) b.appendChild(el("span","onstage","ON STAGE"));
+      b.addEventListener("click", function(){
+        state.picked[cat] = (state.picked[cat]===c.id) ? null : c.id;
+        render();
+      });
+      bank.appendChild(b);
+    });
+    stage.appendChild(bank);
+
+    if(state.picked[cat]){
+      var card = cardById(cat, state.picked[cat]);
+      var fran = el("div","franbox");
+      fran.appendChild(el("span","who","FRAN, STAGE MANAGER, ON HEADSET"));
+      fran.appendChild(el("p", null, FRAN[cat][card.kind]));
+      stage.appendChild(fran);
+    }
+
+    var row = el("div","advance-row");
+    var next = el("button","bigbtn", state.fromReview ? "BACK TO CURTAIN"
+                 : cat==="LINE" ? "TO THE REVIEW" : "NEXT");
+    next.type = "button";
+    next.disabled = !state.picked[cat];
+    next.addEventListener("click", function(){
+      if(state.fromReview){ state.fromReview = false; go("review"); }
+      else go(cat==="OBJECT" ? "MOVE" : cat==="MOVE" ? "LINE" : "review");
+    });
+    row.appendChild(next);
+    stage.appendChild(row);
+  }
+
+  function renderReview(){
+    state.fromReview = false;
+    stage.appendChild(el("p","stepline","YOUR STAGING"));
+    CATS.forEach(function(cat){
+      var card = cardById(cat, state.picked[cat]);
+      var item = el("div","review-item");
+      var head = el("div","cathead");
+      head.appendChild(icon(cat));
+      head.appendChild(el("span","cat", cat==="OBJECT" ? "THE OBJECT" : cat==="MOVE" ? "THE MOVE" : "THE LINE"));
+      item.appendChild(head);
+      item.appendChild(el("p", null, card.text));
+      var swap = el("button","swap","CHANGE THIS");
+      swap.type = "button";
+      swap.setAttribute("aria-label","Change the "+cat.toLowerCase()+" choice");
+      swap.addEventListener("click", function(){ state.fromReview = true; go(cat); });
+      item.appendChild(swap);
+      stage.appendChild(item);
+    });
+    var row = el("div","advance-row");
+    var b = el("button","bigbtn","CURTAIN");
+    b.type = "button";
+    b.addEventListener("click", function(){ go("verdict"); });
+    row.appendChild(b);
+    stage.appendChild(row);
+  }
+
+  function renderVerdict(){
+    var kinds = [];
+    CATS.forEach(function(cat){
+      var card = cardById(cat, state.picked[cat]);
+      kinds.push(card.kind);
+      var r = scene().react[cat][card.kind];
+      var div = el("div","row-react");
+      var head = el("div","cathead");
+      head.appendChild(icon(cat));
+      head.appendChild(el("span","cat", cat==="OBJECT" ? "YOUR OBJECT" : cat==="MOVE" ? "YOUR MOVE" : "YOUR LINE"));
+      div.appendChild(head);
+      div.appendChild(el("p","staged", card.text));
+      div.appendChild(el("span","who", r.who));
+      div.appendChild(el("p",null,r.say));
+      stage.appendChild(div);
+    });
+
+    var shows = kinds.filter(function(k){return k==="SHOW";}).length;
+    var tells = kinds.filter(function(k){return k==="TELL";}).length;
+    var key = shows===3 ? "win" : tells===3 ? "seminar"
+            : kinds.indexOf("INVISIBLE")>=0 ? "invisible" : "told";
+    var vd = VERDICTS[key];
+    var ban = el("div","banner "+vd.cls);
+    ban.appendChild(el("span","head",vd.head));
+    ban.appendChild(el("p",null, key==="win" ? scene().winBody : vd.body));
+    stage.appendChild(ban);
+
+    stage.appendChild(el("p","houselights","From the workshop: if the audience doesn't see it or hear it, they won't know it."));
+
+    var row = el("div","advance-row");
+    var again = el("button","bigbtn","RESTAGE");
+    again.type = "button";
+    again.addEventListener("click", function(){ go("review"); });
+    var nextScene = el("button","bigbtn", state.sceneIdx < SCENES.length-1 ? "NEXT SCENE" : "SCENE ONE");
+    nextScene.type = "button";
+    nextScene.addEventListener("click", function(){
+      state.sceneIdx = (state.sceneIdx+1) % SCENES.length;
+      state.picked = {OBJECT:null, MOVE:null, LINE:null};
+      go("secret");
+    });
+    row.appendChild(again); row.appendChild(nextScene);
+    stage.appendChild(row);
+  }
+
+  function resetAll(){
+    state.sceneIdx = 0;
+    state.fromReview = false;
+    state.picked = {OBJECT:null, MOVE:null, LINE:null};
+    go("lobby");
+  }
+
+  document.getElementById("homeBtn").addEventListener("click", resetAll);
+  document.getElementById("backBtn").addEventListener("click", function(){
+    var i = ORDER.indexOf(state.step);
+    if(i>0) go(ORDER[i-1]);
+  });
+  document.getElementById("comfortBtn").addEventListener("click", function(){
+    var b = document.body;
+    var c = parseInt(b.getAttribute("data-comfort"),10);
+    b.setAttribute("data-comfort", String(c===3 ? 1 : c+1));
+  });
+
+  // DARK HOST LAW: on a dark-preferring device the whole comfort ladder runs on
+  // the dark side (warm dark, deep dark, black), so no stop is ever a light
+  // palette and no host repaint can produce white-on-white. COMFORT still
+  // cycles three visibly distinct stops.
+  if(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches){
+    document.body.setAttribute("data-scheme","dark");
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
