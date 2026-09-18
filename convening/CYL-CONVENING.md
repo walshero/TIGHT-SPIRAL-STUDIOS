@@ -6,12 +6,17 @@ choose-your-leader-v7.html, shipped 2026-08-10 (full six, felt drop, belt-clean)
 untouched since the 08-26 declares-its-world patch, with four founder-only items
 open since ship day and one canon fork PENDING since 08-09.
 
-SENTENCE: The player feels their household's world thicken with each address, and notices what wealth and power — not politics — did to where they stand.
+SENTENCE: The player notices their household in a new light with each address, and notices what wealth and power — through politics — did to where they stand.
 
-Provenance: composed from the founder's binding orders of 08-08 ("a Maslow
-affected world created by the powers that were enabled by your leader") and
-08-10 ("feel how choices affect class! Not politics, wealth and power").
-STANDING VISION, restated for ratification — the founder edits or blesses it.
+Provenance: RATIFIED — founder verbatim, 2026-09-18, replacing the staff's
+proposed restatement. Two deliberate shifts from the proposal, recorded, not
+smoothed: the verb is NOTICES, twice — the noticing game names itself, which
+makes the delta instrument (blind read vs. record) the sentence's own center,
+sharpening the Coordinator's first finding. And "not politics" became
+"through politics": politics is the conduit wealth and power act through, not
+the thing scored. Read with the 08-10 class frame: the gap still lands on the
+household, and partisan scoring stays out of scope unless the founder opens it
+explicitly — this sentence alone does not.
 
 ## SEAT: Coordinator
 
@@ -108,20 +113,30 @@ whole, per the no-smoothing rule.
 
 ## FOUNDER DECISIONS — the convening HALTs here until ruled
 
-1. RATIFY OR REWRITE the sentence above.
-2. SCOPE. Recommended: (a) GATE 1 cold play on v7 — including Osterweil's refusal
-   case — plus record approval for Obama/Trump/Biden scenes, and (b) the
-   founder-words pass from the tag inventory. Why: both are founder-only, both
-   have blocked ship-confidence since 08-10, neither writes new mechanics.
-   Tradeoff: visible polish waits. Simpler: (a) alone. Advanced: add (c) modern
-   plates commission. (d) route-budget mount stays BLOCKED on decision 3.
-3. THE FORK (08-09, verbatim question narrowed 08-10): is the cyl-modern dossier
-   real-and-stranded (then: Mac-side search for the bundle) or fossil (then: mark
-   the cyl-modern docs so no session treats them as canon)?
-4. CONCESSION 5: name venue, date, person. Candidate on the record: Scot, whose
-   build-handoff question has been open since 08-10 and who fits "a named person
-   other than the founder."
-5. WHICH BUILD GOES TO SCOT — open since ship day.
+1. RULED 2026-09-18 — the founder rewrote the sentence; it stands above,
+   verbatim.
+2. RULED 2026-09-18 — ADVANCED. Scope is (a) GATE 1 cold play on v7 including
+   Osterweil's refusal case, plus record approval for the Obama/Trump/Biden
+   scenes; (b) the founder-words pass from the tag inventory; AND (c) the modern
+   plates commission per the image-lane doctrine. (d) route-budget mount stays
+   BLOCKED on decision 3.
+3. RULED "IDK" 2026-09-18 — the founder cannot answer from memory, which is
+   itself an answer: the fork converts from a memory question to an evidence
+   errand. Next session linked to the Mac: search for the git bundle or local
+   clone. Found → real-and-stranded, recover it. A real search that finds
+   nothing → fossil; mark the cyl-modern docs so no session treats them as
+   canon. Until then the fork stays PENDING and the route-budget mount stays
+   blocked.
+4. RULED 2026-09-18 — "Still me." The founder runs the first survivable
+   session himself; venue and date remain unnamed. Recorded without smoothing:
+   the Skeptic's concession as written required a named person OTHER than the
+   founder, so that concession stands UNMET and its dissent rides on.
+5. RULED 2026-09-18 — "Still me." No build goes to Scot yet; CYL stays with
+   the founder.
 
-Per OS §6 0.5-A: the draft that follows is authored against this file. Nothing is
-authored until decisions 1 and 2 are ruled.
+Per OS §6 0.5-A: decisions 1 and 2 are RULED, so work proceeds against this
+file on the ADVANCED scope. Machine-side first moves: the founder-words tag
+inventory (Studio Voice's scrub-in) and the modern-plates commission brief
+(Conductor's constraints). Founder-side: GATE 1 cold play with the refusal
+case, and record approval. The Mac-side fork errand is queued for the next
+linked session.
