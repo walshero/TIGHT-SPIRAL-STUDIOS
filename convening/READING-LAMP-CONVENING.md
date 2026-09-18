@@ -158,4 +158,122 @@ option should be modest — a hair too plain-looking against the abstraction's
 velvet — because that is the honest shape of the choice at a real desk.
 
 And the endings: when the passage is performed at the close, do not summarize.
-Let the paragraph the player built be read aga
+Let the paragraph the player built be read against the Listener's attention,
+line by line, and let the last line land on an object. Weight arrives sideways
+or it does not arrive. 
+
+SIGNED 2026-09-18 — Saunders
+
+## SEAT: Osterweil
+
+The word "trap" worries this chair, so here is the law that keeps the game
+free: nothing locks. Every choice can be re-made, any number of times, before
+the reading — the swap costs nothing, and trying all three on purpose is not
+cheating, it IS the game working, because the player who auditions all three
+rewrites has run the exact comparison we are teaching. There is no fail state,
+no lives, no timer. The reading at the end is a consequence, not a grade: fog,
+fresh paint, or a lit room, and the player walks back in and revises. Freedom
+to fail means the fogged reading is interesting to get, not punished.
+
+Dissent, preserved on purpose: a game with an authored "best" option is still a
+game with a right answer, however soft we sand it, and this chair would rather
+the player free-type the image. I yield to the selection grammar — the arcade's
+one interaction language, and typing walls out the players Stranger guards —
+but the KEEP IT option and free re-swaps are the price of my signature, and a
+build that drops either loses it. 
+
+SIGNED 2026-09-18 — Osterweil
+
+## SEAT: Stranger
+
+I read this cold, as eyes that miss buttons. The rules that follow are
+arithmetic, not taste. One decision per screen: one highlighted phrase, three
+cards plus KEEP IT, never a full passage of tappable hotspots — Row K already
+proved nine-at-once fails. Targets sit at 44px or better, text at 18px floor
+and 20px body. The passage re-typesets in place, and the changed span announces
+itself to a screen reader through an aria-live region, because a silent visual
+rewrite is invisible to ears.
+
+The HALT this chair holds: the Listener's attention must never ride on color
+alone, and never on color at all as the primary channel. Posture, the cup, the
+gaze — behavior reads at low vision where a tint does not, which is one more
+reason Mamet's person beats a meter. Comfort ladder forks under DARK HOST LAW
+with the backdrop as a real element; no opening wall — the scene and the
+Listener are the first paint, one invitation on screen. Flag while I have the
+floor: Sandbags still carries its 114-word wall four sweeps running, and this
+build must not be born with the same defect the belt keeps finding. 
+
+SIGNED 2026-09-18 — Stranger
+
+## SEAT: Studio Voice
+
+The prose is the founder's or it is nobody's. Follow the Sandbags precedent,
+which the founder already ruled on: load-bearing passages come from
+games-text-bank.md and the walshero corpus; the machine plants the clichés into
+his lines, and the concrete option on every card is the phrase the founder
+actually wrote. The game's right answer is his sentence — restoration, not
+invention. The machine writes only the two traps, and writes them sincerely.
+Provenance line on the game screen, same shape as Sandbags: "Prose: Matt Walsh,
+from the studio text bank. The clichés are the machine's; the images are his."
+Where a passage needs a stranger's voice, open-license text enters attributed,
+under the founder's sourcing rule. Copy stays in verbs; no verbless fragments
+anywhere a player reads. 
+
+SIGNED 2026-09-18 — Studio Voice
+
+## SEAT: Conductor
+
+What is seen: a room, a Listener, a page. The tableau majority is image — the
+room and the person over 50% of the paint, the passage held on a page object
+inside the scene, not floated as UI. Entry is scene-first: the Listener already
+seated, lamp lit, one invitation ("Tap the first tired phrase" or the line the
+founder prefers), zero instruction wall. The comfort ladder ships forked per
+DARK HOST LAW with dark-side stops spaced by CIE L*, backdrop as a real
+element at z-index 0, and the hostile-viewer repro joins the preship run. The
+Medium Gate has NOT run — no default medium is claimed here; the art lane gets
+chosen at build convening per §3.2, and nothing in this file binds it. What the
+belt will run before ship: one-thing-gate, preship contrast at every stop in
+both emulations, comfort-gate, and the tableau floor. 
+
+SIGNED 2026-09-18 — Conductor
+
+---
+
+## FINDINGS FOR THE CALIBRATOR — five decisions, none authored past
+
+**D1 — Name.** Recommended: **Reading Lamp** — it names the consequence, not
+the crime, and the win state (the lamp stays lit, the Listener stays) lives in
+the title. Tradeoff: it leaves the Cliché-suite naming grammar. Simpler:
+**Cliché Exchange**, which files neatly beside Field, Line, and City. More
+advanced: **The Restoration**, which names the founder-prose mechanic but
+reads grander than the arcade's register. Founder rules.
+
+**D2 — The Listener.** Recommended: one person, behavior-only, per Mamet —
+never speaks a verdict, never a meter. Tradeoff: costs authored animation
+states (est. six: attentive, cup-turn, window, lean-in, stillness, gone).
+Simpler: lamp brightness alone (dissent recorded: Stranger accepts it only as a
+secondary channel, Mamet calls it a meter wearing a shade). Advanced: Listener
+plus end-of-passage performed reading with per-line attention.
+
+**D3 — Passage source.** Recommended: founder prose from games-text-bank.md,
+machine-planted clichés, founder's phrase as the concrete option; Sandbags
+precedent and provenance line. Tradeoff: needs a founder pass to approve which
+pieces enter. Simpler: machine passages in studio register (dissent: Studio
+Voice signature does not survive this). Advanced: a rotating bank mixing
+founder prose with attributed open-license passages.
+
+**D4 — City hand-off.** Recommended: DEFER to a later build. Swapped-out
+clichés shipping to Cliché City as prefab slabs is a true suite loop and City
+already consumes shot clichés, but cross-file state breaks single-file offline
+law without a design the Medium Gate should see. Log it; do not build it.
+
+**D5 — Home.** Recommended: EN195 arcade, flash-fiction unit (the lightning
+cartridge), cross-listed in the Cowpaths hub as the fourth movement: Field
+notices, Line cuts, City recycles, this one rebuilds. Tradeoff: Cowpaths' hub
+copy needs one new card when this ships.
+
+Spec drafted against these recommendations sits at
+`claude/SPEC-READING-LAMP-2026-09-18.md`, marked DRAFT — AWAITING CALIBRATOR.
+Nothing gets authored past it until the founder rules the five.
+
+GRIEVANCES: none. Every seat above scrubbed in.
