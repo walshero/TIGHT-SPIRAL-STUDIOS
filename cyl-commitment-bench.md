@@ -387,4 +387,10 @@ Then the record turns — the week of October 23–28, or the tape on the mornin
 
 **Recorded.** Georgia, January 2021, is abandoned; the two-scene mirror of §11 is dissolved; Briefs F and G close. The level is October 1962, the suburban house first, the Cold War trio as the season. The full review and the six-month retreat are in `CYL-SIX-MONTH-RETREAT-2026-09-19.md`; the aleph findings in taxonomy form are in `aleph-runs/2026-09-19-cyl-retreat/`. The retreat's finding, in one line: the answer to "more than a click-through" was designed in July (Three Homes, the policy-gap layer, the Lever beat, the walked descent) and never mounted; the level is the house across the week. Five recommendations and a month plan are in the retreat's §8 and §9; five decisions are owed to the founder in its §10.
 
+## 14. Month 1 built: two rooms a night (2026-09-19)
+
+**Founder, verbatim:** "Let's try with Two."
+
+**Recorded.** Two rooms a night. `choose-your-leader-house.html` (Month 1 alpha v1.0, 912,512 B) is the playable house across the week: five nights, six rooms, two chosen, dinner's Standing Word to someone who remembers, a falsifier the week can answer, Sunday recall and the replay of the path. The walk, the gates, and what is deliberately unbuilt are in the ledger entry of the same date. The retreat's remaining four decisions (§10) stay open and do not block Month 2.
+
 Tight Spiral Productions · walshero@gmail.com

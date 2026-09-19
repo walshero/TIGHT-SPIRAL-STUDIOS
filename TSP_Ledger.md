@@ -1342,3 +1342,31 @@ benches. Grievance filed against this session's own earlier passes: the three-ho
 
 **Owed to the founder (retreat §10):** confirm the level; two rooms a night or three; who is in the house; seven clips or
 three; month six at month five. **Next ship:** Month 1, the house. No governance artifact lands before it does.
+
+### 2026-09-19 (later): CYL Month 1 shipped. The house across the week, two rooms a night
+
+**Founder ruling: "Let's try with Two."** Two rooms a night, answering retreat §10's gating question. Built the same turn.
+
+**`choose-your-leader-house.html` (912,512 B, md5 b982e9c4), Month 1 alpha v1.0.** One house, five nights (Oct 22, 23, 24,
+25, 28), six rooms (living room, den, hall telephone, kitchen paper, kids' room, porch). Each night: pick two rooms,
+the other four close; then dinner, one Standing Word said to someone or kept, and one falsifier (what would change your
+mind) from a pool the week can answer (photographs 25th, Moscow's denial 23rd, ships turn 24th, withdrawal 28th, and two
+that never come). The person you said it to remembers on a later night (kids, wife via the neighbor, mother on the line).
+Papers are per night, openable, page-turn only, never scroll inside. The Kennedy clips play in the living room on the
+22nd only, never autoplay. Sunday: recall Monday's word without looking, then the replay: a plan of the house with five
+nights of path, a ledger of said/flip/happened/were-you-at-the-door-it-came-through, what you never went to, and one
+lever line inferred only when the path supports it. No scores, no timers, no faces. Player data never leaves the page.
+
+**Walked in Playwright at 390x844**, entry through five nights (two rooms each, paper page-turns, dinner word and flip)
+to recall and replay: no page errors, no overflow; two-room lock verified each night (four disabled, Dinner appears);
+person memory fired (mother on the 28th after "get out of Miami"; kids after "basement"); the ledger dated the 25th and
+23rd correctly (an ordinal bug, "23th", fixed before ship); the house stage tiled the plate on first look (fixed:
+`background-repeat:no-repeat`). Gates: one-thing phone 56% image, 1 invitation, 19 words (laptop 35% image, WARN, as
+on every CYL build); studio-voice SHIP; retired-lines PASS; structure PASS. Published to the standing artifact
+(https://claude.ai/artifact/13YqM2czAWEMZuqvCZEp6u, version 10). `choose-your-leader-two-scene.html` (v0.5) stays on
+the branch as the prior build; it is superseded, not deleted.
+
+**Not done, by design:** the kitchen ledger (Month 2 policy-gap dossiers); the den and porch and kids' room run on
+studio-draft lines awaiting the founder's words; the Fact-Check pass on VERIFY lines; LOC/NARA plates for the kitchen
+and porch (SVG stand-ins tonight). Owed to the founder (retreat §10, still open): who is in the house, named or
+unnamed; seven clips or three; month six at month five.
