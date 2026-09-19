@@ -1397,3 +1397,25 @@ structure PASS. Bench §15 written. Republished to the standing artifact.
 **Not done, by design:** the Fact-Check pass on the VERIFY lines in the papers and apertures; LOC/NARA plates for the
 kitchen and porch; Month 3 (the founder's three cold plays, one EN195 section, seven clips or three). Owed to the
 founder (retreat §10, still open): who is in the house, named or unnamed; seven clips or three; month six at month five.
+
+### 2026-09-19 (from the phone): the Moscow falsifier cut; the kitchen on the founder's plate; art asks written. v1.2
+
+**Founder:** "'If Moscow denies it' is a bad option. That's expected? How would that change minds? Also the art in the
+kitchen doesn't match studio and the kids room doesn't look like one. Let's let art catch up. Remember mad men founder ask."
+
+**Falsifier.** Cut. A denial from the accused is expected and discriminates nothing. Replaced with "If Moscow admits they
+are there" (happened the 28th; doors: living, den, kitchen, hall) on the four words that carried it (stunt, kept22, mother,
+faked); kept22 now pairs the ships with the admission. Bench §15.1.
+
+**Art.** `choose-your-leader-house.html` v1.2: the kitchen SVG stand-in is gone; the room carries `room.household.nixon69`
+(founder MJ, 2026-07-30) cropped to drop the calendar wall, re-graded toward the Kodachrome 1962 rung, window taken to
+night, 820px q68, provenance in the source comment, the footer and TSP-META, marked INTERIM. Art-gate now passes on the
+file (the porch SVG sits under the gate's floor). Lanes measured from the sandbox: loc.gov and tile.loc.gov refused by
+the egress proxy (403, organization policy), so the legal-photo lane needs the founder to open the environment's
+network policy; the execution gate measures first paint only, so mid-game room scenery cannot be proved studio-cut.
+`art-department/FOUNDER-ASKS-2026-09-19-CYL-HOUSE.md`: three MJ prompts at Mad Men detail (kids' room, 1962 kitchen,
+porch), object dates for the Continuity seat, the Period Librarian brief, and one RULING owed: keep the re-graded
+kitchen as the 1962 interim, or hold for the generated one. The kids' room stays on `prop.emptychair` until its plate lands.
+
+**Verified.** Walk at 390x844 clean (kitchen stage paints the plate; falsifier pool renders; two-room lock; replay);
+voice SHIP, retired PASS, structure PASS, one-thing WARN (unchanged), art-gate pass. File under the connector ceiling.

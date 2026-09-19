@@ -409,4 +409,12 @@ Also: the version chip on the surface (`v1.1` beside the title, in `<title>`, in
 
 **Not done, by design:** the Fact-Check pass on the VERIFY lines still in the papers and apertures (unchanged from Month 1); LOC/NARA plates for the kitchen and porch; the founder's three cold plays (Month 3). The retreat's four open decisions (§10) stay open.
 
+### 15.1 Same day, from the phone: the falsifier, the art (2026-09-19)
+
+**Founder:** *"'If Moscow denies it' is a bad option. That's expected? How would that change minds? Also the art in the kitchen doesn't match studio and the kids room doesn't look like one. Let's let art catch up. Remember mad men founder ask."*
+
+**The falsifier, cut.** He is right and the pool was wrong. A denial from the accused is priced in; it discriminates nothing, so naming it as what would change your mind is not a forecast. Replaced across the four words that carried it with *If Moscow admits they are there* (the informative Soviet-side event, and the one the week delivered: the 28th, through the set, the shortwave, the paper and the telephone). Monday's kept word now names the ships and the admission, so its two falsifiers land on different days.
+
+**The art, caught up as far as a session can.** The kitchen now carries the founder's own household plate (`room.household.nixon69`, 2026-07-30) cropped and re-graded to the 1962 rung with the window taken to night; the Continuity read and the RULING it needs are in `art-department/FOUNDER-ASKS-2026-09-19-CYL-HOUSE.md`, with Mad Men-detail MJ prompts for the kids' room, a 1962 kitchen and the porch, and the Period Librarian brief for when the LOC lane opens. Two lanes were measured closed from the sandbox today: the legal-photo lane (the egress proxy refuses loc.gov, 403) and the studio-cut lane for room scenery (the execution gate measures first paint only, and every room appears mid-game). The kids' room stays on the empty chair until its plate lands. Build is v1.2.
+
 Tight Spiral Productions · walshero@gmail.com
