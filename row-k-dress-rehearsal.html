@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Row K: Dress Rehearsal</title>
 <!--
-  ROW K v15 - a staging game. Tight Spiral Productions.
+  ROW K v16 - a staging game. Tight Spiral Productions.
   Three scenes: Ernesto (elevator), Vera (book club), Frank (the basement cat).
   Craft target: stagecraft / show-don't-tell for the stage (EN195 Workshop 3, Lens 3).
   Floors: single-file offline, no network fetches, no emoji, scene-first,
@@ -136,6 +136,32 @@
       inline style beats a plain rule, so the reduced-motion override needs
       !important or the reduced-motion reader gets an empty proscenium. The
       preship gate caught exactly that.
+
+  --- v16 (founder notes, same rehearsal) ---
+  1. THE UNDERLINE IS THE SECRET, NOT THE PARAGRAPH. Each scene's secret was
+     one string carrying two different things: the fact, which changes every
+     scene, and the charge - "The audience must never be told. They must see
+     it." - which never does. Both were bold and underlined, so the emphasis
+     was spent equally on the news and on the boilerplate. Split: the fact is
+     its own field, bold and underlined; the charge is now a single shared
+     constant, set plain. Underlining the part that is identical every night
+     taught the player nothing.
+  2. THE CURTAIN GOES UP FIRST. The interior and the secret now sit BELOW the
+     proscenium. Reading order is the order a theatre gives you: the curtain
+     opens, then you take in the room, then you learn the job. This reverses
+     v12 (at-rise above the stage) and v13 (secret above that) - both were
+     putting text in front of a reader while the curtain was still moving.
+  3. AUTO-SCROLL REMOVED with it. The proscenium now sits directly under the
+     scene picker and is fully in view at phone height, so the old 1.1s
+     scrollIntoView had nothing left to reveal and would only yank the
+     viewport out from under the reader. Verified in the gate: the curtain is
+     wholly on screen at 390px with scrollY still zero.
+  4. THE HAND SCALES TO THE SHAPE. The v15 wobble was a flat amplitude per
+     drawing, so within one ink plate a 130px elevator door and an 8px call
+     button took the same displacement - 2% of the door, 20% of the button.
+     The door looked drawn; the button turned into a hook. Amplitude is now
+     capped at 2% of each shape's own path length, with the per-drawing figure
+     as the ceiling. Big shapes are unchanged, small ones stop melting.
 -->
 <style>
   :root{
@@ -316,11 +342,14 @@
     font-family:Verdana,Arial,sans-serif; font-size:18px; font-weight:bold;
     letter-spacing:2px;
   }
-  /* v13: the secret is the one thing the player must carry through three
-     decisions, so it is bold and underlined, with the underline set off the
-     baseline far enough that descenders stay readable. */
-  .secret .body{
-    font-size:22px; margin-top:6px; font-weight:bold;
+  /* The secret is the one thing the player must carry through three decisions,
+     so it is bold and underlined - but ONLY the fact. The charge that follows
+     it is identical in every scene, and underlining boilerplate spends
+     emphasis on the part that never changes. The underline sits well off the
+     baseline so descenders stay readable. */
+  .secret .body{ font-size:22px; margin-top:6px; }
+  .secret .fact{
+    font-weight:bold;
     text-decoration:underline; text-decoration-thickness:3px;
     text-underline-offset:6px;
   }
@@ -538,7 +567,7 @@
   var SCENES = [
     {
       name:"ERNESTO AND THE ELEVATOR",
-      secret:"Ernesto is claustrophobic. The audience must never be told. They must see it.",
+      secret:"Ernesto is claustrophobic.",
       scene:"INT. OFFICE LOBBY. Ernesto and his boss Diane wait for a very small elevator. Diane is in a hurry. You will stage his secret in three choices:",
       who:"Ernesto",
       // Emotional color: fear. Cold slate blue, cream mark (8.4:1), sky rim (4.6:1).
@@ -590,7 +619,7 @@
     },
     {
       name:"VERA AT BOOK CLUB",
-      secret:"Vera has not read the book. The audience must never be told. They must see it.",
+      secret:"Vera has not read the book.",
       scene:"INT. LIVING ROOM, BOOK CLUB NIGHT. Five chairs sit in a circle. Everyone holds the same novel. Vera holds it tightest. You will stage her secret in three choices:",
       who:"Vera",
       // Emotional color: bluff. Brass, cream mark (5.9:1), amber rim (3.7:1).
@@ -637,7 +666,7 @@
     },
     {
       name:"FRANK AND THE BASEMENT CAT",
-      secret:"Frank, the building superintendent, loves the stray cat in the basement. No tenant may ever know. The audience must never be told. They must see it.",
+      secret:"Frank, the building superintendent, loves the stray cat in the basement. No tenant may ever know.",
       scene:"INT. BASEMENT, OUTSIDE THE BOILER ROOM. Frank tapes up a NO PETS notice while Mrs. Petrocelli from 4B watches him. Behind the boiler, a cat waits. You will stage his secret in three choices:",
       who:"Frank",
       // Emotional color: love. Deep rose, cream mark (6.9:1), blush rim (3.9:1).
@@ -688,6 +717,10 @@
       winBody:"Three rows walked out arguing about a wrench and a folded blanket. That is staging."
     }
   ];
+
+  // The same charge every scene, so it is not part of any scene's secret.
+  // Only the fact above it is underlined - the rule is the frame, not the news.
+  var SECRET_RULE = "The audience must never be told. They must see it.";
 
   // Fran reacts backstage the moment a card goes on stage - before the house sees anything.
   var FRAN = {
@@ -798,9 +831,16 @@
     function num(v){ return Math.round(v*100)/100; }
 
     // Resample a single geometry element into wandering points.
-    function drift(el, amp, seed){
+    function drift(el, ampIn, seed){
       var len = el.getTotalLength();
       if(!(len > 0.4)) return null;
+      // A hand is no less steady over a short stroke, so the wander has to be
+      // a share of the shape's OWN size, not a flat number. Without this cap a
+      // 130px elevator door and an 8px call button take the same displacement,
+      // which is 2% of the door and 20% of the button - the door looks drawn
+      // and the button turns into a hook. The flat amplitude stays the
+      // ceiling; small shapes get proportionally less.
+      var amp = Math.min(ampIn, len*0.02);
       var n = Math.min(80, Math.max(5, Math.round(len/2.6)));
       var a = el.getPointAtLength(0), b = el.getPointAtLength(len);
       var closed = Math.hypot(a.x-b.x, a.y-b.y) < 0.35;
@@ -1103,14 +1143,6 @@
     });
     stage.appendChild(nav);
 
-    var s = el("div","secret");
-    s.appendChild(el("span","tag","THE SECRET"));
-    s.appendChild(el("p","body",scene().secret));
-    stage.appendChild(s);
-
-    // At rise, above the stage - the reader sees the situation before the reveal.
-    stage.appendChild(el("p","scene-line",scene().scene));
-
     // The proscenium: curtains hauled open to reveal the scene's ink plate.
     // Fold lines are irregular curves so the fabric bunches naturally when gathered.
     var FOLDS_L = '<svg viewBox="0 0 100 160" preserveAspectRatio="none" aria-hidden="true">'
@@ -1139,14 +1171,24 @@
     pros.appendChild(el("div","valance"));
     stage.appendChild(pros);
 
-    var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if(!reduced){
-      setTimeout(function(){
-        if(state.step==="secret" && pros.isConnected){
-          pros.scrollIntoView({behavior:"smooth", block:"center"});
-        }
-      }, 1100);
-    }
+    // The house watches the curtain go up and THEN reads the room, which is
+    // the order a theatre gives you. v12 put the at-rise line above the stage
+    // and v13 the secret above that; both are below it now, so nothing is
+    // asking to be read while the curtain is still moving.
+    stage.appendChild(el("p","scene-line",scene().scene));
+
+    // Only the fact is underlined. The charge after it is the same every night.
+    var sec = el("div","secret");
+    sec.appendChild(el("span","tag","THE SECRET"));
+    var body = el("p","body");
+    body.appendChild(el("strong","fact",scene().secret));
+    body.appendChild(document.createTextNode(" "+SECRET_RULE));
+    sec.appendChild(body);
+    stage.appendChild(sec);
+
+    // No auto-scroll any more: the proscenium now sits directly under the
+    // scene picker and is already in view at phone height, so the old
+    // scrollIntoView would only yank the viewport out from under the reader.
 
     var icons = el("div","iconrow");
     [["OBJECT","they see it"],["MOVE","they watch it"],["LINE","they hear it"]].forEach(function(pair){
