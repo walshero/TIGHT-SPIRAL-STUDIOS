@@ -1424,3 +1424,13 @@ voice SHIP, retired PASS, structure PASS, one-thing WARN (unchanged), art-gate p
 questions? Can this adapt from what you chose? Gameplay direction feels uncertain"). Studio recommendation recorded in
 bench §15.2: replace the falsifier with the question, drawn from tonight's rooms, carried into the next night, asked
 back by the person you told, recalled on Sunday. Not built; awaiting the ruling.
+
+### 2026-09-19 (later): founder ruled "5". The question replaces the falsifier. v1.3
+
+**Built the same turn.** `choose-your-leader-house.html` v1.3: at dinner, *What do you need to know?* from the two
+rooms opened tonight plus the standing question plus Nothing; thirty-five questions with answer maps (night, room, the
+line); seven answers under the paper in the kitchen, resolved only if the sheet is opened; open questions carried until
+a room answers them, asked back by the kids, your mother or the neighbor; Sunday recalls the question; the replay ledger
+reads the question against where its answer was; the lever line reads three answered questions as own judgment. The
+falsifier pool and picker are gone. Kitchen plate now covers its stage on the phone. Design and walk in bench §15.3.
+Gates green (one-thing WARN as always), file under the connector ceiling. Republished to the standing artifact.

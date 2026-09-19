@@ -429,4 +429,16 @@ Also: the version chip on the surface (`v1.1` beside the title, in `<title>`, in
 
 **Not built.** Waiting on the ruling. Build estimate: one inline pass at Month 2 scale, no fleet.
 
+### 15.3 Ruled and built: the question (2026-09-19)
+
+**Founder:** "5." The advanced alternative in §15.2: the question replaces the falsifier, the kitchen table answers the cost questions, the person carries the question across nights.
+
+**Built, v1.3.** At dinner, after the Word: *What do you need to know?* Four options: one question seeded by each of the two rooms opened tonight (labelled with the room it came from), the night's standing question, and *Nothing. I know enough.* Thirty-five questions in all (six rooms and a standing question across five nights), each with an answer map: the night and the room the answer waits in, and the line the room says when the player arrives carrying it. Seven answers wait under the paper in the kitchen and resolve only if the sheet is opened (the invasion, the base, the bluff, the cousin). Sunday's and Thursday's standing questions and every Sunday question have no door in the house; the replay says what became public and when (the Jupiter trade, the reservists' release, the school day). No door ever signals an answer.
+
+**Carried.** An open question stays open until a room answers it. The kids ask it back on a later night if the Word was said to them; your mother on the line; the neighbor, if the Word went to your wife ("She said you wanted to know..."). Sunday's recall is now the question ("Without looking: what did you need to know on Monday?") from Monday's own pool. The replay ledger reads, per night: the Word, to whom, the question, and one of: answered where and when with the line; where it was there to find and that you were not there; or the after line. The lever line gains the strongest mechanism: three or more questions answered in the room they waited in reads as *your own judgment*, ahead of the kitchen, the set, the kids, the porch and the shortwave.
+
+**Gone.** The falsifier pool, its picker, and the "you said it would take" ledger. The Word's `flips` field remains in the data, unused, for the next data pass.
+
+**Also this build.** The kitchen plate now covers its stage at phone width (it letterboxed in v1.2). Walked at 390x844: pool of four at every dinner, the Monday kitchen question answered by Tuesday's paper in the room, the Wednesday question by Thursday's photographs, the Thursday question by Sunday's set, Tuesday's unanswered with its door named, Sunday's after line, recall of four, lever line on own judgment. Gates: voice SHIP, retired PASS, structure PASS, one-thing WARN (unchanged), art-gate pass; file under the connector ceiling.
+
 Tight Spiral Productions · walshero@gmail.com
