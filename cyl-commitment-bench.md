@@ -393,4 +393,20 @@ Then the record turns — the week of October 23–28, or the tape on the mornin
 
 **Recorded.** Two rooms a night. `choose-your-leader-house.html` (Month 1 alpha v1.0, 912,512 B) is the playable house across the week: five nights, six rooms, two chosen, dinner's Standing Word to someone who remembers, a falsifier the week can answer, Sunday recall and the replay of the path. The walk, the gates, and what is deliberately unbuilt are in the ledger entry of the same date. The retreat's remaining four decisions (§10) stay open and do not block Month 2.
 
+## 15. Month 2 built: the kitchen ledger (2026-09-19)
+
+**Founder:** "Proceed."
+
+**Recorded.** `choose-your-leader-house.html` is now Month 2 alpha v1.1 (924,024 B, md5 031f12a6). Three things landed, all from designs the retreat found already in the repo:
+
+- **The kitchen table.** Under the paper in the kitchen sits one folded sheet a night, opened by a tap in the paper's own grammar (front, open, fold). Five items, one per night, drawn from the policy-gap bible §6, Scene 1, decisions 1.1 to 1.5, every one at confidence *verified*: the shelf and the shelter sign (22nd, dossier 1.3), the word quarantine and Proclamation 3504 (23rd, 1.2), DEFCON 2 and the draft card (24th, 1.3), Ole Miss off the front page (25th, 1.5), the 14,200 reservists reporting the morning the missiles come out (28th, 1.3). Each sheet carries the dated decision, *whose table* it landed on, the Maslow register, and the source. Nothing from the bible's VERIFY queue is on the table: no audience figure, no grocery run, no period price. Three items that were not public that week (Mongoose, the Jupiter trade, EO 11063) appear only in the Sunday replay, each with the date it became public.
+- **The walked descent as distance.** The v7 rule, carried forward without a readout: on every night the sheet stays folded, the kitchen moves one slot down the house and gains a margin above it. More scrolling to reach it, no text about it. Structural friction, never input friction; targets and focus rings unchanged. The replay's plan draws the kitchen where it ended with a dotted ghost where it began, and the ledger states the distance in one line.
+- **The Lever line refined.** A fifth mechanism, the cost: three or more sheets opened and the line reads what the player was watching was the cost and whose table it landed on. It takes precedence over the four Month 1 lines.
+
+Also: the version chip on the surface (`v1.1` beside the title, in `<title>`, in the build banner), and the house and the two-scene build linked from `index.html` (funes had them as orphans).
+
+**Studio-written lines added this month**, all under the file's `data-voice="studio-draft-awaiting-founder-words"`: the sheet titles ("The word is quarantine", "The draft card in the drawer", "What the front page dropped"), the replay's per-night verdicts, the lever line. The dossier bodies are the bible's dated fact statements, reworded only to stand as a citizen's sheet, no claim added.
+
+**Not done, by design:** the Fact-Check pass on the VERIFY lines still in the papers and apertures (unchanged from Month 1); LOC/NARA plates for the kitchen and porch; the founder's three cold plays (Month 3). The retreat's four open decisions (§10) stay open.
+
 Tight Spiral Productions · walshero@gmail.com

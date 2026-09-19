@@ -1370,3 +1370,30 @@ the branch as the prior build; it is superseded, not deleted.
 studio-draft lines awaiting the founder's words; the Fact-Check pass on VERIFY lines; LOC/NARA plates for the kitchen
 and porch (SVG stand-ins tonight). Owed to the founder (retreat §10, still open): who is in the house, named or
 unnamed; seven clips or three; month six at month five.
+
+### 2026-09-19 (later still): CYL Month 2 shipped. The kitchen ledger, the descent as distance, the lever line
+
+**Founder: "Proceed."** Month 2 per the retreat's month plan (§9, row 2), built on the branch the same turn.
+
+**`choose-your-leader-house.html` (924,024 B, md5 031f12a6), Month 2 alpha v1.1.** Under the paper in the kitchen, one
+folded sheet a night, opened in the paper's own grammar. Five items from `cyl-policy-gap-bible.md` §6 (Scene 1,
+decisions 1.1 to 1.5, all confidence verified): the shelter sign and the shelf (22nd), the word quarantine (23rd),
+DEFCON 2 and the draft card (24th), Ole Miss off the front page (25th), the reservists reporting on the morning the
+missiles come out (28th). Each: the dated decision, whose table, the register, the source. Nothing from the VERIFY
+queue reaches the table. Mongoose, the Jupiter trade and EO 11063 appear only in the replay, dated by when they became
+public. The walked descent returns as distance: a folded sheet moves the kitchen one slot down the house with a gap
+above it, zero text, targets untouched; the replay plan draws where it ended against a dotted ghost of where it began.
+The Lever line gains the cost: three sheets opened and the line names it. Version chip `v1.1` beside the title, in
+the title tag and the banner. The house and the two-scene build are now linked from `index.html`.
+
+**Walked in Playwright at 390x844**, five nights (kitchen opened on three, left folded on one, skipped on one), recall,
+replay: no page errors (one sandbox font-fetch cert error, not the build); no horizontal overflow on any screen; the
+two-room lock held every night; the kitchen sat fourth through Wednesday and fifth with a 22px gap from Thursday;
+the replay ledger read three opened, one folded, one absent, "2 steps farther", the ghost rect drawn; the lever line
+was the cost line; Walk the week again reset the distance to zero. Gates: one-thing WARN only (phone 56% image,
+1 invitation, 20 words; laptop 35%, as on every CYL build); studio-voice SHIP (zero em dashes); retired-lines PASS;
+structure PASS. Bench §15 written. Republished to the standing artifact.
+
+**Not done, by design:** the Fact-Check pass on the VERIFY lines in the papers and apertures; LOC/NARA plates for the
+kitchen and porch; Month 3 (the founder's three cold plays, one EN195 section, seven clips or three). Owed to the
+founder (retreat §10, still open): who is in the house, named or unnamed; seven clips or three; month six at month five.
