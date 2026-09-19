@@ -1294,3 +1294,30 @@ no em dashes; every studio line cut to the fact. Gates after: one-thing WARN onl
 SHIP, retired PASS, structure PASS. `cyl-commitment-bench.md` §12 carries the detail. `python3 -m pip install playwright` was
 needed once in this container for the browser gates; the browsers at /opt/pw-browsers already matched. Verified headless, both
 rooms; the phone is the founder's.
+
+## 2026-09-19 — v0.5, the set speaks: three clips of the Kennedy address, cut on the record's own pauses
+
+**The founder sent the file.** Every host that carries JFKWHA-142-001 (jfklibrary.org, archive.org, loc.gov, the Miller
+Center, Wikimedia) is refused by this environment's egress policy for curl and for the server-side fetch alike, the same
+wall the 2026-08-08 entry recorded. The founder downloaded the Internet Archive derivative on the phone and dropped it
+into the session; that is the lane, and it works. A U.S. government recording, public domain.
+
+**How the clips were cut without ears.** No ffmpeg here. `miniaudio` (PyPI, pure wheel) decoded the MP3; `pocketsphinx`
+(PyPI, bundles its own English model) keyword-spotted the anchors in one continuous pass: "good evening my fellow
+citizens" at 0.4 s, "fruits of victory" at 518 s, "offensive military equipment" at 550 s. An RMS pause map (100 ms
+windows, 18th-percentile floor, runs of 300 ms or more) gave sentence edges. Three clips: the opening two sentences
+(0.0 to 25.7 s), "we will not prematurely… must be faced" (507.1 to 526.9 s), "First: to halt this offensive buildup…
+is being initiated" (545.3 to 555.3 s). 8 kHz, 8-bit mono WAV, normalised, 60 ms fades, as data URIs: 578 KB of
+base64. The transcript in the build was reordered to the speech's own order and now carries "in which even the fruits
+of victory would be ashes in our mouth," which the earlier line had cut. Every clip has a visible control, never
+autoplays, and sits under its own transcript line.
+
+**The 1 MB ceiling.** With the clips the file hit 1,062,116 B. The three plates were re-encoded a notch smaller
+(1200/960/800 px, q .66/.62/.64) rather than shortening the audio: 922,236 B. Voice gate SHIP; one-thing WARN only.
+
+**Also this entry:** the paper aperture line about "a cold" rewritten plainly (the cold was the White House cover story
+for the President coming home from the campaign trail). v0.4.1, `089dd5e`.
+
+**Verified:** the opening clip decodes in headless Chromium at 25.7 s; both rooms walk; Georgia stays transcript-only
+(Brief F). **Not verified:** the clip boundaries by a human ear. The founder's phone is the check; if a cut lands a
+syllable early or late, the numbers above are the knobs.
