@@ -389,7 +389,36 @@ never assessed. Not done here; carried.
 
 ---
 
-## HELD — not to be actioned yet (founder, 2026-09-19)
+## PROVENANCE — ruled and shipped (founder, 2026-09-19), v19
+
+The footer reads, in the game:
+
+> Stagecraft after Mamet, Saunders, Fore, Sellars and Walsh. EN195.
+
+Names only on the player-facing line, by founder ruling: *"full attribution in
+spec but just names in game for now is fine."* EN195 stays; the workshop number
+is spec and is deliberately absent from the footer.
+
+**Full attribution** (carried in the build's header block and here):
+
+| | contribution |
+|---|---|
+| **David Mamet** | drama is what the character does; evidence at body scale or bigger |
+| **George Saunders** | the reader's mind steered line by line; weight arrives sideways, through the concrete object |
+| **Nick Fore** | stagecraft |
+| **Peter Sellars** | stagecraft — the theatre and opera director, **Sellars with an a**, not Peter Sellers the actor; confirmed by the founder before it went on a player-facing line |
+| **Matt Walsh** | stagecraft contributor; founder |
+
+Course: EN195 (Workshop 3, Lens 3 — spec only).
+
+The preship gate now guards this line: it asserts all five names are present,
+that EN195 is there, that "Workshop" is not, and that the spelling is Sellars
+rather than Sellers. A credit is the one kind of copy that must not rot
+quietly, so it is arithmetic now rather than vigilance.
+
+---
+
+## HELD — superseded by the ruling above, kept for the record
 
 **Provenance line, expanded.** The footer currently reads *"Stagecraft after
 Mamet and Saunders. EN195 Workshop 3."* The founder's note is that the real
