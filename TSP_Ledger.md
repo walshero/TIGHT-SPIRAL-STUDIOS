@@ -1321,3 +1321,24 @@ for the President coming home from the campaign trail). v0.4.1, `089dd5e`.
 **Verified:** the opening clip decodes in headless Chromium at 25.7 s; both rooms walk; Georgia stays transcript-only
 (Brief F). **Not verified:** the clip boundaries by a human ear. The founder's phone is the check; if a cut lands a
 syllable early or late, the numbers above are the knobs.
+
+## 2026-09-19 — Ruling: Georgia abandoned, one level all the way down; the six-month retreat convened
+
+**Founder ruling, verbatim in `cyl-commitment-bench.md` §13.** Georgia is abandoned, not parked. The level is October 1962; the
+Cold War trio is the season; ONE HOME FIRST still binds. Full studio review with expanded staff, and the game (L2), media
+(L3) and learning (L5) alephs on a six-month simulated retreat: `CYL-SIX-MONTH-RETREAT-2026-09-19.md` (4,648 words, run
+inline, no fleet). Findings in taxonomy form: `aleph-runs/2026-09-19-cyl-retreat/` with `synthesis.txt` (dry run; NOT
+committed to the aleph ledger, because a commit would mark the 08-07 the-tell findings "fixed" on the strength of their
+absence from this run, which is the silent-pass shape the fleet exists to refuse; the ledger needs a per-surface diff
+before this run can be committed honestly). L1 did not run in the retreat; 14 floor keys stand as NOT LOOKED AT.
+
+**The finding.** Two blockers, both `AGENCY-ABSENT`, named independently by L2 and L5: the player never chooses where to
+go or when. The Union Rep's caucus found the cure already designed and never mounted: Three Homes (07-14), the policy-gap
+Maslow layer (07-30), the Lever beat (07-21), the walked descent (v7, 08-10). **The level is the house across the week:**
+five evenings, two rooms a night, apertures that persist and move on, the Word said at dinner to someone who remembers,
+the record arriving through the doors it arrived through, a Sunday replay of the path. Expanded staff seated and scrubbed
+in: Schudson (the monitorial citizen), Bogost, Pope, Barlow, Romero, Chen, plus the disciplinary and political-psychology
+benches. Grievance filed against this session's own earlier passes: the three-homes brief was in the repo the whole time.
+
+**Owed to the founder (retreat §10):** confirm the level; two rooms a night or three; who is in the house; seven clips or
+three; month six at month five. **Next ship:** Month 1, the house. No governance artifact lands before it does.

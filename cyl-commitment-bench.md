@@ -379,4 +379,12 @@ Then the record turns — the week of October 23–28, or the tape on the mornin
 
 **Still owed:** the founder's cold play on the phone; the Fact-Check pass; a period plate for the kitchen; landing on main.
 
+---
+
+## 13. Ruling: one level, all the way down (2026-09-19)
+
+**Founder:** "Choose your leader Cold War is well developed and worth pursuing. The Trump section is weak. Let's abandon and just fill out the whole current level. Let's have a full studio review and invite expanded staff to advise. Game and media studio alephs take a 6 month simulated retreat with the game and its goals and recs on how to make it more than a simple click thru experience."
+
+**Recorded.** Georgia, January 2021, is abandoned; the two-scene mirror of §11 is dissolved; Briefs F and G close. The level is October 1962, the suburban house first, the Cold War trio as the season. The full review and the six-month retreat are in `CYL-SIX-MONTH-RETREAT-2026-09-19.md`; the aleph findings in taxonomy form are in `aleph-runs/2026-09-19-cyl-retreat/`. The retreat's finding, in one line: the answer to "more than a click-through" was designed in July (Three Homes, the policy-gap layer, the Lever beat, the walked descent) and never mounted; the level is the house across the week. Five recommendations and a month plan are in the retreat's §8 and §9; five decisions are owed to the founder in its §10.
+
 Tight Spiral Productions · walshero@gmail.com
