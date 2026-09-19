@@ -258,8 +258,16 @@ def cmd_synthesize(rundir, commit=False, stamp=None):
             r['state'] = 'REPEAT'
             r['runs_open'] = prev.get('runs_open', 1) + 1
 
+    # A finding counts as FIXED only if this run actually LOOKED at its surface.
+    # Before 2026-09-19 this was every ledger entry absent from the run, unscoped,
+    # so assessing one file marked every other file's open findings fixed: the
+    # Row K review would have retired 30 live the-tell.html findings it never
+    # opened. Funes' rule is that the ledger forgets nothing - silence about a
+    # surface is not evidence about it.
+    surfaces_now = {r['surface'] for r in rows}
     fixed = [dict(v, id=i) for i, v in known.items()
-             if i not in seen_now and v.get('state') != 'FIXED']
+             if i not in seen_now and v.get('state') != 'FIXED'
+             and v.get('surface') in surfaces_now]
 
     print()
     print('=' * 74)

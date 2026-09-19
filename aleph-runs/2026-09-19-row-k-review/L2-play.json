@@ -1,0 +1,11 @@
+{"lens":"L2","surface":"row-k-dress-rehearsal.html",
+"passed":["OPENING-WALL","INSTRUCTION-WALL","ACTION-BELOW-FOLD","INVITATION-UNCLEAR","FTUE-UNGUIDED","FEEDBACK-ABSENT","PROGRESS-ILLEGIBLE","REPLAY-BLOCKED"],
+"findings":[
+{"key":"GAME-FEEL-DISPLACED","severity":"major","anchor":".housebox on the verdict screen",
+"problem":"The house is the reward the whole game is played for, and it is off screen at the exact moment it pays. On the verdict, go() scrolls to top and the housebox sits at top:1432px in an 844px viewport - 1.7 screens below the fold, scrollY 0. Seats arrive where nobody is looking. Two rounds of work on the meter, invisible at the instant it matters.",
+"fix":"Either lift the house above the three critic reactions on the verdict, or animate the new seats in when the box scrolls into view so arrival is witnessed. Cheapest honest fix: put it directly under the banner.",
+"framework":"game feel - reaction must paint where the eye already is","evidence":"{\"top\":1432,\"vh\":844,\"scrollY\":0,\"onScreen\":false}"},
+{"key":"FAIL-STATE-PUNITIVE","severity":"major","anchor":"renderVerdict - state.scored[i] = most recent run; PER_TELL = 3",
+"problem":"v14 scores the LATEST staging of a scene, not the best, and a TELL removes three seats. So exploring - the thing the game is for - costs the player standing. A curious student who replays Scene 3 to see what the announced version looks like walks 24 earned seats out of the room and nine more besides. The punishment is invisible and irreversible short of HOME.",
+"fix":"Keep the live response to a restage, but floor each scene's contribution at its best run, so the room can be shown the bad version without the player paying for the lesson. One Math.max in the scoring line.",
+"framework":"Osterweil - freedom to fail is freedom to experiment","evidence":"all-TELL restage of a full house measured 96 -> 63 seats in the gate"}]}

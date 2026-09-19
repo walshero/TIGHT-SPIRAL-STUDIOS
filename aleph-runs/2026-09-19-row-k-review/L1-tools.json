@@ -1,0 +1,15 @@
+{"lens":"L1","surface":"row-k-dress-rehearsal.html",
+"passed":["CONTRAST-FLOOR","TYPE-FLOOR","DARK-MISSING","OFFLINE-BROKEN","TAP-TARGET","NAV-MISSING","EMOJI","JS-ERROR","DEAD-CONTROL","DEAD-END","H-OVERFLOW"],
+"findings":[
+{"key":"FOCUS-LOST","severity":"blocker","anchor":"render() / go(step) - stage.innerHTML=\"\"",
+"problem":"Every screen change rebuilds main by clearing innerHTML, which destroys the focused button. Focus falls to BODY on every single transition, so a keyboard or voice user re-tabs from the top of the document at every step of a seven-step game. Measured after entering a scene and after advancing to Choice 1: document.activeElement is BODY both times.",
+"fix":"After each go(), move focus to the new screen's heading (see OUTLINE-BROKEN) with tabindex=-1 and .focus({preventScroll:true}). One line in go(), and it fixes the whole game at once.",
+"framework":"WCAG 2.2 focus order (2.4.3)","evidence":"activeElement after transition: {\"active\":\"BODY\",\"cls\":\"\"} x2"},
+{"key":"FOCUS-INVISIBLE","severity":"blocker","anchor":"stylesheet - no :focus rule anywhere",
+"problem":"The page authors no focus style at all. It inherits the UA ring, measured as outline 1px rgb(16,16,16) on a lobby button - a 1px near-black hairline against near-black ink borders. On a founder-profile build that is not a visible ring, and nothing in the comfort ladder or the DARK HOST LAW fork governs it.",
+"fix":"Author :focus-visible with a 3px outline in --amber plus a 2px offset, declared once for button and applied at every comfort stop so the ring is measured like everything else.",
+"framework":"WCAG 2.4.11 focus appearance","evidence":"stylesheet scan for :focus selectors returned NONE; computed outline 1px rgb(16,16,16)"},
+{"key":"OUTLINE-BROKEN","severity":"major","anchor":"main#stage - .stepline is a <p>",
+"problem":"No screen carries a heading. The only h1 is the persistent site title in the header, so assistive tech is handed an empty outline exactly where the player is standing. The per-screen title (SCENE 1 OF 3, CHOICE 1 OF 3, YOUR STAGING) is styled as a paragraph.",
+"fix":"Promote .stepline to <h2> on every screen. Purely semantic - the CSS already carries the look.",
+"framework":"WCAG 1.3.1 info and relationships","evidence":"querySelectorAll('main h1,h2,h3,[role=heading]') returned NONE on a choice screen"}]}
