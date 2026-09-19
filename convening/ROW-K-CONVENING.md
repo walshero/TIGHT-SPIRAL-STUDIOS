@@ -359,3 +359,30 @@ Nothing above has been authored into the build. Per `INVOKING-THE-STUDIO.md`
 step 4, the findings come to the founder first and the tie-break is his — in
 particular on the two dissents, on COMFORT, and on whether item 3 is worth the
 authoring cost before the semester.
+
+---
+
+## WORKED — 2026-09-19, same session (founder: "Go")
+
+Items 1–6 of the seats' order, authored against the findings above. Second aleph
+run recorded at `aleph-runs/2026-09-19-row-k-v17`:
+**2 blockers → 0 · 8 major → 1 · 12 fixed · 0 regressed.** Shipped as v17.
+
+| # | Finding | State |
+|---|---|---|
+| 1 | FOCUS-LOST, FOCUS-INVISIBLE, OUTLINE-BROKEN | **closed** — h2 per screen takes focus on transition; card picks restore focus to the card; ring authored from the ink/paper pair; `aria-live` off `main` |
+| 2 | gate blind spot | **closed** — the suite now asserts an authored focus style, a ≥3px ring, a heading per screen, focus never on BODY across the walkthrough, and prints image share |
+| 3 | SPLIT-ATTENTION | **closed** — the scene strip carries plate + secret onto the choice and review screens |
+| 4 | GAME-FEEL-DISPLACED | **closed** — house lifted under the banner, above the critics; seats arrive in sequence over ~620ms, and leave from the back |
+| 5 | FAIL-STATE-PUNITIVE | **closed** — best-run floor per scene; a first bad staging still costs, a restage cannot take back won ground |
+| 6 | OUTCOME-UNMAPPED, SOURCE-UNNAMED | **closed** — iSLO 1 / AAC&U Written Communication VALUE, dimension Content Development, named in the build header and here; footer carries the craft lineage |
+| — | TEXT-WALL, IMAGE-FLOOR | **open, downgraded** — strip took choice 1.6→14.5% and review 0.9→12.4%; canon C7 is 50%. Remaining fix is Mamet's: a drawing on each of the 27 cards. Authoring job, quoted not guessed |
+| — | RUBRIC-UNLINKED | **open at minor** — the Coordinator's condition was met (loss is now witnessed, not explained), criteria still unstated by ruling. Recorded so it is not rediscovered as new |
+| 7 | COMFORT, teal | **founder call, untouched** — COMFORT stands against the 2026-08-29 no-walls ruling and the DARK HOST LAW ladder is built on it; teal has no job. The Studio Voice proposed the focus ring as teal's home and measurement killed it (#0F5F5A on the black stop is 2.6:1), so the ring was built from ink on paper |
+
+**Harness note.** `aleph-fleet.py` was patched before the first commit: `fixed` was
+every ledger entry absent from a run, unscoped by surface, so this review would
+have retired 30 live `the-tell.html` findings it never opened. The ledger's
+`fixed_on` history predating 2026-09-19 is therefore **not trustworthy** and
+wants an audit — earlier runs may have marked defects clean on surfaces they
+never assessed. Not done here; carried.

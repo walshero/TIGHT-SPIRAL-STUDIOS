@@ -5,9 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Row K: Dress Rehearsal</title>
 <!--
-  ROW K v16 - a staging game. Tight Spiral Productions.
+  ROW K v17 - a staging game. Tight Spiral Productions.
   Three scenes: Ernesto (elevator), Vera (book club), Frank (the basement cat).
   Craft target: stagecraft / show-don't-tell for the stage (EN195 Workshop 3, Lens 3).
+  Competency: iSLO 1, Written and Oral Communication - AAC&U Written Communication
+  VALUE, dimension CONTENT DEVELOPMENT (using appropriate, relevant content to
+  explore and shape ideas). The live MassBay-normed iSLO 1 rubric is the
+  instrument that would score the same competency; The Norming Table and Rubric
+  Forge already run against it. Named here and in convening/ROW-K-CONVENING.md
+  so the build is assessable and not merely good (v17, closing OUTCOME-UNMAPPED).
   Floors: single-file offline, no network fetches, no emoji, scene-first,
   one decision per screen, 20px body / 18px min, 48px targets, back+home nav,
   three comfort stops, reduced-motion support, keyboard operable.
@@ -162,6 +168,61 @@
      The door looked drawn; the button turned into a hook. Amplitude is now
      capped at 2% of each shape's own path length, with the per-drawing figure
      as the ceiling. Big shapes are unchanged, small ones stop melting.
+
+  --- v17 (the aleph run of 2026-09-19, worked in the seats' own order) ---
+  Five lenses found 2 blockers, 8 major, 5 minor. Findings file:
+  convening/ROW-K-CONVENING.md. This is items 1-6 of the order they set.
+
+  1. FOCUS - both blockers and a major, all in one small place.
+     - FOCUS-LOST. Every screen change rebuilds main by innerHTML, which
+       destroys the focused element; activeElement measured BODY after each
+       transition. A keyboard or voice reader restarted from the top of the
+       document at every one of seven steps. Each screen's title is now an h2
+       with tabindex -1 and go() moves focus to it. Picking a card also
+       re-renders, so that handler puts focus back on the card just pressed.
+     - FOCUS-INVISIBLE. Nothing authored a focus style at all; the UA default
+       measured outline 1px rgb(16,16,16) against 2px near-black borders. The
+       ring is now built from --ink on --paper, the one pair the comfort ladder
+       already audits at every stop, so it inherits that guarantee instead of
+       needing its own; an amber-soft halo widens it without carrying contrast
+       load. Teal was the Studio Voice's suggestion for the ring and it does
+       not survive measurement - #0F5F5A on the black stop is 2.6:1.
+     - OUTLINE-BROKEN. No screen carried a heading, so assistive tech got an
+       empty outline exactly where the player stood. The same h2 fixes it, and
+       the verdict gained a title it never had.
+     - aria-live came OFF main in the same pass. With innerHTML replacement it
+       announced an entire screen on every change. Focus management replaces
+       it; Fran, the one thing that updates without a screen change, is now
+       the only live region.
+  2. THE GATE GREW THE TOOTH IT WAS MISSING. About 90 checks passed while two
+     focus blockers sat in the build - a suite that passes everything and
+     never looks at focus manufactures confidence. It now asserts an authored
+     focus style, a ring of 3px or more, a heading on every screen, focus
+     never on BODY across the whole walkthrough, and prints image share.
+  3. THE SCENE STRIP - three findings, one element. The plate and the secret
+     now ride the choice and review screens, so the secret is present while it
+     is being served instead of held in memory across three screens.
+  4. THE HOUSE ANSWERS WHERE IT CAN BE SEEN. It sat at top 1432px in an 844px
+     viewport at the instant it updated - two rounds of work on a meter nobody
+     ever watched move. It now sits under the verdict banner, above the
+     critics, and seats arrive in sequence over about 620ms rather than being
+     painted pre-filled. Leaving is staggered too, from the back.
+  5. A BEST-RUN FLOOR. v14 scored the most recent staging, so replaying a
+     scene to see the announced version cost 33 seats. A first bad staging
+     still empties the room - the lesson must cost something once - but a
+     restage can no longer take back ground already won.
+  6. PROVENANCE. The closing craft claim said "the workshop" and nothing else;
+     the footer names the lineage now, and the competency is mapped above.
+
+  STILL OPEN after v17, honestly:
+  - IMAGE-FLOOR is improved, not met. Measured at 390px: choice 1.6 -> 14.5%,
+    review 0.9 -> 12.4%, verdict 8.4%, lobby 25%, scene 34.8%. Canon C7 is 50%.
+    The real fix is what Mamet asked for - a drawing on each of the 27 cards,
+    so a card shows the staging it proposes instead of describing it. That is
+    an authoring job, not a refactor, and it is quoted to the founder rather
+    than guessed at here.
+  - COMFORT still stands against the 2026-08-29 no-walls ruling, and the teal
+    still has no job. Both are founder calls, item 7 of the seats' order.
 -->
 <style>
   :root{
@@ -198,6 +259,23 @@
     min-height:48px; border-radius:10px;
   }
   @media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important;} }
+
+  /* FOCUS IS A FLOOR, and until v17 nothing here authored one. The page
+     inherited the UA ring, measured at outline 1px rgb(16,16,16) sitting
+     against 2px near-black borders - invisible on the profile this studio
+     builds for. The ring is built from --ink on --paper because that is the
+     one contrast pair the comfort ladder already audits at every stop, so it
+     inherits that guarantee instead of needing its own. The amber-soft halo
+     only widens the target; it carries none of the contrast load.
+     (Teal was the seat's suggestion and it does not survive measurement:
+     #0F5F5A on the black stop is 2.6:1. Left to the founder with the mark.) */
+  :focus-visible{
+    outline:3px solid var(--ink); outline-offset:2px;
+    box-shadow:0 0 0 7px var(--amber-soft);
+  }
+  /* the per-screen heading takes focus on every transition, so its ring is
+     the quiet version - present for a keyboard reader, not a flashbang */
+  .stepline:focus-visible{ box-shadow:none; outline-offset:4px; }
 
   header{
     display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px;
@@ -375,6 +453,35 @@
     .draw{ animation:none !important; stroke-dashoffset:0 !important; }
   }
 
+  /* THE SCENE STRIP (L5 SPLIT-ATTENTION, L3 TEXT-WALL, L4 IMAGE-FLOOR).
+     The secret used to be shown once and then judged across three screens the
+     player could not see it from, so the only load-bearing sentence in the
+     game was held in working memory while the work happened. The plate rides
+     along with it: the choice screens measured 1.6% image against a 50% floor,
+     and the scene the player is staging was not on screen while they staged
+     it. One element answers all three findings. */
+  .scenestrip{
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+    justify-content:center; margin:6px 0 18px;
+    background:var(--card); border:2px solid var(--ink); border-radius:12px;
+    padding:12px 16px;
+  }
+  .strip-plate{ flex:1 1 200px; min-width:180px; color:var(--ink); }
+  .strip-plate svg{ width:100%; height:auto; max-height:132px; display:block; }
+  /* the plate has already drawn itself on the scene screen; here it is simply
+     present. Inline dash values beat a plain rule, hence !important - the same
+     lesson the reduced-motion override taught in v15. */
+  .strip-plate .draw{ animation:none !important; stroke-dashoffset:0 !important; }
+  .strip-secret{ flex:1 1 230px; min-width:200px; }
+  .strip-secret .tag{
+    display:block; font-family:Verdana,Arial,sans-serif; font-size:18px;
+    font-weight:bold; letter-spacing:2px; margin-bottom:4px;
+  }
+  .strip-secret .fact{
+    font-weight:bold; text-decoration:underline;
+    text-decoration-thickness:3px; text-underline-offset:6px;
+  }
+
   .prompt{ text-align:center; font-size:22px; margin:20px 0 6px; }
   .subprompt{ text-align:center; font-style:italic; margin-bottom:18px; }
 
@@ -467,6 +574,17 @@
   }
   .house-svg{ color:var(--ink); }
   .house-svg svg{ width:100%; height:auto; display:block; }
+  /* Seats are classed rather than painted, so a seat taken or given up is a
+     state change that can be watched. They arrive in sequence over about six
+     tenths of a second - people sitting down, not a chart repainting. The
+     reduced-motion rule above kills the transition and leaves the same
+     end state. */
+  .house-svg .seat{
+    fill:currentColor; fill-opacity:0;
+    stroke:currentColor; stroke-opacity:0.46;
+    transition:fill-opacity .34s ease var(--d,0s), stroke-opacity .34s ease var(--d,0s);
+  }
+  .house-svg .seat.here{ fill-opacity:1; stroke-opacity:1; }
 
   /* Mnemonic icons: eye = OBJECT (seen), footprints = MOVE (watched), speech = LINE (heard) */
   .icn{ display:block; color:var(--ink); }
@@ -502,6 +620,7 @@
     font-weight:bold; letter-spacing:2px;
   }
   .studiotag{ display:block; font-style:italic; font-size:18px; }
+  .studiosource{ display:block; font-size:18px; margin-top:4px; }
 </style>
 </head>
 <body data-comfort="1">
@@ -537,7 +656,7 @@
   </defs>
 </svg>
 
-<main id="stage" aria-live="polite"></main>
+<main id="stage"></main>
 
 <footer>
   <svg class="spiralmark" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
@@ -557,6 +676,7 @@
   <div>
     <span class="studioname">TIGHT SPIRAL STUDIOS</span>
     <span class="studiotag">Play. Notice. Design.</span>
+    <span class="studiosource">Stagecraft after Mamet and Saunders. EN195 Workshop 3.</span>
   </div>
 </footer>
 
@@ -772,12 +892,26 @@
   var state = {
     sceneIdx:0, step:"lobby",
     picked:{OBJECT:null, MOVE:null, LINE:null},
-    scored:[null,null,null]   // per scene, the most recent {shows, tells}
+    scored:[null,null,null],  // per scene, the BEST {shows, tells} so far
+    shownTaken:SEATS_AT_RISE  // what the player last saw, so change can be seen
   };
 
   var stage = document.getElementById("stage");
 
   function scene(){ return SCENES[state.sceneIdx]; }
+
+  // Every screen's title is an h2 that can hold focus. Two findings at once:
+  // assistive tech was handed an empty outline exactly where the player stood
+  // (no heading below the site h1), and rebuilding main by innerHTML dropped
+  // focus to BODY on every transition, so a keyboard or voice reader restarted
+  // from the top of the document at each of seven steps.
+  function head(text){
+    var h = document.createElement("h2");
+    h.className = "stepline";
+    h.setAttribute("tabindex","-1");
+    h.textContent = text;
+    return h;
+  }
 
   function el(tag, cls, text){
     var e = document.createElement(tag);
@@ -981,6 +1115,9 @@
     state.step = step;
     render();
     window.scrollTo(0,0);
+    // hand the reader the new screen instead of the top of the document
+    var h = stage.querySelector(".stepline");
+    if(h) h.focus({preventScroll:true});
   }
 
   function render(){
@@ -1066,16 +1203,22 @@
     return Math.max(SEATS_FLOOR, Math.min(HOUSE_SEATS, n));
   }
 
-  function houseBlock(){
+  function houseBlock(animate){
     var taken = seatsTaken();
+    // Render at the count the player last SAW, then move to the true count so
+    // the change is witnessed. Painting the answer pre-filled was the whole of
+    // GAME-FEEL-DISPLACED: two rounds of work on this meter and nobody ever
+    // saw a seat arrive.
+    var from = animate ? state.shownTaken : taken;
+
     var p = ['<path d="'+STAGE_LIP+'" fill="none" stroke="currentColor" stroke-width="3.8"'
            + ' stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>'];
     HOUSE.forEach(function(s){
-      var here = s.order < taken;
-      p.push('<path d="'+seatPath(s)+'" stroke="currentColor" stroke-linejoin="round"'
-           + ' stroke-width="'+(1.5 + wob(s.seed*19.1 + 5)*0.5).toFixed(2)+'"'
-           + ' fill="'+(here ? "currentColor" : "none")+'"'
-           + (here ? "" : ' opacity="0.48"')+'/>');
+      // Seats carry their state as a class, so taking one is a transition
+      // rather than a repaint.
+      p.push('<path class="seat'+(s.order < from ? " here" : "")+'" d="'+seatPath(s)+'"'
+           + ' stroke-linejoin="round"'
+           + ' stroke-width="'+(1.5 + wob(s.seed*19.1 + 5)*0.5).toFixed(2)+'"/>');
     });
 
     var box = el("section","housebox");
@@ -1084,13 +1227,46 @@
     svgWrap.firstChild.setAttribute("aria-label",
       "The house, seen from the stage: "+taken+" of "+HOUSE_SEATS+" seats taken.");
     box.appendChild(svgWrap);
+
+    if(from !== taken){
+      var lo = Math.min(from, taken), hi = Math.max(from, taken);
+      var step = Math.min(55, 620 / Math.max(1, hi - lo));
+      var apply = function(){
+        var nodes = svgWrap.querySelectorAll(".seat");
+        HOUSE.forEach(function(seat, i){
+          if(seat.order < lo || seat.order >= hi) return;
+          // arriving, they fill from the front; leaving, they go from the back
+          var k = (taken > from) ? (seat.order - lo) : (hi - 1 - seat.order);
+          nodes[i].style.setProperty("--d", Math.round(k * step) + "ms");
+          nodes[i].classList.toggle("here", seat.order < taken);
+        });
+      };
+      requestAnimationFrame(function(){ requestAnimationFrame(apply); });
+    }
+    state.shownTaken = taken;
     return box;
+  }
+
+  // The scene and its secret, carried onto every screen where the player is
+  // working on them. Answers SPLIT-ATTENTION (the secret was held in memory
+  // across three screens) and lifts the image share on the text-heaviest
+  // screens in the game at no authoring cost.
+  function sceneStrip(){
+    var strip = el("section","scenestrip");
+    var sp = el("div","strip-plate");
+    sp.innerHTML = '<svg viewBox="0 0 240 160" aria-hidden="true" focusable="false">'+scene().plate+'</svg>';
+    strip.appendChild(sp);
+    var ss = el("p","strip-secret");
+    ss.appendChild(el("span","tag","THE SECRET"));
+    ss.appendChild(el("strong","fact",scene().secret));
+    strip.appendChild(ss);
+    return strip;
   }
 
   /* ---------- screens ---------- */
 
   function renderLobby(){
-    stage.appendChild(el("p","stepline","TONIGHT'S PROGRAM"));
+    stage.appendChild(head("TONIGHT'S PROGRAM"));
     stage.appendChild(el("p","lobby-note","Three scenes. Three secrets. Choose one and stage it."));
     SCENES.forEach(function(sc, i){
       var b = el("button","lobbybtn");
@@ -1116,11 +1292,11 @@
       });
       stage.appendChild(b);
     });
-    stage.appendChild(houseBlock());
+    stage.appendChild(houseBlock(false));
   }
 
   function renderSecret(){
-    stage.appendChild(el("p","stepline","SCENE "+(state.sceneIdx+1)+" OF "+SCENES.length+": "+scene().name));
+    stage.appendChild(head("SCENE "+(state.sceneIdx+1)+" OF "+SCENES.length+": "+scene().name));
 
     var nav = el("div","scenenav");
     SCENES.forEach(function(sc, i){
@@ -1210,7 +1386,7 @@
 
   function renderChoice(cat){
     var p = PROMPTS[cat];
-    stage.appendChild(el("p","stepline","CHOICE "+p.n+" OF 3"));
+    stage.appendChild(head("CHOICE "+p.n+" OF 3"));
     stage.appendChild(icon(cat,"choice-icn"));
     var ask = (cat==="OBJECT") ? "Put one OBJECT on the stage."
             : (cat==="MOVE") ? "Give "+scene().who+" one MOVE."
@@ -1221,8 +1397,10 @@
             : "Something the audience can hear.";
     stage.appendChild(el("p","subprompt",sub));
 
+    stage.appendChild(sceneStrip());
+
     var bank = el("div","bank");
-    scene().cards[cat].forEach(function(c){
+    scene().cards[cat].forEach(function(c, idx){
       var b = el("button","cardbtn",c.text);
       b.type = "button";
       b.setAttribute("aria-pressed", state.picked[cat]===c.id ? "true" : "false");
@@ -1230,6 +1408,8 @@
       b.addEventListener("click", function(){
         state.picked[cat] = (state.picked[cat]===c.id) ? null : c.id;
         render();
+        var again = stage.querySelectorAll(".cardbtn")[idx];
+        if(again) again.focus({preventScroll:true});
       });
       bank.appendChild(b);
     });
@@ -1238,6 +1418,7 @@
     if(state.picked[cat]){
       var card = cardById(cat, state.picked[cat]);
       var fran = el("div","franbox");
+      fran.setAttribute("aria-live","polite");
       fran.appendChild(el("span","who","FRAN, STAGE MANAGER, ON HEADSET"));
       fran.appendChild(el("p", null, FRAN[cat][card.kind]));
       stage.appendChild(fran);
@@ -1258,7 +1439,8 @@
 
   function renderReview(){
     state.fromReview = false;
-    stage.appendChild(el("p","stepline","YOUR STAGING"));
+    stage.appendChild(head("YOUR STAGING"));
+    stage.appendChild(sceneStrip());
     CATS.forEach(function(cat){
       var card = cardById(cat, state.picked[cat]);
       var item = el("div","review-item");
@@ -1283,12 +1465,32 @@
   }
 
   function renderVerdict(){
+    stage.appendChild(head("THE VERDICT: "+scene().name));
     var kinds = CATS.map(function(cat){ return cardById(cat, state.picked[cat]).kind; });
     var shows = kinds.filter(function(k){ return k==="SHOW"; }).length;
     var tells = kinds.filter(function(k){ return k==="TELL"; }).length;
 
-    // The house answers the night you just gave it, not your best one.
-    state.scored[state.sceneIdx] = { shows: shows, tells: tells };
+    // The house answers the night you gave it, floored at your best night for
+    // that scene. A first bad staging still empties seats - the lesson has to
+    // cost something the first time. A RE-staging cannot take back ground you
+    // have already won, so a player who wants to see what the announced
+    // version looks like is not charged for the curiosity.
+    var net = shows*PER_SHOW - tells*PER_TELL;
+    var was = state.scored[state.sceneIdx];
+    if(!was || net > was.shows*PER_SHOW - was.tells*PER_TELL){
+      state.scored[state.sceneIdx] = { shows: shows, tells: tells };
+    }
+
+    var key = shows===3 ? "win" : tells===3 ? "seminar"
+            : kinds.indexOf("INVISIBLE")>=0 ? "invisible" : "told";
+    var vd = VERDICTS[key];
+    var ban = el("div","banner "+vd.cls);
+    ban.appendChild(el("span","head",vd.head));
+    ban.appendChild(el("p",null, key==="win" ? scene().winBody : vd.body));
+    stage.appendChild(ban);
+
+    // The room answers before the critics explain it.
+    stage.appendChild(houseBlock(true));
 
     CATS.forEach(function(cat){
       var card = cardById(cat, state.picked[cat]);
@@ -1304,15 +1506,6 @@
       stage.appendChild(div);
     });
 
-    var key = shows===3 ? "win" : tells===3 ? "seminar"
-            : kinds.indexOf("INVISIBLE")>=0 ? "invisible" : "told";
-    var vd = VERDICTS[key];
-    var ban = el("div","banner "+vd.cls);
-    ban.appendChild(el("span","head",vd.head));
-    ban.appendChild(el("p",null, key==="win" ? scene().winBody : vd.body));
-    stage.appendChild(ban);
-
-    stage.appendChild(houseBlock());
     stage.appendChild(el("p","houselights",
       "From the workshop: if the audience doesn't see it or hear it, they won't know it."));
 
@@ -1336,6 +1529,7 @@
     state.fromReview = false;
     state.picked = {OBJECT:null, MOVE:null, LINE:null};
     state.scored = [null,null,null];
+    state.shownTaken = SEATS_AT_RISE;
     go("lobby");
   }
 
