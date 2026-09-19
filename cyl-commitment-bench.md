@@ -441,4 +441,8 @@ Also: the version chip on the surface (`v1.1` beside the title, in `<title>`, in
 
 **Also this build.** The kitchen plate now covers its stage at phone width (it letterboxed in v1.2). Walked at 390x844: pool of four at every dinner, the Monday kitchen question answered by Tuesday's paper in the room, the Wednesday question by Thursday's photographs, the Thursday question by Sunday's set, Tuesday's unanswered with its door named, Sunday's after line, recall of four, lever line on own judgment. Gates: voice SHIP, retired PASS, structure PASS, one-thing WARN (unchanged), art-gate pass; file under the connector ceiling.
 
+### 15.4 Founder rule: all art in one style (2026-09-19)
+
+**Founder:** *"Porch etc needs to be in style. All art same style!"* Recorded in CLAUDE.md as a standing rule. For the house: the living room, the set, the den and hall crops and the re-graded kitchen are one hand (founder MJ, photographic, 1962 grade). The porch (studio SVG) and the kids' room (the empty-chair plate, a paneled room) are not. No plate on disk reads as either; the session's lanes are measured closed (MJ by ruling, LOC by the proxy, studio-cut cannot be photographic). The two routes that produce same-style plates are the founder's own MJ run of the three prompts in the ask register, or a generative-expand lane on his own plates opened by ruling. PENDING founder call on the route.
+
 Tight Spiral Productions · walshero@gmail.com

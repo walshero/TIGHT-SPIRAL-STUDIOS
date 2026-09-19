@@ -197,6 +197,15 @@ could measure; the execution gate measures it now (type dominance, cross-hatch, 
 layers). Bad hand-cut art still does not ship - it now fails for being bad rather than
 for being hand-cut. Full ruling: `claude/RULING-STUDIO-CUT-ART-LANE-2026-08-27.md`.
 
+## All art in one style - founder rule, standing (2026-09-19)
+Founder's words: *"Porch etc needs to be in style. All art same style!"* Every plate in a build
+reads as one hand: the same photographic register, the same era grade, the same generator
+where a generator is used. A studio SVG stand-in beside a founder plate is off-style even when
+it is the only thing available; a crop of a founder plate is in style. Interim plates that
+break the style are named as interim on the surface and in the ask register, and never mount
+as finished. Where no in-style plate exists, the build says so and the ask goes to the founder
+(`art-department/FOUNDER-ASKS-*.md`), rather than a second style filling the hole.
+
 ## Status ladder - founder rule, standing (2026-08-27)
 **LAB is a real status and most builds belong in it.** Founder's words: *"Many games
 have to be placed in lab status. All the cliche cowpath games - put in lab not as done
