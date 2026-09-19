@@ -1419,3 +1419,8 @@ kitchen as the 1962 interim, or hold for the generated one. The kids' room stays
 
 **Verified.** Walk at 390x844 clean (kitchen stage paints the plate; falsifier pool renders; two-room lock; replay);
 voice SHIP, retired PASS, structure PASS, one-thing WARN (unchanged), art-gate pass. File under the connector ceiling.
+
+**PENDING (same day):** the founder questions the falsifier as the core dinner dynamic ("Maybe what are your biggest
+questions? Can this adapt from what you chose? Gameplay direction feels uncertain"). Studio recommendation recorded in
+bench §15.2: replace the falsifier with the question, drawn from tonight's rooms, carried into the next night, asked
+back by the person you told, recalled on Sunday. Not built; awaiting the ruling.
