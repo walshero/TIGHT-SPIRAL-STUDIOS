@@ -386,3 +386,26 @@ have retired 30 live `the-tell.html` findings it never opened. The ledger's
 `fixed_on` history predating 2026-09-19 is therefore **not trustworthy** and
 wants an audit — earlier runs may have marked defects clean on surfaces they
 never assessed. Not done here; carried.
+
+---
+
+## HELD — not to be actioned yet (founder, 2026-09-19)
+
+**Provenance line, expanded.** The footer currently reads *"Stagecraft after
+Mamet and Saunders. EN195 Workshop 3."* The founder's note is that the real
+lineage is **Mamet, Saunders, Fore (Nick Fore), Sellers, and Walsh** — and that
+it is to be held, not fixed. Recorded here rather than left in chat, per the
+2026-08-08 make-work-stick rule; the build is untouched.
+
+Two things to settle before it ships, because a misspelled attribution is worse
+than a short one:
+
+1. **Sellers or Sellars?** In a stagecraft lineage this most likely means
+   **Peter Sellars**, the opera and theatre director — spelled with an *a*, and
+   distinct from Peter Sellers the actor. Needs the founder's confirmation
+   before it goes on a player-facing line.
+2. **"Walsh"** is the founder in his own credit line. Confirm the form he wants
+   (Walsh / M. Walsh / Matt Walsh), and whether the EN195 Workshop 3 clause
+   stays alongside it.
+
+No other seat has weighed in; this is a copy note, not a finding.
