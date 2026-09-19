@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Row K: Dress Rehearsal</title>
 <!--
-  ROW K v13 - a staging game. Tight Spiral Productions.
+  ROW K v14 - a staging game. Tight Spiral Productions.
   Three scenes: Ernesto (elevator), Vera (book club), Frank (the basement cat).
   Craft target: stagecraft / show-don't-tell for the stage (EN195 Workshop 3, Lens 3).
   Floors: single-file offline, no network fetches, no emoji, scene-first,
@@ -77,14 +77,37 @@
   5. FRAN, CHOICE 1 (OBJECT/TELL): "awkward" at curtain, not "tricky".
      FRAN, CHOICE 3 (LINE/TELL): "Hope the critics aren't in the house."
 
-  6. AUDIENCE METER. A 54-seat house: 9 rows of 6, in three bands of three
-     rows. Each scene owns a band; each choice the house can SEE lights one
-     row. So a full house is all three scenes staged with all three choices
-     shown, and the ceiling before the final scene is two thirds - not an
-     arbitrary clamp but the arithmetic of the thing: the back third is
-     Scene 3's band and nothing else can fill it. The meter sits on the lobby
-     and under every verdict, and always prints the count in words as well as
-     seats.
+  6. AUDIENCE METER. A 54-seat house in bands, with a count and a key.
+
+  --- v14 (founder notes, same rehearsal) ---
+  THE HOUSE, REDRAWN AND UNEXPLAINED. Three changes, one idea.
+    - FORM. The grid is gone. The house is a hemicycle now, the way a chamber
+      seating map is drawn: seven concentric arcs fanning back from the stage
+      lip, seat counts running with arc length so spacing stays even front to
+      back. Ink only. A seat is taken or it is not, and nothing else is
+      encoded - so there is no key to read and no color to decode.
+    - HAND. Nothing is on its mark. Every seat is jittered off its ideal
+      position and radius, and drawn as a ten-sided lumpy polygon with round
+      joins rather than a true circle. Stroke weights vary. The wobble is a
+      seeded hash, so it is the same wobble every render - hand-made, not
+      restless. A perfect grid of perfect discs reads as a parking lot.
+    - ARITHMETIC. A quarter of the house (24 of 96) is already seated when you
+      arrive; people came, the lights went down, that is the room you inherit.
+      From there it answers the work: every choice they can SEE brings eight
+      more in, every choice you ANNOUNCE loses three, anything INVISIBLE moves
+      nobody. Nine choices across three scenes, so 24 + 9x8 fills the room
+      exactly and only a whole evening staged clean gets there. Seats fill
+      front-first and centre-first with enough noise in the ordering that the
+      crowd has a shape instead of a wavefront. The score is the most recent
+      staging of each scene, not the best, so a restage moves the room live.
+    - AND NOT A WORD OF IT ON THE PAGE. No title, no count, no key, no note,
+      no tally under the verdict. The house is the one element here that shows
+      instead of telling, which is the entire lesson of the game; captioning
+      it would be the thing losing its own argument. The count survives only
+      in the aria-label, where sighted players never meet it.
+    Replaces the v13 band scheme and its two-thirds ceiling: the ceiling is
+    now a consequence rather than a rule, since no arrangement of two scenes
+    reaches 96.
 -->
 <style>
   :root{
@@ -367,41 +390,23 @@
   .houselights{ text-align:center; font-style:italic; margin:16px 0 22px; }
   .hidden{ display:none; }
 
-  /* AUDIENCE METER. 54 seats: 9 rows of 6, three bands of three rows, one band
-     per scene. Each choice the house can SEE lights one row. A lit seat is a
-     solid amber block with a full-strength ink outline; an empty seat is a
-     hairline. The structural difference does the work, not the hue. */
+  /* THE HOUSE. A hemicycle, the way a chamber seating map is drawn: concentric
+     arcs of seats fanning back from the stage. Ink only - a seat is taken or it
+     is not, and nothing else is encoded, so there is no key to read and no
+     legend to hunt for. Every seat is drawn by hand: jittered off its ideal
+     position, jittered in size, and outlined as a lumpy polygon rather than a
+     true circle, because a perfect grid of perfect discs reads as a parking
+     lot. The wobble is deterministic, seeded per seat, so the house does not
+     twitch between renders.
+     It carries NO text. The house is the one thing on this page that shows
+     instead of telling, which is the whole lesson - explaining it in a caption
+     would be the game losing its own argument. */
   .housebox{
     margin:24px auto 6px; background:var(--card); border:2px solid var(--ink);
-    border-radius:12px; padding:14px 14px 12px;
-  }
-  .housebox.full{ border-width:4px; border-color:var(--good); }
-  .house-title{
-    font-family:Verdana,Arial,sans-serif; font-size:18px; font-weight:bold;
-    letter-spacing:2px; text-align:center; margin-bottom:10px;
-  }
-  .house-stagebar{
-    text-align:center; font-family:Verdana,Arial,sans-serif; font-size:18px;
-    font-weight:bold; letter-spacing:6px; padding:7px 0;
-    border:2px solid var(--ink); border-radius:5px;
-    background:var(--amber-soft); margin:0 8% 12px;
+    border-radius:12px; padding:16px 12px 12px;
   }
   .house-svg{ color:var(--ink); }
   .house-svg svg{ width:100%; height:auto; display:block; }
-  .house-key{
-    list-style:none; padding:0; margin:12px 0 0;
-    display:flex; gap:8px 20px; justify-content:center; flex-wrap:wrap;
-    font-size:18px;
-  }
-  .house-key li{ display:flex; align-items:center; gap:8px; }
-  .house-key .swatch{
-    width:20px; height:20px; border-radius:5px; border:2.5px solid; flex:none;
-  }
-  .house-read{
-    text-align:center; font-family:Verdana,Arial,sans-serif; font-size:19px;
-    font-weight:bold; letter-spacing:1px; margin-top:12px;
-  }
-  .house-note{ text-align:center; font-style:italic; margin-top:5px; }
 
   /* Mnemonic icons: eye = OBJECT (seen), footprints = MOVE (watched), speech = LINE (heard) */
   .icn{ display:block; color:var(--ink); }
@@ -689,17 +694,19 @@
   var ORDER = ["lobby","secret","OBJECT","MOVE","LINE","review","verdict"];
   var CATS = ["OBJECT","MOVE","LINE"];
 
-  // THE HOUSE. 9 rows of 6 = 54 seats, in three bands of three rows. Scene N
-  // owns band N; each SHOW in that scene lights one of its rows. So the house
-  // cannot pass two thirds until the final scene is staged - not a clamp, just
-  // the arithmetic: the back third is Scene 3's band and nothing else fills it.
-  var ROWS_PER_BAND = 3, SEATS_PER_ROW = 6, HOUSE_TOTAL = 54;
+  // THE HOUSE. 96 seats. A quarter of them are already there when you arrive -
+  // people came, the lights went down, that is the room you inherit. From
+  // there the house answers the work: every choice they can SEE brings eight
+  // more in, every choice you ANNOUNCE loses three. Nine choices across three
+  // scenes, so 24 + 9x8 fills the room exactly, and nothing but the whole
+  // evening staged clean gets you there. None of this is written down
+  // anywhere on the page. They find out by watching the seats.
+  var HOUSE_SEATS = 96, SEATS_AT_RISE = 24, PER_SHOW = 8, PER_TELL = 3, SEATS_FLOOR = 8;
 
   var state = {
     sceneIdx:0, step:"lobby",
     picked:{OBJECT:null, MOVE:null, LINE:null},
-    house:[0,0,0],        // best SHOW count per scene, 0-3
-    staged:[false,false,false]
+    scored:[null,null,null]   // per scene, the most recent {shows, tells}
   };
 
   var stage = document.getElementById("stage");
@@ -753,100 +760,98 @@
     else renderVerdict();
   }
 
-  /* ---------- the audience meter ---------- */
+  /* ---------- the house ---------- */
 
-  function litRows(){
-    var lit = [];
-    for(var b=0; b<3; b++){
-      var n = state.house[b];
-      for(var r=0; r<ROWS_PER_BAND; r++) lit.push(r < n);
-    }
-    return lit;
-  }
+  // Deterministic hash: the same seat wobbles the same way every render, so
+  // the drawing is hand-made rather than merely random.
+  function wob(n){ var x = Math.sin(n*127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
 
-  function seatsFilled(){
-    var n = 0;
-    litRows().forEach(function(on){ if(on) n += SEATS_PER_ROW; });
-    return n;
-  }
-
-  // The chart carries NO text of its own. A viewBox scales its own type down
-  // with the container - at 390px wide the old 11px stage label rendered near
-  // 10 real pixels, under the 18px floor. Every word here is HTML, so it obeys
-  // the reader's own text size and never shrinks with the drawing.
-  function houseSvg(){
-    var lit = litRows();
-    var heldBack = !state.staged[2];
-    var p = [];
-    for(var i=0; i<9; i++){
-      var band = Math.floor(i/ROWS_PER_BAND);
-      var y = 6 + i*20 + band*8;
-      var w = 40 + i*1.6;
-      var x0 = 180 - (SEATS_PER_ROW*w + (SEATS_PER_ROW-1)*6)/2;
-      for(var k=0; k<SEATS_PER_ROW; k++){
-        var box = 'x="'+(x0 + k*(w+6)).toFixed(1)+'" y="'+y+'" width="'+w.toFixed(1)
-                + '" height="14" rx="3.5"';
-        if(lit[i]){
-          p.push('<rect '+box+' fill="#E8A13D" stroke="currentColor" stroke-width="1.8"/>');
-        } else if(band===2 && heldBack){
-          p.push('<rect '+box+' fill="none" stroke="currentColor" stroke-width="1.4"'
-               + ' stroke-dasharray="4 3" opacity="0.34"/>');
-        } else {
-          p.push('<rect '+box+' fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.42"/>');
-        }
+  // Seats fan back from the stage in concentric arcs, chamber-map style.
+  // Arc seat counts run with arc length, so spacing stays even front to back.
+  var HOUSE = (function(){
+    var cx = 180, cy = 12, a0 = 22*Math.PI/180, a1 = 158*Math.PI/180;
+    var arcs = [[44,6],[62,9],[80,11],[98,14],[116,16],[134,19],[152,21]];
+    var seats = [], id = 0;
+    arcs.forEach(function(arc, ai){
+      var r = arc[0], n = arc[1];
+      for(var k=0; k<n; k++){
+        var t  = (k + 0.5) / n;
+        var th = a0 + (a1-a0)*t;
+        var rr = r  + (wob(id*3.1 + 1) - 0.5) * 4.2;      // off the arc
+        var tt = th + (wob(id*7.7 + 2) - 0.5) * 0.020;    // off its mark
+        seats.push({
+          x: cx + rr*Math.cos(tt),
+          y: cy + rr*Math.sin(tt),
+          rad: 6.3 + (wob(id*5.3 + 3) - 0.5) * 1.8,
+          seed: id,
+          // Who sits first: front before back, middle before the edges, and a
+          // healthy dose of nobody-does-what-you-expect so the crowd that
+          // gathers has a shape instead of a wavefront.
+          pref: ai + Math.abs(t - 0.5)*4.2 + wob(id*11.9 + 4)*1.7
+        });
+        id++;
       }
+    });
+    seats.slice().sort(function(a,b){ return a.pref - b.pref; })
+         .forEach(function(s,i){ s.order = i; });
+    return seats;
+  })();
+
+  // A lumpy closed polygon, not a circle. Round joins soften it into something
+  // drawn rather than plotted.
+  function seatPath(s){
+    var n = 10, d = "";
+    for(var i=0; i<n; i++){
+      var th = (i/n) * Math.PI * 2;
+      var rr = s.rad * (0.84 + wob(s.seed*13.3 + i*4.7) * 0.30);
+      d += (i ? "L" : "M") + (s.x + rr*Math.cos(th)).toFixed(1)
+         + " " + (s.y + rr*Math.sin(th)).toFixed(1) + " ";
     }
-    if(heldBack){
-      p.push('<line x1="8" y1="135" x2="352" y2="135" stroke="currentColor" stroke-width="2.2"'
-           + ' stroke-dasharray="8 6" opacity="0.55"/>');
+    return d + "Z";
+  }
+
+  // The stage: a wide, shallow, hand-drawn apron across the front, bowing the
+  // same way the rows do. Drawn at the hemicycle's focus it would be a dot,
+  // which is true of a debating chamber and false of a theatre - so it is
+  // struck wider than the first row instead, the way a seating plan draws it.
+  // That is the whole label. No word needed.
+  var STAGE_LIP = (function(){
+    var d = "";
+    for(var i=0; i<=30; i++){
+      var t = i/30;
+      var x = 95 + 170*t + (wob(i*17.3 + 9) - 0.5) * 1.6;
+      var y = 15 + 3*Math.sin(Math.PI*t) + (wob(i*23.9 + 7) - 0.5) * 1.7;
+      d += (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1) + " ";
     }
-    return '<svg viewBox="0 0 360 202" role="img">'+p.join("")+'</svg>';
+    return d.trim();
+  })();
+
+  function seatsTaken(){
+    var n = SEATS_AT_RISE;
+    state.scored.forEach(function(sc){
+      if(sc) n += sc.shows*PER_SHOW - sc.tells*PER_TELL;
+    });
+    return Math.max(SEATS_FLOOR, Math.min(HOUSE_SEATS, n));
   }
 
   function houseBlock(){
-    var filled = seatsFilled();
-    var full = filled === HOUSE_TOTAL;
-
-    var box = el("section","housebox"+(full ? " full" : ""));
-    box.appendChild(el("p","house-title", full ? "THE HOUSE - FULL" : "THE HOUSE"));
-    box.appendChild(el("p","house-stagebar","STAGE"));
-
-    var svgWrap = el("div","house-svg");
-    svgWrap.innerHTML = houseSvg();
-    svgWrap.firstChild.setAttribute("aria-label",
-      "Seating chart, stage at the top. "+filled+" of "+HOUSE_TOTAL+" seats filled."
-      + (state.staged[2] ? "" : " The back third is held until Scene 3 is staged."));
-    box.appendChild(svgWrap);
-
-    // The band key doubles as the per-scene scoreboard, in the scene's own color.
-    var key = el("ul","house-key");
-    SCENES.forEach(function(sc, i){
-      var li = el("li");
-      var sw = el("span","swatch");
-      sw.style.background = sc.tint.field;
-      sw.style.borderColor = sc.tint.rim;
-      li.appendChild(sw);
-      li.appendChild(document.createTextNode(
-        "Scene "+(i+1)+": "+state.house[i]+" of "+ROWS_PER_BAND+" rows"));
-      key.appendChild(li);
+    var taken = seatsTaken();
+    var p = ['<path d="'+STAGE_LIP+'" fill="none" stroke="currentColor" stroke-width="3.8"'
+           + ' stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>'];
+    HOUSE.forEach(function(s){
+      var here = s.order < taken;
+      p.push('<path d="'+seatPath(s)+'" stroke="currentColor" stroke-linejoin="round"'
+           + ' stroke-width="'+(1.5 + wob(s.seed*19.1 + 5)*0.5).toFixed(2)+'"'
+           + ' fill="'+(here ? "currentColor" : "none")+'"'
+           + (here ? "" : ' opacity="0.48"')+'/>');
     });
-    box.appendChild(key);
 
-    var read = el("p","house-read");
-    read.appendChild(document.createTextNode("HOUSE: "));
-    read.appendChild(el("strong", null, String(filled)));
-    read.appendChild(document.createTextNode(" OF "+HOUSE_TOTAL+" SEATS"));
-    box.appendChild(read);
-
-    var note;
-    if(full){
-      note = "A full house. Three scenes staged, and every single choice was something they could see.";
-    } else if(!state.staged[2]){
-      note = "Each scene seats one third. The back third belongs to Scene 3 and stays dark until you stage it, so two thirds is tonight's ceiling.";
-    } else {
-      note = "One row lights for every choice the house could see. Restage a scene to fill its band.";
-    }
-    box.appendChild(el("p","house-note", note));
+    var box = el("section","housebox");
+    var svgWrap = el("div","house-svg");
+    svgWrap.innerHTML = '<svg viewBox="0 8 360 168" role="img">'+p.join("")+'</svg>';
+    svgWrap.firstChild.setAttribute("aria-label",
+      "The house, seen from the stage: "+taken+" of "+HOUSE_SEATS+" seats taken.");
+    box.appendChild(svgWrap);
     return box;
   }
 
@@ -868,10 +873,7 @@
       var txt = el("span");
       txt.appendChild(document.createTextNode("SCENE "+(i+1)));
       txt.appendChild(el("span","sname",sc.name));
-      if(state.staged[i]){
-        txt.appendChild(el("span","done",
-          state.house[i]+" of 3 rows lit"+(state.house[i]===3 ? " - the whole band." : ".")));
-      }
+      if(state.scored[i]) txt.appendChild(el("span","done","staged"));
       b.appendChild(txt);
 
       b.addEventListener("click", function(){
@@ -1051,10 +1053,8 @@
     var shows = kinds.filter(function(k){ return k==="SHOW"; }).length;
     var tells = kinds.filter(function(k){ return k==="TELL"; }).length;
 
-    // The house remembers your best night in each scene.
-    var before = state.house[state.sceneIdx];
-    state.staged[state.sceneIdx] = true;
-    state.house[state.sceneIdx] = Math.max(before, shows);
+    // The house answers the night you just gave it, not your best one.
+    state.scored[state.sceneIdx] = { shows: shows, tells: tells };
 
     CATS.forEach(function(cat){
       var card = cardById(cat, state.picked[cat]);
@@ -1080,8 +1080,7 @@
 
     stage.appendChild(houseBlock());
     stage.appendChild(el("p","houselights",
-      "Scene "+(state.sceneIdx+1)+" seated "+(shows*SEATS_PER_ROW)+" of its "
-      +(ROWS_PER_BAND*SEATS_PER_ROW)+". From the workshop: if the audience doesn't see it or hear it, they won't know it."));
+      "From the workshop: if the audience doesn't see it or hear it, they won't know it."));
 
     var row = el("div","advance-row");
     var again = el("button","bigbtn","RESTAGE");
@@ -1102,8 +1101,7 @@
     state.sceneIdx = 0;
     state.fromReview = false;
     state.picked = {OBJECT:null, MOVE:null, LINE:null};
-    state.house = [0,0,0];
-    state.staged = [false,false,false];
+    state.scored = [null,null,null];
     go("lobby");
   }
 
