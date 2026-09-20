@@ -7,7 +7,7 @@
 <meta name="audience" content="MassBay EN195 students learning to stage a secret without announcing it; the founder as first playtester">
 <title>Row K: Dress Rehearsal</title>
 <!--
-  ROW K v22 - a staging game. Tight Spiral Productions.
+  ROW K v23 - a staging game. Tight Spiral Productions.
   Three scenes: Ernesto (elevator), Vera (book club), Frank (the basement cat).
   Craft target: stagecraft / show-don't-tell for the stage (EN195 Workshop 3, Lens 3).
   Stagecraft lineage, full attribution (the footer carries names only, by
@@ -260,6 +260,13 @@
      paragraph - worst on Scene 3, whose fact wraps to four underlined lines.
      Line-height 1.85 on the secret body and on the strip, plus padding under
      the strip's fact.
+
+  --- v23 (founder: "Forget the rough. It's too weird. Just not perfect SVG.") ---
+  THE ROUGHENER IS GONE. Icons, tiles, plates and the spiral render as
+  drawn. The house keeps its own seeded jitter, which the founder liked and
+  which was never the roughener. What survives of v15 is the measurement:
+  each plate line still carries its own dash length inline, so the draw-on
+  takes its whole beat on a short line and a long one alike.
 
   --- v22 (founder: the good can opener is not viewable from Row K; sets) ---
   1. FRANK'S OBJECT failed its own test. "The good can opener" is a detail
@@ -1135,162 +1142,38 @@
 
   var SVGNS = "http://www.w3.org/2000/svg";
 
-  /* ---------- the drawing hand ---------- */
-  /* The seats are drawn by hand and the icons were not, so the page had two
-     drawing styles arguing with each other. One hand now draws everything.
-     Every icon, tile, plate and the studio spiral is resampled off its own
-     geometry and put back down slightly wrong, the way a person puts it down.
-
-     A hand does not vibrate, it WANDERS - so the displacement is two slow
-     sine octaves along the arc length, not per-point noise, which would read
-     as a bad fax. Amplitude scales with each drawing's own coordinate space,
-     so a 24-unit icon and a 240-unit plate wobble by the same visible amount.
-     Open strokes overshoot their ends a touch, because hands do. Points are
-     rejoined with Catmull-Rom, so the result is curved like a drawn line
-     rather than faceted like a polygon.
-
-     The seed is the shape's index, so this is a fixed drawing, not an
-     animation - the same lumps every load. It runs once at startup over
-     about fifty shapes and the results are cached as markup.
-
-     Every step is wrapped: if any of it throws, that shape keeps its original
-     clean geometry. A wobble is never worth a missing icon. */
-  var ROUGH = (function(){
-    var GEOM = ["d","x","y","width","height","rx","ry","cx","cy","r",
-                "x1","y1","x2","y2","points"];
+  /* ---------- the ink ----------
+     v23: the roughener is gone. The founder: "Forget the rough. It's too
+     weird. Just not perfect SVG." The drawings are what was drawn, as drawn.
+     The one thing kept from that pass is the measurement: each plate line
+     carries its own dash length inline, so a short line and a long line
+     both take their whole beat to draw on instead of sharing one guess. */
+  var INK = (function(){
     var padSvg = null;
     function pad(){
       if(!padSvg){
         padSvg = document.createElementNS(SVGNS,"svg");
         padSvg.setAttribute("aria-hidden","true");
         padSvg.setAttribute("focusable","false");
-        padSvg.style.cssText =
-          "position:absolute;left:-9999px;top:0;width:300px;height:300px;";
+        padSvg.style.cssText = "position:absolute;left:-9999px;top:0;width:300px;height:300px;";
         document.body.appendChild(padSvg);
       }
       return padSvg;
     }
-
-    function num(v){ return Math.round(v*100)/100; }
-
-    // Resample a single geometry element into wandering points.
-    function drift(el, ampIn, seed){
-      var len = el.getTotalLength();
-      if(!(len > 0.4)) return null;
-      // A hand is no less steady over a short stroke, so the wander has to be
-      // a share of the shape's OWN size, not a flat number. Without this cap a
-      // 130px elevator door and an 8px call button take the same displacement,
-      // which is 2% of the door and 20% of the button - the door looks drawn
-      // and the button turns into a hook. The flat amplitude stays the
-      // ceiling; small shapes get proportionally less.
-      var amp = Math.min(ampIn, len*0.02);
-      var n = Math.min(80, Math.max(5, Math.round(len/2.6)));
-      var a = el.getPointAtLength(0), b = el.getPointAtLength(len);
-      var closed = Math.hypot(a.x-b.x, a.y-b.y) < 0.35;
-      if(closed) n = Math.max(6, n);
-      var pts = [], i, top = closed ? n-1 : n;
-      for(i=0; i<=top; i++){
-        var at = len*i/n, p = el.getPointAtLength(at);
-        var u = at*0.13 + seed*1.7, v = at*0.29 + seed*4.1;
-        pts.push([ p.x + (Math.sin(u)*0.66 + Math.sin(v)*0.34)*amp,
-                   p.y + (Math.cos(u*1.07)*0.66 + Math.cos(v*0.93)*0.34)*amp ]);
-      }
-      if(!closed && pts.length > 1){
-        // a hand runs past the corner rather than stopping dead on it
-        var o = 0.55*amp, k = pts.length-1;
-        pts[0] = run(pts[0], pts[1], o);
-        pts[k] = run(pts[k], pts[k-1], o);
-      }
-      return { pts:pts, closed:closed };
-    }
-    function run(from, toward, d){
-      var dx = from[0]-toward[0], dy = from[1]-toward[1];
-      var m = Math.hypot(dx,dy) || 1;
-      return [from[0] + dx/m*d, from[1] + dy/m*d];
-    }
-
-    // Catmull-Rom through the points, as cubics.
-    function curve(o){
-      var pts = o.pts, n = pts.length, closed = o.closed;
-      if(n < 2) return null;
-      function at(i){
-        if(closed) return pts[(i%n+n)%n];
-        return pts[Math.max(0, Math.min(n-1, i))];
-      }
-      var d = "M"+num(pts[0][0])+" "+num(pts[0][1]);
-      var last = closed ? n : n-1;
-      for(var i=0; i<last; i++){
-        var p0 = at(i-1), p1 = at(i), p2 = at(i+1), p3 = at(i+2);
-        d += "C"+num(p1[0]+(p2[0]-p0[0])/6)+" "+num(p1[1]+(p2[1]-p0[1])/6)
-           + " "+num(p2[0]-(p3[0]-p1[0])/6)+" "+num(p2[1]-(p3[1]-p1[1])/6)
-           + " "+num(p2[0])+" "+num(p2[1]);
-      }
-      return d + (closed ? "Z" : "");
-    }
-
-    function dOf(el, amp, seed){
-      var o = drift(el, amp, seed);
-      return o ? curve(o) : null;
-    }
-
-    // One element in, one wobbled <path> out, every other attribute carried
-    // across so fills, transforms, classes and animation hooks survive.
-    function shape(el, amp, seed){
-      var d = null;
-      var subs = el.tagName.toLowerCase() === "path"
-        ? (el.getAttribute("d")||"").trim().split(/(?=M)/).filter(function(x){ return x.trim(); })
-        : null;
-      if(subs && subs.length > 1){
-        var host = el.parentNode, acc = [];
-        subs.forEach(function(sd, k){
-          var t = document.createElementNS(SVGNS,"path");
-          t.setAttribute("d", sd);
-          host.appendChild(t);
-          acc.push(dOf(t, amp, seed + k*29) || sd);
-          host.removeChild(t);
-        });
-        d = acc.join(" ");
-      } else {
-        d = dOf(el, amp, seed);
-      }
-      if(!d) return;
-      var np = document.createElementNS(SVGNS,"path");
-      Array.prototype.forEach.call(el.attributes, function(at){
-        if(GEOM.indexOf(at.name) < 0) np.setAttribute(at.name, at.value);
-      });
-      np.setAttribute("d", d);
-      el.parentNode.replaceChild(np, el);
-      return np;
-    }
-
-    function all(container, amp, seed, dash){
-      var kids = Array.prototype.slice.call(
-        container.querySelectorAll("path,rect,circle,ellipse,line,polyline,polygon"));
-      kids.forEach(function(el, i){
-        try {
-          var np = shape(el, amp, seed + i*13);
-          if(np && dash){
-            // the stroke got longer, so each plate line carries its own
-            // dash length instead of the shared guess
-            var L = Math.ceil(np.getTotalLength()) + 2;
-            np.setAttribute("style","stroke-dasharray:"+L+";stroke-dashoffset:"+L+";");
-          }
-        } catch(e){ /* this shape stays clean */ }
-      });
-    }
-
     return {
-      // roughen elements already standing in the document
-      inPlace: function(container, amp, seed){
-        try { all(container, amp, seed, false); } catch(e){}
-      },
-      // roughen a markup string, give the markup back
-      markup: function(src, amp, seed, dash){
+      measure: function(src){
         try {
           var tmp = document.createElementNS(SVGNS,"svg");
           tmp.innerHTML = src;
           pad().appendChild(tmp);
-          all(tmp, amp, seed, dash);
+          Array.prototype.forEach.call(
+            tmp.querySelectorAll("path,rect,circle,ellipse,line,polyline,polygon"),
+            function(el){
+              try {
+                var L = Math.ceil(el.getTotalLength()) + 2;
+                el.setAttribute("style","stroke-dasharray:"+L+";stroke-dashoffset:"+L+";");
+              } catch(e){}
+            });
           var out = tmp.innerHTML;
           pad().removeChild(tmp);
           return out || src;
@@ -1758,23 +1641,10 @@
     b.setAttribute("data-comfort", String(c===3 ? 1 : c+1));
   });
 
-  // ONE HAND DRAWS THE WHOLE PAGE. Amplitude is tuned per coordinate space so
-  // a 24-unit mnemonic and a 240-unit plate wobble by the same visible amount.
+  // each plate line learns its own length, so the draw-on lands on the beat
   (function(){
-    try {
-      ["i-object","i-move","i-line"].forEach(function(id, i){
-        var sym = document.getElementById(id);
-        if(sym) ROUGH.inPlace(sym, 0.30, 101 + i*17);
-      });
-      var spiral = document.getElementById("tss-spiral");
-      if(spiral && spiral.parentNode) ROUGH.inPlace(spiral.parentNode, 0.26, 211);
-
-      SCENES.forEach(function(sc, i){
-        sc.mark  = ROUGH.markup(sc.mark,  0.75, 301 + i*41, false);
-        sc.plate = ROUGH.markup(sc.plate, 1.70, 401 + i*57, true);
-      });
-    } catch(e){ /* the clean art is a perfectly good fallback */ }
-    ROUGH.done();
+    try { SCENES.forEach(function(sc){ sc.plate = INK.measure(sc.plate); }); } catch(e){}
+    INK.done();
   })();
 
   // DARK HOST LAW: on a dark-preferring device the whole comfort ladder runs on
