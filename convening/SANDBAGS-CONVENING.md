@@ -547,3 +547,24 @@ scale and the payphones at 1.3, which is the first time the diorama has had
 true near-far scale rather than three rows at one size. Belt run on the file;
 verdicts recorded in the commit.
 SIGNED: Art Director, Period Librarian, Compositor, Refuter, Studio Voice.
+
+## PROMOTED TO LIVE, 2026-09-20, v28
+
+Per RULING-LAB-STATUS-2026-08-27: "A Lab build may not be promoted by
+relabelling. It moves to Live the way any build does: the gates go green and
+somebody plays it." Both conditions are met on this date. Gates green on the
+file: art-gate, art-execution-gate, preship-gate-v4 (worst pair 7.47),
+studio-voice-gate, intent-gate, comfort-gate in day, dusk and night, and a
+scripted playthrough of all four pieces (liftoff at the declared count on
+each, after-panel, confetti, cutting continues after liftoff, two-strike
+crash, keyboard cut, undo, no console errors). Founder playtest: the founder
+played the artifact through this evening and returned scene notes, which is
+what the third pass built. The LAB band is removed from the build and the
+face chip reads Live, so the two places agree. Branded on the page and in the
+colophon as a Tight Spiral Studios production for EN195.
+
+Open for the founder, carried forward: Sparr's on the Centre Street frame;
+the Art Director seat in OS section 5.6; charter versus art-gate on the
+Midjourney lane; a stroke-integrity tooth for art-execution-gate.
+SIGNED: Coordinator, Stranger, Osterweil, Aleph, Studio Voice, Art Director,
+Refuter.
