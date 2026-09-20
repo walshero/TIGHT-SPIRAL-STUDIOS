@@ -457,4 +457,13 @@ Also: the version chip on the surface (`v1.1` beside the title, in `<title>`, in
 
 **Walked at 390x844:** each night opens in the living room; Monday's kitchen question answered by the set on Tuesday; Wednesday's by Thursday's kitchen; one room then Dinner; the question and the table chain as in v1.3; gates unchanged.
 
+### 15.6 Founder, same morning: spouse, the porch, the neighbor (2026-09-20)
+
+**Founder:** *"Tell your wife should be tell your spouse. Make the porch art match the style of the rest of the game. Let the neighbor have an insight or question."*
+
+**Built as v1.5.**
+- **Spouse.** Every Word, every memory line and the neighbor’s ask-back now say *your spouse*. Nineteen occurrences; none left.
+- **The neighbor.** On every night the porch carries *The neighbor’s read*, one insight in his voice before his question (no pictures were shown; a quarantine is a blockade with a lawyer; if the ships stopped somebody picked up a telephone; a photograph is a claim too, but this one has a road in it; they will never tell us what it cost). The porch’s question at dinner is labelled *The neighbor’s question*, and Sunday’s is his: *What did it cost us?*, answered in the replay by the Jupiter trade. All studio draft, tagged.
+- **The porch.** The studio SVG is gone. The porch stage is a dark, slightly blurred crop of the founder’s living-room plate: the lit room behind you, seen through the screen from the dark porch, with the scrim saying so. One hand with the rest of the game, marked interim in the footer and the build banner. It is not a porch plate; the porch plate is ASK 3 in the register and needs the founder’s Midjourney. No lane reachable from a session can generate a photographic exterior (the Adobe tools connected today offer generative expand and colour fill, no prompted generation).
+
 Tight Spiral Productions · walshero@gmail.com

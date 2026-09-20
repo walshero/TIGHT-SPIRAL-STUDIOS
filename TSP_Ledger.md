@@ -1441,3 +1441,8 @@ Gates green (one-thing WARN as always), file under the connector ceiling. Republ
 Yes?" Yes. `choose-your-leader-house.html` v1.4: every night opens in the living room on the network, no choice; then
 one room of five; then dinner. Lock and question pool unchanged in code (the set is the first room). The set lever
 line and the never-watched-the-set line retired. Bench §15.5. Walked at 390x844, gates as v1.3. Republished.
+
+**Same morning, v1.5** (founder: spouse, porch in style, the neighbor’s insight or question). Wife to spouse everywhere;
+the neighbor’s read on every night and his own question at dinner (Sunday: what did it cost us); the porch SVG cut and
+the porch stage mounted as a dark crop of the founder’s living-room plate (the room behind you, through the screen),
+interim until the porch plate is generated. Bench §15.6. Walked, gated, republished.
