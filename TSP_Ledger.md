@@ -3,6 +3,88 @@
 
 ---
 
+## 2026-09-20 - NAME THE MOVE v3: the tag turns over, and contemporary speech enters as addresses
+
+**FOUND FIRST, and it is the Lane Registry failure again.** "Name the Move" - the CT100
+critical thinking lab, 47 devices, 11 clips, four modules, 187 KB - existed in exactly one
+lane: a published artifact. Not in the repo. Not on Netlify. Not in Drive. A finished
+surface with no canon address, which is the precise condition `LANE-REGISTRY.md` was written
+after. It is now at repo root, `name-the-move.html`, and the repo is its home.
+
+**SHIPPED - the tag turns over (Funes).** Every one of the 47 devices is now a two-sided
+card: front carries name, family, one-line definition and an **illustration of the move's
+shape**; back carries the diagnostic test, how it sounds out loud, and the moves it sits
+closest to as buttons that turn those cards over in turn. Two rules keep it from becoming
+the disclosure-triangle problem the rest of the lab avoids - (1) both faces carry the name
+and family, so turning ADDS and never subtracts; (2) every fact on a back is also printed
+flat in a print-ready list at the foot of the deck, so a reader who never turns a card is
+locked out of nothing. Live in three places: the device deck, the live round palette, and
+the verdict at the moment the answer lands.
+
+**The 47 illustrations are studio-cut vector, and this is their provenance statement.**
+Original, hand-composed from a shared 140x88 grammar and built out of theme tokens, so they
+recolour with light and dark and cost no bytes. No trace, no MJ, no raster, no photo. They
+draw the SHAPE of the argument: a false dilemma is a fork with its other roads erased; an
+agentless passive is a sentence with the subject slot cut out; modus tollens is a
+conditional with its back half struck and the front half falling with it. The mnemonic bet
+is that a student who cannot recall "motte and bailey" can recall the wide field and the
+little keep, and get the name back from the picture. Each carries real alt text describing
+the drawing, because the drawing is an argument.
+
+**SHIPPED - the Record Room (Aleph), module five.** The ask was "recent legislative sessions
+or official government statements." **DECIDED: it ships addresses, not quotations.** Eleven
+standing public-domain sources - Congressional Record (119th Congress, 2nd Session, vol.
+172), committee hearings, bill findings, Federal Register preambles, executive statements,
+agency-vs-inspector-general pairs, GAO, court opinions, the Massachusetts General Court
+(194th, 2025-2026), council and school committee, ballot-question arguments - each with its
+portal, its session, its citation form, its rights basis, the ten moves the GENRE reliably
+produces, and explicit directions from the front page to a transcript.
+
+Two reasons this shape and not a curated quote bank. It **cannot go stale**: a set of this
+year's quotations is wrong by 2028 and silently misleading in between, while a list of
+portals and citation forms is right as long as the institutions exist. And the **sourcing is
+the lesson** - "where did this come from and how would someone else check it" is the first
+question of the course and the one students skip, so it is the first screen rather than a
+footnote. The 1918 wall on the clip bank stands: no invented words in a living politician's
+mouth, ever.
+
+**The marking pass has no answer key, and the interface says so twice.** Nobody has scored
+these lines because nobody has read them. The student writes the key - tag, then say why in
+their own words - and the output is a Markdown key carrying the source link and every
+reason, built to be put beside a partner's pass over the same paragraph. The disagreements
+are the class period. It also lands in the ledger with its source link, so a 2026 rulemaking
+preamble sits on the same baseline as Lincoln and the Athenians at Melos.
+
+**GATE: preship-gate-v5 now SHIPs this file. It HALTed before this session.** Three tap
+targets sat at 40px against the 44px floor - two were mine (the "sits close to" links, the
+removable tag badges), one had been in the fog flag list all along - and the document's base
+font declaration read 14px. Nothing ever rendered at 14px; the lab's own body rule overrode
+it two hundred lines later. **That is worth naming: a floor you clear by accident is a floor
+you lose the next time someone edits the rule that was saving you.** Fixed at the
+declaration. `structure-gate` 0 HALT. `nowalls` SKIP (hand-set chrome). Browser pass in
+Chromium: routes, turns, marking pass end to end, phone width, 200% text, dark, reduced
+motion, no console errors.
+
+**Two bugs the browser pass caught that reading could not.** (1) The turn control is pinned
+to the card corner so it cannot move when the card changes height - but "Turn over" and
+"Turn back" measure differently in a proportional face, and a right-anchored button changed
+width on press, walking its left edge out from under the finger that had just pressed it.
+Fixed with a fixed box. (2) The sentence splitter glued short fragments BACKWARD, so a
+leading "Mr. Speaker." - which is most of the Congressional Record - had nothing behind it
+to fold into and became a line of its own. Fragments now glue FORWARD into the sentence they
+introduce, with an abbreviation guard for the titles and short forms government prose is
+made of.
+
+**NOT DONE, deliberately: `art-gate.py` HALTs on 2,796 bytes of unprovenance'd inline SVG.**
+It is byte-identical on the pre-session file - the same single block, unchanged by this
+work - and it is the brand mark, not the new art. The gate's own rule is that an unproven
+claim is not a lane, so marking it to clear the gate would be exactly the move the gate
+exists to stop. **Needs a founder ruling on which lane the mark belongs to.** Named here so
+the next session inherits the question rather than a false marker.
+
+**PENDING - deploy lane.** The file is canon in the repo and live as an artifact. It is not
+on Pages or Netlify and no URL has been claimed for it.
+
 ## 2026-09-18 - CYL reconvened: sentence ratified, scope ADVANCED, five decisions ruled
 
 **First convening under OS 0.5-A ran to completion.** Findings: `convening/CYL-CONVENING.md` (gate-passed, five seats + Conductor). The founder ruled all five decisions same day:
