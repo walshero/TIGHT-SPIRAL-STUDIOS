@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="spec-source" content="convening/ROW-K-CONVENING.md">
+<meta name="audience" content="MassBay EN195 students learning to stage a secret without announcing it; the founder as first playtester">
 <title>Row K: Dress Rehearsal</title>
 <!--
-  ROW K v19 - a staging game. Tight Spiral Productions.
+  ROW K v20 - a staging game. Tight Spiral Productions.
   Three scenes: Ernesto (elevator), Vera (book club), Frank (the basement cat).
   Craft target: stagecraft / show-don't-tell for the stage (EN195 Workshop 3, Lens 3).
   Stagecraft lineage, full attribution (the footer carries names only, by
@@ -259,6 +261,25 @@
      Line-height 1.85 on the secret body and on the strip, plus padding under
      the strip's fact.
 
+  --- v20 (founder's second dress rehearsal, all three scenes) ---
+  1. FRAN REPEATED HERSELF. Her nine lines were keyed by category and kind,
+     so a player who chose the same kind of card in two scenes heard the same
+     note twice, verbatim. She now has one set per scene, 27 lines, each
+     answering the card in her hand. Founder's own lines are in: "Is there a
+     secret lighting cue for guilt?" and "off off OFF Broadway."
+  2. VERA. The shrink-wrap comes off under the table, hidden from the club
+     and plain to the house - dramatic irony, not a room waiting on her. Her
+     phone now googles each new character as it comes up. "I did not read the
+     book" was a cop-out for a TELL; she now stops at the dedication page and
+     says so. Marge, Dev and Paul follow each change.
+  3. THE WIN LINE was one sentence with the props swapped. Three scenes, three
+     lines. The three losing verdicts also answer the scene by name now.
+  5. BELT DEBT cleared while here: intent meta (spec-source, audience), the
+     lobby's 17px done-line lifted to the 18px floor, and the warm-dark tokens
+     mirrored onto :root under the OS dark query so preship can see them.
+  4. THE TITLE BOX is a coloured box in the scene's tint with the cream mark.
+     The lobby's keeps the studio teal, which holds the cream on either scheme.
+
   --- v19 (founder ruling on the provenance line) ---
   The footer now reads "Stagecraft after Mamet, Saunders, Fore, Sellars and
   Walsh. EN195." Names only in the game; the full attribution with each
@@ -280,6 +301,14 @@
   /* DARK HOST LAW: a dark-preferring device never sees a light palette, so the
      host has nothing to repaint. The comfort ladder forks into three dark-side
      brightness stops: warm dark, deep dark, black. */
+  /* v20: the same warm-dark tokens on :root under the OS query, so a dark
+     phone never paints a light frame before the script mounts the ladder. */
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#3D362B; --ink:#F5F1E8; --card:#4A4336;
+      --slotline:#B8AE9C; --amber-soft:#4A3A1E; color-scheme: dark;
+    }
+  }
   body[data-scheme="dark"]{
     --paper:#3D362B; --ink:#F5F1E8; --card:#4A4336;
     --slotline:#B8AE9C; --amber-soft:#4A3A1E; color-scheme: dark;
@@ -340,7 +369,11 @@
 
   .stepline{
     text-align:center; font-family:Verdana,Arial,sans-serif; font-size:18px;
-    font-weight:bold; letter-spacing:2px; margin:18px 0 6px;
+    font-weight:bold; letter-spacing:2px; margin:18px 0 10px;
+    /* v20: a coloured box, in the scene's own emotional tint with the cream
+       mark. Every tint was chosen against #FAF6EE at 5.9:1 or better. */
+    background:var(--tint, #0F5F5A); color:#FAF6EE;
+    padding:12px 16px; border-radius:12px;
   }
 
   /* Lobby: tonight's program. v13 - each scene carries a tinted plate so the
@@ -360,7 +393,7 @@
   }
   .lobbybtn .done{
     display:block; font-family:Georgia,serif; font-weight:normal; font-style:italic;
-    letter-spacing:0; font-size:17px; margin-top:5px;
+    letter-spacing:0; font-size:18px; margin-top:5px;
   }
 
   /* Proscenium: curtains hauled open by hand to reveal the scene's ink plate */
@@ -781,7 +814,12 @@
           SHOW:      {who:"PAUL, ROW Q, CAME WITH MARGE", say:"I honestly thought he just liked stairs. Wait. The elevator. The door. Oh. OH."}
         }
       },
-      winBody:"Three rows walked out arguing about a man and a door wedge. That is staging."
+      winBody:"Three rows walked out arguing about a man and a door wedge. Nobody said the word. Everybody knew it.",
+      verdicts:{
+        seminar:"The house knows Ernesto is claustrophobic and felt nothing. Like a memo, with lighting.",
+        invisible:"Part of this play happened inside Ernesto, where there are no seats.",
+        told:"The parts you staged worked. The parts Ernesto announced died on arrival."
+      }
     },
     {
       name:"VERA AT BOOK CLUB",
@@ -798,15 +836,15 @@
         OBJECT:[
           {id:"o1", kind:"TELL", text:"A name tag reading: VERA. DID NOT READ THE BOOK."},
           {id:"o2", kind:"INVISIBLE", text:"The guilt Vera has been carrying since Tuesday."},
-          {id:"o3", kind:"SHOW", text:"Vera's copy is still sealed in its shrink-wrap. She has to pick the plastic open with a thumbnail while everyone waits."}
+          {id:"o3", kind:"SHOW", text:"Vera's copy is still sealed in its shrink-wrap. Under the table, she works the plastic open with a thumbnail. The others see nothing. The house sees all of it."}
         ],
         MOVE:[
-          {id:"m1", kind:"TELL", text:"Each time the plot comes up, Vera sneaks out her phone and googles what happens in the book."},
+          {id:"m1", kind:"TELL", text:"Each time a new character is mentioned, Vera sneaks out her phone to Google them."},
           {id:"m2", kind:"INVISIBLE", text:"Vera vividly imagines what chapter seven might contain."},
           {id:"m3", kind:"SHOW", text:"Every time a question lands near her, Vera lifts her cup and drinks. The cup has been empty since scene one."}
         ],
         LINE:[
-          {id:"l1", kind:"TELL", text:"VERA: I did not read the book, everyone. Not one page."},
+          {id:"l1", kind:"TELL", text:"VERA: Full disclosure, everyone. I stopped at the dedication page."},
           {id:"l2", kind:"INVISIBLE", text:"VERA (thinking): Please do not ask me about the ending."},
           {id:"l3", kind:"SHOW", text:"VERA: I loved... the themes. The way it... progressed. Forward."}
         ]
@@ -815,20 +853,25 @@
         OBJECT:{
           TELL:      {who:"MARGE, ROW C, RETIRED STAGE MANAGER", say:"The name tag did the whole plot's job. I read it from Row C without my glasses."},
           INVISIBLE: {who:"MARGE, ROW C, RETIRED STAGE MANAGER", say:"Guilt is not a prop, dear. Forty years backstage and I never once hung guilt from a batten."},
-          SHOW:      {who:"MARGE, ROW C, RETIRED STAGE MANAGER", say:"Still in the plastic. She had to pick it open with a thumbnail while five people sat and waited on her. I have never watched a room learn so much from a sheet of cellophane."}
+          SHOW:      {who:"MARGE, ROW C, RETIRED STAGE MANAGER", say:"Still in the plastic. She picked it open under the table with a thumbnail and not one of those five caught it. Row C caught it. I have never watched a room learn so much from a sheet of cellophane."}
         },
         MOVE:{
-          TELL:      {who:"DEV, ROW K, THEATER MAJOR, TAKES NOTES IN THE DARK", say:"She googled the book. On stage. My notes say: NOTHING LEFT FOR US TO DO. The house had the whole secret before she got the screen unlocked."},
+          TELL:      {who:"DEV, ROW K, THEATER MAJOR, TAKES NOTES IN THE DARK", say:"She googled the characters. Every one of them. On stage. My notes say: NOTHING LEFT FOR US TO DO. The house had the whole secret the first time that screen lit up."},
           INVISIBLE: {who:"DEV, ROW K, THEATER MAJOR, TAKES NOTES IN THE DARK", say:"Per my notes, she sat there. Imagining is not blocking. I cannot underline stillness."},
           SHOW:      {who:"DEV, ROW K, THEATER MAJOR, TAKES NOTES IN THE DARK", say:"She drank every time a question got close. The cup was empty the whole time. Immaculate."}
         },
         LINE:{
-          TELL:      {who:"PAUL, ROW Q, CAME WITH MARGE", say:"She announced she did not read it. Bold. Honest. Also, no play."},
+          TELL:      {who:"PAUL, ROW Q, CAME WITH MARGE", say:"'Stopped at the dedication page.' She just told us. Bold. Honest. Also, no play."},
           INVISIBLE: {who:"PAUL, ROW Q, CAME WITH MARGE", say:"Whatever she was worried about, I could not hear it. I was in Row Q, not in her head."},
           SHOW:      {who:"PAUL, ROW Q, CAME WITH MARGE", say:"'The way it progressed. Forward.' I have said those exact words. I had also not read the book."}
         }
       },
-      winBody:"Three rows walked out arguing about a sheet of shrink-wrap and an empty cup. That is staging."
+      winBody:"Five people never saw the plastic come off. Row C did. The house left knowing a thing the book club still does not.",
+      verdicts:{
+        seminar:"The book club knows, the house knows, and nobody felt a thing. A book report, with lighting.",
+        invisible:"Part of this play happened inside Vera's head. There are no seats in there.",
+        told:"The parts you staged worked. The parts Vera announced died on arrival."
+      }
     },
     {
       name:"FRANK AND THE BASEMENT CAT",
@@ -880,7 +923,12 @@
           SHOW:      {who:"PAUL, ROW Q, CAME WITH MARGE", say:"'There's weather coming Friday.' He gave the cat an extension and called it a forecast. I had to sit a minute."}
         }
       },
-      winBody:"Three rows walked out arguing about a wrench and a folded blanket. That is staging."
+      winBody:"A wrench in a door, a blanket folded in thirds, and not one tenant the wiser. The whole house loves that cat now, and Frank never said so.",
+      verdicts:{
+        seminar:"Everyone knows about the cat and nobody felt the cat. A memo, with a boiler.",
+        invisible:"Part of this play happened inside Frank's chest, where there are no seats.",
+        told:"The parts you staged worked. The parts Frank announced died on arrival."
+      }
     }
   ];
 
@@ -888,24 +936,62 @@
   // Only the fact above it is underlined - the rule is the frame, not the news.
   var SECRET_RULE = "The audience must never be told. They must see it.";
 
-  // Fran reacts backstage the moment a card goes on stage - before the house sees anything.
-  var FRAN = {
-    OBJECT:{
-      TELL:      "I can build it, hon. I am just saying: it hands them the whole secret before the actors breathe. This will be awkward at curtain.",
-      INVISIBLE: "Walk me through this one. How do I hang that from a batten? What does the light hit?",
-      SHOW:      "Prop shop says easy. And it says something without saying it. Curious choice. I like where your head is."
+  // Fran reacts backstage the moment a card goes on stage - before the house
+  // sees anything. One set per scene: she is answering the card in her hand,
+  // not a category. v20 - the founder heard the same note twice in one night.
+  var FRAN = [
+    { // Ernesto
+      OBJECT:{
+        TELL:      "I can build the banner, hon. It hands them the whole secret before the actors breathe. Awkward at curtain, is all I am saying.",
+        INVISIBLE: "Walk me through this one. How do I hang the summer of 1998 from a batten? What does the light hit?",
+        SHOW:      "Prop shop has a wedge. Worn smooth, they can do worn smooth. It says something without saying it. I like where your head is."
+      },
+      MOVE:{
+        TELL:      "The actors can mouth it, sure. Whether the house should be handed it that flat is your call, boss.",
+        INVISIBLE: "I have no cue for a pulse. Nothing on my board reaches inside a man's chest.",
+        SHOW:      "Good blocking. The back row will see that stairwell door never shut. This one is doing quiet work."
+      },
+      LINE:{
+        TELL:      "Easy to deliver. It does announce the thing, though. Hope the critics aren't in the house.",
+        INVISIBLE: "Nobody can hear thinking past the orchestra pit, hon. But you are the playwright.",
+        SHOW:      "Ooh. Eleven floors is nothing. That line says one thing and means another. I will cue it tight."
+      }
     },
-    MOVE:{
-      TELL:      "The actors can do that, sure. Whether the house should be handed it that flat is your call, boss.",
-      INVISIBLE: "I have no cue for what happens inside a person. Nothing on my board reaches in there.",
-      SHOW:      "Good blocking. The back row will catch that. This one is doing quiet work."
+    { // Vera
+      OBJECT:{
+        TELL:      "A name tag. I can print it in the office in four minutes, hon. That is the whole problem with it.",
+        INVISIBLE: "Walk me through this one. Is there a secret lighting cue for guilt?",
+        SHOW:      "Props can source a sealed copy. Under the table, thumbnail, five people none the wiser and Row C seeing every bit of it. That is a prop earning its keep."
+      },
+      MOVE:{
+        TELL:      "She can hold a phone, sure. The second that screen lights up the house has the answer, boss. Nothing left for them to watch.",
+        INVISIBLE: "Imagining chapter seven. I have a follow spot and a fog machine and neither one gets inside her head.",
+        SHOW:      "The empty cup. Every question, one sip of nothing. I will have props strike the water. Lovely."
+      },
+      LINE:{
+        TELL:      "Easy to deliver. It does announce the thing, though. Maybe this play can be off off <em>off</em> Broadway.",
+        INVISIBLE: "Nobody in the house can hear her not wanting to be asked, hon. But you are the playwright.",
+        SHOW:      "Ooh. 'Forward.' That line says one thing and means the opposite. I will cue the pause before it."
+      }
     },
-    LINE:{
-      TELL:      "Easy to deliver. It does announce the thing, though. Hope the critics aren't in the house.",
-      INVISIBLE: "Nobody can hear thinking past the orchestra pit, hon. But you are the playwright.",
-      SHOW:      "Ooh. That line says one thing and means another. I will cue it tight."
+    { // Frank
+      OBJECT:{
+        TELL:      "I can tape a sign to a door, hon. But a sign that spills the secret and then asks for silence is a sign fighting itself.",
+        INVISIBLE: "Walk me through this one. Unbearable warmth, chest, category. Where do I point the light?",
+        SHOW:      "Props can do a tuna can and a moving blanket. The good can opener is the touch. It says love without one word of it."
+      },
+      MOVE:{
+        TELL:      "He can mime a kitten, sure. Whether the house should be handed it that broad is your call, boss.",
+        INVISIBLE: "He decides on Duchess. Inside. I cannot cue a decision. There is no board for that.",
+        SHOW:      "Good blocking. The wrench in the door while he yells about the rules. Back row will catch the gap. Quiet work."
+      },
+      LINE:{
+        TELL:      "Easy to deliver. It does announce the thing, though. Mrs. Petrocelli is not a vault, and neither is Row Q.",
+        INVISIBLE: "Nobody past the pit can hear oil versus water, hon. But you are the playwright.",
+        SHOW:      "Ooh. 'Weather coming Friday.' A forecast that is a pardon. I will cue the beat before it."
+      }
     }
-  };
+  ];
 
   var VERDICTS = {
     win:  {cls:"win", head:"THE HOUSE KNOWS, AND NOBODY TOLD THEM."},
@@ -951,11 +1037,12 @@
   // (no heading below the site h1), and rebuilding main by innerHTML dropped
   // focus to BODY on every transition, so a keyboard or voice reader restarted
   // from the top of the document at each of seven steps.
-  function head(text){
+  function head(text, plain){
     var h = document.createElement("h2");
     h.className = "stepline";
     h.setAttribute("tabindex","-1");
     h.textContent = text;
+    if(!plain) h.style.setProperty("--tint", scene().tint.field);
     return h;
   }
 
@@ -1312,7 +1399,7 @@
   /* ---------- screens ---------- */
 
   function renderLobby(){
-    stage.appendChild(head("TONIGHT'S PROGRAM"));
+    stage.appendChild(head("TONIGHT'S PROGRAM", true));
     stage.appendChild(el("p","lobby-note","Three scenes. Three secrets. Choose one and stage it."));
     SCENES.forEach(function(sc, i){
       var b = el("button","lobbybtn");
@@ -1466,7 +1553,9 @@
       var fran = el("div","franbox");
       fran.setAttribute("aria-live","polite");
       fran.appendChild(el("span","who","FRAN, STAGE MANAGER, ON HEADSET"));
-      fran.appendChild(el("p", null, FRAN[cat][card.kind]));
+      var fp = el("p", null, "");
+      fp.innerHTML = FRAN[state.sceneIdx][cat][card.kind];
+      fran.appendChild(fp);
       stage.appendChild(fran);
     }
 
@@ -1532,7 +1621,8 @@
     var vd = VERDICTS[key];
     var ban = el("div","banner "+vd.cls);
     ban.appendChild(el("span","head",vd.head));
-    ban.appendChild(el("p",null, key==="win" ? scene().winBody : vd.body));
+    ban.appendChild(el("p",null, key==="win" ? scene().winBody
+      : (scene().verdicts && scene().verdicts[key]) || vd.body));
     stage.appendChild(ban);
 
     // The room answers before the critics explain it.
