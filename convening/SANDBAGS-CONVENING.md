@@ -502,3 +502,48 @@ No faces. Wet-street reflection added under the noodle shop's window.
 
 **Belt.** All six gates pass again; preship worst pair 7.47.
 SIGNED: Art Director, Compositor, Refuter, Studio Voice.
+
+## SHOT LIST, REVISED 2026-09-20: founder's corrections to scenes 1 and 3
+
+**Founder:** "Black Spots is on the way to the hospital so it's urban.
+Redesign for Longwood Avenue Boston feel. The Dead Ants one is too large for
+the scene. We need a bus stop and a pay phone and bench."
+
+### Scene 1, revised: Longwood Avenue
+**Place.** Longwood Avenue, the Longwood Medical Area, on the walk to the
+hospital. The Art Director's residential reading was wrong; the piece is
+urban and institutional. **Era.** Late seventies. **Light.** Bright morning.
+**Must be in frame.**
+- Children's Hospital's 1914 pavilion at 300 Longwood: a columned classical
+  front under a green dome on a drum, by Shepley, Rutan and Coolidge. This is
+  the one object that says Longwood and nothing else.
+- The seventies concrete hospital slab behind it, ribbon windows.
+- Brick hospital blocks either side, dense window grids.
+- A traffic signal on a mast arm, red showing. A cobrahead on a wooden pole.
+- An ambulance at the far curb: white van, red stripe, light bar.
+- The ladder crosswalk, the gum spots, granite curbs near and far.
+- **Not in frame:** triple-deckers, which belong to the old reading.
+*Reference:* [Children's Hospital, SAH Archipedia](https://sah-archipedia.org/buildings/MA-01-FL24); [Boston Children's Hospital](https://en.wikipedia.org/wiki/Boston_Children%27s_Hospital); [Harvard Medical School and the Longwood Medical Area](https://sah-archipedia.org/buildings/MA-01-FL21).
+
+### Scene 3, revised: the near sidewalk
+The first build put the storefronts at the front of the frame and the
+narrator's props at the back, which is the opposite of where the piece
+stands. We are on the near sidewalk waiting for the 39, so the near things
+are the big things.
+- A bus shelter: steel frame, flat roof, glass, with a slat bench inside.
+- The 39 stop sign beside it.
+- Two pedestal payphones, near and large.
+- The ant on the brick by the payphones.
+- Across the street, small: nine low-rise brick storefronts, lit, a cobrahead
+  with its sodium pool, wires; the triple-deckers behind, smaller still.
+Shelter form after the plain steel-and-glass MBTA shelters of the period;
+the 2000s advertising shelters came later.
+*Reference:* [Bus Stop Program, City of Boston](https://www.boston.gov/departments/transportation/bus-stop-program); [MBTA Route 39](https://www.mbtainfo.com/39).
+
+## AUTHORED, 2026-09-20, third pass: both revisions built
+Generators added: `pavilion`, `slab`, `signal`, `ambulance`, `shelter`,
+`bench`. Scene 3 uses layer transforms to put the far rows at 0.6 and 0.68
+scale and the payphones at 1.3, which is the first time the diorama has had
+true near-far scale rather than three rows at one size. Belt run on the file;
+verdicts recorded in the commit.
+SIGNED: Art Director, Period Librarian, Compositor, Refuter, Studio Voice.
