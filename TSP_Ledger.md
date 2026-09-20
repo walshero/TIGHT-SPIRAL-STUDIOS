@@ -1446,3 +1446,9 @@ line and the never-watched-the-set line retired. Bench §15.5. Walked at 390x844
 the neighbor’s read on every night and his own question at dinner (Sunday: what did it cost us); the porch SVG cut and
 the porch stage mounted as a dark crop of the founder’s living-room plate (the room behind you, through the screen),
 interim until the porch plate is generated. Bench §15.6. Walked, gated, republished.
+
+**Same day, two rulings, v1.6.** "No Midjourney. Cancel that strategy": recorded in CLAUDE.md, the ask register
+withdrawn, the interims stand. "Make sure the responses are randomized from a strong pool": eight words a night with
+four drawn (kept always, kids and spouse always present), two question variants per room per night (seventy questions)
+with one drawn, two neighbor reads with one drawn, seven new memory lines. Draws once per night per play. Bench §15.7.
+Walked twice, gates unchanged, republished.

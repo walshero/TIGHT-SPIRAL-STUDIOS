@@ -206,6 +206,14 @@ break the style are named as interim on the surface and in the ask register, and
 as finished. Where no in-style plate exists, the build says so and the ask goes to the founder
 (`art-department/FOUNDER-ASKS-*.md`), rather than a second style filling the hole.
 
+## No Midjourney - founder rule, standing (2026-09-20)
+Founder's words: *"No Midjourney. Cancel that strategy."* The studio does not write Midjourney
+prompts for the founder to run, and does not wait on generations. Same-style art comes from
+the founder plates already on disk (`art/cyl/plates/`, crops and grades are in style), from
+the legal-photo lane when the environment's network policy opens it, or from a session-side
+generator only if the founder opens that lane by ruling. Open MJ asks in
+`art-department/FOUNDER-ASKS-*.md` are withdrawn as of this date.
+
 ## Status ladder - founder rule, standing (2026-08-27)
 **LAB is a real status and most builds belong in it.** Founder's words: *"Many games
 have to be placed in lab status. All the cliche cowpath games - put in lab not as done

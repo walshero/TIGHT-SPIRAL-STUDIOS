@@ -1,5 +1,7 @@
 # FOUNDER ART ASKS, 2026-09-19: Choose Your Leader, the house across the week
 
+**WITHDRAWN 2026-09-20.** Founder: *"No Midjourney. Cancel that strategy."* ASK 1 to 3 are not to be run. ASK 4 (the Period Librarian brief, once the LOC lane opens) stands. The kitchen, kids’ room and porch keep their in-style interims from the founder’s existing plates.
+
 Founder, same day: *"The art in the kitchen doesn't match studio and the kids room doesn't look like one. Let's let art catch up. Remember mad men founder ask."*
 
 The standard is the charter's: **Mad Men detail.** Every object in frame period-correct or it goes; a 1962 room contains nothing designed after 1962; the household reads its class register; wear and light match the film stock. The 1962 rung of the era ladder is **Kodachrome: saturated, slightly cool, orderly, hopeful.** No faces, no figures, ever.
