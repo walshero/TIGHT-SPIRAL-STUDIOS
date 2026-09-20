@@ -474,3 +474,31 @@ charter and art-gate disagreement over whether the Midjourney lane is closed.
 
 SIGNED: Art Director, Compositor, Continuity, Refuter (measured the belt, not
 the author's word for it), Studio Voice.
+
+## AUTHORED, 2026-09-20, second pass: founder's Echigo notes
+
+**Founder:** "Lines in Echigo houses overlap and look weird. Umbrellas are
+nice touches, but Lumino would have kimonoed villagers."
+
+**Root causes found.** Two, and only one of them was the gable.
+1. The gable generator laid a second roof plane over the face of the gable,
+   a band twelve units wide along each edge. Real gables show one receding
+   slope and a pair of bargeboards. Rebuilt that way; the cape's dormers get
+   the same fix for free.
+2. The cut-edge rule in the stylesheet (`#scenery .ly3 *{stroke:...}`) beats
+   any `stroke` attribute, so every line in every scene was being restyled
+   into a translucent warm-white edge: the rain was invisible, the wires in
+   the crosswalk and Centre Street scenes were ghosts, the bat on the lawn was
+   white. Lines now set their stroke inline through one helper, `ln()`.
+   Refuter's note: this was in the file for two passes and no gate measures
+   it. A stroke-integrity tooth belongs in art-execution-gate.
+
+**Villagers.** Four figures in kimono under wagasa, by outline and posture:
+robe widening to the hem, hanging sleeves, obi, collar, head as a circle, a
+shallow ribbed umbrella with a finial. Each in a different robe, obi and
+umbrella from the paper drawer. Scaled to stand under the gangi rather than
+over it, because a miniature is honest about height or it is not a miniature.
+No faces. Wet-street reflection added under the noodle shop's window.
+
+**Belt.** All six gates pass again; preship worst pair 7.47.
+SIGNED: Art Director, Compositor, Refuter, Studio Voice.
