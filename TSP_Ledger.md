@@ -1457,3 +1457,11 @@ Walked twice, gates unchanged, republished.
 (what happens at ten tomorrow). Eight second-pool questions failed the audit (answered by the room that raised them, or
 not a question a person carries) and are replaced; two words reworded. Standing check recorded in bench §15.8: read the
 aperture line before writing its question. Walked twice, gates green, republished. The artifact lane reached his phone.
+
+**"Player wants to make calls." v1.8.** The founder, same day: the hall must be a turn, some calls unanswered but
+telling; and who in this house is listening to shortwave. The hall now offers three people to call a night (five in
+the pool, two outcomes each, fifty in all), the call seeds the night’s hall question, and answers through the
+telephone resolve only through the call they come through. The den is the local station in English, the network at
+the hour; the shortwave is retired and Moscow’s words survive as what the station carried. Two den questions replaced
+under the §15.8 check. Insert plate re-encoded to hold the ceiling. Bench §15.9. Walked twice, gates unchanged,
+pushed and verified, republished.
