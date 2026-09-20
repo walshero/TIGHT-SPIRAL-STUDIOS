@@ -1452,3 +1452,8 @@ withdrawn, the interims stand. "Make sure the responses are randomized from a st
 four drawn (kept always, kids and spouse always present), two question variants per room per night (seventy questions)
 with one drawn, two neighbor reads with one drawn, seven new memory lines. Draws once per night per play. Bench §15.7.
 Walked twice, gates unchanged, republished.
+
+**"Is this a joke?" v1.7.** The founder, playing on his phone, hit a Tuesday question the living room had just answered
+(what happens at ten tomorrow). Eight second-pool questions failed the audit (answered by the room that raised them, or
+not a question a person carries) and are replaced; two words reworded. Standing check recorded in bench §15.8: read the
+aperture line before writing its question. Walked twice, gates green, republished. The artifact lane reached his phone.

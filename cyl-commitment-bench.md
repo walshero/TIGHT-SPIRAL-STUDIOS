@@ -479,4 +479,12 @@ Also: the version chip on the surface (`v1.1` beside the title, in `<title>`, in
 
 **Walked twice at 390x844** with different draws: four words a night with the kids, the spouse and the kept word present; four questions at every dinner; five ledger lines; the kitchen chain unchanged. Gates unchanged.
 
+### 15.8 Founder, from the phone: "Is this a joke?" (2026-09-20)
+
+**What he saw.** Tuesday dinner, v1.6: the question *What happens at ten tomorrow?*, labelled from the living room, on the night the network had just told him the proclamation takes effect at ten.
+
+**The defect, owned.** The second question pool was written in one pass and not held to the rule the first pool obeyed: a question must be unanswerable from what the player has already seen tonight, and must be one a person would carry to the table. Eight variants failed on audit and are replaced in v1.7: what Moscow says the arms are for (the shortwave had just said); what the paper missed (glib); what happens at ten (told); what Moscow says about the ships (the shortwave had just said); are the photographs real (asked before any photograph existed); what does the neighbor say now; should I call Mother back; what do we tell them about the pictures. Two words were reworded (the drill was not a game; the radio stays on all night). The rule is now in the bench as a standing check for every pool addition: **read the room’s own aperture line before writing its question; if the line answers it, cut it.**
+
+**Also noted.** The artifact link opened on the founder’s phone (the first confirmed play on that lane since 08-27).
+
 Tight Spiral Productions · walshero@gmail.com
