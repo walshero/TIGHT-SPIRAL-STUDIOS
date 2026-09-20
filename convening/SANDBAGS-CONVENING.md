@@ -332,3 +332,145 @@ findings. Four decisions, in the order they block:
 Cheap and unblocked whatever you decide on the art: the dark palette into a real
 media query, the two intent meta tags, the dead comfort-panel CSS out. Say the
 word and those three go in without touching a pixel.
+
+---
+
+## FOUNDER RULING, 2026-09-20: "No MJ."
+
+That settles decision 1. The lane is **studio-cut, proved by
+`art-execution-gate.py`**, which is the 2026-08-13 ruling's own lane: "we can do
+better than we have so far with proper execution," made checkable. Hand-built
+is permitted when it is MARKED and it EARNS the pass. It was never marked and
+never graded. Now it is both: `data-art-class="studio-cut"` on the scenery and
+the balloon, `data-scene` on the sky, and both gates run green.
+
+Decision 4 was taken as the belt required: the voice gate is a flat em-dash ban
+of 2026-08-05 and this file predates it. Seventy-three went, including the ones
+this session added as `—` escapes that the gate could not see and the rule
+still covered.
+
+## THE SHOT LIST — Art Director, first deliverable
+
+Each scene names the real place, the era, the light, and the objects that must
+be in frame. Nothing below is from memory; the reference the Period Librarian
+found is cited. Figures, where they appear, read by outline and posture only.
+No faces, ever.
+
+### Scene 0 — Ramen at Echigo Kawaguchi
+**Place.** A snow-country station town, Kawaguchi, Niigata. Among the heaviest
+inhabited snowfall on earth, and the architecture is built for it whatever the
+season. **Season/light.** Heavy rain, grey, mid-afternoon; the piece is rain from
+first word to last. **Must be in frame.**
+- Roofs pitched 60° and steeper, deep eaves, dark tile or thatch. Nothing shallower.
+- Dark stained timber frame with pale plaster infill.
+- A **gangi**: the covered wooden arcade that runs along the street front of a
+  Niigata town so you can walk under three metres of snow. This is the single
+  most Niigata object there is and it was absent.
+- The noodle shop, with a noren over the door and one lit window holding the
+  plastic ramen display, because that is the image the piece turns on.
+- Villagers under umbrellas, by outline.
+- Rain. Uonuma hills behind.
+- **Not in frame:** a torii. It marks an approach and means nothing in a field.
+*Reference:* [Snow Country Buildings, Tokamachi](https://snowrich-tokamachi.com/en/architecture.html); [Shirakawa Village, gassho architecture](https://www.vill.shirakawa.lg.jp/2687.htm); [Historic Villages of Shirakawa-go and Gokayama](https://en.wikipedia.org/wiki/Historic_Villages_of_Shirakawa-g%C5%8D_and_Gokayama).
+
+### Scene 1 — Black Spots on the Crosswalk
+**Place.** A Massachusetts residential street. **Era.** The narrator's
+childhood, so late 1970s. **Light.** Ordinary bright morning. **Must be in frame.**
+- **Triple-deckers**: three stacked porches, flat or low-hip roof, clapboard,
+  bay windows. The Massachusetts vernacular, and the answer to "why are there
+  houses in the city" is that this is not the city. It is Dorchester or Somerville.
+- A wooden utility pole carrying a **cobrahead** on a bracket arm, and the wires.
+- **Granite curb**, which is what Massachusetts curbs are made of.
+- The crosswalk, ladder-style painted bars.
+- The black spots, which are flattened gum.
+- One period sedan, boxy, at the curb.
+- **Not in frame:** a downtown skyline, shopfronts, awnings. Two settings in one
+  frame was the error.
+*Reference:* [Boston's triple-deckers, Boston Preservation Alliance](https://www.bostonpreservation.org/news-item/short-history-bostons-triple-deckers); [Three-decker house](https://en.wikipedia.org/wiki/Three-decker_(house)).
+
+### Scene 2 — Peach Cobbler
+**Place.** Two adjacent houses on a suburban Massachusetts street. **Era.**
+Contemporary. **Light.** Late golden afternoon; the walk to the neighbour's door.
+**Must be in frame.**
+- Two New England houses: a **cape** (storey and a half, dormers) for the
+  narrator, a **colonial** (two full storeys) for the neighbours. Clapboard,
+  shutters, brick chimneys.
+- The **bulkhead**: angled steel double doors over a stairwell at the foundation
+  of his house. He was made to sleep beside it. It has to be a real bulkhead.
+- The fence between them.
+- The kids' toys in the yard, since the piece says they want them back.
+- The neighbours' house lit, with a porch light. His dark.
+- Lawn, a tree, a mailbox.
+*Reference:* [Bulkhead and cellar door, Northeast New England](https://www.groundworks.com/resources/bulkhead-and-cellar-door-replacement-in-northeast-new-england/); [cellar door vs bulkhead](https://www.ecospect.com/faqs/whats-the-difference-between-cellar-door-and-bulkhead-door).
+
+### Scene 3 — Dead Ants
+**Place.** Centre Street, Jamaica Plain, at a 39 bus stop. **Era.** Payphones,
+so the 1990s. **Light.** Night; sodium glow. **Must be in frame.**
+- **Low-rise brick storefronts**, two and three storeys, cornices, shop windows.
+  Centre Street is not a downtown and the tall blocks were wrong.
+- Triple-deckers behind and beside.
+- An MBTA bus stop sign on a pole.
+- Two **payphones** of the 1990s pedestal kiosk type, not booths.
+- A cobrahead streetlight on a pole.
+- Brick sidewalk, which Jamaica Plain has.
+- One ant on the pavement, small.
+- **Open question for the founder:** "Sparr's." The Period Librarian could not
+  verify a business by that name on Centre Street. Hardware City at 656 Centre
+  is real and so is the 39. The name is the founder's memory and stays in the
+  text untouched; the question is only whether a shopfront in frame should
+  carry it, and that is his call.
+*Reference:* [MBTA Route 39](https://www.mbtainfo.com/39); [Forest Hills station](https://en.wikipedia.org/wiki/Forest_Hills_station_(MBTA)); [Hardware City, 656 Centre St](https://www.yelp.com/biz/hardware-city-jamaica-plain-2).
+
+## AUTHORED, 2026-09-20: the four scenes rebuilt to the shot list
+
+**What was built.** The `SCENERY` array in `sandbags.html` was rebuilt from the
+shot list above, object by object. Each object is a named generator in the
+source (`decker`, `gangi`, `noren`, `brolly`, `pole`, `sedan`, `curb`,
+`brickwalk`, `cape`, `colonial`, `bulkhead`, `shop`, `payphone`, `busstop`),
+so the shot list can be checked against the code by name rather than by eye.
+
+- **Scene 0, Kawaguchi.** Uonuma ridges with terrace lines; a gassho farmhouse
+  and three 60-degree gables up the slope in dark timber over plaster with a
+  koshi lattice on the lower wall; a gangi arcade the full width of the street
+  with the noodle shop under it, noren over the door, one lit window holding
+  three bowls of plastic ramen, a red lantern; four villagers under umbrellas,
+  outline only; rain. No torii.
+- **Scene 1, the crosswalk.** Four triple-deckers in the middle ground and two
+  behind, each with three stacked porches, balusters, a projecting bay and a
+  cornice; a wooden pole with crossarm and cobrahead; wires; a boxy sedan at
+  the far curb; granite curbs, near and far, with joints; a ladder crosswalk
+  with six flattened gum spots on its bars. Nothing downtown.
+- **Scene 2, Peach Cobbler.** A cape with two dormers and a chimney, every
+  window dark, shutters closed, a steel bulkhead at the foot of its wall; a
+  colonial with eight lit windows, shutters, a door and a porch light; the
+  picket fence between; a ball, a toy truck and a bat on his lawn; a mailbox
+  with its flag up; a tree. Golden light from the sky tokens, not the paper.
+- **Scene 3, Centre Street.** Six low-rise brick storefronts, one to three
+  storeys, cornices, sign bands, lit shop windows, a few lit rooms above;
+  triple-deckers behind; a cobrahead on a pole throwing a sodium pool on the
+  road; wires; brick sidewalks with joint lines and granite curbs; two pedestal
+  payphones; the MBTA stop sign as a white plate with a black roundel, no
+  lettering; one ant. No Sparr's sign, per the open question.
+
+**What else changed in the pass.** Aerial haze is now a vertical gradient
+rather than a flat sheet, which removes the hard line the sheet drew across
+the sky where the diorama began. Seven sheets were added to the paper drawer
+(white, brick, granite, timber, indigo, gold, each with its shade). The OS dark
+palette is now written to `:root` inside the media query, with an explicit
+`html[data-light="day"]` rule repeating the day tokens so a player who picks
+day on a dark phone gets day; preship-gate-v4 could not see the previous
+`:not()` selector and was reporting the page as having no dark palette. The
+Studio Eyes wordmark was 16px and is now 18px.
+
+**Belt, on the rebuilt file.** art-gate pass; art-execution-gate SHIP;
+preship-gate-v4 SHIP, worst pair 7.47; studio-voice-gate SHIP; intent-gate
+clean; comfort-gate pass in day, dusk and night; convening-gate pass. Zero em
+dashes, zero emoji. Rendered at 390 wide in both OS schemes; boot on a dark
+phone lands on night tokens, an explicit day choice lands on day.
+
+**Still open for the founder.** Whether a shopfront in scene 3 carries the
+name Sparr's. The Art Director seat's line in the OS section 5.6 table. The
+charter and art-gate disagreement over whether the Midjourney lane is closed.
+
+SIGNED: Art Director, Compositor, Continuity, Refuter (measured the belt, not
+the author's word for it), Studio Voice.
