@@ -1434,3 +1434,10 @@ a room answers them, asked back by the kids, your mother or the neighbor; Sunday
 reads the question against where its answer was; the lever line reads three answered questions as own judgment. The
 falsifier pool and picker are gone. Kitchen plate now covers its stage on the phone. Design and walk in bench §15.3.
 Gates green (one-thing WARN as always), file under the connector ceiling. Republished to the standing artifact.
+
+### 2026-09-20: founder rule, the set first, then one room. v1.4
+
+**Founder:** "You watch the news, then you can check on kids, check newspaper go to porch or make phone call. Then dinner.
+Yes?" Yes. `choose-your-leader-house.html` v1.4: every night opens in the living room on the network, no choice; then
+one room of five; then dinner. Lock and question pool unchanged in code (the set is the first room). The set lever
+line and the never-watched-the-set line retired. Bench §15.5. Walked at 390x844, gates as v1.3. Republished.

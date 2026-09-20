@@ -445,4 +445,16 @@ Also: the version chip on the surface (`v1.1` beside the title, in `<title>`, in
 
 **Founder:** *"Porch etc needs to be in style. All art same style!"* Recorded in CLAUDE.md as a standing rule. For the house: the living room, the set, the den and hall crops and the re-graded kitchen are one hand (founder MJ, photographic, 1962 grade). The porch (studio SVG) and the kids' room (the empty-chair plate, a paneled room) are not. No plate on disk reads as either; the session's lanes are measured closed (MJ by ruling, LOC by the proxy, studio-cut cannot be photographic). The two routes that produce same-style plates are the founder's own MJ run of the three prompts in the ask register, or a generative-expand lane on his own plates opened by ruling. PENDING founder call on the route.
 
+### 15.5 Ruled and built: the set first, then one room (2026-09-20)
+
+**Founder:** *"Wait, you can’t go to the kids room before listening to the news because they have heard it already through the wall. You watch the news, then you can check on kids, check newspaper go to porch or make phone call. Then dinner. Yes?"*
+
+**Yes, and built as v1.4.** Every night now opens on the set: the night begins in the living room, on the network, with no choice offered. Back to the house, and the pick is one room of the remaining five (den, hall, kitchen, kids, porch), then dinner. The two-room lock is unchanged in code (the set counts as the first room), so the question pool is still four: the set’s question, the chosen room’s question, the standing question, nothing. The lever line about turning to the set every night is retired (it is now always true), as is the never-went-to line for the set. Copy on the house, the scene lines, the replay and the instructor panel say the rule as the founder said it. The den stays in the list as the shortwave, one of the five; the founder’s list named the kids, the paper, the porch and the phone, and the den is his to cut.
+
+**Why it is stronger.** The news was the one aperture every household in America shared that week; the choice was what you did after. One pick a night instead of two makes the constraint the retreat asked for sharper, and it repairs the person-memory logic: the kids heard the set through the floor before you climbed the stairs.
+
+**A consequence, kept on purpose.** Several answers were mapped to the set (the network carries the news). With the set opening every night, those answers now arrive without a choice, which is the truth of the week. So the replay says *the set answered it* for those, and only an answer found in a room the player chose counts toward the own-judgment lever line.
+
+**Walked at 390x844:** each night opens in the living room; Monday's kitchen question answered by the set on Tuesday; Wednesday's by Thursday's kitchen; one room then Dinner; the question and the table chain as in v1.3; gates unchanged.
+
 Tight Spiral Productions · walshero@gmail.com
