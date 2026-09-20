@@ -7,7 +7,7 @@
 <meta name="audience" content="MassBay EN195 students learning to stage a secret without announcing it; the founder as first playtester">
 <title>Row K: Dress Rehearsal</title>
 <!--
-  ROW K v20 - a staging game. Tight Spiral Productions.
+  ROW K v21 - a staging game. Tight Spiral Productions.
   Three scenes: Ernesto (elevator), Vera (book club), Frank (the basement cat).
   Craft target: stagecraft / show-don't-tell for the stage (EN195 Workshop 3, Lens 3).
   Stagecraft lineage, full attribution (the footer carries names only, by
@@ -261,6 +261,15 @@
      Line-height 1.85 on the secret body and on the strip, plus padding under
      the strip's fact.
 
+  --- v21 (founder: "have some fun with the palette, different for each scene") ---
+  THE PAGE WEARS THE SCENE. Three moods already had a tint on the tile and,
+  since v20, the title box. Now the paper, the card, the ink, the accent and
+  the pressed state all follow: fear is cold blue, bluff is brass, love is
+  rose, in a light and a dark version each. The lobby keeps the studio paper.
+  Comfort stops 2 and 3 stay neutral, since less is what they were asked for.
+  The change is a body class set on every render and a 0.45s colour
+  transition, which reduced-motion already zeroes. Every pair measured.
+
   --- v20 (founder's second dress rehearsal, all three scenes) ---
   1. FRAN REPEATED HERSELF. Her nine lines were keyed by category and kind,
      so a player who chose the same kind of card in two scenes heard the same
@@ -315,6 +324,36 @@
   }
   body[data-scheme="dark"][data-comfort="2"]{ --paper:#211C15; --card:#2E2820; }
   body[data-scheme="dark"][data-comfort="3"]{ --paper:#0B0906; --card:#1A1611; }
+
+  /* v21: THE PAGE TAKES THE SCENE'S COLOUR. Three moods, three palettes, on
+     both sides of the OS fork. Fear is cold and blue, bluff is brass, love is
+     rose; the lobby keeps the studio paper. Only stop 1 of the comfort ladder
+     is tinted: stops 2 and 3 exist for readers who asked for less, and less
+     is what they get. Every pair below was measured: ink on paper and on
+     card clears 7:1 in all six, and #1F1B16 on each accent clears 8:1. The
+     accent is the scene's own rim colour, so the secret box, the pressed
+     card and the chip tops all speak in the scene's voice. */
+  body[data-comfort="1"].scene-fear{
+    --paper:#E6EEF5; --card:#FFFFFF; --ink:#14243A; --amber:#A9D3EE; --amber-soft:#CFE3F2;
+    --slotline:#3E5670; --good:#1F4D3F; }
+  body[data-comfort="1"].scene-bluff{
+    --paper:#F6E9CC; --card:#FFFCF4; --ink:#2A1D06; --amber:#F2BC66; --amber-soft:#F7DFAE;
+    --slotline:#66501F; --good:#3E4F1C; }
+  body[data-comfort="1"].scene-love{
+    --paper:#F8E6E9; --card:#FFFAFA; --ink:#3A1420; --amber:#EFA7B3; --amber-soft:#F6D1D7;
+    --slotline:#78424D; --good:#5A2A3A; }
+  body[data-scheme="dark"][data-comfort="1"].scene-fear{
+    --paper:#182739; --card:#22344A; --ink:#EAF2FA; --amber:#7FC0E8; --amber-soft:#2E4A68;
+    --slotline:#9CB7CE; --good:#1F4D3F; }
+  body[data-scheme="dark"][data-comfort="1"].scene-bluff{
+    --paper:#2B2210; --card:#3A2E16; --ink:#F7EBD0; --amber:#F2BC66; --amber-soft:#57421B;
+    --slotline:#CBB27F; --good:#3E4F1C; }
+  body[data-scheme="dark"][data-comfort="1"].scene-love{
+    --paper:#31151C; --card:#421F29; --ink:#F8E8EA; --amber:#EFA7B3; --amber-soft:#5E2A37;
+    --slotline:#D2A2AC; --good:#5A2A3A; }
+  /* the room changes colour the way house lights do: over a beat, not a cut */
+  #backdrop, body, .cardbtn, .review-item, .row-react, .housebox, .franbox, .scenestrip, .secret, .iconchip{
+    transition:background-color .45s ease, color .45s ease, border-color .45s ease; }
   *{box-sizing:border-box; margin:0;}
   body{
     background:var(--paper); color:var(--ink);
@@ -768,7 +807,7 @@
       name:"ERNESTO AND THE ELEVATOR",
       secret:"Ernesto is claustrophobic.",
       scene:"INT. OFFICE LOBBY. Ernesto and his boss Diane wait for a very small elevator. Diane is in a hurry. You will stage his secret in three choices:",
-      who:"Ernesto",
+      who:"Ernesto", mood:"fear",
       // Emotional color: fear. Cold slate blue, cream mark (8.4:1), sky rim (4.6:1).
       tint:{ field:"#2E4A6B", rim:"#7FC0E8" },
       // Two panels with real air between them read as doors at 30px; one box
@@ -825,7 +864,7 @@
       name:"VERA AT BOOK CLUB",
       secret:"Vera has not read the book.",
       scene:"INT. LIVING ROOM, BOOK CLUB NIGHT. Five chairs sit in a circle. Everyone holds the same novel. Vera holds it tightest. You will stage her secret in three choices:",
-      who:"Vera",
+      who:"Vera", mood:"bluff",
       // Emotional color: bluff. Brass, cream mark (5.9:1), amber rim (3.7:1).
       tint:{ field:"#7F5A12", rim:"#F2BC66" },
       mark:'<path d="M9 20 c9 -6 16 -6 23 -1 c7 -5 14 -5 23 1 v27 c-9 -5 -16 -5 -23 0 c-7 -5 -14 -5 -23 0 z"/>'
@@ -877,7 +916,7 @@
       name:"FRANK AND THE BASEMENT CAT",
       secret:"Frank, the building superintendent, loves the stray cat in the basement. No tenant may ever know.",
       scene:"INT. BASEMENT, OUTSIDE THE BOILER ROOM. Frank tapes up a NO PETS notice while Mrs. Petrocelli from 4B watches him. Behind the boiler, a cat waits. You will stage his secret in three choices:",
-      who:"Frank",
+      who:"Frank", mood:"love",
       // Emotional color: love. Deep rose, cream mark (6.9:1), blush rim (3.9:1).
       tint:{ field:"#8C3A4A", rim:"#EFA7B3" },
       // A face with no eyes is a blank. The eyes carry the tenderness here.
@@ -1255,6 +1294,8 @@
 
   function render(){
     stage.innerHTML = "";
+    // the page wears the scene's colour; the lobby wears the studio's
+    document.body.className = state.step==="lobby" ? "" : "scene-"+scene().mood;
     if(state.step==="lobby") renderLobby();
     else if(state.step==="secret") renderSecret();
     else if(CATS.indexOf(state.step)>=0) renderChoice(state.step);
