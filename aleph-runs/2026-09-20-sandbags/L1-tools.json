@@ -1,0 +1,11 @@
+{"lens":"L1","surface":"sandbags.html",
+"passed":["CONTRAST-FLOOR","OFFLINE-BROKEN","TAP-TARGET","NAV-MISSING","EMOJI","JS-ERROR","DEAD-CONTROL","DEAD-END","H-OVERFLOW","FOCUS-INVISIBLE","FOCUS-LOST","OUTLINE-BROKEN"],
+"findings":[
+{"key":"DARK-MISSING","severity":"blocker","anchor":"the night palette is applied by JS setting data-light",
+"problem":"preship-gate-v4 HALTs twice here and it is right. The page carries <meta name=\"color-scheme\" content=\"light dark\">, which tells the OS not to force-darken, and then the dark palette is applied only by JavaScript setting data-light=night at runtime. There is no @media (prefers-color-scheme: dark) block, so the tokens are invisible to every static gate in the belt and the promise is broken entirely if the script does not run. The page tells the phone 'I handle dark' and then may hand it light tokens on a dark surface.",
+"fix":"Move the night palette into a real @media (prefers-color-scheme: dark) block. The JS attribute can stay as an override hook, but CSS must carry the default so it works without script and so the belt can see it.",
+"framework":"DARK HOST LAW; preship-gate-v4 H-DARK-MISSING + H-DARK-PROMISE","evidence":"preship-gate-v4: H-DARK-MISSING, H-DARK-PROMISE"},
+{"key":"TYPE-FLOOR","severity":"minor","anchor":"orphaned .se-panel / .se-btn / .se-tog rules",
+"problem":"Six declarations under the 18px floor (10, 11, 12, 13, 14, 16px). Every one belongs to the Studio Eyes comfort panel, whose markup was removed under the no-walls ruling - the CSS was never removed with it. Nothing renders at these sizes, which is why the runtime audit missed them, but dead rules under the floor are a trap for the next person who reuses this stylesheet.",
+"fix":"Delete the orphaned .se-panel, .se-btn, .se-tog and .se-sr blocks. The panel they style has not existed for weeks.",
+"framework":"studio 18px floor","evidence":"preship-gate-v4 E1-CSS x6; runtime audit reports no rendered text under 18px"}]}

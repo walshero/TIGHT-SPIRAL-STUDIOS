@@ -1,0 +1,334 @@
+# CONVENING — SANDBAGS (a flash fiction climb)
+
+Convened 2026-09-20 under OS §6 0.5-A and `claude/INVOKING-THE-STUDIO.md`.
+Invocation (founder): *"Who is composing the scenes? Those aren't Japanese houses
+or a village. In others the street lights look alien. Why are houses in the city?
+We need an art director. Give this game the full TSP treatment. Conjure funds and
+aleph and run the timing belt."*
+
+SENTENCE: The player drops the words a piece of flash fiction can live without and learns by feel which ones were holding it up — and that the difference is not length, it is load.
+
+Instruments of record, all run this session:
+- **art-gate.py** — HALT.
+- **studio-belt.sh** — HALT (tick 11 intent; tick 12 registries stale).
+- **preship-gate-v4** — HALT (dark palette, type floor).
+- **studio-voice-gate** — HALT. **comfort-gate** — pass. **retired-lines** — pass.
+  **studio-fingers** — pass.
+- **funes-tendrils** — 3 loose ends, 5 lanes blind.
+- **aleph** — `aleph-runs/2026-09-20-sandbags`, **4 blockers, 1 major, 2 minor**,
+  ledger committed, 54 findings tracked.
+
+**Two gates were blind and are not any more.** `art-execution-gate.py` and the
+belt's image-floor tick both reported *"SKIPPED LOUD — playwright absent, this
+gate is BLIND. Not a pass."* Python Playwright is now installed and pointed at
+the container's existing Chromium, so both see. A gate that cannot run is a gate
+that cannot HALT, and this session spent eight versions under two of them.
+
+---
+
+## THE HEADLINE, BEFORE THE SEATS
+
+**Every version of this scenery was composed in a lane that was abolished on
+2026-08-01.**
+
+`art-department/CHARTER.md`, opening line: *"Founder ruling, 2026-08-01. Recorded
+the day the founder saw hand-drawn SVG scene art one time too many: 'I never want
+to again.'"* Then: **"Hand-authored SVG scene art is dead. The check is
+`art-gate.py` — wired into safe-push, exit 1 does not ship."**
+
+`art-gate.py` has been in this repo the entire time. Nobody ran it, including me.
+It takes four seconds and it says:
+
+```
+HALT  sandbags.html
+      line 613: 4779 bytes of unprovenance'd inline SVG - hand-authored scene art
+```
+
+So the answer to *"who is composing the scenes"* is: a lens with no art brief,
+working from memory, in a lane that does not exist. That is also the answer to
+why the Japanese village is not Japanese, why there are houses in front of a
+downtown skyline, and why the streetlamps match no fixture anyone has stood
+under. None of it was referenced. The founder saw in one glance what seven
+versions of polish never fixed, because polish was never the missing thing.
+
+---
+
+## UNION REP ROLL CALL
+
+Caucus ran against the OS benches, `art-department/CHARTER.md`, the ledger and
+the belt. The Rep's finding is that this build has been running without the
+bench that owns its largest surface.
+
+- **Coordinator (learning science)** — method: constructive alignment. Scrub-in:
+  whether the build names its spec and its player.
+- **Stranger (comprehension + RP cold-read)** — method: the floor as arithmetic.
+  Scrub-in: the dark-palette promise, and the type floor in dead CSS.
+- **Osterweil (freedom of play)** — method: the Four Freedoms. Scrub-in: the
+  keep-cutting change shipped this session.
+- **Aleph (one view of all lanes)** — method: five-lens sweep, plus every gate in
+  the belt run literally. Scrub-in: the two blind gates.
+- **Studio Voice (founder corpus)** — method: MW corpus as source. Scrub-in: the
+  why-cards and the voice gate.
+- **Conductor (anything seen)** — method: screen contract, DARK HOST LAW.
+  Scrub-in: image share and the comfort ladder.
+- **ART DIRECTOR (FIRST SEATING on any build — the role is canon in
+  `art-department/CHARTER.md` and has never been seated in a convening)** —
+  method: owns the shot list; reads the beats, decides what each screen needs,
+  writes the brief. **Never draws.** Scrub-in: the shot list this build has
+  never had.
+- **Period Librarian (art bench)** — method: legal-photo lane, licence verified
+  on the source page. Scrub-in: reference for four real places.
+- **Colour & Palette Lead (canon, CLAUDE.md — palette is per game)** — method:
+  the game's palette serves the game. Scrub-in: the paper drawer.
+- **Continuity, the Mad Men seat (art bench)** — method: adversarial audit, names
+  each object and dates it. Scrub-in: the anachronism pass nobody has run.
+- **Refuter (art bench)** — method: breaks every claim the others make, re-runs
+  the gates. Scrub-in: the two gates that were blind.
+
+GRIEVANCE: `ART DIRECTOR seated eleven versions late — the role existed in canon
+from 2026-08-01 and no convening had ever seated it.` Recorded against the
+process, not a session.
+
+---
+
+## SEAT: Coordinator
+
+The game itself is sound and I want that on the record before the art findings
+bury it. A player drops words and learns by feel which ones carry load; the
+strike does not shame, the why-card explains, and the piece rewrites itself under
+them as they trim. Eleven of my twelve keys pass. The session also fixed the two
+real ones — the secret now rides the choice screens, and flying no longer freezes
+the draft.
+
+My one open finding is that this build does not know what it is for.
+`intent-gate` HALTs: no `spec-source`, no `audience`. That tick exists because
+seven wrong Funnybonies builds passed every artifact-quality gate while being the
+wrong game for the wrong player, with a reviewed spec sitting unopened in the
+trunk the whole time. Sandbags is EN195 Creative Writing and maps to iSLO 1,
+Written and Oral Communication — Content Development, the same cell Row K took
+yesterday. Neither fact is in the file. Two meta tags close it.
+
+SIGNED 2026-09-20
+
+## SEAT: Stranger
+
+Clean on my floors and I checked them twice, by two different instruments.
+Contrast holds at day, dusk and night. Targets pass. Focus is restored on every
+tap since this session's accessibility pass, headings exist, nothing renders
+under 18px.
+
+Two things the runtime audit could not see and the studio's own gate could.
+First, `preship-gate-v4` finds six CSS declarations under the 18px floor — 10,
+11, 12, 13, 14 and 16px — every one belonging to the Studio Eyes comfort panel
+whose markup was removed under the no-walls ruling and whose stylesheet was
+never removed with it. Nothing renders at those sizes. They are a trap for
+whoever reuses this sheet, not a live defect, and they should go.
+
+Second and worse: the dark palette is applied by JavaScript. The file declares
+`color-scheme: light dark`, which tells the OS not to force-darken, and then
+hands over the night tokens only if a script runs. There is no
+`@media (prefers-color-scheme: dark)` block at all, so the belt cannot see the
+palette and a reader whose script fails gets light tokens on a dark surface.
+That is the DARK HOST LAW failure with the promise still attached, which is worse
+than not promising. Move it into CSS; keep the attribute as an override.
+
+SIGNED 2026-09-20
+
+## SEAT: Osterweil
+
+Satisfied, and this is the one seat with nothing to add. Liftoff used to freeze
+every word the moment the balloon crossed the line, so a piece that flew at eight
+bags with six still hanging on it could not be trimmed — the game stopped the
+player mid-lesson to tell them they had won. Flying is a state you can enter,
+keep trimming inside, and fall back out of. A strut still tears, and tearing one
+while up drops you below the line with the words still live so you can climb
+back. Undo works at every point. Nothing is timed.
+
+The freedoms are in good order here. My only note is a watching brief: if the
+Art Director's shot list turns out to need a longer scene-load, do not let it buy
+that time out of the player's first tap.
+
+SIGNED 2026-09-20
+
+## SEAT: Aleph
+
+Seven findings, four of them blockers, and three of the four are the same
+failure wearing different clothes: the art lane, the missing provenance, and the
+compositions. Full run at `aleph-runs/2026-09-20-sandbags`, ledger committed,
+54 findings now tracked.
+
+The part I have to report is about the instruments, not the build. **Two gates
+were blind.** `art-execution-gate.py` and the belt's image-floor tick both
+printed *"SKIPPED LOUD — playwright absent, this gate is BLIND. Not a pass."* The
+belt is honest about it, which is to its credit, but honest blindness is still
+blindness and this session ran eight versions of art past two silent gates.
+Python Playwright is now installed and pointed at the Chromium already in this
+container. Both gates see. `art-execution-gate` reports `no scene marked, not
+this gate's business` — which is itself the finding, because a scene that never
+declares itself a scene is a scene no art gate will ever grade.
+
+And `art-gate.py` was never blind. It was never run. Four seconds, sitting in the
+repo, ready to HALT from the first version. The lesson is not "add a gate"; the
+lesson is that a gate nobody invokes is prose.
+
+Funes: three loose ends — one uncommitted tree, nine unmerged commits on the Row
+K branch, two orphan pages unlinked from index. Five lanes blind to the sweep.
+
+SIGNED 2026-09-20
+
+## SEAT: Studio Voice
+
+The writing is the founder's own and it is why this game works. Four verbatim
+excerpts, used by the author, attributed in-file. The heap copy — "weight this
+flight didn't need (it may fly another day)" — and the dignity floor around the
+crash are the founder's register exactly.
+
+One HALT in my lane: `studio-voice-gate` catches `H-VOICE-DASH` at line 764, in a
+why-card. Those cards are studio craft notes written at the 70 percent tier for
+the founder to finish, which is an explanation and not an excuse — a voice ban is
+a ban whether or not the line is a placeholder. Either the line loses the
+punctuation or the founder finishes the card.
+
+SIGNED 2026-09-20
+
+## SEAT: Conductor
+
+Image share is no longer the problem here; the sky and the manifest carry the
+screen. The comfort ladder measures clean at all three stops. My contract holds.
+
+What does not hold is that the largest thing on my screen has no provenance and
+no brief. I sign for what is SEEN, and what is seen in this build is four
+compositions nobody directed. I defer to the Art Director on the remedy and note
+only that whatever replaces them has to survive the same measurement the rest of
+the screen does — including on the black stop, where a photographic plate behaves
+very differently from flat card.
+
+SIGNED 2026-09-20
+
+## SEAT: Art Director (first seating)
+
+I should have been seated eleven versions ago. Taking the founder's three
+questions in order, because each one is a different failure:
+
+**"Those aren't Japanese houses or a village."** Correct. Echigo-Kawaguchi is
+deep snow country in Niigata — among the heaviest snowfall of any inhabited place
+on earth. That fact determines the architecture entirely: steep gassho or irimoya
+pitches to shed load, deep eaves, snow guards, dark stained timber against cream
+plaster, often a raised ground floor and a second-storey entrance for winter.
+What is on screen is four generic gabled boxes that would sit as comfortably in
+Surrey. The torii is worse than wrong — it is placed as decoration in open
+ground, when a torii marks an approach and means nothing standing in a field.
+
+**"The street lights look alien."** Also correct, and this is the tell that
+nothing was referenced. They are invented shapes. A real fixture is a specific
+object with a specific era — a Boston cobrahead on a bracket arm is not a globe
+on a post, and neither is what I am looking at.
+
+**"Why are houses in the city?"** Because two settings were composed into one
+frame. The piece is a father and child at a neighbourhood curb; the frame has
+pitched-roof houses standing in front of a downtown skyline. That is not a style
+error, it is a failure to decide what the place is.
+
+The root cause is not skill, it is process: **there was no shot list.** My job is
+to read the beats, decide what each screen needs, and write the brief. I never
+draw. Nothing further should be drawn on this build until there is a shot list
+per scene naming the real place, the era, the light, and the specific objects
+that must be in frame — and until the Period Librarian has sourced reference for
+all four. Dead Ants is the easiest: Sparr's and the 39 bus are real, in
+Roslindale and Jamaica Plain, and the Library of Congress and Boston's own
+collections are the first stop.
+
+I am not proposing a lane. That is the founder's ruling and it is in the
+decisions section below.
+
+SIGNED 2026-09-20
+
+## SEAT: Colour & Palette Lead
+
+The paper drawer is the one part of the art work I would keep. Eleven fixed
+stocks with a face and a shade each, held outside the page tokens so the art does
+not repaint when the page does, is the correct structure and it is per-game as
+canon requires. The haze-between-layers model for depth is also right: aerial
+perspective is haze added, never colour replaced.
+
+My caution for whatever lane wins: a photographic plate does not take a token
+palette. If the scenes become photography or traces, the drawer stops governing
+the scene and starts governing only the chrome around it, and the per-game
+palette ruling will need re-reading for a build whose art is sourced rather than
+authored. That is worth deciding before assets land, not after.
+
+SIGNED 2026-09-20
+
+## SEAT: Continuity (the Mad Men seat)
+
+I have nothing to audit yet, and that is my finding. An anachronism pass names
+every visible object, dates it, and kills what does not belong. I cannot date an
+invented streetlamp. I cannot date a house that is from nowhere.
+
+What I can say now, so the shot list carries it: Dead Ants has real period
+anchors and they must be got right rather than approximated. Payphones, the 39
+bus, Sparr's — these are datable objects in a datable place, and the piece turns
+on the narrator being a specific person on a specific corner. The withholding
+rule also stands on every scene: no real faces, ever. Figures read by outline,
+posture and prop.
+
+SIGNED 2026-09-20
+
+## SEAT: Refuter
+
+I tried to break the claims above and two did not survive.
+
+The session's own audit script reported "no text under 18px" and that reading was
+true but incomplete — it walked rendered nodes only, and `preship-gate-v4` found
+six declarations it could never have seen. A bespoke check that agrees with you
+is not a second opinion. The studio's gates exist precisely so a session cannot
+grade its own homework, and this session graded its own homework for eight
+versions.
+
+Second: "contrast is clean" held up under `comfort-gate` at all three stops, but
+`preship-gate-v4` additionally flags three token PAIRS that are only safe on
+`--card` — `--rust` on `--gold-br` at 2.76, `--slate` on `--accent-strong` at
+1.30, `--slate` on `--gold-br` at 3.41. Nothing composes them today. They are
+loaded guns in the sheet and the next edit can fire one.
+
+I re-ran `art-gate.py` after the fix to confirm it was not a stale result. Still
+HALT. The finding is real.
+
+SIGNED 2026-09-20
+
+---
+
+## DISSENTS PRESERVED
+
+**No dissent on the art findings.** Every seat that touched them agrees: the lane
+was abolished, the gate was never run, the compositions were undirected.
+
+**Colour & Palette Lead dissents, narrowly, on the remedy's scope.** If the lane
+ruling sends this build to photography, the per-game palette ruling stops
+governing the scene art and the seat's authority over this build shrinks to the
+chrome. The seat does not object to that outcome; it objects to it happening
+silently. Recorded so the next session does not discover it as a surprise.
+
+---
+
+## FOR THE CALIBRATOR — the decisions only you can make
+
+Per `INVOKING-THE-STUDIO.md` step 4, nothing has been authored against these
+findings. Four decisions, in the order they block:
+
+1. **The lane, and it governs everything else.** `art-gate.py` names three:
+   founder MJ generations (the charter says this lane closed 2026-08-13), verified
+   legal photography, or a studio cut PROVED by `art-execution-gate.py`. The
+   charter and the gate disagree about how many lanes are open, which is itself a
+   canon repair. Which lane does Sandbags use?
+2. **Does the hand-authored art come out now or stay until its replacement
+   lands?** It ships today against a standing HALT. Leaving it is a known
+   violation; pulling it leaves the game with an empty sky for a while.
+3. **The Art Director seat** — first-seated here, and the Registrar will want it
+   carried into the OS §5.6 table rather than living only in the art charter and
+   this file.
+4. **The why-card voice HALT** — you finish the card, or I strip the punctuation.
+
+Cheap and unblocked whatever you decide on the art: the dark palette into a real
+media query, the two intent meta tags, the dead comfort-panel CSS out. Say the
+word and those three go in without touching a pixel.
