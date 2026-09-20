@@ -1465,3 +1465,5 @@ telephone resolve only through the call they come through. The den is the local 
 the hour; the shortwave is retired and Moscow’s words survive as what the station carried. Two den questions replaced
 under the §15.8 check. Insert plate re-encoded to hold the ceiling. Bench §15.9. Walked twice, gates unchanged,
 pushed and verified, republished.
+
+**v1.8.1.** Founder: *"I’m not concerned w file size."* The insert plate goes back to full quality; the 1 MB ceiling is dropped for this lane. Bench §15.9.

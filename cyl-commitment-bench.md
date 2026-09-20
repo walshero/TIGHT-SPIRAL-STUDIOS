@@ -497,7 +497,7 @@ Also: the version chip on the surface (`v1.1` beside the title, in `<title>`, in
 
 **Pool check applied.** Every hall question was read against both outcomes of its own call; every den question against the new den line. Two den questions replaced: *Does anyone in Moscow believe what Moscow is saying?* (the den no longer seeds it) becomes *What does Moscow say is on those ships?*, answered by the station on the 23rd and the message on the 28th; *Why will Moscow not describe the photographs?* (the new den line is about the announcer, not Moscow) becomes *Does the Russian know what is in the photographs?*
 
-**Size.** The set-at-seven insert re-encoded (900px, q56) to hold the file under the connector ceiling: 995,219 bytes.
+**Size.** The set-at-seven insert was re-encoded smaller in v1.8 to hold a 1 MB ceiling inherited from the connector lane. Founder, same day: *"I’m not concerned w file size."* v1.8.1 restores the plate at its v1.7 quality; the ceiling no longer binds this lane (git push and the artifact lane both carry the file).
 
 **Walked twice at 390x844** with different draws (the hall on Tuesday: three callees offered, one call, the list gone after it, the outcome unchanged on return; the ledger names the call). Gates unchanged from v1.7.
 
