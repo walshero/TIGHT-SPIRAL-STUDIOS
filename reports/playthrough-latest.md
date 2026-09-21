@@ -1,20 +1,32 @@
-# Playthrough Sweep — 2026-09-14
+# Playthrough Sweep — 2026-09-21
 
-**Run:** 2026-09-14T11:24Z · repo commit `03e3684` · agent `playthrough-agent.py` (reporter, always exits 0 — never a deploy gate)
+**Run:** 2026-09-21T11:18Z · repo commit `273dc22` · agent `playthrough-agent.py` (reporter, always exits 0 — never a deploy gate)
 **Surfaces swept (5):** index.html · arcade.html · choose-your-leader-v7.html · choose-your-leader-v6.html · the-tell.html
-**Prior report:** `reports/playthrough-latest.md` @ 2026-09-07 (HTTP 200, 20,898 B)
+**Prior report:** `reports/playthrough-latest.md` @ 2026-09-14 (HTTP 200, 19,521 B)
 
 ## Classification
 
 - **NEW: 0**
-- **REPEAT: 7 finding lines** across 3 surfaces — every finding from 2026-09-07 reproduces
+- **REPEAT: 7 finding lines** across 3 surfaces — every finding from 2026-09-14 reproduces
 - **FIXED: 0** — nothing has cleared
-- **CLEAN:** choose-your-leader-v6.html (clean three runs running)
+- **CLEAN:** choose-your-leader-v6.html (clean four runs running)
 
-**No drift, and it is provable rather than asserted.** The finding lines of both reports were
-compared as sets, per surface: zero added, zero removed, on all five. Stronger than that — the
-entire raw agent-card block of this run is **byte-identical** to 2026-09-07's, md5 `ef99147cf086`
-on both. Same instrument, same builds, same output, down to the character.
+**No drift, and the reason is now established rather than assumed.** Finding lines were compared as
+sets, per surface: zero added, zero removed, on all five. The raw agent-card block of this run is
+**byte-identical** to both 2026-09-14 and 2026-09-07 — md5 `ef99147cf086` three weeks running.
+
+This run also checked *why*. All five swept builds were hashed against last week's commit
+`03e3684`; **all five are byte-identical to it.** The repo moved (`03e3684` → `273dc22`), but
+nothing in it touched these five files. Identical output from identical input is the instrument
+working, not the instrument stuck — and the checksums below are the evidence rather than the claim.
+
+| Surface | md5 (12) | vs 2026-09-14 |
+|---|---|---|
+| index.html | `3dd76ddee5c2` | unchanged |
+| arcade.html | `db16d2f65732` | unchanged |
+| choose-your-leader-v7.html | `98c3037f89d8` | unchanged |
+| choose-your-leader-v6.html | `11865a501f35` | unchanged |
+| the-tell.html | `a324c0e1e656` | unchanged |
 
 No ledger row was written for this run. `FUNES-LEDGER.md` is append-only, and a row saying nothing
 happened is the kind of entry that makes a ledger unreadable. Rows on change, silence otherwise.
@@ -24,10 +36,15 @@ happened is the kind of entry that makes a ledger unreadable. Rows on change, si
 ## FIXED — none
 
 The v7 known state — eight inert touches (television, evening paper, telephone, doorway, bulletin,
-wall map), two dead buttons, and the three clipped walkbox lines — **reproduces exactly, three weeks
-running**. Its disappearance is still the signal worth shouting about, and it still has not happened.
-v7 last changed 2026-08-26; nothing has touched it since, so the stability is expected rather than
-reassuring. The inert touches are a build defect waiting on a fix, not a finding that has settled.
+wall map), two dead buttons, and the three clipped walkbox lines — **reproduces exactly, four weeks
+running**. Its disappearance is still the signal worth shouting about, and it still has not
+happened. v7 last changed 2026-08-26; nothing has touched it in the 26 days since. The inert
+touches are a build defect waiting on a fix, not a finding that has settled.
+
+**The standing read, fourth week unchanged:** this sweep is now confirming a known state rather
+than discovering anything. Four identical reports is the report earning less each week. The fix is
+upstream of the instrument — someone has to open v7 — and until that happens the weekly run's only
+job is to catch the week the hashes move.
 
 ## REPEAT — 7 finding lines, summarised not listed
 
@@ -37,21 +54,19 @@ reassuring. The inert touches are a build defect waiting on a fix, not a finding
 | arcade.html | DEAD BUTTONS (1): Cabinet · OFFLINE FLOOR (1 external request, eclectic-youtiao-c065da.netlify.app) |
 | choose-your-leader-v7.html | CLIPPED TEXT (3) in `div.walkbox` (400px box, 417px of content) · DEAD BUTTONS (2) · INERT TOUCHES (8) in world `#roomStage` |
 
-The index.html JS error count held at 9. It moved 8 → 9 last week; it did not move again, so that
-drift has settled rather than continued.
+The index.html JS error count held at 9 for the third week. That drift settled two runs ago.
 
 ## Run notes
 
-- **All five surfaces completed in a single invocation** this week. Last week's run needed two passes
-  because it hit a 9-minute shell ceiling; the agent was backgrounded here, so no ceiling applied.
-  ~15 minutes wall clock for the five.
-- `world '#roomStage' resolved from tsp-worlds.json` on v7 — expected and correct, the sidecar doing
-  its job.
+- **All five surfaces completed in a single invocation**, ~9 minutes wall clock.
+- `world '#roomStage' resolved from tsp-worlds.json` on v7 — expected and correct, the sidecar
+  doing its job. v7 still does not declare its own world.
 - `the-tell.html`'s 14 no-DOM-change controls are again reported as **likely select-state**
-  (canvas/style redraw), explicitly *not asserted dead*. Unchanged from the last two runs. Not a fix
-  ticket.
+  (canvas/style redraw), explicitly *not asserted dead*. Unchanged for three runs. Not a fix ticket.
 - `choose-your-leader-v6.html` again logged one click timeout on `Sound` and still scored CLEAN.
 - Click depth steady: 40 on index, v7, v6 and the-tell; 10 on arcade.
+- Run was unattended (scheduled, cloud container, no founder in the loop). No subagents, no
+  full-corpus sweep — five named surfaces only.
 
 ## Raw agent cards
 
