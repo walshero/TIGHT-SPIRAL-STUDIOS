@@ -1,5 +1,11 @@
 # CLAUDE.md — standing notes for this repo
 
+## HOME REPO — founder ruling (2026-09-24)
+- **This repo is the TSP home.** The 2026-09-21 tombstone retired only `confluence-TRUNK.html` here, not the repo. `walshero/tss-playtest` is a MIRROR (and the Confluence trunk): land games here first, then copy to playtest.
+- **`arcade.html` is the EN195 Arcade.** Every date lives in the `TERM` and `DUE` block at the top of its script; update that block each semester from the Course Schedule and touch nothing else. The August cabinet is kept at `lab/arcade-creative-writing-2026-08.html`.
+- **`lab/` holds games still in progress** (`lab/index.html` lists them). Files that gates, ci or studio-belt reference stay at root and are linked from the lab with `../`.
+- **Titles:** "Dress Rehearsal" with the splash line "AN EN195 GAME". Kireji Pond carries the Still water lever (founder-directed; not a comfort wall).
+
 ## COMFORT WORK IS PAUSED — founder ruling, standing (2026-08-29)
 **No build asks the player about their preferences. No comfort button, no light row, no
 text-size row, no legibility panel. No walls.**
