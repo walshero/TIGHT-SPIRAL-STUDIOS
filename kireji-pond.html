@@ -1335,6 +1335,97 @@ function makeTextures(){
   $('#imgGrain').setAttribute('href',grain); $('#imgMottle').setAttribute('href',mottle); $('#imgPaper').setAttribute('href',paper);
 }
 try{makeTextures()}catch(e){}
+/* ---------- carved blocks: the log, the water, the far trees ----------
+   A woodblock prints flat ink. Tone comes three ways, and only three: a second block (a flat
+   shape in a second colour), bokashi (colour wiped darker along a horizontal band), and gouge
+   cuts where the carver took wood away and the paper or the colour beneath shows through.
+   Every mark here is a gouge: widest where the tool went in, pointed where it came out.
+   No noise, no blur, no rounded shading. Vector, so it stays sharp on any screen. */
+function carveBlocks(){
+  let sd=4127; const r=()=>{sd=(sd*1664525+1013904223)>>>0;return sd/4294967296};
+  const NS='http://www.w3.org/2000/svg', f1=v=>v.toFixed(1), defs=$('#sceneSvg defs');
+  const el=(p,tag,a)=>{const e=document.createElementNS(NS,tag);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e};
+  const gouge=(x,y,L,w,ang,bend)=>{const c=Math.cos(ang),s=Math.sin(ang),P=(u,v)=>f1(x+u*c-v*s)+' '+f1(y+u*s+v*c);
+    return `M${P(0,0)}Q${P(L*.3,bend-w)} ${P(L,bend*.5)}Q${P(L*.3,bend+w)} ${P(0,0)}Z`};
+  const clip=(id,d)=>{const c=el(defs,'clipPath',{id});el(c,'path',{d});return `url(#${id})`};
+
+  // WATER: indigo block, a darker wipe at the far shore, then rows of cuts that widen toward us
+  const wb=$('#wBlock');
+  if(wb){
+    wb.setAttribute('clip-path',clip('wCut','M-40 478 C200 470 500 476 760 468 C880 464 960 470 1040 466 L1040 720 L-40 720 Z'));
+    [[460,.72,24],[484,.42,18],[502,.18,16]].forEach(([y,o,h])=>el(wb,'rect',{x:-40,y,width:1080,height:h,fill:'#0E2B44','fill-opacity':o})); // stepped bokashi
+    let mid='',hi='';
+    for(let y=484;y<712;){
+      const f=(y-470)/240, step=6+17*f;
+      for(let x=-60-r()*80;x<1060;){
+        const L=22+(48+90*f)*r(), w=.9+(1.1+2.8*f)*(.4+.6*r());
+        const d=gouge(x,y+(r()-.5)*step*.35,L,w,(r()-.5)*.035,(r()-.5)*(1.5+3*f));
+        if(r()<.1) hi+=d; else mid+=d;
+        x+=L+(8+30*f)*r()+4;
+      }
+      y+=step;
+    }
+    el(wb,'path',{d:mid,fill:'#3A7096'}); el(wb,'path',{d:hi,fill:'#C9DCE3'});
+  }
+
+  // LOG: flat brown, a flat shadow block with a carved edge, a flat light block, bark cut along the grain
+  const lb=$('#lBlock');
+  if(lb){
+    lb.setAttribute('clip-path',clip('lCut','M598 548 C680 541 800 533 1010 520 L1010 580 C820 591 690 599 598 604 Z'));
+    const TL=[598,548],TR=[1010,520],BL=[598,604],BR=[1010,580];
+    const P=(u,v)=>{const tx=TL[0]+(TR[0]-TL[0])*u,ty=TL[1]+(TR[1]-TL[1])*u,bx=BL[0]+(BR[0]-BL[0])*u,by=BL[1]+(BR[1]-BL[1])*u;return[tx+(bx-tx)*v,ty+(by-ty)*v]};
+    const band=(vw,vf,amp,fill)=>{let d='';const N=30;
+      for(let i=0;i<=N;i++){const u=i/N,p=P(u,vw+amp*(Math.sin(u*17+vw*9)*.5+(r()-.5)));d+=(i?'L':'M')+f1(p[0])+' '+f1(p[1])}
+      for(let i=N;i>=0;i--){const p=P(i/N,vf);d+='L'+f1(p[0])+' '+f1(p[1])}
+      el(lb,'path',{d:d+'Z',fill})};
+    band(.64,1.02,.06,'#553E28'); band(.19,-.02,.04,'#98764D');
+    const ang=Math.atan2(TR[1]-TL[1],TR[0]-TL[0]); let dark='',pale='';
+    for(let v=.07;v<.97;v+=.05+.03*r()){
+      for(let u=-.02-r()*.05;u<1.02;){
+        const Lu=.04+.16*r(), p=P(u,v+(r()-.5)*.02), d=gouge(p[0],p[1],Lu*412,.8+1.9*r(),ang+(r()-.5)*.05,(r()-.5)*2.5);
+        if(v<.22&&r()<.55) pale+=d; else dark+=d;
+        u+=Lu+.015+.07*r();
+      }
+    }
+    el(lb,'path',{d:dark,fill:'#2E2016'}); el(lb,'path',{d:pale,fill:'#C7A574'});
+  }
+  // the cut end: rings cut by hand, and two checks where the wood split as it dried
+  const lr=$('#lRings');
+  if(lr){let d='';
+    [.8,.56,.34,.14].forEach(q=>{const N=26,ph=r()*6;for(let j=0;j<=N;j++){const a=j/N*Math.PI*2,k=1+.07*Math.sin(a*3+ph)+(r()-.5)*.06;
+      d+=(j?'L':'M')+f1(600+13.5*q*k*Math.cos(a))+' '+f1(576+26*q*k*Math.sin(a))}});
+    el(lr,'path',{d,fill:'none',stroke:'#8E6A40','stroke-width':1.1,'stroke-linejoin':'round'});
+    el(lr,'path',{d:gouge(601,576,20,1.6,-1.95,.5)+gouge(601,577,15,1.3,1.15,-.4),fill:'#8E6A40'});
+  }
+
+  // FAR TREES: the season lives here, in the background, as carved dabs on forked trunks.
+  // Colour comes from --leafA/B/C per round.
+  const bt=$('#bgTrees');
+  if(bt){
+    [[132,236,.34],[188,206,.3],[160,292,.4],[222,318,.38],[548,168,.3],[596,138,.27],[622,206,.34],[566,246,.36],[648,268,.4],[604,318,.43],[690,336,.46],[664,392,.5]].forEach(([x,y,sc])=>{
+      const g=el(bt,'g',{transform:`translate(${x} ${y}) scale(${sc})`});
+      // a leaning, forked trunk: every tree different, none of them lollipops
+      const lean=(r()-.5)*.5, H=46+r()*16, top=[Math.sin(lean)*H,-Math.cos(lean)*H];
+      const tips=[top]; let br='';
+      const nb=2+Math.floor(r()*3);
+      for(let i=0;i<nb;i++){const q=.45+r()*.4,bx=top[0]*q,by=top[1]*q,side=i%2?1:-1,a=lean+side*(.55+r()*.5),Lb=14+r()*16;
+        const ex=bx+Math.sin(a)*Lb, ey=by-Math.cos(a)*Lb; tips.push([ex,ey]);
+        br+=`M${f1(bx)} ${f1(by)}Q${f1(bx+Math.sin(a)*Lb*.5+side*3)} ${f1(by-Math.cos(a)*Lb*.5)} ${f1(ex)} ${f1(ey)}`}
+      el(g,'path',{d:`M-4 0 Q${f1(top[0]*.5-2)} ${f1(top[1]*.5)} ${f1(top[0]-1.2)} ${f1(top[1])} L${f1(top[0]+1.2)} ${f1(top[1])} Q${f1(top[0]*.5+2.5)} ${f1(top[1]*.5)} 4 0 Z`,fill:'#3F2E1F',stroke:'#1B1A17','stroke-width':1.4,'stroke-linejoin':'round'});
+      el(g,'path',{d:br,fill:'none',stroke:'#3F2E1F','stroke-width':2.4,'stroke-linecap':'round'});
+      // foliage laid in as carved dabs around each branch end, three blocks deep
+      let dA='',dB='',dC='';
+      tips.forEach(([tx,ty],ti)=>{const R=ti?11+r()*5:15+r()*5;
+        for(let i=0;i<(ti?11:16);i++){const a=r()*Math.PI*2,d=R*Math.sqrt(r());dA+=gouge(tx+Math.cos(a)*d*1.25-4,ty+Math.sin(a)*d*.8,6+r()*6,3.4+r()*2.2,r()*Math.PI,0)}
+        for(let i=0;i<(ti?5:8);i++){const a=r()*Math.PI,d=R*.8*Math.sqrt(r());dB+=gouge(tx+Math.cos(a)*d*1.1-3,ty+Math.abs(Math.sin(a))*d*.7+2,5+r()*5,3+r()*1.8,r()*Math.PI,0)}
+        for(let i=0;i<3;i++){const a=r()*Math.PI*2,d=R*.7*r();dC+=gouge(tx+Math.cos(a)*d-3,ty-R*.35+Math.sin(a)*d*.5,4+r()*3,2+r()*1,r()*Math.PI,0)}
+      });
+      const T='transition:fill .9s ease';
+      el(g,'path',{d:dA,style:'fill:var(--leafA);'+T}); el(g,'path',{d:dB,style:'fill:var(--leafB);'+T}); el(g,'path',{d:dC,style:'fill:var(--leafC);'+T});
+    });
+  }
+}
+try{carveBlocks()}catch(e){}
 function layStreamLines(){
   const P=$('#streamPath'),Ln=P.getTotalLength(),offs=[-44,-22,0,22,44];
   $$('#sceneSvg .flow').forEach((el,i)=>{const o=offs[i]??0;let d='';
