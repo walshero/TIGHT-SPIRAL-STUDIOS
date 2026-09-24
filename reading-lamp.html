@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en" data-stop="paper">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reading Lamp</title>
+<style>
+/* ============ STOPS (comfort ladder, DARK HOST LAW) ============
+   D6 ruling: paper cut-out, Lumino City bar. Every object is a piece of
+   cut paper; the tokens are the paper stock, cut per stop. */
+html[data-stop="paper"]{color-scheme:light;
+  --bg:#cfe0e2; --ink:#1d232b; --muted:#3f4a54; --panel:#fdf8ec;
+  --edge:#1d232b; --floor:#c9c0ad; --base:#e3dbc6; --windowpane:#16393d;
+  --lampshade:#8a6322; --lampshade2:#c99a63; --glow:rgba(247,232,181,.6);
+  --chair:#1f4a4f; --chair2:#2a5f6e; --brick:#7e3a22;
+  --fog:rgba(226,233,230,.9); --milk:#ded9c8; --milk2:#eae4d4;
+  --mat:#c99a63; --slip:#ecd9b8;}
+html[data-stop="dim"]{color-scheme:dark;
+  --bg:#3b3e39; --ink:#edeadf; --muted:#c9c6b8; --panel:#30332e;
+  --edge:#edeadf; --floor:#34322b; --base:#3e3b33; --windowpane:#10262a;
+  --lampshade:#6e4f1b; --lampshade2:#8a6a3a; --glow:rgba(230,205,140,.35);
+  --chair:#173a3e; --chair2:#1f4a4f; --brick:#5e2c1a;
+  --fog:rgba(52,54,50,.9); --milk:#4a4c44; --milk2:#565850;
+  --mat:#8a6a3a; --slip:#453f30;}
+html[data-stop="night"]{color-scheme:dark;
+  --bg:#15171a; --ink:#dcded6; --muted:#b2b5ab; --panel:#1d2025;
+  --edge:#dcded6; --floor:#171612; --base:#1d1c17; --windowpane:#0a1a1e;
+  --lampshade:#57400f; --lampshade2:#6e5426; --glow:rgba(222,192,120,.3);
+  --chair:#10282c; --chair2:#173a3e; --brick:#43200f;
+  --fog:rgba(24,26,24,.92); --milk:#26282a; --milk2:#31343a;
+  --mat:#6e5426; --slip:#2e2a1e;}
+/* ============ BASE ============ */
+*{box-sizing:border-box;margin:0}
+body{font-family:Georgia,'Iowan Old Style','Times New Roman',serif;
+  color:var(--ink);background:var(--bg);font-size:20px;line-height:1.6;
+  min-height:100vh}
+/* BACKDROP-AS-ELEMENT: the room is a real fixed div at z 0 */
+#room{position:fixed;inset:0;z-index:0;background:var(--bg)}
+#room svg{width:100%;height:100%;display:block}
+#wallDiv{position:fixed;top:76px;left:0;right:0;z-index:1;
+  pointer-events:none;display:flex;justify-content:center}
+#wallDiv svg{display:block}
+#fog{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0;
+  background:radial-gradient(ellipse at 50% 45%, transparent 20%, var(--fog) 85%);
+  transition:opacity 1.2s ease}
+/* the page rides low so the wall of photographs stays in view */
+main{position:relative;z-index:2;max-width:680px;margin:0 auto;
+  padding:46vh 18px 140px}
+#page{background:var(--panel);border:2px solid var(--edge);
+  border-radius:4px;padding:30px 28px 22px;
+  box-shadow:0 10px 40px rgba(0,0,0,.3)}
+#invite{font-size:20px;color:var(--muted);font-style:italic;margin-bottom:20px}
+#passage p{margin-bottom:16px}
+/* a phrase is a slip of paper glued onto the page */
+.ph{font:inherit;color:inherit;background:var(--slip);border:none;
+  padding:3px 8px;cursor:pointer;text-decoration:none;border-radius:3px;
+  border-bottom:2px solid var(--edge);
+  box-shadow:0 2px 3px rgba(0,0,0,.22);
+  min-height:44px;display:inline}
+.ph:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.line.reading-now{font-weight:bold;border-left:4px solid var(--ink);
+  padding-left:12px}
+#prov{font-size:18px;color:var(--muted);margin-top:24px;
+  border-top:1px solid var(--muted);padding-top:12px}
+/* ============ SPLASH: the reader prepared, wordlessly ============ */
+#splash{position:fixed;inset:0;z-index:4;display:none;overflow-y:auto;
+  background:transparent}
+#splash.on{display:block}
+#splash .col{max-width:560px;margin:0 auto;padding:9vh 18px 60px;
+  text-align:center}
+#splashCard{background:var(--panel);border:2px solid var(--edge);
+  border-radius:4px;padding:34px 26px 30px;
+  box-shadow:0 10px 40px rgba(0,0,0,.3)}
+#splashTitle{font-size:34px;letter-spacing:.06em;margin-bottom:6px}
+#splashSub{font-size:20px;color:var(--muted);font-style:italic;
+  margin-bottom:22px}
+#splashFrames{display:flex;justify-content:center;gap:14px;margin-bottom:24px}
+#splashFrames svg{display:block;filter:drop-shadow(0 5px 7px rgba(0,0,0,.3))}
+#splashCard{box-shadow:0 3px 0 rgba(0,0,0,.12),0 14px 44px rgba(0,0,0,.3)}
+#beginB{margin:0 auto;max-width:300px}
+/* v0.6.2 phone fix: advance controls read as buttons (filled, centered),
+   the splash and overture take a tap anywhere, and the splash clears the
+   corner controls on short phones. iOS Safari fires click on a non-button
+   only when it has cursor:pointer, so the tap surfaces carry it. */
+#beginB,#ovB{text-align:center;font-weight:700;background:var(--ink);
+  color:var(--panel);border-color:var(--ink);touch-action:manipulation}
+#splash,#overture{cursor:pointer;touch-action:manipulation}
+#splash .col{padding:max(84px,9vh) 18px 104px}
+.taphint{font-size:18px;color:var(--muted);margin-top:12px;font-style:italic}
+@media (max-height:700px){#splash .col{padding-top:76px}#splashCard{padding:20px 18px 18px}
+  #splashTitle{font-size:28px}#splashSub{margin-bottom:12px}#splashFrames{margin-bottom:14px}
+  #splashFrames svg{width:62px;height:74px}}
+/* ============ OVERTURE: the lesson, shown once, never stated ======= */
+#overture{display:none}
+#overture.on{display:block}
+#ovLine{font-size:22px;line-height:1.55;margin-bottom:20px;min-height:4.6em}
+#ovAttr{font-size:18px;color:var(--muted);display:none;margin-bottom:16px}
+#ovAsk{font-size:21px;display:none;margin-bottom:16px}
+#ovAsk em{font-style:italic}
+.fadein{animation:dev .9s ease}
+/* ============ CHOICE SHEET: the room stays visible above ============ */
+#choice{position:fixed;left:0;right:0;bottom:0;z-index:5;display:none;
+  background:var(--bg);border-top:3px solid var(--edge);
+  max-height:60vh;overflow-y:auto;box-shadow:0 -12px 40px rgba(0,0,0,.35)}
+#choice.open{display:block}
+#choice .inner{max-width:680px;margin:0 auto;padding:18px 18px 88px}
+#chPhrase{font-style:italic;font-size:21px;margin-bottom:14px}
+.card{display:block;width:100%;text-align:left;font:inherit;font-size:20px;
+  color:var(--ink);background:var(--panel);border:2px solid var(--edge);
+  border-radius:4px;padding:14px 16px;min-height:52px;margin-bottom:12px;
+  cursor:pointer;line-height:1.5}
+.card:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.card.keep{background:none;border-style:dashed}
+#sheetBar{display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:6px}
+/* ============ NAV + COMFORT: live corner controls, no walls ======= */
+.navbtn{font-family:system-ui,sans-serif;
+  font-size:18px;color:var(--ink);background:var(--panel);
+  border:2px solid var(--edge);border-radius:6px;min-height:48px;
+  min-width:48px;padding:10px 16px;cursor:pointer}
+.navbtn:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+#homeB{position:fixed;z-index:6;top:16px;left:16px}
+#readB{position:fixed;z-index:6;top:16px;right:16px;font-family:system-ui,sans-serif;
+  font-size:18px;color:var(--ink);background:var(--panel);
+  border:2px solid var(--edge);border-radius:6px;min-height:48px;
+  padding:10px 16px;cursor:pointer}
+#readB:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+#lightB{position:fixed;z-index:6;bottom:16px;left:16px}
+#lightMenu{position:fixed;z-index:7;bottom:76px;left:16px;display:none}
+#lightMenu.open{display:block}
+#lightMenu button{display:block;width:120px;margin-top:10px}
+/* ============ AFTER THE READING: the finale card ============ */
+#after{display:none;margin-bottom:20px;border-bottom:2px solid var(--edge);
+  padding-bottom:18px}
+#after p{margin-bottom:16px;font-size:21px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.develop{animation:dev .7s ease}
+@keyframes dev{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion: reduce){
+  #fog{transition:none}
+  .develop{animation:none}
+}
+</style>
+</head>
+<body>
+<div id="room" aria-hidden="true">
+<svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid slice" role="img" aria-label="">
+  <defs>
+    <!-- hand-cut paper: displaced edges, then a real shadow off the set -->
+    <filter id="cut" x="-15%" y="-15%" width="130%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.013" numOctaves="2" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="5" result="d"/>
+      <feDropShadow in="d" dx="3" dy="7" stdDeviation="5" flood-color="#000000" flood-opacity=".32"/>
+    </filter>
+    <filter id="cutsoft" x="-10%" y="-10%" width="120%" height="125%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.013" numOctaves="2" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="4" result="d"/>
+      <feDropShadow in="d" dx="1" dy="3" stdDeviation="3" flood-color="#000000" flood-opacity=".2"/>
+    </filter>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" result="n"/>
+      <feColorMatrix in="n" type="matrix"
+        values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .5 0" result="g"/>
+      <feComposite in="g" in2="SourceGraphic" operator="in"/>
+    </filter>
+  </defs>
+  <!-- the set: sky-blue backing board, kraft floor board -->
+  <rect x="0" y="0" width="1000" height="700" fill="var(--bg)"/>
+  <rect x="-10" y="516" width="1020" height="190" fill="var(--floor)" filter="url(#cutsoft)"/>
+  <rect x="-10" y="504" width="1020" height="18" fill="var(--base)" filter="url(#cutsoft)"/>
+  <g id="windowG" filter="url(#cut)">
+    <rect x="726" y="76" width="198" height="248" rx="6" fill="var(--panel)"/>
+    <rect x="742" y="92" width="166" height="216" fill="var(--windowpane)"/>
+    <rect x="818" y="92" width="14" height="216" fill="var(--panel)"/>
+    <rect x="742" y="192" width="166" height="14" fill="var(--panel)"/>
+    <circle cx="782" cy="140" r="4" fill="var(--panel)"/>
+    <circle cx="874" cy="164" r="3" fill="var(--panel)"/>
+    <circle cx="856" cy="118" r="2.5" fill="var(--panel)"/>
+    <path d="M746 292 q30 -18 60 0" stroke="var(--panel)" stroke-width="5" fill="none"/>
+  </g>
+  <ellipse id="glow" cx="180" cy="392" rx="120" ry="120" fill="var(--glow)"/>
+  <g id="lampG" filter="url(#cut)">
+    <path d="M112 398 L248 398 L216 316 L144 316 Z" fill="var(--lampshade)"/>
+    <path d="M144 316 L165 316 L136 398 L112 398 Z" fill="var(--lampshade2)"/>
+    <rect x="172" y="398" width="16" height="128" fill="var(--brick)"/>
+    <path d="M132 536 q48 -18 96 0 l0 6 -96 0 Z" fill="var(--brick)"/>
+  </g>
+  <g id="chairG" filter="url(#cut)">
+    <path d="M366 398 q0 -30 30 -30 l128 0 q30 0 30 30 l0 84 -188 0 Z" fill="var(--chair)"/>
+    <path d="M366 398 q0 -30 30 -30 l30 0 q-22 4 -22 30 l0 84 -38 0 Z" fill="var(--chair2)"/>
+    <rect x="348" y="460" width="224" height="64" rx="14" fill="var(--chair2)"/>
+    <rect x="338" y="414" width="30" height="104" rx="12" fill="var(--chair)"/>
+    <rect x="552" y="414" width="30" height="104" rx="12" fill="var(--chair)"/>
+    <rect x="360" y="522" width="18" height="24" fill="var(--brick)"/>
+    <rect x="544" y="522" width="18" height="24" fill="var(--brick)"/>
+  </g>
+  <g id="tableG" filter="url(#cut)">
+    <ellipse cx="652" cy="498" rx="48" ry="11" fill="var(--brick)"/>
+    <rect x="645" y="498" width="14" height="48" fill="var(--brick)"/>
+    <rect x="624" y="480" width="56" height="12" rx="4" fill="var(--panel)"/>
+  </g>
+  <!-- paper tooth over the whole set -->
+  <rect x="0" y="0" width="1000" height="700" fill="#20242b" filter="url(#grain)" opacity=".14"/>
+</svg>
+</div>
+<!-- THE GALLERY: five photographs, one per phrase; they develop as you choose -->
+<div id="wallDiv" aria-hidden="true"></div>
+<div id="fog" aria-hidden="true"></div>
+
+<button id="homeB" class="navbtn" type="button">Home</button>
+<button id="readB" type="button">Read it to the room</button>
+<button id="lightB" class="navbtn" type="button" aria-expanded="false">Light</button>
+<div id="lightMenu">
+  <button class="navbtn" type="button" data-set="paper">Paper</button>
+  <button class="navbtn" type="button" data-set="dim">Dim</button>
+  <button class="navbtn" type="button" data-set="night">Night</button>
+</div>
+
+<div id="splash">
+  <div class="col">
+    <div id="splashCard">
+      <h1 id="splashTitle">READING LAMP</h1>
+      <p id="splashSub">Trade overused phrases. Watch what develops.</p>
+      <div id="splashFrames" aria-hidden="true"></div>
+      <button class="card" id="beginB" type="button">Begin</button>
+      <p class="taphint">or tap anywhere</p>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div id="page">
+    <div id="overture">
+      <p id="ovLine"></p>
+      <p id="ovAttr">Willa Cather, "The Sculptor's Funeral" (1905), public
+      domain. Read in EN195, Workshop 3.</p>
+      <p id="ovAsk">Which one did you <em>see</em>?</p>
+      <button class="card" id="ovB" type="button">Again</button>
+    </div>
+    <div id="after">
+      <p id="roomWord"></p>
+      <button class="card" id="replayB" type="button">Read it again</button>
+      <button class="card" id="againB" type="button">Revise the page</button>
+      <button class="card" id="nextB" type="button">Next passage</button>
+    </div>
+    <p id="invite">Tap an overused phrase. Watch the image gallery.</p>
+    <div id="passage" aria-live="polite"></div>
+    <p id="prov">Passage: studio draft for this prototype.</p>
+  </div>
+</main>
+
+<div id="choice" role="dialog" aria-modal="false" aria-labelledby="chPhrase">
+  <div class="inner">
+    <div id="sheetBar">
+      <p id="chPhrase"></p>
+      <button id="backB" class="navbtn" type="button">Back</button>
+    </div>
+    <div id="cards"></div>
+  </div>
+</div>
+
+<div class="vh" aria-live="polite" id="announce"></div>
+
+<script>
+"use strict";
+/* slot kinds: c = image, a = abstraction, l = lateral cliche,
+   x = planted overused phrase as written, g = a line best left alone */
+var SLOTS = [
+ {planted:"quiet as a tomb", kind0:"x", opts:[
+   {t:"so quiet I could hear the refrigerator hum", k:"c"},
+   {t:"heavy with an unspeakable stillness", k:"a"},
+   {t:"silent as the grave", k:"l"}]},
+ {planted:"the years came flooding back", kind0:"x", opts:[
+   {t:"it smelled of cedar and old rubber bands", k:"c"},
+   {t:"the weight of memory overwhelmed me", k:"a"},
+   {t:"it hit me like a wave", k:"l"}]},
+ {planted:"grinning from ear to ear", kind0:"x", opts:[
+   {t:"squinting into the sun, one hand on the dog's collar", k:"c"},
+   {t:"radiating pure happiness", k:"a"},
+   {t:"smiling like the cat that got the cream", k:"l"}]},
+ {planted:"young and carefree", kind0:"x", opts:[
+   {t:"barefoot on the steps, holding a cigarette she never let us see", k:"c"},
+   {t:"untouched by everything still to come", k:"a"},
+   {t:"without a care in the world", k:"l"}]},
+ {planted:"it was time to say goodbye", kind0:"x", opts:[
+   {t:"I put the lid back on and carried the shoebox to the truck", k:"c"},
+   {t:"what we were leaving behind was bigger than any of us could say", k:"a"},
+   {t:"we closed that chapter of our lives", k:"l"}]}
+];
+var LINES = [
+ ["The kitchen was ",0,"."],
+ ["I opened the shoebox and ",1,"."],
+ ["On top was a Polaroid of my father at the lake, ",2,", the dog half out of frame."],
+ ["Under it, the two of them on the porch steps, ",3,"."],
+ ["We loaded the truck, and ",4,"."]
+];
+var state = SLOTS.map(function(s){return {cur:s.planted,kind:s.kind0};});
+var openSlot = -1;
+
+/* ---------- THE GALLERY ---------- */
+/* five polaroids in an overlay; layout adapts to the viewport */
+var FW=110, FH=132, IM=94; /* frame w/h, image square */
+function frameLayout(){
+  if(window.innerWidth>=660){
+    return {vb:"0 0 660 170", w:Math.min(window.innerWidth*0.92,720),
+      frames:[{x:14,y:14},{x:142,y:14},{x:270,y:14},{x:398,y:14},{x:526,y:14}]};
+  }
+  return {vb:"0 0 410 330", w:Math.min(window.innerWidth*0.94,430),
+    frames:[{x:14,y:14},{x:150,y:14},{x:286,y:14},{x:82,y:172},{x:218,y:172}]};
+}
+
+/* concrete sketches, one per slot, drawn inside a 94x94 box at 0,0 */
+function sketch(slot){
+  var k='stroke="var(--ink)" fill="none" stroke-width="2.5" stroke-linecap="round"';
+  if(slot===0){ /* refrigerator, hum ripples */
+    return '<rect x="26" y="18" width="34" height="60" rx="3" '+k+'/>'+
+    '<line x1="26" y1="44" x2="60" y2="44" '+k+'/>'+
+    '<line x1="54" y1="26" x2="54" y2="36" '+k+'/>'+
+    '<path d="M66 34 q6 8 0 16" '+k+'/>'+
+    '<path d="M72 28 q10 14 0 28" '+k+' opacity=".6"/>';
+  }
+  if(slot===1){ /* shoebox, lid tilted, rubber bands */
+    return '<rect x="16" y="44" width="56" height="28" '+k+'/>'+
+    '<path d="M12 44 L40 28 L78 36 L72 44" '+k+'/>'+
+    '<ellipse cx="30" cy="80" rx="10" ry="4" '+k+'/>'+
+    '<ellipse cx="52" cy="82" rx="8" ry="3" '+k+'/>';
+  }
+  if(slot===2){ /* father squinting at the lake, dog half out of frame */
+    return '<circle cx="40" cy="30" r="10" '+k+'/>'+
+    '<line x1="33" y1="28" x2="39" y2="28" '+k+'/>'+
+    '<line x1="43" y1="28" x2="49" y2="28" '+k+'/>'+
+    '<path d="M40 40 L40 62 M40 46 L26 56 M40 46 L58 58" '+k+'/>'+
+    '<path d="M6 70 q14 -6 24 0" '+k+'/>'+
+    '<circle cx="86" cy="62" r="8" '+k+'/>'+
+    '<path d="M86 70 L86 82 M86 74 L94 80" '+k+'/>'+
+    '<circle cx="20" cy="14" r="7" '+k+'/>';
+  }
+  if(slot===3){ /* porch steps, two seated, cigarette wisp */
+    return '<path d="M8 78 L30 78 L30 64 L52 64 L52 50 L74 50" '+k+'/>'+
+    '<circle cx="40" cy="40" r="7" '+k+'/><path d="M40 47 L40 60 L32 64" '+k+'/>'+
+    '<circle cx="58" cy="28" r="7" '+k+'/><path d="M58 35 L58 46 L52 50" '+k+'/>'+
+    '<line x1="64" y1="40" x2="70" y2="38" '+k+'/>'+
+    '<path d="M71 36 q3 -6 0 -10" '+k+' opacity=".6"/>';
+  }
+  /* slot 4: the shoebox carried to the truck */
+  return '<rect x="44" y="34" width="42" height="26" rx="3" '+k+'/>'+
+  '<rect x="52" y="42" width="12" height="10" '+k+'/>'+
+  '<circle cx="54" cy="66" r="7" '+k+'/><circle cx="78" cy="66" r="7" '+k+'/>'+
+  '<circle cx="22" cy="24" r="7" '+k+'/>'+
+  '<path d="M22 31 L22 52 M22 36 L34 40 M22 52 L15 64 M22 52 L29 64" '+k+'/>'+
+  '<rect x="30" y="34" width="13" height="9" '+k+'/>';
+}
+function placeholderArt(){ /* the stock photo everyone has already seen */
+  var k='stroke="var(--muted)" fill="none" stroke-width="2.5"';
+  return '<rect x="8" y="8" width="78" height="78" '+k+' stroke-dasharray="6 5"/>'+
+  '<circle cx="30" cy="30" r="9" '+k+'/>'+
+  '<path d="M12 74 L38 46 L54 62 L66 50 L84 70" '+k+'/>';
+}
+function milkArt(){ /* abstraction: torn-paper mist swallows the picture
+  before it can form - a corner of a frame remains, dissolving */
+  return '<rect x="4" y="4" width="86" height="86" fill="var(--milk)"/>'+
+  /* the picture that almost was: one dissolving corner */
+  '<path d="M16 16 L52 16 M16 16 L16 44" stroke="var(--muted)" fill="none" stroke-width="2.5" stroke-dasharray="7 6" opacity=".7"/>'+
+  '<path d="M58 16 L66 16 M16 50 L16 56" stroke="var(--muted)" fill="none" stroke-width="2.5" stroke-dasharray="2 8" opacity=".4"/>'+
+  /* torn paper mist, three sheets deep */
+  '<path d="M2 46 q9 -9 19 -4 q7 -11 19 -7 q6 -8 15 -5 q10 -7 16 1 q9 -3 14 4 l0 22 q-11 9 -23 5 q-9 7 -20 3 q-11 7 -22 1 q-10 5 -18 -3 Z" fill="var(--milk2)" opacity=".95"/>'+
+  '<path d="M2 64 q12 -8 22 -3 q9 -8 20 -4 q10 -6 18 0 q10 -4 16 3 l14 2 0 30 -90 0 Z" fill="var(--panel)" opacity=".8"/>'+
+  '<path d="M2 78 q14 -7 26 -2 q11 -6 22 -1 q12 -5 20 2 q10 -2 20 3 l0 12 -88 0 Z" fill="var(--milk2)" opacity=".9"/>'+
+  /* the thought that circles and lands nowhere */
+  '<path d="M60 36 a13 13 0 1 1 -10 22" stroke="var(--muted)" fill="none" stroke-width="2.5" stroke-linecap="round" opacity=".55"/>';
+}
+function mindArt(){ /* mnemonic: the gallery is the reader's mind - a
+  paper-cut head in profile holding one developed photograph */
+  return '<path d="M84 128 L84 102 Q98 94 97 74 Q98 40 68 30 Q36 20 24 46 Q14 66 24 80 L18 90 Q17 95 24 96 L30 97 Q28 112 42 114 L42 128 Z" '+
+    'fill="var(--chair2)"/>'+
+  '<path d="M84 128 L84 102 Q98 94 97 74 Q97 52 82 40 Q90 56 88 74 Q87 92 74 100 L74 128 Z" fill="var(--chair)"/>'+
+  /* the photograph, held in the mind */
+  '<g transform="translate(42,46) rotate(-3)">'+
+  '<rect x="-3" y="-3" width="42" height="50" fill="var(--panel)"/>'+
+  '<rect x="0" y="0" width="36" height="36" fill="var(--mat)"/>'+
+  '<rect x="3" y="3" width="30" height="30" fill="var(--panel)"/>'+
+  '<path d="M11 10 L25 10 L23 6 L13 6 Z" fill="var(--lampshade)"/>'+
+  '<line x1="18" y1="10" x2="18" y2="24" stroke="var(--ink)" stroke-width="2"/>'+
+  '<path d="M12 26 q6 -3 12 0" stroke="var(--ink)" stroke-width="2" fill="none"/>'+
+  '<circle cx="18" cy="15" r="9" fill="var(--glow)"/>'+
+  '</g>';
+}
+/* ---------- OVERTURE ---------- */
+var mode="overture", ovStage=0;
+var OV_A="Something unspoken hung over the crowd on the platform.";
+var OV_C="The townspeople drew back enough to make room for it and then formed a close semicircle about it, looking curiously at the palm leaf which lay across the black cover.";
+function ovSketch(){ /* the palm leaf on the black cover, the semicircle */
+  var k='stroke="var(--ink)" fill="none" stroke-width="2.5" stroke-linecap="round"';
+  return '<circle cx="20" cy="26" r="6" '+k+'/><path d="M12 40 q8 -8 16 0" '+k+'/>'+
+  '<circle cx="47" cy="21" r="6" '+k+'/><path d="M39 35 q8 -8 16 0" '+k+'/>'+
+  '<circle cx="74" cy="26" r="6" '+k+'/><path d="M66 40 q8 -8 16 0" '+k+'/>'+
+  '<path d="M8 66 L22 54 L72 54 L86 66 L72 78 L22 78 Z" fill="var(--ink)" stroke="var(--ink)" stroke-width="2"/>'+
+  '<path d="M28 68 Q47 58 68 62" stroke="var(--panel)" fill="none" stroke-width="2.5"/>'+
+  '<path d="M34 66 L38 60 M40 64 L45 58 M47 63 L52 58 M54 62 L59 58 M60 63 L64 60" stroke="var(--panel)" fill="none" stroke-width="2"/>';
+}
+function buildOvWall(){
+  var w=Math.min(window.innerWidth*0.6,300);
+  var h=Math.round(w*(220/190));
+  var html='<svg viewBox="0 0 190 220" width="'+w+'" height="'+h+'">'+
+    '<defs><filter id="osh" x="-20%" y="-20%" width="140%" height="150%">'+
+    '<feDropShadow dx="2" dy="6" stdDeviation="4" flood-color="#000000" flood-opacity=".33"/>'+
+    '</filter></defs>'+
+    '<g transform="translate(36,24) scale(1.25)" filter="url(#osh)">'+
+    '<rect x="-4" y="-4" width="'+(FW+8)+'" height="'+(FH+8)+'" fill="var(--panel)"/>'+
+    '<rect x="2" y="2" width="'+(FW-4)+'" height="'+(IM+12)+'" fill="var(--mat)"/>'+
+    '<line x1="'+(FW/2)+'" y1="-14" x2="'+(FW/2)+'" y2="-4" stroke="var(--edge)" stroke-width="2"/>'+
+    '<g id="photoO" transform="translate(8,8)"></g>'+
+    '</g></svg>';
+  document.getElementById("wallDiv").innerHTML=html;
+  paintOv(false);
+}
+function paintOv(animate){
+  var ph=document.getElementById("photoO"); if(!ph){return;}
+  var art=(ovStage===0)?milkArt():ovSketch();
+  ph.innerHTML='<rect x="0" y="0" width="'+IM+'" height="'+IM+'" fill="var(--panel)"/>'+art;
+  if(animate){ph.classList.remove("develop"); void ph.getBoundingClientRect();
+    ph.classList.add("develop");}
+}
+function ovAdvance(){
+  if(ovStage===0){
+    ovStage=1;
+    document.getElementById("ovLine").textContent="“"+OV_C+"”";
+    document.getElementById("ovLine").classList.add("fadein");
+    paintOv(true);
+    document.getElementById("ovAttr").style.display="block";
+    document.getElementById("ovAsk").style.display="block";
+    document.getElementById("ovB").textContent="Your turn";
+    document.getElementById("announce").textContent=OV_C+" Which one did you see?";
+    try{document.getElementById("ovB").scrollIntoView({block:"center",behavior:"smooth"});}catch(e){}
+  } else { endOverture(); }
+}
+function endOverture(){
+  mode="game";
+  document.getElementById("overture").classList.remove("on");
+  document.getElementById("invite").style.display="block";
+  document.getElementById("passage").style.display="block";
+  document.getElementById("prov").style.display="block";
+  document.getElementById("readB").textContent="Read it to the room";
+  buildWall(); relayoutRoom(); paintLamp();
+  window.scrollTo(0,0);
+  document.getElementById("announce").textContent="Tap an overused phrase. Watch the image gallery.";
+}
+/* ---------- SPLASH ---------- */
+function miniFrame(art){
+  return '<svg viewBox="0 0 118 140" width="86" height="102">'+
+    '<rect x="2" y="2" width="114" height="136" fill="var(--panel)" stroke="var(--edge)" stroke-width="2.5"/>'+
+    '<g transform="translate(12,12)">'+
+    '<rect x="0" y="0" width="94" height="94" fill="var(--panel)"/>'+art+
+    '</g></svg>';
+}
+function buildSplash(){
+  document.getElementById("splashFrames").innerHTML=
+    miniFrame(sketch(0))+miniFrame(milkArt())+miniFrame(placeholderArt())+
+    '<svg viewBox="0 0 112 140" width="82" height="102">'+mindArt()+'</svg>';
+}
+function startSplash(){
+  mode="splash";
+  document.getElementById("page").style.display="none";
+  document.getElementById("splash").classList.add("on");
+  document.getElementById("overture").classList.remove("on");
+  document.getElementById("invite").style.display="none";
+  document.getElementById("passage").style.display="none";
+  document.getElementById("prov").style.display="none";
+  document.getElementById("after").style.display="none";
+  document.getElementById("readB").style.display="none";
+  document.getElementById("wallDiv").innerHTML="";
+  buildSplash();
+}
+function startOverture(){
+  document.getElementById("splash").classList.remove("on");
+  document.getElementById("page").style.display="block";
+  document.getElementById("readB").style.display="block";
+  mode="overture"; ovStage=0;
+  document.getElementById("overture").classList.add("on");
+  document.getElementById("invite").style.display="none";
+  document.getElementById("passage").style.display="none";
+  document.getElementById("prov").style.display="none";
+  document.getElementById("after").style.display="none";
+  document.getElementById("ovLine").textContent="“"+OV_A+"”";
+  document.getElementById("readB").textContent="Skip";
+  document.getElementById("ovAsk").innerHTML="Which one did you <em>see</em>?";
+  buildOvWall(); relayoutRoom();
+}
+function buildWall(){
+  if(mode==="splash"){return;}
+  if(mode==="overture"){buildOvWall();return;}
+  var lay=frameLayout();
+  var h=Math.round(lay.w*(parseInt(lay.vb.split(" ")[3],10)/parseInt(lay.vb.split(" ")[2],10)));
+  var html='<svg viewBox="'+lay.vb+'" width="'+lay.w+'" height="'+h+'">'+
+    '<defs><filter id="fsh" x="-20%" y="-20%" width="140%" height="150%">'+
+    '<feDropShadow dx="2" dy="6" stdDeviation="4" flood-color="#000000" flood-opacity=".33"/>'+
+    '</filter></defs>';
+  lay.frames.forEach(function(f,i){
+    html+='<g transform="translate('+f.x+','+f.y+') rotate('+((i%2)?2:-2)+')" filter="url(#fsh)">'+
+      '<rect id="fhl'+i+'" x="-10" y="-10" width="'+(FW+20)+'" height="'+(FH+20)+'" fill="none" stroke="var(--edge)" stroke-width="5" opacity="0"/>'+
+      '<rect x="-4" y="-4" width="'+(FW+8)+'" height="'+(FH+8)+'" fill="var(--panel)"/>'+
+      '<rect x="2" y="2" width="'+(FW-4)+'" height="'+(IM+12)+'" fill="var(--mat)"/>'+
+      '<line x1="'+(FW/2)+'" y1="-12" x2="'+(FW/2)+'" y2="-4" stroke="var(--edge)" stroke-width="2"/>'+
+      '<g id="photo'+i+'" transform="translate(8,8)"></g>'+
+      '</g>';
+  });
+  html+='</svg>';
+  document.getElementById("wallDiv").innerHTML=html;
+  for(var i=0;i<5;i++){paintPhoto(i,false);}
+}
+/* keep the lamp and window inside the visible slice of the room */
+function relayoutRoom(){
+  var w=window.innerWidth,h=window.innerHeight;
+  var scale=Math.max(w/1000,h/700);
+  var visW=w/scale, x0=500-visW/2, x1=500+visW/2;
+  var lampDx=Math.max(0,(x0+80)-180);
+  var winDx=Math.min(0,(x1-110)-825);
+  document.getElementById("lampG").setAttribute("transform","translate("+lampDx+",0)");
+  document.getElementById("glow").setAttribute("transform","translate("+lampDx+",0)");
+  document.getElementById("windowG").setAttribute("transform","translate("+winDx+",0)");
+}
+window.addEventListener("resize",function(){buildWall();relayoutRoom();paintLamp();});
+function paintPhoto(i,animate){
+  var ph=document.getElementById("photo"+i); if(!ph){return;}
+  var kind=state[i].kind; var art;
+  if(kind==="c"||kind==="g"){art=sketch(i);}
+  else if(kind==="a"){art=milkArt();}
+  else{art=placeholderArt();}
+  ph.innerHTML='<rect x="0" y="0" width="'+IM+'" height="'+IM+'" fill="var(--panel)"/>'+art;
+  if(animate){
+    ph.classList.remove("develop"); void ph.getBoundingClientRect();
+    ph.classList.add("develop");
+  }
+}
+function paintLamp(){
+  var c=0; state.forEach(function(s){if(s.kind==="c"||s.kind==="g"){c++;}});
+  var glow=document.getElementById("glow");
+  var r=90+28*c;
+  glow.setAttribute("rx",r); glow.setAttribute("ry",r);
+}
+/* ---------- PASSAGE ---------- */
+function render(){
+  var pass=document.getElementById("passage"); pass.innerHTML="";
+  LINES.forEach(function(L,li){
+    var p=document.createElement("p"); p.className="line"; p.dataset.line=li;
+    L.forEach(function(part){
+      if(typeof part==="string"){ p.appendChild(document.createTextNode(part)); }
+      else{
+        var b=document.createElement("button");
+        b.type="button"; b.className="ph"; b.dataset.slot=part;
+        b.textContent=state[part].cur;
+        b.setAttribute("aria-label","Change this line: "+state[part].cur);
+        b.addEventListener("click",function(){openChoice(part);});
+        p.appendChild(b);
+      }
+    });
+    pass.appendChild(p);
+  });
+}
+function shuffle(a){var i,j,t;for(i=a.length-1;i>0;i--){j=Math.floor(Math.random()*(i+1));t=a[i];a[i]=a[j];a[j]=t;}return a;}
+var order = SLOTS.map(function(s){
+  var all=s.opts.map(function(o,i){return i;}); return shuffle(all);});
+
+function openChoice(idx){
+  openSlot=idx;
+  var s=SLOTS[idx];
+  document.getElementById("chPhrase").textContent="“"+state[idx].cur+"”";
+  var wrap=document.getElementById("cards"); wrap.innerHTML="";
+  order[idx].forEach(function(oi){
+    var o=s.opts[oi];
+    var b=document.createElement("button");
+    b.type="button"; b.className="card"; b.textContent=o.t;
+    b.addEventListener("click",function(){pick(o.t,o.k);});
+    wrap.appendChild(b);
+  });
+  var keep=document.createElement("button");
+  keep.type="button"; keep.className="card keep"; keep.textContent="Keep it";
+  keep.addEventListener("click",function(){pick(SLOTS[idx].planted,SLOTS[idx].kind0);});
+  wrap.appendChild(keep);
+  document.getElementById("choice").classList.add("open");
+  document.getElementById("backB").focus();
+}
+function closeChoice(){
+  document.getElementById("choice").classList.remove("open");
+}
+function pick(text,kind){
+  state[openSlot].cur=text; state[openSlot].kind=kind;
+  var slot=openSlot;
+  closeChoice(); render();
+  paintPhoto(slot,true); paintLamp();
+  document.getElementById("announce").textContent="Line updated: "+text;
+  var b=document.querySelector('.ph[data-slot="'+slot+'"]');
+  if(b){b.focus();}
+}
+/* ---------- THE READING ---------- */
+var reading=false;
+function readAloud(){
+  if(reading){return;} reading=true;
+  document.getElementById("after").style.display="none";
+  var lines=[].slice.call(document.querySelectorAll("#passage .line"));
+  var rm=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var fogLevel=0;
+  function lineKinds(li){
+    var ks=[]; LINES[li].forEach(function(part){
+      if(typeof part!=="string"){ks.push(state[part].kind);}});
+    return ks;
+  }
+  function frameSpot(li){
+    /* the images illustrate the story: light the frame whose line is read */
+    for(var j=0;j<5;j++){
+      var hl=document.getElementById("fhl"+j);
+      if(hl){hl.setAttribute("opacity",(li===j)?"1":"0");}
+    }
+  }
+  function react(li){
+    var ks=lineKinds(li);
+    if(ks.indexOf("a")>-1){fogLevel+=0.28;}
+    if(ks.indexOf("c")>-1||ks.indexOf("g")>-1){fogLevel=Math.max(0,fogLevel-0.1);}
+    document.getElementById("fog").style.opacity=Math.min(fogLevel,0.85);
+  }
+  function finish(){
+    lines.forEach(function(p){p.classList.remove("reading-now");});
+    frameSpot(-1);
+    var c=0,a=0,l=0,x=0,g=0;
+    state.forEach(function(s){
+      if(s.kind==="c"){c++;} if(s.kind==="a"){a++;}
+      if(s.kind==="l"){l++;} if(s.kind==="x"){x++;} if(s.kind==="g"){g++;}
+    });
+    var word;
+    if(a>=2){
+      word="The fog filled the room before the last line. The page waits.";
+    } else if(l+x>=2){
+      word="The gallery came out covered in pictures anyone could have taken. Clean frames, and nothing in them that belongs to anyone. The page waits.";
+      document.getElementById("fog").style.opacity=0;
+    } else if(a===0&&l===0&&x===0){
+      word="The lamp burned to the last word, and every photograph in the gallery held.";
+      document.getElementById("fog").style.opacity=0;
+    } else {
+      word="The lamp held through most of it. A frame or two in the gallery never quite developed. The page waits.";
+    }
+    if(a===0&&l===0&&x===0){ /* win-state art: the lamp flares to fill the room */
+      var gl=document.getElementById("glow");
+      gl.setAttribute("rx",300); gl.setAttribute("ry",300);
+    }
+    document.getElementById("roomWord").textContent=word;
+    document.getElementById("after").style.display="block";
+    document.getElementById("invite").style.display="none";
+    window.scrollTo({top:0,behavior:"smooth"});
+    document.getElementById("announce").textContent=word;
+    reading=false;
+  }
+  if(rm){lines.forEach(function(p,li){react(li);}); finish(); return;}
+  var i=0;
+  function step(){
+    lines.forEach(function(p){p.classList.remove("reading-now");});
+    if(i>=lines.length){finish();return;}
+    lines[i].classList.add("reading-now"); react(i); frameSpot(i);
+    i++; setTimeout(step,1700);
+  }
+  step();
+}
+/* ---------- comfort ladder ---------- */
+function setStop(s){
+  document.documentElement.setAttribute("data-stop",s);
+  try{localStorage.setItem("rl.stop",s);}catch(e){}
+  document.getElementById("lightMenu").classList.remove("open");
+  document.getElementById("lightB").setAttribute("aria-expanded","false");
+}
+document.getElementById("lightB").addEventListener("click",function(){
+  var m=document.getElementById("lightMenu");
+  var open=!m.classList.contains("open");
+  m.classList.toggle("open",open);
+  this.setAttribute("aria-expanded",open?"true":"false");
+});
+[].slice.call(document.querySelectorAll("#lightMenu button")).forEach(function(b){
+  b.addEventListener("click",function(){setStop(this.dataset.set);});
+});
+document.getElementById("backB").addEventListener("click",closeChoice);
+function freshPassage(){
+  /* next sample: rotates the passage bank (one passage in this prototype;
+     the D3 bank slots in here) with fresh card order */
+  closeChoice();
+  state=SLOTS.map(function(s){return {cur:s.planted,kind:s.kind0};});
+  order=SLOTS.map(function(s){
+    var all=s.opts.map(function(o,i){return i;}); return shuffle(all);});
+  document.getElementById("after").style.display="none";
+  document.getElementById("invite").style.display="block";
+  document.getElementById("fog").style.opacity=0;
+  render(); buildWall(); paintLamp(); window.scrollTo(0,0);
+}
+document.getElementById("homeB").addEventListener("click",function(){
+  closeChoice();
+  state=SLOTS.map(function(s){return {cur:s.planted,kind:s.kind0};});
+  document.getElementById("fog").style.opacity=0;
+  render(); startSplash(); window.scrollTo(0,0);
+});
+document.getElementById("nextB").addEventListener("click",freshPassage);
+document.getElementById("replayB").addEventListener("click",function(){
+  document.getElementById("after").style.display="none";
+  readAloud();
+});
+document.getElementById("readB").addEventListener("click",function(){
+  if(mode==="overture"){endOverture();return;}
+  readAloud();
+});
+document.getElementById("ovB").addEventListener("click",ovAdvance);
+document.getElementById("beginB").addEventListener("click",startOverture);
+/* tap anywhere: the splash and the overture advance on any tap that is not
+   already a control (Home, Light and the buttons keep their own jobs) */
+document.getElementById("splash").addEventListener("click",function(e){
+  if(e.target.closest("button")) return; if(mode==="splash") startOverture();
+});
+document.getElementById("overture").addEventListener("click",function(e){
+  if(e.target.closest("button")) return; if(mode==="overture") ovAdvance();
+});
+document.getElementById("againB").addEventListener("click",function(){
+  document.getElementById("after").style.display="none";
+  document.getElementById("invite").style.display="block";
+  document.getElementById("fog").style.opacity=0;
+  paintLamp();
+  document.getElementById("page").scrollIntoView({behavior:"smooth"});
+});
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"){closeChoice();}
+});
+var saved=null; try{saved=localStorage.getItem("rl.stop");}catch(e){}
+if(saved){setStop(saved);}
+else if(window.matchMedia("(prefers-color-scheme: dark)").matches){setStop("night");}
+render(); startSplash(); relayoutRoom(); paintLamp();
+</script>
+</body>
+</html>
