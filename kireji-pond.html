@@ -743,6 +743,8 @@ function applySeason(){
   Object.entries(se.vars).forEach(([k,v])=>scene.style.setProperty(k,v));
   $('#seasonLbl').textContent=`${se.name} · ${se.jp}`;
   const sk=['spring','summer','autumn'][S.round]; $$('.stree').forEach(g=>g.setAttribute('display',g.dataset.season===sk?'inline':'none'));
+  const lf=[['#E6A3A0','#B8707A','#F7E2DA'],['#557438','#36512A','#93AC5C'],['#C2522C','#8C2B20','#E6A444']][S.round]||['#C2522C','#8C2B20','#E6A444'];
+  ['--leafA','--leafB','--leafC'].forEach((k,i)=>scene.style.setProperty(k,lf[i]));
 }
 function scaleNow(){const m=svg.getScreenCTM();return m?m.a:1}
 function gap(){return Math.max(125,(innerWidth<600?96:136)/scaleNow())}
