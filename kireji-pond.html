@@ -882,13 +882,14 @@ function cloudOver(){
 function mouthScreen(){const r=$('#mouthPt').getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+r.height/2}}
 function jaw(open){$('#jaw').setAttribute('opacity',open?1:0)}
 // Tongue and whatever it carries are drawn on the same canvas, from the same tip point, so they always line up.
-function drawTongue(ctx,m,tip){
+function drawTongue(ctx,m,tip,bow,wid){
   const dx=tip.x-m.x, dy=tip.y-m.y, L=Math.hypot(dx,dy); if(L<3) return;
-  const nx=-dy/L, ny=dx/L, bow=Math.min(16,L*.05), cx=m.x+dx*.5+nx*bow, cy=m.y+dy*.5+ny*bow;
+  if(bow==null) bow=Math.min(16,L*.05); wid=wid||1;
+  const nx=-dy/L, ny=dx/L, cx=m.x+dx*.5+nx*bow, cy=m.y+dy*.5+ny*bow, r0=5*wid, r1=3.5*wid;
   ctx.save();ctx.fillStyle='#C8574B';ctx.strokeStyle='#1B1A17';ctx.lineWidth=1.6;ctx.lineJoin='round';
-  ctx.beginPath();ctx.moveTo(m.x+nx*5,m.y+ny*5);ctx.quadraticCurveTo(cx+nx*3.5,cy+ny*3.5,tip.x+nx*3.5,tip.y+ny*3.5);
-  ctx.lineTo(tip.x-nx*3.5,tip.y-ny*3.5);ctx.quadraticCurveTo(cx-nx*3.5,cy-ny*3.5,m.x-nx*5,m.y-ny*5);ctx.closePath();ctx.fill();ctx.stroke();
-  ctx.fillStyle='#D66A5E';ctx.beginPath();ctx.ellipse(tip.x,tip.y,9,8,Math.atan2(dy,dx),0,Math.PI*2);ctx.fill();ctx.stroke();ctx.restore();
+  ctx.beginPath();ctx.moveTo(m.x+nx*r0,m.y+ny*r0);ctx.quadraticCurveTo(cx+nx*r1,cy+ny*r1,tip.x+nx*r1,tip.y+ny*r1);
+  ctx.lineTo(tip.x-nx*r1,tip.y-ny*r1);ctx.quadraticCurveTo(cx-nx*r1,cy-ny*r1,m.x-nx*r0,m.y-ny*r0);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.fillStyle='#D66A5E';ctx.beginPath();ctx.ellipse(tip.x,tip.y,9*wid,8*wid,Math.atan2(dy,dx),0,Math.PI*2);ctx.fill();ctx.stroke();ctx.restore();
 }
 function drawBall(ctx,x,y,s,spin){
   ctx.save();ctx.translate(x,y);ctx.rotate(spin);ctx.scale(s,s);
