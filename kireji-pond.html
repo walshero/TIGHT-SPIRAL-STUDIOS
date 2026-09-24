@@ -243,7 +243,8 @@ body.still #stream{visibility:hidden}
   <feComposite in="ma" in2="ga" operator="arithmetic" k1="1" result="mask"/>
   <feComposite in="SourceGraphic" in2="mask" operator="in" result="inked"/>
   <feComponentTransfer in="SourceGraphic" result="base"><feFuncA type="linear" slope=".58"/></feComponentTransfer>
-  <feMerge><feMergeNode in="base"/><feMergeNode in="inked"/></feMerge>
+  <feColorMatrix in="SourceGraphic" type="matrix" values=".62 0 0 0 0  0 .66 0 0 0  0 0 .6 0 0  0 0 0 1 0" result="paperUnder"/>
+  <feMerge><feMergeNode in="paperUnder"/><feMergeNode in="base"/><feMergeNode in="inked"/></feMerge>
 </filter>
 <filter id="fKey" x="-5%" y="-5%" width="110%" height="110%">
   <feTurbulence type="fractalNoise" baseFrequency="0.0208" numOctaves="2" seed="3" result="n"/>
