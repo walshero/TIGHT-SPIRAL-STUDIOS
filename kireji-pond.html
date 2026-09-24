@@ -1159,29 +1159,54 @@ function flySequence(){
       });
       ctx.restore();
     }
-    function fly(x,y,s,flap,a){
-      ctx.save();ctx.globalAlpha=a;ctx.translate(x,y);ctx.scale(s,s);
-      const w=.5+.5*Math.abs(Math.sin(flap));
-      ctx.fillStyle='rgba(214,228,236,.8)';ctx.strokeStyle=SUMI;ctx.lineWidth=1.6/s;
-      [[4,-10,-.5],[10,-8,.25]].forEach(([wx,wy,r])=>{ctx.save();ctx.translate(wx,wy);ctx.rotate(r);ctx.scale(1,w);ctx.beginPath();ctx.ellipse(0,-8,8,16,0,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.restore()});
-      ctx.beginPath();for(let i=-1;i<=1;i++){ctx.moveTo(i*6,4);ctx.lineTo(i*8-3,13)}ctx.stroke();
+    // The fly leads with its head. It comes over for a look, does a double take, and flees
+    // into the distance, getting smaller. The frog winds up; the tongue whips out, tracks it,
+    // and takes it from behind.
+    function fly(x,y,s,t,face,tilt,flapOn){
+      ctx.save();ctx.translate(x,y);ctx.rotate(tilt);ctx.scale(s*face,s);
+      const ph=t*.11;
+      ctx.strokeStyle=SUMI;ctx.lineWidth=1.4/s;
+      (flapOn?[0,1,2]:[0]).forEach(i=>{ // three wing positions at once read as a beating blur
+        const w=flapOn?.22+.78*Math.abs(Math.sin(ph+i*.95)):.5;
+        ctx.globalAlpha=flapOn?(i?.3:.9):.95;ctx.fillStyle='rgba(214,228,236,.9)';
+        [[4,-9,-.55],[10,-7,.2]].forEach(([wx,wy,rr])=>{ctx.save();ctx.translate(wx,wy);ctx.rotate(rr);ctx.scale(1,w);
+          ctx.beginPath();ctx.ellipse(0,-8,7.5,15,0,0,Math.PI*2);ctx.fill();if(!i)ctx.stroke();ctx.restore()});
+      });
+      ctx.globalAlpha=1;ctx.lineWidth=1.6/s;
+      ctx.beginPath();for(let i=-1;i<=1;i++){ctx.moveTo(i*6,4);ctx.lineTo(i*8-3,flapOn?12:14)}ctx.stroke();
       ctx.fillStyle=SUMI;ctx.beginPath();ctx.ellipse(6,0,15,7,0,0,Math.PI*2);ctx.fill();
-      ctx.beginPath();ctx.arc(-12,-1,7,0,Math.PI*2);ctx.fill();
-      ctx.fillStyle=BENI;ctx.beginPath();ctx.arc(-14,-3,3,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle='#F5EEDB';ctx.lineWidth=1.3/s;ctx.beginPath(); // bands on the abdomen, cut out of the block
+      ctx.moveTo(10,-6);ctx.quadraticCurveTo(12.5,0,10,6);ctx.moveTo(15.5,-5);ctx.quadraticCurveTo(18,0,15.5,5);ctx.stroke();
+      ctx.fillStyle=SUMI;ctx.beginPath();ctx.arc(-12,-1,7,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=BENI;ctx.beginPath();ctx.arc(-14,-3,3.2,0,Math.PI*2);ctx.fill();
       ctx.restore();
     }
-    const m0=mouthScreen();
-    const perch={x:m0.x-150*reach,y:m0.y-95*reach};
-    function flyAt(t){
-      if(t<T.D){const k=ease((t-T.C)/(T.D-T.C)),c={x:(G.x+perch.x)/2,y:Math.min(G.y,perch.y)-80*reach};
-        const x=(1-k)*(1-k)*G.x+2*(1-k)*k*c.x+k*k*perch.x, y=(1-k)*(1-k)*G.y+2*(1-k)*k*c.y+k*k*perch.y;
-        return{x:x+Math.sin(k*20)*9*(1-k),y:y+Math.cos(k*15)*7*(1-k)}}
-      return{x:perch.x+Math.sin(t/55)*4,y:perch.y+Math.cos(t/70)*3};
+    const sz=Math.max(.5,reach), Wd=sr.width, Ht=sr.height;
+    const HOV={x:sr.left+Wd*.55,y:sr.top+Ht*.46}, FAR={x:sr.left+Wd*.27,y:sr.top+Ht*.2};
+    const C1={x:(G.x+HOV.x)/2,y:Math.min(G.y,HOV.y)-70*sz}, C2={x:HOV.x-Wd*.04,y:HOV.y-Ht*.27};
+    const bez=(a,c,b,k)=>({x:(1-k)*(1-k)*a.x+2*(1-k)*k*c.x+k*k*b.x,y:(1-k)*(1-k)*a.y+2*(1-k)*k*c.y+k*k*b.y});
+    const buzz=(t,a)=>({x:a*(Math.sin(t/61)+.6*Math.sin(t/23+1.3)+.25*Math.sin(t/9.7)),
+                        y:a*.8*(Math.cos(t/53)+.5*Math.sin(t/19+.4)+.25*Math.cos(t/8.3))});
+    function flyState(t){
+      if(t<T.D){ // over to the frog for a look, head first
+        const k=ease(Math.min(1,Math.max(0,(t-T.C)/(T.D-T.C)))),p=bez(G,C1,HOV,k),w=buzz(t,8*sz*(1-k*.4));
+        return{x:p.x+w.x,y:p.y+w.y,s:lerp(2.1,1.8,k)*sz,face:-1};
+      }
+      if(t<T.D3){ // hovers, sees the frog, jumps, turns
+        const w=buzz(t,4.5*sz); let hop=0, face=-1;
+        if(t>T.D2){const k=(t-T.D2)/(T.D3-T.D2);hop=-16*sz*Math.sin(Math.PI*k);face=-Math.cos(Math.PI*k);if(Math.abs(face)<.14)face=face<0?-.14:.14}
+        return{x:HOV.x+w.x,y:HOV.y+w.y+hop,s:1.8*sz,face};
+      }
+      const u=Math.max(0,(t-T.D3)/1150), k=Math.min(1,u*u*.62+u*.38); // flees, speeding up
+      const p=bez(HOV,C2,FAR,k), w=buzz(t,6*sz*(1-k*.6));
+      return{x:p.x+w.x,y:p.y+w.y,s:lerp(1.8,.8,k)*sz,face:1};
     }
-    let starts=null, hit=null, gulped=false, last=performance.now(); const t0=last;
+    const setFrog=(rot,sx,sy)=>{FROG.rot=rot;FROG.sx=sx;FROG.sy=sy;drawFrog()};
+    let starts=null, gulped=false, tiltS=0, cp=null, cs=null, trail=[], last=performance.now(); const t0=last;
     function tick(now){
       const t=now-t0, dt=Math.min(.04,(now-last)/1000); last=now;
       clearFx(ctx);
+      if(reduce){jaw(false);gulp();setTimeout(()=>{clearFx(ctx);res()},450);return}
       if(t<T.A){ // wriggle and inch across the scene
         words.forEach(w=>{
           const push=Math.max(0,Math.sin(t/1000*9+w.ph));
@@ -1198,22 +1223,44 @@ function flySequence(){
       } else if(t<T.C){ // knot into a fly
         const k=(t-T.B)/(T.C-T.B);
         words.forEach(w=>drawWord(w,t,.4*(1-k),1-k));
-        fly(G.x,G.y,2.2*ease(k),t/25,1);
-      } else if(t<T.E){ // buzz to the frog
-        const f=flyAt(t); fly(f.x,f.y,lerp(2.2,1.5,Math.min(1,(t-T.C)/(T.D-T.C))),t/22,1);
-        if(t>T.D) jaw(true);
-      } else if(t<T.H){ // strike: out to the fly, back with it
-        jaw(true);
-        const m=mouthScreen();
-        if(t<T.F){const f=flyAt(t),k=easeO((t-T.E)/(T.F-T.E));
-          const tip={x:lerp(m.x,f.x,k),y:lerp(m.y,f.y,k)};
-          fly(f.x,f.y,1.5,t/22,1); drawTongue(ctx,m,tip); hit=f;
-        } else {const k=1-easeI((t-T.F)/(T.H-T.F));
-          const tip={x:lerp(m.x,hit.x,k),y:lerp(m.y,hit.y,k)};
-          drawTongue(ctx,m,tip); fly(tip.x,tip.y,1.5*Math.max(.4,k),t/22,1);
+        fly(G.x,G.y,2.1*sz*ease(k),t,-1,0,true);
+      } else if(t<T.F){ // the look, the double take, the escape, the strike
+        const f=flyState(t), f2=flyState(t-40);
+        const vx=f.x-f2.x, vy=f.y-f2.y, sp=Math.hypot(vx,vy);
+        const aim=Math.max(-.5,Math.min(.5,-Math.sign(f.face)*Math.atan2(vy,Math.abs(vx)+.001)))*Math.min(1,sp/6);
+        tiltS+=(aim-tiltS)*.25;
+        if(t>T.D2&&t<T.E){const k=ease((t-T.D2)/(T.E-T.D2));setFrog(-5*k,1+.04*k,1-.07*k)} // winds up
+        if(t>T.D3){trail.push({x:f.x,y:f.y});if(trail.length>18)trail.shift()}
+        ctx.fillStyle=SUMI;trail.forEach((p,i)=>{if(i%2)return;ctx.globalAlpha=.1+.4*i/trail.length;ctx.beginPath();ctx.arc(p.x,p.y,(1+1.4*i/trail.length)*sz,0,Math.PI*2);ctx.fill()});
+        ctx.globalAlpha=1;
+        if(t>T.E-70) jaw(true);
+        if(t>=T.E){ // the tongue: always aimed at the fly, always a little behind it, until it isn't
+          const k=(t-T.E)/(T.F-T.E), g=1-(1-k)*(1-k), m=mouthScreen();
+          const tip={x:m.x+(f.x-m.x)*g,y:m.y+(f.y-m.y)*g}, L=Math.hypot(f.x-m.x,f.y-m.y);
+          setFrog(lerp(-5,9,easeO(k)),lerp(1.04,1,k),lerp(.93,1.03,k));
+          drawTongue(ctx,m,tip,L*.16*(1-k),sz*1.15);
         }
-      } else if(!gulped){gulped=true;jaw(false);gulp()}
-      if(t<T.Z) requestAnimationFrame(tick); else {clearFx(ctx);jaw(false);res()}
+        fly(f.x,f.y,f.s,t,f.face,tiltS,true);
+      } else if(t<T.F2){ // contact: the hit holds for a beat
+        if(!cp){const f=flyState(T.F);cp={x:f.x,y:f.y};cs=f.s}
+        const k=(t-T.F)/(T.F2-T.F), m=mouthScreen();
+        drawTongue(ctx,m,cp,0,sz*1.15*(1+.25*Math.sin(Math.PI*k)));
+        ctx.save();ctx.strokeStyle=SUMI;ctx.lineWidth=2*sz;ctx.lineCap='round';ctx.globalAlpha=1-k*.6;
+        for(let i=0;i<9;i++){const a=i/9*Math.PI*2+.3,r0=(14+6*k)*sz,r1=(22+14*k)*sz;
+          ctx.beginPath();ctx.moveTo(cp.x+Math.cos(a)*r0,cp.y+Math.sin(a)*r0);ctx.lineTo(cp.x+Math.cos(a)*r1,cp.y+Math.sin(a)*r1);ctx.stroke()}
+        ctx.restore();
+        fly(cp.x,cp.y,cs*1.08,t,1,tiltS,false);
+      } else if(t<T.H){ // reel it in: the fly tumbles and grows as it comes toward us
+        const k=(t-T.F2)/(T.H-T.F2), e=k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2, m=mouthScreen();
+        const tip={x:lerp(cp.x,m.x,e),y:lerp(cp.y,m.y,e)}, L=Math.hypot(tip.x-m.x,tip.y-m.y);
+        setFrog(lerp(9,3,e),1,lerp(1.03,1,e));
+        drawTongue(ctx,m,tip,-L*.08*Math.sin(Math.PI*e),sz*1.15);
+        fly(tip.x,tip.y,lerp(cs,1.3*sz,e),t,1,tiltS+e*5.5,false);
+      } else {
+        if(!gulped){gulped=true;jaw(false);gulp()}
+        const k=Math.min(1,(t-T.H)/(T.Z-T.H)); setFrog(3*(1-easeO(k)),1,1);
+      }
+      if(t<T.Z) requestAnimationFrame(tick); else {clearFx(ctx);jaw(false);setFrog(0,1,1);res()}
     }
     requestAnimationFrame(tick);
   });
