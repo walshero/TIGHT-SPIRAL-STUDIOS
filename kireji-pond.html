@@ -1750,6 +1750,7 @@ const Snd=(()=>{
     fall.gain.setTargetAtTime(.1,ac.currentTime,1.5);
     amb=ac.createGain(); amb.gain.value=1; amb.connect(master);
     timer=setInterval(tick,400);
+    ac.onstatechange=()=>{if(typeof api.onchange==='function') api.onchange()};
     return ac;
   }
   const now=()=>ac.currentTime;
