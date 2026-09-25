@@ -1769,9 +1769,14 @@ const Snd=(()=>{
       whistle(b+.13,[[0,2750*k],[.1,2350*k]],.065,d,.1);
       whistle(b+.27,[[0,1900*k],[.12,2600*k],[.3,3100*k],[.36,2900*k]],.07,d,.1);
     },
-    mejiro(){ // white-eyes: a quick, bright twitter
-      const t=now()+.05, d=panTo(), n=6+Math.floor(rnd(0,6));
-      for(let i=0;i<n;i++){const f=rnd(4200,6200); whistle(t+i*rnd(.06,.09),[[0,f],[.045,f*.8]],.045,d)}
+    suzumushi(){ // bell cricket: a run of clear, trembling riiin
+      const t=now()+.05, d=panTo(), n=3+Math.floor(rnd(0,4)), f0=rnd(4100,4500);
+      for(let i=0;i<n;i++){const b=t+i*rnd(.45,.6), dur=rnd(.28,.4);
+        const o=ac.createOscillator(); o.type='sine'; o.frequency.value=f0*rnd(.99,1.01);
+        const am=ac.createGain(); am.gain.value=.5; const lfo=ac.createOscillator(); lfo.type='square'; lfo.frequency.value=rnd(38,48);
+        const lg=ac.createGain(); lg.gain.value=.5; lfo.connect(lg).connect(am.gain);
+        const g=ac.createGain(); g.gain.setValueAtTime(0,b); g.gain.linearRampToValueAtTime(.06,b+.03); g.gain.setValueAtTime(.06,b+dur*.7); g.gain.linearRampToValueAtTime(0,b+dur);
+        o.connect(am).connect(g).connect(d); o.start(b); lfo.start(b); o.stop(b+dur+.02); lfo.stop(b+dur+.02)}
     },
     abura(){ // aburazemi: frying-oil sizzle that swells and fades
       const t=now()+.05, d=panTo(), dur=rnd(6,9);
