@@ -1808,10 +1808,10 @@ const Snd=(()=>{
         if(last){f.frequency.setValueAtTime(base*1.9,b+dur*.45); f.frequency.exponentialRampToValueAtTime(600,b+dur)} // the mmm: the sound closes
         const am=ac.createGain(); am.gain.value=.6; const lfo=ac.createOscillator(); lfo.frequency.value=rnd(60,80);
         const lg=ac.createGain(); lg.gain.value=.4; lfo.connect(lg).connect(am.gain);
-        const g=ac.createGain(); g.gain.setValueAtTime(0,b); g.gain.linearRampToValueAtTime(.12,b+.05); g.gain.setValueAtTime(.12,b+dur*(last?.5:.6)); g.gain.linearRampToValueAtTime(0,b+dur);
+        const g=ac.createGain(); g.gain.setValueAtTime(0,b); g.gain.linearRampToValueAtTime(.12,b+.05*k); g.gain.setValueAtTime(.12,b+dur*(last?.5:.6)); g.gain.linearRampToValueAtTime(0,b+dur);
         o.connect(f).connect(am).connect(g).connect(d); o.start(b); lfo.start(b); o.stop(b+dur+.05); lfo.stop(b+dur+.05);
       };
-      note(t,.34); note(t+.46,.34); note(t+.92,.34); note(t+1.4,1.9,true);
+      note(t,.34*k); note(t+.46*k,.34*k); note(t+.92*k,.34*k); note(t+1.4*k,1.9*k,true);
     },
     higurashi(){ // the evening cicada: kana-kana-kana, falling and fading
       const t=now()+.05, d=panTo(), n=16, f0=rnd(4300,4700);
