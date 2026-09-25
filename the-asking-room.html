@@ -2,7 +2,7 @@
 <html lang="en">
 <!--
   THE ASKING ROOM (working title, founder rules the name: D1). Tight Spiral Studios, EN195.
-  Workup v0.2, 2026-09-24 (round table in daylight, founder note: the lamp read as interrogation). One playable turn plus the animation language for the whole game.
+  Workup v0.4, 2026-09-25 (three drafts: Presto, Daiko, Dead Ants). v0.3 (struck cards keep a Claim line and the Advocate's note for the whole draft). v0.2, 2026-09-24 (round table in daylight, founder note: the lamp read as interrogation). One playable turn plus the animation language for the whole game.
   Spec: claude/SPEC-ASKING-ROOM-2026-09-24.md. Findings: convening/ASKING-ROOM-CONVENING.md.
 
   WHAT THE PLAYER DOES: sits in a fiction workshop as an Asker. Reads a peer draft. Plays a
@@ -177,6 +177,11 @@ h1 .sub{ display:block; font-size:20px; font-style:italic; font-weight:normal; c
 .ev.marked{ background-size:100% 2px; }
 .ev.marked::after{ content:" [noticed]"; font-family:var(--label); font-size:18px; font-weight:bold; color:var(--rust); }
 
+.drafts{ display:flex; flex-wrap:wrap; gap:8px; margin:0 0 14px; }
+.dtab{ min-height:var(--tap); padding:8px 14px; border:2px solid var(--ink); border-radius:10px; background:var(--card);
+  color:var(--ink); font-family:var(--label); font-weight:bold; font-size:18px; cursor:pointer; }
+.dtab[aria-pressed="true"]{ background:var(--chip); text-decoration:underline; text-decoration-thickness:3px; text-underline-offset:5px; }
+.endbtns{ margin-top:16px; display:flex; flex-wrap:wrap; gap:10px; }
 /* the hand */
 .hand{ display:flex; flex-direction:column; gap:12px; }
 .phase{ font-family:var(--label); font-size:18px; font-weight:bold; margin:0; }
@@ -185,7 +190,8 @@ h1 .sub{ display:block; font-size:20px; font-style:italic; font-weight:normal; c
 .cards{ display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:12px; }
 .card{ position:relative; text-align:left; background:var(--card); color:var(--ink); border:2px solid var(--ink);
   border-radius:10px; padding:12px 14px 14px; min-height:96px; cursor:pointer; font:inherit;
-  box-shadow:2px 3px 0 rgba(40,30,15,.20); transition:transform .15s ease, box-shadow .15s ease; }
+  box-shadow:2px 3px 0 rgba(40,30,15,.20); transition:transform .15s ease, box-shadow .15s ease;
+  display:flex; flex-direction:column; justify-content:flex-start; }
 .card:hover{ transform:translateY(-3px) rotate(-.4deg); box-shadow:3px 6px 0 rgba(40,30,15,.22); }
 .card .deck{ display:block; font-family:var(--label); font-size:18px; font-weight:bold; color:var(--ink2); }
 .card.tag{ border-style:dashed; }
@@ -196,6 +202,10 @@ h1 .sub{ display:block; font-size:20px; font-style:italic; font-weight:normal; c
 .card.struck .nm, .card.struck .said{ text-decoration:line-through; text-decoration-thickness:2px; }
 .card .stamp{ display:none; margin-top:8px; font-family:var(--label); font-size:18px; font-weight:bold; color:var(--rust); }
 .card.struck .stamp, .card.done .stamp{ display:block; }
+.card .why{ display:none; margin-top:4px; font-size:19px; line-height:1.5; color:var(--ink); }
+.card .why b{ font-family:var(--label); font-size:18px; }
+.card.struck .why, .card.done .why{ display:block; }
+.card .ts b{ font-family:var(--label); font-size:18px; color:var(--ink); }
 .card.lift{ visibility:hidden; }
 .flyer{ position:fixed; z-index:50; pointer-events:none; background:var(--card); border:2px solid var(--ink);
   border-radius:10px; box-shadow:4px 8px 0 rgba(40,30,15,.25); transition:transform .55s cubic-bezier(.4,.1,.3,1), opacity .55s ease; }
@@ -230,7 +240,7 @@ details.about p{ margin:8px 0 12px; }
 <div id="backdrop" aria-hidden="true"></div>
 
 <header class="se-chrome">
-  <a class="se-home" href="../index.html" aria-label="The studio">Studio</a><a class="se-home" href="../arcade.html" aria-label="The cabinet">Cabinet</a>
+  <a class="se-home" href="index.html" aria-label="The studio">Studio</a><a class="se-home" href="arcade.html" aria-label="The cabinet">Cabinet</a>
   <span class="se-brand">
     <svg class="mk" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><defs><path id="tss-spiral" d="M26.2 24.0 L26.3 24.5 L26.4 25.1 L26.2 25.7 L25.9 26.3 L25.5 26.8 L24.9 27.3 L24.2 27.6 L23.4 27.7 L22.5 27.7 L21.7 27.5 L20.8 27.0 L20.1 26.4 L19.5 25.6 L19.1 24.6 L18.8 23.5 L18.9 22.3 L19.2 21.2 L19.8 20.1 L20.6 19.1 L21.6 18.3 L22.9 17.7 L24.3 17.4 L25.7 17.4 L27.2 17.8 L28.5 18.5 L29.8 19.4 L30.8 20.7 L31.5 22.2 L32.0 23.8 L32.0 25.6 L31.7 27.4 L30.9 29.0 L29.8 30.5 L28.4 31.8 L26.7 32.8 L24.7 33.3 L22.7 33.5 L20.6 33.1 L18.6 32.4 L16.8 31.2 L15.3 29.6 L14.1 27.7 L13.4 25.5 L13.1 23.1 L13.3 20.8 L14.1 18.5 L15.4 16.3 L17.1 14.5 L19.2 13.1 L21.6 12.1 L24.2 11.7 L26.9 11.8 L29.6 12.5 L32.0 13.8 L34.1 15.7 L35.9 17.9 L37.1 20.6 L37.7 23.5 L37.7 26.4 L37.0 29.4 L35.7 32.2 L33.9 34.7 L31.4 36.7 L28.6 38.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></defs><rect x="1.5" y="1.5" width="45" height="45" rx="11" fill="#B4511A"/><use href="#tss-spiral" stroke="#0F5F5A" stroke-width="4.6" transform="translate(1.6,1.6)"/><use href="#tss-spiral" stroke="#FAF6EE" stroke-width="3.4"/></svg>
     <span class="wm">Tight Spiral</span>
@@ -242,7 +252,7 @@ details.about p{ margin:8px 0 12px; }
 
 <main class="wrap">
   <p class="production">A Tight Spiral Studios production for EN195</p>
-  <h1>The Asking Room<span class="sub">a fiction workshop game, workup of turn one</span></h1>
+  <h1>The Asking Room<span class="sub">a fiction workshop game, workup with three drafts</span></h1>
 
   <div class="room" id="room">
     <div class="stage">
@@ -416,6 +426,14 @@ details.about p{ margin:8px 0 12px; }
     </div>
 
     <article class="ms" id="ms" aria-label="The draft on the table">
+      <div class="drafts" role="group" aria-label="Drafts on the table">
+        <button type="button" class="dtab" data-d="0" aria-pressed="true">1. Presto</button>
+        <button type="button" class="dtab" data-d="1" aria-pressed="false">2. Daiko</button>
+        <button type="button" class="dtab" data-d="2" aria-pressed="false">3. Dead Ants</button>
+      </div>
+      <div id="msBody"></div>
+    </article>
+    <template id="ms0">
       <p class="mhead"><span>Presto, workshop draft</span><span>pages 1 and 2</span></p>
       <p>The first time Presto surprised me was with the coconut jelly beans. I was watching the TV wall, not paying much attention to my Rover, and when I reached for the remote my fingers tumbled over a bowlful of coconut jelly beans that I chewed absentmindedly. <span class="ev" id="ev-beans">Suddenly I was back in my late twenties, hiking the Appalachians with Shelly, having lost three days to rain and running low on everything, when just above the tree line she produced a small bag of coconut jelly beans she'd forgotten about, and the rain stopped, and I thought about getting down on one knee right there.</span></p>
       <p>Maybe Shelly had scanned a photo, or Presto had crawled over an old blog post or something, but there they were, coconut jelly beans, out of the blue.</p>
@@ -423,7 +441,28 @@ details.about p{ margin:8px 0 12px; }
       <p>The second time Presto surprised me was when it set up a lunch date with my brother. I thought I was going for tacos with Wen, my basketball buddy from the lab, but instead I looked across the table at Eddie, my big brother, working on his second margarita. I almost left, right then, but Eddie grabbed me by the arm.</p>
       <p>"Wait," he said. "I got your Wavenotes from Presto." His hand still clung to my arm. "I never knew," he said, and I pulled free. "I mean, maybe I did, but I'm sorry. I'm not that guy anymore." Eddie has three kids in Santa Cruz now. His wife has cancer. He's a history teacher, for chrissake.</p>
       <p><span class="ev" id="ev-static">When he said sorry, I felt completely happy, like nothing bad had ever happened between us.</span> I hadn't realized about the new Wavenotes features, but I suppose I was glad in the end. I never would've reached out to Eddie.</p>
-    </article>
+    </template>
+    <template id="ms1">
+      <p class="mhead"><span>Daiko, chapter one, workshop draft</span><span>pages 3 and 4</span></p>
+      <p>I'd met Hayashi the day before when he hit me with his Mercedes. I'd been out all morning, enjoying an escape from the Nova offices in the city, where I taught English to bored housewives and timid businessmen.</p>
+      <p>I rode my bicycle out beyond the rice fields that surrounded my apartment, taking a Saturday off when all the Japanese in the office were working, because I was a foreigner, a <i>gaijin</i>, and because I could: it was in my contract. I pedaled through vineyards and persimmon orchards, past mountain yam vendors and women carrying baskets of daikon root. By midday the humidity had exhausted me. I turned around and coasted back toward town, past the train station and the ramen shop, the red lantern bars and the fish market.</p>
+      <p>That's when I saw her, stepping out from one of the shops with a small bag in her hand, her lemon hair drawn back behind her head, the first white woman I'd seen in Sasakami. She stopped to look at me as I coasted past. <i>This must be the Russian.</i></p>
+      <p><span class="ev" id="ev-crash">Then a car hit me and I fell off my bike. The driver got out and helped me up. It was scary, but I was okay.</span></p>
+      <p>"I am Hayashi," he said. He lowered his eyes to the ground between us and bowed slowly, deeply, holding there with his arms stiff at his sides. "Please forgive me. Please, I am so sorry."</p>
+      <p>A day had passed and now he was back. In the narrow street outside my apartment, Hayashi stood next to his black Mercedes, holding a bicycle by the seat. Even on a Sunday he wore a dark blue business suit.</p>
+      <p>"Your bicycle was unrepairable," Hayashi said. "Please accept this replacement with my apologies." He bowed again, and I felt awful.</p>
+      <p><span class="ev" id="ev-stolen">I had taken the bicycle from the train station after a night of drinking in the city. It had been raining, and there hadn't been any taxis, and there had just been so many bicycles. At first I meant to bring it back, but then a month had passed, and every day it felt more and more like my own bicycle.</span></p>
+    </template>
+    <template id="ms2">
+      <p class="mhead"><span>Dead Ants, workshop draft</span><span>pages 2 and 3</span></p>
+      <p>The second trip was different. What possessed us to do the things we did? We went to Ellie and Billy's old house up the road, the one they had rented. We took the mail out of the mailbox and wrote on it, "You're dead meat, Ed," and put it back in the box. The door had been unlocked. I remember pouring myself a glass of orange juice from the fridge and leaving the glass on the table.</p>
+      <p>After we let ourselves out of the stranger's house, we wandered into the backwoods, past the trail and beyond the cabin. We found an abandoned school bus that must've been someone's home, once. We went through everything, photographs of strangers in their special moments. Heaps of clothes and trinkets. As we left, we broke a bottle of champagne across the headlights.</p>
+      <p>"We christened it," you later told my uncle. Why'd you tell him, I said with my face.</p>
+      <p>Which brings us to the ants.</p>
+      <p>We slept in sleeping bags on the plywood floor of the attic turret, an octagon with windows, the tops of trees, and moonlight. <span class="ev" id="ev-attic">The turret had been framed in 1979 with pine boards my uncle bought from a lumberyard in Charlemont, and the windows were double-hung, the kind that stick in summer, with brass latches my aunt found at a flea market in Brattleboro.</span> We did that thing with my aunt and uncle's liquor cabinet, drained off the vodka and the rum and topped the bottles up with water. Not enough to get crazy drunk, like we did at home in the Arboretum, but enough to catch a good buzz.</p>
+      <p>There were ants in the attic, I remember. It was like an invasion, and we squished and smeared and annihilated dozens after dozens after dozens. And then you started talking about regret, all drunk philosophical, for the times you never told a girl that you liked her, for the times you didn't stand up to an authority figure in the wrong. And for killing all those ants. The sanctity of all life, or something like that, and I remember that you were genuinely sad. You made a promise to never kill another creature ever, big or small.</p>
+      <p><span class="ev" id="ev-sidewalk">Then we were standing by the payphones across from Sparr's, waiting for the 39, the same place where I'd stood with the football team after practice when we found out that Magic Johnson had contracted AIDS, and I saw you. An ant on the sidewalk, and you stepped without thinking, slid your sneaker across the pavement and smeared it from existence, and then you looked at me to see if I had seen.</span></p>
+    </template>
 
     <section class="hand" id="hand" aria-label="Your hand">
       <h2 class="phase" id="phase" tabindex="-1"><span class="n" id="phaseN">Call 1 of 3</span><span class="q" id="phaseQ">Read the draft. Then play what you notice.</span></h2>
@@ -435,15 +474,15 @@ details.about p{ margin:8px 0 12px; }
     <summary>About this room, its rules, and the draft</summary>
     <p>You sit in a fiction workshop as an Asker. The writer, the Asked, sits at a round table with the class. The Advocate sits beside her and rules on every card you play. If a card misses, the Advocate asks you to reframe once. If it misses again, she calls on someone else. After a good question, she holds the silence so the Asked can think. The Recorder writes down every question and none of the answers, and the Asked takes that page home.</p>
     <p>The roles and rules come from Jesse Ball, "The Asking," in <i>Notes on My Dunce Cap</i>. The ways of speaking come from Pat Schneider and the Amherst Writers &amp; Artists method: say what is strong, say what stays with you, and speak of the narrator, never the writer. The cards come from Matt Walsh's handout "Mapping the Storyscape with Writerly Moves" and its Observation Tags, and every test line on a card is his.</p>
-    <p>The draft adapts the opening of "Presto," a story by Matt Walsh, roughed down to read like a workshop draft. The studio planted one flaw in it for practice. Art: original cut paper, CC0, Tight Spiral Paper Craft.</p>
+    <p>The three drafts adapt stories by Matt Walsh: the opening of "Presto"; a passage from chapter one of <i>Daiko</i>, his novel set in Sasakami Village; and "Dead Ants," from <i>Secret Worlds</i>, his stories written to his friend Dan. Each is roughed down to read like a workshop draft, and the studio planted one flaw in each for practice. Art: original cut paper, CC0, Tight Spiral Paper Craft.</p>
   </details>
 </main>
 
 <nav class="se-rail" aria-label="Page navigation">
-  <a href="../arcade.html" aria-label="Back to the arcade">Back</a>
-  <a href="../index.html" aria-label="Home">Home</a>
+  <a href="arcade.html" aria-label="Back to the arcade">Back</a>
+  <a href="index.html" aria-label="Home">Home</a>
 </nav>
-<p class="foot">Tight Spiral Studios. Play. Notice. Design. Workup v0.2, 2026-09-24.</p>
+<p class="foot">Tight Spiral Studios. Play. Notice. Design. Workup v0.4, 2026-09-25.</p>
 
 <script>
 (function(){
@@ -511,7 +550,107 @@ details.about p{ margin:8px 0 12px; }
     ]
   };
 
-  var S={ call:1, phase:'notice', tries:0, asked:{}, notice:null, record:[], busy:false };
+  var NOTICE1=[
+    {id:'turn', name:'Turn / Shift', deck:'Writerly Move', tag:false,
+     test:'If you cut this moment, would the story basically stay the same?', kind:'hit', ev:'ev-stolen',
+     rule:'Yes. He is accepting an apology for a bicycle he stole. Now say it so it helps her.'},
+    {id:'fast', name:'Driving Too Fast', deck:'Observation Tag', tag:true,
+     test:'An important moment feels rushed or skimmed over.', kind:'hit', ev:'ev-crash',
+     rule:'Yes. The car that nearly kills him gets three plain sentences. Now say it so it helps her.'},
+    {id:'anchor', name:'Anchor in Reality', deck:'Writerly Move', tag:false,
+     test:'Could the reader draw the room / street / bus stop from this?', kind:'trivial',
+     rule:'It’s there. The orchards and the fish market ground us. Is grounding the job this draft is doing, though? Please look again.'},
+    {id:'coin', name:'Convenient Coincidence', deck:'Observation Tag', tag:true,
+     test:'This turn of events may feel too lucky or tidy to be earned.', kind:'bait',
+     rule:'Hayashi comes back because he hit him. That is cause and effect, not luck. Please look again.'},
+    {id:'dump', name:'Noticeable Info Dump', deck:'Observation Tag', tag:true,
+     test:'A block of info is slowing the story’s momentum.', kind:'bait',
+     rule:'Two sentences about his job tell you he is a foreigner with a Saturday off. They work for the scene. Please look again.'},
+    {id:'rules', name:'Shaky World Rules', deck:'Observation Tag', tag:true,
+     test:'I feel like this breaks a rule the story already set up.', kind:'false',
+     rule:'Nothing in this world bends. Bicycles, cars, and apologies all behave the way they should. Please look again.'}
+  ];
+  var FEED1={
+    turn:[
+      {t:'When Hayashi bows and apologizes for the bicycle, does your narrator ever think about telling him where it came from?', good:true,
+       ans:['He thinks about it every day. He never says it.','I think that might be the whole book, actually.']},
+      {t:'The ride past the persimmon orchards felt general to me, but the stolen bicycle made me sit up. He feels guilty in the one place he can’t say so.', good:true,
+       ans:['I buried that at the bottom. Maybe it belongs higher.']},
+      {t:'This part was really powerful.', good:false,
+       why:'That isn’t a question, and it doesn’t show her what you saw. Please reframe.'},
+      {t:'Did you really steal a bike in Japan?', good:false,
+       why:'We speak about the narrator here, never the writer. Please reframe.'},
+      {t:'Wouldn’t it be better if he confessed right away?', good:false,
+       why:'That is a suggestion wearing a question mark. Please reframe.'}
+    ],
+    fast:[
+      {t:'The crash gets three short sentences. What was your narrator looking at in the second before the car hit him?', good:true,
+       ans:['The woman. He was looking at the woman.','Oh. I left her out of the crash.']},
+      {t:'I could see the lemon hair and the fish market, but I lost the crash. It happened faster than I could picture it.', good:true,
+       ans:['The fast part happens too fast. I heard that.']},
+      {t:'Add a paragraph where the bumper rolls over the tire and he looks up at the engine.', good:false,
+       why:'That writes her story for her. Tell her what you noticed instead. Please reframe.'},
+      {t:'The accident scene is weak.', good:false,
+       why:'That is a verdict. Please reframe it as a question.'},
+      {t:'Don’t you think a car crash deserves more than that?', good:false,
+       why:'That is an opinion wearing a question mark. Please reframe.'}
+    ]
+  };
+  var NOTICE2=[
+    {id:'pattern', name:'Notable Pattern', deck:'Writerly Move', tag:false,
+     test:'Does it echo through the piece in a way that feels important?', kind:'hit', ev:'ev-sidewalk',
+     rule:'Yes. The ants come back on the sidewalk, and the promise breaks under a sneaker. Now say it so it helps her.'},
+    {id:'suitcase', name:'Overpacked Suitcase', deck:'Observation Tag', tag:true,
+     test:'This might be an extra detail that isn’t earning its keep.', kind:'hit', ev:'ev-attic',
+     rule:'Yes. Lumber from Charlemont and brass latches from Brattleboro. The attic stops to give a tour. Now say it so it helps her.'},
+    {id:'snap', name:'Backstory Snap', deck:'Writerly Move', tag:false,
+     test:'Is this flashback short and clearly attached to what’s happening now?', kind:'trivial',
+     rule:'It’s there. The football team and the news about Magic Johnson make a quick snap, and it stays attached. Is it the job this draft is doing, though? Please look again.'},
+    {id:'camera', name:'Floating Camera', deck:'Observation Tag', tag:true,
+     test:'I feel lost about where we are or whose eyes I’m in.', kind:'bait',
+     rule:'The jump from the attic to the bus stop is a cut, not a wobble. You know where you are the moment you land, and whose eyes you are in. Please look again.'},
+    {id:'static', name:'Emotional Static', deck:'Observation Tag', tag:true,
+     test:'The feelings here don’t appear to match what’s happening and what we know about the characters.', kind:'bait',
+     rule:'A drunk kid grieving ants is the point. The draft tells you he is drunk and philosophical first, so the sadness fits the moment. Please look again.'},
+    {id:'coin', name:'Convenient Coincidence', deck:'Observation Tag', tag:true,
+     test:'This turn of events may feel too lucky or tidy to be earned.', kind:'false',
+     rule:'Nothing arrives by luck here. The boys cause every bit of trouble themselves. Please look again.'}
+  ];
+  var FEED2={
+    pattern:[
+      {t:'When you wrote the ant on the sidewalk, did you know the promise would break before you got there?', good:true,
+       ans:['No. I wrote the attic first, and the sidewalk showed up a week later.','Now I think the whole piece was walking toward it.']},
+      {t:'The attic felt general to me until the ants, and then the ant on the sidewalk hit me, because he looks to see if the narrator saw.', good:true,
+       ans:['The look. I almost cut the look.']},
+      {t:'I love stories about friendship.', good:false,
+       why:'That isn’t a question, and it doesn’t show her what you saw. Please reframe.'},
+      {t:'Is the “you” a real friend of yours? Did he ever read this?', good:false,
+       why:'We speak about the narrator here, never the writer. Please reframe.'},
+      {t:'The ending is too small to carry a whole story.', good:false,
+       why:'That is a verdict. Please reframe it as a question.'}
+    ],
+    suitcase:[
+      {t:'What does your narrator want us to notice about the attic before the ants arrive?', good:true,
+       ans:['The moonlight, I think. Not the latches.','I looked those latches up. I think I just liked knowing.']},
+      {t:'I could see the octagon with windows, the tops of trees, and moonlight. When the lumber and the latches came in, I lost the attic.', good:true,
+       ans:['So the first picture was enough. I heard it.']},
+      {t:'Delete the sentence about the lumber and the latches.', good:false,
+       why:'That writes her story for her. Tell her what you noticed instead. Please reframe.'},
+      {t:'Isn’t all that detail kind of boring?', good:false,
+       why:'That is an opinion wearing a question mark. Please reframe.'},
+      {t:'Is this your uncle’s house in real life?', good:false,
+       why:'We speak about the narrator here, never the writer. Please reframe.'}
+    ]
+  };
+  var DRAFTS=[
+    {title:'Presto', notice:null, feed:null},
+    {title:'Daiko', notice:NOTICE1, feed:FEED1},
+    {title:'Dead Ants', notice:NOTICE2, feed:FEED2}
+  ];
+  DRAFTS[0].notice=NOTICE; DRAFTS[0].feed=FEED;
+  var D=0;
+
+  var S={ call:1, phase:'notice', tries:0, asked:{}, struck:{}, notice:null, record:[], busy:false };
   var MAXCALLS=3;
   var scene=$('scene'), slip=$('slip'), cardsEl=$('cards');
 
@@ -554,27 +693,34 @@ details.about p{ margin:8px 0 12px; }
     S.phase='notice'; S.tries=0; cardsEl.innerHTML='';
     setPhase('Call '+S.call+' of '+MAXCALLS+': notice', S.call===1?'Read the draft. Then play what you notice.':'What else is this draft doing?');
     shuffle(NOTICE).forEach(function(n){
-      var b=makeCard('<span class="deck">'+n.deck+'</span><span class="nm">'+esc(n.name)+'</span><span class="ts">'+esc(n.test)+'</span><span class="stamp"></span>',
+      var b=makeCard('<span class="deck">'+n.deck+'</span><span class="nm">'+esc(n.name)+'</span><span class="ts">'+esc(n.test)+'</span><span class="stamp"></span><span class="why"></span>',
         n.tag?'tag':'', function(btn){ playNotice(n,btn); });
       b.dataset.id=n.id;
-      if(S.asked[n.id]){ b.setAttribute('aria-disabled','true'); b.classList.add('done'); b.querySelector('.stamp').textContent='Asked already'; }
+      if(S.asked[n.id]){ claim(b,n); b.setAttribute('aria-disabled','true'); b.classList.add('done'); b.querySelector('.stamp').textContent='Upheld. Asked already.'; note(b, clean(n.rule)); }
+      else if(S.struck[n.id]){ claim(b,n); strike(b,'Struck',S.struck[n.id],true); }
     });
   }
   function dealFeedback(n){
     S.phase='feedback'; S.tries=0; cardsEl.innerHTML='';
     setPhase('Call '+S.call+' of '+MAXCALLS+': say it', 'Say it to the Asked. Choose your words.');
     shuffle(FEED[n.id]).forEach(function(f){
-      makeCard('<span class="said">'+esc(f.t)+'</span><span class="stamp"></span>','',function(btn){ playFeedback(f,btn); });
+      var b=makeCard('<span class="said">'+esc(f.t)+'</span><span class="stamp"></span><span class="why"></span>','',function(btn){ playFeedback(f,btn); });
+      if(S.struck[f.t]){ strike(b,'Struck',S.struck[f.t],true); }
     });
     $('phase').focus({preventScroll:true});
   }
-  function strike(btn,label){
+  /* The Advocate's note stays on a struck card for the whole draft. */
+  function clean(t){ return t.replace(/\s*(Please (look again|reframe)[^.]*\.|Now say it so it helps her\.)\s*$/,'').trim(); }
+  function note(btn,text){ btn.querySelector('.why').innerHTML='<b>The Advocate:</b> '+esc(text); }
+  function claim(btn,n){ var ts=btn.querySelector('.ts'); if(ts) ts.innerHTML='<b>Claim:</b> '+esc(n.test); }
+  function strike(btn,label,why,quiet){
     btn.classList.add('struck'); btn.setAttribute('aria-disabled','true');
-    btn.querySelector('.stamp').textContent=label; $('tableCard').classList.add('struck');
+    btn.querySelector('.stamp').textContent=label; note(btn,why);
+    if(!quiet) $('tableCard').classList.add('struck');
   }
 
   async function playNotice(n,btn){
-    S.busy=true; await fly(btn); ruling(true);
+    S.busy=true; claim(btn,n); await fly(btn); ruling(true);
     if(n.kind==='hit'){
       say('The Advocate', n.rule);
       var ev=$(n.ev); if(ev) ev.classList.add('marked');
@@ -582,9 +728,9 @@ details.about p{ margin:8px 0 12px; }
       await wait(1500); ruling(false);
       dealFeedback(n); S.busy=false;
     } else {
-      S.tries++;
-      if(S.tries>=2){ say('The Advocate', n.rule.replace(' Please look again.','')); strike(btn,'Struck'); await wait(2400); await moveOn(); return; }
-      say('The Advocate', n.rule); strike(btn,'Struck. Reframe once.');
+      S.tries++; S.struck[n.id]=clean(n.rule);
+      if(S.tries>=2){ say('The Advocate', clean(n.rule)); strike(btn,'Struck',S.struck[n.id]); await wait(2400); await moveOn(); return; }
+      say('The Advocate', n.rule); strike(btn,'Struck. Reframe once.',S.struck[n.id]);
       await wait(900); ruling(false); S.busy=false;
     }
   }
@@ -601,9 +747,9 @@ details.about p{ margin:8px 0 12px; }
       mood('thinking',false);
       await nextCall();
     } else {
-      ruling(true); S.tries++;
-      if(S.tries>=2){ say('The Advocate', f.why.replace(/ Please reframe.*$/,'')); strike(btn,'Struck'); await wait(2300); await moveOn(); return; }
-      say('The Advocate', f.why); strike(btn,'Struck. Reframe once.');
+      ruling(true); S.tries++; S.struck[f.t]=clean(f.why);
+      if(S.tries>=2){ say('The Advocate', clean(f.why)); strike(btn,'Struck',S.struck[f.t]); await wait(2300); await moveOn(); return; }
+      say('The Advocate', f.why); strike(btn,'Struck. Reframe once.',S.struck[f.t]);
       await wait(900); ruling(false); S.busy=false;
     }
   }
@@ -644,21 +790,34 @@ details.about p{ margin:8px 0 12px; }
     var h='<h2>What the Asked takes home</h2>';
     if(S.record.length){ h+='<ol>'+S.record.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join('')+'</ol>'; }
     else { h+='<p>The page is blank this time. The Advocate struck every card before it reached the Asked.</p>'; }
-    h+='<p style="margin-top:16px"><button class="btn" type="button" id="again">Play this draft again</button></p>';
+    var nx=(D+1)%DRAFTS.length;
+    h+='<p class="endbtns"><button class="btn" type="button" id="next">Next draft: '+esc(DRAFTS[nx].title)+'</button> <button class="btn" type="button" id="again">Play this draft again</button></p>';
     page.innerHTML=h; cardsEl.appendChild(page);
     $('again').addEventListener('click', reset);
+    $('next').addEventListener('click', function(){ loadDraft(nx); window.scrollTo({top:0,behavior:RM?'auto':'smooth'}); });
     $('phase').focus({preventScroll:true});
-    await wait(2400); mood('clap',false); mood('bow',false); S.busy=false;
+    S.busy=false;
+    await wait(2400); mood('clap',false); mood('bow',false);
   }
   function reset(){
-    S={ call:1, phase:'notice', tries:0, asked:{}, notice:null, record:[], busy:false };
+    S={ call:1, phase:'notice', tries:0, asked:{}, struck:{}, notice:null, record:[], busy:false };
     ['r1','r2','r3'].forEach(function(id){ $(id).classList.remove('on'); });
     document.querySelectorAll('.ev').forEach(function(e){ e.classList.remove('marked'); });
+    mood('cardDown',false); mood('thinking',false); mood('hush',false); mood('ruling',false);
     say('The Advocate','Let’s begin. You’re first.');
-    dealNotice(); $('phase').focus();
+    dealNotice(); $('phase').focus({preventScroll:true});
   }
+  /* Three drafts on the table. Switching is always open: no draft is locked. */
+  function loadDraft(i){
+    if(S.busy) return;
+    D=i; NOTICE=DRAFTS[i].notice; FEED=DRAFTS[i].feed;
+    var body=$('msBody'); body.innerHTML=''; body.appendChild(document.getElementById('ms'+i).content.cloneNode(true));
+    document.querySelectorAll('.dtab').forEach(function(b){ b.setAttribute('aria-pressed', String(+b.dataset.d===i)); });
+    reset();
+  }
+  document.querySelectorAll('.dtab').forEach(function(b){ b.addEventListener('click',function(){ loadDraft(+b.dataset.d); }); });
 
-  dealNotice();
+  loadDraft(0);
   setTimeout(function(){ scene.classList.remove('enter'); }, 1600);
 })();
 </script>
