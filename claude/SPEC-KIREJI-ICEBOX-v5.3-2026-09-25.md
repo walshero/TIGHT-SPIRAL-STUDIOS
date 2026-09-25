@@ -44,6 +44,15 @@ Owner: TSP. Build target: `kireji-pond.html` v5.3.
 - `fzEmpty` text: "Drag magnets up here to build a poem. Copy or email it when it's done."
 - Door aria-label adds: "Phrase magnets. Drag up to the freezer to build a poem."
 
+### D. The seal turns over (founder, 2026-09-25: "Keep it, but make it tappable and it turns around for translation")
+- The red 句箱 seal becomes a `<button>` (min 44px target; the seal art stays the same size, padding carries the target).
+- Tap, click, Enter or Space flips it like a card on its vertical axis (0.45s). The back is the same red seal, reading top to bottom: `verse` / `box`, and a small third line `ku · hako`.
+- Tap again flips it back. It stays on whichever face the player left it.
+- `aria-label` on the front: "Seal, 句箱, ku hako. Tap to translate." After the flip, the live region says "verse box. The kanji say verse and box, a pun on icebox." `aria-pressed` tracks the face.
+- Reduced motion: crossfade, no rotation.
+- Contrast: the back text uses the same cream-on-red pair as the front (`#F8E9DC` on `#B23A2A`); the gate must pass at the smaller English size.
+- Honesty note in the back face's title attribute or live text: coined for the game, not a dictionary word.
+
 ## Out of scope for v5.3
 - Cross-device saving (stays this-device; Copy and Email are the escape hatch, stated in the freezer hint).
 - Door endless-scroll changes and a separate phrase drawer. Revisit after founder plays v5.3.
