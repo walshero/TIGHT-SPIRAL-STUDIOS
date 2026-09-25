@@ -1459,6 +1459,11 @@ function carveBlocks(){
   const gouge=(x,y,L,w,ang,bend)=>{const c=Math.cos(ang),s=Math.sin(ang),P=(u,v)=>f1(x+u*c-v*s)+' '+f1(y+u*s+v*c);
     return `M${P(0,0)}Q${P(L*.3,bend-w)} ${P(L,bend*.5)}Q${P(L*.3,bend+w)} ${P(0,0)}Z`};
   const clip=(id,d)=>{const c=el(defs,'clipPath',{id});el(c,'path',{d});return `url(#${id})`};
+  // one continuous cut along a curve: nothing at the ends, full width in the middle
+  const ribbon=(pts,wm)=>{const n=pts.length;if(n<2)return'';const T=[],B=[];
+    for(let i=0;i<n;i++){const a=pts[Math.max(0,i-1)],b=pts[Math.min(n-1,i+1)],dx=b[0]-a[0],dy=b[1]-a[1],l=Math.hypot(dx,dy)||1;
+      const w=wm*Math.pow(Math.max(0,Math.sin(Math.PI*i/(n-1))),.6);T.push([pts[i][0]-dy/l*w,pts[i][1]+dx/l*w]);B.push([pts[i][0]+dy/l*w,pts[i][1]-dx/l*w])}
+    return 'M'+T.map(p=>f1(p[0])+' '+f1(p[1])).join('L')+'L'+B.reverse().map(p=>f1(p[0])+' '+f1(p[1])).join('L')+'Z'};
 
   // WATER: indigo block, a darker wipe at the far shore, then rows of cuts that widen toward us
   const wb=$('#wBlock');
