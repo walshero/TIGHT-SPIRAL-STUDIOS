@@ -1192,8 +1192,10 @@ function rollSlip(up){
       await anim(dur,k=>{const e=1-Math.pow(1-k,2.2); p=from+(to-from)*e; place(p,dir*2.4*Math.sin(Math.PI*k)*(1-k*.4))});
       if(hold) await anim(hold,k=>place(p,dir*.6*Math.sin(k*Math.PI*2)*(1-k)));
     }
-    if(up){ // the rod lifts off the top and is gone
-      await anim(240,k=>{place(1,-1.2*k,18*k);roll.style.opacity=(1-k).toFixed(2)});
+    if(up){ // the rolled scroll tucks itself into the kanji mark
+      const km=$('#kmark');
+      await anim(300,k=>{place(1,-1.2*k,6*k);roll.style.opacity=(1-k).toFixed(2);
+        if(km){km.style.opacity=k.toFixed(2);km.style.transform=`scale(${(.5+.5*(1-Math.pow(1-k,3))).toFixed(3)})`}});
       slip.style.visibility='hidden';
     } else slip.style.clipPath='';
     roll.style.display='none'; slip.style.transform='';
