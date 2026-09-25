@@ -1798,10 +1798,10 @@ const Snd=(()=>{
         o.connect(am).connect(g).connect(d); o.start(b); lfo.start(b); o.stop(b+dur+.02); lfo.stop(b+dur+.02)}
     },
     minmin(){ // minminzemi: three loud min-min-min, then a long miiinnnmmm that closes down
-      const t=now()+.05, d=panTo(), base=rnd(1500,1850);
+      const t=now()+.05, d=panTo(), base=rnd(900,1100), k=1.6; // k stretches the whole call; the rhythm's ratios hold
       const note=(b,dur,last)=>{
         const o=ac.createOscillator(); o.type='sawtooth';
-        o.frequency.setValueAtTime(base*.8,b); o.frequency.linearRampToValueAtTime(base*1.06,b+Math.min(.12,dur*.3));
+        o.frequency.setValueAtTime(base*.8,b); o.frequency.linearRampToValueAtTime(base*1.06,b+Math.min(.12*k,dur*.3));
         if(last){o.frequency.setValueAtTime(base*1.06,b+dur*.4); o.frequency.linearRampToValueAtTime(base*.72,b+dur)}
         else o.frequency.linearRampToValueAtTime(base*.92,b+dur);
         const f=ac.createBiquadFilter(); f.type='bandpass'; f.Q.value=1.4; f.frequency.setValueAtTime(base*1.9,b);
