@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Kireji Pond</title>
+<!-- v5 2026-09-25 (founder): "At the end of Kireji pond show the poems like refrigerator magnets on a 1950s
+     refrigerator made in ukiyo-e style." The Icebox: the three poems go up as magnets; drag or arrow-key them around;
+     the pencil writes new magnets; the door scrolls on forever with more phrase magnets; Move to top keeps a magnet in the
+     freezer tray for later (this device only); Send haiku reads the fridge top to bottom into an email or the clipboard.
+     The frog hides under one magnet (arcade crossover ruling, 2026-09-25).
+     v5.1 (founder): saved magnets hang crooked in the freezer tray (8 to 17 degrees) and can be dragged straight
+     down onto the door, where they straighten out as they land. -->
+<!-- v4.7 2026-09-25: directions scroll inside the card so the water ring stays whole; sound control is a small icon. -->
 <!-- v2 2026-09-24: webfonts removed (offline floor). System Mincho and Gothic stacks carry the type. -->
 <style>
 :root{
@@ -298,6 +306,114 @@ body.still .eddy .e{animation:none}
 }
 @media (max-width:360px){.ph .eyebrow{letter-spacing:.04em}.ph h2{font-size:20px}}
 @media (max-width:350px){.sndbtn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.sndbtn{min-width:44px;justify-content:center}}
+/* v4.7 (founder 2026-09-25): "when you are scrolling up reading directions keep the top water border or it looks
+   weird. Also, the sound button is hogging prime play space. Make it an icon only and smaller."
+   1. The directions scroll INSIDE the card now. The stone and its eddy stay whole, so the water ring never slides
+      off the top of the pond; the card's own edge stays put too.
+   2. The sound control is a small icon chip. Its words stay in the button for screen readers; the tap area is
+      still 44px (an invisible margin around the 36px chip). The red rim still means "tap for sound". */
+.tour{overflow:hidden}
+.stone{display:flex;flex-direction:column;max-height:calc(100% - 2*var(--P))}
+.tcard{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+.sndbtn{top:12px;left:12px;width:36px;height:36px;min-height:0;min-width:0;padding:0;gap:0;justify-content:center;box-shadow:2px 2px 0 var(--sumi)}
+.sndbtn.ask{box-shadow:2px 2px 0 var(--beni)}
+.sndbtn svg{width:20px;height:20px}
+.sndbtn::after{content:"";position:absolute;inset:-5px}
+.sndbtn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:780px){.tour{top:56px}}
+/* v5 the icebox: after the third poem, the poems go up on a 1950s refrigerator, cut as a woodblock print.
+   The print keeps its daylight inks on every device, like the pond scene. */
+body.fzopen{overflow:hidden}
+.fridge{position:fixed;inset:0;z-index:70;overflow-y:auto;overscroll-behavior:contain;color:#1B1A17;
+  background-color:#E6DAC0;background-image:linear-gradient(180deg,rgba(31,58,95,.55) 0,rgba(31,58,95,.18) 90px,rgba(31,58,95,0) 220px),url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="20" viewBox="0 0 40 20"%3E%3Cg fill="%23E6DAC0" stroke="%23B9A77E" stroke-width="1" stroke-opacity=".55"%3E%3Ccircle cx="0" cy="-10" r="19"/%3E%3Ccircle cx="0" cy="-10" r="14"/%3E%3Ccircle cx="0" cy="-10" r="9"/%3E%3Ccircle cx="0" cy="-10" r="4"/%3E%3Ccircle cx="40" cy="-10" r="19"/%3E%3Ccircle cx="40" cy="-10" r="14"/%3E%3Ccircle cx="40" cy="-10" r="9"/%3E%3Ccircle cx="40" cy="-10" r="4"/%3E%3Ccircle cx="20" cy="0" r="19"/%3E%3Ccircle cx="20" cy="0" r="14"/%3E%3Ccircle cx="20" cy="0" r="9"/%3E%3Ccircle cx="20" cy="0" r="4"/%3E%3Ccircle cx="0" cy="10" r="19"/%3E%3Ccircle cx="0" cy="10" r="14"/%3E%3Ccircle cx="0" cy="10" r="9"/%3E%3Ccircle cx="0" cy="10" r="4"/%3E%3Ccircle cx="40" cy="10" r="19"/%3E%3Ccircle cx="40" cy="10" r="14"/%3E%3Ccircle cx="40" cy="10" r="9"/%3E%3Ccircle cx="40" cy="10" r="4"/%3E%3Ccircle cx="20" cy="20" r="19"/%3E%3Ccircle cx="20" cy="20" r="14"/%3E%3Ccircle cx="20" cy="20" r="9"/%3E%3Ccircle cx="20" cy="20" r="4"/%3E%3Ccircle cx="0" cy="30" r="19"/%3E%3Ccircle cx="0" cy="30" r="14"/%3E%3Ccircle cx="0" cy="30" r="9"/%3E%3Ccircle cx="0" cy="30" r="4"/%3E%3Ccircle cx="40" cy="30" r="19"/%3E%3Ccircle cx="40" cy="30" r="14"/%3E%3Ccircle cx="40" cy="30" r="9"/%3E%3Ccircle cx="40" cy="30" r="4"/%3E%3C/g%3E%3C/svg%3E');
+  background-attachment:local,local;background-size:auto,40px 20px;
+  font-family:"Zen Kaku Gothic New","Hiragino Sans","Segoe UI",system-ui,sans-serif;font-size:18px;line-height:1.45}
+.fridge:focus{outline:none}
+.fzbar{position:sticky;top:0;z-index:6;display:flex;align-items:center;gap:8px;padding:10px 12px;
+  background:#F5EEDB;border-bottom:3px solid #1B1A17}
+.fzbar .fzsp{flex:1}
+.fzb{min-height:44px;padding:6px 14px;background:#F5EEDB;color:#1B1A17;border:2px solid #1B1A17;box-shadow:3px 3px 0 #1B1A17;
+  font:700 18px/1.1 "Zen Kaku Gothic New","Hiragino Sans","Segoe UI",system-ui,sans-serif;cursor:pointer}
+.fzb.go{background:#1B1A17;color:#F5EEDB;box-shadow:3px 3px 0 #B23A2A}
+.fzb:focus-visible,.mag:focus-visible,.fzpencil:focus-visible,.fzdlg button:focus-visible,.fzdlg a:focus-visible,.fzdlg input:focus-visible,.fzdlg textarea:focus-visible,.fzmenu button:focus-visible{outline:3px solid #B23A2A;outline-offset:3px}
+
+/* the cabinet: seafoam enamel, flat woodblock colour, keyline, bokashi at the edges; it never ends */
+.fzbox{position:relative;width:min(640px,calc(100% - 32px));margin:44px auto 0;border:3px solid #1B1A17;border-bottom:0;
+  border-radius:46px 46px 0 0;background-color:#D3E4D9;
+  background-image:linear-gradient(90deg,rgba(31,58,95,.20),rgba(31,58,95,0) 9%,rgba(31,58,95,0) 88%,rgba(31,58,95,.26)),var(--mottle,none);
+  background-size:auto,256px 256px;box-shadow:10px 0 0 rgba(27,26,23,.18)}
+.freezer{position:relative;padding:26px 64px 24px 22px;border-bottom:3px solid #1B1A17;
+  background-image:linear-gradient(180deg,rgba(31,58,95,.30),rgba(31,58,95,0) 60px);border-radius:43px 43px 0 0}
+.freezer::after{content:"";position:absolute;left:0;right:0;bottom:-11px;height:5px;background:#1B1A17;opacity:.9;border-bottom:3px solid #C9D2D6}
+.fzbrand{display:flex;align-items:center;gap:10px;margin:0 0 14px}
+.fzseal{flex:none;width:40px;padding:5px 0;line-height:1.05;background:#B23A2A;color:#F8E9DC;border-radius:3px;display:flex;flex-direction:column;align-items:center;
+  font:800 21px/1.05 "Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif}
+.fzname{margin:0;font:800 24px/1.1 "Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;letter-spacing:.06em}
+.fzname small{display:block;font:700 18px/1.3 "Zen Kaku Gothic New",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#4A463E}
+.handle{position:absolute;right:16px;width:18px;border:2px solid #1B1A17;border-radius:9px;pointer-events:none;
+  background:linear-gradient(90deg,#8C979C,#F4F7F8 42%,#B7C0C4 70%,#7F898E)}
+.freezer .handle{top:34px;height:92px}
+.door .handle{top:26px;height:180px}
+.fzsaved{list-style:none;margin:0;padding:18px 12px;min-height:72px;display:flex;flex-wrap:wrap;gap:22px 16px;
+  border:2px dashed #4A463E;background:rgba(245,238,219,.55)}
+.fzsaved li{display:contents}
+.fzempty{margin:0;padding:4px 2px;color:#4A463E}
+.door{position:relative;min-height:1600px;margin-top:11px}
+.fzwall{padding-bottom:0}
+
+/* the magnets: word strips on enamel, hard indigo shadow like a second block */
+.mag{position:absolute;left:0;top:0;display:block;max-width:calc(100% - 70px);padding:6px 11px 7px;margin:0;
+  background:#FBF7EC;color:#1B1A17;border:1.5px solid #1B1A17;box-shadow:3px 3px 0 #1F3A5F;
+  font:600 19px/1.25 "Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;text-align:left;
+  transform:rotate(var(--r,0deg));cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;z-index:2;
+  transition:box-shadow .12s,transform .12s}
+.mag.t span{text-decoration:underline;text-decoration-color:#B23A2A;text-decoration-thickness:3px;text-underline-offset:5px}
+.mag.own{background:#F6E6BC;box-shadow:3px 3px 0 #B23A2A;font-family:"Zen Kaku Gothic New","Hiragino Sans","Segoe UI",system-ui,sans-serif;font-weight:700}
+.mag.lift{z-index:5;cursor:grabbing;transform:rotate(var(--r,0deg)) scale(1.05);transition:none;box-shadow:9px 11px 0 rgba(31,58,95,.5)}
+.mag.snap{animation:magsnap .22s ease-out}
+@keyframes magsnap{0%{transform:rotate(0) scale(1.05)}60%{transform:rotate(var(--r,0deg)) scale(.97)}100%{transform:rotate(var(--r,0deg))}}
+.fzsaved .mag{position:relative;max-width:100%}
+.mag.straighten{transition:transform .5s cubic-bezier(.3,1.6,.5,1),box-shadow .2s}
+.mseal{position:absolute;width:34px;padding:4px 0;background:#B23A2A;color:#F8E9DC;border:1.5px solid #1B1A17;box-shadow:2px 2px 0 #1F3A5F;
+  text-align:center;font:800 20px/1 "Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;z-index:1;pointer-events:none}
+.fzhop{position:absolute;z-index:1;width:44px;height:36px;pointer-events:none}
+.fzhop.go{animation:fzhop 1.1s ease-out forwards}
+.fzhop b{position:absolute;left:50%;bottom:100%;transform:translateX(-50%);font:800 18px/1 "Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;
+  color:#B23A2A;white-space:nowrap;opacity:0;paint-order:stroke;-webkit-text-stroke:4px #F5EEDB}
+.fzhop.go b{animation:fzyatta 1.1s ease-out forwards}
+@keyframes fzhop{0%{transform:none}25%{transform:translateY(-34px) rotate(-8deg)}45%{transform:translateY(0)}60%{transform:translateY(-14px)}75%{transform:none;opacity:1}100%{transform:translateY(-6px) scale(.2);opacity:0}}
+@keyframes fzyatta{0%,15%{opacity:0}30%,80%{opacity:1}100%{opacity:0}}
+
+/* the pencil: a live corner control */
+.fzpencil{position:fixed;right:16px;bottom:16px;z-index:8;display:flex;align-items:center;gap:8px;min-height:56px;padding:6px 16px 6px 10px;
+  background:#F5EEDB;color:#1B1A17;border:2px solid #1B1A17;box-shadow:4px 4px 0 #1F3A5F;border-radius:30px;
+  font:700 18px/1 "Zen Kaku Gothic New","Hiragino Sans","Segoe UI",system-ui,sans-serif;cursor:pointer}
+.fzpencil svg{width:44px;height:44px;flex:none}
+
+/* the small menu that opens on a magnet */
+.fzmenu{position:fixed;z-index:9;display:flex;flex-direction:column;gap:6px;padding:8px;background:#F5EEDB;border:2px solid #1B1A17;box-shadow:5px 5px 0 #1F3A5F;min-width:210px}
+.fzmenu button{min-height:44px;padding:6px 12px;text-align:left;background:#FBF7EC;color:#1B1A17;border:1.5px solid #1B1A17;
+  font:700 18px/1.2 "Zen Kaku Gothic New","Hiragino Sans","Segoe UI",system-ui,sans-serif;cursor:pointer}
+.fzmenu button.top{background:#1B1A17;color:#F5EEDB}
+
+/* write and send */
+.fzdlg{border:3px solid #1B1A17;background:#F5EEDB;color:#1B1A17;padding:20px;width:min(540px,calc(100vw - 32px));max-height:calc(100dvh - 32px);
+  box-shadow:8px 8px 0 #1F3A5F;font-family:"Zen Kaku Gothic New","Hiragino Sans","Segoe UI",system-ui,sans-serif;font-size:18px}
+.fzdlg::backdrop{background:rgba(27,26,23,.5)}
+.fzdlg form{display:flex;flex-direction:column;gap:12px;margin:0}
+.fzdlg h2{margin:0;font:800 26px/1.15 "Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif}
+.fzdlg label{font-weight:700}
+.fzdlg input[type=text],.fzdlg input[type=email],.fzdlg textarea{width:100%;font:600 20px/1.35 "Zen Kaku Gothic New","Hiragino Sans","Segoe UI",system-ui,sans-serif;
+  padding:10px 12px;border:2px solid #1B1A17;background:#FBF7EC;color:#1B1A17;border-radius:0}
+.fzdlg textarea{min-height:190px;resize:vertical;font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif}
+.fzdlg .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.fzdlg .hintline{margin:0;color:#4A463E}
+.fzpicks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.fzpicks label{display:flex;gap:10px;align-items:center;min-height:44px;font-weight:600}
+.fzpicks input{width:26px;height:26px;flex:none;accent-color:#1F3A5F}
+a.fzb{display:inline-flex;align-items:center;text-decoration:none}
+@media (max-width:480px){.fzb{padding:6px 10px}.fzbox{width:calc(100% - 20px);margin-top:28px}.freezer{padding:22px 54px 20px 14px}.mag{font-size:18px;padding:5px 9px 6px}}
+@media (prefers-reduced-motion:reduce){.mag,.mag.snap,.fzhop.go,.fzhop.go b{animation:none;transition:none}}
 </style>
 </head>
 <body>
@@ -652,12 +768,67 @@ body.still .eddy .e{animation:none}
       <h2 lang="ja-Latn">mizu no oto</h2>
       <p class="note">The sound of the water. Three turns fed the frog, and the frog made the last one.</p>
       <div class="finals" id="finals"></div>
-      <button class="primary" id="again">Play again</button>
+      <button class="primary" id="fzOpen" type="button">Open the fridge</button>
+      <button class="ghost" id="again">Play again</button>
       <a class="ghost" href="arcade.html" style="text-decoration:none;color:inherit;align-self:flex-start">Back to the EN195 Arcade</a>
     </section>
   </aside>
 </div>
 <canvas id="fx" aria-hidden="true"></canvas>
+<!-- v5 the icebox -->
+<div class="fridge" id="fridge" role="dialog" aria-modal="true" aria-labelledby="fzTitle" tabindex="-1" hidden>
+  <div class="fzbar">
+    <button type="button" class="fzb" id="fzBack">Back to the pond</button>
+    <span class="fzsp"></span>
+    <button type="button" class="fzb" id="fzTop">Top</button>
+    <button type="button" class="fzb go" id="fzSend">Send haiku</button>
+  </div>
+  <div class="fzbox" id="fzBox">
+    <section class="freezer" id="freezer" aria-labelledby="fzTitle">
+      <span class="handle" aria-hidden="true"></span>
+      <div class="fzbrand">
+        <span class="fzseal" aria-hidden="true"><span>句</span><span>箱</span></span>
+        <h2 class="fzname" id="fzTitle">The Icebox<small>Saved for later</small></h2>
+      </div>
+      <ul class="fzsaved" id="fzSaved" aria-label="Saved magnets"></ul>
+      <p class="fzempty" id="fzEmpty">Tap a magnet, then Move to top, to keep it here for later. Drag a saved one down to the door to use it.</p>
+    </section>
+    <div class="door" id="door" aria-label="Refrigerator door. Drag magnets to rearrange, or focus one and use the arrow keys." role="group">
+      <span class="handle" aria-hidden="true"></span>
+    </div>
+  </div>
+  <button type="button" class="fzpencil" id="fzPencil" aria-label="Write your own line">
+    <svg viewBox="0 0 44 44" aria-hidden="true"><g transform="rotate(-40 22 22)" stroke="#1B1A17" stroke-width="1.8" stroke-linejoin="round">
+      <rect x="15.5" y="3" width="13" height="8" rx="2" fill="#B23A2A"/><rect x="15.5" y="10" width="13" height="4" fill="#C9D2D6"/>
+      <path d="M15.5 14h13v17h-13z" fill="#E7B23A"/><path d="M20 14v17M24 14v17" stroke-width="1" stroke-opacity=".6"/>
+      <path d="M15.5 31h13L22 41z" fill="#F0D9A8"/><path d="M20 37.6L22 41l2-3.4z" fill="#1B1A17"/></g></svg>
+    <span aria-hidden="true">Write</span>
+  </button>
+  <div class="fzmenu" id="fzMenu" role="menu" hidden></div>
+  <p class="sr" id="fzLive" aria-live="polite"></p>
+</div>
+<dialog class="fzdlg" id="fzWrite" aria-labelledby="fzWriteH">
+  <form method="dialog" id="fzWriteF">
+    <h2 id="fzWriteH">Write a magnet</h2>
+    <label for="fzLine">Your line</label>
+    <input type="text" id="fzLine" maxlength="48" autocomplete="off" spellcheck="true">
+    <p class="hintline" id="fzSyl" aria-live="polite">Five or seven syllables fit a haiku.</p>
+    <div class="row"><button type="submit" class="fzb go" value="stick">Stick it on the fridge</button><button type="button" class="fzb" id="fzWriteX">Cancel</button></div>
+  </form>
+</dialog>
+<dialog class="fzdlg" id="fzMail" aria-labelledby="fzMailH">
+  <form method="dialog" id="fzMailF">
+    <h2 id="fzMailH">Send your haiku</h2>
+    <p class="hintline">The fridge is read top to bottom. Each cluster of magnets you placed is one poem.</p>
+    <ul class="fzpicks" id="fzPicks"></ul>
+    <label for="fzText">What will be sent (you can edit it)</label>
+    <textarea id="fzText"></textarea>
+    <label for="fzTo">Email to (optional)</label>
+    <input type="email" id="fzTo" autocomplete="email" inputmode="email">
+    <p class="hintline">Your email app opens with the haiku filled in. Nothing is sent until you press send there.</p>
+    <div class="row"><a class="fzb go" id="fzMailGo" href="mailto:" target="_blank" rel="noopener">Open in email</a><button type="button" class="fzb" id="fzCopy">Copy</button><button type="button" class="fzb" id="fzMailX">Close</button></div>
+  </form>
+</dialog>
 
 <script>
 (()=>{
@@ -1242,6 +1413,7 @@ function startRound(){
 $('#start').addEventListener('click',startRound);
 $('#next').addEventListener('click',startRound);
 $('#again').addEventListener('click',()=>{
+  Fz.reset();
   S.round=0; S.wins=[]; S.smashed=0; deckRound=-1; scene.classList.remove('final');
   resetFrog();
   $('#slipJp').textContent='切れ字の池'; $('#slipEn').textContent='Kireji Pond'; startRound();
@@ -1276,7 +1448,9 @@ async function win(){
     S.phase='final'; rollSlip(false);
     const box=$('#finals'); box.innerHTML='';
     S.wins.forEach((w,i)=>{const b=document.createElement('blockquote');b.className='poem';fillPoem(b,w,SEASONS[i].name+' · '+SEASONS[i].jp);box.appendChild(b)});
-    show('pFinal'); $('#again').focus();
+    show('pFinal'); $('#fzOpen').focus();
+    // v5: after the splash settles, the three poems go up on the fridge
+    setTimeout(()=>{if(S.phase==='final'&&!Fz.isOpen) Fz.open($('#fzOpen'))},reduce?700:2800);
     return;
   }
   const se=SEASONS[S.round], ti=lines.findIndex(p=>p.k==='t');
@@ -1978,6 +2152,306 @@ function drawEddy(){
 }
 goTour(0,false); drawEddy();
 try{new ResizeObserver(drawEddy).observe($('#stone'))}catch(e){addEventListener('resize',drawEddy)}
+
+/* ---------- v5 the icebox: the poems as magnets on a 1950s refrigerator ---------- */
+const Fz=(()=>{
+  const fr=$('#fridge'), door=$('#door'), saved=$('#fzSaved'), menu=$('#fzMenu'), live=$('#fzLive');
+  const KEY='kireji-pond-icebox';
+  let mags=[], bank=[], bankAt=0, doorH=0, builtFor=null, frog=null, menuFor=null, opener=null;
+  const CH=720; // one more stretch of door each time the reader nears the bottom
+  const tell=t=>{live.textContent='';setTimeout(()=>live.textContent=t,30)};
+  const tock=()=>{try{Snd.tock()}catch(e){}};
+  const rot=()=>((Math.random()*4.4-2.2).toFixed(2))+'deg';
+  const W=()=>door.clientWidth-58; // keep clear of the handle
+
+  function loadSaved(){try{return JSON.parse(localStorage.getItem(KEY)||'[]').filter(o=>o&&typeof o.t==='string')}catch(e){return[]}}
+  function storeSaved(list){try{localStorage.setItem(KEY,JSON.stringify(list))}catch(e){}}
+  let keep=loadSaved();
+
+  function syl(s){return s.toLowerCase().replace(/[^a-z\s'-]/g,' ').split(/[\s-]+/).filter(Boolean).reduce((n,w)=>{
+    w=w.replace(/'/g,''); if(w.length<=3) return n+1;
+    w=w.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/,'').replace(/^y/,'');
+    const m=w.match(/[aeiouy]{1,2}/g); return n+Math.max(1,m?m.length:1)},0)}
+
+  function magEl(o){
+    const b=document.createElement('button'); b.type='button';
+    b.className='mag'+(o.k==='t'?' t':'')+(o.own?' own':'');
+    b.innerHTML='<span></span>'; b.firstChild.textContent=o.t;
+    b.style.setProperty('--r',o.r||'0deg');
+    b.setAttribute('aria-label',o.t+(o.own?', your line':'')+'. Magnet.');
+    return b;
+  }
+  function place(m){m.el.style.left=m.x+'px';m.el.style.top=m.y+'px'}
+  function grow(to){if(to>doorH){doorH=to;door.style.minHeight=doorH+'px'}}
+  function add(o,x,y){
+    const m={t:o.t,k:o.k||'i',own:!!o.own,touched:!!o.touched,x,y,r:o.r||rot()};
+    m.el=magEl(m); door.appendChild(m.el);
+    const w=m.el.offsetWidth; m.x=Math.max(0,Math.min(x,W()-w)); place(m); wire(m); mags.push(m); grow(m.y+140); return m;
+  }
+  function rectOf(m){return{x:m.x,y:m.y,w:m.el.offsetWidth,h:m.el.offsetHeight}}
+  function free(x,y,w,h){return mags.every(m=>{const r=rectOf(m);return x+w+14<r.x||r.x+r.w+14<x||y+h+14<r.y||r.y+r.h+14<y})}
+
+  function dealBank(){
+    const used=new Set(S.wins.flat().map(p=>p.t));
+    bank=SEASONS.flatMap(se=>se.phrases).filter(p=>p.k!=='c'&&!used.has(p.t));
+    for(let i=bank.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[bank[i],bank[j]]=[bank[j],bank[i]]}
+    bankAt=0;
+  }
+  function chunk(){
+    const y0=doorH;
+    for(let n=0;n<7;n++){
+      if(bankAt>=bank.length) dealBank();
+      const p=bank[bankAt++]; const m=add({t:p.t,k:'i'},0,y0); const r=rectOf(m);
+      let ok=false;
+      for(let tries=0;tries<40&&!ok;tries++){
+        const x=Math.random()*Math.max(1,W()-r.w), y=y0+20+Math.random()*(CH-90);
+        m.x=0;m.y=-9999; if(free(x,y,r.w,r.h)){m.x=x;m.y=y;ok=true}
+      }
+      if(!ok){m.x=Math.random()*Math.max(1,W()-r.w);m.y=y0+20+n*(CH/7)}
+      place(m);
+      if(!frog&&S.wins.length&&y0<1400&&n===2) hideFrog(m);
+    }
+    grow(y0+CH);
+  }
+  function build(){
+    door.querySelectorAll('.mag,.mseal,.fzhop').forEach(n=>n.remove()); mags=[]; doorH=0; frog=null; dealBank();
+    door.style.minHeight='0px';
+    let y=36;
+    S.wins.forEach((lines,i)=>{
+      const s=document.createElement('span'); s.className='mseal'; s.setAttribute('aria-hidden','true'); s.textContent=SEASONS[i].jp;
+      s.style.left='6px'; s.style.top=(y+2)+'px'; door.appendChild(s);
+      lines.forEach((p,j)=>add({t:p.t,k:p.k,touched:true,r:(j%2?.9:-.7)+'deg'},52+j*10,y+j*54));
+      y+=3*54+84;
+    });
+    grow(y); chunk(); chunk();
+    builtFor=S.wins;
+  }
+
+  /* the frog: the arcade's hidden constant, under one nudgeable magnet */
+  function hideFrog(m){
+    const f=document.createElement('span'); f.className='fzhop'; f.setAttribute('aria-hidden','true');
+    f.innerHTML='<b>yatta!</b><svg viewBox="0 0 44 36" width="44" height="36"><path d="M4 30C4 18 12 10 22 10S40 18 40 30Z" fill="#7C8C3A" stroke="#1B1A17" stroke-width="2"/><circle cx="14" cy="12" r="6" fill="#9DA75C" stroke="#1B1A17" stroke-width="2"/><circle cx="30" cy="12" r="6" fill="#9DA75C" stroke="#1B1A17" stroke-width="2"/><circle cx="14" cy="12" r="2.6" fill="#1B1A17"/><circle cx="30" cy="12" r="2.6" fill="#1B1A17"/><path d="M15 23q7 5 14 0" fill="none" stroke="#1B1A17" stroke-width="2" stroke-linecap="round"/><path d="M2 32h40" stroke="#1B1A17" stroke-width="2.4" stroke-linecap="round"/></svg>';
+    door.appendChild(f); frog={el:f,m,x:m.x+m.el.offsetWidth/2-22,y:m.y+m.el.offsetHeight/2-18,found:false};
+    f.style.left=frog.x+'px'; f.style.top=frog.y+'px';
+  }
+  function checkFrog(m){
+    if(!frog||frog.found||frog.m!==m) return;
+    const r=rectOf(m), cx=frog.x+22, cy=frog.y+18;
+    if(cx>r.x-4&&cx<r.x+r.w+4&&cy>r.y-4&&cy<r.y+r.h+4) return;
+    frog.found=true; try{Snd.yaa()}catch(e){}
+    if(reduce){frog.el.querySelector('b').style.opacity=1;setTimeout(()=>frog.el.remove(),1400)}
+    else{frog.el.classList.add('go');setTimeout(()=>frog.el.remove(),1200)}
+  }
+
+  /* drag, tap, keys */
+  let drag=null, suppress=false, scrollRaf=0;
+  function wire(m){
+    const b=m.el;
+    b.addEventListener('pointerdown',e=>{
+      if(e.button>0) return; closeMenu();
+      const r=b.getBoundingClientRect();
+      drag={m,id:e.pointerId,x0:e.clientX,y0:e.clientY,ox:e.clientX-r.left,oy:e.clientY-r.top,on:false,cy:e.clientY};
+      try{b.setPointerCapture(e.pointerId)}catch(_){}
+    });
+    b.addEventListener('pointermove',e=>{
+      if(!drag||drag.m!==m) return;
+      if(!drag.on){if(Math.hypot(e.clientX-drag.x0,e.clientY-drag.y0)<7) return; drag.on=true; b.classList.add('lift'); autoScroll()}
+      drag.cx=e.clientX; drag.cy=e.clientY; follow();
+    });
+    const end=e=>{
+      if(!drag||drag.m!==m) return;
+      const d=drag; drag=null; cancelAnimationFrame(scrollRaf);
+      if(!d.on) return;
+      suppress=true; setTimeout(()=>suppress=false,0);
+      b.classList.remove('lift');
+      const fz=$('#freezer').getBoundingClientRect();
+      if(e.type==='pointerup'&&e.clientY<fz.bottom&&e.clientY>fz.top){toTop(m);return}
+      if(m.fromTop){m.y=Math.max(8,m.y);place(m);tock();straighten(m);checkFrog(m);tell(`On the door: ${m.t}.`);return}
+      settle(m); tell(`Moved: ${m.t}.`);
+    };
+    b.addEventListener('pointerup',end); b.addEventListener('pointercancel',end);
+    b.addEventListener('click',()=>{if(suppress)return; openMenu(m,b)});
+    b.addEventListener('keydown',e=>{
+      const k=e.key, st=e.shiftKey?40:8; let dx=0,dy=0;
+      if(k==='ArrowLeft')dx=-st; else if(k==='ArrowRight')dx=st; else if(k==='ArrowUp')dy=-st; else if(k==='ArrowDown')dy=st; else return;
+      e.preventDefault(); e.stopPropagation(); m.x=Math.max(0,Math.min(W()-b.offsetWidth,m.x+dx)); m.y=Math.max(8,m.y+dy); m.touched=true; place(m); grow(m.y+140);
+      checkFrog(m); b.scrollIntoView({block:'nearest'});
+    });
+  }
+  function follow(){
+    if(!drag) return; const m=drag.m, dr=door.getBoundingClientRect();
+    m.x=Math.max(0,Math.min(W()-m.el.offsetWidth,drag.cx-drag.ox-dr.left));
+    m.y=Math.max(-160,drag.cy-drag.oy-dr.top); place(m); grow(m.y+160);
+  }
+  function autoScroll(){
+    cancelAnimationFrame(scrollRaf);
+    const step=()=>{ if(!drag) return;
+      const h=fr.clientHeight, y=drag.cy; let v=0;
+      if(y>h-80) v=Math.min(18,(y-(h-80))/3); else if(y<130&&fr.scrollTop>0) v=-Math.min(18,(130-y)/3);
+      if(v){fr.scrollTop+=v; follow(); more()}
+      scrollRaf=requestAnimationFrame(step)};
+    scrollRaf=requestAnimationFrame(step);
+  }
+  function settle(m){
+    m.y=Math.max(8,m.y); m.touched=true; place(m); tock();
+    if(!reduce){m.el.classList.remove('snap');void m.el.offsetWidth;m.el.classList.add('snap')}
+    checkFrog(m);
+  }
+
+  /* menu on a magnet */
+  function openMenu(m,b,inTray){
+    menuFor={m,b,inTray}; menu.innerHTML='';
+    const items=inTray?[['Put back on the door','down'],['Remove','rm'],['Close','x']]:[['Move to top','top'],['Take it off the fridge','rm'],['Close','x']];
+    items.forEach(([label,act])=>{const x=document.createElement('button');x.type='button';x.setAttribute('role','menuitem');x.textContent=label;if(act==='top'||act==='down')x.className='top';x.dataset.act=act;menu.appendChild(x)});
+    menu.hidden=false;
+    const r=b.getBoundingClientRect(), mw=menu.offsetWidth, mh=menu.offsetHeight;
+    let left=Math.min(innerWidth-mw-10,Math.max(10,r.left)), top=r.bottom+10; if(top+mh>innerHeight-10) top=Math.max(64,r.top-mh-10);
+    menu.style.left=left+'px'; menu.style.top=top+'px'; menu.querySelector('button').focus();
+  }
+  function closeMenu(back){if(menu.hidden)return;menu.hidden=true;const f=menuFor;menuFor=null;if(back&&f&&f.b.isConnected)f.b.focus()}
+  menu.addEventListener('click',e=>{
+    const x=e.target.closest('button'); if(!x||!menuFor) return; const {m,b,inTray}=menuFor, act=x.dataset.act;
+    if(act==='x'){closeMenu(true);return}
+    menu.hidden=true; menuFor=null;
+    if(act==='top') toTop(m);
+    else if(act==='rm'&&!inTray){m.el.remove();mags=mags.filter(o=>o!==m);tell(`Taken off: ${m.t}.`);fr.focus({preventScroll:true})}
+    else if(act==='rm'&&inTray){keep.splice(m.i,1);storeSaved(keep);renderSaved();tell(`Removed from the top: ${m.t}.`);(saved.querySelector('.mag')||$('#fzTop')).focus()}
+    else if(act==='down'){keep.splice(m.i,1);storeSaved(keep);renderSaved();
+      const dr=door.getBoundingClientRect(), y=Math.max(20,fr.clientHeight*.4-dr.top);
+      const n=add({t:m.t,k:m.k,own:m.own,touched:true,r:m.a||tilt()},20+Math.random()*60,y); tock(); requestAnimationFrame(()=>straighten(n)); tell(`Back on the door: ${m.t}.`); n.el.focus({preventScroll:true}); n.el.scrollIntoView({block:'center'})}
+  });
+  menu.addEventListener('keydown',e=>{
+    const bs=[...menu.querySelectorAll('button')], i=bs.indexOf(document.activeElement);
+    if(e.key==='Escape'){e.preventDefault();e.stopPropagation();closeMenu(true)}
+    else if(e.key==='ArrowDown'){e.preventDefault();bs[(i+1)%bs.length].focus()}
+    else if(e.key==='ArrowUp'){e.preventDefault();bs[(i-1+bs.length)%bs.length].focus()}
+    else if(e.key==='Tab'){closeMenu(true)}
+  });
+  fr.addEventListener('scroll',()=>{closeMenu(false);more()},{passive:true});
+  document.addEventListener('pointerdown',e=>{if(!menu.hidden&&!menu.contains(e.target))closeMenu(false)},true);
+
+  function toTop(m){
+    m.el.remove(); mags=mags.filter(o=>o!==m);
+    keep.push({t:m.t,k:m.k,own:m.own,a:tilt()}); storeSaved(keep); renderSaved(); tock();
+    tell(`Saved to the top: ${m.t}. ${keep.length} saved for later.`);
+    fr.focus({preventScroll:true});
+  }
+  const tilt=()=>{const a=8+Math.random()*9;return (Math.random()<.5?-a:a).toFixed(1)+'deg'}; // saved magnets hang crooked, about 15 degrees
+  function renderSaved(){
+    saved.innerHTML=''; $('#fzEmpty').hidden=keep.length>0; let fixed=false;
+    keep.forEach((o,i)=>{
+      if(!o.a){o.a=tilt();fixed=true}
+      const li=document.createElement('li'), b=magEl({...o,r:o.a}); li.appendChild(b); saved.appendChild(li);
+      b.setAttribute('aria-label',o.t+'. Saved magnet. Drag it down to the door, or press Enter.');
+      wireTray(b,o);
+    });
+    if(fixed) storeSaved(keep);
+  }
+  /* a saved magnet can be pulled straight off the freezer and dropped on the door below */
+  function wireTray(b,o){
+    let st=null;
+    b.addEventListener('pointerdown',e=>{if(e.button>0)return;closeMenu();st={x0:e.clientX,y0:e.clientY,id:e.pointerId};try{b.setPointerCapture(e.pointerId)}catch(_){}});
+    b.addEventListener('pointermove',e=>{
+      if(!st||Math.hypot(e.clientX-st.x0,e.clientY-st.y0)<7) return;
+      const r=b.getBoundingClientRect(), ox=e.clientX-r.left, oy=e.clientY-r.top, id=st.id; st=null;
+      const i=keep.indexOf(o); if(i<0) return; keep.splice(i,1); storeSaved(keep);
+      const dr=door.getBoundingClientRect();
+      const m=add({t:o.t,k:o.k,own:o.own,touched:true,r:o.a},r.left-dr.left,r.top-dr.top);
+      m.fromTop=true; m.x=r.left-dr.left; m.y=r.top-dr.top; place(m);
+      try{b.releasePointerCapture(id)}catch(_){}
+      renderSaved();
+      m.el.classList.add('lift');
+      drag={m,id,x0:e.clientX,y0:e.clientY,ox,oy,on:true,cx:e.clientX,cy:e.clientY};
+      try{m.el.setPointerCapture(id)}catch(_){}
+      autoScroll(); follow();
+    });
+    const up=()=>{if(st){st=null}};
+    b.addEventListener('pointerup',up); b.addEventListener('pointercancel',up);
+    b.addEventListener('click',()=>{if(!b.isConnected)return;openMenu({...o,i:keep.indexOf(o)},b,true)});
+  }
+  function straighten(m){
+    m.fromTop=false; m.r='0deg';
+    if(reduce){m.el.style.setProperty('--r','0deg');return}
+    m.el.classList.add('straighten'); void m.el.offsetWidth; m.el.style.setProperty('--r','0deg');
+    setTimeout(()=>m.el.classList.remove('straighten'),600);
+  }
+  function more(){
+    if(fr.hidden) return; let guard=0;
+    while(door.getBoundingClientRect().bottom<fr.clientHeight+1400&&guard++<4) chunk();
+  }
+
+  /* read the fridge like a page: rows by height, left to right; a wide gap starts a new poem */
+  function readPoems(){
+    const ms=mags.filter(m=>m.touched).map(m=>({m,r:rectOf(m)})).map(o=>({t:o.m.t,cx:o.r.x,cy:o.r.y+o.r.h/2,h:o.r.h}))
+      .sort((a,b)=>a.cy-b.cy);
+    const rows=[];
+    ms.forEach(o=>{const last=rows[rows.length-1]; if(last&&Math.abs(o.cy-last.cy)<o.h*.6){last.items.push(o)} else rows.push({cy:o.cy,items:[o]})});
+    const poems=[]; let cur=null, prev=null;
+    rows.forEach(r=>{
+      const line=r.items.sort((a,b)=>a.cx-b.cx).map(o=>o.t).join(' ');
+      if(!cur||r.cy-prev>96){cur=[];poems.push(cur)}
+      cur.push(line); prev=r.cy;
+    });
+    return poems;
+  }
+  function mailText(){
+    const picks=[...$$('#fzPicks input')].filter(c=>c.checked).map(c=>+c.value);
+    const poems=readPoems().filter((p,i)=>picks.includes(i));
+    return poems.map(p=>p.join('\n')).join('\n\n')+(poems.length?'\n\n':'')+'Made at Kireji Pond, an EN195 game.';
+  }
+  function mailHref(){
+    const to=$('#fzTo').value.trim().replace(/[^\w.@+,-]/g,'');
+    return 'mailto:'+to+'?subject='+encodeURIComponent('Haiku from Kireji Pond')+'&body='+encodeURIComponent($('#fzText').value.replace(/\n/g,'\r\n'));
+  }
+  function openMail(){
+    const poems=readPoems(), ul=$('#fzPicks'); ul.innerHTML='';
+    poems.forEach((p,i)=>{const li=document.createElement('li'), lab=document.createElement('label'), c=document.createElement('input');
+      c.type='checkbox'; c.checked=true; c.value=i; lab.appendChild(c); lab.appendChild(document.createTextNode(p[0]+(p.length>1?' …':''))); li.appendChild(lab); ul.appendChild(li)});
+    if(!poems.length){const li=document.createElement('li');li.textContent='Move a magnet or write a line first. Only magnets you placed are sent.';ul.appendChild(li)}
+    $('#fzText').value=mailText(); $('#fzMailGo').href=mailHref();
+    $('#fzMail').showModal();
+  }
+  $('#fzPicks').addEventListener('change',()=>{$('#fzText').value=mailText();$('#fzMailGo').href=mailHref()});
+  $('#fzText').addEventListener('input',()=>$('#fzMailGo').href=mailHref());
+  $('#fzTo').addEventListener('input',()=>$('#fzMailGo').href=mailHref());
+  $('#fzMailGo').addEventListener('click',()=>{$('#fzMailGo').href=mailHref(); tell('Opening your email app.')});
+  $('#fzCopy').addEventListener('click',async()=>{
+    const t=$('#fzText').value; let ok=false;
+    try{await navigator.clipboard.writeText(t);ok=true}catch(e){try{$('#fzText').select();ok=document.execCommand('copy')}catch(_){}}
+    $('#fzCopy').textContent=ok?'Copied':'Select and copy'; setTimeout(()=>$('#fzCopy').textContent='Copy',1800);
+  });
+  $('#fzMailX').addEventListener('click',()=>$('#fzMail').close());
+
+  /* the pencil */
+  $('#fzPencil').addEventListener('click',()=>{$('#fzLine').value='';$('#fzSyl').textContent='Five or seven syllables fit a haiku.';$('#fzWrite').showModal();$('#fzLine').focus();try{Snd.paper()}catch(e){}});
+  $('#fzLine').addEventListener('input',e=>{const v=e.target.value.trim(), n=v?syl(v):0;$('#fzSyl').textContent=v?`About ${n} syllable${n===1?'':'s'}.`:'Five or seven syllables fit a haiku.'});
+  $('#fzWriteX').addEventListener('click',()=>$('#fzWrite').close());
+  $('#fzWriteF').addEventListener('submit',e=>{
+    const v=$('#fzLine').value.replace(/\s+/g,' ').trim(); if(!v){e.preventDefault();$('#fzLine').focus();return}
+    const dr=door.getBoundingClientRect(), y=Math.max(20,fr.clientHeight*.45-dr.top);
+    const m=add({t:v,k:'i',own:true,touched:true},16+Math.random()*80,y); tock();
+    setTimeout(()=>{m.el.focus({preventScroll:true});m.el.scrollIntoView({block:'center'})},0);
+    tell(`Your line is on the fridge: ${v}. Drag it, or use the arrow keys.`);
+  });
+
+  /* open and close */
+  function open(from){
+    opener=from||$('#fzOpen');
+    const tex=$('#imgMottle')&&$('#imgMottle').getAttribute('href'); if(tex) $('#fzBox').style.setProperty('--mottle',`url(${tex})`);
+    fr.hidden=false; document.body.classList.add('fzopen'); $('#app').inert=true; fr.scrollTop=0;
+    if(builtFor!==S.wins) build();
+    renderSaved(); more();
+    fr.focus({preventScroll:true}); tell('The Icebox. Your three poems are on the door as magnets. Scroll down for more words.');
+  }
+  function close(){closeMenu(false); fr.hidden=true; document.body.classList.remove('fzopen'); $('#app').inert=false; if(opener&&opener.isConnected) opener.focus()}
+  $('#fzBack').addEventListener('click',close);
+  $('#fzTop').addEventListener('click',()=>{fr.scrollTo({top:0,behavior:reduce?'auto':'smooth'});(saved.querySelector('.mag')||$('#fzTitle')).focus({preventScroll:true})});
+  $('#fzSend').addEventListener('click',openMail);
+  fr.addEventListener('keydown',e=>{if(e.key==='Escape'&&menu.hidden&&!$('#fzWrite').open&&!$('#fzMail').open)close()});
+  addEventListener('resize',()=>{if(fr.hidden)return;mags.forEach(m=>{m.x=Math.max(0,Math.min(m.x,W()-m.el.offsetWidth));place(m)})});
+  return {open,close,reset(){builtFor=null},get isOpen(){return !fr.hidden}};
+})();
+$('#fzOpen').addEventListener('click',e=>Fz.open(e.currentTarget));
 
 /* ---------- boot ---------- */
 applySeason(); renderPads(); renderSlots(); renderSeals(); resetFrog();
