@@ -13,6 +13,8 @@
      poem. Hedge wins. Does the poem land with you? Does this one hold?" The camera holds on the scene through the fly,
      the gulp and the leap (page scroll locked), holds one beat on the frog, then scrolls down to the player's poem.
      Win screens ask instead of declaring. The fridge no longer auto-opens over the three poems; the button stays.
+     v5.2.1 2026-09-25 (founder): "the next season's music should not start until you click next season." The creature
+     sounds follow S.sndRound, which only changes when a round starts; the win screen keeps the season just played.
      v5.1 (founder): saved magnets hang crooked in the freezer tray (8 to 17 degrees) and can be dragged straight
      down onto the door, where they straighten out as they land. -->
 <!-- v4.7 2026-09-25: directions scroll inside the card so the water ring stays whole; sound control is a small icon. -->
@@ -1410,6 +1412,7 @@ function startRound(){
   endTour();
   if(!slipRolled) rollSlip(true);
   S.phase='play'; S.busy=false; $('#slots').classList.remove('busy'); S.pads=3; S.slots=[null,null,null];
+  S.sndRound=S.round; // v5.2.1: the season's creatures change here, on Next season, not at the win
   applySeason(); renderPads(); renderSlots(); renderSeals();
   layer.classList.remove('hush'); layer.inert=false; prefill(); setPaused(false); if(S.still) dealList();
   show('pPlay'); if(innerWidth<780){try{scrollTo({top:0,behavior:'smooth'})}catch(e){scrollTo(0,0)}}
@@ -2048,7 +2051,7 @@ const Snd=(()=>{
   ];
   function tick(){
     if(!ready()||document.hidden) return;
-    const se=Math.max(0,Math.min(2,(typeof S!=='undefined'&&S.round)||0)), t=performance.now()/1000;
+    const se=Math.max(0,Math.min(2,(typeof S!=='undefined'&&S.sndRound)||0)), t=performance.now()/1000;
     if(se!==lastSeason){lastSeason=se; for(const k in next) delete next[k];
       PLAN[se].forEach(([k,first])=>next[k]=t+first); if(se) next.stray=t+rnd(60,120)}
     PLAN[se].forEach(([k,,a,b])=>{if(t>=next[k]){call[k]();next[k]=t+rnd(a,b)}});
