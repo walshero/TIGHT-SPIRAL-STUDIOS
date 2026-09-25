@@ -1510,6 +1510,12 @@ function splash(cx,cy){
   }).then(()=>{drops.forEach(d=>d.c.remove());cols.forEach(c=>c.e.remove())});
 }
 function resetFrog(){Object.assign(FROG,{x:HOME.x,y:HOME.y,rot:0,sx:1,sy:1,flip:1});pose(false);clipAt(null);drawFrog();$('#wake').setAttribute('d','')}
+function yaa(){
+  const el=$('#yaa'); if(!el) return; Snd.yaa();
+  el.textContent='や'; el.style.transition='none'; el.style.opacity=1; el.style.transform='rotate(-5deg)'; el.style.transformBox='fill-box'; el.style.transformOrigin='center';
+  let n=0; const iv=setInterval(()=>{if(n++<4) el.textContent+='ー'; else clearInterval(iv)},reduce?1:170);
+  setTimeout(()=>{el.style.transition='opacity .45s';el.style.opacity=0},1700);
+}
 async function frogJump(){
   if(reduce){yaa();splash(470,622);await wait(1400);return}
   jaw(false); await wait(500);
