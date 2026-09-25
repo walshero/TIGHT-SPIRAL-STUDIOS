@@ -945,6 +945,16 @@ function retire(t,cls){
 }
 
 /* ---------- play ---------- */
+/* v4.3: an open menu floats above everything (the picture's edge, the poem panel), always on screen */
+function placeChoice(t){
+  const c=t.ch; if(!c) return; const r=t.el.querySelector('.in').getBoundingClientRect(), cw=c.offsetWidth, ch=c.offsetHeight, m=8;
+  let top=r.bottom+10; if(top+ch>innerHeight-m) top=r.top-10-ch; if(top<m) top=Math.max(m,innerHeight-m-ch);
+  const left=Math.max(m,Math.min(r.left,innerWidth-m-cw));
+  c.style.left=left.toFixed(0)+'px'; c.style.top=top.toFixed(0)+'px';
+}
+function openChoice(t){if(t.list)return;const c=t.el.querySelector('.choice');if(!c)return;t.ch=c;document.body.appendChild(c);c.classList.add('float');placeChoice(t)}
+function closeChoice(t){const c=t.ch;if(!c)return;t.ch=null;c.classList.remove('float');c.style.left=c.style.top='';t.el.appendChild(c)}
+{const re=()=>tiles.forEach(o=>{if(o.held&&o.ch)placeChoice(o)});addEventListener('scroll',re,{passive:true});addEventListener('resize',re)}
 function release(t){closeChoice(t);t.held=false;t.el.classList.remove('held');t.el.querySelector('.choice').hidden=true;t.el.querySelector('.in').setAttribute('aria-expanded','false')}
 function toggleHold(t){
   if(S.phase!=='play'||S.busy||t.gone) return;
