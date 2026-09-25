@@ -1770,7 +1770,8 @@ const Snd=(()=>{
 })();
 {const b=$('#snd'), paint=()=>{b.setAttribute('aria-pressed',Snd.on);$('#sndTxt').textContent=Snd.on?'Sound on':'Sound off'};
   paint(); b.addEventListener('click',()=>{Snd.set(!Snd.on);paint()});
-  const wake=()=>Snd.wake(); addEventListener('pointerdown',wake,{capture:true}); addEventListener('keydown',wake,{capture:true});
+  const wake=()=>Snd.wake();
+  ['touchend','click','keydown','pointerup'].forEach(ev=>addEventListener(ev,wake,{capture:true,passive:true}));
   document.addEventListener('visibilitychange',()=>Snd.hide(document.hidden));}
 
 /* ---------- v4 opening panels ---------- */
