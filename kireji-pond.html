@@ -1820,9 +1820,9 @@ const Snd=(()=>{
     if(!ready()||document.hidden) return;
     const se=Math.max(0,Math.min(2,(typeof S!=='undefined'&&S.round)||0)), t=performance.now()/1000;
     if(se!==lastSeason){lastSeason=se; for(const k in next) delete next[k];
-      PLAN[se].forEach(([k,first])=>next[k]=t+first); if(!next.frog) next.frog=t+rnd(25,45)}
+      PLAN[se].forEach(([k,first])=>next[k]=t+first); if(se) next.stray=t+rnd(60,120)}
     PLAN[se].forEach(([k,,a,b])=>{if(t>=next[k]){call[k]();next[k]=t+rnd(a,b)}});
-    if(t>=next.frog){call.frog();next.frog=t+rnd(45,90)}
+    if(se&&t>=next.stray){call.frog();next.stray=t+rnd(120,200)} // out of season, the frog is rare
   }
   function unlock(){
     if(!on) return; init(); if(!ac) return;
