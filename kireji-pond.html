@@ -1661,6 +1661,88 @@ function layStreamLines(){
 try{layStreamLines()}catch(e){}
 
 
+/* ---------- v4.1 sound: made here, in the page, no files ----------
+   A soft waterfall under everything; the fly's buzz, which thins and drops as it flees;
+   the whip and wet tock of the tongue; the gulp; paper; and the pochan of the last leap. */
+const Snd=(()=>{
+  let on=true, ac=null, master=null, fall=null, bz=null, noiseBuf=null;
+  try{const v=localStorage.getItem('kirejiSound'); if(v==='0') on=false}catch(e){}
+  const AC=window.AudioContext||window.webkitAudioContext;
+  function init(){
+    if(ac||!AC) return ac;
+    try{ac=new AC()}catch(e){return null}
+    master=ac.createGain(); master.gain.value=on?.55:0; master.connect(ac.destination);
+    noiseBuf=ac.createBuffer(1,ac.sampleRate*4,ac.sampleRate);
+    const d=noiseBuf.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+    // the waterfall: noise through a low band, with a slow breath in it
+    const src=ac.createBufferSource(); src.buffer=noiseBuf; src.loop=true;
+    const lp=ac.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=820; lp.Q.value=.4;
+    const hp=ac.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=140;
+    const g=ac.createGain(); g.gain.value=0;
+    const lfo=ac.createOscillator(); lfo.frequency.value=.09; const lg=ac.createGain(); lg.gain.value=.012; lfo.connect(lg).connect(g.gain); lfo.start();
+    src.connect(hp).connect(lp).connect(g).connect(master); src.start();
+    const src2=ac.createBufferSource(); src2.buffer=noiseBuf; src2.loop=true; src2.playbackRate.value=.93;
+    const bp=ac.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=2600; bp.Q.value=.7;
+    const g2=ac.createGain(); g2.gain.value=.012; src2.connect(bp).connect(g2).connect(g); src2.start();
+    g.gain.setTargetAtTime(.11,ac.currentTime,1.2);
+    fall=g;
+    return ac;
+  }
+  const now=()=>ac.currentTime;
+  const ready=()=>on&&init()&&ac.state==='running';
+  function env(g,t,a,peak,dec){g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(peak,t+a);g.gain.exponentialRampToValueAtTime(.0001,t+a+dec)}
+  function noise(t,dur,type,f0,f1,peak,q){
+    const s=ac.createBufferSource(); s.buffer=noiseBuf; s.playbackRate.value=1;
+    const f=ac.createBiquadFilter(); f.type=type; f.Q.value=q||1; f.frequency.setValueAtTime(f0,t); if(f1) f.frequency.exponentialRampToValueAtTime(f1,t+dur);
+    const g=ac.createGain(); env(g,t,.008,peak,dur); s.connect(f).connect(g).connect(master); s.start(t,Math.random()*3); s.stop(t+dur+.05);
+  }
+  function tone(t,type,f0,f1,dur,peak,a){
+    const o=ac.createOscillator(); o.type=type; o.frequency.setValueAtTime(f0,t); if(f1) o.frequency.exponentialRampToValueAtTime(f1,t+dur);
+    const g=ac.createGain(); env(g,t,a||.005,peak,dur); o.connect(g).connect(master); o.start(t); o.stop(t+dur+.05);
+  }
+  const api={
+    get on(){return on},
+    hide(h){if(!ac)return; if(h) ac.suspend().catch(()=>{}); else if(on) ac.resume().catch(()=>{})},
+    probe(){return {ac,master}},
+    wake(){if(!on) return; init(); if(ac&&ac.state==='suspended') ac.resume().catch(()=>{})},
+    set(v){on=v; try{localStorage.setItem('kirejiSound',v?'1':'0')}catch(e){}
+      if(v){api.wake(); if(master) master.gain.setTargetAtTime(.55,now(),.15)} else if(master){master.gain.setTargetAtTime(0,now(),.08); api.buzz(0)}},
+    buzz(level){ // level: the fly's size, 0 = gone
+      if(!ac) return; if(!on) level=0;
+      if(!bz&&level>0&&ready()){
+        const o=ac.createOscillator(); o.type='sawtooth'; o.frequency.value=190;
+        const o2=ac.createOscillator(); o2.type='square'; o2.frequency.value=381;
+        const vib=ac.createOscillator(); vib.frequency.value=13; const vg=ac.createGain(); vg.gain.value=7; vib.connect(vg); vg.connect(o.frequency); vg.connect(o2.frequency);
+        const f=ac.createBiquadFilter(); f.type='bandpass'; f.frequency.value=700; f.Q.value=1.3;
+        const g2=ac.createGain(); g2.gain.value=.25; const g=ac.createGain(); g.gain.value=0;
+        o.connect(f); o2.connect(g2).connect(f); f.connect(g).connect(master); o.start(); o2.start(); vib.start();
+        bz={o,o2,vib,g,f};
+      }
+      if(!bz) return;
+      const t=now(), L=Math.max(0,Math.min(1.3,level));
+      bz.g.gain.setTargetAtTime(L>0?.085*L*L:0,t,.05);
+      bz.o.frequency.setTargetAtTime(150+42*L,t,.08); bz.o2.frequency.setTargetAtTime(301+84*L,t,.08);
+      bz.f.frequency.setTargetAtTime(420+380*L,t,.08);
+      if(L===0){const b=bz; bz=null; setTimeout(()=>{try{b.o.stop();b.o2.stop();b.vib.stop()}catch(e){}},400)}
+    },
+    whip(){if(!ready())return;const t=now(); noise(t,.2,'bandpass',700,4200,.22,2.5); tone(t+.02,'sine',520,160,.12,.05)},
+    hit(){if(!ready())return;const t=now(); tone(t,'sine',210,80,.16,.22); noise(t,.09,'lowpass',1800,500,.14)},
+    gulp(){if(!ready())return;const t=now(); tone(t,'sine',240,70,.22,.2,.02); tone(t+.16,'sine',150,60,.18,.12,.02)},
+    tock(){if(!ready())return;const t=now(); tone(t,'triangle',880,720,.1,.16); tone(t,'sine',1760,1500,.05,.05)},
+    sink(){if(!ready())return;const t=now(); tone(t,'sine',190,60,.4,.16,.01); noise(t,.3,'lowpass',900,200,.06)},
+    swish(){if(!ready())return;const t=now(); noise(t,.45,'bandpass',1500,380,.09,.9)},
+    crumple(){if(!ready())return;const t=now(); for(let i=0;i<7;i++) noise(t+i*.028+Math.random()*.02,.035,'highpass',2400+Math.random()*2000,0,.09)},
+    paper(up){if(!ready())return;const t=now(), n=up?9:5; for(let i=0;i<n;i++) noise(t+i*.11+Math.random()*.05,.06,'highpass',3000,0,.03+Math.random()*.03)},
+    plop(){if(!ready())return;const t=now(); tone(t,'sine',320,1250,.07,.26,.004); noise(t+.02,.5,'lowpass',2200,300,.12);
+      tone(t+.34,'sine',420,1500,.05,.1,.004); tone(t+.62,'sine',520,1700,.04,.05,.004)}
+  };
+  return api;
+})();
+{const b=$('#snd'), paint=()=>{b.setAttribute('aria-pressed',Snd.on);$('#sndTxt').textContent=Snd.on?'Sound on':'Sound off'};
+  paint(); b.addEventListener('click',()=>{Snd.set(!Snd.on);paint()});
+  const wake=()=>Snd.wake(); addEventListener('pointerdown',wake,{capture:true}); addEventListener('keydown',wake,{capture:true});
+  document.addEventListener('visibilitychange',()=>Snd.hide(document.hidden));}
+
 /* ---------- v4 opening panels ---------- */
 const tourEl=$('#tour'), panes=$$('.tpane'); let tIdx=0;
 function goTour(i,focus){
