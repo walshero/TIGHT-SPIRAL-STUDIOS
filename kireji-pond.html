@@ -1358,6 +1358,7 @@ function flySequence(){
         ctx.fillStyle=SUMI;trail.forEach((p,i)=>{if(i%2)return;ctx.globalAlpha=.1+.4*i/trail.length;ctx.beginPath();ctx.arc(p.x,p.y,(1+1.4*i/trail.length)*sz,0,Math.PI*2);ctx.fill()});
         ctx.globalAlpha=1;
         if(t>T.E-70) jaw(true);
+        if(t>=T.E&&!whipped){whipped=true;Snd.whip()}
         if(t>=T.E){ // the tongue: always aimed at the fly, always a little behind it, until it isn't
           const k=(t-T.E)/(T.F-T.E), g=1-(1-k)*(1-k), m=mouthScreen();
           const tip={x:m.x+(f.x-m.x)*g,y:m.y+(f.y-m.y)*g}, L=Math.hypot(f.x-m.x,f.y-m.y);
