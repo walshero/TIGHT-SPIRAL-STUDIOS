@@ -7,7 +7,20 @@
 <meta name="audience" content="MassBay EN195 students learning to stage a secret without announcing it; the founder as first playtester">
 <title>Dress Rehearsal: an EN195 game</title>
 <!--
-  DRESS REHEARSAL (file: row-k, v41) - a staging game. Tight Spiral Productions.
+  DRESS REHEARSAL (file: row-k, v44) - a staging game. Tight Spiral Productions.
+  v44 (founder 2026-09-25): Ernesto's OBJECT/SHOW card is the founder's line
+  verbatim: "A rubber door wedge, worn smooth, sticks out from Ernesto's jacket
+  pocket." Supersedes the v33 studio rewrite (wedge taken out and turned over),
+  which was never a founder ruling. The wedge stays in the pocket and is still
+  visible to the house, so Marge's "clock the wedge" holds.
+  v43 (founder 2026-09-25): "Add authentic dialogue to Fore in dress rehearsal and
+  responding to work in progress for Sellers." The About screen and this header now
+  give each of them a contribution in place of the bare "Stagecraft."
+  v42 (founder 2026-09-25): "Dress rehearsal crowd sound is more like trains in a
+  tunnel." The house murmur is rebuilt from voices, not noise: twelve synthesized
+  talkers with vowel formants, syllables, phrases and breaths, in a short room.
+  Measured on an offline render against v41: energy below 200 Hz 32% -> 2%,
+  speech band (300 Hz to 3 kHz) 58% -> 90%, syllable-rate loudness change 0.36 -> 0.50.
   v41 (founder 2026-09-24): "Just call it dress rehearsal. Splash page should say
   an en195 game." Title is Dress Rehearsal; the header reads AN EN195 GAME. The
   seat in the house (Dev, Row K) keeps its name - it is a seat, not the title.
@@ -18,8 +31,8 @@
     David Mamet - drama is what the character does; evidence at body scale.
     George Saunders - the reader's mind steered line by line; weight arrives
       sideways, through the concrete object.
-    Nick Fore - stagecraft.
-    Heather Sellers - stagecraft. (v35 founder correction: the credit is
+    Nick Fore - authentic dialogue (founder, 2026-09-25).
+    Heather Sellers - responding to work in progress (founder, 2026-09-25). (v35 founder correction: the credit is
       Heather Sellers, the writer and teacher of creative writing. v19-v34
       carried "Sellars" and glossed it as the theatre director Peter Sellars -
       a studio misidentification, not a founder ruling.)
@@ -1500,7 +1513,7 @@
         OBJECT:[
           {id:"o1", kind:"TELL", text:"A banner over the elevator: WELCOME BACK, ERNESTO, WHO IS CLAUSTROPHOBIC."},
           {id:"o2", kind:"INVISIBLE", text:"The memory of the hallway closet, summer of 1998."},
-          {id:"o3", kind:"SHOW", text:"Ernesto takes a rubber door wedge, worn smooth, out of his jacket pocket and turns it over in his hand while they wait."}
+          {id:"o3", kind:"SHOW", text:"A rubber door wedge, worn smooth, sticks out from Ernesto's jacket pocket."}
         ],
         MOVE:[
           {id:"m1", kind:"TELL", text:"Ernesto turns to the audience and mouths: SMALL. SPACES. NO."},
@@ -1900,29 +1913,78 @@
       s.connect(bp); bp.connect(g); g.connect(c.destination);
       s.start(t, Math.random()); s.stop(t + dur + 0.05);
     }
-    // a wordless crowd: talkers are brown noise through a moving formant,
-    // pulsed at a syllable rate, over a low room bed
+    // a wordless crowd, v42 (founder 09-25: "crowd sound is more like trains in
+    // a tunnel"). v39 built each talker from brown noise swept by slow LFOs over
+    // a 420 Hz rumble bed: all low end and steady whoosh, no syllables, which is
+    // exactly a tunnel. Now each talker is a VOICE: a buzzing vocal cord at a
+    // speaking pitch, two vowel formants that jump to a new vowel every
+    // syllable, syllables grouped into phrases with breaths between, pitch that
+    // falls across a phrase, and the odd laugh. Twelve of them, spread left to
+    // right and at different distances, in a short synthetic room. A high-pass
+    // at 150 Hz keeps the rumble out. Scheduled a couple of seconds ahead on the
+    // audio clock, so it never stutters.
+    var VOWELS = [[730,1090],[530,1840],[570,840],[440,1020],[500,1500],[660,1700],[400,1920],[620,1200]];
+    var ROOM = null;
+    function room(c){
+      if(ROOM && ROOM.ctx === c) return ROOM.buf;
+      var len = Math.floor(c.sampleRate*1.1), b = c.createBuffer(2, len, c.sampleRate);
+      for(var ch=0; ch<2; ch++){ var d = b.getChannelData(ch); for(var i=0;i<len;i++) d[i] = (Math.random()*2-1)*Math.pow(1-i/len, 3.2); }
+      ROOM = { ctx:c, buf:b }; return b;
+    }
     function makeCrowd(c, level, fadeIn){
-      var master = c.createGain(), nodes = [], t = c.currentTime;
+      var master = c.createGain(), nodes = [], t = c.currentTime, live = true, timer = null;
       master.gain.setValueAtTime(0.0001, t);
       master.gain.exponentialRampToValueAtTime(level, t + fadeIn);
-      master.connect(c.destination);
-      function loopSrc(){ var s = c.createBufferSource(); s.buffer = buf(c, true); s.loop = true; s.start(0, Math.random()*1.5); nodes.push(s); return s; }
-      function osc(f, depth, target){ var o = c.createOscillator(), g = c.createGain(); o.frequency.value = f; g.gain.value = depth; o.connect(g); g.connect(target); o.start(); nodes.push(o); }
-      for(var k=0; k<7; k++){
-        var s = loopSrc(), bp = c.createBiquadFilter(), g = c.createGain();
-        bp.type = "bandpass"; bp.Q.value = 3.2; bp.frequency.value = 320 + Math.random()*620;
-        osc(0.07 + Math.random()*0.12, 90 + Math.random()*110, bp.frequency);
-        g.gain.value = 0.55;
-        osc(3 + Math.random()*2.6, 0.25, g.gain);
-        osc(0.11 + Math.random()*0.2, 0.3, g.gain);
-        s.connect(bp); bp.connect(g); g.connect(master);
+      var hp = c.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 150; hp.Q.value = 0.7;
+      var lp = c.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 3800;
+      var dry = c.createGain(); dry.gain.value = 0.7;
+      var wet = c.createGain(); wet.gain.value = 0.55;
+      var verb = c.createConvolver(); verb.buffer = room(c);
+      hp.connect(lp); lp.connect(dry); lp.connect(verb); verb.connect(wet);
+      dry.connect(master); wet.connect(master); master.connect(c.destination);
+      var talkers = [];
+      for(var k=0; k<12; k++){
+        var low = k % 2 === 0, f0 = low ? 100 + Math.random()*40 : 175 + Math.random()*60;
+        var src = c.createOscillator(); src.type = "sawtooth"; src.frequency.value = f0;
+        var vib = c.createOscillator(), vg = c.createGain(); vib.frequency.value = 4.5 + Math.random()*2; vg.gain.value = f0*0.012;
+        vib.connect(vg); vg.connect(src.frequency);
+        var voice = c.createGain(); voice.gain.value = 0;
+        var f1 = c.createBiquadFilter(); f1.type = "bandpass"; f1.Q.value = 6;
+        var f2 = c.createBiquadFilter(); f2.type = "bandpass"; f2.Q.value = 9;
+        var g2 = c.createGain(); g2.gain.value = 0.8;
+        var near = 0.35 + Math.random()*0.65;
+        var dist = c.createBiquadFilter(); dist.type = "lowpass"; dist.frequency.value = 1800 + near*2600;
+        var out = c.createGain(); out.gain.value = near*1.45;
+        src.connect(voice); voice.connect(f1); voice.connect(f2); f2.connect(g2);
+        f1.connect(dist); g2.connect(dist); dist.connect(out);
+        if(c.createStereoPanner){ var pan = c.createStereoPanner(); pan.pan.value = Math.random()*1.6 - 0.8; out.connect(pan); pan.connect(hp); }
+        else out.connect(hp);
+        src.start(); vib.start(); nodes.push(src, vib);
+        talkers.push({ src:src, voice:voice, f1:f1, f2:f2, f0:f0, next:t + Math.random()*2.5 });
       }
-      var bed = loopSrc(), lp = c.createBiquadFilter(), bg = c.createGain();
-      lp.type = "lowpass"; lp.frequency.value = 420; bg.gain.value = 0.35;
-      bed.connect(lp); lp.connect(bg); bg.connect(master);
+      function phrase(v){
+        var at = v.next, n = 3 + Math.floor(Math.random()*7), laugh = Math.random() < 0.07;
+        for(var s=0; s<n; s++){
+          var dur = laugh ? 0.11 : 0.12 + Math.random()*0.15, vw = VOWELS[laugh ? 0 : Math.floor(Math.random()*VOWELS.length)];
+          var p = v.f0 * (laugh ? 1.25 - s*0.05 : 1.08 - 0.16*s/n) * (0.94 + Math.random()*0.12);
+          v.src.frequency.setTargetAtTime(p, at, 0.03);
+          v.f1.frequency.setTargetAtTime(vw[0]*(0.9+Math.random()*0.2), at, 0.025);
+          v.f2.frequency.setTargetAtTime(vw[1]*(0.9+Math.random()*0.2), at, 0.025);
+          var amp = (laugh ? 0.9 : 0.45 + Math.random()*0.55);
+          v.voice.gain.setTargetAtTime(amp, at, 0.018);
+          v.voice.gain.setTargetAtTime(amp*0.15, at + dur*0.7, 0.03);
+          at += dur + (Math.random() < 0.2 ? 0.05 : 0.01);
+        }
+        v.voice.gain.setTargetAtTime(0, at, 0.05);
+        v.next = at + 0.35 + Math.random()*1.4;
+      }
+      function fill(until){ talkers.forEach(function(v){ while(v.next < until) phrase(v); }); }
+      fill(t + 2.5);
+      if(typeof setInterval === "function" && !c.startRendering) timer = setInterval(function(){ if(live) fill(c.currentTime + 2.5); }, 500);
       return {
+        fill: fill,
         stop: function(fade){
+          live = false; if(timer) clearInterval(timer);
           var t0 = c.currentTime;
           master.gain.cancelScheduledValues(t0);
           master.gain.setValueAtTime(Math.max(master.gain.value, 0.0001), t0);
@@ -2211,8 +2273,8 @@
   var CREDITS = [
     {name:"David Mamet", note:"Drama is what the character does. Evidence at body scale."},
     {name:"George Saunders", note:"The reader's mind steered line by line. Weight arrives sideways, through the concrete object."},
-    {name:"Nick Fore", note:"Stagecraft."},
-    {name:"Heather Sellers", note:"Stagecraft."},
+    {name:"Nick Fore", note:"Authentic dialogue."},
+    {name:"Heather Sellers", note:"Responding to work in progress."},
     {name:"Matt Walsh", note:"Stagecraft contributor. Founder, Tight Spiral Studios."}
   ];
 
