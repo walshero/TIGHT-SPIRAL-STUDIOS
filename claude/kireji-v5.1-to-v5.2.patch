@@ -1,0 +1,63 @@
+11a12,15
+>      v5.2 2026-09-25 (founder): "when win happens lock frame to frog animation. then scroll down and land on players'
+>      poem. Hedge wins. Does the poem land with you? Does this one hold?" The camera holds on the scene through the fly,
+>      the gulp and the leap (page scroll locked), holds one beat on the frog, then scrolls down to the player's poem.
+>      Win screens ask instead of declaring. The fridge no longer auto-opens over the three poems; the button stays.
+216a221
+> html.lockframe,html.lockframe body{overflow:hidden;overscroll-behavior:none}
+758,759c763,764
+<       <p class="eyebrow" id="doneLbl">Spring poem, caught</p>
+<       <h2>The frog is fed.</h2>
+---
+>       <p class="eyebrow" id="doneLbl">Spring poem · the frog is fed</p>
+>       <h2 id="doneQ" tabindex="-1">Does this poem land with you?</h2>
+768,769c773,774
+<       <h2 lang="ja-Latn">mizu no oto</h2>
+<       <p class="note">The sound of the water. Three turns fed the frog, and the frog made the last one.</p>
+---
+>       <h2 lang="ja-Latn" id="finalQ" tabindex="-1">mizu no oto</h2>
+>       <p class="note">The sound of the water. Three turns fed the frog, and the frog made the last one. Read them once more. Does one of them hold for you?</p>
+1430a1436,1448
+> /* ---------- v5.2 camera: hold on the frog, then land on the poem ---------- */
+> function frameScene(){
+>   const r=scene.getBoundingClientRect();
+>   if(r.top<0||r.bottom>innerHeight+1){try{scrollTo({top:Math.max(0,scrollY+r.top),behavior:reduce?'auto':'smooth'})}catch(e){scrollTo(0,Math.max(0,scrollY+r.top))}}
+> }
+> function lockFrame(on){document.documentElement.classList.toggle('lockframe',!!on)}
+> function landOn(el,head){
+>   lockFrame(false);
+>   requestAnimationFrame(()=>{try{el.scrollIntoView({block:'center',behavior:reduce?'auto':'smooth'})}catch(e){el.scrollIntoView()}
+>     head.focus({preventScroll:true})});
+> }
+> const HEDGES=['Does this poem land with you?','Does this one hold?','Read it aloud. Does it hold?'];
+> 
+1433c1451
+<   S.busy=true; $('#slots').classList.add('busy'); layer.inert=true; layer.classList.add('hush');
+---
+>   S.busy=true; frameScene(); $('#slots').classList.add('busy'); layer.inert=true; layer.classList.add('hush');
+1441a1460
+>   frameScene(); await wait(reduce?0:350); lockFrame(true);
+1447c1466
+<     await frogJump();
+---
+>     await frogJump(); await wait(reduce?0:700);
+1451,1453c1470
+<     show('pFinal'); $('#fzOpen').focus();
+<     // v5: after the splash settles, the three poems go up on the fridge
+<     setTimeout(()=>{if(S.phase==='final'&&!Fz.isOpen) Fz.open($('#fzOpen'))},reduce?700:2800);
+---
+>     show('pFinal'); landOn(box,$('#finalQ'));
+1457c1474,1476
+<   $('#doneLbl').textContent=`${se.name} poem, caught`;
+---
+>   await wait(reduce?0:700); // one beat on the fed frog before the camera moves
+>   $('#doneLbl').textContent=`${se.name} poem · the frog is fed`;
+>   $('#doneQ').textContent=HEDGES[S.round%HEDGES.length];
+1459c1478
+<   $('#doneNote').textContent=`The turn lands in line ${ti+1}: “${lines[ti].t}.” Before it, the scene holds still. After it, something moves. That hinge is what Bashō's ya marks.`;
+---
+>   $('#doneNote').textContent=`Your turn sits in line ${ti+1}: “${lines[ti].t}.” Does the scene hold still before it, and move after it? That hinge is what Bashō's ya marks.`;
+1461c1480
+<   S.phase='done'; show('pDone'); $('#next').focus();
+---
+>   S.phase='done'; show('pDone'); landOn($('#donePoem'),$('#doneQ'));

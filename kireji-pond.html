@@ -9,6 +9,10 @@
      the pencil writes new magnets; the door scrolls on forever with more phrase magnets; Move to top keeps a magnet in the
      freezer tray for later (this device only); Send haiku reads the fridge top to bottom into an email or the clipboard.
      The frog hides under one magnet (arcade crossover ruling, 2026-09-25).
+     v5.2 2026-09-25 (founder): "when win happens lock frame to frog animation. then scroll down and land on players'
+     poem. Hedge wins. Does the poem land with you? Does this one hold?" The camera holds on the scene through the fly,
+     the gulp and the leap (page scroll locked), holds one beat on the frog, then scrolls down to the player's poem.
+     Win screens ask instead of declaring. The fridge no longer auto-opens over the three poems; the button stays.
      v5.1 (founder): saved magnets hang crooked in the freezer tray (8 to 17 degrees) and can be dragged straight
      down onto the door, where they straighten out as they land. -->
 <!-- v4.7 2026-09-25: directions scroll inside the card so the water ring stays whole; sound control is a small icon. -->
@@ -214,6 +218,7 @@ kbd{font:600 18px/1 "Zen Kaku Gothic New",sans-serif;border:1px solid currentCol
 .plist .tile.take,.plist .tile.sink,.plist .tile.going{display:none}
 body.still .scene,body.still .scene *,.plist,.plist *{animation:none!important;transition:none!important}
 body.still #stream{visibility:hidden}
+html.lockframe,html.lockframe body{overflow:hidden;overscroll-behavior:none}
 #fx{position:fixed;inset:0;width:100%;height:100%;display:block;pointer-events:none;z-index:50}
 @media (prefers-reduced-motion:reduce){
   .fallfx path,.flow,#throat,.final .ripple{animation:none}
@@ -755,8 +760,8 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
 
     <!-- Round done -->
     <section id="pDone" hidden>
-      <p class="eyebrow" id="doneLbl">Spring poem, caught</p>
-      <h2>The frog is fed.</h2>
+      <p class="eyebrow" id="doneLbl">Spring poem · the frog is fed</p>
+      <h2 id="doneQ" tabindex="-1">Does this poem land with you?</h2>
       <blockquote class="poem" id="donePoem"></blockquote>
       <p class="note" id="doneNote"></p>
       <button class="primary" id="next">Next season</button>
@@ -765,8 +770,8 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
     <!-- Final -->
     <section id="pFinal" hidden>
       <p class="eyebrow">Three poems · one splash</p>
-      <h2 lang="ja-Latn">mizu no oto</h2>
-      <p class="note">The sound of the water. Three turns fed the frog, and the frog made the last one.</p>
+      <h2 lang="ja-Latn" id="finalQ" tabindex="-1">mizu no oto</h2>
+      <p class="note">The sound of the water. Three turns fed the frog, and the frog made the last one. Read them once more. Does one of them hold for you?</p>
       <div class="finals" id="finals"></div>
       <button class="primary" id="fzOpen" type="button">Open the fridge</button>
       <button class="ghost" id="again">Play again</button>
@@ -1428,9 +1433,22 @@ function fillPoem(el,lines,label){
   el.querySelectorAll('span').forEach((s,i)=>s.textContent=lines[i].t);
 }
 
+/* ---------- v5.2 camera: hold on the frog, then land on the poem ---------- */
+function frameScene(){
+  const r=scene.getBoundingClientRect();
+  if(r.top<0||r.bottom>innerHeight+1){try{scrollTo({top:Math.max(0,scrollY+r.top),behavior:reduce?'auto':'smooth'})}catch(e){scrollTo(0,Math.max(0,scrollY+r.top))}}
+}
+function lockFrame(on){document.documentElement.classList.toggle('lockframe',!!on)}
+function landOn(el,head){
+  lockFrame(false);
+  requestAnimationFrame(()=>{try{el.scrollIntoView({block:'center',behavior:reduce?'auto':'smooth'})}catch(e){el.scrollIntoView()}
+    head.focus({preventScroll:true})});
+}
+const HEDGES=['Does this poem land with you?','Does this one hold?','Read it aloud. Does it hold?'];
+
 /* ---------- win: words → larvae → fly → frog ---------- */
 async function win(){
-  S.busy=true; $('#slots').classList.add('busy'); layer.inert=true; layer.classList.add('hush');
+  S.busy=true; frameScene(); $('#slots').classList.add('busy'); layer.inert=true; layer.classList.add('hush');
   const lines=[...S.slots];
   const se0=SEASONS[S.round];
   $('#revLbl').textContent=`${se0.name} · ${se0.jp} — your poem`;
@@ -1439,26 +1457,27 @@ async function win(){
   $('#rcard').classList.remove('fade'); $('#reveal').hidden=false;
   say(`Your poem: ${lines.map(p=>p.t).join(' / ')}. The turn is underlined.`);
   await new Promise(r=>setTimeout(r,3800));
+  frameScene(); await wait(reduce?0:350); lockFrame(true);
   await flySequence();
   $('#reveal').hidden=true;
   S.wins.push(lines); renderSeals();
   tiles.forEach(t=>{closeChoice(t);t.el.remove()}); tiles=[]; plist.forEach(t=>t.el.remove()); plist=[];
   if(S.wins.length===3){
-    await frogJump();
+    await frogJump(); await wait(reduce?0:700);
     S.phase='final'; rollSlip(false);
     const box=$('#finals'); box.innerHTML='';
     S.wins.forEach((w,i)=>{const b=document.createElement('blockquote');b.className='poem';fillPoem(b,w,SEASONS[i].name+' · '+SEASONS[i].jp);box.appendChild(b)});
-    show('pFinal'); $('#fzOpen').focus();
-    // v5: after the splash settles, the three poems go up on the fridge
-    setTimeout(()=>{if(S.phase==='final'&&!Fz.isOpen) Fz.open($('#fzOpen'))},reduce?700:2800);
+    show('pFinal'); landOn(box,$('#finalQ'));
     return;
   }
   const se=SEASONS[S.round], ti=lines.findIndex(p=>p.k==='t');
-  $('#doneLbl').textContent=`${se.name} poem, caught`;
+  await wait(reduce?0:700); // one beat on the fed frog before the camera moves
+  $('#doneLbl').textContent=`${se.name} poem · the frog is fed`;
+  $('#doneQ').textContent=HEDGES[S.round%HEDGES.length];
   fillPoem($('#donePoem'),lines);
-  $('#doneNote').textContent=`The turn lands in line ${ti+1}: “${lines[ti].t}.” Before it, the scene holds still. After it, something moves. That hinge is what Bashō's ya marks.`;
+  $('#doneNote').textContent=`Your turn sits in line ${ti+1}: “${lines[ti].t}.” Does the scene hold still before it, and move after it? That hinge is what Bashō's ya marks.`;
   S.round++; $('#next').textContent=`Next season: ${SEASONS[S.round].name}`;
-  S.phase='done'; show('pDone'); $('#next').focus();
+  S.phase='done'; show('pDone'); landOn($('#donePoem'),$('#doneQ'));
 }
 
 function flyPoints(n){
