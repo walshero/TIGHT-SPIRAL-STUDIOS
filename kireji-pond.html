@@ -1470,16 +1470,22 @@ function carveBlocks(){
   if(wb){
     wb.setAttribute('clip-path',clip('wCut','M-40 478 C200 470 500 476 760 468 C880 464 960 470 1040 466 L1040 720 L-40 720 Z'));
     [[460,.72,24],[484,.42,18],[502,.18,16]].forEach(([y,o,h])=>el(wb,'rect',{x:-40,y,width:1080,height:h,fill:'#0E2B44','fill-opacity':o})); // stepped bokashi
+    // Water the way Hiroshige cuts it: long lines in small families of two or three,
+    // riding one slow swell together, with flat untouched indigo between the families.
     let mid='',hi='';
-    for(let y=484;y<712;){
-      const f=(y-470)/240, step=6+17*f;
-      for(let x=-60-r()*80;x<1060;){
-        const L=22+(48+90*f)*r(), w=.9+(1.1+2.8*f)*(.4+.6*r());
-        const d=gouge(x,y+(r()-.5)*step*.35,L,w,(r()-.5)*.035,(r()-.5)*(1.5+3*f));
-        if(r()<.1) hi+=d; else mid+=d;
-        x+=L+(8+30*f)*r()+4;
+    for(let y=488;y<716;){
+      const f=Math.min(1,(y-470)/240), nl=2+(r()<.45?1:0), sp=3.2+4.5*f, A=1+3.2*f, per=110+170*f, ph=r()*6.28;
+      for(let j=0;j<nl;j++){
+        const yy=y+j*sp;
+        for(let x=-80-r()*140;x<1060;){
+          const L=(90+230*f)*(.45+r()*.9), n=Math.max(8,Math.round(L/7)), pts=[];
+          for(let i=0;i<n;i++){const xx=x+L*i/(n-1);pts.push([xx,yy+A*Math.sin(xx/per*6.283+ph+j*.4)])}
+          const d=ribbon(pts,(.75+1.5*f)*(j?.7:1));
+          if(j===0&&r()<.16) hi+=d; else mid+=d;
+          x+=L+(24+90*f)*(.4+r())+8;
+        }
       }
-      y+=step;
+      y+=(nl-1)*sp+(13+30*f)*(.75+.5*r());
     }
     el(wb,'path',{d:mid,fill:'#3A7096'}); el(wb,'path',{d:hi,fill:'#C9DCE3'});
   }
