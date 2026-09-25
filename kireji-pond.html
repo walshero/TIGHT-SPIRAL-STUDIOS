@@ -1897,10 +1897,15 @@ const Snd=(()=>{
   };
   return api;
 })();
-{const b=$('#snd'), paint=()=>{b.setAttribute('aria-pressed',Snd.on);$('#sndTxt').textContent=Snd.on?'Sound on':'Sound off'};
-  paint(); b.addEventListener('click',()=>{Snd.set(!Snd.on);paint()});
+{const b=$('#snd'), paint=()=>{const run=Snd.running; b.setAttribute('aria-pressed',Snd.on); b.classList.toggle('ask',Snd.on&&!run);
+    $('#sndTxt').textContent=!Snd.on?'Sound off':(run?'Sound on':'Tap for sound')};
+  Snd.onchange=paint; paint();
+  // while the browser is still holding sound back, this button asks for it rather than turning it off
+  b.addEventListener('click',()=>{if(b.classList.contains('ask')){Snd.wake();setTimeout(paint,200)}else Snd.set(!Snd.on);paint()});
   const wake=()=>Snd.wake();
-  ['touchend','click','keydown','pointerup'].forEach(ev=>addEventListener(ev,wake,{capture:true,passive:true}));
+  // the very first touch anywhere, on the very first panel, starts the pond
+  ['pointerdown','mousedown','touchend','click','keydown','pointerup'].forEach(ev=>addEventListener(ev,wake,{capture:true,passive:true}));
+  try{Snd.wake()}catch(e){} // and where the browser allows it, sound starts before any touch at all
   document.addEventListener('visibilitychange',()=>Snd.hide(document.hidden));}
 
 /* ---------- v4 opening panels ---------- */
