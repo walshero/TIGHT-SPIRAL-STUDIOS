@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Playtest Room</title>
+<!--
+  PLAYTEST ROOM v1 · Tight Spiral Productions · 2026-09-26
+  source: founder option 5, "a recorded first-human-playtest instrument that grades the seats" | owner: mwalsh
+  The human half of Studio Senses (studio-senses/SEATS.md). The game loads first, full screen, no wall.
+  A thin bar at the bottom says what is recorded and holds one button: I'm done.
+  Records taps (what was pressed, never where on the body of the page), text the game showed, the sound
+  setting at the end, and five answers. No name, no email, no network: results leave only when the
+  player saves or copies them. Works when served (GitHub Pages, localhost): the game must share this
+  page's origin so the room can listen. Opened as a local file, it says so instead of recording nothing.
+  Usage: playtest-room.html?build=kireji-pond.html
+-->
+<style>
+:root{
+  --paper:#F7F4EC; --ink:#1B1A17; --rule:#1B1A17; --pick:#1B1A17; --pickInk:#F7F4EC;
+  --barBg:#1B1A17; --barText:#F7F4EC; --barBtnBg:#F7F4EC; --barBtnText:#1B1A17; --focus:#0B57D0;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#141414; --ink:#F2EFE8; --rule:#F2EFE8; --pick:#F2EFE8; --pickInk:#141414;
+    --barBg:#F2EFE8; --barText:#141414; --barBtnBg:#141414; --barBtnText:#F2EFE8; --focus:#8AB4F8; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141414; --ink:#F2EFE8; --rule:#F2EFE8; --pick:#F2EFE8; --pickInk:#141414;
+  --barBg:#F2EFE8; --barText:#141414; --barBtnBg:#141414; --barBtnText:#F2EFE8; --focus:#8AB4F8; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--paper);color:var(--ink);font:20px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+/* BACKDROP-AS-ELEMENT: a real fixed layer, so a viewer that strips body background cannot orphan the ink */
+.backdrop{position:fixed;inset:0;background:var(--paper);z-index:0}
+.stage{position:fixed;inset:0 0 76px 0;z-index:1}
+.stage iframe{width:100%;height:100%;border:0;display:block;background:#fff}
+.bar{position:fixed;left:0;right:0;bottom:0;height:76px;z-index:2;background:var(--barBg);color:var(--barText);
+  display:flex;align-items:center;gap:12px;padding:0 12px calc(env(safe-area-inset-bottom) / 2)}
+.bar p{margin:0;flex:1;font-size:18px;line-height:1.3}
+.btn{min-height:52px;min-width:52px;padding:10px 20px;font:inherit;font-size:20px;font-weight:650;border-radius:10px;
+  border:3px solid currentColor;background:var(--paper);color:var(--ink);cursor:pointer}
+.bar .btn{background:var(--barBtnBg);color:var(--barBtnText);border-color:var(--barBtnBg)}
+.btn:focus-visible,input:focus-visible+label{outline:4px solid var(--focus);outline-offset:3px}
+.card{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:24px 16px 120px}
+.card h1{font-size:28px;margin:8px 0 4px}
+.card h2{font-size:22px;margin:0}
+fieldset{border:0;padding:0;margin:28px 0 0}
+legend{font-weight:650;font-size:22px;padding:0;margin-bottom:10px}
+.opts{display:grid;gap:10px}
+.opts.scale{grid-template-columns:repeat(5,1fr)}
+.opt input{position:absolute;opacity:0;width:1px;height:1px}
+.opt label{display:flex;align-items:center;justify-content:center;text-align:center;min-height:56px;padding:10px 14px;
+  border:3px solid var(--rule);border-radius:10px;cursor:pointer;background:var(--paper);color:var(--ink)}
+.opt input:checked+label{background:var(--pick);color:var(--pickInk);font-weight:700}
+.opt input:checked+label::after{content:"  (chosen)";font-weight:400;font-size:18px;white-space:pre}
+.opts.scale .opt input:checked+label::after{content:""}
+.ends{display:flex;justify-content:space-between;font-size:18px;margin-top:6px}
+.row{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.note{font-size:18px}
+pre{white-space:pre-wrap;font-size:18px;border:3px solid var(--rule);border-radius:10px;padding:12px;max-height:40vh;overflow:auto}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="backdrop" aria-hidden="true"></div>
+
+<main id="play">
+  <div class="stage"><iframe id="game" title="The game" allow="autoplay"></iframe></div>
+  <div class="bar" role="region" aria-label="Playtest">
+    <p id="barNote">Playtest. This page notes what you tap, never your name.</p>
+    <button class="btn" id="done" type="button">I'm done</button>
+  </div>
+</main>
+
+<section class="card" id="ask" hidden aria-labelledby="askH">
+  <h1 id="askH" tabindex="-1">Thanks for playing</h1>
+  <p class="note">Five quick questions. Tap one answer for each.</p>
+  <form id="qs"></form>
+  <div class="row"><button class="btn" id="finish" type="button">Finish</button></div>
+  <p class="sr" id="askLive" aria-live="polite"></p>
+</section>
+
+<section class="card" id="result" hidden aria-labelledby="resH">
+  <h1 id="resH" tabindex="-1">All set</h1>
+  <p class="note">Your answers are saved on this device only. Send the results file to the person running the playtest.</p>
+  <div class="row">
+    <button class="btn" id="save" type="button">Save results file</button>
+    <button class="btn" id="copy" type="button">Copy results</button>
+    <button class="btn" id="again" type="button">Play again</button>
+  </div>
+  <p class="note" id="copyNote" aria-live="polite"></p>
+  <h2>What was recorded</h2>
+  <pre id="dump"></pre>
+</section>
+
+<script>
+(() => {
+const $ = s => document.querySelector(s);
+const SOUND = /\b(sound|mute|unmute|audio|volume)\b/i;
+const params = new URLSearchParams(location.search);
+const build = (params.get('build') || 'kireji-pond.html').replace(/[^\w.\-\/]/g, '');
+const stem = build.replace(/^.*\//, '').replace(/\.html?$/, '');
+const sid = Array.from(crypto.getRandomValues(new Uint8Array(6)), b => b.toString(16).padStart(2, '0')).join('');
+
+// DEFAULT QUESTIONS. Build-specific ones come from reports/senses/<build>/predictions.json when served.
+const Q = {
+  knew_next: {prompt: 'I knew what to do next.', scale: true},
+  recall: null, notice: null,
+  sound_felt: {prompt: 'The sound in the game...', choices: ['helped', 'got in the way', 'I had it off', "I didn't notice it"]},
+  played_by: {prompt: 'How did you play?', choices: ['looking', 'a screen reader', 'both']}
+};
+
+const S = {tool: 'playtest-room v1', build, sha256: null, session_id: sid, started: new Date().toISOString(),
+  recording: false, taps: [], seen: [], sound: {toggles: 0, end_label: null, end_pressed: null},
+  session_ms: null, answers: {}};
+let t0 = 0, seenSet = new Set();
+
+const sigOf = d => {
+  const parts = [];
+  d.querySelectorAll('[aria-pressed],[aria-expanded],[aria-selected],[aria-checked]').forEach(e =>
+    parts.push((e.getAttribute('aria-pressed') || '') + (e.getAttribute('aria-expanded') || '') +
+               (e.getAttribute('aria-selected') || '') + (e.getAttribute('aria-checked') || '')));
+  d.querySelectorAll('[aria-live],[role=status],[role=alert],h1,h2,h3').forEach(e => parts.push(e.textContent.trim().slice(0, 120)));
+  d.querySelectorAll('[hidden]').forEach(e => parts.push('h' + (e.id || e.className)));
+  d.querySelectorAll('dialog[open],[aria-modal=true]').forEach(e => parts.push('m' + (e.id || e.className)));
+  return parts.join('|');
+};
+const nameOf = el => ((el.getAttribute && (el.getAttribute('aria-label') || el.getAttribute('title'))) ||
+                      el.innerText || el.value || '').trim().replace(/\s+/g, ' ').slice(0, 80);
+const chainOf = el => {
+  const out = [];
+  for (let e = el, i = 0; e && e.nodeType === 1 && i < 5; e = e.parentElement, i++) {
+    const cls = (typeof e.className === 'string' ? e.className : '').trim().split(/\s+/).filter(Boolean).slice(0, 3);
+    out.push(e.tagName.toLowerCase() + (e.id ? '#' + e.id : '') + cls.map(c => '.' + c).join(''));
+  }
+  return out;
+};
+const see = t => { t = (t || '').trim().replace(/\s+/g, ' ').slice(0, 160); if (t && !seenSet.has(t) && seenSet.size < 600) { seenSet.add(t); S.seen.push(t); } };
+const scanSeen = d => d.querySelectorAll('h1,h2,h3,[aria-live],[role=status],[role=alert],button,[role=button]').forEach(e => {
+  if (e.closest('[hidden],[aria-hidden=true]')) return; see(nameOf(e)); });
+
+async function stamp() {
+  try {
+    const buf = await (await fetch(build, {cache: 'no-store'})).arrayBuffer();
+    const h = await crypto.subtle.digest('SHA-256', buf);
+    S.sha256 = Array.from(new Uint8Array(h), b => b.toString(16).padStart(2, '0')).join('');
+  } catch (e) { S.sha256 = null; }
+}
+async function loadQuestions() {
+  try {
+    const p = await (await fetch(`reports/senses/${stem}/predictions.json`, {cache: 'no-store'})).json();
+    if (p.questions) { Q.recall = p.questions.recall || null; Q.notice = p.questions.notice || null; }
+    S.predictions_sha256 = p.sha256 || null;
+  } catch (e) { /* generic questions only */ }
+}
+
+const game = $('#game');
+game.addEventListener('load', () => {
+  let d;
+  try { d = game.contentDocument; d.body; } catch (e) { d = null; }
+  if (!d) {
+    $('#barNote').textContent = 'Recording is off here: open this page from the studio website, not as a file.';
+    return;
+  }
+  t0 = performance.now(); S.recording = true;
+  scanSeen(d);
+  new game.contentWindow.MutationObserver(() => scanSeen(d)).observe(d, {subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden', 'aria-expanded', 'aria-pressed']});
+  d.addEventListener('click', ev => {
+    if (!ev.isTrusted) return;
+    const el = ev.target.closest('button,a,[role=button],input,select,textarea,label,[tabindex]') || ev.target;
+    const before = sigOf(d), name = nameOf(el);
+    const tap = {t: Math.round(performance.now() - t0), name, chain: chainOf(el), dead: null};
+    S.taps.push(tap);
+    if (SOUND.test(name)) S.sound.toggles++;
+    setTimeout(() => { tap.dead = sigOf(d) === before; }, 600);
+  }, true);
+});
+
+function soundAtEnd() {
+  try {
+    const d = game.contentDocument;
+    const b = [...d.querySelectorAll('button,[role=button]')].find(e => SOUND.test(nameOf(e)));
+    if (b) { S.sound.end_label = nameOf(b); S.sound.end_pressed = b.getAttribute('aria-pressed'); }
+  } catch (e) {}
+}
+
+function field(key, q) {
+  const fs = document.createElement('fieldset');
+  const lg = document.createElement('legend'); lg.textContent = q.prompt; fs.appendChild(lg);
+  const box = document.createElement('div'); box.className = 'opts' + (q.scale ? ' scale' : '');
+  const choices = q.scale ? ['1', '2', '3', '4', '5'] : q.choices;
+  choices.forEach((c, i) => {
+    const w = document.createElement('div'); w.className = 'opt';
+    const id = `q_${key}_${i}`;
+    w.innerHTML = `<input type="radio" name="${key}" id="${id}"><label for="${id}"></label>`;
+    w.querySelector('input').value = c; w.querySelector('label').textContent = c;
+    if (q.scale) w.querySelector('label').setAttribute('aria-label', `${c} of 5`);
+    box.appendChild(w);
+  });
+  fs.appendChild(box);
+  if (q.scale) { const e = document.createElement('div'); e.className = 'ends'; e.innerHTML = '<span>1 · not at all</span><span>5 · completely</span>'; fs.appendChild(e); }
+  return fs;
+}
+
+$('#done').addEventListener('click', () => {
+  S.session_ms = t0 ? Math.round(performance.now() - t0) : null;
+  soundAtEnd();
+  const f = $('#qs'); f.innerHTML = '';
+  ['knew_next', 'recall', 'notice', 'sound_felt', 'played_by'].forEach(k => { if (Q[k]) f.appendChild(field(k, Q[k])); });
+  $('#play').hidden = true; $('#ask').hidden = false; game.src = 'about:blank';
+  $('#askH').focus(); scrollTo(0, 0);
+});
+
+$('#finish').addEventListener('click', () => {
+  const fd = new FormData($('#qs'));
+  $('#qs').querySelectorAll('fieldset').forEach(fs => {
+    const k = fs.querySelector('input').name, v = fd.get(k);
+    const inp = fs.querySelector('input:checked');
+    S.answers[k] = inp ? (k === 'knew_next' ? +inp.value : inp.value) : null;
+  });
+  S.seen = S.seen.slice(0, 600);
+  $('#dump').textContent = JSON.stringify({build: S.build, taps: S.taps.length, dead_taps: S.taps.filter(t => t.dead).length,
+    minutes: S.session_ms ? +(S.session_ms / 60000).toFixed(1) : null, answers: S.answers}, null, 1);
+  $('#ask').hidden = true; $('#result').hidden = false; $('#resH').focus(); scrollTo(0, 0);
+});
+
+const blob = () => new Blob([JSON.stringify(S, null, 1)], {type: 'application/json'});
+$('#save').addEventListener('click', () => {
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob());
+  a.download = `playtest-${stem}-${sid}.json`; document.body.appendChild(a); a.click(); a.remove();
+  $('#copyNote').textContent = `Saved as playtest-${stem}-${sid}.json`;
+});
+$('#copy').addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText(JSON.stringify(S)); $('#copyNote').textContent = 'Copied. Paste it into an email or a message.'; }
+  catch (e) { $('#copyNote').textContent = 'Copy is blocked here. Use Save results file instead.'; }
+});
+$('#again').addEventListener('click', () => location.reload());
+
+Promise.all([stamp(), loadQuestions()]).finally(() => {});
+game.src = build;   // scene first: the game starts loading before anything else is asked
+})();
+</script>
+</body>
+</html>

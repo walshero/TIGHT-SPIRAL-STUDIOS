@@ -1,0 +1,18 @@
+{"seat":"Hitchcock","md5":"0a6f41fbb6a5c9a3ce43c1749b6b8358",
+"predictions":[
+{"id":"H1","seat":"Hitchcock","claim":"A first player catches at least one phrase; the catch is the one touch whose result lands in the scene (phrase leaves the stream and fills a line slot).","measure":"tapped","target":"name:catch line","op":"==","value":true,"p":0.88,"cohort":"any"},
+{"id":"H2","seat":"Hitchcock","claim":"The red Smash cliche button is the loudest control in the action menu, so most players try it at least once.","measure":"tapped","target":"name:smash cliché","op":"==","value":true,"p":0.72,"cohort":"any"},
+{"id":"H3","seat":"Hitchcock","claim":"Players who smash will smash a fresh line at least once and read the penalty message, because the menu gives no hint which phrases are cliches before the tap.","measure":"saw","target":"text:is fresh, not a cliché","op":"==","value":true,"p":0.6,"cohort":"any"},
+{"id":"H4","seat":"Hitchcock","claim":"Fewer than half of first players tap Skip to the stream; the large dark Next button pulls them through the intro cards instead.","measure":"tapped","target":"name:skip to the stream","op":"==","value":true,"p":0.4,"cohort":"any"},
+{"id":"H5","seat":"Hitchcock","claim":"At least two taps change nothing on screen within 600 ms, mostly on Show turn marks (label never changes, often no visible mark) and on phrases that slide under the open menu.","measure":"dead_taps","target":"","op":">=","value":2,"p":0.6,"cohort":"any"},
+{"id":"H6","seat":"Hitchcock","claim":"Players answer the notice question correctly: the intro diagram shows ya as a red block splitting old pond from the frog, and card 2 says it splits the poem in two.","measure":"answer:notice","target":"","op":"==","value":"Splits the poem into two parts","p":0.62,"cohort":"any"}
+],
+"notes":[
+"State 8 is the best 3-frame board in the build: room (stream), glow (phrase held), turn (frog tongue spears the cliche, splash, lily pad count and Smashed: 1 change together). The catch (state 6) and let-go (state 12) moves change the stream but give no comparable turn frame; let-go just removes the phrase.",
+"Penalty is told, not shown: state 4 text says 'the water clouds' and one lily pad greys, but the pond in the scene (compare states 02 and 04) keeps the same clear blue. The consequence lives off to the side, in the status panel.",
+"Show turn marks (states 16, 24, 32): label never changes to Hide, screen text never changes, and a mark appears only if a dash phrase is on screen (small red 切 badge in state 32, nothing in state 16). The player is not told what to look for before pressing it.",
+"State 0 withholds the right thing: 'old pond — ya' with ya in red plants the question before card 2 (state 1) answers it with the split diagram. But Skip to the stream on card 1 lets a player leave before the answer; the season screen (state 2) never restates what a cut is."
+],
+"halts":[
+{"check":"confirm that a tap aimed at a second phrase while the action menu is open cannot fire Smash on the held phrase","evidence":"state 3 -> state 4: menu open on 'a child's paper boat', crawler tapped 'the carp flips' phrase (y=77); result was a fresh-line smash of the paper boat and Clear water dropped 3 to 2. The menu buttons sit on top of the drifting phrases (screenshot states/03.png)."}
+]}

@@ -1,0 +1,20 @@
+{"seat":"Sighted persona","md5":"0a6f41fbb6a5c9a3ce43c1749b6b8358",
+"predictions":[
+{"id":"S1","seat":"Sighted persona","claim":"A cold player taps the big dark Next button, not the underlined Skip link, so most never tap Skip to the stream on the first card","measure":"tapped","target":"name:skip to the stream","op":"==","value":true,"p":0.40,"cohort":"any"},
+{"id":"S2","seat":"Sighted persona","claim":"First tap on a floating phrase comes within 60 seconds of load (4 intro cards are short, then the moving cards invite a tap)","measure":"time_to_tap","target":"name:tap to catch or smash","op":"<=","value":60000,"p":0.60,"cohort":"any"},
+{"id":"S3","seat":"Sighted persona","claim":"At least one tap changes nothing on screen, from chasing a drifting card or tapping Show turn marks","measure":"dead_taps","target":"","op":">=","value":1,"p":0.70,"cohort":"any"},
+{"id":"S4","seat":"Sighted persona","claim":"Player sees the fresh-not-cliche penalty line at least once because Smash cliche is the loudest red button","measure":"saw","target":"text:is fresh, not a cliché","op":"==","value":true,"p":0.70,"cohort":"any"},
+{"id":"S5","seat":"Sighted persona","claim":"Player answers the notice question correctly; card 2 says it splits the poem in two and the bold red ya box makes it stick","measure":"answer:notice","target":"","op":"==","value":"Splits the poem into two parts","p":0.60,"cohort":"any"},
+{"id":"S6","seat":"Sighted persona","claim":"Player rates I knew what to do next at 4 or 5; the status line names the three moves but the menus overlap the stream","measure":"answer:knew_next","target":"","op":">=","value":4,"p":0.45,"cohort":"any"},
+{"id":"S7","seat":"Sighted persona","claim":"A cold phone player is done inside 4 minutes; with no end state in Spring they stop when the lines feel full or stuck","measure":"session_ms","target":"","op":"<=","value":240000,"p":0.60,"cohort":"any"}
+],
+"notes":[
+"State 0: the Japanese is gorgeous but I do not know what ya is until I tap Next; the dark Next button wins over the pale Skip link, and 1 of 4 tells me it is short, so I read on.",
+"State 3 to 4: I tapped the paper boat, the Catch line / Smash cliche / Let it go buttons popped up right on top of the other cards, and when I went for the carp card my thumb hit Smash cliche instead; the water clouded and I did not know why I was punished.",
+"State 8: the frog tongue snapping the cliche is the best moment in the game; I get it instantly and want to find another one to smash.",
+"States 16, 24, 32: I tapped Show turn marks and the button went black but the only change was a small red 切 tile over a card; I would not notice it and would tap it again thinking it did nothing."
+],
+"halts":[
+{"check":"Action menu overlays neighboring stream phrases, so a tap aimed at another phrase lands on Smash cliche and costs clear water","evidence":"Step 4 tapped 'the carp flips' label while the paper-boat menu was open; result state 4 reads 'a child's paper boat is fresh, not a cliché... the water clouds' and Clear water drops 3 to 2; screenshot 03 shows Smash cliche at y~240 covering the carp card"},
+{"check":"Show turn marks produces no text change and only a small visual mark, reading as a dead control to a first player","evidence":"Steps 16, 27, 42 all logged 'screen text did not change'; screenshot 32 shows only a small red 切 tile near one card"}
+]}

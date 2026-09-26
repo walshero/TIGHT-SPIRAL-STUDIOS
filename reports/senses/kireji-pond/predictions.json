@@ -1,0 +1,551 @@
+{
+ "build": "kireji-pond.html",
+ "md5": "0a6f41fbb6a5c9a3ce43c1749b6b8358",
+ "sha256": "a71cfaf44c03fa46db0d4379a96138b069a9f13726e0bdc193e79f69b52f5f2e",
+ "filed": "2026-09-26",
+ "questions": {
+  "recall": {
+   "prompt": "What does a cutting word do in a haiku?",
+   "choices": [
+    "Splits the poem into two parts",
+    "Counts the syllables",
+    "Rhymes the last line",
+    "I'm not sure"
+   ],
+   "from": "original build question"
+  },
+  "notice": {
+   "prompt": "Which of these lines has a cut in it, a turn from one thing to another?",
+   "choices": [
+    "the carp flips — the moon shatters",
+    "reeds lean over their shadows",
+    "mud on the ox cart",
+    "I'm not sure"
+   ],
+   "from": "Horvath proposal: tests the practiced skill, not the intro sentence"
+  }
+ },
+ "seats": [
+  {
+   "seat": "Ear persona",
+   "predictions": [
+    {
+     "id": "EP1",
+     "seat": "Ear persona",
+     "claim": "A screen-reader player ever activates Catch line. Tapping a phrase announces nothing and the three action buttons are appended after Still water at the end of the page, so the player must swipe past the whole panel while the phrase drifts; fewer than half get there.",
+     "measure": "tapped",
+     "target": "name:catch line",
+     "op": "==",
+     "value": true,
+     "p": 0.4,
+     "cohort": "screen_reader"
+    },
+    {
+     "id": "EP2",
+     "seat": "Ear persona",
+     "claim": "The player makes three or more dead taps: re-tapping a silent expanded phrase (steps 3, 5, 7, 11 say nothing), tapping a phrase that is disabled or has already drifted off, and Pause/Resume/Show turn marks, which announce nothing.",
+     "measure": "dead_taps",
+     "target": "",
+     "op": ">=",
+     "value": 3,
+     "p": 0.75,
+     "cohort": "screen_reader"
+    },
+    {
+     "id": "EP3",
+     "seat": "Ear persona",
+     "claim": "A screen-reader player rates 'I knew what to do next' at 2 or lower.",
+     "measure": "answer:knew_next",
+     "target": "",
+     "op": "<=",
+     "value": 2,
+     "p": 0.65,
+     "cohort": "screen_reader"
+    },
+    {
+     "id": "EP4",
+     "seat": "Ear persona",
+     "claim": "The status announcement 'Caught:' is ever heard.",
+     "measure": "saw",
+     "target": "text:caught",
+     "op": "==",
+     "value": true,
+     "p": 0.4,
+     "cohort": "screen_reader"
+    },
+    {
+     "id": "EP5",
+     "seat": "Ear persona",
+     "claim": "The player reaches the heading 'The cut.' by pressing Next instead of skipping. Next comes before Skip in swipe order, but a cold player who hears 'Skip to the stream' often takes it, and then never hears what kireji means.",
+     "measure": "saw",
+     "target": "text:the cut",
+     "op": "==",
+     "value": true,
+     "p": 0.55,
+     "cohort": "screen_reader"
+    },
+    {
+     "id": "EP6",
+     "seat": "Ear persona",
+     "claim": "The player ever uses Pause stream, the one control that stops phrases leaving. It sits after the list and its name reads 'Pause streamP', so few find it or trust it.",
+     "measure": "tapped",
+     "target": "name:pause stream",
+     "op": "==",
+     "value": true,
+     "p": 0.3,
+     "cohort": "screen_reader"
+    }
+   ],
+   "notes": [
+    "State 3 / step 3: tapping a phrase gives [expanded] with no announcement, and focus stays on the phrase. Catch line, Smash cliche and Let it go are added at the end of the page, after Still water, about 10 swipes away. Steps 19 and 35 show a phrase leaving or not responding between taps, so by ear the moving target cannot be held long enough to act on it. Pause (state 14) is the only way to hold it, and nothing tells the player that.",
+    "Step 4: tapping a different phrase (the carp) while 'a child's paper boat' was expanded gave a verdict on the boat ('fresh, not a cliche ... water clouds'). Clear water dropped to 2 of 3 and one phrase vanished. By ear, a tap on one line judged another line. The player cannot tell cause from effect.",
+    "5-7-5 slots, states 6/9/30: the slot list reads well ('Line 2 - seven syllables', then the caught text with Move/Remove), and every phrase name gives its syllable count. But 'Caught:' never says which line the phrase went to (a 5 went to line 1 and a 7 to line 2 without a word). The meter 'Poems fed to the frog: 0 of 3' is an image, its label never changed in 42 steps, and the characters 春 夏 秋 are read aloud with no explanation. No completion state was ever heard.",
+    "Cold Tab walk: from load the loop is only Sound on / Next / Skip to the stream, so no phrase is keyboard-reachable before a tap. Sound starts before any gesture (Layer 1 E1, -36.2 dBFS), competing with the screen reader's first speech. Step 32 played 8 short sounds with no announcement. 18 of 32 state changes are silent (E5). 'Pause streamP' and 'a sparrow - and gone turn' leak visual glyphs into the spoken names."
+   ],
+   "halts": [
+    {
+     "check": "GESTURE-FIRST audio (Studio Ears Layer 1 E1)",
+     "evidence": "ear.md verdict: 1 source started before the first gesture; the speaker reached -36.2 dBFS before any touch. This talks over VoiceOver's first announcement on load."
+    },
+    {
+     "check": "Core verb is not reachable by ear: phrase activation neither announces nor moves focus to its actions",
+     "evidence": "State 3/5/7/11/17/20/25/27: phrase gets [expanded] with 'nothing announced'. Catch line/Smash cliche/Let it go are appended after 'Still water', last in DOM order, while the phrase keeps moving (steps 19, 35-37 show phrases leaving or toggling). Step 4 shows a tap on one phrase judging a different phrase."
+    }
+   ]
+  },
+  {
+   "seat": "Fingers",
+   "predictions": [
+    {
+     "id": "F1",
+     "seat": "Fingers",
+     "claim": "A first player lands at least two taps that change nothing, mostly thumb misses on drifting phrases (they spawn about 15px tall at the top of the pond and overlap each other) plus the Show turn marks toggle, which changes no screen text.",
+     "measure": "dead_taps",
+     "target": "",
+     "op": ">=",
+     "value": 2,
+     "p": 0.65,
+     "cohort": "any"
+    },
+    {
+     "id": "F2",
+     "seat": "Fingers",
+     "claim": "The player makes at least four taps before the first Catch line: the intro cards (Next up to three times or Skip), at least one tap to open a phrase, and at least one miss or re-tap on a moving phrase.",
+     "measure": "taps_before",
+     "target": "name:catch line",
+     "op": ">=",
+     "value": 4,
+     "p": 0.6,
+     "cohort": "any"
+    },
+    {
+     "id": "F3",
+     "seat": "Fingers",
+     "claim": "Despite the reach cost, the core verb is found: the player taps Catch line at least once.",
+     "measure": "tapped",
+     "target": "name:catch line",
+     "op": "==",
+     "value": true,
+     "p": 0.85,
+     "cohort": "any"
+    },
+    {
+     "id": "F4",
+     "seat": "Fingers",
+     "claim": "Reaching the first Catch line takes more than 30 seconds, because the phrase must be chased near the top of the screen and the menu opens there too.",
+     "measure": "time_to_tap",
+     "target": "name:catch line",
+     "op": ">",
+     "value": 30000,
+     "p": 0.55,
+     "cohort": "any"
+    },
+    {
+     "id": "F5",
+     "seat": "Fingers",
+     "claim": "The slot controls under the fold of the scene are used: the player taps Remove or Move to at least once after catching.",
+     "measure": "tapped",
+     "target": "name:remove",
+     "op": "==",
+     "value": true,
+     "p": 0.4,
+     "cohort": "any"
+    },
+    {
+     "id": "F6",
+     "seat": "Fingers",
+     "claim": "The player does not tap Show turn marks; it sits at the bottom edge, partly below the 840px fold in the first stream state, and gives no text change when pressed.",
+     "measure": "tapped",
+     "target": "name:show turn marks",
+     "op": "==",
+     "value": false,
+     "p": 0.6,
+     "cohort": "any"
+    }
+   ],
+   "notes": [
+    "Core verb sits entirely outside the thumb arc. Every phrase and every Catch line / Smash cliche / Let it go popup is centered between y=31 and y=251 (arc edge is y=336) in states 2-5, 7, 11, 17, 20, 25, 27, 28. The popup buttons themselves pass the floor (129x47, 160x47, 113x47); the problem is reach, not size. Two-handed or thumb-stretch play is required on a 400x840 phone.",
+    "Small phrase targets are a moving-target problem, not a static floor miss: every new phrase spawns near the waterfall top at about 50-77 x 15-16px (Mother Nature's gentle touch 77x15 in state 6, April showers fall 48x15 in state 10, a temple bell 52x16 in state 15, reeds lean 77x15 in state 28) and grows past 44px as it drifts down. Separately, phrases overlap: in state 2 a child's paper boat shows only 74x22 because the carp flips and a temple bell cover it, so a tap can open the wrong phrase.",
+    "Real static floor misses: Move to bottom 183x39, Move to top 144x39, Remove 103x39 (states 6-12, 18-21, 30) and Skip to the stream 182x39 (states 0-1) are 5px under the 44px floor. Sound on draws 36x36 in the top-left corner (hit area 46x46 passes, but it is a corner control for a reduced-field player).",
+    "Accidental-tap risk: a second tap on an open phrase closes its menu (crawl steps 20-21, 30-31, 35-37 toggle states 19/20, 26/27, 28/29), and the popup row covers the phrase beneath it (state 28: Catch line sits over a breath of fresh air). A shaky or double tap on a drifting phrase will read as nothing happened. Pause stream and Show turn marks are 165x76 but start at y=784 in state 2, bottom 20px below the fold; Still water (y=868-902) is off-screen until scroll."
+   ],
+   "halts": [
+    {
+     "check": "Slot controls under the 44px founder floor",
+     "evidence": "Move to bottom 183x39, Move to top 144x39, Remove 103x39 in every slot-filled state (6-12, 18-21, 30); Skip to the stream 182x39 in states 0-1. Static controls, so this is a true floor miss, fixable with min-height: 44px."
+    },
+    {
+     "check": "Core-verb target spawns at 15-16px tall while moving, at the top screen edge",
+     "evidence": "New phrases measure 77x15 (state 6), 48x15 (state 10), 52x16 (state 15), 77x15 (state 28) centered at y=53-59, above the thumb arc and near the top edge, in low contrast against the mountain. For a reduced-field, low-vision player this is the first thing to tap. Pause stream exists but sits at the bottom edge, partly below the fold."
+    }
+   ]
+  },
+  {
+   "seat": "Hitchcock",
+   "predictions": [
+    {
+     "id": "H1",
+     "seat": "Hitchcock",
+     "claim": "A first player catches at least one phrase; the catch is the one touch whose result lands in the scene (phrase leaves the stream and fills a line slot).",
+     "measure": "tapped",
+     "target": "name:catch line",
+     "op": "==",
+     "value": true,
+     "p": 0.88,
+     "cohort": "any"
+    },
+    {
+     "id": "H2",
+     "seat": "Hitchcock",
+     "claim": "The red Smash cliche button is the loudest control in the action menu, so most players try it at least once.",
+     "measure": "tapped",
+     "target": "name:smash cliché",
+     "op": "==",
+     "value": true,
+     "p": 0.72,
+     "cohort": "any"
+    },
+    {
+     "id": "H3",
+     "seat": "Hitchcock",
+     "claim": "Players who smash will smash a fresh line at least once and read the penalty message, because the menu gives no hint which phrases are cliches before the tap.",
+     "measure": "saw",
+     "target": "text:is fresh, not a cliché",
+     "op": "==",
+     "value": true,
+     "p": 0.6,
+     "cohort": "any"
+    },
+    {
+     "id": "H4",
+     "seat": "Hitchcock",
+     "claim": "Fewer than half of first players tap Skip to the stream; the large dark Next button pulls them through the intro cards instead.",
+     "measure": "tapped",
+     "target": "name:skip to the stream",
+     "op": "==",
+     "value": true,
+     "p": 0.4,
+     "cohort": "any"
+    },
+    {
+     "id": "H5",
+     "seat": "Hitchcock",
+     "claim": "At least two taps change nothing on screen within 600 ms, mostly on Show turn marks (label never changes, often no visible mark) and on phrases that slide under the open menu.",
+     "measure": "dead_taps",
+     "target": "",
+     "op": ">=",
+     "value": 2,
+     "p": 0.6,
+     "cohort": "any"
+    },
+    {
+     "id": "H6",
+     "seat": "Hitchcock",
+     "claim": "Players answer the notice question correctly: the intro diagram shows ya as a red block splitting old pond from the frog, and card 2 says it splits the poem in two.",
+     "measure": "answer:recall",
+     "target": "",
+     "op": "==",
+     "value": "Splits the poem into two parts",
+     "p": 0.62,
+     "cohort": "any"
+    }
+   ],
+   "notes": [
+    "State 8 is the best 3-frame board in the build: room (stream), glow (phrase held), turn (frog tongue spears the cliche, splash, lily pad count and Smashed: 1 change together). The catch (state 6) and let-go (state 12) moves change the stream but give no comparable turn frame; let-go just removes the phrase.",
+    "Penalty is told, not shown: state 4 text says 'the water clouds' and one lily pad greys, but the pond in the scene (compare states 02 and 04) keeps the same clear blue. The consequence lives off to the side, in the status panel.",
+    "Show turn marks (states 16, 24, 32): label never changes to Hide, screen text never changes, and a mark appears only if a dash phrase is on screen (small red 切 badge in state 32, nothing in state 16). The player is not told what to look for before pressing it.",
+    "State 0 withholds the right thing: 'old pond — ya' with ya in red plants the question before card 2 (state 1) answers it with the split diagram. But Skip to the stream on card 1 lets a player leave before the answer; the season screen (state 2) never restates what a cut is."
+   ],
+   "halts": [
+    {
+     "check": "confirm that a tap aimed at a second phrase while the action menu is open cannot fire Smash on the held phrase",
+     "evidence": "state 3 -> state 4: menu open on 'a child's paper boat', crawler tapped 'the carp flips' phrase (y=77); result was a fresh-line smash of the paper boat and Clear water dropped 3 to 2. The menu buttons sit on top of the drifting phrases (screenshot states/03.png)."
+    }
+   ]
+  },
+  {
+   "seat": "Horvath",
+   "predictions": [
+    {
+     "id": "HV1",
+     "seat": "Horvath",
+     "claim": "Most players pick the keyed answer on the build's notice question, because it repeats the intro sentence almost word for word and the other options are easy to rule out. This measures recall, not skill.",
+     "measure": "answer:recall",
+     "target": "",
+     "op": "==",
+     "value": "Splits the poem into two parts",
+     "p": 0.72,
+     "cohort": "any"
+    },
+    {
+     "id": "HV2",
+     "seat": "Horvath",
+     "claim": "The phrase 'cutting word' never reaches a heading, announcement or button. It lives only in a paragraph on intro card 2 of 4 (state 1), which Skip to the stream lets players bypass from the first screen.",
+     "measure": "saw",
+     "target": "text:cutting word",
+     "op": "==",
+     "value": false,
+     "p": 0.85,
+     "cohort": "any"
+    },
+    {
+     "id": "HV3",
+     "seat": "Horvath",
+     "claim": "The only decision that gives right or wrong feedback is Smash, so most players will find it and use it.",
+     "measure": "tapped",
+     "target": "name:smash cliché",
+     "op": "==",
+     "value": true,
+     "p": 0.8,
+     "cohort": "any"
+    },
+    {
+     "id": "HV4",
+     "seat": "Horvath",
+     "claim": "Show turn marks is the only kireji-related control. It is an optional display toggle that changes no on-screen text, and a typical first player never taps it.",
+     "measure": "tapped",
+     "target": "name:show turn marks",
+     "op": "==",
+     "value": false,
+     "p": 0.55,
+     "cohort": "any"
+    },
+    {
+     "id": "HV5",
+     "seat": "Horvath",
+     "claim": "Let it go does nothing that ignoring the phrase would not also do (the phrase drifts off anyway and the scoring does not change). A typical first player never uses it.",
+     "measure": "tapped",
+     "target": "name:let it go",
+     "op": "==",
+     "value": false,
+     "p": 0.5,
+     "cohort": "any"
+    },
+    {
+     "id": "HV6",
+     "seat": "Horvath",
+     "claim": "Players reach the first real decision fast. Catch line appears after 1 or 2 taps once in the stream, so fewer than 6 taps come before the first Catch line (intro taps included).",
+     "measure": "taps_before",
+     "target": "name:catch line",
+     "op": "<",
+     "value": 6,
+     "p": 0.7,
+     "cohort": "any"
+    }
+   ],
+   "notes": [
+    "KIREJI SHOWN, NEVER PRACTICED. The cut is explained once, in a paragraph on intro card 2 (state 1, reached by Next). Skip to the stream is offered on the cold-load screen (state 0, step 2). The stream's verbs are catch, smash, let go, move and remove, and none of them acts on a cut. No outcome depends on where a poem turns. The only kireji control, Show turn marks, is a display toggle: on screen the text did not change at steps 16, 27 and 42. In the ear channel it only adds 'turn' to the name of the dash phrase 'a sparrow — and gone' (states 19-23 and 32). The build claims to teach the kireji, but players only watch it.",
+    "WHICH TAPS ARE DECISIONS. The build does the syllable counting for the player. Every phrase names its count ('5 syllables' in the accessible name, 5 dots on the card), and Catch line places the phrase in the slot that fits (state 30: a 7-syllable phrase goes straight to Line 2). The only choice left is Move to top or bottom between Lines 1 and 3. So 5-7-5 is decoration. Smash is the one real decision with feedback: fresh phrase smashed -> 'the water clouds' (states 4, 26), cliché smashed -> 'The water clears' (state 8). Let it go is decoration and teaches nothing. Letting the cliché 'a breath of fresh air' go (state 28) gives neutral text and no change to the water, so missing a cliché costs nothing and names nothing. Well-ordered-problem fix: let the cut decide the outcome. For example, the player chooses which caught line holds the turn, or two images must sit on either side of a cut before the frog accepts the poem.",
+    "GAP BETWEEN THE TWO CHANNELS. Sighted players get the Catch / Smash / Let it go menu right next to the card they tapped (y=82-185). In the ear transcript the menu comes last in the tree, after Still water and far from the phrase. Opening it announces nothing (steps 3, 5, 7, 11, 17, 20, 25, 27, 34; Ears E5 lists 18 of 32 silent changes). Each phrase's name says 'Tap to catch or smash' and leaves out Let it go. The screen-reader player has more work to do before the one real decision (smash) than the sighted player does.",
+    "NOTICE QUESTION AND MEASUREMENT RULE. 'What does a cutting word do?' with keyed answer 'Splits the poem into two parts' echoes state 1's sentence 'It splits the poem in two'. 'Counts the syllables' and 'Rhymes the last line' can be eliminated with no play at all. So a correct answer shows the player read or guessed a definition, not that they can find a cut, and a high HV1 score would falsely suggest the game works. The replacement below asks the player to apply the idea to lines from the stream. Measurement rule: the build has no rating scale of its own. The only scale is the room's 'I knew what to do next' (1 to 5), which is compliant. Clear water 'N of 3' and the 3-box frog meter are game counters, not measures, and must not be reported as scores."
+   ],
+   "halts": [
+    {
+     "check": "Target concept is practiced: at least one player choice changes its outcome based on where the cut sits",
+     "evidence": "None of the 43 steps has an outcome that depends on a cut. Show turn marks changed no on-screen text (steps 16, 27, 42). Every scored outcome comes from syllable fit (automatic) or the cliché call (smash, states 4, 8, 26). The build names the kireji as its lesson and only displays it at state 1."
+    }
+   ]
+  },
+  {
+   "seat": "Murch",
+   "predictions": [
+    {
+     "id": "M1",
+     "seat": "Murch",
+     "claim": "A typical cold player says the sound helped: the waterfall and seasonal creatures sit under the scene and the catch tock / cliche crumple mark the verbs.",
+     "measure": "answer:sound_felt",
+     "target": "",
+     "op": "==",
+     "value": "helped",
+     "p": 0.45,
+     "cohort": "any"
+    },
+    {
+     "id": "M2",
+     "seat": "Murch",
+     "claim": "A screen-reader player says the sound got in the way: the waterfall is broadband noise at 250 Hz to 2.4 kHz, the same band as synthesized speech, and it runs under every announcement.",
+     "measure": "answer:sound_felt",
+     "target": "",
+     "op": "==",
+     "value": "got in the way",
+     "p": 0.35,
+     "cohort": "screen_reader"
+    },
+    {
+     "id": "M3",
+     "seat": "Murch",
+     "claim": "Most players leave the sound on to the end; the ambience is quiet (about -34 dBFS) and nothing in play invites muting.",
+     "measure": "sound_off_at_end",
+     "target": "",
+     "op": "==",
+     "value": false,
+     "p": 0.75,
+     "cohort": "any"
+    },
+    {
+     "id": "M4",
+     "seat": "Murch",
+     "claim": "A screen-reader player turns sound off more often than a sighted one, because the Sound control is the first Tab stop and the waterfall masks speech.",
+     "measure": "sound_off_at_end",
+     "target": "",
+     "op": "==",
+     "value": true,
+     "p": 0.35,
+     "cohort": "screen_reader"
+    },
+    {
+     "id": "M5",
+     "seat": "Murch",
+     "claim": "The player ever touches the Sound control (to turn it off, or to answer 'Tap for sound' where the browser blocked the early start).",
+     "measure": "tapped",
+     "target": "name:sound",
+     "op": "==",
+     "value": true,
+     "p": 0.45,
+     "cohort": "any"
+    },
+    {
+     "id": "M6",
+     "seat": "Murch",
+     "claim": "The player smashes a real cliche and hears the crumple with the announcement containing 'Snap', the one event where word and sound say the same thing.",
+     "measure": "saw",
+     "target": "text:snap",
+     "op": "==",
+     "value": true,
+     "p": 0.6,
+     "cohort": "any"
+    }
+   ],
+   "notes": [
+    "Events that deserve a sound and lack one: opening a phrase's choice (steps 3, 5, 7, 11, 17, 20, 28, 30) is silent and unannounced; focus lands on Catch line, but a soft lift of the paper (Snd.paper already exists) would say 'you picked this up'. Pause/Resume stream (steps 14, 15, 25, 26, 40, 41) and Show turn marks (16, 27, 42) change state with no sound and no announcement; pausing the stream is the one place where the waterfall itself could carry the meaning (duck it while paused, restore on resume), which is Murch's worldizing: the pond's own water tells you the stream has stopped. Move to top/bottom (9, 10, 22, 23) and Remove (13, 24, 39) are announced but silent; a tock variant pitched by line would pair with the words (XAG 103) without carrying the meaning alone (XAG 104).",
+    "Let it go (steps 12, 33) calls Snd.swish() in code, but Layer 1 heard no sound: a .09-peak bandpassed noise under a running waterfall of the same texture is masked. The one exit verb is effectively silent; it needs a pitched or panned element (a receding downstream swish, panned off) to separate from the bed.",
+    "Competition with reading: the waterfall body (highpass 250, lowpass 2400) occupies the speech band for the whole session; suggest ducking the bed about 6 dB for the length of each live-region announcement. The summer minminzemi (sawtooth, 0.12 peak, filtered near 1.9 kHz, about 5 s long) is the loudest creature and lands squarely on speech; it will collide with announcements in round 2. The yaa (0.55 peak, the loudest sound in the build) is earned, since it is the kireji moment, but it should not fire under a live announcement.",
+    "Step 32: a tile tap produced 8 short sounds with nothing announced. Either a seasonal creature (uguisu, 4 whistles plus overtones) happened to coincide or a play sound fired unannounced; if the latter it is a sound carrying information alone (XAG 104). Worth one re-crawl with creatures disabled to separate bed from events."
+   ],
+   "halts": [
+    {
+     "check": "E1 GESTURE-FIRST: sound before the first tap (founder rules)",
+     "evidence": "Line 2126 calls Snd.wake() at load ('where the browser allows it, sound starts before any touch at all'); Layer 1 measured the waterfall at -36.2 dBFS before any touch. Against: studio OS section 2 says the first tap unlocks audio, permission-clean and ambush-free, and for a screen-reader player an unasked noise bed arrives before the first spoken word. For: the level is low, fades in over about 1.5 s, the mute is the first Tab stop and drops output to -85.5 dBFS (WCAG 1.4.2 is met: a stop mechanism exists at the top), the choice persists in localStorage, and the pond being already alive is the scene-first opening the studio also asks for. The code path conflicts with a stated law, so it is filed as blocking; the founder decides whether the law or the scene wins, or whether a middle path (bed starts on the first tap anywhere, which the capture listeners already do) is enough."
+    }
+   ]
+  },
+  {
+   "seat": "Sighted persona",
+   "predictions": [
+    {
+     "id": "S1",
+     "seat": "Sighted persona",
+     "claim": "A cold player taps the big dark Next button, not the underlined Skip link, so most never tap Skip to the stream on the first card",
+     "measure": "tapped",
+     "target": "name:skip to the stream",
+     "op": "==",
+     "value": true,
+     "p": 0.4,
+     "cohort": "any"
+    },
+    {
+     "id": "S2",
+     "seat": "Sighted persona",
+     "claim": "First tap on a floating phrase comes within 60 seconds of load (4 intro cards are short, then the moving cards invite a tap)",
+     "measure": "time_to_tap",
+     "target": "name:tap to catch or smash",
+     "op": "<=",
+     "value": 60000,
+     "p": 0.6,
+     "cohort": "any"
+    },
+    {
+     "id": "S3",
+     "seat": "Sighted persona",
+     "claim": "At least one tap changes nothing on screen, from chasing a drifting card or tapping Show turn marks",
+     "measure": "dead_taps",
+     "target": "",
+     "op": ">=",
+     "value": 1,
+     "p": 0.7,
+     "cohort": "any"
+    },
+    {
+     "id": "S4",
+     "seat": "Sighted persona",
+     "claim": "Player sees the fresh-not-cliche penalty line at least once because Smash cliche is the loudest red button",
+     "measure": "saw",
+     "target": "text:is fresh, not a cliché",
+     "op": "==",
+     "value": true,
+     "p": 0.7,
+     "cohort": "any"
+    },
+    {
+     "id": "S5",
+     "seat": "Sighted persona",
+     "claim": "Player answers the notice question correctly; card 2 says it splits the poem in two and the bold red ya box makes it stick",
+     "measure": "answer:recall",
+     "target": "",
+     "op": "==",
+     "value": "Splits the poem into two parts",
+     "p": 0.6,
+     "cohort": "any"
+    },
+    {
+     "id": "S6",
+     "seat": "Sighted persona",
+     "claim": "Player rates I knew what to do next at 4 or 5; the status line names the three moves but the menus overlap the stream",
+     "measure": "answer:knew_next",
+     "target": "",
+     "op": ">=",
+     "value": 4,
+     "p": 0.45,
+     "cohort": "any"
+    },
+    {
+     "id": "S7",
+     "seat": "Sighted persona",
+     "claim": "A cold phone player is done inside 4 minutes; with no end state in Spring they stop when the lines feel full or stuck",
+     "measure": "session_ms",
+     "target": "",
+     "op": "<=",
+     "value": 240000,
+     "p": 0.6,
+     "cohort": "any"
+    }
+   ],
+   "notes": [
+    "State 0: the Japanese is gorgeous but I do not know what ya is until I tap Next; the dark Next button wins over the pale Skip link, and 1 of 4 tells me it is short, so I read on.",
+    "State 3 to 4: I tapped the paper boat, the Catch line / Smash cliche / Let it go buttons popped up right on top of the other cards, and when I went for the carp card my thumb hit Smash cliche instead; the water clouded and I did not know why I was punished.",
+    "State 8: the frog tongue snapping the cliche is the best moment in the game; I get it instantly and want to find another one to smash.",
+    "States 16, 24, 32: I tapped Show turn marks and the button went black but the only change was a small red 切 tile over a card; I would not notice it and would tap it again thinking it did nothing."
+   ],
+   "halts": [
+    {
+     "check": "Action menu overlays neighboring stream phrases, so a tap aimed at another phrase lands on Smash cliche and costs clear water",
+     "evidence": "Step 4 tapped 'the carp flips' label while the paper-boat menu was open; result state 4 reads 'a child's paper boat is fresh, not a cliché... the water clouds' and Clear water drops 3 to 2; screenshot 03 shows Smash cliche at y~240 covering the carp card"
+    },
+    {
+     "check": "Show turn marks produces no text change and only a small visual mark, reading as a dead control to a first player",
+     "evidence": "Steps 16, 27, 42 all logged 'screen text did not change'; screenshot 32 shows only a small red 切 tile near one card"
+    }
+   ]
+  }
+ ]
+}

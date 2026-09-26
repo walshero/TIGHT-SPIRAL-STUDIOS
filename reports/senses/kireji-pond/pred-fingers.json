@@ -1,0 +1,22 @@
+{
+  "seat": "Fingers",
+  "md5": "0a6f41fbb6a5c9a3ce43c1749b6b8358",
+  "predictions": [
+    {"id": "F1", "seat": "Fingers", "claim": "A first player lands at least two taps that change nothing, mostly thumb misses on drifting phrases (they spawn about 15px tall at the top of the pond and overlap each other) plus the Show turn marks toggle, which changes no screen text.", "measure": "dead_taps", "target": "", "op": ">=", "value": 2, "p": 0.65, "cohort": "any"},
+    {"id": "F2", "seat": "Fingers", "claim": "The player makes at least four taps before the first Catch line: the intro cards (Next up to three times or Skip), at least one tap to open a phrase, and at least one miss or re-tap on a moving phrase.", "measure": "taps_before", "target": "name:catch line", "op": ">=", "value": 4, "p": 0.6, "cohort": "any"},
+    {"id": "F3", "seat": "Fingers", "claim": "Despite the reach cost, the core verb is found: the player taps Catch line at least once.", "measure": "tapped", "target": "name:catch line", "op": "==", "value": true, "p": 0.85, "cohort": "any"},
+    {"id": "F4", "seat": "Fingers", "claim": "Reaching the first Catch line takes more than 30 seconds, because the phrase must be chased near the top of the screen and the menu opens there too.", "measure": "time_to_tap", "target": "name:catch line", "op": ">", "value": 30000, "p": 0.55, "cohort": "any"},
+    {"id": "F5", "seat": "Fingers", "claim": "The slot controls under the fold of the scene are used: the player taps Remove or Move to at least once after catching.", "measure": "tapped", "target": "name:remove", "op": "==", "value": true, "p": 0.4, "cohort": "any"},
+    {"id": "F6", "seat": "Fingers", "claim": "The player does not tap Show turn marks; it sits at the bottom edge, partly below the 840px fold in the first stream state, and gives no text change when pressed.", "measure": "tapped", "target": "name:show turn marks", "op": "==", "value": false, "p": 0.6, "cohort": "any"}
+  ],
+  "notes": [
+    "Core verb sits entirely outside the thumb arc. Every phrase and every Catch line / Smash cliche / Let it go popup is centered between y=31 and y=251 (arc edge is y=336) in states 2-5, 7, 11, 17, 20, 25, 27, 28. The popup buttons themselves pass the floor (129x47, 160x47, 113x47); the problem is reach, not size. Two-handed or thumb-stretch play is required on a 400x840 phone.",
+    "Small phrase targets are a moving-target problem, not a static floor miss: every new phrase spawns near the waterfall top at about 50-77 x 15-16px (Mother Nature's gentle touch 77x15 in state 6, April showers fall 48x15 in state 10, a temple bell 52x16 in state 15, reeds lean 77x15 in state 28) and grows past 44px as it drifts down. Separately, phrases overlap: in state 2 a child's paper boat shows only 74x22 because the carp flips and a temple bell cover it, so a tap can open the wrong phrase.",
+    "Real static floor misses: Move to bottom 183x39, Move to top 144x39, Remove 103x39 (states 6-12, 18-21, 30) and Skip to the stream 182x39 (states 0-1) are 5px under the 44px floor. Sound on draws 36x36 in the top-left corner (hit area 46x46 passes, but it is a corner control for a reduced-field player).",
+    "Accidental-tap risk: a second tap on an open phrase closes its menu (crawl steps 20-21, 30-31, 35-37 toggle states 19/20, 26/27, 28/29), and the popup row covers the phrase beneath it (state 28: Catch line sits over a breath of fresh air). A shaky or double tap on a drifting phrase will read as nothing happened. Pause stream and Show turn marks are 165x76 but start at y=784 in state 2, bottom 20px below the fold; Still water (y=868-902) is off-screen until scroll."
+  ],
+  "halts": [
+    {"check": "Slot controls under the 44px founder floor", "evidence": "Move to bottom 183x39, Move to top 144x39, Remove 103x39 in every slot-filled state (6-12, 18-21, 30); Skip to the stream 182x39 in states 0-1. Static controls, so this is a true floor miss, fixable with min-height: 44px."},
+    {"check": "Core-verb target spawns at 15-16px tall while moving, at the top screen edge", "evidence": "New phrases measure 77x15 (state 6), 48x15 (state 10), 52x16 (state 15), 77x15 (state 28) centered at y=53-59, above the thumb arc and near the top edge, in low contrast against the mountain. For a reduced-field, low-vision player this is the first thing to tap. Pause stream exists but sits at the bottom edge, partly below the fold."}
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "seat": "Ear persona",
+  "md5": "0a6f41fbb6a5c9a3ce43c1749b6b8358",
+  "predictions": [
+    {"id": "EP1", "seat": "Ear persona", "claim": "A screen-reader player ever activates Catch line. Tapping a phrase announces nothing and the three action buttons are appended after Still water at the end of the page, so the player must swipe past the whole panel while the phrase drifts; fewer than half get there.", "measure": "tapped", "target": "name:catch line", "op": "==", "value": true, "p": 0.4, "cohort": "screen_reader"},
+    {"id": "EP2", "seat": "Ear persona", "claim": "The player makes three or more dead taps: re-tapping a silent expanded phrase (steps 3, 5, 7, 11 say nothing), tapping a phrase that is disabled or has already drifted off, and Pause/Resume/Show turn marks, which announce nothing.", "measure": "dead_taps", "target": "", "op": ">=", "value": 3, "p": 0.75, "cohort": "screen_reader"},
+    {"id": "EP3", "seat": "Ear persona", "claim": "A screen-reader player rates 'I knew what to do next' at 2 or lower.", "measure": "answer:knew_next", "target": "", "op": "<=", "value": 2, "p": 0.65, "cohort": "screen_reader"},
+    {"id": "EP4", "seat": "Ear persona", "claim": "The status announcement 'Caught:' is ever heard.", "measure": "saw", "target": "text:caught", "op": "==", "value": true, "p": 0.4, "cohort": "screen_reader"},
+    {"id": "EP5", "seat": "Ear persona", "claim": "The player reaches the heading 'The cut.' by pressing Next instead of skipping. Next comes before Skip in swipe order, but a cold player who hears 'Skip to the stream' often takes it, and then never hears what kireji means.", "measure": "saw", "target": "text:the cut", "op": "==", "value": true, "p": 0.55, "cohort": "screen_reader"},
+    {"id": "EP6", "seat": "Ear persona", "claim": "The player ever uses Pause stream, the one control that stops phrases leaving. It sits after the list and its name reads 'Pause streamP', so few find it or trust it.", "measure": "tapped", "target": "name:pause stream", "op": "==", "value": true, "p": 0.3, "cohort": "screen_reader"}
+  ],
+  "notes": [
+    "State 3 / step 3: tapping a phrase gives [expanded] with no announcement, and focus stays on the phrase. Catch line, Smash cliche and Let it go are added at the end of the page, after Still water, about 10 swipes away. Steps 19 and 35 show a phrase leaving or not responding between taps, so by ear the moving target cannot be held long enough to act on it. Pause (state 14) is the only way to hold it, and nothing tells the player that.",
+    "Step 4: tapping a different phrase (the carp) while 'a child's paper boat' was expanded gave a verdict on the boat ('fresh, not a cliche ... water clouds'). Clear water dropped to 2 of 3 and one phrase vanished. By ear, a tap on one line judged another line. The player cannot tell cause from effect.",
+    "5-7-5 slots, states 6/9/30: the slot list reads well ('Line 2 - seven syllables', then the caught text with Move/Remove), and every phrase name gives its syllable count. But 'Caught:' never says which line the phrase went to (a 5 went to line 1 and a 7 to line 2 without a word). The meter 'Poems fed to the frog: 0 of 3' is an image, its label never changed in 42 steps, and the characters 春 夏 秋 are read aloud with no explanation. No completion state was ever heard.",
+    "Cold Tab walk: from load the loop is only Sound on / Next / Skip to the stream, so no phrase is keyboard-reachable before a tap. Sound starts before any gesture (Layer 1 E1, -36.2 dBFS), competing with the screen reader's first speech. Step 32 played 8 short sounds with no announcement. 18 of 32 state changes are silent (E5). 'Pause streamP' and 'a sparrow - and gone turn' leak visual glyphs into the spoken names."
+  ],
+  "halts": [
+    {"check": "GESTURE-FIRST audio (Studio Ears Layer 1 E1)", "evidence": "ear.md verdict: 1 source started before the first gesture; the speaker reached -36.2 dBFS before any touch. This talks over VoiceOver's first announcement on load."},
+    {"check": "Core verb is not reachable by ear: phrase activation neither announces nor moves focus to its actions", "evidence": "State 3/5/7/11/17/20/25/27: phrase gets [expanded] with 'nothing announced'. Catch line/Smash cliche/Let it go are appended after 'Still water', last in DOM order, while the phrase keeps moving (steps 19, 35-37 show phrases leaving or toggling). Step 4 shows a tap on one phrase judging a different phrase."}
+  ]
+}
