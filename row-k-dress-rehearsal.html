@@ -7,7 +7,9 @@
 <meta name="audience" content="MassBay EN195 students learning to stage a secret without announcing it; the founder as first playtester">
 <title>Dress Rehearsal: an EN195 game</title>
 <!--
-  DRESS REHEARSAL (file: row-k, v45) - a staging game. Tight Spiral Productions.
+  DRESS REHEARSAL (file: row-k, v46) - a staging game. Tight Spiral Productions.
+  v46 (founder 2026-09-26): "Spacing is good for underline section, but there should be a gap between that and the
+  next part, which should be more tightly spaced." The secret card's rule now sits on its own, 18px below the fact, at 1.35.
   v45 (founder 2026-09-25): "use “ ” around dialogue to be clear." Every
   LINE card sets its words in curly quotes after the speaker's name, the
   (thinking) cards too, so quote marks never tell a player which card is the
@@ -848,6 +850,10 @@
     text-decoration:underline; text-decoration-thickness:3px;
     text-underline-offset:6px;
   }
+  /* v46 (founder 2026-09-26: "Spacing is good for underline section, but there should be a gap between that and the next
+     part, which should be more tightly spaced"): the fact keeps its 1.85 line height for the underline; the rule sits
+     below it after a clear gap, set tighter because it has no underline to clear. */
+  .secret .rule{ display:block; margin-top:18px; line-height:1.35; }
 
   .scene-line{ text-align:center; font-style:italic; margin:16px auto 18px; }
 
@@ -2379,7 +2385,8 @@
     sec.appendChild(el("span","tag","THE SECRET"));
     var body = el("p","body");
     body.appendChild(el("strong","fact",scene().secret));
-    body.appendChild(document.createTextNode(" "+SECRET_RULE));
+    body.appendChild(document.createTextNode(" "));   // a space, so a screen reader still reads fact and rule as two sentences
+    body.appendChild(el("span","rule",SECRET_RULE));
     sec.appendChild(body);
     stage.appendChild(sec);
 
