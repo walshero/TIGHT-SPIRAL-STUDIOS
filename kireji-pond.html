@@ -13,6 +13,9 @@
      poem. Hedge wins. Does the poem land with you? Does this one hold?" The camera holds on the scene through the fly,
      the gulp and the leap (page scroll locked), holds one beat on the frog, then scrolls down to the player's poem.
      Win screens ask instead of declaring. The fridge no longer auto-opens over the three poems; the button stays.
+     v5.2.6 2026-09-26 (founder): "Cut this line ... Don't keep clear water score just cliches kept v smashed 0/0 first digit
+     is red if it's a one or above or green if zero. Also, position sun so the scroll/button doesn't hide it." The clear-water
+     pads and the cloud-over reset are gone; the sun moved to the notch between the mountains.
      v5.2.5 2026-09-26 (founder): Next stuck on 2 of 4 after scrolling the card; the swipe forgot nothing. Fixed.
      v5.2.4 2026-09-26 (founder): "make the leap sound yaaaaa more excited than nervous ... make the ya symbol more artful and
      lower on the screen closer to eyeball following frog." The ya rides above the frog and the leap paints its long vowel;
@@ -34,7 +37,7 @@
   /* v5.2.3 token-role law: text twins, literal values; decoration tokens may change, these may not */
   --paper2-t:#F5EEDB; --sumi-t:#1B1A17; --sumi2-t:#4A463E; --ai-t:#1F3A5F;
   --ai:#1F3A5F; --ai2:#4E7A9E; --ai3:#B7CEDA;
-  --beni:#B23A2A; --beniInk:#7E2419; --moss:#5F6B34; --frog:#7C8C3A; --ochre:#B98A2E;
+  --beni:#B23A2A; --beniInk:#7E2419; --okInk:#2F5D2A; --moss:#5F6B34; --frog:#7C8C3A; --ochre:#B98A2E;
   color-scheme:light;
 }
 *{box-sizing:border-box}
@@ -167,10 +170,11 @@ kbd{font:600 18px/1 "Zen Kaku Gothic New",sans-serif;border:1px solid currentCol
 .seals span.won{background:var(--beni);border-color:var(--beni);color:#F8E9DC}
 .padrow{display:flex;align-items:center;gap:10px;font-size:18px}
 .padrow{flex-wrap:wrap}
-#pads{display:inline-flex;gap:4px}
-#padsTxt,#smashTxt{white-space:nowrap}
-.padrow svg{width:30px;height:18px}
-.padrow .mud path{fill:#9C9686}
+/* v5.2.6: clichés kept / smashed. Kept is red at 1 or more, green at 0; the digit itself carries the count, colour only adds */
+.sclbl{white-space:nowrap}
+.scnum{margin-left:auto;font-size:24px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.scnum b{font-weight:800}
+.kept0{color:var(--okInk)}.kept1{color:var(--beniInk)}
 .slots{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
 .slots li{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:stretch}
 .count{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;font-weight:800;font-size:26px;color:var(--ai-t);display:grid;place-items:center}
@@ -211,7 +215,7 @@ kbd{font:600 18px/1 "Zen Kaku Gothic New",sans-serif;border:1px solid currentCol
 #jaw{transition:opacity .08s}
 /* v2 dark path: the panel follows the device. The print itself keeps its daylight inks. */
 @media (prefers-color-scheme:dark){
-  :root{--paper:#1C1A16;--paper2:#27241E;--sumi:#F2EAD7;--sumi2:#CFC6B2;--paper2-t:#27241E;--sumi-t:#F2EAD7;--sumi2-t:#CFC6B2;--beniInk:#E8957F;color-scheme:dark}
+  :root{--paper:#1C1A16;--paper2:#27241E;--sumi:#F2EAD7;--sumi2:#CFC6B2;--paper2-t:#27241E;--sumi-t:#F2EAD7;--sumi2-t:#CFC6B2;--beniInk:#E8957F;--okInk:#8FCB7E;color-scheme:dark}
   .tile:hover .in,.tile.held .in{background:#3A352C}
   .count{color:#9DBFD2}
   .primary:hover{background:var(--ai);color:#F2EAD7}
@@ -312,7 +316,6 @@ body.still .eddy .e{animation:none}
   .ph h2{font-size:22px;white-space:nowrap}
   .seals{gap:4px}.seals span{width:26px;height:26px;font-size:18px}
   .padrow{gap:6px 10px;padding:8px 10px;border:2px solid var(--sumi2)}
-  #pads{gap:2px}.padrow svg{width:22px;height:14px}
   .slots{gap:6px}
   .slots li{grid-template-columns:22px 1fr;gap:6px}
   .count{font-size:22px}
@@ -546,7 +549,7 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
       </defs>
       <rect width="1000" height="700" fill="url(#sky)"/>
       <rect y="0" width="1000" height="44" fill="#2A4B6E" opacity="0.8"/><rect y="44" width="1000" height="40" fill="#2A4B6E" opacity="0.45"/><rect y="84" width="1000" height="48" fill="#2A4B6E" opacity="0.18"/><rect width="1000" height="132" fill="url(#pMottle)" opacity=".4"/>
-      <circle cx="770" cy="128" r="46" style="fill:var(--sun)"/><circle cx="770" cy="128" r="46" fill="url(#pMottle)"/>
+      <!-- v5.2.6 (founder): the sun sits in the notch between the snow peak and the green mountain, the one patch of sky every screen shape shows and no scroll or button covers --><circle cx="505" cy="58" r="44" style="fill:var(--sun)"/><circle cx="505" cy="58" r="44" fill="url(#pMottle)"/>
       <g class="skyclouds" aria-hidden="true"><path d="M390.0 112.0 C386.0 104.0 394.0 100.0 400.0 105.0 A14.5 13.7 0 0 1 428.4 105.0 A22.8 33.7 0 0 1 473.0 105.0 A16.5 17.8 0 0 1 505.5 105.0 A19.7 25.2 0 0 1 536.0 105.0 C542.0 100.0 550.0 104.0 546.0 112.0 Z" fill="#F4EEDC"/><path d="M390.0 112.0 C386.0 104.0 394.0 100.0 400.0 105.0 A14.5 13.7 0 0 1 428.4 105.0 A22.8 33.7 0 0 1 473.0 105.0 A16.5 17.8 0 0 1 505.5 105.0 A19.7 25.2 0 0 1 536.0 105.0 C542.0 100.0 550.0 104.0 546.0 112.0 Z" fill="url(#pMottle)"/><path d="M406.0 109.0 L530.0 109.0" stroke="#D9CBB0" stroke-width="5" stroke-linecap="round"/><path d="M390.0 112.0 C386.0 104.0 394.0 100.0 400.0 105.0 A14.5 13.7 0 0 1 428.4 105.0 A22.8 33.7 0 0 1 473.0 105.0 A16.5 17.8 0 0 1 505.5 105.0 A19.7 25.2 0 0 1 536.0 105.0 C542.0 100.0 550.0 104.0 546.0 112.0 Z" fill="none" stroke="#1B1A17" stroke-width="1.6" stroke-linejoin="round"/><path d="M441.7 91.9 A9.0 9.0 0 1 1 452.5 94.6 M512.5 96.1 A8.3 8.3 0 1 1 522.4 98.6 " fill="none" stroke="#1B1A17" stroke-width="1.2" stroke-linecap="round"/><path d="M686.0 176.0 C682.0 168.0 690.0 164.0 696.0 169.0 A14.2 10.5 0 0 1 723.8 169.0 A20.7 22.4 0 0 1 764.4 169.0 A28.3 42.0 0 0 1 819.9 169.0 A19.6 20.1 0 0 1 858.4 169.0 A13.1 8.9 0 0 1 876.0 169.0 C882.0 164.0 890.0 168.0 886.0 176.0 Z" fill="#F4EEDC"/><path d="M686.0 176.0 C682.0 168.0 690.0 164.0 696.0 169.0 A14.2 10.5 0 0 1 723.8 169.0 A20.7 22.4 0 0 1 764.4 169.0 A28.3 42.0 0 0 1 819.9 169.0 A19.6 20.1 0 0 1 858.4 169.0 A13.1 8.9 0 0 1 876.0 169.0 C882.0 164.0 890.0 168.0 886.0 176.0 Z" fill="url(#pMottle)"/><path d="M702.0 173.0 L870.0 173.0" stroke="#D9CBB0" stroke-width="5" stroke-linecap="round"/><path d="M686.0 176.0 C682.0 168.0 690.0 164.0 696.0 169.0 A14.2 10.5 0 0 1 723.8 169.0 A20.7 22.4 0 0 1 764.4 169.0 A28.3 42.0 0 0 1 819.9 169.0 A19.6 20.1 0 0 1 858.4 169.0 A13.1 8.9 0 0 1 876.0 169.0 C882.0 164.0 890.0 168.0 886.0 176.0 Z" fill="none" stroke="#1B1A17" stroke-width="1.6" stroke-linejoin="round"/><path d="M735.4 161.9 A8.7 8.7 0 1 1 745.8 164.5 M830.9 162.9 A8.2 8.2 0 1 1 840.8 165.3 " fill="none" stroke="#1B1A17" stroke-width="1.2" stroke-linecap="round"/><path d="M794.0 262.0 C790.0 254.0 798.0 250.0 804.0 255.0 A23.3 24.5 0 0 1 849.8 255.0 A33.0 48.8 0 0 1 914.4 255.0 A20.6 19.1 0 0 1 954.8 255.0 A30.2 41.0 0 0 1 1006.0 255.0 C1012.0 250.0 1020.0 254.0 1016.0 262.0 Z" fill="#F4EEDC"/><path d="M794.0 262.0 C790.0 254.0 798.0 250.0 804.0 255.0 A23.3 24.5 0 0 1 849.8 255.0 A33.0 48.8 0 0 1 914.4 255.0 A20.6 19.1 0 0 1 954.8 255.0 A30.2 41.0 0 0 1 1006.0 255.0 C1012.0 250.0 1020.0 254.0 1016.0 262.0 Z" fill="url(#pMottle)"/><path d="M810.0 259.0 L1000.0 259.0" stroke="#D9CBB0" stroke-width="5" stroke-linecap="round"/><path d="M794.0 262.0 C790.0 254.0 798.0 250.0 804.0 255.0 A23.3 24.5 0 0 1 849.8 255.0 A33.0 48.8 0 0 1 914.4 255.0 A20.6 19.1 0 0 1 954.8 255.0 A30.2 41.0 0 0 1 1006.0 255.0 C1012.0 250.0 1020.0 254.0 1016.0 262.0 Z" fill="none" stroke="#1B1A17" stroke-width="1.6" stroke-linejoin="round"/><path d="M873.1 233.5 A9.0 9.0 0 1 1 883.9 236.2 M971.4 237.8 A9.0 9.0 0 1 1 982.2 240.5 " fill="none" stroke="#1B1A17" stroke-width="1.2" stroke-linecap="round"/></g>
       <path d="M250 118 L292 72 L316 88 L352 50 L392 86 L420 70 L470 118 Z" fill="#EDE3CC"/><path d="M250 118 L292 72 L316 88 L352 50 L392 86 L420 70 L470 118 Z" fill="#8C9AAE"/><path d="M250 118 L292 72 L316 88 L352 50 L392 86 L420 70 L470 118 Z" fill="url(#pMottle)"/><path d="M250 118 L292 72 L316 88 L352 50 L392 86 L420 70 L470 118 Z" fill="none" stroke="#1B1A17" stroke-width="1.4" stroke-linejoin="round"/>
       <path d="M340 62 L352 50 L366 64 L358 62 L352 70 L346 62 Z M286 80 L292 72 L300 80 Z" fill="#F4EEDC" stroke="#1B1A17" stroke-width=".9"/>
@@ -722,7 +725,7 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
               <h2 id="t4h" tabindex="-1">Make it turn.</h2>
               <ul class="rules">
                 <li>One line must turn: a leap, a splash, a sudden shift.</li>
-                <li>Spot a cliché? Tap it, then <b>Smash cliché</b>. A right call clears the water. A wrong call, or catching a cliché, clouds it.</li>
+                <li>Spot a cliché? Tap it, then <b>Smash cliché</b>.</li>
                 <li>Rearrange anytime: move a line, or remove it.</li>
                 <li>Feed the frog three poems. Then listen.</li>
               </ul>
@@ -757,7 +760,7 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
         <div><p class="eyebrow" id="seasonLbl">Spring · 春</p><h2>Catch a poem</h2></div>
         <div class="seals" id="seals" role="img" aria-label="Poems fed to the frog: 0 of 3"><span>春</span><span>夏</span><span>秋</span></div>
       </div>
-      <div class="padrow"><span id="pads" aria-hidden="true"></span><span id="padsTxt">Clear water: 3 of 3</span><span id="smashTxt" style="margin-left:auto">Smashed: 0</span></div>
+      <div class="padrow" id="score"><span class="sclbl">Clichés kept / smashed</span><span class="scnum" aria-hidden="true"><b id="keptN" class="kept0">0</b>/<b id="smashN">0</b></span><span class="sr" id="scoreSr">0 clichés kept, 0 smashed</span></div>
       <ol class="slots" id="slots">
         <li><span class="count" aria-hidden="true">5</span><div class="slot" data-i="0"><span class="txt"></span><span class="hint">Line 1 · five syllables</span><div class="acts" hidden><button type="button" class="mv" data-i="0">Move to bottom</button><button type="button" class="rm" data-i="0">Remove</button></div></div></li>
         <li><span class="count" aria-hidden="true">7</span><div class="slot" data-i="1"><span class="txt"></span><span class="hint">Line 2 · seven syllables</span><div class="acts" hidden><button type="button" class="rm" data-i="1">Remove</button></div></div></li>
@@ -1052,7 +1055,7 @@ const SEASONS=[
 ];
 const CLICHE=[
  p=>`“${p}” — heard that one before. Let it drift.`,
- p=>`“${p}” came pre-packaged. The water clouds a little.`,
+ p=>`“${p}” came pre-packaged.`,
  p=>`“${p}” names a feeling instead of showing a thing. Let it pass.`
 ];
 
@@ -1061,7 +1064,7 @@ const L=path.getTotalLength(), SPEED=28;
 const LIP=(()=>{for(let s=0;s<L;s+=1){if(path.getPointAtLength(s).y>=192)return s}return L*.25})();
 function kAt(s){return s<LIP?.3+.7*Math.pow(Math.max(0,s)/LIP,1.4):1}
 function vAt(s){return s<LIP?SPEED*(.35+.65*kAt(s)):SPEED*1.7}
-const S={phase:'intro',round:0,pads:3,slots:[null,null,null],wins:[],paused:false,busy:false,smashed:0};
+const S={phase:'intro',round:0,slots:[null,null,null],wins:[],paused:false,busy:false,smashed:0,kept:0};
 let tiles=[], sinceTurn=0, laneI=0, clicheI=0, last=performance.now();
 let plist=[]; S.still=false;
 
@@ -1202,20 +1205,12 @@ function onSmash(t){
   release(t);
   if(t.p.k==='c'){
     shatter(t); S.smashed++;
-    const back=S.pads<3; if(back) S.pads++;
-    say(`Smashed. “${t.p.t}” was a cliché. Snap. Crumpled and swallowed.${back?' The water clears a little.':''}`);
+    say(`Smashed. “${t.p.t}” was a cliché. Snap. Crumpled and swallowed.`);
     renderPads();
   } else {
     t.el.classList.remove('nope'); void t.el.offsetWidth; t.el.classList.add('nope'); Snd.sink();
-    S.pads--;
-    if(S.pads<=0){cloudOver();}
-    else say(`“${t.p.t}” is fresh, not a cliché. It survives, and the water clouds.`,true);
-    renderPads();
+    say(`“${t.p.t}” is fresh, not a cliché. It survives.`,true);
   }
-}
-function cloudOver(){
-  S.slots.forEach(x=>{if(x)returned.push(x)}); S.pads=3; S.slots=[null,null,null]; renderSlots();
-  say('The pond clouds over. Your lines wash back into the stream. Start again, and trust your ear.',true);
 }
 function mouthScreen(){const r=$('#mouthPt').getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+r.height/2}}
 function jaw(open){$('#jaw').setAttribute('opacity',open?1:0)}
@@ -1293,15 +1288,14 @@ function onTile(t){
   if(S.slots.every(Boolean)) evaluate(); else say(`Caught: “${p.t}.”`);
 }
 function clicheHit(t){
-  Snd.sink(); retire(t,'sink'); S.pads--;
-  if(S.pads<=0) cloudOver();
-  else say(CLICHE[clicheI++%CLICHE.length](t.p.t),true);
+  Snd.sink(); retire(t,'sink'); S.kept++;
+  say(CLICHE[clicheI++%CLICHE.length](t.p.t),true);
   renderPads();
 }
-function renderPads(){
-  $('#pads').innerHTML=[0,1,2].map(i=>`<svg viewBox="0 0 30 18" class="${i<S.pads?'':'mud'}"><path d="M15 9 L27 7 A13 7 0 1 0 27 11Z" fill="#6E7F36" stroke="#1B1A17" stroke-width="1.5"/></svg>`).join('');
-  $('#padsTxt').textContent=`Clear water: ${S.pads} of 3`;
-  $('#smashTxt').textContent=`Smashed: ${S.smashed}`;
+function renderPads(){ // v5.2.6 (founder): no clear-water score; clichés kept / smashed, kept red at 1+, green at 0
+  const k=$('#keptN'); k.textContent=S.kept; k.className=S.kept>0?'kept1':'kept0';
+  $('#smashN').textContent=S.smashed;
+  $('#scoreSr').textContent=`${S.kept} ${S.kept===1?'cliché':'clichés'} kept, ${S.smashed} smashed`;
 }
 function renderSlots(flashI){
   $$('.slot').forEach((b,i)=>{
@@ -1427,7 +1421,7 @@ function rollSlip(up){
 function startRound(){
   endTour();
   if(!slipRolled) rollSlip(true);
-  S.phase='play'; S.busy=false; $('#slots').classList.remove('busy'); S.pads=3; S.slots=[null,null,null];
+  S.phase='play'; S.busy=false; $('#slots').classList.remove('busy'); S.slots=[null,null,null];
   S.sndRound=S.round; // v5.2.1: the season's creatures change here, on Next season, not at the win
   applySeason(); renderPads(); renderSlots(); renderSeals();
   layer.classList.remove('hush'); layer.inert=false; prefill(); setPaused(false); if(S.still) dealList();
@@ -1438,7 +1432,7 @@ $('#start').addEventListener('click',startRound);
 $('#next').addEventListener('click',startRound);
 $('#again').addEventListener('click',()=>{
   Fz.reset();
-  S.round=0; S.wins=[]; S.smashed=0; deckRound=-1; scene.classList.remove('final');
+  S.round=0; S.wins=[]; S.smashed=0; S.kept=0; deckRound=-1; scene.classList.remove('final');
   resetFrog();
   $('#slipJp').textContent='切れ字の池'; $('#slipEn').textContent='Kireji Pond'; startRound();
 });
