@@ -13,3 +13,9 @@ PENDING FOUNDER. Studio pick: C (balloon climbs to the peak; strongest photograp
 B caveat: no open sky; balloon would rise inside the shop. Candidate for the liftoff reveal instead.
 Whichever wins: Shinkansen moves from v36 foreground platform to mid-distance (flag);
 Echigo crash gag must be re-staged. Not in the game until ruled.
+
+## 17:05 UPDATE: built as v40
+Founder: "Build echigo with all different roofs" (+ Magome-juku photo). Founder did not pick A/B/C;
+studio call: C. Shipped in sandbags.html v40: fourteen houses, fourteen roof types, three rows up the slope.
+Shinkansen moved to a viaduct behind the middle row (was v36 foreground platform) — FLAG for founder.
+Crash gag re-staged (translate 0 63 with the vending machines). Source: claude/sandbags-v40-echigo-roofs.js.
