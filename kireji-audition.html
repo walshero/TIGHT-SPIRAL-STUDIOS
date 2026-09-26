@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Kireji Audition</title>
+<!--
+  KIREJI AUDITION v1 · Tight Spiral Productions · 2026-09-26
+  source: founder, "The yaaaa sound is weird and the hiragana effect could be better. Give me 5 yaaaaa recordings to
+  choose from. Do some research on pleasing win states in games, like throwing in casino slot sounds etc give me options"
+  owner: mwalsh · status: AUDITION (nothing here is in the game until the founder picks)
+  Every sound is synthesized here, in the page, the way kireji-pond.html makes its own: no files, no network.
+  Research notes and sources are at the bottom of the page.
+-->
+<style>
+:root{
+  --paper:#F3ECDC; --card:#FBF7EE; --ink:#1B1A17; --ink2:#3F3A32; --rule:#1B1A17;
+  --beniFill:#B23A2A; --beniInk:#7E2419; --water:#1F3A5F; --water2:#2E5A86; --pad:#5F6B34; --kana:#B23A2A; --halo:#F5EEDB;
+  --focus:#0B57D0; --btnBg:#1B1A17; --btnInk:#FBF7EE;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#15130F; --card:#221F19; --ink:#F2EAD7; --ink2:#D6CCB6; --rule:#F2EAD7; --beniInk:#E8957F;
+    --btnBg:#F2EAD7; --btnInk:#15130F; --focus:#8AB4F8; color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font:20px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+.backdrop{position:fixed;inset:0;background:var(--paper);z-index:0}
+main{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:20px 16px 80px}
+h1{font-size:30px;line-height:1.2;margin:8px 0 6px}
+h2{font-size:25px;margin:40px 0 4px;padding-top:12px;border-top:3px solid var(--rule)}
+.lede{margin:0 0 6px;color:var(--ink2)}
+.grid{display:grid;gap:14px;margin-top:14px}
+@media (min-width:640px){.grid.two{grid-template-columns:1fr 1fr}}
+.card{background:var(--card);border:2px solid var(--rule);border-radius:12px;padding:14px 14px 16px}
+.card h3{margin:0;font-size:22px}
+.card .tag{font-weight:800;margin-right:6px}
+.card p{margin:6px 0 0;color:var(--ink2);font-size:18px}
+.card .why{font-size:18px;color:var(--ink2)}
+.card .warn{font-size:18px;color:var(--beniInk);font-weight:650}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+button{font:inherit;font-size:20px;font-weight:700;min-height:52px;min-width:52px;padding:10px 20px;border-radius:10px;
+  border:3px solid var(--btnBg);background:var(--btnBg);color:var(--btnInk);cursor:pointer}
+button.ghost{background:transparent;color:var(--ink)}
+button:focus-visible{outline:4px solid var(--focus);outline-offset:3px}
+button[aria-disabled="true"]{opacity:.55;cursor:default}
+.stage{display:block;width:100%;height:auto;margin-top:10px;border-radius:10px;border:2px solid var(--rule);background:#EDCDB5}
+.kana{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP","Shippori Mincho",Georgia,serif;font-weight:800;text-anchor:middle}
+.status{font-size:18px;min-height:1.5em;margin-top:8px;color:var(--ink2)}
+.sources{font-size:18px}
+.sources li{margin:6px 0}
+a{color:var(--ink);text-decoration-thickness:2px;text-underline-offset:3px}
+.pick{font-weight:800}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="backdrop" aria-hidden="true"></div>
+<main>
+  <h1>Kireji Pond: the audition</h1>
+  <p class="lede">Tap Play on each. Tell me a letter and a number, such as "voice C, や 2, win W2". Nothing changes in the game until you pick.</p>
+  <p class="status" id="live" aria-live="polite"></p>
+
+  <!-- ===================== VOICES ===================== -->
+  <h2 id="voices">1 · The leap voice</h2>
+  <p class="lede">Five takes on the yaaaa. The first three are voices; D is a small choir; E is an instrument, for when a voice from a machine is the weird part.</p>
+  <div class="grid two">
+    <section class="card"><h3><span class="tag">A</span>Wheee</h3>
+      <p>The original idea done softer: a small, round voice rising like a child saying wheee, landing gently. No tremble.</p>
+      <div class="row"><button type="button" data-voice="A">Play A</button></div></section>
+    <section class="card"><h3><span class="tag">B</span>Slide whistle</h3>
+      <p>The cartoon leap. A pure whistle slides up with a "ya" at the start. Instantly reads as a jump.</p>
+      <div class="row"><button type="button" data-voice="B">Play B</button></div></section>
+    <section class="card"><h3><span class="tag">C</span>Kabuki call</h3>
+      <p>A kakegoe, the shout from the kabuki audience, with two wooden clappers (hyōshigi). Deeper, theatrical, and Japanese in its bones.</p>
+      <div class="row"><button type="button" data-voice="C">Play C</button></div></section>
+    <section class="card"><h3><span class="tag">D</span>Frog chorus</h3>
+      <p>Three small voices in a bright major chord, all shouting yaaa together. A cheer rather than one voice.</p>
+      <div class="row"><button type="button" data-voice="D">Play D</button></div></section>
+    <section class="card"><h3><span class="tag">E</span>Shakuhachi swoop</h3>
+      <p>No voice at all: a breathy bamboo flute runs up a Japanese five-note scale and holds the top note.</p>
+      <div class="row"><button type="button" data-voice="E">Play E</button></div></section>
+    <section class="card"><h3><span class="tag">F</span>Record your own</h3>
+      <p>The least weird yaaaa is a real person. Record yours, or a student's with permission, and I will put that recording in the game.</p>
+      <div class="row"><button type="button" id="recBtn">Record</button><button type="button" class="ghost" id="recPlay" aria-disabled="true">Play it back</button><button type="button" class="ghost" id="recSave" aria-disabled="true">Save the file</button></div>
+      <p class="status" id="recNote" aria-live="polite"></p></section>
+  </div>
+
+  <!-- ===================== KANA ===================== -->
+  <h2 id="kana">2 · The や</h2>
+  <p class="lede">Five ways to put the cutting word on screen. Each plays with the last voice you picked (B until you pick one).</p>
+  <div class="grid two" id="kanaGrid"></div>
+
+  <!-- ===================== WINS ===================== -->
+  <h2 id="wins">3 · Win moments</h2>
+  <p class="lede">For finishing a poem or a season. The research says to scale the celebration to the size of the win, so these run from small to big.</p>
+  <div class="grid two">
+    <section class="card"><h3><span class="tag">W1</span>Coin chime</h3>
+      <p>Two quick bright notes, a fourth apart: the Mario coin idea. Tiny and clean.</p>
+      <p class="why">Best for: every correct catch or smash. Small, success-only feedback builds competence.</p>
+      <div class="row"><button type="button" data-win="W1">Play W1</button></div></section>
+    <section class="card"><h3><span class="tag">W2</span>Koto cascade</h3>
+      <p>Plucked strings tumble down a Japanese pentatonic scale and land on a chord. Fits the pond.</p>
+      <div class="row"><button type="button" data-win="W2">Play W2</button></div>
+      <p class="why">Best for: a finished poem.</p></section>
+    <section class="card"><h3><span class="tag">W3</span>Slot machine payout</h3>
+      <p>Rolling bells, coins counting up, and a ding-ding-ding.</p>
+      <p class="warn">Use with care: casino sounds make players think they won more than they did. Only on a true win, never on a near miss.</p>
+      <div class="row"><button type="button" data-win="W3">Play W3</button></div></section>
+    <section class="card"><h3><span class="tag">W4</span>Taiko finish</h3>
+      <p>A drum roll that speeds up, one big don, and the kabuki "yoo".</p>
+      <p class="why">Best for: finishing a season.</p>
+      <div class="row"><button type="button" data-win="W4">Play W4</button></div></section>
+    <section class="card"><h3><span class="tag">W5</span>Slow-motion bloom</h3>
+      <p>Two slow heartbeats, then a warm major chord opens and sparkles: the Peggle final-peg idea, without borrowing its music.</p>
+      <p class="why">Best for: the last poem, before the frog leaps.</p>
+      <div class="row"><button type="button" data-win="W5">Play W5</button></div></section>
+    <section class="card"><h3><span class="tag">W6</span>Temple bell</h3>
+      <p>One deep bronze bell and a few drops into water. A quiet win, closest to Bashō.</p>
+      <p class="why">Best for: the three-poem ending, where "water's sound" is the point.</p>
+      <div class="row"><button type="button" data-win="W6">Play W6</button></div></section>
+  </div>
+
+  <h2>My recommendation</h2>
+  <p>Tie each size of win to one sound, success only: <span class="pick">W1</span> on each right call, <span class="pick">W2</span> on a finished poem, <span class="pick">W4</span> on a finished season, and <span class="pick">W6</span> with the frog's leap at the very end. Keep <span class="pick">W3</span> out of a classroom game unless it plays only on a true win. For the voice, <span class="pick">F, your own recording</span>, beats any machine; of the synthesized ones, <span class="pick">B</span> reads as a leap fastest. For the や, <span class="pick">3 (pop with splash)</span> has the best evidence behind it.</p>
+
+  <h2>What the research says</h2>
+  <ul class="sources">
+    <li>Animated words work best paired with particles; meaningful words beat gibberish, and neither slows players down. <a href="https://arxiv.org/html/2512.13695v1">Juicy Text (ICMI 2024)</a></li>
+    <li>Big feedback on success builds a sense of competence, but too much of it hides what the player actually did. <a href="https://people.csail.mit.edu/dkao/pdf/3613904.3642656.pdf">Kao et al., CHI 2024</a></li>
+    <li>Winning sounds on slot machines made players remember winning more often than they did, including on losses dressed up as wins. <a href="https://uwaterloo.ca/news/what-does-winning-sound-you">Dixon et al., University of Waterloo</a> · <a href="https://link.springer.com/article/10.1007/s10899-013-9411-8">Journal of Gambling Studies</a></li>
+    <li>Decoration shapes how players feel about a game, not only how it looks. <a href="https://dl.acm.org/doi/abs/10.1145/3311350.3347171">Hicks et al., Juicy Game Design, CHI PLAY 2019</a></li>
+    <li>The coin sound is two square-wave notes a fourth apart, B5 to E6. <a href="https://www.mariowiki.com/Coin_(sound_effect)">Super Mario Wiki</a></li>
+    <li>Peggle's final peg slows time and swells into Beethoven's "Ode to Joy". <a href="https://en.wikipedia.org/wiki/Peggle">Peggle</a></li>
+  </ul>
+</main>
+
+<script>
+(() => {
+const $ = s => document.querySelector(s), live = $('#live');
+const say = t => { live.textContent = t; };
+let ac = null, master = null, noiseBuf = null, lastVoice = 'B';
+function audio(){
+  if (ac) { if (ac.state !== 'running') ac.resume(); return ac; }
+  ac = new (window.AudioContext || window.webkitAudioContext)();
+  try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch(e) {}
+  master = ac.createGain(); master.gain.value = .85;
+  const comp = ac.createDynamicsCompressor(); comp.threshold.value = -10; comp.ratio.value = 4;
+  master.connect(comp).connect(ac.destination);
+  noiseBuf = ac.createBuffer(1, ac.sampleRate * 2, ac.sampleRate);
+  const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  return ac;
+}
+const now = () => ac.currentTime + .03;
+function env(g, t, a, peak, hold, rel){ g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(peak, t + a);
+  g.gain.setValueAtTime(peak, t + a + hold); g.gain.exponentialRampToValueAtTime(.0001, t + a + hold + rel); }
+function tone(t, type, f0, f1, dur, peak, dest){ const o = ac.createOscillator(), g = ac.createGain(); o.type = type;
+  o.frequency.setValueAtTime(f0, t); if (f1) o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+  env(g, t, .004, peak, 0, dur); o.connect(g).connect(dest || master); o.start(t); o.stop(t + dur + .05); return o; }
+function noise(t, dur, type, f, q, peak, dest, fEnd){ const s = ac.createBufferSource(); s.buffer = noiseBuf;
+  const fl = ac.createBiquadFilter(); fl.type = type; fl.frequency.setValueAtTime(f, t); if (fEnd) fl.frequency.exponentialRampToValueAtTime(fEnd, t + dur); fl.Q.value = q || 1;
+  const g = ac.createGain(); env(g, t, .003, peak, 0, dur); s.connect(fl).connect(g).connect(dest || master); s.start(t, Math.random()); s.stop(t + dur + .05); }
+// a vowel: a buzzing source through formant filters, gliding from "y" to "a" (or "o")
+function vowel(t, pts, dur, peak, {src = 'sawtooth', to = 'a', vib = 0, vibAt = .3, breath = .0, dest} = {}){
+  const o = ac.createOscillator(); o.type = src;
+  o.frequency.setValueAtTime(pts[0][1], t); pts.slice(1).forEach(([s, f]) => o.frequency.linearRampToValueAtTime(f, t + s));
+  if (vib) { const v = ac.createOscillator(), vg = ac.createGain(); v.frequency.value = 5; vg.gain.setValueAtTime(0, t);
+    vg.gain.setValueAtTime(0, t + vibAt); vg.gain.linearRampToValueAtTime(vib, t + vibAt + .3); v.connect(vg).connect(o.frequency); v.start(t); v.stop(t + dur + .1); }
+  const out = ac.createGain(); env(out, t, .03, peak, dur - .25, .22); out.connect(dest || master);
+  const F = to === 'o' ? [[300, 500, 8, 1], [2300, 850, 9, .5], [2900, 2500, 10, .15]] : [[300, 850, 7, 1], [2300, 1250, 9, .55], [2900, 2700, 10, .25]];
+  F.forEach(([fy, fa, q, a]) => { const b = ac.createBiquadFilter(); b.type = 'bandpass'; b.Q.value = q;
+    b.frequency.setValueAtTime(fy, t); b.frequency.linearRampToValueAtTime(fa, t + .12); const g = ac.createGain(); g.gain.value = a; o.connect(b).connect(g).connect(out); });
+  if (breath) noise(t, dur, 'bandpass', 1400, .8, breath, out);
+  o.start(t); o.stop(t + dur + .1);
+}
+function clapper(t){ [0, .012].forEach(dx => { tone(t + dx, 'square', 1850, 1500, .05, .18); noise(t + dx, .06, 'bandpass', 2600, 4, .5); }); }
+
+const VOICES = {
+  A(){ const t = now(); // wheee: round triangle voice, rising, soft landing, no tremble
+    vowel(t, [[0, 360], [.18, 520], [.6, 820], [.95, 880], [1.2, 760]], 1.25, .55, {src: 'triangle', breath: .05}); },
+  B(){ const t = now(); // "ya" onset then a slide whistle up
+    vowel(t, [[0, 520], [.14, 700]], .2, .45, {src: 'triangle'});
+    const o = ac.createOscillator(), g = ac.createGain(); o.type = 'sine';
+    o.frequency.setValueAtTime(600, t + .12); o.frequency.exponentialRampToValueAtTime(1900, t + .85);
+    const v = ac.createOscillator(), vg = ac.createGain(); v.frequency.value = 7; vg.gain.value = 18; v.connect(vg).connect(o.frequency);
+    env(g, t + .12, .03, .38, .6, .15); o.connect(g).connect(master); o.start(t + .12); v.start(t + .12); o.stop(t + 1.1); v.stop(t + 1.1); },
+  C(){ const t = now(); clapper(t); // kabuki kakegoe: "i-yooo", a lower voice that rises and holds, then clappers
+    vowel(t + .12, [[0, 170], [.1, 150], [.35, 260], [.9, 280], [1.15, 250]], 1.2, .95, {to: 'o', vib: 9, vibAt: .45, breath: .06});
+    clapper(t + 1.35); clapper(t + 1.62); },
+  D(){ const t = now(); // three voices in a major triad, cheering together
+    [[1, .0], [1.26, .02], [1.5, .035]].forEach(([r, dt]) => vowel(t + dt, [[0, 392 * r * .8], [.16, 392 * r], [.9, 400 * r], [1.1, 440 * r]], 1.15, .5, {vib: 6, vibAt: .4, breath: .03})); },
+  E(){ const t = now(); // shakuhachi: breathy flute up the yo scale, holding the top
+    const notes = [587, 659, 784, 880, 988, 1175]; notes.forEach((f, i) => {
+      const s = t + i * .09, last = i === notes.length - 1, d = last ? .9 : .11;
+      const o = ac.createOscillator(), g = ac.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(f * .97, s); o.frequency.linearRampToValueAtTime(f, s + .04);
+      if (last) { const v = ac.createOscillator(), vg = ac.createGain(); v.frequency.value = 5; vg.gain.setValueAtTime(0, s); vg.gain.linearRampToValueAtTime(10, s + .5); v.connect(vg).connect(o.frequency); v.start(s); v.stop(s + d + .2); }
+      env(g, s, .02, .32, d * .6, d * .5); o.connect(g).connect(master); o.start(s); o.stop(s + d + .2);
+      noise(s, d, 'bandpass', f * 2, 2, .09); }); }
+};
+
+const WINS = {
+  W1(){ const t = now(); tone(t, 'square', 988, 0, .07, .3); tone(t + .08, 'square', 1319, 0, .5, .3); },
+  W2(){ const t = now(); const yo = [1175, 988, 880, 784, 659, 587, 494, 440];
+    yo.forEach((f, i) => { tone(t + i * .07, 'triangle', f, 0, .5, .22); tone(t + i * .07, 'sine', f * 2, 0, .15, .05); });
+    [440, 659, 880].forEach(f => tone(t + .62, 'triangle', f, 0, 1.4, .18)); },
+  W3(){ const t = now(); let s = t;
+    for (let i = 0; i < 22; i++) { const gap = .075 - i * .002; tone(s, 'sine', i % 2 ? 2093 : 2637, 0, .06, .2); s += gap; }
+    for (let i = 0; i < 9; i++) { const c = t + .15 + i * .11; tone(c, 'sine', 3520 + Math.random() * 300, 0, .12, .07); tone(c, 'sine', 5274, 0, .08, .04); noise(c, .05, 'highpass', 6000, 1, .12); }
+    [0, .16, .32].forEach(d => { tone(s + d, 'sine', 1568, 0, .5, .2); tone(s + d, 'sine', 3136, 0, .3, .07); }); },
+  W4(){ const t = now(); let s = t; const hits = 9;
+    for (let i = 0; i < hits; i++) { const gap = .22 - i * .02; tone(s, 'sine', 95, 55, .25, .3 * (.5 + i / hits / 2)); noise(s, .08, 'lowpass', 900, 1, .25); s += gap; }
+    tone(s + .05, 'sine', 80, 40, 1.0, .5); noise(s + .05, .3, 'lowpass', 1200, 1, .3);
+    vowel(s + .4, [[0, 170], [.3, 260], [.8, 270]], .9, .5, {to: 'o', vib: 8, vibAt: .35, breath: .05}); },
+  W5(){ const t = now(); [0, .7].forEach(d => { tone(t + d, 'sine', 70, 45, .3, .6); tone(t + d + .16, 'sine', 60, 40, .25, .4); });
+    const c = t + 1.5, lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.setValueAtTime(400, c); lp.frequency.exponentialRampToValueAtTime(5000, c + 1.2); lp.connect(master);
+    [261.6, 329.6, 392, 523.3].forEach(f => [-4, 4].forEach(det => { const o = ac.createOscillator(), g = ac.createGain(); o.type = 'sawtooth'; o.frequency.value = f; o.detune.value = det;
+      env(g, c, .5, .07, 1.3, .9); o.connect(g).connect(lp); o.start(c); o.stop(c + 3); }));
+    [1047, 1319, 1568, 2093, 2637].forEach((f, i) => tone(c + .5 + i * .09, 'sine', f, 0, .6, .07)); },
+  W6(){ const t = now(); const f = 174; [[1, 1, 5], [2.76, .5, 3], [5.4, .25, 2], [8.93, .12, 1.2], [.5, .3, 6]].forEach(([r, a, d]) => {
+      const o = ac.createOscillator(), g = ac.createGain(); o.type = 'sine'; o.frequency.value = f * r; g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.3 * a, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + d);
+      o.connect(g).connect(master); o.start(t); o.stop(t + d + .1); });
+    [1.6, 2.1, 2.45].forEach((d, i) => { tone(t + d, 'sine', 500 + i * 180, 1400 + i * 200, .06, .18); noise(t + d + .02, .25, 'lowpass', 1800, 1, .06, null, 300); }); }
+};
+
+document.querySelectorAll('[data-voice]').forEach(b => b.addEventListener('click', () => { audio(); lastVoice = b.dataset.voice; VOICES[lastVoice](); say(`Voice ${lastVoice}.`); }));
+document.querySelectorAll('[data-win]').forEach(b => b.addEventListener('click', () => { audio(); WINS[b.dataset.win](); say(`Win ${b.dataset.win}.`); }));
+
+/* ===================== KANA EFFECTS ===================== */
+const NS = 'http://www.w3.org/2000/svg';
+const KANA = [
+  ['1', 'Brush-drawn', 'The や is written stroke by stroke in brush ink, then fills. Calligraphy, calm.'],
+  ['2', 'Hanko stamp', 'A red seal stamps down with a thump and a bounce. Satisfying and final.'],
+  ['3', 'Pop with splash', 'The や pops up with an overshoot and a spray of water drops. Best supported by the research: meaningful words plus particles.'],
+  ['4', 'Rides the leap (in the game now)', 'The や flies above the frog and the leap paints its long vowel as a brush tail.'],
+  ['5', 'Ripple vowel', 'The や lands on the water and its long vowel spreads out as ripples.']
+];
+const grid = $('#kanaGrid');
+KANA.forEach(([n, name, blurb]) => {
+  const c = document.createElement('section'); c.className = 'card';
+  c.innerHTML = `<h3><span class="tag">${n}</span>${name}</h3><p>${blurb}</p>
+    <svg class="stage" viewBox="0 0 320 180" role="img" aria-label="Preview of ${name}">
+      <rect x="0" y="0" width="320" height="120" fill="#EDCDB5"/><rect x="0" y="120" width="320" height="60" fill="#1F3A5F"/>
+      <path d="M0 122 Q40 116 80 122 T160 122 T240 122 T320 122" fill="none" stroke="#9DB8CF" stroke-width="2"/>
+      <ellipse cx="236" cy="128" rx="34" ry="8" fill="#5F6B34" stroke="#1B1A17" stroke-width="1.5"/>
+      <g class="fx"></g></svg>
+    <div class="row"><button type="button" data-kana="${n}">Play ${n}</button></div>`;
+  grid.appendChild(c);
+});
+const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const kanaText = (g, x, y, size, attrs = {}) => { const t = el('text', Object.assign({x, y, class: 'kana', 'font-size': size, fill: '#B23A2A', stroke: '#F5EEDB', 'stroke-width': size / 9, 'paint-order': 'stroke'}, attrs), g); t.textContent = 'や'; return t; };
+function frogDot(g){ return el('g', {}, g); }
+const FX = {
+  '1'(g){ const t = kanaText(g, 160, 100, 88, {fill: 'transparent', stroke: '#B23A2A', 'stroke-width': 2.2, 'stroke-dasharray': 900, 'stroke-dashoffset': 900, filter: ''});
+    if (reduce) { t.setAttribute('fill', '#B23A2A'); t.removeAttribute('stroke-dasharray'); return; }
+    t.animate([{strokeDashoffset: 900}, {strokeDashoffset: 0}], {duration: 900, easing: 'ease-in-out', fill: 'forwards'});
+    setTimeout(() => t.animate([{fill: 'rgba(178,58,42,0)'}, {fill: 'rgba(178,58,42,1)'}], {duration: 350, fill: 'forwards'}), 750); },
+  '2'(g){ const s = el('g', {}, g); el('rect', {x: 112, y: 22, width: 96, height: 96, rx: 12, fill: '#B23A2A', stroke: '#7E2419', 'stroke-width': 3}, s);
+    const t = el('text', {x: 160, y: 98, class: 'kana', 'font-size': 76, fill: '#F5EEDB'}, s); t.textContent = 'や';
+    if (reduce) return;
+    s.style.transformOrigin = '160px 70px';
+    s.animate([{transform: 'scale(1.9) rotate(-18deg)', opacity: 0}, {transform: 'scale(.9) rotate(-7deg)', opacity: 1, offset: .55}, {transform: 'scale(1.04) rotate(-6deg)', offset: .8}, {transform: 'scale(1) rotate(-6deg)', opacity: 1}], {duration: 520, easing: 'cubic-bezier(.3,.7,.3,1)', fill: 'forwards'});
+    setTimeout(() => { if (ac) { tone(now(), 'sine', 120, 60, .12, .5); noise(now(), .06, 'lowpass', 700, 1, .4); } }, 280); },
+  '3'(g){ const t = kanaText(g, 160, 100, 90); t.style.transformOrigin = '160px 70px'; t.style.transformBox = 'view-box';
+    if (reduce) return;
+    t.animate([{transform: 'scale(0) rotate(-20deg)'}, {transform: 'scale(1.3) rotate(-6deg)', offset: .55}, {transform: 'scale(.94) rotate(-9deg)', offset: .78}, {transform: 'scale(1) rotate(-8deg)'}], {duration: 600, easing: 'ease-out', fill: 'forwards'});
+    for (let i = 0; i < 14; i++) { const a = -Math.PI * (.1 + .8 * Math.random()), v = 60 + Math.random() * 70, r = 3 + Math.random() * 4;
+      const d = el('circle', {cx: 160, cy: 118, r, fill: i % 3 ? '#9DB8CF' : '#F5EEDB', stroke: '#1F3A5F', 'stroke-width': 1}, g);
+      const dx = Math.cos(a) * v, dy = Math.sin(a) * v;
+      d.animate([{transform: 'translate(0,0)', opacity: 1}, {transform: `translate(${dx}px,${dy}px)`, opacity: 1, offset: .55}, {transform: `translate(${dx * 1.4}px,${dy * .2 + 60}px)`, opacity: 0}], {duration: 900 + Math.random() * 300, easing: 'cubic-bezier(.2,.6,.4,1)', fill: 'forwards'}); } },
+  '4'(g){ const frog = el('ellipse', {rx: 13, ry: 9, fill: '#7C8C3A', stroke: '#1B1A17', 'stroke-width': 1.5}, g);
+    const tail = el('path', {fill: '#B23A2A'}, g), halo = el('path', {fill: '#F5EEDB'}, g); g.insertBefore(halo, tail);
+    const t = kanaText(g, 0, 0, 44);
+    const pts = [], t0 = performance.now(), D = 1100;
+    const brush = (W, pad) => { if (pts.length < 2) return ''; const L = [], R = [], n = pts.length;
+      for (let i = 0; i < n; i++) { const [x, y] = pts[i], [px, py] = pts[Math.max(0, i - 1)], [qx, qy] = pts[Math.min(n - 1, i + 1)];
+        let dx = qx - px, dy = qy - py; const m = Math.hypot(dx, dy) || 1; dx /= m; dy /= m; const w = (1 + W * Math.pow(i / (n - 1), .8)) / 2 + pad;
+        L.push([x - dy * w, y + dx * w]); R.push([x + dy * w, y - dx * w]); }
+      return 'M' + L.map(p => p.join(' ')).join('L') + 'L' + R.reverse().map(p => p.join(' ')).join('L') + 'Z'; };
+    (function step(n){ const k = Math.min(1, (n - t0) / D), x = 260 - 200 * k, y = 118 - 150 * k * (1 - k) * 2.2;
+      frog.setAttribute('cx', x); frog.setAttribute('cy', y);
+      if (k < .55) { const gx = x - 4, gy = Math.max(46, y - 22); t.setAttribute('x', gx); t.setAttribute('y', gy); pts.push([gx + 20, gy - 14]); if (pts.length > 14) pts.shift(); tail.setAttribute('d', brush(7, 0)); halo.setAttribute('d', brush(7, 2.5)); }
+      if (k < 1 && !reduce) requestAnimationFrame(step); })(t0); },
+  '5'(g){ const t = kanaText(g, 160, 108, 64); if (reduce) return;
+    t.animate([{transform: 'translateY(-60px)', opacity: 0}, {transform: 'translateY(0)', opacity: 1}], {duration: 380, easing: 'cubic-bezier(.5,0,.8,.4)', fill: 'forwards'});
+    [0, 1, 2].forEach(i => setTimeout(() => {
+      const r = el('ellipse', {cx: 160, cy: 132, rx: 10, ry: 3, fill: 'none', stroke: '#F5EEDB', 'stroke-width': 3}, g);
+      r.animate([{rx: 10, ry: 3, opacity: 1}, {rx: 140, ry: 26, opacity: 0}], {duration: 1400, easing: 'ease-out', fill: 'forwards'});
+    }, 380 + i * 260)); }
+};
+document.querySelectorAll('[data-kana]').forEach(b => b.addEventListener('click', () => {
+  audio(); const g = b.closest('.card').querySelector('.fx'); g.innerHTML = '';
+  VOICES[lastVoice](); FX[b.dataset.kana](g); say(`や ${b.dataset.kana} with voice ${lastVoice}.`);
+}));
+
+/* ===================== RECORD YOUR OWN ===================== */
+let rec = null, chunks = [], blob = null, url = null;
+$('#recBtn').addEventListener('click', async () => {
+  const note = $('#recNote'), btn = $('#recBtn');
+  if (rec && rec.state === 'recording') { rec.stop(); return; }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+    chunks = []; rec = new MediaRecorder(stream);
+    rec.ondataavailable = e => chunks.push(e.data);
+    rec.onstop = () => { stream.getTracks().forEach(t => t.stop()); blob = new Blob(chunks, {type: rec.mimeType || 'audio/webm'});
+      if (url) URL.revokeObjectURL(url); url = URL.createObjectURL(blob);
+      $('#recPlay').setAttribute('aria-disabled','false'); $('#recSave').setAttribute('aria-disabled','false'); btn.textContent = 'Record again'; note.textContent = 'Got it. Play it back, then save the file and send it to me.'; };
+    rec.start(); btn.textContent = 'Stop'; note.textContent = 'Recording. Say yaaaa, then tap Stop.';
+  } catch (e) { note.textContent = 'The microphone is blocked here. Record a voice memo on your phone instead and send me that.'; }
+});
+$('#recPlay').addEventListener('click', () => { if (!url) { $('#recNote').textContent = 'Record first, then play it back.'; return; } new Audio(url).play(); });
+$('#recSave').addEventListener('click', () => { if (!blob) { $('#recNote').textContent = 'Record first, then save the file.'; return; } const a = document.createElement('a'); const ext = (blob.type.includes('mp4') ? 'm4a' : 'webm');
+  a.href = url; a.download = `kireji-yaaa.${ext}`; document.body.appendChild(a); a.click(); a.remove(); });
+})();
+</script>
+</body>
+</html>
