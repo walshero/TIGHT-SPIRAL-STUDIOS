@@ -3,11 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="spec-source" content="convening/ROW-K-CONVENING.md">
+<meta name="spec-source" content="convening/ROW-K-PAPER-HOUSE-RECONVENE.md">
 <meta name="audience" content="MassBay EN195 students learning to stage a secret without announcing it; the founder as first playtester">
 <title>Dress Rehearsal: an EN195 game</title>
 <!--
-  DRESS REHEARSAL (file: row-k, v46) - a staging game. Tight Spiral Productions.
+  DRESS REHEARSAL (file: row-k, v47) - a staging game. Tight Spiral Productions.
+  v47 (founder 2026-09-26: "Once we've already chosen a scene we don't need to show all three at the top"; and
+  "Yes" to a belt pass): scene picker gone from the scene screen; night ladder on html[data-light]; ARCADE link inked;
+  spec-source now convening/ROW-K-PAPER-HOUSE-RECONVENE.md (ROW-K-CONVENING.md was never found in any lane).
   v46 (founder 2026-09-26): "Spacing is good for underline section, but there should be a gap between that and the
   next part, which should be more tightly spaced." The secret card's rule now sits on its own, 18px below the fact, at 1.35.
   v45 (founder 2026-09-25): "use “ ” around dialogue to be clear." Every
@@ -597,13 +600,14 @@
       --stamp:#8FD6CC; --shade:rgba(0,0,0,0.5); --shadow:rgba(0,0,0,0.45);
     }
   }
-  body[data-scheme="dark"]{
+  /* v47: html[data-light="night"] (the studio comfort kernel) selects the same dark side as the switch */
+  body[data-scheme="dark"], html[data-light="night"] body{
     --paper:#3D362B; --ink:#F5F1E8; --card:#4A4336;
     --slotline:#B8AE9C; --amber-soft:#4A3A1E; color-scheme: dark;
     --stamp:#8FD6CC; --shade:rgba(0,0,0,0.5); --shadow:rgba(0,0,0,0.45);
   }
-  body[data-scheme="dark"][data-comfort="2"]{ --paper:#211C15; --card:#2E2820; }
-  body[data-scheme="dark"][data-comfort="3"]{ --paper:#0B0906; --card:#1A1611; }
+  body[data-scheme="dark"][data-comfort="2"], html[data-light="night"] body[data-comfort="2"]{ --paper:#211C15; --card:#2E2820; }
+  body[data-scheme="dark"][data-comfort="3"], html[data-light="night"] body[data-comfort="3"]{ --paper:#0B0906; --card:#1A1611; }
   /* v39: the dark mode switch must also be able to say LIGHT on a dark device */
   body[data-scheme="light"]{
     --paper:#FAF6EE; --ink:#1F1B16; --card:#FFFFFF; --slotline:#5A5245;
@@ -636,9 +640,9 @@
   body[data-comfort="1"].scene-fear{  --frame:#2E4A6B; --amber:#A9D3EE; --amber-soft:#D6E7F4; --slotline:#3E5670; }
   body[data-comfort="1"].scene-bluff{ --frame:#7F5A12; --amber:#F2BC66; --amber-soft:#F5E3BE; --slotline:#66501F; }
   body[data-comfort="1"].scene-love{  --frame:#8C3A4A; --amber:#EFA7B3; --amber-soft:#F6DADF; --slotline:#78424D; }
-  body[data-scheme="dark"][data-comfort="1"].scene-fear{  --card:#15120E; --frame:#7FC0E8; --amber:#7FC0E8; --amber-soft:#2A4460; --slotline:#9CB7CE; }
-  body[data-scheme="dark"][data-comfort="1"].scene-bluff{ --card:#15120E; --frame:#F2BC66; --amber:#F2BC66; --amber-soft:#4F3C18; --slotline:#CBB27F; }
-  body[data-scheme="dark"][data-comfort="1"].scene-love{  --card:#15120E; --frame:#EFA7B3; --amber:#EFA7B3; --amber-soft:#582633; --slotline:#D2A2AC; }
+  body[data-scheme="dark"][data-comfort="1"].scene-fear, html[data-light="night"] body[data-comfort="1"].scene-fear{  --card:#15120E; --frame:#7FC0E8; --amber:#7FC0E8; --amber-soft:#2A4460; --slotline:#9CB7CE; }
+  body[data-scheme="dark"][data-comfort="1"].scene-bluff, html[data-light="night"] body[data-comfort="1"].scene-bluff{ --card:#15120E; --frame:#F2BC66; --amber:#F2BC66; --amber-soft:#4F3C18; --slotline:#CBB27F; }
+  body[data-scheme="dark"][data-comfort="1"].scene-love, html[data-light="night"] body[data-comfort="1"].scene-love{  --card:#15120E; --frame:#EFA7B3; --amber:#EFA7B3; --amber-soft:#582633; --slotline:#D2A2AC; }
   /* the room changes colour the way house lights do: over a beat, not a cut */
   #backdrop, body, .cardbtn, .review-item, .row-react, .housebox, .franbox, .scenestrip, .secret, .iconchip{
     transition:background-color .45s ease, color .45s ease, border-color .45s ease; }
@@ -694,7 +698,7 @@
   #soundBtn[aria-pressed="false"] .waves{ display:none; }
   #soundBtn[aria-pressed="false"] .slash{ display:inline; }
   .navbtn{
-    background:var(--card); border:2px solid var(--ink); padding:8px 18px;
+    background:var(--card); color:var(--ink); border:2px solid var(--ink); padding:8px 18px;
     font-family:Verdana,Arial,sans-serif; font-size:18px; font-weight:bold;
   }
   h1{ font-family:Verdana,Arial,sans-serif; font-size:26px; letter-spacing:3px; }
@@ -2327,26 +2331,8 @@
   function renderSecret(){
     stage.appendChild(head("SCENE "+(state.sceneIdx+1)+" OF "+SCENES.length+": "+scene().name));
 
-    var nav = el("div","scenenav");
-    SCENES.forEach(function(sc, i){
-      var b = el("button","scenebtn");
-      b.type = "button";
-      var tile = document.createElement("span");
-      tile.innerHTML = sceneTile(sc);
-      b.appendChild(tile.firstChild);
-      b.appendChild(document.createTextNode("SCENE "+(i+1)));
-      b.setAttribute("aria-pressed", i===state.sceneIdx ? "true" : "false");
-      b.setAttribute("aria-label","Go to scene "+(i+1)+": "+sc.name);
-      b.addEventListener("click", function(){
-        if(i===state.sceneIdx) return;
-        state.sceneIdx = i;
-        state.fromReview = false;
-        state.picked = {OBJECT:null, MOVE:null, LINE:null};
-        go("secret");
-      });
-      nav.appendChild(b);
-    });
-    stage.appendChild(nav);
+    // v47 (founder 2026-09-26): "Once we've already chosen a scene we don't need to show all three at the top of the
+    // scene we've chosen." The heading above names the scene; BACK returns to the program to choose another.
 
     // The proscenium: curtains hauled open to reveal the scene's ink plate.
     // Fold lines are irregular curves so the fabric bunches naturally when gathered.
@@ -2391,7 +2377,7 @@
     stage.appendChild(sec);
 
     // No auto-scroll any more: the proscenium now sits directly under the
-    // scene picker and is already in view at phone height, so the old
+    // heading (the scene picker left in v47) and is already in view at phone height, so the old
     // scrollIntoView would only yank the viewport out from under the reader.
 
     var icons = el("div","iconrow");
@@ -2577,6 +2563,7 @@
   var darkBtn = document.getElementById("darkBtn");
   function setScheme(dark, save){
     document.body.setAttribute("data-scheme", dark ? "dark" : "light");
+    document.documentElement.setAttribute("data-light", dark ? "night" : "day");   // v47: the kernel's name for the same state
     document.body.setAttribute("data-comfort", "1");
     darkBtn.setAttribute("aria-pressed", dark ? "true" : "false");
     if(save){ try { localStorage.setItem("rowk-scheme", dark ? "dark" : "light"); } catch(e){} }
