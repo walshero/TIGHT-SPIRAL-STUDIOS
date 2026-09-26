@@ -13,6 +13,7 @@
      poem. Hedge wins. Does the poem land with you? Does this one hold?" The camera holds on the scene through the fly,
      the gulp and the leap (page scroll locked), holds one beat on the frog, then scrolls down to the player's poem.
      Win screens ask instead of declaring. The fridge no longer auto-opens over the three poems; the button stays.
+     v5.2.5 2026-09-26 (founder): Next stuck on 2 of 4 after scrolling the card; the swipe forgot nothing. Fixed.
      v5.2.4 2026-09-26 (founder): "make the leap sound yaaaaa more excited than nervous ... make the ya symbol more artful and
      lower on the screen closer to eyeball following frog." The ya rides above the frog and the leap paints its long vowel;
      the voice swoops up and ends rising.
@@ -2203,9 +2204,14 @@ document.addEventListener('keydown',e=>{
   if(e.key==='ArrowRight'){afterPond(()=>goTour(tIdx+1,true));e.preventDefault()}
   else if(e.key==='ArrowLeft'){goTour(tIdx-1,true);e.preventDefault()}
 });
-{let x0=null,y0=0;const c=$('#tcard');
-  c.addEventListener('pointerdown',e=>{if(e.target.closest('button,a'))return;x0=e.clientX;y0=e.clientY});
-  c.addEventListener('pointerup',e=>{if(x0===null)return;const dx=e.clientX-x0,dy=e.clientY-y0;x0=null;
+/* v5.2.5 (founder 2026-09-26: "Next button not working, opening stuck on 2 of 4 ... I can tap it. It doesn't work").
+   A finger that SCROLLS the card fires pointerdown and then pointercancel, never pointerup, so the swipe kept the
+   stale start point. The next tap on Next then read as a swipe back while the tap itself went forward: stuck on 2,
+   the first card long enough to need a scroll. A cancel, a scroll, or a press on a button now forgets the start. */
+{let x0=null,y0=0;const c=$('#tcard'); const forget=()=>{x0=null};
+  c.addEventListener('pointerdown',e=>{if(e.target.closest('button,a')){x0=null;return}x0=e.clientX;y0=e.clientY});
+  c.addEventListener('pointercancel',forget); c.addEventListener('scroll',forget,{passive:true});
+  c.addEventListener('pointerup',e=>{if(x0===null||e.target.closest('button,a')){x0=null;return}const dx=e.clientX-x0,dy=e.clientY-y0;x0=null;
     if(Math.abs(dx)>50&&Math.abs(dy)<60){const d=dx<0?1:-1; if(d>0) afterPond(()=>goTour(tIdx+1,false)); else goTour(tIdx-1,false)}});}
 /* the eddy: a flat indigo pool around the card, and three currents running round it, cut in white */
 function drawEddy(){
