@@ -4,6 +4,6 @@ Accumulated seat scorecards across builds. One row per graded build. A seat whos
 
 | date | build | sha256 (16) | sessions graded | Hitchcock | Horvath | Fingers | Murch | Sighted | Ear |
 |---|---|---|---|---|---|---|---|---|---|
-| 2026-09-26 | kireji-pond.html | a71cfaf44c03fa46 | 0 | filed 6 | filed 6 | filed 6 | filed 6 | filed 7 | filed 6 |
+| 2026-09-26 | kireji-pond.html (v5.2.2) | 3dc7d3493d8c9023 | 0 | filed 6 | filed 6 | filed 6 | filed 6 | filed 7 | filed 6 |
 
 The only session run so far is a scripted end-to-end test, not a human, and it is not in this ledger.

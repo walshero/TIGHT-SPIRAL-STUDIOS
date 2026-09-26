@@ -1,23 +1,24 @@
 # KIREJI POND — SENSES PASS, 2026-09-26
 
-Build `kireji-pond.html` · md5 `0a6f41fbb6a5c9a3ce43c1749b6b8358` · sha256 `a71cfaf44c03fa46...`
+Build `kireji-pond.html` · md5 `e7897fa24ae3649ff93cb296931cea6e` (v5.2.2; seat predictions carried from 0a6f41fb) · sha256 `3dc7d3493d8c9023...`
 
 Findings are blocking checks filed for the founder. No seat vetoes a ship; the founder rules.
 
-## Studio Ears Layer 1 (arithmetic)
-Verdict: **HALT**
-- HALT E1 GESTURE-FIRST  1 source(s) started before the first gesture; speaker reached -36.2 dBFS before any touch. [LAW] OS §2: the first tap unlocks audio, ambush-free.
-- WARN E5 SIGHT ALONE  18 of 32 state changes carry no sound, vibration or announcement: step 3 "a child’s paper boat, 5 syll"; step 5 "a temple bell, cold, 5 sylla"; step 7 "Mother Nature’s gentle touch"; step 11 "April showers fall, 5 syllab"; step 14 "Pause streamP"; step 15 "Resume streamP" .... [CITED] XAG 103.
+## Studio Ears Layer 1 (arithmetic), re-run on v5.2.2
+Verdict: **PASS**
+- WARN E5 SIGHT ALONE  21 of 38 state changes carry no sound, vibration or announcement: step 2 "swallows stitch the river’s "; step 4 "a picture-perfect morning, 7"; step 6 "a kite in the pines, 5 sylla"; step 9 "Pause streamP"; step 10 "Resume streamP"; step 11 "Show turn marks" .... [CITED] XAG 103.
 
-## Founder ruling needed: sound before the first tap
+## Correction, 2026-09-26: the E1 HALT was wrong
 
-- **Against:** line 2126 starts the waterfall at load; measured -36 dBFS before any touch. OS §2 (2026-06-27): the first tap unlocks audio, ambush-free.
-- **For:** it is quiet and fades in, the mute is the first Tab stop and works (-83 dBFS), and a living pond is scene-first.
-- **Middle path (Murch):** delete only the load-time `Snd.wake()`; the existing first-touch listeners already start the pond on the first tap.
+The first pass reported sound before any touch at -36 dBFS. The founder heard the opposite on a phone: sound began on screen 2. Re-derived: the crawler launched Chromium with a lenient autoplay policy that let the page start audio untouched. Under the policy a phone uses, the load-time start stays silent and the first touch, nearly always Next, woke the pond as card 2 slid in. Fixed in the crawler (document-user-activation-required) and in E1 (a source prepared in a suspended context is not an ambush). The seats' notes about an ambient opening before any touch rest on the wrong measurement and should be read with that in mind.
+
+## Founder ruling applied: sound opens on screen 1 (v5.2.2)
+
+The first way off card 1 (Next, Skip, swipe, arrow key) wakes the pond on card 1, the frog goes in, and the card turns about a second later. Once only; with sound off it turns at once.
 
 ## Seat halts (blocking checks for the founder)
 
-- **Ear persona:** GESTURE-FIRST audio (Studio Ears Layer 1 E1) — evidence: ear.md verdict: 1 source started before the first gesture; the speaker reached -36.2 dBFS before any touch. This talks over VoiceOver's first announcement on load.
+- **Ear persona (VOID, rests on the corrected E1 measurement):** GESTURE-FIRST audio (Studio Ears Layer 1 E1) — evidence: ear.md verdict: 1 source started before the first gesture; the speaker reached -36.2 dBFS before any touch. This talks over VoiceOver's first announcement on load.
 - **Ear persona:** Core verb is not reachable by ear: phrase activation neither announces nor moves focus to its actions — evidence: State 3/5/7/11/17/20/25/27: phrase gets [expanded] with 'nothing announced'. Catch line/Smash cliche/Let it go are appended after 'Still water', last in DOM order, while the phrase keeps moving (steps 19, 35-37 show phrases leaving or toggling). Step 4 shows a tap on one phrase judging a different phrase.
 - **Fingers:** Slot controls under the 44px founder floor — evidence: Move to bottom 183x39, Move to top 144x39, Remove 103x39 in every slot-filled state (6-12, 18-21, 30); Skip to the stream 182x39 in states 0-1. Static controls, so this is a true floor miss, fixable with min-height: 44px.
 - **Fingers:** Core-verb target spawns at 15-16px tall while moving, at the top screen edge — evidence: New phrases measure 77x15 (state 6), 48x15 (state 10), 52x16 (state 15), 77x15 (state 28) centered at y=53-59, above the thumb arc and near the top edge, in low contrast against the mountain. For a reduced-field, low-vision player this is the first thing to tap. Pause stream exists but sits at the bottom edge, partly below the fold.

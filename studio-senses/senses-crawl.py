@@ -183,7 +183,11 @@ def crawl(build, out, clicks):
            "crawled": time.strftime('%Y-%m-%dT%H:%M:%S%z'), "tool": "senses-crawl.py v1",
            "states": [], "steps": [], "tab_walk": [], "external_requests": external}
     with sync_playwright() as p:
-        b = p.chromium.launch(args=['--autoplay-policy=user-gesture-required'])
+        # DEVICE POLICY, corrected 2026-09-26 after the founder heard it on a phone: with
+        # 'user-gesture-required' headless Chromium let the AudioContext run before any touch,
+        # so E1 HALTed kireji for a sound no phone ever plays. 'document-user-activation-required'
+        # is what a phone does: sound waits for a touch. The machine was the suspect.
+        b = p.chromium.launch(args=['--autoplay-policy=document-user-activation-required'])
         ctx = b.new_context(viewport=VIEWPORT, device_scale_factor=2, has_touch=True)
         ctx.add_init_script(HOOK)
         page = ctx.new_page()

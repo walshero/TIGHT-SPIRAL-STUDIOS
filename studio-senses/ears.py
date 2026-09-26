@@ -66,7 +66,9 @@ def judge(m):
 
     # E1
     g = a.get('first_gesture_ms')
-    pre = a.get('pre_gesture_sources', [])
+    # A source started into a SUSPENDED context makes no sound: that is a page preparing,
+    # not an ambush. Only a running context or a measured level before the touch counts.
+    pre = [e for e in a.get('pre_gesture_sources', []) if e.get('state', 'running') == 'running' or e.get('k') == 'media']
     pre_loud = [w for w in a.get('level_windows', []) if g is not None and w[0] < g and w[1] > AUDIBLE_DBFS]
     if pre or pre_loud:
         lvl = max((w[1] for w in pre_loud), default=None)
@@ -151,6 +153,8 @@ def self_test():
     cases.append(("no audio reads SILENT, not PASS", c, 'SILENT', None))
     c = copy.deepcopy(base); c['audio']['level_windows'] = [[400, -40, .1]]; c['audio']['pre_gesture_sources'] = [{"k": "src"}]
     cases.append(("sound before a gesture HALTs", c, 'HALT', 'E1'))
+    c = copy.deepcopy(base); c['audio']['pre_gesture_sources'] = [{"k": "src", "state": "suspended"}]
+    cases.append(("a source prepared in a suspended context before a touch PASSES", c, 'PASS', None))
     c = copy.deepcopy(base); c['mute_test']['after_press_dbfs'] = -40
     cases.append(("a mute that does not drop the level HALTs", c, 'HALT', 'E2'))
     c = copy.deepcopy(base); c['states'][0]['controls'][0]['inView'] = False

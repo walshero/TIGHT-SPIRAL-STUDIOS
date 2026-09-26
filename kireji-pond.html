@@ -13,6 +13,9 @@
      poem. Hedge wins. Does the poem land with you? Does this one hold?" The camera holds on the scene through the fly,
      the gulp and the leap (page scroll locked), holds one beat on the frog, then scrolls down to the player's poem.
      Win screens ask instead of declaring. The fridge no longer auto-opens over the three poems; the button stays.
+     v5.2.2 2026-09-26 (founder): "The sound plays on screen 2 of open but should open on screen 1." A phone holds
+     sound until the first touch, and the first touch on card 1 is nearly always Next, so the pond woke as card 2 slid in.
+     Now the first turn off card 1 waits one beat: the touch wakes the pond, the frog goes in, then the card turns.
      v5.2.1 2026-09-25 (founder): "the next season's music should not start until you click next season." The creature
      sounds follow S.sndRound, which only changes when a round starts; the win screen keeps the season just played.
      v5.1 (founder): saved magnets hang crooked in the freezer tray (8 to 17 degrees) and can be dragged straight
@@ -2137,18 +2140,29 @@ function goTour(i,focus){
   if(focus&&prev!==tIdx) panes[tIdx].querySelector('h2').focus({preventScroll:true});
 }
 function endTour(){if(tourEl.hidden)return;tourEl.hidden=true;$('#app').classList.remove('touring')}
-$('#tNext').addEventListener('click',()=>goTour(tIdx+1,true));
+/* v5.2.2: the pond opens on card 1. The first way off card 1 (Next, Skip, swipe, arrow key) is the touch that lets the
+   phone make sound, so it wakes the pond HERE, drops the frog in (water's sound, the poem on this card) and turns
+   the card a beat later. Once only; with sound off, or the pond already running, the card turns at once. */
+let pondHeard=false;
+function afterPond(go){
+  if(pondHeard||tIdx!==0||!Snd.on){pondHeard=true;go();return}
+  pondHeard=true; const was=Snd.running; Snd.wake();
+  if(was){go();return}
+  setTimeout(()=>{try{Snd.plop()}catch(e){}},150);
+  setTimeout(go,1100);
+}
+$('#tNext').addEventListener('click',()=>afterPond(()=>goTour(tIdx+1,true)));
 $('#tBack').addEventListener('click',()=>goTour(tIdx-1,true));
-$('#tSkip').addEventListener('click',startRound);
+$('#tSkip').addEventListener('click',()=>afterPond(startRound));
 document.addEventListener('keydown',e=>{
   if(tourEl.hidden||e.metaKey||e.ctrlKey||e.altKey) return;
-  if(e.key==='ArrowRight'){goTour(tIdx+1,true);e.preventDefault()}
+  if(e.key==='ArrowRight'){afterPond(()=>goTour(tIdx+1,true));e.preventDefault()}
   else if(e.key==='ArrowLeft'){goTour(tIdx-1,true);e.preventDefault()}
 });
 {let x0=null,y0=0;const c=$('#tcard');
   c.addEventListener('pointerdown',e=>{if(e.target.closest('button,a'))return;x0=e.clientX;y0=e.clientY});
   c.addEventListener('pointerup',e=>{if(x0===null)return;const dx=e.clientX-x0,dy=e.clientY-y0;x0=null;
-    if(Math.abs(dx)>50&&Math.abs(dy)<60) goTour(tIdx+(dx<0?1:-1),false)});}
+    if(Math.abs(dx)>50&&Math.abs(dy)<60){const d=dx<0?1:-1; if(d>0) afterPond(()=>goTour(tIdx+1,false)); else goTour(tIdx-1,false)}});}
 /* the eddy: a flat indigo pool around the card, and three currents running round it, cut in white */
 function drawEddy(){
   const st=$('#stone'), sv=$('#eddy'); if(!st||!sv||tourEl.hidden) return;
