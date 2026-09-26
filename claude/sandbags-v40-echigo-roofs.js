@@ -91,6 +91,13 @@
     var d='M'+(x-e)+' '+(y+1)+' L'+(x+w+e)+' '+(y+1)+' L'+(x+w+e-3)+' '+(y-rh)+' L'+(x-e+3)+' '+(y-rh)+' Z';
     return P(d,UK.tile)+ukClip(d,kawara(x-e,y-rh,x+w+e,y+1))+'<g class="noedge">'+rc(x-e,y,w+2*e,1.6,UK.tileD)+'</g>'+ridge(x-e+3,x+w+e-3,y-rh,UK.tileD);
   }
+  // v42: the gable end of an eaves-front roof, turned away down the street
+  function sideGable(x,y,h,rh,d,wall,wallS){
+    var dy=d*RAKE;
+    return P('M'+x+' '+y+' l'+d+' -'+dy.toFixed(1)+' v'+h+' l-'+d+' '+dy.toFixed(1)+' z',wallS)
+      +P('M'+x+' '+y+' L'+(x+d/2)+' '+(y-rh-dy/2).toFixed(1)+' L'+(x+d)+' '+(y-dy).toFixed(1)+' Z',wall)
+      +'<g class="noedge">'+ln('M'+(x-.6)+' '+(y+.6)+' L'+(x+d/2)+' '+(y-rh-dy/2-.8).toFixed(1)+' L'+(x+d+.6)+' '+(y-dy+.6).toFixed(1),UK.tileD,1.6)+'</g>';
+  }
   // 2. irimoya: a hipped skirt with a small gable riding on top
   function roofIrimoya(x,y,w,rh,e,wall){
     var m=y-rh*.5, d1='M'+(x-e)+' '+(y+1)+' L'+(x+w+e)+' '+(y+1)+' L'+(x+w*.88)+' '+m+' L'+(x+w*.12)+' '+m+' Z';
@@ -161,48 +168,50 @@
     o+=ukGrad('ukCm1',[[0,'#b8b2ab',0],[.5,'#b8b2ab',.55],[1,'#b8b2ab',0]],-10,98,420,26);
     o+='<g class="ly1">'+ukForest('M-10 162 L28 136 L70 146 L112 118 L158 132 L200 106 L238 124 L286 110 L330 130 L372 120 L410 136 L410 205 L-10 205 Z','ukCf',17,'#243632',['#1d2e2a','#2f453c','#26392f','#3a5244'],102,205,4)+'</g>';
     o+=ukGrad('ukCm2',[[0,'#9aa0a6',0],[.5,'#9aa0a6',.45],[1,'#9aa0a6',0]],-10,138,420,22);
+    // v42 (founder: "The train track should not be as thick and clear"): the
+    // viaduct runs far back across the slope, thin, hazed and soft, behind
+    // every roof; the E7 is a pale line sliding along it
+    var vd=rc(-10,146,420,1.2,'#5d6671');
+    for(var px=4;px<410;px+=30) vd+=rc(px,147,1.1,9,'#56606a');
+    o+='<g filter="url(#dofFar)" opacity=".62"><g class="noedge">'+vd+'</g>'+shinkansen(214,146).replace('<g class="fx noedge"><g class="shink">','<g class="fx noedge"><g class="shink"><g transform="translate(214 146) scale(.62) translate(-214 -146)">').replace(/<\/g><\/g>$/,'</g></g></g>')+'</g>';
     // back row, up the slope
     o+='<g class="ly2">'+kayabuki(22,150,42,16)+gassho(252,170,40,44)+'</g>';
-    // the viaduct and the E7, between the back row and the middle row
-    o+='<g class="ly2">'+rc(-10,158,420,2.4,'var(--p-granite-d)');
-    for(var px=4;px<410;px+=28) o+=rc(px,160,2.4,12,'#4a4f55');
-    o+='</g>'+shinkansen(214,158);
     // v41: the maples stand in the gaps between the roofs, trunks showing
     var mr=tssR(52), mp=''; [[122,176,40],[210,170,30],[292,164,34],[344,170,30],[-2,166,30]].forEach(function(t){ mp+=momiji(t[0],t[1],t[2],mr); });
     o+='<g class="ly3"><g class="noedge">'+mp+'</g></g>';
     // middle row
     var m='';
-    m+=snowGable(-8,164,44,24,30,7,'var(--p-cedar)','var(--p-cedar-d)','var(--p-tingreen)','var(--p-tingreen-d)',5,.5,1)+cedar(-8,164,44,24)+fw(4,170,9,7,1)+fw(20,170,9,7,0);
-    m+=rc(42,170,52,18,'var(--p-timber)')+rc(46,170,3,18,'var(--p-verm)')+rc(87,170,3,18,'var(--p-verm)')+'<g class="lit glow">'+lr(54,174,30,8)+'</g>'+roofCopper(42,170,52,18,5);
-    m+=snowGable(150,164,50,24,34,8,'var(--p-cream)','var(--p-cream-d)','var(--p-tinblue)','var(--p-tinblue-d)',6,.26,1)+fw(160,170,9,8,1)+fw(182,170,9,8,0);
-    m+=rc(206,166,60,22,'var(--p-white)')+rc(206,178,60,10,'var(--p-char)')+fw(216,169,8,6,1)+fw(244,169,8,6,0)+roofVent(206,166,60,12,5);
+    m+=snowGable(-8,160,44,28,28,7,'var(--p-cedar)','var(--p-cedar-d)','var(--p-tingreen)','var(--p-tingreen-d)',5,.5,1)+cedar(-8,160,44,28)+fw(4,164,9,7,1)+fw(20,164,9,7,0)+fw(4,176,9,7,0)+fw(20,176,9,7,1);
+    m+=rc(42,160,52,28,'var(--p-timber)')+rc(46,160,3,28,'var(--p-verm)')+rc(87,160,3,28,'var(--p-verm)')+rc(42,172,52,1.6,'var(--p-verm-d)')+fw(56,163,8,6,1)+fw(74,163,8,6,0)+'<g class="lit glow">'+lr(54,176,30,9)+'</g>'+roofCopper(42,160,52,18,5);
+    m+=snowGable(154,160,42,28,24,7,'var(--p-cedar-d)','var(--p-timber)','#5b6670','#3e474f',5,.3,1)+cedar(154,160,42,28)+fw(162,164,8,7,1)+fw(180,164,8,7,0)+fw(162,176,8,7,0)+fw(180,176,8,7,1);
+    m+=rc(206,160,60,28,'var(--p-white)')+rc(206,176,60,12,'var(--p-char)')+fw(216,164,8,6,1)+fw(244,164,8,6,0)+sideGable(266,160,28,12,6,'var(--p-white)','var(--p-white-d)')+roofVent(206,160,60,12,5);
     m+=rc(296,158,44,30,'var(--p-granite)')+'<g class="noedge">'+rc(302,163,12,8,'var(--p-steel-d)')+rc(322,163,12,8,'var(--p-steel-d)')+rc(302,176,12,8,'var(--p-steel-d)')+'</g>'+'<g class="lit glow">'+lr(322,176,12,8)+'</g>'+roofFlat(296,158,44);
-    m+=rc(346,168,62,20,'var(--p-cedar)')+cedar(346,168,62,20)+fw(356,172,9,7,1)+fw(390,172,9,7,1)+roofHip(346,168,62,18,5,UK.rust,UK.rustD,1);
+    m+=rc(346,160,62,28,'var(--p-cedar)')+cedar(346,160,62,28)+fw(356,164,9,7,1)+fw(390,164,9,7,1)+fw(356,176,9,7,0)+fw(390,176,9,7,1)+roofHip(346,160,62,18,5,UK.rust,UK.rustD,1);
     o+='<g class="ly2">'+m+'</g>'+haze(.1);
     // front row, the street
     var f='';
     // hisashi machiya: two storeys, a pent roof between them, slotted plaster upstairs
     f+=rc(-12,195,58,19,'var(--p-cedar)')+koshi(-6,199,40,13,1)+rc(-12,180,58,15,'var(--p-cream)')
       +'<g class="noedge">'+rc(0,184,20,7,'var(--p-timber-d)')+ln('M3 184 v7 M6 184 v7 M9 184 v7 M12 184 v7 M15 184 v7 M18 184 v7','var(--p-cream)',1)+'</g>'+fw(30,184,8,7,1)
-      +P('M-16 199 L50 199 L48 193 L-14 193 Z',UK.tile)+ukClip('M-16 199 L50 199 L48 193 L-14 193 Z',kawara(-16,193,50,199))+roofKiri(-12,180,58,12,4);
+      +P('M-16 199 L50 199 L48 193 L-14 193 Z',UK.tile)+ukClip('M-16 199 L50 199 L48 193 L-14 193 Z',kawara(-16,193,50,199))+sideGable(46,180,34,12,6,'var(--p-cream)','var(--p-cream-d)')+roofKiri(-12,180,58,12,4);
     // the kura
     f+=kura(50,180,40,34,6)+sugidama(70,184);
     // the noodle shop, eaves to the street, udatsu at both ends
-    f+=rc(106,188,56,26,'var(--p-cream)')+timber(106,188,56,25,'var(--p-timber)')+fw(114,192,10,7,1)+fw(144,192,10,7,1)
+    f+=sideGable(162,182,32,16,7,'var(--p-cream)','var(--p-cream-d)')+rc(106,182,56,32,'var(--p-cream)')+timber(106,182,56,31,'var(--p-timber)')+fw(114,187,10,8,1)+fw(144,187,10,8,1)
       +'<g class="lit glow">'+lr(110,203,26,11)+'</g>'
       +'<g class="noedge">'+rc(109,202,28,1.4,'var(--p-timber-d)')+'<ellipse cx="116" cy="211" rx="3.4" ry="1.8" fill="var(--p-cream)"/><ellipse cx="124" cy="211" rx="3.4" ry="1.8" fill="var(--p-cream)"/><ellipse cx="132" cy="211" rx="3.4" ry="1.8" fill="var(--p-cream)"/>'
       +'<ellipse cx="116" cy="210.2" rx="3.4" ry=".8" fill="var(--p-terra)"/><ellipse cx="124" cy="210.2" rx="3.4" ry=".8" fill="var(--p-terra)"/><ellipse cx="132" cy="210.2" rx="3.4" ry=".8" fill="var(--p-terra)"/>'
       +ln('M115 209.6 l2.6 -5 M117 209.6 l2.6 -5 M123 209.6 l2.6 -5 M125 209.6 l2.6 -5 M131 209.6 l2.6 -5 M133 209.6 l2.6 -5','var(--p-kraft-d)',.5)+'</g>'
-      +noren(140,202,18,'var(--p-indigo)')+roofKiri(106,188,56,16,5)+udatsu(100,188,12)+udatsu(163.6,188,12)+ramenSign(92,181,10,31);
+      +noren(140,202,18,'var(--p-indigo)')+roofKiri(106,182,56,16,5)+udatsu(100,182,12)+udatsu(163.6,182,12)+ramenSign(92,181,10,31);
     // stone-weighted shingles over a cedar house
-    f+=rc(168,192,50,22,'var(--p-cedar)')+cedar(168,192,50,22)+fw(176,196,9,7,1)+fw(200,196,9,7,0)+roofIshi(168,192,50,8,6);
+    f+=sideGable(218,184,30,10,6,'var(--p-cedar)','var(--p-cedar-d)')+rc(168,184,50,30,'var(--p-cedar)')+cedar(168,184,50,30)+fw(176,188,9,7,1)+fw(200,188,9,7,0)+fw(176,200,9,7,0)+roofIshi(168,184,50,8,6);
     // the inn: irimoya, a row of lit rooms
-    f+=rc(228,186,66,28,'var(--p-bone)')+timber(228,186,66,27,'var(--p-timber)')+fw(234,190,9,7,1)+fw(248,190,9,7,1)+fw(262,190,9,7,0)+fw(276,190,9,7,1)
-      +'<g class="lit glow">'+lr(236,203,20,11)+'</g>'+noren(262,202,22,'var(--p-verm-d)')+roofIrimoya(228,186,66,26,6,'var(--p-bone)');
+    f+=rc(228,182,66,32,'var(--p-bone)')+timber(228,182,66,31,'var(--p-timber)')+fw(234,187,9,7,1)+fw(248,187,9,7,1)+fw(262,187,9,7,0)+fw(276,187,9,7,1)
+      +'<g class="lit glow">'+lr(236,203,20,11)+'</g>'+noren(262,202,22,'var(--p-verm-d)')+roofIrimoya(228,182,66,26,6,'var(--p-bone)');
     // a lean-to in red tin
-    f+=rc(300,190,40,24,'var(--p-white)')+fw(308,196,9,7,1)+rc(324,200,10,14,'var(--p-timber)')+roofShed(300,190,40,16,4,'var(--p-white)','var(--p-tinred)','var(--p-tinred-d)');
+    f+=rc(300,182,40,32,'var(--p-white)')+fw(308,187,9,7,0)+fw(324,187,9,7,1)+fw(308,200,9,7,1)+rc(324,200,10,14,'var(--p-timber)')+roofShed(300,182,40,16,4,'var(--p-white)','var(--p-tinred)','var(--p-tinred-d)');
     // hipped tile over white plaster
-    f+=rc(348,188,62,26,'var(--p-white)')+timber(348,188,62,25,'var(--p-timber)')+fw(356,192,10,7,0)+fw(376,192,10,7,1)+fw(394,192,10,7,1)+koshi(356,203,30,10,1)+roofHip(348,188,62,18,5,UK.tile,UK.tileD,0);
+    f+=rc(348,182,62,32,'var(--p-white)')+timber(348,182,62,31,'var(--p-timber)')+fw(356,187,10,7,0)+fw(376,187,10,7,1)+fw(394,187,10,7,1)+koshi(356,203,30,10,1)+roofHip(348,182,62,18,5,UK.tile,UK.tileD,0);
     // in front: the vending machines, the stone lantern, pots
     f+=vending(204,214,'var(--p-white)','var(--p-white-d)')+vending(222,214,'var(--p-verm)','var(--p-verm-d)')+toro(176,214)
       +pot(84,214,'#d8566a',4)+pot(298,214,'#e0a23a',8)+pot(344,214,'#e8c64a',9);
