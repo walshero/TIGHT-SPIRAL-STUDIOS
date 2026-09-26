@@ -13,6 +13,8 @@
      poem. Hedge wins. Does the poem land with you? Does this one hold?" The camera holds on the scene through the fly,
      the gulp and the leap (page scroll locked), holds one beat on the frog, then scrolls down to the player's poem.
      Win screens ask instead of declaring. The fridge no longer auto-opens over the three poems; the button stays.
+     v5.2.9 2026-09-26 (founder): "w 6 is the only of the 6 I like" - the temple bell rings when a poem is finished, and with
+     drops into water after the final leap.
      v5.2.8 2026-09-26 (founder): "Use the kabuki - just make sure it sounds more like YAH then YOH. I like the painted 1 option
      for the character but start with it filled in, and make it follow the frog, Then send smaller YA's back behind itself in
      coordination with the kabuki call." Kakegoe with hyoshigi, vowel opened to ah; the や rides the whole leap and sheds echoes.
@@ -1473,6 +1475,7 @@ async function win(){
   const rp=$('#revPoem'); rp.innerHTML=lines.map(p=>`<span class="${p.k==='t'?'t':''}"></span>`).join('');
   rp.querySelectorAll('span').forEach((x,i)=>x.textContent=lines[i].t);
   $('#rcard').classList.remove('fade'); $('#reveal').hidden=false;
+  try{Snd.bell(false)}catch(e){} // v5.2.9: the poem is finished; the bell marks it
   say(`Your poem: ${lines.map(p=>p.t).join(' / ')}. The turn is underlined.`);
   await new Promise(r=>setTimeout(r,3800));
   frameScene(); await wait(reduce?0:350); lockFrame(true);
@@ -1481,7 +1484,7 @@ async function win(){
   S.wins.push(lines); renderSeals();
   tiles.forEach(t=>{closeChoice(t);t.el.remove()}); tiles=[]; plist.forEach(t=>t.el.remove()); plist=[];
   if(S.wins.length===3){
-    await frogJump(); await wait(reduce?0:700);
+    await frogJump(); try{Snd.bell(true)}catch(e){} await wait(reduce?0:700); // v5.2.9: after the last ぽちゃん, the bell and the water
     S.phase='final'; rollSlip(false);
     const box=$('#finals'); box.innerHTML='';
     S.wins.forEach((w,i)=>{const b=document.createElement('blockquote');b.className='poem';fillPoem(b,w,SEASONS[i].name+' · '+SEASONS[i].jp);box.appendChild(b)});
@@ -2160,6 +2163,14 @@ const Snd=(()=>{
       noise(t,D,'bandpass',1400,0,.05,.8,env); // breath
       src.start(t); vib.start(t); src.stop(t+D+.05); vib.stop(t+D+.05);
       clap(t0+1.35); clap(t0+1.62);
+    },
+    bell(drops){ // v5.2.9 (founder 2026-09-26: "w 6 is the only of the 6 I like"): the temple bell (bonshō), one deep
+      // bronze strike with inharmonic partials that ring down over five seconds; with drops, a few drips into water after.
+      if(!ready())return; const t=now(), f=174;
+      [[1,1,5],[2.76,.5,3],[5.4,.25,2],[8.93,.12,1.2],[.5,.3,6]].forEach(([r,a,d])=>{const o=ac.createOscillator(),g=ac.createGain();
+        o.type='sine'; o.frequency.value=f*r; g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.3*a,t+.01); g.gain.exponentialRampToValueAtTime(.0001,t+d);
+        o.connect(g).connect(master); o.start(t); o.stop(t+d+.1)});
+      if(drops) [1.6,2.1,2.45].forEach((d,i)=>{tone(t+d,'sine',500+i*180,1400+i*200,.06,.18,.004); noise(t+d+.02,.25,'lowpass',1800,300,.06,1)});
     },
     plop(){if(!ready())return;const t=now(); tone(t,'sine',320,1250,.07,.26,.004); noise(t+.02,.5,'lowpass',2200,300,.12);
       tone(t+.34,'sine',420,1500,.05,.1,.004); tone(t+.62,'sine',520,1700,.04,.05,.004)}
