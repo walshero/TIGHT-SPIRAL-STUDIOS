@@ -13,6 +13,9 @@
      poem. Hedge wins. Does the poem land with you? Does this one hold?" The camera holds on the scene through the fly,
      the gulp and the leap (page scroll locked), holds one beat on the frog, then scrolls down to the player's poem.
      Win screens ask instead of declaring. The fridge no longer auto-opens over the three poems; the button stays.
+     v5.2.8 2026-09-26 (founder): "Use the kabuki - just make sure it sounds more like YAH then YOH. I like the painted 1 option
+     for the character but start with it filled in, and make it follow the frog, Then send smaller YA's back behind itself in
+     coordination with the kabuki call." Kakegoe with hyoshigi, vowel opened to ah; the や rides the whole leap and sheds echoes.
      v5.2.7 2026-09-26 (founder): every card in the opening lands at the top of its text.
      v5.2.6 2026-09-26 (founder): "Cut this line ... Don't keep clear water score just cliches kept v smashed 0/0 first digit
      is red if it's a one or above or green if zero. Also, position sun so the scroll/button doesn't hide it." The clear-water
@@ -73,7 +76,8 @@ button:focus-visible{outline:3px solid var(--beni);outline-offset:3px}
 .tile{transform-origin:0 0}
 #lid{transform-box:fill-box;transform-origin:50% 0;transform:scaleY(0);animation:blink 5.5s infinite}
 @keyframes blink{0%,93%,100%{transform:scaleY(0)}95.5%{transform:scaleY(1)}}
-#yaa{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;font-weight:800;font-size:66px;fill:#B23A2A;stroke:#F5EEDB;stroke-width:7px;paint-order:stroke;text-anchor:middle}
+#yaa,.yaaEcho{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;font-weight:800;font-size:66px;fill:#B23A2A;stroke:#F5EEDB;stroke-width:7px;paint-order:stroke;text-anchor:middle}
+.yaaEcho{transform-box:fill-box;transform-origin:center} /* echoes shrink about their own centre */
 #pochan{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;font-weight:800;font-size:34px;fill:#B23A2A;stroke:#F5EEDB;stroke-width:5px;paint-order:stroke;opacity:0}
 #pochan.show{animation:pochan 2.6s ease-out forwards}
 @keyframes pochan{0%{opacity:0;transform:translateY(10px)}15%{opacity:1;transform:none}75%{opacity:1}100%{opacity:0}}
@@ -1717,35 +1721,37 @@ function splash(cx,cy){
   }).then(()=>{drops.forEach(d=>d.c.remove());cols.forEach(c=>c.e.remove())});
 }
 function resetFrog(){Object.assign(FROG,{x:HOME.x,y:HOME.y,rot:0,sx:1,sy:1,flip:1});pose(false);clipAt(null);drawFrog();$('#wake').setAttribute('d','')}
-function yaa(){ // v5.2.4 (founder): the ya rides the leap, just above the frog, where the eye already is. The frog's
-  // flight paints the long vowel behind it as one tapering brush stroke: yaaaa, written by the jump itself.
-  const g=$('#yaaG'), el=$('#yaa'), tail=$('#yaaTail'), halo=$('#yaaHalo'); if(!el) return; Snd.yaa();
-  el.textContent='や'; tail.setAttribute('d',''); halo.setAttribute('d','');
+function yaa(){ // v5.2.8 (founder): "I like the painted option for the character but start with it filled in, and make it
+  // follow the frog. Then send smaller YA's back behind itself in coordination with the kabuki call."
+  // The や is brush ink from the first frame and rides the whole leap above the frog. Each beat of the call sends a smaller
+  // や peeling off behind it, back along the path it came: the shout, three pulses of the held ah, and each clapper strike.
+  const g=$('#yaaG'), el=$('#yaa'); if(!el) return; Snd.yaa();
+  g.querySelectorAll('.yaaEcho').forEach(e=>e.remove()); $('#yaaTail').setAttribute('d',''); $('#yaaHalo').setAttribute('d','');
+  el.textContent='や';
   const at=(x,y)=>{el.setAttribute('x',x.toFixed(1));el.setAttribute('y',y.toFixed(1));el.setAttribute('transform',`rotate(-8 ${x.toFixed(1)} ${(y-22).toFixed(1)})`)};
-  const fade=()=>setTimeout(()=>{g.style.transition='opacity .6s';g.style.opacity=0},1900);
+  const fade=()=>setTimeout(()=>{g.style.transition='opacity .6s';g.style.opacity=0},2100);
   g.style.transition='none'; g.style.opacity=1;
-  if(reduce){at(470,540);fade();return}
-  const pts=[], t0=performance.now();
-  const brush=(W,pad)=>{ // a tapering stroke through the trail: thin where the leap began, full at the glyph
-    if(pts.length<2) return '';
-    const L=[],R=[],n=pts.length;
-    for(let i=0;i<n;i++){const [x,y]=pts[i],[px,py]=pts[Math.max(0,i-1)],[qx,qy]=pts[Math.min(n-1,i+1)];
-      let dx=qx-px,dy=qy-py; const m=Math.hypot(dx,dy)||1; dx/=m; dy/=m;
-      const w=(1.5+W*Math.pow(i/(n-1),.8))/2+pad; L.push([x-dy*w,y+dx*w]); R.push([x+dy*w,y-dx*w])}
-    return 'M'+L.map(p=>p.map(v=>v.toFixed(1)).join(' ')).join('L')+'L'+R.reverse().map(p=>p.map(v=>v.toFixed(1)).join(' ')).join('L')+'Z';
+  const TOP=300, BOT=560;                    // kept between the banner and the water line
+  const pos=()=>[FROG.x-20, Math.max(TOP,Math.min(BOT,FROG.y-80))];
+  if(reduce){at(470,540);
+    [[80,-6,.55],[150,-10,.4]].forEach(([dx,dy,sc])=>{const e=document.createElementNS('http://www.w3.org/2000/svg','text');
+      e.setAttribute('class','yaaEcho'); e.setAttribute('x',470+dx); e.setAttribute('y',540+dy); e.setAttribute('style',`font-size:${66*sc}px;opacity:${sc}`); e.textContent='や'; g.insertBefore(e,el)});
+    fade(); return}
+  let last=pos(), vel=[-1,-.6], under=false; // vel starts as the leap's own direction (up and left), so the first echo, fired on the shout before the frog moves, still flies back behind it;   // under: the frog has gone into the water, so the や stays at the surface
+  const echo=()=>{ // a smaller や leaves the big one and drifts back along the way it came
+    const [x,y]=last, m=Math.hypot(vel[0],vel[1])||1, bx=-vel[0]/m, by=-vel[1]/m;
+    const e=document.createElementNS('http://www.w3.org/2000/svg','text'); e.setAttribute('class','yaaEcho'); e.textContent='や';
+    e.setAttribute('x',(x+bx*28).toFixed(1)); e.setAttribute('y',(y+by*28).toFixed(1)); g.insertBefore(e,el);
+    e.animate([{transform:'translate(0,0) scale(.85)',opacity:1},{transform:`translate(${(bx*70).toFixed(1)}px,${(by*70).toFixed(1)}px) scale(.68)`,opacity:.9,offset:.45},
+      {transform:`translate(${(bx*140).toFixed(1)}px,${(by*140).toFixed(1)}px) scale(.5)`,opacity:0}],
+      {duration:1150,easing:'cubic-bezier(.2,.6,.3,1)',fill:'forwards'}).onfinish=()=>e.remove();
   };
-  // Kept in the middle band of the pond: never up in the banner, never under the water line.
-  const TOP=300, BOT=560, KEEP=16;           // KEEP: trail length in samples, a short comet, not the whole arc
-  let lowY=Infinity, held=false;
+  [120,420,720,1020,1350,1620].forEach(ms=>setTimeout(echo,ms)); // in time with the call: shout, held ah x3, clappers x2
+  const t0=performance.now();
   (function step(now){
-    // It rides the rise, then HANGS where the frog peaked while the frog drops to its own ぽちゃん.
-    if(FROG.y<lowY) lowY=FROG.y; else if(FROG.y>lowY+6) held=true;
-    if(held) return;
-    const x=FROG.x-20, y=Math.max(TOP,Math.min(BOT,FROG.y-80)); // above and just behind the frog's head
-    at(x,y);
-    if(now-t0<1150){const last=pts[pts.length-1]; const tx=x+30, ty=y-20; // the tail leaves from the glyph's right shoulder
-      if(!last||Math.hypot(tx-last[0],ty-last[1])>3){pts.push([tx,ty]); if(pts.length>KEEP) pts.shift()}
-      tail.setAttribute('d',brush(11,0)); halo.setAttribute('d',brush(11,3.5)); requestAnimationFrame(step)}
+    if(!under&&FROG.y-80>BOT) under=true;
+    if(!under){const [x,y]=pos(); if(x!==last[0]||y!==last[1]) vel=[x-last[0],y-last[1]]; last=[x,y]; at(x,y)}
+    if(now-t0<1900) requestAnimationFrame(step);
   })(t0);
   fade();
 }
@@ -2135,23 +2141,25 @@ const Snd=(()=>{
     swish(){if(!ready())return;const t=now(); noise(t,.45,'bandpass',1500,380,.09,.9)},
     crumple(){if(!ready())return;const t=now(); for(let i=0;i<7;i++) noise(t+i*.028+Math.random()*.02,.035,'highpass',2400+Math.random()*2000,0,.09)},
     paper(up){if(!ready())return;const t=now(), n=up?9:5; for(let i=0;i<n;i++) noise(t+i*.11+Math.random()*.05,.06,'highpass',3000,0,.03+Math.random()*.03)},
-    yaa(){ // v5.2.4 (founder 2026-09-26): "more excited than nervous." Excited voices run higher and wider and
-      // climb; nervous ones tremble fast and narrow from the first instant and sink. So: a quick "hup", a big swoop
-      // up to a bright held top, a slow vibrato that only blooms once the note is held, and a flip UP at the end.
-      if(!ready())return; const t0=now(), t=t0+.09, D=1.35, src=ac.createOscillator(); src.type='sawtooth';
-      tone(t0,'triangle',300,720,.07,.22,.004); // hup!
-      const F=src.frequency;
-      F.setValueAtTime(420,t); F.exponentialRampToValueAtTime(980,t+.22); F.linearRampToValueAtTime(900,t+.4);
-      F.linearRampToValueAtTime(940,t+.95); F.exponentialRampToValueAtTime(1180,t+1.2); F.linearRampToValueAtTime(1100,t+D);
+    yaa(){ // v5.2.8 (founder 2026-09-26): "Use the kabuki - just make sure it sounds more like YAH than YOH."
+      // A kakegoe: two hyoshigi clappers, then a voice that shouts from a low "y" glide into a wide-open "ah" and holds,
+      // then two more clappers. The vowel is steered by formants: the y starts close (F1 300, F2 2300) and opens to a
+      // bright ah (F1 850, F2 1250); the old yoo target (F1 500, F2 850) is what made it read as YOH.
+      if(!ready())return; const t0=now(), t=t0+.12, D=1.2;
+      const clap=c=>{[0,.012].forEach(dx=>{tone(c+dx,'square',1850,1500,.05,.16,.002);noise(c+dx,.06,'bandpass',2600,0,.45,4)})};
+      clap(t0);
+      const src=ac.createOscillator(); src.type='sawtooth'; const F=src.frequency;
+      F.setValueAtTime(190,t); F.linearRampToValueAtTime(175,t+.1); F.linearRampToValueAtTime(300,t+.35); F.linearRampToValueAtTime(320,t+.9); F.linearRampToValueAtTime(290,t+D);
       const vib=ac.createOscillator(); vib.frequency.value=5; const vg=ac.createGain();
-      vg.gain.setValueAtTime(0,t); vg.gain.setValueAtTime(0,t+.35); vg.gain.linearRampToValueAtTime(22,t+.8); vg.gain.linearRampToValueAtTime(10,t+D);
-      vib.connect(vg).connect(F);
-      const env=ac.createGain(); env.gain.setValueAtTime(0,t); env.gain.linearRampToValueAtTime(.6,t+.03); env.gain.setValueAtTime(.6,t+D-.18); env.gain.exponentialRampToValueAtTime(.0001,t+D);
+      vg.gain.setValueAtTime(0,t); vg.gain.setValueAtTime(0,t+.45); vg.gain.linearRampToValueAtTime(9,t+.75); vib.connect(vg).connect(F);
+      const env=ac.createGain(); env.gain.setValueAtTime(0,t); env.gain.linearRampToValueAtTime(.95,t+.03); env.gain.setValueAtTime(.95,t+D-.25); env.gain.exponentialRampToValueAtTime(.0001,t+D);
       env.connect(master);
-      [[420,1050,6,1],[2600,1600,8,.6],[3300,3200,10,.32]].forEach(([fy,fa,q,a])=>{ // the y glides into a bright a
+      [[300,850,7,1],[2300,1250,9,.6],[2900,2700,10,.28]].forEach(([fy,fa,q,a])=>{
         const f=ac.createBiquadFilter(); f.type='bandpass'; f.Q.value=q; f.frequency.setValueAtTime(fy,t); f.frequency.linearRampToValueAtTime(fa,t+.14);
         const g=ac.createGain(); g.gain.value=a; src.connect(f).connect(g).connect(env)});
+      noise(t,D,'bandpass',1400,0,.05,.8,env); // breath
       src.start(t); vib.start(t); src.stop(t+D+.05); vib.stop(t+D+.05);
+      clap(t0+1.35); clap(t0+1.62);
     },
     plop(){if(!ready())return;const t=now(); tone(t,'sine',320,1250,.07,.26,.004); noise(t+.02,.5,'lowpass',2200,300,.12);
       tone(t+.34,'sine',420,1500,.05,.1,.004); tone(t+.62,'sine',520,1700,.04,.05,.004)}
