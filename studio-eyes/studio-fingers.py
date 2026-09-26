@@ -113,7 +113,23 @@ PROBE = r"""
     const r = vis(el);
     if (!r) return;
     if (inlineLink(el)) return;
-    const m = Math.min(r.width, r.height);
+    // HIT AREA, NOT PAINT BOX (2026-09-26, kireji). An absolute ::before/::after with a
+    // negative inset widens what a thumb can land on, placed against the PADDING box.
+    // Proven by click: inset:-5px on a 2px-bordered 36px chip = 42px; -7px = 46px.
+    // Same arithmetic as studio-eyes.py, so the two gates cannot disagree about one button.
+    const cs0 = getComputedStyle(el);
+    const bl = parseFloat(cs0.borderLeftWidth)||0, bt = parseFloat(cs0.borderTopWidth)||0,
+          bR = parseFloat(cs0.borderRightWidth)||0, bB = parseFloat(cs0.borderBottomWidth)||0;
+    let hx = r.left, hy = r.top, hr = r.right, hb = r.bottom;
+    for (const pe of ['::before', '::after']) {
+      const ps = getComputedStyle(el, pe);
+      if (ps.content === 'none' || ps.position !== 'absolute' || ps.pointerEvents === 'none') continue;
+      const T = parseFloat(ps.top), L = parseFloat(ps.left), R = parseFloat(ps.right), B = parseFloat(ps.bottom);
+      if (![T, L, R, B].every(Number.isFinite)) continue;
+      hx = Math.min(hx, r.left + bl + L); hy = Math.min(hy, r.top + bt + T);
+      hr = Math.max(hr, r.right - bR - R); hb = Math.max(hb, r.bottom - bB - B);
+    }
+    const m = Math.min(hr - hx, hb - hy);
     if (m < 44) out.small.push({ tag: el.tagName.toLowerCase(), name: name(el), px: Math.round(m) });
   });
 
@@ -463,6 +479,18 @@ GOOD4 = BAD4.replace("border-radius:8px;font-size:13px",
                      "justify-content:center;line-height:1;font-size:13px")
 
 
+# BAD5 / GOOD5: the kireji sound chip, isolated (2026-09-26). A 36px chip with a 2px
+# border and an invisible ::after margin. At inset -5px it measures 42px by click, though
+# the rule reads like 46; at -7px it is 46px. The gate must tell them apart.
+_CHIP = ("<!doctype html><meta name=viewport content='width=device-width,initial-scale=1'>"
+         "<style>body{margin:0;font:20px system-ui}.c{position:fixed;top:12px;left:12px;width:36px;height:36px;"
+         "padding:0;border:2px solid #111;background:#eee}.c::after{content:'';position:absolute;inset:INSET}"
+         ".c:focus-visible{outline:3px solid #000}</style><body><h1 style='margin:80px 20px'>scene</h1>"
+         "<button class=c aria-label='Sound on'>S</button></body>")
+BAD5 = _CHIP.replace('INSET', '-5px')
+GOOD5 = _CHIP.replace('INSET', '-7px')
+
+
 def self_test():
     from playwright.sync_api import sync_playwright
     r = {}
@@ -470,7 +498,7 @@ def self_test():
     with tempfile.TemporaryDirectory() as td:
         paths = {}
         for k, html in (('good',GOOD), ('bad1',BAD1), ('bad2',BAD2), ('bad3',BAD3),
-                        ('bad4',BAD4), ('good4',GOOD4)):
+                        ('bad4',BAD4), ('good4',GOOD4), ('bad5',BAD5), ('good5',GOOD5)):
             paths[k] = os.path.join(td, k+'.html'); open(paths[k],'w').write(html)
         with sync_playwright() as p:
             b = p.chromium.launch(**({'executable_path': exe} if exe else {}))
@@ -492,13 +520,17 @@ def self_test():
     codes3 = {h.split()[0] for h in r['bad3']}
     ok_bad3 = 'F-TAP' in codes3
     ok_bad4 = len(align['bad4']) == 1 and not align['good4'] and not align['good']
+    ok_bad5 = any(h.startswith('F-TAP') for h in r['bad5'])
+    ok_good5 = not any(h.startswith('F-TAP') for h in r['good5'])
     print("  self-test:")
     print(f"    GOOD canary clean          : {'PASS' if ok_good else 'FAIL -> '+str(r['good'])}")
     print(f"    BAD1 (tap/viewport/wall)   : {'PASS' if ok_bad1 else 'FAIL -> got '+str(sorted(codes1))}")
     print(f"    BAD2 (missing meta view)   : {'PASS' if ok_bad2 else 'FAIL -> got '+str(sorted(codes2))}")
     print(f"    BAD3 (tap AFTER transition): {'PASS' if ok_bad3 else 'FAIL -> got '+str(sorted(codes3))}")
     print(f"    BAD4 (rail labels off/on)  : {'PASS' if ok_bad4 else 'FAIL -> bad4='+str(align['bad4'])+' good4='+str(align['good4'])+' good='+str(align['good'])}")
-    return 0 if (ok_good and ok_bad1 and ok_bad2 and ok_bad3 and ok_bad4) else 1
+    print(f"    BAD5 (42px margin, looks 46): {'PASS' if ok_bad5 else 'FAIL -> '+str(r['bad5'])}")
+    print(f"    GOOD5 (46px hit area)       : {'PASS' if ok_good5 else 'FAIL -> '+str(r['good5'])}")
+    return 0 if (ok_good and ok_bad1 and ok_bad2 and ok_bad3 and ok_bad4 and ok_bad5 and ok_good5) else 1
 
 
 def main():

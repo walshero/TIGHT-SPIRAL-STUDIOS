@@ -114,14 +114,17 @@ CONTROLS_JS = r"""
     // negative inset widens the tap target (kireji's 36px sound chip is 46px to a
     // thumb). Reading the paint box here is the exact false positive the retired
     // root studio-fingers.py shipped on Flok. Union the pseudo extents in.
+    // offsets are against the PADDING box (inside the border): kireji's inset:-5px chip measured 42px, not 46
+    const bl = parseFloat(cs.borderLeftWidth)||0, bt = parseFloat(cs.borderTopWidth)||0,
+          bR = parseFloat(cs.borderRightWidth)||0, bB = parseFloat(cs.borderBottomWidth)||0;
     let hx = r.x, hy = r.y, hr = r.right, hb = r.bottom;
     for (const pe of ['::before', '::after']) {
       const ps = getComputedStyle(el, pe);
       if (ps.content === 'none' || ps.position !== 'absolute') continue;
       const t = parseFloat(ps.top), l = parseFloat(ps.left), rr = parseFloat(ps.right), bb = parseFloat(ps.bottom);
       if ([t, l, rr, bb].every(Number.isFinite)) {
-        hx = Math.min(hx, r.x + l); hy = Math.min(hy, r.y + t);
-        hr = Math.max(hr, r.right - rr); hb = Math.max(hb, r.bottom - bb);
+        hx = Math.min(hx, r.x + bl + l); hy = Math.min(hy, r.y + bt + t);
+        hr = Math.max(hr, r.right - bR - rr); hb = Math.max(hb, r.bottom - bB - bb);
       }
     }
     const vis = (el.innerText || el.value || '').trim().replace(/\s+/g, ' ');

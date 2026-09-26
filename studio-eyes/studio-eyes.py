@@ -308,8 +308,27 @@ PROBE = r"""
   document.querySelectorAll('a,button,input,select,textarea,[role=button],[tabindex]').forEach(el=>{
     const cs = getComputedStyle(el);
     if (cs.display==='none' || cs.visibility==='hidden') return;
-    const r = el.getBoundingClientRect();
-    if (r.width < 1 && r.height < 1) return;
+    const r0 = el.getBoundingClientRect();
+    if (r0.width < 1 && r0.height < 1) return;
+    // HIT AREA, NOT PAINT BOX. Added 2026-09-26: a ::before/::after, position:absolute, with a
+    // negative inset widens the tap target (kireji's 36px sound chip is 46px to a thumb). The
+    // Fingers gate has credited this since the Flok false positives; Eyes now reads the same
+    // geometry, so the two gates cannot disagree about one button.
+    // An absolute pseudo is placed against the PADDING box, inside the border. Measured on
+    // kireji: inset:-5px on a 2px-bordered 36px chip is a 42px hit area, not 46.
+    const cs0 = getComputedStyle(el);
+    const bl = parseFloat(cs0.borderLeftWidth)||0, bt = parseFloat(cs0.borderTopWidth)||0,
+          br = parseFloat(cs0.borderRightWidth)||0, bb = parseFloat(cs0.borderBottomWidth)||0;
+    let hx = r0.left, hy = r0.top, hr = r0.right, hb = r0.bottom;
+    for (const pe of ['::before', '::after']) {
+      const ps = getComputedStyle(el, pe);
+      if (ps.content === 'none' || ps.position !== 'absolute') continue;
+      const T = parseFloat(ps.top), L = parseFloat(ps.left), R = parseFloat(ps.right), B = parseFloat(ps.bottom);
+      if (![T, L, R, B].every(Number.isFinite)) continue;
+      hx = Math.min(hx, r0.left + bl + L); hy = Math.min(hy, r0.top + bt + T);
+      hr = Math.max(hr, r0.right - br - R); hb = Math.max(hb, r0.bottom - bb - B);
+    }
+    const r = {width: hr - hx, height: hb - hy};
     el.focus();
     const f = getComputedStyle(el);
     const ring = (f.outlineStyle !== 'none' && parseFloat(f.outlineWidth) > 0)
@@ -405,7 +424,16 @@ PROBE = r"""
     for (const r of rules) {
       if (!r.selectorText) continue;
       const m = r.selectorText.match(/body\.([\w-]+)/g);
-      if (m) m.forEach(x=>bodyClasses.add(x.replace('body.','')));
+      // A STOP IS A CLASS THAT REPAINTS. Added 2026-09-26 (kireji-pond): body.still stops
+      // motion and body.fzopen stops scroll; neither is a light stop, and grading them as
+      // knobs that "change nothing" HALTed a correct build three times over. Only a rule that
+      // declares a paint property (background, color, or a token) makes its class a stop.
+      // t10 (a real fake knob that repaints by 0.004) still HALTs: it declares background.
+      let paints = false;
+      for (let i = 0; i < r.style.length; i++) {
+        if (/^(background|color$|filter$|--)/.test(r.style[i])) { paints = true; break; }
+      }
+      if (m && paints) m.forEach(x=>bodyClasses.add(x.replace('body.','')));
     }
   }
   out.stops = [...bodyClasses];

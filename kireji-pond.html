@@ -13,6 +13,11 @@
      poem. Hedge wins. Does the poem land with you? Does this one hold?" The camera holds on the scene through the fly,
      the gulp and the leap (page scroll locked), holds one beat on the frog, then scrolls down to the player's poem.
      Win screens ask instead of declaring. The fridge no longer auto-opens over the three poems; the button stays.
+     v5.2.4 2026-09-26 (founder): "make the leap sound yaaaaa more excited than nervous ... make the ya symbol more artful and
+     lower on the screen closer to eyeball following frog." The ya rides above the frog and the leap paints its long vowel;
+     the voice swoops up and ends rising.
+     v5.2.3 2026-09-26: Studio Eyes carried debt cleared - text tokens split from decoration, Skip to the stream at 44px,
+     visible focus on the card heading, sound chip tap area 42px -> 46px (the chip itself unchanged). No colour a player sees changed.
      v5.2.2 2026-09-26 (founder): "The sound plays on screen 2 of open but should open on screen 1." A phone holds
      sound until the first touch, and the first touch on card 1 is nearly always Next, so the pond woke as card 2 slid in.
      Now the first turn off card 1 waits one beat: the touch wakes the pond, the frog goes in, then the card turns.
@@ -25,13 +30,15 @@
 <style>
 :root{
   --paper:#EAE2CD; --paper2:#F5EEDB; --sumi:#1B1A17; --sumi2:#4A463E;
+  /* v5.2.3 token-role law: text twins, literal values; decoration tokens may change, these may not */
+  --paper2-t:#F5EEDB; --sumi-t:#1B1A17; --sumi2-t:#4A463E; --ai-t:#1F3A5F;
   --ai:#1F3A5F; --ai2:#4E7A9E; --ai3:#B7CEDA;
   --beni:#B23A2A; --beniInk:#7E2419; --moss:#5F6B34; --frog:#7C8C3A; --ochre:#B98A2E;
   color-scheme:light;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
-body{margin:0;background:var(--paper);color:var(--sumi);
+body{margin:0;background:var(--paper);color:var(--sumi-t);
   font-family:"Zen Kaku Gothic New","Hiragino Sans","Segoe UI",system-ui,sans-serif;
   font-size:18px;line-height:1.5;padding-inline:16px;padding-block:16px}
 [hidden]{display:none!important}
@@ -61,7 +68,7 @@ button:focus-visible{outline:3px solid var(--beni);outline-offset:3px}
 .tile{transform-origin:0 0}
 #lid{transform-box:fill-box;transform-origin:50% 0;transform:scaleY(0);animation:blink 5.5s infinite}
 @keyframes blink{0%,93%,100%{transform:scaleY(0)}95.5%{transform:scaleY(1)}}
-#yaa{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;font-weight:800;font-size:44px;fill:#B23A2A;stroke:#F5EEDB;stroke-width:6px;paint-order:stroke;text-anchor:middle;opacity:0;transition:opacity .45s}
+#yaa{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;font-weight:800;font-size:66px;fill:#B23A2A;stroke:#F5EEDB;stroke-width:7px;paint-order:stroke;text-anchor:middle}
 #pochan{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;font-weight:800;font-size:34px;fill:#B23A2A;stroke:#F5EEDB;stroke-width:5px;paint-order:stroke;opacity:0}
 #pochan.show{animation:pochan 2.6s ease-out forwards}
 @keyframes pochan{0%{opacity:0;transform:translateY(10px)}15%{opacity:1;transform:none}75%{opacity:1}100%{opacity:0}}
@@ -96,7 +103,7 @@ button:focus-visible{outline:3px solid var(--beni);outline-offset:3px}
 .stream.hush{opacity:0}
 .tile{position:absolute;left:0;top:0;will-change:transform}
 .tile.held{z-index:5}
-.tile .in{border:0;cursor:pointer;text-align:left;color:var(--sumi)}
+.tile .in{border:0;cursor:pointer;text-align:left;color:var(--sumi-t)}
 .choice{position:absolute;left:0;top:calc(100% + 10px);display:flex;flex-wrap:wrap;gap:6px;width:max-content;max-width:min(380px,calc(100vw - 64px))}
 .tile.up .choice{top:auto;bottom:calc(100% + 10px)}
 .choice button{border:2px solid var(--sumi);padding:8px 12px;font-weight:700;font-size:18px;cursor:pointer;white-space:nowrap;box-shadow:3px 3px 0 var(--sumi)}
@@ -130,14 +137,14 @@ button:focus-visible{outline:3px solid var(--beni);outline-offset:3px}
 .panel section{display:flex;flex-direction:column;gap:16px}
 .eyebrow{margin:0;font-size:18px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--beniInk)}
 h2{margin:0;font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;font-weight:800;font-size:26px;line-height:1.15;text-wrap:balance}
-h3{margin:0;font-size:18px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sumi2)}
+h3{margin:0;font-size:18px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sumi2-t)}
 p{margin:0}
-.primary{background:var(--sumi);color:var(--paper2);border:0;padding:14px 20px;font-weight:700;font-size:18px;
+.primary{background:var(--sumi);color:var(--paper2-t);border:0;padding:14px 20px;font-weight:700;font-size:18px;
   cursor:pointer;box-shadow:4px 4px 0 var(--beni);align-self:flex-start}
 .primary:hover{background:var(--ai)}
 .ghost{background:transparent;border:2px solid var(--sumi);padding:9px 14px;font-weight:600;font-size:18px;cursor:pointer}
 .ghost:hover{background:var(--paper2)}
-.ghost[aria-pressed="true"]{background:var(--sumi);color:var(--paper2)}
+.ghost[aria-pressed="true"]{background:var(--sumi);color:var(--paper2-t)}
 .ghost.call{border-color:var(--beni);box-shadow:3px 3px 0 var(--beni)}
 kbd{font:600 18px/1 "Zen Kaku Gothic New",sans-serif;border:1px solid currentColor;padding:2px 5px;margin-left:6px}
 
@@ -146,9 +153,9 @@ kbd{font:600 18px/1 "Zen Kaku Gothic New",sans-serif;border:1px solid currentCol
 .jp{writing-mode:vertical-rl;font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;font-weight:800;font-size:27px;line-height:1.6;letter-spacing:.08em;margin:0}
 .rom{display:flex;flex-direction:column;gap:12px}
 .rom .ro{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;font-style:italic;font-size:19px;line-height:1.45}
-.rom .gl{font-size:18px;line-height:1.55;color:var(--sumi2)}
+.rom .gl{font-size:18px;line-height:1.55;color:var(--sumi2-t)}
 .gl b,.note b{color:var(--beniInk)}
-.note{font-size:18px;color:var(--sumi2);max-width:60ch}
+.note{font-size:18px;color:var(--sumi2-t);max-width:60ch}
 .rules{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:18px}
 
 /* Play */
@@ -165,12 +172,12 @@ kbd{font:600 18px/1 "Zen Kaku Gothic New",sans-serif;border:1px solid currentCol
 .padrow .mud path{fill:#9C9686}
 .slots{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
 .slots li{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:stretch}
-.count{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;font-weight:800;font-size:26px;color:var(--ai);display:grid;place-items:center}
+.count{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;font-weight:800;font-size:26px;color:var(--ai-t);display:grid;place-items:center}
 .slot{min-height:58px;text-align:left;border:2px dashed var(--sumi2);background:transparent;padding:10px 12px;
   display:flex;flex-direction:column;justify-content:center;gap:4px}
 .slot.full{border-style:solid;border-color:var(--sumi);background:var(--paper2);box-shadow:3px 3px 0 var(--ai)}
 .slot .txt{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;font-weight:600;font-size:20px;line-height:1.25}
-.slot .hint{font-size:18px;color:var(--sumi2)}
+.slot .hint{font-size:18px;color:var(--sumi2-t)}
 .slot.full .hint{display:none}
 .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
 .acts button{background:transparent;border:1.5px solid var(--sumi);padding:5px 10px;font-size:18px;font-weight:600;cursor:pointer}
@@ -203,7 +210,7 @@ kbd{font:600 18px/1 "Zen Kaku Gothic New",sans-serif;border:1px solid currentCol
 #jaw{transition:opacity .08s}
 /* v2 dark path: the panel follows the device. The print itself keeps its daylight inks. */
 @media (prefers-color-scheme:dark){
-  :root{--paper:#1C1A16;--paper2:#27241E;--sumi:#F2EAD7;--sumi2:#CFC6B2;--beniInk:#E8957F;color-scheme:dark}
+  :root{--paper:#1C1A16;--paper2:#27241E;--sumi:#F2EAD7;--sumi2:#CFC6B2;--paper2-t:#27241E;--sumi-t:#F2EAD7;--sumi2-t:#CFC6B2;--beniInk:#E8957F;color-scheme:dark}
   .tile:hover .in,.tile.held .in{background:#3A352C}
   .count{color:#9DBFD2}
   .primary:hover{background:var(--ai);color:#F2EAD7}
@@ -244,7 +251,7 @@ html.lockframe,html.lockframe body{overflow:hidden;overscroll-behavior:none}
 .eddy .e3{stroke-dasharray:240 60 110 90;animation:eddy 23s linear infinite}
 @keyframes eddy{to{stroke-dashoffset:-500}}
 .tcard{position:relative;background:var(--paper2);border:3px solid var(--sumi);padding:22px 24px 18px;touch-action:pan-y}
-.tskip{display:table;margin:10px auto 0;text-align:center;background:none;border:0;padding:6px 8px;font-size:18px;color:var(--sumi2);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.tskip{display:table;margin:10px auto 0;text-align:center;background:none;border:0;padding:6px 8px;font-size:18px;color:var(--sumi2-t);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .tpanes{position:relative}
 .tpane{position:absolute;top:0;left:0;right:0;display:flex;flex-direction:column;gap:14px;visibility:hidden;opacity:0;transform:translateX(18px);transition:opacity .35s,transform .35s,visibility 0s .35s}
 .tpane.on{position:relative;visibility:visible;opacity:1;transform:none;transition:opacity .35s,transform .35s}
@@ -266,7 +273,7 @@ html.lockframe,html.lockframe body{overflow:hidden;overscroll-behavior:none}
 .tnav{display:flex;align-items:center;gap:12px;margin-top:22px}
 .tnav .primary{box-shadow:4px 4px 0 var(--beni)}
 .tnav [disabled]{visibility:hidden}
-.tcount{margin:0 auto;white-space:nowrap;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:18px;font-weight:700;letter-spacing:.1em;color:var(--sumi2)}
+.tcount{margin:0 auto;white-space:nowrap;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:18px;font-weight:700;letter-spacing:.1em;color:var(--sumi2-t)}
 .pips{display:flex;gap:7px}.pips i{width:10px;height:10px;border:2px solid var(--sumi2)}.pips i.on{background:var(--beni);border-color:var(--beni)}
 @media (max-width:780px){.app:not(.touring) .scene{min-height:0}.cutrow{grid-template-columns:1fr;justify-items:center;text-align:center;gap:18px}.cutrow span:first-child{text-align:center}.tcard{padding:18px 16px 14px}.tpane h2{font-size:25px}.cutrow{font-size:18px;gap:8px}}
 @media (prefers-reduced-motion:reduce){.eddy .e{animation:none}.tpane,.tpane.on{transition:none;transform:none}}
@@ -274,7 +281,7 @@ body.still .eddy .e{animation:none}
 
 /* v4.1 sound: a live corner control */
 .sndbtn{position:absolute;top:16px;left:16px;z-index:9;display:flex;align-items:center;gap:8px;min-height:44px;padding:6px 12px;
-  background:var(--paper2);color:var(--sumi);border:2px solid var(--sumi);box-shadow:3px 3px 0 var(--sumi);font-weight:700;font-size:18px;cursor:pointer}
+  background:var(--paper2);color:var(--sumi-t);border:2px solid var(--sumi);box-shadow:3px 3px 0 var(--sumi);font-weight:700;font-size:18px;cursor:pointer}
 .sndbtn .x{display:none}
 .sndbtn.ask{border-color:var(--beni);box-shadow:3px 3px 0 var(--beni)}
 .sndbtn[aria-pressed="false"] .x{display:inline}.sndbtn[aria-pressed="false"] .w{display:none}
@@ -291,7 +298,7 @@ body.still .eddy .e{animation:none}
 .cartouche{z-index:1}.stream{z-index:2}
 /* v4.4: the title scroll retracts into this mark: 切 (cut) over 池 (pond), in the scroll's own paper and ink */
 .kmark{position:absolute;top:0;right:0;width:44px;padding:6px 0;display:flex;flex-direction:column;align-items:center;line-height:1.06;
-  background:var(--paper2);color:var(--sumi);border:2px solid var(--sumi);box-shadow:0 3px 0 rgba(27,26,23,.28);
+  background:var(--paper2);color:var(--sumi-t);border:2px solid var(--sumi);box-shadow:0 3px 0 rgba(27,26,23,.28);
   font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;font-weight:800;font-size:21px;
   opacity:0;transform-origin:50% 0;pointer-events:none}
 .choice.float{position:fixed;z-index:60;max-width:min(380px,calc(100vw - 16px))}
@@ -328,7 +335,7 @@ body.still .eddy .e{animation:none}
 .sndbtn{top:12px;left:12px;width:36px;height:36px;min-height:0;min-width:0;padding:0;gap:0;justify-content:center;box-shadow:2px 2px 0 var(--sumi)}
 .sndbtn.ask{box-shadow:2px 2px 0 var(--beni)}
 .sndbtn svg{width:20px;height:20px}
-.sndbtn::after{content:"";position:absolute;inset:-5px}
+.sndbtn::after{content:"";position:absolute;inset:-7px} /* v5.2.3: measured 42px at -5px (the inset starts inside the 2px border); -7px gives 46px */
 .sndbtn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 @media (max-width:780px){.tour{top:56px}}
 /* v5 the icebox: after the third poem, the poems go up on a 1950s refrigerator, cut as a woodblock print.
@@ -424,6 +431,10 @@ body.fzopen{overflow:hidden}
 a.fzb{display:inline-flex;align-items:center;text-decoration:none}
 @media (max-width:480px){.fzb{padding:6px 10px}.fzbox{width:calc(100% - 20px);margin-top:28px}.freezer{padding:22px 54px 20px 14px}.mag{font-size:18px;padding:5px 9px 6px}}
 @media (prefers-reduced-motion:reduce){.mag,.mag.snap,.fzhop.go,.fzhop.go b{animation:none;transition:none}}
+/* v5.2.3: Skip to the stream was 39px tall, a real floor miss (44px founder floor) */
+.tskip{min-height:44px}
+/* v5.2.3: the card heading takes focus on every turn; a keyboard player now sees where it landed */
+.tpane h2:focus-visible{outline:3px solid var(--sumi);outline-offset:4px}
 </style>
 </head>
 <body>
@@ -432,6 +443,7 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
   <div class="scene" id="scene" aria-label="Woodblock scene: a stream runs down into an old pond where a frog sits on a stone.">
     <svg class="bg" id="sceneSvg" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
       <defs>
+        <filter id="brushInk" x="-20%" y="-30%" width="140%" height="160%"><feTurbulence type="fractalNoise" baseFrequency=".09" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3.2"/></filter>
         <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" style="stop-color:var(--sky1)"/>
           <stop offset=".38" style="stop-color:var(--sky2)"/>
@@ -625,7 +637,7 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
       </g>
       <path id="wake" d="" fill="none" stroke="#EAF2F5" stroke-width="2.5" stroke-linecap="round"/>
       <g id="splash"></g>
-      <text id="yaa" x="585" y="236" aria-hidden="true"></text>
+      <g id="yaaG" aria-hidden="true" filter="url(#brushInk)" style="opacity:0"><path id="yaaHalo" fill="#F5EEDB"/><path id="yaaTail" fill="#B23A2A"/><text id="yaa" x="470" y="540"></text></g>
       <text id="pochan" x="540" y="452" aria-hidden="true"><tspan x="540" dy="0">ぽ</tspan><tspan x="540" dy="38">ち</tspan><tspan x="540" dy="38">ゃ</tspan><tspan x="540" dy="38">ん</tspan></text>
       <!-- the frog -->
       <g id="frogWrap" clip-path="url(#waterClip)">
@@ -1709,11 +1721,37 @@ function splash(cx,cy){
   }).then(()=>{drops.forEach(d=>d.c.remove());cols.forEach(c=>c.e.remove())});
 }
 function resetFrog(){Object.assign(FROG,{x:HOME.x,y:HOME.y,rot:0,sx:1,sy:1,flip:1});pose(false);clipAt(null);drawFrog();$('#wake').setAttribute('d','')}
-function yaa(){
-  const el=$('#yaa'); if(!el) return; Snd.yaa();
-  el.textContent='や'; el.style.transition='none'; el.style.opacity=1; el.style.transform='rotate(-5deg)'; el.style.transformBox='fill-box'; el.style.transformOrigin='center';
-  let n=0; const iv=setInterval(()=>{if(n++<4) el.textContent+='ー'; else clearInterval(iv)},reduce?1:170);
-  setTimeout(()=>{el.style.transition='opacity .45s';el.style.opacity=0},1700);
+function yaa(){ // v5.2.4 (founder): the ya rides the leap, just above the frog, where the eye already is. The frog's
+  // flight paints the long vowel behind it as one tapering brush stroke: yaaaa, written by the jump itself.
+  const g=$('#yaaG'), el=$('#yaa'), tail=$('#yaaTail'), halo=$('#yaaHalo'); if(!el) return; Snd.yaa();
+  el.textContent='や'; tail.setAttribute('d',''); halo.setAttribute('d','');
+  const at=(x,y)=>{el.setAttribute('x',x.toFixed(1));el.setAttribute('y',y.toFixed(1));el.setAttribute('transform',`rotate(-8 ${x.toFixed(1)} ${(y-22).toFixed(1)})`)};
+  const fade=()=>setTimeout(()=>{g.style.transition='opacity .6s';g.style.opacity=0},1900);
+  g.style.transition='none'; g.style.opacity=1;
+  if(reduce){at(470,540);fade();return}
+  const pts=[], t0=performance.now();
+  const brush=(W,pad)=>{ // a tapering stroke through the trail: thin where the leap began, full at the glyph
+    if(pts.length<2) return '';
+    const L=[],R=[],n=pts.length;
+    for(let i=0;i<n;i++){const [x,y]=pts[i],[px,py]=pts[Math.max(0,i-1)],[qx,qy]=pts[Math.min(n-1,i+1)];
+      let dx=qx-px,dy=qy-py; const m=Math.hypot(dx,dy)||1; dx/=m; dy/=m;
+      const w=(1.5+W*Math.pow(i/(n-1),.8))/2+pad; L.push([x-dy*w,y+dx*w]); R.push([x+dy*w,y-dx*w])}
+    return 'M'+L.map(p=>p.map(v=>v.toFixed(1)).join(' ')).join('L')+'L'+R.reverse().map(p=>p.map(v=>v.toFixed(1)).join(' ')).join('L')+'Z';
+  };
+  // Kept in the middle band of the pond: never up in the banner, never under the water line.
+  const TOP=300, BOT=560, KEEP=16;           // KEEP: trail length in samples, a short comet, not the whole arc
+  let lowY=Infinity, held=false;
+  (function step(now){
+    // It rides the rise, then HANGS where the frog peaked while the frog drops to its own ぽちゃん.
+    if(FROG.y<lowY) lowY=FROG.y; else if(FROG.y>lowY+6) held=true;
+    if(held) return;
+    const x=FROG.x-20, y=Math.max(TOP,Math.min(BOT,FROG.y-80)); // above and just behind the frog's head
+    at(x,y);
+    if(now-t0<1150){const last=pts[pts.length-1]; const tx=x+30, ty=y-20; // the tail leaves from the glyph's right shoulder
+      if(!last||Math.hypot(tx-last[0],ty-last[1])>3){pts.push([tx,ty]); if(pts.length>KEEP) pts.shift()}
+      tail.setAttribute('d',brush(11,0)); halo.setAttribute('d',brush(11,3.5)); requestAnimationFrame(step)}
+  })(t0);
+  fade();
 }
 async function frogJump(){
   if(reduce){yaa();splash(470,622);await wait(1400);return}
@@ -2101,15 +2139,21 @@ const Snd=(()=>{
     swish(){if(!ready())return;const t=now(); noise(t,.45,'bandpass',1500,380,.09,.9)},
     crumple(){if(!ready())return;const t=now(); for(let i=0;i<7;i++) noise(t+i*.028+Math.random()*.02,.035,'highpass',2400+Math.random()*2000,0,.09)},
     paper(up){if(!ready())return;const t=now(), n=up?9:5; for(let i=0;i<n;i++) noise(t+i*.11+Math.random()*.05,.06,'highpass',3000,0,.03+Math.random()*.03)},
-    yaa(){ // a squeaky sing-song yaaaa: a small voice, rising like wheee and sliding down
-      if(!ready())return; const t=now(), D=1.55, src=ac.createOscillator(); src.type='sawtooth';
-      src.frequency.setValueAtTime(330,t); src.frequency.linearRampToValueAtTime(470,t+.14); src.frequency.linearRampToValueAtTime(720,t+.55);
-      src.frequency.linearRampToValueAtTime(650,t+1.0); src.frequency.linearRampToValueAtTime(400,t+D);
-      const vib=ac.createOscillator(); vib.frequency.value=6.5; const vg=ac.createGain(); vg.gain.value=14; vib.connect(vg).connect(src.frequency);
-      const env=ac.createGain(); env.gain.setValueAtTime(0,t); env.gain.linearRampToValueAtTime(.55,t+.05); env.gain.setValueAtTime(.55,t+D-.35); env.gain.linearRampToValueAtTime(0,t+D);
+    yaa(){ // v5.2.4 (founder 2026-09-26): "more excited than nervous." Excited voices run higher and wider and
+      // climb; nervous ones tremble fast and narrow from the first instant and sink. So: a quick "hup", a big swoop
+      // up to a bright held top, a slow vibrato that only blooms once the note is held, and a flip UP at the end.
+      if(!ready())return; const t0=now(), t=t0+.09, D=1.35, src=ac.createOscillator(); src.type='sawtooth';
+      tone(t0,'triangle',300,720,.07,.22,.004); // hup!
+      const F=src.frequency;
+      F.setValueAtTime(420,t); F.exponentialRampToValueAtTime(980,t+.22); F.linearRampToValueAtTime(900,t+.4);
+      F.linearRampToValueAtTime(940,t+.95); F.exponentialRampToValueAtTime(1180,t+1.2); F.linearRampToValueAtTime(1100,t+D);
+      const vib=ac.createOscillator(); vib.frequency.value=5; const vg=ac.createGain();
+      vg.gain.setValueAtTime(0,t); vg.gain.setValueAtTime(0,t+.35); vg.gain.linearRampToValueAtTime(22,t+.8); vg.gain.linearRampToValueAtTime(10,t+D);
+      vib.connect(vg).connect(F);
+      const env=ac.createGain(); env.gain.setValueAtTime(0,t); env.gain.linearRampToValueAtTime(.6,t+.03); env.gain.setValueAtTime(.6,t+D-.18); env.gain.exponentialRampToValueAtTime(.0001,t+D);
       env.connect(master);
-      [[350,960,7,1],[2500,1400,9,.55],[3100,3000,11,.28]].forEach(([fy,fa,q,a])=>{ // the y glides into the a
-        const f=ac.createBiquadFilter(); f.type='bandpass'; f.Q.value=q; f.frequency.setValueAtTime(fy,t); f.frequency.linearRampToValueAtTime(fa,t+.16);
+      [[420,1050,6,1],[2600,1600,8,.6],[3300,3200,10,.32]].forEach(([fy,fa,q,a])=>{ // the y glides into a bright a
+        const f=ac.createBiquadFilter(); f.type='bandpass'; f.Q.value=q; f.frequency.setValueAtTime(fy,t); f.frequency.linearRampToValueAtTime(fa,t+.14);
         const g=ac.createGain(); g.gain.value=a; src.connect(f).connect(g).connect(env)});
       src.start(t); vib.start(t); src.stop(t+D+.05); vib.stop(t+D+.05);
     },
