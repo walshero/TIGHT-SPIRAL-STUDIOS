@@ -13,6 +13,7 @@
      poem. Hedge wins. Does the poem land with you? Does this one hold?" The camera holds on the scene through the fly,
      the gulp and the leap (page scroll locked), holds one beat on the frog, then scrolls down to the player's poem.
      Win screens ask instead of declaring. The fridge no longer auto-opens over the three poems; the button stays.
+     v5.2.7 2026-09-26 (founder): every card in the opening lands at the top of its text.
      v5.2.6 2026-09-26 (founder): "Cut this line ... Don't keep clear water score just cliches kept v smashed 0/0 first digit
      is red if it's a one or above or green if zero. Also, position sun so the scroll/button doesn't hide it." The clear-water
      pads and the cloud-over reset are gone; the sun moved to the notch between the mountains.
@@ -2176,6 +2177,9 @@ function goTour(i,focus){
   const last=tIdx===panes.length-1; $('#tBack').disabled=tIdx===0; $('#tNext').hidden=last; $('#tSkip').hidden=last; $('#tArcade').hidden=!last;
   $('#tCount').textContent=`${tIdx+1} of ${panes.length}`;
   $$('.pips i').forEach((p,k)=>p.classList.toggle('on',k===tIdx));
+  // v5.2.7 (founder): "When you press to next eg 2 of 4 you should land at top of text not bottom or middle."
+  // The card is one scroller shared by all four panes, so it kept the last pane's scroll. Every turn starts at the top.
+  if(prev!==tIdx){const c=$('#tcard'); c.scrollTop=0; requestAnimationFrame(()=>{c.scrollTop=0})}
   if(focus&&prev!==tIdx) panes[tIdx].querySelector('h2').focus({preventScroll:true});
 }
 function endTour(){if(tourEl.hidden)return;tourEl.hidden=true;$('#app').classList.remove('touring')}
