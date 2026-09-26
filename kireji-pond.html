@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="spec-source" content="claude/SPEC-KIREJI-ICEBOX-v5.3-2026-09-25.md">
+<meta name="audience" content="MassBay EN195 students writing their first haiku; the founder as first player">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Kireji Pond</title>
 <!-- v5 2026-09-25 (founder): "At the end of Kireji pond show the poems like refrigerator magnets on a 1950s
@@ -13,6 +15,8 @@
      poem. Hedge wins. Does the poem land with you? Does this one hold?" The camera holds on the scene through the fly,
      the gulp and the leap (page scroll locked), holds one beat on the frog, then scrolls down to the player's poem.
      Win screens ask instead of declaring. The fridge no longer auto-opens over the three poems; the button stays.
+     v5.2.10 2026-09-26 (founder: "Yes" to a belt pass): night mode as a moon chip beside the sound chip, Next 120px wide,
+     spec and audience named, two interface dashes rewritten.
      v5.2.9 2026-09-26 (founder): "w 6 is the only of the 6 I like" - the temple bell rings when a poem is finished, and with
      drops into water after the final leap.
      v5.2.8 2026-09-26 (founder): "Use the kabuki - just make sure it sounds more like YAH then YOH. I like the painted 1 option
@@ -221,13 +225,21 @@ kbd{font:600 18px/1 "Zen Kaku Gothic New",sans-serif;border:1px solid currentCol
 @keyframes rin{from{opacity:0;transform:translateY(12px) scale(.97)}}
 #jaw{transition:opacity .08s}
 /* v2 dark path: the panel follows the device. The print itself keeps its daylight inks. */
+/* v5.2.10 night ladder: the dark palette answers to the phone's setting (unless the player chose day) and to the moon
+   chip, html[data-light="night"], so the comfort kernel's night stop is real and the choice is the player's. */
 @media (prefers-color-scheme:dark){
   :root{--paper:#1C1A16;--paper2:#27241E;--sumi:#F2EAD7;--sumi2:#CFC6B2;--paper2-t:#27241E;--sumi-t:#F2EAD7;--sumi2-t:#CFC6B2;--beniInk:#E8957F;--okInk:#8FCB7E;color-scheme:dark}
-  .tile:hover .in,.tile.held .in{background:#3A352C}
-  .count{color:#9DBFD2}
-  .primary:hover{background:var(--ai);color:#F2EAD7}
-  .slot.flash{animation:none}
+  :root:not([data-light="day"]) .tile:hover .in,:root:not([data-light="day"]) .tile.held .in{background:#3A352C}
+  :root:not([data-light="day"]) .count{color:#9DBFD2}
+  :root:not([data-light="day"]) .primary:hover{background:var(--ai);color:#F2EAD7}
+  :root:not([data-light="day"]) .slot.flash{animation:none}
 }
+:root[data-light="night"]{--paper:#1C1A16;--paper2:#27241E;--sumi:#F2EAD7;--sumi2:#CFC6B2;--paper2-t:#27241E;--sumi-t:#F2EAD7;--sumi2-t:#CFC6B2;--beniInk:#E8957F;--okInk:#8FCB7E;color-scheme:dark}
+:root[data-light="night"] .tile:hover .in,:root[data-light="night"] .tile.held .in{background:#3A352C}
+:root[data-light="night"] .count{color:#9DBFD2}
+:root[data-light="night"] .primary:hover{background:var(--ai);color:#F2EAD7}
+:root[data-light="night"] .slot.flash{animation:none}
+:root[data-light="day"]{--paper:#EAE2CD;--paper2:#F5EEDB;--sumi:#1B1A17;--sumi2:#4A463E;--paper2-t:#F5EEDB;--sumi-t:#1B1A17;--sumi2-t:#4A463E;--beniInk:#7E2419;--okInk:#2F5D2A;color-scheme:light} /* a chosen day beats the phone's dark setting */
 /* v2 Still water: the no/low motion lever. The stream stops and the phrases wait on the bank as a list. */
 .lever{display:inline-flex;align-items:center;gap:10px}
 .lever .knob{flex:none;width:44px;height:24px;border:2px solid var(--sumi);border-radius:13px;position:relative;background:var(--paper2)}
@@ -283,7 +295,7 @@ html.lockframe,html.lockframe body{overflow:hidden;overscroll-behavior:none}
 .beadrow span{display:flex;gap:6px}.beadrow i{width:9px;height:9px;border-radius:50%;background:var(--ai2)}
 .tgo{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin-top:4px}
 .tnav{display:flex;align-items:center;gap:12px;margin-top:22px}
-.tnav .primary{box-shadow:4px 4px 0 var(--beni)}
+.tnav .primary{box-shadow:4px 4px 0 var(--beni);min-width:120px} /* v5.2.10: 88px read as a side button on a laptop */
 .tnav [disabled]{visibility:hidden}
 .tcount{margin:0 auto;white-space:nowrap;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:18px;font-weight:700;letter-spacing:.1em;color:var(--sumi2-t)}
 .pips{display:flex;gap:7px}.pips i{width:10px;height:10px;border:2px solid var(--sumi2)}.pips i.on{background:var(--beni);border-color:var(--beni)}
@@ -347,6 +359,12 @@ body.still .eddy .e{animation:none}
 .sndbtn.ask{box-shadow:2px 2px 0 var(--beni)}
 .sndbtn svg{width:20px;height:20px}
 .sndbtn::after{content:"";position:absolute;inset:-7px} /* v5.2.3: measured 42px at -5px (the inset starts inside the 2px border); -7px gives 46px */
+/* v5.2.10 the moon chip: night mode as a live corner control beside the sound chip, same size and same 46px reach */
+.litebtn{position:absolute;top:12px;left:60px;z-index:9;width:36px;height:36px;padding:0;display:flex;align-items:center;justify-content:center;
+  background:var(--paper2);color:var(--sumi-t);border:2px solid var(--sumi);box-shadow:2px 2px 0 var(--sumi);cursor:pointer}
+.litebtn::after{content:"";position:absolute;inset:-7px}
+.litebtn svg{width:20px;height:20px}
+.litebtn:focus-visible,.sndbtn:focus-visible{outline:3px solid var(--sumi);outline-offset:3px}
 .sndbtn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 @media (max-width:780px){.tour{top:56px}}
 /* v5 the icebox: after the third poem, the poems go up on a 1950s refrigerator, cut as a woodblock print.
@@ -688,6 +706,7 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
     </svg>
     <div class="stream" id="stream" inert></div>
     <div class="reveal" id="reveal" hidden><div class="rcard" id="rcard"><p class="eyebrow" id="revLbl"></p><p class="rpoem" id="revPoem"></p></div></div>
+    <button class="litebtn" id="lite" type="button" aria-pressed="false" aria-label="Night mode"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="currentColor"/></svg></button>
     <button class="sndbtn" id="snd" type="button" aria-pressed="true"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 9h4l5-4v14l-5-4H3z" fill="currentColor"/><path class="w" d="M15.5 8.5c1.6 1.9 1.6 5.1 0 7M18.5 6c3 3.3 3 8.7 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="x" d="M16 9l6 6M22 9l-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span id="sndTxt">Sound on</span></button>
     <div class="cartouche" aria-hidden="true">
       <div class="kmark" id="kmark" lang="ja"><span>切</span><span>池</span></div>
@@ -1061,7 +1080,7 @@ const SEASONS=[
    P("painted by nature’s own brush",7,'c')]}
 ];
 const CLICHE=[
- p=>`“${p}” — heard that one before. Let it drift.`,
+ p=>`“${p}”: heard that one before. Let it drift.`,
  p=>`“${p}” came pre-packaged.`,
  p=>`“${p}” names a feeling instead of showing a thing. Let it pass.`
 ];
@@ -1471,7 +1490,7 @@ async function win(){
   S.busy=true; frameScene(); $('#slots').classList.add('busy'); layer.inert=true; layer.classList.add('hush');
   const lines=[...S.slots];
   const se0=SEASONS[S.round];
-  $('#revLbl').textContent=`${se0.name} · ${se0.jp} — your poem`;
+  $('#revLbl').textContent=`${se0.name} · ${se0.jp} · your poem`;
   const rp=$('#revPoem'); rp.innerHTML=lines.map(p=>`<span class="${p.k==='t'?'t':''}"></span>`).join('');
   rp.querySelectorAll('span').forEach((x,i)=>x.textContent=lines[i].t);
   $('#rcard').classList.remove('fade'); $('#reveal').hidden=false;
@@ -2188,6 +2207,13 @@ const Snd=(()=>{
   try{Snd.wake()}catch(e){} // and where the browser allows it, sound starts before any touch at all
   document.addEventListener('visibilitychange',()=>Snd.hide(document.hidden));}
 
+/* ---------- v5.2.10 night mode: opens on the phone's own setting, remembers the player's choice ---------- */
+{const root=document.documentElement, b=$('#lite'), KEY='kirejiLight'; let saved=null;
+  const set=(night,save)=>{root.setAttribute('data-light',night?'night':'day'); b.setAttribute('aria-pressed',night?'true':'false');
+    b.setAttribute('aria-label',night?'Night mode on':'Night mode'); if(save){try{localStorage.setItem(KEY,night?'night':'day')}catch(e){}}};
+  try{saved=localStorage.getItem(KEY)}catch(e){}
+  set(saved?saved==='night':matchMedia('(prefers-color-scheme: dark)').matches,false);
+  b.addEventListener('click',()=>set(root.getAttribute('data-light')!=='night',true));}
 /* ---------- v4 opening panels ---------- */
 const tourEl=$('#tour'), panes=$$('.tpane'); let tIdx=0;
 function goTour(i,focus){

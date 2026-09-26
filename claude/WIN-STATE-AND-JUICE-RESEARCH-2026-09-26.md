@@ -1,5 +1,5 @@
 # WIN STATES, JUICE AND THE LEAP VOICE — studio research, 2026-09-26
-<!-- source: founder, 2026-09-26: "Do some research on pleasing win states in games, like throwing in casino slot sounds etc give me options" then "Make this research persist in studio memory" | owner: mwalsh | status: RESEARCH (canon for design calls; the founder picks per build) | audition: kireji-audition.html -->
+<!-- source: founder, 2026-09-26: "Do some research on pleasing win states in games, like throwing in casino slot sounds etc give me options" then "Make this research persist in studio memory" | owner: mwalsh | status: RESEARCH (canon for design calls; the founder picks per build) | audition: archive/kireji-audition.html (retired after the founder's picks) -->
 
 **One sentence:** celebrate in proportion to the win, only on real success, and never so loudly that the player loses sight of what they did.
 
@@ -44,4 +44,4 @@ None of these is built yet. They are recorded here so the next Senses pass can m
 
 ## Audition page
 
-`kireji-audition.html` (repo root): five synthesized leap voices (A–E), record-your-own (F), five や effects, six win moments (W1–W6), all offline, levels balanced to within about 8 dB, contrast SHIP, Eyes PASS, Fingers 0 HALT.
+`archive/kireji-audition.html` (retired 2026-09-26 after the founder picked voice C as YAH, や option 1 filled and following the frog with echoes, and W6; the page failed the belt's night-mode, image and entry checks and was never meant to last): five synthesized leap voices (A–E), record-your-own (F), five や effects, six win moments (W1–W6), all offline, levels balanced to within about 8 dB, contrast SHIP, Eyes PASS, Fingers 0 HALT.

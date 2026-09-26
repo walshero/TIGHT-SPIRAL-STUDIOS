@@ -17,7 +17,7 @@ personas.py       splits the bundle: sighted.md | ear.md | fingers-states.json
       |
 SEATS (agents)    each reads ONLY its channel, files predictions.json entries
       |
-playtest-room.html   first human playtesters; records taps, text seen, sound, 3 questions
+archive/playtest-room.html   SHELVED 2026-09-26 (founder: one main link for playtesting); records taps, text seen, sound, questions
       |
 grade.py          outcome per prediction per session; Brier score per seat
 ```
@@ -39,7 +39,7 @@ The seats never veto a ship. Their HALTs are blocking checks filed for the found
 
 Every entry names one observable the human instrument records. Opinions without an observable go in `notes`, which are read by the founder and never scored.
 
-**Observables** (per human session, recorded by `playtest-room.html`):
+**Observables** (per human session, recorded by `archive/playtest-room.html`, shelved 2026-09-26; it fails the belt's night-mode, image and intent checks and needs that pass before any return):
 
 | measure | meaning | fields |
 |---|---|---|
@@ -82,7 +82,7 @@ python3 studio-senses/senses-crawl.py kireji-pond.html --out reports/senses/kire
 python3 studio-senses/ears.py reports/senses/kireji-pond        # exit 1 on HALT
 python3 studio-senses/personas.py reports/senses/kireji-pond
 # seats: one agent per seat, each reading only its channel, writes pred-<seat>.json; merge into predictions.json
-# humans: https://walshero.github.io/TIGHT-SPIRAL-STUDIOS/playtest-room.html?build=kireji-pond.html
+# humans: play the game directly (founder, 2026-09-26); the recorded room is shelved in archive/
 python3 studio-senses/grade.py reports/senses/kireji-pond/predictions.json playtest-*.json
 python3 studio-senses/ears.py --self-test && python3 studio-senses/grade.py --self-test
 ```

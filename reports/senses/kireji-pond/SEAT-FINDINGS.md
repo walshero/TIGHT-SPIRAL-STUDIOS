@@ -44,4 +44,4 @@ The first way off card 1 (Next, Skip, swipe, arrow key) wakes the pond on card 1
 - Murch: 6
 - Sighted persona: 7
 
-Graded by `studio-senses/grade.py` against sessions from `playtest-room.html?build=kireji-pond.html`. None yet: no human has played.
+Graded by `studio-senses/grade.py` against sessions from the playtest room, now shelved in `archive/`. None yet: no human has played.

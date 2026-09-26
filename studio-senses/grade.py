@@ -3,7 +3,7 @@
 STUDIO SENSES · THE GRADER                                Tight Spiral Productions
 -----------------------------------------------------------------------------
 Scores every seat's predictions against what first human players actually did in
-playtest-room.html. This is what makes a seat accountable instead of plausible.
+archive/playtest-room.html (shelved 2026-09-26). This is what makes a seat accountable instead of plausible.
 
   outcome     each prediction x each session: TRUE / FALSE / N/A
               N/A when the session is the wrong cohort (a screen_reader prediction

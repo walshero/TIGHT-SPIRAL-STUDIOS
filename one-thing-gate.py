@@ -62,7 +62,9 @@ MEASURE_JS = r"""
   const visualRatio = maxA/VA;
 
   // interactive controls painted in the entry viewport (dedupe nested)
-  let ctrls=[...document.querySelectorAll('button,a[href],[role=button],[onclick],input,select,summary,[tabindex]')]
+  // tabindex="-1" is focus for scripts (a heading a screen reader is moved to), never a control a player can reach by
+  // tab or tap. Counting it made Kireji's card heading "Before the leap, stillness." a second co-equal invitation (2026-09-26).
+  let ctrls=[...document.querySelectorAll('button,a[href],[role=button],[onclick],input,select,summary,[tabindex]:not([tabindex="-1"])')]
               .filter(e=>vis(e)&&inVp(e));
   ctrls = ctrls.filter(e=>!ctrls.some(o=>o!==e && o.contains(e)));
 
