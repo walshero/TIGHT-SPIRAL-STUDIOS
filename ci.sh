@@ -67,6 +67,10 @@ fi
 echo clean
 
 echo
+echo "=== no new faculty emails in a public repo ==="
+python3 pii-gate.py || fail=1
+
+echo
 echo "=== recompute STUDIO-STATE.md from the tree ==="
 python3 emit-state.py
 
