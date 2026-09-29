@@ -15,6 +15,9 @@
      poem. Hedge wins. Does the poem land with you? Does this one hold?" The camera holds on the scene through the fly,
      the gulp and the leap (page scroll locked), holds one beat on the frog, then scrolls down to the player's poem.
      Win screens ask instead of declaring. The fridge no longer auto-opens over the three poems; the button stays.
+     v5.2.11 2026-09-29 (founder): "remove extra spaces in boxes that needlessly take up space. Pay attention to messaging,
+     show the message about letting cliche go or players miss it." Caught lines and their controls share one row (icon
+     buttons, words kept for screen readers); a kept cliche shows a bottom-of-screen note that says Smash it or Let it go.
      v5.2.10 2026-09-26 (founder: "Yes" to a belt pass): night mode as a moon chip beside the sound chip, Next 120px wide,
      spec and audience named, two interface dashes rewritten.
      v5.2.9 2026-09-26 (founder): "w 6 is the only of the 6 I like" - the temple bell rings when a poem is finished, and with
@@ -197,15 +200,38 @@ kbd{font:600 18px/1 "Zen Kaku Gothic New",sans-serif;border:1px solid currentCol
 .slot.full .hint{display:none}
 .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
 .acts button{background:transparent;border:1.5px solid var(--sumi);padding:5px 10px;font-size:18px;font-weight:600;cursor:pointer}
+/* v5.2.11 (founder 2026-09-29): "remove extra spaces in boxes that needlessly take up space." A caught line and its
+   controls share ONE row: the words take the room, two 40px icon buttons sit at the right edge. The old labelled
+   buttons wrapped to two more rows under every caught line (137px for a five-syllable line on an iPhone 13).
+   Buttons keep their words as aria-label and title; the tap area is 46px (absolute pseudo, padding-box formula). */
+.slot{flex-direction:row;flex-wrap:nowrap;align-items:center;justify-content:space-between;gap:10px}
+.slot .txt{flex:1 1 auto;min-width:0}
+.slot:not(.full) .txt{display:none}
+.slot .hint{flex:1 1 auto}
+.acts{flex:none;flex-wrap:nowrap;gap:6px;margin-top:0}
+.acts button{position:relative;width:40px;height:40px;padding:0;display:grid;place-items:center;color:var(--sumi-t);border-width:2px}
+.acts button::after{content:"";position:absolute;inset:-5px}
+.acts button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 .acts button:hover{background:var(--paper)}
 .acts .rm{border-color:var(--beni);color:var(--beniInk)}
 .acts button.call{background:var(--beni);color:#fff;border-color:var(--beni)}
 .slots.busy .acts{visibility:hidden}
+.slots.busy .slot.full .acts{display:none}
 .slot.warn{border-color:var(--beni);box-shadow:3px 3px 0 var(--beni)}
 .slot.flash{animation:flash .6s}
 @keyframes flash{0%{background:#fff}100%{background:var(--paper2)}}
 .msg{min-height:3.2em;font-size:18px;border-left:4px solid var(--ai);padding:6px 0 6px 12px;max-width:60ch}
 .msg.warn{border-color:var(--beni)}
+/* v5.2.11 (founder 2026-09-29): "show the message about letting cliché go or players miss it." On a phone the status
+   line sits under the poem, off screen while the player watches the stream (y 653 on a 664px iPhone 13). A kept
+   cliché now also shows as a note pinned to the bottom of the screen, wherever the player is scrolled, for 6 s or
+   until the next message. The live status line still speaks it once; the note is aria-hidden so nothing doubles. */
+.cnote{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:55;margin:0 auto;max-width:520px;
+  background:var(--paper2);color:var(--sumi-t);border:2px solid var(--sumi);border-left:8px solid var(--beni);box-shadow:4px 4px 0 var(--beni);
+  padding:10px 14px;font-size:18px;line-height:1.4;pointer-events:none;animation:cnoteIn .28s ease-out}
+.cnote b{display:block;color:var(--beniInk);font-weight:800;letter-spacing:.04em}
+@keyframes cnoteIn{from{transform:translateY(18px);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.cnote{animation:none}}
 .controls{display:flex;flex-wrap:wrap;gap:10px}
 
 /* Done + final */
@@ -788,10 +814,11 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
       </div>
       <div class="padrow" id="score"><span class="sclbl">Clichés kept / smashed</span><span class="scnum" aria-hidden="true"><b id="keptN" class="kept0">0</b>/<b id="smashN">0</b></span><span class="sr" id="scoreSr">0 clichés kept, 0 smashed</span></div>
       <ol class="slots" id="slots">
-        <li><span class="count" aria-hidden="true">5</span><div class="slot" data-i="0"><span class="txt"></span><span class="hint">Line 1 · five syllables</span><div class="acts" hidden><button type="button" class="mv" data-i="0">Move to bottom</button><button type="button" class="rm" data-i="0">Remove</button></div></div></li>
-        <li><span class="count" aria-hidden="true">7</span><div class="slot" data-i="1"><span class="txt"></span><span class="hint">Line 2 · seven syllables</span><div class="acts" hidden><button type="button" class="rm" data-i="1">Remove</button></div></div></li>
-        <li><span class="count" aria-hidden="true">5</span><div class="slot" data-i="2"><span class="txt"></span><span class="hint">Line 3 · five syllables</span><div class="acts" hidden><button type="button" class="mv" data-i="2">Move to top</button><button type="button" class="rm" data-i="2">Remove</button></div></div></li>
+        <li><span class="count" aria-hidden="true">5</span><div class="slot" data-i="0"><span class="txt"></span><span class="hint">Line 1 · five syllables</span><div class="acts" hidden><button type="button" class="mv" data-i="0" aria-label="Move line 1 to the bottom" title="Move to bottom"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v13M6.5 10.5 12 16l5.5-5.5M5 20.5h14"/></svg></button><button type="button" class="rm" data-i="0" aria-label="Remove line 1" title="Remove"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></div></li>
+        <li><span class="count" aria-hidden="true">7</span><div class="slot" data-i="1"><span class="txt"></span><span class="hint">Line 2 · seven syllables</span><div class="acts" hidden><button type="button" class="rm" data-i="1" aria-label="Remove line 2" title="Remove"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></div></li>
+        <li><span class="count" aria-hidden="true">5</span><div class="slot" data-i="2"><span class="txt"></span><span class="hint">Line 3 · five syllables</span><div class="acts" hidden><button type="button" class="mv" data-i="2" aria-label="Move line 3 to the top" title="Move to top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V8M6.5 13.5 12 8l5.5 5.5M5 3.5h14"/></svg></button><button type="button" class="rm" data-i="2" aria-label="Remove line 3" title="Remove"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></div></li>
       </ol>
+      <p class="cnote" id="cnote" aria-hidden="true" hidden></p>
       <p class="msg" id="msg" role="status" aria-live="polite">Tap a phrase to stop it: Catch it, Smash it as a cliché, or Let it go.</p>
       <div class="stillbox" id="stillBox" hidden>
         <h3 id="stillHead">Still water: phrases on the bank</h3>
@@ -1080,9 +1107,9 @@ const SEASONS=[
    P("painted by nature’s own brush",7,'c')]}
 ];
 const CLICHE=[
- p=>`“${p}”: heard that one before. Let it drift.`,
+ p=>`“${p}”: heard that one before.`,
  p=>`“${p}” came pre-packaged.`,
- p=>`“${p}” names a feeling instead of showing a thing. Let it pass.`
+ p=>`“${p}” names a feeling instead of showing a thing.`
 ];
 
 const svg=$('#sceneSvg'), path=$('#streamPath'), layer=$('#stream'), scene=$('#scene');
@@ -1300,7 +1327,15 @@ function shatter(t){
     })(lt);
   }
 }
-function say(txt,warn){const m=$('#msg');m.textContent=txt;m.classList.toggle('warn',!!warn)}
+function say(txt,warn){const m=$('#msg');m.textContent=txt;m.classList.toggle('warn',!!warn);cnote()}
+let cnoteT=0;
+function cnote(head,body){ // no args: clear. The note is a sighted echo of #msg, never the only copy.
+  const n=$('#cnote'); clearTimeout(cnoteT);
+  if(!head){n.hidden=true;return}
+  n.innerHTML=''; const b=document.createElement('b'); b.textContent=head; n.append(b,document.createTextNode(body));
+  n.hidden=false; n.style.animation='none'; void n.offsetWidth; n.style.animation='';
+  cnoteT=setTimeout(()=>{n.hidden=true},6000);
+}
 function onTile(t){
   if(S.phase!=='play'||S.busy||t.gone) return;
   const p=t.p;
@@ -1315,7 +1350,8 @@ function onTile(t){
 }
 function clicheHit(t){
   Snd.sink(); retire(t,'sink'); S.kept++;
-  say(CLICHE[clicheI++%CLICHE.length](t.p.t),true);
+  const why=CLICHE[clicheI++%CLICHE.length](t.p.t), tip='Next time, Smash it or Let it go.';
+  say(`Cliché kept. ${why} ${tip}`,true); cnote('Cliché kept',`${why} ${tip}`);
   renderPads();
 }
 function renderPads(){ // v5.2.6 (founder): no clear-water score; clichés kept / smashed, kept red at 1+, green at 0
@@ -1344,7 +1380,7 @@ function evaluate(){
   const mark=()=>$$('.slot').forEach(b=>b.classList.add('warn'));
   if(turns.length===0){mark();say('Three still pictures, and nothing moves. Send a line back and catch one that turns: a leap, a splash, a sudden shift.',true);return}
   if(turns.length>1){turns.forEach(i=>$$('.slot')[i].classList.add('warn'));say('Two turns pull against each other. Keep one leap and send the other back.',true);return}
-  if(turns[0]===0){$$('.slot')[0].classList.add('warn');$('.mv[data-i="0"]').classList.add('call');say('The turn comes before there is anything to turn from. Move line 1 to the bottom so the stillness comes first.',true);return}
+  if(turns[0]===0){$$('.slot')[0].classList.add('warn');$('.mv[data-i="0"]').classList.add('call');say('The turn comes before there is anything to turn from. Tap the red arrow on line 1 to move it to the bottom, so the stillness comes first.',true);return}
   win();
 }
 $('#slots').addEventListener('click',e=>{
