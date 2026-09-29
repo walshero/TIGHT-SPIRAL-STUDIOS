@@ -197,3 +197,31 @@ SIGNED Conductor, 2026-09-29
   this café art is built so Table Four can mount it.
 
 PENDING: founder rulings D1 to D6. No authoring before "go" or rulings.
+
+## RULINGS (founder, 2026-09-29 16:15 ET)
+
+Founder's words: "Go. Build with this council. Also consult art spec on drive Google
+Drive, Claude_files: CHOREOGRAPHED-CHAOS-ART-SPEC-2026-09-29.md."
+
+- D1 to D6 ruled at their defaults by "Go."
+- D1 note: the art spec records "Wallers approved 2026-09-29 (founder report, in chat)."
+  The written reply is still owed next to the spec. Build ships as LAB.
+- ART DIRECTION SUPERSEDED. The Conductor's cut-paper diorama is replaced by the art spec
+  ("The Spilled Shaker"): the cover's red, overhead tabletop objects, every readable word
+  on a kitchen ticket, no text on red. The spec says the paper-house look does NOT apply to
+  this business lane. Hitchcock's window dissolve becomes a vase on the bar whose flower
+  changes with the season, because an overhead shot has no window.
+- Studio copy of the spec: claude/CHOREOGRAPHED-CHAOS-ART-SPEC-2026-09-29.md (9,145 B,
+  from Drive 18cBi1XQWjg9OPuXumcAM87NgcyNii8jk).
+
+## BUILD NOTE, v0.1 (2026-09-29)
+
+lab/edgars-spot.html. The objects are studio-drawn stand-ins sized for the photo shoot in
+spec section 7; each carries a data-cc slot name for its photo. The corner light control
+follows the spec's section 4 and the project instructions ("comfort is a live corner
+control"). CLAUDE.md still carries the 2026-08-29 comfort pause. The two conflict, and
+the founder rules which one stands.
+
+Open for the founder: the Wallers' written approval, the photo shoot, a voice pass on all
+guest lines (studio prose), and a check of the two closing quotes against the printed
+book (the source here is the 2026-03-23 manuscript).
