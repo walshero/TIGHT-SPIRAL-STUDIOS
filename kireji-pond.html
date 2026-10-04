@@ -6,6 +6,22 @@
 <meta name="audience" content="MassBay EN195 students writing their first haiku; the founder as first player">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Kireji Pond</title>
+<!-- v5.4 2026-10-02 (founder): "when we present Does this poem land with you? Add a pencil that allows the user to edit
+     the haiku and the new text shows on fridge." A pencil sits under the poem on the season screen and under each poem on
+     the last screen. It opens the three lines for editing; an emptied line keeps its old words. Edited lines replace the
+     caught ones in the game's record of that poem (the season's phrase deck is never touched), and go up on the fridge
+     as the player's own magnets, the turn line still underlined. -->
+<!-- v5.5 2026-10-02 (founder): "add a new mode called cliche creek where you have to rescue actual classic haiku from a
+     stream of cliches. Since only three of thirty or so will be real, it can't be a waiting game. Catch the haiku with
+     frog." Cliché Creek: thirty poems, three real, the rest clichés, near misses included. Clichés that float past count
+     against you, so the player smashes all the way down; the frog's tongue brings the real ones home. Studio translations
+     from public-domain Japanese originals; the results screen shows each original and its cliché twin. -->
+<!-- v5.7 2026-10-02 (founder): "Audio go w G." The summer cicada is now G, Across the Pond, from the round 2 audition. -->
+<!-- v5.6 2026-10-02 (founder): "Misunderstood haiku finder mode. This is one line at a time, pulling them out of the
+     river. Let's try this: three real haiku mixed in with cliche and you try to sort them out after you get the 9."
+     Cliché Creek now runs on the pond's own stream: single lines, nine of them from three real haiku, the rest cliché
+     lines. Catch nine (no verdict at the catch); then the sort: three poems of three lines, and a bin for clichés.
+     Line-end punctuation is held back in the river so the dash can't give a real line away; it returns on the results. -->
 <!-- v5 2026-09-25 (founder): "At the end of Kireji pond show the poems like refrigerator magnets on a 1950s
      refrigerator made in ukiyo-e style." The Icebox: the three poems go up as magnets; drag or arrow-key them around;
      the pencil writes new magnets; the door scrolls on forever with more phrase magnets; Move to top keeps a magnet in the
@@ -486,6 +502,48 @@ body.fzopen{overflow:hidden}
 a.fzb{display:inline-flex;align-items:center;text-decoration:none}
 @media (max-width:480px){.fzb{padding:6px 10px}.fzbox{width:calc(100% - 20px);margin-top:28px}.freezer{padding:22px 54px 20px 14px}.mag{font-size:18px;padding:5px 9px 6px}}
 @media (prefers-reduced-motion:reduce){.mag,.mag.snap,.fzhop.go,.fzhop.go b{animation:none;transition:none}}
+/* v5.4 the pencil under a finished poem: a live control, 44px floor, same ink as the panel */
+.penbtn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;min-height:48px;padding:4px 16px 4px 8px;
+  background:var(--paper2);color:var(--sumi-t);border:2px solid var(--sumi);border-radius:26px;box-shadow:3px 3px 0 var(--ai);
+  font-weight:700;font-size:18px;cursor:pointer}
+.penbtn svg{width:36px;height:36px;flex:none}
+.penbtn:hover{background:var(--paper)}
+.fpoem{display:flex;flex-direction:column;gap:8px}
+.pmline{display:flex;flex-direction:column;gap:4px}
+/* v5.6 Cliché Creek: the basket, the sort, the marks */
+#creek0,#creekF{align-self:flex-start}
+.ccount{margin:0;font-size:24px;font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums}
+.basket{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.basket li{display:flex;align-items:center;gap:8px;min-height:46px;padding:3px 4px 3px 10px;border:2px dashed var(--sumi2)}
+.basket li.empty{color:var(--sumi2-t);font-size:18px}
+.basket li.full{border-style:solid;border-color:var(--sumi);background:var(--paper2)}
+.basket .txt{flex:1 1 auto;min-width:0;font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;font-weight:600;font-size:19px;line-height:1.25}
+.basket .rm{position:relative;flex:none;width:40px;height:40px;padding:0;display:grid;place-items:center;background:transparent;border:2px solid var(--beni);color:var(--beniInk);cursor:pointer}
+.basket .rm::after{content:"";position:absolute;inset:-5px}
+.basket .rm svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round}
+.stray{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.stray li.done{color:var(--sumi2-t)}
+.sline,.sslot{min-height:48px;padding:8px 12px;text-align:left;border:2px solid var(--sumi);background:var(--paper2);color:var(--sumi-t);cursor:pointer;
+  font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;font-weight:600;font-size:19px;line-height:1.25;box-shadow:3px 3px 0 var(--ai)}
+.sslot{width:100%;border-style:dashed;border-color:var(--sumi2);box-shadow:none;color:var(--sumi2-t);font-family:inherit;font-weight:400;font-size:18px}
+.sslot.full{border-style:solid;border-color:var(--sumi);box-shadow:3px 3px 0 var(--ai);color:var(--sumi-t);font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;font-weight:600;font-size:19px}
+.sline.sel,.sslot.sel{background:var(--sumi);color:var(--paper2-t);border-color:var(--sumi);box-shadow:3px 3px 0 var(--beni)}
+.sframes{display:flex;flex-direction:column;gap:14px}
+.sframe h3{margin:0 0 6px}
+.sframe ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.sbinbox{border:2px dashed var(--beni);padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.sbinbox h3{color:var(--beniInk)}
+.sbinbox .row{display:flex;flex-wrap:wrap;gap:8px}
+.ghost:disabled{border-style:dashed;cursor:not-allowed}
+.primary:disabled{background:transparent;color:var(--sumi2-t);border:2px dashed var(--sumi2);box-shadow:none;cursor:not-allowed}
+.marks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.marks li{display:flex;flex-direction:column;gap:2px;border-left:4px solid var(--sumi2);padding-left:10px}
+.marks .ml{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;font-weight:600;font-size:19px}
+.marks .mk{font-size:18px;font-weight:700}
+.mk.ok{color:var(--okInk)}.mk.near{color:var(--sumi2-t)}.mk.bad{color:var(--beniInk)}
+.cjp{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;font-size:20px;font-weight:700}
+.cro{font-style:italic;color:var(--sumi2-t)}
+.cpair b{color:var(--beniInk)}
 /* v5.2.3: Skip to the stream was 39px tall, a real floor miss (44px founder floor) */
 .tskip{min-height:44px}
 /* v5.2.3: the card heading takes focus on every turn; a keyboard player now sees where it landed */
@@ -784,6 +842,7 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
               <div class="tgo">
                 <button class="primary" id="start" type="button">Enter the stream</button>
                 <button class="ghost lever" id="still0" type="button" aria-pressed="false"><span class="knob" aria-hidden="true"></span>Still water: no moving phrases</button>
+                <button class="ghost" id="creek0" type="button">Cliché Creek: find the real haiku</button>
               </div>
             </section>
           </div>
@@ -837,6 +896,7 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
       <p class="eyebrow" id="doneLbl">Spring poem · the frog is fed</p>
       <h2 id="doneQ" tabindex="-1">Does this poem land with you?</h2>
       <blockquote class="poem" id="donePoem"></blockquote>
+      <button type="button" class="penbtn" id="doneEdit"><svg viewBox="0 0 44 44" aria-hidden="true"><g transform="rotate(-40 22 22)" stroke="#1B1A17" stroke-width="1.8" stroke-linejoin="round"><rect x="15.5" y="3" width="13" height="8" rx="2" fill="#B23A2A"/><rect x="15.5" y="10" width="13" height="4" fill="#C9D2D6"/><path d="M15.5 14h13v17h-13z" fill="#E7B23A"/><path d="M15.5 31h13L22 41z" fill="#F0D9A8"/><path d="M20 37.6L22 41l2-3.4z" fill="#1B1A17"/></g></svg>Edit this poem</button>
       <p class="note" id="doneNote"></p>
       <button class="primary" id="next">Next season</button>
     </section>
@@ -849,7 +909,56 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
       <div class="finals" id="finals"></div>
       <button class="primary" id="fzOpen" type="button">Open the fridge</button>
       <button class="ghost" id="again">Play again</button>
+      <button class="ghost" id="creekF" type="button">Try Cliché Creek</button>
       <a class="ghost" href="arcade.html" style="text-decoration:none;color:inherit;align-self:flex-start">Back to the EN195 Arcade</a>
+    </section>
+
+
+    <!-- v5.6 Cliché Creek: catch nine lines, then sort -->
+    <section id="pCreek" hidden>
+      <div class="ph">
+        <div><p class="eyebrow">Cliché Creek</p><h2>Catch nine lines</h2></div>
+        <p class="ccount"><b id="cCount">0</b> of 9</p>
+      </div>
+      <p class="note">Three real haiku are in the river, broken into lines and mixed with clichés. Catch nine lines. Then sort them back into three poems.</p>
+      <ol class="basket" id="cBasket" aria-label="Your catch: nine lines"></ol>
+      <div class="padrow"><span class="sclbl">Clichés smashed</span><span class="scnum"><b id="cSm">0</b></span></div>
+      <p class="msg" id="cmsg" role="status" aria-live="polite"></p>
+      <div class="stillbox" id="cStillBox" hidden>
+        <h3>Still water: lines on the bank</h3>
+        <button class="primary" id="cPull" type="button">Pull the lever: new lines</button>
+      </div>
+      <div class="controls">
+        <button class="ghost" id="cPause" type="button" aria-pressed="false">Pause river</button>
+        <button class="ghost lever" id="cStill" type="button" aria-pressed="false"><span class="knob" aria-hidden="true"></span>Still water</button>
+        <button class="ghost" id="cBack" type="button">Back to the pond</button>
+      </div>
+    </section>
+    <section id="pSort" hidden>
+      <p class="eyebrow">Cliché Creek · the sort</p>
+      <h2 id="sortQ" tabindex="-1">Sort your nine lines</h2>
+      <p class="note">Rebuild the three haiku: three poems, three lines each. Tap a line to pick it up, then tap where it goes. A cliché goes in the bin.</p>
+      <h3 id="sTrayH">Your catch</h3>
+      <ul class="stray" id="sTray" aria-labelledby="sTrayH"></ul>
+      <div class="sframes" id="sFrames"></div>
+      <div class="sbinbox">
+        <h3 id="sBinH">Cliché bin</h3>
+        <ul class="stray" id="sBin" aria-labelledby="sBinH"></ul>
+        <div class="row"><button class="ghost" id="sBinBtn" type="button" disabled>Put it in the bin</button><button class="ghost" id="sTrayBtn" type="button" disabled>Back to my catch</button></div>
+      </div>
+      <p class="msg" id="smsg" role="status" aria-live="polite">Tap a line to pick it up.</p>
+      <button class="primary" id="sCheck" type="button" disabled>Check my sort</button>
+    </section>
+    <section id="pSortDone" hidden>
+      <p class="eyebrow">Cliché Creek · how it sorted</p>
+      <h2 id="sDoneQ" tabindex="-1">How it sorted</h2>
+      <p class="note" id="sDoneNote"></p>
+      <div class="finals" id="sResult"></div>
+      <h3>The three haiku</h3>
+      <div class="finals" id="sReal"></div>
+      <button class="primary" id="sAgain" type="button">Run the creek again</button>
+      <button class="ghost" id="sRetry" type="button">Sort the same nine again</button>
+      <button class="ghost" id="sBack" type="button">Back to the pond</button>
     </section>
   </aside>
 </div>
@@ -893,6 +1002,17 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
     <input type="text" id="fzLine" maxlength="48" autocomplete="off" spellcheck="true">
     <p class="hintline" id="fzSyl" aria-live="polite">Five or seven syllables fit a haiku.</p>
     <div class="row"><button type="submit" class="fzb go" value="stick">Stick it on the fridge</button><button type="button" class="fzb" id="fzWriteX">Cancel</button></div>
+  </form>
+</dialog>
+<p class="sr" id="pmLive" aria-live="polite"></p>
+<dialog class="fzdlg" id="pmEdit" aria-labelledby="pmEditH">
+  <form method="dialog" id="pmEditF">
+    <h2 id="pmEditH">Edit your poem</h2>
+    <p class="hintline">Change any word. A line you empty keeps its old words. The fridge shows what you write here.</p>
+    <div class="pmline"><label for="pm0">Line 1 · five syllables</label><input type="text" id="pm0" maxlength="48" autocomplete="off" spellcheck="true"><p class="hintline" id="pm0s" aria-live="polite"></p></div>
+    <div class="pmline"><label for="pm1">Line 2 · seven syllables</label><input type="text" id="pm1" maxlength="48" autocomplete="off" spellcheck="true"><p class="hintline" id="pm1s" aria-live="polite"></p></div>
+    <div class="pmline"><label for="pm2">Line 3 · five syllables</label><input type="text" id="pm2" maxlength="48" autocomplete="off" spellcheck="true"><p class="hintline" id="pm2s" aria-live="polite"></p></div>
+    <div class="row"><button type="submit" class="fzb go" value="save">Save the poem</button><button type="button" class="fzb" id="pmEditX">Cancel</button></div>
   </form>
 </dialog>
 <dialog class="fzdlg" id="fzMail" aria-labelledby="fzMailH">
@@ -1141,18 +1261,19 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
 function dealSeason(){deck=shuffle(SEASONS[S.round].phrases.slice());deckRound=S.round;returned=[];sinceTurn=0}
 function pick(){
   if(deckRound!==S.round) dealSeason();
-  const used=new Set([...tiles.filter(t=>!t.gone).map(t=>t.p),...plist.filter(t=>!t.gone).map(t=>t.p),...S.slots.filter(Boolean)]);
+  const used=new Set([...tiles.filter(t=>!t.gone).map(t=>t.p),...plist.filter(t=>!t.gone).map(t=>t.p),...S.slots.filter(Boolean),...(S.mode==='creek'?CK.basket:[])]);
   let p=null;
   while(returned.length&&!p){const r=returned.shift();if(!used.has(r))p=r}
   if(!p){
-    if(!deck.length){deck=shuffle(SEASONS[S.round].phrases.filter(x=>!used.has(x))); if(S.phase==='play') say('Every phrase this season has floated past once. The stream starts its second pass.')}
+    if(!deck.length){deck=shuffle((S.mode==='creek'?CK.pool:SEASONS[S.round].phrases).filter(x=>!used.has(x))); if(S.phase==='play') say(S.mode==='creek'?'Every line has floated past once. The river comes round again, and the real lines with it.':'Every phrase this season has floated past once. The stream starts its second pass.')}
     let i=0;
-    if(sinceTurn>=3){const j=deck.findIndex(x=>x.k==='t'&&!used.has(x));if(j>=0)i=j}
+    const hot=S.mode==='creek'?'r':'t'; // v5.6: in the creek, a real line comes at least every fourth line
+    if(sinceTurn>=3){const j=deck.findIndex(x=>x.k===hot&&!used.has(x));if(j>=0)i=j}
     while(i<deck.length&&used.has(deck[i]))i++;
     if(i>=deck.length) return null;
     p=deck.splice(i,1)[0];
   }
-  sinceTurn=p.k==='t'?0:sinceTurn+1;
+  sinceTurn=p.k===(S.mode==='creek'?'r':'t')?0:sinceTurn+1;
   return p;
 }
 function spawn(s){
@@ -1163,7 +1284,7 @@ function spawn(s){
   el.style.setProperty('--r',(Math.random()*4-2).toFixed(1)+'deg');
   el.innerHTML=`<button type="button" class="in" aria-expanded="false"><span class="tx"></span><span class="beads" aria-hidden="true">${'<i></i>'.repeat(p.s)}</span></button><div class="choice" hidden><button type="button" class="c-catch">Catch line</button><button type="button" class="c-smash">Smash cliché</button><button type="button" class="c-go">Let it go</button></div>`;
   el.querySelector('.tx').textContent=p.t;
-  el.querySelector('.in').setAttribute('aria-label',`${p.t}, ${p.s} syllables. Tap to catch or smash.`);
+  el.querySelector('.in').setAttribute('aria-label',`${p.t}${p.s?`, ${p.s} syllables`:''}. Tap to catch or smash.`);
   const t={p,el,s,lane:[0,1,-1][laneI++%3],w:0,h:0,gone:false,held:false};
   el.querySelector('.in').addEventListener('click',()=>toggleHold(t));
   el.querySelector('.c-catch').addEventListener('click',()=>{release(t);onTile(t)});
@@ -1259,7 +1380,7 @@ function onSmash(t){
   if(t.p.k==='c'){
     shatter(t); S.smashed++;
     say(`Smashed. “${t.p.t}” was a cliché. Snap. Crumpled and swallowed.`);
-    renderPads();
+    renderPads(); if(S.mode==='creek') creekShowBasket();
   } else {
     t.el.classList.remove('nope'); void t.el.offsetWidth; t.el.classList.add('nope'); Snd.sink();
     say(`“${t.p.t}” is fresh, not a cliché. It survives.`,true);
@@ -1295,6 +1416,9 @@ function shatter(t){
   t.gone=true; t.held=false;
   if(reduce||t.list){t.el.remove();gulp();return}
   Snd.whip(); cores.push({x:r.left+r.width/2,y:r.top+r.height/2,t:0,el:t.el,gulped:false,crumpled:false});
+  startFx();
+}
+function startFx(){
   if(!bitsOn){bitsOn=true;let lt=performance.now();
     const ctx=sizeFx();
     (function loop(now){
@@ -1312,6 +1436,7 @@ function shatter(t){
       }
       for(let i=cores.length-1;i>=0;i--){
         const c=cores[i]; c.t+=dt;
+
         const m=mouthScreen(); let k=0, ball=0;
         jaw(true);
         if(c.t<.11){k=0}
@@ -1327,7 +1452,7 @@ function shatter(t){
     })(lt);
   }
 }
-function say(txt,warn){const m=$('#msg');m.textContent=txt;m.classList.toggle('warn',!!warn);cnote()}
+function say(txt,warn){const m=$(S.mode==='creek'?'#cmsg':'#msg');m.textContent=txt;m.classList.toggle('warn',!!warn);cnote()}
 let cnoteT=0;
 function cnote(head,body){ // no args: clear. The note is a sighted echo of #msg, never the only copy.
   const n=$('#cnote'); clearTimeout(cnoteT);
@@ -1339,6 +1464,7 @@ function cnote(head,body){ // no args: clear. The note is a sighted echo of #msg
 function onTile(t){
   if(S.phase!=='play'||S.busy||t.gone) return;
   const p=t.p;
+  if(S.mode==='creek'){creekTake(t);return} // v5.6: no verdict at the catch
   if(p.k==='c'){clicheHit(t);return}
   const idx=p.s===7?(S.slots[1]?-1:1):(!S.slots[0]?0:(!S.slots[2]?2:-1));
   if(idx<0){
@@ -1415,7 +1541,7 @@ function bankTile(p){
   if(p.k==='t') el.dataset.turn='';
   el.innerHTML=`<button type="button" class="in" aria-expanded="false"><span class="tx"></span><span class="beads" aria-hidden="true">${'<i></i>'.repeat(p.s)}</span></button><div class="choice" hidden><button type="button" class="c-catch">Catch line</button><button type="button" class="c-smash">Smash cliché</button><button type="button" class="c-go">Let it go</button></div>`;
   el.querySelector('.tx').textContent=p.t;
-  el.querySelector('.in').setAttribute('aria-label',`${p.t}, ${p.s} syllables. Tap to catch or smash.`);
+  el.querySelector('.in').setAttribute('aria-label',`${p.t}${p.s?`, ${p.s} syllables`:''}. Tap to catch or smash.`);
   const t={p,el,s:0,lane:0,w:0,h:0,gone:false,held:false,list:true};
   el.querySelector('.in').addEventListener('click',()=>toggleHold(t));
   el.querySelector('.c-catch').addEventListener('click',()=>{release(t);onTile(t)});
@@ -1441,7 +1567,7 @@ $('#still0').addEventListener('click',()=>setStill(!S.still));
 $('#pull').addEventListener('click',()=>{if(S.phase!=='play'||S.busy)return; dealList(); say('Lever pulled. New phrases on the bank.'); const f=$('#plist .in'); if(f) f.focus()});
 {let st=reduce; try{const v=localStorage.getItem('kirejiStill'); if(v!==null) st=v==='1'}catch(e){} if(st) setStill(true);}
 
-function show(id){['pIntro','pPlay','pDone','pFinal'].forEach(x=>$('#'+x).hidden=x!==id)}
+function show(id){['pIntro','pPlay','pDone','pFinal','pCreek','pSort','pSortDone'].forEach(x=>$('#'+x).hidden=x!==id)}
 /* The title slip rolls up like a hanging scroll: a hand pulling it in uneven tugs,
    a hitch, a pause, the roll swelling as paper winds on, then the rod lifts away. */
 let slipRolled=false, slipRollBusy=null;
@@ -1508,6 +1634,53 @@ function fillPoem(el,lines,label){
   el.querySelectorAll('span').forEach((s,i)=>s.textContent=lines[i].t);
 }
 
+/* ---------- v5.4 the pencil: edit a finished poem; the fridge shows the edit ---------- */
+const PEN=$('#doneEdit svg').outerHTML;
+function renderDone(){ // the season screen always shows the latest poem, as edited
+  const i=S.wins.length-1, lines=S.wins[i], ti=lines.findIndex(p=>p.k==='t');
+  fillPoem($('#donePoem'),lines);
+  $('#doneNote').textContent=`Your turn sits in line ${ti+1}: “${lines[ti].t}.” Does the scene hold still before it, and move after it? That hinge is what Bashō's ya marks.`;
+}
+function renderFinals(){
+  const box=$('#finals'); box.innerHTML='';
+  S.wins.forEach((w,i)=>{
+    const wrap=document.createElement('div'); wrap.className='fpoem';
+    const b=document.createElement('blockquote'); b.className='poem'; fillPoem(b,w,SEASONS[i].name+' · '+SEASONS[i].jp);
+    const e=document.createElement('button'); e.type='button'; e.className='penbtn'; e.innerHTML=PEN;
+    e.append(`Edit the ${SEASONS[i].name.toLowerCase()} poem`);
+    e.addEventListener('click',()=>editPoem(i,e));
+    wrap.append(b,e); box.appendChild(wrap);
+  });
+}
+let pmAt=-1, pmFrom=null;
+function pmHint(j){
+  const v=$('#pm'+j).value.trim(), want=j===1?7:5;
+  $('#pm'+j+'s').textContent=v?`About ${Fz.syl(v)} syllables. This line wants ${want}.`:'Empty: the old words stay.';
+}
+function editPoem(i,from){
+  pmAt=i; pmFrom=from||null;
+  S.wins[i].forEach((p,j)=>{$('#pm'+j).value=p.t; pmHint(j)});
+  try{Snd.paper()}catch(e){}
+  $('#pmEdit').showModal(); $('#pm0').focus();
+}
+[0,1,2].forEach(j=>$('#pm'+j).addEventListener('input',()=>pmHint(j)));
+$('#pmEditX').addEventListener('click',()=>$('#pmEdit').close());
+$('#pmEdit').addEventListener('close',()=>{if(pmFrom&&pmFrom.isConnected)pmFrom.focus()});
+$('#pmEditF').addEventListener('submit',()=>{
+  const i=pmAt; if(i<0||!S.wins[i]) return;
+  let changed=0;
+  // a new list, new line objects: the season's own phrases are never rewritten, so Play again starts clean
+  S.wins[i]=S.wins[i].map((p,j)=>{const v=$('#pm'+j).value.replace(/\s+/g,' ').trim();
+    if(!v||v===p.t) return p; changed++; return {t:v,s:Fz.syl(v),k:p.k,own:true}});
+  const tellPm=t=>{const l=$('#pmLive');l.textContent='';setTimeout(()=>l.textContent=t,30)};
+  if(!changed){tellPm('No change. The poem stays as it was.');return}
+  Fz.reset(); try{Snd.tock()}catch(e){}
+  if(S.phase==='final'){renderFinals(); const btns=$$('#finals .penbtn'); pmFrom=btns[i]||null}
+  else renderDone();
+  tellPm(`Poem saved with your edit${changed>1?'s':''}. The fridge will show it.`);
+});
+$('#doneEdit').addEventListener('click',e=>editPoem(S.wins.length-1,e.currentTarget));
+
 /* ---------- v5.2 camera: hold on the frog, then land on the poem ---------- */
 function frameScene(){
   const r=scene.getBoundingClientRect();
@@ -1541,17 +1714,15 @@ async function win(){
   if(S.wins.length===3){
     await frogJump(); try{Snd.bell(true)}catch(e){} await wait(reduce?0:700); // v5.2.9: after the last ぽちゃん, the bell and the water
     S.phase='final'; rollSlip(false);
-    const box=$('#finals'); box.innerHTML='';
-    S.wins.forEach((w,i)=>{const b=document.createElement('blockquote');b.className='poem';fillPoem(b,w,SEASONS[i].name+' · '+SEASONS[i].jp);box.appendChild(b)});
+    const box=$('#finals'); renderFinals();
     show('pFinal'); landOn(box,$('#finalQ'));
     return;
   }
-  const se=SEASONS[S.round], ti=lines.findIndex(p=>p.k==='t');
+  const se=SEASONS[S.round];
   await wait(reduce?0:700); // one beat on the fed frog before the camera moves
   $('#doneLbl').textContent=`${se.name} poem · the frog is fed`;
   $('#doneQ').textContent=HEDGES[S.round%HEDGES.length];
-  fillPoem($('#donePoem'),lines);
-  $('#doneNote').textContent=`Your turn sits in line ${ti+1}: “${lines[ti].t}.” Does the scene hold still before it, and move after it? That hinge is what Bashō's ya marks.`;
+  renderDone();
   S.round++; $('#next').textContent=`Next season: ${SEASONS[S.round].name}`;
   S.phase='done'; show('pDone'); landOn($('#donePoem'),$('#doneQ'));
 }
@@ -2087,6 +2258,55 @@ const Snd=(()=>{
       g2.gain.setValueAtTime(0,t); g2.gain.linearRampToValueAtTime(peak*harm,t+Math.min(.03,dur*.2)); g2.gain.linearRampToValueAtTime(0,t+dur);
       o2.connect(g2).connect(dest); o2.start(t); o2.stop(t+dur+.02)}
   }
+  /* v5.7 (founder 2026-10-02, round 2 audition: "Audio go w G"): the summer cicada is G, Across the Pond. The tymbal
+     singer (a click train near 300 a second ringing the body, under the reed and the high beating tones), heard from a tree
+     on the far bank: the air takes off the top and a soft echo comes back off the water. Rhythm and schedule unchanged. */
+  const CICADA_K=1.6;
+  function cicadaRhythm(t,note){const k=CICADA_K;note(t,.34*k,false);note(t+.46*k,.34*k,false);note(t+.92*k,.34*k,false);note(t+1.4*k,1.9*k,true)}
+function cContour(P,f,b,dur,last,lo,hi,end){ // the current call's pitch shape, as a ratio of f
+  const k=CICADA_K; P.setValueAtTime(f*lo,b); P.linearRampToValueAtTime(f*hi,b+Math.min(.12*k,dur*.3));
+  if(last){P.setValueAtTime(f*hi,b+dur*.42); P.exponentialRampToValueAtTime(f*end,b+dur)} else P.linearRampToValueAtTime(f*.93,b+dur);
+}
+function cEnv(ac,b,dur,last,pk){const g=ac.createGain(),k=CICADA_K;
+  g.gain.setValueAtTime(0,b); g.gain.linearRampToValueAtTime(pk,b+.05*k); g.gain.setValueAtTime(pk,b+dur*(last?.52:.6)); g.gain.linearRampToValueAtTime(0,b+dur); return g}
+function cVib(ac,b,dur,last,rate,depthHz,targets){const v=ac.createOscillator(),g=ac.createGain();
+  v.frequency.setValueAtTime(rate,b); if(last) v.frequency.linearRampToValueAtTime(rate*.45,b+dur); g.gain.value=depthHz;
+  v.connect(g); targets.forEach(t=>g.connect(t)); v.start(b); v.stop(b+dur+.05)}
+function cRasp(ac,b,dur,rate,depth){const am=ac.createGain(),l=ac.createOscillator(),lg=ac.createGain();
+  am.gain.value=1-depth; l.frequency.value=rate; lg.gain.value=depth; l.connect(lg).connect(am.gain); l.start(b); l.stop(b+dur+.05); return am}
+/* one blended note: the current reed (sawtooth near 1 kHz) under Singer's two beating tones near 3.2 kHz */
+function cBlendNote(ac,out,b,dur,last,base,f0,mix,vib){
+  const k=CICADA_K;
+  const reed=ac.createOscillator(); reed.type='sawtooth'; cContour(reed.frequency,base,b,dur,last,.8,1.06,.72);
+  const rf=ac.createBiquadFilter(); rf.type='bandpass'; rf.Q.value=1.4; rf.frequency.setValueAtTime(base*1.9,b);
+  if(last){rf.frequency.setValueAtTime(base*1.9,b+dur*.45); rf.frequency.exponentialRampToValueAtTime(600,b+dur)}
+  const rg=ac.createGain(); rg.gain.value=mix.reed; reed.connect(rf).connect(rg).connect(out);
+  const tones=[1,1.013].map((m,i)=>{const o=ac.createOscillator(); o.type=i?'triangle':'sine'; cContour(o.frequency,f0*m,b,dur,last,.86,1.04,.68);
+    const g=ac.createGain(); g.gain.value=mix.sing*(i?.8:1); o.connect(g).connect(out); return o});
+  cVib(ac,b,dur,last,vib||7,f0*.016,tones.map(o=>o.frequency).concat([reed.frequency]));
+  [reed,...tones].forEach(o=>{o.start(b);o.stop(b+dur+.05)});
+}
+
+function cicadaTymbalSinger(ac,d,t,rnd,G){
+    const base=rnd(900,1100), f0=base*rnd(3,3.2), rate=rnd(290,340);
+    cicadaRhythm(t,(b,dur,last)=>{
+      const g=cEnv(ac,b,dur,last,.205*(G||1)); g.connect(d);
+      const pulse=ac.createOscillator(); pulse.type='sawtooth'; cContour(pulse.frequency,rate,b,dur,last,.9,1.03,.75);
+      const body=ac.createBiquadFilter(); body.type='bandpass'; body.Q.value=7; body.frequency.setValueAtTime(f0,b);
+      if(last){body.frequency.setValueAtTime(f0,b+dur*.45); body.frequency.exponentialRampToValueAtTime(f0*.62,b+dur)}
+      const low=ac.createBiquadFilter(); low.type='bandpass'; low.Q.value=3; low.frequency.value=base*1.9; const lg=ac.createGain(); lg.gain.value=.45;
+      const mixg=ac.createGain(); mixg.gain.value=1; pulse.connect(body).connect(mixg); pulse.connect(low).connect(lg).connect(mixg);
+      const am=cRasp(ac,b,dur,rnd(55,70),.3); mixg.connect(am).connect(g);
+      const sing=ac.createGain(); sing.gain.value=.25; sing.connect(am); cBlendNote(ac,sing,b,dur,last,base,f0,{reed:0,sing:.5});
+      cVib(ac,b,dur,last,7,rate*.02,[pulse.frequency]); pulse.start(b); pulse.stop(b+dur+.05);
+    });
+  }
+  function cicadaAcrossThePond(ac,d,t,rnd){
+    const lp=ac.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=2700; lp.Q.value=.5;
+    const dl=ac.createDelay(1); dl.delayTime.value=.085; const fb=ac.createGain(); fb.gain.value=.22; const wet=ac.createGain(); wet.gain.value=.32;
+    lp.connect(d); lp.connect(dl); dl.connect(fb).connect(dl); dl.connect(wet).connect(d);
+    cicadaTymbalSinger(ac,lp,t,rnd,1);
+  }
   const call={
     uguisu(){ // hoo... hokekyo
       const t=now()+.05, d=panTo(), k=rnd(.95,1.06);
@@ -2105,21 +2325,8 @@ const Snd=(()=>{
         const g=ac.createGain(); g.gain.setValueAtTime(0,b); g.gain.linearRampToValueAtTime(.06,b+.03); g.gain.setValueAtTime(.06,b+dur*.7); g.gain.linearRampToValueAtTime(0,b+dur);
         o.connect(am).connect(g).connect(d); o.start(b); lfo.start(b); o.stop(b+dur+.02); lfo.stop(b+dur+.02)}
     },
-    minmin(){ // minminzemi: three loud min-min-min, then a long miiinnnmmm that closes down
-      const t=now()+.05, d=panTo(), base=rnd(900,1100), k=1.6; // k stretches the whole call; the rhythm's ratios hold
-      const note=(b,dur,last)=>{
-        const o=ac.createOscillator(); o.type='sawtooth';
-        o.frequency.setValueAtTime(base*.8,b); o.frequency.linearRampToValueAtTime(base*1.06,b+Math.min(.12*k,dur*.3));
-        if(last){o.frequency.setValueAtTime(base*1.06,b+dur*.4); o.frequency.linearRampToValueAtTime(base*.72,b+dur)}
-        else o.frequency.linearRampToValueAtTime(base*.92,b+dur);
-        const f=ac.createBiquadFilter(); f.type='bandpass'; f.Q.value=1.4; f.frequency.setValueAtTime(base*1.9,b);
-        if(last){f.frequency.setValueAtTime(base*1.9,b+dur*.45); f.frequency.exponentialRampToValueAtTime(600,b+dur)} // the mmm: the sound closes
-        const am=ac.createGain(); am.gain.value=.6; const lfo=ac.createOscillator(); lfo.frequency.value=rnd(60,80);
-        const lg=ac.createGain(); lg.gain.value=.4; lfo.connect(lg).connect(am.gain);
-        const g=ac.createGain(); g.gain.setValueAtTime(0,b); g.gain.linearRampToValueAtTime(.12,b+.05*k); g.gain.setValueAtTime(.12,b+dur*(last?.5:.6)); g.gain.linearRampToValueAtTime(0,b+dur);
-        o.connect(f).connect(am).connect(g).connect(d); o.start(b); lfo.start(b); o.stop(b+dur+.05); lfo.stop(b+dur+.05);
-      };
-      note(t,.34*k); note(t+.46*k,.34*k); note(t+.92*k,.34*k); note(t+1.4*k,1.9*k,true);
+    minmin(){ // v5.7: G, Across the Pond (see cicadaAcrossThePond)
+      cicadaAcrossThePond(ac,panTo(),now()+.05,rnd);
     },
     higurashi(){ // the evening cicada: kana-kana-kana, falling and fading
       const t=now()+.05, d=panTo(), n=16, f0=rnd(4300,4700);
@@ -2385,7 +2592,7 @@ const Fz=(()=>{
     S.wins.forEach((lines,i)=>{
       const s=document.createElement('span'); s.className='mseal'; s.setAttribute('aria-hidden','true'); s.textContent=SEASONS[i].jp;
       s.style.left='6px'; s.style.top=(y+2)+'px'; door.appendChild(s);
-      lines.forEach((p,j)=>add({t:p.t,k:p.k,touched:true,r:(j%2?.9:-.7)+'deg'},52+j*10,y+j*54));
+      lines.forEach((p,j)=>add({t:p.t,k:p.k,own:!!p.own,touched:true,r:(j%2?.9:-.7)+'deg'},52+j*10,y+j*54)); // v5.4: an edited line is the player's own magnet
       y+=3*54+84;
     });
     grow(y); chunk(); chunk();
@@ -2614,9 +2821,266 @@ const Fz=(()=>{
   $('#fzSend').addEventListener('click',openMail);
   fr.addEventListener('keydown',e=>{if(e.key==='Escape'&&menu.hidden&&!$('#fzWrite').open&&!$('#fzMail').open)close()});
   addEventListener('resize',()=>{if(fr.hidden)return;mags.forEach(m=>{m.x=Math.max(0,Math.min(m.x,W()-m.el.offsetWidth));place(m)})});
-  return {open,close,reset(){builtFor=null},get isOpen(){return !fr.hidden}};
+  return {open,close,syl,reset(){builtFor=null},get isOpen(){return !fr.hidden}};
 })();
 $('#fzOpen').addEventListener('click',e=>Fz.open(e.currentTarget));
+
+/* ---------- v5.5 Cliché Creek: the poems ----------
+   REAL: classic haiku, Japanese originals in the public domain (all five poets died by 1902). The English lines are the
+   studio's own translations from the originals, so nothing here is borrowed from a modern translator.
+   CLICHE: written for the game to be clichés on purpose. Items with `pair` take the same subject as a real haiku and say
+   it the stale way; they are the near misses, and the results screen sets each one beside its real counterpart. */
+const CREEK_POETS={
+  basho:'Matsuo Bashō (1644–1694)', buson:'Yosa Buson (1716–1784)', issa:'Kobayashi Issa (1763–1828)',
+  chiyo:'Fukuda Chiyo-ni (1703–1775)', shiki:'Masaoka Shiki (1867–1902)'};
+const CREEK_REAL=[
+  {id:'furuike',by:'basho',jp:'古池や 蛙飛び込む 水の音',ro:'furu ike ya / kawazu tobikomu / mizu no oto',en:['the old pond —','a frog jumps in,','the sound of water']},
+  {id:'shizukasa',by:'basho',jp:'閑さや 岩にしみ入る 蝉の声',ro:'shizukasa ya / iwa ni shimiiru / semi no koe',en:['stillness —','seeping into the rocks,','the cicada’s cry']},
+  {id:'natsukusa',by:'basho',jp:'夏草や 兵どもが 夢の跡',ro:'natsukusa ya / tsuwamonodomo ga / yume no ato',en:['summer grasses —','all that is left','of the soldiers’ dreams']},
+  {id:'araumi',by:'basho',jp:'荒海や 佐渡によこたふ 天河',ro:'araumi ya / Sado ni yokotau / amanogawa',en:['a rough sea —','stretched out over Sado,','the River of Heaven']},
+  {id:'kareeda',by:'basho',jp:'枯枝に 烏のとまりけり 秋の暮',ro:'kareeda ni / karasu no tomarikeri / aki no kure',en:['on a bare branch','a crow has settled —','autumn evening']},
+  {id:'konomichi',by:'basho',jp:'この道や 行く人なしに 秋の暮',ro:'kono michi ya / yuku hito nashi ni / aki no kure',en:['this road —','no one walking it','this autumn evening']},
+  {id:'tabi',by:'basho',jp:'旅に病んで 夢は枯野を かけ廻る',ro:'tabi ni yande / yume wa kareno o / kakemeguru',en:['sick on a journey,','my dreams go running','over withered fields']},
+  {id:'nanohana',by:'buson',jp:'菜の花や 月は東に 日は西に',ro:'na no hana ya / tsuki wa higashi ni / hi wa nishi ni',en:['mustard flowers —','the moon in the east,','the sun in the west']},
+  {id:'harunoumi',by:'buson',jp:'春の海 終日のたり のたりかな',ro:'haru no umi / hinemosu notari / notari kana',en:['the spring sea','all day long, rising and falling,','rising and falling']},
+  {id:'samidare',by:'buson',jp:'五月雨や 大河を前に 家二軒',ro:'samidare ya / taiga o mae ni / ie niken',en:['early summer rain —','facing the swollen river,','two houses']},
+  {id:'yasegaeru',by:'issa',jp:'痩蛙 まけるな一茶 是に有',ro:'yasegaeru / makeru na Issa / kore ni ari',en:['skinny frog,','don’t give up!','Issa is right here']},
+  {id:'suzume',by:'issa',jp:'雀の子 そこのけそこのけ お馬が通る',ro:'suzume no ko / soko noke soko noke / ouma ga tōru',en:['little sparrow,','out of the way, out of the way!','a horse is coming through']},
+  {id:'tsuyu',by:'issa',jp:'露の世は 露の世ながら さりながら',ro:'tsuyu no yo wa / tsuyu no yo nagara / sari nagara',en:['this world of dew','is a world of dew,','and yet, and yet']},
+  {id:'asagao',by:'chiyo',jp:'朝顔に 釣瓶とられて もらひ水',ro:'asagao ni / tsurube torarete / morai mizu',en:['the morning glory','has taken my well bucket —','I’ll borrow water']},
+  {id:'kaki',by:'shiki',jp:'柿食へば 鐘が鳴るなり 法隆寺',ro:'kaki kueba / kane ga naru nari / Hōryūji',en:['I bite a persimmon,','and a bell rings out','at Hōryū-ji']}
+];
+const CREEK_CLICHE=[
+  {en:['cherry blossoms fall','like snowflakes in the spring breeze','beauty everywhere']},
+  {en:['the sun sets in gold','painting the sky with its fire','nature’s masterpiece'],pair:'nanohana'},
+  {en:['a gentle river','flows on and on forever','just like my true love']},
+  {en:['autumn leaves falling','in a dance of red and gold','change is beautiful']},
+  {en:['the moon shines so bright','a silver coin in the sky','the night is magic']},
+  {en:['birds sing happy songs','to welcome the brand new day','life is a blessing']},
+  {en:['raindrops on the glass','tears from heaven softly fall','my heart weeps with them'],pair:'samidare'},
+  {en:['the mighty waves crash','the endless power of the sea','I feel so small now'],pair:'araumi'},
+  {en:['snowflakes softly fall','a blanket of white silence','winter wonderland']},
+  {en:['the old pond is calm','a frog sings his happy song','peace fills my spirit'],pair:'furuike'},
+  {en:['stars twinkle above','like diamonds in the dark sky','dreams can still come true']},
+  {en:['a butterfly floats','free as a bird on the wind','I long to be free']},
+  {en:['the cicadas sing','the soundtrack of summer days','memories are made'],pair:'shizukasa'},
+  {en:['a single red rose','symbol of eternal love','my heart beats for you']},
+  {en:['the mountain stands tall','strong and proud through every storm','I will be strong too']},
+  {en:['morning dew sparkles','like jewels on the green grass','a gift from above']},
+  {en:['the wind whispers soft','secrets of the ancient trees','nature speaks to me']},
+  {en:['a crow on a branch','as dark as the darkest night','an omen of doom'],pair:'kareeda'},
+  {en:['spring has finally sprung','flowers bloom and birds return','a brand new beginning']},
+  {en:['fireflies glowing','tiny lanterns in the night','magic all around']},
+  {en:['the lonely old road','no one walks it anymore','just like my sad heart'],pair:'konomichi'},
+  {en:['a cup of warm tea','comfort on a rainy day','all is right with me']},
+  {en:['the frog leaps with joy','into the sparkling water','a splash of pure bliss'],pair:'yasegaeru'},
+  {en:['the green summer fields','where brave heroes fought and fell','we will not forget'],pair:'natsukusa'},
+  {en:['the harvest moon glows','so big and orange tonight','autumn is here now']},
+  {en:['waves kiss the shoreline','the sand is warm beneath me','paradise is found'],pair:'harunoumi'},
+  {en:['a tiny sparrow','small but brave against the world','never give up hope'],pair:'suzume'},
+  {en:['icicles hanging','the frozen tears of winter','soon the spring will come']},
+  {en:['the river of life','flows through valleys of sorrow','to the sea of joy']},
+  {en:['a kitten at play','chasing yarn the whole day long','so cute and carefree']},
+  {en:['the silent night falls','and the world is fast asleep','peace and quiet reign']},
+  {en:['autumn’s paintbrush strokes','every leaf a work of art','the trees are on fire']},
+  {en:['beneath the full moon','two lovers walk hand in hand','their love will last forever']},
+  {en:['the morning glory','opens its face to the sun','to greet the new day'],pair:'asagao'},
+  {en:['a world full of dreams','like dewdrops they disappear','so cherish each one'],pair:'tsuyu'},
+  {en:['the persimmon tree','heavy with sweet orange fruit','autumn’s sweet bounty'],pair:'kaki'},
+  {en:['the journey of life','has its ups and downs and turns','follow your heart’s dream'],pair:'tabi'},
+  {en:['thunder roars with rage','the angry sky cries its tears','then the rainbow comes']},
+  {en:['golden fields of wheat','swaying in the summer breeze','a peaceful landscape']},
+  {en:['time is like a stream','it flows and never looks back','so live for today']}
+];
+/* ---------- v5.6 Cliché Creek: line by line, then the sort ----------
+   The river is the pond's own stream (same engine, same Catch / Smash / Let it go, same Still water list). It carries
+   the nine lines of three real haiku mixed with twenty-seven cliché lines. Catching gives no verdict: the player keeps
+   nine lines, then sorts them into three poems of three lines, with a bin for any cliché caught. Smash still bounces off
+   a real line, as Smash bounces off a fresh line in the pond. Real lines the player misses come round again. */
+const CK={on:false,basket:[],run:[],pool:[],saved:null,back:'start',sel:null,slots:[],bin:[],tray:[]};
+const ckBare=t=>t.replace(/\s*[—,!.;:]+\s*$/,''); // line-end punctuation stays out of the river, back on the results
+function creekPlan(){
+  const real=shuffle(CREEK_REAL.slice()).slice(0,3);
+  const realTexts=new Set(CREEK_REAL.flatMap(r=>r.en.map(l=>ckBare(l).toLowerCase())));
+  const pairs=CREEK_CLICHE.filter(c=>real.some(r=>r.id===c.pair));
+  const others=shuffle(CREEK_CLICHE.filter(c=>!pairs.includes(c)));
+  const lines=[];
+  pairs.concat(others).forEach(c=>c.en.forEach(l=>{if(!realTexts.has(l.toLowerCase())&&!lines.some(x=>x.t===l))lines.push(l)}));
+  const decoys=lines.slice(0,27).map(l=>({t:l,s:0,k:'c'}));
+  const reals=real.flatMap(r=>r.en.map((l,li)=>({t:ckBare(l),full:l,s:0,k:'r',hid:r.id,li})));
+  CK.run=real; CK.pool=reals.concat(decoys);
+}
+function creekShowBasket(){
+  const ol=$('#cBasket'); ol.innerHTML='';
+  if(!CK.basket.length){const li=document.createElement('li');li.className='empty';li.textContent='Nothing caught yet.';ol.appendChild(li)}
+  for(let i=0;i<CK.basket.length;i++){ // v5.6: only what is caught takes room; the count says how many are left
+    const li=document.createElement('li'), p=CK.basket[i];
+    if(p){const sp=document.createElement('span'); sp.className='txt'; sp.textContent=p.t;
+      const rm=document.createElement('button'); rm.type='button'; rm.className='rm'; rm.dataset.i=i; rm.title='Send it back';
+      rm.setAttribute('aria-label',`Send “${p.t}” back to the river`);
+      rm.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+      li.className='full'; li.append(sp,rm)}
+    else {li.textContent='empty'; li.className='empty'}
+    ol.appendChild(li);
+  }
+  $('#cCount').textContent=CK.basket.length; $('#cSm').textContent=S.smashed;
+}
+function startCreek(back){
+  endTour(); if(!slipRolled) rollSlip(true);
+  if(S.mode!=='creek') CK.saved={smashed:S.smashed,kept:S.kept,round:S.round,phase:S.phase};
+  CK.back=back||CK.back||'start';
+  S.mode='creek'; creekPlan(); CK.basket=[]; S.smashed=0;
+  tiles.forEach(t=>{closeChoice(t);t.el.remove()}); tiles=[]; plist.forEach(t=>t.el.remove()); plist=[]; $('#plist').innerHTML='';
+  deck=shuffle(CK.pool.slice()); deckRound=S.round; returned=[]; sinceTurn=0;
+  S.phase='play'; S.busy=false; S.sndRound=1; // summer, the cicadas
+  layer.classList.remove('hush'); layer.inert=false; prefill(); setPaused(false);
+  show('pCreek'); creekShowBasket(); $('#cStill').setAttribute('aria-pressed',S.still); $('#cPause').hidden=S.still;
+  $('#cStillBox').hidden=!S.still; if(S.still){dealList();moveBank(true)}
+  if(innerWidth<780){try{scrollTo({top:0,behavior:'smooth'})}catch(e){scrollTo(0,0)}}
+  say('Three real haiku are in the river, broken into lines. Catch nine lines, then sort them back into three poems.');
+}
+/* the bank list lives in the play panel; in the creek it moves into the creek panel and back */
+function moveBank(toCreek){const pl=$('#plist'); if(toCreek)$('#cStillBox').insertBefore(pl,$('#cPull')); else $('#stillBox').insertBefore(pl,$('#pull'))}
+function creekTake(t){
+  if(CK.basket.length>=9) return;
+  CK.basket.push(t.p); Snd.tock(); retire(t,'take'); creekShowBasket();
+  if(CK.basket.length===9){setTimeout(creekSort,450);return}
+  say(`Caught: “${t.p.t}.” ${9-CK.basket.length} to go.`);
+  if(t.list) setTimeout(()=>{if(S.still&&S.phase==='play'&&!plist.some(o=>!o.gone)) dealList()},460);
+}
+$('#cBasket').addEventListener('click',e=>{
+  const b=e.target.closest('button.rm'); if(!b||S.phase!=='play') return;
+  const p=CK.basket.splice(+b.dataset.i,1)[0]; if(!p) return;
+  returned.push(p); creekShowBasket(); say(`“${p.t}” goes back to the river.`);
+  ($('#cBasket .rm')||$('#cmsg')).focus?.();
+});
+function creekLeave(){
+  S.mode='main'; moveBank(false); deckRound=-1;
+  tiles.forEach(t=>{closeChoice(t);t.el.remove()}); tiles=[]; plist.forEach(t=>t.el.remove()); plist=[]; $('#plist').innerHTML='';
+  const sv=CK.saved||{}; S.smashed=sv.smashed||0; S.kept=sv.kept||0;
+  if(CK.back==='final'){S.phase='final';layer.classList.add('hush');layer.inert=true;show('pFinal');landOn($('#finals'),$('#finalQ'))}
+  else startRound();
+}
+
+/* ---------- the sort ---------- */
+function creekSort(){
+  S.phase='sort'; S.busy=true; layer.classList.add('hush'); layer.inert=true;
+  tiles.forEach(t=>{closeChoice(t);t.el.remove()}); tiles=[]; plist.forEach(t=>t.el.remove()); plist=[]; $('#plist').innerHTML='';
+  CK.tray=shuffle(CK.basket.slice()); CK.slots=Array(9).fill(null); CK.bin=[]; CK.sel=null;
+  try{Snd.bell(false)}catch(e){}
+  show('pSort'); renderSort(); landOn($('#sTray'),$('#sortQ'));
+}
+const ORD=['one','two','three'];
+function lineBtn(p,where){
+  const b=document.createElement('button'); b.type='button'; b.className='sline'+(CK.sel===p?' sel':''); b.textContent=p.t;
+  b.setAttribute('aria-pressed',CK.sel===p?'true':'false'); b.addEventListener('click',()=>sortPick(p)); return b;
+}
+function renderSort(){
+  const tray=$('#sTray'); tray.innerHTML='';
+  CK.tray.forEach(p=>{const li=document.createElement('li'); li.appendChild(lineBtn(p)); tray.appendChild(li)});
+  if(!CK.tray.length){const li=document.createElement('li'); li.className='done'; li.textContent='Every line is placed.'; tray.appendChild(li)}
+  const fr=$('#sFrames'); fr.innerHTML='';
+  for(let f=0;f<3;f++){
+    const box=document.createElement('section'); box.className='sframe'; box.setAttribute('aria-label',`Poem ${ORD[f]}`);
+    const h=document.createElement('h3'); h.textContent=`Poem ${ORD[f]}`; const ol=document.createElement('ol');
+    for(let l=0;l<3;l++){
+      const i=f*3+l, p=CK.slots[i], li=document.createElement('li');
+      const b=document.createElement('button'); b.type='button'; b.className='sslot'+(p?' full':'')+(p&&CK.sel===p?' sel':'');
+      b.textContent=p?p.t:`Line ${l+1}`; b.setAttribute('aria-label',p?`Poem ${ORD[f]}, line ${l+1}: ${p.t}${CK.sel===p?', picked up':''}`:`Poem ${ORD[f]}, line ${l+1}, empty`);
+      b.addEventListener('click',()=>sortSlot(i)); li.appendChild(b); ol.appendChild(li);
+    }
+    box.append(h,ol); fr.appendChild(box);
+  }
+  const bin=$('#sBin'); bin.innerHTML='';
+  CK.bin.forEach(p=>{const li=document.createElement('li'); li.appendChild(lineBtn(p)); bin.appendChild(li)});
+  $('#sBinBtn').disabled=!CK.sel||CK.bin.includes(CK.sel);
+  $('#sTrayBtn').disabled=!CK.sel||CK.tray.includes(CK.sel);
+  $('#sCheck').disabled=CK.tray.length>0;
+}
+function sortSay(t){$('#smsg').textContent=t}
+function whereIs(p){if(CK.tray.includes(p))return['tray'];if(CK.bin.includes(p))return['bin'];const i=CK.slots.indexOf(p);return i>=0?['slot',i]:['none']}
+function takeOut(p){const w=whereIs(p);if(w[0]==='tray')CK.tray.splice(CK.tray.indexOf(p),1);else if(w[0]==='bin')CK.bin.splice(CK.bin.indexOf(p),1);else if(w[0]==='slot')CK.slots[w[1]]=null;return w}
+function sortPick(p){
+  CK.sel=CK.sel===p?null:p; renderSort();
+  sortSay(CK.sel?`Picked up “${p.t}.” Now choose a line in a poem, or the bin.`:'Put down.');
+  focusLine(p);
+}
+function focusLine(p){const b=[...document.querySelectorAll('#pSort .sline,#pSort .sslot')].find(x=>x.textContent===p.t);if(b)b.focus()}
+function sortSlot(i){
+  const here=CK.slots[i];
+  if(!CK.sel){if(here){sortPick(here)}else sortSay('Pick a line first, then choose where it goes.');return}
+  if(here===CK.sel){sortPick(here);return}
+  const p=CK.sel, from=takeOut(p);
+  if(here){ // swap: the line already there goes where the moving line came from
+    if(from[0]==='slot') CK.slots[from[1]]=here; else if(from[0]==='bin') CK.bin.push(here); else CK.tray.push(here);
+  }
+  CK.slots[i]=p; CK.sel=null; Snd.tock(); renderSort();
+  sortSay(`“${p.t}” goes in poem ${ORD[Math.floor(i/3)]}, line ${i%3+1}.`);
+  const b=$$('#sFrames .sslot')[i]; if(b) b.focus();
+}
+$('#sBinBtn').addEventListener('click',()=>{const p=CK.sel;if(!p)return;takeOut(p);CK.bin.push(p);CK.sel=null;Snd.sink();renderSort();sortSay(`“${p.t}” goes in the cliché bin.`);$('#sBinBtn').focus()});
+$('#sTrayBtn').addEventListener('click',()=>{const p=CK.sel;if(!p)return;takeOut(p);CK.tray.push(p);CK.sel=null;renderSort();sortSay(`“${p.t}” is back with your catch.`)});
+$('#sCheck').addEventListener('click',sortCheck);
+
+/* grading: each poem frame belongs to the real haiku with the most lines in it (each haiku claimed once) */
+function sortCheck(){
+  const counts=[];
+  for(let f=0;f<3;f++) CK.run.forEach(r=>{const n=[0,1,2].filter(l=>{const p=CK.slots[f*3+l];return p&&p.hid===r.id}).length;if(n)counts.push({f,id:r.id,n})});
+  counts.sort((a,b)=>b.n-a.n); const own={}, taken=new Set();
+  counts.forEach(c=>{if(own[c.f]===undefined&&!taken.has(c.id)){own[c.f]=c.id;taken.add(c.id)}});
+  let exact=0, realCaught=CK.basket.filter(p=>p.k==='r').length, clCaught=CK.basket.length-realCaught, clBinned=CK.bin.filter(p=>p.k==='c').length;
+  const box=$('#sResult'); box.innerHTML='';
+  for(let f=0;f<3;f++){
+    const sec=document.createElement('div'); sec.className='fpoem';
+    const h=document.createElement('p'); h.className='eyebrow'; h.textContent=`Your poem ${ORD[f]}`; sec.appendChild(h);
+    const ul=document.createElement('ul'); ul.className='marks';
+    for(let l=0;l<3;l++){
+      const p=CK.slots[f*3+l], li=document.createElement('li');
+      if(!p){li.textContent=`Line ${l+1}: empty`;ul.appendChild(li);continue}
+      let mark,cls;
+      if(p.k==='c'){mark='a cliché';cls='bad'}
+      else if(own[f]===p.hid&&p.li===l){mark='right poem, right line';cls='ok';exact++}
+      else if(own[f]===p.hid){mark=`right poem, belongs on line ${p.li+1}`;cls='near'}
+      else {mark='belongs to another poem';cls='bad'}
+      const t=document.createElement('span'); t.className='ml'; t.textContent=p.full||p.t;
+      const m=document.createElement('span'); m.className='mk '+cls; m.textContent=mark;
+      li.append(t,m); ul.appendChild(li);
+    }
+    sec.appendChild(ul); box.appendChild(sec);
+  }
+  CK.bin.forEach(p=>{if(p.k==='r'){const n=document.createElement('p');n.className='note';n.textContent=`In the bin, but real: “${p.full}”`;box.appendChild(n)}});
+  const clean=exact===realCaught&&clBinned===clCaught&&!CK.bin.some(p=>p.k==='r');
+  $('#sDoneQ').textContent=clean?(realCaught===9?'All nine lines, home in the right poems.':`Every line you caught is where it belongs. ${9-realCaught} real ${9-realCaught===1?'line was':'lines were'} still in the river.`)
+    :`${exact} of your ${realCaught} real lines are in the right poem and the right place.`;
+  $('#sDoneNote').textContent=`You caught ${realCaught} real ${realCaught===1?'line':'lines'} and ${clCaught} ${clCaught===1?'cliché':'clichés'}`+(clCaught?`, and binned ${clBinned} of them.`:'.')+' Here are the three haiku as their poets wrote them.';
+  const real=$('#sReal'); real.innerHTML='';
+  CK.run.forEach(r=>{
+    const w=document.createElement('div'); w.className='fpoem';
+    const b=document.createElement('blockquote'); b.className='poem'; const em=document.createElement('em'); em.textContent=CREEK_POETS[r.by]; b.appendChild(em);
+    r.en.forEach(l=>{const s=document.createElement('span');s.textContent=l;b.appendChild(s)});
+    const jp=document.createElement('p'); jp.className='cjp'; jp.lang='ja'; jp.textContent=r.jp;
+    const ro=document.createElement('p'); ro.className='cro'; ro.lang='ja-Latn'; ro.textContent=r.ro;
+    const got=CK.basket.filter(p=>p.hid===r.id).length;
+    const n=document.createElement('p'); n.className='note'; n.textContent=got===3?'You caught all three of its lines.':`You caught ${got} of its 3 lines.`;
+    w.append(b,jp,ro,n);
+    const pc=CREEK_CLICHE.find(c=>c.pair===r.id);
+    if(pc){const pp=document.createElement('p');pp.className='note cpair';const bb=document.createElement('b');bb.textContent='The cliché on the same subject: ';pp.append(bb,document.createTextNode(pc.en.join(' / ')));w.appendChild(pp)}
+    real.appendChild(w);
+  });
+  const cr=document.createElement('p'); cr.className='note'; cr.textContent='English versions by Tight Spiral Studios, translated from the Japanese originals.'; real.appendChild(cr);
+  if(exact===9){try{Snd.bell(true)}catch(e){}}
+  S.phase='sortdone'; show('pSortDone'); landOn($('#sResult'),$('#sDoneQ'));
+}
+$('#creek0').addEventListener('click',()=>startCreek('start'));
+$('#creekF').addEventListener('click',()=>startCreek('final'));
+$('#cBack').addEventListener('click',creekLeave);
+$('#sBack').addEventListener('click',creekLeave);
+$('#sAgain').addEventListener('click',()=>startCreek());
+$('#sRetry').addEventListener('click',()=>{S.phase='sort';CK.tray=shuffle(CK.basket.slice());CK.slots=Array(9).fill(null);CK.bin=[];CK.sel=null;show('pSort');renderSort();landOn($('#sTray'),$('#sortQ'))});
+$('#cPause').addEventListener('click',()=>{setPaused(!S.paused);$('#cPause').textContent=S.paused?'Resume river':'Pause river';$('#cPause').setAttribute('aria-pressed',S.paused)});
+$('#cStill').addEventListener('click',()=>{const v=!S.still; if(v) moveBank(true); setStill(v); $('#cStill').setAttribute('aria-pressed',v); $('#cStillBox').hidden=!v; $('#cPause').hidden=v});
+
+$('#cPull').addEventListener('click',()=>{if(S.phase!=='play'||S.busy)return; dealList(); say('Lever pulled. New lines on the bank.'); const f=$('#plist .in'); if(f) f.focus()});
 
 /* ---------- boot ---------- */
 applySeason(); renderPads(); renderSlots(); renderSeals(); resetFrog();
