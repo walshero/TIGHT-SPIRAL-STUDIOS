@@ -1,72 +1,81 @@
-# Playthrough Sweep — 2026-09-21
+# Playthrough Sweep — 2026-10-05
 
-**Run:** 2026-09-21T11:18Z · repo commit `273dc22` · agent `playthrough-agent.py` (reporter, always exits 0 — never a deploy gate)
+**Run:** 2026-10-05 · repo commit `fe67915` · agent `playthrough-agent.py` (reporter, always exits 0 — never a deploy gate)
 **Surfaces swept (5):** index.html · arcade.html · choose-your-leader-v7.html · choose-your-leader-v6.html · the-tell.html
-**Prior report:** `reports/playthrough-latest.md` @ 2026-09-14 (HTTP 200, 19,521 B)
+**Prior report:** `reports/playthrough-latest.md` @ 2026-09-21 (HTTP 200, 20,414 B)
+**Runner:** scheduled cloud routine, unattended. Single invocation, 9m53s wall clock. All five surfaces completed; none errored.
 
 ## Classification
 
 - **NEW: 0**
-- **REPEAT: 7 finding lines** across 3 surfaces — every finding from 2026-09-14 reproduces
-- **FIXED: 0** — nothing has cleared
-- **CLEAN:** choose-your-leader-v6.html (clean four runs running)
+- **FIXED: 2 finding lines** — both on `arcade.html`, which is now CLEAN
+- **REPEAT: 5 finding lines** across 2 surfaces (`index.html`, `choose-your-leader-v7.html`)
+- **CLEAN:** `arcade.html` (new this week), `choose-your-leader-v6.html` (five runs running)
 
-**No drift, and the reason is now established rather than assumed.** Finding lines were compared as
-sets, per surface: zero added, zero removed, on all five. The raw agent-card block of this run is
-**byte-identical** to both 2026-09-14 and 2026-09-07 — md5 `ef99147cf086` three weeks running.
+**The four-week stalemate broke.** After three byte-identical reports, a finding has actually cleared.
 
-This run also checked *why*. All five swept builds were hashed against last week's commit
-`03e3684`; **all five are byte-identical to it.** The repo moved (`03e3684` → `273dc22`), but
-nothing in it touched these five files. Identical output from identical input is the instrument
-working, not the instrument stuck — and the checksums below are the evidence rather than the claim.
+## FIXED — 2, and this is the headline
 
-| Surface | md5 (12) | vs 2026-09-14 |
-|---|---|---|
-| index.html | `3dd76ddee5c2` | unchanged |
-| arcade.html | `db16d2f65732` | unchanged |
-| choose-your-leader-v7.html | `98c3037f89d8` | unchanged |
-| choose-your-leader-v6.html | `11865a501f35` | unchanged |
-| the-tell.html | `a324c0e1e656` | unchanged |
+`arcade.html` went **NOTES to CLEAN**. Both findings it carried on 2026-09-21 are gone:
 
-No ledger row was written for this run. `FUNES-LEDGER.md` is append-only, and a row saying nothing
-happened is the kind of entry that makes a ledger unreadable. Rows on change, silence otherwise.
+| surface | finding cleared |
+|---|---|
+| arcade.html | **DEAD BUTTONS (1): Cabinet** — the top-chrome Cabinet link registers a click again |
+| arcade.html | **OFFLINE FLOOR (1 external request)** — `eclectic-youtiao-c065da.netlify.app` is no longer fetched; the cabinet now runs with no outbound call |
+
+**This is a real fix, not instrument flake, and the hashes are the evidence rather than the claim.**
+`arcade.html` changed on disk between the two runs (`db16d2f65732` → `97082185c87a`). A finding that
+clears on a file whose bytes moved is a fix; a finding that clears on an unchanged file would have been
+a reason to distrust the agent. The surface now prints *"nothing mechanical to fix — ready for founder
+taste-play"*, and the agent's click depth on it fell from **10 to 6**, consistent with a dead control and
+an external fetch both leaving the build rather than being papered over.
+
+| Surface | md5 (12) | vs 2026-09-21 | findings |
+|---|---|---|---|
+| index.html | `a9c0167e2af0` | **changed** (was `3dd76ddee5c2`) | identical — the edit missed both |
+| arcade.html | `97082185c87a` | **changed** (was `db16d2f65732`) | **2 cleared** |
+| choose-your-leader-v7.html | `98c3037f89d8` | unchanged | identical |
+| choose-your-leader-v6.html | `11865a501f35` | unchanged | CLEAN, as before |
+| the-tell.html | `a324c0e1e656` | unchanged | identical |
+
+**Worth a second look:** `index.html` also changed this week, and its findings did not move at all —
+still the dead `Studio` button, still the same nine JS errors. Whoever touched the front door did not
+touch either defect. That is the one place this week's diff suggests a near-miss rather than progress.
+
+Neither the arcade fix nor the index edit was logged. No `FUNES-LEDGER.md` row exists for either, so
+the clearance is recorded here and in the ledger row appended with this run.
 
 ## NEW — none
 
-## FIXED — none
+No finding appeared on any surface that was not already present on 2026-09-21.
 
-The v7 known state — eight inert touches (television, evening paper, telephone, doorway, bulletin,
-wall map), two dead buttons, and the three clipped walkbox lines — **reproduces exactly, four weeks
-running**. Its disappearance is still the signal worth shouting about, and it still has not
-happened. v7 last changed 2026-08-26; nothing has touched it in the 26 days since. The inert
-touches are a build defect waiting on a fix, not a finding that has settled.
-
-**The standing read, fourth week unchanged:** this sweep is now confirming a known state rather
-than discovering anything. Four identical reports is the report earning less each week. The fix is
-upstream of the instrument — someone has to open v7 — and until that happens the weekly run's only
-job is to catch the week the hashes move.
-
-## REPEAT — 7 finding lines, summarised not listed
+## REPEAT — 5 finding lines, summarised not listed
 
 | Surface | Repeat finding lines |
 |---|---|
 | index.html | DEAD BUTTONS (1): Studio · JS ERRORS (9): `start`, `onHasParentDirectory`, `addRow` undefined |
-| arcade.html | DEAD BUTTONS (1): Cabinet · OFFLINE FLOOR (1 external request, eclectic-youtiao-c065da.netlify.app) |
 | choose-your-leader-v7.html | CLIPPED TEXT (3) in `div.walkbox` (400px box, 417px of content) · DEAD BUTTONS (2) · INERT TOUCHES (8) in world `#roomStage` |
 
-The index.html JS error count held at 9 for the third week. That drift settled two runs ago.
+The v7 known state — eight inert touches (television, evening paper, telephone, doorway, bulletin,
+wall map), two dead buttons, three clipped walkbox lines — reproduces exactly for the **fifth week**,
+off a byte-identical build. v7 last changed 2026-08-26; nothing has touched it in the 40 days since.
+These stay REPEAT until someone opens v7. Their disappearance is still the signal worth shouting about.
+
+The `index.html` JS error count held at 9 for the fourth week — but see the note above: that file *did*
+change this week, so the count holding is now a missed opportunity rather than a quiet file.
 
 ## Run notes
 
-- **All five surfaces completed in a single invocation**, ~9 minutes wall clock.
-- `world '#roomStage' resolved from tsp-worlds.json` on v7 — expected and correct, the sidecar
-  doing its job. v7 still does not declare its own world.
-- `the-tell.html`'s 14 no-DOM-change controls are again reported as **likely select-state**
-  (canvas/style redraw), explicitly *not asserted dead*. Unchanged for three runs. Not a fix ticket.
-- `choose-your-leader-v6.html` again logged one click timeout on `Sound` and still scored CLEAN.
-- Click depth steady: 40 on index, v7, v6 and the-tell; 10 on arcade.
-- Run was unattended (scheduled, cloud container, no founder in the loop). No subagents, no
-  full-corpus sweep — five named surfaces only.
+- `world '#roomStage' resolved from tsp-worlds.json` on v7 — expected and correct, the sidecar doing
+  its job. v7 still does not declare its own world.
+- `the-tell.html` again reports **14 controls with no DOM change**, explicitly flagged *likely
+  select-state (canvas/style redraw), VERIFY BY EYE, not asserted dead*. Unchanged for five runs, off an
+  unchanged build. Not a fix ticket, and not counted as a finding line.
+- `choose-your-leader-v6.html` again logged one click timeout on `Sound` and still scored CLEAN. Fifth
+  run with the same note, same bytes.
+- Click depth: 40 on index, v7, v6 and the-tell; **6 on arcade (was 10)**.
+- Cost discipline per `CLAUDE.md`: no subagents, no full-corpus sweep, five named surfaces only, all
+  browser work in bash inside the cloud container.
 
 ## Raw agent cards
 
@@ -184,30 +193,25 @@ The Ru' navigates to another page (expected for a nav link) — returning to thi
 └────────────────────────────────────────
 
 ┌─ arcade.html
-│  verdict: NOTES   clicks: 10   end-reached: yes
-│  ✗ DEAD BUTTONS (1): Cabinet
-│  · 'Studio' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
-│  · '1
-Cliché Cowpaths
-THREE ' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
-│  · '2
-Sandbags
-A FLASH FICTI' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
-│  · '3
-The Tell
-AN ASYNC WORK' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
-│  · '4
-The Workshop Wall
-WRIT' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
-│  · '5
-The Review Bench
-FLASH' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
-│  · '6
-Barcelona Summers
-GUES' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
-│  · 'Back' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
-│  · 'Home' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
-│  · OFFLINE FLOOR: 1 external request(s) e.g. https://eclectic-youtiao-c065da.netlify.app/
+│  verdict: CLEAN   clicks: 6   end-reached: yes
+│  · 'Play Kireji Pond' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
+│  · 'Play Reading Lamp' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
+│  · 'Play Dress Rehearsal' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
+│  · 'Play The Asking Room' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
+│  · 'Play Sandbags' navigates to another page (expected for a nav link) — returning to this file to keep testing it, not that one
+│  · 'Dark mode' is an already-active toggle — skipped, not dead
+│  · 'Dark mode' is an already-active toggle — skipped, not dead
+│  · 'Dark mode' is an already-active toggle — skipped, not dead
+│  · 'Dark mode' is an already-active toggle — skipped, not dead
+│  · 'Dark mode' is an already-active toggle — skipped, not dead
+│  · 'Dark mode' is an already-active toggle — skipped, not dead
+│  · 'Dark mode' is an already-active toggle — skipped, not dead
+│  · 'Dark mode' is an already-active toggle — skipped, not dead
+│  · 'Dark mode' is an already-active toggle — skipped, not dead
+│  · 'Dark mode' is an already-active toggle — skipped, not dead
+│  · 'Dark mode' is an already-active toggle — skipped, not dead
+│  · 'Dark mode' is an already-active toggle — skipped, not dead
+│  nothing mechanical to fix — ready for founder taste-play
 └────────────────────────────────────────
 
 ┌─ choose-your-leader-v7.html
