@@ -16,6 +16,10 @@
      frog." Cliché Creek: thirty poems, three real, the rest clichés, near misses included. Clichés that float past count
      against you, so the player smashes all the way down; the frog's tongue brings the real ones home. Studio translations
      from public-domain Japanese originals; the results screen shows each original and its cliché twin. -->
+<!-- v5.9 2026-10-05 (founder): "For second game 3 haikus is crazy hard. Just one at a time." Cliché Creek now runs one
+     haiku per round: its three lines in the river with nine cliché lines (its own cliché twin first), catch three, put the
+     poem back in order, bin any cliché. Next haiku deals a poem not yet seen this session until all thirteen have come round.
+     CKN in the code is the poems-per-run dial (1 now; the three-poem build still works at CKN=3). -->
 <!-- v5.8 2026-10-05 (founder): "Rewrite and resort lines as needed to prevent mislabeling." The creek deals single lines,
      but the cliché bank was cliché only as whole poems: plain images like "a crow on a branch" or "the persimmon tree" went
      in the bin, and "no one walks it anymore" nearly matched Bashō's own line. Every decoy line is now a cliché by itself,
@@ -920,14 +924,14 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
     </section>
 
 
-    <!-- v5.6 Cliché Creek: catch nine lines, then sort -->
+    <!-- v5.6 Cliché Creek: catch, then sort (v5.9: one haiku, three lines) -->
     <section id="pCreek" hidden>
       <div class="ph">
-        <div><p class="eyebrow">Cliché Creek</p><h2>Catch nine lines</h2></div>
-        <p class="ccount"><b id="cCount">0</b> of 9</p>
+        <div><p class="eyebrow">Cliché Creek</p><h2>Catch three lines</h2></div>
+        <p class="ccount"><b id="cCount">0</b> of 3</p>
       </div>
-      <p class="note">Three real haiku are in the river, broken into lines and mixed with clichés. Catch nine lines. Then sort them back into three poems.</p>
-      <ol class="basket" id="cBasket" aria-label="Your catch: nine lines"></ol>
+      <p class="note">One real haiku is in the river, broken into lines and mixed with clichés. Catch three lines. Then put the poem back together.</p>
+      <ol class="basket" id="cBasket" aria-label="Your catch: three lines"></ol>
       <div class="padrow"><span class="sclbl">Clichés smashed</span><span class="scnum"><b id="cSm">0</b></span></div>
       <p class="msg" id="cmsg" role="status" aria-live="polite"></p>
       <div class="stillbox" id="cStillBox" hidden>
@@ -942,8 +946,8 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
     </section>
     <section id="pSort" hidden>
       <p class="eyebrow">Cliché Creek · the sort</p>
-      <h2 id="sortQ" tabindex="-1">Sort your nine lines</h2>
-      <p class="note">Rebuild the three haiku: three poems, three lines each. Tap a line to pick it up, then tap where it goes. A cliché goes in the bin.</p>
+      <h2 id="sortQ" tabindex="-1">Put the poem back together</h2>
+      <p class="note">Three lines, in order. Tap a line to pick it up, then tap where it goes. A cliché goes in the bin.</p>
       <h3 id="sTrayH">Your catch</h3>
       <ul class="stray" id="sTray" aria-labelledby="sTrayH"></ul>
       <div class="sframes" id="sFrames"></div>
@@ -960,10 +964,10 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
       <h2 id="sDoneQ" tabindex="-1">How it sorted</h2>
       <p class="note" id="sDoneNote"></p>
       <div class="finals" id="sResult"></div>
-      <h3>The three haiku</h3>
+      <h3>The haiku</h3>
       <div class="finals" id="sReal"></div>
-      <button class="primary" id="sAgain" type="button">Run the creek again</button>
-      <button class="ghost" id="sRetry" type="button">Sort the same nine again</button>
+      <button class="primary" id="sAgain" type="button">Next haiku</button>
+      <button class="ghost" id="sRetry" type="button">Sort the same three again</button>
       <button class="ghost" id="sBack" type="button">Back to the pond</button>
     </section>
   </aside>
@@ -2906,16 +2910,19 @@ const CREEK_CLICHE=[ /* v5.8: every LINE is a cliché on its own, not just every
    the nine lines of three real haiku mixed with twenty-seven cliché lines. Catching gives no verdict: the player keeps
    nine lines, then sorts them into three poems of three lines, with a bin for any cliché caught. Smash still bounces off
    a real line, as Smash bounces off a fresh line in the pond. Real lines the player misses come round again. */
-const CK={on:false,basket:[],run:[],pool:[],saved:null,back:'start',sel:null,slots:[],bin:[],tray:[]};
+const CKN=1, CKL=3*CKN; // v5.9 (founder 2026-10-05: "3 haikus is crazy hard. Just one at a time"): poems per run, lines to catch
+const CK={seen:new Set(),on:false,basket:[],run:[],pool:[],saved:null,back:'start',sel:null,slots:[],bin:[],tray:[]};
 const ckBare=t=>t.replace(/\s*[—,!.;:]+\s*$/,''); // line-end punctuation stays out of the river, back on the results
 function creekPlan(){
-  const real=shuffle(CREEK_REAL.filter(r=>r.creek!==false)).slice(0,3); // v5.8: only poems whose every line reads true alone
+  const ok=CREEK_REAL.filter(r=>r.creek!==false); // v5.8: only poems whose every line reads true alone
+  let fresh=ok.filter(r=>!CK.seen.has(r.id)); if(fresh.length<CKN){CK.seen.clear();fresh=ok} // v5.9: a new poem each run until all have come round
+  const real=shuffle(fresh.slice()).slice(0,CKN); real.forEach(r=>CK.seen.add(r.id));
   const realTexts=new Set(CREEK_REAL.flatMap(r=>r.en.map(l=>ckBare(l).toLowerCase())));
   const pairs=CREEK_CLICHE.filter(c=>real.some(r=>r.id===c.pair));
   const others=shuffle(CREEK_CLICHE.filter(c=>!pairs.includes(c)));
   const lines=[];
   pairs.concat(others).forEach(c=>c.en.forEach(l=>{if(!realTexts.has(l.toLowerCase())&&!lines.some(x=>x.t===l))lines.push(l)}));
-  const decoys=lines.slice(0,27).map(l=>({t:l,s:0,k:'c'}));
+  const decoys=lines.slice(0,9*CKN).map(l=>({t:l,s:0,k:'c'}));
   const reals=real.flatMap(r=>r.en.map((l,li)=>({t:ckBare(l),full:l,s:0,k:'r',hid:r.id,li})));
   CK.run=real; CK.pool=reals.concat(decoys);
 }
@@ -2946,15 +2953,15 @@ function startCreek(back){
   show('pCreek'); creekShowBasket(); $('#cStill').setAttribute('aria-pressed',S.still); $('#cPause').hidden=S.still;
   $('#cStillBox').hidden=!S.still; if(S.still){dealList();moveBank(true)}
   if(innerWidth<780){try{scrollTo({top:0,behavior:'smooth'})}catch(e){scrollTo(0,0)}}
-  say('Three real haiku are in the river, broken into lines. Catch nine lines, then sort them back into three poems.');
+  say('One real haiku is in the river, broken into lines. Catch three lines, then put the poem back together.');
 }
 /* the bank list lives in the play panel; in the creek it moves into the creek panel and back */
 function moveBank(toCreek){const pl=$('#plist'); if(toCreek)$('#cStillBox').insertBefore(pl,$('#cPull')); else $('#stillBox').insertBefore(pl,$('#pull'))}
 function creekTake(t){
-  if(CK.basket.length>=9) return;
+  if(CK.basket.length>=CKL) return;
   CK.basket.push(t.p); Snd.tock(); retire(t,'take'); creekShowBasket();
-  if(CK.basket.length===9){setTimeout(creekSort,450);return}
-  say(`Caught: “${t.p.t}.” ${9-CK.basket.length} to go.`);
+  if(CK.basket.length===CKL){setTimeout(creekSort,450);return}
+  say(`Caught: “${t.p.t}.” ${CKL-CK.basket.length} to go.`);
   if(t.list) setTimeout(()=>{if(S.still&&S.phase==='play'&&!plist.some(o=>!o.gone)) dealList()},460);
 }
 $('#cBasket').addEventListener('click',e=>{
@@ -2975,11 +2982,11 @@ function creekLeave(){
 function creekSort(){
   S.phase='sort'; S.busy=true; layer.classList.add('hush'); layer.inert=true;
   tiles.forEach(t=>{closeChoice(t);t.el.remove()}); tiles=[]; plist.forEach(t=>t.el.remove()); plist=[]; $('#plist').innerHTML='';
-  CK.tray=shuffle(CK.basket.slice()); CK.slots=Array(9).fill(null); CK.bin=[]; CK.sel=null;
+  CK.tray=shuffle(CK.basket.slice()); CK.slots=Array(CKL).fill(null); CK.bin=[]; CK.sel=null;
   try{Snd.bell(false)}catch(e){}
   show('pSort'); renderSort(); landOn($('#sTray'),$('#sortQ'));
 }
-const ORD=['one','two','three'];
+const ORD=['one','two','three']; const PNAME=f=>CKN===1?'The poem':`Poem ${ORD[f]}`, pname=f=>CKN===1?'the poem':`poem ${ORD[f]}`;
 function lineBtn(p,where){
   const b=document.createElement('button'); b.type='button'; b.className='sline'+(CK.sel===p?' sel':''); b.textContent=p.t;
   b.setAttribute('aria-pressed',CK.sel===p?'true':'false'); b.addEventListener('click',()=>sortPick(p)); return b;
@@ -2989,13 +2996,13 @@ function renderSort(){
   CK.tray.forEach(p=>{const li=document.createElement('li'); li.appendChild(lineBtn(p)); tray.appendChild(li)});
   if(!CK.tray.length){const li=document.createElement('li'); li.className='done'; li.textContent='Every line is placed.'; tray.appendChild(li)}
   const fr=$('#sFrames'); fr.innerHTML='';
-  for(let f=0;f<3;f++){
-    const box=document.createElement('section'); box.className='sframe'; box.setAttribute('aria-label',`Poem ${ORD[f]}`);
-    const h=document.createElement('h3'); h.textContent=`Poem ${ORD[f]}`; const ol=document.createElement('ol');
+  for(let f=0;f<CKN;f++){
+    const box=document.createElement('section'); box.className='sframe'; box.setAttribute('aria-label',PNAME(f));
+    const h=document.createElement('h3'); h.textContent=PNAME(f); const ol=document.createElement('ol');
     for(let l=0;l<3;l++){
       const i=f*3+l, p=CK.slots[i], li=document.createElement('li');
       const b=document.createElement('button'); b.type='button'; b.className='sslot'+(p?' full':'')+(p&&CK.sel===p?' sel':'');
-      b.textContent=p?p.t:`Line ${l+1}`; b.setAttribute('aria-label',p?`Poem ${ORD[f]}, line ${l+1}: ${p.t}${CK.sel===p?', picked up':''}`:`Poem ${ORD[f]}, line ${l+1}, empty`);
+      b.textContent=p?p.t:`Line ${l+1}`; b.setAttribute('aria-label',p?`${PNAME(f)}, line ${l+1}: ${p.t}${CK.sel===p?', picked up':''}`:`${PNAME(f)}, line ${l+1}, empty`);
       b.addEventListener('click',()=>sortSlot(i)); li.appendChild(b); ol.appendChild(li);
     }
     box.append(h,ol); fr.appendChild(box);
@@ -3024,7 +3031,7 @@ function sortSlot(i){
     if(from[0]==='slot') CK.slots[from[1]]=here; else if(from[0]==='bin') CK.bin.push(here); else CK.tray.push(here);
   }
   CK.slots[i]=p; CK.sel=null; Snd.tock(); renderSort();
-  sortSay(`“${p.t}” goes in poem ${ORD[Math.floor(i/3)]}, line ${i%3+1}.`);
+  sortSay(`“${p.t}” goes in ${pname(Math.floor(i/3))}, line ${i%3+1}.`);
   const b=$$('#sFrames .sslot')[i]; if(b) b.focus();
 }
 $('#sBinBtn').addEventListener('click',()=>{const p=CK.sel;if(!p)return;takeOut(p);CK.bin.push(p);CK.sel=null;Snd.sink();renderSort();sortSay(`“${p.t}” goes in the cliché bin.`);$('#sBinBtn').focus()});
@@ -3034,14 +3041,14 @@ $('#sCheck').addEventListener('click',sortCheck);
 /* grading: each poem frame belongs to the real haiku with the most lines in it (each haiku claimed once) */
 function sortCheck(){
   const counts=[];
-  for(let f=0;f<3;f++) CK.run.forEach(r=>{const n=[0,1,2].filter(l=>{const p=CK.slots[f*3+l];return p&&p.hid===r.id}).length;if(n)counts.push({f,id:r.id,n})});
+  for(let f=0;f<CKN;f++) CK.run.forEach(r=>{const n=[0,1,2].filter(l=>{const p=CK.slots[f*3+l];return p&&p.hid===r.id}).length;if(n)counts.push({f,id:r.id,n})});
   counts.sort((a,b)=>b.n-a.n); const own={}, taken=new Set();
   counts.forEach(c=>{if(own[c.f]===undefined&&!taken.has(c.id)){own[c.f]=c.id;taken.add(c.id)}});
   let exact=0, realCaught=CK.basket.filter(p=>p.k==='r').length, clCaught=CK.basket.length-realCaught, clBinned=CK.bin.filter(p=>p.k==='c').length;
   const box=$('#sResult'); box.innerHTML='';
-  for(let f=0;f<3;f++){
+  for(let f=0;f<CKN;f++){
     const sec=document.createElement('div'); sec.className='fpoem';
-    const h=document.createElement('p'); h.className='eyebrow'; h.textContent=`Your poem ${ORD[f]}`; sec.appendChild(h);
+    const h=document.createElement('p'); h.className='eyebrow'; h.textContent=CKN===1?'Your poem':`Your poem ${ORD[f]}`; sec.appendChild(h);
     const ul=document.createElement('ul'); ul.className='marks';
     for(let l=0;l<3;l++){
       const p=CK.slots[f*3+l], li=document.createElement('li');
@@ -3059,9 +3066,10 @@ function sortCheck(){
   }
   CK.bin.forEach(p=>{if(p.k==='r'){const n=document.createElement('p');n.className='note';n.textContent=`In the bin, but real: “${p.full}”`;box.appendChild(n)}});
   const clean=exact===realCaught&&clBinned===clCaught&&!CK.bin.some(p=>p.k==='r');
-  $('#sDoneQ').textContent=clean?(realCaught===9?'All nine lines, home in the right poems.':`Every line you caught is where it belongs. ${9-realCaught} real ${9-realCaught===1?'line was':'lines were'} still in the river.`)
-    :`${exact} of your ${realCaught} real lines are in the right poem and the right place.`;
-  $('#sDoneNote').textContent=`You caught ${realCaught} real ${realCaught===1?'line':'lines'} and ${clCaught} ${clCaught===1?'cliché':'clichés'}`+(clCaught?`, and binned ${clBinned} of them.`:'.')+' Here are the three haiku as their poets wrote them.';
+  const miss=CKL-realCaught;
+  $('#sDoneQ').textContent=clean?(miss===0?(CKN===1?'All three lines, home in the right order.':'All the lines, home in the right poems.'):`Every line you caught is where it belongs. ${miss} real ${miss===1?'line was':'lines were'} still in the river.`)
+    :`${exact} of your ${realCaught} real ${realCaught===1?'line is':'lines are'} in the right place.`;
+  $('#sDoneNote').textContent=`You caught ${realCaught} real ${realCaught===1?'line':'lines'} and ${clCaught} ${clCaught===1?'cliché':'clichés'}`+(clCaught?`, and binned ${clBinned} of them.`:'.')+(CKN===1?' Here is the haiku as its poet wrote it.':' Here are the haiku as their poets wrote them.');
   const real=$('#sReal'); real.innerHTML='';
   CK.run.forEach(r=>{
     const w=document.createElement('div'); w.className='fpoem';
@@ -3077,7 +3085,7 @@ function sortCheck(){
     real.appendChild(w);
   });
   const cr=document.createElement('p'); cr.className='note'; cr.textContent='English versions by Tight Spiral Studios, translated from the Japanese originals.'; real.appendChild(cr);
-  if(exact===9){try{Snd.bell(true)}catch(e){}}
+  if(exact===CKL){try{Snd.bell(true)}catch(e){}}
   S.phase='sortdone'; show('pSortDone'); landOn($('#sResult'),$('#sDoneQ'));
 }
 $('#creek0').addEventListener('click',()=>startCreek('start'));
@@ -3085,7 +3093,7 @@ $('#creekF').addEventListener('click',()=>startCreek('final'));
 $('#cBack').addEventListener('click',creekLeave);
 $('#sBack').addEventListener('click',creekLeave);
 $('#sAgain').addEventListener('click',()=>startCreek());
-$('#sRetry').addEventListener('click',()=>{S.phase='sort';CK.tray=shuffle(CK.basket.slice());CK.slots=Array(9).fill(null);CK.bin=[];CK.sel=null;show('pSort');renderSort();landOn($('#sTray'),$('#sortQ'))});
+$('#sRetry').addEventListener('click',()=>{S.phase='sort';CK.tray=shuffle(CK.basket.slice());CK.slots=Array(CKL).fill(null);CK.bin=[];CK.sel=null;show('pSort');renderSort();landOn($('#sTray'),$('#sortQ'))});
 $('#cPause').addEventListener('click',()=>{setPaused(!S.paused);$('#cPause').textContent=S.paused?'Resume river':'Pause river';$('#cPause').setAttribute('aria-pressed',S.paused)});
 $('#cStill').addEventListener('click',()=>{const v=!S.still; if(v) moveBank(true); setStill(v); $('#cStill').setAttribute('aria-pressed',v); $('#cStillBox').hidden=!v; $('#cPause').hidden=v});
 
