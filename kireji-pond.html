@@ -16,6 +16,12 @@
      frog." Cliché Creek: thirty poems, three real, the rest clichés, near misses included. Clichés that float past count
      against you, so the player smashes all the way down; the frog's tongue brings the real ones home. Studio translations
      from public-domain Japanese originals; the results screen shows each original and its cliché twin. -->
+<!-- v5.10 2026-10-06 (founder): "'The morning glory' can be mistaken as cliche. Sort more carefully. Choose 5 haiku and
+     gameplay moves through sequence." The creek is now a fixed run of five, one haiku at a time: Basho's old pond,
+     Shiki's persimmon, Buson's early summer rain, Issa's sparrow, Basho's rough sea. Each was kept only if every one of its
+     lines, alone in the river, reads plainly as not a cliché (reasons for the eight left out sit beside CREEK_SEQ).
+     The eyebrow counts haiku N of 5; the results button walks on to the next; after the fifth, the score of exact rebuilds
+     and Start again from haiku 1. Leaving for the pond keeps your place in the run. -->
 <!-- v5.9 2026-10-05 (founder): "For second game 3 haikus is crazy hard. Just one at a time." Cliché Creek now runs one
      haiku per round: its three lines in the river with nine cliché lines (its own cliché twin first), catch three, put the
      poem back in order, bin any cliché. Next haiku deals a poem not yet seen this session until all thirteen have come round.
@@ -927,7 +933,7 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
     <!-- v5.6 Cliché Creek: catch, then sort (v5.9: one haiku, three lines) -->
     <section id="pCreek" hidden>
       <div class="ph">
-        <div><p class="eyebrow">Cliché Creek</p><h2>Catch three lines</h2></div>
+        <div><p class="eyebrow" id="cEye">Cliché Creek</p><h2>Catch three lines</h2></div>
         <p class="ccount"><b id="cCount">0</b> of 3</p>
       </div>
       <p class="note">One real haiku is in the river, broken into lines and mixed with clichés. Catch three lines. Then put the poem back together.</p>
@@ -945,7 +951,7 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
       </div>
     </section>
     <section id="pSort" hidden>
-      <p class="eyebrow">Cliché Creek · the sort</p>
+      <p class="eyebrow" id="sEye">Cliché Creek · the sort</p>
       <h2 id="sortQ" tabindex="-1">Put the poem back together</h2>
       <p class="note">Three lines, in order. Tap a line to pick it up, then tap where it goes. A cliché goes in the bin.</p>
       <h3 id="sTrayH">Your catch</h3>
@@ -960,7 +966,7 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
       <button class="primary" id="sCheck" type="button" disabled>Check my sort</button>
     </section>
     <section id="pSortDone" hidden>
-      <p class="eyebrow">Cliché Creek · how it sorted</p>
+      <p class="eyebrow" id="dEye">Cliché Creek · how it sorted</p>
       <h2 id="sDoneQ" tabindex="-1">How it sorted</h2>
       <p class="note" id="sDoneNote"></p>
       <div class="finals" id="sResult"></div>
@@ -2911,12 +2917,18 @@ const CREEK_CLICHE=[ /* v5.8: every LINE is a cliché on its own, not just every
    nine lines, then sorts them into three poems of three lines, with a bin for any cliché caught. Smash still bounces off
    a real line, as Smash bounces off a fresh line in the pond. Real lines the player misses come round again. */
 const CKN=1, CKL=3*CKN; // v5.9 (founder 2026-10-05: "3 haikus is crazy hard. Just one at a time"): poems per run, lines to catch
-const CK={seen:new Set(),on:false,basket:[],run:[],pool:[],saved:null,back:'start',sel:null,slots:[],bin:[],tray:[]};
+/* v5.10 (founder 2026-10-06: "'The morning glory' can be mistaken as cliche. Sort more carefully. Choose 5 haiku and
+   gameplay moves through sequence"). Five poems, chosen line by line: every line, read alone in the river, has to be
+   plainly NOT a cliché - a concrete thing, a place, an act. Out, and why: asagao ("the morning glory" is a stock flower
+   alone); shizukasa ("stillness" alone is a vague abstraction); tsuyu ("this world of dew" reads as stock poetic);
+   tabi ("my dreams go running"); kareeda and konomichi ("autumn evening" alone is generic); nanohana ("the moon in the
+   east" sits too near the moon clichés); harunoumi (strong, held back so the run stays five); natsukusa, yasegaeru
+   (pulled at v5.8). Order runs from the game's own frog to the widest sky. */
+const CREEK_SEQ=['furuike','kaki','samidare','suzume','araumi'];
+const CK={idx:0,score:[],on:false,basket:[],run:[],pool:[],saved:null,back:'start',sel:null,slots:[],bin:[],tray:[]};
 const ckBare=t=>t.replace(/\s*[—,!.;:]+\s*$/,''); // line-end punctuation stays out of the river, back on the results
 function creekPlan(){
-  const ok=CREEK_REAL.filter(r=>r.creek!==false); // v5.8: only poems whose every line reads true alone
-  let fresh=ok.filter(r=>!CK.seen.has(r.id)); if(fresh.length<CKN){CK.seen.clear();fresh=ok} // v5.9: a new poem each run until all have come round
-  const real=shuffle(fresh.slice()).slice(0,CKN); real.forEach(r=>CK.seen.add(r.id));
+  const real=[CREEK_REAL.find(r=>r.id===CREEK_SEQ[CK.idx])]; // v5.10: the fixed run of five, one at a time
   const realTexts=new Set(CREEK_REAL.flatMap(r=>r.en.map(l=>ckBare(l).toLowerCase())));
   const pairs=CREEK_CLICHE.filter(c=>real.some(r=>r.id===c.pair));
   const others=shuffle(CREEK_CLICHE.filter(c=>!pairs.includes(c)));
@@ -2953,7 +2965,8 @@ function startCreek(back){
   show('pCreek'); creekShowBasket(); $('#cStill').setAttribute('aria-pressed',S.still); $('#cPause').hidden=S.still;
   $('#cStillBox').hidden=!S.still; if(S.still){dealList();moveBank(true)}
   if(innerWidth<780){try{scrollTo({top:0,behavior:'smooth'})}catch(e){scrollTo(0,0)}}
-  say('One real haiku is in the river, broken into lines. Catch three lines, then put the poem back together.');
+  const n=`haiku ${CK.idx+1} of ${CREEK_SEQ.length}`; $('#cEye').textContent=`Cliché Creek · ${n}`; $('#sEye').textContent=`Cliché Creek · ${n} · the sort`; $('#dEye').textContent=`Cliché Creek · ${n} · how it sorted`;
+  say(`Haiku ${CK.idx+1} of ${CREEK_SEQ.length} is in the river, broken into lines. Catch three lines, then put the poem back together.`);
 }
 /* the bank list lives in the play panel; in the creek it moves into the creek panel and back */
 function moveBank(toCreek){const pl=$('#plist'); if(toCreek)$('#cStillBox').insertBefore(pl,$('#cPull')); else $('#stillBox').insertBefore(pl,$('#pull'))}
@@ -3086,13 +3099,17 @@ function sortCheck(){
   });
   const cr=document.createElement('p'); cr.className='note'; cr.textContent='English versions by Tight Spiral Studios, translated from the Japanese originals.'; real.appendChild(cr);
   if(exact===CKL){try{Snd.bell(true)}catch(e){}}
+  CK.score[CK.idx]=clean&&exact===CKL; // v5.10: rebuilt whole and clean
+  const last=CK.idx===CREEK_SEQ.length-1, done=CK.score.filter(Boolean).length;
+  $('#sFin')?.remove(); if(last){const fin=document.createElement('p'); fin.id='sFin'; fin.className='note'; fin.textContent=`That is all five. You rebuilt ${done} of ${CREEK_SEQ.length} exactly as their poets wrote them.`; $('#sDoneNote').after(fin)}
+  $('#sAgain').textContent=last?'Start again from haiku 1':`Next: haiku ${CK.idx+2} of ${CREEK_SEQ.length}`;
   S.phase='sortdone'; show('pSortDone'); landOn($('#sResult'),$('#sDoneQ'));
 }
 $('#creek0').addEventListener('click',()=>startCreek('start'));
 $('#creekF').addEventListener('click',()=>startCreek('final'));
 $('#cBack').addEventListener('click',creekLeave);
 $('#sBack').addEventListener('click',creekLeave);
-$('#sAgain').addEventListener('click',()=>startCreek());
+$('#sAgain').addEventListener('click',()=>{CK.idx=(CK.idx+1)%CREEK_SEQ.length; if(!CK.idx) CK.score=[]; startCreek()}); // v5.10: on through the five
 $('#sRetry').addEventListener('click',()=>{S.phase='sort';CK.tray=shuffle(CK.basket.slice());CK.slots=Array(CKL).fill(null);CK.bin=[];CK.sel=null;show('pSort');renderSort();landOn($('#sTray'),$('#sortQ'))});
 $('#cPause').addEventListener('click',()=>{setPaused(!S.paused);$('#cPause').textContent=S.paused?'Resume river':'Pause river';$('#cPause').setAttribute('aria-pressed',S.paused)});
 $('#cStill').addEventListener('click',()=>{const v=!S.still; if(v) moveBank(true); setStill(v); $('#cStill').setAttribute('aria-pressed',v); $('#cStillBox').hidden=!v; $('#cPause').hidden=v});
