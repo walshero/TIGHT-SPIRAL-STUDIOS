@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Spades Practice Table</title>
+<meta name="tsp-build" content="spades-practice-table v0.1 · 2026-10-08 · single-player vs three computer players · offline single file">
+<style>
+/* Layout: one screen. Legal-pad scoresheet on top, walnut kitchen table in the middle (the scene),
+   your hand at the bottom. Text only ever sits on --panel, --pad or --card. Wood is atmosphere only. */
+:root{
+  --bg:#3B2A20; --table-1:#8A5A3B; --table-2:#7A4E33; --mat:#9C6B49;
+  --pad:#FFF3B0; --pad-rule:#9DB7E0; --pad-margin:#D9534F;
+  --panel:#FFFBF2; --ink:#1E1A16; --muted:#4B433B; --line:#CDBFAE;
+  --accent:#0A5BA8; --on-accent:#FDFCF8; --turn:#F2B632; --hint:#0A5BA8;
+  --card:#FDFCF8; --card-edge:#BDB3A6; --back-1:#1F3B73; --back-2:#2C539B;
+  --suit-s:#111111; --suit-h:#B3261E; --suit-d:#B3261E; --suit-c:#111111;
+  --font-ui:-apple-system,"SF Pro Text",system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-card:Georgia,"Iowan Old Style","Times New Roman",serif;
+  --font-num:ui-rounded,"SF Pro Rounded",-apple-system,system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0A0B0C; --table-1:#1C1714; --table-2:#181310; --mat:#241E1A;
+  --pad:#17191C; --pad-rule:#2A3442; --pad-margin:#4A2523;
+  --panel:#15181B; --ink:#ECECEC; --muted:#B9B9B9; --line:#2E343A;
+  --accent:#8FC1FF; --on-accent:#0B0D0F; --hint:#8FC1FF; --card:#EDEBE6; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0A0B0C; --table-1:#1C1714; --table-2:#181310; --mat:#241E1A;
+  --pad:#17191C; --pad-rule:#2A3442; --pad-margin:#4A2523;
+  --panel:#15181B; --ink:#ECECEC; --muted:#B9B9B9; --line:#2E343A;
+  --accent:#8FC1FF; --on-accent:#0B0D0F; --hint:#8FC1FF; --card:#EDEBE6; color-scheme:dark }
+/* comfort ladder (studio kernel): the live corner control sets one of these on body */
+body.day{
+  --bg:#3B2A20; --table-1:#8A5A3B; --table-2:#7A4E33; --mat:#9C6B49;
+  --pad:#FFF3B0; --pad-rule:#9DB7E0; --pad-margin:#D9534F;
+  --panel:#FFFBF2; --ink:#1E1A16; --muted:#4B433B; --line:#CDBFAE;
+  --accent:#0A5BA8; --on-accent:#FDFCF8; --hint:#0A5BA8; --card:#FDFCF8; color-scheme:light }
+body.dusk{
+  --bg:#1E1611; --table-1:#4E3527; --table-2:#432D21; --mat:#5A3F2F;
+  --pad:#3A3326; --pad-rule:#5B6C86; --pad-margin:#8C3A35;
+  --panel:#2E2620; --ink:#F4EEE4; --muted:#D3C7B6; --line:#5A4B3E;
+  --accent:#9DCBFF; --on-accent:#102033; --hint:#9DCBFF; --card:#FDFCF8; color-scheme:dark }
+body.night{
+  --bg:#0A0B0C; --table-1:#1C1714; --table-2:#181310; --mat:#241E1A;
+  --pad:#17191C; --pad-rule:#2A3442; --pad-margin:#4A2523;
+  --panel:#15181B; --ink:#ECECEC; --muted:#B9B9B9; --line:#2E343A;
+  --accent:#8FC1FF; --on-accent:#0B0D0F; --hint:#8FC1FF; --card:#EDEBE6; color-scheme:dark }
+body.four{ --suit-d:#1747A6; --suit-c:#1D6A2C }
+
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.35 var(--font-ui);
+  transition:background-color .18s;-webkit-tap-highlight-color:transparent;overflow:hidden}
+.app{height:100%;display:flex;flex-direction:column;max-width:760px;margin:0 auto}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+/* ---- legal pad ---- */
+.pad{position:relative;background:var(--pad);color:var(--ink);
+  background-image:repeating-linear-gradient(180deg,transparent 0 23px,var(--pad-rule) 23px 24px);
+  padding:8px 12px 8px 30px;display:grid;grid-template-columns:1fr 1fr auto;gap:4px 14px;align-items:start;
+  box-shadow:0 2px 0 rgba(0,0,0,.25)}
+.pad::before{content:"";position:absolute;left:20px;top:0;bottom:0;width:2px;background:var(--pad-margin)}
+.team h2{margin:0;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.team .score{font:800 28px/1.05 var(--font-num);font-variant-numeric:tabular-nums}
+.team .sub{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pad .meta{grid-column:1/3;font-size:12px;color:var(--muted)}
+.comfort-btn{grid-row:1/3;grid-column:3;align-self:center;background:var(--panel);color:var(--ink);
+  border:2px solid var(--line);border-radius:10px;padding:8px 12px;font-weight:700;font-size:14px;min-height:44px}
+
+/* ---- the table (scene) ---- */
+.table{position:relative;flex:1;min-height:230px;overflow:hidden;
+  background:
+   radial-gradient(ellipse 60% 45% at 50% 50%,var(--mat),transparent 70%),
+   repeating-linear-gradient(92deg,var(--table-1) 0 7px,var(--table-2) 7px 9px,var(--table-1) 9px 19px,var(--table-2) 19px 20px),
+   var(--table-1)}
+.table::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 40%,transparent 55%,rgba(0,0,0,.35))}
+.seat{position:absolute;z-index:3;background:var(--panel);color:var(--ink);border:2px solid var(--line);
+  border-radius:12px;padding:5px 10px;text-align:center;min-width:84px;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.seat .nm{font-weight:800;font-size:15px}
+.seat .st{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.seat.on{border-color:var(--turn);box-shadow:0 0 0 3px var(--turn),0 2px 6px rgba(0,0,0,.3)}
+.seat.n{top:8px;left:50%;transform:translateX(-50%)}
+.seat.w{left:6px;top:50%;transform:translateY(-50%)}
+.seat.e{right:6px;top:50%;transform:translateY(-50%)}
+.seat.s{bottom:6px;left:50%;transform:translateX(-50%)}
+.backs{display:flex;justify-content:center;margin-top:3px;height:14px}
+.backs i{width:9px;height:14px;margin-left:-4px;border-radius:2px;border:1px solid var(--card);
+  background:repeating-linear-gradient(45deg,var(--back-1) 0 2px,var(--back-2) 2px 4px)}
+.backs i:first-child{margin-left:0}
+
+.trick{position:absolute;left:50%;top:50%;width:0;height:0;z-index:2}
+.trick .card{position:absolute;width:var(--tw);margin:calc(var(--tw)*-.7) 0 0 calc(var(--tw)*-.5)}
+.trick .c0{transform:translate(0,calc(var(--tw)*.78))}
+.trick .c1{transform:translate(calc(var(--tw)*-1.02),0)}
+.trick .c2{transform:translate(0,calc(var(--tw)*-.78))}
+.trick .c3{transform:translate(calc(var(--tw)*1.02),0)}
+.trick .card.in0{animation:in0 .28s ease-out}
+.trick .card.in1{animation:in1 .28s ease-out}
+.trick .card.in2{animation:in2 .28s ease-out}
+.trick .card.in3{animation:in3 .28s ease-out}
+@keyframes in0{from{transform:translate(0,220%)}}
+@keyframes in1{from{transform:translate(-260%,0)}}
+@keyframes in2{from{transform:translate(0,-220%)}}
+@keyframes in3{from{transform:translate(260%,0)}}
+.trick.go0 .card{transition:transform .45s ease-in,opacity .45s;transform:translate(0,260%);opacity:0}
+.trick.go1 .card{transition:transform .45s ease-in,opacity .45s;transform:translate(-320%,0);opacity:0}
+.trick.go2 .card{transition:transform .45s ease-in,opacity .45s;transform:translate(0,-260%);opacity:0}
+.trick.go3 .card{transition:transform .45s ease-in,opacity .45s;transform:translate(320%,0);opacity:0}
+
+/* ---- cards ---- */
+.card{position:relative;aspect-ratio:5/7;background:var(--card);border:1px solid var(--card-edge);border-radius:8%/6%;
+  box-shadow:0 1px 3px rgba(0,0,0,.35);padding:0;display:block;overflow:hidden;font-family:var(--font-card)}
+.card .rk{position:absolute;left:8%;top:3%;font-weight:700;font-size:calc(var(--cw)*.36);line-height:1}
+.card .sm{position:absolute;left:9%;top:calc(var(--cw)*.42);width:28%}
+.card .bg{position:absolute;right:8%;bottom:6%;width:52%}
+.card svg{display:block;width:100%;height:auto;fill:currentColor}
+.s3{color:var(--suit-s)} .s2{color:var(--suit-h)} .s1{color:var(--suit-d)} .s0{color:var(--suit-c)}
+.trick .card{--cw:var(--tw)}
+
+.status{display:flex;gap:10px;align-items:center;background:var(--panel);color:var(--ink);
+  border-top:2px solid var(--line);padding:8px 12px;min-height:48px}
+.status p{margin:0;flex:1;font-size:15px;font-weight:600;min-width:0}
+.btn{background:var(--panel);color:var(--ink);border:2px solid var(--line);border-radius:10px;
+  padding:8px 14px;min-height:44px;font-weight:700;cursor:pointer}
+.btn.primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+
+.handwrap{background:var(--panel);padding:8px 12px 12px}
+.hand{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;max-width:560px;margin:0 auto;
+  --cw:min(calc((100vw - 60px)/7),74px)}
+body.big .hand{grid-template-columns:repeat(5,1fr);--cw:min(calc((100vw - 48px)/5),96px)}
+.hand .card{cursor:pointer;transition:transform .15s}
+.hand .card.ok{transform:translateY(-5px);box-shadow:0 0 0 3px var(--accent),0 3px 6px rgba(0,0,0,.35)}
+.hand .card.hint{box-shadow:0 0 0 4px var(--turn),0 0 0 7px var(--hint)}
+.hand .card.no{cursor:default}
+.hand .card.shake{animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+:root{--tw:min(17vw,78px)}
+body.big{--tw:min(21vw,100px)}
+
+/* ---- sheets (bidding, results, comfort) ---- */
+.sheet{position:absolute;left:8px;right:8px;bottom:8px;z-index:5;background:var(--panel);color:var(--ink);
+  border:2px solid var(--line);border-radius:14px;padding:12px;box-shadow:0 6px 20px rgba(0,0,0,.45);
+  max-height:calc(100% - 16px);overflow:auto}
+.sheet h3{margin:0 0 4px;font-size:18px}
+.sheet .note{margin:0 0 8px;font-size:14px;color:var(--muted)}
+.bids{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.bids button{min-height:46px;border-radius:10px;border:2px solid var(--line);background:var(--panel);color:var(--ink);
+  font:800 18px var(--font-num);cursor:pointer;padding:0}
+.bids button.sug{border:3px solid var(--accent)}
+.bids button small{display:block;font:700 10px var(--font-ui);letter-spacing:.04em;color:var(--muted)}
+.res{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;margin:6px 0 10px}
+.res th,.res td{padding:5px 6px;border-bottom:1px solid var(--line);text-align:right;font-size:15px}
+.res th:first-child,.res td:first-child{text-align:left;color:var(--muted);font-weight:600}
+.res thead th{font-size:13px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.moves{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px;padding:0;list-style:none}
+.moves li{border:2px solid var(--accent);border-radius:999px;padding:3px 10px;font-size:14px;font-weight:700}
+.row{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+
+.comfort{position:fixed;top:calc(env(safe-area-inset-top,0px) + 70px);right:10px;left:auto;bottom:auto;width:min(330px,calc(100vw - 20px))}
+.comfort fieldset{border:0;margin:0 0 10px;padding:0}
+.comfort legend{font-weight:800;font-size:14px;margin-bottom:4px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{flex:1;min-height:44px;border-radius:10px;border:2px solid var(--line);background:var(--panel);color:var(--ink);font-weight:700;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+@media (min-height:760px){ .seat .nm{font-size:16px} }
+</style>
+</head>
+<body>
+
+
+<div class="app">
+  <header class="pad" aria-label="Scoresheet">
+    <div class="team"><h2>Us</h2><div class="score" id="sc0">0</div><div class="sub" id="sb0"></div></div>
+    <div class="team"><h2>Them</h2><div class="score" id="sc1">0</div><div class="sub" id="sb1"></div></div>
+    <button class="comfort-btn" id="comfortBtn" aria-expanded="false" aria-controls="comfort">Comfort</button>
+    <div class="meta" id="meta">Game to 500</div>
+  </header>
+
+  <main class="table" id="table" aria-label="Card table">
+    <div class="seat n" id="seat2"></div>
+    <div class="seat w" id="seat1"></div>
+    <div class="seat e" id="seat3"></div>
+    <div class="trick" id="trick" aria-live="polite"></div>
+    <section class="sheet" id="bidSheet" hidden aria-labelledby="bidH">
+      <h3 id="bidH">Your bid</h3>
+      <p class="note" id="bidNote"></p>
+      <div class="bids" id="bids"></div>
+    </section>
+    <section class="sheet" id="endSheet" hidden aria-labelledby="endH">
+      <h3 id="endH">Hand over</h3>
+      <div id="endBody"></div>
+      <div class="row"><button class="btn primary" id="nextBtn">Deal next hand</button></div>
+    </section>
+  </main>
+
+  <div class="status">
+    <p id="status" aria-live="polite">Shuffling.</p>
+    <button class="btn" id="hintBtn">Hint</button>
+  </div>
+  <div class="handwrap"><div class="hand" id="hand" aria-label="Your hand"></div></div>
+</div>
+
+<section class="sheet comfort" id="comfort" hidden aria-label="Comfort settings">
+  <fieldset><legend>Light</legend><div class="seg" data-k="light">
+    <button data-v="day">Day</button><button data-v="dusk">Dusk</button><button data-v="night">Night</button></div></fieldset>
+  <fieldset><legend>Cards</legend><div class="seg" data-k="size">
+    <button data-v="std">Standard</button><button data-v="big">Large</button></div></fieldset>
+  <fieldset><legend>Suit colors</legend><div class="seg" data-k="suits">
+    <button data-v="two">Two colors</button><button data-v="four">Four colors</button></div></fieldset>
+  <fieldset><legend>Pace</legend><div class="seg" data-k="pace">
+    <button data-v="relaxed">Relaxed</button><button data-v="brisk">Brisk</button></div></fieldset>
+  <fieldset><legend>Sound</legend><div class="seg" data-k="sound">
+    <button data-v="on">On</button><button data-v="off">Off</button></div></fieldset>
+  <div class="row">
+    <button class="btn" id="newGameBtn">Start a new game</button>
+    <button class="btn primary" id="closeComfort">Done</button>
+  </div>
+  <p class="note" id="newGameConfirm" hidden>Tap Start a new game again to drop this game.</p>
+</section>
+
+<script>
+(function(){
+"use strict";
+/* ---------- constants ---------- */
+var SUIT_NAMES=["clubs","diamonds","hearts","spades"];
+var RANK_NAMES={11:"Jack",12:"Queen",13:"King",14:"Ace"};
+var RANK_TXT={11:"J",12:"Q",13:"K",14:"A"};
+var NAMES=["You","Rollo","Dee","Junie"];
+var SVG={
+ 3:'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 4C36 28 6 44 6 65c0 17 20 26 37 13-2 10-6 16-12 19h38c-6-3-10-9-12-19 17 13 37 4 37-13C94 44 64 28 50 4z"/></svg>',
+ 2:'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 93C20 71 5 53 5 32 5 15 18 5 31 5c9 0 16 6 19 13 3-7 10-13 19-13 13 0 26 10 26 27 0 21-15 39-45 61z"/></svg>',
+ 1:'<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 3l38 47-38 47-38-47z"/></svg>',
+ 0:'<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="28" r="21"/><circle cx="27" cy="58" r="21"/><circle cx="73" cy="58" r="21"/><path d="M45 52h10l6 44H39z"/></svg>'
+};
+var TARGET=500, FLOOR=-200;
+var $=function(id){return document.getElementById(id)};
+
+/* ---------- prefs ---------- */
+function load(k,d){try{var v=localStorage.getItem("spt-"+k);return v==null?d:JSON.parse(v)}catch(e){return d}}
+function store(k,v){try{localStorage.setItem("spt-"+k,JSON.stringify(v))}catch(e){}}
+var sysDark=false;try{sysDark=matchMedia("(prefers-color-scheme: dark)").matches}catch(e){}
+var P=load("prefs",{light:sysDark?"night":"day",size:"std",suits:"two",pace:"relaxed",sound:"on"});
+function applyPrefs(){
+  var b=document.body;
+  b.classList.remove("day","dusk","night","big","four");
+  b.classList.add(P.light);
+  if(P.size==="big")b.classList.add("big");
+  if(P.suits==="four")b.classList.add("four");
+  document.documentElement.setAttribute("data-light",P.light);
+  document.querySelectorAll(".seg").forEach(function(seg){
+    seg.querySelectorAll("button").forEach(function(btn){
+      btn.setAttribute("aria-pressed",String(P[seg.dataset.k]===btn.dataset.v));
+    });
+  });
+  store("prefs",P);
+}
+function delay(){return P.pace==="brisk"?420:850}
+function hold(){return P.pace==="brisk"?750:1300}
+
+/* ---------- sound ---------- */
+var actx=null;
+function snap(){
+  if(P.sound!=="on")return;
+  try{
+    if(!actx)actx=new (window.AudioContext||window.webkitAudioContext)();
+    var n=actx.sampleRate*0.05,buf=actx.createBuffer(1,n,actx.sampleRate),d=buf.getChannelData(0);
+    for(var i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,3);
+    var src=actx.createBufferSource(),f=actx.createBiquadFilter(),g=actx.createGain();
+    f.type="bandpass";f.frequency.value=2200;g.gain.value=0.25;
+    src.buffer=buf;src.connect(f);f.connect(g);g.connect(actx.destination);src.start();
+  }catch(e){}
+}
+
+/* ---------- game state ---------- */
+var G=null, timer=null;
+function rnd(n){try{var a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n}catch(e){return Math.floor(Math.random()*n)}}
+function newGame(){
+  G={scores:[0,0],bags:[0,0],dealer:rnd(4),handNo:0,moves:[]};
+  startHand();
+}
+function startHand(){
+  var deck=[];for(var s=0;s<4;s++)for(var r=2;r<=14;r++)deck.push({s:s,r:r});
+  for(var i=deck.length-1;i>0;i--){var j=rnd(i+1),t=deck[i];deck[i]=deck[j];deck[j]=t}
+  G.hands=[[],[],[],[]];
+  for(var k=0;k<52;k++)G.hands[k%4].push(deck[k]);
+  G.hands.forEach(sortHand);
+  G.handNo++;G.bids=[null,null,null,null];G.tricks=[0,0,0,0];G.trick=[];G.broken=false;
+  G.phase="bid";G.turn=(G.dealer+1)%4;G.leader=G.turn;G.last=null;G.result=null;
+  save();render();schedule();
+}
+var ORDER={3:0,2:1,0:2,1:3};
+function sortHand(h){h.sort(function(a,b){return ORDER[a.s]-ORDER[b.s]||b.r-a.r})}
+function save(){store("game",G)}
+
+/* ---------- rules ---------- */
+function legal(p){
+  var h=G.hands[p];
+  if(!G.trick.length){
+    if(!G.broken){var ns=h.filter(function(c){return c.s!==3});if(ns.length)return ns}
+    return h.slice();
+  }
+  var led=G.trick[0].c.s,f=h.filter(function(c){return c.s===led});
+  return f.length?f:h.slice();
+}
+function beats(a,b,led){ // does card a beat card b given led suit
+  if(a.s===b.s)return a.r>b.r;
+  if(a.s===3)return true;
+  if(b.s===3)return false;
+  return a.s===led&&b.s!==led;
+}
+function winnerOf(trick){
+  var led=trick[0].c.s,w=trick[0];
+  for(var i=1;i<trick.length;i++)if(beats(trick[i].c,w.c,led))w=trick[i];
+  return w;
+}
+function team(p){return p%2}
+function nilAlive(p){return G.bids[p]===0&&G.tricks[p]===0}
+function teamNeed(t){
+  var bid=0,took=0;
+  [t,t+2].forEach(function(p){if(G.bids[p]>0){bid+=G.bids[p];took+=G.tricks[p]}});
+  return bid-took;
+}
+
+/* ---------- computer players ---------- */
+function estimate(h){
+  var t=0,by=[[],[],[],[]];
+  h.forEach(function(c){by[c.s].push(c.r)});
+  var sp=by[3];
+  for(var s=0;s<3;s++){
+    var a=by[s],n=a.length;
+    if(a.indexOf(14)>=0)t+=n<=5?1:0.6;
+    if(a.indexOf(13)>=0&&n>=2)t+=a.indexOf(14)>=0?0.8:0.6;
+    if(a.indexOf(12)>=0&&n>=3&&a.indexOf(14)>=0)t+=0.3;
+    if(sp.length>=3){if(n===0)t+=0.9;else if(n===1&&a[0]!==14)t+=0.5;}
+  }
+  if(sp.indexOf(14)>=0)t+=1;
+  if(sp.indexOf(13)>=0)t+=sp.length>=2?1:0.4;
+  if(sp.indexOf(12)>=0)t+=sp.length>=3?0.7:0.2;
+  if(sp.length>3)t+=(sp.length-3)*0.8;
+  return t;
+}
+function suggestBid(p){
+  var h=G.hands[p],t=estimate(h),partner=(p+2)%4;
+  var sp=h.filter(function(c){return c.s===3});
+  var hasBig=h.some(function(c){return c.r===14||(c.s===3&&c.r>=12)});
+  if(t<1.3&&!hasBig&&sp.length<=3&&G.bids[partner]!==0)return 0;
+  var b=Math.max(1,Math.round(t));
+  var others=0;G.bids.forEach(function(x,i){if(i!==p&&x)others+=x});
+  return Math.max(1,Math.min(b,13-Math.min(others,12)));
+}
+function lowest(cards,avoidSpades){
+  return cards.slice().sort(function(a,b){
+    return ((avoidSpades&&a.s===3)?20:0)+a.r-((avoidSpades&&b.s===3)?20:0)-b.r})[0];
+}
+function highest(cards,avoidSpades){
+  return cards.slice().sort(function(a,b){
+    return (b.r-((avoidSpades&&b.s===3)?20:0))-(a.r-((avoidSpades&&a.s===3)?20:0))})[0];
+}
+function choose(p){
+  var L=legal(p),partner=(p+2)%4,need=teamNeed(team(p)),n=G.trick.length;
+  var led=n?G.trick[0].c.s:null, cur=n?winnerOf(G.trick):null;
+  var wins=n?L.filter(function(c){return beats(c,cur.c,led)}):L.slice();
+  var loses=n?L.filter(function(c){return !beats(c,cur.c,led)}):[];
+  // 1. nil bidder ducks
+  if(nilAlive(p)){
+    if(!n)return [lowest(L,true),"Nil: lead your lowest card."];
+    if(loses.length)return [highest(loses,true),"Nil: play the highest card that still loses."];
+    return [highest(L),"Nil is in trouble here. Spend your highest card."];
+  }
+  // 2. cover partner's nil
+  if(nilAlive(partner)){
+    if(!n)return [highest(L,true),"Your partner bid nil. Lead high and take the book."];
+    if(cur.p===partner||G.trick.length<3){
+      if(wins.length)return [lowest(wins.filter(function(c){return c.r>=10||c.s===3}).length?wins.filter(function(c){return c.r>=10||c.s===3}):wins),"Cover your partner's nil. Take this book."];
+    }
+  }
+  // 3. leading
+  if(!n){
+    if(need>0){
+      var aces=L.filter(function(c){return c.r===14&&c.s!==3});
+      if(aces.length)return [aces[0],"Lead an ace while it can still win."];
+      var topSp=L.filter(function(c){return c.s===3&&c.r===14});
+      if(topSp.length)return [topSp[0],"Pull spades with your ace."];
+    }
+    var counts=[0,0,0,0];L.forEach(function(c){counts[c.s]++});
+    var best=-1,bs=-1;for(var s=0;s<3;s++)if(counts[s]>best){best=counts[s];bs=s}
+    var pool=L.filter(function(c){return c.s===bs});
+    if(!pool.length)pool=L;
+    return [lowest(pool),need>0?"Lead low from your longest suit.":"Your team has its books. Lead low and avoid bags."];
+  }
+  // 4. following
+  if(cur.p===partner&&!(G.trick.length<3&&cur.c.r<12&&cur.c.s!==3&&need>0)){
+    return [lowest(L,true),"Your partner is winning this book. Play low."];
+  }
+  if(need>0&&wins.length){
+    if(n===3)return [lowest(wins),"Last to play. Win it as cheaply as you can."];
+    var strong=wins.filter(function(c){return c.r>=12||c.s===3});
+    return [lowest(strong.length?strong:wins),"Your team still needs books. Take this one."];
+  }
+  if(need<=0&&loses.length)return [highest(loses,true),"Your team has its books. Duck to avoid bags."];
+  return [lowest(L,true),"You can't win this one cheaply. Throw your lowest card."];
+}
+
+/* ---------- flow ---------- */
+function schedule(){
+  clearTimeout(timer);
+  if(G.phase==="bid"){
+    if(G.turn===0){render();return}
+    timer=setTimeout(function(){placeBid(G.turn,suggestBid(G.turn))},delay());
+  }else if(G.phase==="play"){
+    if(G.turn===0){render();return}
+    timer=setTimeout(function(){play(G.turn,choose(G.turn)[0])},delay());
+  }
+}
+function placeBid(p,b){
+  G.bids[p]=b;G.turn=(p+1)%4;
+  if(G.bids.every(function(x){return x!==null})){G.phase="play";G.turn=G.leader}
+  save();render();schedule();
+}
+function play(p,card){
+  var h=G.hands[p];
+  h.splice(h.findIndex(function(c){return c.s===card.s&&c.r===card.r}),1);
+  if(card.s===3)G.broken=true;
+  G.trick.push({p:p,c:card});G.last=p;G.hintCard=null;
+  snap();
+  if(G.trick.length===4){G.phase="collect";save();render();timer=setTimeout(collect,hold());return}
+  G.turn=(p+1)%4;save();render();schedule();
+}
+function collect(){
+  var w=winnerOf(G.trick).p,tr=$("trick");
+  tr.className="trick go"+w;
+  setTimeout(function(){
+    G.tricks[w]++;G.trick=[];G.turn=w;G.last=null;tr.className="trick";
+    if(!G.hands[0].length){endHand();return}
+    G.phase="play";save();render();schedule();
+  },P.pace==="brisk"?300:480);
+}
+function endHand(){
+  var R={teams:[]},moves=[];
+  for(var t=0;t<2;t++){
+    var bid=0,took=0,pts=0,bags=0,lines=[];
+    [t,t+2].forEach(function(p){
+      if(G.bids[p]===0){
+        if(G.tricks[p]===0){pts+=100;lines.push(NAMES[p]+" made nil +100");if(t===0)moves.push(p===0?"Nil made":"Dee made nil")}
+        else{pts-=100;bags+=G.tricks[p];pts+=G.tricks[p];lines.push(NAMES[p]+" missed nil −100")}
+      }else{bid+=G.bids[p];took+=G.tricks[p]}
+    });
+    if(bid>0){
+      if(took>=bid){pts+=10*bid+(took-bid);bags+=took-bid;
+        if(t===0&&took===bid)moves.push("Made it exact");
+        if(took===13)moves.push("Boston: all thirteen")}
+      else{pts-=10*bid;if(t===1)moves.push("Set them")}
+    }
+    G.bags[t]+=bags;
+    if(G.bags[t]>=10){G.bags[t]-=10;pts-=100;lines.push("Ten bags −100");if(t===0)moves.push("Bagged out")}
+    G.scores[t]+=pts;
+    R.teams.push({bid:bid,took:took,pts:pts,bags:bags,lines:lines,total:G.scores[t],nil:[t,t+2].filter(function(p){return G.bids[p]===0})});
+  }
+  if(G.bids[2]===0&&G.tricks[2]===0&&G.tricks[0]>0)moves.push("Covered the nil");
+  R.moves=moves;G.moves=G.moves.concat(moves);
+  var s=G.scores;
+  R.over=(s[0]>=TARGET||s[1]>=TARGET||s[0]<=FLOOR||s[1]<=FLOOR)&&s[0]!==s[1];
+  G.result=R;G.phase=R.over?"over":"handEnd";
+  save();render();
+}
+function nextHand(){
+  if(G.phase==="over"){newGame();return}
+  G.dealer=(G.dealer+1)%4;startHand();
+}
+
+/* ---------- render ---------- */
+function cardName(c){return (RANK_NAMES[c.r]||c.r)+" of "+SUIT_NAMES[c.s]}
+function cardHTML(c,tag,cls){
+  var rk=RANK_TXT[c.r]||c.r;
+  return "<"+tag+' class="card s'+c.s+(cls?" "+cls:"")+'" aria-label="'+cardName(c)+'"'+(tag==="button"?' type="button"':"")+'>'+
+    '<span class="rk" aria-hidden="true">'+rk+'</span><span class="sm">'+SVG[c.s]+'</span><span class="bg">'+SVG[c.s]+'</span></'+tag+'>';
+}
+function seatText(p){
+  var b=G.bids[p],bid=b===null?(G.phase==="bid"&&G.turn===p?"Bidding":"No bid yet"):(b===0?"Nil":"Bid "+b);
+  return bid+" · Books "+G.tricks[p];
+}
+function render(){
+  if(!G)return;
+  // scoresheet
+  for(var t=0;t<2;t++){
+    $("sc"+t).textContent=G.scores[t];
+    var bid=0,anyNil=false;[t,t+2].forEach(function(p){if(G.bids[p]>0)bid+=G.bids[p];if(G.bids[p]===0)anyNil=true});
+    var took=G.tricks[t]+G.tricks[t+2];
+    $("sb"+t).innerHTML=(G.phase!=="bid"?"Bid "+bid+(anyNil?"+nil":"")+" · Books "+took+"<br>":"")+"Bags "+G.bags[t];
+  }
+  $("meta").textContent="Game to "+TARGET+" · Hand "+G.handNo+" · "+NAMES[G.dealer]+(G.dealer===0?" deal":" deals")+(G.broken?" · Spades broken":"");
+  // seats
+  [1,2,3].forEach(function(p){
+    var el=$("seat"+p),backs="";
+    for(var i=0;i<Math.min(G.hands[p].length,13);i++)backs+="<i></i>";
+    el.innerHTML='<div class="nm">'+NAMES[p]+(p===2?" · partner":"")+'</div><div class="st">'+seatText(p)+'</div><div class="backs" aria-hidden="true">'+backs+'</div>';
+    el.classList.toggle("on",(G.phase==="bid"||G.phase==="play")&&G.turn===p);
+    el.setAttribute("aria-label",NAMES[p]+", "+seatText(p));
+  });
+  // trick
+  var tr=$("trick"),html="";
+  G.trick.forEach(function(e){html+=cardHTML(e.c,"div","c"+e.p+(e.p===G.last?" in"+e.p:""))});
+  tr.innerHTML=html;G.last=null;
+  // hand
+  var myTurn=G.phase==="play"&&G.turn===0,L=myTurn?legal(0):[];
+  var hh="";
+  G.hands[0].forEach(function(c,i){
+    var ok=L.some(function(x){return x.s===c.s&&x.r===c.r});
+    var hint=G.hintCard&&G.hintCard.s===c.s&&G.hintCard.r===c.r;
+    hh+=cardHTML(c,"button",(myTurn?(ok?"ok":"no"):"")+(hint?" hint":"")).replace("<button",'<button data-i="'+i+'"');
+  });
+  $("hand").innerHTML=hh;
+  // status
+  $("status").textContent=statusText(myTurn);
+  $("hintBtn").hidden=!(myTurn||(G.phase==="bid"&&G.turn===0));
+  // sheets
+  $("bidSheet").hidden=!(G.phase==="bid"&&G.turn===0);
+  if(!$("bidSheet").hidden)renderBid();
+  $("endSheet").hidden=!(G.phase==="handEnd"||G.phase==="over");
+  if(!$("endSheet").hidden)renderEnd();
+}
+function statusText(myTurn){
+  if(G.phase==="bid")return G.turn===0?"Your bid. How many books will you take?":NAMES[G.turn]+" is bidding.";
+  if(G.phase==="collect"){var w=winnerOf(G.trick).p;return (w===0?"You take":NAMES[w]+" takes")+" the book.";}
+  if(G.phase==="handEnd")return "Hand over.";
+  if(G.phase==="over")return "Game over.";
+  if(!myTurn)return NAMES[G.turn]+" is playing.";
+  if(G.hintWhy)return G.hintWhy;
+  if(!G.trick.length)return G.broken||G.hands[0].every(function(c){return c.s===3})?"Your lead. Any card.":"Your lead. Spades aren't broken yet.";
+  var led=G.trick[0].c.s,has=G.hands[0].some(function(c){return c.s===led});
+  return has?"Your turn. Follow "+SUIT_NAMES[led]+".":"Your turn. No "+SUIT_NAMES[led]+", so play anything. A spade will trump.";
+}
+function renderBid(){
+  var sug=suggestBid(0),said=[];
+  for(var i=1;i<4;i++){var p=(G.dealer+i)%4;if(p!==0&&G.bids[p]!==null)said.push(NAMES[p]+" bid "+(G.bids[p]===0?"nil":G.bids[p]))}
+  $("bidNote").textContent=(said.length?said.join(". ")+". ":"You bid first. ")+"Suggested: "+(sug===0?"nil":sug)+".";
+  var h="";
+  for(var b=0;b<=13;b++)h+='<button type="button" data-b="'+b+'" class="'+(b===sug?"sug":"")+'" aria-label="Bid '+(b===0?"nil":b)+(b===sug?", suggested":"")+'">'+(b===0?"Nil":b)+(b===sug?"<small>HINT</small>":"")+"</button>";
+  $("bids").innerHTML=h;
+}
+function renderEnd(){
+  var R=G.result;if(!R)return;
+  var rows=[["Bid",R.teams[0].bid+(R.teams[0].nil.length?" +nil":""),R.teams[1].bid+(R.teams[1].nil.length?" +nil":"")],
+    ["Books",G.tricks[0]+G.tricks[2],G.tricks[1]+G.tricks[3]],
+    ["This hand",fmt(R.teams[0].pts),fmt(R.teams[1].pts)],
+    ["Bags now",G.bags[0],G.bags[1]],["Total",R.teams[0].total,R.teams[1].total]];
+  var h='<table class="res"><thead><tr><th></th><th>Us</th><th>Them</th></tr></thead><tbody>';
+  rows.forEach(function(r){h+="<tr><td>"+r[0]+"</td><td>"+r[1]+"</td><td>"+r[2]+"</td></tr>"});
+  h+="</tbody></table>";
+  var notes=R.teams[0].lines.concat(R.teams[1].lines);
+  if(notes.length)h+='<p class="note">'+notes.join(". ")+".</p>";
+  if(R.moves.length){h+='<p class="note">Moves this hand</p><ul class="moves">';R.moves.forEach(function(m){h+="<li>"+m+"</li>"});h+="</ul>"}
+  if(R.over){
+    var won=G.scores[0]>G.scores[1];
+    $("endH").textContent=won?"You and Dee win":"Rollo and Junie win";
+    h+='<p class="note">Final: '+G.scores[0]+" to "+G.scores[1]+". Moves this game: "+(G.moves.length||"none")+".</p>";
+    $("nextBtn").textContent="Play again";
+  }else{
+    $("endH").textContent="Hand "+G.handNo+" scored";
+    $("nextBtn").textContent="Deal next hand";
+  }
+  $("endBody").innerHTML=h;
+}
+function fmt(n){return n>0?"+"+n:n<0?"−"+Math.abs(n):"0"}
+
+/* ---------- input ---------- */
+$("hand").addEventListener("click",function(e){
+  var btn=e.target.closest("button[data-i]");if(!btn)return;
+  if(!(G.phase==="play"&&G.turn===0))return;
+  var c=G.hands[0][+btn.dataset.i],L=legal(0);
+  if(!L.some(function(x){return x.s===c.s&&x.r===c.r})){
+    btn.classList.remove("shake");void btn.offsetWidth;btn.classList.add("shake");
+    var msg=G.trick.length?"Follow "+SUIT_NAMES[G.trick[0].c.s]+" if you can.":"Spades aren't broken yet. Lead another suit.";
+    $("status").textContent=msg;return;
+  }
+  G.hintWhy=null;play(0,c);
+});
+$("bids").addEventListener("click",function(e){
+  var b=e.target.closest("button[data-b]");if(!b)return;
+  if(G.phase==="bid"&&G.turn===0){snap();placeBid(0,+b.dataset.b)}
+});
+$("hintBtn").addEventListener("click",function(){
+  if(G.phase==="bid"){var s=suggestBid(0);$("status").textContent="Hint: bid "+(s===0?"nil":s)+". Count your aces, your high spades, and any short suit you can trump.";return}
+  if(G.phase!=="play"||G.turn!==0)return;
+  var ch=choose(0);G.hintCard=ch[0];G.hintWhy="Hint: the "+cardName(ch[0])+". "+ch[1];render();
+});
+$("nextBtn").addEventListener("click",nextHand);
+var comfortEl=$("comfort"),cbtn=$("comfortBtn");
+function setComfort(open){comfortEl.hidden=!open;cbtn.setAttribute("aria-expanded",String(open));$("newGameConfirm").hidden=true;armed=false;if(open)comfortEl.querySelector("button").focus()}
+cbtn.addEventListener("click",function(){setComfort(comfortEl.hidden)});
+$("closeComfort").addEventListener("click",function(){setComfort(false);cbtn.focus()});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!comfortEl.hidden){setComfort(false);cbtn.focus()}});
+comfortEl.addEventListener("click",function(e){
+  var b=e.target.closest(".seg button");if(!b)return;
+  P[b.parentNode.dataset.k]=b.dataset.v;applyPrefs();
+});
+var armed=false;
+$("newGameBtn").addEventListener("click",function(){
+  if(!armed){armed=true;$("newGameConfirm").hidden=false;return}
+  armed=false;setComfort(false);clearTimeout(timer);newGame();
+});
+
+/* ---------- boot: scene first, resume if a game was in progress ---------- */
+function start(data){
+  applyPrefs();
+  var saved=(data&&data.G)||load("game",null);
+  if(saved&&saved.hands&&saved.phase){
+    G=saved;G.last=null;
+    if(G.phase==="collect"){render();timer=setTimeout(collect,300);return}
+    render();schedule();
+  }else newGame();
+}
+if(window.claude&&window.claude.hot&&window.claude.hot.snapshot){try{window.claude.hot.snapshot(function(){return {G:G}})}catch(e){}}
+if(window.claude&&window.claude.hot&&window.claude.hot.ready)window.claude.hot.ready(start);
+else start((window.claude&&window.claude.hot&&window.claude.hot.data)||{});
+})();
+</script>
+
+</body>
+</html>
