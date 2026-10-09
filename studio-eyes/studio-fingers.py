@@ -12,6 +12,11 @@ CHECKS (each a HALT, exit 1):
                (founder floor: "44px+ targets, 52px buttons"). Inline text links
                are exempt (WCAG 2.5.5 inline exception).
   F-VIEWPORT   the page scrolls sideways on a phone (body wider than the viewport)
+  F-SIDESCROLL a box that scrolls up and down can ALSO be slid sideways (overflow-y:auto turns
+               overflow-x visible into auto; any child a few px too wide then lets a thumb slide the
+               words under the edge with no way back). Founder, Kireji 2026-10-09: "The text sometimes
+               gets scrolled to the side accidentally and I can't get back." F-VIEWPORT only measured
+               the page body, so it never saw this. Mark a deliberate side-scroller data-hscroll.
   F-METAVIEW   no <meta name="viewport" width=device-width> — pinch-zoom roulette
   F-WALL       comfort/display options are shown UNASKED (founder floor 2026-07-03:
                "comfort is a knob, not a wall"; sharpened 2026-07-22: the options
@@ -83,6 +88,20 @@ PROBE = r"""
   out.metaViewport = !!(mv && /width\s*=\s*device-width/i.test(mv.getAttribute('content')||''));
 
   out.overflow = Math.max(0, Math.round((de.scrollWidth||0) - vw));
+
+  // F-SIDESCROLL: every visible box a thumb can slide sideways that nobody meant to slide sideways.
+  out.sidescroll = [];
+  for (const el of document.querySelectorAll('body *')) {
+    const cs = getComputedStyle(el);
+    if (!/(auto|scroll)/.test(cs.overflowX)) continue;
+    if (el.closest('[data-hscroll]')) continue;
+    const over = el.scrollWidth - el.clientWidth;
+    if (over <= 2) continue;   // OVERFLOW_TOL
+    const r = el.getBoundingClientRect();
+    if (r.width <= 0 || r.height <= 0 || cs.visibility === 'hidden' || el.closest('[hidden]')) continue;
+    out.sidescroll.push({ sel: el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') +
+      (typeof el.className === 'string' && el.className.trim() ? '.' + el.className.trim().split(/\s+/)[0] : ''), over });
+  }
 
   const vis = (el) => {
     const r = el.getBoundingClientRect();
@@ -302,8 +321,8 @@ def audit_page(page, path):
         ADVANCED_NOTE = name
         d2 = page.evaluate(PROBE)
         def _k(x):
-            return (x.get('tag'), x.get('name'), x.get('px'), x.get('fs'))
-        for field in ('small', 'zoomy'):
+            return (x.get('tag'), x.get('name'), x.get('px'), x.get('fs'), x.get('sel'))
+        for field in ('small', 'zoomy', 'sidescroll'):
             seen = {_k(x) for x in d.get(field, [])}
             for x in d2.get(field, []):
                 if _k(x) not in seen:
@@ -318,6 +337,11 @@ def audit_page(page, path):
     if d['overflow'] > OVERFLOW_TOL:
         halts.append(f"F-VIEWPORT  page scrolls sideways on a {d['vw']}px phone (overflows by {d['overflow']}px). "
                      "Wide content must scroll inside its own box, never the page body.")
+
+    for s in d.get('sidescroll', []):
+        halts.append(f"F-SIDESCROLL <{s['sel']}> slides sideways by {s['over']}px. A thumb can push its words under "
+                     "the edge and not get them back. Set overflow-x:hidden on a vertical scroller, or mark a "
+                     "deliberate side-scroller data-hscroll. [FOUNDER 2026-10-09]")
 
     for s in d['small']:
         halts.append(f"F-TAP       <{s['tag']}> \"{s['name']}\" renders {s['px']}px — under the {TAP_FLOOR}px touch floor. "
@@ -491,6 +515,18 @@ BAD5 = _CHIP.replace('INSET', '-5px')
 GOOD5 = _CHIP.replace('INSET', '-7px')
 
 
+# BAD6 / GOOD6: the Kireji directions card, isolated (2026-10-09). A card that scrolls up and down, with the
+# next pane parked 18px right for its slide-in. The page body never overflows, so F-VIEWPORT is silent; the
+# card itself slides sideways. GOOD6 is the shipped fix and must be silent.
+_CARD = ("<!doctype html><meta name=viewport content='width=device-width,initial-scale=1'>"
+         "<style>body{margin:0;font:18px system-ui}.card{height:300px;margin:20px;border:3px solid #111;overflow-y:auto;XFIX}"
+         ".panes{position:relative}.p{padding:10px}.wait{position:absolute;top:0;left:0;right:0;visibility:hidden;transform:translateX(18px)}"
+         "</style><body><div class=card><div class=panes><section class=p>"+"words "*200+"</section>"
+         "<section class='p wait'>next</section></div></div></body>")
+BAD6 = _CARD.replace('XFIX', '')
+GOOD6 = _CARD.replace('XFIX', 'overflow-x:hidden')
+
+
 def self_test():
     from playwright.sync_api import sync_playwright
     r = {}
@@ -498,7 +534,8 @@ def self_test():
     with tempfile.TemporaryDirectory() as td:
         paths = {}
         for k, html in (('good',GOOD), ('bad1',BAD1), ('bad2',BAD2), ('bad3',BAD3),
-                        ('bad4',BAD4), ('good4',GOOD4), ('bad5',BAD5), ('good5',GOOD5)):
+                        ('bad4',BAD4), ('good4',GOOD4), ('bad5',BAD5), ('good5',GOOD5),
+                        ('bad6',BAD6), ('good6',GOOD6)):
             paths[k] = os.path.join(td, k+'.html'); open(paths[k],'w').write(html)
         with sync_playwright() as p:
             b = p.chromium.launch(**({'executable_path': exe} if exe else {}))
@@ -522,6 +559,8 @@ def self_test():
     ok_bad4 = len(align['bad4']) == 1 and not align['good4'] and not align['good']
     ok_bad5 = any(h.startswith('F-TAP') for h in r['bad5'])
     ok_good5 = not any(h.startswith('F-TAP') for h in r['good5'])
+    ok_bad6 = any(h.startswith('F-SIDESCROLL') for h in r['bad6']) and not any(h.startswith('F-VIEWPORT') for h in r['bad6'])
+    ok_good6 = not any(h.startswith('F-SIDESCROLL') for h in r['good6'])
     print("  self-test:")
     print(f"    GOOD canary clean          : {'PASS' if ok_good else 'FAIL -> '+str(r['good'])}")
     print(f"    BAD1 (tap/viewport/wall)   : {'PASS' if ok_bad1 else 'FAIL -> got '+str(sorted(codes1))}")
@@ -530,7 +569,10 @@ def self_test():
     print(f"    BAD4 (rail labels off/on)  : {'PASS' if ok_bad4 else 'FAIL -> bad4='+str(align['bad4'])+' good4='+str(align['good4'])+' good='+str(align['good'])}")
     print(f"    BAD5 (42px margin, looks 46): {'PASS' if ok_bad5 else 'FAIL -> '+str(r['bad5'])}")
     print(f"    GOOD5 (46px hit area)       : {'PASS' if ok_good5 else 'FAIL -> '+str(r['good5'])}")
-    return 0 if (ok_good and ok_bad1 and ok_bad2 and ok_bad3 and ok_bad4 and ok_bad5 and ok_good5) else 1
+    print(f"    BAD6 (card slides sideways) : {'PASS' if ok_bad6 else 'FAIL -> '+str(r['bad6'])}")
+    print(f"    GOOD6 (vertical-only card)  : {'PASS' if ok_good6 else 'FAIL -> '+str(r['good6'])}")
+    return 0 if (ok_good and ok_bad1 and ok_bad2 and ok_bad3 and ok_bad4 and ok_bad5 and ok_good5
+                 and ok_bad6 and ok_good6) else 1
 
 
 def main():

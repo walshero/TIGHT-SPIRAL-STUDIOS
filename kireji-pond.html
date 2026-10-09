@@ -16,6 +16,9 @@
      frog." Cliché Creek: thirty poems, three real, the rest clichés, near misses included. Clichés that float past count
      against you, so the player smashes all the way down; the frog's tongue brings the real ones home. Studio translations
      from public-domain Japanese originals; the results screen shows each original and its cliché twin. -->
+<!-- v5.11 2026-10-09 (founder): "The text sometimes gets scrolled to the side accidentally and I can't get back."
+     The directions card scrolled sideways by 4px (a hidden pane parked 18px right for its slide-in). Card is now
+     vertical-only, and any sideways offset snaps back to 0. Studio Fingers gains F-SIDESCROLL so no box ships this again. -->
 <!-- v5.10 2026-10-06 (founder): "'The morning glory' can be mistaken as cliche. Sort more carefully. Choose 5 haiku and
      gameplay moves through sequence." The creek is now a fixed run of five, one haiku at a time: Basho's old pond,
      Shiki's persimmon, Buson's early summer rain, Issa's sparrow, Basho's rough sea. Each was kept only if every one of its
@@ -413,6 +416,12 @@ body.still .eddy .e{animation:none}
 .tour{overflow:hidden}
 .stone{display:flex;flex-direction:column;max-height:calc(100% - 2*var(--P))}
 .tcard{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+/* v5.11 (founder 2026-10-09: "The text sometimes gets scrolled to the side accidentally and I can't get back").
+   overflow-y:auto quietly makes overflow-x auto too (CSS: one scrolling axis turns the other's visible into auto).
+   The waiting pane sits translated 18px to the right for its slide-in, so the card was 4px wider than its window
+   and a sideways thumb could slide the words under the left edge with no way to slide them back.
+   The card scrolls up and down only. Measured: scrollWidth 302 > clientWidth 298 before, equal after. */
+.tcard{overflow-x:hidden}
 .sndbtn{top:12px;left:12px;width:36px;height:36px;min-height:0;min-width:0;padding:0;gap:0;justify-content:center;box-shadow:2px 2px 0 var(--sumi)}
 .sndbtn.ask{box-shadow:2px 2px 0 var(--beni)}
 .sndbtn svg{width:20px;height:20px}
@@ -2512,7 +2521,7 @@ document.addEventListener('keydown',e=>{
    the first card long enough to need a scroll. A cancel, a scroll, or a press on a button now forgets the start. */
 {let x0=null,y0=0;const c=$('#tcard'); const forget=()=>{x0=null};
   c.addEventListener('pointerdown',e=>{if(e.target.closest('button,a')){x0=null;return}x0=e.clientX;y0=e.clientY});
-  c.addEventListener('pointercancel',forget); c.addEventListener('scroll',forget,{passive:true});
+  c.addEventListener('pointercancel',forget); c.addEventListener('scroll',()=>{forget(); if(c.scrollLeft) c.scrollLeft=0},{passive:true}); /* v5.11: never left sideways */
   c.addEventListener('pointerup',e=>{if(x0===null||e.target.closest('button,a')){x0=null;return}const dx=e.clientX-x0,dy=e.clientY-y0;x0=null;
     if(Math.abs(dx)>50&&Math.abs(dy)<60){const d=dx<0?1:-1; if(d>0) afterPond(()=>goTour(tIdx+1,false)); else goTour(tIdx-1,false)}});}
 /* the eddy: a flat indigo pool around the card, and three currents running round it, cut in white */
