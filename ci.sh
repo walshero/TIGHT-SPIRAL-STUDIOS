@@ -71,6 +71,13 @@ echo "=== no new faculty emails in a public repo ==="
 python3 pii-gate.py || fail=1
 
 echo
+echo "=== founder vision: every quote is the founder's own words (Menard) ==="
+# validate blocks: a vision row whose quote is not in a founder turn is a paraphrase.
+# diff reports: contradictions go to the founder, they do not stop unrelated work.
+python3 founder-vision.py validate || fail=1
+python3 founder-vision.py diff || true
+
+echo
 echo "=== recompute STUDIO-STATE.md from the tree ==="
 python3 emit-state.py
 
