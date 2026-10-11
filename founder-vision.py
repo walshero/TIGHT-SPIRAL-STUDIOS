@@ -179,7 +179,12 @@ def ingest(paths):
         for url, upd, kind, body in CHAT_RE.findall(raw):
             title = plain((re.search(r"Title:\s*(.+)", body) or [None, ""])[1])
             turns = founder_turns(body)
-            if kind == "read" and url in failed:
+            if kind == "partial":
+                depth = "PARTIAL"
+                m = re.search(r"resume='(t\d+)'", raw[raw.find(url):raw.find(url) + 400])
+                if m:
+                    cov["chats"].setdefault(url, {"title": title, "updated_at": upd, "depth": "UNSWEPT"})["resume"] = m.group(1)
+            elif kind == "read" and url in failed:
                 depth = "PARTIAL"       # harvester stopped mid-chat (rate limit etc.)
             elif kind == "read":
                 depth = "READ"          # whole chat paged by a harvester
@@ -193,6 +198,8 @@ def ingest(paths):
             c["updated_at"] = max(c.get("updated_at", ""), upd)
             if DEPTH.index(depth) > DEPTH.index(c["depth"]):
                 c["depth"] = depth
+            if depth == "READ":
+                c.pop("resume", None)
             c["last_ingest"] = now()
             touched += 1
             for t in turns:
@@ -204,7 +211,7 @@ def ingest(paths):
                 seen.add(s)
                 new_u.append({"id": "u-" + s, "sha": s, "chat_url": url, "chat_title": title,
                               "chat_updated_at": upd, "text": t, "ingested_at": now(),
-                              "fidelity": "transcribed" if kind == "read" else "machine-exact",
+                              "fidelity": "transcribed" if kind in ("read", "partial") else "machine-exact",
                               "source_dump": os.path.basename(p)})
     os.makedirs(D, exist_ok=True)
     with open(UTT, "a", encoding="utf-8") as f:
