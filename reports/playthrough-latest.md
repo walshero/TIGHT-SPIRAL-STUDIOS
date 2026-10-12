@@ -1,53 +1,28 @@
-# Playthrough Sweep — 2026-10-05
+# Playthrough Sweep — 2026-10-12
 
-**Run:** 2026-10-05 · repo commit `fe67915` · agent `playthrough-agent.py` (reporter, always exits 0 — never a deploy gate)
+**Run:** 2026-10-12 · repo commit `6cb1ad5` · agent `playthrough-agent.py` (reporter, always exits 0 — never a deploy gate)
 **Surfaces swept (5):** index.html · arcade.html · choose-your-leader-v7.html · choose-your-leader-v6.html · the-tell.html
-**Prior report:** `reports/playthrough-latest.md` @ 2026-09-21 (HTTP 200, 20,414 B)
-**Runner:** scheduled cloud routine, unattended. Single invocation, 9m53s wall clock. All five surfaces completed; none errored.
+**Prior report:** `reports/playthrough-latest.md` @ 2026-10-05 (HTTP 200, 21,420 B)
+**Runner:** scheduled cloud routine, unattended. Two invocations — see Run notes. All five surfaces completed; none errored.
 
 ## Classification
 
 - **NEW: 0**
-- **FIXED: 2 finding lines** — both on `arcade.html`, which is now CLEAN
+- **FIXED: 0**
 - **REPEAT: 5 finding lines** across 2 surfaces (`index.html`, `choose-your-leader-v7.html`)
-- **CLEAN:** `arcade.html` (new this week), `choose-your-leader-v6.html` (five runs running)
+- **CLEAN:** `arcade.html` (second run, and this time off changed bytes), `choose-your-leader-v6.html` (six runs running)
 
-**The four-week stalemate broke.** After three byte-identical reports, a finding has actually cleared.
-
-## FIXED — 2, and this is the headline
-
-`arcade.html` went **NOTES to CLEAN**. Both findings it carried on 2026-09-21 are gone:
-
-| surface | finding cleared |
-|---|---|
-| arcade.html | **DEAD BUTTONS (1): Cabinet** — the top-chrome Cabinet link registers a click again |
-| arcade.html | **OFFLINE FLOOR (1 external request)** — `eclectic-youtiao-c065da.netlify.app` is no longer fetched; the cabinet now runs with no outbound call |
-
-**This is a real fix, not instrument flake, and the hashes are the evidence rather than the claim.**
-`arcade.html` changed on disk between the two runs (`db16d2f65732` → `97082185c87a`). A finding that
-clears on a file whose bytes moved is a fix; a finding that clears on an unchanged file would have been
-a reason to distrust the agent. The surface now prints *"nothing mechanical to fix — ready for founder
-taste-play"*, and the agent's click depth on it fell from **10 to 6**, consistent with a dead control and
-an external fetch both leaving the build rather than being papered over.
-
-| Surface | md5 (12) | vs 2026-09-21 | findings |
-|---|---|---|---|
-| index.html | `a9c0167e2af0` | **changed** (was `3dd76ddee5c2`) | identical — the edit missed both |
-| arcade.html | `97082185c87a` | **changed** (was `db16d2f65732`) | **2 cleared** |
-| choose-your-leader-v7.html | `98c3037f89d8` | unchanged | identical |
-| choose-your-leader-v6.html | `11865a501f35` | unchanged | CLEAN, as before |
-| the-tell.html | `a324c0e1e656` | unchanged | identical |
-
-**Worth a second look:** `index.html` also changed this week, and its findings did not move at all —
-still the dead `Studio` button, still the same nine JS errors. Whoever touched the front door did not
-touch either defect. That is the one place this week's diff suggests a near-miss rather than progress.
-
-Neither the arcade fix nor the index edit was logged. No `FUNES-LEDGER.md` row exists for either, so
-the clearance is recorded here and in the ledger row appended with this run.
+**No change since 2026-10-05.** The finding lines are byte-identical to last week's, line for line.
+Last week broke a four-week stalemate; this week nothing moved either way.
 
 ## NEW — none
 
-No finding appeared on any surface that was not already present on 2026-09-21.
+No finding appeared on any surface that was not already present on 2026-10-05.
+
+## FIXED — none
+
+Nothing cleared. Last week's `arcade.html` clearance holds — see below, where it is now
+corroborated by a second signal rather than merely repeated.
 
 ## REPEAT — 5 finding lines, summarised not listed
 
@@ -57,23 +32,58 @@ No finding appeared on any surface that was not already present on 2026-09-21.
 | choose-your-leader-v7.html | CLIPPED TEXT (3) in `div.walkbox` (400px box, 417px of content) · DEAD BUTTONS (2) · INERT TOUCHES (8) in world `#roomStage` |
 
 The v7 known state — eight inert touches (television, evening paper, telephone, doorway, bulletin,
-wall map), two dead buttons, three clipped walkbox lines — reproduces exactly for the **fifth week**,
-off a byte-identical build. v7 last changed 2026-08-26; nothing has touched it in the 40 days since.
+wall map), two dead buttons, three clipped walkbox lines — reproduces exactly for the **sixth week**,
+off byte-identical bytes. v7 last changed 2026-08-26; nothing has touched it in the 47 days since.
 These stay REPEAT until someone opens v7. Their disappearance is still the signal worth shouting about.
 
-The `index.html` JS error count held at 9 for the fourth week — but see the note above: that file *did*
-change this week, so the count holding is now a missed opportunity rather than a quiet file.
+`index.html` is **unchanged this week** (`a9c0167e2af0`, same hash as 2026-10-05). Last week's note
+stands unresolved: the front door was edited the week before and both of its defects were missed.
+This week nobody touched it at all, so the count holding at 9 is a quiet file rather than a near-miss.
+
+## Byte evidence — what actually moved
+
+| Surface | md5 (12) | vs 2026-10-05 | findings |
+|---|---|---|---|
+| index.html | `a9c0167e2af0` | unchanged | identical |
+| arcade.html | `9b05b5afdbb4` | **changed** (was `97082185c87a`) | **still CLEAN — no regression** |
+| choose-your-leader-v7.html | `98c3037f89d8` | unchanged | identical |
+| choose-your-leader-v6.html | `11865a501f35` | unchanged | CLEAN, as before |
+| the-tell.html | `a324c0e1e656` | unchanged | identical |
+
+**One surface moved, and it held.** `arcade.html` is the only swept build whose bytes changed this
+week, and it came back CLEAN a second time. That is worth more than a repeat: a clean verdict on
+unchanged bytes proves nothing but that the file sat still, whereas a clean verdict on *changed*
+bytes means an edit landed on the cabinet without re-breaking the Cabinet link or re-introducing
+the outbound fetch. Last week's fix is now corroborated rather than merely restated.
+
+Its card is in fact identical to last week's line for line — same `clicks: 6`, same twelve
+`Dark mode` already-active-toggle notes, same closing *"nothing mechanical to fix"*. An edit landed
+on the arcade that the agent cannot see at all, which is what a safe edit looks like from this
+instrument. Worth one founder eye on whether the change was meant to be visible; if it was, the
+agent is the wrong witness for it and Studio Eyes is the right one.
+
+The whole raw-card block below is byte-identical to the 2026-10-05 block. That is the cleanest way
+to state this week's result: the instrument saw exactly what it saw last Monday.
+
+No ledger row was written for this run. There are no NEW and no FIXED findings, and an
+append-only record of "nothing happened" is noise — `FUNES-LEDGER.md` is deliberately untouched.
 
 ## Run notes
 
+- **The sweep needed two invocations, which is a runner note and not a build finding.** The single
+  five-surface call was cut at a 9-minute ceiling with `the-tell.html` still to go (last week's run
+  took 9m53s, so the ceiling was set too tight, not the agent being slow). `the-tell.html` was
+  re-run alone, exited 0, and its card is reproduced below unmodified. The first four cards come
+  from the five-surface invocation. No surface errored, and nothing was skipped or inferred. Next
+  run should allow ~12 minutes, or split the five surfaces into two calls up front.
 - `world '#roomStage' resolved from tsp-worlds.json` on v7 — expected and correct, the sidecar doing
   its job. v7 still does not declare its own world.
 - `the-tell.html` again reports **14 controls with no DOM change**, explicitly flagged *likely
-  select-state (canvas/style redraw), VERIFY BY EYE, not asserted dead*. Unchanged for five runs, off an
-  unchanged build. Not a fix ticket, and not counted as a finding line.
-- `choose-your-leader-v6.html` again logged one click timeout on `Sound` and still scored CLEAN. Fifth
-  run with the same note, same bytes.
-- Click depth: 40 on index, v7, v6 and the-tell; **6 on arcade (was 10)**.
+  select-state (canvas/style redraw), VERIFY BY EYE, not asserted dead*. Unchanged for six runs, off
+  unchanged bytes. Not a fix ticket, and not counted as a finding line.
+- `choose-your-leader-v6.html` again logged click timeouts on `Sound` (an already-active toggle,
+  skipped rather than called dead) and still scored CLEAN. Sixth run, same note, same bytes.
+- Click depth: 40 on index, v7, v6 and the-tell; 6 on arcade.
 - Cost discipline per `CLAUDE.md`: no subagents, no full-corpus sweep, five named surfaces only, all
   browser work in bash inside the cloud container.
 
