@@ -1189,3 +1189,9 @@ of that), plus a changed-files gate run. Single inline pass, no subagents.
 - New lane: `art-department/commons-scout.py` + `.github/workflows/commons-scout.yml`. The sandbox can't reach Wikimedia; Actions can. Push a request JSON to `art-department/commons-requests/`, get contact sheets or fetched photos + credits back in about a minute. Ranks phone-camera EXIF first.
 - 7 photos swapped in, 5 retired (cassette, coffees, laptop, creek, night). Credits: `art-department/flok-feed/v26/CREDITS.md`.
 - Canon 6cb1ad5, mirrored to tss-playtest, hashes match, live URL confirmed serving v26.
+
+## 2026-10-12 — Flok v27: the cold open
+- Founder: landing and opening "underwhelming. Needs to be clear and compelling."
+- Diagnosis: the opening was a job ad. Three paragraphs about an abstract meter, no person, no picture until screen two.
+- Now scene first: "She opened flok to post one photo." over north_trail's real Level 1 post, 10:52 PM; "Your job: keep her here past midnight"; her minutes tick live on the meter; "Start your shift".
+- Fits above the fold at 375x667 / 360x740 / 390x844 / 430x932, measured. All gates green. Live URL confirmed serving v27.
