@@ -1182,3 +1182,10 @@ the trap rather than the crater.
 **Quoted, not spent:** the seven real walls are one bespoke pass each (the shared-class
 check above has to be run per file, and `en195-arcade.html` is the second dialect on top
 of that), plus a changed-files gate run. Single inline pass, no subagents.
+
+## 2026-10-12 — Flok v26: posts that look posted
+- Founder: feed photos "make no sense; are repurposed, and don't seem like a user's typical posts."
+- Measured, not argued: new `flok-feed-check.py` (H1 reuse, H2 stranger, H3 orphan, H4 ledger, H5 caption tie, H6 text-post share, H7 one face per handle). v25 = 21 HALTs. v26 = PASS.
+- New lane: `art-department/commons-scout.py` + `.github/workflows/commons-scout.yml`. The sandbox can't reach Wikimedia; Actions can. Push a request JSON to `art-department/commons-requests/`, get contact sheets or fetched photos + credits back in about a minute. Ranks phone-camera EXIF first.
+- 7 photos swapped in, 5 retired (cassette, coffees, laptop, creek, night). Credits: `art-department/flok-feed/v26/CREDITS.md`.
+- Canon 6cb1ad5, mirrored to tss-playtest, hashes match, live URL confirmed serving v26.
