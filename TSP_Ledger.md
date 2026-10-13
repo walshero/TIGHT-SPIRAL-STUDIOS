@@ -1202,3 +1202,10 @@ of that), plus a changed-files gate run. Single inline pass, no subagents.
 - Landed as checks: senses-crawl v2 (stays in build, plays every screen, coverage FULL/SHALLOW); studio-senses/fingers-play.py (P1-P4, self-test 4/4, v27 HALT / v28 PASS); studio-senses/senses-run.sh (one command); belt tick 13; honest belt verdict for report-only ticks; .claude/agents/senses-seats.md; CLAUDE.md "THE SENSES ARE ONE COMMAND".
 - Flok v28: verb on screen at every lever on 375x667 to 430x932; Next scrolls up on a win; dot 4.6:1; opening clock described for screen readers. Belt PASS (armed ticks), senses PASS, 11 seat predictions filed, 0 graded.
 - Full SWOT: claude/STUDIO-SENSES-SWOT-2026-10-13.md. Pending founder calls: notification tick (O2), midnight payoff (O3), lever-1 decoys (O4), 17% entry image.
+
+## 2026-10-13 — Flok v29: past midnight (the four SWOT calls)
+- Founder: "Address all 4."
+- Midnight paid off (clock on every lever, every promotion, the reveal at 12:09 AM); notification tick on Release with a mute beside it; lever-1 decoys made inert; the opening became her story post (56% image on phone, was 17%).
+- senses-seats agent seated once on v29 (one agent, protocol). Its five findings: four fixed same day (announcements, Next aria-disabled, clear-then-release, crawl state identity), one kept by WCAG 2.1.1. Predictions carried to the final bytes with the reason written in.
+- Senses tools corrected where Flok exposed Kireji-shaped assumptions: Ears (no-bed state 0, one-shot mute, no mute-over-silence), Fingers Play (post-win taps, chrome), crawl v2.1 (headings in state identity).
+- Belt PASS (armed ticks, incl. tick 13), senses PASS, preship v4/v5/contrast SHIP, flok-feed-check PASS. Fits above the fold 360x740..430x932 and lever 4 on SE.

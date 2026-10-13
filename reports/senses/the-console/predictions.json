@@ -1,8 +1,9 @@
 {
  "build": "the-console.html",
- "md5": "da6fb71e1ce62f961577e41125d6b888",
- "sha256": "6ec9529895eee23538531aea3c9ae04d09f880e0aa9f86d8f3486f7cbb0fb69b",
+ "md5": "1f59f6939ce42e08d48e00afc2656d09",
+ "sha256": "737379f911df2e31bfed7a2199ceaed0e3f3e49ba68ea60189da8885fe613071",
  "filed": "2026-10-13",
+ "version": "v29 past midnight",
  "questions": {
   "recall": {
    "prompt": "In the last assignment, what did switching on 'Seen' receipts turn silence into?",
@@ -22,29 +23,20 @@
     {
      "id": "HI1",
      "seat": "Hitchcock",
-     "claim": "A first player taps Start your shift within 15 seconds of load: the opening is one scene and one invitation.",
+     "claim": "A first player taps Start your shift within 15 seconds of load. The opening is one post with one invitation under it.",
      "measure": "time_to_tap",
      "target": "name:start your shift",
      "op": "<=",
      "value": 15000,
-     "p": 0.75,
-     "cohort": "any"
-    },
-    {
-     "id": "HI2",
-     "seat": "Hitchcock",
-     "claim": "The player finishes all five levers and reaches the telemetry reveal ('it measured you').",
-     "measure": "saw",
-     "target": "text:it measured you",
-     "op": "==",
-     "value": true,
      "p": 0.7,
      "cohort": "any"
     }
    ],
    "notes": [
-    "Setup without payoff. The cold open plants a clock (10:52 PM, 'past midnight'); the training screens speak only 'Engagement %'; the 11:48 PM screenshot post is the only time cue; the reveal never says what time it is. Not gradeable by the recorder's observables, so it is a note, not a prediction.",
-    "On a win, v28 scrolls Next into view and her post leaves the frame. The payoff frame is meter + 'Target hit.' + an empty 'Why does this work?' card. The scene is gone at the moment you hurt her."
+    "Setup and payoff ledger. (1) The 10:52 PM clock (state 0) pays off. The phone clock advances every lever (10:53, 11:07, 11:22, 11:38, 11:53; states 1, 4, 6, 8, 12) and the reveal opens '12:09 AM.' (state 17). PAID. (2) 'Your job: keep her here past midnight' pays off as 'You kept her past midnight.' (state 17). PAID. (3) The person, north_trail and her lake post: her posts stay in the feed on levers 1, 3 and 4 ('opened the app again. not sure why', state 9), and the reveal says 'She's still on flok'. PAID. (4) 'Five tricks' pays off as assignments 1/5 to 5/5. PAID. (5) The opening meter 'on flok 4:13' with a midnight marker never returns; every lever shows Engagement % instead. UNPAID, small. (6) The three story progress bars on the opening: the crawl took one frame, so whether they advance is unverified.",
+    "Evidence gap, not a defect. The crawl's state signature hashes controls and ignores text (senses-crawl.py signature()), so the promotion card was photographed once (state 3: 'Junior', '11:06 PM · she's still on flok'). Steps 11, 16, 26 and 35 reached cards 2 to 4 but they were never captured. Whether the later cards show later times and ranks is unchecked; it takes one look on the phone.",
+    "Weight of the payoff. The setup is the page's h1. The payoff is an unheaded paragraph (state 17 headings: none) with no announcement (step 36). By sight it lands, as the first and boldest line of the reveal. It is not gradeable by the recorder: 'saw' reads headings, announcements and buttons only, so it stays a note.",
+    "Win frames: on every lever the phone's own clock row scrolls out of frame when Next comes into view (states 2, 9, 13). The time is on screen when the lever starts and gone at the moment you hit the target."
    ],
    "halts": []
   },
@@ -54,7 +46,18 @@
     {
      "id": "HO1",
      "seat": "Horvath",
-     "claim": "The player opens 'Why does this work?' on at least one lever. It is optional and sits below the win; most will press Next.",
+     "claim": "Lever-1 decoys are gone: a first player taps no more than one control (Start your shift) before their first Boost.",
+     "measure": "taps_before",
+     "target": "name:boost",
+     "op": "<=",
+     "value": 1,
+     "p": 0.8,
+     "cohort": "any"
+    },
+    {
+     "id": "HO2",
+     "seat": "Horvath",
+     "claim": "The player opens 'Why does this work?' on at least one lever. It is optional and sits below the win, so most players will press Next.",
      "measure": "tapped",
      "target": "name:flip to see the research",
      "op": "==",
@@ -63,20 +66,9 @@
      "cohort": "any"
     },
     {
-     "id": "HO2",
-     "seat": "Horvath",
-     "claim": "On lever 1 the player taps the bell or the feed before Boost: they are on screen, labelled as controls, and do nothing on this lever.",
-     "measure": "taps_before",
-     "target": "name:boost",
-     "op": ">=",
-     "value": 1,
-     "p": 0.45,
-     "cohort": "any"
-    },
-    {
      "id": "HO3",
      "seat": "Horvath",
-     "claim": "After play, the player can name the trick behind the 'Seen' receipts as guilt (the build's own label).",
+     "claim": "After play, the player names the trick behind 'Seen' receipts as guilt, the build's own label.",
      "measure": "answer:recall",
      "target": "",
      "op": "==",
@@ -86,8 +78,10 @@
     }
    ],
    "notes": [
-    "Decision vs decoration: on lever 1 the bell ('Notifications, tap to clear') and the feed are live controls that change nothing (crawl steps 1-2, 10-11). A cold player spends taps on decoys before the verb.",
-    "The research is behind an optional flip card below the win. Most players will never reach it."
+    "O4 decoys, lever 1: FIXED. State 1 holds Boost plus the studio chrome and nothing else (no bell, no feed). The crawl's lever-1 taps were Boost only (steps 1 to 4, and the same on all four passes).",
+    "Remaining decoy: lever 5. 'Simulated feed' is a live, labelled control on the inbox lever (state 12, y=247). Step 31 made no new state, and step 33 changed no text. It is labelled 'feed' on a screen that is an inbox. The founder ruled that the feed takes focus on this lever, so this is filed as a label question, not a defect.",
+    "Work asked versus work required, lever 4. The brief says 'First, clear the red dot. Then release.' Passes 2 to 4 won with Release alone: 9 presses, the bell never tapped (steps 59 to 67, 99 to 107, 139 to 147). The ordered two-step task is described but not required. After the dot is cleared, a further bell tap changes nothing (step 24).",
+    "Lever 5 can be won and then undone. Toggling 'Seen' off drops reply rate from 92% to 0% and engagement from 68% to 26%, but 'Target hit.' stays (states 13 to 14)."
    ],
    "halts": []
   },
@@ -97,18 +91,20 @@
     {
      "id": "FI1",
      "seat": "Fingers",
-     "claim": "Dead taps stay under 4 per session now that every verb and Next is on screen (v28).",
+     "claim": "Dead taps stay under 4 per session: every verb and every Next is on screen when it is needed.",
      "measure": "dead_taps",
      "target": "",
      "op": "<",
      "value": 4,
-     "p": 0.6,
+     "p": 0.55,
      "cohort": "any"
     }
    ],
    "notes": [
-    "fingers-play v28: P1 PASS on all five verbs, P2 PASS on the main path, P3 FULL coverage. WARN: 'About the photos' needs a scroll on the opening (secondary screen, declared data-secondary).",
-    "Short phones (375x667) use tier 2: role line dropped, feed 222px. The rank pill carries the same information."
+    "The floor: fingers-play PASS (160 taps, 19 states). P1 verb in view on all five levers. P2 has one WARN: 'About the photos' needs a scroll on the opening, which is a declared secondary screen. P3 coverage FULL 5/5. No control is under the 44px floor in any state.",
+    "Above the floor, verb in view at the win frame: lever 1 Boost (state 2, y=414), lever 2 the feed (state 5), lever 3 Send streak alert (state 7), and lever 5 'Seen' receipts (state 13) all stay in frame. Lever 4 (state 9): the winning tap on the first pass was the bell (step 20), and at the win frame the bell sits at y=-128, out of frame. Release stays in view.",
+    "Reach: on lever 4 the bell is 44x44 at y=152, above the thumb arc (state 8). In state 10, 'Sound on' (y=179) and Release (y=229) are above the arc.",
+    "Dead-tap risk for FI1: 'Flip to see the research' changed no text at step 5, and the bell after clearing changed nothing at step 24. If the recorder judges deadness by text, flips will count."
    ],
    "halts": []
   },
@@ -118,17 +114,31 @@
     {
      "id": "MU1",
      "seat": "Murch",
-     "claim": "Asked how the sound felt, the player answers 'I didn't notice it': the game is silent.",
+     "claim": "Asked how the sound felt, the player does not answer 'I didn't notice it'. The tick plays on every Release press, and lever 4 takes several presses.",
      "measure": "answer:sound_felt",
      "target": "",
-     "op": "==",
+     "op": "!=",
      "value": "I didn't notice it",
-     "p": 0.8,
+     "p": 0.55,
+     "cohort": "any"
+    },
+    {
+     "id": "MU2",
+     "seat": "Murch",
+     "claim": "The player leaves sound on. The tick is quiet, comes only from their own press, and plays on one lever.",
+     "measure": "sound_off_at_end",
+     "target": "",
+     "op": "==",
+     "value": false,
+     "p": 0.85,
      "cohort": "any"
     }
    ],
    "notes": [
-    "Ears Layer 1: SILENT. Lever 4 teaches red-dot interrupts with no interrupting sound. A single gesture-first, mutable tick on Release (E1-E3 floors) would let the player feel it. Founder call."
+    "Ears Layer 1 PASS. No sound before the first gesture (first gesture 2295 ms; first sound at step 19, 18761 ms). Every Release press starts 6 oscillators over about 0.29 s, a two-note tick per notification. Level: RMS max -25.5 dBFS, peak 0.172 linear (about -15 dBFS). No loops and no media.",
+    "Mute works on the first try: -25.6 dBFS before, -180 after pressing 'Sound on', and -25.5 after pressing it again. It is a toggle with aria-pressed, beside Release.",
+    "The sound sits in the meaning. The only sound in the game is the interrupt, on the interrupt lever. Clearing the red dot is silent, which fits: the dot works by sight.",
+    "WARN carried from Ears: 7 of 18 state changes carry no sound, vibration or announcement (steps 6, 23, 29, 33, 34, 36, ...). Murch does not ask for more sound. Those are announcement gaps; see Ear persona."
    ],
    "halts": []
   },
@@ -149,17 +159,20 @@
     {
      "id": "SP2",
      "seat": "Sighted persona",
-     "claim": "Taps About the photos at least once.",
+     "claim": "Taps About the photos at least once. It now sits under the fold on the opening.",
      "measure": "tapped",
      "target": "name:about the photos",
      "op": "==",
      "value": true,
-     "p": 0.2,
+     "p": 0.15,
      "cohort": "any"
     }
    ],
    "notes": [
-    "The opening reads in one glance. The training brief is still 4-5 lines of dense instruction above the phone on every lever; the eye skips to the button."
+    "The opening reads as her story post: three segment bars, avatar, 'north_trail now', a 10:52 PM clock, the headline over the photo, and a caption chip ('golden hour at the lake. no filter.'). The photo is the first thing the eye lands on. In 00.png it spans roughly half the 400x840 frame; that is an eyeball read, not a gate measure. The job line, meter and Start your shift sit on a dark panel below, all above the fold. The footer and About the photos are under the fold (y=928).",
+    "Studio and Cabinet still sit above the post as two framed buttons, so the first screen still offers three invitations.",
+    "The lever briefs are still 4 to 5 dense lines above the phone (state 1). The eye skips to the button.",
+    "The reveal's first line, '12:09 AM. She's still on flok. You kept her past midnight.', reads as the ending. 'About one in 2' mixes a word and a numeral."
    ],
    "halts": []
   },
@@ -180,22 +193,24 @@
     {
      "id": "EP2",
      "seat": "Ear persona",
-     "claim": "A screen-reader player rates 'I knew what to do next' 3 or lower: Boost is pressed three times in silence before anything is said.",
-     "measure": "answer:knew_next",
+     "claim": "A screen-reader player says the sound helped. On lever 4, Release announces nothing (steps 19, 21, 22, 25), so the tick is the only immediate answer to the press.",
+     "measure": "answer:sound_felt",
      "target": "",
-     "op": "<=",
-     "value": 3,
-     "p": 0.55,
+     "op": "==",
+     "value": "helped",
+     "p": 0.5,
      "cohort": "screen_reader"
     }
    ],
    "notes": [
-    "116 of 156 state changes say nothing by ear: every Boost, Send, Release press until 'Target hit.'. The meter is a progressbar but not live. A polite announcement at halfway would do.",
-    "v28: 'Start your shift' is described as 'It is 10:52 PM. She has been on flok for about four minutes.' (aria-describedby, hidden target). The ticking counter stays aria-hidden so it never talks over VoiceOver."
+    "The midnight payoff is in the tree as the first paragraph of the region 'Your telemetry' (state 17), but it is not announced (step 36: nothing announced) and it has no heading. A listener has to go looking for it. The promotion card's '11:06 PM · she's still on flok' is also unannounced (step 6).",
+    "Lever 1: the accessibility tree lists 'Flip to see the research' and 'Next →' as buttons before the target is hit (state 1 aria), while the sighted controls list does not. A screen reader may reach Next before the win. Unverified whether they are inert.",
+    "The opening reads in order: the image 'Her post: a still lake at golden hour...', then 'north_trail now 10:52 PM', then the h1. Jumping by heading lands after the clock.",
+    "Sound control: 'Sound on' is a toggle that reads its pressed state. The cold Tab walk from load reaches 6 stops and cycles; that is expected before any tap."
    ],
    "halts": []
   }
  ],
- "carried_from": null,
- "carry_reason": null
+ "carried_from": "1aeb4521a881d8981457eec23747eaed",
+ "carry_reason": "Seated on v29 md5 1aeb4521a881d8981457eec23747eaed; four seat findings fixed the same day without changing any graded observable: the promotion and 12:09 AM reveal are now announced (polite live region), Next carries aria-disabled until the target is hit, lever 4 Release waits for the red dot to be cleared (as the brief says), and the fifth card reads 'Shift over'. Crawl v2.1 now separates states by heading, so promotion cards 2-4 are in the bundle."
 }

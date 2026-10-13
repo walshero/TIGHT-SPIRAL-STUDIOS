@@ -78,6 +78,17 @@ def judge(m):
 
     # E2
     mt = m.get('mute_test') or {}
+    # 2026-10-13 (Flok): a one-shot sound tied to one action is muted where it plays. The
+    # crawl's end-of-run test only sees wherever the crawl stopped; the one-shot test
+    # (press action, mute, press, unmute, press) runs beside the sound itself.
+    # ...and a mute "tested" over silence proves nothing: prefer the one-shot test whenever
+    # the end-of-crawl test had no sound to drop (before at or under the mute floor).
+    one = m.get('mute_test_oneshot') or {}
+    silent_test = mt.get('found') and (mt.get('before_dbfs') is None or mt['before_dbfs'] <= MUTE_FLOOR_DBFS)
+    if one.get('found') and (not mt.get('found') or silent_test):
+        mt = one
+    elif silent_test:
+        out['warn'].append("E2 MUTE UNTESTED  the sound control was pressed over silence; nothing to drop.")
     if not mt.get('found'):
         out['halt'].append("E2 MUTE WORKS  no sound control found. [CITED] WCAG 2.2 SC 1.4.2.")
     else:
@@ -94,7 +105,11 @@ def judge(m):
 
     # E3
     states = m.get('states', [])
-    audio_states = {s['to'] for s in steps if s.get('oneshot_sounds') or s.get('loops_started')} | {0}
+    # State 0 counts only when the build has a bed (a loop) or sound before a touch. Kireji's
+    # pond wakes on the first tap, so its mute must be on the first screen; Flok's only
+    # sound is a tick on one button three screens in (2026-10-13, the machine was the suspect).
+    bed = any(s.get('loops_started') for s in steps) or bool((m.get('audio') or {}).get('pre_gesture_sources'))
+    audio_states = {s['to'] for s in steps if s.get('oneshot_sounds') or s.get('loops_started')} | ({0} if bed else set())
     missing = [st['n'] for st in states if st['n'] in audio_states and
                not any(SOUND_CTL.search(c['name']) and c['inView'] for c in st['controls'])]
     if missing:
@@ -159,6 +174,18 @@ def self_test():
     cases.append(("a mute that does not drop the level HALTs", c, 'HALT', 'E2'))
     c = copy.deepcopy(base); c['states'][0]['controls'][0]['inView'] = False
     cases.append(("a mute scrolled out of view HALTs", c, 'HALT', 'E3'))
+    c = copy.deepcopy(base); c['mute_test'] = {"found": False}
+    c['mute_test_oneshot'] = {"found": True, "control": "Sound on", "before_dbfs": -26, "after_press_dbfs": -120, "after_second_press_dbfs": -26}
+    cases.append(("a one-shot muted beside its action PASSES", c, 'PASS', None))
+    c = copy.deepcopy(c); c['mute_test_oneshot']['after_press_dbfs'] = -30
+    cases.append(("a one-shot whose mute does not mute HALTs", c, 'HALT', 'E2'))
+    c = copy.deepcopy(c); c['mute_test'] = {"found": True, "control": "Sound on", "before_dbfs": -180, "after_press_dbfs": -180, "after_second_press_dbfs": -180}
+    cases.append(("a silent end-of-crawl mute yields to the one-shot test", c, 'HALT', 'E2'))
+    c = copy.deepcopy(base); c['states'] = [{"n": 0, "controls": []}, {"n": 1, "controls": [{"name": "Sound on", "inView": True}]}]
+    c['steps'] = [{"n": 0, "label": "Release", "to": 1, "new_state": True, "oneshot_sounds": [{}], "text_changed": True}]
+    cases.append(("no bed: the first screen needs no mute", c, 'PASS', None))
+    c = copy.deepcopy(c); c['steps'][0]['loops_started'] = 1
+    cases.append(("a bed: the first screen needs the mute", c, 'HALT', 'E3'))
     c = copy.deepcopy(base); c['audio']['peak_linear'] = 1.0
     cases.append(("clipping HALTs", c, 'HALT', 'E6'))
     c = copy.deepcopy(base); c['steps'][0]['oneshot_sounds'] = []

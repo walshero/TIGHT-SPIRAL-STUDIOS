@@ -147,8 +147,10 @@ def md5(path):
         return hashlib.md5(f.read()).hexdigest()
 
 
-def signature(controls, text):
-    heads = ' '.join(sorted({c['name'] for c in controls if c['inView']}))
+def signature(controls, text, titles=''):
+    # v2.1 (2026-10-13, seat finding): headings and titles are part of a state's identity.
+    # Grouping by controls alone folded Flok's promotion cards 2-4 into card 1, so no seat saw them.
+    heads = ' '.join(sorted({c['name'] for c in controls if c['inView']})) + '#' + titles
     pressed = ' '.join(f"{c['name']}={c['pressed']}" for c in controls if c['pressed'] is not None)
     return hashlib.md5((heads + '|' + pressed).encode()).hexdigest()[:12]
 
@@ -174,6 +176,21 @@ def mute_test(page):
     r['label_after'] = c2['name']
     page.mouse.click(c2['x'] + c2['w'] / 2, c2['y'] + c2['h'] / 2)
     r['after_second_press_dbfs'] = level(page)
+    return r
+
+
+def mute_oneshot(page, ctl, action):
+    """2026-10-13. For a sound that plays only when one action is pressed: press the action
+    and measure, press the sound control and press the action again (must be silent),
+    press the control back and press the action again (must sound)."""
+    ax, ay = action['x'] + action['w'] / 2, action['y'] + action['h'] / 2
+    cx, cy = ctl['x'] + ctl['w'] / 2, ctl['y'] + ctl['h'] / 2
+    r = {"found": True, "control": ctl['name'], "kind": "oneshot", "action": action['name']}
+    page.mouse.click(ax, ay); r['before_dbfs'] = level(page, 450)
+    page.mouse.click(cx, cy); page.wait_for_timeout(150)
+    page.mouse.click(ax, ay); r['after_press_dbfs'] = level(page, 450)
+    page.mouse.click(cx, cy); page.wait_for_timeout(150)
+    page.mouse.click(ax, ay); r['after_second_press_dbfs'] = level(page, 450)
     return r
 
 
@@ -237,7 +254,8 @@ def crawl(build, out, clicks):
                 if page.evaluate("scrollY") == y1: break
             controls = page.evaluate(CONTROLS_JS)
             text = page.inner_text('body')[:5000]
-            sig = signature(controls, text)
+            titles = page.evaluate("()=>[...document.querySelectorAll('h1,h2,h3,.title,[role=heading]')].filter(e=>e.offsetParent).map(e=>e.innerText.trim()).join('|').slice(0,300)")
+            sig = signature(controls, text, titles)
             if sig in seen_sigs:
                 return seen_sigs[sig], controls, text, False
             n = len(man['states'])
@@ -320,6 +338,12 @@ def crawl(build, out, clicks):
                 "live": [e['text'] for e in ev if e['k'] == 'live'],
                 "vibrate": [e['p'] for e in ev if e['k'] == 'vibrate']})
             cur = nxt
+            if man['steps'][-1]['oneshot_sounds'] and 'mute_test_oneshot' not in man:
+                snd = [k for k in controls if SOUND_CTL.search(k['name']) and k['inView']]
+                same = [k for k in controls if k['name'] == c['name'] and k['inView']]
+                if snd and same:
+                    man['mute_test_oneshot'] = mute_oneshot(page, snd[0], same[0])
+                    text = page.inner_text('body')[:5000]
         # v2 COVERAGE. A crawl that never reached the game's own screens is SHALLOW, and
         # SHALLOW is printed, never PASS. Screens = the build's [id^=sc-] sections or
         # [data-screen] / .screen elements; reached = shown at any captured state.

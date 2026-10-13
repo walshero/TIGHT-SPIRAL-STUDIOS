@@ -65,3 +65,12 @@ The SWOT is of the AGENTS (Eyes, Fingers, Ears, the crawl, the seats, the belt, 
 - O2 a notification tick on Release. O3 a clock on the reveal. O4 make the lever-1 decoys inert or part of the lesson.
 - The entry gate still carries two old debts on the opening: the photo is 17% of the entry against the >50% image rule, and Studio / Cabinet / Start your shift read as three co-equal invitations. Both pre-date v27 and ride the ratchet; growing the photo trades against fitting the button above the fold on an SE.
 - Grade the seats: play Flok v28 cold on the phone. The 11 predictions in `reports/senses/the-console/predictions.json` are the first ever filed on Flok.
+
+## Resolved, same day (founder: "Address all 4.") — Flok v29
+- **O3 midnight pays off:** the phone clock runs 10:53 PM to 11:53 PM across the levers; each promotion card names the time ("11:06 PM · she's still on flok"); the fifth card reads "Shift over" at 12:09 AM; the reveal opens "12:09 AM. She's still on flok. You kept her past midnight." All spoken for screen readers.
+- **O2 the interrupt sounds:** one quiet two-note tick per notification on Release, lever 4 only, synthesized, never before a tap. Sound on/off sits beside Release. Ears: mute drops -25.7 dBFS to -180 and restores.
+- **O4 decoys gone:** the bell is a control only on lever 4; the feed takes focus only where scrolling or the inbox is the verb. Lever 4 now waits for the dot to be cleared, as the brief says.
+- **Image rule:** the opening is her story post. 56% image on a 390px phone (was 17%). The photo stays visible, framed on the treeline and its reflection; a photo hidden under a panel would have passed the gate and failed the rule.
+- **The senses learned from this round too:** Ears no longer assumes every game has an ambient bed (state 0 needs a mute only if a loop or pre-touch sound exists), tests a one-shot mute beside its own action, and refuses a mute tested over silence (self-test 14/14). Fingers Play ignores taps after a win and ignores the studio chrome when deciding what "after the win" means (self-test 5/5; v27 still HALTs on five verbs). The crawl separates states by heading (promotion cards 2-4 were invisible to the seats).
+- Still carried, by ruling: the entry gate's "three invitations" (Studio / Cabinet / Start) is the universal navigation CLAUDE.md requires on every game.
+

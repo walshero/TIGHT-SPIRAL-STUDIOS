@@ -41,8 +41,15 @@ def judge(m, secondary=()):
         runs[s['label']] = runs.get(s['label'], 0) + 1 if prev == s['label'] else max(runs.get(s['label'], 0), 1)
         prev = s['label']
     verbs = {k for k, v in runs.items() if v >= 2}
+    # A verb tap AFTER the win does not count: once an exit to another screen (Next) is
+    # live in the state, the player's job there is done (2026-10-13, Flok v29: the Ears
+    # one-shot mute test pressed Release past the target and the crawl kept tapping).
+    exits = {s['label'] for s in steps
+             if states.get(s['from'], {}).get('screen') != states.get(s['to'], {}).get('screen')}
+    def post_win(st):
+        return any(c.get('name') in exits and not c.get('chrome') for c in states.get(st['from'], {}).get('controls', []))
     for v in sorted(verbs):
-        if any(s['label'] == v and s.get('needs_scroll') for s in steps):
+        if any(s['label'] == v and s.get('needs_scroll') and not post_win(s) for s in steps):
             halts.append(f"P1 verb in view: core verb '{v}' needed a scroll to reach")
     # P2: progression controls, first pass only
     # the screen you load on is already seen; returning to it is not a first pass
@@ -89,8 +96,13 @@ def self_test():
     verb = dict(base, steps=[dict(s, needs_scroll=(s['label'] == 'Boost')) for s in good['steps']])
     nxt = dict(base, steps=[dict(s, needs_scroll=(s['label'] == 'Next')) for s in good['steps']])
     shallow = dict(good, screens_seen=["sc-a"])
+    st2 = [st(0, "sc-a"), dict(st(1, "sc-a"), controls=[{"name": "Next"}]), st(2, "sc-b")]
+    after = dict(base, states=st2, steps=[{"label": "Boost", "from": 0, "to": 1, "text_changed": True},
+                                          {"label": "Boost", "from": 1, "to": 1, "text_changed": True, "needs_scroll": True},
+                                          {"label": "Next", "from": 1, "to": 2, "text_changed": True}])
     cases = [("clean play", good, False), ("verb below fold (Flok v25)", verb, True),
-             ("win button below fold (Flok v27)", nxt, True), ("shallow crawl (crawl v1)", shallow, True)]
+             ("win button below fold (Flok v27)", nxt, True), ("shallow crawl (crawl v1)", shallow, True),
+             ("verb tapped after the win, off screen", after, False)]
     ok = True
     for name, m, want in cases:
         got = bool(judge(m)[0]); ok &= got == want
