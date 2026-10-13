@@ -2,7 +2,7 @@
 <html lang="en">
 <!--
   THE ASKING ROOM (working title, founder rules the name: D1). Tight Spiral Studios, EN195.
-  Workup v0.5, 2026-09-25 (mnemonic icons on every move, tag and ruled comment). v0.4 (three drafts: Presto, Daiko, Dead Ants). v0.3 (struck cards keep a Claim line and the Advocate's note for the whole draft). v0.2, 2026-09-24 (round table in daylight, founder note: the lamp read as interrogation). One playable turn plus the animation language for the whole game.
+  Workup v0.6, 2026-10-13 (founder ruling: "Remove comfort control and label and focus on 3 best modes for each game including light and dark." The one icon button now cycles Light, Dark, Sharp; Sharp is high contrast). v0.5, 2026-09-25 (mnemonic icons on every move, tag and ruled comment). v0.4 (three drafts: Presto, Daiko, Dead Ants). v0.3 (struck cards keep a Claim line and the Advocate's note for the whole draft). v0.2, 2026-09-24 (round table in daylight, founder note: the lamp read as interrogation). One playable turn plus the animation language for the whole game.
   Spec: claude/SPEC-ASKING-ROOM-2026-09-24.md. Findings: convening/ASKING-ROOM-CONVENING.md.
 
   WHAT THE PLAYER DOES: sits in a fiction workshop as an Asker. Reads a peer draft. Plays a
@@ -66,6 +66,17 @@
     --s-glow:#ffcf87; --s-glowop:.40; --s-cone:.18; --s-grain:.18;
   --is-dark:1; }
 :root[data-theme="light"]{ color-scheme:light; }
+/* sharp: high contrast. Near-black surfaces, near-white text, scene from the dark set, grain off */
+:root[data-theme="sharp"]{ color-scheme:dark;
+  --bg:#050505; --card:#0f0f0f; --ink:#fbfaf5; --ink2:#ece6d6; --line:#c8bea8;
+  --rust:#ffb48c; --chip:#1c1c1c; --focus:#ffd84a;
+  --s-wall:#4f4232; --s-trim:#2f2419; --s-floor:#50392a; --s-board:#3e2c1f;
+  --s-table:#6e4a2e; --s-tableE:#4a301d; --s-sky1:#e79a64; --s-sky2:#4b5a8c; --s-cloud:#f3c9a6; --s-sun:#ffb66b;
+  --s-tree:#2e4428; --s-leaf:#3e5f33; --s-cork:#6a4d31; --s-note:#e9dfc6;
+  --s-glow:#ffcf87; --s-glowop:.40; --s-cone:.18; --s-grain:0;
+  --is-dark:1; }
+.iconbtn .ico{ display:none; }
+.iconbtn[data-mode="light"] .ico-light, .iconbtn[data-mode="dark"] .ico-dark, .iconbtn[data-mode="sharp"] .ico-sharp{ display:block; }
 
 *{ box-sizing:border-box; }
 html{ background:var(--bg); }
@@ -250,8 +261,10 @@ details.about p{ margin:8px 0 12px; }
     <svg class="mk" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><defs><path id="tss-spiral" d="M26.2 24.0 L26.3 24.5 L26.4 25.1 L26.2 25.7 L25.9 26.3 L25.5 26.8 L24.9 27.3 L24.2 27.6 L23.4 27.7 L22.5 27.7 L21.7 27.5 L20.8 27.0 L20.1 26.4 L19.5 25.6 L19.1 24.6 L18.8 23.5 L18.9 22.3 L19.2 21.2 L19.8 20.1 L20.6 19.1 L21.6 18.3 L22.9 17.7 L24.3 17.4 L25.7 17.4 L27.2 17.8 L28.5 18.5 L29.8 19.4 L30.8 20.7 L31.5 22.2 L32.0 23.8 L32.0 25.6 L31.7 27.4 L30.9 29.0 L29.8 30.5 L28.4 31.8 L26.7 32.8 L24.7 33.3 L22.7 33.5 L20.6 33.1 L18.6 32.4 L16.8 31.2 L15.3 29.6 L14.1 27.7 L13.4 25.5 L13.1 23.1 L13.3 20.8 L14.1 18.5 L15.4 16.3 L17.1 14.5 L19.2 13.1 L21.6 12.1 L24.2 11.7 L26.9 11.8 L29.6 12.5 L32.0 13.8 L34.1 15.7 L35.9 17.9 L37.1 20.6 L37.7 23.5 L37.7 26.4 L37.0 29.4 L35.7 32.2 L33.9 34.7 L31.4 36.7 L28.6 38.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></defs><rect x="1.5" y="1.5" width="45" height="45" rx="11" fill="#B4511A"/><use href="#tss-spiral" stroke="#0F5F5A" stroke-width="4.6" transform="translate(1.6,1.6)"/><use href="#tss-spiral" stroke="#FAF6EE" stroke-width="3.4"/></svg>
     <span class="wm">Tight Spiral</span>
   </span>
-  <button class="iconbtn" id="darkBtn" type="button" aria-label="Dark mode" aria-pressed="false">
-    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3 A9 9 0 0 1 12 21 Z" fill="currentColor"/></svg>
+  <button class="iconbtn" id="darkBtn" type="button" aria-label="Mode: Light. Tap for Dark." data-mode="light">
+    <svg class="ico ico-light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <svg class="ico ico-dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z" fill="currentColor"/></svg>
+    <svg class="ico ico-sharp" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3 A9 9 0 0 1 12 21 Z" fill="currentColor"/></svg>
   </button>
 </header>
 
@@ -487,7 +500,7 @@ details.about p{ margin:8px 0 12px; }
   <a href="arcade.html" aria-label="Back to the arcade">Back</a>
   <a href="index.html" aria-label="Home">Home</a>
 </nav>
-<p class="foot">Tight Spiral Studios. Play. Notice. Design. Workup v0.5, 2026-09-25.</p>
+<p class="foot">Tight Spiral Studios. Play. Notice. Design. Workup v0.6, 2026-10-13.</p>
 
 <script>
 (function(){
@@ -495,16 +508,23 @@ details.about p{ margin:8px 0 12px; }
   var RM=false; try{ RM=window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
   var HUSH=3600;
 
-  /* dark mode: CSS decides first; the button only writes an explicit choice */
+  /* three modes on one button: Light -> Dark -> Sharp (high contrast) -> Light.
+     CSS decides first load; the button only writes an explicit choice. */
   var root=document.documentElement, darkBtn=$('darkBtn');
+  var MODES=['light','dark','sharp'], NAMES={light:'Light',dark:'Dark',sharp:'Sharp'};
   function isDark(){ return getComputedStyle(root).getPropertyValue('--is-dark').trim()==='1'; }
-  function syncDark(){ darkBtn.setAttribute('aria-pressed', isDark()?'true':'false'); }
-  try{ var saved=localStorage.getItem('tsp-asking-theme'); if(saved==='dark'||saved==='light') root.setAttribute('data-theme',saved); }catch(e){}
-  syncDark();
+  function curMode(){ var t=root.getAttribute('data-theme'); return MODES.indexOf(t)>=0 ? t : (isDark()?'dark':'light'); }
+  function syncMode(){
+    var m=curMode(), n=MODES[(MODES.indexOf(m)+1)%MODES.length];
+    darkBtn.setAttribute('data-mode',m);
+    darkBtn.setAttribute('aria-label','Mode: '+NAMES[m]+'. Tap for '+NAMES[n]+'.');
+  }
+  try{ var saved=localStorage.getItem('tsp-asking-theme'); if(MODES.indexOf(saved)>=0) root.setAttribute('data-theme',saved); }catch(e){}
+  syncMode();
   darkBtn.addEventListener('click',function(){
-    var next=isDark()?'light':'dark'; root.setAttribute('data-theme',next);
+    var next=MODES[(MODES.indexOf(curMode())+1)%MODES.length]; root.setAttribute('data-theme',next);
     try{ localStorage.setItem('tsp-asking-theme',next); }catch(e){}
-    syncDark();
+    syncMode();
   });
 
   /* THE HAND. Test lines are Matt Walsh's, verbatim, from the Storyscape handout. */

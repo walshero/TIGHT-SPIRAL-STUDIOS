@@ -4,6 +4,15 @@
   SANDBAGS, a flash-fiction compression game. Tight Spiral Studios · walshero@gmail.com
   EN195 Creative Writing. v2 GAME REBUILD 2026-07-06 (founder GATE-1 verdict: "no game").
 
+  v48 2026-10-13, THREE MODES (founder: "Remove comfort control and label and
+  focus on 3 best modes for each game including light and dark"). The one round
+  button in the header now cycles Light, Dark, Sharp on each tap. Sharp is high
+  contrast for the founder's eyes: near-black ground, near-white ink, a bright
+  yellow focus and accent, every text token past 7:1, and the paper grain and
+  vignette overlays flattened. Icon-only (sun, moon, half-filled circle); the
+  aria-label names the current mode and the next. Same data-light attribute
+  (day / night / sharp), same 'sandbags-scheme' key, old saved values load.
+
   v47 2026-09-26, THE LUMINO PASS (founder: "That looks like a crane? Almost.
   Lumino city. That's what we strive for. Take your time and make all sandbags
   10/10"). Worked against an independent critic scoring each scene 1-10 against
@@ -1010,6 +1019,29 @@ html{ background:var(--bg); }
   background:var(--surface-2); color:var(--ink); border:2px solid var(--ink); cursor:pointer; }
 .iconbtn svg{ width:26px; height:26px; display:block; }
 .iconbtn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+/* v48 mode button: one icon per mode, shown by data-light. */
+.iconbtn .ic{ display:none; }
+html[data-light="day"] .iconbtn .ic-day,
+html[data-light="night"] .iconbtn .ic-night,
+html[data-light="sharp"] .iconbtn .ic-sharp,
+html:not([data-light]) .iconbtn .ic-day{ display:block; }
+
+/* ---- v48 SHARP: high contrast. Near-black ground, near-white ink, every
+   text token past 7:1 on every surface, bright yellow focus. Specificity is
+   doubled so it beats the OS-dark :root and flown rules above. ---- */
+html[data-light="sharp"][data-light]{
+  --bg:#0b0b0b; --card:#141414; --ink:#f7f7f2; --line:#c9c9c0;
+  --slate:#a6dcff; --gold:#ffd95a; --gold-br:#ffd95a; --gold-pale:#2a2406;
+  --rust:#ffb796; --sky:#141820; --skyhi:#1c212b; --focus:#ffe34d;
+  --land-far:#181d26; --land:#0f1319; --land-near:#070a0e; --piece-accent:#ffd95a;
+  --surface:#141414; --surface-2:#1f1f1f; --ink-2:#e8e8e0;
+  --accent:#a6dcff; --accent-strong:#cfeaff; --on-accent:#0b0b0b;
+  --stamp:#8ff0e2; --shade:rgba(0,0,0,.6); --shadow:rgba(0,0,0,.5); --tape:rgba(150,130,92,.62);
+}
+html.flown[data-light="sharp"][data-light]{ --bg:#1a1606; }
+html[data-light="sharp"][data-light] .skybox{ filter:none; }
+html[data-light="sharp"] .skybox::after,
+html[data-light="sharp"] .skybox > .grain{ display:none; }
 
 /* THE CARD HAND (Row K v34): sheets set down by hand. */
 .plate{ border-radius:14px 20px 16px 22px; box-shadow:0 2px 0 var(--shade), 0 10px 22px var(--shadow); }
@@ -1139,14 +1171,16 @@ html.se-reduce #scenery .urain{ animation:none; }
     <svg class="mk" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><defs><path id="tss-spiral" d="M26.2 24.0 L26.3 24.5 L26.4 25.1 L26.2 25.7 L25.9 26.3 L25.5 26.8 L24.9 27.3 L24.2 27.6 L23.4 27.7 L22.5 27.7 L21.7 27.5 L20.8 27.0 L20.1 26.4 L19.5 25.6 L19.1 24.6 L18.8 23.5 L18.9 22.3 L19.2 21.2 L19.8 20.1 L20.6 19.1 L21.6 18.3 L22.9 17.7 L24.3 17.4 L25.7 17.4 L27.2 17.8 L28.5 18.5 L29.8 19.4 L30.8 20.7 L31.5 22.2 L32.0 23.8 L32.0 25.6 L31.7 27.4 L30.9 29.0 L29.8 30.5 L28.4 31.8 L26.7 32.8 L24.7 33.3 L22.7 33.5 L20.6 33.1 L18.6 32.4 L16.8 31.2 L15.3 29.6 L14.1 27.7 L13.4 25.5 L13.1 23.1 L13.3 20.8 L14.1 18.5 L15.4 16.3 L17.1 14.5 L19.2 13.1 L21.6 12.1 L24.2 11.7 L26.9 11.8 L29.6 12.5 L32.0 13.8 L34.1 15.7 L35.9 17.9 L37.1 20.6 L37.7 23.5 L37.7 26.4 L37.0 29.4 L35.7 32.2 L33.9 34.7 L31.4 36.7 L28.6 38.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></defs><rect x="1.5" y="1.5" width="45" height="45" rx="11" fill="#B4511A"/><use href="#tss-spiral" stroke="#0F5F5A" stroke-width="4.6" transform="translate(1.6,1.6)"/><use href="#tss-spiral" stroke="#FAF6EE" stroke-width="3.4"/></svg>
     <span class="wm">Tight Spiral</span>
   </span>
-  <button class="iconbtn" id="darkBtn" type="button" aria-label="Dark mode" aria-pressed="false">
-    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3 A9 9 0 0 1 12 21 Z" fill="currentColor"/></svg>
+  <button class="iconbtn" id="darkBtn" type="button" aria-label="Mode: Light. Tap for Dark.">
+    <svg class="ic ic-day" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></g></svg>
+    <svg class="ic ic-night" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z" fill="currentColor"/></svg>
+    <svg class="ic ic-sharp" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3 A9 9 0 0 1 12 21 Z" fill="currentColor"/></svg>
   </button>
 </header>
 
 <div class="wrap">
   <p class="production">A Tight Spiral Studios production for EN195</p>
-  <h1 class="gametitle">Sandbags <span class="ver">v47</span><span class="sub">a flash fiction climb</span></h1>
+  <h1 class="gametitle">Sandbags <span class="ver">v48</span><span class="sub">a flash fiction climb</span></h1>
   <p class="prompt" id="prompt">Too heavy to fly. Tap words this piece can live without. Tear the meaning twice, and it crashes.</p>
 
   <div class="plate">
@@ -1255,7 +1289,7 @@ html.se-reduce #scenery .urain{ animation:none; }
 <div class="wrap">
   <div class="foot">
     <p>Sandbags, a Tight Spiral Studios production for EN195 Creative Writing, MassBay Community College. Stagecraft: Matt Walsh. Tight Spiral Studios &middot; walshero@gmail.com. Single-file, offline, stores nothing. A strike is never shame. That word was holding the piece up, and now you know it by feel. Excerpts from four pieces by Matt Walsh, used by the author. Art: original cut-paper SVG, CC0, Tight Spiral Paper Craft.</p>
-    <p class="updated"><span id="seUpdated"></span> <span class="se-version" style="font:inherit;opacity:.85">&middot; v1 <span style="opacity:.75">new</span></span> &middot; v47</p>
+    <p class="updated"><span id="seUpdated"></span> <span class="se-version" style="font:inherit;opacity:.85">&middot; v1 <span style="opacity:.75">new</span></span> &middot; v48</p>
     <div class="studiofoot">
       <svg class="spiralmark" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect x="1.5" y="1.5" width="45" height="45" rx="11" fill="#B4511A"/><use href="#tss-spiral" stroke="#0F5F5A" stroke-width="4.6" transform="translate(1.6,1.6)"/><use href="#tss-spiral" stroke="#FAF6EE" stroke-width="3.4"/></svg>
       <div>
@@ -3452,16 +3486,27 @@ html.se-reduce #scenery .urain{ animation:none; }
     var n=parseInt(v,16); if(isNaN(n)) return false;
     return (((n>>16)&255)*.299+((n>>8)&255)*.587+(n&255)*.114) < 110;
   }
-  function setScheme(dark,save){
-    root.setAttribute('data-light', dark?'night':'day');
-    if(btn) btn.setAttribute('aria-pressed', dark?'true':'false');
-    if(save){ try{ localStorage.setItem(KEY, dark?'dark':'light'); }catch(e){} }
+  /* v48: three modes on the one button, cycling Light -> Dark -> Sharp.
+     Stored as 'light' | 'dark' | 'sharp' under the same key, so a v47 save
+     ('light' / 'dark') still loads. */
+  var ATTR={light:'day',dark:'night',sharp:'sharp'},
+      NAME={light:'Light',dark:'Dark',sharp:'Sharp'},
+      NEXT={light:'dark',dark:'sharp',sharp:'light'};
+  function current(){
+    var a=root.getAttribute('data-light');
+    return a==='sharp'?'sharp':a==='night'?'dark':'light';
+  }
+  function setMode(mode,save){
+    if(!ATTR[mode]) mode='light';
+    root.setAttribute('data-light', ATTR[mode]);
+    if(btn) btn.setAttribute('aria-label','Mode: '+NAME[mode]+'. Tap for '+NAME[NEXT[mode]]+'.');
+    if(save){ try{ localStorage.setItem(KEY, mode); }catch(e){} }
   }
   try{ saved=localStorage.getItem(KEY); }catch(e){}
-  if(saved) setScheme(saved==='dark',false);
-  else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) setScheme(true,false);
-  else setScheme(painted(),false);   // mismatch host: pin the attribute to what CSS actually painted
-  if(btn) btn.addEventListener('click',function(){ setScheme(!painted(),true); });
+  if(saved && ATTR[saved]) setMode(saved,false);
+  else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) setMode('dark',false);
+  else setMode(painted()?'dark':'light',false);   // mismatch host: pin the attribute to what CSS actually painted
+  if(btn) btn.addEventListener('click',function(){ setMode(NEXT[current()],true); });
   // last-updated: computed, not typed
   (function(){ var u=document.getElementById('seUpdated'); if(!u) return;
     var dt=new Date(document.lastModified);

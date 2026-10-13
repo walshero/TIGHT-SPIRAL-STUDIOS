@@ -6,7 +6,24 @@
 - **`lab/` holds games still in progress** (`lab/index.html` lists them). Files that gates, ci or studio-belt reference stay at root and are linked from the lab with `../`.
 - **Titles:** "Dress Rehearsal" with the splash line "AN EN195 GAME". Kireji Pond carries the Still water lever (founder-directed; not a comfort wall).
 
-## COMFORT WORK IS PAUSED — founder ruling, standing (2026-08-29)
+## THREE MODES, ONE BUTTON — founder ruling (2026-10-13), amends the 2026-08-29 pause
+**Founder: "Remove comfort control and label and focus on 3 best modes for each game
+including light and dark. Row K just a dark toggle button for states."**
+- Each game ships **three modes on one icon-only button** (no visible label, no word
+  "comfort"): Light, Dark, and one more chosen per game. Shipped 2026-10-13: Sandbags,
+  Kireji Pond and The Asking Room cycle Light, Dark, Sharp (high contrast); Reading Lamp
+  keeps Paper, Dim, Night. The button's aria-label names the current mode and the next one.
+- **Row K is the exception:** one dark toggle, nothing more.
+- The standalone Comfort Control (`comfort-control.html`, the "- O +" five-state spec) is
+  retired. Everything below about walls still holds: no preference panels, no text-size rows.
+
+**There is no studio default palette (founder, 2026-10-13: "Rewrite palette default").**
+The art seats pick each game's palette fresh; the floor is a contrast number, not a hue.
+
+**Most files are single-file and offline** (founder, 2026-10-13: "most files are single
+file offline"). That is the usual shape, not a limit on any single design.
+
+## COMFORT WORK WAS PAUSED — founder ruling (2026-08-29), still standing except as amended above
 **No build asks the player about their preferences. No comfort button, no light row, no
 text-size row, no legibility panel. No walls.**
 
@@ -19,9 +36,9 @@ hue. Per-game palette work is NOT paused.
 carries **Back** and **Home**. The bottom rail is already right on ~63 surfaces; the top
 needs Cabinet added in the same header the Comfort button is cut from — one edit, not two.
 
-- **Do not start** a new palette, light mode, type-scale experiment or comfort-kernel
-  version. Existing kernels are frozen as they stand. The pause lifts only when the
-  founder lifts it in writing.
+- **Do not start** a type-scale experiment or comfort-kernel version. Light modes are
+  unpaused only for the three-mode rule above (founder, in writing, 2026-10-13). Per-game
+  palettes were never paused.
 - **Delete the WALL, never the KERNEL.** The wall is the UI that asks. The kernel is the
   CSS that responds to `data-light` and holds the contrast floor — `comfort-gate.py`
   measures the kernel and never clicks a control, so removing walls keeps the belt green.

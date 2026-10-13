@@ -88,7 +88,7 @@ Two rules sit above everything else and are never overridden: **no emoji, ever**
 **Tagline:** "Play. Notice. Design."
 **Descriptor:** "We turn how you learn into how you play."
 **Contact:** walshero@gmail.com
-**What it makes:** All kinds of games and interactive pieces — not only writing or composition games. Single-file, offline, accessible-first.
+**What it makes:** All kinds of games and interactive pieces — not only writing or composition games. Accessible-first. Most files are single-file and offline.
 
 **The studios (gears, with one hub).** Human-in-the-Loop Productions is both a named imprint and the hub the others mesh to — every output carries a human gate because the gate is the hub. The two art imprints mesh to it, never directly to each other:
 - **Tight Spiral Paper Craft Studios** — the cut-paper SVG art system (one of three medium lanes; chosen when the Medium Gate sends a build there, not by default).
@@ -157,7 +157,7 @@ The studio is built around one person's real strengths and real constraints. Des
 **No emoji. Ever. In any output, any venue.**
 
 **Accessibility is a design floor.** Every interactive build, without exception:
-- Single-file HTML, fully offline; in-memory only, nothing leaves the page.
+- Most files are single-file HTML, offline and in-memory, with nothing leaving the page. That is the usual shape, not a limit on any single design (founder, 2026-10-13: *"most files are single file offline"*).
 - Large type; one decision per screen; big tappable buttons (44px minimum).
 - Full keyboard navigation with visible focus rings.
 - Reduced-motion respected for genuine motion-sensitivity needs (but see the joy clause); no seizure-risk fast strobing, ever.
@@ -974,6 +974,27 @@ would, on 73 surfaces.
    work and are NOT paused — they are the Colour & Palette Lead's job, per item 2. This
    pause is lifted by the founder, in writing, and by nobody else.
 
+### Amendment 2026-10-13 — three modes, one button (founder lifts item 6 in part)
+
+**Founder's words, in writing:** *"Remove comfort control and label and focus on 3 best
+modes for each game including light and dark. Row K just a dark toggle button for states."*
+
+- **Every game ships three modes on one icon-only button:** Light, Dark, and one more the
+  design seats choose for that game. No visible label, no word "comfort". The aria-label
+  names the current mode and the next one ("Mode: Light. Tap for Dark."). One tap moves
+  to the next mode; the choice is remembered.
+- **Shipped the same day:** Sandbags (v48), Kireji Pond (v5.12) and The Asking Room (v0.6)
+  cycle Light, Dark, Sharp. Sharp is high contrast: near-black ground, near-white ink, every
+  text token at 7:1 or better, grain off. Reading Lamp already had Paper, Dim, Night.
+- **Row K is the exception:** one dark toggle, nothing more.
+- **Retired:** the standalone Comfort Control (`comfort-control.html`, the "- O +"
+  five-state spec) and the word "comfort" on any player-facing control.
+- **Unchanged:** no preference panels, no text-size rows, no legibility drawers (items 1
+  and 3 above). Item 6's pause on light modes is lifted only for this rule.
+- **Known enforcement gap:** `preship-contrast-gate.py` reads only the default token set, so
+  it never sees a `data-light` or `data-theme` mode. The 2026-10-13 Sharp modes were checked
+  by hand-run arithmetic. Until the gate reads every mode, a mode can ship unread.
+
 ### The combined transformation, proven before it was armed
 
 On `choose-your-leader-nixon-slice.html`, 16,614 → 15,362 B: comfort wall removed, top
@@ -1540,7 +1561,7 @@ Settled calls. A future session — human or AI — should not reopen these with
 - **13.1 The 50% text gate.** No page or screen lands where text is more than 50% of visual space, unless empty space is deliberately the point. A hard floor, not a preference. Rides in the PATTERN-TICK.
 - **13.2 The logo.** A circle where the outer line *is* the circle — the ring is the outermost turn of the tight spiral, coiling inward. Not a spiral inside a ring.
 
-**Palette reconciliation.** Arcade default palette B (High Lumen amber, 16.1:1) is the legibility *floor*; the Constitution's "reserve strong color for meaning" is the discipline *on top* of that floor. Not a conflict — B guarantees readable-on-load, §15 governs what added color may mean. Confluence green is institutional-tool-specific, never an inherited default.
+**Palette: there is no studio default (rewritten 2026-10-13; founder: *"Rewrite palette default"*).** Earlier text named arcade palette B (High Lumen amber) as the games' default floor; that is withdrawn. The founder's later words govern: *"really should be the ones to choose pallet. My only ask is that it be novel"* (2026-06-30) and *"Forget about default palette"* (2026-07-14). The Visual Designer, Rhetorical Grammarian, Art Director and Colour & Palette Lead choose each game's palette fresh, from that game's rhetorical situation, aiming to surprise. The legibility floor is a **number, not a hue**: every text token in every mode clears the contrast gate. The Constitution's "reserve strong color for meaning" still governs what added color may mean (§15). Confluence green stays institutional-tool-specific and never leaks into a game.
 
 **Belt hook — VISUAL-TICK folds into PATTERN-TICK.** Before any page ships, the belt also checks: the 50% text gate (§13.1), the game-tie clause (visual vision on screen), and the Brand Test (five questions, any "no" flags revise). One graduated change per the accumulation brake — the Constitution is the add; VISUAL-TICK extends the existing PATTERN-TICK, it does not stand as a new beat.
 
@@ -1685,7 +1706,7 @@ Drive Atlas made law: index, never archive.
 ## §12.6 Palette floor as mount (enforcement detail)
 
 Each lane declares its palette floor once in the manifest:
-- **arcade** → palette-B High Lumen amber, 16.1:1 (games default floor)
+- **arcade** → no mounted palette (2026-10-13: no studio default). The mount is the contrast floor only: every text token, every mode, clears the gate.
 - **Confluence** → studio green #1a4a35 (instrument only)
 
 A build reads its floor `RO` at open. Studio Eyes check `PALETTE-MOUNT`: any inline
@@ -2987,7 +3008,7 @@ screen is measured too, but the phone decides.
 `one-thing-gate.py` now measures 390x844 *and* 1280x800, and the phone-side findings
 carry the higher severity. It also measures the thing that actually matters for an
 instruction wall — not words on screen, but **words above the first control** and
-**screens-to-first-action**, with chrome (comfort control, nav rail, skip link)
+**screens-to-first-action**, with chrome (mode button, nav rail, skip link)
 excluded, because furniture sitting at y=0 was masking the measure.
 
 ---
@@ -3046,8 +3067,8 @@ to the others, so agreement between them is signal, not echo.
 
 1. **TSP as-is** — the studio's own gates, run literally:
    `studio-eyes/studio-fingers.py` (touch), `preship-gate-v4.py` (render), `ratchet.py`
-   (floor), plus the founder floors (comfort = knob-not-wall; scene-first; single-file
-   offline; back+home on every screen; 44px targets). Concrete and runnable.
+   (floor), plus the founder floors (three modes on one button, no comfort wall; scene-first;
+   single-file offline for most files; back+home on every screen; 44px targets). Concrete and runnable.
 2. **Game-based, 3rd-party public** — evaluate it AS A PLAYABLE using published
    frameworks: Nielsen's 10 heuristics, Desurvire HEP / PLAY, FTUE onboarding, game-feel
    ("action and reaction in the same place"). Does it *play*?

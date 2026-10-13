@@ -16,6 +16,10 @@
      frog." Cliché Creek: thirty poems, three real, the rest clichés, near misses included. Clichés that float past count
      against you, so the player smashes all the way down; the frog's tongue brings the real ones home. Studio translations
      from public-domain Japanese originals; the results screen shows each original and its cliché twin. -->
+<!-- v5.12 2026-10-13 (founder): "Cut mizu no oto." The end screen's "mizu no oto" heading is gone. The eyebrow line
+     "Three poems · one splash" is now the heading and the focus landing (id finalQ), so screen readers still get a heading.
+     Founder 2026-10-13: "Remove comfort control and label and focus on 3 best modes for each game including light and dark."
+     The corner chip now cycles three modes on one icon button, Day, Night, Sharp (high contrast); no visible label. -->
 <!-- v5.11 2026-10-09 (founder): "The text sometimes gets scrolled to the side accidentally and I can't get back."
      The directions card scrolled sideways by 4px (a hidden pane parked 18px right for its slide-in). Card is now
      vertical-only, and any sideways offset snaps back to 0. Studio Fingers gains F-SIDESCROLL so no box ships this again. -->
@@ -301,6 +305,19 @@ kbd{font:600 18px/1 "Zen Kaku Gothic New",sans-serif;border:1px solid currentCol
 :root[data-light="night"] .primary:hover{background:var(--ai);color:#F2EAD7}
 :root[data-light="night"] .slot.flash{animation:none}
 :root[data-light="day"]{--paper:#EAE2CD;--paper2:#F5EEDB;--sumi:#1B1A17;--sumi2:#4A463E;--paper2-t:#F5EEDB;--sumi-t:#1B1A17;--sumi2-t:#4A463E;--beniInk:#7E2419;--okInk:#2F5D2A;color-scheme:light} /* a chosen day beats the phone's dark setting */
+/* v5.12 Sharp: the high-contrast stop. Near-black paper, near-white ink, every text token clears 7:1 on both papers.
+   --beni darkens so the white words on seals and buttons clear 7:1; the bright gold --kin carries focus and marks.
+   Decorative grain and mottle overlays flatten so edges stay crisp. */
+:root[data-light="sharp"]{--paper:#0A0A0A;--paper2:#141414;--sumi:#F5F5F0;--sumi2:#E0E0DA;--paper2-t:#141414;--sumi-t:#F5F5F0;--sumi2-t:#E0E0DA;--ai-t:#A8D4FF;--beni:#8E2416;--beniInk:#FFB08F;--okInk:#9BE08A;--kin:#FFC23D;color-scheme:dark}
+:root[data-light="sharp"] .tile:hover .in,:root[data-light="sharp"] .tile.held .in{background:#262626}
+:root[data-light="sharp"] .primary:hover{background:var(--ai);color:#F5F5F0}
+:root[data-light="sharp"] .slot.flash{animation:none}
+:root[data-light="sharp"] :focus-visible{outline-color:var(--kin)!important}
+:root[data-light="sharp"] .poem .t,:root[data-light="sharp"] .rpoem .t{text-decoration-color:var(--kin)}
+:root[data-light="sharp"] .slot.warn,:root[data-light="sharp"] .msg.warn{border-color:var(--kin)}
+:root[data-light="sharp"] [fill="url(#pMottle)"],:root[data-light="sharp"] [fill="url(#pGrain)"]{display:none}
+:root[data-light="sharp"] [filter*="grain"],:root[data-light="sharp"] [filter*="Grain"]{filter:none}
+:root[data-light="sharp"] .fzbox{background-image:none}
 /* v2 Still water: the no/low motion lever. The stream stops and the phrases wait on the bank as a list. */
 .lever{display:inline-flex;align-items:center;gap:10px}
 .lever .knob{flex:none;width:44px;height:24px;border:2px solid var(--sumi);border-radius:13px;position:relative;background:var(--paper2)}
@@ -815,7 +832,7 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
     </svg>
     <div class="stream" id="stream" inert></div>
     <div class="reveal" id="reveal" hidden><div class="rcard" id="rcard"><p class="eyebrow" id="revLbl"></p><p class="rpoem" id="revPoem"></p></div></div>
-    <button class="litebtn" id="lite" type="button" aria-pressed="false" aria-label="Night mode"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="currentColor"/></svg></button>
+    <button class="litebtn" id="lite" type="button" aria-label="Mode: Day. Tap for Night."><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
     <button class="sndbtn" id="snd" type="button" aria-pressed="true"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 9h4l5-4v14l-5-4H3z" fill="currentColor"/><path class="w" d="M15.5 8.5c1.6 1.9 1.6 5.1 0 7M18.5 6c3 3.3 3 8.7 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="x" d="M16 9l6 6M22 9l-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span id="sndTxt">Sound on</span></button>
     <div class="cartouche" aria-hidden="true">
       <div class="kmark" id="kmark" lang="ja"><span>切</span><span>池</span></div>
@@ -928,8 +945,7 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
 
     <!-- Final -->
     <section id="pFinal" hidden>
-      <p class="eyebrow">Three poems · one splash</p>
-      <h2 lang="ja-Latn" id="finalQ" tabindex="-1">mizu no oto</h2>
+      <h2 class="eyebrow" id="finalQ" tabindex="-1">Three poems · one splash</h2>
       <p class="note">The sound of the water. Three turns fed the frog, and the frog made the last one. Read them once more. Does one of them hold for you?</p>
       <div class="finals" id="finals"></div>
       <button class="primary" id="fzOpen" type="button">Open the fridge</button>
@@ -2476,12 +2492,19 @@ function cicadaTymbalSinger(ac,d,t,rnd,G){
   document.addEventListener('visibilitychange',()=>Snd.hide(document.hidden));}
 
 /* ---------- v5.2.10 night mode: opens on the phone's own setting, remembers the player's choice ---------- */
-{const root=document.documentElement, b=$('#lite'), KEY='kirejiLight'; let saved=null;
-  const set=(night,save)=>{root.setAttribute('data-light',night?'night':'day'); b.setAttribute('aria-pressed',night?'true':'false');
-    b.setAttribute('aria-label',night?'Night mode on':'Night mode'); if(save){try{localStorage.setItem(KEY,night?'night':'day')}catch(e){}}};
+/* v5.12 three modes on one chip: day -> night -> sharp (high contrast) -> day. Same key; old 'day'/'night' still load. */
+{const root=document.documentElement, b=$('#lite'), KEY='kirejiLight', MODES=['day','night','sharp'], NAME={day:'Day',night:'Night',sharp:'Sharp, high contrast'};
+  const S='<svg viewBox="0 0 24 24" aria-hidden="true">', ICON={
+    day:S+'<circle cx="12" cy="12" r="4.5" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
+    night:S+'<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="currentColor"/></svg>',
+    sharp:S+'<circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg>'};
+  let saved=null;
+  const set=(m,save)=>{if(!MODES.includes(m)) m='day'; const nx=MODES[(MODES.indexOf(m)+1)%MODES.length];
+    root.setAttribute('data-light',m); b.innerHTML=ICON[m]; b.setAttribute('aria-label','Mode: '+NAME[m]+'. Tap for '+NAME[nx]+'.');
+    if(save){try{localStorage.setItem(KEY,m)}catch(e){}}};
   try{saved=localStorage.getItem(KEY)}catch(e){}
-  set(saved?saved==='night':matchMedia('(prefers-color-scheme: dark)').matches,false);
-  b.addEventListener('click',()=>set(root.getAttribute('data-light')!=='night',true));}
+  set(MODES.includes(saved)?saved:(matchMedia('(prefers-color-scheme: dark)').matches?'night':'day'),false);
+  b.addEventListener('click',()=>{const c=root.getAttribute('data-light'); set(MODES[(MODES.indexOf(c)+1)%MODES.length],true)});}
 /* ---------- v4 opening panels ---------- */
 const tourEl=$('#tour'), panes=$$('.tpane'); let tIdx=0;
 function goTour(i,focus){

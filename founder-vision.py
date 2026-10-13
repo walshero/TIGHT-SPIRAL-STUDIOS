@@ -103,9 +103,12 @@ def load_cov():
 
 
 # --------------------------------------------------------------------- ingest
-CHAT_RE = re.compile(r"<chat url='(https://claude\.ai/chat/[0-9a-f-]{36})' updated_at='([^']+)'"
+# A source is a claude.ai chat or a Claude Code session (founder rulings given in a code
+# session are primary source too; added 2026-10-13).
+SRC_URL = r"https://claude\.ai/(?:chat/[0-9a-f-]{36}|code/session_[0-9A-Za-z]+)"
+CHAT_RE = re.compile(r"<chat url='(" + SRC_URL + r")' updated_at='([^']+)'"
                      r"(?:[^>]*kind='(\w+)')?[^>]*>(.*?)</chat>", re.S)
-FAILED_RE = re.compile(r"<!--\s*FAILED\s+(https://claude\.ai/chat/[0-9a-f-]{36})")
+FAILED_RE = re.compile(r"<!--\s*FAILED\s+(" + SRC_URL + r")")
 # Never let a credential the founder once pasted into a chat ride into the repo.
 # Same patterns as secret-scan-gate.py; redacted at ingest, so no lane ever holds it.
 SECRET_RES = [re.compile(p) for p in (
