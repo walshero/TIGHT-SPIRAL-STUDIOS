@@ -1,6 +1,6 @@
 # SIGHTED TRANSCRIPT — the-console.html
 
-build the-console.html · md5 6eaa4b42fca4dd622664c3f176dd777f · crawled 2026-10-13T19:09:18-0400 · viewport 400x840
+build the-console.html · md5 5f19f917e9a421b965ecc263b5887e02 · crawled 2026-10-13T19:50:41-0400 · viewport 400x840
 
 You can see. You play by looking. Each state below has a screenshot path; open it.
 
@@ -9,28 +9,28 @@ screenshot: states/00.png
 headings: ['She opened flok to post one\xa0photo.']
 controls in view: ['The studio', 'The cabinet', 'Start your shift']
 visible text (first 600 chars):
-> LABAn experiment on the bench, not a finished game. /  / Studio / Cabinet / north_trail / now / 10:52 PM / She opened flok to post one photo. /  / golden hour at the lake. for rosa. /  / Your job: keep her here past midnight. /  / on flok 4:13 / midnight / Start your shift /  /  flok growth team, night shift. Five tricks real apps use, one at a time. Offline. The people are invented; the photos are real. / About the photos /  / Last updated October 13, 2026 / · v31 Tess’s Tuesday /  / Back / Home
+> LABAn experiment on the bench, not a finished game. /  / Studio / Cabinet / north_trail / now / 10:52 PM / She opened flok to post one photo. /  / golden hour at the lake. for rosa. /  / Your job: keep her here past midnight. /  / on flok 4:13 / midnight / Start your shift /  /  flok growth team, night shift. Five tricks real apps use, one at a time. Offline. The people are invented; the photos are real. / About the photos /  / Last updated October 13, 2026 / · v32 the receipt /  / Back / Home
 
 ## State 1  (reached by: step 0: Start your shift)
 screenshot: states/01.png
 headings: []
 controls in view: ['Boost']
 visible text (first 600 chars):
-> LABAn experiment on the bench, not a finished game. /  / Studio / Cabinet / Intern / GROWTH OPERATOR · ASSIGNMENT 1 / 5 / Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. / 10:53 PM / flok. / 0 / north_trail / now / golden hour at the lake. for rosa. / 3 / ◇ 2 / ↗ / — end — / +1 / ENGAGEMENT / 26% / Boost / Surprise likes — a reward trick. / Tap Boost. Watch which payout brings her back fastest. / ↻ / Why does this work? / Unpredictable rewards drive the most persistent checking — the same schedule that makes slot machines compulsive.
+> LABAn experiment on the bench, not a finished game. /  / Studio / Cabinet / Intern / Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. / 10:53 PM / flok. / 0 / north_trail / now / golden hour at the lake. for rosa. / 3 / ◇ 2 / ↗ / +1 / No Boosts yet. / Each result lands here. / ENGAGEMENT / 26% / Boost / Surprise likes — a reward trick. / Tap Boost. Watch which payout brings her back fastest. / ↻ / Why does this work? / Unpredictable rewards drive the most persistent checking — the same schedule that makes slot machines compulsive. / Ski
 
 ## State 2  (reached by: step 6: Boost)
 screenshot: states/02.png
 headings: []
 controls in view: ['Boost', 'Flip to see the research', 'Next →']
 visible text (first 600 chars):
-> LABAn experiment on the bench, not a finished game. /  / Studio / Cabinet / Intern / GROWTH OPERATOR · ASSIGNMENT 1 / 5 / Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. / 10:53 PM / flok. / 0 / north_trail / back 20s after Quinn's view / posting through it / 6 / ◇ 3 / ↗ / north_trail / back after 2m / @q.ramos saw your story. the new place looks huge / 5 / ◇ 16 / ↗ / q.ramos viewed your story / north_trail / back 90s after Mom's comment / anyone up? or just me / 5 / ◇ 16 / ↗ / north_trail / back 1m after a like / how does tidepool get 2,000 lik
+> LABAn experiment on the bench, not a finished game. /  / Studio / Cabinet / Intern / Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. / 10:53 PM / flok. / 0 / north_trail / back 20s after Quinn's view / posting through it / 6 / ◇ 3 / ↗ / north_trail / back after 2m / @q.ramos saw your story. the new place looks huge / 5 / ◇ 16 / ↗ / north_trail / back 90s after Mom's comment / anyone up? or just me / 5 / ◇ 16 / ↗ / north_trail / back 1m after a like / how does tidepool get 2,000 likes on a sunset / 4 / ◇ 9 / ↗ / north_trail / back after 2m / @daily.loaf 
 
 ## State 3  (reached by: step 8: Next →)
 screenshot: states/03.png
 headings: []
 controls in view: ['The studio', 'The cabinet', 'Continue →', 'Back', 'Home']
 visible text (first 600 chars):
-> LABAn experiment on the bench, not a finished game. /  / Studio / Cabinet / ★ / PROMOTED / Junior / Growth Team /  / 11:06 PM · she’s still on flok /  / Continue → /  / Last updated October 13, 2026 / · v31 Tess’s Tuesday /  / Promoted: Junior. 11:06 PM. She is still on flok. /  / Back / Home
+> LABAn experiment on the bench, not a finished game. /  / Studio / Cabinet / ★ / PROMOTED / Junior / Growth Team /  / 11:06 PM · she’s still on flok /  / Continue → /  / Last updated October 13, 2026 / · v32 the receipt /  / Promoted: Junior. 11:06 PM. She is still on flok. /  / Back / Home
 
 ## State 4  (reached by: step 9: Continue →)
 screenshot: states/04.png
@@ -51,7 +51,7 @@ screenshot: states/06.png
 headings: []
 controls in view: ['The studio', 'The cabinet', 'Continue →', 'Back', 'Home']
 visible text (first 600 chars):
-> LABAn experiment on the bench, not a finished game. /  / Studio / Cabinet / ★ / PROMOTED / Growth Lead / Growth Team /  / 11:21 PM · she’s still on flok /  / Continue → /  / Last updated October 13, 2026 / · v31 Tess’s Tuesday /  / Promoted: Growth Lead. 11:21 PM. She is still on flok. /  / Back / Home
+> LABAn experiment on the bench, not a finished game. /  / Studio / Cabinet / ★ / PROMOTED / Growth Lead / Growth Team /  / 11:21 PM · she’s still on flok /  / Continue → /  / Last updated October 13, 2026 / · v32 the receipt /  / Promoted: Growth Lead. 11:21 PM. She is still on flok. /  / Back / Home
 
 ## State 7  (reached by: step 15: Continue →)
 screenshot: states/07.png
@@ -72,7 +72,7 @@ screenshot: states/09.png
 headings: []
 controls in view: ['The studio', 'The cabinet', 'Continue →', 'Back', 'Home']
 visible text (first 600 chars):
-> LABAn experiment on the bench, not a finished game. /  / Studio / Cabinet / ★ / PROMOTED / Senior Lead / Growth Team /  / 11:37 PM · she’s still on flok /  / Continue → /  / Last updated October 13, 2026 / · v31 Tess’s Tuesday /  / Promoted: Senior Lead. 11:37 PM. She is still on flok. /  / Back / Home
+> LABAn experiment on the bench, not a finished game. /  / Studio / Cabinet / ★ / PROMOTED / Senior Lead / Growth Team /  / 11:37 PM · she’s still on flok /  / Continue → /  / Last updated October 13, 2026 / · v32 the receipt /  / Promoted: Senior Lead. 11:37 PM. She is still on flok. /  / Back / Home
 
 ## State 10  (reached by: step 20: Continue →)
 screenshot: states/10.png
@@ -88,57 +88,50 @@ controls in view: ['Sound on', 'Release notifications', 'Flip to see the researc
 visible text (first 600 chars):
 > LABAn experiment on the bench, not a finished game. /  / Studio / Cabinet / Senior Lead / Interrupt on purpose. First, see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task. A sample lands back on Tess. / 11:38 PM / flok. / 0 / cvx / posted for the first time in a while / north_trail / Memories / 1 year ago today: you and q.ramos, movie night at the old place / 0 / ◇ 1 / ↗ / q.ramos / viewed your story / hank.jpg / and 3 others liked your post / north_trail / now / one more before bed. (i say this every night) / 3 / ◇ 2 / ↗ / north_trail / earlier / posting through it / 12 / ◇ 5 / ↗ / — end — / Quinn viewed / ENGAGEME
 
-## State 12  (reached by: step 25: Release notifications)
+## State 12  (reached by: step 26: Notifications — tap to clear)
 screenshot: states/12.png
-headings: []
-controls in view: ['Sound on', 'Release notifications', 'Flip to see the research', 'Next →', 'Back', 'Home']
-visible text (first 600 chars):
-> LABAn experiment on the bench, not a finished game. /  / Studio / Cabinet / Senior Lead / Interrupt on purpose. First, see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task. A sample lands back on Tess. / 11:38 PM / flok. / 6 / q.ramos / viewed your story / hank.jpg / and 3 others liked your post / cvx / posted for the first time in a while / north_trail / Memories / 1 year ago today: you and q.ramos, movie night at the old place / 0 / ◇ 1 / ↗ / q.ramos / viewed your story / hank.jpg / and 3 others liked your post / — end — / Quinn viewed / ENGAGEMENT / 80% / Sound on / Release notifications / Target hit. / ↻ / Wh
-
-## State 13  (reached by: step 26: Notifications — tap to clear)
-screenshot: states/13.png
 headings: []
 controls in view: ['The studio', 'The cabinet', 'Notifications — tap to clear', 'Sound on']
 visible text (first 600 chars):
 > LABAn experiment on the bench, not a finished game. /  / Studio / Cabinet / Senior Lead / Interrupt on purpose. First, see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task. A sample lands back on Tess. / 11:38 PM / flok. / 0 / q.ramos / viewed your story / hank.jpg / and 3 others liked your post / cvx / posted for the first time in a while / north_trail / Memories / 1 year ago today: you and q.ramos, movie night at the old place / 0 / ◇ 1 / ↗ / q.ramos / viewed your story / hank.jpg / and 3 others liked your post / — end — / Quinn viewed / ENGAGEMENT / 92% / Sound on / Release notifications / Target hit. / ↻ / Wh
 
-## State 14  (reached by: step 29: Next →)
-screenshot: states/14.png
+## State 13  (reached by: step 29: Next →)
+screenshot: states/13.png
 headings: []
 controls in view: ['The studio', 'The cabinet', 'Continue →', 'Back', 'Home']
 visible text (first 600 chars):
-> LABAn experiment on the bench, not a finished game. /  / Studio / Cabinet / ★ / PROMOTED / Head of Growth / Growth Team /  / 11:52 PM · she’s still on flok /  / Continue → /  / Last updated October 13, 2026 / · v31 Tess’s Tuesday /  / Promoted: Head of Growth. 11:52 PM. She is still on flok. /  / Back / Home
+> LABAn experiment on the bench, not a finished game. /  / Studio / Cabinet / ★ / PROMOTED / Head of Growth / Growth Team /  / 11:52 PM · she’s still on flok /  / Continue → /  / Last updated October 13, 2026 / · v32 the receipt /  / Promoted: Head of Growth. 11:52 PM. She is still on flok. /  / Back / Home
 
-## State 15  (reached by: step 30: Continue →)
-screenshot: states/15.png
+## State 14  (reached by: step 30: Continue →)
+screenshot: states/14.png
 headings: []
 controls in view: ['Simulated feed', "'Seen' receipts"]
 visible text (first 600 chars):
 > LABAn experiment on the bench, not a finished game. /  / Studio / Cabinet / Head of Growth / Turn silence into guilt. Priya, her mom and Quinn all sit 'Seen' with no reply. Switch on read receipts so ignoring them becomes something they can see her doing. / 11:53 PM / flok. / 0 / daily.loaf / best friend · 64-day streak / did you get my last one? / Seen 2:41 PM · no reply / sunroom.mornings / mom / call me when you can / Seen 2:41 PM · no reply / q.ramos / college roommate · moved in August / lmk when you're free / Seen 2:41 PM · no reply / Reply rate / 0% / — end — / Quinn viewed / ENGAGEMENT / 26% / 'Seen' receipts / 'Seen' receipts — a guilt tri
 
-## State 16  (reached by: step 31: 'Seen' receipts)
-screenshot: states/16.png
+## State 15  (reached by: step 31: 'Seen' receipts)
+screenshot: states/15.png
 headings: []
 controls in view: ['Simulated feed', "'Seen' receipts", 'Flip to see the research', 'Next →']
 visible text (first 600 chars):
 > LABAn experiment on the bench, not a finished game. /  / Studio / Cabinet / Head of Growth / Turn silence into guilt. Priya, her mom and Quinn all sit 'Seen' with no reply. Switch on read receipts so ignoring them becomes something they can see her doing. / 11:53 PM / flok. / 0 / daily.loaf / best friend · 64-day streak / did you get my last one? / Seen 2:41 PM · replied just now / sunroom.mornings / mom / call me when you can / Seen 2:41 PM · replied just now / q.ramos / college roommate · moved in August / lmk when you're free / Seen 2:41 PM · typing… / Reply rate / 92% / — end — / Quinn viewed / ENGAGEMENT / 68% / 'Seen' receipts / Target hit. / ↻
 
-## State 17  (reached by: step 32: 'Seen' receipts)
-screenshot: states/17.png
+## State 16  (reached by: step 32: 'Seen' receipts)
+screenshot: states/16.png
 headings: []
 controls in view: ['Simulated feed', "'Seen' receipts", 'Flip to see the research', 'Next →']
 visible text (first 600 chars):
 > LABAn experiment on the bench, not a finished game. /  / Studio / Cabinet / Head of Growth / Turn silence into guilt. Priya, her mom and Quinn all sit 'Seen' with no reply. Switch on read receipts so ignoring them becomes something they can see her doing. / 11:53 PM / flok. / 0 / daily.loaf / best friend · 64-day streak / did you get my last one? / Seen 2:41 PM · replied just now / sunroom.mornings / mom / call me when you can / Seen 2:41 PM · replied just now / q.ramos / college roommate · moved in August / lmk when you're free / Seen 2:41 PM · replied just now / Reply rate / 92% / — end — / Quinn viewed / ENGAGEMENT / 68% / 'Seen' receipts / Targ
 
-## State 18  (reached by: step 38: Continue →)
-screenshot: states/18.png
+## State 17  (reached by: step 38: Continue →)
+screenshot: states/17.png
 headings: []
 controls in view: ['The studio', 'The cabinet']
 visible text (first 600 chars):
 > LABAn experiment on the bench, not a finished game. /  / Studio / Cabinet / ◐ /  / 12:09 AM. She’s still on flok. You kept her past midnight. /  / While you trained the machine, it measured you. /  / You tapped Boost / 6 / It paid off / 3 /  / About one in 2. That is the schedule you were taught to build. /  / Screens you scrolled past the end / 10 / Alerts you fired at the cohort / 10 /  / What pulled her back fastest: Quinn viewing her story. What never came on schedule: a like from Rosa. /  / At 12:06 her sister liked the lake photo. That was the post. She didn't see it. /  / The cohort was people like you. /  / Start over / About the photos /  / Last
 
-## State 19  (reached by: step 40: About the photos)
-screenshot: states/19.png
+## State 18  (reached by: step 40: About the photos)
+screenshot: states/18.png
 headings: ['About the photos']
 controls in view: ['The studio', 'The cabinet', 'Wikimedia Commons page', 'Wikimedia Commons page']
 visible text (first 600 chars):
@@ -147,14 +140,14 @@ visible text (first 600 chars):
 ## Steps (what was tapped, where it led)
 
 - step 0: tap "Start your shift" at y=722 -> state 1 (new)
-- step 1: tap "Boost" at y=755 -> state 1
-- step 2: tap "Boost" at y=755 -> state 1
-- step 3: tap "Boost" at y=755 -> state 1
-- step 4: tap "Boost" at y=755 -> state 1
-- step 5: tap "Boost" at y=755 -> state 1
-- step 6: tap "Boost" at y=755 -> state 2 (new)
+- step 1: tap "Boost" at y=711 -> state 1
+- step 2: tap "Boost" at y=714 -> state 1
+- step 3: tap "Boost" at y=711 -> state 1
+- step 4: tap "Boost" at y=711 -> state 1
+- step 5: tap "Boost" at y=714 -> state 1
+- step 6: tap "Boost" at y=711 -> state 2 (new)
 - step 7: tap "Flip to see the research" at y=552 -> state 2 — screen text did not change
-- step 8: tap "Next →" at y=753 -> state 3 (new)
+- step 8: tap "Next →" at y=754 -> state 3 (new)
 - step 9: tap "Continue →" at y=504 -> state 4 (new)
 - step 10: tap "Simulated feed" at y=389 -> state 4
 - step 11: tap "Simulated feed" at y=389 -> state 4
@@ -171,31 +164,31 @@ visible text (first 600 chars):
 - step 22: tap "Release notifications" at y=695 -> state 10
 - step 23: tap "Notifications — tap to clear" at y=153 -> state 11 (new)
 - step 24: tap "Release notifications" at y=420 -> state 11
-- step 25: tap "Release notifications" at y=308 -> state 12 (new)
-- step 26: tap "Notifications — tap to clear" at y=342 -> state 13 (new)
-- step 27: tap "Notifications — tap to clear" at y=342 -> state 13 — screen text did not change
-- step 28: tap "Release notifications" at y=382 -> state 12
-- step 29: tap "Next →" at y=563 -> state 14 (new)
-- step 30: tap "Continue →" at y=504 -> state 15 (new)
-- step 31: tap "'Seen' receipts" at y=683 -> state 16 (new)
-- step 32: tap "'Seen' receipts" at y=432 -> state 17 (new)
-- step 33: tap "'Seen' receipts" at y=432 -> state 16
-- step 34: tap "'Seen' receipts" at y=432 -> state 17
-- step 35: tap "Simulated feed" at y=-4 -> state 17 — screen text did not change
-- step 36: tap "'Seen' receipts" at y=432 -> state 16
-- step 37: tap "Next →" at y=703 -> state 14
-- step 38: tap "Continue →" at y=603 -> state 18 (new)
+- step 25: tap "Release notifications" at y=420 -> state 11
+- step 26: tap "Notifications — tap to clear" at y=342 -> state 12 (new)
+- step 27: tap "Notifications — tap to clear" at y=342 -> state 12 — screen text did not change
+- step 28: tap "Release notifications" at y=382 -> state 11
+- step 29: tap "Next →" at y=715 -> state 13 (new)
+- step 30: tap "Continue →" at y=504 -> state 14 (new)
+- step 31: tap "'Seen' receipts" at y=683 -> state 15 (new)
+- step 32: tap "'Seen' receipts" at y=432 -> state 16 (new)
+- step 33: tap "'Seen' receipts" at y=432 -> state 15
+- step 34: tap "'Seen' receipts" at y=432 -> state 16
+- step 35: tap "Simulated feed" at y=-4 -> state 16 — screen text did not change
+- step 36: tap "'Seen' receipts" at y=432 -> state 15
+- step 37: tap "Next →" at y=753 -> state 13
+- step 38: tap "Continue →" at y=603 -> state 17 (new)
 - step 39: tap "Start over" at y=500 -> state 0
-- step 40: tap "About the photos" at y=586 -> state 19 (new)
+- step 40: tap "About the photos" at y=586 -> state 18 (new)
 - step 41: tap "Back" at y=564 -> state 0
 - step 42: tap "Start your shift" at y=722 -> state 1
-- step 43: tap "Boost" at y=755 -> state 1
-- step 44: tap "Boost" at y=755 -> state 1
-- step 45: tap "Boost" at y=755 -> state 1
-- step 46: tap "Boost" at y=755 -> state 1
-- step 47: tap "Boost" at y=755 -> state 1
-- step 48: tap "Boost" at y=755 -> state 2
-- step 49: tap "Next →" at y=753 -> state 3
+- step 43: tap "Boost" at y=707 -> state 1
+- step 44: tap "Boost" at y=710 -> state 1
+- step 45: tap "Boost" at y=707 -> state 1
+- step 46: tap "Boost" at y=707 -> state 1
+- step 47: tap "Boost" at y=710 -> state 1
+- step 48: tap "Boost" at y=707 -> state 2
+- step 49: tap "Next →" at y=754 -> state 3
 - step 50: tap "Continue →" at y=504 -> state 4
 - step 51: tap "Simulated feed" at y=390 -> state 4
 - step 52: tap "Simulated feed" at y=390 -> state 4
@@ -220,31 +213,31 @@ visible text (first 600 chars):
 - step 71: tap "Release notifications" at y=695 -> state 10
 - step 72: tap "Release notifications" at y=695 -> state 10
 - step 73: tap "Release notifications" at y=695 -> state 11
-- step 74: tap "Next →" at y=753 -> state 14
-- step 75: tap "Continue →" at y=504 -> state 15
-- step 76: tap "'Seen' receipts" at y=683 -> state 16
-- step 77: tap "'Seen' receipts" at y=432 -> state 17
-- step 78: tap "'Seen' receipts" at y=432 -> state 16
-- step 79: tap "'Seen' receipts" at y=432 -> state 17
-- step 80: tap "'Seen' receipts" at y=432 -> state 16
-- step 81: tap "Next →" at y=753 -> state 14
-- step 82: tap "Continue →" at y=603 -> state 18
+- step 74: tap "Next →" at y=753 -> state 13
+- step 75: tap "Continue →" at y=504 -> state 14
+- step 76: tap "'Seen' receipts" at y=683 -> state 15
+- step 77: tap "'Seen' receipts" at y=432 -> state 16
+- step 78: tap "'Seen' receipts" at y=432 -> state 15
+- step 79: tap "'Seen' receipts" at y=432 -> state 16
+- step 80: tap "'Seen' receipts" at y=432 -> state 15
+- step 81: tap "Next →" at y=753 -> state 13
+- step 82: tap "Continue →" at y=603 -> state 17
 - step 83: tap "Start over" at y=500 -> state 0
-- step 84: tap "About the photos" at y=586 -> state 19
+- step 84: tap "About the photos" at y=586 -> state 18
 - step 85: tap "Back" at y=564 -> state 0
 - step 86: tap "Start your shift" at y=722 -> state 1
-- step 87: tap "Boost" at y=755 -> state 1
-- step 88: tap "Boost" at y=755 -> state 1
-- step 89: tap "Boost" at y=755 -> state 1
-- step 90: tap "Boost" at y=755 -> state 1
-- step 91: tap "Boost" at y=755 -> state 1
-- step 92: tap "Boost" at y=755 -> state 2
-- step 93: tap "Next →" at y=753 -> state 3
+- step 87: tap "Boost" at y=707 -> state 1
+- step 88: tap "Boost" at y=710 -> state 1
+- step 89: tap "Boost" at y=707 -> state 1
+- step 90: tap "Boost" at y=707 -> state 1
+- step 91: tap "Boost" at y=710 -> state 1
+- step 92: tap "Boost" at y=707 -> state 2
+- step 93: tap "Next →" at y=754 -> state 3
 - step 94: tap "Continue →" at y=504 -> state 4
-- step 95: tap "Simulated feed" at y=389 -> state 4
-- step 96: tap "Simulated feed" at y=389 -> state 4
-- step 97: tap "Simulated feed" at y=389 -> state 4
-- step 98: tap "Simulated feed" at y=389 -> state 5
+- step 95: tap "Simulated feed" at y=390 -> state 4
+- step 96: tap "Simulated feed" at y=390 -> state 4
+- step 97: tap "Simulated feed" at y=390 -> state 4
+- step 98: tap "Simulated feed" at y=390 -> state 5
 - step 99: tap "Next →" at y=753 -> state 6
 - step 100: tap "Continue →" at y=504 -> state 7
 - step 101: tap "Send streak alert" at y=741 -> state 7
@@ -264,31 +257,31 @@ visible text (first 600 chars):
 - step 115: tap "Release notifications" at y=695 -> state 10
 - step 116: tap "Release notifications" at y=695 -> state 10
 - step 117: tap "Release notifications" at y=695 -> state 11
-- step 118: tap "Next →" at y=753 -> state 14
-- step 119: tap "Continue →" at y=504 -> state 15
-- step 120: tap "'Seen' receipts" at y=683 -> state 16
-- step 121: tap "'Seen' receipts" at y=432 -> state 17
-- step 122: tap "'Seen' receipts" at y=432 -> state 16
-- step 123: tap "'Seen' receipts" at y=432 -> state 17
-- step 124: tap "'Seen' receipts" at y=432 -> state 16
-- step 125: tap "Next →" at y=753 -> state 14
-- step 126: tap "Continue →" at y=603 -> state 18
+- step 118: tap "Next →" at y=753 -> state 13
+- step 119: tap "Continue →" at y=504 -> state 14
+- step 120: tap "'Seen' receipts" at y=683 -> state 15
+- step 121: tap "'Seen' receipts" at y=432 -> state 16
+- step 122: tap "'Seen' receipts" at y=432 -> state 15
+- step 123: tap "'Seen' receipts" at y=432 -> state 16
+- step 124: tap "'Seen' receipts" at y=432 -> state 15
+- step 125: tap "Next →" at y=753 -> state 13
+- step 126: tap "Continue →" at y=603 -> state 17
 - step 127: tap "Start over" at y=500 -> state 0
-- step 128: tap "About the photos" at y=586 -> state 19
+- step 128: tap "About the photos" at y=586 -> state 18
 - step 129: tap "Back" at y=564 -> state 0
 - step 130: tap "Start your shift" at y=722 -> state 1
-- step 131: tap "Boost" at y=755 -> state 1
-- step 132: tap "Boost" at y=755 -> state 1
-- step 133: tap "Boost" at y=755 -> state 1
-- step 134: tap "Boost" at y=755 -> state 1
-- step 135: tap "Boost" at y=755 -> state 1
-- step 136: tap "Boost" at y=755 -> state 2
-- step 137: tap "Next →" at y=753 -> state 3
+- step 131: tap "Boost" at y=707 -> state 1
+- step 132: tap "Boost" at y=710 -> state 1
+- step 133: tap "Boost" at y=707 -> state 1
+- step 134: tap "Boost" at y=707 -> state 1
+- step 135: tap "Boost" at y=710 -> state 1
+- step 136: tap "Boost" at y=707 -> state 2
+- step 137: tap "Next →" at y=754 -> state 3
 - step 138: tap "Continue →" at y=504 -> state 4
-- step 139: tap "Simulated feed" at y=390 -> state 4
-- step 140: tap "Simulated feed" at y=390 -> state 4
-- step 141: tap "Simulated feed" at y=390 -> state 4
-- step 142: tap "Simulated feed" at y=390 -> state 5
+- step 139: tap "Simulated feed" at y=389 -> state 4
+- step 140: tap "Simulated feed" at y=389 -> state 4
+- step 141: tap "Simulated feed" at y=389 -> state 4
+- step 142: tap "Simulated feed" at y=389 -> state 5
 - step 143: tap "Next →" at y=753 -> state 6
 - step 144: tap "Continue →" at y=504 -> state 7
 - step 145: tap "Send streak alert" at y=741 -> state 7
