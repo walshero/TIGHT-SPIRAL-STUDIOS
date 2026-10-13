@@ -1214,3 +1214,5 @@ of that), plus a changed-files gate run. Single inline pass, no subagents.
 - Body and captions 19px to 18px (floor kept); Studio/Cabinet now underlined links, bar 68px to 49px; the bar scrolls away (it was sticky; the voice call had assumed otherwise; verified and fixed); underlined links on their own line, close to their text.
 - Studio rollout PENDING the founder's phone check: claude/RULING-110-PERCENT-2026-10-13.md, chrome-scroll-check.py (98 pages pin the bar; a quick grep had said 14).
 - Next: the Flok world-building proposal (claude/FLOK-WORLD-PROPOSAL-2026-10-13.md), for the founder to shape before any rebuild.
+- Flok world proposal written for the founder: claude/FLOK-WORLD-PROPOSAL-2026-10-13.md (canon source); phone page on the play lane, https://walshero.github.io/tss-playtest/flok-world-proposal.html. PENDING founder calls: Tess, Quinn the ex, lever-1 reward cards, the 12:06 beat, build order. Nothing built.
+- lab/index.html: Flok entry updated to v30, stray retired-entry line removed. It still carries pre-existing belt HALTs (tick 1, 5, 11, 12), unchanged by this edit; the lab is allowed to fail gates by the status ladder.
