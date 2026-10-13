@@ -1209,3 +1209,8 @@ of that), plus a changed-files gate run. Single inline pass, no subagents.
 - senses-seats agent seated once on v29 (one agent, protocol). Its five findings: four fixed same day (announcements, Next aria-disabled, clear-then-release, crawl state identity), one kept by WCAG 2.1.1. Predictions carried to the final bytes with the reason written in.
 - Senses tools corrected where Flok exposed Kireji-shaped assumptions: Ears (no-bed state 0, one-shot mute, no mute-over-silence), Fingers Play (post-win taps, chrome), crawl v2.1 (headings in state identity).
 - Belt PASS (armed ticks, incl. tick 13), senses PASS, preship v4/v5/contrast SHIP, flok-feed-check PASS. Fits above the fold 360x740..430x932 and lever 4 on SE.
+
+## 2026-10-13 — Flok v30: 110% (founder, by voice)
+- Body and captions 19px to 18px (floor kept); Studio/Cabinet now underlined links, bar 68px to 49px; the bar scrolls away (it was sticky; the voice call had assumed otherwise; verified and fixed); underlined links on their own line, close to their text.
+- Studio rollout PENDING the founder's phone check: claude/RULING-110-PERCENT-2026-10-13.md, chrome-scroll-check.py (14 other pages pin the bar).
+- Next: the Flok world-building proposal (claude/FLOK-WORLD-PROPOSAL-2026-10-13.md), for the founder to shape before any rebuild.
