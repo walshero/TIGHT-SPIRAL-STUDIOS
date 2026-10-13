@@ -1212,5 +1212,5 @@ of that), plus a changed-files gate run. Single inline pass, no subagents.
 
 ## 2026-10-13 — Flok v30: 110% (founder, by voice)
 - Body and captions 19px to 18px (floor kept); Studio/Cabinet now underlined links, bar 68px to 49px; the bar scrolls away (it was sticky; the voice call had assumed otherwise; verified and fixed); underlined links on their own line, close to their text.
-- Studio rollout PENDING the founder's phone check: claude/RULING-110-PERCENT-2026-10-13.md, chrome-scroll-check.py (14 other pages pin the bar).
+- Studio rollout PENDING the founder's phone check: claude/RULING-110-PERCENT-2026-10-13.md, chrome-scroll-check.py (98 pages pin the bar; a quick grep had said 14).
 - Next: the Flok world-building proposal (claude/FLOK-WORLD-PROPOSAL-2026-10-13.md), for the founder to shape before any rebuild.

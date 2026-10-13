@@ -12,4 +12,4 @@
 
 ## Status
 - **Flok v30: LANDED** (the-console.html). Smallest text 18px; senses, belt and gates green.
-- **STUDIO ROLLOUT: PENDING the founder's phone check of Flok v30.** `chrome-scroll-check.py` lists the pages still to change (14 other pages pin the bar on 2026-10-13; every other page still uses the boxed buttons). When approved: apply the same three CSS changes per page, run the belt on changed files, then add chrome-scroll-check to the belt as a tick.
+- **STUDIO ROLLOUT: PENDING the founder's phone check of Flok v30.** `chrome-scroll-check.py` lists the pages still to change (98 pages pin the bar and 104 still use the boxed buttons on 2026-10-13; a first single-line grep had said 14 and was wrong, which is why this is a script). When approved: apply the same three CSS changes per page, run the belt on changed files, then add chrome-scroll-check to the belt as a tick.
