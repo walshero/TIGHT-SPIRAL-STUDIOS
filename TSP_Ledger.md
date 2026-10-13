@@ -1224,3 +1224,10 @@ of that), plus a changed-files gate run. Single inline pass, no subagents.
 - flok-feed-check H8 (cast): every handle shown must declare its tie to Tess; v30 fails it 10 times. H6 now per-feed (Tess 30-70% text).
 - senses-seats seated once: one HALT (payout pop-up stuck under reduced motion) and seven timeline slips, all fixed the same day; predictions carried with reason.
 - Belt PASS, senses PASS (coverage FULL), preship SHIP, feed check PASS, every phone fits at every lever and on the last card.
+
+## 2026-10-13 — Flok v32: the receipt
+- Founder, on his iPhone, lever 1: "The buttons we are talking about are cut off. And after the pop up, I can't see what just flashed if I miss it. It should be captured and explained ON screen."
+- Cause 1: v31 put a payout line inside each post; the feed window is fixed, so the newest post's like row fell below it on every phone. Cause 2: the payout lived only in a 1.1 s pill. Cause 3 (found by the new check): browser scroll anchoring moved the page on every inserted post, carrying Boost off a short phone.
+- Fix: the payout line leaves the post; a fixed-height receipt under the phone names every Boost's result ("Boost 5: Quinn viewed her story. She is back in 20 seconds.") and stays until the next; the pill drifts down into it; the newest photo trims to fit its window; overflow-anchor off; the winning tap's scroll keeps the receipt on screen when it fits, and the result also rides beside Next.
+- New arithmetic: studio-senses/feedback-floor.py (F1 subject in window, F2 result persists 2.5 s later, F3 verb in view; 4 phones incl. the founder's iPhone with toolbar up and down). v31 HALTs it on all four; v32 PASS. Wired into senses-run.sh for any build with a #receipt. No new prose rule.
+- Senses PASS (coverage FULL), preship contrast SHIP (worst 5.05), feedback floor PASS (one WARN: iPhone SE clips 27 px off the top of the newest post).

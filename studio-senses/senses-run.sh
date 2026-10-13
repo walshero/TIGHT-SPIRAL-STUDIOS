@@ -8,6 +8,7 @@
 #   crawl (v2: stays in the build, plays every screen, census of coverage)
 #   -> ears.py          Layer 1 sound floors          (SILENT is printed, never PASS)
 #   -> fingers-play.py  every tap as a thumb made it  (verb in view, path in view, coverage)
+#   -> feedback-floor.py the subject in its window, the result still on screen (builds with #receipt)
 #   -> studio-eyes.py   real-pixel contrast + clip     (first paint, every light mode)
 #   -> personas.py      sighted.md / ear.md / fingers-states.json for the seats
 #
@@ -26,6 +27,10 @@ python3 "$HERE/senses-crawl.py" "$B" --out "$OUT" --clicks "${SENSES_CLICKS:-160
 grep -q '"screens_total": \[\]' "$OUT/manifest.json" 2>/dev/null && echo "  (no .screen census: single-scene build, coverage not judged)"
 echo "-- ears";          python3 "$HERE/ears.py" "$OUT" | sed 's/^/  /';            [ "${PIPESTATUS[0]}" -ne 0 ] && fail=1
 echo "-- fingers play";  python3 "$HERE/fingers-play.py" "$OUT" $SEC | sed 's/^/  /'; [ "${PIPESTATUS[0]}" -ne 0 ] && fail=1
+# feedback floor (2026-10-13, Flok v32): builds with a result receipt are played tap by tap
+if grep -q 'id="receipt"' "$B"; then
+echo "-- feedback floor"; python3 "$HERE/feedback-floor.py" "$B" | sed 's/^/  /'; [ "${PIPESTATUS[0]}" -ne 0 ] && fail=1
+fi
 echo "-- eyes";          python3 "$ROOT/studio-eyes/studio-eyes.py" "$B" 2>/dev/null | grep -E 'HALT|CONTRAST|CLIP|of [0-9]+ at HALT' | grep -v 'SELF-TEST' | sed 's/^/  /'
                          python3 "$ROOT/studio-eyes/studio-eyes.py" "$B" >/dev/null 2>&1 || fail=1
 echo "-- personas";      python3 "$HERE/personas.py" "$OUT" | sed 's/^/  /'
