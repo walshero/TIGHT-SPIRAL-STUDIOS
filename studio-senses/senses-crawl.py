@@ -202,7 +202,7 @@ def crawl(build, out, clicks):
     external = []
     man = {"build": os.path.basename(build), "md5": stamp,
            "sha256": hashlib.sha256(open(build, 'rb').read()).hexdigest(), "viewport": VIEWPORT,
-           "crawled": time.strftime('%Y-%m-%dT%H:%M:%S%z'), "tool": "senses-crawl.py v2",
+           "crawled": time.strftime('%Y-%m-%dT%H:%M:%S%z'), "tool": "senses-crawl.py v2.1",
            "states": [], "steps": [], "tab_walk": [], "external_requests": external}
     with sync_playwright() as p:
         # DEVICE POLICY, corrected 2026-09-26 after the founder heard it on a phone: with

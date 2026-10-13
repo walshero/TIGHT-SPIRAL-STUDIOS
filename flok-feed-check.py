@@ -14,7 +14,10 @@ HALTs:
   H5 tie        a photo whose caption shares no word with TIES[photo]: the caption has
                 to be ABOUT the picture, or the picture is a stock insert
   H7 face     one handle, one avatar: a poster's hue must match in feed, Level 1 and DMs
-  H6 texture    text-only share outside 15-45% in either feed (all-photo feeds read as ads)
+  H6 texture    text-only share outside its range: cohort 15-45% (all-photo feeds read as
+                ads); Tess's own feed 30-70% (she stops posting photos after two)
+  H8 cast       a handle shown anywhere in the feed, the DMs or the strangers has no declared
+                tie to Tess in CAST (founder: "these need to look like actual relationships")
 
 Usage: python3 flok-feed-check.py [the-console.html]   exit 1 on any HALT
 """
@@ -23,12 +26,15 @@ import json, re, sys
 # Caption words a poster would use for their own picture. Add a tie when you add a photo.
 TIES = {
     "basil": ["basil", "repotted"], "oldphone": ["phone", "2009"], "coffee": ["third", "one"],
-    "loaf": ["loaf", "crumb"], "trail": ["trail"], "bed": ["log", "off"],
-    "sunset": ["sunset"], "boxes": ["mugs", "cat"], "pizza": ["opinion"],
-    "fog": ["fog"], "lake": ["lake", "golden", "reposting"], "mushroom": ["like", "this"],
-    "window": ["day", "still", "here"], "lamp": ["bed", "before"],
+    "loaf": ["loaf", "crumb"], "creek": ["mountains", "lake"], "bed": ["bed", "streak"],
+    "sunset": ["sunset"], "boxes": ["mugs", "cat"], "night": ["city", "new"],
+    "window": ["window", "rain"], "lake": ["lake", "golden", "reposting"], "mushroom": ["found", "loop"],
+    "lamp": ["bed", "before"], "mugs": ["year", "ago", "night"],
     "SHOT": ["checked", "times"],
 }
+# v31: Tess's own feed is mostly text after two photos (founder, 2026-10-13: "after they post
+# a couple of pictures ... they're not posting pictures"). Her range is wider than the cohort's.
+TEXT_RANGE = {"cohort": (0.15, 0.45), "north_trail": (0.30, 0.70)}
 
 def arr(s, name):
     m = re.search(r"const " + name + r"=\[(.*?)\];", s, re.S)
@@ -58,6 +64,9 @@ def main(path):
         if k and i not in rep: uses.setdefault(k, []).append(("north_trail", i, b))
         if i in rep and r1img[rep[i]] != k:
             halts.append(f"H1 repost {i} declares post {rep[i]} but shows a different photo")
+    ex = re.search(r"const R1_EXTRA=(\[.*?\]\]);", s)
+    for j, (b, k) in enumerate(json.loads(ex.group(1)) if ex else []):
+        if k: uses.setdefault(k, []).append(("north_trail", 100 + j, b))
     for k, u in uses.items():
         if len(u) > 1: halts.append(f"H1 reuse: '{k}' on {len(u)} posts: " + "; ".join(x[2] for x in u))
         if len({x[0] for x in u}) > 1: halts.append(f"H2 stranger: '{k}' shown by two different posters")
@@ -74,7 +83,15 @@ def main(path):
                 halts.append(f"H5 tie: '{k}' on \"{b}\" (no caption word in {TIES.get(k, 'no TIES entry')})")
     for name, imgs in (("cohort", bimg), ("north_trail", r1img)):
         share = sum(1 for k in imgs if not k) / max(1, len(imgs))
-        if not 0.15 <= share <= 0.45: halts.append(f"H6 texture: {name} text-only share {share:.0%} (want 15-45%)")
+        lo, hi = TEXT_RANGE[name]
+        if not lo <= share <= hi: halts.append(f"H6 texture: {name} text-only share {share:.0%} (want {lo:.0%}-{hi:.0%})")
+    cast = re.search(r"const CAST=(\{.*?\});", s, re.S)
+    cast = json.loads(cast.group(1)) if cast else {}
+    shown_handles = set(re.findall(r'"([^"]+)"', re.search(r"const NAMES=\[(.*?)\]", s).group(1)))
+    # accounts are the objects that carry an avatar hue; lever names do not
+    shown_handles |= set(re.findall(r'name:"([^"]+)",hue:', s)) | set(re.findall(r'who:"([^"]+)",hue:', s))
+    for h in sorted(shown_handles):
+        if h not in cast: halts.append(f"H8 cast: '{h}' appears with no declared tie to Tess")
 
     hues = {}
     hl = [int(x) for x in re.search(r"const HUES=\[(.*?)\]", s).group(1).split(",")]

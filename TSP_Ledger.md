@@ -1216,3 +1216,11 @@ of that), plus a changed-files gate run. Single inline pass, no subagents.
 - Next: the Flok world-building proposal (claude/FLOK-WORLD-PROPOSAL-2026-10-13.md), for the founder to shape before any rebuild.
 - Flok world proposal written for the founder: claude/FLOK-WORLD-PROPOSAL-2026-10-13.md (canon source); phone page on the play lane, https://walshero.github.io/tss-playtest/flok-world-proposal.html. PENDING founder calls: Tess, Quinn the ex, lever-1 reward cards, the 12:06 beat, build order. Nothing built.
 - lab/index.html: Flok entry updated to v30, stray retired-entry line removed. It still carries pre-existing belt HALTs (tick 1, 5, 11, 12), unchanged by this edit; the lab is allowed to fail gates by the status ladder.
+
+## 2026-10-13 — Flok v31: Tess's Tuesday (the world rebuild)
+- Founder rulings on the proposal: Tess kept; Quinn a drifting friend, not an ex; lever 1 to the Coordinator seat; 12:06 beat kept; build order kept.
+- convening/FLOK-WORLD-CONVENING.md: five seats signed; Coordinator ruled one Boost with varied payouts (a choice has no ratio; the reveal measures the ratio).
+- Built: the cast (CAST object, every handle tied to Tess), Tess's arc (two photos then replies and text), the feed drifting to strangers, the 64-day streak with Priya, the Memories card, three weighted Seens, lever 1's payout lanes and "what pulled her back fastest", the 12:06 list with Rosa fifth, the reveal's Rosa line.
+- flok-feed-check H8 (cast): every handle shown must declare its tie to Tess; v30 fails it 10 times. H6 now per-feed (Tess 30-70% text).
+- senses-seats seated once: one HALT (payout pop-up stuck under reduced motion) and seven timeline slips, all fixed the same day; predictions carried with reason.
+- Belt PASS, senses PASS (coverage FULL), preship SHIP, feed check PASS, every phone fits at every lever and on the last card.

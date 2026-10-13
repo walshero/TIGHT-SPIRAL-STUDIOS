@@ -1,5 +1,5 @@
 # Flok: the world before the rebuild (proposal)
-<!-- source: Matt, by voice, 2026-10-13: "think about what the user is posting and why ... after they post a couple of pictures ... they're just posting on other people's stuff ... make it look like an actual experience ... there should be different types of rewards ... a profile for the user who's posting and what stuff they see ... a whole world building thought about who are these people, are they friends ... these need to look like actual relationships ... I want some thinking about the rebuild and then the rebuild." | owner: mwalsh | status: PROPOSAL, nothing built -->
+<!-- source: Matt, by voice, 2026-10-13: "think about what the user is posting and why ... after they post a couple of pictures ... they're just posting on other people's stuff ... make it look like an actual experience ... there should be different types of rewards ... a profile for the user who's posting and what stuff they see ... a whole world building thought about who are these people, are they friends ... these need to look like actual relationships ... I want some thinking about the rebuild and then the rebuild." | owner: mwalsh | status: RULED 2026-10-13, BUILT as Flok v31 -->
 
 **One sentence:** Flok stops being a feed of strangers and becomes one woman's Tuesday night, from 10:52 PM to 12:09 AM. Every lever the player pulls lands on someone she actually knows.
 
@@ -97,3 +97,11 @@ The read-receipt switch now has a cost the player can feel: turning it on expose
 3. **Lever 1 as four reward cards**, or keep one button and vary the reward behind it? Cards give the player the discovery; one button is simpler.
 4. **The 12:06 beat.** Rosa's like arrives buried and Tess scrolls past. Keep, or let her see it?
 5. **Order of work.** I'd build in this order: cast and captions first (cheap, changes the feel the most), then levers 3 to 5 (content swaps), then lever 1's cards (new interaction), then the 12:06 turn.
+
+## Founder rulings (2026-10-13) and what was built
+"1. Keep. 2. Friend. 3. Consult Jared Horvath. 4. Y. 5y"
+1. **Tess kept** as written.
+2. **Quinn is a friend, not an ex:** college roommate, moved in August. Memories card: "movie night at the old place."
+3. **Lever 1 went to the Coordinator seat** (convening/FLOK-WORLD-CONVENING.md): one Boost, payouts vary in kind and size behind it (none, a stranger's like, Mom's comment, Hank's like, Quinn viewing her story). Four cards were declined because a choice has no ratio and the reveal measures the ratio. The reveal now states what pulled her back fastest and that Rosa's like never came on schedule.
+4. **The 12:06 beat kept:** the last card lists seven notifications with Rosa's like fifth; the reveal says she didn't see it.
+5. **Build order kept:** cast and captions, levers 3-5, lever 1, the turn. Shipped together as v31.

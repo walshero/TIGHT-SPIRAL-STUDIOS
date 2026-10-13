@@ -9,3 +9,4 @@ Accumulated seat scorecards across builds. One row per graded build. A seat whos
 The only session run so far is a scripted end-to-end test, not a human, and it is not in this ledger.
 | 2026-10-13 | the-console.html (Flok v28) | 6ec9529895eee235 | 0 | filed 2 | filed 3 | filed 1 | filed 1 | filed 2 | filed 2 |
 | 2026-10-13 | the-console.html (Flok v29, carried after 4 fixes) | 737379f911df2e31 | 0 | filed 1 | filed 3 | filed 1 | filed 2 | filed 2 | filed 2 |
+| 2026-10-13 | the-console.html (Flok v31, Tess’s Tuesday) | 324d1edbd0348159 | 0 | filed 2 | filed 2 | filed 2 | filed 1 | filed 2 | filed 2 |
