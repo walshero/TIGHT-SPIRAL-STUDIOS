@@ -137,6 +137,7 @@ else
 fi
 
 fail=0
+reported=0
 echo "======================================================================"
 if [ "$MODE" = file ]; then
   echo "STUDIO BELT  ·  PREFLIGHT  ·  $(printf '%s' "$CHANGED" | grep -c . ) file(s)  ·  all 12 ticks"
@@ -566,6 +567,7 @@ else
   python3 "$BELT_DIR/stale-fuse.py" --verify --all >/tmp/sf12.out 2>&1; _fuse_rc=$?
   grep -E '^  (STALE-HALT|drifted|NO FUSE)' /tmp/sf12.out | sed 's/^/      /' | head -14
   if [ "$_fuse_rc" -ne 0 ]; then
+    reported=$((reported+1))
     echo "  REPORTED, NOT ARMED — a REGISTRY describes a corpus that has moved."
     echo "                        This is NOT a pass. It does not block yet, by the"
     echo "                        arming rule in this tick's comment."
@@ -574,12 +576,32 @@ else
   fi
 fi
 
+# TICK 13 — the senses play the build (added 2026-10-13, Flok SWOT).
+# Every tick above reads FIRST PAINT or source. Flok v25-v27 passed all twelve while
+# the core verb sat below the fold on every phone and the win button landed 300px
+# under it. This tick plays the game: senses-run.sh = crawl v2 + ears + fingers-play
+# + studio-eyes. Only for game builds (a .screen / data-screen census), changed files
+# only; a corpus sweep of crawls is minutes per build (CLAUDE.md cost discipline).
+echo; echo "-- tick 13: the senses play it (crawl, ears, fingers-play, eyes) --"
+_games=""; for _f in $SURFACES; do grep -qE 'class="screen|data-screen=' "$_f" 2>/dev/null && _games="$_games $_f"; done
+if [ -z "$_games" ]; then echo "  (no game builds with a screen census in this change — skipped)"
+elif ! python3 -c "import playwright" >/dev/null 2>&1; then
+  echo "  SKIPPED LOUD — playwright absent, the senses are BLIND. Not a pass."; reported=$((reported+1))
+else
+  for _g in $_games; do
+    if bash "$BELT_DIR/studio-senses/senses-run.sh" "$_g" >/tmp/sr13.out 2>&1; then echo "  pass  $_g"
+    else echo "  HALT  $_g"; grep -E 'HALT|SHALLOW' /tmp/sr13.out | grep -v '^== SENSES' | sed 's/^/        /' | head -8; fail=1; fi
+  done
+fi
+
 echo; echo "----------------------------------------------------------------------"
 if [ "$fail" -ne 0 ]; then
   echo "BELT: HALT — a tick refused. This build does not ship."
   [ "$MODE" = file ] && echo "       PREFLIGHT caught it before the push. That is the whole point."
 else
-  echo "BELT: PASS — all ticks clear."
+  if [ "${reported:-0}" -ne 0 ]; then
+    echo "BELT: PASS — every ARMED tick clears; $reported tick(s) REPORTED, NOT ARMED (read them above)."
+  else echo "BELT: PASS — all ticks clear."; fi
   [ "$MODE" = file ] && echo "       Preflight only. Run the full belt before trusting a corpus-wide claim."
 fi
 exit $fail

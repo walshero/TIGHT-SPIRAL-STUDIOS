@@ -7,3 +7,4 @@ Accumulated seat scorecards across builds. One row per graded build. A seat whos
 | 2026-09-26 | kireji-pond.html (v5.2.2) | 3dc7d3493d8c9023 | 0 | filed 6 | filed 6 | filed 6 | filed 6 | filed 7 | filed 6 |
 
 The only session run so far is a scripted end-to-end test, not a human, and it is not in this ledger.
+| 2026-10-13 | the-console.html (Flok v28) | 6ec9529895eee235 | 0 | filed 2 | filed 3 | filed 1 | filed 1 | filed 2 | filed 2 |

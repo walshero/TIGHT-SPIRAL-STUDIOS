@@ -109,7 +109,7 @@ CONTROLS_JS = r"""
     const r = el.getBoundingClientRect(), cs = getComputedStyle(el);
     if (r.width < 1 || r.height < 1 || cs.visibility === 'hidden' || cs.display === 'none') continue;
     if (el.closest('[hidden],[aria-hidden=true]')) continue;
-    if (el.disabled) continue;
+    if (el.disabled || cs.pointerEvents === 'none' || el.getAttribute('aria-disabled') === 'true') continue;  // v2: inert until earned
     // HIT AREA, not paint box. A ::before/::after with position:absolute and a
     // negative inset widens the tap target (kireji's 36px sound chip is 46px to a
     // thumb). Reading the paint box here is the exact false positive the retired
@@ -132,6 +132,8 @@ CONTROLS_JS = r"""
     out.push({name, visible: vis.slice(0, 60), tag: el.tagName.toLowerCase(), id: el.id || '',
       cls: (el.className && el.className.baseVal === undefined ? el.className : '').toString().slice(0, 40),
       pressed: el.getAttribute('aria-pressed'), href: el.getAttribute('href') || '',
+      chrome: !!el.closest('.se-chrome,.se-rail,[data-studio-chrome]'),
+      scrollable: el.scrollHeight > el.clientHeight + 20 && /(auto|scroll)/.test(cs.overflowY),
       x: Math.round(r.x), y: Math.round(r.y), w: Math.round(r.width), h: Math.round(r.height), hw: Math.round(hr - hx), hh: Math.round(hb - hy),
       inView: r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth});
   }
@@ -183,7 +185,7 @@ def crawl(build, out, clicks):
     external = []
     man = {"build": os.path.basename(build), "md5": stamp,
            "sha256": hashlib.sha256(open(build, 'rb').read()).hexdigest(), "viewport": VIEWPORT,
-           "crawled": time.strftime('%Y-%m-%dT%H:%M:%S%z'), "tool": "senses-crawl.py v1",
+           "crawled": time.strftime('%Y-%m-%dT%H:%M:%S%z'), "tool": "senses-crawl.py v2",
            "states": [], "steps": [], "tab_walk": [], "external_requests": external}
     with sync_playwright() as p:
         # DEVICE POLICY, corrected 2026-09-26 after the founder heard it on a phone: with
@@ -224,8 +226,15 @@ def crawl(build, out, clicks):
 
         seen_sigs = {}
         clicked = {}
+        dead = {}          # v2: clicks on a label that changed nothing
+        left = []          # v2: taps that tried to leave the build
 
         def capture(tag):
+            # v2: wait for smooth scrolling to settle, or every box is read mid-flight and
+            # the next tap lands on empty space (Flok "Start over", 2026-10-13).
+            for _ in range(20):
+                y1 = page.evaluate("scrollY"); page.wait_for_timeout(90)
+                if page.evaluate("scrollY") == y1: break
             controls = page.evaluate(CONTROLS_JS)
             text = page.inner_text('body')[:5000]
             sig = signature(controls, text)
@@ -240,7 +249,11 @@ def crawl(build, out, clicks):
                 snap = f"(aria snapshot unavailable: {e})"
             with open(os.path.join(out, aria), 'w') as f:
                 f.write(snap)
-            man['states'].append({"n": n, "sig": sig, "reached_by": tag, "png": png, "aria": aria,
+            man.setdefault('screens_seen', [])
+            for sid in page.evaluate("()=>[...document.querySelectorAll('.screen,[data-screen]')].filter(e=>e.offsetParent||getComputedStyle(e).display!=='none').map(e=>e.id||e.dataset.screen||'')"):
+                if sid and sid not in man['screens_seen']: man['screens_seen'].append(sid)
+            scr = page.evaluate("()=>{const e=[...document.querySelectorAll('.screen,[data-screen]')].find(e=>getComputedStyle(e).display!=='none'&&e.offsetParent);return e?(e.id||e.dataset.screen||''):''}")
+            man['states'].append({"n": n, "sig": sig, "reached_by": tag, "png": png, "aria": aria, "screen": scr,
                                   "controls": controls, "text": text[:2500],
                                   "headings": page.evaluate("()=>[...document.querySelectorAll('h1,h2,h3')].filter(h=>h.offsetParent).map(h=>h.innerText.trim()).slice(0,8)")})
             seen_sigs[sig] = n
@@ -248,29 +261,57 @@ def crawl(build, out, clicks):
 
         cur, controls, text, _ = capture('cold load')
         for step in range(clicks):
-            cands = [c for c in controls if c['inView'] and not c['href'].startswith(('mailto:', 'tel:', 'sms:'))
+            # v2, 2026-10-13: STAY IN THE BUILD. v1's first tap on Flok was the studio's own
+            # "Studio" link at the top; the whole bundle became the home page and the
+            # arcade, and every seat would have reviewed the wrong game. Never follow a
+            # link to another document; never tap the studio chrome (Studio / Cabinet /
+            # Back / Home), which is the same on every build and is Fingers' job anyway.
+            cands = [c for c in controls if not c.get('chrome')
+                     and not (c['href'] and not c['href'].startswith('#'))
                      and c['tag'] not in ('input', 'textarea', 'select')
                      and not SOUND_CTL.search(c['name'])]   # Ears tests the mute on its own
-            # breadth first: least-clicked label first, then top to bottom
-            cands.sort(key=lambda c: (clicked.get(c['name'], 0), c['y'], c['x']))
+            # least-DEAD first: a game's core verb is often the same button tapped many
+            # times (Flok's levers). v1 quit any label after 3 clicks, so a 5-lever game
+            # stalled on lever 1. Now a label is retired after 3 clicks that changed nothing.
+            cands.sort(key=lambda c: (dead.get(c['name'], 0), clicked.get(c['name'], 0), not c['inView'], c['y'], c['x']))
             if not cands:
                 man['steps'].append({"n": step, "dead_end": True, "state": cur}); break
             c = cands[0]
-            if clicked.get(c['name'], 0) >= 3:
+            if dead.get(c['name'], 0) >= 3:
                 break
             clicked[c['name']] = clicked.get(c['name'], 0) + 1
+            # v2: a control whose centre is off screen gets scrolled to first, as a thumb
+            # would, and the scroll is logged for Fingers (needs_scroll is a finding).
+            vh = VIEWPORT['height']; cy = c['y'] + c['h'] / 2
+            needs_scroll = cy < 4 or cy > vh - 4
+            if needs_scroll:
+                page.mouse.wheel(0, cy - vh / 2); page.wait_for_timeout(350)
+                fresh = [k for k in page.evaluate(CONTROLS_JS) if k['name'] == c['name']]
+                if fresh: c = dict(fresh[0], scrollable=c.get('scrollable'))
             before_ev = page.evaluate("() => window.__senses.ev.length")
             t_click = page.evaluate("() => performance.now()")
             try:
-                page.mouse.click(c['x'] + c['w'] / 2, c['y'] + c['h'] / 2)
+                # v2: a scrollable control's verb is the swipe, not the tap (Flok lever 2
+                # is an infinite feed). Wheel over it, the way a thumb would drag it.
+                if c.get('scrollable'):
+                    page.mouse.move(c['x'] + c['w'] / 2, c['y'] + c['h'] / 2)
+                    page.mouse.wheel(0, 700)
+                else:
+                    page.mouse.click(c['x'] + c['w'] / 2, c['y'] + c['h'] / 2)
             except Exception as e:
                 man['steps'].append({"n": step, "label": c['name'], "error": str(e)[:120]}); continue
             page.wait_for_timeout(SETTLE_MS)
             ev = page.evaluate(f"() => window.__senses.ev.slice({before_ev})")
             prev_text = text
+            if not page.url.startswith(url.split('#')[0]):
+                left.append({"n": step, "label": c['name'], "to": page.url[-80:]})
+                page.goto(url); page.wait_for_timeout(1200)
             nxt, controls, text, new = capture(f"step {step}: {c['name']}")
+            if text == prev_text:
+                dead[c['name']] = dead.get(c['name'], 0) + 1
             man['steps'].append({
                 "n": step, "label": c['name'], "from": cur, "to": nxt, "new_state": new,
+                "needs_scroll": needs_scroll,
                 "t_click": round(t_click), "box": [c['x'], c['y'], c['w'], c['h']],
                 "text_changed": text != prev_text,
                 "oneshot_sounds": [e for e in ev if e['k'] == 'src' and not e['loop']][:12],
@@ -279,6 +320,10 @@ def crawl(build, out, clicks):
                 "live": [e['text'] for e in ev if e['k'] == 'live'],
                 "vibrate": [e['p'] for e in ev if e['k'] == 'vibrate']})
             cur = nxt
+        # v2 COVERAGE. A crawl that never reached the game's own screens is SHALLOW, and
+        # SHALLOW is printed, never PASS. Screens = the build's [id^=sc-] sections or
+        # [data-screen] / .screen elements; reached = shown at any captured state.
+        man['left_build'] = left
         man['mute_test'] = mute_test(page)
         s = page.evaluate("() => ({gest: window.__senses.gest, ctx: window.__senses.ctx, peak: window.__senses.peak, rmsMax: window.__senses.rmsMax, win: window.__senses.win, ev: window.__senses.ev})")
         man['audio'] = {"first_gesture_ms": s['gest'], "contexts": s['ctx'], "peak_linear": round(s['peak'], 4),
@@ -288,6 +333,8 @@ def crawl(build, out, clicks):
                         "sources_total": sum(1 for e in s['ev'] if e['k'] == 'src'),
                         "media_total": sum(1 for e in s['ev'] if e['k'] == 'media')}
         man['page_errors'] = errors
+        man['screens_secondary'] = page.evaluate("()=>[...document.querySelectorAll('[data-secondary]')].map(e=>e.id||e.dataset.screen||'').filter(Boolean)") if page.url.startswith(url.split('#')[0]) else []
+        man['screens_total'] = page.evaluate("()=>[...document.querySelectorAll('.screen,[data-screen]')].map(e=>e.id||e.dataset.screen||'').filter(Boolean)") if page.url.startswith(url.split('#')[0]) else []
         b.close()
     with open(os.path.join(out, 'manifest.json'), 'w') as f:
         json.dump(man, f, indent=1)
@@ -303,6 +350,13 @@ def main():
     print(f"SENSES CRAWL  {m['build']}  md5 {m['md5']}")
     print(f"  states {len(m['states'])} · steps {len(m['steps'])} · audio sources {m['audio']['sources_total']}"
           f" · page errors {len(m['page_errors'])} · external requests {len(m['external_requests'])}")
+    tot, seen = m.get('screens_total', []), [x for x in m.get('screens_seen', []) if x in m.get('screens_total', [])]
+    if tot:
+        verdict = 'FULL' if len(seen) == len(tot) else 'SHALLOW'
+        print(f"  coverage {verdict}  {len(seen)}/{len(tot)} screens reached: {', '.join(seen)}"
+              + ('' if verdict == 'FULL' else f"  (never reached: {', '.join(x for x in tot if x not in seen)})"))
+    if m.get('left_build'):
+        print(f"  left the build {len(m['left_build'])}x and came back (a link escaped the filter)")
     print(f"  bundle -> {out}/manifest.json")
 
 

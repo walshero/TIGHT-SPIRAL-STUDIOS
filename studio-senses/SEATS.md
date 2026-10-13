@@ -9,13 +9,20 @@ Contrast talked because it is arithmetic on the belt and exits 1. Hitchcock and 
 
 ## The pipeline (runs in this order, per build)
 
+ONE COMMAND (2026-10-13, Flok SWOT): `studio-senses/senses-run.sh <build>` runs every
+line below except the seats and grading, and is belt tick 13. Do not hand-pick.
+
 ```
-senses-crawl.py   plays once, writes the evidence bundle (md5-stamped)
+senses-crawl.py   v2: plays the BUILD (never its links or studio chrome), every screen,
+                  prints coverage FULL / SHALLOW; writes the evidence bundle (md5-stamped)
       |
 ears.py           Studio Ears Layer 1, arithmetic, exit 1 on HALT
+fingers-play.py   every tap as a thumb made it: verb in view, path in view, coverage
+studio-eyes.py    real-pixel contrast and clip (first paint, every light mode)
 personas.py       splits the bundle: sighted.md | ear.md | fingers-states.json
       |
-SEATS (agents)    each reads ONLY its channel, files predictions.json entries
+SEATS (agent)     .claude/agents/senses-seats.md, ONE agent, all six chairs, each
+                  reading ONLY its channel; refuses a v1 or SHALLOW bundle
       |
 archive/playtest-room.html   SHELVED 2026-09-26 (founder: one main link for playtesting); records taps, text seen, sound, questions
       |
@@ -78,11 +85,15 @@ Every entry names one observable the human instrument records. Opinions without 
 ## Run it
 
 ```
+bash studio-senses/senses-run.sh the-console.html               # crawl+ears+fingers-play+eyes+personas, exit 1 on HALT
+# then the senses-seats agent on reports/senses/the-console/
+# (the long form, for one sense at a time:)
 python3 studio-senses/senses-crawl.py kireji-pond.html --out reports/senses/kireji-pond
 python3 studio-senses/ears.py reports/senses/kireji-pond        # exit 1 on HALT
+python3 studio-senses/fingers-play.py reports/senses/kireji-pond  # exit 1 on HALT
 python3 studio-senses/personas.py reports/senses/kireji-pond
 # seats: one agent per seat, each reading only its channel, writes pred-<seat>.json; merge into predictions.json
 # humans: play the game directly (founder, 2026-09-26); the recorded room is shelved in archive/
 python3 studio-senses/grade.py reports/senses/kireji-pond/predictions.json playtest-*.json
-python3 studio-senses/ears.py --self-test && python3 studio-senses/grade.py --self-test
+python3 studio-senses/ears.py --self-test && python3 studio-senses/grade.py --self-test && python3 studio-senses/fingers-play.py --self-test
 ```

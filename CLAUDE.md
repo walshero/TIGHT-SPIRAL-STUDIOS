@@ -282,6 +282,13 @@ per build, and TICK 11 graduated 2026-08-22.
 - **Default to canon.** Land docs, decisions, and builds in this git repo via the "deploy studio file" skill: the authenticated GitHub connector — `get_file_contents` for the SHA, `create_file` / `apply_patch_to_repo_file` / `append_chunk_to_repo_file` to write, then raw-verify. `git push` from a session container is blocked (403); the connector is the working lane and needs no open tab.
 - **Never end on a "ready-to-paste" handoff** when the connector can land it. Paste-handoffs die by closed tab or dead battery. Write it to canon, verify the bytes, then tell Matt what landed.
 
+## THE SENSES ARE ONE COMMAND - standing (2026-10-13, Flok SWOT)
+Before any game build reaches the founder: `bash studio-senses/senses-run.sh <build>`, then the
+`senses-seats` agent on its bundle. Never a hand-picked gate list: Flok v27 shipped "all gates
+green" on three chosen gates while Studio Eyes HALTed it, and v25-v27 shipped with the core verb
+below the fold because every gate read first paint. Belt tick 13 runs the same command on changed
+game builds. Why, with evidence: `claude/STUDIO-SENSES-SWOT-2026-10-13.md`.
+
 ## CHECKED IS NOT SHIPPED - standing, non-negotiable (2026-08-27)
 
 **Never report a push as landed on the strength of a connector's success message.**
