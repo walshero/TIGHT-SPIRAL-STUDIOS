@@ -255,7 +255,12 @@ def crawl(build, out, clicks):
             controls = page.evaluate(CONTROLS_JS)
             text = page.inner_text('body')[:5000]
             titles = page.evaluate("()=>[...document.querySelectorAll('h1,h2,h3,.title,[role=heading]')].filter(e=>e.offsetParent).map(e=>e.innerText.trim()).join('|').slice(0,300)")
-            sig = signature(controls, text, titles)
+            # v2.2 (2026-10-14): the visible screen is part of a state's identity. Flok v33 opens
+            # its play screen at the brief (no verb in view) and the ending opens with Start over
+            # below the fold; with no in-view controls and no h-tags, both hashed the same and the
+            # crawl filed the ending as lever 1, then never "reached" sc-flip-seat.
+            scr_id = page.evaluate("()=>{const e=[...document.querySelectorAll('.screen,[data-screen]')].find(e=>getComputedStyle(e).display!=='none'&&e.offsetParent);return e?(e.id||e.dataset.screen||''):''}")
+            sig = signature(controls, text, scr_id + '|' + titles)
             if sig in seen_sigs:
                 return seen_sigs[sig], controls, text, False
             n = len(man['states'])
@@ -303,7 +308,10 @@ def crawl(build, out, clicks):
             vh = VIEWPORT['height']; cy = c['y'] + c['h'] / 2
             needs_scroll = cy < 4 or cy > vh - 4
             if needs_scroll:
-                page.mouse.wheel(0, cy - vh / 2); page.wait_for_timeout(350)
+                # scroll the PAGE (2026-10-14): a wheel at the mouse's last position scrolled
+                # Flok's lever-5 inbox instead, so the knob was "tapped" off screen 3x and
+                # the crawl stopped short of the ending. A thumb on the page moves the page.
+                page.evaluate(f"window.scrollBy(0, {cy - vh / 2})"); page.wait_for_timeout(350)
                 fresh = [k for k in page.evaluate(CONTROLS_JS) if k['name'] == c['name']]
                 if fresh: c = dict(fresh[0], scrollable=c.get('scrollable'))
             before_ev = page.evaluate("() => window.__senses.ev.length")

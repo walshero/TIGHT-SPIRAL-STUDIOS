@@ -306,6 +306,16 @@ green" on three chosen gates while Studio Eyes HALTed it, and v25-v27 shipped wi
 below the fold because every gate read first paint. Belt tick 13 runs the same command on changed
 game builds. Why, with evidence: `claude/STUDIO-SENSES-SWOT-2026-10-13.md`.
 
+## BRIEF FIRST, ONE SCROLL TO THE VERB - founder ruling (2026-10-14, Flok v33)
+Founder: *"Right now the screen is loading with this text ABOVE the top of the screen. Let's make
+the strategy first, its own screen... gold background and compelling graphics to prompt the
+lesson. Then, when the player taps away the lesson brief is at top and scrollable to the feed."*
+- A play screen opens at its brief and **never scrolls itself**. One scroll to reach the verb is
+  allowed; after that, taps must never move the page (fingers-play P1, amended).
+- What must share ONE screen is the phone down to the verb, so a player scrolled to the verb
+  sees the whole post and its result (feedback-floor F1-F3).
+- Flok's strategy lives on its own gold Playbook card before each assignment.
+
 ## CHECKED IS NOT SHIPPED - standing, non-negotiable (2026-08-27)
 
 **Never report a push as landed on the strength of a connector's success message.**

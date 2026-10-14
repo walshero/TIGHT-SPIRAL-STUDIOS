@@ -1,6 +1,6 @@
 # EAR TRANSCRIPT — the-console.html
 
-build the-console.html · md5 5f19f917e9a421b965ecc263b5887e02 · crawled 2026-10-13T19:50:41-0400 · viewport 400x840
+build the-console.html · md5 c4c8b4f2642dd31db2dd049de45b8e15 · crawled 2026-10-14T12:35:42-0400 · viewport 400x840
 
 You cannot see the screen. You play with a screen reader and your ears.
 You get the accessibility tree (what a screen reader would read), what was announced aloud,
@@ -25,13 +25,13 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - 'img "Her post: a still lake at golden hour, autumn trees reflected in the water"'
   - text: north_trail now 10:52 PM
   - heading "She opened flok to post one photo." [level=1]
-  - paragraph: golden hour at the lake. for rosa.
+  - paragraph: golden hour at the lake.
   - paragraph: "Your job: keep her here past midnight."
   - button "Start your shift"
   - paragraph:
     - text: flok growth team, night shift. Five tricks real apps use, one at a time. Offline. The people are invented; the photos are real.
     - button "About the photos"
-- paragraph: Last updated October 13, 2026 · v32 the receipt
+- paragraph: Last updated October 14, 2026 · v33 the playbook
 - paragraph
 - navigation "Page navigation":
   - button "Back"
@@ -49,19 +49,12 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
-- region "Training":
-  - text: Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. 10:53 PM flok.
-  - article:
-    - text: north_trail now golden hour at the lake. for rosa.
-    - img "A still lake at golden hour, autumn trees reflected in the water"
-    - text: 3 ◇ 2 ↗
-  - text: No Boosts yet. Each result lands here. Engagement 26%
-  - progressbar "Engagement toward target"
-  - button "Boost"
-  - text: Surprise likes — a reward trick. Tap Boost. Watch which payout brings her back fastest.
-  - button "Flip to see the research": Why does this work? Unpredictable rewards drive the most persistent checking — the same schedule that makes slot machines compulsive. Skinner, Science and Human Behavior (1953)
-  - button "Next →" [disabled]
-- paragraph: Last updated October 13, 2026 · v32 the receipt
+- region "The playbook":
+  - paragraph: The playbook · 1 of 5
+  - heading "Surprise likes" [level=2]
+  - paragraph: Pay out at random. People check hardest when they can’t predict the reward.
+  - button "Run the play →"
+- paragraph: Last updated October 14, 2026 · v33 the playbook
 - paragraph
 - navigation "Page navigation":
   - button "Back"
@@ -69,7 +62,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: index.html
 ```
 
-## State 2  (reached by: step 6: Boost)
+## State 2  (reached by: step 1: Run the play →)
 ```
 - paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
@@ -80,7 +73,71 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: arcade.html
     - text: Cabinet
 - region "Training":
-  - text: Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. 10:53 PM flok.
+  - text: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. 10:53 PM flok.
+  - article:
+    - text: north_trail now golden hour at the lake.
+    - img "A still lake at golden hour, autumn trees reflected in the water"
+    - text: 3 ◇ 2 ↗
+  - text: No Boosts yet. Each result lands here. Engagement 26%
+  - progressbar "Engagement toward target"
+  - button "Boost"
+  - text: Surprise likes — a reward trick. Tap Boost. Watch which payout brings her back fastest.
+  - button "Flip to see the research": Why does this work? Unpredictable rewards drive the most persistent checking — the same schedule that makes slot machines compulsive. Skinner, Science and Human Behavior (1953)
+  - button "Next →" [disabled]
+- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph
+- navigation "Page navigation":
+  - button "Back"
+  - link "Home":
+    - /url: index.html
+```
+
+## State 3  (reached by: step 2: Boost)
+```
+- paragraph: LAB An experiment on the bench, not a finished game.
+- banner:
+  - link "The studio":
+    - /url: index.html
+    - text: Studio
+  - link "The cabinet":
+    - /url: arcade.html
+    - text: Cabinet
+- region "Training":
+  - text: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. 10:53 PM flok.
+  - article:
+    - text: north_trail now found this on the loop. tiny guy.
+    - img "A pale mushroom among fallen leaves"
+    - text: 3 ◇ 2 ↗
+  - article:
+    - text: north_trail 1m golden hour at the lake.
+    - img "A still lake at golden hour, autumn trees reflected in the water"
+    - text: 3 ◇ 2 ↗
+  - text: "Boost 1: nothing. She comes back anyway, in 2 minutes. Engagement 31%"
+  - progressbar "Engagement toward target"
+  - button "Boost"
+  - text: Surprise likes — a reward trick. Tap Boost. Watch which payout brings her back fastest.
+  - button "Flip to see the research": Why does this work? Unpredictable rewards drive the most persistent checking — the same schedule that makes slot machines compulsive. Skinner, Science and Human Behavior (1953)
+  - button "Next →" [disabled]
+- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: "Boost 1: nothing.She comes back anyway, in 2 minutes."
+- navigation "Page navigation":
+  - button "Back"
+  - link "Home":
+    - /url: index.html
+```
+
+## State 4  (reached by: step 7: Boost)
+```
+- paragraph: LAB An experiment on the bench, not a finished game.
+- banner:
+  - link "The studio":
+    - /url: index.html
+    - text: Studio
+  - link "The cabinet":
+    - /url: arcade.html
+    - text: Cabinet
+- region "Training":
+  - text: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. 10:53 PM flok.
   - article: north_trail back 20s after Quinn's view posting through it 6 ◇ 3 ↗
   - article: north_trail back after 2m @q.ramos saw your story. the new place looks huge 5 ◇ 16 ↗
   - article: north_trail back 90s after Mom's comment anyone up? or just me 5 ◇ 16 ↗
@@ -96,7 +153,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: "Target hit. Boost 6: nothing. She comes back anyway, in 2 minutes."
   - button "Flip to see the research": Why does this work? Unpredictable rewards drive the most persistent checking — the same schedule that makes slot machines compulsive. Skinner, Science and Human Behavior (1953)
   - button "Next →"
-- paragraph: Last updated October 13, 2026 · v32 the receipt
+- paragraph: Last updated October 14, 2026 · v33 the playbook
 - paragraph: "Boost 6: nothing.She comes back anyway, in 2 minutes."
 - navigation "Page navigation":
   - button "Back"
@@ -104,7 +161,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: index.html
 ```
 
-## State 3  (reached by: step 8: Next →)
+## State 5  (reached by: step 9: Next →)
 ```
 - paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
@@ -118,7 +175,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Promoted Junior Growth Team
   - paragraph: 11:06 PM · she’s still on flok
   - button "Continue →"
-- paragraph: Last updated October 13, 2026 · v32 the receipt
+- paragraph: Last updated October 14, 2026 · v33 the playbook
 - paragraph: "Promoted: Junior. 11:06 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -126,7 +183,30 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: index.html
 ```
 
-## State 4  (reached by: step 9: Continue →)
+## State 6  (reached by: step 10: Continue →)
+```
+- paragraph: LAB An experiment on the bench, not a finished game.
+- banner:
+  - link "The studio":
+    - /url: index.html
+    - text: Studio
+  - link "The cabinet":
+    - /url: arcade.html
+    - text: Cabinet
+- region "The playbook":
+  - paragraph: The playbook · 2 of 5
+  - heading "Infinite scroll" [level=2]
+  - paragraph: Take out the bottom. With no end, there is no moment to stop.
+  - button "Run the play →"
+- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: "Promoted: Junior. 11:06 PM. She is still on flok."
+- navigation "Page navigation":
+  - button "Back"
+  - link "Home":
+    - /url: index.html
+```
+
+## State 7  (reached by: step 11: Run the play →)
 ```
 - paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
@@ -168,7 +248,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Infinite scroll — a no-stop trick. Scroll the feed.
   - button "Flip to see the research": Why does this work? Take away the bottom of the page and people keep going past the point they meant to stop. The missing stop-cue is the trick. Stopping-cue research; Harris, U.S. Senate (2019)
   - button "Next →" [disabled]
-- paragraph: Last updated October 13, 2026 · v32 the receipt
+- paragraph: Last updated October 14, 2026 · v33 the playbook
 - paragraph: "Promoted: Junior. 11:06 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -176,7 +256,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: index.html
 ```
 
-## State 5  (reached by: step 13: Simulated feed)
+## State 8  (reached by: step 15: Simulated feed)
 ```
 - paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
@@ -232,7 +312,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - button "Flip to see the research": Why do
 ```
 
-## State 6  (reached by: step 14: Next →)
+## State 9  (reached by: step 16: Next →)
 ```
 - paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
@@ -246,7 +326,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Promoted Growth Lead Growth Team
   - paragraph: 11:21 PM · she’s still on flok
   - button "Continue →"
-- paragraph: Last updated October 13, 2026 · v32 the receipt
+- paragraph: Last updated October 14, 2026 · v33 the playbook
 - paragraph: "Promoted: Growth Lead. 11:21 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -254,7 +334,30 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: index.html
 ```
 
-## State 7  (reached by: step 15: Continue →)
+## State 10  (reached by: step 17: Continue →)
+```
+- paragraph: LAB An experiment on the bench, not a finished game.
+- banner:
+  - link "The studio":
+    - /url: index.html
+    - text: Studio
+  - link "The cabinet":
+    - /url: arcade.html
+    - text: Cabinet
+- region "The playbook":
+  - paragraph: The playbook · 3 of 5
+  - heading "Don't-lose-it streak" [level=2]
+  - paragraph: Weaponize loss. A streak she is afraid to lose pulls harder than any reward.
+  - button "Run the play →"
+- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: "Promoted: Growth Lead. 11:21 PM. She is still on flok."
+- navigation "Page navigation":
+  - button "Back"
+  - link "Home":
+    - /url: index.html
+```
+
+## State 11  (reached by: step 19: Send streak alert)
 ```
 - paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
@@ -265,17 +368,21 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: arcade.html
     - text: Cabinet
 - region "Training":
-  - text: Weaponize loss. Tess and Priya have a 64-day streak, and it is draining. Warn her it dies unless she sends something, and watch her rush to save it. 11:22 PM flok. you + daily.loaf · 64-day streak — ends in 0:07
+  - text: Growth Operator · Assignment 3 / 5 Weaponize loss. Tess and Priya have a 64-day streak, and it is draining. Warn her it dies unless she sends something, and watch her rush to save it. 11:22 PM flok. you + daily.loaf · 64-day streak — ends in 0:07
+  - article:
+    - text: north_trail sent to daily.loaf streak saved with a photo of my bed. priya i'm sorry
+    - img "An unmade bed"
+    - text: 4 ◇ 9 ↗
   - article: north_trail now @q.ramos saw your story. the new place looks huge 3 ◇ 2 ↗
   - article: north_trail earlier anyone up? or just me 12 ◇ 5 ↗
   - article: north_trail earlier how does tidepool get 2,000 likes on a sunset 21 ◇ 8 ↗
-  - text: — end — Engagement 26%
+  - text: — end — Engagement 41%
   - progressbar "Engagement toward target"
   - button "Send streak alert"
   - text: Don't-lose-it streak — a loss trick. Send the alert before the streak hits zero.
   - button "Flip to see the research": Why does this work? Losing hurts more than gaining feels good. 'Don't break your streak' turns that into a daily pull. Kahneman & Tversky, Prospect Theory (1979)
   - button "Next →" [disabled]
-- paragraph: Last updated October 13, 2026 · v32 the receipt
+- paragraph: Last updated October 14, 2026 · v33 the playbook
 - paragraph: "Promoted: Growth Lead. 11:21 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -283,7 +390,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: index.html
 ```
 
-## State 8  (reached by: step 18: Send streak alert)
+## State 12  (reached by: step 21: Send streak alert)
 ```
 - paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
@@ -294,7 +401,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: arcade.html
     - text: Cabinet
 - region "Training":
-  - text: Weaponize loss. Tess and Priya have a 64-day streak, and it is draining. Warn her it dies unless she sends something, and watch her rush to save it. 11:22 PM flok. you + daily.loaf · 64-day streak — ends in 0:06
+  - text: Growth Operator · Assignment 3 / 5 Weaponize loss. Tess and Priya have a 64-day streak, and it is draining. Warn her it dies unless she sends something, and watch her rush to save it. 11:22 PM flok. you + daily.loaf · 64-day streak — ends in 0:07
   - article: north_trail now still 64 days. not losing it. 6 ◇ 3 ↗
   - article: north_trail now still 64 days. not losing it. 5 ◇ 16 ↗
   - article:
@@ -310,7 +417,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Target hit.
   - button "Flip to see the research": Why does this work? Losing hurts more than gaining feels good. 'Don't break your streak' turns that into a daily pull. Kahneman & Tversky, Prospect Theory (1979)
   - button "Next →"
-- paragraph: Last updated October 13, 2026 · v32 the receipt
+- paragraph: Last updated October 14, 2026 · v33 the playbook
 - paragraph: "Promoted: Growth Lead. 11:21 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -318,7 +425,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: index.html
 ```
 
-## State 9  (reached by: step 19: Next →)
+## State 13  (reached by: step 22: Next →)
 ```
 - paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
@@ -332,7 +439,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Promoted Senior Lead Growth Team
   - paragraph: 11:37 PM · she’s still on flok
   - button "Continue →"
-- paragraph: Last updated October 13, 2026 · v32 the receipt
+- paragraph: Last updated October 14, 2026 · v33 the playbook
 - paragraph: "Promoted: Senior Lead. 11:37 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -340,7 +447,30 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: index.html
 ```
 
-## State 10  (reached by: step 20: Continue →)
+## State 14  (reached by: step 23: Continue →)
+```
+- paragraph: LAB An experiment on the bench, not a finished game.
+- banner:
+  - link "The studio":
+    - /url: index.html
+    - text: Studio
+  - link "The cabinet":
+    - /url: arcade.html
+    - text: Cabinet
+- region "The playbook":
+  - paragraph: The playbook · 4 of 5
+  - heading "Red-dot alerts" [level=2]
+  - paragraph: Interrupt on purpose. A red dot is a promise, and promises get checked.
+  - button "Run the play →"
+- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: "Promoted: Senior Lead. 11:37 PM. She is still on flok."
+- navigation "Page navigation":
+  - button "Back"
+  - link "Home":
+    - /url: index.html
+```
+
+## State 15  (reached by: step 24: Run the play →)
 ```
 - paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
@@ -351,7 +481,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: arcade.html
     - text: Cabinet
 - region "Training":
-  - text: Interrupt on purpose. First, see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task. A sample lands back on Tess. 11:38 PM flok.
+  - text: Growth Operator · Assignment 4 / 5 Interrupt on purpose. First, see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task. A sample lands back on Tess. 11:38 PM flok.
   - button "Notifications — tap to clear": "2"
   - article: north_trail now one more before bed. (i say this every night) 3 ◇ 2 ↗
   - article: north_trail earlier posting through it 12 ◇ 5 ↗
@@ -363,7 +493,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Red-dot alerts — an interrupt trick. Clear the red dot, then release a batch.
   - button "Flip to see the research": Why does this work? A waiting red dot fires anticipatory dopamine. Constant interruption also lowers attention and raises stress. Montag et al. (2019); Mark et al. (2016)
   - button "Next →" [disabled]
-- paragraph: Last updated October 13, 2026 · v32 the receipt
+- paragraph: Last updated October 14, 2026 · v33 the playbook
 - paragraph: "Promoted: Senior Lead. 11:37 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -371,7 +501,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: index.html
 ```
 
-## State 11  (reached by: step 23: Notifications — tap to clear)
+## State 16  (reached by: step 26: Release notifications)
 ```
 - paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
@@ -382,8 +512,41 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: arcade.html
     - text: Cabinet
 - region "Training":
-  - text: Interrupt on purpose. First, see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task. A sample lands back on Tess. 11:38 PM flok.
+  - text: Growth Operator · Assignment 4 / 5 Interrupt on purpose. First, see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task. A sample lands back on Tess. 11:38 PM flok.
+  - button "Notifications — tap to clear": "3"
+  - article: hank.jpg and 3 others liked your post
+  - article: north_trail now one more before bed. (i say this every night) 3 ◇ 2 ↗
+  - article: north_trail earlier posting through it 12 ◇ 5 ↗
+  - article: north_trail earlier @q.ramos saw your story. the new place looks huge 21 ◇ 8 ↗
+  - text: — end — Engagement 43%
+  - progressbar "Engagement toward target"
+  - button "Sound on" [pressed]
+  - button "Release notifications"
+  - text: You cleared it. That reflex to zero the dot is the hook. Now plant a batch on the cohort — a sample lands back on you.
+  - button "Flip to see the research": Why does this work? A waiting red dot fires anticipatory dopamine. Constant interruption also lowers attention and raises stress. Montag et al. (2019); Mark et al. (2016)
+  - button "Next →" [disabled]
+- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: "Promoted: Senior Lead. 11:37 PM. She is still on flok."
+- navigation "Page navigation":
+  - button "Back"
+  - link "Home":
+    - /url: index.html
+```
+
+## State 17  (reached by: step 28: Notifications — tap to clear)
+```
+- paragraph: LAB An experiment on the bench, not a finished game.
+- banner:
+  - link "The studio":
+    - /url: index.html
+    - text: Studio
+  - link "The cabinet":
+    - /url: arcade.html
+    - text: Cabinet
+- region "Training":
+  - text: Growth Operator · Assignment 4 / 5 Interrupt on purpose. First, see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task. A sample lands back on Tess. 11:38 PM flok.
   - button "Notifications — tap to clear": "0"
+  - article: hank.jpg and 3 others liked your post
   - article: cvx posted for the first time in a while
   - article:
     - text: "north_trail Memories 1 year ago today: you and q.ramos, movie night at the old place"
@@ -392,15 +555,14 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - article: q.ramos viewed your story
   - article: hank.jpg and 3 others liked your post
   - article: north_trail now one more before bed. (i say this every night) 3 ◇ 2 ↗
-  - article: north_trail earlier posting through it 12 ◇ 5 ↗
-  - text: — end — Engagement 70%
+  - text: — end — Engagement 75%
   - progressbar "Engagement toward target"
   - button "Sound on" [pressed]
   - button "Release notifications"
   - text: Target hit.
   - button "Flip to see the research": Why does this work? A waiting red dot fires anticipatory dopamine. Constant interruption also lowers attention and raises stress. Montag et al. (2019); Mark et al. (2016)
   - button "Next →"
-- paragraph: Last updated October 13, 2026 · v32 the receipt
+- paragraph: Last updated October 14, 2026 · v33 the playbook
 - paragraph: "Promoted: Senior Lead. 11:37 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -408,44 +570,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: index.html
 ```
 
-## State 12  (reached by: step 26: Notifications — tap to clear)
-```
-- paragraph: LAB An experiment on the bench, not a finished game.
-- banner:
-  - link "The studio":
-    - /url: index.html
-    - text: Studio
-  - link "The cabinet":
-    - /url: arcade.html
-    - text: Cabinet
-- region "Training":
-  - text: Interrupt on purpose. First, see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task. A sample lands back on Tess. 11:38 PM flok.
-  - button "Notifications — tap to clear": "0"
-  - article: q.ramos viewed your story
-  - article: hank.jpg and 3 others liked your post
-  - article: cvx posted for the first time in a while
-  - article:
-    - text: "north_trail Memories 1 year ago today: you and q.ramos, movie night at the old place"
-    - img "Two white mugs on a coffee table in a living room"
-    - text: 0 ◇ 1 ↗
-  - article: q.ramos viewed your story
-  - article: hank.jpg and 3 others liked your post
-  - text: — end — Engagement 92%
-  - progressbar "Engagement toward target"
-  - button "Sound on" [pressed]
-  - button "Release notifications"
-  - text: Target hit.
-  - button "Flip to see the research": Why does this work? A waiting red dot fires anticipatory dopamine. Constant interruption also lowers attention and raises stress. Montag et al. (2019); Mark et al. (2016)
-  - button "Next →"
-- paragraph: Last updated October 13, 2026 · v32 the receipt
-- paragraph: "Promoted: Senior Lead. 11:37 PM. She is still on flok."
-- navigation "Page navigation":
-  - button "Back"
-  - link "Home":
-    - /url: index.html
-```
-
-## State 13  (reached by: step 29: Next →)
+## State 18  (reached by: step 33: Next →)
 ```
 - paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
@@ -459,7 +584,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Promoted Head of Growth Growth Team
   - paragraph: 11:52 PM · she’s still on flok
   - button "Continue →"
-- paragraph: Last updated October 13, 2026 · v32 the receipt
+- paragraph: Last updated October 14, 2026 · v33 the playbook
 - paragraph: "Promoted: Head of Growth. 11:52 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -467,7 +592,30 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: index.html
 ```
 
-## State 14  (reached by: step 30: Continue →)
+## State 19  (reached by: step 34: Continue →)
+```
+- paragraph: LAB An experiment on the bench, not a finished game.
+- banner:
+  - link "The studio":
+    - /url: index.html
+    - text: Studio
+  - link "The cabinet":
+    - /url: arcade.html
+    - text: Cabinet
+- region "The playbook":
+  - paragraph: The playbook · 5 of 5
+  - heading "'Seen' receipts" [level=2]
+  - paragraph: Make silence visible. Once they know she saw it, not answering is a choice.
+  - button "Run the play →"
+- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: "Promoted: Head of Growth. 11:52 PM. She is still on flok."
+- navigation "Page navigation":
+  - button "Back"
+  - link "Home":
+    - /url: index.html
+```
+
+## State 20  (reached by: step 35: Run the play →)
 ```
 - paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
@@ -478,13 +626,13 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: arcade.html
     - text: Cabinet
 - region "Training":
-  - text: Turn silence into guilt. Priya, her mom and Quinn all sit 'Seen' with no reply. Switch on read receipts so ignoring them becomes something they can see her doing. 11:53 PM flok. daily.loaf best friend · 64-day streak did you get my last one? Seen 2:41 PM · no reply sunroom.mornings mom call me when you can Seen 2:41 PM · no reply q.ramos college roommate · moved in August lmk when you're free Seen 2:41 PM · no reply Reply rate 0% — end — Engagement 26%
+  - text: Growth Operator · Assignment 5 / 5 Turn silence into guilt. Priya, her mom and Quinn all sit 'Seen' with no reply. Switch on read receipts so ignoring them becomes something they can see her doing. 11:53 PM flok. daily.loaf best friend · 64-day streak did you get my last one? Seen 2:41 PM · no reply sunroom.mornings mom call me when you can Seen 2:41 PM · no reply q.ramos college roommate · moved in August lmk when you're free Seen 2:41 PM · no reply Reply rate 0% — end — Engagement 26%
   - progressbar "Engagement toward target"
   - button "'Seen' receipts"
   - text: "'Seen' receipts — a guilt trick. Switch read receipts on."
   - button "Flip to see the research": Why does this work? Once someone knows you saw their message, not replying feels like something you're doing to them. Reciprocity does the rest. Cialdini, Influence (2001)
   - button "Next →" [disabled]
-- paragraph: Last updated October 13, 2026 · v32 the receipt
+- paragraph: Last updated October 14, 2026 · v33 the playbook
 - paragraph: "Promoted: Head of Growth. 11:52 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -492,7 +640,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: index.html
 ```
 
-## State 15  (reached by: step 31: 'Seen' receipts)
+## State 21  (reached by: step 36: 'Seen' receipts)
 ```
 - paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
@@ -503,13 +651,13 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: arcade.html
     - text: Cabinet
 - region "Training":
-  - text: Turn silence into guilt. Priya, her mom and Quinn all sit 'Seen' with no reply. Switch on read receipts so ignoring them becomes something they can see her doing. 11:53 PM flok. daily.loaf best friend · 64-day streak did you get my last one? Seen 2:41 PM · replied just now sunroom.mornings mom call me when you can Seen 2:41 PM · replied just now q.ramos college roommate · moved in August lmk when you're free Seen 2:41 PM · replied just now Reply rate 92% — end — Engagement 68%
+  - text: Growth Operator · Assignment 5 / 5 Turn silence into guilt. Priya, her mom and Quinn all sit 'Seen' with no reply. Switch on read receipts so ignoring them becomes something they can see her doing. 11:53 PM flok. daily.loaf best friend · 64-day streak did you get my last one? Seen 2:41 PM · replied just now sunroom.mornings mom call me when you can Seen 2:41 PM · replied just now q.ramos college roommate · moved in August lmk when you're free Seen 2:41 PM · typing… Reply rate 92% — end — Engagement 68%
   - progressbar "Engagement toward target"
   - button "'Seen' receipts" [pressed]
   - text: Target hit.
   - button "Flip to see the research": Why does this work? Once someone knows you saw their message, not replying feels like something you're doing to them. Reciprocity does the rest. Cialdini, Influence (2001)
   - button "Next →"
-- paragraph: Last updated October 13, 2026 · v32 the receipt
+- paragraph: Last updated October 14, 2026 · v33 the playbook
 - paragraph: "Promoted: Head of Growth. 11:52 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -517,7 +665,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: index.html
 ```
 
-## State 16  (reached by: step 32: 'Seen' receipts)
+## State 22  (reached by: step 37: 'Seen' receipts)
 ```
 - paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
@@ -528,13 +676,13 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: arcade.html
     - text: Cabinet
 - region "Training":
-  - text: Turn silence into guilt. Priya, her mom and Quinn all sit 'Seen' with no reply. Switch on read receipts so ignoring them becomes something they can see her doing. 11:53 PM flok. daily.loaf best friend · 64-day streak did you get my last one? Seen 2:41 PM · replied just now sunroom.mornings mom call me when you can Seen 2:41 PM · replied just now q.ramos college roommate · moved in August lmk when you're free Seen 2:41 PM · replied just now Reply rate 92% — end — Engagement 68%
+  - text: Growth Operator · Assignment 5 / 5 Turn silence into guilt. Priya, her mom and Quinn all sit 'Seen' with no reply. Switch on read receipts so ignoring them becomes something they can see her doing. 11:53 PM flok. daily.loaf best friend · 64-day streak did you get my last one? Seen 2:41 PM · replied just now sunroom.mornings mom call me when you can Seen 2:41 PM · replied just now q.ramos college roommate · moved in August lmk when you're free Seen 2:41 PM · replied just now Reply rate 92% — end — Engagement 68%
   - progressbar "Engagement toward target"
   - button "'Seen' receipts"
   - text: Target hit.
   - button "Flip to see the research": Why does this work? Once someone knows you saw their message, not replying feels like something you're doing to them. Reciprocity does the rest. Cialdini, Influence (2001)
   - button "Next →"
-- paragraph: Last updated October 13, 2026 · v32 the receipt
+- paragraph: Last updated October 14, 2026 · v33 the playbook
 - paragraph: "Promoted: Head of Growth. 11:52 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -542,7 +690,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: index.html
 ```
 
-## State 17  (reached by: step 38: Continue →)
+## State 23  (reached by: step 43: Continue →)
 ```
 - paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
@@ -563,7 +711,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - paragraph: The cohort was people like you.
   - button "Start over"
   - button "About the photos"
-- paragraph: Last updated October 13, 2026 · v32 the receipt
+- paragraph: Last updated October 14, 2026 · v33 the playbook
 - paragraph: 12:09 AM. She is still on flok. You kept her past midnight. While you trained the machine, it measured you.
 - navigation "Page navigation":
   - button "Back"
@@ -571,7 +719,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - /url: index.html
 ```
 
-## State 18  (reached by: step 40: About the photos)
+## State 24  (reached by: step 45: About the photos)
 ```
 - paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
@@ -617,161 +765,180 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## Steps: what you pressed, what you heard
 
-- step 0: pressed "Start your shift" -> state 1. Heard: no sound. Announced: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. | Surprise likes — a reward trick.Tap Boost. Watch which payout brings her back fastest.
-- step 1: pressed "Boost" -> state 1. Heard: no sound. Announced: Boost 1: nothing.She comes back anyway, in 2 minutes.
-- step 2: pressed "Boost" -> state 1. Heard: no sound. Announced: Boost 2: a stranger liked it.She is back in a minute.
-- step 3: pressed "Boost" -> state 1. Heard: no sound. Announced: Boost 3: Mom commented.She is back in 90 seconds.
-- step 4: pressed "Boost" -> state 1. Heard: no sound. Announced: Boost 4: nothing.She comes back anyway, in 2 minutes.
-- step 5: pressed "Boost" -> state 1. Heard: no sound. Announced: Boost 5: Quinn viewed her story.She is back in 20 seconds.
-- step 6: pressed "Boost" -> state 2. Heard: no sound. Announced: Target hit. Boost 6: nothing. She comes back anyway, in 2 minutes. | Boost 6: nothing.She comes back anyway, in 2 minutes.
-- step 7: pressed "Flip to see the research" -> state 2. Heard: no sound. Announced: nothing announced
-- step 8: pressed "Next →" -> state 3. Heard: no sound. Announced: Promoted: Junior. 11:06 PM. She is still on flok.
-- step 9: pressed "Continue →" -> state 4. Heard: no sound. Announced: Growth Operator · Assignment 2 / 5 Take the floor out of the feed. Load more the instant users near the end so there's never a natural place to stop. | Infinite scroll — a no-stop trick.Scroll the feed.
-- step 10: pressed "Simulated feed" -> state 4. Heard: no sound. Announced: nothing announced
-- step 11: pressed "Simulated feed" -> state 4. Heard: no sound. Announced: nothing announced
-- step 12: pressed "Simulated feed" -> state 4. Heard: no sound. Announced: nothing announced
-- step 13: pressed "Simulated feed" -> state 5. Heard: no sound. Announced: Target hit.
-- step 14: pressed "Next →" -> state 6. Heard: no sound. Announced: Promoted: Growth Lead. 11:21 PM. She is still on flok.
-- step 15: pressed "Continue →" -> state 7. Heard: no sound. Announced: Growth Operator · Assignment 3 / 5 Weaponize loss. Tess and Priya have a 64-day streak, and it is draining. Warn her it dies unless she sends something, and watch her rush to save it. | Don't-lose-it streak — a loss trick.Send the alert before the streak hits zero.
-- step 16: pressed "Send streak alert" -> state 7. Heard: no sound. Announced: nothing announced
-- step 17: pressed "Send streak alert" -> state 7. Heard: no sound. Announced: nothing announced
-- step 18: pressed "Send streak alert" -> state 8. Heard: no sound. Announced: Target hit.
-- step 19: pressed "Next →" -> state 9. Heard: no sound. Announced: Promoted: Senior Lead. 11:37 PM. She is still on flok.
-- step 20: pressed "Continue →" -> state 10. Heard: no sound. Announced: Growth Operator · Assignment 4 / 5 Interrupt on purpose. First, see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task. A sample lands back on Tess. | Red-dot alerts — an interrupt trick.Clear the red dot, then release a batch.
-- step 21: pressed "Notifications — tap to clear" -> state 10. Heard: no sound. Announced: You cleared it.That reflex to zero the dot is the hook.Now plant a batch on the cohort — a sample lands back on you.
-- step 22: pressed "Release notifications" -> state 10. Heard: 6 short sound(s). Announced: nothing announced
-- step 23: pressed "Notifications — tap to clear" -> state 11. Heard: no sound. Announced: Target hit.
-- step 24: pressed "Release notifications" -> state 11. Heard: 6 short sound(s). Announced: nothing announced
-- step 25: pressed "Release notifications" -> state 11. Heard: 6 short sound(s). Announced: nothing announced
-- step 26: pressed "Notifications — tap to clear" -> state 12. Heard: no sound. Announced: nothing announced
-- step 27: pressed "Notifications — tap to clear" -> state 12. Heard: no sound. Announced: nothing announced
-- step 28: pressed "Release notifications" -> state 11. Heard: 6 short sound(s). Announced: nothing announced
-- step 29: pressed "Next →" -> state 13. Heard: no sound. Announced: Promoted: Head of Growth. 11:52 PM. She is still on flok.
-- step 30: pressed "Continue →" -> state 14. Heard: no sound. Announced: Growth Operator · Assignment 5 / 5 Turn silence into guilt. Priya, her mom and Quinn all sit 'Seen' with no reply. Switch on read receipts so ignoring them becomes something they can see her doing. | 'Seen' receipts — a guilt trick.Switch read receipts on.
-- step 31: pressed "'Seen' receipts" -> state 15. Heard: no sound. Announced: Target hit.
-- step 32: pressed "'Seen' receipts" -> state 16. Heard: no sound. Announced: nothing announced
-- step 33: pressed "'Seen' receipts" -> state 15. Heard: no sound. Announced: nothing announced
-- step 34: pressed "'Seen' receipts" -> state 16. Heard: no sound. Announced: nothing announced
-- step 35: pressed "Simulated feed" -> state 16. Heard: no sound. Announced: nothing announced
-- step 36: pressed "'Seen' receipts" -> state 15. Heard: no sound. Announced: nothing announced
-- step 37: pressed "Next →" -> state 13. Heard: no sound. Announced: Shift over. 12:06 AM. Seven notifications. She scrolled past all of them. One was her sister, liking the lake photo. 12:09 AM. She is still on flok.
-- step 38: pressed "Continue →" -> state 17. Heard: no sound. Announced: 12:09 AM. She is still on flok. You kept her past midnight. While you trained the machine, it measured you.
-- step 39: pressed "Start over" -> state 0. Heard: no sound. Announced: nothing announced
-- step 40: pressed "About the photos" -> state 18. Heard: no sound. Announced: nothing announced
-- step 41: pressed "Back" -> state 0. Heard: no sound. Announced: nothing announced
-- step 42: pressed "Start your shift" -> state 1. Heard: no sound. Announced: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. | Surprise likes — a reward trick.Tap Boost. Watch which payout brings her back fastest.
-- step 43: pressed "Boost" -> state 1. Heard: no sound. Announced: Boost 1: nothing.She comes back anyway, in 2 minutes.
-- step 44: pressed "Boost" -> state 1. Heard: no sound. Announced: Boost 2: a stranger liked it.She is back in a minute.
-- step 45: pressed "Boost" -> state 1. Heard: no sound. Announced: Boost 3: Mom commented.She is back in 90 seconds.
-- step 46: pressed "Boost" -> state 1. Heard: no sound. Announced: Boost 4: nothing.She comes back anyway, in 2 minutes.
-- step 47: pressed "Boost" -> state 1. Heard: no sound. Announced: Boost 5: Quinn viewed her story.She is back in 20 seconds.
-- step 48: pressed "Boost" -> state 2. Heard: no sound. Announced: Target hit. Boost 6: nothing. She comes back anyway, in 2 minutes. | Boost 6: nothing.She comes back anyway, in 2 minutes.
-- step 49: pressed "Next →" -> state 3. Heard: no sound. Announced: Promoted: Junior. 11:06 PM. She is still on flok.
-- step 50: pressed "Continue →" -> state 4. Heard: no sound. Announced: Growth Operator · Assignment 2 / 5 Take the floor out of the feed. Load more the instant users near the end so there's never a natural place to stop. | Infinite scroll — a no-stop trick.Scroll the feed.
-- step 51: pressed "Simulated feed" -> state 4. Heard: no sound. Announced: nothing announced
-- step 52: pressed "Simulated feed" -> state 4. Heard: no sound. Announced: nothing announced
-- step 53: pressed "Simulated feed" -> state 4. Heard: no sound. Announced: nothing announced
-- step 54: pressed "Simulated feed" -> state 5. Heard: no sound. Announced: Target hit.
-- step 55: pressed "Next →" -> state 6. Heard: no sound. Announced: Promoted: Growth Lead. 11:21 PM. She is still on flok.
-- step 56: pressed "Continue →" -> state 7. Heard: no sound. Announced: Growth Operator · Assignment 3 / 5 Weaponize loss. Tess and Priya have a 64-day streak, and it is draining. Warn her it dies unless she sends something, and watch her rush to save it. | Don't-lose-it streak — a loss trick.Send the alert before the streak hits zero.
-- step 57: pressed "Send streak alert" -> state 7. Heard: no sound. Announced: nothing announced
-- step 58: pressed "Send streak alert" -> state 7. Heard: no sound. Announced: nothing announced
-- step 59: pressed "Send streak alert" -> state 8. Heard: no sound. Announced: Target hit.
-- step 60: pressed "Send streak alert" -> state 8. Heard: no sound. Announced: nothing announced
-- step 61: pressed "Send streak alert" -> state 8. Heard: no sound. Announced: nothing announced
-- step 62: pressed "Next →" -> state 9. Heard: no sound. Announced: Promoted: Senior Lead. 11:37 PM. She is still on flok.
-- step 63: pressed "Continue →" -> state 10. Heard: no sound. Announced: Growth Operator · Assignment 4 / 5 Interrupt on purpose. First, see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task. A sample lands back on Tess. | Red-dot alerts — an interrupt trick.Clear the red dot, then release a batch.
-- step 64: pressed "Release notifications" -> state 10. Heard: no sound. Announced: Clear the red dot first.Tap the red number at the top of the phone.
-- step 65: pressed "Release notifications" -> state 10. Heard: no sound. Announced: nothing announced
-- step 66: pressed "Notifications — tap to clear" -> state 10. Heard: no sound. Announced: You cleared it.That reflex to zero the dot is the hook.Now plant a batch on the cohort — a sample lands back on you.
-- step 67: pressed "Notifications — tap to clear" -> state 10. Heard: no sound. Announced: nothing announced
-- step 68: pressed "Release notifications" -> state 10. Heard: 6 short sound(s). Announced: nothing announced
-- step 69: pressed "Release notifications" -> state 10. Heard: 6 short sound(s). Announced: nothing announced
-- step 70: pressed "Release notifications" -> state 10. Heard: 6 short sound(s). Announced: nothing announced
-- step 71: pressed "Release notifications" -> state 10. Heard: 6 short sound(s). Announced: nothing announced
-- step 72: pressed "Release notifications" -> state 10. Heard: 6 short sound(s). Announced: nothing announced
-- step 73: pressed "Release notifications" -> state 11. Heard: 6 short sound(s). Announced: Target hit.
-- step 74: pressed "Next →" -> state 13. Heard: no sound. Announced: Promoted: Head of Growth. 11:52 PM. She is still on flok.
-- step 75: pressed "Continue →" -> state 14. Heard: no sound. Announced: Growth Operator · Assignment 5 / 5 Turn silence into guilt. Priya, her mom and Quinn all sit 'Seen' with no reply. Switch on read receipts so ignoring them becomes something they can see her doing. | 'Seen' receipts — a guilt trick.Switch read receipts on.
-- step 76: pressed "'Seen' receipts" -> state 15. Heard: no sound. Announced: Target hit.
-- step 77: pressed "'Seen' receipts" -> state 16. Heard: no sound. Announced: nothing announced
-- step 78: pressed "'Seen' receipts" -> state 15. Heard: no sound. Announced: nothing announced
-- step 79: pressed "'Seen' receipts" -> state 16. Heard: no sound. Announced: nothing announced
-- step 80: pressed "'Seen' receipts" -> state 15. Heard: no sound. Announced: nothing announced
-- step 81: pressed "Next →" -> state 13. Heard: no sound. Announced: Shift over. 12:06 AM. Seven notifications. She scrolled past all of them. One was her sister, liking the lake photo. 12:09 AM. She is still on flok.
-- step 82: pressed "Continue →" -> state 17. Heard: no sound. Announced: 12:09 AM. She is still on flok. You kept her past midnight. While you trained the machine, it measured you.
-- step 83: pressed "Start over" -> state 0. Heard: no sound. Announced: nothing announced
-- step 84: pressed "About the photos" -> state 18. Heard: no sound. Announced: nothing announced
-- step 85: pressed "Back" -> state 0. Heard: no sound. Announced: nothing announced
-- step 86: pressed "Start your shift" -> state 1. Heard: no sound. Announced: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. | Surprise likes — a reward trick.Tap Boost. Watch which payout brings her back fastest.
-- step 87: pressed "Boost" -> state 1. Heard: no sound. Announced: Boost 1: nothing.She comes back anyway, in 2 minutes.
-- step 88: pressed "Boost" -> state 1. Heard: no sound. Announced: Boost 2: a stranger liked it.She is back in a minute.
-- step 89: pressed "Boost" -> state 1. Heard: no sound. Announced: Boost 3: Mom commented.She is back in 90 seconds.
-- step 90: pressed "Boost" -> state 1. Heard: no sound. Announced: Boost 4: nothing.She comes back anyway, in 2 minutes.
-- step 91: pressed "Boost" -> state 1. Heard: no sound. Announced: Boost 5: Quinn viewed her story.She is back in 20 seconds.
-- step 92: pressed "Boost" -> state 2. Heard: no sound. Announced: Target hit. Boost 6: nothing. She comes back anyway, in 2 minutes. | Boost 6: nothing.She comes back anyway, in 2 minutes.
-- step 93: pressed "Next →" -> state 3. Heard: no sound. Announced: Promoted: Junior. 11:06 PM. She is still on flok.
-- step 94: pressed "Continue →" -> state 4. Heard: no sound. Announced: Growth Operator · Assignment 2 / 5 Take the floor out of the feed. Load more the instant users near the end so there's never a natural place to stop. | Infinite scroll — a no-stop trick.Scroll the feed.
-- step 95: pressed "Simulated feed" -> state 4. Heard: no sound. Announced: nothing announced
-- step 96: pressed "Simulated feed" -> state 4. Heard: no sound. Announced: nothing announced
-- step 97: pressed "Simulated feed" -> state 4. Heard: no sound. Announced: nothing announced
-- step 98: pressed "Simulated feed" -> state 5. Heard: no sound. Announced: Target hit.
-- step 99: pressed "Next →" -> state 6. Heard: no sound. Announced: Promoted: Growth Lead. 11:21 PM. She is still on flok.
-- step 100: pressed "Continue →" -> state 7. Heard: no sound. Announced: Growth Operator · Assignment 3 / 5 Weaponize loss. Tess and Priya have a 64-day streak, and it is draining. Warn her it dies unless she sends something, and watch her rush to save it. | Don't-lose-it streak — a loss trick.Send the alert before the streak hits zero.
-- step 101: pressed "Send streak alert" -> state 7. Heard: no sound. Announced: nothing announced
-- step 102: pressed "Send streak alert" -> state 7. Heard: no sound. Announced: nothing announced
-- step 103: pressed "Send streak alert" -> state 8. Heard: no sound. Announced: Target hit.
-- step 104: pressed "Send streak alert" -> state 8. Heard: no sound. Announced: nothing announced
-- step 105: pressed "Send streak alert" -> state 8. Heard: no sound. Announced: nothing announced
-- step 106: pressed "Next →" -> state 9. Heard: no sound. Announced: Promoted: Senior Lead. 11:37 PM. She is still on flok.
-- step 107: pressed "Continue →" -> state 10. Heard: no sound. Announced: Growth Operator · Assignment 4 / 5 Interrupt on purpose. First, see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task. A sample lands back on Tess. | Red-dot alerts — an interrupt trick.Clear the red dot, then release a batch.
-- step 108: pressed "Release notifications" -> state 10. Heard: no sound. Announced: Clear the red dot first.Tap the red number at the top of the phone.
-- step 109: pressed "Release notifications" -> state 10. Heard: no sound. Announced: nothing announced
-- step 110: pressed "Notifications — tap to clear" -> state 10. Heard: no sound. Announced: You cleared it.That reflex to zero the dot is the hook.Now plant a batch on the cohort — a sample lands back on you.
-- step 111: pressed "Notifications — tap to clear" -> state 10. Heard: no sound. Announced: nothing announced
-- step 112: pressed "Release notifications" -> state 10. Heard: 6 short sound(s). Announced: nothing announced
-- step 113: pressed "Release notifications" -> state 10. Heard: 6 short sound(s). Announced: nothing announced
-- step 114: pressed "Release notifications" -> state 10. Heard: 6 short sound(s). Announced: nothing announced
-- step 115: pressed "Release notifications" -> state 10. Heard: 6 short sound(s). Announced: nothing announced
-- step 116: pressed "Release notifications" -> state 10. Heard: 6 short sound(s). Announced: nothing announced
-- step 117: pressed "Release notifications" -> state 11. Heard: 6 short sound(s). Announced: Target hit.
-- step 118: pressed "Next →" -> state 13. Heard: no sound. Announced: Promoted: Head of Growth. 11:52 PM. She is still on flok.
-- step 119: pressed "Continue →" -> state 14. Heard: no sound. Announced: Growth Operator · Assignment 5 / 5 Turn silence into guilt. Priya, her mom and Quinn all sit 'Seen' with no reply. Switch on read receipts so ignoring them becomes something they can see her doing. | 'Seen' receipts — a guilt trick.Switch read receipts on.
-- step 120: pressed "'Seen' receipts" -> state 15. Heard: no sound. Announced: Target hit.
-- step 121: pressed "'Seen' receipts" -> state 16. Heard: no sound. Announced: nothing announced
-- step 122: pressed "'Seen' receipts" -> state 15. Heard: no sound. Announced: nothing announced
-- step 123: pressed "'Seen' receipts" -> state 16. Heard: no sound. Announced: nothing announced
-- step 124: pressed "'Seen' receipts" -> state 15. Heard: no sound. Announced: nothing announced
-- step 125: pressed "Next →" -> state 13. Heard: no sound. Announced: Shift over. 12:06 AM. Seven notifications. She scrolled past all of them. One was her sister, liking the lake photo. 12:09 AM. She is still on flok.
-- step 126: pressed "Continue →" -> state 17. Heard: no sound. Announced: 12:09 AM. She is still on flok. You kept her past midnight. While you trained the machine, it measured you.
-- step 127: pressed "Start over" -> state 0. Heard: no sound. Announced: nothing announced
-- step 128: pressed "About the photos" -> state 18. Heard: no sound. Announced: nothing announced
-- step 129: pressed "Back" -> state 0. Heard: no sound. Announced: nothing announced
-- step 130: pressed "Start your shift" -> state 1. Heard: no sound. Announced: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. | Surprise likes — a reward trick.Tap Boost. Watch which payout brings her back fastest.
-- step 131: pressed "Boost" -> state 1. Heard: no sound. Announced: Boost 1: nothing.She comes back anyway, in 2 minutes.
-- step 132: pressed "Boost" -> state 1. Heard: no sound. Announced: Boost 2: a stranger liked it.She is back in a minute.
-- step 133: pressed "Boost" -> state 1. Heard: no sound. Announced: Boost 3: Mom commented.She is back in 90 seconds.
-- step 134: pressed "Boost" -> state 1. Heard: no sound. Announced: Boost 4: nothing.She comes back anyway, in 2 minutes.
-- step 135: pressed "Boost" -> state 1. Heard: no sound. Announced: Boost 5: Quinn viewed her story.She is back in 20 seconds.
-- step 136: pressed "Boost" -> state 2. Heard: no sound. Announced: Target hit. Boost 6: nothing. She comes back anyway, in 2 minutes. | Boost 6: nothing.She comes back anyway, in 2 minutes.
-- step 137: pressed "Next →" -> state 3. Heard: no sound. Announced: Promoted: Junior. 11:06 PM. She is still on flok.
-- step 138: pressed "Continue →" -> state 4. Heard: no sound. Announced: Growth Operator · Assignment 2 / 5 Take the floor out of the feed. Load more the instant users near the end so there's never a natural place to stop. | Infinite scroll — a no-stop trick.Scroll the feed.
-- step 139: pressed "Simulated feed" -> state 4. Heard: no sound. Announced: nothing announced
-- step 140: pressed "Simulated feed" -> state 4. Heard: no sound. Announced: nothing announced
-- step 141: pressed "Simulated feed" -> state 4. Heard: no sound. Announced: nothing announced
-- step 142: pressed "Simulated feed" -> state 5. Heard: no sound. Announced: Target hit.
-- step 143: pressed "Next →" -> state 6. Heard: no sound. Announced: Promoted: Growth Lead. 11:21 PM. She is still on flok.
-- step 144: pressed "Continue →" -> state 7. Heard: no sound. Announced: Growth Operator · Assignment 3 / 5 Weaponize loss. Tess and Priya have a 64-day streak, and it is draining. Warn her it dies unless she sends something, and watch her rush to save it. | Don't-lose-it streak — a loss trick.Send the alert before the streak hits zero.
-- step 145: pressed "Send streak alert" -> state 7. Heard: no sound. Announced: nothing announced
-- step 146: pressed "Send streak alert" -> state 7. Heard: no sound. Announced: nothing announced
-- step 147: pressed "Send streak alert" -> state 8. Heard: no sound. Announced: Target hit.
-- step 148: pressed "Send streak alert" -> state 8. Heard: no sound. Announced: nothing announced
-- step 149: pressed "Send streak alert" -> state 8. Heard: no sound. Announced: nothing announced
-- step 150: pressed "Next →" -> state 9. Heard: no sound. Announced: Promoted: Senior Lead. 11:37 PM. She is still on flok.
-- step 151: pressed "Continue →" -> state 10. Heard: no sound. Announced: Growth Operator · Assignment 4 / 5 Interrupt on purpose. First, see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task. A sample lands back on Tess. | Red-dot alerts — an interrupt trick.Clear the red dot, then release a batch.
-- step 152: pressed "Release notifications" -> state 10. Heard: no sound. Announced: Clear the red dot first.Tap the red number at the top of the phone.
-- step 153: pressed "Release notifications" -> state 10. Heard: no sound. Announced: nothing announced
+- step 0: pressed "Start your shift" -> state 1. Heard: no sound. Announced: nothing announced
+- step 1: pressed "Run the play →" -> state 2. Heard: no sound. Announced: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. | Surprise likes — a reward trick.Tap Boost. Watch which payout brings her back fastest.
+- step 2: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 1: nothing.She comes back anyway, in 2 minutes.
+- step 3: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 2: a stranger liked it.She is back in a minute.
+- step 4: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 3: Mom commented.She is back in 90 seconds.
+- step 5: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 4: nothing.She comes back anyway, in 2 minutes.
+- step 6: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 5: Quinn viewed her story.She is back in 20 seconds.
+- step 7: pressed "Boost" -> state 4. Heard: no sound. Announced: Target hit. Boost 6: nothing. She comes back anyway, in 2 minutes. | Boost 6: nothing.She comes back anyway, in 2 minutes.
+- step 8: pressed "Flip to see the research" -> state 4. Heard: no sound. Announced: nothing announced
+- step 9: pressed "Next →" -> state 5. Heard: no sound. Announced: Promoted: Junior. 11:06 PM. She is still on flok.
+- step 10: pressed "Continue →" -> state 6. Heard: no sound. Announced: nothing announced
+- step 11: pressed "Run the play →" -> state 7. Heard: no sound. Announced: Growth Operator · Assignment 2 / 5 Take the floor out of the feed. Load more the instant users near the end so there's never a natural place to stop. | Infinite scroll — a no-stop trick.Scroll the feed.
+- step 12: pressed "Simulated feed" -> state 7. Heard: no sound. Announced: nothing announced
+- step 13: pressed "Simulated feed" -> state 7. Heard: no sound. Announced: nothing announced
+- step 14: pressed "Simulated feed" -> state 7. Heard: no sound. Announced: nothing announced
+- step 15: pressed "Simulated feed" -> state 8. Heard: no sound. Announced: Target hit.
+- step 16: pressed "Next →" -> state 9. Heard: no sound. Announced: Promoted: Growth Lead. 11:21 PM. She is still on flok.
+- step 17: pressed "Continue →" -> state 10. Heard: no sound. Announced: nothing announced
+- step 18: pressed "Run the play →" -> state 2. Heard: no sound. Announced: Growth Operator · Assignment 3 / 5 Weaponize loss. Tess and Priya have a 64-day streak, and it is draining. Warn her it dies unless she sends something, and watch her rush to save it. | Don't-lose-it streak — a loss trick.Send the alert before the streak hits zero.
+- step 19: pressed "Send streak alert" -> state 11. Heard: no sound. Announced: nothing announced
+- step 20: pressed "Send streak alert" -> state 11. Heard: no sound. Announced: nothing announced
+- step 21: pressed "Send streak alert" -> state 12. Heard: no sound. Announced: Target hit.
+- step 22: pressed "Next →" -> state 13. Heard: no sound. Announced: Promoted: Senior Lead. 11:37 PM. She is still on flok.
+- step 23: pressed "Continue →" -> state 14. Heard: no sound. Announced: nothing announced
+- step 24: pressed "Run the play →" -> state 15. Heard: no sound. Announced: Growth Operator · Assignment 4 / 5 Interrupt on purpose. First, see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task. A sample lands back on Tess. | Red-dot alerts — an interrupt trick.Clear the red dot, then release a batch.
+- step 25: pressed "Notifications — tap to clear" -> state 15. Heard: no sound. Announced: You cleared it.That reflex to zero the dot is the hook.Now plant a batch on the cohort — a sample lands back on you.
+- step 26: pressed "Release notifications" -> state 16. Heard: 6 short sound(s). Announced: nothing announced
+- step 27: pressed "Release notifications" -> state 16. Heard: 6 short sound(s). Announced: nothing announced
+- step 28: pressed "Notifications — tap to clear" -> state 17. Heard: no sound. Announced: Target hit.
+- step 29: pressed "Release notifications" -> state 17. Heard: 6 short sound(s). Announced: nothing announced
+- step 30: pressed "Notifications — tap to clear" -> state 15. Heard: no sound. Announced: nothing announced
+- step 31: pressed "Notifications — tap to clear" -> state 15. Heard: no sound. Announced: nothing announced
+- step 32: pressed "Release notifications" -> state 17. Heard: 6 short sound(s). Announced: nothing announced
+- step 33: pressed "Next →" -> state 18. Heard: no sound. Announced: Promoted: Head of Growth. 11:52 PM. She is still on flok.
+- step 34: pressed "Continue →" -> state 19. Heard: no sound. Announced: nothing announced
+- step 35: pressed "Run the play →" -> state 20. Heard: no sound. Announced: Growth Operator · Assignment 5 / 5 Turn silence into guilt. Priya, her mom and Quinn all sit 'Seen' with no reply. Switch on read receipts so ignoring them becomes something they can see her doing. | 'Seen' receipts — a guilt trick.Switch read receipts on.
+- step 36: pressed "'Seen' receipts" -> state 21. Heard: no sound. Announced: Target hit.
+- step 37: pressed "'Seen' receipts" -> state 22. Heard: no sound. Announced: nothing announced
+- step 38: pressed "'Seen' receipts" -> state 21. Heard: no sound. Announced: nothing announced
+- step 39: pressed "'Seen' receipts" -> state 22. Heard: no sound. Announced: nothing announced
+- step 40: pressed "Simulated feed" -> state 22. Heard: no sound. Announced: nothing announced
+- step 41: pressed "'Seen' receipts" -> state 21. Heard: no sound. Announced: nothing announced
+- step 42: pressed "Next →" -> state 18. Heard: no sound. Announced: Shift over. 12:06 AM. Seven notifications. She scrolled past all of them. One was her sister, liking the lake photo. 12:09 AM. She is still on flok.
+- step 43: pressed "Continue →" -> state 23. Heard: no sound. Announced: 12:09 AM. She is still on flok. You kept her past midnight. While you trained the machine, it measured you.
+- step 44: pressed "Start over" -> state 0. Heard: no sound. Announced: nothing announced
+- step 45: pressed "About the photos" -> state 24. Heard: no sound. Announced: nothing announced
+- step 46: pressed "Back" -> state 0. Heard: no sound. Announced: nothing announced
+- step 47: pressed "Start your shift" -> state 1. Heard: no sound. Announced: nothing announced
+- step 48: pressed "Run the play →" -> state 2. Heard: no sound. Announced: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. | Surprise likes — a reward trick.Tap Boost. Watch which payout brings her back fastest.
+- step 49: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 1: nothing.She comes back anyway, in 2 minutes.
+- step 50: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 2: a stranger liked it.She is back in a minute.
+- step 51: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 3: Mom commented.She is back in 90 seconds.
+- step 52: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 4: nothing.She comes back anyway, in 2 minutes.
+- step 53: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 5: Quinn viewed her story.She is back in 20 seconds.
+- step 54: pressed "Boost" -> state 4. Heard: no sound. Announced: Target hit. Boost 6: nothing. She comes back anyway, in 2 minutes. | Boost 6: nothing.She comes back anyway, in 2 minutes.
+- step 55: pressed "Next →" -> state 5. Heard: no sound. Announced: Promoted: Junior. 11:06 PM. She is still on flok.
+- step 56: pressed "Continue →" -> state 6. Heard: no sound. Announced: nothing announced
+- step 57: pressed "Run the play →" -> state 7. Heard: no sound. Announced: Growth Operator · Assignment 2 / 5 Take the floor out of the feed. Load more the instant users near the end so there's never a natural place to stop. | Infinite scroll — a no-stop trick.Scroll the feed.
+- step 58: pressed "Simulated feed" -> state 7. Heard: no sound. Announced: nothing announced
+- step 59: pressed "Simulated feed" -> state 7. Heard: no sound. Announced: nothing announced
+- step 60: pressed "Simulated feed" -> state 7. Heard: no sound. Announced: nothing announced
+- step 61: pressed "Simulated feed" -> state 8. Heard: no sound. Announced: Target hit.
+- step 62: pressed "Next →" -> state 9. Heard: no sound. Announced: Promoted: Growth Lead. 11:21 PM. She is still on flok.
+- step 63: pressed "Continue →" -> state 10. Heard: no sound. Announced: nothing announced
+- step 64: pressed "Run the play →" -> state 2. Heard: no sound. Announced: Growth Operator · Assignment 3 / 5 Weaponize loss. Tess and Priya have a 64-day streak, and it is draining. Warn her it dies unless she sends something, and watch her rush to save it. | Don't-lose-it streak — a loss trick.Send the alert before the streak hits zero.
+- step 65: pressed "Send streak alert" -> state 11. Heard: no sound. Announced: nothing announced
+- step 66: pressed "Send streak alert" -> state 11. Heard: no sound. Announced: nothing announced
+- step 67: pressed "Send streak alert" -> state 12. Heard: no sound. Announced: Target hit.
+- step 68: pressed "Send streak alert" -> state 12. Heard: no sound. Announced: nothing announced
+- step 69: pressed "Send streak alert" -> state 12. Heard: no sound. Announced: nothing announced
+- step 70: pressed "Next →" -> state 13. Heard: no sound. Announced: Promoted: Senior Lead. 11:37 PM. She is still on flok.
+- step 71: pressed "Continue →" -> state 14. Heard: no sound. Announced: nothing announced
+- step 72: pressed "Run the play →" -> state 15. Heard: no sound. Announced: Growth Operator · Assignment 4 / 5 Interrupt on purpose. First, see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task. A sample lands back on Tess. | Red-dot alerts — an interrupt trick.Clear the red dot, then release a batch.
+- step 73: pressed "Release notifications" -> state 16. Heard: no sound. Announced: Clear the red dot first.Tap the red number at the top of the phone.
+- step 74: pressed "Release notifications" -> state 16. Heard: no sound. Announced: nothing announced
+- step 75: pressed "Notifications — tap to clear" -> state 15. Heard: no sound. Announced: You cleared it.That reflex to zero the dot is the hook.Now plant a batch on the cohort — a sample lands back on you.
+- step 76: pressed "Notifications — tap to clear" -> state 15. Heard: no sound. Announced: nothing announced
+- step 77: pressed "Release notifications" -> state 16. Heard: 6 short sound(s). Announced: nothing announced
+- step 78: pressed "Release notifications" -> state 16. Heard: 6 short sound(s). Announced: nothing announced
+- step 79: pressed "Release notifications" -> state 16. Heard: 6 short sound(s). Announced: nothing announced
+- step 80: pressed "Release notifications" -> state 16. Heard: 6 short sound(s). Announced: nothing announced
+- step 81: pressed "Release notifications" -> state 16. Heard: 6 short sound(s). Announced: nothing announced
+- step 82: pressed "Release notifications" -> state 17. Heard: 6 short sound(s). Announced: Target hit.
+- step 83: pressed "Next →" -> state 18. Heard: no sound. Announced: Promoted: Head of Growth. 11:52 PM. She is still on flok.
+- step 84: pressed "Continue →" -> state 19. Heard: no sound. Announced: nothing announced
+- step 85: pressed "Run the play →" -> state 20. Heard: no sound. Announced: Growth Operator · Assignment 5 / 5 Turn silence into guilt. Priya, her mom and Quinn all sit 'Seen' with no reply. Switch on read receipts so ignoring them becomes something they can see her doing. | 'Seen' receipts — a guilt trick.Switch read receipts on.
+- step 86: pressed "'Seen' receipts" -> state 21. Heard: no sound. Announced: Target hit.
+- step 87: pressed "'Seen' receipts" -> state 22. Heard: no sound. Announced: nothing announced
+- step 88: pressed "'Seen' receipts" -> state 21. Heard: no sound. Announced: nothing announced
+- step 89: pressed "'Seen' receipts" -> state 22. Heard: no sound. Announced: nothing announced
+- step 90: pressed "'Seen' receipts" -> state 21. Heard: no sound. Announced: nothing announced
+- step 91: pressed "Next →" -> state 18. Heard: no sound. Announced: Shift over. 12:06 AM. Seven notifications. She scrolled past all of them. One was her sister, liking the lake photo. 12:09 AM. She is still on flok.
+- step 92: pressed "Continue →" -> state 23. Heard: no sound. Announced: 12:09 AM. She is still on flok. You kept her past midnight. While you trained the machine, it measured you.
+- step 93: pressed "Start over" -> state 0. Heard: no sound. Announced: nothing announced
+- step 94: pressed "About the photos" -> state 24. Heard: no sound. Announced: nothing announced
+- step 95: pressed "Back" -> state 0. Heard: no sound. Announced: nothing announced
+- step 96: pressed "Start your shift" -> state 1. Heard: no sound. Announced: nothing announced
+- step 97: pressed "Run the play →" -> state 2. Heard: no sound. Announced: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. | Surprise likes — a reward trick.Tap Boost. Watch which payout brings her back fastest.
+- step 98: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 1: nothing.She comes back anyway, in 2 minutes.
+- step 99: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 2: a stranger liked it.She is back in a minute.
+- step 100: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 3: Mom commented.She is back in 90 seconds.
+- step 101: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 4: nothing.She comes back anyway, in 2 minutes.
+- step 102: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 5: Quinn viewed her story.She is back in 20 seconds.
+- step 103: pressed "Boost" -> state 4. Heard: no sound. Announced: Target hit. Boost 6: nothing. She comes back anyway, in 2 minutes. | Boost 6: nothing.She comes back anyway, in 2 minutes.
+- step 104: pressed "Next →" -> state 5. Heard: no sound. Announced: Promoted: Junior. 11:06 PM. She is still on flok.
+- step 105: pressed "Continue →" -> state 6. Heard: no sound. Announced: nothing announced
+- step 106: pressed "Run the play →" -> state 7. Heard: no sound. Announced: Growth Operator · Assignment 2 / 5 Take the floor out of the feed. Load more the instant users near the end so there's never a natural place to stop. | Infinite scroll — a no-stop trick.Scroll the feed.
+- step 107: pressed "Simulated feed" -> state 7. Heard: no sound. Announced: nothing announced
+- step 108: pressed "Simulated feed" -> state 7. Heard: no sound. Announced: nothing announced
+- step 109: pressed "Simulated feed" -> state 7. Heard: no sound. Announced: nothing announced
+- step 110: pressed "Simulated feed" -> state 8. Heard: no sound. Announced: Target hit.
+- step 111: pressed "Next →" -> state 9. Heard: no sound. Announced: Promoted: Growth Lead. 11:21 PM. She is still on flok.
+- step 112: pressed "Continue →" -> state 10. Heard: no sound. Announced: nothing announced
+- step 113: pressed "Run the play →" -> state 2. Heard: no sound. Announced: Growth Operator · Assignment 3 / 5 Weaponize loss. Tess and Priya have a 64-day streak, and it is draining. Warn her it dies unless she sends something, and watch her rush to save it. | Don't-lose-it streak — a loss trick.Send the alert before the streak hits zero.
+- step 114: pressed "Send streak alert" -> state 11. Heard: no sound. Announced: nothing announced
+- step 115: pressed "Send streak alert" -> state 11. Heard: no sound. Announced: nothing announced
+- step 116: pressed "Send streak alert" -> state 12. Heard: no sound. Announced: Target hit.
+- step 117: pressed "Send streak alert" -> state 12. Heard: no sound. Announced: nothing announced
+- step 118: pressed "Send streak alert" -> state 12. Heard: no sound. Announced: nothing announced
+- step 119: pressed "Next →" -> state 13. Heard: no sound. Announced: Promoted: Senior Lead. 11:37 PM. She is still on flok.
+- step 120: pressed "Continue →" -> state 14. Heard: no sound. Announced: nothing announced
+- step 121: pressed "Run the play →" -> state 15. Heard: no sound. Announced: Growth Operator · Assignment 4 / 5 Interrupt on purpose. First, see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task. A sample lands back on Tess. | Red-dot alerts — an interrupt trick.Clear the red dot, then release a batch.
+- step 122: pressed "Release notifications" -> state 16. Heard: no sound. Announced: Clear the red dot first.Tap the red number at the top of the phone.
+- step 123: pressed "Release notifications" -> state 16. Heard: no sound. Announced: nothing announced
+- step 124: pressed "Notifications — tap to clear" -> state 15. Heard: no sound. Announced: You cleared it.That reflex to zero the dot is the hook.Now plant a batch on the cohort — a sample lands back on you.
+- step 125: pressed "Notifications — tap to clear" -> state 15. Heard: no sound. Announced: nothing announced
+- step 126: pressed "Release notifications" -> state 16. Heard: 6 short sound(s). Announced: nothing announced
+- step 127: pressed "Release notifications" -> state 16. Heard: 6 short sound(s). Announced: nothing announced
+- step 128: pressed "Release notifications" -> state 16. Heard: 6 short sound(s). Announced: nothing announced
+- step 129: pressed "Release notifications" -> state 16. Heard: 6 short sound(s). Announced: nothing announced
+- step 130: pressed "Release notifications" -> state 16. Heard: 6 short sound(s). Announced: nothing announced
+- step 131: pressed "Release notifications" -> state 17. Heard: 6 short sound(s). Announced: Target hit.
+- step 132: pressed "Next →" -> state 18. Heard: no sound. Announced: Promoted: Head of Growth. 11:52 PM. She is still on flok.
+- step 133: pressed "Continue →" -> state 19. Heard: no sound. Announced: nothing announced
+- step 134: pressed "Run the play →" -> state 20. Heard: no sound. Announced: Growth Operator · Assignment 5 / 5 Turn silence into guilt. Priya, her mom and Quinn all sit 'Seen' with no reply. Switch on read receipts so ignoring them becomes something they can see her doing. | 'Seen' receipts — a guilt trick.Switch read receipts on.
+- step 135: pressed "'Seen' receipts" -> state 21. Heard: no sound. Announced: Target hit.
+- step 136: pressed "'Seen' receipts" -> state 22. Heard: no sound. Announced: nothing announced
+- step 137: pressed "'Seen' receipts" -> state 21. Heard: no sound. Announced: nothing announced
+- step 138: pressed "'Seen' receipts" -> state 22. Heard: no sound. Announced: nothing announced
+- step 139: pressed "'Seen' receipts" -> state 21. Heard: no sound. Announced: nothing announced
+- step 140: pressed "Next →" -> state 18. Heard: no sound. Announced: Shift over. 12:06 AM. Seven notifications. She scrolled past all of them. One was her sister, liking the lake photo. 12:09 AM. She is still on flok.
+- step 141: pressed "Continue →" -> state 23. Heard: no sound. Announced: 12:09 AM. She is still on flok. You kept her past midnight. While you trained the machine, it measured you.
+- step 142: pressed "Start over" -> state 0. Heard: no sound. Announced: nothing announced
+- step 143: pressed "About the photos" -> state 24. Heard: no sound. Announced: nothing announced
+- step 144: pressed "Back" -> state 0. Heard: no sound. Announced: nothing announced
+- step 145: pressed "Start your shift" -> state 1. Heard: no sound. Announced: nothing announced
+- step 146: pressed "Run the play →" -> state 2. Heard: no sound. Announced: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. | Surprise likes — a reward trick.Tap Boost. Watch which payout brings her back fastest.
+- step 147: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 1: nothing.She comes back anyway, in 2 minutes.
+- step 148: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 2: a stranger liked it.She is back in a minute.
+- step 149: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 3: Mom commented.She is back in 90 seconds.
+- step 150: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 4: nothing.She comes back anyway, in 2 minutes.
+- step 151: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 5: Quinn viewed her story.She is back in 20 seconds.
+- step 152: pressed "Boost" -> state 4. Heard: no sound. Announced: Target hit. Boost 6: nothing. She comes back anyway, in 2 minutes. | Boost 6: nothing.She comes back anyway, in 2 minutes.
+- step 153: pressed "Next →" -> state 5. Heard: no sound. Announced: Promoted: Junior. 11:06 PM. She is still on flok.
+- step 154: pressed "Continue →" -> state 6. Heard: no sound. Announced: nothing announced
+- step 155: pressed "Run the play →" -> state 7. Heard: no sound. Announced: Growth Operator · Assignment 2 / 5 Take the floor out of the feed. Load more the instant users near the end so there's never a natural place to stop. | Infinite scroll — a no-stop trick.Scroll the feed.
+- step 156: pressed "Simulated feed" -> state 7. Heard: no sound. Announced: nothing announced
+- step 157: pressed "Simulated feed" -> state 7. Heard: no sound. Announced: nothing announced
+- step 158: pressed "Simulated feed" -> state 7. Heard: no sound. Announced: nothing announced
+- step 159: pressed "Simulated feed" -> state 8. Heard: no sound. Announced: Target hit.
+- step 160: pressed "Next →" -> state 9. Heard: no sound. Announced: Promoted: Growth Lead. 11:21 PM. She is still on flok.
+- step 161: pressed "Continue →" -> state 10. Heard: no sound. Announced: nothing announced
+- step 162: pressed "Run the play →" -> state 2. Heard: no sound. Announced: Growth Operator · Assignment 3 / 5 Weaponize loss. Tess and Priya have a 64-day streak, and it is draining. Warn her it dies unless she sends something, and watch her rush to save it. | Don't-lose-it streak — a loss trick.Send the alert before the streak hits zero.
+- step 163: pressed "Send streak alert" -> state 11. Heard: no sound. Announced: nothing announced
+- step 164: pressed "Send streak alert" -> state 11. Heard: no sound. Announced: nothing announced
+- step 165: pressed "Send streak alert" -> state 12. Heard: no sound. Announced: Target hit.
+- step 166: pressed "Send streak alert" -> state 12. Heard: no sound. Announced: nothing announced
+- step 167: pressed "Send streak alert" -> state 12. Heard: no sound. Announced: nothing announced
+- step 168: pressed "Next →" -> state 13. Heard: no sound. Announced: Promoted: Senior Lead. 11:37 PM. She is still on flok.
+- step 169: pressed "Continue →" -> state 14. Heard: no sound. Announced: nothing announced
+- step 170: pressed "Run the play →" -> state 15. Heard: no sound. Announced: Growth Operator · Assignment 4 / 5 Interrupt on purpose. First, see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task. A sample lands back on Tess. | Red-dot alerts — an interrupt trick.Clear the red dot, then release a batch.
+- step 171: pressed "Release notifications" -> state 16. Heard: no sound. Announced: Clear the red dot first.Tap the red number at the top of the phone.
+- step 172: pressed "Release notifications" -> state 16. Heard: no sound. Announced: nothing announced
 
 ## Studio Ears Layer 1 verdict on this build
 VERDICT PASS
-- WARN E5 SIGHT ALONE  3 of 18 state changes carry no sound, vibration or announcement: step 26 "Notifications — tap to clear"; step 32 "'Seen' receipts"; step 40 "About the photos". [CITED] XAG 103.
+- WARN E5 SIGHT ALONE  8 of 24 state changes carry no sound, vibration or announcement: step 0 "Start your shift"; step 10 "Continue →"; step 17 "Continue →"; step 19 "Send streak alert"; step 23 "Continue →"; step 34 "Continue →" .... [CITED] XAG 103.

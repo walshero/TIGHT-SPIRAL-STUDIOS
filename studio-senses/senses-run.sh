@@ -23,7 +23,7 @@ STEM="$(basename "${B%.html}")"; OUT="$ROOT/reports/senses/$STEM"
 # are the seats' work and survive a re-run (a v1 of this script wiped them, 2026-10-13).
 mkdir -p "$OUT"; rm -rf "$OUT/states" "$OUT/manifest.json" "$OUT/sighted.md" "$OUT/ear.md" "$OUT/fingers-states.json" "$OUT/ears.json"; fail=0
 echo "== STUDIO SENSES  $B"
-python3 "$HERE/senses-crawl.py" "$B" --out "$OUT" --clicks "${SENSES_CLICKS:-160}" | sed 's/^/  /' || fail=1
+python3 "$HERE/senses-crawl.py" "$B" --out "$OUT" --clicks "${SENSES_CLICKS:-200}" | sed 's/^/  /' || fail=1
 grep -q '"screens_total": \[\]' "$OUT/manifest.json" 2>/dev/null && echo "  (no .screen census: single-scene build, coverage not judged)"
 echo "-- ears";          python3 "$HERE/ears.py" "$OUT" | sed 's/^/  /';            [ "${PIPESTATUS[0]}" -ne 0 ] && fail=1
 echo "-- fingers play";  python3 "$HERE/fingers-play.py" "$OUT" $SEC | sed 's/^/  /'; [ "${PIPESTATUS[0]}" -ne 0 ] && fail=1

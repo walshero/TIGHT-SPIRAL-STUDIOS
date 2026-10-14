@@ -14,7 +14,8 @@ made, as a thumb made it.
 
 THE FLOORS
   P1 VERB IN VIEW     a control tapped 2+ times in a row (the level's core verb)     HALT
-                      needed a scroll to reach. [LAW] founder 2026-09-24, "the
+                      needed a scroll again after its first tap. (Amended 2026-10-14:
+                      the screen opens at its brief; one scroll to the verb is allowed.) [LAW] founder 2026-09-24, "the
                       phone is the scene": the thing you act on and the action
                       are on screen together.
   P2 PATH IN VIEW     a control that moved the game to a different screen needed   HALT
@@ -48,9 +49,18 @@ def judge(m, secondary=()):
              if states.get(s['from'], {}).get('screen') != states.get(s['to'], {}).get('screen')}
     def post_win(st):
         return any(c.get('name') in exits and not c.get('chrome') for c in states.get(st['from'], {}).get('controls', []))
+    # Founder 2026-10-14 (Flok v33): "the lesson brief is at top and scrollable to the feed".
+    # The screen may open at its brief, so ONE scroll to reach the verb is allowed: the first
+    # tap of each run. Any LATER tap in the run that needed a scroll means the page moved
+    # under the thumb, and that still HALTs.
+    first = set(); prev_l = None
+    for i, s in enumerate(steps):
+        if s['label'] != prev_l: first.add(i)
+        prev_l = s['label']
     for v in sorted(verbs):
-        if any(s['label'] == v and s.get('needs_scroll') and not post_win(s) for s in steps):
-            halts.append(f"P1 verb in view: core verb '{v}' needed a scroll to reach")
+        if any(s['label'] == v and s.get('needs_scroll') and not post_win(s) and i not in first
+               for i, s in enumerate(steps)):
+            halts.append(f"P1 verb in view: core verb '{v}' needed a scroll again after the first tap")
     # P2: progression controls, first pass only
     # the screen you load on is already seen; returning to it is not a first pass
     seen = {m['states'][0].get('screen')} if m['states'] else set()
@@ -100,9 +110,11 @@ def self_test():
     after = dict(base, states=st2, steps=[{"label": "Boost", "from": 0, "to": 1, "text_changed": True},
                                           {"label": "Boost", "from": 1, "to": 1, "text_changed": True, "needs_scroll": True},
                                           {"label": "Next", "from": 1, "to": 2, "text_changed": True}])
+    once = dict(base, steps=[dict(good['steps'][0], needs_scroll=True)] + good['steps'][1:])
     cases = [("clean play", good, False), ("verb below fold (Flok v25)", verb, True),
              ("win button below fold (Flok v27)", nxt, True), ("shallow crawl (crawl v1)", shallow, True),
-             ("verb tapped after the win, off screen", after, False)]
+             ("verb tapped after the win, off screen", after, False),
+             ("one scroll to the verb, then it stays (Flok v33 brief-first)", once, False)]
     ok = True
     for name, m, want in cases:
         got = bool(judge(m)[0]); ok &= got == want

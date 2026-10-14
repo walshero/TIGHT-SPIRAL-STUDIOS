@@ -77,9 +77,15 @@ def run(path):
             pg = b.new_page(viewport={"width": w, "height": h}, device_scale_factor=2,
                             has_touch=True, is_mobile=True)
             pg.goto(url); pg.wait_for_timeout(400)
-            pg.evaluate("startTraining()"); pg.wait_for_timeout(700)
+            pg.evaluate("startTraining(); if (typeof beginLever === 'function') beginLever();"); pg.wait_for_timeout(700)
             for i in range(1, TAPS + 1):
-                pg.locator('#actZone .act-btn').click()
+                # a thumb, not a script: scroll only until Boost is fully on screen (bottom
+                # edge, 16 px gap), never centre it, then tap where it is
+                pg.evaluate("""() => { const b = document.querySelector('#actZone .act-btn').getBoundingClientRect();
+                  if (b.bottom > innerHeight - 16) scrollBy(0, b.bottom - innerHeight + 16);
+                  else if (b.top < 0) scrollBy(0, b.top - 16); }""")
+                bb = pg.locator('#actZone .act-btn').bounding_box()
+                pg.mouse.click(bb['x'] + bb['width'] / 2, bb['y'] + bb['height'] / 2)
                 pg.wait_for_timeout(2500)
                 m = pg.evaluate(PROBE)
                 inside = m['actionsInside'] if not m['won'] else m['actionsInWindow']
