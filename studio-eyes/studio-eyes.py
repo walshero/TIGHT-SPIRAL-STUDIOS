@@ -308,6 +308,9 @@ PROBE = r"""
   document.querySelectorAll('a,button,input,select,textarea,[role=button],[tabindex]').forEach(el=>{
     const cs = getComputedStyle(el);
     if (cs.display==='none' || cs.visibility==='hidden') return;
+    // 2026-10-15: content of a CLOSED <details> is not rendered and cannot take focus, so it
+    // read as "no focus ring" (the face's folded full shelf). Not rendered = not a target.
+    if (el.checkVisibility && !el.checkVisibility()) return;
     const r0 = el.getBoundingClientRect();
     if (r0.width < 1 && r0.height < 1) return;
     // HIT AREA, NOT PAINT BOX. Added 2026-09-26: a ::before/::after, position:absolute, with a

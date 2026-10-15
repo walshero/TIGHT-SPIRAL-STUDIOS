@@ -1259,3 +1259,10 @@ of that), plus a changed-files gate run. Single inline pass, no subagents.
 - Also fixed: Old Problems, Arcade (Aug), Cliche Field stamps lifted above decorative layers; Dad Energy no longer scrolls past its own bar on load; CYL v5 slice sound button moved off the stamp.
 - New arithmetic: studio-senses/top-floor.py (T1 buried text in the top band, pointer-events forced on; T2 dead top). Wired into senses-run.sh and belt tick 14. Corpus: 24 HALT -> 4 (the cliche games' "Turn sideways" hint and Cliche Cabinet's portrait wall), 2 retired skipped.
 - Flok senses PASS 6/6 incl. top floor. Pre-existing contrast HALTs unchanged: behind-this-door, studio/the-village.
+
+## 2026-10-15 — Slim face live; Flok v35 (steady panels)
+- Founder (voice): assess what to keep vs pause; don't show everything on the face. Assessment at studio-assessment.html (10 face / 3 bench / 30 paused, computed from the face). Founder: "Go" (17:09), approving the face and the four recommendations (Funny Boney's paused, Fireground on the bench, cliche games paused not deleted).
+- Face: 40 cards -> 10. Kireji Pond, Reading Lamp, Dress Rehearsal, The Asking Room get face cards for the first time (they were orphans). Paused list added to the folded full shelf; personal pages (Soundings, Warriors, Repos) deliberately unlinked. Six pages the new cards open were mirrored to tss-playtest for the first time.
+- Flok v35 ships the two voice-playtest notes: "User north_trail" on the opening; three fixed, labelled panels (Assignment / Result / Your move) on every lever, each sized once per lever so taps never move them; every lever now writes a Result line (only Boost did before).
+- studio-eyes.py: links inside a closed <details> are skipped (not rendered, cannot take focus); the fold's links show a 3px ring when opened.
+- Gates: Flok senses PASS 6/6 incl. top floor; contrast SHIP (Flok 5.05, face 5.57, assessment 7.91); face Studio Eyes 0 HALT; feed check PASS.

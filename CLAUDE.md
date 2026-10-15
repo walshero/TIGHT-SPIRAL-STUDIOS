@@ -282,6 +282,11 @@ per build, and TICK 11 graduated 2026-08-22.
 ## Face
 - `index.html` accounts for **every** page in the repo — nothing is orphaned.
   Keep it that way: new pages get linked from the face.
+- **Slim face, founder approved 2026-10-15 ("Go" on `studio-assessment.html`).** Ten room cards
+  (Flok, the five EN195 Arcade games, CYL v7, the Arcade, Workshop in a Box, iSLO), the client
+  slab, one "On the bench" line. Paused games live in the folded full shelf's **Paused** list,
+  files untouched, Lab tags unchanged. Exception to the orphan rule, by design: Soundings,
+  Warriors Fantasy Arcade and Repos are personal and are not linked from the public face.
 
 ## Voice — settled
 - **No invented or inflated claims.** Use the founder's actual words; if a claim isn't

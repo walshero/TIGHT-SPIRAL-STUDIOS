@@ -1,8 +1,8 @@
 # Flok — voice playtest notes, queued (2026-10-15)
 
 Founder played Flok on a voice call and relayed notes through the voice session.
-Instruction: queue with the studio assessment work; **do not ship alone**. Status: PENDING,
-ships in the same push as the approved slim face.
+Instruction: queue with the studio assessment work; **do not ship alone**. Status: **SHIPPED in Flok v35**,
+same push as the slim face (founder: "Go", 2026-10-15 17:09).
 
 1. **Name the user, not "her."** Opening screen: "Your job: keep her here past midnight." ->
    "Your job: keep user north_trail here past midnight." Same wording replaces "She" in
