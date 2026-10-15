@@ -18,6 +18,11 @@ HALTs:
                 ads); Tess's own feed 30-70% (she stops posting photos after two)
   H8 cast       a handle shown anywhere in the feed, the DMs or the strangers has no declared
                 tie to Tess in CAST (founder: "these need to look like actual relationships")
+  H9 cause      lever 1 (founder 2026-10-14: "Her mom comments and then she posts 'anyone up'
+                makes no sense"). Tess's post after a payout must answer the person who paid
+                (name or @handle); a post after nothing must name no payer; the first Boost
+                must pay (Horvath: a contingency is learned from early reward, then thinned);
+                no reaction line may repeat.
 
 Usage: python3 flok-feed-check.py [the-console.html]   exit 1 on any HALT
 """
@@ -26,7 +31,7 @@ import json, re, sys
 # Caption words a poster would use for their own picture. Add a tie when you add a photo.
 TIES = {
     "basil": ["basil", "repotted"], "oldphone": ["phone", "2009"], "coffee": ["third", "one"],
-    "loaf": ["loaf", "crumb"], "creek": ["mountains", "lake"], "bed": ["bed", "streak"],
+    "loaf": ["loaf", "sourdough"], "creek": ["mountains", "lake"], "bed": ["bed", "streak"],
     "sunset": ["sunset"], "boxes": ["mugs", "cat"], "night": ["city", "new"],
     "window": ["window", "rain"], "lake": ["lake", "golden", "reposting"], "mushroom": ["found", "loop"],
     "lamp": ["bed", "before"], "mugs": ["year", "ago", "night"],
@@ -35,6 +40,9 @@ TIES = {
 # v31: Tess's own feed is mostly text after two photos (founder, 2026-10-13: "after they post
 # a couple of pictures ... they're not posting pictures"). Her range is wider than the cohort's.
 TEXT_RANGE = {"cohort": (0.15, 0.45), "north_trail": (0.30, 0.70)}
+# H9: who each payout is, in words Tess would use to answer them
+PAYER = {"mom": ["sunroom.mornings", "mom"], "quinn": ["q.ramos", "quinn"], "hank": ["hank"],
+         "stranger": ["stranger"]}
 
 def arr(s, name):
     m = re.search(r"const " + name + r"=\[(.*?)\];", s, re.S)
@@ -64,6 +72,16 @@ def main(path):
         if k and i not in rep: uses.setdefault(k, []).append(("north_trail", i, b))
         if i in rep and r1img[rep[i]] != k:
             halts.append(f"H1 repost {i} declares post {rep[i]} but shows a different photo")
+    # v34 lever-1 reactions: photos count like any of Tess's posts; the lake repost is
+    # declared by its own first word ("reposting"), the way a person declares one
+    rm = re.search(r"const REACT=(\{.*?\]\]\});", s, re.S)
+    react = json.loads(re.sub(r"(\w+):\[\[", r'"\1":[[', rm.group(1))) if rm else {}
+    for k, rows in react.items():
+        for j, row in enumerate(rows):
+            if len(row) > 1 and not (row[0].startswith("reposting") and row[1] == (r1img[0] if r1img else None)):
+                uses.setdefault(row[1], []).append(("north_trail", 200 + j, row[0]))
+            elif len(row) > 1 and not set(re.findall(r"[a-z0-9]+", row[0].lower())) & set(TIES.get(row[1], [])):
+                halts.append(f"H5 tie: '{row[1]}' on \"{row[0]}\"")
     ex = re.search(r"const R1_EXTRA=(\[.*?\]\]);", s)
     for j, (b, k) in enumerate(json.loads(ex.group(1)) if ex else []):
         if k: uses.setdefault(k, []).append(("north_trail", 100 + j, b))
@@ -81,7 +99,18 @@ def main(path):
             words = set(re.findall(r"[a-z0-9]+", b.lower()))
             if not words & set(TIES.get(k, [])):
                 halts.append(f"H5 tie: '{k}' on \"{b}\" (no caption word in {TIES.get(k, 'no TIES entry')})")
-    for name, imgs in (("cohort", bimg), ("north_trail", r1img)):
+    # Tess's texture is what a player SEES on lever 1: her first post plus twelve Boosts
+    sched = arr(s, "SCHEDULE") if "const SCHEDULE=" in s else []
+    seen_imgs = list(r1img[:1])
+    if react and sched:
+        occ = {}
+        for t in range(12):
+            k = sched[t % len(sched)] or "none"; i = occ.get(k, 0); occ[k] = i + 1
+            row = react[k][min(i, len(react[k]) - 1)]
+            seen_imgs.append(row[1] if len(row) > 1 else None)
+    else:
+        seen_imgs = r1img
+    for name, imgs in (("cohort", bimg), ("north_trail", seen_imgs)):
         share = sum(1 for k in imgs if not k) / max(1, len(imgs))
         lo, hi = TEXT_RANGE[name]
         if not lo <= share <= hi: halts.append(f"H6 texture: {name} text-only share {share:.0%} (want {lo:.0%}-{hi:.0%})")
@@ -102,6 +131,24 @@ def main(path):
     for n, hs in hues.items():
         if len(hs) > 1: halts.append(f"H7 face: '{n}' wears {len(hs)} avatar hues {sorted(hs)}")
 
+    # H9 cause and effect
+    if not react:
+        halts.append("H9 cause: lever 1 is a fixed list of posts (no REACT): what Tess posts cannot answer what the Boost paid")
+    else:
+        if not sched or sched[0] is None: halts.append("H9 cause: the first Boost pays nothing")
+        for k in {x for x in sched if x}:
+            if k not in react: halts.append(f"H9 cause: payout '{k}' has no reaction lines")
+        names = [w for ws in PAYER.values() for w in ws]
+        seen_lines = {}
+        for k, rows in react.items():
+            for row in rows:
+                low = row[0].lower()
+                if k in PAYER and not any(w in low for w in PAYER[k]):
+                    halts.append(f"H9 cause: after '{k}' Tess posts \"{row[0]}\", answering nobody who paid")
+                if k == "none" and (any(re.search(r"\b" + re.escape(w) + r"\b", low) for w in names) or "@" in low):
+                    halts.append(f"H9 cause: after nothing Tess answers someone: \"{row[0]}\"")
+                if row[0] in seen_lines: halts.append(f"H9 cause: \"{row[0]}\" reacts to both '{seen_lines[row[0]]}' and '{k}'")
+                seen_lines[row[0]] = k
     total = sum(len(u) for u in uses.values())
     print(f"flok-feed-check: {len(bodies)} cohort + {len(r1)} north_trail posts, {total} with pictures, "
           f"{len(embedded)} photos embedded, {len(rep)} declared repost(s)")

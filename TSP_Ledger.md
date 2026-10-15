@@ -1238,3 +1238,9 @@ of that), plus a changed-files gate run. Single inline pass, no subagents.
 - Gates changed to match the ruling, not to pass: fingers-play P1 now allows one scroll to the verb (self-test case added, the v25 case still HALTs); feedback-floor scrolls like a thumb (minimal, never centred).
 - Two crawler bugs found by this build, both fixed: it wheeled at the mouse's last position (scrolled lever 5's inbox, not the page) and it fingerprinted states without the screen id (the brief-first play screen and the ending hashed the same, so the ending was never "reached"). Default crawl budget 160 -> 200 for the five extra screens.
 - Senses PASS (coverage FULL 6/6), feedback floor PASS (one WARN: SE clips 12 px off the top of the newest post), preship contrast SHIP, feed check PASS, gold card worst text pair 6.53:1.
+
+## 2026-10-14 — Flok v34: cause and effect
+- Founder: first Boost should not be "nothing"; Mom comments then "anyone up?" makes no sense; what is the crumb; seat Saunders, Horvath, Golbeck on the posts.
+- Built: Tess's lever-1 posts react to the payout (REACT, MOM_SAYS); schedule opens on a payout and thins; receipt states cause and response; Priya's bread in plain words; levers 3-4 backstory reordered to her night. Findings: claude/FLOK-POST-LOGIC-2026-10-14.md.
+- flok-feed-check H9 (cause): v33 HALT, three-defect mutant HALT x3, v34 PASS. Texture measured over the lever-1 play.
+- Senses PASS 6/6, feedback floor PASS (WARN: SE clips 37 px off the newest post's top), contrast SHIP, feed check PASS.

@@ -1,6 +1,6 @@
 # EAR TRANSCRIPT — the-console.html
 
-build the-console.html · md5 c4c8b4f2642dd31db2dd049de45b8e15 · crawled 2026-10-14T12:35:42-0400 · viewport 400x840
+build the-console.html · md5 f684644a051608e7ce6fb1ad6464d102 · crawled 2026-10-14T20:07:49-0400 · viewport 400x840
 
 You cannot see the screen. You play with a screen reader and your ears.
 You get the accessibility tree (what a screen reader would read), what was announced aloud,
@@ -31,7 +31,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - paragraph:
     - text: flok growth team, night shift. Five tricks real apps use, one at a time. Offline. The people are invented; the photos are real.
     - button "About the photos"
-- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
 - paragraph
 - navigation "Page navigation":
   - button "Back"
@@ -54,7 +54,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - heading "Surprise likes" [level=2]
   - paragraph: Pay out at random. People check hardest when they can’t predict the reward.
   - button "Run the play →"
-- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
 - paragraph
 - navigation "Page navigation":
   - button "Back"
@@ -81,10 +81,10 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: No Boosts yet. Each result lands here. Engagement 26%
   - progressbar "Engagement toward target"
   - button "Boost"
-  - text: Surprise likes — a reward trick. Tap Boost. Watch which payout brings her back fastest.
+  - text: Surprise likes — a reward trick. Tap Boost. Watch what each payout makes her do next.
   - button "Flip to see the research": Why does this work? Unpredictable rewards drive the most persistent checking — the same schedule that makes slot machines compulsive. Skinner, Science and Human Behavior (1953)
   - button "Next →" [disabled]
-- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
 - paragraph
 - navigation "Page navigation":
   - button "Back"
@@ -104,22 +104,19 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - text: Cabinet
 - region "Training":
   - text: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. 10:53 PM flok.
-  - article:
-    - text: north_trail now found this on the loop. tiny guy.
-    - img "A pale mushroom among fallen leaves"
-    - text: 3 ◇ 2 ↗
+  - article: north_trail back 90s after Mom's comment @sunroom.mornings the lake past the clinic, mom. you've been there. 3 ◇ 2 ↗
   - article:
     - text: north_trail 1m golden hour at the lake.
     - img "A still lake at golden hour, autumn trees reflected in the water"
     - text: 3 ◇ 2 ↗
-  - text: "Boost 1: nothing. She comes back anyway, in 2 minutes. Engagement 31%"
+  - text: "Boost 1: Mom commented: “Beautiful. Where is this?” She answered her in 90 seconds. Engagement 34%"
   - progressbar "Engagement toward target"
   - button "Boost"
-  - text: Surprise likes — a reward trick. Tap Boost. Watch which payout brings her back fastest.
+  - text: Surprise likes — a reward trick. Tap Boost. Watch what each payout makes her do next.
   - button "Flip to see the research": Why does this work? Unpredictable rewards drive the most persistent checking — the same schedule that makes slot machines compulsive. Skinner, Science and Human Behavior (1953)
   - button "Next →" [disabled]
-- paragraph: Last updated October 14, 2026 · v33 the playbook
-- paragraph: "Boost 1: nothing.She comes back anyway, in 2 minutes."
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: "Boost 1: Mom commented: “Beautiful. Where is this?”She answered her in 90 seconds."
 - navigation "Page navigation":
   - button "Back"
   - link "Home":
@@ -138,23 +135,23 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - text: Cabinet
 - region "Training":
   - text: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. 10:53 PM flok.
-  - article: north_trail back 20s after Quinn's view posting through it 6 ◇ 3 ↗
-  - article: north_trail back after 2m @q.ramos saw your story. the new place looks huge 5 ◇ 16 ↗
-  - article: north_trail back 90s after Mom's comment anyone up? or just me 5 ◇ 16 ↗
-  - article: north_trail back 1m after a like how does tidepool get 2,000 likes on a sunset 4 ◇ 9 ↗
-  - article: north_trail back after 2m @daily.loaf the crumb!! day 41 and it's perfect 4 ◇ 9 ↗
+  - article: north_trail back 1m after Hank's like @hank.jpg why are you up. we have a 7:30. 7 ◇ 10 ↗
+  - article: north_trail back after 2m · nothing came anyone up? or just me 6 ◇ 3 ↗
+  - article: north_trail back 20s after Quinn's view @q.ramos saw you saw my story. the new place looks huge 5 ◇ 16 ↗
+  - article: north_trail back after 2m · nothing came huh. the lake was better in person. 5 ◇ 16 ↗
   - article:
-    - text: north_trail 1m found this on the loop. tiny guy.
+    - text: north_trail back 1m after a like a stranger liked that. hi, whoever you are. here's a tiny guy from the loop.
     - img "A pale mushroom among fallen leaves"
-    - text: 3 ◇ 2 ↗
-  - text: "Boost 6: nothing. She comes back anyway, in 2 minutes. Engagement 73%"
+    - text: 5 ◇ 16 ↗
+  - article: north_trail back 90s after Mom's comment @sunroom.mornings the lake past the clinic, mom. you've been there. 3 ◇ 2 ↗
+  - text: "Boost 6: Hank, from the clinic, liked it. She answered him a minute later. Engagement 76%"
   - progressbar "Engagement toward target"
   - button "Boost"
-  - text: "Target hit. Boost 6: nothing. She comes back anyway, in 2 minutes."
+  - text: "Target hit. Boost 6: Hank, from the clinic, liked it. She answered him a minute later."
   - button "Flip to see the research": Why does this work? Unpredictable rewards drive the most persistent checking — the same schedule that makes slot machines compulsive. Skinner, Science and Human Behavior (1953)
   - button "Next →"
-- paragraph: Last updated October 14, 2026 · v33 the playbook
-- paragraph: "Boost 6: nothing.She comes back anyway, in 2 minutes."
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: "Boost 6: Hank, from the clinic, liked it.She answered him a minute later."
 - navigation "Page navigation":
   - button "Back"
   - link "Home":
@@ -175,7 +172,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Promoted Junior Growth Team
   - paragraph: 11:06 PM · she’s still on flok
   - button "Continue →"
-- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
 - paragraph: "Promoted: Junior. 11:06 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -198,7 +195,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - heading "Infinite scroll" [level=2]
   - paragraph: Take out the bottom. With no end, there is no moment to stop.
   - button "Run the play →"
-- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
 - paragraph: "Promoted: Junior. 11:06 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -228,7 +225,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - text: 12 ◇ 8 ↗
   - article: 808drift Suggested for you unpopular opinion in 3… 2… 21 ◇ 15 ↗
   - article:
-    - text: daily.loaf 12m day 41 of the loaf. the crumb opened up.
+    - text: "daily.loaf 12m sourdough attempt #41. it finally has the big holes."
     - img "The inside of a sourdough loaf, full of holes"
     - text: 30 ◇ 2 ↗
   - article:
@@ -248,7 +245,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Infinite scroll — a no-stop trick. Scroll the feed.
   - button "Flip to see the research": Why does this work? Take away the bottom of the page and people keep going past the point they meant to stop. The missing stop-cue is the trick. Stopping-cue research; Harris, U.S. Senate (2019)
   - button "Next →" [disabled]
-- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
 - paragraph: "Promoted: Junior. 11:06 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -278,7 +275,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - text: 12 ◇ 8 ↗
   - article: 808drift Suggested for you unpopular opinion in 3… 2… 21 ◇ 15 ↗
   - article:
-    - text: daily.loaf 12m day 41 of the loaf. the crumb opened up.
+    - text: "daily.loaf 12m sourdough attempt #41. it finally has the big holes."
     - img "The inside of a sourdough loaf, full of holes"
     - text: 30 ◇ 2 ↗
   - article:
@@ -309,7 +306,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: loading more… Engagement 86%
   - progressbar "Engagement toward target"
   - text: Target hit.
-  - button "Flip to see the research": Why do
+  - button "Flip to see the res
 ```
 
 ## State 9  (reached by: step 16: Next →)
@@ -326,7 +323,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Promoted Growth Lead Growth Team
   - paragraph: 11:21 PM · she’s still on flok
   - button "Continue →"
-- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
 - paragraph: "Promoted: Growth Lead. 11:21 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -349,7 +346,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - heading "Don't-lose-it streak" [level=2]
   - paragraph: Weaponize loss. A streak she is afraid to lose pulls harder than any reward.
   - button "Run the play →"
-- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
 - paragraph: "Promoted: Growth Lead. 11:21 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -373,16 +370,16 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - text: north_trail sent to daily.loaf streak saved with a photo of my bed. priya i'm sorry
     - img "An unmade bed"
     - text: 4 ◇ 9 ↗
-  - article: north_trail now @q.ramos saw your story. the new place looks huge 3 ◇ 2 ↗
-  - article: north_trail earlier anyone up? or just me 12 ◇ 5 ↗
-  - article: north_trail earlier how does tidepool get 2,000 likes on a sunset 21 ◇ 8 ↗
+  - article: north_trail now @q.ramos saw you saw my story. the new place looks huge 3 ◇ 2 ↗
+  - article: north_trail earlier how does tidepool get 2,000 likes on a sunset 12 ◇ 5 ↗
+  - article: north_trail earlier anyone up? or just me 21 ◇ 8 ↗
   - text: — end — Engagement 41%
   - progressbar "Engagement toward target"
   - button "Send streak alert"
   - text: Don't-lose-it streak — a loss trick. Send the alert before the streak hits zero.
   - button "Flip to see the research": Why does this work? Losing hurts more than gaining feels good. 'Don't break your streak' turns that into a daily pull. Kahneman & Tversky, Prospect Theory (1979)
   - button "Next →" [disabled]
-- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
 - paragraph: "Promoted: Growth Lead. 11:21 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -408,16 +405,16 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - text: north_trail sent to daily.loaf streak saved with a photo of my bed. priya i'm sorry
     - img "An unmade bed"
     - text: 4 ◇ 9 ↗
-  - article: north_trail now @q.ramos saw your story. the new place looks huge 3 ◇ 2 ↗
-  - article: north_trail earlier anyone up? or just me 12 ◇ 5 ↗
-  - article: north_trail earlier how does tidepool get 2,000 likes on a sunset 21 ◇ 8 ↗
+  - article: north_trail now @q.ramos saw you saw my story. the new place looks huge 3 ◇ 2 ↗
+  - article: north_trail earlier how does tidepool get 2,000 likes on a sunset 12 ◇ 5 ↗
+  - article: north_trail earlier anyone up? or just me 21 ◇ 8 ↗
   - text: — end — Engagement 71%
   - progressbar "Engagement toward target"
   - button "Send streak alert"
   - text: Target hit.
   - button "Flip to see the research": Why does this work? Losing hurts more than gaining feels good. 'Don't break your streak' turns that into a daily pull. Kahneman & Tversky, Prospect Theory (1979)
   - button "Next →"
-- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
 - paragraph: "Promoted: Growth Lead. 11:21 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -439,7 +436,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Promoted Senior Lead Growth Team
   - paragraph: 11:37 PM · she’s still on flok
   - button "Continue →"
-- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
 - paragraph: "Promoted: Senior Lead. 11:37 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -462,7 +459,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - heading "Red-dot alerts" [level=2]
   - paragraph: Interrupt on purpose. A red dot is a promise, and promises get checked.
   - button "Run the play →"
-- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
 - paragraph: "Promoted: Senior Lead. 11:37 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -484,8 +481,8 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Growth Operator · Assignment 4 / 5 Interrupt on purpose. First, see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task. A sample lands back on Tess. 11:38 PM flok.
   - button "Notifications — tap to clear": "2"
   - article: north_trail now one more before bed. (i say this every night) 3 ◇ 2 ↗
-  - article: north_trail earlier posting through it 12 ◇ 5 ↗
-  - article: north_trail earlier @q.ramos saw your story. the new place looks huge 21 ◇ 8 ↗
+  - article: north_trail earlier i have a 7:30 patient. i am aware of this. 12 ◇ 5 ↗
+  - article: north_trail earlier @q.ramos saw you saw my story. the new place looks huge 21 ◇ 8 ↗
   - text: — end — Engagement 26%
   - progressbar "Engagement toward target"
   - button "Sound on" [pressed]
@@ -493,7 +490,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Red-dot alerts — an interrupt trick. Clear the red dot, then release a batch.
   - button "Flip to see the research": Why does this work? A waiting red dot fires anticipatory dopamine. Constant interruption also lowers attention and raises stress. Montag et al. (2019); Mark et al. (2016)
   - button "Next →" [disabled]
-- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
 - paragraph: "Promoted: Senior Lead. 11:37 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -516,8 +513,8 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - button "Notifications — tap to clear": "3"
   - article: hank.jpg and 3 others liked your post
   - article: north_trail now one more before bed. (i say this every night) 3 ◇ 2 ↗
-  - article: north_trail earlier posting through it 12 ◇ 5 ↗
-  - article: north_trail earlier @q.ramos saw your story. the new place looks huge 21 ◇ 8 ↗
+  - article: north_trail earlier i have a 7:30 patient. i am aware of this. 12 ◇ 5 ↗
+  - article: north_trail earlier @q.ramos saw you saw my story. the new place looks huge 21 ◇ 8 ↗
   - text: — end — Engagement 43%
   - progressbar "Engagement toward target"
   - button "Sound on" [pressed]
@@ -525,7 +522,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: You cleared it. That reflex to zero the dot is the hook. Now plant a batch on the cohort — a sample lands back on you.
   - button "Flip to see the research": Why does this work? A waiting red dot fires anticipatory dopamine. Constant interruption also lowers attention and raises stress. Montag et al. (2019); Mark et al. (2016)
   - button "Next →" [disabled]
-- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
 - paragraph: "Promoted: Senior Lead. 11:37 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -562,7 +559,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Target hit.
   - button "Flip to see the research": Why does this work? A waiting red dot fires anticipatory dopamine. Constant interruption also lowers attention and raises stress. Montag et al. (2019); Mark et al. (2016)
   - button "Next →"
-- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
 - paragraph: "Promoted: Senior Lead. 11:37 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -584,7 +581,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Promoted Head of Growth Growth Team
   - paragraph: 11:52 PM · she’s still on flok
   - button "Continue →"
-- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
 - paragraph: "Promoted: Head of Growth. 11:52 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -607,7 +604,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - heading "'Seen' receipts" [level=2]
   - paragraph: Make silence visible. Once they know she saw it, not answering is a choice.
   - button "Run the play →"
-- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
 - paragraph: "Promoted: Head of Growth. 11:52 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -632,7 +629,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: "'Seen' receipts — a guilt trick. Switch read receipts on."
   - button "Flip to see the research": Why does this work? Once someone knows you saw their message, not replying feels like something you're doing to them. Reciprocity does the rest. Cialdini, Influence (2001)
   - button "Next →" [disabled]
-- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
 - paragraph: "Promoted: Head of Growth. 11:52 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -657,7 +654,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Target hit.
   - button "Flip to see the research": Why does this work? Once someone knows you saw their message, not replying feels like something you're doing to them. Reciprocity does the rest. Cialdini, Influence (2001)
   - button "Next →"
-- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
 - paragraph: "Promoted: Head of Growth. 11:52 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -682,7 +679,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Target hit.
   - button "Flip to see the research": Why does this work? Once someone knows you saw their message, not replying feels like something you're doing to them. Reciprocity does the rest. Cialdini, Influence (2001)
   - button "Next →"
-- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
 - paragraph: "Promoted: Head of Growth. 11:52 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -703,7 +700,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 - region "Your telemetry":
   - paragraph: 12:09 AM. She’s still on flok. You kept her past midnight.
   - paragraph: While you trained the machine, it measured you.
-  - text: You tapped Boost 6 It paid off 3
+  - text: You tapped Boost 6 It paid off 4
   - paragraph: About one in 2. That is the schedule you were taught to build.
   - text: Screens you scrolled past the end 10 Alerts you fired at the cohort 10
   - paragraph: "What pulled her back fastest: Quinn viewing her story. What never came on schedule: a like from Rosa."
@@ -711,7 +708,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - paragraph: The cohort was people like you.
   - button "Start over"
   - button "About the photos"
-- paragraph: Last updated October 14, 2026 · v33 the playbook
+- paragraph: Last updated October 14, 2026 · v34 cause and effect
 - paragraph: 12:09 AM. She is still on flok. You kept her past midnight. While you trained the machine, it measured you.
 - navigation "Page navigation":
   - button "Back"
@@ -766,13 +763,13 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 ## Steps: what you pressed, what you heard
 
 - step 0: pressed "Start your shift" -> state 1. Heard: no sound. Announced: nothing announced
-- step 1: pressed "Run the play →" -> state 2. Heard: no sound. Announced: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. | Surprise likes — a reward trick.Tap Boost. Watch which payout brings her back fastest.
-- step 2: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 1: nothing.She comes back anyway, in 2 minutes.
-- step 3: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 2: a stranger liked it.She is back in a minute.
-- step 4: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 3: Mom commented.She is back in 90 seconds.
-- step 5: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 4: nothing.She comes back anyway, in 2 minutes.
-- step 6: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 5: Quinn viewed her story.She is back in 20 seconds.
-- step 7: pressed "Boost" -> state 4. Heard: no sound. Announced: Target hit. Boost 6: nothing. She comes back anyway, in 2 minutes. | Boost 6: nothing.She comes back anyway, in 2 minutes.
+- step 1: pressed "Run the play →" -> state 2. Heard: no sound. Announced: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. | Surprise likes — a reward trick.Tap Boost. Watch what each payout makes her do next.
+- step 2: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 1: Mom commented: “Beautiful. Where is this?”She answered her in 90 seconds.
+- step 3: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 2: a stranger liked her post.She posted again a minute later.
+- step 4: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 3: nothing came.She posted again anyway, 2 minutes later.
+- step 5: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 4: Quinn viewed her story.She posted again in 20 seconds.
+- step 6: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 5: nothing came.She posted again anyway, 2 minutes later.
+- step 7: pressed "Boost" -> state 4. Heard: no sound. Announced: Target hit. Boost 6: Hank, from the clinic, liked it. She answered him a minute later. | Boost 6: Hank, from the clinic, liked it.She answered him a minute later.
 - step 8: pressed "Flip to see the research" -> state 4. Heard: no sound. Announced: nothing announced
 - step 9: pressed "Next →" -> state 5. Heard: no sound. Announced: Promoted: Junior. 11:06 PM. She is still on flok.
 - step 10: pressed "Continue →" -> state 6. Heard: no sound. Announced: nothing announced
@@ -813,13 +810,13 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 - step 45: pressed "About the photos" -> state 24. Heard: no sound. Announced: nothing announced
 - step 46: pressed "Back" -> state 0. Heard: no sound. Announced: nothing announced
 - step 47: pressed "Start your shift" -> state 1. Heard: no sound. Announced: nothing announced
-- step 48: pressed "Run the play →" -> state 2. Heard: no sound. Announced: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. | Surprise likes — a reward trick.Tap Boost. Watch which payout brings her back fastest.
-- step 49: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 1: nothing.She comes back anyway, in 2 minutes.
-- step 50: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 2: a stranger liked it.She is back in a minute.
-- step 51: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 3: Mom commented.She is back in 90 seconds.
-- step 52: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 4: nothing.She comes back anyway, in 2 minutes.
-- step 53: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 5: Quinn viewed her story.She is back in 20 seconds.
-- step 54: pressed "Boost" -> state 4. Heard: no sound. Announced: Target hit. Boost 6: nothing. She comes back anyway, in 2 minutes. | Boost 6: nothing.She comes back anyway, in 2 minutes.
+- step 48: pressed "Run the play →" -> state 2. Heard: no sound. Announced: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. | Surprise likes — a reward trick.Tap Boost. Watch what each payout makes her do next.
+- step 49: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 1: Mom commented: “Beautiful. Where is this?”She answered her in 90 seconds.
+- step 50: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 2: a stranger liked her post.She posted again a minute later.
+- step 51: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 3: nothing came.She posted again anyway, 2 minutes later.
+- step 52: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 4: Quinn viewed her story.She posted again in 20 seconds.
+- step 53: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 5: nothing came.She posted again anyway, 2 minutes later.
+- step 54: pressed "Boost" -> state 4. Heard: no sound. Announced: Target hit. Boost 6: Hank, from the clinic, liked it. She answered him a minute later. | Boost 6: Hank, from the clinic, liked it.She answered him a minute later.
 - step 55: pressed "Next →" -> state 5. Heard: no sound. Announced: Promoted: Junior. 11:06 PM. She is still on flok.
 - step 56: pressed "Continue →" -> state 6. Heard: no sound. Announced: nothing announced
 - step 57: pressed "Run the play →" -> state 7. Heard: no sound. Announced: Growth Operator · Assignment 2 / 5 Take the floor out of the feed. Load more the instant users near the end so there's never a natural place to stop. | Infinite scroll — a no-stop trick.Scroll the feed.
@@ -862,13 +859,13 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 - step 94: pressed "About the photos" -> state 24. Heard: no sound. Announced: nothing announced
 - step 95: pressed "Back" -> state 0. Heard: no sound. Announced: nothing announced
 - step 96: pressed "Start your shift" -> state 1. Heard: no sound. Announced: nothing announced
-- step 97: pressed "Run the play →" -> state 2. Heard: no sound. Announced: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. | Surprise likes — a reward trick.Tap Boost. Watch which payout brings her back fastest.
-- step 98: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 1: nothing.She comes back anyway, in 2 minutes.
-- step 99: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 2: a stranger liked it.She is back in a minute.
-- step 100: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 3: Mom commented.She is back in 90 seconds.
-- step 101: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 4: nothing.She comes back anyway, in 2 minutes.
-- step 102: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 5: Quinn viewed her story.She is back in 20 seconds.
-- step 103: pressed "Boost" -> state 4. Heard: no sound. Announced: Target hit. Boost 6: nothing. She comes back anyway, in 2 minutes. | Boost 6: nothing.She comes back anyway, in 2 minutes.
+- step 97: pressed "Run the play →" -> state 2. Heard: no sound. Announced: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. | Surprise likes — a reward trick.Tap Boost. Watch what each payout makes her do next.
+- step 98: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 1: Mom commented: “Beautiful. Where is this?”She answered her in 90 seconds.
+- step 99: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 2: a stranger liked her post.She posted again a minute later.
+- step 100: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 3: nothing came.She posted again anyway, 2 minutes later.
+- step 101: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 4: Quinn viewed her story.She posted again in 20 seconds.
+- step 102: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 5: nothing came.She posted again anyway, 2 minutes later.
+- step 103: pressed "Boost" -> state 4. Heard: no sound. Announced: Target hit. Boost 6: Hank, from the clinic, liked it. She answered him a minute later. | Boost 6: Hank, from the clinic, liked it.She answered him a minute later.
 - step 104: pressed "Next →" -> state 5. Heard: no sound. Announced: Promoted: Junior. 11:06 PM. She is still on flok.
 - step 105: pressed "Continue →" -> state 6. Heard: no sound. Announced: nothing announced
 - step 106: pressed "Run the play →" -> state 7. Heard: no sound. Announced: Growth Operator · Assignment 2 / 5 Take the floor out of the feed. Load more the instant users near the end so there's never a natural place to stop. | Infinite scroll — a no-stop trick.Scroll the feed.
@@ -911,13 +908,13 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 - step 143: pressed "About the photos" -> state 24. Heard: no sound. Announced: nothing announced
 - step 144: pressed "Back" -> state 0. Heard: no sound. Announced: nothing announced
 - step 145: pressed "Start your shift" -> state 1. Heard: no sound. Announced: nothing announced
-- step 146: pressed "Run the play →" -> state 2. Heard: no sound. Announced: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. | Surprise likes — a reward trick.Tap Boost. Watch which payout brings her back fastest.
-- step 147: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 1: nothing.She comes back anyway, in 2 minutes.
-- step 148: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 2: a stranger liked it.She is back in a minute.
-- step 149: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 3: Mom commented.She is back in 90 seconds.
-- step 150: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 4: nothing.She comes back anyway, in 2 minutes.
-- step 151: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 5: Quinn viewed her story.She is back in 20 seconds.
-- step 152: pressed "Boost" -> state 4. Heard: no sound. Announced: Target hit. Boost 6: nothing. She comes back anyway, in 2 minutes. | Boost 6: nothing.She comes back anyway, in 2 minutes.
+- step 146: pressed "Run the play →" -> state 2. Heard: no sound. Announced: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. | Surprise likes — a reward trick.Tap Boost. Watch what each payout makes her do next.
+- step 147: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 1: Mom commented: “Beautiful. Where is this?”She answered her in 90 seconds.
+- step 148: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 2: a stranger liked her post.She posted again a minute later.
+- step 149: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 3: nothing came.She posted again anyway, 2 minutes later.
+- step 150: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 4: Quinn viewed her story.She posted again in 20 seconds.
+- step 151: pressed "Boost" -> state 3. Heard: no sound. Announced: Boost 5: nothing came.She posted again anyway, 2 minutes later.
+- step 152: pressed "Boost" -> state 4. Heard: no sound. Announced: Target hit. Boost 6: Hank, from the clinic, liked it. She answered him a minute later. | Boost 6: Hank, from the clinic, liked it.She answered him a minute later.
 - step 153: pressed "Next →" -> state 5. Heard: no sound. Announced: Promoted: Junior. 11:06 PM. She is still on flok.
 - step 154: pressed "Continue →" -> state 6. Heard: no sound. Announced: nothing announced
 - step 155: pressed "Run the play →" -> state 7. Heard: no sound. Announced: Growth Operator · Assignment 2 / 5 Take the floor out of the feed. Load more the instant users near the end so there's never a natural place to stop. | Infinite scroll — a no-stop trick.Scroll the feed.
