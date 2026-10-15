@@ -594,6 +594,18 @@ else
   done
 fi
 
+# TICK 14 — the top of the page (added 2026-10-15). Founder, opening Flok v34 on his phone:
+# "Why does it load with empty space at top? That should be a studio wide no-no." The Lab
+# band sat above the bar with Flok's fixed scene layer painted over it: a dark strip with its
+# text buried. Every changed page, not only games: the face carried a dead stamp row too.
+echo; echo "-- tick 14: the top of the page (no buried text, no dead top) --"
+_pages=""; for _f in $SURFACES; do case "$_f" in *.html) _pages="$_pages $_f";; esac; done
+if [ -z "$_pages" ]; then echo "  (no pages in this change — skipped)"
+elif ! python3 -c "import playwright" >/dev/null 2>&1; then
+  echo "  SKIPPED LOUD — playwright absent, the top floor is BLIND. Not a pass."; reported=$((reported+1))
+elif python3 "$BELT_DIR/studio-senses/top-floor.py" $_pages >/tmp/tf14.out 2>&1; then echo "  pass  $(tail -1 /tmp/tf14.out)"
+else grep -E '^HALT|  HALT' /tmp/tf14.out | head -12 | sed 's/^/  /'; fail=1; fi
+
 echo; echo "----------------------------------------------------------------------"
 if [ "$fail" -ne 0 ]; then
   echo "BELT: HALT — a tick refused. This build does not ship."

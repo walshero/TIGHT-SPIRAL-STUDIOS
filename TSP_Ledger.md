@@ -1251,3 +1251,11 @@ of that), plus a changed-files gate run. Single inline pass, no subagents.
 - version-stamp.py bug fixed: its strip regex stopped at the nested hash span and left one orphan </span> per run (the face carried eight), plus a space per run. Now idempotent (three runs, byte-identical); --check flags orphans. Face stamp corrected v49 -> v102 (git count; the old stamp was computed on a shallow clone).
 - Studio Eyes had a standing HALT on the face (TOKEN_ROLE: --ink and --live-ink were both text and decoration). Split into --ink-line and --live-dot, same values. Eyes 0 HALT, contrast SHIP 5.57.
 - Known debt, unchanged: ~50 face links (studio/*, older builds) point at files that exist in canon but not on the playtest mirror, so they 404 on the live face.
+
+## 2026-10-15 — No empty space at the top (studio-wide)
+- Founder (Flok v34 on iPhone): "Why does it load with empty space at top? That should be a studio wide no-no."
+- Cause: the 2026-08-28 Lab status band sat above the Studio/Cabinet bar; Flok's .scene-bg (fixed, z-index 0) painted over it, a 76 px dark strip with its text buried. Studio Eyes passed it (13.4:1 against its own background); an elementFromPoint probe skips pointer-events:none layers, so nothing saw the overlay.
+- Fix: band removed from 16 lab pages, LAB chip in the bar (.tsp-labchip, 10.7:1); soundings (no bar) keeps a lifted band. 62 pages had the version stamp as a loose line after its <p>; moved inside (no renumbering). 16 pages nested the stamp <p> in another <p> (an empty row); normalized. 44 stray </span> runs removed; tag balance worse on 0 files, better on 44. version-stamp.py now writes inside block stamps.
+- Also fixed: Old Problems, Arcade (Aug), Cliche Field stamps lifted above decorative layers; Dad Energy no longer scrolls past its own bar on load; CYL v5 slice sound button moved off the stamp.
+- New arithmetic: studio-senses/top-floor.py (T1 buried text in the top band, pointer-events forced on; T2 dead top). Wired into senses-run.sh and belt tick 14. Corpus: 24 HALT -> 4 (the cliche games' "Turn sideways" hint and Cliche Cabinet's portrait wall), 2 retired skipped.
+- Flok senses PASS 6/6 incl. top floor. Pre-existing contrast HALTs unchanged: behind-this-door, studio/the-village.

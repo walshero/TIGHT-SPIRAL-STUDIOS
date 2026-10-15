@@ -31,6 +31,7 @@ echo "-- fingers play";  python3 "$HERE/fingers-play.py" "$OUT" $SEC | sed 's/^/
 if grep -q 'id="receipt"' "$B"; then
 echo "-- feedback floor"; python3 "$HERE/feedback-floor.py" "$B" | sed 's/^/  /'; [ "${PIPESTATUS[0]}" -ne 0 ] && fail=1
 fi
+echo "-- top floor";     python3 "$HERE/top-floor.py" "$B" | sed 's/^/  /'; [ "${PIPESTATUS[0]}" -ne 0 ] && fail=1
 echo "-- eyes";          python3 "$ROOT/studio-eyes/studio-eyes.py" "$B" 2>/dev/null | grep -E 'HALT|CONTRAST|CLIP|of [0-9]+ at HALT' | grep -v 'SELF-TEST' | sed 's/^/  /'
                          python3 "$ROOT/studio-eyes/studio-eyes.py" "$B" >/dev/null 2>&1 || fail=1
 echo "-- personas";      python3 "$HERE/personas.py" "$OUT" | sed 's/^/  /'

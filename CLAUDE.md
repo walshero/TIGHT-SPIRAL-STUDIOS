@@ -316,6 +316,18 @@ lesson. Then, when the player taps away the lesson brief is at top and scrollabl
   sees the whole post and its result (feedback-floor F1-F3).
 - Flok's strategy lives on its own gold Playbook card before each assignment.
 
+## NO EMPTY SPACE AT THE TOP - founder rule, studio-wide (2026-10-15)
+Founder, opening Flok on his phone: *"Why does it load with empty space at top? That should be a
+studio wide no-no."*
+- A page opens on content: the Studio/Cabinet bar, then the game. No row of its own for status,
+  no loose stamp lines, no text painted over by a decorative layer.
+- **Lab status rides in the bar** as a `.tsp-labchip` ("LAB") inside `.se-brand`, not as a band
+  above it (the band was buried under Flok's fixed scene layer). This amends the status-ladder
+  "state the status on the surface" rule's placement, not the rule.
+- Arithmetic: `studio-senses/top-floor.py` (T1 buried text in the top 140 px, T2 dead top over
+  48 px). In senses-run.sh and belt tick 14 (every changed page). Known HALTs: the four cliche
+  games ("Turn sideways" hint over the top; Cliche Cabinet's portrait wall).
+
 ## CHECKED IS NOT SHIPPED - standing, non-negotiable (2026-08-27)
 
 **Never report a push as landed on the strength of a connector's success message.**

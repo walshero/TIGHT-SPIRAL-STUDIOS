@@ -1,6 +1,6 @@
 # EAR TRANSCRIPT — the-console.html
 
-build the-console.html · md5 f684644a051608e7ce6fb1ad6464d102 · crawled 2026-10-14T20:07:49-0400 · viewport 400x840
+build the-console.html · md5 e65a9a0596bca9a62dbb878f1b4cc5e9 · crawled 2026-10-15T09:27:09-0400 · viewport 400x840
 
 You cannot see the screen. You play with a screen reader and your ears.
 You get the accessibility tree (what a screen reader would read), what was announced aloud,
@@ -13,7 +13,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 0  (reached by: cold load)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -21,6 +20,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "Your job":
   - 'img "Her post: a still lake at golden hour, autumn trees reflected in the water"'
   - text: north_trail now 10:52 PM
@@ -31,7 +31,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - paragraph:
     - text: flok growth team, night shift. Five tricks real apps use, one at a time. Offline. The people are invented; the photos are real.
     - button "About the photos"
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph
 - navigation "Page navigation":
   - button "Back"
@@ -41,7 +41,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 1  (reached by: step 0: Start your shift)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -49,12 +48,13 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "The playbook":
   - paragraph: The playbook · 1 of 5
   - heading "Surprise likes" [level=2]
   - paragraph: Pay out at random. People check hardest when they can’t predict the reward.
   - button "Run the play →"
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph
 - navigation "Page navigation":
   - button "Back"
@@ -64,7 +64,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 2  (reached by: step 1: Run the play →)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -72,6 +71,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "Training":
   - text: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. 10:53 PM flok.
   - article:
@@ -84,7 +84,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Surprise likes — a reward trick. Tap Boost. Watch what each payout makes her do next.
   - button "Flip to see the research": Why does this work? Unpredictable rewards drive the most persistent checking — the same schedule that makes slot machines compulsive. Skinner, Science and Human Behavior (1953)
   - button "Next →" [disabled]
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph
 - navigation "Page navigation":
   - button "Back"
@@ -94,7 +94,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 3  (reached by: step 2: Boost)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -102,6 +101,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "Training":
   - text: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. 10:53 PM flok.
   - article: north_trail back 90s after Mom's comment @sunroom.mornings the lake past the clinic, mom. you've been there. 3 ◇ 2 ↗
@@ -115,7 +115,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Surprise likes — a reward trick. Tap Boost. Watch what each payout makes her do next.
   - button "Flip to see the research": Why does this work? Unpredictable rewards drive the most persistent checking — the same schedule that makes slot machines compulsive. Skinner, Science and Human Behavior (1953)
   - button "Next →" [disabled]
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph: "Boost 1: Mom commented: “Beautiful. Where is this?”She answered her in 90 seconds."
 - navigation "Page navigation":
   - button "Back"
@@ -125,7 +125,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 4  (reached by: step 7: Boost)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -133,6 +132,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "Training":
   - text: Growth Operator · Assignment 1 / 5 Reward her at random. Some Boosts pay out (a like, a comment, a friend checking her story) and some pay nothing. Unpredictable payoffs are the strongest hook. 10:53 PM flok.
   - article: north_trail back 1m after Hank's like @hank.jpg why are you up. we have a 7:30. 7 ◇ 10 ↗
@@ -150,7 +150,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: "Target hit. Boost 6: Hank, from the clinic, liked it. She answered him a minute later."
   - button "Flip to see the research": Why does this work? Unpredictable rewards drive the most persistent checking — the same schedule that makes slot machines compulsive. Skinner, Science and Human Behavior (1953)
   - button "Next →"
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph: "Boost 6: Hank, from the clinic, liked it.She answered him a minute later."
 - navigation "Page navigation":
   - button "Back"
@@ -160,7 +160,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 5  (reached by: step 9: Next →)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -168,11 +167,12 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "Promotion":
   - text: Promoted Junior Growth Team
   - paragraph: 11:06 PM · she’s still on flok
   - button "Continue →"
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph: "Promoted: Junior. 11:06 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -182,7 +182,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 6  (reached by: step 10: Continue →)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -190,12 +189,13 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "The playbook":
   - paragraph: The playbook · 2 of 5
   - heading "Infinite scroll" [level=2]
   - paragraph: Take out the bottom. With no end, there is no moment to stop.
   - button "Run the play →"
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph: "Promoted: Junior. 11:06 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -205,7 +205,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 7  (reached by: step 11: Run the play →)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -213,6 +212,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "Training":
   - text: Growth Operator · Assignment 2 / 5 Take the floor out of the feed. Load more the instant users near the end so there's never a natural place to stop. 11:07 PM flok.
   - article:
@@ -245,7 +245,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Infinite scroll — a no-stop trick. Scroll the feed.
   - button "Flip to see the research": Why does this work? Take away the bottom of the page and people keep going past the point they meant to stop. The missing stop-cue is the trick. Stopping-cue research; Harris, U.S. Senate (2019)
   - button "Next →" [disabled]
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph: "Promoted: Junior. 11:06 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -255,7 +255,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 8  (reached by: step 15: Simulated feed)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -263,6 +262,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "Training":
   - text: Growth Operator · Assignment 2 / 5 Take the floor out of the feed. Load more the instant users near the end so there's never a natural place to stop. 11:07 PM flok.
   - article:
@@ -306,12 +306,11 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: loading more… Engagement 86%
   - progressbar "Engagement toward target"
   - text: Target hit.
-  - button "Flip to see the res
+  - button "Flip to see the research": Why does this work? Take away the bottom of 
 ```
 
 ## State 9  (reached by: step 16: Next →)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -319,11 +318,12 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "Promotion":
   - text: Promoted Growth Lead Growth Team
   - paragraph: 11:21 PM · she’s still on flok
   - button "Continue →"
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph: "Promoted: Growth Lead. 11:21 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -333,7 +333,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 10  (reached by: step 17: Continue →)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -341,12 +340,13 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "The playbook":
   - paragraph: The playbook · 3 of 5
   - heading "Don't-lose-it streak" [level=2]
   - paragraph: Weaponize loss. A streak she is afraid to lose pulls harder than any reward.
   - button "Run the play →"
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph: "Promoted: Growth Lead. 11:21 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -356,7 +356,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 11  (reached by: step 19: Send streak alert)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -364,6 +363,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "Training":
   - text: Growth Operator · Assignment 3 / 5 Weaponize loss. Tess and Priya have a 64-day streak, and it is draining. Warn her it dies unless she sends something, and watch her rush to save it. 11:22 PM flok. you + daily.loaf · 64-day streak — ends in 0:07
   - article:
@@ -379,7 +379,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Don't-lose-it streak — a loss trick. Send the alert before the streak hits zero.
   - button "Flip to see the research": Why does this work? Losing hurts more than gaining feels good. 'Don't break your streak' turns that into a daily pull. Kahneman & Tversky, Prospect Theory (1979)
   - button "Next →" [disabled]
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph: "Promoted: Growth Lead. 11:21 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -389,7 +389,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 12  (reached by: step 21: Send streak alert)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -397,6 +396,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "Training":
   - text: Growth Operator · Assignment 3 / 5 Weaponize loss. Tess and Priya have a 64-day streak, and it is draining. Warn her it dies unless she sends something, and watch her rush to save it. 11:22 PM flok. you + daily.loaf · 64-day streak — ends in 0:07
   - article: north_trail now still 64 days. not losing it. 6 ◇ 3 ↗
@@ -414,7 +414,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Target hit.
   - button "Flip to see the research": Why does this work? Losing hurts more than gaining feels good. 'Don't break your streak' turns that into a daily pull. Kahneman & Tversky, Prospect Theory (1979)
   - button "Next →"
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph: "Promoted: Growth Lead. 11:21 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -424,7 +424,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 13  (reached by: step 22: Next →)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -432,11 +431,12 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "Promotion":
   - text: Promoted Senior Lead Growth Team
   - paragraph: 11:37 PM · she’s still on flok
   - button "Continue →"
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph: "Promoted: Senior Lead. 11:37 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -446,7 +446,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 14  (reached by: step 23: Continue →)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -454,12 +453,13 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "The playbook":
   - paragraph: The playbook · 4 of 5
   - heading "Red-dot alerts" [level=2]
   - paragraph: Interrupt on purpose. A red dot is a promise, and promises get checked.
   - button "Run the play →"
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph: "Promoted: Senior Lead. 11:37 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -469,7 +469,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 15  (reached by: step 24: Run the play →)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -477,6 +476,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "Training":
   - text: Growth Operator · Assignment 4 / 5 Interrupt on purpose. First, see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task. A sample lands back on Tess. 11:38 PM flok.
   - button "Notifications — tap to clear": "2"
@@ -490,7 +490,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Red-dot alerts — an interrupt trick. Clear the red dot, then release a batch.
   - button "Flip to see the research": Why does this work? A waiting red dot fires anticipatory dopamine. Constant interruption also lowers attention and raises stress. Montag et al. (2019); Mark et al. (2016)
   - button "Next →" [disabled]
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph: "Promoted: Senior Lead. 11:37 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -500,7 +500,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 16  (reached by: step 26: Release notifications)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -508,6 +507,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "Training":
   - text: Growth Operator · Assignment 4 / 5 Interrupt on purpose. First, see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task. A sample lands back on Tess. 11:38 PM flok.
   - button "Notifications — tap to clear": "3"
@@ -522,7 +522,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: You cleared it. That reflex to zero the dot is the hook. Now plant a batch on the cohort — a sample lands back on you.
   - button "Flip to see the research": Why does this work? A waiting red dot fires anticipatory dopamine. Constant interruption also lowers attention and raises stress. Montag et al. (2019); Mark et al. (2016)
   - button "Next →" [disabled]
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph: "Promoted: Senior Lead. 11:37 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -532,7 +532,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 17  (reached by: step 28: Notifications — tap to clear)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -540,6 +539,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "Training":
   - text: Growth Operator · Assignment 4 / 5 Interrupt on purpose. First, see the red dot up top? Clear it. Then release a batch onto the cohort and pull them back mid-task. A sample lands back on Tess. 11:38 PM flok.
   - button "Notifications — tap to clear": "0"
@@ -559,7 +559,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Target hit.
   - button "Flip to see the research": Why does this work? A waiting red dot fires anticipatory dopamine. Constant interruption also lowers attention and raises stress. Montag et al. (2019); Mark et al. (2016)
   - button "Next →"
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph: "Promoted: Senior Lead. 11:37 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -569,7 +569,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 18  (reached by: step 33: Next →)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -577,11 +576,12 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "Promotion":
   - text: Promoted Head of Growth Growth Team
   - paragraph: 11:52 PM · she’s still on flok
   - button "Continue →"
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph: "Promoted: Head of Growth. 11:52 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -591,7 +591,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 19  (reached by: step 34: Continue →)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -599,12 +598,13 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "The playbook":
   - paragraph: The playbook · 5 of 5
   - heading "'Seen' receipts" [level=2]
   - paragraph: Make silence visible. Once they know she saw it, not answering is a choice.
   - button "Run the play →"
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph: "Promoted: Head of Growth. 11:52 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -614,7 +614,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 20  (reached by: step 35: Run the play →)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -622,6 +621,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "Training":
   - text: Growth Operator · Assignment 5 / 5 Turn silence into guilt. Priya, her mom and Quinn all sit 'Seen' with no reply. Switch on read receipts so ignoring them becomes something they can see her doing. 11:53 PM flok. daily.loaf best friend · 64-day streak did you get my last one? Seen 2:41 PM · no reply sunroom.mornings mom call me when you can Seen 2:41 PM · no reply q.ramos college roommate · moved in August lmk when you're free Seen 2:41 PM · no reply Reply rate 0% — end — Engagement 26%
   - progressbar "Engagement toward target"
@@ -629,7 +629,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: "'Seen' receipts — a guilt trick. Switch read receipts on."
   - button "Flip to see the research": Why does this work? Once someone knows you saw their message, not replying feels like something you're doing to them. Reciprocity does the rest. Cialdini, Influence (2001)
   - button "Next →" [disabled]
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph: "Promoted: Head of Growth. 11:52 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -639,7 +639,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 21  (reached by: step 36: 'Seen' receipts)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -647,6 +646,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "Training":
   - text: Growth Operator · Assignment 5 / 5 Turn silence into guilt. Priya, her mom and Quinn all sit 'Seen' with no reply. Switch on read receipts so ignoring them becomes something they can see her doing. 11:53 PM flok. daily.loaf best friend · 64-day streak did you get my last one? Seen 2:41 PM · replied just now sunroom.mornings mom call me when you can Seen 2:41 PM · replied just now q.ramos college roommate · moved in August lmk when you're free Seen 2:41 PM · typing… Reply rate 92% — end — Engagement 68%
   - progressbar "Engagement toward target"
@@ -654,7 +654,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Target hit.
   - button "Flip to see the research": Why does this work? Once someone knows you saw their message, not replying feels like something you're doing to them. Reciprocity does the rest. Cialdini, Influence (2001)
   - button "Next →"
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph: "Promoted: Head of Growth. 11:52 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -664,7 +664,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 22  (reached by: step 37: 'Seen' receipts)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -672,6 +671,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "Training":
   - text: Growth Operator · Assignment 5 / 5 Turn silence into guilt. Priya, her mom and Quinn all sit 'Seen' with no reply. Switch on read receipts so ignoring them becomes something they can see her doing. 11:53 PM flok. daily.loaf best friend · 64-day streak did you get my last one? Seen 2:41 PM · replied just now sunroom.mornings mom call me when you can Seen 2:41 PM · replied just now q.ramos college roommate · moved in August lmk when you're free Seen 2:41 PM · replied just now Reply rate 92% — end — Engagement 68%
   - progressbar "Engagement toward target"
@@ -679,7 +679,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - text: Target hit.
   - button "Flip to see the research": Why does this work? Once someone knows you saw their message, not replying feels like something you're doing to them. Reciprocity does the rest. Cialdini, Influence (2001)
   - button "Next →"
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph: "Promoted: Head of Growth. 11:52 PM. She is still on flok."
 - navigation "Page navigation":
   - button "Back"
@@ -689,7 +689,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 23  (reached by: step 43: Continue →)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -697,6 +696,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "Your telemetry":
   - paragraph: 12:09 AM. She’s still on flok. You kept her past midnight.
   - paragraph: While you trained the machine, it measured you.
@@ -708,7 +708,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - paragraph: The cohort was people like you.
   - button "Start over"
   - button "About the photos"
-- paragraph: Last updated October 14, 2026 · v34 cause and effect
+- paragraph: Last updated October 15, 2026 · v34 cause and effect
 - paragraph: 12:09 AM. She is still on flok. You kept her past midnight. While you trained the machine, it measured you.
 - navigation "Page navigation":
   - button "Back"
@@ -718,7 +718,6 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
 
 ## State 24  (reached by: step 45: About the photos)
 ```
-- paragraph: LAB An experiment on the bench, not a finished game.
 - banner:
   - link "The studio":
     - /url: index.html
@@ -726,6 +725,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
   - link "The cabinet":
     - /url: arcade.html
     - text: Cabinet
+  - text: LAB
 - region "About the photos":
   - heading "About the photos" [level=2]
   - paragraph: "The people in flok are invented. The photos are real: ordinary pictures that real people posted to Wikimedia Commons under open licenses. Each one is something its poster would actually take: their plant, their bread, their walk, their nightstand. They are cropped to fit the feed. Nothing else is changed. One post is a screenshot of flok itself, made in the studio."
@@ -757,7 +757,7 @@ The walk CYCLES every 7 stops from a cold load: only these are reachable by keyb
     - listitem:
       - text: A cat sitting on top of stacked moving boxes Roman Eisele · CC BY-SA 4.0
       - link "Wikimedia Commons page":
-        - /url: h
+        - /url: https://commons.wikimedia.org/wiki/File:Europ%C3%A4is
 ```
 
 ## Steps: what you pressed, what you heard

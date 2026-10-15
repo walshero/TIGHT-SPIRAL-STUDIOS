@@ -43,7 +43,15 @@ def stamp(path):
     # 2) existing stamp element? append version as its sibling
     m = re.search(r'(<[a-z]+[^>]*id="(?:seUpdated|faceUpdated|kUpdated)"[^>]*>.*?</[a-z]+>)', s, re.S)
     if m:
-        s = s.replace(m.group(1), m.group(1)+' '+span, 1)
+        el = m.group(1)
+        # 2026-10-15: a block stamp (<p>/<div>) takes the version INSIDE it. Appended after
+        # its closing tag, the version became a loose line of its own on 62 pages: a dead
+        # row at the top of the screen (founder: "empty space at top ... a studio wide no-no").
+        tag = re.match(r'<([a-z]+)', el).group(1)
+        if tag in ('p', 'div'):
+            s = s.replace(el, el[:el.rfind('</')] + ' ' + span + el[el.rfind('</'):], 1)
+        else:
+            s = s.replace(el, el+' '+span, 1)
     else:
         # 3) no stamp at all: insert full stamp block after chrome header, else after <body>
         blk = STAMP_BLOCK.replace('{VER}', span)
