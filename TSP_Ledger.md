@@ -1244,3 +1244,10 @@ of that), plus a changed-files gate run. Single inline pass, no subagents.
 - Built: Tess's lever-1 posts react to the payout (REACT, MOM_SAYS); schedule opens on a payout and thins; receipt states cause and response; Priya's bread in plain words; levers 3-4 backstory reordered to her night. Findings: claude/FLOK-POST-LOGIC-2026-10-14.md.
 - flok-feed-check H9 (cause): v33 HALT, three-defect mutant HALT x3, v34 PASS. Texture measured over the lever-1 play.
 - Senses PASS 6/6, feedback floor PASS (WARN: SE clips 37 px off the newest post's top), contrast SHIP, feed check PASS.
+
+## 2026-10-15 — Face: Flok v34 pushed to the studio face
+- Founder: "Push to studio face." The Flok room card (the face's one primary invitation) now names v34 and the current game: night shift, Tess, five tricks, every Boost changes what she posts next. Lab chip kept (no promotion by relabelling).
+- Live face is tss-playtest/studio-index.html, mirrored from canon index.html (it was a v31-era copy).
+- version-stamp.py bug fixed: its strip regex stopped at the nested hash span and left one orphan </span> per run (the face carried eight), plus a space per run. Now idempotent (three runs, byte-identical); --check flags orphans. Face stamp corrected v49 -> v102 (git count; the old stamp was computed on a shallow clone).
+- Studio Eyes had a standing HALT on the face (TOKEN_ROLE: --ink and --live-ink were both text and decoration). Split into --ink-line and --live-dot, same values. Eyes 0 HALT, contrast SHIP 5.57.
+- Known debt, unchanged: ~50 face links (studio/*, older builds) point at files that exist in canon but not on the playtest mirror, so they 404 on the live face.

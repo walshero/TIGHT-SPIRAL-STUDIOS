@@ -37,7 +37,9 @@ def stamp(path):
     s = open(path,encoding='utf-8').read(); orig = s
     span = ver_span(path)
     # 1) strip any prior version span (idempotent)
-    s = re.sub(r'<span class="se-version" [^>]*>.*?</span>', '', s, flags=re.S)
+    # 2026-10-15: the version span NESTS a hash span. The old non-greedy '.*?</span>' stopped
+    # at the inner close and left one orphan '</span>' behind per run (the face had eight).
+    s = re.sub(r' ?<span class="se-version" [^>]*>[^<]*(?:<span[^>]*>[^<]*</span>)?[^<]*</span>', '', s)
     # 2) existing stamp element? append version as its sibling
     m = re.search(r'(<[a-z]+[^>]*id="(?:seUpdated|faceUpdated|kUpdated)"[^>]*>.*?</[a-z]+>)', s, re.S)
     if m:
@@ -62,6 +64,8 @@ def check(paths):
         s = open(p,encoding='utf-8').read()
         if 'se-version' not in s or not re.search(r'id="(seUpdated|faceUpdated|kUpdated)"', s):
             bad.append(p)
+        elif re.search(r'class="se-version"[^>]*>[^<]*<span[^>]*>[^<]*</span></span>(?:\s*</span>)+\s*</p>', s):
+            print("ORPHAN </span> after the version stamp:", p); bad.append(p)
     for p in bad: print("MISSING stamp/version:", p)
     return 1 if bad else 0
 
