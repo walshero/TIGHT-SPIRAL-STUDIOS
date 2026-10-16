@@ -7,7 +7,13 @@
 <meta name="audience" content="MassBay EN195 students learning to stage a secret without announcing it; the founder as first playtester">
 <title>Dress Rehearsal: an EN195 game</title>
 <!--
-  DRESS REHEARSAL (file: row-k, v48) - a staging game. Tight Spiral Productions.
+  DRESS REHEARSAL (file: row-k, v48b) - a staging game. Tight Spiral Productions.
+  v48b (founder 2026-10-16, phone screenshot): ELEVATOR and BASEMENT CAT ran out
+  through the right border of the lobby buttons at ~140% page zoom. Not a clip -
+  the box had overflow visible, so floor 11 was right to stay green - the words
+  simply left. Fix: the lobby text span shrinks, breaks a word if it must, and
+  wraps under the tile; the title loses its tracking under 260px. The check is
+  Studio Eyes floor 12 (ESCAPED_TEXT), new this session, swept at x1, x1.5, x2.
   v48 (founder 2026-10-16: "showing up for a book club without having read the
   book is about the lamest thing in terms of drama we could really think of ...
   we need something with a bit more drama here"; the pawn shop was pitched and
@@ -722,6 +728,8 @@
   }
 
   @media (max-width:359px){ h1{ letter-spacing:1px; } } /* v41: DRESS REHEARSAL holds one line at 320px */
+  @media (max-width:259px){ h1{ letter-spacing:0; font-size:22px; overflow-wrap:anywhere; } } /* v48b: 200% zoom */
+  header{ min-width:0; } header > *{ min-width:0; }
 
   main{ max-width:760px; margin:0 auto; }
 
@@ -737,8 +745,12 @@
   /* Lobby: tonight's program. v13 - each scene carries a tinted plate so the
      splash reads as a poster board instead of a list of links. */
   .lobby-note{ text-align:center; font-style:italic; margin:8px 0 20px; }
+  /* v48b: WORDS STAY IN THEIR BOX. At 150% page zoom ELEVATOR and BASEMENT CAT
+     walked out through the right border (founder's phone, 2026-10-16). The text
+     span may now shrink, break a word if it must, and drop under the tile when
+     there is no room beside it. Studio Eyes floor 12 measures this at x1, x1.5, x2. */
   .lobbybtn{
-    display:flex; align-items:center; gap:15px;
+    display:flex; flex-wrap:wrap; align-items:center; gap:15px;
     width:100%; max-width:560px; margin:0 auto 14px;
     background:var(--card); border:2px solid var(--ink); border-left-width:11px;
     padding:12px 16px; text-align:left;
@@ -746,6 +758,7 @@
     font-weight:bold; letter-spacing:2px;
   }
   .lobbybtn .tile{ width:64px; height:64px; flex:none; display:block; }
+  .lobbybtn .txt{ flex:1 1 180px; min-width:0; overflow-wrap:anywhere; }
   .lobbybtn .sname{
     display:block; font-size:21px; letter-spacing:1px; margin-top:3px;
   }
@@ -2302,7 +2315,7 @@
       tile.innerHTML = sceneTile(sc);
       b.appendChild(tile.firstChild);
 
-      var txt = el("span");
+      var txt = el("span","txt");
       txt.appendChild(document.createTextNode("SCENE "+(i+1)));
       txt.appendChild(el("span","sname",sc.name));
       if(state.scored[i]) txt.appendChild(el("span","done","staged"));

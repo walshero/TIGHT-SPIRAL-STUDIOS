@@ -66,6 +66,20 @@ def load_clip_probe():
 
 CLIP_PROBE = load_clip_probe()
 
+def load_escape_probe():
+    """Floor 12 (ESCAPED_TEXT) from studio-eyes.py, or None. Same rule as the clip
+    probe: a check that went missing must never read as a check that found nothing."""
+    try:
+        import importlib.util, os
+        here = os.path.dirname(os.path.abspath(__file__))
+        spec = importlib.util.spec_from_file_location('studio_eyes', os.path.join(here, 'studio-eyes', 'studio-eyes.py'))
+        mod = importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
+        return getattr(mod, 'ESCAPE_PROBE', None)
+    except Exception:
+        return None
+
+ESCAPE_PROBE = load_escape_probe()
+
 MAX_CLICKS = 40          # breadth-first click budget per game
 # A CONTROL THAT KEEPS ANSWERING IS WORTH PRESSING AGAIN.
 # Added 2026-09-01. The walker clicked each LABEL once, so any state behind a
@@ -211,6 +225,19 @@ def sample_clips(page, card, where):
             continue
         card["_clip_seen"].add(key)
         card["clipped_text"].append({**c, "state": where})
+    # floor 12: words that left their box (escaped, not clipped)
+    if ESCAPE_PROBE is not None:
+        try:
+            esc = page.evaluate(ESCAPE_PROBE) or []
+        except Exception:
+            esc = []
+        for c in esc:
+            key = ('escaped', c.get('sel'), c.get('text'))
+            if key in card["_clip_seen"]:
+                continue
+            card["_clip_seen"].add(key)
+            card["clipped_text"].append({**c, "escaped": True, "clipSel": c.get('frame'),
+                                         "boxH": 0, "needH": 0, "state": where})
 
 
 def play(path, world=None, touches=None):

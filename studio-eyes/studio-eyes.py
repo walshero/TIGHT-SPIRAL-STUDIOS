@@ -240,6 +240,130 @@ _CLIP_BODY = r"""
 # has a page and wants the one question floors 1-10 never asked.
 CLIP_PROBE = "() => {\n  const out = {clipped:[]};\n" + _CLIP_BODY + "\n  return out.clipped;\n}"
 
+# ---- FLOOR 12: ESCAPED TEXT. Added 2026-10-16 after the founder's phone showed
+# ELEVATOR and BASEMENT CAT walking out through the right border of their lobby
+# buttons at ~140% page zoom. Floor 11 stayed green, correctly: nothing was CLIPPED.
+# The box had overflow:visible, so the browser painted every glyph — straight across
+# the border and off the viewport. Floor 11 asks "was any text thrown away?" This
+# floor asks the other half of the question: "did any text leave its box?"
+#
+# ARITHMETIC: for every visible text node, walk up to the nearest ancestor that FRAMES
+# it — one that paints a border or a background, or is a button. If the text's painted
+# box exits that frame's padding box, or exits the viewport on the right, the text
+# escaped. Measured at the padding box, inside the borders, exactly as floor 11 does.
+#
+# WHAT IS NOT A DEFECT: a scroll window on that axis; sr-only text; parked text
+# (negative side only); a backface turned away; text-overflow other than clip; and a
+# frame that is itself a window (content more than 2x the box, see CLIP_WINDOW_RATIO).
+# Body and html are never the frame: a paragraph on bare paper has nothing to escape.
+_ESCAPE_BODY = r"""
+  const facingAway = (el, stopAt) => {
+    let p = el, m = new DOMMatrix();
+    while (p && p !== stopAt) {
+      const t = getComputedStyle(p).transform;
+      if (t && t !== 'none') { try { m = new DOMMatrix(t).multiply(m); } catch(e){} }
+      p = p.parentElement;
+    }
+    return m.m33 < 0;
+  };
+  const framed = (e) => {
+    const cs = getComputedStyle(e);
+    if (/^(button|a|summary)$/i.test(e.tagName)) return cs;
+    const bw = ['Top','Right','Bottom','Left'].some(k =>
+      parseFloat(cs['border'+k+'Width']) > 0 && !/rgba\(0, 0, 0, 0\)|transparent/.test(cs['border'+k+'Color']));
+    const bg = cs.backgroundColor && !/rgba\(0, 0, 0, 0\)|transparent/.test(cs.backgroundColor);
+    return (bw || bg) ? cs : null;
+  };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const seen = new Set();
+  let n;
+  while (n = walker.nextNode()) {
+    const t = n.textContent.trim();
+    if (!t) continue;
+    const el = n.parentElement;
+    if (!el || seen.has(el)) continue;
+    seen.add(el);
+    if (el.closest('[hidden],[aria-hidden="true"],script,style,svg')) continue;
+    // a closed disclosure is waiting, not hiding: Chromium still lays its body out
+    const det = el.closest('details');
+    if (det && !det.open && !el.closest('summary')) continue;
+    const cs = getComputedStyle(el);
+    if (cs.display === 'none' || cs.visibility === 'hidden' || parseFloat(cs.opacity) === 0) continue;
+    const r = el.getBoundingClientRect();
+    if (r.width < 1 || r.height < 1) continue;
+    if (r.bottom <= 0 || r.right <= 0) continue;
+    // a hard-edged inline run can be taller than its glyphs; measure the text itself
+    const range = document.createRange(); range.selectNodeContents(el);
+    const tr = range.getBoundingClientRect();
+    if (tr.width < 1) continue;
+    if (cs.textOverflow && cs.textOverflow !== 'clip') continue;
+    let box = el.parentElement, bcs = null;
+    while (box && box !== document.body) { bcs = framed(box); if (bcs) break; box = box.parentElement; }
+    if (!box || box === document.body) {
+      if (tr.right > innerWidth + 2) {
+        out.push({ text: t.slice(0,40), sel: el.tagName.toLowerCase(), by: Math.round(tr.right - innerWidth),
+                   frame: 'viewport', axis: 'X' });
+      }
+      continue;
+    }
+    const cr = box.getBoundingClientRect();
+    if (cr.width <= 4 || cr.height <= 4) continue;
+    if (facingAway(el, box.parentElement)) continue;
+    const bw = (v) => parseFloat(v) || 0;
+    const cRight  = cr.right  - bw(bcs.borderRightWidth);
+    const cLeft   = cr.left   + bw(bcs.borderLeftWidth);
+    const cBottom = cr.bottom - bw(bcs.borderBottomWidth);
+    const cTop    = cr.top    + bw(bcs.borderTopWidth);
+    const scrolls = (o) => o === 'auto' || o === 'scroll';
+    const overX = scrolls(bcs.overflowX) ? 0 : Math.max(tr.right - cRight, cLeft - tr.left);
+    const overY = scrolls(bcs.overflowY) ? 0 : Math.max(tr.bottom - cBottom, cTop - tr.top);
+    const over = Math.max(overX, overY);
+    if (over <= 2) continue;
+    const vertical = overY >= overX;
+    const span = vertical ? cr.height : cr.width;
+    const need = vertical ? box.scrollHeight : box.scrollWidth;
+    if (span > 0 && need / span > 2.0) continue;   // a window, not a box
+    const nm = (e) => e.tagName.toLowerCase() + (e.className && typeof e.className === 'string'
+                 ? '.' + e.className.trim().split(/\s+/).join('.') : '');
+    out.push({ text: t.slice(0,40), sel: nm(el), by: Math.round(over), frame: nm(box),
+               axis: vertical ? 'Y' : 'X' });
+  }
+"""
+ESCAPE_PROBE = "() => {\n  const out = [];\n" + _ESCAPE_BODY + "\n  return out;\n}"
+
+# The text scales a founder with retinitis pigmentosa actually reads at. 1.0 is the
+# page as authored; 1.5 and 2.0 are Safari page zoom / a large-text phone. A box
+# that holds its words at 1.0 and loses them at 1.5 fails the reader it was built for.
+TEXT_SCALES = (1.0, 1.5, 2.0)
+
+def escape_halts(page, mode_label):
+    """Floor 12 at every TEXT_SCALE. Page zoom is emulated the way Safari does it: the
+    CSS viewport narrows to 390/scale and the page REFLOWS, so a box that fits its
+    words at 1.0 has to fit them again with a third less room. Text leaving the
+    viewport is only judged at the authored scale: at a narrowed viewport a fixed-width
+    panel walking off the right edge is page overflow (Studio Fingers' question), not
+    a word leaving its box. The viewport is restored afterwards."""
+    halts = []
+    for z in TEXT_SCALES:
+        try:
+            page.set_viewport_size({'width': int(round(390 / z)), 'height': int(round(844 / z))})
+            page.wait_for_timeout(80)
+            found = page.evaluate(ESCAPE_PROBE) or []
+        except Exception:
+            found = []
+        for c in found:
+            if c['frame'] == 'viewport' and z != 1.0:
+                continue
+            halts.append(f"ESCAPED_TEXT [{mode_label} x{z}] {c['sel']} \"{c['text'][:28]}\" leaves "
+                         f"{c['frame']} by {c['by']}px on the {c['axis']} axis. "
+                         f"A word outside its box is a word the reader has to chase.")
+    try:
+        page.set_viewport_size({'width': 390, 'height': 844})
+        page.wait_for_timeout(60)
+    except Exception:
+        pass
+    return halts
+
 PROBE = r"""
 () => {
   const out = {texts:[], targets:[], stops:[], firstScreen:null, emoji:[], tokens:{}, clipped:[]};
@@ -680,6 +804,8 @@ def audit(path, no_net=True):
 
             h, d = audit_page(page, path, 'default')
             halts += h
+            # -- 4c. ESCAPED TEXT (floor 12), across the text scales a reader uses
+            halts += escape_halts(page, 'default')
 
             # -- 6. OFFLINE FLOOR
             for host in sorted(set(external)):
