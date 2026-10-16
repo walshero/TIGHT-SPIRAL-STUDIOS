@@ -16,6 +16,14 @@
      frog." Cliché Creek: thirty poems, three real, the rest clichés, near misses included. Clichés that float past count
      against you, so the player smashes all the way down; the frog's tongue brings the real ones home. Studio translations
      from public-domain Japanese originals; the results screen shows each original and its cliché twin. -->
+<!-- v5.13 2026-10-16 (founder): "After a cliche has been IDENTIFIED correctly in a game, don't reshow it. Not even in
+     another season." A cliché the player smashes (pond or creek) or bins at the sort leaves the river for the rest of the
+     game: every season of the pond, every haiku of the creek run. Play again (pond) and Start again from haiku 1 (creek)
+     bring them all back. A cliché that is caught by mistake was not identified, so it can still come round.
+     Founder 2026-10-16: "For the existing haiku game line order matters so I want to replace the haiku." The creek's run
+     of five is now the founder's five, in his order: Issa's sparrow, Moritake's fallen blossom, Masahide's storehouse,
+     Kijō's first autumn morning, Buson's summer river, his English verbatim. In the river a real line's first letter is
+     lowercased and end marks (including ?) stay off, so capitals can't give away which line opens a poem. -->
 <!-- v5.12 2026-10-13 (founder): "Cut mizu no oto." The end screen's "mizu no oto" heading is gone. The eyebrow line
      "Three poems · one splash" is now the heading and the focus landing (id finalQ), so screen readers still get a heading.
      Founder 2026-10-13: "Remove comfort control and label and focus on 3 best modes for each game including light and dark."
@@ -1298,15 +1306,18 @@ function gap(){return Math.max(125,(innerWidth<600?96:136)/scaleNow())}
 // Each season deals its phrases like a shuffled deck: nothing repeats in a game.
 // Only lines the player sends back from the poem return to the stream.
 let deck=[], deckRound=-1, returned=[];
+// v5.13 (founder 2026-10-16): a cliché identified correctly never comes back this game, not even in another season
+const GONE={main:new Set(),creek:new Set()}; const gk=p=>(p.t||'').toLowerCase(); const isGone=p=>p.k==='c'&&GONE[S.mode==='creek'?'creek':'main'].has(gk(p)); const retireCliche=p=>{if(p&&p.k==='c')GONE[S.mode==='creek'?'creek':'main'].add(gk(p))};
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function dealSeason(){deck=shuffle(SEASONS[S.round].phrases.slice());deckRound=S.round;returned=[];sinceTurn=0}
 function pick(){
   if(deckRound!==S.round) dealSeason();
   const used=new Set([...tiles.filter(t=>!t.gone).map(t=>t.p),...plist.filter(t=>!t.gone).map(t=>t.p),...S.slots.filter(Boolean),...(S.mode==='creek'?CK.basket:[])]);
+  deck=deck.filter(x=>!isGone(x)); returned=returned.filter(x=>!isGone(x));
   let p=null;
   while(returned.length&&!p){const r=returned.shift();if(!used.has(r))p=r}
   if(!p){
-    if(!deck.length){deck=shuffle((S.mode==='creek'?CK.pool:SEASONS[S.round].phrases).filter(x=>!used.has(x))); if(S.phase==='play') say(S.mode==='creek'?'Every line has floated past once. The river comes round again, and the real lines with it.':'Every phrase this season has floated past once. The stream starts its second pass.')}
+    if(!deck.length){deck=shuffle((S.mode==='creek'?CK.pool:SEASONS[S.round].phrases).filter(x=>!used.has(x)&&!isGone(x))); if(S.phase==='play') say(S.mode==='creek'?'Every line has floated past once. The river comes round again, and the real lines with it.':'Every phrase this season has floated past once. The stream starts its second pass.')}
     let i=0;
     const hot=S.mode==='creek'?'r':'t'; // v5.6: in the creek, a real line comes at least every fourth line
     if(sinceTurn>=3){const j=deck.findIndex(x=>x.k===hot&&!used.has(x));if(j>=0)i=j}
@@ -1419,7 +1430,7 @@ function onSmash(t){
   if(S.phase!=='play'||S.busy||t.gone) return;
   release(t);
   if(t.p.k==='c'){
-    shatter(t); S.smashed++;
+    shatter(t); S.smashed++; retireCliche(t.p);
     say(`Smashed. “${t.p.t}” was a cliché. Snap. Crumpled and swallowed.`);
     renderPads(); if(S.mode==='creek') creekShowBasket();
   } else {
@@ -1661,7 +1672,7 @@ $('#start').addEventListener('click',startRound);
 $('#next').addEventListener('click',startRound);
 $('#again').addEventListener('click',()=>{
   Fz.reset();
-  S.round=0; S.wins=[]; S.smashed=0; S.kept=0; deckRound=-1; scene.classList.remove('final');
+  S.round=0; S.wins=[]; S.smashed=0; S.kept=0; deckRound=-1; GONE.main.clear(); scene.classList.remove('final');
   resetFrog();
   $('#slipJp').textContent='切れ字の池'; $('#slipEn').textContent='Kireji Pond'; startRound();
 });
@@ -2880,7 +2891,8 @@ $('#fzOpen').addEventListener('click',e=>Fz.open(e.currentTarget));
    it the stale way; they are the near misses, and the results screen sets each one beside its real counterpart. */
 const CREEK_POETS={
   basho:'Matsuo Bashō (1644–1694)', buson:'Yosa Buson (1716–1784)', issa:'Kobayashi Issa (1763–1828)',
-  chiyo:'Fukuda Chiyo-ni (1703–1775)', shiki:'Masaoka Shiki (1867–1902)'};
+  chiyo:'Fukuda Chiyo-ni (1703–1775)', shiki:'Masaoka Shiki (1867–1902)',
+  moritake:'Arakida Moritake (1473–1549)', masahide:'Mizuta Masahide (1657–1723)', kijo:'Murakami Kijō (1865–1938)'};
 const CREEK_REAL=[
   {id:'furuike',by:'basho',jp:'古池や 蛙飛び込む 水の音',ro:'furu ike ya / kawazu tobikomu / mizu no oto',en:['the old pond —','a frog jumps in,','the sound of water']},
   {id:'shizukasa',by:'basho',jp:'閑さや 岩にしみ入る 蝉の声',ro:'shizukasa ya / iwa ni shimiiru / semi no koe',en:['stillness —','seeping into the rocks,','the cicada’s cry']},
@@ -2893,7 +2905,13 @@ const CREEK_REAL=[
   {id:'harunoumi',by:'buson',jp:'春の海 終日のたり のたりかな',ro:'haru no umi / hinemosu notari / notari kana',en:['the spring sea','all day long, rising and falling,','rising and falling']},
   {id:'samidare',by:'buson',jp:'五月雨や 大河を前に 家二軒',ro:'samidare ya / taiga o mae ni / ie niken',en:['early summer rain —','facing the swollen river,','two houses']},
   {id:'yasegaeru',by:'issa',creek:false,jp:'痩蛙 まけるな一茶 是に有',ro:'yasegaeru / makeru na Issa / kore ni ari',en:['skinny frog,','don’t give up!','Issa is right here']},
-  {id:'suzume',by:'issa',jp:'雀の子 そこのけそこのけ お馬が通る',ro:'suzume no ko / soko noke soko noke / ouma ga tōru',en:['little sparrow,','out of the way, out of the way!','a horse is coming through']},
+  {id:'suzume',by:'issa',jp:'雀の子 そこのけそこのけ お馬が通る',ro:'suzume no ko / soko noke soko noke / ouma ga tōru',en:['Little sparrow—','out of the way, out of the way!','A horse is coming through.']}, // v5.13: founder's English, verbatim
+  /* v5.13 (founder 2026-10-16): four more, English as the founder gave it. Japanese for Moritake, Masahide, Buson is the
+     standard text; Kijō's original is NOT yet verified (jp/ro left blank, the results screen skips them). */
+  {id:'rakka',by:'moritake',jp:'落花枝に 帰ると見れば 胡蝶かな',ro:'rakka eda ni / kaeru to mireba / kochō kana',en:['A fallen blossom','returning to its branch?','No—a butterfly!']},
+  {id:'kura',by:'masahide',jp:'蔵焼けて 障る物なき 月見哉',ro:'kura yakete / sawaru mono naki / tsukimi kana',en:['My storehouse burned down—','nothing now obstructs','my view of the moon.']},
+  {id:'hatsuaki',by:'kijo',jp:'',ro:'',en:['First autumn morning—','looking into the mirror,','I see my father\'s face.']},
+  {id:'natsukawa',by:'buson',jp:'夏河を 越すうれしさよ 手に草履',ro:'natsukawa o / kosu ureshisa yo / te ni zōri',en:['Crossing a summer river—','what happiness!','My sandals in my hands.']},
   {id:'tsuyu',by:'issa',jp:'露の世は 露の世ながら さりながら',ro:'tsuyu no yo wa / tsuyu no yo nagara / sari nagara',en:['this world of dew','is a world of dew,','and yet, and yet']},
   {id:'asagao',by:'chiyo',jp:'朝顔に 釣瓶とられて もらひ水',ro:'asagao ni / tsurube torarete / morai mizu',en:['the morning glory','has taken my well bucket —','I’ll borrow water']},
   {id:'kaki',by:'shiki',jp:'柿食へば 鐘が鳴るなり 法隆寺',ro:'kaki kueba / kane ga naru nari / Hōryūji',en:['I bite a persimmon,','and a bell rings out','at Hōryū-ji']}
@@ -2941,7 +2959,12 @@ const CREEK_CLICHE=[ /* v5.8: every LINE is a cliché on its own, not just every
   {en:['the long journey of life','has its ups and downs and turns','follow your dreams'],pair:'tabi'},
   {en:['thunder roars with rage','the angry sky cries its tears','a rainbow of hope']},
   {en:['amber waves of grain','swaying in the gentle breeze','so peaceful']},
-  {en:['time is like a stream','it flows and never looks back','live for today']}
+  {en:['time is like a stream','it flows and never looks back','live for today']},
+  /* v5.13: near-miss twins for the founder's new four, every line stock on its own */
+  {en:['petals fall like tears','beauty fades away too soon','nothing lasts forever'],pair:'rakka'},
+  {en:['when one door closes','another one will open','every cloud has a silver lining'],pair:'kura'},
+  {en:['where did the time go','time waits for no man','like father, like son'],pair:'hatsuaki'},
+  {en:['the lazy days of summer','carefree as a child again','happy as can be'],pair:'natsukawa'}
 ];
 /* ---------- v5.6 Cliché Creek: line by line, then the sort ----------
    The river is the pond's own stream (same engine, same Catch / Smash / Let it go, same Still water list). It carries
@@ -2956,18 +2979,20 @@ const CKN=1, CKL=3*CKN; // v5.9 (founder 2026-10-05: "3 haikus is crazy hard. Ju
    tabi ("my dreams go running"); kareeda and konomichi ("autumn evening" alone is generic); nanohana ("the moon in the
    east" sits too near the moon clichés); harunoumi (strong, held back so the run stays five); natsukusa, yasegaeru
    (pulled at v5.8). Order runs from the game's own frog to the widest sky. */
-const CREEK_SEQ=['furuike','kaki','samidare','suzume','araumi'];
+/* v5.13 (founder 2026-10-16): the run is now the founder's five, in his order. The v5.10 set above stays in CREEK_REAL. */
+const CREEK_SEQ=['suzume','rakka','kura','hatsuaki','natsukawa'];
 const CK={idx:0,score:[],on:false,basket:[],run:[],pool:[],saved:null,back:'start',sel:null,slots:[],bin:[],tray:[]};
-const ckBare=t=>t.replace(/\s*[—,!.;:]+\s*$/,''); // line-end punctuation stays out of the river, back on the results
+const ckBare=t=>t.replace(/\s*[—,!.;:?]+\s*$/,'');
+const ckRiver=t=>{const b=ckBare(t); return /^I\b/.test(b)?b:b.charAt(0).toLowerCase()+b.slice(1)}; // v5.13: no capital tells in the river // line-end punctuation stays out of the river, back on the results
 function creekPlan(){
   const real=[CREEK_REAL.find(r=>r.id===CREEK_SEQ[CK.idx])]; // v5.10: the fixed run of five, one at a time
   const realTexts=new Set(CREEK_REAL.flatMap(r=>r.en.map(l=>ckBare(l).toLowerCase())));
   const pairs=CREEK_CLICHE.filter(c=>real.some(r=>r.id===c.pair));
   const others=shuffle(CREEK_CLICHE.filter(c=>!pairs.includes(c)));
   const lines=[];
-  pairs.concat(others).forEach(c=>c.en.forEach(l=>{if(!realTexts.has(l.toLowerCase())&&!lines.some(x=>x.t===l))lines.push(l)}));
+  pairs.concat(others).forEach(c=>c.en.forEach(l=>{if(!realTexts.has(l.toLowerCase())&&!lines.some(x=>x===l)&&!GONE.creek.has(l.toLowerCase()))lines.push(l)})); // v5.13: identified clichés stay out
   const decoys=lines.slice(0,9*CKN).map(l=>({t:l,s:0,k:'c'}));
-  const reals=real.flatMap(r=>r.en.map((l,li)=>({t:ckBare(l),full:l,s:0,k:'r',hid:r.id,li})));
+  const reals=real.flatMap(r=>r.en.map((l,li)=>({t:ckRiver(l),full:l,s:0,k:'r',hid:r.id,li})));
   CK.run=real; CK.pool=reals.concat(decoys);
 }
 function creekShowBasket(){
@@ -3089,6 +3114,7 @@ function sortCheck(){
   for(let f=0;f<CKN;f++) CK.run.forEach(r=>{const n=[0,1,2].filter(l=>{const p=CK.slots[f*3+l];return p&&p.hid===r.id}).length;if(n)counts.push({f,id:r.id,n})});
   counts.sort((a,b)=>b.n-a.n); const own={}, taken=new Set();
   counts.forEach(c=>{if(own[c.f]===undefined&&!taken.has(c.id)){own[c.f]=c.id;taken.add(c.id)}});
+  CK.bin.forEach(retireCliche); // v5.13: a binned cliché is identified
   let exact=0, realCaught=CK.basket.filter(p=>p.k==='r').length, clCaught=CK.basket.length-realCaught, clBinned=CK.bin.filter(p=>p.k==='c').length;
   const box=$('#sResult'); box.innerHTML='';
   for(let f=0;f<CKN;f++){
@@ -3124,12 +3150,12 @@ function sortCheck(){
     const ro=document.createElement('p'); ro.className='cro'; ro.lang='ja-Latn'; ro.textContent=r.ro;
     const got=CK.basket.filter(p=>p.hid===r.id).length;
     const n=document.createElement('p'); n.className='note'; n.textContent=got===3?'You caught all three of its lines.':`You caught ${got} of its 3 lines.`;
-    w.append(b,jp,ro,n);
+    w.append(b); if(r.jp) w.append(jp); if(r.ro) w.append(ro); w.append(n); // v5.13: blank until verified
     const pc=CREEK_CLICHE.find(c=>c.pair===r.id);
     if(pc){const pp=document.createElement('p');pp.className='note cpair';const bb=document.createElement('b');bb.textContent='The cliché on the same subject: ';pp.append(bb,document.createTextNode(pc.en.join(' / ')));w.appendChild(pp)}
     real.appendChild(w);
   });
-  const cr=document.createElement('p'); cr.className='note'; cr.textContent='English versions by Tight Spiral Studios, translated from the Japanese originals.'; real.appendChild(cr);
+  const cr=document.createElement('p'); cr.className='note'; cr.textContent='English versions as chosen by the studio founder.'; real.appendChild(cr);
   if(exact===CKL){try{Snd.bell(true)}catch(e){}}
   CK.score[CK.idx]=clean&&exact===CKL; // v5.10: rebuilt whole and clean
   const last=CK.idx===CREEK_SEQ.length-1, done=CK.score.filter(Boolean).length;
@@ -3141,7 +3167,7 @@ $('#creek0').addEventListener('click',()=>startCreek('start'));
 $('#creekF').addEventListener('click',()=>startCreek('final'));
 $('#cBack').addEventListener('click',creekLeave);
 $('#sBack').addEventListener('click',creekLeave);
-$('#sAgain').addEventListener('click',()=>{CK.idx=(CK.idx+1)%CREEK_SEQ.length; if(!CK.idx) CK.score=[]; startCreek()}); // v5.10: on through the five
+$('#sAgain').addEventListener('click',()=>{CK.idx=(CK.idx+1)%CREEK_SEQ.length; if(!CK.idx){CK.score=[];GONE.creek.clear()} startCreek()}); // v5.10: on through the five
 $('#sRetry').addEventListener('click',()=>{S.phase='sort';CK.tray=shuffle(CK.basket.slice());CK.slots=Array(CKL).fill(null);CK.bin=[];CK.sel=null;show('pSort');renderSort();landOn($('#sTray'),$('#sortQ'))});
 $('#cPause').addEventListener('click',()=>{setPaused(!S.paused);$('#cPause').textContent=S.paused?'Resume river':'Pause river';$('#cPause').setAttribute('aria-pressed',S.paused)});
 $('#cStill').addEventListener('click',()=>{const v=!S.still; if(v) moveBank(true); setStill(v); $('#cStill').setAttribute('aria-pressed',v); $('#cStillBox').hidden=!v; $('#cPause').hidden=v});
