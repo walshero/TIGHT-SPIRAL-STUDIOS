@@ -36,3 +36,4 @@ look. The founder authorized the write lane; the write lane does not get a secon
 If a future session finds this pointer inconvenient and replaces it with rows, it will have
 reproduced the 2026-08-05 defect deliberately, and the rows written here will be invisible
 to every gate that routes to root. The inconvenience is the feature.
+| 2026-10-16T20:42Z | row-k-dress-rehearsal.html | contrast | SHIP | v48 pawn shop; md5 fbb6ed5d 174310 B; commit 4daac34; worst pair 7.49; readback byte-identical |  |  |
