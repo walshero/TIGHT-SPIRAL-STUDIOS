@@ -31,6 +31,8 @@ on games that legitimately end fast).
 Usage:  python3 playthrough-agent.py <file.html> [file2.html ...]
         python3 playthrough-agent.py --dir .        (every root .html)
         python3 playthrough-agent.py --selftest
+        flags:  --seed N (default 1)  --no-seed  --routes-only (skip the walk)
+        routes: tsp-routes.json, keyed by file name (see ROUTES below)
 """
 import sys, os, glob, re
 
@@ -240,13 +242,135 @@ def sample_clips(page, card, where):
                                          "boxH": 0, "needH": 0, "state": where})
 
 
-def play(path, world=None, touches=None):
+# ── THE SAME GAME TWICE. Added 2026-10-17 (Playtest Table 2 review). Kireji Pond calls
+# Math.random 21 times; a crawler that sees a different stream of phrases on every run
+# cannot say whether a finding is new, fixed, or the dice. Every page this agent opens
+# now gets a seeded Math.random (mulberry32) before any of its own script runs, so a
+# REPEAT is a repeat. --seed N picks the stream; --no-seed restores the old dice.
+# The seed is printed on every card: a verdict that depended on it must say so.
+SEED = 1
+
+
+def seed_js(seed):
+    return ("(()=>{let s=%d>>>0;Math.random=function(){s=(s+0x6D2B79F5)>>>0;let t=s;"
+            "t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);"
+            "return((t^(t>>>14))>>>0)/4294967296;};})();" % int(seed))
+
+
+def seed_context(ctx):
+    if SEED is not None:
+        ctx.add_init_script(seed_js(SEED))
+
+
+# ── ROUTES: THE ENDINGS. Added 2026-10-17.
+# The breadth-first walk above presses what it can see; TSP games are deep and narrow,
+# so it reliably stops two to four screens in (measured 2026-10-17: Asking Room never
+# left its opening screen, Kireji never reached a poem). A route is a short scripted
+# play to ONE named ending, kept in tsp-routes.json, keyed by file name.
+#
+# THIS IS NOT THE RECIPE studio-fingers rejected. That failure was a recipe that
+# REPLACED the generic check and left uncovered builds looking covered. Routes are
+# additive: the generic walk still runs on every build, and a build with no route
+# prints NO ROUTE on its card — never silent, never green by omission.
+#
+# Each route runs in its OWN fresh browser context (no localStorage carried between
+# routes or from the walk), seeded, offline, reduced motion (the games' own instant
+# path — routes test that the ending is reachable, not the animation).
+#
+# Step grammar, one string per step:
+#   "text=Begin"        click the visible element whose text contains Begin
+#   "#readB", ".x:visible"  click the first match of a CSS selector
+#   "see=some words"    wait (up to SEE_MS) until the page text contains them
+#   "wait=1500"         wait a fixed number of ms
+#   "press=.act-btn*15" press a CSS selector up to 15 times (meters, repeated verbs)
+# The route's "ending" is a final see= that must succeed for the route to count.
+ROUTES = 'tsp-routes.json'
+SEE_MS = 30000
+STEP_MS = 4000
+
+
+def load_routes(path):
+    """Routes for this build, or None when the routes file has no entry. NEVER
+    silent: None prints NO ROUTE on the card."""
+    import json
+    fp = os.path.join(os.path.dirname(os.path.abspath(__file__)), ROUTES)
+    if not os.path.exists(fp):
+        return None
+    try:
+        reg = json.load(open(fp, encoding='utf-8'))
+    except Exception as e:
+        return [{"name": "routes file unreadable", "steps": [], "ending": None,
+                 "_error": str(e)[:80]}]
+    return reg.get(os.path.basename(path))
+
+
+def run_route(browser, path, route):
+    out = {"name": route.get("name", "?"), "reached": False, "steps_done": 0,
+           "steps_total": len(route.get("steps", [])), "stopped_at": None,
+           "js_errors": [], "clipped_text": []}
+    if route.get("_error"):
+        out["stopped_at"] = "routes file: " + route["_error"]
+        return out
+    ctx = browser.new_context(viewport=VIEWPORT, reduced_motion='reduce')
+    seed_context(ctx)
+    ctx.route(re.compile(r'^https?://'), lambda r: r.abort())
+    page = ctx.new_page()
+    page.on('pageerror', lambda e: out["js_errors"].append(str(e)[:120]))
+    clipcard = {"clipped_text": [], "_clip_seen": set()}
+    try:
+        page.goto('file://' + os.path.abspath(path), wait_until='load')
+        page.wait_for_timeout(SETTLE_MS)
+        steps = list(route.get("steps", []))
+        if route.get("ending"):
+            steps.append("see=" + route["ending"])
+        out["steps_total"] = len(steps)
+        for i, st in enumerate(steps):
+            try:
+                if st.startswith('wait='):
+                    page.wait_for_timeout(int(st[5:]))
+                elif st.startswith('press='):
+                    # a repeated action (a meter, a Boost): press up to N times,
+                    # stopping early if the control goes away
+                    sel, _, n = st[6:].rpartition('*')
+                    for _k in range(int(n)):
+                        loc = page.locator(sel + ' >> visible=true').first
+                        if loc.count() == 0:
+                            break
+                        loc.click(timeout=STEP_MS)
+                        page.wait_for_timeout(SETTLE_MS)
+                elif st.startswith('see='):
+                    want = st[4:]
+                    page.wait_for_function(
+                        "w => document.body && document.body.innerText.includes(w)",
+                        arg=want, timeout=SEE_MS)
+                    sample_clips(page, clipcard, f"route '{out['name']}' at see '{want[:24]}'")
+                else:
+                    if st.startswith('text='):
+                        loc = page.locator('text=' + st[5:] + ' >> visible=true').first
+                    else:
+                        loc = page.locator(st + ' >> visible=true').first
+                    loc.click(timeout=STEP_MS)
+                    page.wait_for_timeout(SETTLE_MS)
+            except Exception as e:
+                out["stopped_at"] = f"step {i + 1} '{st[:40]}': {str(e).splitlines()[0][:90]}"
+                break
+            out["steps_done"] = i + 1
+        else:
+            out["reached"] = True
+    finally:
+        ctx.close()
+    out["clipped_text"] = clipcard["clipped_text"]
+    return out
+
+
+def play(path, world=None, touches=None, walk=True):
     from playwright.sync_api import sync_playwright
     card = {"file": os.path.basename(path), "clicks": 0,
             "dead_buttons": [], "js_errors": [], "notes": [],
             "opening_wall": False, "reached_end": False, "dead_end": False,
             "inert_touches": [], "world": None, "touches": None,
-            "clipped_text": [], "_clip_seen": set(), "clip_blind": CLIP_PROBE is None}
+            "clipped_text": [], "_clip_seen": set(), "clip_blind": CLIP_PROBE is None,
+            "seed": SEED, "walked": walk, "routes": None}
     with sync_playwright() as p:
         # A GATE THAT GOES BLIND MUST NOT READ AS CLEAN. Playwright resolves its browser
         # by a build number pinned to the installed python package; when the package and
@@ -262,6 +386,7 @@ def play(path, world=None, touches=None):
         except Exception:
             b = p.chromium.launch(executable_path="/opt/pw-browsers/chromium")
         ctx = b.new_context(viewport=VIEWPORT)
+        seed_context(ctx)
         # offline floor: block every external request, same as Studio Eyes
         ext = []
         def on_req(r):
@@ -322,7 +447,7 @@ def play(path, world=None, touches=None):
         responsive = set()       # labels whose last press moved the page
         repeats = {}             # label -> presses spent in the persistence pass
         blocked = set()          # labels that were visible but refused the click
-        while card["clicks"] < MAX_CLICKS:
+        while walk and card["clicks"] < MAX_CLICKS:
             ctrls = live_controls(page)
             if not ctrls:
                 # zero live controls — dead end unless the text says it ended
@@ -471,6 +596,9 @@ def play(path, world=None, touches=None):
             if END_WORDS.search(after):
                 card["reached_end"] = True
 
+        routes = load_routes(path)
+        if routes is not None:
+            card["routes"] = [run_route(b, path, r) for r in routes]
         if ext:
             card["notes"].append(f"OFFLINE FLOOR: {len(ext)} external request(s) "
                                  f"e.g. {ext[0][:60]}")
@@ -488,10 +616,32 @@ def render(card):
     verdict = "CLEAN" if (not card["dead_buttons"] and not card["js_errors"]
                           and not card["opening_wall"] and not card["dead_end"]
                           and not card["inert_touches"]
+                          and not [r for r in (card.get("routes") or [])
+                                   if not r["reached"] or r["js_errors"]
+                                   or [c for c in r["clipped_text"] if not c.get("window")]]
                           and not [c for c in card["clipped_text"]
                                    if not c.get("window")]) else "NOTES"
     L.append(f"│  verdict: {verdict}   clicks: {card['clicks']}   "
-             f"end-reached: {'yes' if card['reached_end'] else 'no'}")
+             f"end-reached: {'yes' if card['reached_end'] else 'no'}   "
+             f"seed: {card.get('seed') if card.get('seed') is not None else 'off (dice)'}")
+    if not card.get("walked", True):
+        L.append("│  ! WALK SKIPPED (--routes-only) — dead buttons, inert touches and dead "
+                 "ends were NOT checked on this run")
+    routes = card.get("routes")
+    if routes is None:
+        L.append(f"│  · NO ROUTE — no entry in {ROUTES}; endings not checked for this build")
+    else:
+        got = sum(1 for r in routes if r["reached"])
+        L.append(f"│  routes: {got} of {len(routes)} reached their ending")
+        for r in routes:
+            mark = "✓" if r["reached"] else "✗"
+            L.append(f"│    {mark} {r['name']}" + ("" if r["reached"] else
+                     f" — STOPPED at {r['stopped_at']}"))
+            if r["js_errors"]:
+                uniq = list(dict.fromkeys(r["js_errors"]))[:3]
+                L.append(f"│      JS ERRORS ({len(r['js_errors'])}): " + " | ".join(uniq))
+            for c in [c for c in r["clipped_text"] if not c.get("window")][:3]:
+                L.append(f"│      CLIPPED \"{c['text'][:30]}\" by {c['by']}px in {c['clipSel']}")
     if card.get("clip_blind"):
         L.append("│  ! CLIP FLOOR NOT RUN — studio-eyes/studio-eyes.py did not yield "
                  "CLIP_PROBE. This card says nothing about clipped text; it did not look.")
@@ -623,9 +773,49 @@ def self_test():
           f"{[(x['state'], x['by'], 'window' if x.get('window') else 'box') for x in c3['clipped_text']]} "
           "(expected 0 at first paint, >=1 after the click — proving the crawler "
           "measures states, not just the door)")
+    # SIXTH: THE SAME GAME TWICE. A page that prints Math.random must print the same
+    # number on two seeded runs, or REPEAT/NEW/FIXED means nothing.
+    from playwright.sync_api import sync_playwright
+    dice = ('<!doctype html><body><h1 id=d></h1><button onclick="document.getElementById'
+            '(\'d\').textContent=String(Math.random())">roll</button></body>')
+    fp = os.path.join(tempfile.gettempdir(), "dice-canary.html")
+    open(fp, 'w').write(dice)
+    rolls = []
+    with sync_playwright() as pw:
+        try:
+            br = pw.chromium.launch()
+        except Exception:
+            br = pw.chromium.launch(executable_path="/opt/pw-browsers/chromium")
+        for _ in range(2):
+            ctx = br.new_context(); seed_context(ctx); pg = ctx.new_page()
+            pg.goto('file://' + fp); pg.click('button'); rolls.append(pg.inner_text('#d'))
+            ctx.close()
+        v4 = "PASS" if (SEED is not None and rolls[0] == rolls[1]) else "FAIL"
+        if v4 == "FAIL": ok = False
+        print(f"  [{v4}] dice-canary: two seeded runs rolled {rolls} (expected identical)")
+        # SEVENTH: A ROUTE MUST EARN ITS TICK. One that reaches its ending passes; one
+        # whose ending never appears is STOPPED, never green.
+        game = ('<!doctype html><body><p id=t>the door</p><button id=a onclick="'
+                'document.getElementById(\'t\').textContent=\'the lantern appears\'">open</button>'
+                '</body>')
+        fp = os.path.join(tempfile.gettempdir(), "route-canary.html")
+        open(fp, 'w').write(game)
+        global SEE_MS
+        keep, SEE_MS = SEE_MS, 1500
+        good = run_route(br, fp, {"name": "good", "steps": ["text=open"],
+                                  "ending": "the lantern appears"})
+        bad = run_route(br, fp, {"name": "bad", "steps": ["text=open"],
+                                 "ending": "the river rises"})
+        SEE_MS = keep
+        br.close()
+    v5 = "PASS" if (good["reached"] and not bad["reached"] and bad["stopped_at"]) else "FAIL"
+    if v5 == "FAIL": ok = False
+    print(f"  [{v5}] route-canary: good reached={good['reached']}, bad reached={bad['reached']} "
+          f"stopped_at={str(bad['stopped_at'])[:40]!r} (expected True / False with a reason)")
     print("SELFTEST", "PASS — dead button caught, clean game cleared, inert touch caught, "
           "no-world behaviour unchanged, clipped text caught in a state no "
-          "first-paint floor can reach" if ok else "FAIL — do not trust results")
+          "first-paint floor can reach, seeded runs repeat, a route must reach its "
+          "ending to pass" if ok else "FAIL — do not trust results")
     return 0 if ok else 1
 
 
@@ -641,6 +831,15 @@ def main():
         i = args.index('--touches')
         touches = args[i + 1] if len(args) > i + 1 else None
         del args[i:i + 2]
+    global SEED
+    if '--seed' in args:
+        i = args.index('--seed')
+        SEED = int(args[i + 1]); del args[i:i + 2]
+    if '--no-seed' in args:
+        SEED = None; args.remove('--no-seed')
+    walk = True
+    if '--routes-only' in args:
+        walk = False; args.remove('--routes-only')
     if not args or args[0] == '--selftest':
         return self_test()
     if args[0] == '--dir':
@@ -650,7 +849,7 @@ def main():
     print(f"PLAYTHROUGH AGENT — {len(files)} game(s)\n")
     for path in files:
         try:
-            print(render(play(path, world, touches)))
+            print(render(play(path, world, touches, walk)))
         except Exception as e:
             print(f"┌─ {os.path.basename(path)}\n│  AGENT ERROR: {str(e)[:100]}\n└" + "─"*40)
         print()
