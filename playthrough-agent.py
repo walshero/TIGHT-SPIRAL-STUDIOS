@@ -283,6 +283,7 @@ def seed_context(ctx):
 #   "see=some words"    wait (up to SEE_MS) until the page text contains them
 #   "wait=1500"         wait a fixed number of ms
 #   "press=.act-btn*15" press a CSS selector up to 15 times (meters, repeated verbs)
+#   "scroll=#feed*30"   scroll an element down 300px, 30 times (endless feeds)
 # The route's "ending" is a final see= that must succeed for the route to count.
 ROUTES = 'tsp-routes.json'
 SEE_MS = 30000
@@ -338,6 +339,13 @@ def run_route(browser, path, route):
                             break
                         loc.click(timeout=STEP_MS)
                         page.wait_for_timeout(SETTLE_MS)
+                elif st.startswith('scroll='):
+                    # a scroll verb (an endless feed): scroll the element down N times
+                    sel, _, n = st[7:].rpartition('*')
+                    for _k in range(int(n)):
+                        page.eval_on_selector(sel, 'e => { e.scrollTop += 300; e.dispatchEvent(new Event("scroll")); }')
+                        page.wait_for_timeout(120)
+                    page.wait_for_timeout(SETTLE_MS)
                 elif st.startswith('see='):
                     want = st[4:]
                     page.wait_for_function(
