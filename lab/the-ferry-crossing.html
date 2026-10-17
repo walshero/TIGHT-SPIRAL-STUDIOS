@@ -231,6 +231,9 @@ th,td{text-align:left;padding:10px 8px;border-bottom:2px solid var(--line);verti
 #scene[data-stage="6"][data-out="silence"] #boatMove{transform:translate(-40px,10px) scaleX(-1);transition:transform 1.6s ease}
 
 @media (prefers-reduced-motion:reduce){#scene *{transition:none!important;animation:none!important}.panel{animation:none}}
+
+.tsp-dark{ display:inline-flex; align-items:center; justify-content:center; min-width:var(--tap,44px); min-height:var(--tap,44px); padding:8px; cursor:pointer; }
+.tsp-dark svg{ width:24px; height:24px; display:block; }
 </style>
 
 <div class="backdrop" aria-hidden="true"></div>
@@ -240,22 +243,11 @@ th,td{text-align:left;padding:10px 8px;border-bottom:2px solid var(--line);verti
     <button class="btn" id="homeBtn" type="button">Home</button>
     <span class="spacer"></span>
     <span class="brand">The Ferry Crossing</span>
-    <button class="btn" id="comfortBtn" type="button" aria-expanded="false" aria-controls="comfort">Comfort</button>
-    <div class="comfort" id="comfort" hidden>
-      <h3 id="brightLabel">Brightness</h3>
-      <div class="seg" role="group" aria-labelledby="brightLabel">
-        <button class="btn" type="button" data-stop="1">Soft</button>
-        <button class="btn" type="button" data-stop="2">Bright</button>
-        <button class="btn" type="button" data-stop="3">Brightest</button>
-      </div>
-      <h3 id="sizeLabel">Text size</h3>
-      <div class="seg" role="group" aria-labelledby="sizeLabel">
-        <button class="btn" type="button" data-size="1">Large</button>
-        <button class="btn" type="button" data-size="2">Larger</button>
-        <button class="btn" type="button" data-size="3">Largest</button>
-      </div>
-      <button class="btn" type="button" id="comfortClose">Done</button>
-    </div>
+    <button class="btn tsp-dark" id="tspDark" type="button" aria-label="Dark mode" aria-pressed="false" data-attr="data-theme" data-dark="dark" data-lightval="light" data-reset="data-stop=1;data-size=1"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path d="M12 3 A9 9 0 0 1 12 21 Z" fill="currentColor"/>
+  </svg></button><span id="comfortBtn" hidden></span>
+    <div id="comfort" hidden><!-- retired Comfort panel (2026-10-17): placeholders only --><span id="brightLabel"></span><span id="sizeLabel"></span><span id="comfortClose"></span></div>
   </header>
 
   <main class="stage">
@@ -693,5 +685,27 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!cPanel.hid
 function start(d){if(d&&d.S){S=d.S;snaps=d.snaps||[];i=d.i;phase=d.phase;endPhase=d.endPhase||"ask";guess=d.guess||0}render(true)}
 if(window.claude&&window.claude.hot&&window.claude.hot.snapshot)window.claude.hot.snapshot(function(){return{S:S,snaps:snaps,i:i,phase:phase,endPhase:endPhase,guess:guess}});
 if(window.claude&&window.claude.hot&&window.claude.hot.ready)window.claude.hot.ready(start);else start(window.claude&&window.claude.hot&&window.claude.hot.data||{});
+})();
+</script>
+<script>
+/* TSP DARK TOGGLE v1 (founder 2026-10-17, option A) */
+(function(){
+  var root=document.documentElement, btn=document.getElementById('tspDark');
+  if(!btn) return;
+  var A=btn.getAttribute('data-attr')||'data-light', D=btn.getAttribute('data-dark')||'night',
+      L=btn.getAttribute('data-lightval')||'day', canSave=!btn.hasAttribute('data-nosave');
+  (btn.getAttribute('data-clear')||'').split(' ').forEach(function(c){ if(c) root.classList.remove(c); });
+  (btn.getAttribute('data-reset')||'').split(';').forEach(function(p){
+    var i=p.indexOf('='); if(i>0) root.setAttribute(p.slice(0,i), p.slice(i+1)); });
+  function isDark(){ return root.getAttribute(A)===D; }
+  function set(dark, save){
+    root.setAttribute(A, dark ? D : L);
+    btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+    if(save && canSave){ try { localStorage.setItem('tsp-dark', dark ? '1' : '0'); } catch(e){} }
+  }
+  var saved=null; try { saved=localStorage.getItem('tsp-dark'); } catch(e){}
+  var osDark=false; try { osDark=window.matchMedia('(prefers-color-scheme: dark)').matches; } catch(e){}
+  set(saved!==null ? saved==='1' : (isDark() || osDark), false);
+  btn.addEventListener('click', function(){ set(!isDark(), true); });
 })();
 </script>

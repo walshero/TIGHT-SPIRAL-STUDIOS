@@ -437,6 +437,9 @@ html.c-reader .cr-note{
   display:block; border:2px solid #000; padding:12px 14px; margin:0 0 20px;
   font-size:1.1875rem; background:#ffffff; color:#000000;
 }
+
+.tsp-dark{ display:inline-flex; align-items:center; justify-content:center; min-width:var(--tap,44px); min-height:var(--tap,44px); padding:8px; cursor:pointer; }
+.tsp-dark svg{ width:24px; height:24px; display:block; }
 </style>
 </head>
 <body>
@@ -446,7 +449,10 @@ html.c-reader .cr-note{
   <span class="coins" id="coinCount" aria-label="Coins: 0"><svg class="barcoin" aria-hidden="true" viewBox="0 0 40 40"><ellipse cx="20" cy="23" rx="15" ry="8" fill="var(--gold)" stroke="var(--edge)" stroke-width="3"/><ellipse cx="20" cy="18" rx="15" ry="8" fill="#ffe1a3" stroke="var(--edge)" stroke-width="3"/></svg><span id="coinNum">0</span></span>
   <span class="coins tokens" id="tokenCount" hidden aria-label="Tokens: 0"><svg class="barcoin" aria-hidden="true" viewBox="0 0 40 40"><ellipse cx="20" cy="23" rx="13" ry="7" fill="var(--kraft)" stroke="var(--edge)" stroke-width="3"/><ellipse cx="20" cy="18" rx="13" ry="7" fill="#d9c49a" stroke="var(--edge)" stroke-width="3"/></svg><span id="tokenNum">0</span></span>
   <button id="homeBtn" type="button" aria-label="Home. Back to the arcade floor.">Home</button>
-  <button id="comfortTop" type="button" aria-expanded="false" aria-controls="panel">Comfort</button>
+  <button class="tsp-dark" id="tspDark" type="button" aria-label="Dark mode" aria-pressed="false" data-attr="data-light" data-dark="night" data-lightval="day" data-clear="c-a1 c-a2 c-contrast c-cues c-reader"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path d="M12 3 A9 9 0 0 1 12 21 Z" fill="currentColor"/>
+  </svg></button><span id="comfortTop" hidden></span>
 </div>
 
 <main id="main">
@@ -755,45 +761,7 @@ html.c-reader .cr-note{
 
 </main>
 
-<div class="panel" id="panel" role="dialog" aria-modal="false" aria-label="Comfort">
-  <div class="grp">
-    <h2 id="l-light">Light</h2>
-    <div class="row" role="group" aria-labelledby="l-light">
-      <button class="btn" type="button" data-light-set="day">Day</button>
-      <button class="btn" type="button" data-light-set="night">Warm dark</button>
-    </div>
-  </div>
-
-  <div class="grp">
-    <h2>Screen reader</h2>
-    <button class="tog" type="button" data-tog="c-reader">Clear Reader <span class="st">Off</span></button>
-    <details class="why"><summary>What this does</summary>
-      <p class="note">Removes the design and leaves the document, which is close to what a
-        screen reader is handed. A way to check whether a page still makes sense without
-        its layout.</p></details>
-  </div>
-
-  <div class="grp">
-    <h2 id="l-size">Font size</h2>
-    <div class="row" role="group" aria-labelledby="l-size">
-      <button class="btn" type="button" data-size="0">Normal</button>
-      <button class="btn" type="button" data-size="1">Larger</button>
-      <button class="btn" type="button" data-size="2">Largest</button>
-    </div>
-    <details class="why"><summary>How sizes work</summary>
-      <p class="note">Sizes multiply your browser's own text setting rather than replacing
-        it.</p></details>
-  </div>
-
-  <div class="grp">
-    <h2>Reading</h2>
-    <button class="tog" type="button" data-tog="c-contrast">High contrast <span class="st">Off</span></button>
-    <button class="tog" type="button" data-tog="c-still">Motion stop <span class="st">Off</span></button>
-    <button class="tog" type="button" data-tog="c-cues">Underline links <span class="st">Off</span></button>
-  </div>
-
-  <span class="sr" id="say" role="status" aria-live="polite"></span>
-</div>
+<div id="panel" hidden><!-- retired Comfort panel (2026-10-17): placeholders only --><span id="l-light"></span><span id="l-size"></span><span id="say"></span></div>
 
 <footer class="studiofoot" hidden>
   <p><strong>◎ Tight Spiral Studios</strong> · Play. Notice. Design. · walshero@gmail.com</p>
@@ -1664,6 +1632,28 @@ document.getElementById('vmForm').addEventListener('submit', function(ev){
   });
 
   paintState();
+})();
+</script>
+<script>
+/* TSP DARK TOGGLE v1 (founder 2026-10-17, option A) */
+(function(){
+  var root=document.documentElement, btn=document.getElementById('tspDark');
+  if(!btn) return;
+  var A=btn.getAttribute('data-attr')||'data-light', D=btn.getAttribute('data-dark')||'night',
+      L=btn.getAttribute('data-lightval')||'day', canSave=!btn.hasAttribute('data-nosave');
+  (btn.getAttribute('data-clear')||'').split(' ').forEach(function(c){ if(c) root.classList.remove(c); });
+  (btn.getAttribute('data-reset')||'').split(';').forEach(function(p){
+    var i=p.indexOf('='); if(i>0) root.setAttribute(p.slice(0,i), p.slice(i+1)); });
+  function isDark(){ return root.getAttribute(A)===D; }
+  function set(dark, save){
+    root.setAttribute(A, dark ? D : L);
+    btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+    if(save && canSave){ try { localStorage.setItem('tsp-dark', dark ? '1' : '0'); } catch(e){} }
+  }
+  var saved=null; try { saved=localStorage.getItem('tsp-dark'); } catch(e){}
+  var osDark=false; try { osDark=window.matchMedia('(prefers-color-scheme: dark)').matches; } catch(e){}
+  set(saved!==null ? saved==='1' : (isDark() || osDark), false);
+  btn.addEventListener('click', function(){ set(!isDark(), true); });
 })();
 </script>
 </body>

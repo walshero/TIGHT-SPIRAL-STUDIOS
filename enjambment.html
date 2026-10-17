@@ -557,6 +557,9 @@ html.c-reader .versecard, html.c-reader .compare .col, html.c-reader .callout{
   background:transparent; border:0; border-left:3px solid var(--cr-rule); border-radius:0; padding:0 0 0 14px;
 }
 html.c-reader button{background:transparent; color:var(--cr-ink); border:2px solid var(--cr-rule);}
+
+.tsp-dark{ display:inline-flex; align-items:center; justify-content:center; min-width:var(--tap,44px); min-height:var(--tap,44px); padding:8px; cursor:pointer; }
+.tsp-dark svg{ width:24px; height:24px; display:block; }
 </style>
 </head>
 <body>
@@ -564,47 +567,15 @@ html.c-reader button{background:transparent; color:var(--cr-ink); border:2px sol
 
 <div class="coinbar" id="coinbar">
   <span class="barlabel">Enjambment</span>
-  <button type="button" id="comfortTop" aria-expanded="false" aria-controls="panel">Comfort</button>
+  <button class="tsp-dark" id="tspDark" type="button" aria-label="Dark mode" aria-pressed="false" data-attr="data-light" data-dark="night" data-lightval="day" data-clear="c-a1 c-a2 c-contrast c-cues c-reader"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path d="M12 3 A9 9 0 0 1 12 21 Z" fill="currentColor"/>
+  </svg></button><span id="comfortTop" hidden></span>
   <button type="button" id="soundBtn" aria-pressed="false" hidden>Sound off</button>
   <button type="button" id="homeBtn" onclick="location.href='en195-arcade.html'">Arcade</button>
 </div>
 
-<div class="panel" id="panel" role="dialog" aria-modal="false" aria-label="Comfort">
-  <div class="grp">
-    <h2 id="l-light">Light</h2>
-    <div class="row" role="group" aria-labelledby="l-light">
-      <button class="btn" type="button" data-light-set="day">Day</button>
-      <button class="btn" type="button" data-light-set="night">Warm dark</button>
-    </div>
-  </div>
-  <div class="grp">
-    <h2>Screen reader</h2>
-    <button class="tog" type="button" data-tog="c-reader">Clear Reader <span class="st">Off</span></button>
-    <details class="why"><summary>What this does</summary>
-      <p class="note">Removes the design and leaves the document, which is close to what a
-        screen reader is handed. A way to check whether a page still makes sense without
-        its layout.</p></details>
-  </div>
-  <div class="grp">
-    <h2 id="l-size">Font size</h2>
-    <div class="row" role="group" aria-labelledby="l-size">
-      <button class="btn" type="button" data-size="0">Normal</button>
-      <button class="btn" type="button" data-size="1">Larger</button>
-      <button class="btn" type="button" data-size="2">Largest</button>
-    </div>
-    <details class="why"><summary>How sizes work</summary>
-      <p class="note">Sizes multiply your browser's own text setting rather than replacing it.</p></details>
-  </div>
-  <div class="grp">
-    <h2>Reading</h2>
-    <button class="tog" type="button" data-tog="c-contrast">High contrast <span class="st">Off</span></button>
-    <button class="tog" type="button" data-tog="c-still">Motion stop <span class="st">Off</span></button>
-    <button class="tog" type="button" data-tog="c-cues">Underline links <span class="st">Off</span></button>
-    <details class="why"><summary>About motion stop</summary>
-      <p class="note">Stops the belt from scrolling and silences the beat. The poem still
-        arrives, one line at a time, at your pace.</p></details>
-  </div>
-</div>
+<div id="panel" hidden><!-- retired Comfort panel (2026-10-17): placeholders only --><span id="l-light"></span><span id="l-size"></span></div>
 
 <p class="sr" id="say" role="status" aria-live="polite"></p>
 
@@ -1809,6 +1780,28 @@ document.getElementById('againBtn').addEventListener('click', function(){
 window.__stillChanged = function(){
   announce(motionStopped() ? 'Belt stopped.' : 'Belt running.');
 };
+</script>
+<script>
+/* TSP DARK TOGGLE v1 (founder 2026-10-17, option A) */
+(function(){
+  var root=document.documentElement, btn=document.getElementById('tspDark');
+  if(!btn) return;
+  var A=btn.getAttribute('data-attr')||'data-light', D=btn.getAttribute('data-dark')||'night',
+      L=btn.getAttribute('data-lightval')||'day', canSave=!btn.hasAttribute('data-nosave');
+  (btn.getAttribute('data-clear')||'').split(' ').forEach(function(c){ if(c) root.classList.remove(c); });
+  (btn.getAttribute('data-reset')||'').split(';').forEach(function(p){
+    var i=p.indexOf('='); if(i>0) root.setAttribute(p.slice(0,i), p.slice(i+1)); });
+  function isDark(){ return root.getAttribute(A)===D; }
+  function set(dark, save){
+    root.setAttribute(A, dark ? D : L);
+    btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+    if(save && canSave){ try { localStorage.setItem('tsp-dark', dark ? '1' : '0'); } catch(e){} }
+  }
+  var saved=null; try { saved=localStorage.getItem('tsp-dark'); } catch(e){}
+  var osDark=false; try { osDark=window.matchMedia('(prefers-color-scheme: dark)').matches; } catch(e){}
+  set(saved!==null ? saved==='1' : (isDark() || osDark), false);
+  btn.addEventListener('click', function(){ set(!isDark(), true); });
+})();
 </script>
 </body>
 </html>

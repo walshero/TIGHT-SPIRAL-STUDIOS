@@ -16,6 +16,11 @@
      frog." Cliché Creek: thirty poems, three real, the rest clichés, near misses included. Clichés that float past count
      against you, so the player smashes all the way down; the frog's tongue brings the real ones home. Studio translations
      from public-domain Japanese originals; the results screen shows each original and its cliché twin. -->
+<!-- v5.14 2026-10-17 (founder): "Sound button can be top left at start of game but then is a scroll to the bottom
+     option during gameplay." Sound stays top left on the intro; from the first round on it waits at the bottom of the
+     panel, labelled. And a turn on line 1 is no longer refused: haiku need one cut, not a fixed place for it. The
+     season screen says where the leap fell and invites the other order, without stopping anyone.
+     Also: the comfort-era panel is gone studio-wide; this game's own Day/Night mode button stays. -->
 <!-- v5.13 2026-10-16 (founder): "After a cliche has been IDENTIFIED correctly in a game, don't reshow it. Not even in
      another season." A cliché the player smashes (pond or creek) or bins at the sort leaves the river for the rest of the
      game: every season of the pond, every haiku of the creek run. Play again (pond) and Start again from haiku 1 (creek)
@@ -456,6 +461,13 @@ body.still .eddy .e{animation:none}
   background:var(--paper2);color:var(--sumi-t);border:2px solid var(--sumi);box-shadow:2px 2px 0 var(--sumi);cursor:pointer}
 .litebtn::after{content:"";position:absolute;inset:-7px}
 .litebtn svg{width:20px;height:20px}
+.snddock{display:flex;justify-content:center;padding:28px 0 8px;margin-top:20px;border-top:1px solid var(--sumi)}
+.snddock[hidden]{display:none}
+.snddock .sndbtn{position:static;width:auto;height:auto;min-height:44px;min-width:44px;padding:6px 16px;gap:8px;box-shadow:3px 3px 0 var(--sumi)}
+.snddock .sndbtn.ask{box-shadow:3px 3px 0 var(--beni)}
+.snddock .sndbtn::after{content:none}
+.snddock .sndbtn span{position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:nowrap}
+html.snd-docked .litebtn{left:12px}
 .litebtn:focus-visible,.sndbtn:focus-visible{outline:3px solid var(--sumi);outline-offset:3px}
 .sndbtn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 @media (max-width:780px){.tour{top:56px}}
@@ -1009,6 +1021,7 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
       <button class="ghost" id="sRetry" type="button">Sort the same three again</button>
       <button class="ghost" id="sBack" type="button">Back to the pond</button>
     </section>
+    <div class="snddock" id="sndDock" hidden></div>
   </aside>
 </div>
 <canvas id="fx" aria-hidden="true"></canvas>
@@ -1558,7 +1571,7 @@ function evaluate(){
   const mark=()=>$$('.slot').forEach(b=>b.classList.add('warn'));
   if(turns.length===0){mark();say('Three still pictures, and nothing moves. Send a line back and catch one that turns: a leap, a splash, a sudden shift.',true);return}
   if(turns.length>1){turns.forEach(i=>$$('.slot')[i].classList.add('warn'));say('Two turns pull against each other. Keep one leap and send the other back.',true);return}
-  if(turns[0]===0){$$('.slot')[0].classList.add('warn');$('.mv[data-i="0"]').classList.add('call');say('The turn comes before there is anything to turn from. Tap the red arrow on line 1 to move it to the bottom, so the stillness comes first.',true);return}
+  /* v5.14 (founder 2026-10-17): a turn on line 1 is accepted. Haiku need one cut, not a fixed place for it. */
   win();
 }
 $('#slots').addEventListener('click',e=>{
@@ -1619,7 +1632,14 @@ $('#still0').addEventListener('click',()=>setStill(!S.still));
 $('#pull').addEventListener('click',()=>{if(S.phase!=='play'||S.busy)return; dealList(); say('Lever pulled. New phrases on the bank.'); const f=$('#plist .in'); if(f) f.focus()});
 {let st=reduce; try{const v=localStorage.getItem('kirejiStill'); if(v!==null) st=v==='1'}catch(e){} if(st) setStill(true);}
 
-function show(id){['pIntro','pPlay','pDone','pFinal','pCreek','pSort','pSortDone'].forEach(x=>$('#'+x).hidden=x!==id)}
+function show(id){['pIntro','pPlay','pDone','pFinal','pCreek','pSort','pSortDone'].forEach(x=>$('#'+x).hidden=x!==id); dockSound(id!=='pIntro')}
+/* v5.14 (founder 2026-10-17): "Sound button can be top left at start of game but then is a scroll to the bottom option during gameplay." */
+const SND_HOME={parent:null,next:null};
+function dockSound(down){const b=$('#snd'),dock=$('#sndDock'); if(!b||!dock) return;
+  if(!SND_HOME.parent){SND_HOME.parent=b.parentNode; SND_HOME.next=b.nextSibling}
+  if(down&&b.parentNode!==dock){dock.appendChild(b); document.documentElement.classList.add('snd-docked')}
+  else if(!down&&b.parentNode===dock){SND_HOME.parent.insertBefore(b,SND_HOME.next); document.documentElement.classList.remove('snd-docked')}
+  dock.hidden=!down}
 /* The title slip rolls up like a hanging scroll: a hand pulling it in uneven tugs,
    a hitch, a pause, the roll swelling as paper winds on, then the rod lifts away. */
 let slipRolled=false, slipRollBusy=null;
@@ -1691,7 +1711,9 @@ const PEN=$('#doneEdit svg').outerHTML;
 function renderDone(){ // the season screen always shows the latest poem, as edited
   const i=S.wins.length-1, lines=S.wins[i], ti=lines.findIndex(p=>p.k==='t');
   fillPoem($('#donePoem'),lines);
-  $('#doneNote').textContent=`Your turn sits in line ${ti+1}: “${lines[ti].t}.” Does the scene hold still before it, and move after it? That hinge is what Bashō's ya marks.`;
+  $('#doneNote').textContent=ti===0
+    ? `Your turn opens the poem: “${lines[ti].t}.” The leap comes first and the stillness settles after it. Try it last sometime, and notice how it lands when the stillness comes first.`
+    : `Your turn sits in line ${ti+1}: “${lines[ti].t}.” Does the scene hold still before it, and move after it? That hinge is what Bashō's ya marks.`;
 }
 function renderFinals(){
   const box=$('#finals'); box.innerHTML='';

@@ -28,6 +28,11 @@ html[data-comfort="3"]{ --t-paper:#D9CBB5; }
   html[data-comfort="2"]{ --t-paper:#3E3532; }
   html[data-comfort="3"]{ --t-paper:#544946; }
 }
+/* TSP dark toggle (2026-10-17): the corner button chooses light or dark; the phone's setting is only the first-visit default */
+html[data-light="night"]{ --field:#3A0706; --shade:#140101; --band:#680202; --t-paper:#2A2422; --t-ink:#F4EEE6; --t-rule:#F4EEE6; color-scheme:dark; }
+@media (prefers-color-scheme:dark){ html[data-light="day"]{ --field:#F70201; --shade:#680202; --band:#680202; --t-paper:#FBF7F0; --t-ink:#231F20; --t-rule:#231F20; color-scheme:light; } }
+.cc-dark{position:absolute;z-index:2;top:max(8px,env(safe-area-inset-top));left:8px;border:0;background:var(--t-paper);color:var(--t-ink);border-radius:6px}
+.cc-dark:focus-visible{outline:3px solid var(--t-ink);outline-offset:4px}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:var(--field)}
 body{overflow:hidden;font-family:"Helvetica Neue",Arial,system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
@@ -50,11 +55,17 @@ body{overflow:hidden;font-family:"Helvetica Neue",Arial,system-ui,sans-serif;-we
   clip-path:polygon(0 0,100% 0,100% 100%,92% 88%,84% 100%,76% 88%,68% 100%,60% 88%,52% 100%,44% 88%,36% 100%,28% 88%,20% 100%,12% 88%,4% 100%,0 92%)}
 @media (max-height:760px){ .ticket{padding:16px 20px 10px} .ticket .go{font-size:34px;margin:2px 0 4px;padding-top:6px} .title{max-height:32vh} }
 @media (min-aspect-ratio:1/1){ .title{max-height:40vh} }
+
+.tsp-dark{ display:inline-flex; align-items:center; justify-content:center; min-width:var(--tap,44px); min-height:var(--tap,44px); padding:8px; cursor:pointer; }
+.tsp-dark svg{ width:24px; height:24px; display:block; }
 </style>
 </head>
 <body>
 <div class="backdrop" aria-hidden="true"></div>
-<button class="comfort" type="button" aria-label="Comfort, brightness stop 1 of 3">Comfort 1</button>
+<button class="cc-dark tsp-dark" id="tspDark" type="button" aria-label="Dark mode" aria-pressed="false" data-attr="data-light" data-dark="night" data-lightval="day" data-reset="data-comfort=1"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path d="M12 3 A9 9 0 0 1 12 21 Z" fill="currentColor"/>
+  </svg></button><span class="comfort" hidden></span>
 <main class="stage">
 <h1 class="sr">Choreographed Chaos: Every Table in the Restaurant Counts</h1>
 <svg class="title" viewBox="490 8 400 280" aria-hidden="true" preserveAspectRatio="xMidYMin meet">
@@ -179,6 +190,28 @@ window.__ccFrame=frame; window.__ccEnd=END;
 frame(0);
 scene.addEventListener("click",play);
 if(document.readyState==="complete") play(); else window.addEventListener("load",play);
+})();
+</script>
+<script>
+/* TSP DARK TOGGLE v1 (founder 2026-10-17, option A) */
+(function(){
+  var root=document.documentElement, btn=document.getElementById('tspDark');
+  if(!btn) return;
+  var A=btn.getAttribute('data-attr')||'data-light', D=btn.getAttribute('data-dark')||'night',
+      L=btn.getAttribute('data-lightval')||'day', canSave=!btn.hasAttribute('data-nosave');
+  (btn.getAttribute('data-clear')||'').split(' ').forEach(function(c){ if(c) root.classList.remove(c); });
+  (btn.getAttribute('data-reset')||'').split(';').forEach(function(p){
+    var i=p.indexOf('='); if(i>0) root.setAttribute(p.slice(0,i), p.slice(i+1)); });
+  function isDark(){ return root.getAttribute(A)===D; }
+  function set(dark, save){
+    root.setAttribute(A, dark ? D : L);
+    btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+    if(save && canSave){ try { localStorage.setItem('tsp-dark', dark ? '1' : '0'); } catch(e){} }
+  }
+  var saved=null; try { saved=localStorage.getItem('tsp-dark'); } catch(e){}
+  var osDark=false; try { osDark=window.matchMedia('(prefers-color-scheme: dark)').matches; } catch(e){}
+  set(saved!==null ? saved==='1' : (isDark() || osDark), false);
+  btn.addEventListener('click', function(){ set(!isDark(), true); });
 })();
 </script>
 </body>

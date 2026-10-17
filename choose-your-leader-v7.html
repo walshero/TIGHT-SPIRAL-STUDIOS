@@ -128,6 +128,9 @@ p{margin:.55rem 0}
 .meter{width:100%;height:.7rem;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--bg)}
 .meter i{display:block;height:100%;background:var(--orange)}
 .gap-note{border:1px solid var(--line);border-radius:10px;padding:.7rem .8rem;background:var(--card);margin:.6rem 0}
+
+.tsp-dark{ display:inline-flex; align-items:center; justify-content:center; min-width:var(--tap,44px); min-height:var(--tap,44px); padding:8px; cursor:pointer; }
+.tsp-dark svg{ width:24px; height:24px; display:block; }
 </style>
 </head>
 <body>
@@ -261,21 +264,12 @@ p{margin:.55rem 0}
 
 <div class="corner">
   <button class="iconbtn" id="homeBtn" aria-label="Home">Home</button>
-  <button class="iconbtn" id="comfortBtn" aria-expanded="false" aria-controls="comfort">Comfort</button>
+  <button class="iconbtn tsp-dark" id="tspDark" type="button" aria-label="Dark mode" aria-pressed="false" data-attr="data-comfort" data-dark="warm" data-lightval="day" data-nosave><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path d="M12 3 A9 9 0 0 1 12 21 Z" fill="currentColor"/>
+  </svg></button><span id="comfortBtn" hidden></span>
 </div>
-<div id="comfort" role="dialog" aria-label="Comfort controls">
-  <p><b>Comfort</b></p>
-  <div class="chiprow">
-    <button class="chip" id="mDay" aria-pressed="true">Day</button>
-    <button class="chip" id="mWarm" aria-pressed="false">Warm dark</button>
-  </div>
-  <div class="chiprow">
-    <button class="chip" id="tA" aria-pressed="true">Text A</button>
-    <button class="chip" id="tB" aria-pressed="false">Text A+</button>
-  </div>
-  <button class="btn" id="leave">Leave the game</button>
-  <p class="small quiet">Nothing is saved. Leaving clears everything.</p>
-</div>
+<div id="comfort" hidden><!-- retired Comfort panel (2026-10-17): placeholders only --><span id="mDay"></span><span id="mWarm"></span><span id="tA"></span><span id="tB"></span><span id="leave"></span></div>
 
 <script>
 "use strict";
@@ -295,7 +289,7 @@ const SCENES = [
   quote:/* FOUNDER-VERBATIM: sourced presidential address, JFK Oct 22 1962, transcript punctuation */"We will not prematurely or unnecessarily risk the costs of worldwide nuclear war in which even the fruits of victory would be ashes in our mouth — but neither will we shrink from that risk at any time it must be faced.",
   reach:"A calm voice, straight to camera, in your living room. It sounds like a man telling you the truth as it happens.",
   words:"A first reaction, calm under fire, telling the country the truth as it happens.",
-  life:"The address that sounded like a first reaction was day eight of six days of secret deliberation. The calm was rehearsed. A naval quarantine had already been chosen; an air strike and an invasion had been argued and set aside in a room the country never saw.",
+  life:"The address that sounded like a first reaction came on day seven, after six days of secret deliberation. The calm was rehearsed. A naval quarantine had already been chosen; an air strike and an invasion had been argued and set aside in a room the country never saw.",
   src:"ExComm records; Kennedy Library. Declassified 1990s.",
   whoPaid:"Who carried it: a fallout shelter was a private purchase. The free version was a school desk to kneel under. The same address landed differently depending on what a household could buy.",
   walkNeed:"shelf", walkNote:"Grocers report a run on canned goods. The shelf empties fastest for the family that could only afford this week's groceries this week."
@@ -675,6 +669,28 @@ $("leave").addEventListener("click",()=>{
   $("comfortBtn").setAttribute("aria-expanded","false");
   show("s-entry");
 });
+</script>
+<script>
+/* TSP DARK TOGGLE v1 (founder 2026-10-17, option A) */
+(function(){
+  var root=document.documentElement, btn=document.getElementById('tspDark');
+  if(!btn) return;
+  var A=btn.getAttribute('data-attr')||'data-light', D=btn.getAttribute('data-dark')||'night',
+      L=btn.getAttribute('data-lightval')||'day', canSave=!btn.hasAttribute('data-nosave');
+  (btn.getAttribute('data-clear')||'').split(' ').forEach(function(c){ if(c) root.classList.remove(c); });
+  (btn.getAttribute('data-reset')||'').split(';').forEach(function(p){
+    var i=p.indexOf('='); if(i>0) root.setAttribute(p.slice(0,i), p.slice(i+1)); });
+  function isDark(){ return root.getAttribute(A)===D; }
+  function set(dark, save){
+    root.setAttribute(A, dark ? D : L);
+    btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+    if(save && canSave){ try { localStorage.setItem('tsp-dark', dark ? '1' : '0'); } catch(e){} }
+  }
+  var saved=null; try { saved=localStorage.getItem('tsp-dark'); } catch(e){}
+  var osDark=false; try { osDark=window.matchMedia('(prefers-color-scheme: dark)').matches; } catch(e){}
+  set(saved!==null ? saved==='1' : (isDark() || osDark), false);
+  btn.addEventListener('click', function(){ set(!isDark(), true); });
+})();
 </script>
 </body>
 </html>
