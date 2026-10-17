@@ -2,6 +2,7 @@
 <html lang="en">
 <!--
   THE ASKING ROOM (working title, founder rules the name: D1). Tight Spiral Studios, EN195.
+  Workup v0.7, 2026-10-17 (founder, by voice: "players should get another shot." After a miss the Advocate says why and the player tries again on the same call; the forced move-on after two misses is gone, so the blank Recorder's page can no longer happen.)
   Workup v0.6, 2026-10-13 (founder ruling: "Remove comfort control and label and focus on 3 best modes for each game including light and dark." The one icon button now cycles Light, Dark, Sharp; Sharp is high contrast). v0.5, 2026-09-25 (mnemonic icons on every move, tag and ruled comment). v0.4 (three drafts: Presto, Daiko, Dead Ants). v0.3 (struck cards keep a Claim line and the Advocate's note for the whole draft). v0.2, 2026-09-24 (round table in daylight, founder note: the lamp read as interrogation). One playable turn plus the animation language for the whole game.
   Spec: claude/SPEC-ASKING-ROOM-2026-09-24.md. Findings: convening/ASKING-ROOM-CONVENING.md.
 
@@ -12,7 +13,7 @@
 
   SOURCES, founder corpus and founder-assigned texts:
    - Roles and rules: Jesse Ball, "The Asking," from Notes on My Dunce Cap (EN195 course
-     materials, post Drive). Asker, Advocate, Asked, Recorder. Reframe once, then the
+     materials, post Drive). Asker, Advocate, Asked, Recorder. [v0.7: no longer moves on; see 2026-10-17 below] Reframe once, then the
      Advocate moves on (rule 7). The Advocate defends the silence (rule 8). The Recorder
      writes the questions and none of the answers (rule 12). Opinions are not expressed (14).
    - Feedback registers: Pat Schneider / Amherst Writers & Artists (what is strong, what
@@ -500,7 +501,7 @@ details.about p{ margin:8px 0 12px; }
   <a href="arcade.html" aria-label="Back to the arcade">Back</a>
   <a href="index.html" aria-label="Home">Home</a>
 </nav>
-<p class="foot">Tight Spiral Studios. Play. Notice. Design. Workup v0.6, 2026-10-13.</p>
+<p class="foot">Tight Spiral Studios. Play. Notice. Design. Workup v0.7, 2026-10-17.</p>
 
 <script>
 (function(){
@@ -798,8 +799,8 @@ details.about p{ margin:8px 0 12px; }
       dealFeedback(n); S.busy=false;
     } else {
       S.tries++; S.struck[n.id]=clean(n.rule);
-      if(S.tries>=2){ say('The Advocate', clean(n.rule)); strike(btn,'Struck',S.struck[n.id]); await wait(2400); await moveOn(); return; }
-      say('The Advocate', n.rule); strike(btn,'Struck. Reframe once.',S.struck[n.id]);
+      /* v0.7 (founder 2026-10-17): no forced move-on. Every miss gets another shot at this call. */
+      say('The Advocate', n.rule); strike(btn,'Struck. Try another.',S.struck[n.id]);
       await wait(900); ruling(false); S.busy=false;
     }
   }
@@ -817,8 +818,8 @@ details.about p{ margin:8px 0 12px; }
       await nextCall();
     } else {
       ruling(true); S.tries++; S.struck[f.t]=clean(f.why);
-      if(S.tries>=2){ say('The Advocate', clean(f.why)); strike(btn,'Struck',S.struck[f.t]); await wait(2300); await moveOn(); return; }
-      say('The Advocate', f.why); strike(btn,'Struck. Reframe once.',S.struck[f.t]);
+      /* v0.7 (founder 2026-10-17): no forced move-on. Every miss gets another shot at this card. */
+      say('The Advocate', f.why); strike(btn,'Struck. Try another.',S.struck[f.t]);
       await wait(900); ruling(false); S.busy=false;
     }
   }
