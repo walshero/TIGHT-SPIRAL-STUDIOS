@@ -1266,3 +1266,9 @@ of that), plus a changed-files gate run. Single inline pass, no subagents.
 - Flok v35 ships the two voice-playtest notes: "User north_trail" on the opening; three fixed, labelled panels (Assignment / Result / Your move) on every lever, each sized once per lever so taps never move them; every lever now writes a Result line (only Boost did before).
 - studio-eyes.py: links inside a closed <details> are skipped (not rendered, cannot take focus); the fold's links show a 3px ring when opened.
 - Gates: Flok senses PASS 6/6 incl. top floor; contrast SHIP (Flok 5.05, face 5.57, assessment 7.91); face Studio Eyes 0 HALT; feed check PASS.
+
+## 2026-10-17 — Asking Room v0.7 (founder by voice: "players should get another shot")
+- No forced move-on: every miss stays on the call; after a 2nd miss the Advocate adds a hint and the passage that matters lights up "[look here]". The blank Recorder's page can no longer happen.
+- Debt paid with it: dark-mode evidence underline was 1.2:1 (now a real underline, worst pair 8.79); --ink/--ink2 no longer double as borders (--rule/--rule2); screen declared for the senses census; phone scene 52% of first screen.
+- Gates: senses PASS (eyes, fingers, top floor); contrast SHIP 8.79; routes 2/2 incl. three misses then a hit.
+- PENDING (founder ruled 2026-10-17, "2 then 1"): shipped with the phone crop, which cuts the two outer people at the edges. Follow-up: art seat redraws a phone-shaped workshop scene, people closer together, nobody cut. Hint wording is studio placeholder awaiting founder words.
