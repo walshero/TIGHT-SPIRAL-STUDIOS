@@ -3,32 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="spec-source" content="founder 2026-10-16: 'We want variation! Not the same move times 3. Create a corpus of stagecraft to draw from for this game'">
+<meta name="spec-source" content="founder 2026-10-16: 'Research first, then gap analysis, then build.'">
+<meta name="research" content="claude/STAGECRAFT-RESEARCH-2026-10-16.md (R1-R20)">
+<meta name="gap-analysis" content="claude/STAGECRAFT-GAP-ANALYSIS-2026-10-16.md">
 <meta name="serves" content="row-k-dress-rehearsal.html (Dress Rehearsal, EN195)">
 <title>Stagecraft Corpus</title>
 <!--
-  STAGECRAFT CORPUS for Dress Rehearsal. Tight Spiral Productions. v1, 2026-10-16.
-  Every card in the game names one device from this file. No device repeats in
-  the same slot (OBJECT, MOVE, LINE) and kind (TELL, INVISIBLE, SHOW) across
-  the three scenes. Section 6 is the audit of the build as it stands.
-  Sources are cited by work; nothing here is quoted, all is paraphrase.
+  STAGECRAFT CORPUS for Dress Rehearsal. Tight Spiral Productions. v2, 2026-10-16.
+  v2 replaces v1, which was written alongside the cards it justified. v2 is built
+  only from the research log (R1-R20) and the gap analysis. Every device carries
+  its R-number, or the label STUDIO INVENTION when no source was found.
+  Everything is paraphrase. Nothing is quoted.
 -->
 <style>
   :root{
     --paper:#FAF5EC; --ink:#1F1B16; --rule:#1F1B16; --muted:#3D362D;
-    --tell:#8A2B1C; --invis:#2E4A6B; --show:#1E5631; --flag:#8A2B1C;
+    --tell:#8A2B1C; --invis:#2E4A6B; --show:#1E5631; --flag:#8A2B1C; --inv:#6B4A00;
     --band:#EFE6D4;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
       --paper:#16130F; --ink:#F3EAD4; --rule:#F3EAD4; --muted:#D9CFBA;
-      --tell:#F2A08F; --invis:#9CC6EC; --show:#9AD6A8; --flag:#F2A08F;
+      --tell:#F2A08F; --invis:#9CC6EC; --show:#9AD6A8; --flag:#F2A08F; --inv:#F2C66B;
       --band:#25201A;
     }
   }
   :root[data-theme="dark"]{
     --paper:#16130F; --ink:#F3EAD4; --rule:#F3EAD4; --muted:#D9CFBA;
-    --tell:#F2A08F; --invis:#9CC6EC; --show:#9AD6A8; --flag:#F2A08F;
+    --tell:#F2A08F; --invis:#9CC6EC; --show:#9AD6A8; --flag:#F2A08F; --inv:#F2C66B;
     --band:#25201A;
   }
   *{ box-sizing:border-box; }
@@ -40,223 +42,234 @@
   .sub{ font-size:18px; color:var(--muted); margin:0 0 20px; }
   h2{ font-size:22px; border-top:3px solid var(--rule); padding-top:18px; margin-top:38px; }
   h3{ font-size:19px; margin:26px 0 6px; }
-  .kind{ display:inline-block; font-family:Verdana,Arial,sans-serif; font-weight:bold;
-    font-size:15px; letter-spacing:1.5px; padding:2px 8px; border:2px solid currentColor; border-radius:4px; margin-right:8px; }
   .k-tell{ color:var(--tell); } .k-invis{ color:var(--invis); } .k-show{ color:var(--show); }
   .dev{ border-left:5px solid currentColor; padding:4px 0 4px 14px; margin:18px 0; }
   .dev p{ margin:4px 0; color:var(--ink); }
   .dev .lbl{ font-family:Verdana,Arial,sans-serif; font-weight:bold; font-size:16px; }
+  .src{ font-family:Verdana,Arial,sans-serif; font-size:16px; }
+  .inv{ color:var(--inv); font-weight:bold; }
   .rule{ background:var(--band); border:2px solid var(--rule); border-radius:8px; padding:14px 16px; }
   .rule p{ margin:6px 0; }
+  ol.ladder li{ margin:6px 0; }
   table{ border-collapse:collapse; width:100%; font-size:17px; margin:12px 0; }
   th,td{ border:1.5px solid var(--rule); padding:7px 8px; text-align:left; vertical-align:top; }
   th{ font-family:Verdana,Arial,sans-serif; font-size:15px; background:var(--band); }
   .flag{ color:var(--flag); font-weight:bold; }
   .wrap{ overflow-x:auto; }
   footer{ border-top:2px solid var(--rule); margin-top:40px; padding-top:12px; font-size:17px; color:var(--muted); }
+  footer p{ margin:6px 0; }
 </style>
 </head>
 <body>
 <main>
 <h1>STAGECRAFT CORPUS</h1>
-<p class="sub">The devices Dress Rehearsal's 27 cards are drawn from: what a stage can carry, and the different ways a staging can fail.</p>
+<p class="sub">Version 2. The devices Dress Rehearsal's cards are drawn from, each traced to a source or marked as a studio invention.</p>
 
 <div class="rule">
-<p><strong>The variation rule.</strong> Each card names one device below. In any one slot and kind (for example, MOVE / TELL), the three scenes must use three different devices.</p>
-<p><strong>The size rule.</strong> Every SHOW card must read from Row K. If it needs a close-up (a brass plate, a sticker, a good can opener), it belongs under I7, not SHOW.</p>
-<p><strong>The tempt rule.</strong> A wrong card has to look like a reasonable choice to a student. The failure is the lesson, so it must be a failure people actually make (Saunders: the trap has to tempt).</p>
+<p><strong>Variation.</strong> In any one slot and kind (for example, MOVE / TELL), the three scenes use three different devices.</p>
+<p><strong>Row K.</strong> A SHOW card must read from the back row. Anything that needs a close-up is I7, not SHOW.</p>
+<p><strong>The silent-movie test</strong> (Mamet, R2). An OBJECT or MOVE card is SHOW only if it works with the sound off.</p>
+<p><strong>Tempt.</strong> A wrong card must be a mistake students actually make. The failure is the lesson.</p>
 </div>
 
-<h2>1. TELL: the secret gets announced</h2>
-<p>Each of these puts the secret in words, or in a gesture that stands for words. The house is informed instead of persuaded. Actors call the gesture version <em>indicating</em>: showing the audience a feeling instead of pursuing a goal (Uta Hagen, <cite>Respect for Acting</cite>; Sanford Meisner, <cite>On Acting</cite>).</p>
+<h2>1. The spine: Aristotle's ladder</h2>
+<p>The oldest account of this game is Aristotle's ranking of how a play lets someone discover the truth (<cite>Poetics</cite> ch. 16, R5). Worst to best:</p>
+<ol class="ladder">
+<li><strong>Signs and tokens.</strong> A scar, a necklace, an object that proves who someone is. Least artful, especially when produced as proof.</li>
+<li><strong>Contrived by the poet.</strong> The character simply announces the truth, as Orestes does.</li>
+<li><strong>Memory.</strong> An object or sound sets off visible feeling, as when Odysseus weeps at the lyre.</li>
+<li><strong>Reasoning.</strong> Someone draws the conclusion from evidence.</li>
+<li><strong>From the incidents.</strong> The truth comes out of the action itself, as in <cite>Oedipus</cite>. Best.</li>
+</ol>
+<p>The studio maps the game onto the ladder (our mapping, not Aristotle's): TELL cards live on rungs 1 and 2, and SHOW cards on rungs 4 and 5: the house reasons from what the action gives it. Hitchcock adds why it works: once the audience knows something a character does not, every ordinary moment fills with suspense (R6). In this game the house learns the secret and the other people on stage never do.</p>
+
+<h2>2. TELL: the secret is announced</h2>
+<p>Spolin's definition, which this game teaches: telling is indicating, in words or any other indirect way, instead of doing (R1).</p>
 
 <div class="dev k-tell"><p class="lbl">T1 &middot; Placard</p>
-<p>A sign, banner or caption hung on the set that names the secret.</p>
-<p>Source: Brecht hung scene titles on purpose, to stop the audience getting absorbed. Used by accident, it does the same thing.</p>
-<p>In the game: Ernesto's WELCOME BACK banner.</p></div>
+<p>A sign, banner or caption that names the secret. Brecht used placards on purpose, to break the illusion (R14); here it breaks it by accident.</p>
+<p class="src">Source: R14. In the game: Ernesto's banner.</p></div>
 
 <div class="dev k-tell"><p class="lbl">T2 &middot; Costume slogan</p>
-<p>The character wears the secret: a T-shirt, a badge, a name tag.</p>
-<p>Source: costume design, where clothes signal character. A slogan is the shortcut that skips the signal.</p>
-<p>Example: Frank's T-shirt reads WORLD'S BEST CAT DAD.</p></div>
+<p>The character wears the secret on a shirt or badge.</p>
+<p class="src"><span class="inv">STUDIO INVENTION.</span> No source found.</p></div>
 
 <div class="dev k-tell"><p class="lbl">T3 &middot; The aside</p>
-<p>The character turns to the house and says or mouths the secret.</p>
-<p>Source: the Elizabethan aside, a real convention (Shakespeare's villains confide in us). It works when the play is built on it; in a realistic scene it breaks the frame.</p>
-<p>In the game: Ernesto mouths SMALL. SPACES. NO.</p></div>
+<p>The character speaks or mouths the secret to the house, unheard by the others onstage. A real convention (R13); in a realistic scene it breaks the frame.</p>
+<p class="src">Source: R13. In the game: Ernesto mouths SMALL. SPACES. NO.</p></div>
 
-<div class="dev k-tell"><p class="lbl">T4 &middot; Charade gesture</p>
-<p>A mime that spells out a word or object: rocking an invisible baby, miming handcuffs.</p>
-<p>Source: indicating (Hagen, Meisner). The gesture is aimed at the audience, not at anyone in the scene.</p>
-<p>In the game: Frank rocks an invisible kitten.</p></div>
+<div class="dev k-tell"><p class="lbl">T4 &middot; Expressive gesture</p>
+<p>A mime performed for the house instead of behavior done in the scene. Spolin calls this telling: indicating instead of doing (R1). The nearest Viewpoints term is expressive gesture, symbolic movement for an inner state, as opposed to ordinary behavioral gesture (R11).</p>
+<p class="src">Source: R1, R11. In the game: Frank rocks an invisible kitten.</p></div>
 
-<div class="dev k-tell"><p class="lbl">T5 &middot; Exhibit to the house</p>
-<p>The character holds up a document, photo or headline so the audience can read it.</p>
-<p>Source: the opposite of Hagen's object work. The object is shown instead of used.</p>
-<p>Example: Nicky pulls a crumpled flyer from his pocket, MISSING: SCHOOL CELLO, holds it up to the house, then stuffs it back.</p></div>
+<div class="dev k-tell"><p class="lbl">T5 &middot; Token as proof</p>
+<p>A document or object produced to prove the secret, held up or hung where the house can read it. Aristotle's least artful recognition (R5, rung 1).</p>
+<p class="src">Source: R5.</p></div>
 
-<div class="dev k-tell"><p class="lbl">T6 &middot; Telephone exposition</p>
-<p>A phone rings and the character explains the situation to the caller, and to us.</p>
-<p>Source: a stock opening of the drawing-room play. Mamet's memo to the writers of <cite>The Unit</cite> warns against scenes that exist only to pass information to the audience.</p>
-<p>In the game: Nicky's call, "about to sell the hot cello."</p></div>
+<div class="dev k-tell"><p class="lbl">T6 &middot; Telling the listener</p>
+<p>A character explains the situation to someone so the audience hears it. Mamet names this as a warning sign (R2).</p>
+<p class="src">Source: R2. In the game: Nicky's phone call. (No source was found for phone exposition as a named convention.)</p></div>
 
 <div class="dev k-tell"><p class="lbl">T7 &middot; "As you know"</p>
-<p>One character tells another something they both already know.</p>
-<p>Source: the maid-and-butler opening, where two servants explain the household to each other. Mamet's <cite>Unit</cite> memo again.</p>
-<p>In the game: Ernesto's "As you know, Diane."</p></div>
+<p>Two characters tell each other what they both know. Sometimes called maid-and-butler dialogue; Sheridan mocked it in <cite>The Critic</cite> and Stoppard in <cite>The Real Inspector Hound</cite> (R12).</p>
+<p class="src">Source: R12, R2. In the game: Ernesto's "As you know, Diane."</p></div>
 
-<div class="dev k-tell"><p class="lbl">T8 &middot; Confession to a confidant</p>
-<p>The character says the secret aloud to someone in the scene, then asks them to keep it.</p>
-<p>Source: the confidant role in French neoclassical tragedy, a listener who exists so the hero can explain himself.</p>
-<p>In the game: Frank's "I love that cat. Tell no one."</p></div>
+<div class="dev k-tell"><p class="lbl">T8 &middot; The announcement</p>
+<p>The character states the secret outright to someone onstage. Aristotle's second rung: Orestes says who he is (R5).</p>
+<p class="src">Source: R5. In the game: Frank's "I love that cat."</p></div>
 
 <div class="dev k-tell"><p class="lbl">T9 &middot; The unprompted denial</p>
-<p>The character denies the secret before anyone has raised it.</p>
-<p>Source: Gertrude in <cite>Hamlet</cite> spots the player queen protesting too much. Played straight, the denial is just the secret with a "not" in it.</p>
-<p>In the game: Nicky's "I didn't steal it, okay?"</p></div>
+<p>The character denies the secret before anyone raises it, which in modern usage reads as guilt.</p>
+<p class="src"><span class="inv">STUDIO INVENTION.</span> The modern idiom only. Shakespeare's Gertrude meant something else: in his time "protest" meant vow (R19). In the game: Nicky's "I didn't steal it."</p></div>
 
 <div class="dev k-tell"><p class="lbl">T10 &middot; Mugging</p>
-<p>Behavior pushed into cartoon so the audience cannot miss it: tiptoeing like a burglar, wringing hands.</p>
-<p>Source: melodrama acting; Meisner's warning against playing the result instead of doing the action.</p>
-<p>Example: Nicky creeps around the shop on tiptoe, hood up, glancing over his shoulder.</p></div>
+<p>Behavior blown up past what the moment would cause, so no one can miss it: cartoon tiptoes, wrung hands. Meisner calls a response out of proportion to its cause false (R7).</p>
+<p class="src">Source: R7. The name "mugging" is common studio usage, not from the source.</p></div>
 
 <div class="dev k-tell"><p class="lbl">T11 &middot; The sound underline</p>
-<p>A sound or light cue that points at the secret: a siren, a sting, a red light.</p>
-<p>Source: melodrama's musical stings. The production says what the actor should have played.</p>
-<p>Example: a siren passes; Nicky drops behind the counter.</p></div>
+<p>A sound or light cue that points at the secret: a siren, a sting.</p>
+<p class="src"><span class="inv">STUDIO INVENTION.</span> No source found.</p></div>
 
-<h2>2. INVISIBLE: true, but no seat can see it</h2>
-<p>These are real parts of the character that the stage cannot carry. Film can cut to a close-up; a novel can enter a mind; a stage has only bodies, objects, sound and space (Mamet, <cite>On Directing Film</cite>, on telling the story through what can be seen).</p>
+<h2>3. INVISIBLE: true, but no seat can get it</h2>
+<p>Hagen: emotion follows from pursuing an objective (R8). Stanislavski: every objective carries the seed of an action (R9). Mamet: the story travels through what can be seen (R3). A feeling has to come out as an action to reach the house.</p>
 
-<div class="dev k-invis"><p class="lbl">I1 &middot; Backstory memory</p>
-<p>Something that happened before the scene. Example: the hallway closet, summer of 1998.</p></div>
+<div class="dev k-invis"><p class="lbl">I1 &middot; Untriggered memory</p>
+<p>Something from before the scene, with nothing onstage to set it off and nothing visible as a result. It fails because only what can be seen carries (R3). Aristotle shows the fix: a trigger and a visible response (R5, rung 3; see S10).</p>
+<p class="src">Source: R3; fix from R5. In the game: Ernesto's closet; Nicky's band room.</p></div>
 
-<div class="dev k-invis"><p class="lbl">I2 &middot; Labeled feeling</p>
-<p>An emotion named instead of played. Example: the warm feeling in Frank's chest.</p></div>
+<div class="dev k-invis"><p class="lbl">I2 &middot; Named feeling</p>
+<p>An emotion labeled instead of played (R8).</p>
+<p class="src">Source: R8. In the game: the warm feeling in Frank's chest.</p></div>
 
 <div class="dev k-invis"><p class="lbl">I3 &middot; Body state</p>
-<p>Pulse, adrenaline, a dry mouth: real, and invisible past Row A. Example: Ernesto's pulse climbs to 140.</p></div>
+<p>Pulse, adrenaline, a dry mouth. Real, and invisible past the front row.</p>
+<p class="src">Source: R3, on carrying the story through what can be seen. In the game: Ernesto's pulse.</p></div>
 
 <div class="dev k-invis"><p class="lbl">I4 &middot; Private decision</p>
-<p>A choice made in silence that changes nothing on stage yet. Example: Frank decides to buy a collar tomorrow.</p></div>
+<p>A choice that produces no action yet. Stanislavski: every objective has to carry the seed of an action (R9).</p>
+<p class="src">Source: R9. In the game: Frank decides to buy a collar.</p></div>
 
-<div class="dev k-invis"><p class="lbl">I5 &middot; Thought voiceover</p>
-<p>A line marked (thinking). The stage has no inner-voice channel unless the play builds one, as O'Neill does on purpose in <cite>Strange Interlude</cite>.</p></div>
+<div class="dev k-invis"><p class="lbl">I5 &middot; Spoken thought</p>
+<p>A line marked (thinking). O'Neill built a whole play on it in <cite>Strange Interlude</cite>, on purpose (R15). This game is realism, so the house cannot hear it.</p>
+<p class="src">Source: R15. In the game: all three scenes' LINE / INVISIBLE cards.</p></div>
 
-<div class="dev k-invis"><p class="lbl">I6 &middot; Too quiet to hear</p>
-<p>A line spoken under the breath, too low for anyone past the front row. Example: NICKY (under his breath): "It was just sitting there."</p></div>
+<div class="dev k-invis"><p class="lbl">I6 &middot; Too quiet to carry</p>
+<p>A line spoken under the breath, below what reaches the house.</p>
+<p class="src"><span class="inv">STUDIO INVENTION.</span> Lead to research: stage voice and projection training.</p></div>
 
-<div class="dev k-invis"><p class="lbl">I7 &middot; Too small to see</p>
-<p>A real, visible detail at the wrong scale: an engraved plate, a sticker, a brand of can opener. The founder's Row K test catches these. Example: initials carved inside the cello's f-hole.</p></div>
+<div class="dev k-invis"><p class="lbl">I7 &middot; Token too small</p>
+<p>A real, visible proof at a scale no seat can read: an engraved plate, a sticker, a carved initial. Aristotle's tokens (R5, rung 1), failed again by the founder's Row K test.</p>
+<p class="src">Source: R5 and the Row K test.</p></div>
 
 <div class="dev k-invis"><p class="lbl">I8 &middot; Typed and deleted</p>
-<p>The character writes the secret into a phone and deletes it unsent. The house sees thumbs, not words. Example: Frank types "who's a good girl" to no one, and deletes it.</p></div>
+<p>The character types the secret into a phone and deletes it. The house sees thumbs.</p>
+<p class="src"><span class="inv">STUDIO INVENTION.</span></p></div>
 
-<div class="dev k-invis"><p class="lbl">I9 &middot; Against the circumstances</p>
-<p>A clear, stageable action that argues the opposite of the secret. Every seat sees it, and it tells them the wrong story.</p>
-<p>Source: Stanislavski's given circumstances. Every action has to be true to the facts of the scene.</p>
-<p>In the game: Nicky rosins the bow like a pro. Only an owner can do that. (This card sits in the INVISIBLE slot, since the game has three kinds.)</p></div>
+<div class="dev k-invis"><p class="lbl">I9 &middot; Against the given circumstances</p>
+<p>A clear action that contradicts the facts of the scene. Every seat sees it, and it argues the wrong story (R9).</p>
+<p class="src">Source: R9. In the game: Nicky rosins the bow like a pro. It sits in the INVISIBLE slot because the game has three kinds.</p></div>
 
-<h2>3. SHOW: the house works it out</h2>
-<p>Each of these gives the audience evidence and lets them put it together. Hitchcock's bomb under the table is the model: once the audience knows what a character does not, every ordinary moment fills with suspense (Truffaut, <cite>Hitchcock</cite>). Here, the house learns the secret and the other characters never do.</p>
+<h2>4. SHOW: the house works it out</h2>
 
 <h3>Objects</h3>
-<div class="dev k-show"><p class="lbl">S1 &middot; The endowed prop</p>
-<p>An object the character brought, that only makes sense if the secret is true.</p>
-<p>Source: Hagen's endowment, an object charged with history.</p>
-<p>In the game: Ernesto's door wedge.</p></div>
+<div class="dev k-show"><p class="lbl">S1 &middot; The planted prop</p>
+<p>An object onstage that only makes sense if the secret is true. Chekhov: don't bring a rifle on unless someone means to fire it (R16). The house reasons from it, Aristotle's fourth rung (R5).</p>
+<p class="src">Source: R16, R5. In the game: Ernesto's door wedge. (v1 called this Hagen's endowment; that was wrong.)</p></div>
 
 <div class="dev k-show"><p class="lbl">S2 &middot; Handling</p>
-<p>How a character carries or treats an object shows their relation to it. Owners flinch; thieves do not.</p>
-<p>Source: Hagen's object exercises.</p>
-<p>In the game: Nicky drags the cello; Sol stands it up carefully.</p></div>
+<p>How a character treats an object tells us what it is to them.</p>
+<p class="src">Source: related to Hagen's endowment, where the actor's behavior gives an object qualities like heat or weight (R8). Applying it to ownership and worth is <span class="inv">STUDIO FRAMING</span>. In the game: Nicky drags the cello; Sol stands it up with care.</p></div>
 
-<div class="dev k-show"><p class="lbl">S3 &middot; Set as evidence</p>
-<p>The room itself has been arranged by the secret.</p>
-<p>Source: Ibsen's and Chekhov's rooms, where the furniture holds the history.</p>
-<p>In the game: Frank's blanket bed and tuna pyramid.</p></div>
+<div class="dev k-show"><p class="lbl">S3 &middot; Where as evidence</p>
+<p>The place has been arranged by the secret. Spolin's Where: place and relationship come through the body and the environment (R1).</p>
+<p class="src">Source: R1. In the game: Frank's blanket bed and tuna pyramid.</p></div>
 
 <h3>Moves</h3>
-<div class="dev k-show"><p class="lbl">S4 &middot; Avoidance in space</p>
-<p>The body moves away from the thing it fears, step by step.</p>
-<p>Source: Viewpoints, spatial relationship (Bogart and Landau, <cite>The Viewpoints Book</cite>).</p>
-<p>In the game: Ernesto drifts to the stairwell door.</p></div>
+<div class="dev k-show"><p class="lbl">S4 &middot; Spatial relationship</p>
+<p>Distance between bodies and objects, changing over time. A body moving away from what it fears (R11).</p>
+<p class="src">Source: R11. In the game: Ernesto drifts to the stairwell door.</p></div>
 
 <div class="dev k-show"><p class="lbl">S5 &middot; The task they cannot do</p>
-<p>A simple task the character should be able to do, failed in front of us.</p>
-<p>Source: Stanislavski's method of physical actions. Truth lives in doing a task, so failing the task shows the lie.</p>
-<p>In the game: Nicky cannot hold the cello.</p></div>
+<p>An ordinary task, actually attempted and failed in front of us. Meisner's reality of doing (R7); Stanislavski's physical action (R9).</p>
+<p class="src">Source: R7, R9. In the game: Nicky cannot hold the cello.</p></div>
 
 <div class="dev k-show"><p class="lbl">S6 &middot; Caught and cover</p>
-<p>Interrupted mid-action, the character covers with something absurd.</p>
-<p>Source: farce, from Feydeau on.</p>
-<p>In the game: Frank drinks the cat's milk.</p></div>
+<p>A near-discovery and a desperate deflection. Feydeau's farce runs on it (R18).</p>
+<p class="src">Source: R18. In the game: Frank drinks the cat's milk.</p></div>
 
-<div class="dev k-show"><p class="lbl">S7 &middot; The status move</p>
-<p>Who looks away, who waits, who fills the silence.</p>
-<p>Source: Keith Johnstone, <cite>Impro</cite>, on status.</p>
-<p>Example: Sol lets the silence run; Nicky cannot stand it.</p></div>
+<div class="dev k-show"><p class="lbl">S7 &middot; Status</p>
+<p>Who holds eye contact, who goes still, who takes space (R10).</p>
+<p class="src">Source: R10.</p></div>
+
+<div class="dev k-show"><p class="lbl">S8 &middot; The reaction</p>
+<p>The information travels through the other character's response. Mamet builds scenes by setting plain images side by side (R3); Meisner: truth lives in the response (R7).</p>
+<p class="src">Source: R3, R7. In the game: the cello hits the frame; Sol looks, Nicky doesn't.</p></div>
+
+<div class="dev k-show"><p class="lbl">S9 &middot; Repetition and tempo</p>
+<p>The same small action again, or at the wrong speed (R11).</p>
+<p class="src">Source: R11.</p></div>
+
+<div class="dev k-show"><p class="lbl">S10 &middot; The trigger</p>
+<p>An object or sound onstage sets off a visible response. Aristotle's third rung, done right (R5).</p>
+<p class="src">Source: R5. Example: the shop radio plays a cello piece; Nicky reaches over and switches it off.</p></div>
 
 <h3>Lines</h3>
-<div class="dev k-show"><p class="lbl">S8 &middot; Bravado</p>
-<p>The line says the opposite of what is true, loudly.</p>
-<p>Source: subtext (Stanislavski); Mamet, <cite>Three Uses of the Knife</cite>, on characters who never say what they want.</p>
-<p>In the game: Ernesto's "Eleven floors is nothing."</p></div>
+<div class="dev k-show"><p class="lbl">S11 &middot; Speech as a smokescreen</p>
+<p>The line says the opposite of the truth, loudly. Pinter's second kind of silence: a flood of talk covering what is not said (R17).</p>
+<p class="src">Source: R17. In the game: Ernesto's "Eleven floors is nothing."</p></div>
 
-<div class="dev k-show"><p class="lbl">S9 &middot; The tactic that gives it away</p>
-<p>The character pursues what they want, and how they pursue it betrays them.</p>
-<p>Source: Mamet's objective. Every character wants something, and the way they go after it is the drama.</p>
-<p>In the game: Nicky bids against himself.</p></div>
+<div class="dev k-show"><p class="lbl">S12 &middot; The tactic that betrays them</p>
+<p>The character pursues what they want, and how they pursue it gives them away. Mamet: drama is the pursuit of a goal against an obstacle (R2).</p>
+<p class="src">Source: R2. In the game: Nicky bids against himself.</p></div>
 
-<div class="dev k-show"><p class="lbl">S10 &middot; The slip</p>
-<p>A detail the character should not know leaks into an ordinary line.</p>
-<p>Source: comic slips of the tongue, from Sheridan's Mrs. Malaprop on.</p>
-<p>In the game: Frank's "especially at 9am."</p></div>
+<div class="dev k-show"><p class="lbl">S13 &middot; The slip</p>
+<p>A slip in an ordinary line reveals what the character wants. Michael Fontaine reads the slips in Plautus's <cite>Menaechmi</cite> this way (R20).</p>
+<p class="src">Source: R20. In the game: Frank's "especially at 9am." (v1 credited Mrs. Malaprop; a malapropism is a wrong word, not a revealing slip.)</p></div>
 
-<div class="dev k-show"><p class="lbl">S11 &middot; The pause</p>
-<p>What is not said, held long enough to be heard.</p>
-<p>Source: Pinter's pauses and silences.</p>
-<p>Example: Sol's silence between Nicky's prices.</p></div>
+<div class="dev k-show"><p class="lbl">S14 &middot; The pause</p>
+<p>What is not said, held long enough to be heard. Pinter also warned against pauses played for portent (R17).</p>
+<p class="src">Source: R17. Example: Sol's silence between Nicky's prices.</p></div>
 
-<h2>4. The audit: the 27 cards as they stand</h2>
-<p>Every card in the build, tagged with its device. Flagged rows break the variation rule.</p>
-
+<h2>5. The audit: the 27 cards in v52</h2>
 <div class="wrap">
 <table>
-<caption class="sub">Build: row-k-dress-rehearsal.html v52, 2026-10-16.</caption>
 <thead><tr><th>Slot and kind</th><th>Ernesto</th><th>Nicky</th><th>Frank</th><th>Status</th></tr></thead>
 <tbody>
-<tr><td>OBJECT / TELL</td><td>T1 placard</td><td>T6 telephone</td><td>T1 placard</td><td class="flag">Repeat: T1 twice</td></tr>
-<tr><td>OBJECT / INVISIBLE</td><td>I1 memory</td><td>I1 memory</td><td>I2 feeling</td><td class="flag">Repeat: I1 twice</td></tr>
-<tr><td>OBJECT / SHOW</td><td>S1 endowed prop</td><td>S2 handling</td><td>S3 set as evidence</td><td>Varied</td></tr>
-<tr><td>MOVE / TELL</td><td>T3 aside</td><td>T3 aside (the shush)</td><td>T4 charade</td><td class="flag">Repeat: T3 twice</td></tr>
-<tr><td>MOVE / INVISIBLE</td><td>I3 body state</td><td>I9 against the circumstances</td><td>I4 private decision</td><td>Varied</td></tr>
-<tr><td>MOVE / SHOW</td><td>S4 avoidance</td><td>S5 failed task</td><td>S6 caught and cover</td><td>Varied</td></tr>
-<tr><td>LINE / TELL</td><td>T7 as you know</td><td>T9 denial</td><td>T8 confidant</td><td>Varied</td></tr>
-<tr><td>LINE / INVISIBLE</td><td>I5 voiceover</td><td>I5 voiceover</td><td>I5 voiceover</td><td class="flag">Repeat: I5 three times</td></tr>
-<tr><td>LINE / SHOW</td><td>S8 bravado</td><td>S9 tactic</td><td>S10 slip</td><td>Varied</td></tr>
+<tr><td>OBJECT / TELL</td><td>T1</td><td>T6</td><td>T1</td><td class="flag">Repeat</td></tr>
+<tr><td>OBJECT / INVISIBLE</td><td>I1</td><td>I1</td><td>I2</td><td class="flag">Repeat</td></tr>
+<tr><td>OBJECT / SHOW</td><td>S1</td><td>S2, S8</td><td>S3</td><td>Varied</td></tr>
+<tr><td>MOVE / TELL</td><td>T3</td><td>T3 (a signal to the house)</td><td>T3, T4</td><td class="flag">Repeat: all three turn to the house</td></tr>
+<tr><td>MOVE / INVISIBLE</td><td>I3</td><td>I9</td><td>I4</td><td>Varied</td></tr>
+<tr><td>MOVE / SHOW</td><td>S4</td><td>S5</td><td>S6</td><td>Varied</td></tr>
+<tr><td>LINE / TELL</td><td>T7</td><td>T9</td><td>T8</td><td>Varied</td></tr>
+<tr><td>LINE / INVISIBLE</td><td>I5</td><td>I5</td><td>I5</td><td class="flag">Repeat</td></tr>
+<tr><td>LINE / SHOW</td><td>S11</td><td>S12, S14</td><td>S12</td><td class="flag">Repeat (found in checking)</td></tr>
 </tbody>
 </table>
 </div>
 
-<h2>5. Proposed fixes for the four repeats</h2>
-<p>Five card changes, drafts for the founder to edit. Not yet in the build.</p>
+<h2>6. Fixes, drawn from the corpus</h2>
+<p>Drafts for the founder to edit. Not yet in the build. Sourced devices first; inventions are marked. An independent check of this page found two more repeats than the first audit (MOVE / TELL was worse than it looked, and LINE / SHOW repeats), so there are seven drafts.</p>
 <div class="wrap">
 <table>
-<thead><tr><th>Slot</th><th>Change</th><th>New device</th><th>Draft card</th></tr></thead>
+<thead><tr><th>Slot</th><th>Card</th><th>Device</th><th>Draft</th></tr></thead>
 <tbody>
-<tr><td>MOVE / TELL</td><td>Nicky</td><td>T5 exhibit</td><td>Nicky pulls a crumpled flyer from his pocket, MISSING: SCHOOL CELLO, holds it up to the house, then stuffs it back.</td></tr>
-<tr><td>OBJECT / TELL</td><td>Frank</td><td>T2 costume slogan</td><td>Frank's T-shirt, under the open work jacket: WORLD'S BEST CAT DAD.</td></tr>
-<tr><td>OBJECT / INVISIBLE</td><td>Nicky</td><td>I7 too small to see</td><td>Initials carved inside the cello's f-hole, someone else's.</td></tr>
-<tr><td>LINE / INVISIBLE</td><td>Nicky</td><td>I6 too quiet to hear</td><td>NICKY (under his breath, as Sol turns the cello over): "It was just sitting there."</td></tr>
-<tr><td>LINE / INVISIBLE</td><td>Frank</td><td>I8 typed and deleted</td><td>Frank types into his phone, "who's a good girl," looks at it, and deletes it.</td></tr>
+<tr><td>MOVE / TELL</td><td>Nicky</td><td>T10 mugging (R7)</td><td>Nicky crosses to the counter on big cartoon tiptoes, hood pulled low, checking left and right like a burglar in a comic strip.</td></tr>
+<tr><td>MOVE / TELL</td><td>Frank</td><td>T4 only, no aside (R1)</td><td>Mid-rant about building rules, Frank cradles an invisible kitten and rocks it, then points at the boiler room.</td></tr>
+<tr><td>OBJECT / TELL</td><td>Frank</td><td>T5 token as proof (R5)</td><td>Hung on the boiler, a framed certificate in big letters: ADOPTION PAPERS, MITTENS. Signed: FRANK.</td></tr>
+<tr><td>OBJECT / INVISIBLE</td><td>Nicky</td><td>I7 token too small (R5, Row K)</td><td>Initials carved inside the cello's f-hole. Someone else's.</td></tr>
+<tr><td>LINE / INVISIBLE</td><td>Nicky</td><td>I6 too quiet <span class="inv">(invention)</span></td><td>NICKY (under his breath, too low to carry past the front row): "It was just sitting there."</td></tr>
+<tr><td>LINE / INVISIBLE</td><td>Frank</td><td>I8 typed and deleted <span class="inv">(invention; an action standing in for a line)</span></td><td>Frank types into his phone, "who's a good girl," looks at it, and deletes it.</td></tr>
+<tr><td>LINE / SHOW</td><td>Frank</td><td>S13 the slip (R20)</td><td>FRANK (to Mrs. Petrocelli, about her dog): "That dog needs to be out of the building Wednesday. Mittens, I mean. The dog. Out." <em>Or keep his current line and change Nicky's instead; founder's call.</em></td></tr>
 </tbody>
 </table>
 </div>
-<p>With these in, each slot uses three different devices. Ernesto keeps his current cards.</p>
+<p>The LINE / INVISIBLE slot has only one sourced device, so two of its three cards stay inventions until a source turns up.</p>
 
 <footer>
-Tight Spiral Productions. Stagecraft corpus for Dress Rehearsal, an EN195 game. Sources, all paraphrased: Uta Hagen, <cite>Respect for Acting</cite>; Sanford Meisner and Dennis Longwell, <cite>Sanford Meisner on Acting</cite>; David Mamet, <cite>On Directing Film</cite>, <cite>Three Uses of the Knife</cite>, and the memo to the writers of <cite>The Unit</cite>; Konstantin Stanislavski on given circumstances and physical actions; Keith Johnstone, <cite>Impro</cite>; Anne Bogart and Tina Landau, <cite>The Viewpoints Book</cite>; Fran&ccedil;ois Truffaut, <cite>Hitchcock</cite>; Bertolt Brecht on epic staging; George Saunders on the reader's mind.
+<p>Tight Spiral Productions. Stagecraft corpus v2 for Dress Rehearsal, an EN195 game.</p>
+<p>Research log with every source and grade: claude/STAGECRAFT-RESEARCH-2026-10-16.md. Gap analysis: claude/STAGECRAFT-GAP-ANALYSIS-2026-10-16.md.</p>
+<p>Sources: Aristotle, <cite>Poetics</cite>; Viola Spolin; David Mamet's memo to the writers of <cite>The Unit</cite>, <cite>On Directing Film</cite>, <cite>True and False</cite>; Hitchcock in Truffaut's <cite>Hitchcock</cite>; Sanford Meisner; Uta Hagen, <cite>Respect for Acting</cite>; Stanislavski; Keith Johnstone, <cite>Impro</cite>; Bogart and Landau, Viewpoints (after Mary Overlie's Six Viewpoints); Brecht; O'Neill, <cite>Strange Interlude</cite>; Chekhov's 1889 letter to Lazarev; Pinter's 1962 speech; Feydeau; Plautus, <cite>Menaechmi</cite>.</p>
 </footer>
 </main>
 </body>

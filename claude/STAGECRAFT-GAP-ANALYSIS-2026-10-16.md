@@ -63,3 +63,6 @@
 ## E. What the build step must do
 1. Rebuild the corpus from section A's verdicts and section B's additions. Every device carries its R-number or the label STUDIO INVENTION.
 2. Draft replacements for the four repeats, choosing sourced devices first. Where no sourced device exists (LINE / INVISIBLE), say so on the card's row.
+
+## F. Independent check of corpus v2 (2026-10-16)
+A separate agent checked v2 against this log and the card texts. Applied: T6 phone claim and "dead scene" dropped; T4 re-cited to R1 first; T10 name marked studio usage; T9 relabeled STUDIO INVENTION; section 3 intro softened to what R8/R9 say; I1 and I3 re-cited to R3; S2's ownership reading marked STUDIO FRAMING; S8 softened; S13 re-defined per R20 with Fontaine named; the Aristotle-to-card mapping marked as the studio's. Audit corrections: Nicky's MOVE/TELL is a signal to the house, Frank's opens with an aside too (all three turn to the house); Frank's "9am" line is a tip-off (S12), not a slip, so LINE/SHOW repeats with Nicky. Two drafts added (Frank MOVE/TELL without the aside; Frank LINE/SHOW as a true slip).
