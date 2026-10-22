@@ -77,7 +77,9 @@ build or put it in Lab.
 - Then `./verify-push.sh <path>`. Say nothing about shipping until it prints clean.
   A green connector result is a claim, not proof (CLAUDE.md: "CHECKED IS NOT SHIPPED").
 - Record the new hash: `python3 resolve-canon.py --row <file> <gate> <verdict> "<detail>"`
-  and append the row to FUNES-LEDGER.md in the same push.
+  and append the row to root FUNES-LEDGER.md in the same push.
+- Belt runs re-record `reports/senses/*`. Do not commit those unless the change is
+  about them.
 
 ## 6. Close the turn
 
