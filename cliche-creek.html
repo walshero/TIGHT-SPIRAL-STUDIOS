@@ -1,0 +1,693 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cliché Creek v0.1 (Lab)</title>
+<meta name="spec-source" content="claude/SPEC-CLICHE-CREEK-2026-10-23.md">
+<meta name="audience" content="EN195 creative writing students at a community college, phone first, low vision as a design floor">
+<meta name="tsp-build" content="cliche-creek v0.1 Lab 2026-10-23">
+<!-- BUILD BANNER: Cliché Creek v0.1 (Lab), 2026-10-23.
+     Founder 2026-10-23: "Create a standalone cliche creek game based on the mechanics of Kireji but with a new art take
+     entirely. Paper craft to the max. Start the beta build with egregoous cliches and 3 solid formal rhyming poems. Each
+     game has ONE poem mixed in and you sort the order of the lines once you id them all."
+     Engine follows kireji-pond.html Cliché Creek (v5.6 to v5.13): single lines drift past, one real poem in the stream
+     with cliché lines at 1 real : 2 cliché, a real line at least every third boat, lines that drift off come round again,
+     Still water stops the river. New here: every judgment answers at once, and a real line will not tear (closes the
+     Kireji open item where Smash confirmed a real line). Spec: claude/SPEC-CLICHE-CREEK-2026-10-23.md
+     All player-facing copy below is machine fallback for the founder to edit. -->
+<style>
+:root{
+  --ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  /* TEXT tokens (used as color) */
+  --ring:#1f1a14; --slipline:#1f1a14; --ink:#1f1a14; --ink2:#4a3f33; --slipink:#1f1a14; --on-accent:#ffffff; --tagink:#1f1a14;
+  /* SURFACE tokens (backgrounds that carry text) */
+  --paper:#fbf6ea; --slip:#fffaf0; --accent:#2c5a4c; --chip:#efe4cc; --tagbg:#fff3d6; --okbg:#e3efd9; --nobg:#f6e1d6;
+  /* ATMOSPHERE tokens (scene fills only, never text) */
+  --sky:#bfe0ec; --sky2:#e6f2ef; --sun:#f6c453; --sun2:#ef9f45; --cloud:#fdfbf5; --stitch:#b9c7cf;
+  --hillA:#a9c5a0; --hillB:#89b27e; --hillC:#6f9a64; --hillD:#5d8a55; --pine1:#3f6f4f; --pine2:#2f5a3f; --trunk:#7a5a3c;
+  --river1:#8fc3d4; --river2:#6fa9c4; --river3:#5592b3; --river4:#447fa2; --river5:#386d8f;
+  --bank:#9bbf72; --bank2:#7fa85a; --reed:#557d3d; --cat:#7b5233; --bloom:#f0a6a0; --bloom2:#f6d26b;
+  --deckle:#fffdf6; --shade:#1b2a33; --crane1:#fffdf6; --crane2:#e2dccd;
+  --boat1:#fffdf6; --boat2:#e7dfcd; --string:#6d5b47; --peg:#c89a64; --tape:rgba(214,120,110,.55); --tape2:rgba(120,170,190,.55);
+  --veil:rgba(20,30,36,.38);
+  color-scheme: light;
+}
+html[data-light="day"] body{
+  --ring:#1f1a14; --slipline:#1f1a14; --ink:#1f1a14; --ink2:#4a3f33; --slipink:#1f1a14; --on-accent:#ffffff; --tagink:#1f1a14;
+  --paper:#fbf6ea; --slip:#fffaf0; --accent:#2c5a4c; --chip:#efe4cc; --tagbg:#fff3d6; --okbg:#e3efd9; --nobg:#f6e1d6;
+  --sky:#bfe0ec; --sky2:#e6f2ef; --sun:#f6c453; --sun2:#ef9f45; --cloud:#fdfbf5; --stitch:#b9c7cf;
+  --hillA:#a9c5a0; --hillB:#89b27e; --hillC:#6f9a64; --hillD:#5d8a55; --pine1:#3f6f4f; --pine2:#2f5a3f; --trunk:#7a5a3c;
+  --river1:#8fc3d4; --river2:#6fa9c4; --river3:#5592b3; --river4:#447fa2; --river5:#386d8f;
+  --bank:#9bbf72; --bank2:#7fa85a; --reed:#557d3d; --cat:#7b5233; --bloom:#f0a6a0; --bloom2:#f6d26b;
+  --deckle:#fffdf6; --shade:#1b2a33; --crane1:#fffdf6; --crane2:#e2dccd;
+  --boat1:#fffdf6; --boat2:#e7dfcd; --string:#6d5b47; --peg:#c89a64; --tape:rgba(214,120,110,.55); --tape2:rgba(120,170,190,.55);
+  --veil:rgba(20,30,36,.38);
+}
+html[data-light="night"] body, html body.night{
+  --ring:#f4ecdb; --slipline:#1f1a14; --ink:#f4ecdb; --ink2:#d6cbb3; --slipink:#1f1a14; --on-accent:#10221c; --tagink:#1f1a14;
+  --paper:#222a3b; --slip:#fff4dc; --accent:#9fd8c2; --chip:#323c52; --tagbg:#fff0cf; --okbg:#2f4a3b; --nobg:#4a3230;
+  --sky:#1c2a4a; --sky2:#2c3d63; --sun:#f4e3a8; --sun2:#d9c27a; --cloud:#3b4a6e; --stitch:#6b7ba0;
+  --hillA:#2f4a5c; --hillB:#28414f; --hillC:#223845; --hillD:#1d313b; --pine1:#1f3a37; --pine2:#152b29; --trunk:#3d2f26;
+  --river1:#2b5574; --river2:#244a67; --river3:#1e405b; --river4:#183650; --river5:#132d44;
+  --bank:#2d4a3a; --bank2:#243f31; --reed:#3d5f46; --cat:#5a3e2a; --bloom:#c98f8b; --bloom2:#d9c27a;
+  --deckle:#cfd6e6; --shade:#000000; --crane1:#e9e4d6; --crane2:#bdb6a5;
+  --boat1:#efe7d3; --boat2:#c9bfa7; --string:#b9a88f; --peg:#a07a50; --tape:rgba(214,120,110,.45); --tape2:rgba(120,170,190,.45);
+  --veil:rgba(0,0,0,.5);
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+  --ring:#f4ecdb; --slipline:#1f1a14; --ink:#f4ecdb; --ink2:#d6cbb3; --slipink:#1f1a14; --on-accent:#10221c; --tagink:#1f1a14;
+  --paper:#222a3b; --slip:#fff4dc; --accent:#9fd8c2; --chip:#323c52; --tagbg:#fff0cf; --okbg:#2f4a3b; --nobg:#4a3230;
+  --sky:#1c2a4a; --sky2:#2c3d63; --sun:#f4e3a8; --sun2:#d9c27a; --cloud:#3b4a6e; --stitch:#6b7ba0;
+  --hillA:#2f4a5c; --hillB:#28414f; --hillC:#223845; --hillD:#1d313b; --pine1:#1f3a37; --pine2:#152b29; --trunk:#3d2f26;
+  --river1:#2b5574; --river2:#244a67; --river3:#1e405b; --river4:#183650; --river5:#132d44;
+  --bank:#2d4a3a; --bank2:#243f31; --reed:#3d5f46; --cat:#5a3e2a; --bloom:#c98f8b; --bloom2:#d9c27a;
+  --deckle:#cfd6e6; --shade:#000000; --crane1:#e9e4d6; --crane2:#bdb6a5;
+  --boat1:#efe7d3; --boat2:#c9bfa7; --string:#b9a88f; --peg:#a07a50; --tape:rgba(214,120,110,.45); --tape2:rgba(120,170,190,.45);
+  --veil:rgba(0,0,0,.5);
+  color-scheme: dark;
+  }
+}
+html[data-light="ink"] body, html body.ink{
+  --ring:#000000; --slipline:#000000; --ink:#000000; --ink2:#1a1a1a; --slipink:#000000; --on-accent:#ffffff; --tagink:#000000;
+  --paper:#ffffff; --slip:#ffffff; --accent:#000000; --chip:#ffffff; --tagbg:#ffffff; --okbg:#ffffff; --nobg:#ffffff;
+  --sky:#f2f2f2; --sky2:#ffffff; --sun:#d9d9d9; --sun2:#a6a6a6; --cloud:#ffffff; --stitch:#7a7a7a;
+  --hillA:#d4d4d4; --hillB:#bdbdbd; --hillC:#a3a3a3; --hillD:#8c8c8c; --pine1:#5c5c5c; --pine2:#3d3d3d; --trunk:#4d4d4d;
+  --river1:#c7c7c7; --river2:#b3b3b3; --river3:#9e9e9e; --river4:#8a8a8a; --river5:#767676;
+  --bank:#cfcfcf; --bank2:#b8b8b8; --reed:#5e5e5e; --cat:#3d3d3d; --bloom:#9a9a9a; --bloom2:#c4c4c4;
+  --deckle:#ffffff; --shade:#000000; --crane1:#ffffff; --crane2:#d0d0d0;
+  --boat1:#ffffff; --boat2:#d6d6d6; --string:#000000; --peg:#5c5c5c; --tape:rgba(0,0,0,.18); --tape2:rgba(0,0,0,.12);
+  --veil:rgba(0,0,0,.35);
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden}
+body{font-family:var(--ui);font-size:19px;line-height:1.4;color:var(--ink);background:var(--sky);-webkit-tap-highlight-color:transparent}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:4px solid var(--ring);outline-offset:3px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+#scene{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
+#scene .sway{animation:sway 9s ease-in-out infinite alternate}
+#scene .sway.b{animation-duration:12s;animation-delay:-3s}
+#scene .sway.c{animation-duration:7s;animation-delay:-5s}
+#scene .drift{animation:drift 140s linear infinite}
+#scene .spin{transform-box:fill-box;transform-origin:center;animation:spin 90s linear infinite}
+#scene .fly{animation:fly 70s linear infinite}
+@keyframes sway{from{transform:translateX(-60px)}to{transform:translateX(60px)}}
+@keyframes drift{from{transform:translateX(-30vw)}to{transform:translateX(130vw)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fly{0%{transform:translate(-15vw,6vh)}50%{transform:translate(55vw,0)}100%{transform:translate(120vw,7vh)}}
+body.still #scene .sway, body.still #scene .drift, body.still #scene .fly{animation-play-state:paused}
+.night-only{display:none}
+html[data-light="night"] .night-only, body.night .night-only{display:inline}
+html[data-light="night"] .day-only, body.night .day-only{display:none}
+@media (prefers-color-scheme: dark){html:not([data-light]) .night-only{display:inline} html:not([data-light]) .day-only{display:none}}
+
+/* paper card with washi tape */
+.card{background:var(--paper);color:var(--ink);border-radius:4px;box-shadow:0 3px 0 rgba(0,0,0,.08),0 6px 16px rgba(0,0,0,.18);position:relative}
+.card::before{content:"";position:absolute;top:-11px;left:22px;width:76px;height:24px;background:var(--tape);transform:rotate(-4deg);
+  background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.35) 0 6px,transparent 6px 12px)}
+
+.hud{position:fixed;z-index:3;top:calc(12px + env(safe-area-inset-top));left:12px;padding:10px 14px 10px;max-width:calc(100vw - 126px)}
+.hud h1{margin:0;font-family:var(--serif);font-size:22px;line-height:1.15;font-weight:700}
+.chip{display:inline-block;font-family:var(--ui);font-size:18px;font-weight:600;line-height:1;padding:3px 7px;margin-left:5px;border-radius:999px;background:var(--chip);color:var(--ink);vertical-align:3px}
+.hud p{margin:4px 0 0;font-size:18px;color:var(--ink2)}
+.nw{white-space:nowrap}
+.hud b{color:var(--ink)}
+
+.corner{position:fixed;z-index:3;top:calc(12px + env(safe-area-inset-top));right:12px;display:flex;flex-direction:column;gap:8px;align-items:stretch;width:92px}
+.pill{min-height:52px;padding:6px 12px;border:2px solid var(--ring);border-radius:999px;background:var(--paper);color:var(--ink);font-size:18px;font-weight:500;
+  box-shadow:0 3px 0 rgba(0,0,0,.18)}
+.pill[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+
+#line{position:fixed;z-index:2;left:0;right:0;height:80px;pointer-events:none}
+#line svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.tagp{position:absolute;width:34px;height:44px;margin-left:-17px;background:var(--tagbg);color:var(--tagink);font-size:18px;font-weight:700;
+  display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;border-radius:3px 3px 6px 6px;
+  clip-path:polygon(0 18%,30% 0,70% 0,100% 18%,100% 100%,0 100%);box-shadow:0 2px 4px rgba(0,0,0,.25);transform-origin:50% 0;animation:swing 3s ease-in-out infinite alternate}
+.tagp::after{content:"";position:absolute;top:5px;left:50%;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:var(--string)}
+.peg{position:absolute;width:10px;height:22px;margin-left:-5px;background:var(--peg);border-radius:3px;box-shadow:0 1px 2px rgba(0,0,0,.35)}
+@keyframes swing{from{transform:rotate(-4deg)}to{transform:rotate(4deg)}}
+body.still .tagp{animation:none}
+
+#boats{position:fixed;inset:0;z-index:1;pointer-events:none}
+.boat{position:absolute;left:0;top:0;pointer-events:auto;border:0;background:none;padding:0;margin:0;color:var(--slipink);font-weight:600;will-change:transform;text-align:center;
+  display:flex;flex-direction:column;align-items:center;max-width:min(78vw,340px)}
+.boat .bob{display:flex;flex-direction:column;align-items:center;animation:bob 3.2s ease-in-out infinite alternate}
+.boat:nth-child(2n) .bob{animation-duration:2.6s;animation-delay:-1s}
+body.still .boat .bob{animation:none}
+@keyframes bob{from{transform:translateY(-3px) rotate(-1.2deg)}to{transform:translateY(3px) rotate(1.2deg)}}
+.slip{display:block;font-weight:600;background-color:var(--slip);background-image:linear-gradient(to bottom,transparent calc(100% - 7px),rgba(90,140,190,.35) calc(100% - 7px),rgba(90,140,190,.35) calc(100% - 5px),transparent calc(100% - 5px));color:var(--slipink);font-family:var(--serif);font-size:20px;line-height:1.3;padding:10px 14px 11px;border-radius:2px;
+  box-shadow:0 2px 0 rgba(0,0,0,.08),0 5px 12px rgba(0,0,0,.25);position:relative;
+  clip-path:polygon(0 3%,6% 0,14% 2%,23% 0,33% 1%,44% 0,55% 2%,66% 0,77% 1%,88% 0,100% 2%,99% 30%,100% 62%,99% 100%,90% 98%,79% 100%,67% 98%,55% 100%,43% 98%,31% 100%,19% 98%,8% 100%,0 98%,1% 60%)}
+.boat .mast{width:3px;height:10px;background:var(--string)}
+.boat svg.hull{width:118px;height:36px;display:block;overflow:visible}
+.boat.sel .slip{outline:4px solid var(--ring);outline-offset:4px}
+.boat:focus-visible{outline:4px solid var(--ring);outline-offset:6px;border-radius:6px}
+.boat.shake .bob{animation:shake .5s ease-in-out}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px) rotate(-3deg)}40%{transform:translateX(8px) rotate(2deg)}60%{transform:translateX(-6px)}80%{transform:translateX(4px)}}
+
+.bar{position:fixed;z-index:3;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:8px;align-items:stretch;max-width:640px;margin:0 auto}
+#msg{margin:0;padding:12px 16px;font-size:19px}
+#msg.warn{background:var(--nobg)}
+#msg.good{background:var(--okbg)}
+#deal{align-self:flex-start}
+.sheet{padding:16px;display:flex;flex-direction:column;gap:10px}
+.sheet[hidden]{display:none}
+.sheet .q{margin:0;font-size:18px;color:var(--ink2)}
+.sheet blockquote{margin:0;font-family:var(--serif);font-size:22px;line-height:1.3;color:var(--ink)}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.big{min-height:56px;padding:8px 12px;border-radius:10px;border:2px solid var(--ring);background:var(--paper);color:var(--ink);font-size:19px;font-weight:700}
+.big.primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.big.full{grid-column:1 / -1}
+.big:disabled{opacity:.45;cursor:default}
+
+/* sort and done panels */
+.veil{position:fixed;inset:0;z-index:4;background:var(--veil)}
+.panel{position:fixed;z-index:5;left:50%;transform:translateX(-50%);width:min(680px,calc(100vw - 24px));top:calc(16px + env(safe-area-inset-top));bottom:calc(16px + env(safe-area-inset-bottom));
+  overflow-y:auto;overflow-x:hidden;padding:22px 16px 20px}
+.panel[hidden],.veil[hidden]{display:none}
+.panel::after{content:"";position:absolute;top:-8px;right:26px;width:70px;height:22px;background:var(--tape2);transform:rotate(5deg)}
+.eyebrow{margin:0;font-size:18px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink2)}
+.panel h2{margin:4px 0 8px;font-family:var(--serif);font-size:28px;line-height:1.15}
+.panel h2:focus{outline:none}
+.note{margin:0 0 10px;color:var(--ink2)}
+.scheme{margin:0 0 12px}
+#sList{list-style:none;margin:0 0 14px;padding:0;display:flex;flex-direction:column;gap:8px}
+.row{display:flex;align-items:stretch;gap:8px;background:var(--slip);color:var(--slipink);border-radius:3px;padding:6px;box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.row .n{flex:0 0 34px;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--slipink)}
+.row .t{flex:1;min-width:0;text-align:left;border:2px solid transparent;border-radius:6px;background:transparent;color:var(--slipink);font-family:var(--serif);font-size:19px;line-height:1.3;padding:8px;min-height:48px}
+.row .t[aria-pressed="true"]{border-color:var(--slipline);border-style:dashed}
+.row .rh{display:block;font-family:var(--ui);font-size:18px;font-weight:700;color:var(--slipink);margin-top:4px}
+.row .ar{flex:0 0 48px;display:flex;flex-direction:column;gap:4px}
+.row .ar button{flex:1;min-height:44px;border:2px solid var(--slipline);border-radius:8px;background:var(--slip);color:var(--slipink);font-size:20px;font-weight:800;line-height:1}
+.row .ar button:disabled{opacity:.35}
+.row.locked{background:var(--okbg);color:var(--ink)}
+.row.locked .n,.row.locked .t,.row.locked .rh{color:var(--ink)}
+.row .pin{flex:0 0 48px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:var(--ink)}
+.prow{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.prow .big{flex:1 1 220px}
+#smsg{margin:12px 0 0;padding:10px 12px;border-radius:6px;background:var(--chip);color:var(--ink)}
+.poem{font-family:var(--serif);font-size:21px;line-height:1.5;margin:10px 0 14px}
+.poem p{margin:0 0 14px}
+.poem .ln{display:flex;gap:10px}
+.poem .ln span:first-child{flex:1;padding-left:1.1em;text-indent:-1.1em}
+.poem .let{flex:0 0 22px;font-family:var(--ui);font-size:18px;font-weight:700;color:var(--ink2);text-align:right}
+.by{margin:0 0 4px;color:var(--ink2)}
+.form{margin:0 0 10px}
+.stats{margin:0 0 14px;padding:10px 12px;background:var(--chip);color:var(--ink);border-radius:6px}
+
+.fx{position:fixed;z-index:6;pointer-events:none}
+.bit{position:fixed;z-index:6;pointer-events:none;width:12px;height:9px;border-radius:1px}
+@media (prefers-reduced-motion: reduce){
+  #scene .sway,#scene .drift,#scene .fly,#scene .spin,.tagp,.boat .bob{animation:none !important}
+}
+@media (max-width:420px){
+  .hud{max-width:calc(100vw - 118px)}
+  .corner{width:88px}
+  .btns{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<svg id="scene" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"></svg>
+
+<header class="hud card">
+  <h1>Cliché Creek<span class="chip">v0.1</span><span class="chip">Lab</span></h1>
+  <p><span id="hPoem">Poem <span class="nw">1 of 3</span></span><br>Found <span class="nw"><b id="hFound">0</b> of <b id="hTotal">8</b></span></p>
+</header>
+
+<nav class="corner comfort" aria-label="Paper mode">
+  <button class="pill" id="mode" type="button" aria-label="Paper mode: Day. Tap for Night.">Day</button>
+</nav>
+
+<div id="line" aria-hidden="true"><svg><path id="string" fill="none" stroke-width="2.5"/></svg></div>
+
+<main id="boats" aria-label="The creek: lines on paper boats"></main>
+
+<div class="bar">
+  <button class="pill" id="deal" type="button" hidden>New boats</button>
+  <section class="sheet card" id="sheet" hidden aria-labelledby="sheetQ">
+    <p class="q" id="sheetQ">Is this line from the poem, or a cliché?</p>
+    <blockquote id="sheetLine"></blockquote>
+    <div class="btns">
+      <button class="big primary" id="bKeep" type="button">From the poem: keep it</button>
+      <button class="big" id="bTear" type="button">Cliché: tear it up</button>
+      <button class="big full" id="bDrift" type="button">Not sure: let it drift</button>
+    </div>
+  </section>
+  <p class="card" id="msg" role="status" aria-live="polite" tabindex="-1"></p>
+</div>
+
+<div class="veil" id="veil" hidden></div>
+<section class="panel card" id="sort" hidden aria-labelledby="sortH">
+  <p class="eyebrow" id="sEye">Poem 1 of 3 · the sort</p>
+  <h2 id="sortH" tabindex="-1">Put the lines in the poet's order</h2>
+  <p class="note">Tap a line, then tap another to swap them, or use the arrows. Check when you are ready: lines in the right place get pinned.</p>
+  <p class="scheme" id="sScheme"></p>
+  <ol id="sList"></ol>
+  <div class="prow">
+    <button class="big" id="hint" type="button" aria-pressed="false">Show the rhymes</button>
+    <button class="big primary" id="check" type="button">Check my order</button>
+  </div>
+  <div class="prow"><button class="big snd" type="button" aria-pressed="true">Sound on</button></div>
+  <p id="smsg" role="status" aria-live="polite"></p>
+</section>
+<section class="panel card" id="done" hidden aria-labelledby="doneH">
+  <p class="eyebrow" id="dEye">Poem 1 of 3 · the poem</p>
+  <h2 id="doneH" tabindex="-1"></h2>
+  <p class="by" id="dBy"></p>
+  <div class="poem" id="dPoem"></div>
+  <p class="form" id="dForm"></p>
+  <p class="stats" id="dStats"></p>
+  <div class="prow">
+    <button class="big primary" id="dNext" type="button">Next poem</button>
+    <button class="big" id="dAgain" type="button">Play this poem again</button>
+  </div>
+  <div class="prow"><button class="big snd" type="button" aria-pressed="true">Sound on</button></div>
+</section>
+
+<script>
+"use strict";
+/* ---------------- the poems ----------------
+   Public domain in the US. River text is made from these by riverForm(): line-end punctuation off, first letter
+   lowercased, so neither punctuation nor capitals tell a poem line from a cliché. The results show them as printed. */
+/* SOURCE-VERBATIM-BEGIN  Frost 1923 (New Hampshire, Gutenberg 58611); Yeats, Poems (Unwin, Gutenberg 38877); Hopkins 1918 (Poems, ed. Bridges, Gutenberg 22403) - public domain in the US.
+   Checked line by line 2026-10-23. Hopkins: the 1918 page prints GLORY in capitals (typographic opening, set here as Glory) and wraps plough onto its own line (printer's wrap, kept as one verse line). */
+const POEMS=[
+ {id:'dust',title:'Dust of Snow',by:'Robert Frost',src:'New Hampshire, 1923',scheme:'ABAB CDCD',stanzas:[8],
+  lines:['The way a crow','Shook down on me','The dust of snow','From a hemlock tree','Has given my heart','A change of mood','And saved some part','Of a day I had rued.'],
+  rh:['-ow','-ee','-ow','-ee','-art','-ood','-art','-ood'],
+  form:'Two quatrains rhymed ABAB CDCD, two beats to a line. One sentence carries the whole poem: a small thing happens, and it changes the day.'},
+ {id:'innisfree',title:'The Lake Isle of Innisfree',by:'W. B. Yeats',src:'Poems (T. Fisher Unwin), text as reprinted 1895 to 1920; first printed 1890',scheme:'ABAB CDCD EFEF',stanzas:[4,4,4],
+  lines:['I will arise and go now, and go to Innisfree,','And a small cabin build there, of clay and wattles made:','Nine bean rows will I have there, a hive for the honey bee,','And live alone in the bee-loud glade.',
+   'And I shall have some peace there, for peace comes dropping slow,','Dropping from the veils of the morning to where the cricket sings;','There midnight’s all a glimmer, and noon a purple glow,','And evening full of the linnet’s wings.',
+   'I will arise and go now, for always night and day','I hear lake water lapping with low sounds by the shore;','While I stand on the roadway, or on the pavements gray,','I hear it in the deep heart’s core.'],
+  rh:['-ee','-ade','-ee','-ade','-ow','-ings','-ow','-ings','-ay','-ore','-ay','-ore'],
+  form:'Three quatrains rhymed ABAB CDCD EFEF. Long lines of six beats, and every stanza closes on a short line of four, like a breath let out.'},
+ {id:'pied',title:'Pied Beauty',by:'Gerard Manley Hopkins',src:'Poems, edited by Robert Bridges, 1918',scheme:'ABCABC DBCDC',stanzas:[6,5],
+  lines:['Glory be to God for dappled things—','For skies of couple-colour as a brinded cow;','For rose-moles all in stipple upon trout that swim:','Fresh-firecoal chestnut-falls; finches’ wings;','Landscape plotted and pieced—fold, fallow, and plough;','And àll tràdes, their gear and tackle and trim.',
+   'All things counter, original, spare, strange;','Whatever is fickle, freckled (who knows how?)','With swift, slow; sweet, sour; adazzle, dim;','He fathers-forth whose beauty is past change:','Praise him.'],
+  rh:['-ings','-ow (cow)','-im','-ings','-ow (cow)','-im','-ange','-ow (cow)','-im','-ange','-im'],
+  form:'A curtal sonnet, Hopkins’ own shrunken sonnet of ten and a half lines, rhymed ABCABC DBCDC. Look at what it praises: things counter, original, spare, strange. The opposite of a cliché.'}
+];
+/* SOURCE-VERBATIM-END */
+
+/* ---------------- the clichés (egregious on purpose, beta) ----------------
+   Twins echo their poem's subject so the stream is a real choice; the general pool fills the rest. */
+const TWINS={
+ dust:['a raven as black as midnight','snow fell like a soft white blanket','as pure as the driven snow','my heart was as heavy as lead',
+  'it turned my frown upside down','the sun came out from behind the clouds','a winter wonderland of sparkling white','it brightened up my gloomy day'],
+ innisfree:['I long to escape the rat race','a cozy little cottage in the woods','as busy as a bee','far away from the hustle and bustle',
+  'at long last, peace and quiet','at the crack of dawn','the stars twinkled like diamonds','nature’s sweet symphony',
+  'the gentle lapping of the waves','home is where the heart is','deep down in my heart of hearts','a hidden paradise on earth'],
+ pied:['the beauty of nature takes my breath away','every color of the rainbow','a feast for the eyes','variety is the spice of life',
+  'beauty is in the eye of the beholder','when they made you, they broke the mold','a sight for sore eyes','God works in mysterious ways',
+  'as different as night and day','quick as a flash','sweet as honey']
+};
+const GENERAL=['it was a dark and stormy night','roses are red, violets are blue','my heart skipped a beat','tears fell like rain','as cold as ice',
+ 'the calm before the storm','at the end of the day','lost in the sands of time','a diamond in the rough','my heart shattered into a million pieces',
+ 'the light at the end of the tunnel','every cloud has a silver lining','time heals all wounds','the wind whispered softly through the trees',
+ 'the moon hung like a silver coin','her eyes sparkled like stars','lost in a sea of emotion','only time will tell','in the blink of an eye',
+ 'and the world stood still','my spirit soared on wings of joy','a single tear rolled down my cheek','all good things must come to an end',
+ 'a rollercoaster of emotions','the sun kissed the horizon','frozen in time','the darkness swallowed me whole','the fire of passion burned within',
+ 'two hearts beating as one','a love that would last forever','life is a journey, not a destination','happy as a clam',
+ 'it’s always darkest before the dawn','the silence was deafening','as old as time','my one true love','the rain washed my sorrows away',
+ 'a ray of sunshine on a cloudy day','the autumn leaves fell like tears','I gazed into the endless sky','the ocean of my soul','like a moth to a flame'];
+
+const TEAR_MSG=['Torn up. Good riddance.','Shredded. That one has been said a million times.','Into the recycling with it.',
+ 'Torn in two. The creek is fresher for it.','Confetti now. Nobody will miss it.','Ripped. A fresh line will float in its place.'];
+
+/* ---------------- helpers ---------------- */
+const $=s=>document.querySelector(s);
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function riverForm(t){let b=t.replace(/[^\p{L}\p{N})]+$/u,''); return /^I\b/.test(b)?b:b.charAt(0).toLowerCase()+b.slice(1)}
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+
+/* ---------------- sound: paper and wood, all synthesized ---------------- */
+const Snd={ctx:null,on:true,
+ ac(){if(!this.on)return null; if(!this.ctx){try{this.ctx=new (window.AudioContext||window.webkitAudioContext)()}catch(e){return null}} if(this.ctx.state==='suspended')this.ctx.resume(); return this.ctx},
+ tone(f,t0,d,type,g){const c=this.ac();if(!c)return;const o=c.createOscillator(),a=c.createGain();o.type=type||'sine';o.frequency.value=f;
+  a.gain.setValueAtTime(0.0001,c.currentTime+t0);a.gain.exponentialRampToValueAtTime(g||.18,c.currentTime+t0+.01);a.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+t0+d);
+  o.connect(a).connect(c.destination);o.start(c.currentTime+t0);o.stop(c.currentTime+t0+d+.05)},
+ rip(){const c=this.ac();if(!c)return;const n=Math.floor(c.sampleRate*.38),b=c.createBuffer(1,n,c.sampleRate),d=b.getChannelData(0);
+  for(let i=0;i<n;i++){const crack=Math.random()<.06?1:.35;d[i]=(Math.random()*2-1)*crack*(1-i/n)}
+  const s=c.createBufferSource();s.buffer=b;const f=c.createBiquadFilter();f.type='bandpass';f.Q.value=1.2;f.frequency.setValueAtTime(1600,c.currentTime);f.frequency.linearRampToValueAtTime(3800,c.currentTime+.35);
+  const g=c.createGain();g.gain.value=.55;s.connect(f).connect(g).connect(c.destination);s.start()},
+ tock(){this.tone(540,0,.12,'triangle',.22);this.tone(320,.02,.1,'sine',.12)},
+ chime(){this.tone(1318.5,0,.35,'sine',.12);this.tone(1975.5,.04,.3,'sine',.07)},
+ thud(){this.tone(150,0,.22,'sine',.25);this.tone(110,.05,.2,'sine',.18)},
+ swish(){this.tone(880,0,.08,'sine',.04)},
+ cascade(){[784,987.8,1174.7,1568,1975.5].forEach((f,i)=>this.tone(f,i*.09,.5,'sine',.11))}
+};
+
+/* ---------------- the paper scene ---------------- */
+const svg=$('#scene'); let W=innerWidth,H=innerHeight;
+function torn(x0,x1,y,amp,seed,step){const r=rng(seed),p=[];const f1=.004+r()*.004,f2=.013+r()*.01,ph=r()*6;
+  for(let x=x0;x<=x1+step;x+=step*(.6+r()*.8)){p.push([Math.min(x,x1),y+amp*Math.sin(x*f1+ph)+amp*.35*Math.sin(x*f2+ph*2)+(r()-.5)*3.2])}return p}
+function band(pts,bottom){return 'M'+pts[0][0].toFixed(1)+','+bottom+' '+pts.map(q=>'L'+q[0].toFixed(1)+','+q[1].toFixed(1)).join(' ')+' L'+pts[pts.length-1][0].toFixed(1)+','+bottom+' Z'}
+function layer(cls,d,extra){return `<path d="${d}" transform="translate(0,8)" style="fill:var(--shade);opacity:.09"/><path d="${d}" transform="translate(0,3)" style="fill:var(--shade);opacity:.2"/><path d="${d}" style="fill:var(${cls});stroke:var(--deckle);stroke-width:2.6;paint-order:stroke;stroke-linejoin:round" ${extra||''}/>`}
+function rosette(cx,cy,r,teeth){let p=[];for(let i=0;i<teeth*2;i++){const a=i/(teeth*2)*Math.PI*2,rr=i%2?r:r*1.2;p.push((cx+Math.cos(a)*rr).toFixed(1)+','+(cy+Math.sin(a)*rr).toFixed(1))}return p.join(' ')}
+function cloud(x,y,s){return `M${x-50*s},${y} a${18*s},${18*s} 0 0 1 ${22*s},${-18*s} a${24*s},${24*s} 0 0 1 ${42*s},${-10*s} a${18*s},${18*s} 0 0 1 ${30*s},${12*s} a${12*s},${12*s} 0 0 1 ${6*s},${16*s} z`}
+function pine(x,base,h){const w=h*.46;let s=`<rect x="${x-h*.035}" y="${base-h*.12}" width="${h*.07}" height="${h*.14}" style="fill:var(--trunk)"/>`;
+  for(let t=0;t<3;t++){const top=base-h+t*h*.26,bot=base-h*.12-(2-t)*h*.13,ww=w*(.55+t*.22);
+    s+=`<path d="M${x},${top} L${x-ww},${bot} L${x},${bot-h*.03} Z" style="fill:var(--pine1)"/><path d="M${x},${top} L${x+ww},${bot} L${x},${bot-h*.03} Z" style="fill:var(--pine2)"/>`}
+  return s}
+function star(cx,cy,r){let p=[];for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rr=i%2?r*.45:r;p.push((cx+Math.cos(a)*rr).toFixed(1)+','+(cy+Math.sin(a)*rr).toFixed(1))}return `<polygon points="${p.join(' ')}" style="fill:var(--sun);stroke:var(--deckle);stroke-width:1.2;paint-order:stroke"/>`}
+function crane(){return `<g transform="scale(1.1)">
+ <path d="M10,0 L46,-26 L18,5 Z" style="fill:var(--crane2)"/><path d="M-10,0 L-42,-24 L-47,-19 L-16,5 Z" style="fill:var(--crane2)"/>
+ <path d="M-47,-19 L-42,-24 L-52,-22 Z" style="fill:var(--crane1)"/>
+ <path d="M-16,5 L0,-5 L18,5 L0,12 Z" style="fill:var(--crane1)"/>
+ <path d="M-4,-3 L14,-44 L8,1 Z" style="fill:var(--crane1)"/><path d="M0,-3 L-14,-36 L6,1 Z" style="fill:var(--crane2)"/></g>`}
+function lily(x,y,r){const a=.5;return `<g><ellipse cx="${x}" cy="${y+3}" rx="${r}" ry="${r*.42}" style="fill:var(--shade);opacity:.18"/>
+ <path d="M${x},${y} L${x+r*Math.cos(-a)},${y+r*.42*Math.sin(-a)} A${r},${r*.42} 0 1 1 ${x+r*Math.cos(a)},${y+r*.42*Math.sin(a)} Z" style="fill:var(--hillC);stroke:var(--deckle);stroke-width:1.6;paint-order:stroke"/>
+ <path d="M${x},${y} L${x-r*.8},${y}" style="stroke:var(--hillD);stroke-width:1.2"/></g>`}
+function fan(cx,cy,r,n){let s='';for(let i=0;i<n;i++){const a=i/n*Math.PI*2,b=a+Math.PI/n;
+  s+=`<path d="M${cx},${cy} L${cx+Math.cos(a)*r},${cy+Math.sin(a)*r} L${cx+Math.cos(b)*r*.9},${cy+Math.sin(b)*r*.9} Z" style="fill:var(${i%2?'--sun':'--sun2'});opacity:.55"/>`}return s}
+function fringe(y,seed){const r=rng(seed);let d='';for(let x=-10;x<W+10;x+=7+r()*5){const h=10+r()*16,lean=(r()-.5)*8;d+=`M${x},${y+6} L${x+2+lean},${y-h} L${x+5},${y+6} Z `}
+  return `<path d="${d}" style="fill:var(--bank2);stroke:var(--deckle);stroke-width:.8;paint-order:stroke"/>`}
+function heron(x,y,s){return `<g transform="translate(${x},${y}) scale(${s})">
+ <path d="M0,0 L-6,-30 L-2,-30 L2,0 Z" style="fill:var(--string)"/><path d="M6,0 L4,-30 L8,-30 L10,0 Z" style="fill:var(--string)"/>
+ <path d="M-18,-30 L22,-34 L30,-56 L-8,-50 Z" style="fill:var(--crane2);stroke:var(--deckle);stroke-width:1.5;paint-order:stroke"/>
+ <path d="M-8,-50 L22,-34 L-18,-30 Z" style="fill:var(--crane1)"/>
+ <path d="M24,-52 L30,-92 L36,-92 L32,-50 Z" style="fill:var(--crane1);stroke:var(--deckle);stroke-width:1.2;paint-order:stroke"/>
+ <path d="M30,-92 L36,-100 L58,-94 L36,-90 Z" style="fill:var(--crane2)"/><circle cx="37" cy="-95" r="1.8" style="fill:var(--shade)"/></g>`}
+function cattail(x,base,h){return `<rect x="${x-1.5}" y="${base-h}" width="3" height="${h}" style="fill:var(--reed)"/><rect x="${x-5}" y="${base-h*.92}" width="10" height="${h*.28}" rx="5" style="fill:var(--cat)"/>`}
+function reed(x,base,h,lean){return `<path d="M${x-4},${base} Q${x+lean*.4},${base-h*.6} ${x+lean},${base-h} Q${x+lean*.3},${base-h*.5} ${x+5},${base} Z" style="fill:var(--reed)"/>`}
+function flower(x,y,r,c){return `<polygon points="${rosette(x,y,r,7)}" style="fill:var(${c});stroke:var(--deckle);stroke-width:1.4;paint-order:stroke"/><circle cx="${x}" cy="${y}" r="${r*.35}" style="fill:var(--sun2)"/>`}
+
+function buildScene(){
+  W=innerWidth;H=innerHeight; svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  const R=rng(7);
+  const rTop=H*.46, x0=-40, x1=W+40, sunR=Math.min(W,H)*.075;
+  let s=`<defs><filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="3" result="n"/>
+  <feColorMatrix in="n" type="matrix" values="0 0 0 0 .3  0 0 0 0 .25  0 0 0 0 .2  0 0 0 .17 0"/></filter>
+  <linearGradient id="skyg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sky)"/><stop offset="1" style="stop-color:var(--sky2)"/></linearGradient></defs>`;
+  s+=`<rect width="${W}" height="${H}" fill="url(#skyg)"/>`;
+  // sun (day) or moon and stars (night)
+  const sx=W*.8, sy=Math.max(H*.25, 190);
+  s+=`<g class="day-only"><g class="spin">${fan(sx,sy,sunR*1.9,18)}</g><polygon class="spin" points="${rosette(sx,sy,sunR*1.05,16)}" style="fill:var(--sun2);stroke:var(--deckle);stroke-width:2;paint-order:stroke"/>
+     <circle cx="${sx}" cy="${sy}" r="${sunR*.86}" style="fill:var(--sun);stroke:var(--deckle);stroke-width:2;paint-order:stroke"/>
+     <circle cx="${sx}" cy="${sy}" r="${sunR*.62}" fill="none" style="stroke:var(--sun2);stroke-width:1.6;stroke-dasharray:5 5"/></g>`;
+  s+=`<g class="night-only"><circle cx="${sx}" cy="${sy}" r="${sunR}" style="fill:var(--sun);stroke:var(--deckle);stroke-width:2;paint-order:stroke"/>
+     <circle cx="${sx+sunR*.45}" cy="${sy-sunR*.2}" r="${sunR*.9}" style="fill:var(--sky)"/>`;
+  for(let i=0;i<14;i++) s+=star(R()*W, 120+R()*(rTop*.55), 4+R()*5);
+  s+='</g>';
+  // stitched clouds, drifting
+  [[.15,.27,1.1,0],[.55,.21,.8,-50],[.85,.34,.9,-95]].forEach((c,i)=>{
+    const lt=(typeof lineTop==='number'?lineTop:120)+50, x=c[0]*W,y=Math.max(c[1]*H,lt+i*28),sc=c[2]*Math.min(1.7,W/500+.6),d=cloud(x,y,sc);
+    s+=`<g class="drift" style="animation-delay:${c[3]}s"><path d="${d}" transform="translate(0,3)" style="fill:var(--shade);opacity:.15"/>
+      <path d="${d}" style="fill:var(--cloud);stroke:var(--deckle);stroke-width:2;paint-order:stroke"/>
+      <path d="${d}" transform="translate(${x*.12},${y*.12}) scale(.88)" fill="none" style="stroke:var(--stitch);stroke-width:1.6;stroke-dasharray:4 5"/></g>`});
+  // origami crane
+  s+=`<g class="fly"><g transform="translate(0,${Math.max(H*.3,200)})">${crane()}</g></g>`;
+  // far hills, torn paper
+  s+=layer('--hillA',band(torn(x0,x1,rTop-H*.13,H*.03,11,14),rTop+4));
+  const hb=band(torn(x0,x1,rTop-H*.085,H*.025,23,12),rTop+4);
+  s+=layer('--hillB',hb)+`<clipPath id="hbclip"><path d="${hb}"/></clipPath><g clip-path="url(#hbclip)">`;
+  for(let x=-W*.2,k=0;x<W*1.2;x+=26,k++){ if(k%2) s+=`<path d="M${x},${rTop-H*.2} L${x+26},${rTop-H*.2} L${x+70},${rTop+10} L${x+44},${rTop+10} Z" style="fill:var(--hillC);opacity:.28"/>` }
+  s+='</g>';
+  // pleated pines on the far bank
+  const pr=rng(5); const np=Math.max(5,Math.round(W/70));
+  for(let i=0;i<np;i++){const px=(i+.3+pr()*.5)*W/np, ph=H*(.07+pr()*.06); s+=pine(px, rTop-H*.03+pr()*8, ph)}
+  s+=layer('--hillC',band(torn(x0,x1,rTop-H*.035,H*.012,37,10),rTop+6));
+  s+=layer('--bank',band(torn(x0,x1,rTop-H*.008,H*.006,41,9),rTop+12));
+  // the river: five paper strips that sway
+  const rv=['--river1','--river2','--river3','--river4','--river5'], rH=H*.42;
+  rv.forEach((c,i)=>{const y=rTop+i*rH/5.2; const cls=['sway','sway b','sway c','sway','sway b'][i];
+    const tp=torn(-240,W+240,y,4+i*1.5,100+i*7,16);
+    s+=`<g class="${cls}">${layer(c,band(tp,H+10))}<path d="M${tp.map(q=>q[0].toFixed(1)+','+(q[1]+9).toFixed(1)).join(' L')}" fill="none" style="stroke:var(--deckle);stroke-width:1.4;stroke-dasharray:6 7;opacity:.55"/></g>`});
+  const lr=rng(21); for(let i=0;i<Math.max(3,Math.round(W/140));i++){const lx=lr()*W, ly=rTop+14+lr()*rH*.85; s+=lily(lx,ly,14+lr()*12); if(i===1) s+=flower(lx+4,ly-4,7,'--bloom')}
+  // paper ripples
+  const rr=rng(9); for(let i=0;i<9;i++){const x=rr()*W,y=rTop+20+rr()*rH*.9,w=30+rr()*50;
+    s+=`<path d="M${x},${y} q${w/2},-6 ${w},0" fill="none" style="stroke:var(--deckle);stroke-width:2.4;stroke-linecap:round;opacity:.7"/>`}
+  // near bank with reeds, cattails, paper flowers
+  const nb=H*.9;
+  s+=fringe(nb+2,71)+layer('--bank2',band(torn(x0,x1,nb,H*.008,61,9),H+10));
+  s+=heron(W*.86,nb+16,Math.min(1.1,H/800));
+  const fr=rng(13);
+  for(let i=0;i<Math.round(W/38);i++){const x=fr()*W; s+= fr()<.35?cattail(x,nb+14,H*(.07+fr()*.05)):reed(x,nb+14,H*(.05+fr()*.05),(fr()-.5)*30)}
+  for(let i=0;i<Math.round(W/120)+2;i++){s+=flower(fr()*W, nb+10+fr()*(H*.08), 7+fr()*5, fr()<.5?'--bloom':'--bloom2')}
+  s+=`<rect width="${W}" height="${H}" filter="url(#grain)" style="pointer-events:none"/>`;
+  svg.innerHTML=s;
+  drawString();
+}
+
+/* ---------------- clothesline for the caught lines ---------------- */
+function hudBottom(){const r=$('.hud').getBoundingClientRect(), c=$('.corner').getBoundingClientRect();return Math.max(r.bottom, W<560?0:0, c.bottom*(W<560?1:0))}
+let lineTop=120, sag=22;
+function drawString(){
+  lineTop=Math.max($('.hud').getBoundingClientRect().bottom, $('.corner').getBoundingClientRect().bottom)+14;
+  const ln=$('#line'); ln.style.top=lineTop+'px';
+  const p=$('#string'); p.setAttribute('d',`M-10,0 Q${W/2},${sag*2} ${W+10},0`); p.style.stroke='var(--string)';
+  placeTags();
+}
+function tagX(i,n){return W*(.07+.86*(n<2?.5:i/(n-1)))}
+function tagY(x){const t=x/W; return 4*sag*t*(1-t)}
+function placeTags(){
+  const ln=$('#line'); ln.querySelectorAll('.tagp,.peg').forEach(e=>e.remove());
+  const n=G.poem?G.poem.lines.length:8;
+  G.kept.forEach((p,i)=>{const x=tagX(i,n),y=tagY(x);
+    const t=document.createElement('div');t.className='tagp';t.style.left=x+'px';t.style.top=(y+6)+'px';t.textContent=i+1;t.style.animationDelay=(-i*.4)+'s';
+    const g=document.createElement('div');g.className='peg';g.style.left=x+'px';g.style.top=(y-8)+'px';ln.append(t,g)});
+}
+
+/* ---------------- game state ---------------- */
+const G={pi:0,poem:null,deck:[],returned:[],kept:[],torn:0,slips:0,since:0,phase:'play',still:false,paused:false,sel:null,lanes:[],order:[],locked:[],checks:0,hint:false,gone:new Set(),tearI:0};
+let LN=3;
+
+function startPoem(i){
+  G.pi=i; const P=POEMS[i]; G.poem=P;
+  const reals=P.lines.map((l,li)=>({t:riverForm(l),k:'r',li}));
+  const want=P.lines.length*2;
+  const twins=shuffle(TWINS[P.id].slice()), gen=shuffle(GENERAL.slice());
+  const dec=[]; twins.concat(gen).forEach(t=>{if(dec.length<want&&!dec.includes(t))dec.push(t)});
+  G.deck=shuffle(reals.concat(dec.map(t=>({t,k:'c'}))));
+  G.returned=[]; G.kept=[]; G.torn=0; G.slips=0; G.since=0; G.checks=0; G.hint=false; G.sel=null; G.phase='play'; G.paused=false;
+  clearBoats(); setupLanes(true); placeTags(); hud(); $('#deal').hidden=!G.still;
+  $('#sort').hidden=true; $('#done').hidden=true; $('#veil').hidden=true; $('#sheet').hidden=true;
+  say(`Poem ${i+1} of 3: ${P.lines.length} lines are hiding among the clichés. Tap a boat.`);
+}
+function hud(){$('#hPoem').innerHTML=`Poem <span class="nw">${G.pi+1} of 3</span>`;$('#hFound').textContent=G.kept.length;$('#hTotal').textContent=G.poem.lines.length}
+function say(t,kind){const m=$('#msg');m.textContent=t;m.classList.toggle('warn',kind==='warn');m.classList.toggle('good',kind==='good')}
+
+/* ---------------- the boats ---------------- */
+const HULL=`<svg class="hull" viewBox="0 0 118 36" aria-hidden="true" focusable="false">
+ <path d="M0,10 L118,10 L98,34 L20,34 Z" transform="translate(0,2)" style="fill:var(--shade);opacity:.25"/>
+ <path d="M0,10 L118,10 L98,34 L20,34 Z" style="fill:var(--boat1);stroke:var(--deckle);stroke-width:1.5"/>
+ <path d="M20,10 L59,0 L98,10 Z" style="fill:var(--boat2)"/><path d="M59,0 L59,10" style="stroke:var(--boat2);stroke-width:1"/>
+ <path d="M0,10 L20,34 L59,10 Z" style="fill:var(--boat2);opacity:.55"/></svg>`;
+function clearBoats(){G.lanes.forEach(l=>{if(l.b)l.b.el.remove()});G.lanes=[];$('#boats').innerHTML=''}
+function riverBox(){const top=H*.47, barTop=$('.bar').getBoundingClientRect().top; const bot=Math.min(H*.9,barTop-6); return [top,Math.max(bot,top+120)]}
+function setupLanes(fresh){
+  LN=H<620?2:3;
+  const old=G.lanes; G.lanes=[];
+  for(let i=0;i<LN;i++) G.lanes.push(old[i]||{b:null,cool:fresh?i*3.2:1});
+  for(let i=LN;i<old.length;i++){if(old[i].b){G.returned.push(old[i].b.p);old[i].b.el.remove()}}
+  if(fresh&&!G.lanes[0].b) spawn(0,true);
+}
+function draw(){
+  if(!G.deck.length){G.deck=shuffle(G.returned);G.returned=[]}
+  if(!G.deck.length) return null;
+  let idx=0;
+  if(G.since>=2){const j=G.deck.findIndex(p=>p.k==='r'); if(j>=0) idx=j; else {const k=G.returned.findIndex(p=>p.k==='r'); if(k>=0) return take(G.returned.splice(k,1)[0])}}
+  return take(G.deck.splice(idx,1)[0]);
+  function take(p){G.since=p.k==='r'?0:G.since+1;return p}
+}
+function laneY(i,h){const [a,b]=riverBox();const span=b-a;return a+span*(i+.5)/LN-h/2}
+function spawn(i,inView){
+  const p=draw(); if(!p) return;
+  const el=document.createElement('button'); el.type='button'; el.className='boat';
+  el.innerHTML=`<span class="bob"><span class="slip"></span><span class="mast" aria-hidden="true"></span>${HULL}</span>`;
+  el.querySelector('.slip').textContent=p.t;
+  el.setAttribute('aria-label',`Line: ${p.t}. Tap to judge it.`);
+  $('#boats').appendChild(el);
+  const w=el.offsetWidth,h=el.offsetHeight;
+  const b={p,el,w,h,x:0,y:laneY(i,h),tx:(W-w)/2+(i%2?18:-18),leaving:false,lane:i};
+  b.x=G.still?b.tx:(inView?Math.max(8,W*.12):-w-10);
+  el.style.transform=`translate(${b.x}px,${b.y}px)`;
+  el.addEventListener('click',()=>pick(b));
+  G.lanes[i].b=b;
+}
+function speed(){return Math.max(36,W/17)}
+let last=performance.now();
+function tick(now){
+  const dt=Math.min(.05,(now-last)/1000); last=now;
+  if(G.phase==='play'){
+    G.lanes.forEach((l,i)=>{
+      const b=l.b;
+      if(!b){ if(!G.paused){l.cool-=dt; if(l.cool<=0){spawn(i,false); l.cool=0}} return }
+      if(b.leaving){b.x+=Math.max(520,speed()*6)*dt}
+      else if(G.paused&&G.sel===b){}
+      else if(G.paused){}
+      else if(G.still){b.x+=(b.tx-b.x)*Math.min(1,dt*4)}
+      else b.x+=speed()*dt;
+      if(b.x>W+10){ if(!b.gone) G.returned.push(b.p); b.el.remove(); l.b=null; l.cool=G.still?.4:1.2+Math.random()*2.6 }
+      else b.el.style.transform=`translate(${b.x.toFixed(1)}px,${b.y.toFixed(1)}px)`;
+    });
+  }
+  requestAnimationFrame(tick);
+}
+
+/* ---------------- judging ---------------- */
+function pick(b){
+  if(G.phase!=='play'||b.leaving) return;
+  Snd.ac(); Snd.swish();
+  if(G.sel) G.sel.el.classList.remove('sel');
+  G.sel=b; b.el.classList.add('sel'); G.paused=true;
+  $('#sheetLine').textContent=`“${b.p.t}”`; $('#sheet').hidden=false; $('#msg').hidden=true;
+  $('#bKeep').focus({preventScroll:true});
+}
+function closeSheet(){ if(G.sel) G.sel.el.classList.remove('sel'); G.sel=null; G.paused=false; $('#sheet').hidden=true; $('#msg').hidden=false }
+function freeLane(b){const l=G.lanes[b.lane]; if(l&&l.b===b){l.b=null; l.cool=G.still?.5:1.4}}
+function judge(kind){
+  const b=G.sel; if(!b) return; const p=b.p, n=G.poem.lines.length;
+  closeSheet();
+  if(kind==='keep'){
+    if(p.k==='r'){ G.kept.push(p); flyToLine(b); b.gone=true; b.el.remove(); freeLane(b); Snd.tock(); setTimeout(()=>Snd.chime(),120);
+      hud(); const left=n-G.kept.length;
+      if(!left){ say(`Kept. That's all ${n} lines of the poem. Now put them in order.`,'good'); G.phase='wait'; setTimeout(startSort,1100) }
+      else say(`Kept. A real line from the poem. ${left} still in the creek.`,'good');
+    } else { G.slips++; tearFx(b); b.gone=true; b.el.remove(); freeLane(b); Snd.thud(); setTimeout(()=>Snd.rip(),80);
+      say(`That one is a cliché. “${p.t}” has been on a thousand greeting cards. Torn up for you. Slips: ${G.slips}.`,'warn') }
+  } else if(kind==='tear'){
+    if(p.k==='c'){ G.torn++; tearFx(b); b.gone=true; b.el.remove(); freeLane(b); Snd.rip(); say(TEAR_MSG[G.tearI++%TEAR_MSG.length]) }
+    else { G.slips++; Snd.thud(); b.el.classList.add('shake'); say(`It will not tear. That line is from the poem, so back in the creek it goes. Slips: ${G.slips}.`,'warn');
+      setTimeout(()=>{b.el.classList.remove('shake'); b.leaving=true},520) }
+  } else { b.leaving=true; say('It drifts on downstream. It will come round again.') }
+  setTimeout(()=>{const nb=document.querySelector('.boat:not(.sel)'); (nb||$('#msg')).focus({preventScroll:true})},60);
+}
+$('#bKeep').addEventListener('click',()=>judge('keep'));
+$('#bTear').addEventListener('click',()=>judge('tear'));
+$('#bDrift').addEventListener('click',()=>judge('drift'));
+addEventListener('keydown',e=>{if(e.key==='Escape'&&G.sel){closeSheet();say('Back in the creek.')}});
+
+/* ---------------- paper effects ---------------- */
+function slipClone(b){const s=b.el.querySelector('.slip'),r=s.getBoundingClientRect(),c=s.cloneNode(true);
+  Object.assign(c.style,{position:'fixed',left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px',margin:0,zIndex:6,pointerEvents:'none'});return [c,r]}
+function tearFx(b){
+  const [c,r]=slipClone(b);
+  if(RM){document.body.appendChild(c);c.animate([{opacity:1},{opacity:0}],{duration:300}).onfinish=()=>c.remove();return}
+  const L=c, Rr=c.cloneNode(true);
+  const cut='52% 0,47% 18%,56% 36%,45% 55%,54% 74%,48% 100%';
+  L.style.clipPath=`polygon(0 0,${cut},0 100%)`; Rr.style.clipPath=`polygon(${cut},100% 100%,100% 0)`;
+  document.body.append(L,Rr);
+  L.animate([{transform:'none',opacity:1},{transform:'translate(-34px,140px) rotate(-28deg)',opacity:0}],{duration:900,easing:'cubic-bezier(.3,.1,.6,1)'}).onfinish=()=>L.remove();
+  Rr.animate([{transform:'none',opacity:1},{transform:'translate(38px,150px) rotate(24deg)',opacity:0}],{duration:950,easing:'cubic-bezier(.3,.1,.6,1)'}).onfinish=()=>Rr.remove();
+  const cols=['--slip','--bloom','--bloom2','--river1','--boat2','--sun'];
+  for(let i=0;i<16;i++){const d=document.createElement('div');d.className='bit';d.style.background=`var(${cols[i%cols.length]})`;
+    const x=r.left+r.width/2+(Math.random()-.5)*r.width*.6,y=r.top+r.height/2;d.style.left=x+'px';d.style.top=y+'px';document.body.appendChild(d);
+    const dx=(Math.random()-.5)*220,dy=60+Math.random()*160,rot=(Math.random()-.5)*720;
+    d.animate([{transform:'translate(0,0) rotate(0)',opacity:1},{transform:`translate(${dx*.6}px,${-40-Math.random()*50}px) rotate(${rot/2}deg)`,opacity:1,offset:.3},{transform:`translate(${dx}px,${dy}px) rotate(${rot}deg)`,opacity:0}],
+      {duration:1100+Math.random()*500,easing:'ease-out'}).onfinish=()=>d.remove()}
+}
+function flyToLine(b){
+  const [c,r]=slipClone(b); document.body.appendChild(c);
+  const n=G.poem.lines.length,i=G.kept.length-1,x=tagX(i,n),y=lineTop+tagY(x)+20;
+  const dx=x-(r.left+r.width/2),dy=y-(r.top+r.height/2);
+  const go=()=>{c.remove();placeTags()};
+  if(RM){go();return}
+  c.animate([{transform:'none',opacity:1},{transform:`translate(${dx}px,${dy}px) scale(.12) rotate(8deg)`,opacity:.3}],{duration:700,easing:'cubic-bezier(.5,0,.3,1)'}).onfinish=go;
+}
+
+/* ---------------- the sort ---------------- */
+function startSort(){
+  G.phase='sort'; clearBoats(); $('#deal').hidden=true; $('#sheet').hidden=true; $('#msg').hidden=false;
+  const P=G.poem; let o;
+  do{o=shuffle(G.kept.slice())}while(o.length>1&&o.every((p,i)=>p.li===i));
+  G.order=o; G.locked=o.map(()=>false); G.pickI=null;
+  $('#sEye').textContent=`Poem ${G.pi+1} of 3 · the sort`;
+  $('#sScheme').innerHTML=`<span class="nw">${P.lines.length} lines</span> · rhyme scheme <b class="nw">${P.scheme}</b>`;
+  $('#hint').setAttribute('aria-pressed',G.hint); $('#hint').textContent=G.hint?'Hide the rhymes':'Show the rhymes';
+  $('#smsg').textContent='Tap a line to pick it up.';
+  $('#veil').hidden=false; $('#sort').hidden=false; $('#sort').scrollTop=0; renderSort();
+  try{Snd.chime()}catch(e){}
+  $('#sortH').focus({preventScroll:true});
+}
+function renderSort(){
+  const ol=$('#sList'); ol.innerHTML=''; const P=G.poem;
+  G.order.forEach((p,i)=>{
+    const li=document.createElement('li'); li.className='row'+(G.locked[i]?' locked':'');
+    const n=document.createElement('span'); n.className='n'; n.textContent=i+1; n.setAttribute('aria-hidden','true');
+    const t=document.createElement('button'); t.type='button'; t.className='t';
+    t.textContent=p.t;
+    if(G.hint){const rh=document.createElement('span'); rh.className='rh'; rh.textContent='rhymes on '+P.rh[p.li]; t.appendChild(rh)}
+    if(G.locked[i]){t.disabled=true; t.setAttribute('aria-label',`Line ${i+1}, pinned in place: ${p.t}`)}
+    else {t.setAttribute('aria-pressed',G.pickI===i?'true':'false'); t.setAttribute('aria-label',`Line ${i+1}: ${p.t}${G.hint?', rhymes on '+P.rh[p.li]:''}${G.pickI===i?', picked up':''}`)}
+    t.addEventListener('click',()=>tapRow(i));
+    li.append(n,t);
+    if(G.locked[i]){const pin=document.createElement('span'); pin.className='pin'; pin.textContent='Pinned'; li.appendChild(pin)}
+    else {const ar=document.createElement('span'); ar.className='ar';
+      const up=document.createElement('button'); up.type='button'; up.textContent='↑'; up.setAttribute('aria-label',`Move line ${i+1} up`); up.disabled=nextFree(i,-1)<0;
+      const dn=document.createElement('button'); dn.type='button'; dn.textContent='↓'; dn.setAttribute('aria-label',`Move line ${i+1} down`); dn.disabled=nextFree(i,1)<0;
+      up.addEventListener('click',()=>move(i,-1,'up')); dn.addEventListener('click',()=>move(i,1,'dn')); ar.append(up,dn); li.appendChild(ar)}
+    ol.appendChild(li);
+  });
+}
+function nextFree(i,d){let j=i+d; while(j>=0&&j<G.order.length&&G.locked[j]) j+=d; return (j>=0&&j<G.order.length)?j:-1}
+function swap(i,j){[G.order[i],G.order[j]]=[G.order[j],G.order[i]]}
+function tapRow(i){
+  if(G.locked[i]) return;
+  if(G.pickI===null){G.pickI=i; Snd.swish(); $('#smsg').textContent=`Picked up line ${i+1}. Tap the line it should swap with.`; renderSort(); focusRow(i,'.t'); return}
+  if(G.pickI===i){G.pickI=null; $('#smsg').textContent='Put down.'; renderSort(); focusRow(i,'.t'); return}
+  swap(G.pickI,i); Snd.tock(); $('#smsg').textContent=`Swapped lines ${G.pickI+1} and ${i+1}.`; G.pickI=null; renderSort(); focusRow(i,'.t');
+}
+function move(i,d,which){const j=nextFree(i,d); if(j<0) return; swap(i,j); G.pickI=null; Snd.tock(); $('#smsg').textContent=`Moved to line ${j+1}.`; renderSort();
+  const sel=which==='up'?'.ar button:first-child':'.ar button:last-child'; focusRow(j,sel)}
+function focusRow(i,sel){const r=$('#sList').children[i]; const el=r&&(r.querySelector(sel+':not(:disabled)')||r.querySelector('button:not(:disabled)')); if(el) el.focus({preventScroll:false})}
+$('#hint').addEventListener('click',()=>{G.hint=!G.hint; $('#hint').setAttribute('aria-pressed',G.hint); $('#hint').textContent=G.hint?'Hide the rhymes':'Show the rhymes'; renderSort();
+  $('#smsg').textContent=G.hint?'Each line now shows the sound it ends on. Lines that rhyme belong where the scheme pairs them.':'Rhymes hidden.'});
+$('#check').addEventListener('click',()=>{
+  G.checks++; let k=0; G.order.forEach((p,i)=>{if(p.li===i){G.locked[i]=true;k++}}); G.pickI=null; renderSort();
+  const n=G.order.length;
+  if(k===n){ Snd.cascade(); setTimeout(finish,700); $('#smsg').textContent=`All ${n} lines in place.`; return }
+  Snd.chime(); $('#smsg').textContent=`${k} of ${n} in place and pinned. Move the others and check again.`;
+});
+
+/* ---------------- the poem, as printed ---------------- */
+function finish(){
+  G.phase='done'; const P=G.poem; $('#sort').hidden=true; $('#done').hidden=false; $('#done').scrollTop=0;
+  $('#dEye').textContent=`Poem ${G.pi+1} of 3 · the poem`;
+  $('#doneH').textContent=P.title; $('#dBy').textContent=`${P.by}, ${P.src}. Public domain.`;
+  const letters=P.scheme.replace(/\s/g,''); let html='',k=0;
+  P.stanzas.forEach(c=>{html+='<p>';for(let i=0;i<c;i++,k++){html+=`<span class="ln"><span>${esc(P.lines[k])}</span><span class="let" aria-label="rhyme ${letters[k]}">${letters[k]}</span></span>`}html+='</p>'});
+  $('#dPoem').innerHTML=html; $('#dForm').textContent=P.form;
+  $('#dStats').innerHTML=`<span class="nw">Clichés torn: <b>${G.torn}</b></span> · <span class="nw">Slips: <b>${G.slips}</b></span> · <span class="nw">Checks: <b>${G.checks}</b></span>`;
+  const lastP=G.pi===POEMS.length-1; $('#dNext').textContent=lastP?'Start again from poem 1':`Next: poem ${G.pi+2} of 3`;
+  $('#doneH').focus({preventScroll:true});
+}
+function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+$('#dNext').addEventListener('click',()=>startPoem((G.pi+1)%POEMS.length));
+$('#dAgain').addEventListener('click',()=>startPoem(G.pi));
+
+/* ---------------- corner control: three paper modes ----------------
+   Founder 2026-10-13: three best modes per game, light and dark among them, one control. Day and Night flow; Still is
+   ink on white with the river stopped (boats wait, New boats deals fresh ones). Reduced motion stops the river in any mode. */
+const MODES=['day','night','ink'], MLAB={day:'Day',night:'Night',ink:'Still'}, MDESC={day:'Day',night:'Night',ink:'Still: high contrast, river stopped'};
+function setMode(m){document.documentElement.setAttribute('data-light',m); const nx=MODES[(MODES.indexOf(m)+1)%3];
+  $('#mode').textContent=MLAB[m]; $('#mode').setAttribute('aria-label',`Paper mode: ${MDESC[m]}. Tap for ${MLAB[nx]}.`); store.set('cc-mode',m); setStill(m==='ink'||RM)}
+$('#mode').addEventListener('click',()=>{const m=MODES[(MODES.indexOf(document.documentElement.getAttribute('data-light'))+1)%3]; setMode(m);
+  if(G.phase==='play') say(m==='ink'?'Still water: the boats wait for you. New boats brings fresh lines.':m==='night'?'Night on the creek.':'Day on the creek.')});
+function setStill(on){G.still=on; document.body.classList.toggle('still',on); $('#deal').hidden=!on||G.phase!=='play';
+  G.lanes.forEach((l,i)=>{if(l.b){l.b.tx=(W-l.b.w)/2+(i%2?18:-18)}})}
+$('#deal').addEventListener('click',()=>{if(G.phase!=='play')return; if(G.sel)closeSheet(); G.lanes.forEach(l=>{if(l.b&&!l.b.leaving)l.b.leaving=true}); Snd.swish()});
+function sndPaint(){document.querySelectorAll('.snd').forEach(b=>{b.setAttribute('aria-pressed',Snd.on);b.textContent=Snd.on?'Sound on':'Sound off'})}
+document.querySelectorAll('.snd').forEach(b=>b.addEventListener('click',()=>{Snd.on=!Snd.on; store.set('cc-snd',Snd.on?'1':'0'); sndPaint(); if(Snd.on){Snd.ac();Snd.chime()}}));
+
+/* ---------------- start: scene first ---------------- */
+(function init(){
+  const m=store.get('cc-mode'); setMode(MODES.includes(m)?m:(matchMedia('(prefers-color-scheme: dark)').matches?'night':'day'));
+  if(store.get('cc-snd')==='0') Snd.on=false; sndPaint();
+  buildScene(); startPoem(0); requestAnimationFrame(t=>{last=t;tick(t)});
+  let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{buildScene();setupLanes(false);
+    G.lanes.forEach((l,i)=>{if(l.b){l.b.y=laneY(i,l.b.h);l.b.tx=(W-l.b.w)/2+(i%2?18:-18)}})},150)});
+})();
+</script>
+</body>
+</html>
