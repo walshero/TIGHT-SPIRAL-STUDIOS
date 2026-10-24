@@ -5,7 +5,19 @@
 <meta name="spec-source" content="claude/SPEC-KIREJI-ICEBOX-v5.3-2026-09-25.md">
 <meta name="audience" content="MassBay EN195 students writing their first haiku; the founder as first player">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Kireji Pond</title>
+<title>Kireji Pond v5.14</title>
+<!-- v5.14 2026-10-23 (founder): "The 'find the haiku' mode for Kireji should include a river with only egregious cliches
+     and the game mode after you find the three lines is just ordering them. Full play on River is just 30 seconds if they
+     get all three lines correct as they arrive. Collect all 10 haiku and THEY show up as collectibles on a little fridge
+     you can open from most menus." Cliché Creek's decoys now come only from CREEK_STOCK: every one is a dead idiom
+     ("every cloud has a silver lining"), three of them riffing on the haiku's own subject. The frog will not eat a
+     cliché: a caught one is spat back, so the sort is only ordering the three real lines (the bin is gone). The river is
+     timed: the three real lines are dealt 3rd, 7th and 11th of twelve, one new line every 3.2 s, so a player who catches
+     each as it arrives finishes the river in under 30 s; the results give the river time. The run is ten: the founder's
+     five, then Bashō's old pond, Shiki's persimmon, Buson's early summer rain, Bashō's rough sea, Buson's spring sea
+     (those five in the studio's translations, flagged for the founder's edit). Rebuild one in order and it goes up on
+     the haiku fridge as magnets, kept on this device; the fridge opens from the corner chip and from the start,
+     creek, results and final screens. -->
 <!-- v5.4 2026-10-02 (founder): "when we present Does this poem land with you? Add a pencil that allows the user to edit
      the haiku and the new text shows on fridge." A pencil sits under the poem on the season screen and under each poem on
      the last screen. It opens the three lines for editing; an emptied line keeps its old words. Edited lines replace the
@@ -459,6 +471,40 @@ body.still .eddy .e{animation:none}
 .litebtn:focus-visible,.sndbtn:focus-visible{outline:3px solid var(--sumi);outline-offset:3px}
 .sndbtn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 @media (max-width:780px){.tour{top:56px}}
+/* v5.14 the haiku fridge: the creek's ten haiku, collected as magnets. Corner chip beside the light chip, same reach. */
+.hfbtn{position:absolute;top:12px;left:108px;z-index:9;width:36px;height:36px;padding:0;display:flex;align-items:center;justify-content:center;
+  background:var(--paper2);color:var(--sumi-t);border:2px solid var(--sumi);box-shadow:2px 2px 0 var(--sumi);cursor:pointer}
+.hfbtn::after{content:"";position:absolute;inset:-7px}
+.hfbtn svg{width:20px;height:20px}
+.hfbtn:focus-visible{outline:3px solid var(--sumi);outline-offset:3px}
+.hfbtn.bump{animation:hfbump .7s ease-out 2}
+@keyframes hfbump{0%,100%{transform:none}35%{transform:translateY(-4px) rotate(-6deg)}70%{transform:translateY(0) rotate(4deg)}}
+@media (prefers-reduced-motion:reduce){.hfbtn.bump{animation:none;box-shadow:2px 2px 0 #B23A2A}}
+.hfridge{position:fixed;inset:0;z-index:72;overflow-y:auto;overscroll-behavior:contain;background:rgba(27,26,23,.72);
+  display:flex;justify-content:center;align-items:flex-start;padding:18px 12px 40px;
+  font-family:"Zen Kaku Gothic New","Hiragino Sans","Segoe UI",system-ui,sans-serif;font-size:18px;line-height:1.4;color:#1B1A17}
+.hfridge[hidden]{display:none}
+.hfridge:focus{outline:none}
+.hfbox{position:relative;width:100%;max-width:560px;background:#F5EEDB;border:3px solid #1B1A17;border-radius:26px 26px 14px 14px;
+  box-shadow:6px 6px 0 #1F3A5F;padding:0 0 18px}
+.hfbox::before{content:"";position:absolute;right:16px;top:118px;width:12px;height:120px;border-radius:6px;
+  background:linear-gradient(90deg,#9AA3A8,#E8ECEE 45%,#8A9398);border:2px solid #1B1A17}
+.hftop{display:flex;align-items:center;gap:10px;padding:14px 16px 12px;border-bottom:3px solid #1B1A17;background:#E6DAC0;border-radius:23px 23px 0 0}
+.hftop h2{flex:1;margin:0;font-size:22px;line-height:1.15}
+.hftop h2 small{display:block;font-size:18px;font-weight:600;color:#4A463E}
+.hfclose{min-height:44px;padding:6px 14px;background:#F5EEDB;color:#1B1A17;border:2px solid #1B1A17;box-shadow:3px 3px 0 #1B1A17;
+  font-weight:700;font-size:18px;line-height:1.1;font-family:inherit;cursor:pointer}
+.hfclose:focus-visible{outline:3px solid #1B1A17;outline-offset:3px}
+.hfmsg{margin:12px 44px 4px 16px;color:#1B1A17}
+.hfgrid{list-style:none;margin:8px 44px 0 16px;padding:0;display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:620px){.hfgrid{grid-template-columns:1fr 1fr}}
+.hfcell{padding:10px 10px 8px;border:2px dashed #6B655A;border-radius:6px;background:#EFE6D0}
+.hfcell .hfn{margin:0;font-weight:800;color:#4A463E}
+.hfcell.got{border:2px solid #1B1A17;background:#FBF7EC;box-shadow:3px 3px 0 #B23A2A}
+.hfcell.got .hfn{color:#7E2419}
+.hfmag{display:block;width:max-content;max-width:100%;margin:6px 0 0;padding:3px 8px;background:#fff;color:#1B1A17;
+  border:1px solid #1B1A17;box-shadow:2px 2px 0 rgba(27,26,23,.35);transform:rotate(var(--r,0deg));overflow-wrap:anywhere}
+.hfby{margin:8px 0 0;color:#4A463E;font-size:18px}
 /* v5 the icebox: after the third poem, the poems go up on a 1950s refrigerator, cut as a woodblock print.
    The print keeps its daylight inks on every device, like the pond scene. */
 body.fzopen{overflow:hidden}
@@ -601,7 +647,7 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
 </style>
 </head>
 <body>
-<h1 class="sr">Kireji Pond</h1>
+<h1 class="sr">Kireji Pond <span class="ver">v5.14</span> <span class="status">In build</span></h1>
 <div class="app touring" id="app">
   <div class="scene" id="scene" aria-label="Woodblock scene: a stream runs down into an old pond where a frog sits on a stone.">
     <svg class="bg" id="sceneSvg" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
@@ -841,6 +887,7 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
     <div class="stream" id="stream" inert></div>
     <div class="reveal" id="reveal" hidden><div class="rcard" id="rcard"><p class="eyebrow" id="revLbl"></p><p class="rpoem" id="revPoem"></p></div></div>
     <button class="litebtn" id="lite" type="button" aria-label="Mode: Day. Tap for Night."><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+    <button class="hfbtn" id="hfOpen" type="button" aria-label="Haiku fridge: 0 of 10 collected" title="Haiku fridge"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 9.5h14" stroke="currentColor" stroke-width="2"/><path d="M8.5 5v2.5M8.5 12.5v4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><rect x="12" y="12" width="4.5" height="3" rx=".6" fill="currentColor"/></svg></button>
     <button class="sndbtn" id="snd" type="button" aria-pressed="true"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 9h4l5-4v14l-5-4H3z" fill="currentColor"/><path class="w" d="M15.5 8.5c1.6 1.9 1.6 5.1 0 7M18.5 6c3 3.3 3 8.7 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="x" d="M16 9l6 6M22 9l-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span id="sndTxt">Sound on</span></button>
     <div class="cartouche" aria-hidden="true">
       <div class="kmark" id="kmark" lang="ja"><span>切</span><span>池</span></div>
@@ -893,6 +940,7 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
                 <button class="primary" id="start" type="button">Enter the stream</button>
                 <button class="ghost lever" id="still0" type="button" aria-pressed="false"><span class="knob" aria-hidden="true"></span>Still water: no moving phrases</button>
                 <button class="ghost" id="creek0" type="button">Cliché Creek: find the real haiku</button>
+                <button class="ghost hfgo" type="button">The haiku fridge</button>
               </div>
             </section>
           </div>
@@ -927,7 +975,6 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
         <li><span class="count" aria-hidden="true">7</span><div class="slot" data-i="1"><span class="txt"></span><span class="hint">Line 2 · seven syllables</span><div class="acts" hidden><button type="button" class="rm" data-i="1" aria-label="Remove line 2" title="Remove"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></div></li>
         <li><span class="count" aria-hidden="true">5</span><div class="slot" data-i="2"><span class="txt"></span><span class="hint">Line 3 · five syllables</span><div class="acts" hidden><button type="button" class="mv" data-i="2" aria-label="Move line 3 to the top" title="Move to top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V8M6.5 13.5 12 8l5.5 5.5M5 3.5h14"/></svg></button><button type="button" class="rm" data-i="2" aria-label="Remove line 3" title="Remove"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></div></li>
       </ol>
-      <p class="cnote" id="cnote" aria-hidden="true" hidden></p>
       <p class="msg" id="msg" role="status" aria-live="polite">Tap a phrase to stop it: Catch it, Smash it as a cliché, or Let it go.</p>
       <div class="stillbox" id="stillBox" hidden>
         <h3 id="stillHead">Still water: phrases on the bank</h3>
@@ -959,6 +1006,7 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
       <button class="primary" id="fzOpen" type="button">Open the fridge</button>
       <button class="ghost" id="again">Play again</button>
       <button class="ghost" id="creekF" type="button">Try Cliché Creek</button>
+      <button class="ghost hfgo" type="button">The haiku fridge</button>
       <a class="ghost" href="arcade.html" style="text-decoration:none;color:inherit;align-self:flex-start">Back to the EN195 Arcade</a>
     </section>
 
@@ -969,7 +1017,7 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
         <div><p class="eyebrow" id="cEye">Cliché Creek</p><h2>Catch three lines</h2></div>
         <p class="ccount"><b id="cCount">0</b> of 3</p>
       </div>
-      <p class="note">One real haiku is in the river, broken into lines and mixed with clichés. Catch three lines. Then put the poem back together.</p>
+      <p class="note">One real haiku is in the river, broken into three lines and floating among the worst clichés in English. The frog eats only real lines. Catch all three as they come, then put them in order.</p>
       <ol class="basket" id="cBasket" aria-label="Your catch: three lines"></ol>
       <div class="padrow"><span class="sclbl">Clichés smashed</span><span class="scnum"><b id="cSm">0</b></span></div>
       <p class="msg" id="cmsg" role="status" aria-live="polite"></p>
@@ -980,17 +1028,18 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
       <div class="controls">
         <button class="ghost" id="cPause" type="button" aria-pressed="false">Pause river</button>
         <button class="ghost lever" id="cStill" type="button" aria-pressed="false"><span class="knob" aria-hidden="true"></span>Still water</button>
+        <button class="ghost hfgo" type="button">Haiku fridge</button>
         <button class="ghost" id="cBack" type="button">Back to the pond</button>
       </div>
     </section>
     <section id="pSort" hidden>
       <p class="eyebrow" id="sEye">Cliché Creek · the sort</p>
       <h2 id="sortQ" tabindex="-1">Put the poem back together</h2>
-      <p class="note">Three lines, in order. Tap a line to pick it up, then tap where it goes. A cliché goes in the bin.</p>
+      <p class="note">Three real lines. Put them in the order the poet wrote them. Tap a line to pick it up, then tap where it goes.</p>
       <h3 id="sTrayH">Your catch</h3>
       <ul class="stray" id="sTray" aria-labelledby="sTrayH"></ul>
       <div class="sframes" id="sFrames"></div>
-      <div class="sbinbox">
+      <div class="sbinbox" hidden>
         <h3 id="sBinH">Cliché bin</h3>
         <ul class="stray" id="sBin" aria-labelledby="sBinH"></ul>
         <div class="row"><button class="ghost" id="sBinBtn" type="button" disabled>Put it in the bin</button><button class="ghost" id="sTrayBtn" type="button" disabled>Back to my catch</button></div>
@@ -1007,11 +1056,21 @@ a.fzb{display:inline-flex;align-items:center;text-decoration:none}
       <div class="finals" id="sReal"></div>
       <button class="primary" id="sAgain" type="button">Next haiku</button>
       <button class="ghost" id="sRetry" type="button">Sort the same three again</button>
+      <button class="ghost hfgo" type="button">The haiku fridge</button>
       <button class="ghost" id="sBack" type="button">Back to the pond</button>
     </section>
+    <p class="cnote" id="cnote" aria-hidden="true" hidden></p>
   </aside>
 </div>
 <canvas id="fx" aria-hidden="true"></canvas>
+<!-- v5.14 the haiku fridge -->
+<div class="hfridge" id="hfridge" role="dialog" aria-modal="true" aria-labelledby="hfTitle" tabindex="-1" hidden>
+  <div class="hfbox">
+    <div class="hftop"><h2 id="hfTitle" tabindex="-1">The haiku fridge<small id="hfCount">0 of 10 collected</small></h2><button type="button" class="hfclose" id="hfClose">Close</button></div>
+    <p class="hfmsg" id="hfMsg">Rebuild a haiku from Cliché Creek in its poet's order and it goes up here.</p>
+    <ol class="hfgrid" id="hfGrid"></ol>
+  </div>
+</div>
 <!-- v5 the icebox -->
 <div class="fridge" id="fridge" role="dialog" aria-modal="true" aria-labelledby="fzTitle" tabindex="-1" hidden>
   <div class="fzbar">
@@ -1360,7 +1419,7 @@ let lastSpawn=0;
 function maybeSpawn(){
   const live=tiles.filter(t=>!t.gone&&!t.fast);
   const minS=live.reduce((m,t)=>Math.min(m,t.s),Infinity);
-  const s0=0, now=performance.now(); if(live.length<11&&minS>s0+22&&now-lastSpawn>(innerWidth<600?3200:2400)){spawn(s0);lastSpawn=now}
+  const s0=0, now=performance.now(); if(live.length<11&&minS>s0+22&&now-lastSpawn>(S.mode==='creek'?CKGAP:(innerWidth<600?3200:2400))){spawn(s0);lastSpawn=now}
 }
 function place(){
   const ctm=path.getScreenCTM(); if(!ctm) return;
@@ -1388,6 +1447,7 @@ function frame(now){
   if(!S.paused&&!S.still&&!S.busy&&S.phase==='play'){
     tiles.forEach(t=>{if(!t.gone&&!t.held){if(t.fast)t.v=Math.min(420,(t.v||SPEED)*(1+5*dt));t.s+=(t.fast?t.v:vAt(t.s))*dt}});
     maybeSpawn();
+    if(S.mode==='creek'&&!CK.secs) CK.ms+=dt*1000; // v5.14 river clock
   }
   place();
   requestAnimationFrame(frame);
@@ -2980,20 +3040,50 @@ const CKN=1, CKL=3*CKN; // v5.9 (founder 2026-10-05: "3 haikus is crazy hard. Ju
    east" sits too near the moon clichés); harunoumi (strong, held back so the run stays five); natsukusa, yasegaeru
    (pulled at v5.8). Order runs from the game's own frog to the widest sky. */
 /* v5.13 (founder 2026-10-16): the run is now the founder's five, in his order. The v5.10 set above stays in CREEK_REAL. */
-const CREEK_SEQ=['suzume','rakka','kura','hatsuaki','natsukawa'];
-const CK={idx:0,score:[],on:false,basket:[],run:[],pool:[],saved:null,back:'start',sel:null,slots:[],bin:[],tray:[]};
+const CREEK_SEQ=['suzume','rakka','kura','hatsuaki','natsukawa','furuike','kaki','samidare','araumi','harunoumi'];
+/* v5.14 (founder 2026-10-23: "Collect all 10 haiku"): the founder's five in his order, then five from the v5.10 vetted
+   set in the studio's translations (harunoumi was held back only to keep that run at five). FOUNDER_EN marks whose
+   English is the founder's; the other five await his edit. */
+const FOUNDER_EN=new Set(['suzume','rakka','kura','hatsuaki','natsukawa']);
+/* v5.14 (founder 2026-10-23: "a river with only egregious cliches"). The creek's decoys come only from here. Each line
+   is a dead idiom, said whole, the kind a reader has heard a thousand times; `pair` lines riff on that haiku's subject
+   (the sparrow gets "free as a bird"), so the near miss is still a miss on sight. No line repeats a real line. */
+const CREEK_STOCK=[
+  ['suzume','free as a bird'],['suzume','hold your horses'],['suzume','the early bird catches the worm'],
+  ['rakka','butterflies in my stomach'],['rakka','stop and smell the roses'],['rakka','all good things must come to an end'],
+  ['kura','every cloud has a silver lining'],['kura','rising from the ashes'],['kura','over the moon'],
+  ['hatsuaki','like father, like son'],['hatsuaki','the autumn of my life'],['hatsuaki','mirror, mirror on the wall'],
+  ['natsukawa','the lazy days of summer'],['natsukawa','go with the flow'],['natsukawa','happy as a clam'],
+  ['furuike','still waters run deep'],['furuike','a big fish in a small pond'],['furuike','making a splash'],
+  ['kaki','saved by the bell'],['kaki','the forbidden fruit'],['kaki','the apple of my eye'],
+  ['samidare','raining cats and dogs'],['samidare','home sweet home'],['samidare','the calm before the storm'],
+  ['araumi','a drop in the ocean'],['araumi','reach for the stars'],['araumi','plenty of fish in the sea'],
+  ['harunoumi','spring is in the air'],['harunoumi','the ups and downs of life'],['harunoumi','time and tide wait for no man'],
+  ['','time flies when you’re having fun'],['','only time will tell'],['','the circle of life'],['','a blessing in disguise'],
+  ['','follow your dreams'],['','the light at the end of the tunnel'],['','my heart skips a beat'],['','love conquers all'],
+  ['','the best things in life are free'],['','a diamond in the rough'],['','dance like nobody’s watching'],
+  ['','once in a blue moon'],['','cool as a cucumber'],['','quiet as a mouse'],['','water under the bridge'],
+  ['','head over heels in love'],['','beauty is in the eye of the beholder'],['','what goes around comes around'],
+  ['','a sight for sore eyes'],['','the tip of the iceberg']
+].map(([pair,t])=>({pair,t}));
+const CKGAP=3200, CKAT=[2,6,10]; // v5.14: one line every 3.2 s; the real lines are dealt 3rd, 7th and 11th of twelve
+const CK={idx:0,score:[],on:false,basket:[],run:[],pool:[],order:[],saved:null,back:'start',sel:null,slots:[],bin:[],tray:[],ms:0,secs:0,slips:0};
 const ckBare=t=>t.replace(/\s*[—,!.;:?]+\s*$/,'');
 const ckRiver=t=>{const b=ckBare(t); return /^I\b/.test(b)?b:b.charAt(0).toLowerCase()+b.slice(1)}; // v5.13: no capital tells in the river // line-end punctuation stays out of the river, back on the results
 function creekPlan(){
-  const real=[CREEK_REAL.find(r=>r.id===CREEK_SEQ[CK.idx])]; // v5.10: the fixed run of five, one at a time
-  const realTexts=new Set(CREEK_REAL.flatMap(r=>r.en.map(l=>ckBare(l).toLowerCase())));
-  const pairs=CREEK_CLICHE.filter(c=>real.some(r=>r.id===c.pair));
-  const others=shuffle(CREEK_CLICHE.filter(c=>!pairs.includes(c)));
-  const lines=[];
-  pairs.concat(others).forEach(c=>c.en.forEach(l=>{if(!realTexts.has(l.toLowerCase())&&!lines.some(x=>x===l)&&!GONE.creek.has(l.toLowerCase()))lines.push(l)})); // v5.13: identified clichés stay out
-  const decoys=lines.slice(0,9*CKN).map(l=>({t:l,s:0,k:'c'}));
-  const reals=real.flatMap(r=>r.en.map((l,li)=>({t:ckRiver(l),full:l,s:0,k:'r',hid:r.id,li})));
+  const r=CREEK_REAL.find(x=>x.id===CREEK_SEQ[CK.idx]), real=[r]; // v5.10: the fixed run, one at a time
+  const realTexts=new Set(CREEK_REAL.flatMap(x=>x.en.map(l=>ckBare(l).toLowerCase())));
+  const ok=CREEK_STOCK.filter(c=>!realTexts.has(c.t.toLowerCase())), fresh=c=>!GONE.creek.has(c.t.toLowerCase());
+  const own=shuffle(ok.filter(c=>c.pair===r.id)), rest=shuffle(ok.filter(c=>c.pair!==r.id));
+  let pick=own.filter(fresh).concat(rest.filter(fresh)).slice(0,9*CKN);
+  if(pick.length<9*CKN){ // v5.14: a long run can identify more clichés than the bank holds; the oldest come back
+    own.concat(rest).forEach(c=>{if(pick.length<9*CKN&&!pick.includes(c)){GONE.creek.delete(c.t.toLowerCase());pick.push(c)}});
+  }
+  const decoys=shuffle(pick.map(c=>({t:c.t,s:0,k:'c'})));
+  const reals=shuffle(r.en.map((l,li)=>({t:ckRiver(l),full:l,s:0,k:'r',hid:r.id,li})));
   CK.run=real; CK.pool=reals.concat(decoys);
+  const d=decoys.slice(), q=reals.slice(); CK.order=[];
+  for(let i=0;i<CK.pool.length;i++) CK.order.push(CKAT.includes(i)&&q.length?q.shift():(d.shift()||q.shift()));
 }
 function creekShowBasket(){
   const ol=$('#cBasket'); ol.innerHTML='';
@@ -3014,23 +3104,30 @@ function startCreek(back){
   endTour(); if(!slipRolled) rollSlip(true);
   if(S.mode!=='creek') CK.saved={smashed:S.smashed,kept:S.kept,round:S.round,phase:S.phase};
   CK.back=back||CK.back||'start';
-  S.mode='creek'; creekPlan(); CK.basket=[]; S.smashed=0;
+  S.mode='creek'; creekPlan(); CK.basket=[]; S.smashed=0; CK.ms=0; CK.secs=0; CK.slips=0;
   tiles.forEach(t=>{closeChoice(t);t.el.remove()}); tiles=[]; plist.forEach(t=>t.el.remove()); plist=[]; $('#plist').innerHTML='';
-  deck=shuffle(CK.pool.slice()); deckRound=S.round; returned=[]; sinceTurn=0;
+  deck=CK.order.slice(); deckRound=S.round; returned=[]; sinceTurn=0; // v5.14: dealt in timed order
   S.phase='play'; S.busy=false; S.sndRound=1; // summer, the cicadas
   layer.classList.remove('hush'); layer.inert=false; prefill(); setPaused(false);
   show('pCreek'); creekShowBasket(); $('#cStill').setAttribute('aria-pressed',S.still); $('#cPause').hidden=S.still;
   $('#cStillBox').hidden=!S.still; if(S.still){dealList();moveBank(true)}
   if(innerWidth<780){try{scrollTo({top:0,behavior:'smooth'})}catch(e){scrollTo(0,0)}}
   const n=`haiku ${CK.idx+1} of ${CREEK_SEQ.length}`; $('#cEye').textContent=`Cliché Creek · ${n}`; $('#sEye').textContent=`Cliché Creek · ${n} · the sort`; $('#dEye').textContent=`Cliché Creek · ${n} · how it sorted`;
-  say(`Haiku ${CK.idx+1} of ${CREEK_SEQ.length} is in the river, broken into lines. Catch three lines, then put the poem back together.`);
+  say(`Haiku ${CK.idx+1} of ${CREEK_SEQ.length} is in the river, broken into lines among the clichés. Catch the three real lines as they come.`);
 }
 /* the bank list lives in the play panel; in the creek it moves into the creek panel and back */
 function moveBank(toCreek){const pl=$('#plist'); if(toCreek)$('#cStillBox').insertBefore(pl,$('#cPull')); else $('#stillBox').insertBefore(pl,$('#pull'))}
 function creekTake(t){
   if(CK.basket.length>=CKL) return;
+  if(t.p.k==='c'){ // v5.14: the frog eats only real lines, so the sort is only ordering
+    Snd.sink(); retire(t,'sink'); CK.slips++;
+    say(`“${t.p.t}” is a cliché. The frog spits it out. Smash it, or let it go.`,true);
+    cnote('Cliché, spat out',` “${t.p.t}” is not in any haiku. Next time, Smash it or Let it go.`);
+    if(t.list) setTimeout(()=>{if(S.still&&S.phase==='play'&&!plist.some(o=>!o.gone)) dealList()},460);
+    return;
+  }
   CK.basket.push(t.p); Snd.tock(); retire(t,'take'); creekShowBasket();
-  if(CK.basket.length===CKL){setTimeout(creekSort,450);return}
+  if(CK.basket.length===CKL){CK.secs=Math.max(1,Math.round(CK.ms/1000));setTimeout(creekSort,450);return}
   say(`Caught: “${t.p.t}.” ${CKL-CK.basket.length} to go.`);
   if(t.list) setTimeout(()=>{if(S.still&&S.phase==='play'&&!plist.some(o=>!o.gone)) dealList()},460);
 }
@@ -3088,7 +3185,7 @@ function whereIs(p){if(CK.tray.includes(p))return['tray'];if(CK.bin.includes(p))
 function takeOut(p){const w=whereIs(p);if(w[0]==='tray')CK.tray.splice(CK.tray.indexOf(p),1);else if(w[0]==='bin')CK.bin.splice(CK.bin.indexOf(p),1);else if(w[0]==='slot')CK.slots[w[1]]=null;return w}
 function sortPick(p){
   CK.sel=CK.sel===p?null:p; renderSort();
-  sortSay(CK.sel?`Picked up “${p.t}.” Now choose a line in a poem, or the bin.`:'Put down.');
+  sortSay(CK.sel?`Picked up “${p.t}.” Now tap where it goes in the poem.`:'Put down.');
   focusLine(p);
 }
 function focusLine(p){const b=[...document.querySelectorAll('#pSort .sline,#pSort .sslot')].find(x=>x.textContent===p.t);if(b)b.focus()}
@@ -3140,7 +3237,10 @@ function sortCheck(){
   const miss=CKL-realCaught;
   $('#sDoneQ').textContent=clean?(miss===0?(CKN===1?'All three lines, home in the right order.':'All the lines, home in the right poems.'):`Every line you caught is where it belongs. ${miss} real ${miss===1?'line was':'lines were'} still in the river.`)
     :`${exact} of your ${realCaught} real ${realCaught===1?'line is':'lines are'} in the right place.`;
-  $('#sDoneNote').textContent=`You caught ${realCaught} real ${realCaught===1?'line':'lines'} and ${clCaught} ${clCaught===1?'cliché':'clichés'}`+(clCaught?`, and binned ${clBinned} of them.`:'.')+(CKN===1?' Here is the haiku as its poet wrote it.':' Here are the haiku as their poets wrote them.');
+  const timed=!S.still&&CK.secs>0, rt=timed?`River time: ${CK.secs} seconds. `:'';
+  const sp=CK.slips?`The frog spat out ${CK.slips} ${CK.slips===1?'cliché':'clichés'}. `:'No clichés caught. ';
+  const got=exact===CKL?HF.collect(CK.run[0].id,timed?CK.secs:0):null;
+  $('#sDoneNote').textContent=rt+sp+(got?got+' ':'')+(CKN===1?'Here is the haiku as its poet wrote it.':'Here are the haiku as their poets wrote them.');
   const real=$('#sReal'); real.innerHTML='';
   CK.run.forEach(r=>{
     const w=document.createElement('div'); w.className='fpoem';
@@ -3155,11 +3255,11 @@ function sortCheck(){
     if(pc){const pp=document.createElement('p');pp.className='note cpair';const bb=document.createElement('b');bb.textContent='The cliché on the same subject: ';pp.append(bb,document.createTextNode(pc.en.join(' / ')));w.appendChild(pp)}
     real.appendChild(w);
   });
-  const cr=document.createElement('p'); cr.className='note'; cr.textContent='English versions as chosen by the studio founder.'; real.appendChild(cr);
+  const cr=document.createElement('p'); cr.className='note'; cr.textContent=CK.run.every(r=>FOUNDER_EN.has(r.id))?'English versions as chosen by the studio founder.':'English: the studio’s translation from the public-domain Japanese.'; real.appendChild(cr);
   if(exact===CKL){try{Snd.bell(true)}catch(e){}}
   CK.score[CK.idx]=clean&&exact===CKL; // v5.10: rebuilt whole and clean
   const last=CK.idx===CREEK_SEQ.length-1, done=CK.score.filter(Boolean).length;
-  $('#sFin')?.remove(); if(last){const fin=document.createElement('p'); fin.id='sFin'; fin.className='note'; fin.textContent=`That is all five. You rebuilt ${done} of ${CREEK_SEQ.length} exactly as their poets wrote them.`; $('#sDoneNote').after(fin)}
+  $('#sFin')?.remove(); if(last){const fin=document.createElement('p'); fin.id='sFin'; fin.className='note'; fin.textContent=`That is all ${CREEK_SEQ.length}. You rebuilt ${done} of ${CREEK_SEQ.length} exactly as their poets wrote them.`; $('#sDoneNote').after(fin)}
   $('#sAgain').textContent=last?'Start again from haiku 1':`Next: haiku ${CK.idx+2} of ${CREEK_SEQ.length}`;
   S.phase='sortdone'; show('pSortDone'); landOn($('#sResult'),$('#sDoneQ'));
 }
@@ -3173,6 +3273,54 @@ $('#cPause').addEventListener('click',()=>{setPaused(!S.paused);$('#cPause').tex
 $('#cStill').addEventListener('click',()=>{const v=!S.still; if(v) moveBank(true); setStill(v); $('#cStill').setAttribute('aria-pressed',v); $('#cStillBox').hidden=!v; $('#cPause').hidden=v});
 
 $('#cPull').addEventListener('click',()=>{if(S.phase!=='play'||S.busy)return; dealList(); say('Lever pulled. New lines on the bank.'); const f=$('#plist .in'); if(f) f.focus()});
+
+/* ---------- v5.14 the haiku fridge: collected creek haiku, kept on this device ---------- */
+const HF=(()=>{
+  const KEY='kireji-haiku-fridge', box=$('#hfridge'), grid=$('#hfGrid');
+  let got={}, opener=null;
+  try{const v=JSON.parse(localStorage.getItem(KEY)||'{}'); if(v&&typeof v.got==='object') got=v.got}catch(e){}
+  const n=()=>CREEK_SEQ.filter(id=>got[id]).length;
+  function save(){try{localStorage.setItem(KEY,JSON.stringify({v:1,got}))}catch(e){}}
+  function label(){const c=n(); $('#hfOpen').setAttribute('aria-label',`Haiku fridge: ${c} of ${CREEK_SEQ.length} collected`); $('#hfOpen').title=`Haiku fridge, ${c} of ${CREEK_SEQ.length}`}
+  function render(){
+    const c=n(); $('#hfCount').textContent=`${c} of ${CREEK_SEQ.length} collected`;
+    $('#hfMsg').textContent=c===CREEK_SEQ.length?'All ten are on the fridge. Every one rebuilt in its poet’s order.':'Rebuild a haiku from Cliché Creek in its poet’s order and it goes up here.';
+    grid.innerHTML='';
+    CREEK_SEQ.forEach((id,i)=>{
+      const r=CREEK_REAL.find(x=>x.id===id), g=got[id], li=document.createElement('li'); li.className='hfcell'+(g?' got':'');
+      const h=document.createElement('p'); h.className='hfn'; h.textContent=`Haiku ${i+1}`+(g?'':': not yet');
+      li.appendChild(h);
+      if(g){
+        r.en.forEach((l,k)=>{const m=document.createElement('span'); m.className='hfmag'; m.style.setProperty('--r',[-1.6,1.2,-.8][k]+'deg'); m.textContent=l; li.appendChild(m)});
+        const by=document.createElement('p'); by.className='hfby'; by.textContent=CREEK_POETS[r.by].replace(/ \(.*\)$/,'')+(g.t?` · river ${g.t} s`:''); li.appendChild(by);
+      }
+      grid.appendChild(li);
+    });
+  }
+  function open(from){
+    opener=from||document.activeElement; render(); box.hidden=false; document.body.classList.add('fzopen'); $('#app').inert=true; box.scrollTop=0;
+    $('#hfTitle').focus({preventScroll:true});
+  }
+  function close(){box.hidden=true; document.body.classList.remove('fzopen'); $('#app').inert=false; if(opener&&opener.isConnected) opener.focus()}
+  function collect(id,t){
+    const first=!got[id], better=!first&&t&&(!got[id].t||t<got[id].t);
+    if(first) got[id]={t:t||0}; else if(better) got[id].t=t;
+    save(); label();
+    if(first){const b=$('#hfOpen'); b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump')}
+    const c=n();
+    if(first&&c===CREEK_SEQ.length) return 'All ten haiku are on the fridge.';
+    if(first) return `New on the haiku fridge: ${c} of ${CREEK_SEQ.length}.`;
+    if(better) return 'A faster river time, and the fridge remembers it.';
+    return 'Already on the haiku fridge.';
+  }
+  $('#hfOpen').addEventListener('click',e=>open(e.currentTarget));
+  $$('.hfgo').forEach(b=>b.addEventListener('click',e=>open(e.currentTarget)));
+  $('#hfClose').addEventListener('click',close);
+  box.addEventListener('keydown',e=>{if(e.key==='Escape')close(); if(e.key==='Tab'){e.preventDefault();$('#hfClose').focus()}});
+  box.addEventListener('click',e=>{if(e.target===box)close()});
+  label();
+  return {open,close,collect,get count(){return n()}};
+})();
 
 /* ---------- boot ---------- */
 applySeason(); renderPads(); renderSlots(); renderSeals(); resetFrog();
