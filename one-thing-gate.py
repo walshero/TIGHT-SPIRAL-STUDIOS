@@ -69,7 +69,11 @@ MEASURE_JS = r"""
   ctrls = ctrls.filter(e=>!ctrls.some(o=>o!==e && o.contains(e)));
 
   // PRIMARY invitation = a large, filled/weighted call to act
-  const primary = ctrls.filter(e=>{ const r=e.getBoundingClientRect(); const s=getComputedStyle(e);
+  // studio chrome (the Studio/Cabinet bar, the Back/Home rail) is furniture on every page by
+  // founder rule, never a co-equal invitation. Named containers only: [class*="se-"] also
+  // matches game stages (cliche-city .se-stagewrap holds its verb), so it is NOT used here
+  // below; the invitation count had never applied it (Reading Lamp v0.11, 2026-10-25).
+  const primary = ctrls.filter(e=>!e.closest('nav,header,.se-chrome,.se-rail')).filter(e=>{ const r=e.getBoundingClientRect(); const s=getComputedStyle(e);
     const w=parseInt(s.fontWeight)||400; return r.width>=90 && r.height>=40 && w>=600; });
 
   // prose (visible viewport text NOT inside a control)
