@@ -55,8 +55,14 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--ground2);
 #comfort .btn{box-shadow:none;font-size:calc(.95rem * var(--ts))}
 #comfort .btn[aria-pressed=true]{background:var(--text);color:var(--surface)}
 #card{position:fixed;z-index:5;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(20,14,12,.55);padding:16px}
-#card[hidden],#comfort[hidden],#launchBtn[hidden]{display:none}
-#launchBtn{position:fixed;z-index:3;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 18px);font-size:calc(1.3rem * var(--ts));padding:12px 34px;min-height:56px}
+#card[hidden],#comfort[hidden],#ride[hidden]{display:none}
+#ride{position:fixed;z-index:3;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 14px);display:flex;flex-direction:column;align-items:center;gap:8px}
+#launchBtn{font-size:calc(1.3rem * var(--ts));padding:12px 34px;min-height:56px}
+#gauge{display:flex;align-items:center;gap:6px;background:var(--surface);color:var(--text);border:2px solid var(--edge);border-radius:14px;padding:7px 12px;font-weight:800;font-size:calc(1rem * var(--ts))}
+#gauge i{display:block;width:16px;height:22px;border:2px solid var(--edge);border-radius:5px}
+#gauge i.on{background:var(--text)}
+#gauge i.hot{width:24px}
+#gauge span{margin-left:4px}
 .cardbox{background:var(--surface);color:var(--text);border:3px solid var(--edge);border-radius:22px;width:min(420px,94vw);
   max-height:94vh;overflow:auto;padding:14px 16px 16px;text-align:center;box-shadow:0 8px 0 rgba(0,0,0,.4)}
 .cardbox svg{width:100%;height:auto;display:block;border-radius:14px}
@@ -394,7 +400,10 @@ body.calm *{animation:none !important;transition:none !important}
 </div>
 <p id="cap" aria-live="polite">Bloat has gone stiff. His funny bone is stuck in the tree.</p>
 <p class="sr" id="desc" aria-live="polite"></p>
-<button class="btn" id="launchBtn" hidden>Launch</button>
+<div id="ride" hidden>
+  <div id="gauge" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i class="hot"></i><span>Too much</span></div>
+  <button class="btn" id="launchBtn">Launch</button>
+</div>
 
 <div id="comfort" hidden>
   <h2>Light</h2>
@@ -657,7 +666,10 @@ function update(dt){
       if(K.x<=PAD+44){ K.state="hop"; K.t=0; K.hx=K.x; } }
     else if(K.state==="hop"){ K.t+=dt; var kh=Math.min(1,K.t/0.5); K.x=ease(K.hx,PAD,kh); K.y=ease(GROUND,kidTop(),kh)-Math.sin(kh*Math.PI)*40;
       if(kh>=1){ K.state="ride"; phase="ready"; pt=0; B.pump=0;
-        cap("Tap Bloat to pump him up. Then Launch.","The kid is sitting on top of Bloat. Tap Bloat to pump him bigger, then press Launch."); hint("bloat");
+        if(outcome==="small") cap("Too small for Bloat. Pump him way more this time.","The kid is back on top. Tap Bloat many more times before you launch.");
+        else if(outcome==="mid") cap("Not too much yet. Fill the meter, then Launch.","The kid is back on top. Fill the pump meter all the way to Too much.");
+        else cap("Tap Bloat to pump him up. Then Launch.","The kid is sitting on top of Bloat. Tap Bloat to pump him bigger, then press Launch.");
+        hint("bloat"); outcome=null;
         $("bloat").setAttribute("tabindex","0"); } }
     break;
   case "ready":
@@ -670,7 +682,7 @@ function update(dt){
     break;
   case "squash":
     B.sy=ease(B.sy,0.32,dt*30); B.sx=ease(B.sx,2.1,dt*30); K.y=kidTop();
-    if(pt>0.22){ phase="flight"; pt=0; K.vy=-kidLaunchV; K.state="fly"; B.sy=1.4; B.sx=1.2; puff(PAD,GROUND-4,10,"#f3e3c8",110,5); if(!calm)shake=5; }
+    if(pt>0.22){ phase="flight"; pt=0; var hh = outcome==="big" ? K.y+320 : (outcome==="mid" ? 220+(B.pump-2)*70 : 140+B.pump*40); K.vy=-Math.sqrt(2*G*hh); K.state="fly"; B.sy=1.4; B.sx=1.2; puff(PAD,GROUND-4,10,"#f3e3c8",110,5); if(!calm)shake=5; }
     break;
   case "flight":
     /* Bloat rebounds, then deflates with a long raspberry */
@@ -682,14 +694,14 @@ function update(dt){
       else if(K.vy>0 && K.y>=kidTop()-2 && outcome!=="big"){ /* came back down: lands beside the pad */
         K.state="land"; K.t=0; K.y=GROUND; K.x=PAD+48; K.rot=0; puff(K.x,GROUND,5,"#c9a26a",60,3);
         if(outcome==="small"){ bonieReact(0); cap("That's it? It's Bloat. Make it too much.","The kid hopped up a little and landed. The Bonies yawned."); }
-        else { bonieReact(1); cap("Higher! But Bloat can do way too much. Pump more.","The kid went up high and landed. One Bonie chuckled."); } } }
+        else { bonieReact(1); cap("Higher! But that is not TOO much. Pump more.","The kid went up high and landed. One Bonie chuckled."); } } }
     else if(K.state==="gone"){ K.t+=dt;
       if(K.t>1.8){ K.state="plunge"; K.x=258; K.y=-140; K.vy=300; K.rot=180; cap("Wait for it...","Something is coming back down."); } }
     else if(K.state==="plunge"){ K.vy+=G*dt; K.y+=K.vy*dt;
       if(K.y>=GROUND+20){ K.y=GROUND+20; K.state="buried"; K.t=0; $("crater").setAttribute("transform","translate(258 "+(GROUND+2)+")"); $("crater").setAttribute("visibility","visible");
         puff(258,GROUND,16,"#c9a26a",160,5); stars(258,GROUND-30); if(!calm)shake=8; bonieReact(3);
         cap("Way too high. And nobody to catch them.","The kid came down head first into the ground. Only their feet stick out. The Bonies laughed so hard they fell off the wall."); } }
-    else if(K.state==="land"){ K.t+=dt; if(K.t>1.4){ K.state="walk"; } }
+    else if(K.state==="land"){ K.t+=dt; K.rot=K.t<0.3?-20:0; if(K.t>2.6){ K.state="walk"; } }
     else if(K.state==="walk"){ K.x-=30*dt; K.y=GROUND-Math.abs(Math.sin(now*9))*2;
       if(K.x<=PAD+44){ K.state="hop"; K.t=0; K.hx=K.x; phase="board"; B.pump=0; } }
     else if(K.state==="buried"){ K.t+=dt; K.rot=180+Math.sin(K.t*14)*8;
@@ -713,7 +725,9 @@ function update(dt){
   if(hintOn==="sand"){r.setAttribute("cx",160);r.setAttribute("cy",sand.y+16);r.setAttribute("r",32);}
   if(hintOn==="bucket"){r.setAttribute("cx",bucket.x);r.setAttribute("cy",bucket.y-24);r.setAttribute("r",34);}
   if(hintOn==="bloat"){r.setAttribute("cx",PAD);r.setAttribute("cy",GROUND-40*B.sy-20);r.setAttribute("r",30+B.sx*12);}
-  $("launchBtn").hidden = !(phase==="ready" && B.pump>0);
+  $("ride").hidden = !(phase==="ready");
+  $("launchBtn").disabled = B.pump<1;
+  var pips=document.querySelectorAll("#gauge i"); for(var gi=0;gi<pips.length;gi++) pips[gi].className=(gi===5?"hot":"")+(B.pump>gi?" on":"");
 }
 
 /* ---------- ride controls ---------- */
@@ -722,13 +736,13 @@ function pump(){
   B.pump=Math.min(9,B.pump+1); hint(null);
   puff(PAD-46*B.sx/1.5,GROUND-30,3,"#f3e3c8",50,3);
   var lines=["Pump.","Bigger.","Bigger!","Way bigger.","Too big?","Not for Bloat.","He is enormous.","This is a bad idea.","Perfect."];
-  cap(lines[B.pump-1]+" Pump more, or Launch.","Bloat is pumped "+B.pump+" times.");
+  cap(lines[B.pump-1]+(B.pump<6?" Keep pumping.":" Now Launch!"),"Bloat is pumped "+B.pump+" of 6 times. Six or more is too much.");
 }
 function launch(){
   if(phase!=="ready"||B.pump<1) return;
-  kidLaunchV=380+B.pump*150;
+  kidLaunchV=620+B.pump*120;
   outcome = B.pump>=6?"big":(B.pump>=3?"mid":"small");
-  phase="squash"; pt=0; K.state="ride"; $("launchBtn").hidden=true;
+  phase="squash"; pt=0; K.state="ride";
 }
 
 /* ---------- end of level ---------- */
