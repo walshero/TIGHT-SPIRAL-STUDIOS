@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Funnybonies v16 · The Yard</title>
+<meta name="description" content="Funnybonies Factory, level one. Meet one character at a time. Each one is a kind of funny.">
+<meta name="spec-source" content="funnybonies/SPEC-LINK-v16.md">
+<meta name="audience" content="kids, grades 3 to 6">
+<style>
+/* ===========================================================
+   Funnybonies v16 · The Yard
+   Founder ruling 2026-11-03: each character IS a kind of humor.
+   Meet them one at a time. The yard is a slapstick machine with
+   real physics, and the same prop gets a different laugh from
+   each character. Register: Amanita (Samorost, Machinarium).
+   Floors: no emoji, no green, single file, offline, stores
+   nothing, 44px targets, comfort is a live corner control.
+   =========================================================== */
+:root{
+  --surface:#f6ecd6;
+  --text:#1d1714;
+  --edge:#1d1714;
+  --ts:1;
+  --sky1:#f1dcae; --sky2:#e3a872; --sky3:#b5664c;
+  --haze:#9a5b5e; --ground1:#7a4a33; --ground2:#3e2419;
+}
+body.dusk{ --sky1:#3a2a4a; --sky2:#7a3f55; --sky3:#c4704a; --haze:#5a3550; --ground1:#5a3426; --ground2:#2a1812; }
+body.night{ --surface:#1d1714; --text:#f6ecd6; --edge:#f6ecd6;
+  --sky1:#121827; --sky2:#26314b; --sky3:#3f5e78; --haze:#2c3550; --ground1:#3c2a24; --ground2:#1a110d; }
+@media (prefers-color-scheme: dark){
+  body:not(.day):not(.night){ --sky1:#3a2a4a; --sky2:#7a3f55; --sky3:#c4704a; --haze:#5a3550; --ground1:#5a3426; --ground2:#2a1812; }
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--ground2);
+  font-family:ui-rounded,"SF Pro Rounded","Nunito","Trebuchet MS",system-ui,sans-serif;}
+#stage{position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;display:block;touch-action:manipulation;}
+.hud{position:fixed;top:calc(env(safe-area-inset-top) + 8px);left:8px;right:8px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;pointer-events:none;z-index:3}
+.plaque,.btn{pointer-events:auto;background:var(--surface);color:var(--text);border:2px solid var(--edge);border-radius:14px;
+  font-size:calc(1rem * var(--ts));font-weight:700;line-height:1.2;}
+.plaque{padding:9px 13px;box-shadow:0 3px 0 rgba(0,0,0,.35)}
+.btn{min-height:48px;min-width:48px;padding:10px 16px;cursor:pointer;font-family:inherit;box-shadow:0 3px 0 rgba(0,0,0,.35)}
+.btn:focus-visible,[role=button]:focus-visible{outline:4px solid var(--text);outline-offset:3px}
+#cap{position:fixed;z-index:2;top:calc(env(safe-area-inset-top) + 70px);left:50%;transform:translateX(-50%);
+  width:min(92vw,520px);background:var(--surface);color:var(--text);border:2px solid var(--edge);border-radius:16px;
+  padding:12px 16px;font-size:calc(1.18rem * var(--ts));font-weight:700;line-height:1.3;text-align:center;
+  box-shadow:0 4px 0 rgba(0,0,0,.35);transition:opacity .3s}
+#comfort{position:fixed;z-index:4;top:calc(env(safe-area-inset-top) + 64px);right:8px;background:var(--surface);color:var(--text);
+  border:2px solid var(--edge);border-radius:16px;padding:12px;width:min(300px,90vw);box-shadow:0 6px 0 rgba(0,0,0,.35)}
+#comfort h2{font-size:calc(1.05rem * var(--ts));margin:2px 0 6px}
+#comfort .row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+#comfort .btn{box-shadow:none;font-size:calc(.95rem * var(--ts))}
+#comfort .btn[aria-pressed=true]{background:var(--text);color:var(--surface)}
+#card{position:fixed;z-index:5;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(20,14,12,.55);padding:16px}
+#card[hidden],#comfort[hidden]{display:none}
+.cardbox{background:var(--surface);color:var(--text);border:3px solid var(--edge);border-radius:22px;width:min(420px,94vw);
+  max-height:94vh;overflow:auto;padding:14px 16px 16px;text-align:center;box-shadow:0 8px 0 rgba(0,0,0,.4)}
+.cardbox svg{width:100%;height:auto;display:block;border-radius:14px}
+.cardbox h2{font-size:calc(1.5rem * var(--ts));margin:12px 0 4px}
+.cardbox p{font-size:calc(1.12rem * var(--ts));margin:4px 0 14px;line-height:1.35}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* SVG behaviour */
+[role=button]{cursor:pointer}
+.ring{fill:none;stroke:#f6ecd6;stroke-width:3;stroke-dasharray:6 6;opacity:.95;animation:ring 1.4s ease-in-out infinite}
+@keyframes ring{0%,100%{stroke-width:3;opacity:.95}50%{stroke-width:5;opacity:.5}}
+.drift{animation:drift 60s linear infinite}
+@keyframes drift{from{transform:translateX(-30px)}to{transform:translateX(60px)}}
+.smoke circle{transform-box:fill-box;transform-origin:center;animation:smoke 6s linear infinite}
+@keyframes smoke{0%{transform:translate(0,0) scale(.4);opacity:0}15%{opacity:.75}100%{transform:translate(28px,-120px) scale(2.1);opacity:0}}
+.gear{transform-box:fill-box;transform-origin:center;animation:spin 9s linear infinite}
+.gear.rev{animation-direction:reverse;animation-duration:6s}
+@keyframes spin{to{transform:rotate(360deg)}}
+.leaf{transform-box:fill-box;transform-origin:center;animation:leaf 9s linear infinite}
+@keyframes leaf{0%{transform:translate(0,0) rotate(0);opacity:0}8%{opacity:1}100%{transform:translate(-70px,300px) rotate(540deg);opacity:0}}
+.flicker{animation:flick 5s steps(1) infinite}
+@keyframes flick{0%,40%,44%,100%{opacity:1}42%{opacity:.35}}
+.bonie{transform-box:fill-box;transform-origin:50% 100%}
+.bonie.chuckle{animation:chuck .18s ease-in-out 8 alternate}
+@keyframes chuck{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-3px) rotate(3deg)}}
+.bonie.fall{animation:fall 2.6s ease-in-out 1}
+@keyframes fall{0%{transform:rotate(0)}12%{transform:translateY(-6px) rotate(-14deg)}30%{transform:translate(18px,8px) rotate(95deg)}55%{transform:translate(18px,8px) rotate(95deg)}75%{transform:translate(8px,-4px) rotate(30deg)}100%{transform:rotate(0)}}
+.bub{animation:bub 3.5s linear infinite}
+@keyframes bub{from{transform:translateY(0);opacity:.9}to{transform:translateY(-50px);opacity:0}}
+body.calm *{animation:none !important;transition:none !important}
+@media (prefers-reduced-motion: reduce){ body:not(.full) *{animation:none !important} }
+</style>
+</head>
+<body>
+<svg id="stage" viewBox="0 0 360 640" preserveAspectRatio="xMidYMid meet" aria-labelledby="stageTitle" role="img">
+<title id="stageTitle">The yard behind the Funnybonies Factory</title>
+<defs>
+  <linearGradient id="gSky" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" style="stop-color:var(--sky1)"/><stop offset=".55" style="stop-color:var(--sky2)"/><stop offset="1" style="stop-color:var(--sky3)"/>
+  </linearGradient>
+  <linearGradient id="gGround" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" style="stop-color:var(--ground1)"/><stop offset="1" style="stop-color:var(--ground2)"/>
+  </linearGradient>
+  <radialGradient id="gSun" cx=".5" cy=".5" r=".5">
+    <stop offset="0" stop-color="#fff3cf" stop-opacity=".95"/><stop offset=".35" stop-color="#f2d38c" stop-opacity=".7"/><stop offset="1" stop-color="#f2d38c" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="gVig" cx=".5" cy=".45" r=".75">
+    <stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#140c08" stop-opacity=".55"/>
+  </radialGradient>
+  <radialGradient id="gPlum" cx=".35" cy=".3" r=".8">
+    <stop offset="0" stop-color="#b0629a"/><stop offset=".55" stop-color="#7d3a6b"/><stop offset="1" stop-color="#4a1f40"/>
+  </radialGradient>
+  <linearGradient id="gSlate" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#6f8fa8"/><stop offset="1" stop-color="#34506a"/>
+  </linearGradient>
+  <linearGradient id="gBrick" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#9a5338"/><stop offset="1" stop-color="#6a3424"/>
+  </linearGradient>
+  <linearGradient id="gWood" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#b98552"/><stop offset="1" stop-color="#7a5232"/>
+  </linearGradient>
+  <linearGradient id="gStone" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#a39083"/><stop offset="1" stop-color="#6c5a50"/>
+  </linearGradient>
+  <linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#f6cf6a"/><stop offset="1" stop-color="#c9892d"/>
+  </linearGradient>
+  <radialGradient id="gWin" cx=".5" cy=".5" r=".6">
+    <stop offset="0" stop-color="#fff0c0"/><stop offset=".6" stop-color="#f0b850"/><stop offset="1" stop-color="#b9702c"/>
+  </radialGradient>
+  <pattern id="pBrick" width="24" height="12" patternUnits="userSpaceOnUse">
+    <path d="M0 11.5H24M12 0V6M0 6H24M0 0V6M24 6V12" stroke="#4c2418" stroke-width="1" opacity=".45" fill="none"/>
+    <path d="M6 6V12M18 6V12" stroke="#4c2418" stroke-width="1" opacity=".45"/>
+  </pattern>
+  <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="4"/>
+    <feDisplacementMap in="SourceGraphic" scale="3.2"/>
+  </filter>
+  <filter id="grain" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="9" result="n"/>
+    <feColorMatrix type="saturate" values="0"/>
+    <feComponentTransfer><feFuncA type="table" tableValues="0 .5"/></feComponentTransfer>
+  </filter>
+  <filter id="soft"><feGaussianBlur stdDeviation="2.4"/></filter>
+  <clipPath id="jarClip"><path d="M308 566 Q306 556 314 552 H338 Q346 556 344 566 V618 Q344 626 336 626 H316 Q308 626 308 618 Z"/></clipPath>
+
+  <!-- the bucket: origin at bottom centre, rim at y -34 -->
+  <symbol id="bucketSym" overflow="visible">
+    <path d="M-17 0 L-21 -34 L21 -34 L17 0 Z" fill="url(#gSlate)" stroke="#1d1714" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M-19.5 -24 H19.5 M-18 -9 H18" stroke="#24384c" stroke-width="2.2"/>
+    <ellipse cx="0" cy="-34" rx="21" ry="4.5" fill="#24384c" stroke="#1d1714" stroke-width="2"/>
+    <path d="M-12 -30 L-10 -4" stroke="#cfe0ec" stroke-width="2.4" opacity=".55" stroke-linecap="round"/>
+    <path d="M-20 -33 Q0 -62 20 -33" fill="none" stroke="#1d1714" stroke-width="2.2"/>
+  </symbol>
+
+  <!-- a Bonie, the audience. origin bottom centre, sitting -->
+  <symbol id="bonieSym" overflow="visible">
+    <path d="M-6 0 q-2 8 -6 10 M6 0 q2 8 6 10" stroke="#1d1714" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <path d="M-10 -4 Q-14 -2 -12 4 Q-6 8 -3 2 M10 -4 Q14 -2 12 4 Q6 8 3 2" fill="#efe3c8" stroke="#1d1714" stroke-width="2"/>
+    <path d="M-9 -2 V-36 M9 -2 V-36" stroke="none"/>
+    <rect x="-10" y="-38" width="20" height="38" rx="9" fill="#efe3c8" stroke="#1d1714" stroke-width="2.2"/>
+    <circle cx="-7" cy="-40" r="6.5" fill="#efe3c8" stroke="#1d1714" stroke-width="2.2"/>
+    <circle cx="7" cy="-40" r="6.5" fill="#efe3c8" stroke="#1d1714" stroke-width="2.2"/>
+    <rect x="-8.6" y="-40" width="17.2" height="8" fill="#efe3c8"/>
+    <path d="M-5 -10 Q0 -7 5 -10" stroke="#c9b48e" stroke-width="1.5" fill="none"/>
+  </symbol>
+</defs>
+
+<g id="world">
+<!-- BACK LAYER: sky, sun, haze hills -->
+<rect x="-500" y="-500" width="1360" height="1000" fill="url(#gSky)"/>
+<circle cx="268" cy="168" r="120" fill="url(#gSun)"/>
+<circle cx="268" cy="168" r="34" fill="#fbe7b0" opacity=".9"/>
+<g class="drift" opacity=".75">
+  <path d="M-60 120 q18 -22 44 -10 q14 -18 36 -4 q24 -6 26 14 q-4 10 -18 10 H-50 q-16 0 -10 -10 Z" fill="#f8e6c4" opacity=".7"/>
+  <path d="M190 70 q14 -16 34 -8 q12 -14 30 -2 q18 -2 18 12 q-2 8 -14 8 H196 q-12 0 -6 -10 Z" fill="#f8e6c4" opacity=".55"/>
+</g>
+<g filter="url(#rough)">
+  <path d="M-500 400 Q-200 330 0 372 Q60 330 120 356 Q200 318 280 350 Q340 326 420 352 Q600 330 860 380 V520 H-500 Z" fill="var(--haze)" opacity=".55"/>
+  <!-- distant water tower and chimneys -->
+  <g fill="var(--haze)" opacity=".85">
+    <rect x="318" y="290" width="26" height="22" rx="4"/><path d="M322 312 L318 352 M340 312 L344 352 M320 330 H342" stroke="var(--haze)" stroke-width="2.5"/>
+    <rect x="-8" y="300" width="9" height="60"/><rect x="6" y="318" width="7" height="44"/>
+  </g>
+</g>
+
+<!-- MID LAYER: the factory -->
+<g id="factory" filter="url(#rough)">
+  <!-- chimneys -->
+  <g>
+    <path d="M36 248 L40 92 L62 90 L64 248 Z" fill="url(#gBrick)" stroke="#1d1714" stroke-width="2.6"/>
+    <rect x="36" y="86" width="30" height="10" rx="2" fill="#4a2a20" stroke="#1d1714" stroke-width="2.4"/>
+    <path d="M39 130 H63 M39 170 H63" stroke="#3a1c14" stroke-width="3" opacity=".6"/>
+    <path d="M150 248 L156 128 L176 132 L172 248 Z" fill="url(#gBrick)" stroke="#1d1714" stroke-width="2.6"/>
+    <rect x="152" y="122" width="28" height="10" rx="2" fill="#4a2a20" stroke="#1d1714" stroke-width="2.4" transform="rotate(4 166 127)"/>
+  </g>
+  <!-- main hall -->
+  <path d="M8 470 L10 252 L210 246 L214 470 Z" fill="url(#gBrick)" stroke="#1d1714" stroke-width="3"/>
+  <path d="M10 252 L210 246 L214 470 L8 470 Z" fill="url(#pBrick)"/>
+  <!-- sawtooth roof -->
+  <path d="M2 256 L30 214 L58 252 L86 210 L114 250 L142 206 L170 248 L198 204 L220 248 Z" fill="#3f5e78" stroke="#1d1714" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M30 214 L34 250 M86 210 L90 250 M142 206 L146 248 M198 204 L201 246" stroke="#1f3245" stroke-width="2.5"/>
+  <path d="M34 248 L56 250 M90 248 L112 249 M146 246 L168 247" stroke="#f6d48a" stroke-width="3" opacity=".7"/>
+  <!-- the sign, hanging crooked -->
+  <g transform="rotate(-3 110 196)">
+    <path d="M58 168 L56 140 M162 166 L166 140" stroke="#1d1714" stroke-width="2"/>
+    <rect x="44" y="166" width="132" height="34" rx="6" fill="url(#gWood)" stroke="#1d1714" stroke-width="2.6"/>
+    <text x="110" y="191" text-anchor="middle" font-size="20" font-weight="800" fill="#2a160e" letter-spacing="1" font-family="Georgia,serif">FUNNYBONIES</text>
+    <circle class="flicker" cx="52" cy="174" r="3" fill="#ffe7a0"/>
+  </g>
+  <!-- porthole with gears -->
+  <circle cx="64" cy="320" r="34" fill="url(#gWin)" stroke="#1d1714" stroke-width="3.4"/>
+  <g opacity=".75" fill="#7a3f22">
+    <g class="gear"><circle cx="54" cy="314" r="14"/><path d="M54 296 v36 M36 314 h36 M41 301 l26 26 M67 301 l-26 26" stroke="#7a3f22" stroke-width="6"/><circle cx="54" cy="314" r="5" fill="#f0b850"/></g>
+    <g class="gear rev"><circle cx="78" cy="334" r="9"/><path d="M78 322 v24 M66 334 h24" stroke="#7a3f22" stroke-width="5"/></g>
+  </g>
+  <circle cx="64" cy="320" r="34" fill="none" stroke="#c9892d" stroke-width="3" stroke-dasharray="2 9"/>
+  <!-- tall door with a crack of light -->
+  <path d="M108 470 V378 Q130 352 152 378 V470 Z" fill="#4a2a20" stroke="#1d1714" stroke-width="3"/>
+  <path d="M130 360 V470" stroke="#f0b850" stroke-width="3" opacity=".85"/>
+  <circle cx="140" cy="424" r="3" fill="#d9a441"/>
+  <!-- pipe running along the wall -->
+  <path d="M8 286 H120 Q132 286 132 298 V336 H214" fill="none" stroke="#24384c" stroke-width="9" stroke-linecap="round"/>
+  <path d="M8 286 H120 Q132 286 132 298 V336 H214" fill="none" stroke="#6f8fa8" stroke-width="3" opacity=".6"/>
+  <circle cx="132" cy="318" r="7" fill="#a4462a" stroke="#1d1714" stroke-width="2"/>
+  <!-- crane bracket for the sandbag -->
+  <path d="M212 352 L156 352 M212 380 L180 352" stroke="#1d1714" stroke-width="6" stroke-linecap="round"/>
+  <path d="M212 352 L156 352" stroke="#7a5232" stroke-width="3"/>
+  <circle cx="160" cy="356" r="6" fill="#d9a441" stroke="#1d1714" stroke-width="2"/>
+</g>
+<!-- smoke, alive -->
+<g class="smoke" fill="#f3e3c8">
+  <circle cx="51" cy="82" r="10" style="animation-delay:0s"/><circle cx="51" cy="82" r="9" style="animation-delay:2s"/><circle cx="51" cy="82" r="11" style="animation-delay:4s"/>
+  <circle cx="166" cy="118" r="8" style="animation-delay:1s"/><circle cx="166" cy="118" r="9" style="animation-delay:3.4s"/>
+</g>
+
+<!-- the tree, autumn, with the bucket branch -->
+<g filter="url(#rough)">
+  <path d="M296 504 Q304 400 296 300 Q290 230 312 160 L330 164 Q318 240 324 300 Q332 400 330 504 Z" fill="#5a3426" stroke="#1d1714" stroke-width="3"/>
+  <path d="M304 470 q4 -40 -2 -80 M318 430 q6 -50 0 -110 M310 260 q6 -30 12 -60" stroke="#3a2018" stroke-width="2.2" fill="none"/>
+  <path d="M306 214 Q270 200 224 210 L222 220 Q268 212 304 228 Z" fill="#5a3426" stroke="#1d1714" stroke-width="2.6"/>
+  <path d="M316 172 Q340 130 368 128 M312 186 Q290 150 262 150" stroke="#5a3426" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <g opacity=".95">
+    <circle cx="300" cy="140" r="34" fill="#a4462a"/><circle cx="340" cy="122" r="30" fill="#c9672e"/><circle cx="266" cy="150" r="24" fill="#b5532c"/>
+    <circle cx="322" cy="96" r="26" fill="#d98f3a"/><circle cx="356" cy="152" r="22" fill="#a4462a"/><circle cx="286" cy="110" r="20" fill="#d9a441"/>
+  </g>
+</g>
+<g fill="#d98f3a">
+  <path class="leaf" d="M270 160 q6 -6 12 0 q-6 6 -12 0z" style="animation-delay:0s"/>
+  <path class="leaf" d="M330 150 q6 -6 12 0 q-6 6 -12 0z" fill="#a4462a" style="animation-delay:3s"/>
+  <path class="leaf" d="M300 130 q6 -6 12 0 q-6 6 -12 0z" fill="#d9a441" style="animation-delay:6s"/>
+</g>
+
+<!-- the low stone wall where the Bonies sit -->
+<g filter="url(#rough)">
+  <path d="M214 500 L216 444 Q290 436 372 442 L372 500 Z" fill="url(#gStone)" stroke="#1d1714" stroke-width="2.8"/>
+  <path d="M216 462 H372 M216 482 H372 M240 444 V462 M276 440 V462 M318 440 V462 M354 442 V462 M228 462 V482 M262 462 V482 M300 462 V482 M340 462 V482" stroke="#4e3f37" stroke-width="1.6" opacity=".7"/>
+  <path d="M216 444 Q290 436 372 442" stroke="#cbb9a8" stroke-width="2.2" fill="none" opacity=".7"/>
+</g>
+<g id="bonies">
+  <g class="bonie" id="b0" transform="translate(262 444)"><use href="#bonieSym"/><g class="face"></g></g>
+  <g class="bonie" id="b1" transform="translate(298 442)"><use href="#bonieSym"/><g class="face"></g></g>
+  <g class="bonie" id="b2" transform="translate(334 443)"><use href="#bonieSym"/><g class="face"></g></g>
+</g>
+
+<!-- GROUND -->
+<g filter="url(#rough)">
+  <path d="M-500 486 Q0 470 180 482 Q300 490 860 478 V1100 H-500 Z" fill="url(#gGround)" stroke="#1d1714" stroke-width="2.6"/>
+  <path d="M-500 512 Q100 504 360 514 Q600 520 860 510 L860 536 Q500 544 180 538 Q0 534 -500 540 Z" fill="#9a6a48" opacity=".45"/>
+  <g fill="#5a3426" opacity=".8">
+    <ellipse cx="34" cy="552" rx="8" ry="4"/><ellipse cx="190" cy="560" rx="10" ry="4.5"/><ellipse cx="250" cy="600" rx="7" ry="3.5"/><ellipse cx="120" cy="612" rx="12" ry="5"/>
+  </g>
+  <g stroke="#d9a441" stroke-width="2" stroke-linecap="round" opacity=".8">
+    <path d="M90 488 l-3 -10 M94 488 l1 -12 M98 488 l4 -9"/><path d="M226 494 l-3 -9 M230 494 l2 -11"/><path d="M8 494 l-2 -8 M12 494 l2 -10"/>
+  </g>
+  <path d="M60 580 q30 6 50 -2 M200 620 q20 4 40 -4" stroke="#2a1812" stroke-width="2" fill="none"/>
+</g>
+
+<!-- SEESAW -->
+<g id="seesaw">
+  <path d="M106 520 L120 494 L134 520 Z" fill="url(#gWood)" stroke="#1d1714" stroke-width="2.6" stroke-linejoin="round"/>
+  <g id="plank"><rect x="70" y="490" width="100" height="9" rx="3" fill="url(#gWood)" stroke="#1d1714" stroke-width="2.4"/>
+    <path d="M78 494 H162" stroke="#5e3c22" stroke-width="1.4" opacity=".7"/></g>
+</g>
+
+<!-- SANDBAG on the crane -->
+<g id="sandRope"><path id="sandRopeP" d="M160 356 V398" stroke="#1d1714" stroke-width="2"/></g>
+<g id="sandbag" role="button" tabindex="0" aria-label="Sandbag. Drop it on the seesaw.">
+  <rect x="-26" y="-12" width="52" height="58" fill="transparent"/>
+  <path d="M-14 0 Q-18 30 -12 34 H12 Q18 30 14 0 Q8 -6 0 -2 Q-8 -6 -14 0 Z" fill="#c9a26a" stroke="#1d1714" stroke-width="2.4"/>
+  <path d="M-8 -2 Q0 4 8 -2" stroke="#1d1714" stroke-width="2" fill="none"/>
+  <path d="M-6 14 l12 0 M-4 22 l8 0" stroke="#7a5232" stroke-width="2"/>
+  <text x="0" y="28" text-anchor="middle" font-size="9" font-weight="800" fill="#5a3426" aria-hidden="true">10</text>
+</g>
+
+<!-- BUCKET on the branch -->
+<path id="bucketRope" d="M232 214 V266" stroke="#1d1714" stroke-width="2"/>
+<g id="bucket" role="button" tabindex="0" aria-label="Bucket in the tree. Drop it on someone.">
+  <rect x="-28" y="-66" width="56" height="70" fill="transparent"/>
+  <use href="#bucketSym"/>
+</g>
+
+<!-- CHARACTERS -->
+<g id="chars">
+  <!-- BLOAT: exaggeration. A balloon of a fellow. -->
+  <g id="bloat">
+    <g id="blSq">
+      <g id="blLegL"><path d="M-11 -12 Q-13 -5 -12 0" stroke="#a4462a" stroke-width="6" stroke-linecap="round" fill="none"/><ellipse cx="-14" cy="1" rx="8" ry="4" fill="#1d1714"/></g>
+      <g id="blLegR"><path d="M11 -12 Q13 -5 12 0" stroke="#a4462a" stroke-width="6" stroke-linecap="round" fill="none"/><ellipse cx="14" cy="1" rx="8" ry="4" fill="#1d1714"/></g>
+      <g id="blRot"><g id="blBody">
+        <ellipse cx="2" cy="-38" rx="35" ry="33" fill="#2c1226" opacity=".35" transform="translate(3 3)"/>
+        <ellipse cx="0" cy="-40" rx="35" ry="33" fill="url(#gPlum)" stroke="#1d1714" stroke-width="2.8"/>
+        <ellipse cx="3" cy="-28" rx="21" ry="14" fill="#c27aa8" opacity=".35"/>
+        <path d="M-24 -62 Q0 -76 24 -63" stroke="#f3d9e6" stroke-width="1.8" fill="none" stroke-dasharray="3 4" opacity=".7"/>
+        <ellipse cx="-16" cy="-58" rx="9" ry="5" fill="#fbe9f2" opacity=".55" transform="rotate(-25 -16 -58)"/>
+        <path d="M-3 -72 q-4 -10 -11 -12 M1 -73 q1 -12 8 -15 M4 -72 q6 -6 13 -5" stroke="#1d1714" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <g id="blEyes">
+          <ellipse cx="-11" cy="-46" rx="9.5" ry="10.5" fill="#fbf4e6" stroke="#1d1714" stroke-width="2"/>
+          <ellipse cx="11" cy="-47" rx="10.5" ry="11.5" fill="#fbf4e6" stroke="#1d1714" stroke-width="2"/>
+          <g id="blPup"><circle cx="-10" cy="-45" r="4.3" fill="#1d1714"/><circle cx="12" cy="-46" r="4.6" fill="#1d1714"/>
+            <circle cx="-11.5" cy="-46.5" r="1.4" fill="#fff"/><circle cx="10.5" cy="-47.5" r="1.5" fill="#fff"/></g>
+          <g id="blLids" transform="scale(1 0)" style="transform-origin:0 -57px">
+            <ellipse cx="-11" cy="-46" rx="10.5" ry="11.5" fill="#7d3a6b" stroke="#1d1714" stroke-width="2"/>
+            <ellipse cx="11" cy="-47" rx="11.5" ry="12.5" fill="#7d3a6b" stroke="#1d1714" stroke-width="2"/></g>
+        </g>
+        <circle cx="-22" cy="-30" r="5" fill="#e0607a" opacity=".35"/><circle cx="24" cy="-31" r="5" fill="#e0607a" opacity=".35"/>
+        <path id="blMouth" d="M-8 -27 Q1 -20 10 -28" stroke="#1d1714" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+        <use id="blBucket" href="#bucketSym" transform="translate(0 -84) rotate(180)" visibility="hidden"/>
+      </g></g>
+    </g>
+  </g>
+  <!-- MOTE: understatement. Small, square, unbothered. -->
+  <g id="mote" visibility="hidden">
+    <g id="moSq">
+      <g id="moLegL"><path d="M-7 -8 V-1" stroke="#1d1714" stroke-width="3" stroke-linecap="round"/><path d="M-11 0 H-3" stroke="#1d1714" stroke-width="4" stroke-linecap="round"/></g>
+      <g id="moLegR"><path d="M7 -8 V-1" stroke="#1d1714" stroke-width="3" stroke-linecap="round"/><path d="M3 0 H11" stroke="#1d1714" stroke-width="4" stroke-linecap="round"/></g>
+      <g id="moRot"><g id="moBody">
+        <rect x="-15" y="-44" width="30" height="37" rx="7" fill="#142433" opacity=".35" transform="translate(2 2)"/>
+        <rect x="-15" y="-44" width="30" height="37" rx="7" fill="url(#gSlate)" stroke="#1d1714" stroke-width="2.4"/>
+        <path d="M-15 -20 H15" stroke="#24384c" stroke-width="2"/>
+        <path d="M0 -20 l-3 4 l3 9 l3 -9 z" fill="#a4462a" stroke="#1d1714" stroke-width="1.4"/>
+        <g id="moEyes">
+          <ellipse cx="-6" cy="-31" rx="4.6" ry="5" fill="#fbf4e6" stroke="#1d1714" stroke-width="1.6"/>
+          <ellipse cx="6" cy="-31" rx="4.6" ry="5" fill="#fbf4e6" stroke="#1d1714" stroke-width="1.6"/>
+          <g id="moPup"><circle cx="-6" cy="-29.5" r="2.1" fill="#1d1714"/><circle cx="6" cy="-29.5" r="2.1" fill="#1d1714"/></g>
+          <path d="M-11 -32 H-1.4 V-36 H-11 Z M1.4 -32 H11 V-36 H1.4 Z" fill="#3f5e78" stroke="#1d1714" stroke-width="1.6"/>
+        </g>
+        <path id="moMouth" d="M-4 -24 H4" stroke="#1d1714" stroke-width="2" stroke-linecap="round"/>
+        <use id="moBucket" href="#bucketSym" transform="translate(0 -70) rotate(180) scale(.72)" visibility="hidden"/>
+      </g></g>
+    </g>
+  </g>
+</g>
+
+<!-- banana peel, the loose one -->
+<g id="peel" visibility="hidden">
+  <path d="M-12 0 Q-16 -10 -6 -8 Q-2 -14 2 -8 Q10 -12 13 -2 Q4 2 -12 0 Z" fill="#f1c63c" stroke="#1d1714" stroke-width="2"/>
+  <path d="M-4 -7 Q0 -2 4 -6" stroke="#8a5a1c" stroke-width="1.4" fill="none"/>
+</g>
+
+<!-- speech: the deadpan 'hm.' -->
+<g id="say" visibility="hidden">
+  <rect x="-30" y="-24" width="60" height="32" rx="12" fill="#f6ecd6" stroke="#1d1714" stroke-width="2.2"/>
+  <path d="M-6 8 L0 16 L4 8" fill="#f6ecd6" stroke="#1d1714" stroke-width="2.2"/>
+  <rect x="-7" y="5" width="12" height="4" fill="#f6ecd6"/>
+  <text id="sayT" x="0" y="0" text-anchor="middle" font-size="22" font-weight="800" fill="#1d1714">hm.</text>
+</g>
+
+<!-- FOREGROUND: peel crate and the laugh jar -->
+<g id="crate" role="button" tabindex="0" aria-label="Banana crate. Throw a peel in front of the walker.">
+  <rect x="8" y="548" width="74" height="84" fill="transparent"/>
+  <g filter="url(#rough)">
+    <path d="M14 570 L76 566 L78 628 L12 630 Z" fill="url(#gWood)" stroke="#1d1714" stroke-width="2.8"/>
+    <path d="M13 590 H77 M13 610 H78 M30 568 V630 M58 567 V629" stroke="#5e3c22" stroke-width="2"/>
+  </g>
+  <g>
+    <path d="M22 568 Q26 548 40 556 Q46 544 56 556 Q68 550 70 566 Z" fill="#f1c63c" stroke="#1d1714" stroke-width="2.2"/>
+    <path d="M34 560 q6 -4 10 2 M50 558 q6 -2 8 4" stroke="#8a5a1c" stroke-width="1.6" fill="none"/>
+  </g>
+</g>
+<g id="jar" aria-hidden="true">
+  <path d="M308 566 Q306 556 314 552 H338 Q346 556 344 566 V618 Q344 626 336 626 H316 Q308 626 308 618 Z" fill="#f6ecd6" opacity=".18"/>
+  <g clip-path="url(#jarClip)">
+    <rect id="jarFill" x="300" y="626" width="52" height="0" fill="url(#gGold)"/>
+    <g id="jarBubs" fill="#fff3cf"></g>
+  </g>
+  <path d="M308 566 Q306 556 314 552 H338 Q346 556 344 566 V618 Q344 626 336 626 H316 Q308 626 308 618 Z" fill="none" stroke="#1d1714" stroke-width="2.8"/>
+  <rect x="311" y="544" width="30" height="9" rx="3" fill="#a4462a" stroke="#1d1714" stroke-width="2.4"/>
+  <path d="M313 572 Q312 600 316 612" stroke="#fff" stroke-width="3" opacity=".5" fill="none" stroke-linecap="round"/>
+</g>
+
+<g id="fx"></g>
+<circle id="ring" class="ring" cx="45" cy="590" r="44" visibility="hidden"/>
+</g>
+
+<!-- atmosphere over everything -->
+<rect x="-500" y="-500" width="1360" height="1600" fill="url(#gVig)" pointer-events="none"/>
+<rect x="-500" y="-500" width="1360" height="1600" filter="url(#grain)" opacity=".22" pointer-events="none" style="mix-blend-mode:multiply"/>
+</svg>
+
+<div class="hud">
+  <p class="plaque" id="lvl">Level 1 · Bloat</p>
+  <button class="btn" id="comfortBtn" aria-expanded="false" aria-controls="comfort">Comfort</button>
+</div>
+<p id="cap" aria-live="polite">This is Bloat. Everything he does is too much.</p>
+<p class="sr" id="desc" aria-live="polite"></p>
+
+<div id="comfort" hidden>
+  <h2>Light</h2>
+  <div class="row" id="themeRow">
+    <button class="btn" data-theme="day" aria-pressed="false">Day</button>
+    <button class="btn" data-theme="dusk" aria-pressed="false">Dusk</button>
+    <button class="btn" data-theme="night" aria-pressed="false">Night</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="row" id="sizeRow">
+    <button class="btn" data-ts="1" aria-pressed="true">A</button>
+    <button class="btn" data-ts="1.2" aria-pressed="false">A+</button>
+    <button class="btn" data-ts="1.4" aria-pressed="false">A++</button>
+  </div>
+  <h2>Motion</h2>
+  <div class="row" id="motionRow">
+    <button class="btn" data-motion="full" aria-pressed="true">Full</button>
+    <button class="btn" data-motion="calm" aria-pressed="false">Calm</button>
+  </div>
+  <div class="row"><button class="btn" id="comfortClose">Close</button></div>
+</div>
+
+<section id="card" hidden aria-modal="true" role="dialog" aria-labelledby="cardH">
+  <div class="cardbox">
+    <svg id="cardArt" viewBox="0 0 360 240" aria-hidden="true"></svg>
+    <h2 id="cardH"></h2>
+    <p id="cardP"></p>
+    <button class="btn" id="cardGo"></button>
+  </div>
+</section>
+
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+var SVGNS="http://www.w3.org/2000/svg";
+var GROUND=520, G=1400, GOAL=6;
+var calm=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+if(calm) document.body.classList.add("calm");
+
+/* ---------- Bonie faces (drawn once, swapped by state) ---------- */
+function el(tag,attrs,parent){var e=document.createElementNS(SVGNS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e}
+var bonies=[0,1,2].map(function(i){
+  var g=$("b"+i), f=g.querySelector(".face");
+  var eyes=el("g",{},f);
+  el("circle",{cx:-4.5,cy:-26,r:4.6,fill:"#fbf4e6",stroke:"#1d1714","stroke-width":1.6},eyes);
+  el("circle",{cx:4.5,cy:-26,r:4.6,fill:"#fbf4e6",stroke:"#1d1714","stroke-width":1.6},eyes);
+  var pup=el("g",{},eyes);
+  el("circle",{cx:-4.5,cy:-25,r:2.2,fill:"#1d1714"},pup);el("circle",{cx:4.5,cy:-25,r:2.2,fill:"#1d1714"},pup);
+  var lid=el("path",{d:"M-9.5 -27 H9.5",stroke:"#1d1714","stroke-width":2.2,"stroke-linecap":"round",visibility:"hidden"},f);
+  var bored=el("path",{d:"M-4 -14 H4",stroke:"#1d1714","stroke-width":2,"stroke-linecap":"round"},f);
+  var laugh=el("path",{d:"M-6 -16 Q0 -4 6 -16 Z",fill:"#7a2a22",stroke:"#1d1714","stroke-width":1.6,visibility:"hidden"},f);
+  var yawn=el("ellipse",{cx:0,cy:-13,rx:2.6,ry:4.2,fill:"#7a2a22",stroke:"#1d1714","stroke-width":1.4,visibility:"hidden"},f);
+  var arms=el("path",{d:"M-10 -18 Q0 -12 10 -18",stroke:"#1d1714","stroke-width":2.2,fill:"none","stroke-linecap":"round"},f);
+  var armsUp=el("path",{d:"M-10 -20 Q-18 -28 -16 -38 M10 -20 Q18 -28 16 -38",stroke:"#1d1714","stroke-width":2.2,fill:"none","stroke-linecap":"round",visibility:"hidden"},f);
+  return {g:g,pup:pup,lid:lid,bored:bored,laugh:laugh,yawn:yawn,arms:arms,armsUp:armsUp,x:[262,298,334][i],t:0};
+});
+function bonieFace(b,s){
+  b.bored.setAttribute("visibility",s==="bored"?"visible":"hidden");
+  b.laugh.setAttribute("visibility",s==="laugh"?"visible":"hidden");
+  b.yawn.setAttribute("visibility",s==="yawn"?"visible":"hidden");
+  b.lid.setAttribute("visibility",s==="yawn"||s==="laugh"?"visible":"hidden");
+  b.pup.setAttribute("visibility",s==="yawn"||s==="laugh"?"hidden":"visible");
+  b.armsUp.setAttribute("visibility",s==="laugh"?"visible":"hidden");
+  b.arms.setAttribute("visibility",s==="laugh"?"hidden":"visible");
+}
+function bonieReact(level){
+  bonies.forEach(function(b,i){
+    b.g.classList.remove("chuckle","fall"); void b.g.getBBox();
+    var on = level>=2 || (level===1 && i===1);
+    if(level===0 && i===1){bonieFace(b,"yawn");b.t=2.2;return}
+    if(!on){return}
+    bonieFace(b,"laugh"); b.t = level===3?2.8:1.8;
+    if(!calm) b.g.classList.add(level===3?"fall":"chuckle");
+  });
+}
+
+/* ---------- characters ---------- */
+var CH={
+  bloat:{g:$("bloat"),sq:$("blSq"),rot:$("blRot"),body:$("blBody"),pup:$("blPup"),lids:$("blLids"),mouth:$("blMouth"),
+    bucket:$("blBucket"),legL:$("blLegL"),legR:$("blLegR"),speed:46,H:74,cy:-40,name:"Bloat"},
+  mote:{g:$("mote"),sq:$("moSq"),rot:$("moRot"),body:$("moBody"),pup:$("moPup"),lids:null,mouth:$("moMouth"),
+    bucket:$("moBucket"),legL:$("moLegL"),legR:$("moLegR"),speed:30,H:44,cy:-26,name:"Mote"}
+};
+var MOUTH={bloat:{smile:"M-8 -27 Q1 -20 10 -28",oh:"M-5 -26 Q1 -16 7 -26 Q1 -32 -5 -26 Z",wow:"M-11 -28 Q0 -6 12 -28 Q0 -34 -11 -28 Z",flat:"M-7 -25 H8",wobble:"M-10 -26 q4 -4 7 0 q4 4 7 0 q4 -4 7 0"},
+  mote:{smile:"M-4 -24 H4",oh:"M-4 -24 H4",wow:"M-4 -24 H4",flat:"M-4 -24 H4",wobble:"M-4 -24 H4"}};
+
+var c; // current character state
+function newChar(kind){
+  return {kind:kind,d:CH[kind],x:-40,y:GROUND,vx:0,vy:0,rot:0,spin:0,dir:1,mode:"enter",t:0,swell:1,sq:1,
+    bucketOn:false,float:false,bounces:0,walkPh:0,look:null,after:null};
+}
+
+/* ---------- props ---------- */
+var peel={state:"crate",x:0,y:0,vx:0,vy:0,rot:0,t:0};
+var bucket={state:"hang",ax:232,ay:214,x:232,y:300,vy:0,vx:0,rot:0,t:0,ph:0};
+var sand={state:"hang",x:160,y:398,vy:0,t:0};
+var plank={r:-12,target:-12};
+var used={peel:0,bucket:0,sand:0};
+
+/* ---------- game state ---------- */
+var level=1, score=0, shownScore=0, history=[], lastGag={t:-9}, now=0, shake=0, hintOn=null, ended=false;
+
+function cap(t,detail){ $("cap").textContent=t; $("desc").textContent=detail||""; }
+
+/* ---------- particles ---------- */
+var fx=$("fx"), parts=[];
+function puff(x,y,n,col,spd,r){
+  if(calm) return;
+  for(var i=0;i<n;i++){
+    var a=Math.random()*Math.PI*2, s=(spd||60)*(0.4+Math.random());
+    var e=el("circle",{cx:x,cy:y,r:r||4,fill:col||"#f3e3c8",opacity:.9},fx);
+    parts.push({e:e,x:x,y:y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-20,life:0.6+Math.random()*0.4,t:0,r:r||4});
+  }
+}
+function stars(x,y){ puff(x,y,6,"#f6cf6a",110,3); }
+function stepParts(dt){
+  for(var i=parts.length-1;i>=0;i--){var p=parts[i];p.t+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy-=10*dt;
+    var k=p.t/p.life; if(k>=1){p.e.remove();parts.splice(i,1);continue}
+    p.e.setAttribute("cx",p.x);p.e.setAttribute("cy",p.y);p.e.setAttribute("r",p.r*(1+k*1.6));p.e.setAttribute("opacity",.9*(1-k));}
+}
+
+/* ---------- speech ---------- */
+var sayT=0;
+function say(txt){ $("sayT").textContent=txt; sayT=1.4; }
+
+/* ---------- the joke ledger: combos, repetition, laughs ---------- */
+var LINES={
+ bloat:{peel:"Way too big, on purpose. That is exaggeration.",bucket:"A bucket is small. Bloat makes it huge.",sand:"Bigger, higher, longer. Exaggeration!",
+   peelD:"Bloat slipped, puffed up huge, spun, and bounced.",bucketD:"The bucket landed on Bloat's head. He swelled up, staggered around, and popped it off.",
+   sandD:"The sandbag hit the seesaw. Bloat shot into the sky, ballooned up, and drifted down deflating."},
+ mote:{peel:"A huge slip. A tiny 'hm.' That is understatement.",bucket:"A bucket on his head. He wears it like a hat.",sand:"He flew to the sky. He landed. 'hm.'",
+   peelD:"Mote slid a long way, stopped, and said hm.",bucketD:"The bucket landed on Mote's head. He kept walking, as if it were a hat.",
+   sandD:"Mote shot straight up out of sight, waited, dropped straight down onto his feet, and said hm."}
+};
+function gag(type,base){
+  var combo = (now-lastGag.t<2.8 && lastGag.type!==type);
+  var rep = history.length>=2 && history[history.length-1]===type && history[history.length-2]===type;
+  var lv = Math.min(3, base + (combo?1:0) - (rep?1:0));
+  history.push(type); lastGag={t:now,type:type}; used[type]++;
+  var L=LINES[c.kind];
+  setTimeout(function(){
+    bonieReact(lv);
+    if(lv===0){ cap("Same joke three times? The Bonies yawn. Try a new prop.","The Bonies yawned."); return; }
+    score+=lv;
+    if(combo) cap("Two gags in a row! The Bonies fell off the wall.",L[type+"D"]+" It was a combo.");
+    else cap(L[type],L[type+"D"]);
+    if(!calm) shake=lv*2;
+    nextHint();
+  }, c.kind==="mote"?650:200);
+}
+function nextHint(){
+  if(used.peel===0) hint("crate"); else if(used.bucket===0) hint("bucket"); else if(used.sand===0) hint("sand"); else hint(null);
+}
+function hint(which){ hintOn=which; $("ring").setAttribute("visibility",which?"visible":"hidden"); }
+function miss(msg,detail){ cap(msg,detail); if(Math.abs(c.x-(c.mode==="walk"?c.x:c.x))<999 && c.mode==="walk"){c.mode="look";c.t=0;} }
+
+/* ---------- actions ---------- */
+function throwPeel(){
+  if(ended||peel.state!=="crate"||c.mode==="enter"||c.mode==="hello") return;
+  var tx=Math.max(50,Math.min(300,c.x+c.dir*(c.kind==="mote"?60:80)));
+  peel.state="fly"; peel.x=45; peel.y=556; peel.t=0; peel.sx=45; peel.sy=556; peel.tx=tx; peel.dur=0.65;
+  $("peel").setAttribute("visibility","visible");
+  if(hintOn==="crate") hint(null);
+}
+function dropBucket(){
+  if(ended||bucket.state!=="hang"||c.mode==="enter") return;
+  bucket.state="fall"; bucket.vy=0; if(hintOn==="bucket") hint(null);
+}
+function dropSand(){
+  if(ended||sand.state!=="hang"||c.mode==="enter") return;
+  sand.state="fall"; sand.vy=0; if(hintOn==="sand") hint(null);
+}
+function slip(){
+  peel.state="gone"; peel.t=0; peel.vx=c.dir*-120; peel.vy=-380;
+  if(c.kind==="bloat"){ c.mode="air"; c.vy=-560; c.vx=c.dir*150; c.spin=c.dir*760; c.bounces=0; c.float=false; c.mouthS="wow"; puff(c.x,GROUND,6); }
+  else { c.mode="skid"; c.t=0; }
+  gag("peel",1);
+}
+function launch(){
+  if(c.kind==="bloat"){ c.mode="air"; c.vy=-1250; c.vx=40; c.spin=0; c.float=true; c.bounces=0; c.mouthS="wow"; }
+  else { c.mode="air"; c.vy=-1500; c.vx=0; c.spin=0; c.float=false; c.rocket=true; }
+  puff(c.x,GROUND,8); gag("sand",2);
+}
+function bucketHit(){
+  bucket.state="onhead"; c.bucketOn=true; c.d.bucket.setAttribute("visibility","visible");
+  stars(c.x,c.y-c.d.H);
+  if(c.kind==="bloat"){ if(c.mode!=="air"){ c.mode="stagger"; c.t=0; } }
+  else { if(c.mode!=="air"){ c.mode="pause"; c.t=0; c.after="hat"; } }
+  gag("bucket",2);
+}
+function popBucket(){
+  c.bucketOn=false; c.d.bucket.setAttribute("visibility","hidden");
+  bucket.state="flying"; bucket.x=c.x; bucket.y=c.y-c.d.H*c.swell; bucket.vy=-760; bucket.vx=(Math.random()<.5?-1:1)*90; bucket.rot=0;
+  puff(c.x,c.y-c.d.H,8,"#f3e3c8",90,5);
+}
+function setDownBucket(){
+  c.bucketOn=false; c.d.bucket.setAttribute("visibility","hidden");
+  bucket.state="ground"; bucket.x=Math.max(30,Math.min(330,c.x+c.dir*20)); bucket.y=GROUND; bucket.rot=0; bucket.t=0;
+}
+
+/* ---------- character update ---------- */
+function ease(a,b,k){return a+(b-a)*k}
+function onPlankLeft(){ return c.y>=GROUND-2 && c.x>58 && c.x<104; }
+function updChar(dt){
+  var d=c.d; c.t+=dt;
+  var walking=false, spd=d.speed;
+  switch(c.mode){
+  case "enter":
+    c.x+=spd*dt; walking=true;
+    if(c.x>=100){ c.mode="hello"; c.t=0; }
+    break;
+  case "hello":
+    if(c.kind==="bloat"){ c.swell=1+0.45*Math.sin(Math.min(1,c.t/1.3)*Math.PI); c.mouthS=c.t<1.1?"wow":"smile"; }
+    else { c.rot = c.t<0.4?4:0; }
+    if(c.t>1.6){ c.mode="walk"; c.swell=1; c.rot=0;
+      cap("The Bonies are bored. Tap the banana crate.","Bloat is walking back and forth. Props: banana crate at bottom left, bucket in the tree, sandbag over the seesaw.");
+      if(c.kind==="mote") cap("Same yard, same props. Mote reacts the other way. Tap the crate.","Mote walks slowly back and forth.");
+      hint("crate"); }
+    break;
+  case "walk":
+    c.x+=c.dir*spd*dt; walking=true; c.mouthS="smile";
+    if(c.x>318){c.dir=-1} if(c.x<40){c.dir=1}
+    break;
+  case "stagger":
+    walking=true; c.x+=c.dir*112*dt; c.rot=Math.sin(c.t*13)*15; c.swell=ease(c.swell,1.28,dt*6); c.mouthS="wobble";
+    if(Math.random()<dt*2.6) c.dir*=-1;
+    if(c.x>322){c.dir=-1;stars(c.x+20,c.y-60);if(!calm)shake=3} if(c.x<36){c.dir=1;stars(c.x-20,c.y-60);if(!calm)shake=3}
+    if(c.t>2.4){ popBucket(); c.mode="recover"; c.t=0; }
+    break;
+  case "air":
+    if(c.rocket){
+      c.vy+=G*dt*0.35; c.y+=c.vy*dt;
+      if(c.y<-260){ c.mode="hang"; c.t=0; c.rocket=false; }
+      break;
+    }
+    if(c.float && c.vy>0){
+      c.vy=Math.min(c.vy+G*dt*0.2,135); c.x+=Math.sin(c.t*3.2)*40*dt; c.rot=Math.sin(c.t*5)*14;
+      c.swell=ease(c.swell,1+Math.max(0,(GROUND-c.y))/520,dt*2);
+      if(Math.random()<dt*7) puff(c.x-c.dir*10,c.y-8,1,"#f3e3c8",30,3);
+      c.mouthS="wobble";
+    } else {
+      c.vy+=G*dt; c.rot+=c.spin*dt;
+      c.swell=ease(c.swell,c.float?2.1:1.6,dt*5);
+    }
+    c.x+=c.vx*dt; c.y+=c.vy*dt;
+    if(c.x<24){c.x=24;c.vx=Math.abs(c.vx)*0.6;stars(c.x-20,c.y-40)} if(c.x>336){c.x=336;c.vx=-Math.abs(c.vx)*0.6;stars(c.x+20,c.y-40)}
+    if(c.y>=GROUND){
+      c.y=GROUND;
+      if(c.kind==="bloat" && c.vy>280 && c.bounces<2){ c.vy=-c.vy*0.45; c.bounces++; c.sq=0.62; puff(c.x,GROUND,5); if(!calm)shake=2; }
+      else { c.vy=0; c.vx=0; c.sq=0.7; puff(c.x,GROUND,4);
+        if(c.bucketOn){ if(c.kind==="bloat"){ popBucket(); c.mode="recover"; c.t=0; } else { c.mode="pause"; c.t=0; c.after="hat"; } }
+        else if(c.kind==="mote"){ c.mode="pause"; c.t=0; c.after="hm"; }
+        else { c.mode="recover"; c.t=0; } }
+    }
+    break;
+  case "hang": /* Mote, out of sight, taking his time */
+    c.y=-260;
+    if(c.t>1.5){ c.mode="drop"; c.vy=500; }
+    break;
+  case "drop":
+    c.vy+=G*dt; c.y+=c.vy*dt;
+    if(c.y>=GROUND){ c.y=GROUND; c.vy=0; c.sq=0.9; puff(c.x,GROUND,6); if(!calm)shake=4; c.mode="pause"; c.t=0; c.after=c.bucketOn?"hat":"hm"; }
+    break;
+  case "skid":
+    var k=Math.min(1,c.t/0.7); c.x+=c.dir*130*(1-k)*dt;
+    if(Math.random()<dt*20) puff(c.x-c.dir*8,GROUND-2,1,"#c9a26a",20,2.5);
+    if(c.t>0.7){ c.mode="pause"; c.t=0; c.after="hm"; }
+    break;
+  case "pause":
+    c.rot=ease(c.rot,0,dt*10);
+    if(c.t>0.6 && c.after){ var a=c.after; c.after=null; say("hm."); if(a==="hat"){ c.hatT=0; } }
+    if(c.t>1.6){ c.mode="walk"; }
+    break;
+  case "recover":
+    c.rot=ease(c.rot%360,0,dt*8); c.swell=ease(c.swell,1,dt*4); c.mouthS="flat";
+    if(c.kind==="bloat" && c.t<0.5 && Math.random()<dt*14) puff(c.x+c.dir*30,c.y-40,1,"#f3e3c8",50,3);
+    if(c.t>0.9){ c.rot=0; c.mode="walk"; }
+    break;
+  case "look": /* a miss: he looks at the prop, then at you */
+    c.mouthS="flat";
+    if(c.t>1.5) c.mode="walk";
+    break;
+  }
+  /* Mote with a bucket hat sets it down after a stroll */
+  if(c.kind==="mote" && c.bucketOn && c.mode==="walk"){ c.hatT=(c.hatT||0)+dt; if(c.hatT>4){ setDownBucket(); } }
+  /* peel trigger */
+  if(peel.state==="down" && (c.mode==="walk"||c.mode==="stagger") && Math.abs(c.x-peel.x)<9) slip();
+  c.sq=ease(c.sq,1,dt*9);
+  if(walking){ c.walkPh+=dt*spd*0.28; }
+  render(walking);
+}
+
+function render(walking){
+  var d=c.d, bob=walking?Math.abs(Math.sin(c.walkPh))*-2.5:0;
+  d.g.setAttribute("transform","translate("+c.x.toFixed(1)+" "+(c.y+bob).toFixed(1)+") scale("+c.dir+" 1)");
+  var sx=1+(1-c.sq)*0.8, sy=c.sq;
+  d.sq.setAttribute("transform","scale("+sx.toFixed(3)+" "+sy.toFixed(3)+")");
+  d.rot.setAttribute("transform","rotate("+(c.rot*c.dir).toFixed(1)+" 0 "+d.cy+")");
+  var s=c.swell; d.body.setAttribute("transform","translate(0 "+d.cy+") scale("+s.toFixed(3)+") translate(0 "+(-d.cy)+")");
+  var lg=walking?Math.sin(c.walkPh)*4:0;
+  d.legL.setAttribute("transform","translate("+lg.toFixed(1)+" 0)"); d.legR.setAttribute("transform","translate("+(-lg).toFixed(1)+" 0)");
+  /* eyes: look at what matters */
+  var tx=0,ty=0;
+  if(c.mode==="look"){ tx=0; ty=2.5; }
+  else if(bucket.state==="fall"){ tx=Math.sign((bucket.x-c.x)*c.dir)*2; ty=-3; }
+  else if(c.mode==="air"&&c.float){ tx=0; ty=3; }
+  else { tx=2; ty=0; }
+  if(c.kind==="mote"){ tx*=0.5; ty=Math.max(0,ty)*0.4; }
+  d.pup.setAttribute("transform","translate("+tx+" "+ty+")");
+  d.mouth.setAttribute("d",MOUTH[c.kind][c.mouthS||"smile"]);
+  /* blink */
+  if(d.lids){ c.blink=(c.blink||0)-0.016; if(c.blink< -3-Math.random()*3) c.blink=0.14;
+    d.lids.setAttribute("transform","scale(1 "+(c.blink>0?1:0)+")"); }
+  /* speech */
+  var sg=$("say");
+  if(sayT>0){ sg.setAttribute("visibility","visible"); sg.setAttribute("transform","translate("+c.x+" "+(c.y-d.H-(c.bucketOn?34:14))+")"); }
+  else sg.setAttribute("visibility","hidden");
+}
+
+/* ---------- props update ---------- */
+function updProps(dt){
+  /* peel */
+  var pe=$("peel");
+  if(peel.state==="fly"){ peel.t+=dt; var k=Math.min(1,peel.t/peel.dur);
+    peel.x=ease(peel.sx,peel.tx,k); peel.y=ease(peel.sy,GROUND,k)-Math.sin(k*Math.PI)*120; peel.rot+=dt*720;
+    if(k>=1){ peel.state="down"; peel.y=GROUND; peel.rot=0; } }
+  else if(peel.state==="gone"){ peel.t+=dt; peel.vy+=G*dt*0.6; peel.x+=peel.vx*dt; peel.y+=peel.vy*dt; peel.rot+=dt*900;
+    if(peel.t>1.1){ peel.state="crate"; pe.setAttribute("visibility","hidden"); } }
+  if(peel.state!=="crate") pe.setAttribute("transform","translate("+peel.x.toFixed(1)+" "+peel.y.toFixed(1)+") rotate("+peel.rot.toFixed(0)+")");
+
+  /* bucket */
+  var bg=$("bucket"), rope=$("bucketRope");
+  bucket.ph+=dt;
+  if(bucket.state==="hang"){ var sw=Math.sin(bucket.ph*1.6)*7; bucket.x=bucket.ax+sw; bucket.y=300; bucket.rot=-sw*0.6;
+    rope.setAttribute("d","M"+bucket.ax+" "+bucket.ay+" L"+bucket.x.toFixed(1)+" "+(bucket.y-48).toFixed(1)); }
+  else if(bucket.state==="fall"){ bucket.vy+=G*dt; bucket.y+=bucket.vy*dt;
+    rope.setAttribute("d","M"+bucket.ax+" "+bucket.ay+" l0 10");
+    var head=c.y-c.d.H*c.swell;
+    if(!c.bucketOn && bucket.y-34>=head-6 && bucket.y-34<=head+30 && Math.abs(bucket.x-c.x)<20+12*c.swell && c.mode!=="hang"){ bucketHit(); }
+    else if(bucket.y>=GROUND){ bucket.y=GROUND; bucket.state="ground"; bucket.t=0; puff(bucket.x,GROUND,6,"#c9a26a",70,3); stars(bucket.x,GROUND-30);
+      cap("Missed. Drop it when they are right under the tree.","The bucket clanked on the ground."); if(c.mode==="walk"){c.mode="look";c.t=0;} } }
+  else if(bucket.state==="flying"){ bucket.vy+=G*dt; bucket.x+=bucket.vx*dt; bucket.y+=bucket.vy*dt; bucket.rot+=dt*600;
+    if(bucket.y>=GROUND){ bucket.y=GROUND; bucket.state="ground"; bucket.t=0; bucket.rot=0; puff(bucket.x,GROUND,5,"#c9a26a",60,3); } }
+  else if(bucket.state==="ground"){ bucket.t+=dt; rope.setAttribute("d","M"+bucket.ax+" "+bucket.ay+" l0 10");
+    if(bucket.t>1.4){ bucket.state="reel"; bucket.t=0; bucket.fx=bucket.x; bucket.fy=bucket.y; } }
+  else if(bucket.state==="reel"){ bucket.t+=dt; var kr=Math.min(1,bucket.t/1.3); var e2=kr*kr*(3-2*kr);
+    bucket.x=ease(bucket.fx,bucket.ax,e2); bucket.y=ease(bucket.fy,300,e2); bucket.rot=Math.sin(kr*12)*10*(1-kr);
+    rope.setAttribute("d","M"+bucket.ax+" "+bucket.ay+" L"+bucket.x.toFixed(1)+" "+(bucket.y-48).toFixed(1));
+    if(kr>=1){ bucket.state="hang"; } }
+  bg.setAttribute("visibility",bucket.state==="onhead"?"hidden":"visible");
+  rope.setAttribute("visibility",bucket.state==="onhead"||bucket.state==="flying"?"hidden":"visible");
+  bg.setAttribute("transform","translate("+bucket.x.toFixed(1)+" "+bucket.y.toFixed(1)+") rotate("+bucket.rot.toFixed(1)+")");
+
+  /* sandbag and seesaw */
+  var sg=$("sandbag"), sr=$("sandRopeP");
+  if(sand.state==="hang"){ sand.y=398+Math.sin(bucket.ph*2.2)*1.5; sr.setAttribute("d","M160 356 V"+(sand.y-2).toFixed(1)); }
+  else if(sand.state==="fall"){ sand.vy+=G*dt; sand.y+=sand.vy*dt; sr.setAttribute("d","M160 356 V364");
+    var rightEnd=GROUND-10-Math.sin(plank.r*Math.PI/180)*-48 - 8;
+    if(sand.y+34>=496){ sand.y=496-34+10; sand.state="down"; sand.t=0; plank.target=12; puff(166,500,6,"#c9a26a",70,3);
+      if(onPlankLeft() && c.mode!=="air" && c.mode!=="hang"){ launch(); }
+      else { cap("Thump. Wait until they stand on the low end.","The sandbag hit an empty seesaw."); if(c.mode==="walk"){c.mode="look";c.t=0;} } } }
+  else if(sand.state==="down"){ sand.t+=dt; if(sand.t>1.6){ sand.state="reel"; sand.t=0; plank.target=-12; } }
+  else if(sand.state==="reel"){ sand.t+=dt; var ks=Math.min(1,sand.t/1.2); sand.y=ease(472,398,ks*ks*(3-2*ks)); sr.setAttribute("d","M160 356 V"+(sand.y-2).toFixed(1));
+    if(ks>=1) sand.state="hang"; }
+  sg.setAttribute("transform","translate(160 "+sand.y.toFixed(1)+")");
+  plank.r=ease(plank.r,plank.target,dt*(plank.target>0?22:4));
+  $("plank").setAttribute("transform","rotate("+plank.r.toFixed(2)+" 120 494)");
+}
+
+/* ---------- audience, jar, hint ---------- */
+var bubT=0;
+function updAudience(dt){
+  bonies.forEach(function(b){
+    if(b.t>0){ b.t-=dt; if(b.t<=0){ bonieFace(b,"bored"); b.g.classList.remove("chuckle","fall"); } }
+    else { var dx=Math.max(-2,Math.min(2,(c.x-b.x)/40)); var dy=c.y<GROUND-80?-2:0.5; b.pup.setAttribute("transform","translate("+dx.toFixed(1)+" "+dy+")"); }
+  });
+  shownScore=ease(shownScore,Math.min(score,GOAL),dt*3);
+  var h=shownScore/GOAL*70; $("jarFill").setAttribute("y",(626-h).toFixed(1)); $("jarFill").setAttribute("height",h.toFixed(1));
+  bubT-=dt; if(!calm && score>0 && bubT<0){ bubT=0.5; var b=el("circle",{cx:314+Math.random()*24,cy:622,r:1.5+Math.random()*2,class:"bub"},$("jarBubs")); setTimeout(function(){b.remove()},3500); }
+  var r=$("ring");
+  if(hintOn==="crate"){r.setAttribute("cx",45);r.setAttribute("cy",590);r.setAttribute("r",44);}
+  if(hintOn==="bucket"){r.setAttribute("cx",bucket.x);r.setAttribute("cy",bucket.y-22);r.setAttribute("r",34);}
+  if(hintOn==="sand"){r.setAttribute("cx",160);r.setAttribute("cy",sand.y+16);r.setAttribute("r",32);}
+  if(!ended && score>=GOAL && c.mode==="walk" && sayT<=0){ ended=true; setTimeout(endLevel,700); }
+}
+
+/* ---------- loop ---------- */
+var last=performance.now();
+function frame(t){
+  var dt=Math.min(0.033,(t-last)/1000); last=t; now+=dt;
+  if(sayT>0) sayT-=dt;
+  updProps(dt); updChar(dt); updAudience(dt); stepParts(dt);
+  var w=$("world");
+  if(shake>0 && !calm){ shake=Math.max(0,shake-dt*12); w.setAttribute("transform","translate("+((Math.random()-.5)*shake*2).toFixed(1)+" "+((Math.random()-.5)*shake*2).toFixed(1)+")"); }
+  else w.removeAttribute("transform");
+  requestAnimationFrame(frame);
+}
+
+/* ---------- level flow ---------- */
+function startLevel(kind){
+  c=newChar(kind); score=0; shownScore=0; history=[]; lastGag={t:-9}; ended=false; used={peel:0,bucket:0,sand:0};
+  CH.bloat.g.setAttribute("visibility",kind==="bloat"?"visible":"hidden");
+  CH.mote.g.setAttribute("visibility",kind==="mote"?"visible":"hidden");
+  CH.bloat.bucket.setAttribute("visibility","hidden"); CH.mote.bucket.setAttribute("visibility","hidden");
+  peel.state="crate"; $("peel").setAttribute("visibility","hidden"); bucket.state="hang"; sand.state="hang"; plank.target=-12;
+  $("lvl").textContent= kind==="bloat"?"Level 1 · Bloat":"Level 2 · Mote";
+  cap(kind==="bloat"?"This is Bloat. Everything he does is too much.":"This is Mote. He barely reacts to anything.",
+      kind==="bloat"?"A round plum creature walks into the yard and puffs up huge to say hello.":"A small square slate creature walks in and gives the smallest nod.");
+  hint(null);
+}
+function portrait(kind,x,locked){
+  var src=CH[kind]? CH[kind].g : null; var s="";
+  if(kind==="bloat") s='<g transform="translate('+x+' 196) scale(1.5)"><use href="#bloat"/></g>';
+  return s;
+}
+function endLevel(){
+  var art=$("cardArt");
+  var bg='<rect width="360" height="240" fill="url(#gSky)"/><circle cx="270" cy="70" r="70" fill="url(#gSun)"/><path d="M0 180 Q180 166 360 178 V240 H0 Z" fill="url(#gGround)"/>';
+  if(c.kind==="bloat"){
+    art.innerHTML=bg+cardChar("bloat",180,200,2.0)+'<g transform="translate(110 186)"><use href="#bonieSym" transform="scale(1.2)"/></g>';
+    $("cardH").textContent="Bloat's move: Exaggeration";
+    $("cardP").textContent="Make it too big. Then bigger. A small thing becomes a huge thing.";
+    $("cardGo").textContent="Meet Mote";
+    $("cardGo").onclick=function(){ closeCard(); startLevel("mote"); };
+  } else {
+    art.innerHTML=bg+cardChar("bloat",70,200,1.15)+cardChar("mote",150,200,1.4)+
+      '<g opacity=".9"><circle cx="230" cy="168" r="22" fill="#1d1714"/><path d="M230 152 V168 L240 174" stroke="#f6ecd6" stroke-width="3" fill="none"/></g>'+
+      '<g opacity=".9"><path d="M290 190 l16 -40 l16 40 z" fill="#1d1714"/><path d="M306 162 v12 M306 180 v2" stroke="#f6ecd6" stroke-width="3"/></g>';
+    $("cardH").textContent="Mote's move: Understatement";
+    $("cardP").textContent="A big thing happens. The reaction is tiny. Next in the factory: Tock (timing) and Flip (surprise).";
+    $("cardGo").textContent="Play again";
+    $("cardGo").onclick=function(){ closeCard(); startLevel("bloat"); };
+  }
+  $("card").hidden=false; $("cardGo").focus();
+}
+function cardChar(kind,x,y,s){
+  /* clone the live character art so the card always matches the yard */
+  var src=CH[kind].body.cloneNode(true); src.removeAttribute("id"); src.removeAttribute("transform");
+  [].forEach.call(src.querySelectorAll("[id]"),function(n){n.removeAttribute("id")});
+  var legs=(kind==="bloat")?'<path d="M-11 -12 Q-13 -5 -12 0 M11 -12 Q13 -5 12 0" stroke="#a4462a" stroke-width="6" stroke-linecap="round" fill="none"/><ellipse cx="-14" cy="1" rx="8" ry="4" fill="#1d1714"/><ellipse cx="14" cy="1" rx="8" ry="4" fill="#1d1714"/>':
+    '<path d="M-7 -8 V-1 M7 -8 V-1" stroke="#1d1714" stroke-width="3"/><path d="M-11 0 H-3 M3 0 H11" stroke="#1d1714" stroke-width="4" stroke-linecap="round"/>';
+  var hid=src.querySelectorAll("use"); [].forEach.call(hid,function(u){u.setAttribute("visibility","hidden")});
+  return '<g transform="translate('+x+' '+y+') scale('+s+')">'+legs+src.outerHTML+'</g>';
+}
+function closeCard(){ $("card").hidden=true; }
+
+/* ---------- input ---------- */
+function bindBtn(id,fn){ var n=$(id); n.addEventListener("click",fn); n.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); fn(); } }); }
+bindBtn("crate",throwPeel); bindBtn("bucket",dropBucket); bindBtn("sandbag",dropSand);
+document.addEventListener("keydown",function(e){ if(e.target.closest&&e.target.closest("button"))return;
+  if(e.key==="1")throwPeel(); if(e.key==="2")dropBucket(); if(e.key==="3")dropSand(); });
+/* poke the world: small rewards for curiosity */
+$("factory").addEventListener("click",function(){ puff(51,84,6,"#f3e3c8",50,6); puff(166,120,5,"#f3e3c8",50,5); });
+$("bonies").addEventListener("click",function(){ bonies.forEach(function(b){ if(b.t<=0){ bonieFace(b,"yawn"); b.t=1; } }); });
+$("chars").addEventListener("click",function(){ if(c.mode==="walk"){ c.dir*=-1; if(c.kind==="bloat"){ c.swell=1.25; setTimeout(function(){},0);} else say("hm."); } });
+
+/* comfort corner */
+$("comfortBtn").onclick=function(){ var p=$("comfort"); p.hidden=!p.hidden; this.setAttribute("aria-expanded",String(!p.hidden)); };
+$("comfortClose").onclick=function(){ $("comfort").hidden=true; $("comfortBtn").setAttribute("aria-expanded","false"); $("comfortBtn").focus(); };
+function press(row,btn){ [].forEach.call(row.querySelectorAll("button"),function(b){b.setAttribute("aria-pressed",String(b===btn))}); }
+$("themeRow").addEventListener("click",function(e){ var b=e.target.closest("button"); if(!b)return; document.body.classList.remove("day","dusk","night"); document.body.classList.add(b.dataset.theme); press(this,b); });
+$("sizeRow").addEventListener("click",function(e){ var b=e.target.closest("button"); if(!b)return; document.documentElement.style.setProperty("--ts",b.dataset.ts); press(this,b); });
+$("motionRow").addEventListener("click",function(e){ var b=e.target.closest("button"); if(!b)return; calm=b.dataset.motion==="calm"; document.body.classList.toggle("calm",calm); document.body.classList.toggle("full",!calm); press(this,b); });
+if(calm) press($("motionRow"),$("motionRow").querySelector("[data-motion=calm]"));
+
+startLevel("bloat");
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

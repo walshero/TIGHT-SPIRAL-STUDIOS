@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Funnybonies v17 · Level 1 · Wake Bloat</title>
+<meta name="description" content="Funnybonies Factory, level one. Bloat the robot has gone stiff. Find his funny bone, wake him, and he becomes the first part of the ride.">
+<meta name="spec-source" content="funnybonies/SPEC-LINK-v17.md">
+<meta name="audience" content="kids, grades 3 to 6">
+<style>
+/* ===========================================================
+   Funnybonies v17 · Level 1 · Wake Bloat
+   Spec: funnybonies/SPEC-LINK-v17.md. The robots have gone stiff.
+   Find the funny bone with a prop chain, wake the robot, and it
+   folds into one segment of a ride. Bloat (exaggeration) = launch.
+   Founder ruling 2026-11-03: each character IS a kind of humor.
+   Meet them one at a time. The yard is a slapstick machine with
+   real physics, and the same prop gets a different laugh from
+   each character. Register: Amanita (Samorost, Machinarium).
+   Floors: no emoji, no green, single file, offline, stores
+   nothing, 44px targets, comfort is a live corner control.
+   =========================================================== */
+:root{
+  --surface:#f6ecd6;
+  --text:#1d1714;
+  --edge:#1d1714;
+  --ts:1;
+  --sky1:#f1dcae; --sky2:#e3a872; --sky3:#b5664c;
+  --haze:#9a5b5e; --ground1:#7a4a33; --ground2:#3e2419;
+}
+body.dusk{ --sky1:#3a2a4a; --sky2:#7a3f55; --sky3:#c4704a; --haze:#5a3550; --ground1:#5a3426; --ground2:#2a1812; }
+body.night{ --surface:#1d1714; --text:#f6ecd6; --edge:#f6ecd6;
+  --sky1:#121827; --sky2:#26314b; --sky3:#3f5e78; --haze:#2c3550; --ground1:#3c2a24; --ground2:#1a110d; }
+@media (prefers-color-scheme: dark){
+  body:not(.day):not(.night){ --sky1:#3a2a4a; --sky2:#7a3f55; --sky3:#c4704a; --haze:#5a3550; --ground1:#5a3426; --ground2:#2a1812; }
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--ground2);
+  font-family:ui-rounded,"SF Pro Rounded","Nunito","Trebuchet MS",system-ui,sans-serif;}
+#stage{position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;display:block;touch-action:manipulation;}
+.hud{position:fixed;top:calc(env(safe-area-inset-top) + 8px);left:8px;right:8px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;pointer-events:none;z-index:3}
+.plaque,.btn{pointer-events:auto;background:var(--surface);color:var(--text);border:2px solid var(--edge);border-radius:14px;
+  font-size:calc(1rem * var(--ts));font-weight:700;line-height:1.2;}
+.plaque{padding:9px 13px;box-shadow:0 3px 0 rgba(0,0,0,.35)}
+.btn{min-height:48px;min-width:48px;padding:10px 16px;cursor:pointer;font-family:inherit;box-shadow:0 3px 0 rgba(0,0,0,.35)}
+.btn:focus-visible,[role=button]:focus-visible{outline:4px solid var(--text);outline-offset:3px}
+#cap{position:fixed;z-index:2;top:calc(env(safe-area-inset-top) + 70px);left:50%;transform:translateX(-50%);
+  width:min(92vw,520px);background:var(--surface);color:var(--text);border:2px solid var(--edge);border-radius:16px;
+  padding:12px 16px;font-size:calc(1.18rem * var(--ts));font-weight:700;line-height:1.3;text-align:center;
+  box-shadow:0 4px 0 rgba(0,0,0,.35);transition:opacity .3s}
+#comfort{position:fixed;z-index:4;top:calc(env(safe-area-inset-top) + 64px);right:8px;background:var(--surface);color:var(--text);
+  border:2px solid var(--edge);border-radius:16px;padding:12px;width:min(300px,90vw);box-shadow:0 6px 0 rgba(0,0,0,.35)}
+#comfort h2{font-size:calc(1.05rem * var(--ts));margin:2px 0 6px}
+#comfort .row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+#comfort .btn{box-shadow:none;font-size:calc(.95rem * var(--ts))}
+#comfort .btn[aria-pressed=true]{background:var(--text);color:var(--surface)}
+#card{position:fixed;z-index:5;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(20,14,12,.55);padding:16px}
+#card[hidden],#comfort[hidden],#launchBtn[hidden]{display:none}
+#launchBtn{position:fixed;z-index:3;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 18px);font-size:calc(1.3rem * var(--ts));padding:12px 34px;min-height:56px}
+.cardbox{background:var(--surface);color:var(--text);border:3px solid var(--edge);border-radius:22px;width:min(420px,94vw);
+  max-height:94vh;overflow:auto;padding:14px 16px 16px;text-align:center;box-shadow:0 8px 0 rgba(0,0,0,.4)}
+.cardbox svg{width:100%;height:auto;display:block;border-radius:14px}
+.cardbox h2{font-size:calc(1.5rem * var(--ts));margin:12px 0 4px}
+.cardbox p{font-size:calc(1.12rem * var(--ts));margin:4px 0 14px;line-height:1.35}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* SVG behaviour */
+[role=button]{cursor:pointer}
+.ring{fill:none;stroke:#f6ecd6;stroke-width:3;stroke-dasharray:6 6;opacity:.95;animation:ring 1.4s ease-in-out infinite}
+@keyframes ring{0%,100%{stroke-width:3;opacity:.95}50%{stroke-width:5;opacity:.5}}
+.drift{animation:drift 60s linear infinite}
+@keyframes drift{from{transform:translateX(-30px)}to{transform:translateX(60px)}}
+.smoke circle{transform-box:fill-box;transform-origin:center;animation:smoke 6s linear infinite}
+@keyframes smoke{0%{transform:translate(0,0) scale(.4);opacity:0}15%{opacity:.75}100%{transform:translate(28px,-120px) scale(2.1);opacity:0}}
+.gear{transform-box:fill-box;transform-origin:center;animation:spin 9s linear infinite}
+.gear.rev{animation-direction:reverse;animation-duration:6s}
+@keyframes spin{to{transform:rotate(360deg)}}
+.leaf{transform-box:fill-box;transform-origin:center;animation:leaf 9s linear infinite}
+@keyframes leaf{0%{transform:translate(0,0) rotate(0);opacity:0}8%{opacity:1}100%{transform:translate(-70px,300px) rotate(540deg);opacity:0}}
+.flicker{animation:flick 5s steps(1) infinite}
+@keyframes flick{0%,40%,44%,100%{opacity:1}42%{opacity:.35}}
+.bonie{transform-box:fill-box;transform-origin:50% 100%}
+.bonie.chuckle{animation:chuck .18s ease-in-out 8 alternate}
+@keyframes chuck{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-3px) rotate(3deg)}}
+.bonie.fall{animation:fall 2.6s ease-in-out 1}
+@keyframes fall{0%{transform:rotate(0)}12%{transform:translateY(-6px) rotate(-14deg)}30%{transform:translate(18px,8px) rotate(95deg)}55%{transform:translate(18px,8px) rotate(95deg)}75%{transform:translate(8px,-4px) rotate(30deg)}100%{transform:rotate(0)}}
+.bub{animation:bub 3.5s linear infinite}
+@keyframes bub{from{transform:translateY(0);opacity:.9}to{transform:translateY(-50px);opacity:0}}
+body.calm *{animation:none !important;transition:none !important}
+@media (prefers-reduced-motion: reduce){ body:not(.full) *{animation:none !important} }
+</style>
+</head>
+<body>
+<svg id="stage" viewBox="0 0 360 640" preserveAspectRatio="xMidYMid meet" aria-labelledby="stageTitle" role="img">
+<title id="stageTitle">The yard behind the Funnybonies Factory</title>
+<defs>
+  <linearGradient id="gSky" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" style="stop-color:var(--sky1)"/><stop offset=".55" style="stop-color:var(--sky2)"/><stop offset="1" style="stop-color:var(--sky3)"/>
+  </linearGradient>
+  <linearGradient id="gGround" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" style="stop-color:var(--ground1)"/><stop offset="1" style="stop-color:var(--ground2)"/>
+  </linearGradient>
+  <radialGradient id="gSun" cx=".5" cy=".5" r=".5">
+    <stop offset="0" stop-color="#fff3cf" stop-opacity=".95"/><stop offset=".35" stop-color="#f2d38c" stop-opacity=".7"/><stop offset="1" stop-color="#f2d38c" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="gVig" cx=".5" cy=".45" r=".75">
+    <stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#140c08" stop-opacity=".55"/>
+  </radialGradient>
+  <radialGradient id="gPlum" cx=".35" cy=".3" r=".8">
+    <stop offset="0" stop-color="#b0629a"/><stop offset=".55" stop-color="#7d3a6b"/><stop offset="1" stop-color="#4a1f40"/>
+  </radialGradient>
+  <linearGradient id="gSlate" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#6f8fa8"/><stop offset="1" stop-color="#34506a"/>
+  </linearGradient>
+  <linearGradient id="gBrick" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#9a5338"/><stop offset="1" stop-color="#6a3424"/>
+  </linearGradient>
+  <linearGradient id="gWood" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#b98552"/><stop offset="1" stop-color="#7a5232"/>
+  </linearGradient>
+  <linearGradient id="gStone" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#a39083"/><stop offset="1" stop-color="#6c5a50"/>
+  </linearGradient>
+  <linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#f6cf6a"/><stop offset="1" stop-color="#c9892d"/>
+  </linearGradient>
+  <radialGradient id="gWin" cx=".5" cy=".5" r=".6">
+    <stop offset="0" stop-color="#fff0c0"/><stop offset=".6" stop-color="#f0b850"/><stop offset="1" stop-color="#b9702c"/>
+  </radialGradient>
+  <pattern id="pBrick" width="24" height="12" patternUnits="userSpaceOnUse">
+    <path d="M0 11.5H24M12 0V6M0 6H24M0 0V6M24 6V12" stroke="#4c2418" stroke-width="1" opacity=".45" fill="none"/>
+    <path d="M6 6V12M18 6V12" stroke="#4c2418" stroke-width="1" opacity=".45"/>
+  </pattern>
+  <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="4"/>
+    <feDisplacementMap in="SourceGraphic" scale="3.2"/>
+  </filter>
+  <filter id="grain" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="9" result="n"/>
+    <feColorMatrix type="saturate" values="0"/>
+    <feComponentTransfer><feFuncA type="table" tableValues="0 .5"/></feComponentTransfer>
+  </filter>
+  <filter id="soft"><feGaussianBlur stdDeviation="2.4"/></filter>
+
+  <symbol id="boneSym" overflow="visible">
+    <path d="M-10 -3 H10 A4.2 4.2 0 1 1 13 -6 A4.2 4.2 0 1 1 13 6 A4.2 4.2 0 1 1 10 3 H-10 A4.2 4.2 0 1 1 -13 6 A4.2 4.2 0 1 1 -13 -6 A4.2 4.2 0 1 1 -10 -3 Z" fill="#fbf1d8" stroke="#1d1714" stroke-width="2"/>
+    <path d="M-8 -1 H8" stroke="#e4cf9f" stroke-width="1.6"/>
+  </symbol>
+  <filter id="stiffF" x="-20%" y="-20%" width="140%" height="140%"><feColorMatrix id="stiffM" type="saturate" values="0.12"/></filter>
+  <radialGradient id="gGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff3cf" stop-opacity=".95"/><stop offset="1" stop-color="#f6cf6a" stop-opacity="0"/></radialGradient>
+  <!-- the bucket: origin at bottom centre, rim at y -34 -->
+  <symbol id="bucketSym" overflow="visible">
+    <path d="M-17 0 L-21 -34 L21 -34 L17 0 Z" fill="url(#gSlate)" stroke="#1d1714" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M-19.5 -24 H19.5 M-18 -9 H18" stroke="#24384c" stroke-width="2.2"/>
+    <ellipse cx="0" cy="-34" rx="21" ry="4.5" fill="#24384c" stroke="#1d1714" stroke-width="2"/>
+    <path d="M-12 -30 L-10 -4" stroke="#cfe0ec" stroke-width="2.4" opacity=".55" stroke-linecap="round"/>
+    <path d="M-20 -33 Q0 -62 20 -33" fill="none" stroke="#1d1714" stroke-width="2.2"/>
+  </symbol>
+
+  <!-- a Bonie, the audience. origin bottom centre, sitting -->
+  <symbol id="bonieSym" overflow="visible">
+    <path d="M-6 0 q-2 8 -6 10 M6 0 q2 8 6 10" stroke="#1d1714" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <path d="M-10 -4 Q-14 -2 -12 4 Q-6 8 -3 2 M10 -4 Q14 -2 12 4 Q6 8 3 2" fill="#efe3c8" stroke="#1d1714" stroke-width="2"/>
+    <path d="M-9 -2 V-36 M9 -2 V-36" stroke="none"/>
+    <rect x="-10" y="-38" width="20" height="38" rx="9" fill="#efe3c8" stroke="#1d1714" stroke-width="2.2"/>
+    <circle cx="-7" cy="-40" r="6.5" fill="#efe3c8" stroke="#1d1714" stroke-width="2.2"/>
+    <circle cx="7" cy="-40" r="6.5" fill="#efe3c8" stroke="#1d1714" stroke-width="2.2"/>
+    <rect x="-8.6" y="-40" width="17.2" height="8" fill="#efe3c8"/>
+    <path d="M-5 -10 Q0 -7 5 -10" stroke="#c9b48e" stroke-width="1.5" fill="none"/>
+  </symbol>
+</defs>
+
+<g id="world">
+<!-- BACK LAYER: sky, sun, haze hills -->
+<rect x="-500" y="-500" width="1360" height="1000" fill="url(#gSky)"/>
+<circle cx="268" cy="168" r="120" fill="url(#gSun)"/>
+<circle cx="268" cy="168" r="34" fill="#fbe7b0" opacity=".9"/>
+<g class="drift" opacity=".75">
+  <path d="M-60 120 q18 -22 44 -10 q14 -18 36 -4 q24 -6 26 14 q-4 10 -18 10 H-50 q-16 0 -10 -10 Z" fill="#f8e6c4" opacity=".7"/>
+  <path d="M190 70 q14 -16 34 -8 q12 -14 30 -2 q18 -2 18 12 q-2 8 -14 8 H196 q-12 0 -6 -10 Z" fill="#f8e6c4" opacity=".55"/>
+</g>
+<g filter="url(#rough)">
+  <path d="M-500 400 Q-200 330 0 372 Q60 330 120 356 Q200 318 280 350 Q340 326 420 352 Q600 330 860 380 V520 H-500 Z" fill="var(--haze)" opacity=".55"/>
+  <!-- distant water tower and chimneys -->
+  <g fill="var(--haze)" opacity=".85">
+    <rect x="318" y="290" width="26" height="22" rx="4"/><path d="M322 312 L318 352 M340 312 L344 352 M320 330 H342" stroke="var(--haze)" stroke-width="2.5"/>
+    <rect x="-8" y="300" width="9" height="60"/><rect x="6" y="318" width="7" height="44"/>
+  </g>
+</g>
+
+<!-- MID LAYER: the factory -->
+<g id="factory" filter="url(#rough)">
+  <!-- chimneys -->
+  <g>
+    <path d="M36 248 L40 92 L62 90 L64 248 Z" fill="url(#gBrick)" stroke="#1d1714" stroke-width="2.6"/>
+    <rect x="36" y="86" width="30" height="10" rx="2" fill="#4a2a20" stroke="#1d1714" stroke-width="2.4"/>
+    <path d="M39 130 H63 M39 170 H63" stroke="#3a1c14" stroke-width="3" opacity=".6"/>
+    <path d="M150 248 L156 128 L176 132 L172 248 Z" fill="url(#gBrick)" stroke="#1d1714" stroke-width="2.6"/>
+    <rect x="152" y="122" width="28" height="10" rx="2" fill="#4a2a20" stroke="#1d1714" stroke-width="2.4" transform="rotate(4 166 127)"/>
+  </g>
+  <!-- main hall -->
+  <path d="M8 470 L10 252 L210 246 L214 470 Z" fill="url(#gBrick)" stroke="#1d1714" stroke-width="3"/>
+  <path d="M10 252 L210 246 L214 470 L8 470 Z" fill="url(#pBrick)"/>
+  <!-- sawtooth roof -->
+  <path d="M2 256 L30 214 L58 252 L86 210 L114 250 L142 206 L170 248 L198 204 L220 248 Z" fill="#3f5e78" stroke="#1d1714" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M30 214 L34 250 M86 210 L90 250 M142 206 L146 248 M198 204 L201 246" stroke="#1f3245" stroke-width="2.5"/>
+  <path d="M34 248 L56 250 M90 248 L112 249 M146 246 L168 247" stroke="#f6d48a" stroke-width="3" opacity=".7"/>
+  <!-- the sign, hanging crooked -->
+  <g transform="rotate(-3 110 196)">
+    <path d="M58 168 L56 140 M162 166 L166 140" stroke="#1d1714" stroke-width="2"/>
+    <rect x="34" y="164" width="152" height="38" rx="6" fill="url(#gWood)" stroke="#1d1714" stroke-width="2.6"/>
+    <text x="110" y="191" text-anchor="middle" font-size="19" font-weight="800" fill="#2a160e" letter-spacing=".5" font-family="Georgia,serif">FUNNYBONIES</text>
+    <circle class="flicker" cx="52" cy="174" r="3" fill="#ffe7a0"/>
+  </g>
+  <!-- porthole with gears -->
+  <circle cx="64" cy="320" r="34" fill="url(#gWin)" stroke="#1d1714" stroke-width="3.4"/>
+  <g opacity=".75" fill="#7a3f22">
+    <g class="gear"><circle cx="54" cy="314" r="14"/><path d="M54 296 v36 M36 314 h36 M41 301 l26 26 M67 301 l-26 26" stroke="#7a3f22" stroke-width="6"/><circle cx="54" cy="314" r="5" fill="#f0b850"/></g>
+    <g class="gear rev"><circle cx="78" cy="334" r="9"/><path d="M78 322 v24 M66 334 h24" stroke="#7a3f22" stroke-width="5"/></g>
+  </g>
+  <circle cx="64" cy="320" r="34" fill="none" stroke="#c9892d" stroke-width="3" stroke-dasharray="2 9"/>
+  <!-- tall door with a crack of light -->
+  <path d="M108 470 V378 Q130 352 152 378 V470 Z" fill="#4a2a20" stroke="#1d1714" stroke-width="3"/>
+  <path d="M130 360 V470" stroke="#f0b850" stroke-width="3" opacity=".85"/>
+  <circle cx="140" cy="424" r="3" fill="#d9a441"/>
+  <!-- pipe running along the wall -->
+  <path d="M8 286 H120 Q132 286 132 298 V336 H214" fill="none" stroke="#24384c" stroke-width="9" stroke-linecap="round"/>
+  <path d="M8 286 H120 Q132 286 132 298 V336 H214" fill="none" stroke="#6f8fa8" stroke-width="3" opacity=".6"/>
+  <circle cx="132" cy="318" r="7" fill="#a4462a" stroke="#1d1714" stroke-width="2"/>
+  <!-- crane bracket for the sandbag -->
+  <path d="M212 352 L156 352 M212 380 L180 352" stroke="#1d1714" stroke-width="6" stroke-linecap="round"/>
+  <path d="M212 352 L156 352" stroke="#7a5232" stroke-width="3"/>
+  <circle cx="160" cy="356" r="6" fill="#d9a441" stroke="#1d1714" stroke-width="2"/>
+</g>
+<!-- smoke, alive -->
+<g class="smoke" fill="#f3e3c8">
+  <circle cx="51" cy="82" r="10" style="animation-delay:0s"/><circle cx="51" cy="82" r="9" style="animation-delay:2s"/><circle cx="51" cy="82" r="11" style="animation-delay:4s"/>
+  <circle cx="166" cy="118" r="8" style="animation-delay:1s"/><circle cx="166" cy="118" r="9" style="animation-delay:3.4s"/>
+</g>
+
+<!-- the tree, autumn, with the bucket branch -->
+<g filter="url(#rough)">
+  <path d="M296 504 Q304 400 296 300 Q290 230 312 160 L330 164 Q318 240 324 300 Q332 400 330 504 Z" fill="#5a3426" stroke="#1d1714" stroke-width="3"/>
+  <path d="M304 470 q4 -40 -2 -80 M318 430 q6 -50 0 -110 M310 260 q6 -30 12 -60" stroke="#3a2018" stroke-width="2.2" fill="none"/>
+  <path d="M306 214 Q270 200 224 210 L222 220 Q268 212 304 228 Z" fill="#5a3426" stroke="#1d1714" stroke-width="2.6"/>
+  <path d="M316 172 Q340 130 368 128 M312 186 Q290 150 262 150" stroke="#5a3426" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <g opacity=".95">
+    <circle cx="300" cy="140" r="34" fill="#a4462a"/><circle cx="340" cy="122" r="30" fill="#c9672e"/><circle cx="266" cy="150" r="24" fill="#b5532c"/>
+    <circle cx="322" cy="96" r="26" fill="#d98f3a"/><circle cx="356" cy="152" r="22" fill="#a4462a"/><circle cx="286" cy="110" r="20" fill="#d9a441"/>
+  </g>
+</g>
+<g id="treeBone" transform="translate(292 132) rotate(-24)"><circle r="16" fill="url(#gGlow)" class="flicker"/><use href="#boneSym"/></g>
+<g fill="#d98f3a">
+  <path class="leaf" d="M270 160 q6 -6 12 0 q-6 6 -12 0z" style="animation-delay:0s"/>
+  <path class="leaf" d="M330 150 q6 -6 12 0 q-6 6 -12 0z" fill="#a4462a" style="animation-delay:3s"/>
+  <path class="leaf" d="M300 130 q6 -6 12 0 q-6 6 -12 0z" fill="#d9a441" style="animation-delay:6s"/>
+</g>
+
+<!-- the low stone wall where the Bonies sit -->
+<g filter="url(#rough)">
+  <path d="M214 500 L216 444 Q290 436 372 442 L372 500 Z" fill="url(#gStone)" stroke="#1d1714" stroke-width="2.8"/>
+  <path d="M216 462 H372 M216 482 H372 M240 444 V462 M276 440 V462 M318 440 V462 M354 442 V462 M228 462 V482 M262 462 V482 M300 462 V482 M340 462 V482" stroke="#4e3f37" stroke-width="1.6" opacity=".7"/>
+  <path d="M216 444 Q290 436 372 442" stroke="#cbb9a8" stroke-width="2.2" fill="none" opacity=".7"/>
+</g>
+<g id="bonies">
+  <g transform="translate(262 444)"><g class="bonie" id="b0"><use href="#bonieSym"/><g class="face"></g></g></g>
+  <g transform="translate(298 442)"><g class="bonie" id="b1"><use href="#bonieSym"/><g class="face"></g></g></g>
+  <g transform="translate(334 443)"><g class="bonie" id="b2"><use href="#bonieSym"/><g class="face"></g></g></g>
+</g>
+
+<!-- GROUND -->
+<g filter="url(#rough)">
+  <path d="M-500 486 Q0 470 180 482 Q300 490 860 478 V1100 H-500 Z" fill="url(#gGround)" stroke="#1d1714" stroke-width="2.6"/>
+  <path d="M-500 512 Q100 504 360 514 Q600 520 860 510 L860 536 Q500 544 180 538 Q0 534 -500 540 Z" fill="#9a6a48" opacity=".45"/>
+  <g fill="#5a3426" opacity=".8">
+    <ellipse cx="34" cy="552" rx="8" ry="4"/><ellipse cx="190" cy="560" rx="10" ry="4.5"/><ellipse cx="250" cy="600" rx="7" ry="3.5"/><ellipse cx="120" cy="612" rx="12" ry="5"/>
+  </g>
+  <g stroke="#d9a441" stroke-width="2" stroke-linecap="round" opacity=".8">
+    <path d="M90 488 l-3 -10 M94 488 l1 -12 M98 488 l4 -9"/><path d="M226 494 l-3 -9 M230 494 l2 -11"/><path d="M8 494 l-2 -8 M12 494 l2 -10"/>
+  </g>
+  <path d="M60 580 q30 6 50 -2 M200 620 q20 4 40 -4" stroke="#2a1812" stroke-width="2" fill="none"/>
+</g>
+
+<!-- SEESAW -->
+<g id="seesaw">
+  <path d="M106 520 L120 494 L134 520 Z" fill="url(#gWood)" stroke="#1d1714" stroke-width="2.6" stroke-linejoin="round"/>
+  <g id="plank"><rect x="70" y="490" width="100" height="9" rx="3" fill="url(#gWood)" stroke="#1d1714" stroke-width="2.4"/>
+    <path d="M78 494 H162" stroke="#5e3c22" stroke-width="1.4" opacity=".7"/></g>
+</g>
+
+<!-- SANDBAG on the crane -->
+<g id="sandRope"><path id="sandRopeP" d="M160 356 V398" stroke="#1d1714" stroke-width="2"/></g>
+<g id="sandbag" role="button" tabindex="0" aria-label="Sandbag. Drop it on the seesaw.">
+  <rect x="-26" y="-12" width="52" height="58" fill="transparent"/>
+  <path d="M-14 0 Q-18 30 -12 34 H12 Q18 30 14 0 Q8 -6 0 -2 Q-8 -6 -14 0 Z" fill="#c9a26a" stroke="#1d1714" stroke-width="2.4"/>
+  <path d="M-8 -2 Q0 4 8 -2" stroke="#1d1714" stroke-width="2" fill="none"/>
+  <path d="M-6 14 l12 0 M-4 22 l8 0" stroke="#7a5232" stroke-width="2"/>
+  <text x="0" y="28" text-anchor="middle" font-size="9" font-weight="800" fill="#5a3426" aria-hidden="true">10</text>
+</g>
+
+<!-- BUCKET on the branch -->
+<path id="bucketRope" d="M232 214 V266" stroke="#1d1714" stroke-width="2"/>
+<g id="bucket" role="button" tabindex="0" aria-label="Bucket in the tree. Drop it on Bloat.">
+  <rect x="-28" y="-66" width="56" height="70" fill="transparent"/>
+  <use id="bucketBone" href="#boneSym" transform="translate(6 -40) rotate(-60) scale(.8)" visibility="hidden"/>
+  <use href="#bucketSym"/>
+</g>
+
+<!-- CHARACTERS -->
+<g id="chars">
+  <!-- BLOAT: exaggeration. A balloon robot, gone stiff. -->
+  <g id="bloat" role="button" tabindex="-1" aria-label="Bloat">
+    <g id="blSq">
+      <g id="blSprings" opacity="0">
+        <path d="M-26 0 l6 -4 l-6 -4 l6 -4 l-6 -4 M26 0 l-6 -4 l6 -4 l-6 -4 l6 -4 M0 0 l6 -4 l-6 -4 l6 -4 l-6 -4" stroke="#1d1714" stroke-width="3" fill="none" stroke-linejoin="round"/>
+        <rect x="-36" y="-2" width="72" height="6" rx="3" fill="#a4462a" stroke="#1d1714" stroke-width="2"/>
+      </g>
+      <g id="blLegL"><path d="M-11 -12 Q-13 -5 -12 0" stroke="#a4462a" stroke-width="6" stroke-linecap="round" fill="none"/><ellipse cx="-14" cy="1" rx="8" ry="4" fill="#1d1714"/></g>
+      <g id="blLegR"><path d="M11 -12 Q13 -5 12 0" stroke="#a4462a" stroke-width="6" stroke-linecap="round" fill="none"/><ellipse cx="14" cy="1" rx="8" ry="4" fill="#1d1714"/></g>
+      <g id="blRot"><g id="blBody" filter="url(#stiffF)">
+        <ellipse cx="2" cy="-38" rx="35" ry="33" fill="#2c1226" opacity=".35" transform="translate(3 3)"/>
+        <path d="M0 -73 V-88" stroke="#1d1714" stroke-width="2.6"/>
+        <circle id="blBulb" cx="0" cy="-91" r="5" fill="#8a6a3a" stroke="#1d1714" stroke-width="2"/>
+        <ellipse cx="0" cy="-40" rx="35" ry="33" fill="url(#gPlum)" stroke="#1d1714" stroke-width="2.8"/>
+        <ellipse cx="3" cy="-28" rx="21" ry="14" fill="#c27aa8" opacity=".35"/>
+        <path d="M-33 -46 Q0 -54 33 -46" stroke="#3a1530" stroke-width="1.6" fill="none" opacity=".6"/>
+        <g fill="#d9a441" stroke="#1d1714" stroke-width="1"><circle cx="-30" cy="-47" r="2"/><circle cx="-16" cy="-51" r="2"/><circle cx="16" cy="-51" r="2"/><circle cx="30" cy="-47" r="2"/></g>
+        <ellipse cx="-16" cy="-60" rx="9" ry="5" fill="#fbe9f2" opacity=".55" transform="rotate(-25 -16 -60)"/>
+        <g id="blRust" fill="#8a4a2a" opacity=".85"><circle cx="20" cy="-22" r="4"/><circle cx="-26" cy="-30" r="3"/><circle cx="8" cy="-66" r="3"/><circle cx="-6" cy="-12" r="2.5"/></g>
+        <g transform="translate(0 -66) scale(.62)"><path d="M-10 -3 H10 A4.2 4.2 0 1 1 13 -6 A4.2 4.2 0 1 1 13 6 A4.2 4.2 0 1 1 10 3 H-10 A4.2 4.2 0 1 1 -13 6 A4.2 4.2 0 1 1 -13 -6 A4.2 4.2 0 1 1 -10 -3 Z" fill="#2a1218" stroke="#1d1714" stroke-width="2" stroke-dasharray="3 2"/>
+          <use id="blBone" href="#boneSym" visibility="hidden"/></g>
+        <g id="blEyes">
+          <ellipse cx="-11" cy="-46" rx="9.5" ry="10.5" fill="#fbf4e6" stroke="#1d1714" stroke-width="2"/>
+          <ellipse cx="11" cy="-47" rx="10.5" ry="11.5" fill="#fbf4e6" stroke="#1d1714" stroke-width="2"/>
+          <g id="blPup"><circle cx="-10" cy="-45" r="4.3" fill="#1d1714"/><circle cx="12" cy="-46" r="4.6" fill="#1d1714"/>
+            <circle cx="-11.5" cy="-46.5" r="1.4" fill="#fff"/><circle cx="10.5" cy="-47.5" r="1.5" fill="#fff"/></g>
+          <g id="blLids" transform="scale(1 0)" style="transform-origin:0 -58px">
+            <ellipse cx="-11" cy="-46" rx="10.5" ry="11.5" fill="#7d3a6b" stroke="#1d1714" stroke-width="2"/>
+            <ellipse cx="11" cy="-47" rx="11.5" ry="12.5" fill="#7d3a6b" stroke="#1d1714" stroke-width="2"/></g>
+        </g>
+        <circle cx="-22" cy="-30" r="5" fill="#e0607a" opacity=".35"/><circle cx="24" cy="-31" r="5" fill="#e0607a" opacity=".35"/>
+        <path id="blMouth" d="M-7 -27 H8" stroke="#1d1714" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+        <use id="blBucket" href="#bucketSym" transform="translate(0 -84) rotate(180)" visibility="hidden"/>
+      </g></g>
+    </g>
+  </g>
+  <!-- the rider: a Bonie kid who has never laughed -->
+  <g id="kid"><g id="kidIn" transform="scale(.82)"><use href="#bonieSym"/><g class="face"></g></g></g>
+</g>
+<!-- the hole a rider makes when nobody catches them -->
+<g id="crater" visibility="hidden">
+  <path d="M-34 4 Q-30 -12 -12 -10 Q0 -18 12 -10 Q30 -12 34 4 Z" fill="#6a3f2c" stroke="#1d1714" stroke-width="2.4"/>
+  <path d="M-20 -6 l-4 -6 M18 -7 l5 -5 M0 -12 l0 -6" stroke="#c9a26a" stroke-width="2" stroke-linecap="round"/>
+</g>
+
+<use id="flyBone" href="#boneSym" visibility="hidden"/>
+<!-- banana peel, the loose one -->
+<g id="peel" visibility="hidden">
+  <path d="M-12 0 Q-16 -10 -6 -8 Q-2 -14 2 -8 Q10 -12 13 -2 Q4 2 -12 0 Z" fill="#f1c63c" stroke="#1d1714" stroke-width="2"/>
+  <path d="M-4 -7 Q0 -2 4 -6" stroke="#8a5a1c" stroke-width="1.4" fill="none"/>
+</g>
+
+<!-- speech: the deadpan 'hm.' -->
+<g id="say" visibility="hidden">
+  <rect x="-30" y="-24" width="60" height="32" rx="12" fill="#f6ecd6" stroke="#1d1714" stroke-width="2.2"/>
+  <path d="M-6 8 L0 16 L4 8" fill="#f6ecd6" stroke="#1d1714" stroke-width="2.2"/>
+  <rect x="-7" y="5" width="12" height="4" fill="#f6ecd6"/>
+  <text id="sayT" x="0" y="0" text-anchor="middle" font-size="22" font-weight="800" fill="#1d1714">hm.</text>
+</g>
+
+<!-- FOREGROUND: peel crate and the laugh jar -->
+<g id="crate" role="button" tabindex="0" aria-label="Banana crate. Toss a peel onto the seesaw.">
+  <rect x="8" y="548" width="74" height="84" fill="transparent"/>
+  <g filter="url(#rough)">
+    <path d="M14 570 L76 566 L78 628 L12 630 Z" fill="url(#gWood)" stroke="#1d1714" stroke-width="2.8"/>
+    <path d="M13 590 H77 M13 610 H78 M30 568 V630 M58 567 V629" stroke="#5e3c22" stroke-width="2"/>
+  </g>
+  <g>
+    <path d="M22 568 Q26 548 40 556 Q46 544 56 556 Q68 550 70 566 Z" fill="#f1c63c" stroke="#1d1714" stroke-width="2.2"/>
+    <path d="M34 560 q6 -4 10 2 M50 558 q6 -2 8 4" stroke="#8a5a1c" stroke-width="1.6" fill="none"/>
+  </g>
+</g>
+<g id="fx"></g>
+<circle id="ring" class="ring" cx="45" cy="590" r="44" visibility="hidden"/>
+</g>
+
+<!-- atmosphere over everything -->
+<rect x="-500" y="-500" width="1360" height="1600" fill="url(#gVig)" pointer-events="none"/>
+<rect x="-500" y="-500" width="1360" height="1600" filter="url(#grain)" opacity=".22" pointer-events="none" style="mix-blend-mode:multiply"/>
+</svg>
+
+<div class="hud">
+  <p class="plaque" id="lvl">Level 1 · Wake Bloat</p>
+  <button class="btn" id="comfortBtn" aria-expanded="false" aria-controls="comfort">Comfort</button>
+</div>
+<p id="cap" aria-live="polite">Bloat has gone stiff. His funny bone is stuck in the tree.</p>
+<p class="sr" id="desc" aria-live="polite"></p>
+<button class="btn" id="launchBtn" hidden>Launch</button>
+
+<div id="comfort" hidden>
+  <h2>Light</h2>
+  <div class="row" id="themeRow">
+    <button class="btn" data-theme="day" aria-pressed="false">Day</button>
+    <button class="btn" data-theme="dusk" aria-pressed="false">Dusk</button>
+    <button class="btn" data-theme="night" aria-pressed="false">Night</button>
+  </div>
+  <h2>Text size</h2>
+  <div class="row" id="sizeRow">
+    <button class="btn" data-ts="1" aria-pressed="true">A</button>
+    <button class="btn" data-ts="1.2" aria-pressed="false">A+</button>
+    <button class="btn" data-ts="1.4" aria-pressed="false">A++</button>
+  </div>
+  <h2>Motion</h2>
+  <div class="row" id="motionRow">
+    <button class="btn" data-motion="full" aria-pressed="true">Full</button>
+    <button class="btn" data-motion="calm" aria-pressed="false">Calm</button>
+  </div>
+  <div class="row"><button class="btn" id="comfortClose">Close</button></div>
+</div>
+
+<section id="card" hidden aria-modal="true" role="dialog" aria-labelledby="cardH">
+  <div class="cardbox">
+    <svg id="cardArt" viewBox="0 0 360 240" aria-hidden="true"></svg>
+    <h2 id="cardH"></h2>
+    <p id="cardP"></p>
+    <button class="btn" id="cardGo"></button>
+  </div>
+</section>
+
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+var SVGNS="http://www.w3.org/2000/svg";
+var GROUND=520, G=1400, PAD=180;
+var calm=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+if(calm) document.body.classList.add("calm");
+function el(tag,attrs,parent){var e=document.createElementNS(SVGNS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e}
+function ease(a,b,k){return a+(b-a)*Math.min(1,k)}
+function smooth(k){k=Math.max(0,Math.min(1,k));return k*k*(3-2*k)}
+function cap(t,detail){ $("cap").textContent=t; $("desc").textContent=detail||t; }
+
+/* ---------- faces for the Bonies and the kid ---------- */
+function makeFace(f){
+  var eyes=el("g",{},f);
+  el("circle",{cx:-4.5,cy:-26,r:4.6,fill:"#fbf4e6",stroke:"#1d1714","stroke-width":1.6},eyes);
+  el("circle",{cx:4.5,cy:-26,r:4.6,fill:"#fbf4e6",stroke:"#1d1714","stroke-width":1.6},eyes);
+  var pup=el("g",{},eyes);
+  el("circle",{cx:-4.5,cy:-25,r:2.2,fill:"#1d1714"},pup);el("circle",{cx:4.5,cy:-25,r:2.2,fill:"#1d1714"},pup);
+  return {pup:pup,
+    lid:el("path",{d:"M-9.5 -27 H9.5",stroke:"#1d1714","stroke-width":2.2,"stroke-linecap":"round",visibility:"hidden"},f),
+    bored:el("path",{d:"M-4 -14 H4",stroke:"#1d1714","stroke-width":2,"stroke-linecap":"round"},f),
+    laugh:el("path",{d:"M-6 -16 Q0 -4 6 -16 Z",fill:"#7a2a22",stroke:"#1d1714","stroke-width":1.6,visibility:"hidden"},f),
+    yawn:el("ellipse",{cx:0,cy:-13,rx:2.6,ry:4.2,fill:"#7a2a22",stroke:"#1d1714","stroke-width":1.4,visibility:"hidden"},f),
+    oh:el("circle",{cx:0,cy:-13,r:3.4,fill:"#7a2a22",stroke:"#1d1714","stroke-width":1.4,visibility:"hidden"},f),
+    arms:el("path",{d:"M-10 -18 Q0 -12 10 -18",stroke:"#1d1714","stroke-width":2.2,fill:"none","stroke-linecap":"round"},f),
+    armsUp:el("path",{d:"M-10 -20 Q-18 -28 -16 -38 M10 -20 Q18 -28 16 -38",stroke:"#1d1714","stroke-width":2.2,fill:"none","stroke-linecap":"round",visibility:"hidden"},f)};
+}
+function face(b,s){
+  b.bored.setAttribute("visibility",s==="bored"?"visible":"hidden");
+  b.laugh.setAttribute("visibility",s==="laugh"?"visible":"hidden");
+  b.yawn.setAttribute("visibility",s==="yawn"?"visible":"hidden");
+  b.oh.setAttribute("visibility",s==="oh"?"visible":"hidden");
+  b.lid.setAttribute("visibility",s==="yawn"||s==="laugh"?"visible":"hidden");
+  b.pup.setAttribute("visibility",s==="yawn"||s==="laugh"?"hidden":"visible");
+  b.armsUp.setAttribute("visibility",s==="laugh"||s==="oh"?"visible":"hidden");
+  b.arms.setAttribute("visibility",s==="laugh"||s==="oh"?"hidden":"visible");
+}
+var bonies=[0,1,2].map(function(i){
+  var g=$("b"+i), f=makeFace(g.querySelector(".face")); f.g=g; f.x=[262,298,334][i]; f.t=0; return f;
+});
+function bonieReact(level){
+  bonies.forEach(function(b,i){
+    b.g.classList.remove("chuckle","fall"); void b.g.getBBox();
+    if(level===0){ if(i===1){face(b,"yawn");b.t=2.2;} return; }
+    if(level===1 && i!==1) return;
+    face(b,"laugh"); b.t=level===3?3:1.8;
+    if(!calm) b.g.classList.add(level===3?"fall":"chuckle");
+  });
+}
+var kidF=makeFace($("kidIn").querySelector(".face"));
+
+/* ---------- particles ---------- */
+var fx=$("fx"), parts=[], shake=0;
+function puff(x,y,n,col,spd,r){
+  if(calm) return;
+  for(var i=0;i<n;i++){
+    var a=Math.random()*Math.PI*2, s=(spd||60)*(0.4+Math.random());
+    var e=el("circle",{cx:x,cy:y,r:r||4,fill:col||"#f3e3c8",opacity:.9},fx);
+    parts.push({e:e,x:x,y:y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-20,life:0.6+Math.random()*0.4,t:0,r:r||4});
+  }
+}
+function stars(x,y){ puff(x,y,7,"#f6cf6a",120,3); }
+function leaves(x,y){ if(calm)return; ["#a4462a","#d98f3a","#d9a441","#c9672e"].forEach(function(c){puff(x,y,4,c,140,4)}); }
+function stepParts(dt){
+  for(var i=parts.length-1;i>=0;i--){var p=parts[i];p.t+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=40*dt;
+    var k=p.t/p.life; if(k>=1){p.e.remove();parts.splice(i,1);continue}
+    p.e.setAttribute("cx",p.x.toFixed(1));p.e.setAttribute("cy",p.y.toFixed(1));p.e.setAttribute("r",(p.r*(1+k*1.4)).toFixed(1));p.e.setAttribute("opacity",(.9*(1-k)).toFixed(2));}
+}
+
+/* ---------- state ---------- */
+/* phase: stiff -> waking -> toPad -> fold -> board -> ready -> squash -> flight -> after -> done */
+var phase="stiff", pt=0, now=0;
+var B={x:232,y:GROUND,dir:1,rot:0,sx:1,sy:1,swell:1,sat:0.12,lid:0.55,mouth:"M-7 -27 H8",walkPh:0,fold:0,pump:0,wheeze:2.5,blink:0};
+var K={x:272,y:GROUND,vx:0,vy:0,rot:0,state:"stand",t:0};
+var peel={state:"crate",t:0}, bone={state:"tree",t:0}, bucket={state:"hang",ax:232,ay:214,x:232,y:300,vy:0,rot:0,t:0,ph:0,bone:false};
+var sand={state:"hang",y:398,vy:0,t:0}, plank={r:-12,target:-12};
+var hintOn=null, kidLaunchV=0, outcome=null;
+
+function hint(which){ hintOn=which; $("ring").setAttribute("visibility",which?"visible":"hidden"); }
+
+/* ---------- the bone chain: peel -> sandbag -> tree -> bucket -> Bloat ---------- */
+function throwPeel(){
+  if(phase!=="stiff"||peel.state!=="crate") return;
+  peel.state="toSeesaw"; peel.t=0; $("peel").setAttribute("visibility","visible");
+  hint(null);
+}
+function dropSand(){
+  if(phase!=="stiff"||sand.state!=="hang") return;
+  sand.state="fall"; sand.vy=0; hint(null);
+}
+function dropBucket(){
+  if(phase!=="stiff"||bucket.state!=="hang") return;
+  bucket.state="fall"; bucket.vy=0; hint(null);
+}
+
+/* ---------- Bloat render ---------- */
+function renderBloat(walking){
+  var bob=walking?Math.abs(Math.sin(B.walkPh))*-2.5:0;
+  $("bloat").setAttribute("transform","translate("+B.x.toFixed(1)+" "+(B.y+bob).toFixed(1)+") scale("+B.dir+" 1)");
+  $("blRot").setAttribute("transform","rotate("+B.rot.toFixed(1)+" 0 -40)");
+  var body=$("blBody"), f=B.fold;
+  if(f>0){
+    /* folded into the Launcher: a drum on springs, face still on the front */
+    var sx=B.sx, sy=B.sy, lift=8*f;
+    body.setAttribute("transform","translate(0 "+(-33*sy-lift).toFixed(2)+") scale("+sx.toFixed(3)+" "+sy.toFixed(3)+") translate(0 40)");
+  } else {
+    var s=B.swell;
+    body.setAttribute("transform","translate(0 -40) scale("+s.toFixed(3)+") translate(0 40)");
+  }
+  var lg=walking?Math.sin(B.walkPh)*4:0, ls=1-f;
+  $("blLegL").setAttribute("transform","translate("+lg.toFixed(1)+" 0) scale(1 "+ls.toFixed(2)+")");
+  $("blLegR").setAttribute("transform","translate("+(-lg).toFixed(1)+" 0) scale(1 "+ls.toFixed(2)+")");
+  $("blSprings").setAttribute("opacity",f.toFixed(2));
+  $("stiffM").setAttribute("values",B.sat.toFixed(2));
+  $("blMouth").setAttribute("d",B.mouth);
+  var lid=B.lid; if(B.blink>0) lid=1;
+  $("blLids").setAttribute("transform","scale(1 "+lid.toFixed(2)+")");
+  $("blBulb").setAttribute("fill",B.sat>0.6?"#f6cf6a":"#8a6a3a");
+}
+function kidTop(){ return GROUND-66*B.sy*1-8; }
+function renderKid(){
+  $("kid").setAttribute("transform","translate("+K.x.toFixed(1)+" "+K.y.toFixed(1)+") rotate("+K.rot.toFixed(1)+" 0 -18)");
+}
+
+/* ---------- main update ---------- */
+function update(dt){
+  now+=dt; pt+=dt; bucket.ph+=dt;
+  var walking=false;
+  B.blink-=dt; if(B.blink< -3-Math.random()*4) B.blink=0.13;
+
+  /* ---- peel ---- */
+  var pe=$("peel");
+  if(peel.state==="toSeesaw"){ peel.t+=dt; var k=Math.min(1,peel.t/0.6);
+    peel.x=ease(45,84,k); peel.y=ease(556,489,k)-Math.sin(k*Math.PI)*90; peel.rot=k*540;
+    if(k>=1){ peel.state="onSeesaw"; peel.rot=0; cap("A peel on the seesaw. Now drop the sandbag.","The banana peel landed on the low end of the seesaw."); hint("sand"); } }
+  else if(peel.state==="onSeesaw"){ peel.y=GROUND-10-26-Math.sin(plank.r*Math.PI/180)*-36+ (plank.r<0?0:0); peel.x=84; peel.y=494+Math.sin(-plank.r*Math.PI/180)*36-6; }
+  else if(peel.state==="toTree"){ peel.t+=dt; var k2=Math.min(1,peel.t/0.75), u=1-k2;
+    peel.x=u*u*84+2*u*k2*150+k2*k2*292; peel.y=u*u*488+2*u*k2*40+k2*k2*134; peel.rot+=dt*1100;
+    if(k2>=1){ peel.state="drop"; peel.vy=0; peel.vx=-40; leaves(292,134); if(!calm)shake=2;
+      if(bone.state==="tree"){ bone.state="fall"; bone.t=0; $("treeBone").setAttribute("visibility","hidden"); } } }
+  else if(peel.state==="drop"){ peel.vy+=G*dt; peel.y+=peel.vy*dt; peel.x+=peel.vx*dt; peel.rot+=dt*400;
+    if(peel.y>=GROUND){ peel.state="crate"; pe.setAttribute("visibility","hidden"); puff(peel.x,GROUND,3,"#c9a26a",40,3); } }
+  if(peel.state!=="crate") pe.setAttribute("transform","translate("+peel.x.toFixed(1)+" "+peel.y.toFixed(1)+") rotate("+(peel.rot||0).toFixed(0)+")");
+
+  /* ---- the bone, loose ---- */
+  var fb=$("flyBone");
+  if(bone.state==="fall"){ bone.t+=dt; var kb=Math.min(1,bone.t/0.7);
+    var bx=ease(292,bucket.x+4,kb), by=ease(132,262,kb)-Math.sin(kb*Math.PI)*40;
+    fb.setAttribute("visibility","visible"); fb.setAttribute("transform","translate("+bx.toFixed(1)+" "+by.toFixed(1)+") rotate("+(kb*720).toFixed(0)+")");
+    if(kb>=1){ bone.state="bucket"; bucket.bone=true; fb.setAttribute("visibility","hidden"); $("bucketBone").setAttribute("visibility","visible");
+      puff(bucket.x,262,4,"#f6cf6a",50,3); cap("The bone fell in the bucket! Drop the bucket on Bloat.","The funny bone fell out of the tree and landed in the hanging bucket."); hint("bucket"); } }
+  else if(bone.state==="toSocket"){ bone.t+=dt; var ks=Math.min(1,bone.t/0.8);
+    var sx0=232, sy0=GROUND-80, tx=B.x, ty=GROUND-66;
+    var bx2=ease(sx0,tx,ks)+Math.sin(ks*Math.PI)*-30, by2=ease(sy0,ty,ks)-Math.sin(ks*Math.PI)*110;
+    fb.setAttribute("visibility","visible"); fb.setAttribute("transform","translate("+bx2.toFixed(1)+" "+by2.toFixed(1)+") rotate("+(ks*1080).toFixed(0)+")");
+    if(ks>=1){ bone.state="in"; fb.setAttribute("visibility","hidden"); $("blBone").setAttribute("visibility","visible"); phase="waking"; pt=0;
+      stars(B.x,GROUND-20); cap("Click. The funny bone is in.","The funny bone spun through the air and clicked into the socket on Bloat's chest."); } }
+
+  /* ---- bucket ---- */
+  var bg=$("bucket"), rope=$("bucketRope");
+  if(bucket.state==="hang"){ var sw=Math.sin(bucket.ph*1.6)*6; bucket.x=bucket.ax+sw; bucket.y=300; bucket.rot=-sw*0.6;
+    rope.setAttribute("d","M"+bucket.ax+" "+bucket.ay+" L"+bucket.x.toFixed(1)+" "+(bucket.y-48).toFixed(1)); }
+  else if(bucket.state==="fall"){ bucket.vy+=G*dt; bucket.y+=bucket.vy*dt; rope.setAttribute("d","M"+bucket.ax+" "+bucket.ay+" l0 10");
+    if(bucket.y-34>=GROUND-74-4){ /* Bloat is standing right here, stiff */
+      bucket.state="onhead"; bucket.t=0; $("blBucket").setAttribute("visibility","visible"); stars(B.x,GROUND-80); if(!calm)shake=3;
+      if(bucket.bone){ bucket.bone=false; $("bucketBone").setAttribute("visibility","hidden"); bone.state="toSocket"; bone.t=0; }
+      else cap("Clonk. He is too stiff to even notice. He needs his funny bone.","The bucket landed on Bloat's head. Stiff Bloat did not react at all."); } }
+  else if(bucket.state==="onhead"){ bucket.t+=dt; if(bucket.t>(phase==="stiff"?1.6:0.9)){ $("blBucket").setAttribute("visibility","hidden");
+      bucket.state="flying"; bucket.x=B.x; bucket.y=GROUND-90; bucket.vy=-650; bucket.vx=70; bucket.rot=0; } }
+  else if(bucket.state==="flying"){ bucket.vy+=G*dt; bucket.x+=bucket.vx*dt; bucket.y+=bucket.vy*dt; bucket.rot+=dt*600;
+    if(bucket.y>=GROUND){ bucket.y=GROUND; bucket.state="ground"; bucket.t=0; bucket.rot=0; puff(bucket.x,GROUND,5,"#c9a26a",60,3); } }
+  else if(bucket.state==="ground"){ bucket.t+=dt; if(bucket.t>1.2){ bucket.state="reel"; bucket.t=0; bucket.fx=bucket.x; bucket.fy=bucket.y; } }
+  else if(bucket.state==="reel"){ bucket.t+=dt; var kr=smooth(bucket.t/1.3);
+    bucket.x=ease(bucket.fx,bucket.ax,kr); bucket.y=ease(bucket.fy,300,kr);
+    rope.setAttribute("d","M"+bucket.ax+" "+bucket.ay+" L"+bucket.x.toFixed(1)+" "+(bucket.y-48).toFixed(1));
+    if(bucket.t>=1.3){ bucket.state="hang"; } }
+  bg.setAttribute("visibility",bucket.state==="onhead"?"hidden":"visible");
+  rope.setAttribute("visibility",bucket.state==="onhead"||bucket.state==="flying"||bucket.state==="fall"||bucket.state==="ground"?"hidden":"visible");
+  bg.setAttribute("transform","translate("+bucket.x.toFixed(1)+" "+bucket.y.toFixed(1)+") rotate("+bucket.rot.toFixed(1)+")");
+
+  /* ---- sandbag + seesaw ---- */
+  var sr=$("sandRopeP");
+  if(sand.state==="hang"){ sand.y=398+Math.sin(bucket.ph*2.2)*1.5; sr.setAttribute("d","M160 356 V"+(sand.y-2).toFixed(1)); }
+  else if(sand.state==="fall"){ sand.vy+=G*dt; sand.y+=sand.vy*dt; sr.setAttribute("d","M160 356 V364");
+    if(sand.y>=470){ sand.y=470; sand.state="down"; sand.t=0; plank.target=12; puff(166,500,6,"#c9a26a",70,3); if(!calm)shake=2;
+      if(peel.state==="onSeesaw"){ peel.state="toTree"; peel.t=0;
+        cap(bone.state==="tree"?"Fling! Straight into the tree.":"Fling! Just leaves this time.","The seesaw flung the peel into the tree."); }
+      else cap("Thump. Nothing on the seesaw to fling. Try the banana crate first.","The sandbag hit an empty seesaw."); } }
+  else if(sand.state==="down"){ sand.t+=dt; if(sand.t>1.4){ sand.state="reel"; sand.t=0; plank.target=-12; } }
+  else if(sand.state==="reel"){ sand.t+=dt; sand.y=ease(470,398,smooth(sand.t/1.2)); sr.setAttribute("d","M160 356 V"+(sand.y-2).toFixed(1));
+    if(sand.t>=1.2) sand.state="hang"; }
+  $("sandbag").setAttribute("transform","translate(160 "+sand.y.toFixed(1)+")");
+  plank.r=ease(plank.r,plank.target,dt*(plank.target>0?22:4));
+  $("plank").setAttribute("transform","rotate("+plank.r.toFixed(2)+" 120 494)");
+
+  /* ---- Bloat and the kid, by phase ---- */
+  switch(phase){
+  case "stiff":
+    B.wheeze-=dt;
+    if(B.wheeze<0){ B.wheeze=3+Math.random()*2; B.wt=0; puff(B.x,GROUND-92,2,"#e8e2d8",30,3); }
+    B.wt=(B.wt||9)+dt;
+    B.swell = B.wt<0.5 ? 1+Math.sin(B.wt/0.5*Math.PI)*0.04 : 1;
+    B.rot = B.wt<0.5 ? Math.sin(B.wt*60)*1.5 : 0;
+    break;
+  case "waking":
+    B.sat=ease(0.12,1,pt/0.9); B.lid=ease(0.55,0,pt/0.6);
+    if(pt>0.2) $("blRust").setAttribute("opacity",Math.max(0,0.85-pt).toFixed(2));
+    if(pt>0.3 && pt<0.35) puff(B.x,GROUND-40,10,"#8a4a2a",90,2.5);
+    if(pt>0.9){ var w=Math.min(1,(pt-0.9)/1.3); B.swell=1+Math.sin(w*Math.PI)*0.95; B.mouth=w<0.85?"M-11 -28 Q0 -6 12 -28 Q0 -34 -11 -28 Z":"M-8 -27 Q1 -20 10 -28"; B.rot=Math.sin(pt*9)*6*Math.sin(w*Math.PI); }
+    if(pt>0.95 && pt<1.0){ stars(B.x,GROUND-110); bonieReact(1); cap("Bloat is awake! Everything he does is too much.","Color flooded back into Bloat. He blinked, then puffed up enormous with joy."); if(!calm)shake=3; }
+    if(pt>2.5){ phase="toPad"; pt=0; B.swell=1; B.rot=0; B.dir=-1; }
+    break;
+  case "toPad":
+    walking=true; B.x-=46*dt; B.walkPh+=dt*13;
+    if(B.x<=PAD){ B.x=PAD; B.dir=1; phase="fold"; pt=0; cap("Now watch. Bloat folds into the first part of the ride.","Bloat walked to an open spot and started to fold up."); }
+    break;
+  case "fold":
+    var kf=smooth(pt/1.3);
+    if(pt<0.35){ B.swell=1+Math.sin(pt/0.35*Math.PI)*0.12; }
+    else { B.fold=kf; B.sx=ease(1,1.5,kf); B.sy=ease(1,0.62,kf); }
+    if(pt>0.6 && pt<0.65) puff(B.x,GROUND-6,8,"#f3e3c8",80,4);
+    if(pt>1.4){ B.fold=1; phase="board"; pt=0; K.state="walk"; face(kidF,"bored");
+      cap("Bloat is the Launcher. Here comes a rider.","Bloat is now a bouncy drum on springs, with his face on the front. A small Bonie kid walks over."); }
+    break;
+  case "board":
+    if(K.state==="walk"){ K.x-=34*dt; K.y=GROUND-Math.abs(Math.sin(now*9))*2;
+      if(K.x<=PAD+44){ K.state="hop"; K.t=0; K.hx=K.x; } }
+    else if(K.state==="hop"){ K.t+=dt; var kh=Math.min(1,K.t/0.5); K.x=ease(K.hx,PAD,kh); K.y=ease(GROUND,kidTop(),kh)-Math.sin(kh*Math.PI)*40;
+      if(kh>=1){ K.state="ride"; phase="ready"; pt=0; B.pump=0;
+        cap("Tap Bloat to pump him up. Then Launch.","The kid is sitting on top of Bloat. Tap Bloat to pump him bigger, then press Launch."); hint("bloat");
+        $("bloat").setAttribute("tabindex","0"); } }
+    break;
+  case "ready":
+    var targetSx=1.5+B.pump*0.16, targetSy=0.62+B.pump*0.2;
+    B.sx=ease(B.sx,targetSx,dt*10); B.sy=ease(B.sy,targetSy,dt*10);
+    B.rot = B.pump>=7 ? Math.sin(now*40)*1.5 : 0;
+    B.mouth = B.pump>=6 ? "M-11 -28 Q0 -6 12 -28 Q0 -34 -11 -28 Z" : "M-8 -27 Q1 -20 10 -28";
+    K.x=PAD; K.y=kidTop(); K.rot=0;
+    face(kidF, B.pump>=5?"oh":"bored");
+    break;
+  case "squash":
+    B.sy=ease(B.sy,0.32,dt*30); B.sx=ease(B.sx,2.1,dt*30); K.y=kidTop();
+    if(pt>0.22){ phase="flight"; pt=0; K.vy=-kidLaunchV; K.state="fly"; B.sy=1.4; B.sx=1.2; puff(PAD,GROUND-4,10,"#f3e3c8",110,5); if(!calm)shake=5; }
+    break;
+  case "flight":
+    /* Bloat rebounds, then deflates with a long raspberry */
+    B.sy=ease(B.sy,0.62,dt*3); B.sx=ease(B.sx,1.5,dt*3);
+    if(pt<1.2 && Math.random()<dt*14) puff(PAD+40,GROUND-30,1,"#f3e3c8",60,3);
+    B.mouth="M-10 -26 q4 -4 7 0 q4 4 7 0 q4 -4 7 0";
+    if(K.state==="fly"){ K.vy+=G*dt; K.y+=K.vy*dt; K.rot+=dt*500;
+      if(K.y<-140){ K.state="gone"; K.t=0; cap("...","The kid flew so high they went out of sight. Everyone is looking up."); }
+      else if(K.vy>0 && K.y>=kidTop()-2 && outcome!=="big"){ /* came back down: lands beside the pad */
+        K.state="land"; K.t=0; K.y=GROUND; K.x=PAD+48; K.rot=0; puff(K.x,GROUND,5,"#c9a26a",60,3);
+        if(outcome==="small"){ bonieReact(0); cap("That's it? It's Bloat. Make it too much.","The kid hopped up a little and landed. The Bonies yawned."); }
+        else { bonieReact(1); cap("Higher! But Bloat can do way too much. Pump more.","The kid went up high and landed. One Bonie chuckled."); } } }
+    else if(K.state==="gone"){ K.t+=dt;
+      if(K.t>1.8){ K.state="plunge"; K.x=258; K.y=-140; K.vy=300; K.rot=180; cap("Wait for it...","Something is coming back down."); } }
+    else if(K.state==="plunge"){ K.vy+=G*dt; K.y+=K.vy*dt;
+      if(K.y>=GROUND+20){ K.y=GROUND+20; K.state="buried"; K.t=0; $("crater").setAttribute("transform","translate(258 "+(GROUND+2)+")"); $("crater").setAttribute("visibility","visible");
+        puff(258,GROUND,16,"#c9a26a",160,5); stars(258,GROUND-30); if(!calm)shake=8; bonieReact(3);
+        cap("Way too high. And nobody to catch them.","The kid came down head first into the ground. Only their feet stick out. The Bonies laughed so hard they fell off the wall."); } }
+    else if(K.state==="land"){ K.t+=dt; if(K.t>1.4){ K.state="walk"; } }
+    else if(K.state==="walk"){ K.x-=30*dt; K.y=GROUND-Math.abs(Math.sin(now*9))*2;
+      if(K.x<=PAD+44){ K.state="hop"; K.t=0; K.hx=K.x; phase="board"; B.pump=0; } }
+    else if(K.state==="buried"){ K.t+=dt; K.rot=180+Math.sin(K.t*14)*8;
+      if(K.t>3.2){ phase="done"; showEnd(); } }
+    if(K.state!=="fly" && K.state!=="gone" && K.state!=="plunge" && K.state!=="buried") B.mouth="M-8 -27 Q1 -20 10 -28";
+    break;
+  }
+  renderBloat(walking); renderKid();
+
+  /* eyes: Bloat watches the rider when they are up */
+  var up = (phase==="flight" && (K.state==="fly"||K.state==="gone"));
+  $("blPup").setAttribute("transform", up?"translate(0 -4)":(phase==="stiff"?"translate(0 2)":"translate(2 0)"));
+  bonies.forEach(function(b){
+    if(b.t>0){ b.t-=dt; if(b.t<=0){ face(b,"bored"); b.g.classList.remove("chuckle","fall"); } }
+    else { var tx=up?0:Math.max(-2,Math.min(2,(B.x-b.x)/40)); b.pup.setAttribute("transform","translate("+tx.toFixed(1)+" "+(up?-2.5:0.5)+")"); }
+  });
+  kidF.pup.setAttribute("transform", K.state==="ride"?"translate(0 -1)":"translate(-1.5 0.5)");
+
+  var r=$("ring");
+  if(hintOn==="crate"){r.setAttribute("cx",45);r.setAttribute("cy",590);r.setAttribute("r",44);}
+  if(hintOn==="sand"){r.setAttribute("cx",160);r.setAttribute("cy",sand.y+16);r.setAttribute("r",32);}
+  if(hintOn==="bucket"){r.setAttribute("cx",bucket.x);r.setAttribute("cy",bucket.y-24);r.setAttribute("r",34);}
+  if(hintOn==="bloat"){r.setAttribute("cx",PAD);r.setAttribute("cy",GROUND-40*B.sy-20);r.setAttribute("r",30+B.sx*12);}
+  $("launchBtn").hidden = !(phase==="ready" && B.pump>0);
+}
+
+/* ---------- ride controls ---------- */
+function pump(){
+  if(phase!=="ready") return;
+  B.pump=Math.min(9,B.pump+1); hint(null);
+  puff(PAD-46*B.sx/1.5,GROUND-30,3,"#f3e3c8",50,3);
+  var lines=["Pump.","Bigger.","Bigger!","Way bigger.","Too big?","Not for Bloat.","He is enormous.","This is a bad idea.","Perfect."];
+  cap(lines[B.pump-1]+" Pump more, or Launch.","Bloat is pumped "+B.pump+" times.");
+}
+function launch(){
+  if(phase!=="ready"||B.pump<1) return;
+  kidLaunchV=380+B.pump*150;
+  outcome = B.pump>=6?"big":(B.pump>=3?"mid":"small");
+  phase="squash"; pt=0; K.state="ride"; $("launchBtn").hidden=true;
+}
+
+/* ---------- end of level ---------- */
+function showEnd(){
+  var art=$("cardArt");
+  art.innerHTML='<rect width="360" height="240" fill="url(#gSky)"/><circle cx="270" cy="60" r="70" fill="url(#gSun)"/>'+
+    '<path d="M0 178 Q180 166 360 176 V240 H0 Z" fill="url(#gGround)"/>'+
+    '<g transform="translate(130 180) scale(1.6)"><path d="M-26 0 l6 -4 l-6 -4 l6 -4 M26 0 l-6 -4 l6 -4 l-6 -4 M0 0 l6 -4 l-6 -4 l6 -4" stroke="#1d1714" stroke-width="3" fill="none"/>'+
+    '<g transform="translate(0 -29) scale(1.5 .62) translate(0 40)">'+cleanBody()+'</g></g>'+
+    '<g transform="translate(262 186)"><path d="M-34 4 Q-30 -12 -12 -10 Q0 -18 12 -10 Q30 -12 34 4 Z" fill="#6a3f2c" stroke="#1d1714" stroke-width="2.4"/>'+
+    '<g transform="translate(0 6) rotate(180) scale(1.1)"><use href="#bonieSym"/></g></g>';
+  $("cardH").textContent="Bloat's move: Exaggeration";
+  $("cardP").textContent="Make it too much. Then more. But nobody caught the rider. Level 2: wake Mote, the catch.";
+  $("cardGo").textContent="Ride again";
+  $("cardGo").onclick=function(){ $("card").hidden=true; $("crater").setAttribute("visibility","hidden");
+    phase="board"; pt=0; K.state="walk"; K.x=272; K.y=GROUND; K.rot=0; B.pump=0; outcome=null;
+    cap("Here comes the rider again.","The kid climbs out and walks back to Bloat."); };
+  $("card").hidden=false; $("cardGo").focus();
+}
+function cleanBody(){
+  var n=$("blBody").cloneNode(true); n.removeAttribute("id"); n.removeAttribute("transform"); n.removeAttribute("filter");
+  [].forEach.call(n.querySelectorAll("[id]"),function(x){x.removeAttribute("id")});
+  [].forEach.call(n.querySelectorAll("use[visibility=hidden]"),function(x){x.remove()});
+  return n.outerHTML;
+}
+
+/* ---------- loop ---------- */
+var last=performance.now();
+function frame(t){
+  var dt=Math.min(0.033,(t-last)/1000); last=t;
+  update(dt); stepParts(dt);
+  var w=$("world");
+  if(shake>0 && !calm){ shake=Math.max(0,shake-dt*14); w.setAttribute("transform","translate("+((Math.random()-.5)*shake*2).toFixed(1)+" "+((Math.random()-.5)*shake*2).toFixed(1)+")"); }
+  else w.removeAttribute("transform");
+  requestAnimationFrame(frame);
+}
+
+/* ---------- input ---------- */
+function bindBtn(id,fn){ var n=$(id); n.addEventListener("click",fn); n.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); fn(); } }); }
+bindBtn("crate",throwPeel); bindBtn("bucket",dropBucket); bindBtn("sandbag",dropSand); bindBtn("bloat",pump);
+$("launchBtn").addEventListener("click",launch);
+document.addEventListener("keydown",function(e){ if(e.target.closest&&e.target.closest("button"))return;
+  if(e.key==="1")throwPeel(); if(e.key==="2")dropSand(); if(e.key==="3")dropBucket(); if(e.key==="p")pump(); if(e.key==="l")launch(); });
+/* poke the world */
+$("factory").addEventListener("click",function(){ puff(51,84,6,"#f3e3c8",50,6); puff(166,120,5,"#f3e3c8",50,5); });
+$("bonies").addEventListener("click",function(){ bonies.forEach(function(b){ if(b.t<=0){ face(b,"yawn"); b.t=1; } }); });
+
+/* comfort corner */
+$("comfortBtn").onclick=function(){ var p=$("comfort"); p.hidden=!p.hidden; this.setAttribute("aria-expanded",String(!p.hidden)); };
+$("comfortClose").onclick=function(){ $("comfort").hidden=true; $("comfortBtn").setAttribute("aria-expanded","false"); $("comfortBtn").focus(); };
+function press(row,btn){ [].forEach.call(row.querySelectorAll("button"),function(b){b.setAttribute("aria-pressed",String(b===btn))}); }
+$("themeRow").addEventListener("click",function(e){ var b=e.target.closest("button"); if(!b)return; document.body.classList.remove("day","dusk","night"); document.body.classList.add(b.dataset.theme); press(this,b); });
+$("sizeRow").addEventListener("click",function(e){ var b=e.target.closest("button"); if(!b)return; document.documentElement.style.setProperty("--ts",b.dataset.ts); press(this,b); });
+$("motionRow").addEventListener("click",function(e){ var b=e.target.closest("button"); if(!b)return; calm=b.dataset.motion==="calm"; document.body.classList.toggle("calm",calm); document.body.classList.toggle("full",!calm); press(this,b); });
+if(calm) press($("motionRow"),$("motionRow").querySelector("[data-motion=calm]"));
+
+/* scene first: Bloat stands stiff under the tree, the bone glints above */
+cap("Bloat has gone stiff. His funny bone is stuck in the tree.","Bloat, a round plum robot, stands frozen and gray under the tree. A bone glints in the branches. Props: banana crate at bottom left, sandbag over the seesaw, bucket in the tree.");
+face(kidF,"bored"); hint("crate");
+requestAnimationFrame(frame);
+})();
+
+</script>
+</body>
+</html>
