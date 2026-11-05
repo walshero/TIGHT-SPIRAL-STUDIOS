@@ -120,8 +120,15 @@ PROBE = r"""
   // inline text link exemption: <a> sitting inside running prose or a footer/credit
   // byline. An email in "Tight Spiral Studios · you@example.com — …" is inline text,
   // not a primary touch target; forcing it to 44px would break the credit line.
+  // [LAW] WCAG 2.5.8 Inline exception (2026-11-05, asking-room): "does not apply to inline
+  // targets in sentences, or where the size of the target is constrained by the line-height
+  // of non-target text." Not just <a>: any target that computes display:inline inside a
+  // paragraph (a tappable sentence, a word to tag) is constrained by the line-height. Measured,
+  // not guessed: the test is the computed display, not a class name.
+  const PROSE = 'p,li,dd,dt,blockquote,.fc-body,.prose,figcaption,footer,.foot,.credits,.credit,.byline,address,.bio-card,.award-card,.sec-hd';
   const inlineLink = (el) =>
-    el.tagName === 'A' && el.closest('p,li,dd,dt,blockquote,.fc-body,.prose,figcaption,footer,.foot,.credits,.credit,.byline,address,.bio-card,.award-card,.sec-hd');
+    (el.tagName === 'A' && el.closest(PROSE)) ||
+    (getComputedStyle(el).display === 'inline' && el.parentElement && el.parentElement.closest('p,li,blockquote,.prose'));
 
   const sel = 'button,a[href],[role="button"],input:not([type="hidden"]),select,textarea,[onclick],[tabindex]:not([tabindex="-1"])';
   out.vh = de.clientHeight;

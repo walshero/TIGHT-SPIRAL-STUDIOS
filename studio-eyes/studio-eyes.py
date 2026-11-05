@@ -465,7 +465,10 @@ PROBE = r"""
       sel: el.tagName.toLowerCase() + (el.className && typeof el.className==='string'
             ? '.'+el.className.trim().split(/\s+/)[0] : ''),
       w: r.width, h: r.height, ring: ring,
-      inlineLink: el.tagName === 'A' && !!el.closest(INLINE_CTX)
+      // [LAW] WCAG 2.5.8 Inline exception, mirrors studio-fingers (2026-11-05): any target
+      // that computes display:inline inside a paragraph is constrained by the line-height.
+      inlineLink: (el.tagName === 'A' && !!el.closest(INLINE_CTX)) ||
+        (getComputedStyle(el).display === 'inline' && !!el.parentElement && !!el.parentElement.closest('p,li,blockquote,.prose'))
     });
     el.blur();
   });
