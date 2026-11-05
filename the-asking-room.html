@@ -2,6 +2,7 @@
 <html lang="en">
 <!--
   THE ASKING ROOM (working title, founder rules the name: D1). Tight Spiral Studios, EN195.
+  Workup v0.8, 2026-11-05 (founder: "Play what you notice" was unclear: does playing World Detail That Matters mean it is done well, or missing? And a move should tag a section of the text, not the whole passage. Fix: every card now says which way it points (Writerly Move: working here / Drafty Air: needs a look), and the player taps the sentences first, then plays a card on them. Right card on the wrong lines gets "Right move, wrong lines.")
   Workup v0.7, 2026-10-17 (founder, by voice: "players should get another shot." After a miss the Advocate says why and the player tries again on the same call; the forced move-on after two misses is gone, so the blank Recorder's page can no longer happen.)
   Workup v0.6, 2026-10-13 (founder ruling: "Remove comfort control and label and focus on 3 best modes for each game including light and dark." The one icon button now cycles Light, Dark, Sharp; Sharp is high contrast). v0.5, 2026-09-25 (mnemonic icons on every move, tag and ruled comment). v0.4 (three drafts: Presto, Daiko, Dead Ants). v0.3 (struck cards keep a Claim line and the Advocate's note for the whole draft). v0.2, 2026-09-24 (round table in daylight, founder note: the lamp read as interrogation). One playable turn plus the animation language for the whole game.
   Spec: claude/SPEC-ASKING-ROOM-2026-09-24.md. Findings: convening/ASKING-ROOM-CONVENING.md.
@@ -195,6 +196,16 @@ h1 .sub{ display:block; font-size:20px; font-style:italic; font-weight:normal; c
 /* v0.7 hint: after a second miss, the Advocate points at the lines that matter */
 .ev.hint{ background:var(--hl); color:var(--ink); border-radius:3px; box-shadow:0 0 0 3px var(--hl); }
 .ev.hint::before{ content:"[look here] "; font-family:var(--label); font-size:18px; font-weight:bold; color:var(--rust); }
+/* v0.8: point, then play. Every sentence in the draft is a target. */
+.pick .sn{ cursor:pointer; border-radius:3px; }
+.pick .sn:hover{ text-decoration-line:underline; text-decoration-style:dotted; text-decoration-thickness:2px; text-underline-offset:4px; }
+.sn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.sn[aria-pressed="true"]{ background:var(--hl); color:var(--ink); box-shadow:0 0 0 3px var(--hl);
+  text-decoration-line:underline; text-decoration-style:solid; text-decoration-color:var(--ink); text-decoration-thickness:3px; text-underline-offset:5px; }
+@keyframes nudge{ 0%,100%{ box-shadow:4px 6px 0 rgba(40,30,15,.14); } 40%{ box-shadow:0 0 0 4px var(--focus); } }
+.ms.nudge{ animation:nudge .9s ease 2; }
+@media (prefers-reduced-motion: reduce){ .ms.nudge{ animation:none; outline:4px solid var(--focus); } }
+.selnote{ margin:0; font-family:var(--label); font-size:18px; font-weight:bold; color:var(--ink2); min-height:1.5em; }
 .ev.marked::after{ content:" [noticed]"; font-family:var(--label); font-size:18px; font-weight:bold; color:var(--rust); }
 
 .drafts{ display:flex; flex-wrap:wrap; gap:8px; margin:0 0 14px; }
@@ -492,14 +503,15 @@ details.about p{ margin:8px 0 12px; }
     </template>
 
     <section class="hand" id="hand" aria-label="Your hand">
-      <h2 class="phase" id="phase" tabindex="-1"><span class="n" id="phaseN">Call 1 of 3</span><span class="q" id="phaseQ">Read the draft. Then play what you notice.</span></h2>
+      <h2 class="phase" id="phase" tabindex="-1"><span class="n" id="phaseN">Call 1 of 3</span><span class="q" id="phaseQ">Tap the lines that caught you. Then play a card on them.</span></h2>
+      <p class="selnote" id="selnote" aria-live="polite"></p>
       <div class="cards" id="cards"></div>
     </section>
   </div>
 
   <details class="about">
     <summary>About this room, its rules, and the draft</summary>
-    <p>You sit in a fiction workshop as an Asker. The writer, the Asked, sits at a round table with the class. The Advocate sits beside her and rules on every card you play. If a card misses, the Advocate asks you to reframe once. If it misses again, she calls on someone else. After a good question, she holds the silence so the Asked can think. The Recorder writes down every question and none of the answers, and the Asked takes that page home.</p>
+    <p>You sit in a fiction workshop as an Asker. The writer, the Asked, sits at a round table with the class. The Advocate sits beside her and rules on every card you play. First tap the sentences in the draft you want to talk about. Then play a card: a Writerly Move says something is working there; a Drafty Air card says something there may need a look. If a card misses, the Advocate says why and you try again. After a good question, she holds the silence so the Asked can think. The Recorder writes down every question and none of the answers, and the Asked takes that page home.</p>
     <p>The roles and rules come from Jesse Ball, "The Asking," in <i>Notes on My Dunce Cap</i>. The ways of speaking come from Pat Schneider and the Amherst Writers &amp; Artists method: say what is strong, say what stays with you, and speak of the narrator, never the writer. The cards come from Matt Walsh's handout "Mapping the Storyscape with Writerly Moves" and its Observation Tags, and every test line on a card is his.</p>
     <p>The three drafts adapt stories by Matt Walsh: the opening of "Presto"; a passage from chapter one of <i>Daiko</i>, his novel set in Sasakami Village; and "Dead Ants," from <i>Secret Worlds</i>, his stories written to his friend Dan. Each is roughed down to read like a workshop draft, and the studio planted one flaw in each for practice. Art: original cut paper, CC0, Tight Spiral Paper Craft.</p>
   </details>
@@ -509,7 +521,7 @@ details.about p{ margin:8px 0 12px; }
   <a href="arcade.html" aria-label="Back to the arcade">Back</a>
   <a href="index.html" aria-label="Home">Home</a>
 </nav>
-<p class="foot">Tight Spiral Studios. Play. Notice. Design. Workup v0.7, 2026-10-17.</p>
+<p class="foot">Tight Spiral Studios. Play. Notice. Design. Workup v0.8, 2026-11-05.</p>
 
 <script>
 (function(){
@@ -768,9 +780,10 @@ details.about p{ margin:8px 0 12px; }
 
   function dealNotice(){
     S.phase='notice'; S.tries=0; cardsEl.innerHTML=''; [].forEach.call(document.querySelectorAll('.ev.hint'),function(e){ e.classList.remove('hint'); });
-    setPhase('Call '+S.call+' of '+MAXCALLS+': notice', S.call===1?'Read the draft. Then play what you notice.':'What else is this draft doing?');
+    setPhase('Call '+S.call+' of '+MAXCALLS+': notice', S.call===1?'Tap the lines that caught you. Then play a card on them.':'What else is this draft doing? Tap those lines, then play a card.');
+    pickable(true); syncSel();
     shuffle(NOTICE).forEach(function(n){
-      var b=makeCard('<span class="chead">'+icon(n.id)+'<span><span class="deck">'+n.deck+'</span><span class="nm">'+esc(n.name)+'</span></span></span><span class="ts">'+esc(n.test)+'</span><span class="stamp"></span><span class="why"></span>',
+      var b=makeCard('<span class="chead">'+icon(n.id)+'<span><span class="deck">'+deckLabel(n)+'</span><span class="nm">'+esc(n.name)+'</span></span></span><span class="ts">'+esc(n.test)+'</span><span class="stamp"></span><span class="why"></span>',
         n.tag?'tag':'', function(btn){ playNotice(n,btn); });
       b.dataset.id=n.id;
       if(S.asked[n.id]){ claim(b,n); b.setAttribute('aria-disabled','true'); b.classList.add('done'); b.querySelector('.stamp').textContent='Upheld. Asked already.'; note(b, clean(n.rule)); }
@@ -778,7 +791,7 @@ details.about p{ margin:8px 0 12px; }
     });
   }
   function dealFeedback(n){
-    S.phase='feedback'; S.tries=0; cardsEl.innerHTML='';
+    S.phase='feedback'; S.tries=0; cardsEl.innerHTML=''; pickable(false); clearSel();
     setPhase('Call '+S.call+' of '+MAXCALLS+': say it', 'Say it to the Asked. Choose your words.');
     shuffle(FEED[n.id]).forEach(function(f){
       var k=kindOf(f);
@@ -790,7 +803,9 @@ details.about p{ margin:8px 0 12px; }
   /* The Advocate's note stays on a struck card for the whole draft. */
   function clean(t){ return t.replace(/\s*(Please (look again|reframe)[^.]*\.|Now say it so it helps her\.)\s*$/,'').trim(); }
   function note(btn,text){ btn.querySelector('.why').innerHTML='<b>The Advocate:</b> '+esc(text); }
-  function claim(btn,n){ var ts=btn.querySelector('.ts'); if(ts) ts.innerHTML='<b>Claim:</b> '+esc(n.test); }
+  function deckLabel(n){ return n.tag?'Drafty Air: needs a look':'Writerly Move: working here'; }
+  function claimLead(n){ return n.tag?'You claim these lines need a look:':'You claim these lines are working:'; }
+  function claim(btn,n){ var ts=btn.querySelector('.ts'); if(ts) ts.innerHTML='<b>'+claimLead(n)+'</b> '+esc(n.test); }
   function strike(btn,label,why,quiet){
     btn.classList.add('struck'); btn.setAttribute('aria-disabled','true');
     btn.querySelector('.stamp').textContent=label; note(btn,why);
@@ -798,11 +813,23 @@ details.about p{ margin:8px 0 12px; }
   }
 
   async function playNotice(n,btn){
+    var sel=selected();
+    if(!sel.length){ say('The Advocate','Point first. Tap the lines in the draft this card is about, then play it.'); flashDraft(); return; }
     S.busy=true; claim(btn,n); await fly(btn); ruling(true);
     if(n.kind==='hit'){
+      var target=[].slice.call(document.querySelectorAll('#'+n.ev+' .sn'));
+      var on=sel.filter(function(x){ return target.indexOf(x)>=0; }).length;
+      if(!on || sel.length>target.length+2){
+        S.tries++;
+        var msg=!on?'Right move, wrong lines. Where in the draft does this happen? Move your marks and play it again.'
+                   :'Right move. Now narrow it down. Which lines, exactly? Untap the ones that are not doing it.';
+        if(S.tries>=2){ var te=$(n.ev); if(te) te.classList.add('hint'); msg+=' Hint: look at the highlighted lines.'; }
+        say('The Advocate', msg);
+        await wait(900); ruling(false); S.busy=false; return;
+      }
       say('The Advocate', n.rule);
-      var ev=$(n.ev); if(ev) ev.classList.add('marked');
-      S.asked[n.id]=true; S.notice=n;
+      var ev=$(n.ev); if(ev){ ev.classList.add('marked'); ev.classList.remove('hint'); }
+      S.asked[n.id]=true; S.notice=n; clearSel();
       await wait(1500); ruling(false);
       dealFeedback(n); S.busy=false;
     } else {
@@ -882,6 +909,7 @@ details.about p{ margin:8px 0 12px; }
     await wait(2400); mood('clap',false); mood('bow',false);
   }
   function reset(){
+    clearSel();
     S={ call:1, phase:'notice', tries:0, asked:{}, struck:{}, notice:null, record:[], busy:false };
     ['r1','r2','r3'].forEach(function(id){ $(id).classList.remove('on'); });
     document.querySelectorAll('.ev').forEach(function(e){ e.classList.remove('marked'); });
@@ -890,10 +918,54 @@ details.about p{ margin:8px 0 12px; }
     dealNotice(); $('phase').focus({preventScroll:true});
   }
   /* Three drafts on the table. Switching is always open: no draft is locked. */
+  /* v0.8 POINT, THEN PLAY. Split the draft into sentences so a card lands on lines, not the
+     whole passage. Planted .ev spans stay as wrappers, so marked/hint still work. */
+  var END=/[.!?]["”’)]*\s*$/;
+  function build(src,dest){
+    var cur=null;
+    function open(){ if(!cur){ cur=document.createElement('span'); cur.className='sn'; dest.appendChild(cur); } return cur; }
+    [].slice.call(src.childNodes).forEach(function(node){
+      if(node.nodeType===3){
+        (node.textContent.match(/[^.!?]+[.!?]*["”’)]*\s*|[.!?]+["”’)]*\s*/g)||[]).forEach(function(t){
+          if(!t.trim()){ (cur||dest).appendChild(document.createTextNode(t)); return; }
+          if(!cur){ var lead=t.match(/^\s+/); if(lead){ dest.appendChild(document.createTextNode(lead[0])); t=t.slice(lead[0].length); } }
+          open().appendChild(document.createTextNode(t)); if(END.test(t)) cur=null;
+        });
+      } else if(node.classList && node.classList.contains('ev')){
+        cur=null; var w=node.cloneNode(false); dest.appendChild(w); build(node,w); cur=null;
+      } else { open().appendChild(node.cloneNode(true)); if(END.test(node.textContent)) cur=null; }
+    });
+  }
+  function sentencize(root){
+    root.querySelectorAll('p:not(.mhead):not(.brk)').forEach(function(p){
+      var f=document.createDocumentFragment(); build(p,f); p.innerHTML=''; p.appendChild(f);
+    });
+    root.querySelectorAll('.sn').forEach(function(sn){
+      sn.setAttribute('role','button'); sn.setAttribute('tabindex','0'); sn.setAttribute('aria-pressed','false');
+    });
+  }
+  function selected(){ return [].slice.call(document.querySelectorAll('#msBody .sn[aria-pressed="true"]')); }
+  function syncSel(){
+    var k=selected().length, el=$('selnote'); if(!el) return;
+    el.textContent = S.phase!=='notice' ? '' : (k ? k+(k===1?' line':' lines')+' marked. Now play a card on '+(k===1?'it.':'them.') : 'No lines marked yet.');
+  }
+  function clearSel(){ selected().forEach(function(x){ x.setAttribute('aria-pressed','false'); }); syncSel(); }
+  function pickable(on){ $('msBody').classList.toggle('pick',on); $('msBody').querySelectorAll('.sn').forEach(function(x){ x.setAttribute('tabindex',on?'0':'-1'); }); }
+  function flashDraft(){ var m=$('ms'); m.classList.remove('nudge'); void m.offsetWidth; m.classList.add('nudge'); }
+  function toggleSn(sn){
+    if(S.busy || S.phase!=='notice') return;
+    sn.setAttribute('aria-pressed', String(sn.getAttribute('aria-pressed')!=='true')); syncSel();
+  }
+  $('msBody').addEventListener('click',function(e){ var sn=e.target.closest&&e.target.closest('.sn'); if(sn) toggleSn(sn); });
+  $('msBody').addEventListener('keydown',function(e){
+    var sn=e.target.closest&&e.target.closest('.sn'); if(!sn) return;
+    if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggleSn(sn); }
+  });
+
   function loadDraft(i){
     if(S.busy) return;
     D=i; NOTICE=DRAFTS[i].notice; FEED=DRAFTS[i].feed;
-    var body=$('msBody'); body.innerHTML=''; body.appendChild(document.getElementById('ms'+i).content.cloneNode(true));
+    var body=$('msBody'); body.innerHTML=''; body.appendChild(document.getElementById('ms'+i).content.cloneNode(true)); sentencize(body);
     document.querySelectorAll('.dtab').forEach(function(b){ b.setAttribute('aria-pressed', String(+b.dataset.d===i)); });
     reset();
   }
