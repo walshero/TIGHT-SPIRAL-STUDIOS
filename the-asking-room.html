@@ -2,6 +2,7 @@
 <html lang="en">
 <!--
   THE ASKING ROOM (working title, founder rules the name: D1). Tight Spiral Studios, EN195.
+  Workup v0.8.1, 2026-11-05 (founder chose option 3: an answer key on every card, drawn from the EN195 corpus. Writerly Moves: "Yes/No means it's working" plus the move's description, verbatim from the Storyscape card set (rescued/drive-2026-07-13/6.11.26-writerly_moves_game.html). Drafty Air: "Ask:" plus the question, verbatim from the founder's Drafty Moves sheet (writerly-moves/from-export-2026-06-28/Drafty_Moves.md), then which answer means it needs a look. Driving Too Fast borrows the Fast-Forward Scene question, its nearest twin on the sheet.)
   Workup v0.8, 2026-11-05 (founder: "Play what you notice" was unclear: does playing World Detail That Matters mean it is done well, or missing? And a move should tag a section of the text, not the whole passage. Fix: every card now says which way it points (Writerly Move: working here / Drafty Air: needs a look), and the player taps the sentences first, then plays a card on them. Right card on the wrong lines gets "Right move, wrong lines.")
   Workup v0.7, 2026-10-17 (founder, by voice: "players should get another shot." After a miss the Advocate says why and the player tries again on the same call; the forced move-on after two misses is gone, so the blank Recorder's page can no longer happen.)
   Workup v0.6, 2026-10-13 (founder ruling: "Remove comfort control and label and focus on 3 best modes for each game including light and dark." The one icon button now cycles Light, Dark, Sharp; Sharp is high contrast). v0.5, 2026-09-25 (mnemonic icons on every move, tag and ruled comment). v0.4 (three drafts: Presto, Daiko, Dead Ants). v0.3 (struck cards keep a Claim line and the Advocate's note for the whole draft). v0.2, 2026-09-24 (round table in daylight, founder note: the lamp read as interrogation). One playable turn plus the animation language for the whole game.
@@ -232,6 +233,9 @@ h1 .sub{ display:block; font-size:20px; font-style:italic; font-weight:normal; c
 .card .deck{ display:block; font-family:var(--label); font-size:18px; font-weight:bold; color:var(--ink2); }
 .card.tag{ border-style:dashed; }
 .card .nm{ display:block; font-size:22px; font-weight:bold; line-height:1.25; margin:2px 0 4px; }
+.card .key{ display:block; margin-top:8px; padding-top:8px; border-top:1.5px dashed var(--line); font-size:18px; line-height:1.45; color:var(--ink); }
+.card .key b{ font-family:var(--label); font-size:18px; }
+.card.struck .key, .card.done .key{ display:none; }
 .card .ts{ display:block; font-size:18px; color:var(--ink2); line-height:1.45; }
 .card .said{ display:block; font-size:20px; line-height:1.5; }
 .card[aria-disabled="true"]{ cursor:default; transform:none; box-shadow:none; }
@@ -511,8 +515,8 @@ details.about p{ margin:8px 0 12px; }
 
   <details class="about">
     <summary>About this room, its rules, and the draft</summary>
-    <p>You sit in a fiction workshop as an Asker. The writer, the Asked, sits at a round table with the class. The Advocate sits beside her and rules on every card you play. First tap the sentences in the draft you want to talk about. Then play a card: a Writerly Move says something is working there; a Drafty Air card says something there may need a look. If a card misses, the Advocate says why and you try again. After a good question, she holds the silence so the Asked can think. The Recorder writes down every question and none of the answers, and the Asked takes that page home.</p>
-    <p>The roles and rules come from Jesse Ball, "The Asking," in <i>Notes on My Dunce Cap</i>. The ways of speaking come from Pat Schneider and the Amherst Writers &amp; Artists method: say what is strong, say what stays with you, and speak of the narrator, never the writer. The cards come from Matt Walsh's handout "Mapping the Storyscape with Writerly Moves" and its Observation Tags, and every test line on a card is his.</p>
+    <p>You sit in a fiction workshop as an Asker. The writer, the Asked, sits at a round table with the class. The Advocate sits beside her and rules on every card you play. First tap the sentences in the draft you want to talk about. Then play a card: a Writerly Move says something is working there; a Drafty Air card says something there may need a look. The bottom of each card tells you which answer means which. If a card misses, the Advocate says why and you try again. After a good question, she holds the silence so the Asked can think. The Recorder writes down every question and none of the answers, and the Asked takes that page home.</p>
+    <p>The roles and rules come from Jesse Ball, "The Asking," in <i>Notes on My Dunce Cap</i>. The ways of speaking come from Pat Schneider and the Amherst Writers &amp; Artists method: say what is strong, say what stays with you, and speak of the narrator, never the writer. The cards come from Matt Walsh's handout "Mapping the Storyscape with Writerly Moves" and its Observation Tags, and every test line on a card is his. The answer keys come from his Storyscape card descriptions and his Drafty Moves sheet.</p>
     <p>The three drafts adapt stories by Matt Walsh: the opening of "Presto"; a passage from chapter one of <i>Daiko</i>, his novel set in Sasakami Village; and "Dead Ants," from <i>Secret Worlds</i>, his stories written to his friend Dan. Each is roughed down to read like a workshop draft, and the studio planted one flaw in each for practice. Art: original cut paper, CC0, Tight Spiral Paper Craft.</p>
   </details>
 </main>
@@ -521,7 +525,7 @@ details.about p{ margin:8px 0 12px; }
   <a href="arcade.html" aria-label="Back to the arcade">Back</a>
   <a href="index.html" aria-label="Home">Home</a>
 </nav>
-<p class="foot">Tight Spiral Studios. Play. Notice. Design. Workup v0.8, 2026-11-05.</p>
+<p class="foot">Tight Spiral Studios. Play. Notice. Design. Workup v0.8.1, 2026-11-05.</p>
 
 <script>
 (function(){
@@ -688,6 +692,27 @@ details.about p{ margin:8px 0 12px; }
        why:'We speak about the narrator here, never the writer. Please reframe.'}
     ]
   };
+  /* v0.8.1 ANSWER KEY. Every card says which answer means working / needs a look.
+     Move descriptions: Storyscape card set, verbatim. Ask lines: Drafty Moves sheet, verbatim. */
+  var KEY={
+    wdtm:    {good:'Yes', d:'Offers a specific detail that quietly carries meaning (class, mood, history).'},
+    anchor:  {good:'Yes', d:'Grounds us in who/where/when and keeps the world solid.'},
+    turn:    {good:'No',  d:'The situation or understanding changes direction.'},
+    pattern: {good:'Yes', d:'Plants or repeats an image, phrase, or motif that ties the story together.'},
+    snap:    {good:'Yes', d:'Briefly looks backward to explain, complicate, or re-color the present.'},
+    static:  {ask:'Does this reaction feel specific and proportional?', flag:'No'},
+    dump:    {ask:'Does the story feel like it hit pause to brief me?', flag:'Yes'},
+    coin:    {ask:'Does this feel caused by what came before, or dropped in from the sky?', flag:'Dropped in from the sky'},
+    camera:  {ask:'Can I clearly picture this scene and viewpoint?', flag:'No'},
+    fast:    {ask:'Did I want to see more of how this happened, not just that it did?', flag:'Yes'},
+    rules:   {ask:'Does this contradict something the story already taught me?', flag:'Yes'},
+    suitcase:{ask:'If we cut this, would anything important break—plot, character, or mood?', flag:'No'}
+  };
+  function keyHtml(n){
+    var k=KEY[n.id]; if(!k) return '';
+    if(k.ask) return '<span class="key"><b>Ask:</b> '+esc(k.ask)+' <b>'+esc(k.flag)+' means it needs a look.</b></span>';
+    return '<span class="key"><b>'+k.good+' means it’s working.</b> '+esc(k.d)+'</span>';
+  }
   var DRAFTS=[
     {title:'Presto', notice:null, feed:null},
     {title:'Daiko', notice:NOTICE1, feed:FEED1},
@@ -783,7 +808,7 @@ details.about p{ margin:8px 0 12px; }
     setPhase('Call '+S.call+' of '+MAXCALLS+': notice', S.call===1?'Tap the lines that caught you. Then play a card on them.':'What else is this draft doing? Tap those lines, then play a card.');
     pickable(true); syncSel();
     shuffle(NOTICE).forEach(function(n){
-      var b=makeCard('<span class="chead">'+icon(n.id)+'<span><span class="deck">'+deckLabel(n)+'</span><span class="nm">'+esc(n.name)+'</span></span></span><span class="ts">'+esc(n.test)+'</span><span class="stamp"></span><span class="why"></span>',
+      var b=makeCard('<span class="chead">'+icon(n.id)+'<span><span class="deck">'+deckLabel(n)+'</span><span class="nm">'+esc(n.name)+'</span></span></span><span class="ts">'+esc(n.test)+'</span>'+keyHtml(n)+'<span class="stamp"></span><span class="why"></span>',
         n.tag?'tag':'', function(btn){ playNotice(n,btn); });
       b.dataset.id=n.id;
       if(S.asked[n.id]){ claim(b,n); b.setAttribute('aria-disabled','true'); b.classList.add('done'); b.querySelector('.stamp').textContent='Upheld. Asked already.'; note(b, clean(n.rule)); }
