@@ -180,3 +180,32 @@ APPLIED (v0.5):
 - Phone layout: on tall screens the scene sits lower so the speech card clears the face,
   the glove rests higher, and the Call-the-move panel fades while the player pulls back.
 - Gates: belt 14 ticks pass, preship SHIP. About 45 fps in headless Chromium.
+
+## FOUNDER RULINGS 2026-11-06, 16:02-16:04 ET — v0.6 (play space on a zoomed phone)
+
+FOUNDER: "The text bubbles interfere with play. They should be closeable. And they should
+disappear as soon as you tap the hand to pull back." / "Space is limited so the header
+should disappear" / a phone screenshot ("Look").
+
+READ FROM THE SCREENSHOT: the founder's phone shows the page at about 1.5x, so the real
+play area is about 263 x 480 CSS px, not the 390 x 844 every earlier test used. At that size
+the header took a third of the screen and the hint card, Back/Home and the speech bubble
+stacked over the play. Test size of record for this game is now 263 x 480.
+
+APPLIED (v0.6):
+- One card at the top holds the exchange (crowd, then politician) and the call. It has a
+  44 px close button, and it vanishes the moment the player touches to pull back (back
+  only if the pull is let go without a throw). Reaction bubbles (miss, net, dunk) get the
+  same close button and the same vanish-on-pull.
+- Short screens (under 640 px tall) run the card in two steps: the exchange with a pinned
+  "Call the move" button, then the three choices, then the explanation. The card stays in
+  the top 44% of the screen, so the glove is always visible below it.
+- Header folds away: a corner menu button opens Studio, Cabinet, Back, Home, the title
+  with its v0.6 and LAB chips, Seat, mode and sound. A slim pill keeps balls, dunks and
+  breeze in view. Touching the scene folds the menu. This amends the studio's bottom-rail
+  and always-visible version-chip conventions for this game, by founder ruling; the
+  version is in the menu, the page title and the menu button's spoken label.
+- Hint cut to one line ("Pull the glove back, let go"), at the bottom edge.
+- iOS text inflation switched off (text-size-adjust 100%) so only the reader's own zoom applies.
+- Gates: preship SHIP. Full round at 390 x 844: 6 of 9 calls as scripted, 7 dunks, no
+  errors; no-repeat check still 0 on all five levels.
