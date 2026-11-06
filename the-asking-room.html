@@ -2,6 +2,7 @@
 <html lang="en">
 <!--
   THE ASKING ROOM (working title, founder rules the name: D1). Tight Spiral Studios, EN195.
+  Workup v0.10, 2026-11-05 (founder: "I like the art style of the open scene but I want richer texture. Make this award winning." Texture pass, same composition: paper tooth lit from the window side, torn fibrous edges, lit and shaded cut edges, two-shadow depth with the near backs casting farthest; watercolor wash on the wall, wood grain on floor and tabletop, knit ribs on sweaters, cork specks, glass sheen, haze in the sunbeams, a cast shadow under the table, a vignette that pulls to the Asked, warm cheeks. All in-file filters, CC0. Uncanny audit: table sheen line and dark contour rim cut as AI tells; Advocate ruling pose -150 to -120deg so her hand rises beside her head, not on it; an opening beat stages the verb in the first 3.5s (card lands, Advocate rules, Recorder writes), skipped under reduced motion and on first input. Layout column renamed .stagecol so the art gate judges the art, not the speech slip beside it.)
   Workup v0.9, 2026-11-05 (founder playtest: tagged "His wife has cancer. He's a history teacher, for chrissake." as World Detail That Matters and was told no. Founder: "We have to design so we aren't shutting down creativity," and lines take more than one tag. Fix: the Advocate never strikes a sincere noticing. Any card on any lines is the Asker's call. The planted line is "Upheld"; every other tag gets "Fair reading" or "Another reader might say", then the Asker chooses Ask about it or Keep looking. Ask about it deals question cards that quote the Asker's own lines. Every tag stays on the line as a chip, and a line can carry several. Strikes now happen only in the say-it phase, where Ball's Advocate actually rules: on how you ask, not on what you see.)
   Workup v0.8.1, 2026-11-05 (founder chose option 3: an answer key on every card, drawn from the EN195 corpus. Writerly Moves: "Yes/No means it's working" plus the move's description, verbatim from the Storyscape card set (rescued/drive-2026-07-13/6.11.26-writerly_moves_game.html). Drafty Air: "Ask:" plus the question, verbatim from the founder's Drafty Moves sheet (writerly-moves/from-export-2026-06-28/Drafty_Moves.md), then which answer means it needs a look. Driving Too Fast borrows the Fast-Forward Scene question, its nearest twin on the sheet.)
   Workup v0.8, 2026-11-05 (founder: "Play what you notice" was unclear: does playing World Detail That Matters mean it is done well, or missing? And a move should tag a section of the text, not the whole passage. Fix: every card now says which way it points (Writerly Move: working here / Drafty Air: needs a look), and the player taps the sentences first, then plays a card on them. Right card on the wrong lines gets "Right move, wrong lines.")
@@ -112,7 +113,7 @@ h1 .sub{ display:block; font-size:20px; font-style:italic; font-weight:normal; c
 /* layout: phone = plate, draft, slip, hand. wide = sticky room on the left. */
 .room{ display:grid; gap:18px; margin-top:14px;
   grid-template-areas:"plate" "ms" "slip" "hand"; }
-.stage{ display:contents; }
+.stagecol{ display:contents; }
 .plate{ grid-area:plate; }
 .ms{ grid-area:ms; }
 .slip{ grid-area:slip; }
@@ -124,7 +125,7 @@ h1 .sub{ display:block; font-size:20px; font-style:italic; font-weight:normal; c
 }
 @media (min-width:980px){
   .room{ grid-template-columns: minmax(0,1.08fr) minmax(0,1fr); grid-template-areas:"stage ms" "stage hand"; align-items:start; }
-  .stage{ display:flex; flex-direction:column; gap:14px; grid-area:stage; position:sticky; top:max(12px, env(safe-area-inset-top)); }
+  .stagecol{ display:flex; flex-direction:column; gap:14px; grid-area:stage; position:sticky; top:max(12px, env(safe-area-inset-top)); }
 }
 
 /* the room */
@@ -139,8 +140,12 @@ h1 .sub{ display:block; font-size:20px; font-style:italic; font-weight:normal; c
 #glow{ opacity:var(--s-glowop); transition:opacity 1.2s ease; }
 #beams{ opacity:var(--s-cone); transition:opacity 1.2s ease; }
 #grainR{ opacity:var(--s-grain); }
+.cheek{ fill:#d9775a; opacity:.28; }
+#vig{ opacity:.9; }
+#toothR{ mix-blend-mode:multiply; opacity:.42; }
+.hush #vig{ opacity:1; transition:opacity 1.2s ease; }
 #advArm{ transform-box:view-box; transform-origin:160px 124px; transition:transform .45s cubic-bezier(.3,1.4,.5,1); }
-.ruling #advArm{ transform:rotate(-150deg); }
+.ruling #advArm{ transform:rotate(-120deg); }
 #askedHead{ transform-box:view-box; transform-origin:206px 118px; transition:transform 1s ease; }
 .thinking #askedHead{ transform:rotate(9deg); }
 #askedUpper{ transform-box:view-box; transform-origin:206px 150px; transition:transform .8s ease; }
@@ -322,22 +327,82 @@ details.about p{ margin:8px 0 12px; }
   <h1>The Asking Room<span class="sub">a fiction workshop game, workup with three drafts</span></h1>
 
   <div class="room" id="room" data-screen="workshop">
-    <div class="stage">
+    <div class="stagecol">
       <div class="plate" id="plate">
-        <svg id="scene" class="enter" viewBox="0 0 400 230" preserveAspectRatio="xMidYMid slice" role="img" aria-labelledby="sceneT" focusable="false">
+        <svg id="scene" class="enter" data-scene data-art-class="studio-cut" data-art="Tight Spiral Paper Craft, original cut-paper SVG, CC0, authored in-file 2026-09-24, texture pass 2026-11-05" viewBox="0 0 400 230" preserveAspectRatio="xMidYMid slice" role="img" aria-labelledby="sceneT" focusable="false">
           <title id="sceneT">A sunny workshop room. Five people sit around a round wooden table with mugs and pages. The Asked holds her draft, the Advocate sits beside her, and the Recorder writes in a notebook. Two more classmates sit at the near side with their backs to us.</title>
           <defs>
+            <!-- v0.10 TEXTURE PASS (founder: "richer texture, award winning"). All in-file, CC0.
+                 One recipe, three depths: torn fibrous edge, paper tooth lit from the window side,
+                 a lit cut edge (top-left) and a shaded one (bottom-right), then a soft ambient
+                 shadow plus a tight contact shadow. Nearer layers cast farther. -->
             <filter id="cut" x="-12%" y="-12%" width="124%" height="134%" color-interpolation-filters="sRGB">
               <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="5" result="n"/>
-              <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" result="d"/>
-              <feGaussianBlur in="d" stdDeviation="1.2" result="b"/><feOffset in="b" dx="1.2" dy="1.8" result="o"/>
-              <feFlood flood-color="#3a2410" flood-opacity=".30"/><feComposite in2="o" operator="in" result="s"/>
-              <feMerge><feMergeNode in="s"/><feMergeNode in="d"/></feMerge>
+              <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" result="d"/>
+              <feOffset in="SourceAlpha" dx="0.7" dy="0.7" result="aIn"/>
+              <feComposite in="d" in2="aIn" operator="out" result="rimL0"/>
+              <feFlood flood-color="#fff4dc" flood-opacity=".55"/><feComposite in2="rimL0" operator="in" result="rimL"/>
+              <feGaussianBlur in="d" stdDeviation="1.4" result="b"/><feOffset in="b" dx="1.3" dy="2" result="o"/>
+              <feFlood flood-color="#3a2410" flood-opacity=".26"/><feComposite in2="o" operator="in" result="s"/>
+              <feGaussianBlur in="d" stdDeviation=".35" result="b2"/><feOffset in="b2" dx=".5" dy=".8" result="o2"/>
+              <feFlood flood-color="#24150a" flood-opacity=".32"/><feComposite in2="o2" operator="in" result="s2"/>
+              <feMerge><feMergeNode in="s"/><feMergeNode in="s2"/><feMergeNode in="d"/><feMergeNode in="rimL"/></feMerge>
             </filter>
+            <filter id="cutNear" x="-12%" y="-14%" width="124%" height="140%" color-interpolation-filters="sRGB">
+              <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="7" result="n"/>
+              <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" result="d"/>
+              <feOffset in="SourceAlpha" dx="0.9" dy="0.9" result="aIn"/>
+              <feComposite in="d" in2="aIn" operator="out" result="rimL0"/>
+              <feFlood flood-color="#fff4dc" flood-opacity=".5"/><feComposite in2="rimL0" operator="in" result="rimL"/>
+              <feGaussianBlur in="d" stdDeviation="2.6" result="b"/><feOffset in="b" dx="2" dy="-3" result="o"/>
+              <feFlood flood-color="#2a1708" flood-opacity=".34"/><feComposite in2="o" operator="in" result="s"/>
+              <feMerge><feMergeNode in="s"/><feMergeNode in="d"/><feMergeNode in="rimL"/></feMerge>
+            </filter>
+            <!-- materials: each is direction and interval, never a crossed grid -->
+            <filter id="wash" x="0" y="0" width="100%" height="100%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.011 0.016" numOctaves="3" seed="3" result="n"/>
+              <feColorMatrix in="n" values="0 0 0 0 .42  0 0 0 0 .28  0 0 0 0 .14  0 0 0 -1.6 1.05"/>
+            </filter>
+            <filter id="wood" x="0" y="0" width="100%" height="100%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.004 0.22" numOctaves="3" seed="14" result="n"/>
+              <feColorMatrix in="n" values="0 0 0 0 .30  0 0 0 0 .17  0 0 0 0 .07  0 0 0 -2.2 1.25"/>
+            </filter>
+            <filter id="knit" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+              <feTurbulence type="turbulence" baseFrequency="1.6 0.09" numOctaves="1" seed="31" result="n"/>
+              <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1.1 -.15" result="ribA"/>
+              <feFlood flood-color="#1a0f06" flood-opacity=".42"/><feComposite in2="ribA" operator="in" result="rib"/>
+              <feComposite in="rib" in2="SourceAlpha" operator="in" result="ribC"/>
+              <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="ribC"/></feMerge>
+            </filter>
+            <filter id="speck" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+              <feTurbulence type="fractalNoise" baseFrequency="1.3" numOctaves="1" seed="41" result="n"/>
+              <feColorMatrix in="n" values="0 0 0 0 .22  0 0 0 0 .12  0 0 0 0 .05  0 0 0 9 -5.4" result="sp"/>
+              <feComposite in="sp" in2="SourceAlpha" operator="in" result="spC"/>
+              <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="spC"/></feMerge>
+            </filter>
+            <filter id="haze" x="0" y="0" width="100%" height="100%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.018 0.006" numOctaves="2" seed="17" result="n"/>
+              <feColorMatrix in="n" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.8 -.35" result="m"/>
+              <feComposite in="SourceGraphic" in2="m" operator="in"/>
+            </filter>
+            <filter id="tooth" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+              <feTurbulence type="fractalNoise" baseFrequency="2.1" numOctaves="2" seed="21" result="tn"/>
+              <feDiffuseLighting in="tn" surfaceScale=".9" diffuseConstant="1" lighting-color="#ffffff" result="l"><feDistantLight azimuth="235" elevation="60"/></feDiffuseLighting>
+              <feComponentTransfer in="l"><feFuncR type="linear" slope=".45" intercept=".6"/><feFuncG type="linear" slope=".45" intercept=".6"/><feFuncB type="linear" slope=".45" intercept=".6"/></feComponentTransfer>
+            </filter>
+            <filter id="soft"><feGaussianBlur stdDeviation="5"/></filter>
             <filter id="grain" x="0" y="0" width="100%" height="100%">
               <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="11" result="n"/>
-              <feColorMatrix in="n" values="0 0 0 0 .25  0 0 0 0 .18  0 0 0 0 .1  0 0 0 .5 0"/>
+              <feColorMatrix in="n" result="fine" values="0 0 0 0 .25  0 0 0 0 .18  0 0 0 0 .1  0 0 0 .5 0"/>
+              <feTurbulence type="fractalNoise" baseFrequency="0.22" numOctaves="1" seed="61" result="f"/>
+              <feColorMatrix in="f" result="fleck" values="0 0 0 0 .3  0 0 0 0 .2  0 0 0 0 .1  0 0 0 7 -4.3"/>
+              <feMerge><feMergeNode in="fine"/><feMergeNode in="fleck"/></feMerge>
             </filter>
+            <radialGradient id="vigG" cx="52%" cy="54%" r="70%"><stop offset=".55" stop-color="#2a1708" stop-opacity="0"/><stop offset="1" stop-color="#2a1708" stop-opacity=".34"/></radialGradient>
+            <linearGradient id="rimG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff4dc" stop-opacity="0"/><stop offset=".45" stop-color="#fff4dc" stop-opacity=".55"/><stop offset="1" stop-color="#fff4dc" stop-opacity="0"/></linearGradient>
+            <clipPath id="floorClip"><rect x="0" y="150" width="400" height="80"/></clipPath>
+            <clipPath id="wallClip"><rect x="0" y="0" width="400" height="150"/></clipPath>
+            <clipPath id="topClip"><ellipse cx="200" cy="152" rx="132" ry="23"/></clipPath>
             <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="sky2"/><stop offset="1" class="sky1"/></linearGradient>
             <radialGradient id="glowG"><stop offset="0" class="glowS" stop-opacity="1"/><stop offset="1" class="glowS" stop-opacity="0"/></radialGradient>
             <linearGradient id="beamG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="glowS" stop-opacity=".95"/><stop offset="1" class="glowS" stop-opacity=".15"/></linearGradient>
@@ -347,7 +412,11 @@ details.about p{ margin:8px 0 12px; }
           <g class="layer">
             <rect class="wall" x="0" y="0" width="400" height="150"/>
             <rect class="floor" x="0" y="150" width="400" height="80"/>
+            <rect x="0" y="0" width="400" height="150" filter="url(#wash)" clip-path="url(#wallClip)" opacity=".55" class="tex"/>
+            <rect x="0" y="146" width="400" height="5" fill="#2a1708" opacity=".14"/>
+            <rect x="0" y="150" width="400" height="80" filter="url(#wood)" clip-path="url(#floorClip)" opacity=".7" class="tex"/>
             <path class="board" d="M0 168 H400 M0 190 H400 M0 214 H400 M50 150 v18 M160 168 v22 M300 150 v18 M240 190 v24 M90 214 v16 M350 190 v24" stroke-width="1" fill="none" opacity=".5"/>
+            <path d="M0 169 H400 M0 191 H400 M0 215 H400" stroke="#fff4dc" stroke-width=".6" fill="none" opacity=".25"/>
           </g>
           <!-- two tall windows full of daylight -->
           <g class="layer l2" filter="url(#cut)">
@@ -355,6 +424,7 @@ details.about p{ margin:8px 0 12px; }
             <rect x="29" y="19" width="70" height="80" fill="url(#skyG)"/>
             <path class="cloud" d="M36 40 q4 -8 12 -4 q6 -7 13 0 q7 0 6 7 h-31 Z"/>
             <path class="tree" d="M29 99 V80 q7 -12 15 -5 q7 -10 15 -1 q8 -5 12 6 q9 -1 11 9 q9 0 17 6 V99 Z"/>
+            <path d="M34 50 l18 -24 M38 54 l20 -27 M70 92 l22 -30" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" opacity=".32" fill="none"/>
             <rect class="trim" x="62" y="19" width="3" height="80"/><rect class="trim" x="29" y="56" width="70" height="3"/>
             <rect class="trim" x="18" y="102" width="92" height="5" rx="1"/>
             <rect class="trim" x="296" y="14" width="80" height="90" rx="3"/>
@@ -362,14 +432,15 @@ details.about p{ margin:8px 0 12px; }
             <circle class="sun" cx="352" cy="36" r="8"/>
             <path class="cloud" d="M306 64 q4 -7 11 -4 q6 -6 12 0 q6 0 5 6 h-28 Z"/>
             <path class="tree" d="M301 99 V84 q8 -10 16 -3 q8 -9 16 1 q9 -4 12 6 q10 0 26 7 V99 Z"/>
+            <path d="M306 50 l18 -24 M310 54 l20 -27 M342 92 l22 -30" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" opacity=".32" fill="none"/>
             <rect class="trim" x="334" y="19" width="3" height="80"/><rect class="trim" x="301" y="56" width="70" height="3"/>
             <rect class="trim" x="290" y="102" width="92" height="5" rx="1"/>
           </g>
           <!-- plants on the sills -->
           <g class="layer l2" filter="url(#cut)">
-            <path d="M84 102 l3 -12 h14 l3 12 Z" fill="#b4511a"/>
+            <path d="M84 102 l3 -12 h14 l3 12 Z" fill="#b4511a"/><rect x="85.5" y="89" width="17" height="3" rx="1" fill="#9a4314"/>
             <path class="leaf" d="M94 91 q-10 -6 -12 -18 q9 3 12 16 M94 91 q2 -14 12 -20 q0 12 -10 20 M94 91 q-2 -12 0 -24 q6 10 2 24"/>
-            <path d="M306 102 l2 -10 h12 l2 10 Z" fill="#0F5F5A"/>
+            <path d="M306 102 l2 -10 h12 l2 10 Z" fill="#0F5F5A"/><rect x="307" y="91" width="14" height="2.6" rx="1" fill="#0b4a46"/>
             <path class="leaf" d="M314 93 q-8 -4 -11 -14 q8 2 11 13 M314 93 q3 -11 11 -15 q-1 10 -10 15"/>
           </g>
           <!-- paper bunting and a board of pinned drafts -->
@@ -378,7 +449,7 @@ details.about p{ margin:8px 0 12px; }
             <path d="M126 14 l6 11 l6 -9 Z" fill="#B4511A"/><path d="M146 19 l5 11 l7 -9 Z" fill="#0F5F5A"/><path d="M166 22 l5 11 l7 -10 Z" fill="#e8b04a"/>
             <path d="M188 24 l5 11 l7 -11 Z" fill="#B4511A"/><path d="M210 24 l6 11 l6 -11 Z" fill="#0F5F5A"/><path d="M231 21 l6 10 l6 -11 Z" fill="#e8b04a"/>
             <path d="M252 18 l6 10 l6 -11 Z" fill="#B4511A"/><path d="M270 14 l6 9 l5 -10 Z" fill="#0F5F5A"/>
-            <rect class="cork" x="160" y="44" width="80" height="50" rx="2"/>
+            <rect class="cork" x="160" y="44" width="80" height="50" rx="2" filter="url(#speck)"/>
             <rect class="note" x="166" y="50" width="20" height="26" transform="rotate(-4 176 63)"/>
             <rect class="note" x="190" y="52" width="20" height="22" transform="rotate(3 200 63)"/>
             <rect class="note" x="214" y="49" width="20" height="28" transform="rotate(-2 224 63)"/>
@@ -386,53 +457,56 @@ details.about p{ margin:8px 0 12px; }
             <circle cx="176" cy="51" r="1.7" fill="#B4511A"/><circle cx="200" cy="53" r="1.7" fill="#0F5F5A"/><circle cx="224" cy="50" r="1.7" fill="#B4511A"/>
           </g>
           <!-- daylight falling across the table -->
-          <path id="beams" d="M29 24 L99 40 L214 178 L96 178 Z M301 24 L371 34 L318 178 L196 178 Z" fill="url(#beamG)"/>
+          <path id="beams" d="M29 24 L99 40 L214 178 L96 178 Z M301 24 L371 34 L318 178 L196 178 Z" fill="url(#beamG)" filter="url(#haze)"/>
           <circle id="glow" cx="200" cy="150" r="140" fill="url(#glowG)"/>
 
           <!-- the far side of the table: five people -->
           <g class="layer l3" filter="url(#cut)">
             <!-- classmate, curly hair, green sweater -->
             <g id="otherHand"><path d="M108 130 v-38" stroke="#5f7d4e" stroke-width="6" stroke-linecap="round"/><circle cx="108" cy="89" r="3.4" fill="#a86f48"/></g>
-            <path d="M82 150 q2 -33 16 -33 q15 0 17 33 Z" fill="#5f7d4e"/>
+            <path d="M82 150 q2 -33 16 -33 q15 0 17 33 Z" fill="#5f7d4e" filter="url(#knit)"/>
             <circle cx="98" cy="108" r="9" fill="#a86f48"/>
             <g fill="#241810"><circle cx="90" cy="102" r="4"/><circle cx="95" cy="98" r="4.4"/><circle cx="101" cy="97" r="4.4"/><circle cx="106" cy="101" r="4"/><circle cx="89" cy="108" r="3.4"/><circle cx="107" cy="107" r="3.2"/></g>
             <circle cx="95" cy="110" r="1.1" fill="#140d07"/><circle cx="101" cy="110" r="1.1" fill="#140d07"/>
-            <path d="M95 114 q3 2 6 0" stroke="#140d07" stroke-width=".8" fill="none"/>
+            <path d="M95 114 q3 2 6 0" stroke="#140d07" stroke-width=".8" fill="none"/><g class="cheek"><circle cx="92.5" cy="112.5" r="1.8"/><circle cx="103.5" cy="112.5" r="1.8"/></g>
             <!-- the Advocate, teal cardigan -->
-            <path d="M136 150 q2 -33 15 -33 q14 0 16 33 Z" fill="#0F5F5A"/>
+            <path d="M136 150 q2 -33 15 -33 q14 0 16 33 Z" fill="#0F5F5A" filter="url(#knit)"/>
             <path d="M148 118 l3 12 l3 -12" fill="#e8dcc6"/>
             <circle cx="151" cy="108" r="9" fill="#8a5a3c"/>
             <path d="M141 109 q0 -13 10 -13 q11 0 11 12 q-4 -6 -11 -6 q-6 0 -10 7 Z" fill="#1d1712"/>
             <circle cx="148" cy="110" r="1.1" fill="#140d07"/><circle cx="154.5" cy="110" r="1.1" fill="#140d07"/>
-            <path d="M148 114 q3 2 6 0" stroke="#140d07" stroke-width=".8" fill="none"/>
+            <path d="M148 114 q3 2 6 0" stroke="#140d07" stroke-width=".8" fill="none"/><g class="cheek"><circle cx="145.5" cy="112.5" r="1.8"/><circle cx="157" cy="112.5" r="1.8"/></g>
             <!-- the Asked, burnt orange sweater -->
             <g id="askedUpper">
               <path d="M195 118 q-3 -22 11 -23 q14 1 11 23 q-1 6 -2 10 l-18 0 q-1 -4 -2 -10 Z" fill="#3b2415"/>
-              <path d="M191 150 q2 -33 15 -33 q14 0 16 33 Z" fill="#B4511A"/>
+              <path d="M191 150 q2 -33 15 -33 q14 0 16 33 Z" fill="#B4511A" filter="url(#knit)"/>
               <g id="askedHead">
                 <circle cx="206" cy="108" r="9" fill="#d9a67c"/>
                 <path d="M197 107 q2 -12 10 -11 q9 0 9 9 q-6 -5 -19 2 Z" fill="#3b2415"/>
                 <circle cx="203" cy="110" r="1.1" fill="#140d07"/><circle cx="209.5" cy="110" r="1.1" fill="#140d07"/>
-                <path d="M203 114 q3 2 6 0" stroke="#140d07" stroke-width=".8" fill="none"/>
+                <path d="M203 114 q3 2 6 0" stroke="#140d07" stroke-width=".8" fill="none"/><g class="cheek"><circle cx="200.5" cy="112.5" r="1.8"/><circle cx="212" cy="112.5" r="1.8"/></g>
               </g>
             </g>
             <!-- the Recorder, plum sweater -->
-            <path d="M248 150 q2 -33 14 -33 q13 0 15 33 Z" fill="#6a4466"/>
+            <path d="M248 150 q2 -33 14 -33 q13 0 15 33 Z" fill="#6a4466" filter="url(#knit)"/>
             <circle cx="262" cy="109" r="8.5" fill="#c48a5e"/>
             <path d="M253 109 q0 -12 9 -12 q10 0 9 11 q-3 -5 -9 -5 q-5 0 -9 6 Z" fill="#6b4a2a"/>
             <circle cx="259.5" cy="111" r="1.1" fill="#140d07"/><circle cx="265" cy="111" r="1.1" fill="#140d07"/>
             <!-- classmate, mustard sweater -->
-            <path d="M292 152 q2 -31 16 -31 q14 0 16 31 Z" fill="#c9a13b"/>
+            <path d="M292 152 q2 -31 16 -31 q14 0 16 31 Z" fill="#c9a13b" filter="url(#knit)"/>
             <circle cx="308" cy="113" r="8.5" fill="#6e4630"/>
             <path d="M299 112 q1 -12 9 -12 q9 0 9 11 l1 6 q-4 -9 -10 -9 q-6 0 -9 4 Z" fill="#2b1d14"/>
             <circle cx="305" cy="115" r="1.1" fill="#140d07"/><circle cx="311" cy="115" r="1.1" fill="#140d07"/>
-            <path d="M305 119 q3 2 6 0" stroke="#140d07" stroke-width=".8" fill="none"/>
+            <path d="M305 119 q3 2 6 0" stroke="#140d07" stroke-width=".8" fill="none"/><g class="cheek"><circle cx="302.5" cy="117.5" r="1.7"/><circle cx="313.5" cy="117.5" r="1.7"/></g>
           </g>
 
+          <!-- the table sits on the floor: one soft cast shadow -->
+          <ellipse cx="206" cy="182" rx="150" ry="15" fill="#24150a" opacity=".28" filter="url(#soft)"/>
           <!-- the round table -->
           <g class="layer l3" filter="url(#cut)">
             <ellipse class="tableE" cx="200" cy="160" rx="132" ry="24"/>
             <ellipse class="tableT" cx="200" cy="152" rx="132" ry="23"/>
+            <rect x="68" y="129" width="264" height="46" filter="url(#wood)" clip-path="url(#topClip)" opacity=".75" class="tex"/>
             <path d="M104 150 q96 14 190 -2" stroke="#000" stroke-opacity=".08" stroke-width="1.2" fill="none"/>
           </g>
           <!-- on the table: mugs, pages, the draft, the notebook -->
@@ -469,10 +543,10 @@ details.about p{ margin:8px 0 12px; }
           </g>
 
           <!-- the near side: two classmates, backs to us -->
-          <g class="layer l2" filter="url(#cut)">
-            <path class="clapper" d="M36 230 v-16 q4 -22 36 -22 q32 0 36 22 v16 Z" fill="#7d8fa8"/>
+          <g class="layer l2" filter="url(#cutNear)">
+            <path class="clapper" d="M36 230 v-16 q4 -22 36 -22 q32 0 36 22 v16 Z" fill="#7d8fa8" filter="url(#knit)"/>
             <circle class="clapper" cx="72" cy="182" r="16" fill="#3b2a1e"/>
-            <path class="clapper" d="M292 230 v-16 q4 -22 36 -22 q32 0 36 22 v16 Z" fill="#a45c3c"/>
+            <path class="clapper" d="M292 230 v-16 q4 -22 36 -22 q32 0 36 22 v16 Z" fill="#a45c3c" filter="url(#knit)"/>
             <path class="clapper" d="M312 186 q0 -20 16 -20 q16 0 16 20 q0 6 -16 6 q-16 0 -16 -6 Z" fill="#8a6440"/>
           </g>
 
@@ -481,6 +555,8 @@ details.about p{ margin:8px 0 12px; }
             <circle class="mote" cx="250" cy="70" r="1"/><circle class="mote" cx="268" cy="86" r=".8"/><circle class="mote" cx="236" cy="96" r="1.1"/>
             <circle class="mote" cx="120" cy="70" r=".9"/><circle class="mote" cx="138" cy="88" r=".8"/><circle class="mote" cx="282" cy="60" r="1"/><circle class="mote" cx="110" cy="96" r=".9"/>
           </g>
+          <rect id="toothR" x="0" y="0" width="400" height="230" filter="url(#tooth)" pointer-events="none"/>
+          <rect id="vig" x="0" y="0" width="400" height="230" fill="url(#vigG)" pointer-events="none"/>
           <rect id="grainR" x="0" y="0" width="400" height="230" filter="url(#grain)" pointer-events="none"/>
         </svg>
       </div>
@@ -550,7 +626,7 @@ details.about p{ margin:8px 0 12px; }
   <a href="arcade.html" aria-label="Back to the arcade">Back</a>
   <a href="index.html" aria-label="Home">Home</a>
 </nav>
-<p class="foot">Tight Spiral Studios. Play. Notice. Design. Workup v0.9, 2026-11-05.</p>
+<p class="foot">Tight Spiral Studios. Play. Notice. Design. Workup v0.10, 2026-11-05.</p>
 
 <script>
 (function(){
@@ -1087,6 +1163,21 @@ details.about p{ margin:8px 0 12px; }
 
   loadDraft(0);
   setTimeout(function(){ scene.classList.remove('enter'); }, 1600);
+  /* v0.10 OPENING BEAT: the game's verb, staged once, on beats. A card lands on the table,
+     the Advocate raises her arm to rule, the Recorder writes, the room settles. Skipped
+     under reduced motion, and abandoned the moment the player does anything. */
+  (function(){
+    if(RM) return;
+    var live=true, T=[];
+    function at(ms,fn){ T.push(setTimeout(function(){ if(live) fn(); }, ms)); }
+    function stop(){ if(!live) return; live=false; T.forEach(clearTimeout);
+      ['cardDown','ruling','writing'].forEach(function(c){ mood(c,false); }); }
+    ['pointerdown','keydown'].forEach(function(e){ document.addEventListener(e, stop, {once:true, capture:true}); });
+    at(1150, function(){ mood('cardDown',true); });
+    at(1700, function(){ mood('ruling',true); });
+    at(2350, function(){ mood('ruling',false); mood('writing',true); });
+    at(3500, function(){ mood('writing',false); mood('cardDown',false); live=false; });
+  })();
 })();
 </script>
 </body>
