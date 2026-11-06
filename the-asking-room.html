@@ -2,6 +2,7 @@
 <html lang="en">
 <!--
   THE ASKING ROOM (working title, founder rules the name: D1). Tight Spiral Studios, EN195.
+  Workup v0.10.2, 2026-11-05 (Studio Eyes IMAGE_FLOOR: whole wide scene on a portrait phone was 26% of the first screen. Portrait phones now get a tall frame of the same room, 0 -140 400 470: ceiling trim, a clock, two paper lamps with light pools, a striped rug, the near classmates' full shoulders. Landscape and desktop keep 0 0 400 230. Never cropped.)
   Workup v0.10.1, 2026-11-05 (founder: the scene was cut off on a phone in both orientations. Phone CSS forced the scene to a fixed height with preserveAspectRatio slice, which crops. Now meet + natural height, capped at 86svh, so the whole room shows.)
   Workup v0.10, 2026-11-05 (founder: "I like the art style of the open scene but I want richer texture. Make this award winning." Texture pass, same composition: paper tooth lit from the window side, torn fibrous edges, lit and shaded cut edges, two-shadow depth with the near backs casting farthest; watercolor wash on the wall, wood grain on floor and tabletop, knit ribs on sweaters, cork specks, glass sheen, haze in the sunbeams, a cast shadow under the table, a vignette that pulls to the Asked, warm cheeks. All in-file filters, CC0. Uncanny audit: table sheen line and dark contour rim cut as AI tells; Advocate ruling pose -150 to -120deg so her hand rises beside her head, not on it; an opening beat stages the verb in the first 3.5s (card lands, Advocate rules, Recorder writes), skipped under reduced motion and on first input. Layout column renamed .stagecol so the art gate judges the art, not the speech slip beside it.)
   Workup v0.9, 2026-11-05 (founder playtest: tagged "His wife has cancer. He's a history teacher, for chrissake." as World Detail That Matters and was told no. Founder: "We have to design so we aren't shutting down creativity," and lines take more than one tag. Fix: the Advocate never strikes a sincere noticing. Any card on any lines is the Asker's call. The planted line is "Upheld"; every other tag gets "Fair reading" or "Another reader might say", then the Asker chooses Ask about it or Keep looking. Ask about it deals question cards that quote the Asker's own lines. Every tag stays on the line as a chip, and a line can carry several. Strikes now happen only in the say-it phase, where Ball's Advocate actually rules: on how you ask, not on what you see.)
@@ -146,6 +147,8 @@ h1 .sub{ display:block; font-size:20px; font-style:italic; font-weight:normal; c
 #beams{ opacity:var(--s-cone); transition:opacity 1.2s ease; }
 #grainR{ opacity:var(--s-grain); }
 .cheek{ fill:#d9775a; opacity:.28; }
+.chair{ fill:#7a5332; }
+:root[data-theme="dark"] .chair, .dark .chair{ fill:#5a3b22; }
 #vig{ opacity:.9; }
 #toothR{ mix-blend-mode:multiply; opacity:.42; }
 .hush #vig{ opacity:1; transition:opacity 1.2s ease; }
@@ -403,10 +406,11 @@ details.about p{ margin:8px 0 12px; }
               <feColorMatrix in="f" result="fleck" values="0 0 0 0 .3  0 0 0 0 .2  0 0 0 0 .1  0 0 0 7 -4.3"/>
               <feMerge><feMergeNode in="fine"/><feMergeNode in="fleck"/></feMerge>
             </filter>
+            <radialGradient id="lampG" cx="50%" cy="0%" r="100%"><stop offset="0" stop-color="#ffe2a0" stop-opacity=".55"/><stop offset="1" stop-color="#ffe2a0" stop-opacity="0"/></radialGradient>
             <radialGradient id="vigG" cx="52%" cy="54%" r="70%"><stop offset=".55" stop-color="#2a1708" stop-opacity="0"/><stop offset="1" stop-color="#2a1708" stop-opacity=".34"/></radialGradient>
             <linearGradient id="rimG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff4dc" stop-opacity="0"/><stop offset=".45" stop-color="#fff4dc" stop-opacity=".55"/><stop offset="1" stop-color="#fff4dc" stop-opacity="0"/></linearGradient>
-            <clipPath id="floorClip"><rect x="0" y="150" width="400" height="80"/></clipPath>
-            <clipPath id="wallClip"><rect x="0" y="0" width="400" height="150"/></clipPath>
+            <clipPath id="floorClip"><rect x="0" y="150" width="400" height="180"/></clipPath>
+            <clipPath id="wallClip"><rect x="0" y="-140" width="400" height="290"/></clipPath>
             <clipPath id="topClip"><ellipse cx="200" cy="152" rx="132" ry="23"/></clipPath>
             <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="sky2"/><stop offset="1" class="sky1"/></linearGradient>
             <radialGradient id="glowG"><stop offset="0" class="glowS" stop-opacity="1"/><stop offset="1" class="glowS" stop-opacity="0"/></radialGradient>
@@ -415,12 +419,24 @@ details.about p{ margin:8px 0 12px; }
 
           <!-- the wall and floor -->
           <g class="layer">
-            <rect class="wall" x="0" y="0" width="400" height="150"/>
-            <rect class="floor" x="0" y="150" width="400" height="80"/>
-            <rect x="0" y="0" width="400" height="150" filter="url(#wash)" clip-path="url(#wallClip)" opacity=".55" class="tex"/>
+            <!-- v0.10.2 TALL FRAME: portrait phones see the room from y -140 to 330. The wide
+                 frame (0 0 400 230) is unchanged; everything below lives outside it. -->
+            <rect class="wall" x="0" y="-140" width="400" height="290"/>
+            <rect class="floor" x="0" y="150" width="400" height="180"/>
+            <rect x="0" y="-140" width="400" height="290" filter="url(#wash)" clip-path="url(#wallClip)" opacity=".55" class="tex"/>
+            <rect x="0" y="-140" width="400" height="22" fill="#2a1708" opacity=".10"/>
+            <rect class="trim" x="0" y="-120" width="400" height="5"/>
             <rect x="0" y="146" width="400" height="5" fill="#2a1708" opacity=".14"/>
             <rect x="0" y="150" width="400" height="80" filter="url(#wood)" clip-path="url(#floorClip)" opacity=".7" class="tex"/>
-            <path class="board" d="M0 168 H400 M0 190 H400 M0 214 H400 M50 150 v18 M160 168 v22 M300 150 v18 M240 190 v24 M90 214 v16 M350 190 v24" stroke-width="1" fill="none" opacity=".5"/>
+            <path class="board" d="M0 168 H400 M0 190 H400 M0 214 H400 M0 242 H400 M0 272 H400 M0 304 H400 M50 150 v18 M160 168 v22 M300 150 v18 M240 190 v24 M90 214 v16 M350 190 v24 M200 214 v28 M120 242 v30 M310 242 v30 M60 272 v32 M250 272 v32 M150 304 v26 M360 304 v26" stroke-width="1" fill="none" opacity=".5"/>
+            <!-- a striped rug under the table: direction and interval, no grid -->
+            <g opacity=".62">
+              <ellipse cx="205" cy="232" rx="196" ry="64" fill="#7a3a24"/>
+              <ellipse cx="205" cy="232" rx="182" ry="56" fill="none" stroke="#c9a13b" stroke-width="3"/>
+              <ellipse cx="205" cy="232" rx="170" ry="50" fill="#0F5F5A"/>
+              <ellipse cx="205" cy="232" rx="156" ry="43" fill="none" stroke="#e8d5ad" stroke-width="2" stroke-dasharray="6 5"/>
+              <ellipse cx="205" cy="232" rx="142" ry="37" fill="#9a4a2a"/>
+            </g>
             <path d="M0 169 H400 M0 191 H400 M0 215 H400" stroke="#fff4dc" stroke-width=".6" fill="none" opacity=".25"/>
           </g>
           <!-- two tall windows full of daylight -->
@@ -448,6 +464,16 @@ details.about p{ margin:8px 0 12px; }
             <path d="M306 102 l2 -10 h12 l2 10 Z" fill="#0F5F5A"/><rect x="307" y="91" width="14" height="2.6" rx="1" fill="#0b4a46"/>
             <path class="leaf" d="M314 93 q-8 -4 -11 -14 q8 2 11 13 M314 93 q3 -11 11 -15 q-1 10 -10 15"/>
           </g>
+          <!-- above the bunting (tall frame): a clock and two paper lamps over the table -->
+          <g class="layer l2" filter="url(#cut)">
+            <circle cx="200" cy="-74" r="17" class="trim"/><circle cx="200" cy="-74" r="14" fill="#fbf3e2"/>
+            <path d="M200 -86 v2 M200 -64 v2 M188 -74 h2 M210 -74 h2" stroke="#1f1b12" stroke-width="1.2"/>
+            <path d="M200 -74 v-9 M200 -74 l6 3" stroke="#1f1b12" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M128 -115 V-44 M272 -115 V-44" stroke="#2a1d12" stroke-width="1.1"/>
+            <path d="M116 -26 l6 -20 h12 l6 20 Z M260 -26 l6 -20 h12 l6 20 Z" fill="#c9a13b"/>
+            <path d="M118 -27 h20 M262 -27 h20" stroke="#a37f24" stroke-width="2"/>
+          </g>
+          <path d="M116 -26 L80 60 L176 60 L140 -26 Z M260 -26 L224 60 L320 60 L284 -26 Z" fill="url(#lampG)" pointer-events="none"/>
           <!-- paper bunting and a board of pinned drafts -->
           <g class="layer l2" filter="url(#cut)">
             <path d="M118 12 q82 22 164 0" class="trimS" stroke-width="1" fill="none"/>
@@ -549,10 +575,16 @@ details.about p{ margin:8px 0 12px; }
 
           <!-- the near side: two classmates, backs to us -->
           <g class="layer l2" filter="url(#cutNear)">
-            <path class="clapper" d="M36 230 v-16 q4 -22 36 -22 q32 0 36 22 v16 Z" fill="#7d8fa8" filter="url(#knit)"/>
+            <path class="clapper" d="M34 262 v-40 q2 -10 6 -14 q4 -16 32 -16 q28 0 32 16 q4 4 6 14 v40 Z" fill="#7d8fa8" filter="url(#knit)"/>
             <circle class="clapper" cx="72" cy="182" r="16" fill="#3b2a1e"/>
-            <path class="clapper" d="M292 230 v-16 q4 -22 36 -22 q32 0 36 22 v16 Z" fill="#a45c3c" filter="url(#knit)"/>
+            <path class="clapper" d="M290 262 v-40 q2 -10 6 -14 q4 -16 32 -16 q28 0 32 16 q4 4 6 14 v40 Z" fill="#a45c3c" filter="url(#knit)"/>
             <path class="clapper" d="M312 186 q0 -20 16 -20 q16 0 16 20 q0 6 -16 6 q-16 0 -16 -6 Z" fill="#8a6440"/>
+            <g class="chair">
+              <path d="M38 236 h68 v9 h-68 Z M294 236 h68 v9 h-68 Z"/>
+              <path d="M42 230 h7 v98 h-7 Z M95 230 h7 v98 h-7 Z M298 230 h7 v98 h-7 Z M351 230 h7 v98 h-7 Z"/>
+              <path d="M38 262 h68 v7 h-68 Z M294 262 h68 v7 h-68 Z"/>
+              <path d="M49 296 h46 v4 h-46 Z M305 296 h46 v4 h-46 Z" opacity=".8"/>
+            </g>
           </g>
 
           <!-- dust turning in the sunlight during the silence -->
@@ -631,7 +663,7 @@ details.about p{ margin:8px 0 12px; }
   <a href="arcade.html" aria-label="Back to the arcade">Back</a>
   <a href="index.html" aria-label="Home">Home</a>
 </nav>
-<p class="foot">Tight Spiral Studios. Play. Notice. Design. Workup v0.10.1, 2026-11-05.</p>
+<p class="foot">Tight Spiral Studios. Play. Notice. Design. Workup v0.10.2, 2026-11-05.</p>
 
 <script>
 (function(){
@@ -1168,6 +1200,17 @@ details.about p{ margin:8px 0 12px; }
 
   loadDraft(0);
   setTimeout(function(){ scene.classList.remove('enter'); }, 1600);
+  /* v0.10.2 FRAMING: portrait phones get the tall frame so the whole room fills the
+     first screen; everything else keeps the wide frame. Nothing is ever cropped. */
+  (function(){
+    var mq; try{ mq=window.matchMedia('(orientation: portrait) and (max-width: 979px)'); }catch(e){ return; }
+    function frame(){
+      var tall=mq.matches, y=tall?-140:0, h=tall?470:230;
+      scene.setAttribute('viewBox','0 '+y+' 400 '+h);
+      ['toothR','vig','grainR'].forEach(function(id){ var r=$(id); if(r){ r.setAttribute('y',y); r.setAttribute('height',h); } });
+    }
+    frame(); if(mq.addEventListener) mq.addEventListener('change',frame); else if(mq.addListener) mq.addListener(frame);
+  })();
   /* v0.10 OPENING BEAT: the game's verb, staged once, on beats. A card lands on the table,
      the Advocate raises her arm to rule, the Recorder writes, the room settles. Skipped
      under reduced motion, and abandoned the moment the player does anything. */
