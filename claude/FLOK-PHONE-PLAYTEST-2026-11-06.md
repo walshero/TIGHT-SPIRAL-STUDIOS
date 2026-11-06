@@ -33,3 +33,6 @@ Source: founder's spoken notes while playing v35 at the playtest URL. Founder wo
 - Feed photos look like stock ("a National Geographic cover, not something I expect to see 11:07 PM"; e.g. rosa.out.west mountains). Needs phone-real photos. Blocked: the session sandbox cannot reach upload.wikimedia.org / commons.wikimedia.org. Founder can allow them at claude.ai > Settings > Capabilities.
 - No way to go back to a previous screen. Asked; founder did not answer.
 - Pre-existing Studio Eyes HALT (on v35 too): LAB chip leaves the top bar by 42px at 200% zoom.
+
+## v37, the opening (same day, founder screenshot of v36: "needs cohesion and energy as well as clarity", Horvath leads; founder chose option 1)
+One story, one column, one clock. Photo brightened, scrims only behind text; caption on the photo with no box; small avatar, full name; a live heart count and one "2 people viewed your story" notification; panel left-aligned at two sizes ("She opened flok to post one photo." / "Your job: keep her here past midnight."); the meter is the clock (10:52 PM ticking toward the midnight tick; the "on flok" timer is gone); button "Clock in". tsp-routes.json updated to the new button text.
