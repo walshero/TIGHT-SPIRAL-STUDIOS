@@ -122,3 +122,32 @@ Sources: Roozenbeek, J., van der Linden, S., Goldberg, B., Rathje, S., & Lewando
 (2022). Psychological inoculation improves resilience against misinformation on social
 media. Science Advances, 8(34), eabo6254. Twain, M. (1897). Following the Equator,
 Pudd'nhead Wilson's New Calendar (epigraph list, University of Virginia Mark Twain site).
+
+---
+
+## FOUNDER RULING 2026-11-06, 13:18 ET — v0.4
+
+FOUNDER: "Dunk O Rama mechanics are much better. Increase the curriculum and cut the
+repeats. Make the dialogue richer. We are halfway there"
+
+APPLIED (v0.4):
+- Curriculum: 12 moves to 20, four per level, and a fifth level. D1 resolved by the
+  founder's "increase": the Pundit (Dale Bluster) carries scapegoating and incoherence,
+  the two techniques from Roozenbeek et al. (2022) that v0.3 lacked, plus false cause and
+  loaded question. Added to the first four levels: circular reasoning (Filibusterer),
+  moving the goalposts (Spin Doctor), false equivalence (Mayor), anecdote as proof
+  (Lobbyist). Each has what it does, spot it, and the fair version.
+- Richer dialogue: every heckle is now an exchange. The crowd asks a plain question;
+  the politician answers with the cheat. A straw man cannot be spotted without the
+  original claim, so the question is part of the lesson, not decoration. The bubble
+  labels both speakers.
+- Repeats cut: 60 exchanges (3 per move) and 65 reactions (5 miss, 3 net, 5 dunk per
+  character), drawn from shuffle bags reset each round. A round has 10 heckles and each
+  level holds 12 exchanges, so nothing repeats inside a round. Measured: 12 distinct
+  exchanges in 12 heckles on all five levels.
+- Pundit's Twain maxim, verified on the UVA epigraph list: "Truth is stranger than
+  fiction, but it is because Fiction is obliged to stick to possibilities; Truth isn't."
+- Gates: belt 14 ticks pass, preship SHIP.
+
+Still owed: D2 (voice the exchanges), D3 (founder edit pass, now 60 exchanges and 20
+field-guide entries), D4 (Heckle Bench), D5 (placement).

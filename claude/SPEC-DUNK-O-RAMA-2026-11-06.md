@@ -43,3 +43,7 @@ v0.2, same session:
 Founder: "Each level of dunk o Rama should teach a set of critical thinking skills by demonstrating political rhetorical moves, especially the cheats like straw man ad hominem etc. This should be funny but very sharp. Mark Twain is on set writing these characters. Convene political science messaging alephs as needed."
 
 Full record, with seats and sources: `convening/DUNK-O-RAMA-CONVENING.md`. In short: three moves per level (12 in all); every throw opens with a heckle that commits one; from the second throw on, "Call the move" offers three choices. A right call locks the breath steady and makes the target 22% bigger for that throw. A wrong call shows the answer and how to spot it. The round card is a field guide (what it does, spot it, fair version) and closes with a Twain maxim verified in Following the Equator (1897). Test run: 9 calls, 6 right as scripted; no page errors.
+
+## v0.4 (2026-11-06): bigger curriculum, exchanges, no repeats
+
+Founder: "Increase the curriculum and cut the repeats. Make the dialogue richer." Five levels, 20 cheats, 60 crowd-then-politician exchanges, 65 reactions, shuffle bags reset each round. Details in the convening file.
