@@ -18,50 +18,44 @@
   The origin deck and its two taxonomies (writerly-moves/README.md) are untouched; that review is still owed.
 -->
 <style>
-  :root {
-    color-scheme: dark;
-    --bg:#0f0d09; --panel:#1a1610; --ink:#f6f1e6; --muted:#ddd3bf; --line:#5a4f3e;
-    --accent:#e0a94b; --onaccent:#1a1300; --focus:#ffd479; --field:#15120c;
-    --paper:#221d16; --pink:#f4ecdc; --tryb:#2c261d; --cardline:#4a4033;
-  }
-  html[data-light="dusk"]  { color-scheme: dark; --bg:#221d16; --panel:#2b251c; --field:#1f1a14; --line:#6a5e4b; --paper:#2c261e; --tryb:#363026; }
-  html[data-light="slate"] { color-scheme: dark; --bg:#353028; --panel:#3e382f; --field:#2e2922; --line:#7b6f5c; --paper:#3a342b; --tryb:#443d33; --muted:#ece4d4; --ink:#fbf8f1; --pink:#fbf8f1; }
-  html[data-light="day"] {
-    color-scheme: light;
+  :root { color-scheme: light; --is-dark:0;
     --bg:#e9e2d2; --panel:#f6f1e4; --ink:#1b1712; --muted:#2f281b; --line:#b4a684;
     --accent:#7f4307; --onaccent:#fffdf6; --focus:#7a4300; --field:#fbf7ec;
-    --paper:#f4ecdc; --pink:#1b1712; --tryb:var(--gtint); --cardline:#cfc2a4;
-  }
+    --paper:#f4ecdc; --pink:#1b1712; --tryb:var(--gtint); --cardline:#cfc2a4; }
   @media (prefers-color-scheme: dark) {
-    :root {
-      color-scheme: dark;
-      --bg:#0f0d09; --panel:#1a1610; --ink:#f6f1e6; --muted:#ddd3bf; --line:#5a4f3e;
-      --accent:#e0a94b; --onaccent:#1a1300; --focus:#ffd479; --field:#15120c;
-      --paper:#221d16; --pink:#f4ecdc; --tryb:#2c261d; --cardline:#4a4033;
-    }
-    html[data-light="day"] {
-      color-scheme: dark;
-      --bg:#0f0d09; --panel:#1a1610; --ink:#f6f1e6; --muted:#ddd3bf; --line:#5a4f3e;
-      --accent:#e0a94b; --onaccent:#1a1300; --focus:#ffd479; --field:#15120c;
-      --paper:#221d16; --pink:#f4ecdc; --tryb:#2c261d; --cardline:#4a4033;
-    }
+    :root { color-scheme: dark; --is-dark:1;
+    --bg:#0f0d09; --panel:#1a1610; --ink:#f6f1e6; --muted:#ddd3bf; --line:#5a4f3e;
+    --accent:#e0a94b; --onaccent:#1a1300; --focus:#ffd479; --field:#15120c;
+    --paper:#221d16; --pink:#f4ecdc; --tryb:#2c261d; --cardline:#4a4033; }
   }
+  html[data-light="day"]   { color-scheme: light; --is-dark:0;
+    --bg:#e9e2d2; --panel:#f6f1e4; --ink:#1b1712; --muted:#2f281b; --line:#b4a684;
+    --accent:#7f4307; --onaccent:#fffdf6; --focus:#7a4300; --field:#fbf7ec;
+    --paper:#f4ecdc; --pink:#1b1712; --tryb:var(--gtint); --cardline:#cfc2a4; }
+  html[data-light="night"] { color-scheme: dark; --is-dark:1;
+    --bg:#0f0d09; --panel:#1a1610; --ink:#f6f1e6; --muted:#ddd3bf; --line:#5a4f3e;
+    --accent:#e0a94b; --onaccent:#1a1300; --focus:#ffd479; --field:#15120c;
+    --paper:#221d16; --pink:#f4ecdc; --tryb:#2c261d; --cardline:#4a4033; }
+  html[data-light="dusk"]  { color-scheme: dark; --is-dark:1;
+    --bg:#2b251c; --panel:#352e24; --ink:#fbf8f1; --muted:#ece4d4; --line:#7b6f5c;
+    --accent:#e8b65c; --onaccent:#1a1300; --focus:#ffd479; --field:#241f18;
+    --paper:#3a342b; --pink:#fbf8f1; --tryb:#443d33; --cardline:#5e5444; }
+  html[data-light="sharp"] { color-scheme: dark; --is-dark:1;
+    --bg:#000000; --panel:#000000; --ink:#ffffff; --muted:#ffffff; --line:#ffffff;
+    --accent:#ffd34d; --onaccent:#000000; --focus:#ffd34d; --field:#000000;
+    --paper:#000000; --pink:#ffffff; --tryb:#000000; --cardline:#ffffff; }
   /* group colors: --gd = header ground (always dark), --gl = label ink on the card */
-  .g-core  { --gd:#23305a; --gt:#e4e8f4; --glab:#8fa2d6; }
-  .g-work  { --gd:#1f4a3e; --gt:#e2efe7; --glab:#8cc0a8; }
-  .g-draft { --gd:#7a2e14; --gt:#f7e5d9; --glab:#e8a27c; }
-  .g-cli   { --gd:#4a2346; --gt:#f1e3ee; --glab:#c792bd; }
-  .g-core { --gtint:#e4e8f4; } .g-work { --gtint:#e2efe7; } .g-draft { --gtint:#f7e5d9; } .g-cli { --gtint:#f1e3ee; }
-  html[data-light="day"] .g-core  { --glab:#23305a; }
-  html[data-light="day"] .g-work  { --glab:#1f4a3e; }
-  html[data-light="day"] .g-draft { --glab:#7a2e14; }
-  html[data-light="day"] .g-cli   { --glab:#4a2346; }
-  @media (prefers-color-scheme: dark) {
-    html[data-light="day"] .g-core  { --glab:#8fa2d6; }
-    html[data-light="day"] .g-work  { --glab:#8cc0a8; }
-    html[data-light="day"] .g-draft { --glab:#e8a27c; }
-    html[data-light="day"] .g-cli   { --glab:#c792bd; }
-  }
+  .g-core  { --gd:#23305a; --gtint:#e4e8f4; --gdark:#23305a; --glight:#8fa2d6; }
+  .g-work  { --gd:#1f4a3e; --gtint:#e2efe7; --gdark:#1f4a3e; --glight:#8cc0a8; }
+  .g-draft { --gd:#7a2e14; --gtint:#f7e5d9; --gdark:#7a2e14; --glight:#e8a27c; }
+  .g-cli   { --gd:#4a2346; --gtint:#f1e3ee; --gdark:#4a2346; --glight:#c792bd; }
+  .g-core, .g-work, .g-draft, .g-cli { --glab:var(--gdark); }
+  @media (prefers-color-scheme: dark) { .g-core, .g-work, .g-draft, .g-cli { --glab:var(--glight); } }
+  html[data-light="day"] .g-core, html[data-light="day"] .g-work, html[data-light="day"] .g-draft, html[data-light="day"] .g-cli { --glab:var(--gdark); }
+  html[data-light="night"] .g-core, html[data-light="night"] .g-work, html[data-light="night"] .g-draft, html[data-light="night"] .g-cli,
+  html[data-light="dusk"] .g-core, html[data-light="dusk"] .g-work, html[data-light="dusk"] .g-draft, html[data-light="dusk"] .g-cli,
+  html[data-light="sharp"] .g-core, html[data-light="sharp"] .g-work, html[data-light="sharp"] .g-draft, html[data-light="sharp"] .g-cli { --glab:var(--glight); }
+  html[data-light="sharp"] .bhead { border-bottom:2px solid #fff; }
   * { box-sizing:border-box; }
   html, body { margin:0; min-height:100%; }
   body { background:var(--bg); color:var(--ink); font-family: Georgia, "Iowan Old Style", "Times New Roman", serif; font-size:20px; -webkit-font-smoothing:antialiased; }
@@ -70,7 +64,18 @@
   @media (prefers-reduced-motion: reduce) { * { transition:none !important; animation:none !important; } }
   .sans { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
 
-  header.top { padding:12px clamp(12px,4vw,28px) 8px; border-bottom:2px solid var(--line); background:var(--panel); }
+  .se-chrome { position:relative; z-index:2; display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:10px; padding:9px 14px; background:var(--panel); border-bottom:2px solid var(--line); }
+  .se-home { display:inline-flex; align-items:center; min-height:52px; padding:8px 14px; border:2px solid var(--line); border-radius:10px; background:var(--panel); color:var(--ink); font-family:system-ui,sans-serif; font-weight:700; font-size:18px; text-decoration:none; }
+  .se-brand { display:inline-flex; align-items:center; gap:8px; color:var(--ink); }
+  .se-brand svg.mk { width:34px; height:34px; flex:none; }
+  .se-brand .wm { font-family:system-ui,sans-serif; font-weight:700; font-size:18px; letter-spacing:2px; white-space:nowrap; }
+  @media (max-width:560px){ .se-brand .wm { display:none; } }
+  .tsp-labchip { display:inline-flex; align-items:center; min-height:30px; padding:2px 8px; border:2px dashed #f3c675; border-radius:4px; background:#241a11; color:#f3c675; font:700 18px/1 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.09em; white-space:nowrap; }
+  .iconbtn { width:52px; height:52px; padding:0; border-radius:50%; display:inline-grid; place-items:center; background:var(--panel); color:var(--ink); border:2px solid var(--line); cursor:pointer; }
+  .iconbtn svg { width:26px; height:26px; display:block; }
+  .iconbtn .ico { display:none; }
+  .iconbtn[data-mode="light"] .ico-light, .iconbtn[data-mode="dark"] .ico-dark, .iconbtn[data-mode="sharp"] .ico-sharp { display:block; }
+  .top { padding:10px clamp(12px,4vw,28px) 8px; border-bottom:2px solid var(--line); background:var(--panel); }
   .titlebar { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
   h1 { margin:0; font-size:clamp(26px,5vw,34px); letter-spacing:-.3px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
   .ver { font-family:system-ui,sans-serif; font-size:20px; font-weight:700; white-space:nowrap; color:var(--muted); }
@@ -79,7 +84,7 @@
   .btn { font-family:system-ui,sans-serif; font-size:18px; background:var(--panel); color:var(--ink); border:2px solid var(--line); border-radius:12px; padding:8px 14px; cursor:pointer; min-height:52px; min-width:52px; }
   .btn:hover { border-color:var(--accent); }
   .btn[aria-pressed="true"] { background:var(--accent); color:var(--onaccent); border-color:var(--accent); font-weight:700; }
-  .row2 { display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:8px; flex-wrap:wrap; }
+  .row2 { display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap; }
   .grp { display:flex; align-items:center; gap:8px; font-family:system-ui,sans-serif; font-size:18px; font-weight:700; }
   .grp select { font-family:system-ui,sans-serif; font-size:18px; min-height:52px; border-radius:12px; border:2px solid var(--line); background:var(--field); color:var(--ink); padding:6px 10px; max-width:58vw; }
 
@@ -163,15 +168,21 @@
 <body class="pens">
 <div id="backdrop" aria-hidden="true"></div>
 <div id="app">
-<header class="top">
-  <div class="titlebar">
-    <h1>Writerly Moves <span class="ver">v1.0</span><span class="chip" title="In build: being worked on now" aria-label="Status: in build">IN BUILD</span></h1>
-  </div>
-  <div class="row2">
-    <label class="grp"><span>Group</span><select id="grpPick"></select></label>
-    <button class="btn" id="comfortBtn" aria-label="Change brightness">Brightness</button>
-  </div>
+<header class="se-chrome">
+  <a class="se-home" href="index.html" aria-label="The studio">Studio</a><a class="se-home" href="arcade.html" aria-label="The cabinet">Cabinet</a>
+  <span class="se-brand"><svg class="mk" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><defs><path id="tss-spiral" d="M26.2 24.0 L26.3 24.5 L26.4 25.1 L26.2 25.7 L25.9 26.3 L25.5 26.8 L24.9 27.3 L24.2 27.6 L23.4 27.7 L22.5 27.7 L21.7 27.5 L20.8 27.0 L20.1 26.4 L19.5 25.6 L19.1 24.6 L18.8 23.5 L18.9 22.3 L19.2 21.2 L19.8 20.1 L20.6 19.1 L21.6 18.3 L22.9 17.7 L24.3 17.4 L25.7 17.4 L27.2 17.8 L28.5 18.5 L29.8 19.4 L30.8 20.7 L31.5 22.2 L32.0 23.8 L32.0 25.6 L31.7 27.4 L30.9 29.0 L29.8 30.5 L28.4 31.8 L26.7 32.8 L24.7 33.3 L22.7 33.5 L20.6 33.1 L18.6 32.4 L16.8 31.2 L15.3 29.6 L14.1 27.7 L13.4 25.5 L13.1 23.1 L13.3 20.8 L14.1 18.5 L15.4 16.3 L17.1 14.5 L19.2 13.1 L21.6 12.1 L24.2 11.7 L26.9 11.8 L29.6 12.5 L32.0 13.8 L34.1 15.7 L35.9 17.9 L37.1 20.6 L37.7 23.5 L37.7 26.4 L37.0 29.4 L35.7 32.2 L33.9 34.7 L31.4 36.7 L28.6 38.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></defs><rect x="1.5" y="1.5" width="45" height="45" rx="11" fill="#B4511A"/><use href="#tss-spiral" stroke="#0F5F5A" stroke-width="4.6" transform="translate(1.6,1.6)"/><use href="#tss-spiral" stroke="#FAF6EE" stroke-width="3.4"/></svg><span class="wm">Tight Spiral</span>
+    <span class="tsp-labchip" title="In build: being worked on now, not yet Live" aria-label="Status: in build">IN BUILD</span></span>
+  <button class="iconbtn" id="modeBtn2" type="button" aria-label="Mode: Light. Tap for Dark." data-mode="light">
+    <svg class="ico ico-light" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <svg class="ico ico-dark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z" fill="currentColor"/></svg>
+    <svg class="ico ico-sharp" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3 A9 9 0 0 1 12 21 Z" fill="currentColor"/></svg>
+  </button>
 </header>
+<div class="top">
+  <div class="titlebar">
+    <h1>Writerly Moves <span class="ver">v1.0</span></h1>
+  </div>
+</div>
 
 <main>
   <section class="stage" id="stage" aria-live="polite">
@@ -182,6 +193,7 @@
     </div>
   </section>
   <nav class="toolrow" aria-label="Deck controls">
+    <label class="grp"><span>Group</span><select id="grpPick"></select></label>
     <button class="btn" id="modeBtn">Browse</button>
     <button class="btn" id="penBtn" aria-pressed="true">Pencils on</button>
     <button class="btn" id="shuffleBtn">Shuffle</button>
@@ -193,7 +205,7 @@
   <section id="sceneView" class="hidden panelview" aria-label="Choose a picture"></section>
 </main>
 
-<nav class="rail" aria-label="Page navigation">
+<nav class="rail se-rail" aria-label="Page navigation">
   <a href="arcade.html">Back to the arcade</a>
   <a href="index.html">Home</a>
 </nav>
@@ -248,13 +260,16 @@ function cur(){ const l=list(); if(!l.length) return null; if(pos>=l.length) pos
 function numOf(c){ return String(cards.indexOf(c)+1).padStart(2,'0') + ' / ' + cards.length; }
 function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); }
 
-/* comfort stops; a dark-preferring device never gets the paper stop */
-const prefersDark = () => { try { return matchMedia('(prefers-color-scheme: dark)').matches; } catch(e){ return true; } };
-function stops(){ return prefersDark() ? ['night','dusk','slate'] : ['day','night','dusk','slate']; }
-let stop = (()=>{ try { return localStorage.getItem('wm_light'); } catch(e){ return null; } })() || (prefersDark()?'night':'day');
-function applyStop(){ if(!stops().includes(stop)) stop = stops()[0]; document.documentElement.setAttribute('data-light', stop);
-  $('comfortBtn').textContent = 'Brightness: ' + ({day:'Day',night:'Night',dusk:'Dusk',slate:'Slate'})[stop]; }
-$('comfortBtn').onclick = () => { const s=stops(); stop = s[(s.indexOf(stop)+1)%s.length]; try{localStorage.setItem('wm_light',stop);}catch(e){} applyStop(); };
+/* three modes on one button: Light -> Dark -> Sharp. CSS picks the first look from the
+   device setting; the button only writes an explicit choice (house pattern, The Asking Room). */
+const MODES=['light','dark','sharp'], NAMES={light:'Light',dark:'Dark',sharp:'Sharp'}, ATTR={light:'day',dark:'night',sharp:'sharp'};
+const root=document.documentElement, modeBtn=$('modeBtn2');
+function curMode(){ const t=root.getAttribute('data-light'); const back={day:'light',night:'dark',sharp:'sharp',dusk:'dark'}; if(back[t]) return back[t];
+  return getComputedStyle(root).getPropertyValue('--is-dark').trim()==='1' ? 'dark' : 'light'; }
+function syncMode(){ const m=curMode(), n=MODES[(MODES.indexOf(m)+1)%MODES.length]; modeBtn.setAttribute('data-mode',m); modeBtn.setAttribute('aria-label','Mode: '+NAMES[m]+'. Tap for '+NAMES[n]+'.'); }
+try { const saved=localStorage.getItem('wm_mode'); if(MODES.includes(saved)) root.setAttribute('data-light', ATTR[saved]); } catch(e){}
+syncMode();
+modeBtn.addEventListener('click', () => { const next=MODES[(MODES.indexOf(curMode())+1)%MODES.length]; root.setAttribute('data-light', ATTR[next]); try{ localStorage.setItem('wm_mode',next); }catch(e){} syncMode(); });
 
 /* fields */
 function pen(field){ return `<button class="pencil" data-edit="${field}" aria-label="Edit ${esc(FIELDS[field])}">${PENCIL}</button>`; }
@@ -395,7 +410,7 @@ function renderHelp(){
     <p><b>Hide the pencils.</b> Pencils on, under the card, switches them off so the card reads clean.</p>
     <p><b>Move around.</b> Next card and Back sit under the card. The Group picker under the title filters the deck. Turn over sits on the card itself. Browse shows every card as a tile. Shuffle deals a new order.</p>
     <p><b>Add, copy, delete, regroup.</b> The buttons above, on this page.</p>
-    <p><b>Brightness</b> steps through the page and card shades. A phone set to dark mode stays on the dark shades.</p>
+    <p><b>The round button at the top right</b> switches between Light, Dark and Sharp (high contrast).</p>
     <p>Keys: left and right arrows move, F turns the card, G browse, S shuffle, E pencils, Escape cancels an edit.</p>
     </div>`;
 }
@@ -432,8 +447,8 @@ document.addEventListener('keydown', e => {
   else if(k==='f' && view==='card') flip();
   else if(k==='g') toggleView('grid'); else if(k==='s') shuffle(); else if(k==='e'){ pencils=!pencils; editing=null; render(); }
 });
-try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyStop); } catch(e){}
-applyStop(); render();
+try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', syncMode); } catch(e){}
+render();
 })();
 </script>
 </body>
