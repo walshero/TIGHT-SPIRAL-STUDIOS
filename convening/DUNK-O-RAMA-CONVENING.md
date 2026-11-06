@@ -151,3 +151,32 @@ APPLIED (v0.4):
 
 Still owed: D2 (voice the exchanges), D3 (founder edit pass, now 60 exchanges and 20
 field-guide entries), D4 (Heckle Bench), D5 (placement).
+
+## FOUNDER RULINGS 2026-11-06, 15:47-15:50 ET — v0.5
+
+FOUNDER: "Does the new build include NO repeated lines?" / "remove the breathe meter, but
+the over hold still has same effect" / "Make the tank and character slightly larger. And
+employ more paper craft textural depth"
+
+ANSWER, measured: v0.4 kept heckle exchanges unique inside a round, but reactions could
+repeat (5 miss and 5 dunk lines against up to 10 balls), and the three rim lines repeated
+freely.
+
+APPLIED (v0.5):
+- No repeats: 10 miss and 10 dunk lines per character (50 new, Twain seat). Net and rim
+  lines use their own bag first, then borrow from the miss bag, so a 10-ball round never
+  repeats a reaction. Measured over 200 simulated rounds per character with random
+  miss/net/rim/dunk mixes: 0 repeated reactions, 0 repeated heckles. Across rounds, lines
+  return only after the whole set has played.
+- Breath meter removed (ring, STEADY/BREATHE/SHAKY label, colored aim dots). The breathing
+  is unchanged: holding still steadies the aim, holding past 5 s brings the tremor, a
+  called move locks it steady. A soft tone at steady is the only cue.
+- Larger: tank about 12% bigger in every direction, characters 18% bigger; the dunk sinks
+  them fully under the taller water. Target moved left to keep clear of the tank.
+- Paper craft: every major piece is a cut-paper layer with its own drop shadow (booth
+  stripes, awning, sign, target, tank frame, characters, glove, speech card); the ground is
+  three torn paper strips; cut-paper clouds drift across the sky; a paper grain with
+  fibers lies over the scene. Speech text casts no shadow, so it stays crisp.
+- Phone layout: on tall screens the scene sits lower so the speech card clears the face,
+  the glove rests higher, and the Call-the-move panel fades while the player pulls back.
+- Gates: belt 14 ticks pass, preship SHIP. About 45 fps in headless Chromium.
