@@ -209,3 +209,28 @@ APPLIED (v0.6):
 - iOS text inflation switched off (text-size-adjust 100%) so only the reader's own zoom applies.
 - Gates: preship SHIP. Full round at 390 x 844: 6 of 9 calls as scripted, 7 dunks, no
   errors; no-repeat check still 0 on all five levels.
+
+## FOUNDER RULING 2026-11-06, 19:23 ET — v0.7 (panel playtest, recommendation 1)
+
+FOUNDER: "Proceed with 1." Read as the panel's recommended first build
+(claude/playtest/dunk-o-rama-panel-2026-11-06.md): fix the hint defect, add No cheat, cut
+every exchange to fit the card at 263 x 480.
+
+APPLIED (v0.7):
+- Defect fixed: a touch on the one-line hint now grabs the glove and throws (it used to
+  start keyboard-aim mode silently). Keyboard Enter on the hint still starts keyboard aim.
+  Measured: first touch on the hint at 263 x 480 throws.
+- No cheat (Critical Thinking, Gitlin, Turkle seats): each level gains 3 straight answers,
+  some of them the honest twin of a cheat ("The state engineer signed off. Her report is
+  public."). They come up 20% of the time (measured over 2,000 heckles). "No cheat" is a
+  choice on every straight answer and on about 40% of the others. Calling it right earns
+  the same steady aim. Dunking a straight answer draws one of five lines ("Next time I will
+  lie. That seems to work better.") and the round card counts it ("You dunked 2 straight
+  answers."). The field guide ends with No cheat.
+- Length (Osterweil seat): all 75 exchanges are 18 words or fewer, question plus answer
+  (was 21 to 25 on average, up to 31). In-play explanations cut to the move's name and what
+  it does; "spot it" and the fair version stay in the field guide.
+- Measured at 263 x 480: 0 of 450 card views scroll (exchange, choices, explanation), was 45
+  of 60. The counter pill drops the breeze reading under 360 px wide (the wind sock shows it).
+- Full round at 390 x 844: 6 of 9 calls as scripted, 8 dunks, 2 straight answers dunked, no
+  errors. No-repeat check: 0 on all five levels. Preship SHIP.
