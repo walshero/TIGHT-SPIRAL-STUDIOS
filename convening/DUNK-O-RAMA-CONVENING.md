@@ -234,3 +234,58 @@ APPLIED (v0.7):
   of 60. The counter pill drops the breeze reading under 360 px wide (the wind sock shows it).
 - Full round at 390 x 844: 6 of 9 calls as scripted, 8 dunks, 2 straight answers dunked, no
   errors. No-repeat check: 0 on all five levels. Preship SHIP.
+
+## FOUNDER RULING 2026-11-07, 09:03 ET — v0.8 (the runoff)
+
+FOUNDER: "Dunk O rams should change there should be two politicians in the dunk tank. You
+can aim at a target to the left 9f tank, right, and above will dunk both politicians.
+There can still be double no cheat but usually it's one or the other. Make candidates
+answer consistently so that this presents a kind of run off. Dryest candidate wins mayor."
+
+READ: two seats in one tank; left target dunks the left seat, right target the right seat,
+the top target dunks both. The crowd asks one question and both candidates answer. Usually
+exactly one cheats; sometimes both answer straight ("double no cheat"). "Answer
+consistently" read as: each candidate holds one platform and never flips it, cheat or
+straight; the cheat changes the argument, not the position. Fewest dunks at the end of
+ten balls wins the mayor's office.
+
+CALLS MADE (founder may overrule):
+- Both-cheat exchanges exist, about 13% of the time, so the top target has a right answer.
+  Mix: one cheats 72%, both straight 15%, both cheat 13%.
+- The first ball of each runoff carries no exchange. Its card names the seats and the three
+  targets ("Left target dunks Senator ..."). The questions start with ball two, so a round
+  is 9 exchanges from a bag of 10. Reason: at 263 x 480 the legend and a three-voice
+  exchange cannot share one card without scrolling.
+- A right call steadies the aim and enlarges the target that dunks the cheater (top target
+  when both cheated; no target grows when both were straight).
+
+SEATS (inline, one pass):
+- Twain: 50 questions, 200 answers, each answer 8 words or so. Platforms: Senator (leave it,
+  wait for the study), Skip (make it look new, events pay), Mayor Bunting (build it, name
+  it; the incumbent), Chet (let a private firm do it; he discloses clients), Dale (crack
+  down: fines, cameras, guards). Skip never appeals to tradition; the Senator never
+  rebrands. Consistency is in the writing, so a player can predict each candidate's
+  position before the answer lands.
+- Even Hand: platforms are town-scale and map to no party. Every candidate cheats in some
+  answers and plays straight in others; the dice decide which, not the character.
+- Coordinator: the call now tests two things at once, who and how. Distractors are the
+  right move on the wrong candidate, the right candidate with another move, Both straight,
+  and Both cheated. The round card reports each candidate's cheat count beside the vote, so
+  the player sees whether they kept the straighter talker dry. It reports, it does not grade.
+- Stranger: the target-to-seat link is drawn, not only told: each side target's trip cord
+  runs to its own seat's latch; the top target's two cords run to both seats; the marquee
+  now rides the arch over the tank, so "top" reads as the sign.
+- Osterweil: dunking the honest candidate on purpose is allowed, and the card says so
+  plainly ("The one you kept dry cheated more"). That is the freedom to try the other vote.
+
+MEASURED:
+- Reach (zero-sway solver, pull grid): all three targets hittable on all five runoffs.
+- Card at 263 x 480: 0 of 605 views scroll (legend, all 50 questions x 4 cheat cases,
+  call step, explanation step). 390 x 844: 0 of 405.
+- Bot rounds (390 x 844): 10 throws, 9 calls, 9 distinct questions, round card and winner
+  correct, no page errors. Preship contrast gate: SHIP (worst text pair 10.58).
+
+DECISIONS OWED:
+- D6 Both-cheat share (13%) and the legend-first ball: keep or change.
+- D7 Founder edit pass on the 200 answers (Twain drafts).
+- Carried: D2 voice, D4 Heckle Bench, D5 placement.

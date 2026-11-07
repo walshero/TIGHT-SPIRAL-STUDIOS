@@ -47,3 +47,9 @@ Full record, with seats and sources: `convening/DUNK-O-RAMA-CONVENING.md`. In sh
 ## v0.4 (2026-11-06): bigger curriculum, exchanges, no repeats
 
 Founder: "Increase the curriculum and cut the repeats. Make the dialogue richer." Five levels, 20 cheats, 60 crowd-then-politician exchanges, 65 reactions, shuffle bags reset each round. Details in the convening file.
+
+## v0.8 (2026-11-07): the runoff for mayor
+
+Founder: "there should be two politicians in the dunk tank. You can aim at a target to the left of tank, right, and above will dunk both politicians. There can still be double no cheat but usually it's one or the other. Make candidates answer consistently so that this presents a kind of run off. Dryest candidate wins mayor."
+
+Five runoffs (Senator v Skip, Skip v Mayor, Mayor v Chet, Chet v Dale, Dale v Senator), each teaching its level's four moves. 50 questions, 200 answers; each candidate holds one platform throughout. Three targets: left, right, top (both). Driest candidate wins; the card reports cheat counts. Full record: `convening/DUNK-O-RAMA-CONVENING.md`.
