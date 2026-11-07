@@ -31,3 +31,7 @@ The letters never change. Gray caps (DNA methylation) and tight spools (deacetyl
 - R2 Audience: high school biology (recommended) or EN195-style general.
 - R3 Match rule fork: same-letter runs (built) vs. complementary pairing A–T, G–C (more DNA-true, harder to read at a glance).
 - R4 Art: cut-paper tiles on a layered nucleus (built) — founder eyes owed.
+
+## Lanes
+- Canon: lab/spool.html (TIGHT-SPIRAL-STUDIOS). Mirror: tss-playtest lab/spool.html.
+- claude.ai artifact: slug eeb7fe86-9ec4-476c-9f8b-61bb257a3e63 (https://claude.ai/artifact/WUj1k5i2iqRWQaJVfRdf8N). Same bytes as canon except the three nav links, which point at absolute GitHub Pages URLs. Republish it on every ship.
