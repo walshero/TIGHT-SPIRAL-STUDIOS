@@ -99,7 +99,7 @@ Applied (v0.10):
 
 Ruling (founder, 11-07): the player can't see what good and bad effects are. Make the choices more nuanced, sort them into research-based categories of stress and resilience, let players drill down at the start, and give facts while they choose.
 
-Build: artifact 93f72ea1 version 1794061212-f5ef, sha256 3483932cdfddc7467e7505233950fdf6b95012d50d3f27660546a1e6babe2cd1 (verified via list_files). Builder: build_v11.py over v0.10 (ec25339e). Repo lab/ is still v0.8 at d4ff3e1; there's no push credential here, so the repo is BLIND for this build.
+Build: artifact 93f72ea1 version 1794061212-f5ef, sha256 3483932cdfddc7467e7505233950fdf6b95012d50d3f27660546a1e6babe2cd1 (verified via list_files). Builder: build_v11.py over v0.10 (ec25339e). Landed in the repo 2026-11-07: tight-spiral-studios main b4a0934 (re-cloned; hash matches). Mirrored to tss-playtest main 1f23ba1.
 
 **Stress categories (red):**
 - Sleep: short nights, phone at night
