@@ -1272,3 +1272,9 @@ of that), plus a changed-files gate run. Single inline pass, no subagents.
 - Debt paid with it: dark-mode evidence underline was 1.2:1 (now a real underline, worst pair 8.79); --ink/--ink2 no longer double as borders (--rule/--rule2); screen declared for the senses census; phone scene 52% of first screen.
 - Gates: senses PASS (eyes, fingers, top floor); contrast SHIP 8.79; routes 2/2 incl. three misses then a hit.
 - PENDING (founder ruled 2026-10-17, "2 then 1"): shipped with the phone crop, which cuts the two outer people at the edges. Follow-up: art seat redraws a phone-shaped workshop scene, people closer together, nobody cut. Hint wording is studio placeholder awaiting founder words.
+
+## 2026-11-07 — EN195 outcome gaps: Enjambment ruled out (founder, after playtest: "Enjambment doesn't make the cut")
+- Context: outcome-gap review found the arcade has no game for creative nonfiction, revision as reshaping, the portfolio/artist statement, line breaks, or naming moves in fiction/nonfiction.
+- Ruling: enjambment.html is NOT mounted in the EN195 Arcade. File untouched.
+- Course site shipped same day as Lab: lab/en195-course.html v1.0 (commit db05d24), linked from arcade.html, index.html, lab/index.html.
+- PENDING: next candidate is the-tell.html (Lab, one piece) for objectives 1 and 4; then a new nonfiction build, working title Secret World. Line breaks stay an open gap.
