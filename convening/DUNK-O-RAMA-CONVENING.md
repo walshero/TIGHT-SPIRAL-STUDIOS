@@ -289,3 +289,21 @@ DECISIONS OWED:
 - D6 Both-cheat share (13%) and the legend-first ball: keep or change.
 - D7 Founder edit pass on the 200 answers (Twain drafts).
 - Carried: D2 voice, D4 Heckle Bench, D5 placement.
+
+## FOUNDER RULING 2026-11-07, 11:28 ET — v0.9 (straight answer, towel, honest candidates)
+
+Context: the panel's contempt warning; the studio nominated three options (Sign Shy skin, Ballot
+Toss skin, keep the tank and add the straight answer). FOUNDER chose option 4: "After the
+candidate says the straight answer give them a towel. Dont make all candidates cheats!"
+
+BUILT:
+- A dunked candidate who cheated climbs out and gives the straight answer to the same
+  question ("Fine. Straight answer: ..."), drawn from the 200-answer table. Then a striped
+  carnival towel drops onto their shoulders and fades after four seconds. A dunked candidate who
+  answered straight gets the "dunked anyway" line, and the towel too.
+- Cheat rates per candidate, constant across every runoff they enter: Senator 20%, Chet 25%,
+  Mayor 45%, Skip 65%, Dale 65%. Two candidates mostly tell the truth; the player can learn
+  who talks straight. Measured over 4,000 draws: Senator 0.20, Skip 0.65.
+- Retires v0.8's fixed mix (72 / 15 / 13).
+
+DECISIONS OWED: D8 the rates themselves; D6 (legend-first ball) carried.
