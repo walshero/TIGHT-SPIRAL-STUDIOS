@@ -21,3 +21,10 @@ Every line of player-facing text read against the story (Tess, 26, hygienist, on
 | Seen receipts | el.reads avatar color 265 | v36 slip: a different face than in the feed (flok-feed-check H7) | 190, same face everywhere |
 
 Checked and left: Mom's three comments and Tess's answers, the seven 12:06 notifications (count matches), rank titles and clocks, the sister line, the reading list, seen-receipt states and the 40% rate, scroll results, the About text.
+
+## v39, Boost is delivery (same day)
+Founder: *"It's not within the employee's power to make mom comment."* Then, declining a new mechanic: *"No, keep boost. Just only include things an employee can control."*
+The machine controls delivery, never people. Boost results now name only that:
+- "you delivered Mom's comment: ..." / "you delivered a stranger's like." / "you delivered Hank's like." / "you told her Quinn viewed her story." / "you held it all back."
+- Task: "Each Boost delivers something, or holds it back. She never knows which."
+- Layout fix found on the way: fitTrain could GROW the feed when space was tight (floor above the default height). Fitting now only shrinks.
