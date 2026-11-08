@@ -61,6 +61,11 @@ censused — a status, not a shrug).
 
 Also on PUSH: C1 color-scheme (`c1-check.py`, `floor.yml` + `confluence-hub.yml`) — WIRED.
 
+Also on PUSH (2026-11-08, founder phone screenshot of lab/en195-course.html, dark mode):
+- Studio Eyes v3 on changed surfaces was **REPORT** (`continue-on-error`), so en195-course v1.0 shipped with 25 HALTs. Now **WIRED, ratchet**: `studio-eyes/eyes-ratchet.py` in `floor.yml` blocks a new surface with any HALT and a changed surface that adds one; parent debt is carried.
+- Floor 13 NON-TEXT CONTRAST (SC 1.4.11, 3:1, diagrams HALT, scene paint advisory) and floor 14 OBSCURED (fixed overlays over unreachable text; SC 2.4.11 focus) — inside `studio-eyes.py`, canaries t16/t17/p12/p13, self-test 30/30.
+- Feel probe (`studio-senses/feel-probe.py`: dead tap >400 ms, script errors, long tasks, NaN/escaped motion HALT; slow answer >100 ms and frame pacing WARN) — WIRED via `senses-run.sh` (belt tick 13, game builds), self-test 2/2.
+
 ### Wired to WEEKLY (verified live on the scheduler)
 
 | Law | Carrier | Status |

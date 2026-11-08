@@ -1278,3 +1278,13 @@ of that), plus a changed-files gate run. Single inline pass, no subagents.
 - Ruling: enjambment.html is NOT mounted in the EN195 Arcade. File untouched.
 - Course site shipped same day as Lab: lab/en195-course.html v1.0 (commit db05d24), linked from arcade.html, index.html, lab/index.html.
 - PENDING: next candidate is the-tell.html (Lab, one piece) for objectives 1 and 4; then a new nonfiction build, working title Secret World. Line breaks stay an open gap.
+
+## 2026-11-08 — Studio Eyes + Fingers work-up (founder: "contrast floor problem ... improve playtesting and studio builds ergo art, physics, screen cohesion, intuitive UI and gameplay")
+- Root cause of the screenshot: the dark fork of lab/en195-course.html darkened the art ramp instead of flipping its values, so the spiral track sat at 1.1:1 and its stops at 1.2-2.3:1. Twelve floors were green because every floor graded glyphs. Studio Eyes also HALTed v1.0 with 25 defects on the push, but CI ran it report-only.
+- New in studio-eyes.py: floor 13 NON-TEXT CONTRAST (measured by hiding the mark and diffing pixels, graded on the mark's edge so rims count) and floor 14 OBSCURED. Fixed: smooth scroll made rect reads land mid-flight. Canaries t16, t17, p12, p13; self-test 30/30.
+- CI: eyes-ratchet.py blocks new HALTs on changed surfaces (floor.yml).
+- preship-gate-v4.py: false H-DARK-PROMISE on compound dark selectors (`:root, html[data-comfort=...]`) fixed; self-test ok.
+- New: studio-senses/feel-probe.py (dead taps, answer latency, errors, frame pacing, broken motion), in senses-run.sh; self-test 2/2.
+- lab/en195-course.html v1.1: spiral track and punched-washer stops (light 4.5-9:1, dark 3-10:1), role tokens split (--line, --slab, --ink-rev, --focus), 44px links, 200% text reflows, frog hit area 52px on screen, tsp:surface=site. Studio Eyes PASS (was 25 HALT). Comparison: claude/en195-spiral-before-after-2026-11-08.png.
+- FORK, not auto-picked: the claude.ai artifact (version 1794069725-c2f8, 906 lines, Top/Comfort corner pills) predates repo v1.0 (868 lines, mode button in the top bar). Founder picks which design the artifact carries.
+- Corpus findings for the new floors (carried, not blocking): lab/down-the-nerve.html Balance gauge 2.7:1; lab/index.html workbench art reads as a diagram (declare data-graphic="scene" or lift it); lab/table-four-v12-list.html skip link hides under the header on focus; ART_VALUE advisories across scene art in dark mode (Hitchcock's seat).
