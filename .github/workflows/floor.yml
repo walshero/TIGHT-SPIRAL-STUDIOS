@@ -121,7 +121,7 @@ jobs:
             if git cat-file -e "${BEFORE}^{commit}" 2>/dev/null; then
               RESOLVED=yes
               CHANGED=$(git diff --name-only "$BEFORE" "$HEAD_SHA" -- '*.html' \
-                        | grep -v '^studio-eyes/canary/' || true)
+                        | grep -v '/canary/' || true)
             fi
           fi
           {
@@ -154,6 +154,16 @@ jobs:
           [ -n "$FILES" ] || { echo "no .html surface changed on this push"; exit 0; }
           python3 studio-eyes/studio-eyes.py --no-self-test $FILES
         continue-on-error: true
+
+      - name: STUDIO EYES RATCHET — changed surfaces may not ADD a defect. BLOCKS.
+        # Armed 2026-11-08: en195-course.html v1.0 shipped with 25 HALTs because the step
+        # above reports and never blocks. New surfaces must pass; changed ones may not get
+        # worse; debt the parent already carried is reported, not blocking.
+        if: steps.changed.outputs.resolved == 'yes'
+        run: |
+          FILES='${{ steps.changed.outputs.list }}'
+          [ -n "$FILES" ] || { echo "no .html surface changed on this push"; exit 0; }
+          python3 studio-eyes/eyes-ratchet.py '${{ github.event.before }}' $FILES
 
       - name: PLAYTHROUGH — clipped text in every state the crawler reaches (report)
         if: steps.changed.outputs.resolved == 'yes'

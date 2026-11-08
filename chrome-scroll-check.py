@@ -11,7 +11,7 @@ Usage: python3 chrome-scroll-check.py [files...]   (default: every live .html pa
 Exit 1 if any page pins the chrome.
 """
 import re, sys, glob, os
-SKIP = ('archive/', 'rescued/', 'shelf-rescue', 'reports/', 'studio-eyes/canary', 'node_modules/')
+SKIP = ('archive/', 'rescued/', 'shelf-rescue', 'reports/', 'studio-eyes/canary', 'studio-senses/canary', 'node_modules/')
 files = sys.argv[1:] or [f for f in glob.glob('**/*.html', recursive=True) if not f.startswith(SKIP)]
 pinned, boxed = [], []
 for f in sorted(files):

@@ -783,6 +783,318 @@ def audit_page(page, path, mode_label):
 
     return halts, d
 
+# ---------------------------------------------------------------- floors 13 + 14
+# Added 2026-11-08 from a founder phone screenshot of lab/en195-course.html in dark
+# mode: the spiral diagram's track and one of its five stops sat at ~1.3:1 on their
+# panel. Twelve floors were green on it because every floor graded GLYPHS. Nothing
+# ever asked whether a line, a dot or an icon that carries meaning can be seen.
+# Same screenshot: two floating corner pills (Top, Comfort) parked over the reading
+# column. Nothing asked whether a fixed control covers words the reader needs.
+#
+# FLOOR 13 — NON-TEXT CONTRAST (WCAG 2.2 SC 1.4.11, 3:1)
+#   Measured by asking the renderer, the v3 doctrine: screenshot the mark, hide the
+#   mark, screenshot again. The pixels that changed ARE the mark; the same pixels in
+#   the second shot ARE its ground. Opacity, filters, gradients and shadows are all
+#   inside the measurement, not guessed.
+#   SCOPE, arithmetic and overridable:
+#     - only SVGs a reader is told about (role="img" or a <title>); aria-hidden is decor
+#     - a "diagram" (<= DIAGRAM_MAX_SHAPES drawn shapes AND stroke-only lines running at
+#       least half its width, the thing that connects marks) HALTs under 3:1   [HOUSE heuristic]
+#     - a "scene" (more shapes) is paint, not chart: under 3:1 is an ART_VALUE advisory
+#     - data-graphic="diagram" | "scene" on the <svg> overrides the count
+#     - a shape painting more than FIELD_MAX of its SVG is a field (sky, hill), not a mark
+#     - translucent paint (opacity < 0.6) is glaze or shadow, never graded
+# FLOOR 14 — OBSCURED (WCAG 2.2 SC 2.4.11 for focus; reachability for text)
+#   A fixed or sticky element HALTs when (a) at the top or the bottom of the page,
+#   where no further scroll exists, it covers more than a third of a text block that
+#   is not its own, or (b) a focused control is more than half hidden under it.
+#   Footprint over FOOTPRINT_MAX of the phone screen is an advisory.
+NONTEXT_MIN = 3.0
+DIAGRAM_MAX_SHAPES = 24
+FIELD_MAX = 0.15
+MAX_MARKS = 30       # per graphic
+FOOTPRINT_MAX = 0.08
+ADVISORIES = []       # printed by main(); never change the exit code
+
+_MARKS_JS = r"""() => {
+  const out = [];
+  document.querySelectorAll('[data-se-mark]').forEach(e => e.removeAttribute('data-se-mark'));
+  const SH = 'circle,ellipse,rect,path,polygon,polyline,line,use';
+  let n = 0;
+  for (const svg of document.querySelectorAll('svg')) {
+    if (svg.closest('[aria-hidden="true"]')) continue;
+    const told = svg.getAttribute('role') === 'img' || svg.querySelector(':scope > title');
+    if (!told) continue;
+    const sr = svg.getBoundingClientRect();
+    if (sr.width < 40 || sr.height < 40) continue;          // an icon inside a button is graded as the button
+    const cs0 = getComputedStyle(svg);
+    if (cs0.display === 'none' || cs0.visibility === 'hidden') continue;
+    const shapes = [...svg.querySelectorAll(SH)].filter(s => !s.closest('defs,clipPath,mask,symbol,pattern,marker'));
+    const decl = svg.getAttribute('data-graphic');
+    // A diagram CONNECTS things: it carries at least one stroke-only line (a track, an
+    // arrow, an axis). Scene paint is filled shapes. p08 (a 3-rect living room) is a scene.
+    // ...and the line must actually travel: total stroke-only length of at least half
+    // the graphic's width. A ribbon seal's 8%% flourish is ornament (measured 0.08 on
+    // en195-course.html); the spiral track is 2.26, the Down the Nerve gauge 0.84.
+    const vb = svg.viewBox && svg.viewBox.baseVal, vw0 = vb && vb.width ? vb.width : sr.width;
+    let run = 0;
+    for (const s of shapes) { const c = getComputedStyle(s);
+      if ((c.fill === 'none' || s.tagName === 'line') && c.stroke !== 'none' && parseFloat(c.strokeWidth) >= 2)
+        try { run += s.getTotalLength(); } catch (e) {} }
+    const stroked = run >= 0.5 * vw0;
+    const kind = decl || (shapes.length <= %d && stroked ? 'diagram' : 'scene');
+    const sarea = sr.width * sr.height;
+    let per = 0;
+    for (const s of shapes) {
+      if (per >= %d) break;               // cap PER graphic, so a busy hero cannot starve the diagram below it
+      const cs = getComputedStyle(s);
+      if (cs.display === 'none' || cs.visibility === 'hidden') continue;
+      let op = 1, e = s;
+      while (e && e !== svg.parentElement) { op *= +getComputedStyle(e).opacity; e = e.parentElement; }
+      const hasFill = cs.fill !== 'none' && !/rgba\(.*,\s*0\)$/.test(cs.fill);
+      const hasStroke = cs.stroke !== 'none' && parseFloat(cs.strokeWidth) > 0;
+      const po = hasFill ? +cs.fillOpacity : +cs.strokeOpacity;
+      if (op * po < 0.6) continue;
+      const r = s.getBoundingClientRect();
+      if (r.width < 2 && r.height < 2) continue;
+      if (hasFill && (r.width * r.height) / sarea > 0.6) continue;  // backdrop rect
+      s.setAttribute('data-se-mark', String(n)); per++;
+      let label = s.tagName.toLowerCase();
+      if (s.getAttribute('class')) label += '.' + s.getAttribute('class').trim().split(/\s+/).join('.');
+      out.push({i: n, label, kind, svgArea: sarea,
+                svgId: svg.id || (svg.querySelector('title') ? svg.querySelector('title').textContent.slice(0, 40) : 'svg')});
+      n++;
+    }
+  }
+  return out;
+}""" % (DIAGRAM_MAX_SHAPES, MAX_MARKS)
+
+def _shot_mark(page, i):
+    """Two shots of one mark's neighbourhood: painted, and with the mark hidden."""
+    r = page.evaluate("""(i)=>{const s=document.querySelector('[data-se-mark="'+i+'"]');
+        if(!s) return null; s.scrollIntoView({block:'center',inline:'center',behavior:'instant'});
+        const b=s.getBoundingClientRect(); return {x:b.left,y:b.top,w:b.width,h:b.height,
+        vw:innerWidth,vh:innerHeight};}""", i)
+    if not r:
+        return None
+    pad = 8
+    x0, y0 = max(0, r['x']-pad), max(0, r['y']-pad)
+    x1, y1 = min(r['vw'], r['x']+r['w']+pad), min(r['vh'], r['y']+r['h']+pad)
+    if x1 - x0 < 3 or y1 - y0 < 3:
+        return None
+    clip = {'x': x0, 'y': y0, 'width': x1-x0, 'height': y1-y0}
+    a = page.screenshot(clip=clip, animations='disabled')
+    page.evaluate("(i)=>{document.querySelector('[data-se-mark=\"'+i+'\"]').style.setProperty('visibility','hidden','important')}", i)
+    try:
+        b = page.screenshot(clip=clip, animations='disabled')
+    finally:
+        page.evaluate("(i)=>{document.querySelector('[data-se-mark=\"'+i+'\"]').style.removeProperty('visibility')}", i)
+    return a, b
+
+def _mark_ratio(a_png, b_png, svg_area):
+    """SC 1.4.11 grades a mark against its ADJACENT colours, so measure the mark's
+    outer edge, not its belly: an outlined stop (a punched washer, a rim) is legible
+    by its rim whatever its fill. Edge = the outermost ring of the mark's PAINT, where
+    paint means a change of at least 40% of the strongest change, so a soft drop
+    shadow (small change) is never mistaken for the edge."""
+    from PIL import Image
+    A = Image.open(io.BytesIO(a_png)).convert('RGB')
+    B = Image.open(io.BytesIO(b_png)).convert('RGB')
+    W, H = A.size
+    pa, pb = A.tobytes(), B.tobytes()
+    diff = [0] * (W * H)
+    for i in range(W * H):
+        k = 3 * i
+        diff[i] = max(abs(pa[k]-pb[k]), abs(pa[k+1]-pb[k+1]), abs(pa[k+2]-pb[k+2]))
+    changed = sum(1 for d in diff if d > 6)
+    if changed < 12:
+        return None, changed                # nothing visible changed: covered, or zero contrast
+    if changed > FIELD_MAX * svg_area:
+        return 'field', changed
+    top = max(diff); cut = max(7, 0.4 * top)
+    paint = [d >= cut for d in diff]
+    edge = []
+    for y in range(H):
+        for x in range(W):
+            i = y * W + x
+            if not paint[i]: continue
+            if x == 0 or y == 0 or x == W-1 or y == H-1 or not (paint[i-1] and paint[i+1] and paint[i-W] and paint[i+W]):
+                edge.append(i)
+    # The outermost ring is antialiased, a blend of mark and ground, so it always
+    # under-reads. Grade the SECOND ring in: true paint, still at the boundary.
+    es = set(edge)
+    inner = [i for i in range(W * H) if paint[i] and i not in es]
+    ins = set(inner)
+    ring2 = [i for i in inner if (i-1 not in ins) or (i+1 not in ins) or (i-W not in ins) or (i+W not in ins)]
+    if len(ring2) >= 6:
+        edge = ring2
+    elif len(edge) < 6:
+        edge = [i for i in range(W * H) if paint[i]]
+    def med(buf):
+        ls = sorted((lum((buf[3*i], buf[3*i+1], buf[3*i+2])), i) for i in edge)
+        i = ls[len(ls)//2][1]
+        return (buf[3*i], buf[3*i+1], buf[3*i+2])
+    return ratio(med(pa), med(pb)), changed
+
+_INSTANT = ("()=>{document.documentElement.style.setProperty('scroll-behavior','auto','important');"
+            "document.body&&document.body.style.setProperty('scroll-behavior','auto','important')}")
+# html{scroll-behavior:smooth} turns every scrollTo into an animation: a rect read the
+# next instant is mid-flight. Found 2026-11-08 on en195-course.html, where it hid the
+# very spiral this floor was written for. Both floors pin scrolling to instant first.
+
+def nontext_halts(page, mode_label):
+    halts = []
+    page.evaluate(_INSTANT)
+    try:
+        marks = page.evaluate(_MARKS_JS)
+    except Exception as e:
+        return [f"NONTEXT [{mode_label}] could not enumerate marks: {e}"]
+    y0 = page.evaluate("()=>scrollY")
+    for m in marks:
+        shots = _shot_mark(page, m['i'])
+        if not shots:
+            continue
+        r, npx = _mark_ratio(shots[0], shots[1], m['svgArea'])
+        if r is None:
+            # A mark that changes no pixel when hidden is either covered or the same
+            # colour as its ground. Covered marks are not our business; same-colour is.
+            if npx == 0 and m['kind'] == 'diagram':
+                ADVISORIES.append(f"NONTEXT_GHOST [{mode_label}] {m['label']} in \"{m['svgId']}\" "
+                                  f"changes no pixel when hidden: covered, or the colour of its ground")
+            continue
+        if r == 'field':
+            continue
+        if r < NONTEXT_MIN:
+            msg = (f"{m['label']} in \"{m['svgId']}\" = {r:.1f}:1 against what it sits on "
+                   f"(floor {NONTEXT_MIN}, SC 1.4.11)")
+            if m['kind'] == 'diagram':
+                halts.append(f"NONTEXT [{mode_label}] {msg}. A line or a dot that carries "
+                             f"meaning is read, not glimpsed.")
+            else:
+                ADVISORIES.append(f"ART_VALUE [{mode_label}] {msg} — scene paint; Hitchcock "
+                                  f"decides whether it is meant to recede")
+    page.evaluate("(y)=>{scrollTo(0,y);document.querySelectorAll('[data-se-mark]')"
+                  ".forEach(e=>e.removeAttribute('data-se-mark'))}", y0)
+    return halts
+
+_OVERLAYS_JS = r"""() => {
+  const vw = innerWidth, vh = innerHeight, out = [];
+  for (const el of document.querySelectorAll('body *')) {
+    const cs = getComputedStyle(el);
+    if (cs.position !== 'fixed' && cs.position !== 'sticky') continue;
+    if (cs.display === 'none' || cs.visibility === 'hidden' || +cs.opacity === 0) continue;
+    if (el.hidden || el.closest('[hidden]')) continue;
+    const r = el.getBoundingClientRect();
+    if (r.width < 4 || r.height < 4) continue;
+    if ((r.width * r.height) / (vw * vh) > 0.6) continue;      // a backdrop, not an overlay
+    if (cs.position === 'sticky' && (r.bottom < 0 || r.top > vh)) continue;
+    if (out.some(o => o.el.contains(el))) continue;
+    out.push({el, sel: el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') +
+              (el.className && typeof el.className === 'string' ? '.' + el.className.trim().split(/\s+/)[0] : '')});
+  }
+  window.__seOverlays = out.map(o => o.el);
+  return out.map(o => o.sel);
+}"""
+
+_COVER_JS = r"""(edge) => {
+  // edge: 'top' | 'bottom' | 'focus'
+  const ovs = (window.__seOverlays || []).map(el => ({el, r: el.getBoundingClientRect(),
+      sel: el.tagName.toLowerCase() + (el.id ? '#' + el.id : '')}))
+      .filter(o => o.r.width > 0 && o.r.height > 0 && o.r.bottom > 0 && o.r.top < innerHeight);
+  const ov = (a, b) => Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) *
+                       Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top));
+  const hits = [];
+  const scrollable = document.documentElement.scrollHeight > innerHeight + 4;
+  const vis = r => r.bottom > 0 && r.top < innerHeight && r.width > 0 && r.height > 0;
+  const blocks = [...document.querySelectorAll('p,li,h1,h2,h3,h4,dd,dt,td,th,figcaption,blockquote,label,a,button')]
+      .filter(el => (el.innerText || '').trim().length > 1);
+  // graded per LINE, not per block: one buried line in a two-line paragraph is a
+  // buried line, whatever fraction of the block it is
+  for (const el of blocks) {
+    const br = el.getBoundingClientRect();
+    if (!vis(br)) continue;
+    const rg = document.createRange(); rg.selectNodeContents(el);
+    const lines = [...rg.getClientRects()].filter(r => r.width > 12 && r.height > 6 && vis(r));
+    let done = false;
+    for (const o of ovs) {
+      if (done) break;
+      if (o.el.contains(el) || el.contains(o.el)) continue;
+      const mid = (o.r.top + o.r.bottom) / 2, low = mid > innerHeight / 2;
+      if (scrollable && ((edge === 'top' && low) || (edge === 'bottom' && !low))) continue;
+      for (const r of lines) {
+        const a = ov(r, o.r) / (r.width * r.height);
+        if (a <= 0.5) continue;
+        // only an overlay PAINTED above the line covers it: probe the CENTRE of the
+        // intersection, since a rounded pill's corner lets the page show through
+        const cx = (Math.max(r.left, o.r.left) + Math.min(r.right, o.r.right)) / 2,
+              cy = (Math.max(r.top, o.r.top) + Math.min(r.bottom, o.r.bottom)) / 2;
+        const top = document.elementFromPoint(Math.min(cx, innerWidth - 1), Math.min(cy, innerHeight - 1));
+        if (!top || !o.el.contains(top)) continue;
+        hits.push({sel: o.sel, text: el.innerText.trim().slice(0, 28), pct: Math.round(a * 100)});
+        done = true; break;
+      }
+    }
+  }
+  const fp = ovs.reduce((s, o) => s + ov(o.r, {left: 0, top: 0, right: innerWidth, bottom: innerHeight}), 0)
+             / (innerWidth * innerHeight);
+  return {hits, footprint: fp};
+}"""
+
+def obscured_halts(page, mode_label):
+    halts = []
+    page.evaluate(_INSTANT)
+    try:
+        sels = page.evaluate(_OVERLAYS_JS)
+    except Exception as e:
+        return [f"OBSCURED [{mode_label}] could not enumerate overlays: {e}"]
+    if not sels:
+        return halts
+    seen = set()
+    for edge, js in (('top', "()=>scrollTo(0,0)"),
+                     ('bottom', "()=>scrollTo(0,document.documentElement.scrollHeight)")):
+        page.evaluate(js); page.wait_for_timeout(60)
+        res = page.evaluate(_COVER_JS, edge)
+        for h in res['hits']:
+            k = (edge, h['sel'], h['text'])
+            if k in seen: continue
+            seen.add(k)
+            halts.append(f"OBSCURED [{mode_label}] {h['sel']} covers {h['pct']}% of a line of "
+                         f"\"{h['text']}\" at the {edge} of the page, where no scroll can "
+                         f"move it out from under. Pad the page by the overlay's height.")
+        if edge == 'top' and res['footprint'] > FOOTPRINT_MAX:
+            ADVISORIES.append(f"FOOTPRINT [{mode_label}] fixed controls cover "
+                              f"{res['footprint']*100:.0f}% of a 390x844 screen "
+                              f"(advisory over {FOOTPRINT_MAX*100:.0f}%): {', '.join(sels[:4])}")
+    # focus not obscured — tab every control and measure what the browser scrolled to
+    n = page.evaluate("()=>document.querySelectorAll('a[href],button,input,select,textarea,[tabindex]:not([tabindex=\"-1\"])').length")
+    page.evaluate("()=>scrollTo(0,0)")
+    for _ in range(min(n, 120)):
+        page.keyboard.press('Tab')
+        got = page.evaluate(r"""() => {
+          const f = document.activeElement; if (!f || f === document.body) return null;
+          const r = f.getBoundingClientRect(); if (!r.width || !r.height) return null;
+          for (const o of (window.__seOverlays || [])) {
+            if (o.contains(f)) continue;
+            const q = o.getBoundingClientRect();
+            const a = Math.max(0, Math.min(r.right, q.right) - Math.max(r.left, q.left)) *
+                      Math.max(0, Math.min(r.bottom, q.bottom) - Math.max(r.top, q.top));
+            const t = document.elementFromPoint(Math.min(Math.max(r.left + r.width/2, 0), innerWidth-1),
+                                                Math.min(Math.max(r.top + r.height/2, 0), innerHeight-1));
+            if (a / (r.width * r.height) > 0.5 && t && o.contains(t))
+              return {f: f.tagName.toLowerCase() + ' "' + (f.innerText || f.getAttribute('aria-label') || '').trim().slice(0, 24) + '"',
+                      o: o.tagName.toLowerCase() + (o.id ? '#' + o.id : '')};
+          }
+          return null;
+        }""")
+        if got:
+            k = ('focus', got['f'])
+            if k not in seen:
+                seen.add(k)
+                halts.append(f"OBSCURED [{mode_label}] focused {got['f']} is more than half "
+                             f"hidden under {got['o']} (SC 2.4.11). Add scroll-padding.")
+    page.evaluate("()=>{document.activeElement&&document.activeElement.blur();scrollTo(0,0)}")
+    return halts
+
 def audit(path, no_net=True):
     from playwright.sync_api import sync_playwright
     halts = []
@@ -809,6 +1121,9 @@ def audit(path, no_net=True):
             halts += h
             # -- 4c. ESCAPED TEXT (floor 12), across the text scales a reader uses
             halts += escape_halts(page, 'default')
+            # -- 4d. NON-TEXT CONTRAST (floor 13) and OBSCURED (floor 14)
+            halts += nontext_halts(page, 'default')
+            halts += obscured_halts(page, 'default')
 
             # -- 6. OFFLINE FLOOR
             for host in sorted(set(external)):
@@ -849,6 +1164,7 @@ def audit(path, no_net=True):
                 page.wait_for_timeout(80)
                 h3, _ = audit_page(page, path, f'prefers-{scheme}')
                 halts += [x for x in h3 if x.startswith(('CONTRAST', 'CLIPPED_TEXT'))]
+                halts += nontext_halts(page, f'prefers-{scheme}')
             page.emulate_media(color_scheme='light')
         finally:
             b.close()
@@ -856,7 +1172,7 @@ def audit(path, no_net=True):
     # dedupe, then order by severity. The headline defect must lead: a preference
     # gate on first paint is a WALL, and reporting its button size first buries it.
     SEV = {'OPENING_WALL':0, 'CLIPPED_TEXT':1, 'OFFLINE':2, 'EMOJI':3, 'CONTRAST':4,
-           'TOKEN_ROLE':5, 'STOP_SEPARATION':6, 'FOCUS':7, 'TOUCH_TARGET':8}
+           'NONTEXT':4, 'OBSCURED':4, 'TOKEN_ROLE':5, 'STOP_SEPARATION':6, 'FOCUS':7, 'TOUCH_TARGET':8}
     out, s = [], set()
     for x in halts:
         if x not in s:
@@ -937,7 +1253,7 @@ def self_test(verbose=True):
     fails = []
     for c in expected:
         f = os.path.join(cdir, c['file'])
-        halts = audit(f)
+        halts = audit(f); ADVISORIES.clear()
         got = 'HALT' if halts else 'PASS'
         ok = (got == c['expect'])
         if ok and c['expect'] == 'HALT' and c['code']:
@@ -995,6 +1311,12 @@ def main():
                 print(f"       {h}")
             if len(halts) > 14:
                 print(f"       ... +{len(halts)-14} more")
+        mine = [a for a in dict.fromkeys(ADVISORIES)]
+        ADVISORIES.clear()
+        if mine:
+            print(f"     ADVISORY — {len(mine)} (never blocks):")
+            for a in mine[:8]:
+                print(f"       {a}")
         # Adaptivity is ADVISORY: it never changes PASS/HALT or the exit code.
         if do_profiles:
             warns = grade_adaptivity(f)

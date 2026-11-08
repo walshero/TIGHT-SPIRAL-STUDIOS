@@ -118,7 +118,7 @@ else
   # day named one directory instead of the pattern, so it only half-landed. A fixture
   # that stops failing is caught by the owning gate's self-test, never by the sweep.
   SURFACES=$(find . -name '*.html' -not -path './.git/*' -not -path './archive/*' \
-    -not -path './rescued/*' -not -path '*/node_modules/*' -not -path './studio-eyes/canary/*' \
+    -not -path './rescued/*' -not -path '*/node_modules/*' -not -path '*/canary/*' \
     -not -name '*-canary-*.html' -not -name 'canary-*.html' \
     -not -path './confluence-hub/*' \
     -not -name 'confluence-TRUNK*.html' | sort)
