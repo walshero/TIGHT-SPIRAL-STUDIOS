@@ -193,3 +193,17 @@ Founder, 13:19 ET: "In down the nerve, there is no fail state on the jumps and t
 - The Back button is announced as "Restart the ride".
 
 **Names.** Brainstorm in progress; no ruling yet. "Threshold" and "Touch & Go" are taken by existing games.
+
+## v0.13 — renamed Signal Rider (2026-11-08)
+
+Founder, 14:37 ET: "Rename signal rider and push new updates version to repo and studio." The founder chose Signal Rider over Neuron Rider. Neuron Rider sounds like Neon Rider, an existing neon tube racer.
+
+**Renamed:** the on-screen title, the page title and the canvas label now say Signal Rider, version v0.13.
+
+**Kept:** the file path stays lab/down-the-nerve.html so bookmarks keep working. Gameplay is unchanged from v0.12.
+
+**Lab shelf:** the lab/index.html entry is renamed and its description rewritten. It previously read v0.8 and still described the retired checkpoint replays.
+
+**Builder:** claude/signal-rider-build-v13.py.
+
+**Gates:** contrast SHIP, Studio Eyes PASS, top floor PASS, no page errors.
