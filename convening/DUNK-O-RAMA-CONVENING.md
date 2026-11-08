@@ -307,3 +307,29 @@ BUILT:
 - Retires v0.8's fixed mix (72 / 15 / 13).
 
 DECISIONS OWED: D8 the rates themselves; D6 (legend-first ball) carried.
+
+## FOUNDER RULING 2026-11-08, 10:01 ET — v1.0 (fair answers are safe; layman terms; names)
+
+FOUNDER: "You can't throw a ball at a candidate who hasn't cheated. But 'cheat' isn't the
+right word in the game. Let's use critical thinking terminology, for layman." And: "I don't
+like SKIP as a name they can be confused as a game command. And senators don't run for mayor
+so let's make it councilman etc."
+
+BUILT:
+- Targets open only for a fallacy, and only after the player calls it. A fair answerer's
+  target is boarded up (two crossed planks); a ball that hits it thunks off with a line
+  ("You cannot dunk a fair answer. House rules."). The top target opens only when both
+  candidates used a fallacy. Pulling before the call brings the card back: "Call it first."
+- The explanation names the open target in place ("Twirl's target, on the right, is open"),
+  which retires v0.8's legend-first ball. Every ball now has a question.
+- A round is ten questions, no repeats. When both answers are fair there is no throw: the card
+  says so and offers "Next question". The HUD counts questions left.
+- Terms: "fallacy (a trick in reasoning)" on first use, then "fallacy"; "fair answer" replaces
+  "no cheat" and "straight answer". Chips: "Twirl: Straw man", "Both fair", "Both used a
+  fallacy". End card counts fallacies per candidate.
+- Names: Councilman Lyle Droneon (was Senator), Spencer Twirl (was Skip). Short names are now
+  surnames everywhere: Droneon, Twirl, Bunting, Ledger, Bluster. None reads as a command.
+
+MEASURED: card fit 0 of 600 views scroll at 263 x 480; bot rounds 10 of 10 distinct questions,
+throws only at open targets; boarded-target probe: no dunk; early pull reopens the card;
+preship SHIP.
