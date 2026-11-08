@@ -159,7 +159,7 @@ def token_blocks(css):
 
     # the OS-applied palette. nested braces, so match to the inner :root.
     for mm in re.finditer(
-            r'@media[^{]*prefers-color-scheme\s*:\s*dark[^{]*\{\s*:root\s*\{([^}]*)\}', css, re.I):
+            r'@media[^{]*prefers-color-scheme\s*:\s*dark[^{]*\{\s*(?:/\*.*?\*/\s*)*:root\b[^{]*\{([^}]*)\}', css, re.I):
         blk = dict(root); blk.update(_decls(mm.group(1)))
         modes['os-dark'] = blk
 
