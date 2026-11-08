@@ -190,3 +190,4 @@ highest-leverage unlanded item in the repo and it costs a click.
 | 2026-11-07T17:04Z | lab/spool.html | preship | SHIP | v0.1 LAB, belt PASS (tick 12 report), contrast worst 8.74 | md5 849b0af2 | 41247 B |
 | 2026-11-07T18:57Z | lab/en195-course.html | belt | HALT-LAB | Lab: belt ticks 1,2,3,5,7,11 HALT; contrast gate SHIP 7.42; runtime audit 12/12 clean |  |  |
 | 2026-11-08T18:22Z | lab/edgars-spot-evening.html | preship | SHIP | v0.1 LAB art direction animatic (founder picked option 5); belt PASS, contrast worst 12.30 | md5 1533b173 | 21714 B |
+| 2026-11-08T18:45Z | row-k-dress-rehearsal.html | preship | SHIP | v56 Extended Run: six Dramatical Moves scenes behind a lobby PROGRAM switch (Row K default unchanged); belt PASS, tick 12 report | md5 e2450a26 | 270695 B |
