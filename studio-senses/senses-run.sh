@@ -9,7 +9,8 @@
 #   -> ears.py          Layer 1 sound floors          (SILENT is printed, never PASS)
 #   -> fingers-play.py  every tap as a thumb made it  (verb in view, path in view, coverage)
 #   -> feedback-floor.py the subject in its window, the result still on screen (builds with #receipt)
-#   -> studio-eyes.py   real-pixel contrast + clip     (first paint, every light mode)
+#   -> feel-probe.py    every tap answers on screen <400 ms, errors, frame pacing, motion
+#   -> studio-eyes.py   real-pixel contrast + clip + non-text + obscured (every light mode)
 #   -> personas.py      sighted.md / ear.md / fingers-states.json for the seats
 #
 # Usage: studio-senses/senses-run.sh <build.html> [--secondary sc-about,sc-credits]
@@ -31,8 +32,11 @@ echo "-- fingers play";  python3 "$HERE/fingers-play.py" "$OUT" $SEC | sed 's/^/
 if grep -q 'id="receipt"' "$B"; then
 echo "-- feedback floor"; python3 "$HERE/feedback-floor.py" "$B" | sed 's/^/  /'; [ "${PIPESTATUS[0]}" -ne 0 ] && fail=1
 fi
+# feel probe (2026-11-08): every tap answers on screen within 400 ms, no script errors,
+# steady frames, no NaN or escaped motion. Thresholds and sources in the file header.
+echo "-- feel";          python3 "$HERE/feel-probe.py" "$B" --json "$OUT/feel.json" 2>/dev/null | sed 's/^/  /'; [ "${PIPESTATUS[0]}" -ne 0 ] && fail=1
 echo "-- top floor";     python3 "$HERE/top-floor.py" "$B" | sed 's/^/  /'; [ "${PIPESTATUS[0]}" -ne 0 ] && fail=1
-echo "-- eyes";          python3 "$ROOT/studio-eyes/studio-eyes.py" "$B" 2>/dev/null | grep -E 'HALT|CONTRAST|CLIP|of [0-9]+ at HALT' | grep -v 'SELF-TEST' | sed 's/^/  /'
+echo "-- eyes";          python3 "$ROOT/studio-eyes/studio-eyes.py" "$B" 2>/dev/null | grep -E 'HALT|CONTRAST|CLIP|NONTEXT|OBSCURED|of [0-9]+ at HALT' | grep -v 'SELF-TEST' | sed 's/^/  /'
                          python3 "$ROOT/studio-eyes/studio-eyes.py" "$B" >/dev/null 2>&1 || fail=1
 echo "-- personas";      python3 "$HERE/personas.py" "$OUT" | sed 's/^/  /'
 echo "== SENSES: $([ $fail -eq 0 ] && echo PASS || echo HALT)  (seats read $OUT; they predict, the founder's play grades)"
