@@ -144,3 +144,52 @@ Build: artifact 93f72ea1 version 1794061212-f5ef, sha256 3483932cdfddc7467e75052
 - tmsg: 0/288 message-ball overlaps.
 - Contrast gate: SHIP, worst pair 18.10.
 - No errors.
+
+## v0.12 — the leap can fail (2026-11-08)
+
+Founder, 13:19 ET: "In down the nerve, there is no fail state on the jumps and there should be. It should be slightly harder."
+
+**Science.** A neuron fires only when enough input lands together to reach threshold. Below threshold there is no action potential (OpenStax A&P 12.5).
+
+**Fail state.**
+- Each gap has a closing window:
+  - Relays: 2 landings in 5 beats. A half landing counts half.
+  - Thinking cortex, ordinary week: 3 in 6.
+  - Thinking cortex, hard week: each landing counts 0.5 (floor raised from 0.35), 8 beats.
+- Missing the window shows "Did not fire", with a spoken line and a fizzle. It costs one of 3 hits, and a fresh spark retries from 7 units back.
+- At the cortex, half of what landed carries over (summation).
+- The third hit opens the fade card, which now names the gap when the gap was the cause.
+
+**Slightly harder.**
+- The beat quickens by leg: 1.0 / 0.92 / 0.85 / 0.8 s.
+- Windows are tighter: a full landing is under 0.25 rad, a half under 0.5.
+- Targets jump only as far as steering (2.7 rad/s) covers in 60% of a beat, so it's hard but never unreachable.
+- On a two-spine cortex the target holds and jumps every third beat.
+
+**Calibration** (simulated aimers at the game's steer speed; t12.py, 6 trials each):
+
+| Gap | 250 ms reaction | 450 ms reaction | No steering |
+|---|---|---|---|
+| Default week, relay | 6/6 fire | 5/6 fire | 0/6 |
+| Default week, cortex (first try) | 4/6 | 3/6 | 0/6 |
+| Hard week, cortex (with carryover) | fires in 1-3 tries | fires in 1-2 tries | the alarm road fires first |
+
+**Also in this build.**
+- HUD text has solid backings, and the balance fulcrum is lighter. These were Studio Eyes contrast HALTs already present in v0.11.
+- --ink and --bg are split into text tokens plus --inkfill and --ground fill tokens (Studio Eyes TOKEN_ROLE).
+- The legend has a line on how the leap is won and lost.
+
+**Gates.**
+- Contrast gate: SHIP.
+- Studio Eyes: PASS.
+- Top floor: PASS.
+- Messages vs ball: 0/288.
+- Senses: HALT on fingers P3 "shallow". The crawl has no screen census and never enters the ride. The seat read (one agent) confirmed this and declined to seat. LAB status allows it.
+
+**Open from the seat read.**
+- Give the crawl a way into the ride (sc- screens for the ride, the "Did not fire" banner and the fade card, plus a held steer through one window).
+- The crawler counts 0 of 0 screens as FULL (senses-crawl.py line 387).
+- The top bar shows the word "Comfort", which the 2026-10-13 ruling bars.
+- The Back button is announced as "Restart the ride".
+
+**Names.** Brainstorm in progress; no ruling yet. "Threshold" and "Touch & Go" are taken by existing games.
