@@ -207,3 +207,33 @@ Founder, 14:37 ET: "Rename signal rider and push new updates version to repo and
 **Builder:** claude/signal-rider-build-v13.py.
 
 **Gates:** contrast SHIP, Studio Eyes PASS, top floor PASS, no page errors.
+
+## v0.14 — a guided path through the week (2026-11-08)
+
+**Founder, 14:59 ET:** "when you are choosing categories at the start, the natural path is to drill down in the first box and then play the week instead of having a chance to review all categories." He accepted the recommended fix at 15:00 ("1 rec.").
+
+**Inside a category:**
+- A large "Next: <category>" button sits at the bottom, in the same spot every time, with "Skip to review" beside it.
+- Ride is hidden.
+- A progress line reads "Stress n of 6 looked at. Support n of 5."
+- Focus moves to the category heading.
+
+**Order:** the six stress categories, then the five support categories.
+
+**Review screen:** the last Next opens "Your week". It shows:
+- every block chosen, each tappable to remove;
+- "Not looked at: …" with a "Look at <first unseen>" button;
+- the balance and effects panel above;
+- Ride and Calm road.
+
+**Ride:** "Ride this week" appears only on the category list and the review screen. Each new visit to the tray starts a fresh walk.
+
+**Builder:** claude/signal-rider-build-v14.py.
+
+**Checks:**
+- t14 walks all 11 categories by Next to the review.
+- Remove works.
+- Skip-to-review lists the unseen categories.
+- The ride starts from the review screen.
+- t11 is updated: Ride is now tapped from the list, since it's hidden inside categories.
+- Contrast SHIP, Studio Eyes PASS, top floor PASS, no errors.
