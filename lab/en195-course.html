@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<!-- lab/en195-course.html · EN195 Creative Writing course site · v1.0 · LAB · Tight Spiral Studios · 2026-11-07 -->
+<!-- lab/en195-course.html · EN195 Creative Writing course site · v1.1 · LAB · Tight Spiral Studios · 2026-11-08 (v1.1: spiral reads in dark mode, role tokens split, 44px links, 200% text reflows) -->
 <html lang="en" data-comfort="bright">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<title>EN195 Creative Writing v1.0 · MassBay · Tight Spiral Studios</title>
+<title>EN195 Creative Writing v1.1 · MassBay · Tight Spiral Studios</title>
 <meta name="description" content="EN195 Creative Writing at MassBay Community College: four genres, four workshops, one portfolio. How the course works, week by week.">
 <meta name="author" content="Matt Walsh, Professor of English, MassBay Community College">
+<meta name="tsp:surface" content="site">
 <meta name="tsp:studio" content="Tight Spiral Studios · Play. Notice. Design.">
 <meta name="tsp:version" content="1.0 · 2026-11-07">
 <meta name="tsp:source" content="FALL 2026 EN195-700 Syllabus · Google Doc 1Ga0iM6k5VJ_YHaHFZ1iA74pt40LW2Yxy8D1uAbdyb1w · modified 2026-09-11">
@@ -24,21 +25,29 @@
   --a-sky:#f1e4cc; --a-sun:#c05a1e; --a-h1:#9fbcb3; --a-h2:#5f8f86; --a-h3:#2f6660; --a-h4:#164a45;
   --a-path:#f7efe0; --a-wood:#7a4a2a; --a-red:#a8321e; --a-gold:#e2a33a; --a-water:#4f8fa0; --a-page:#fffaf0; --a-shadow:#3b2a18;
   --fs:1;
+    --line:#1c1915; --slab:#1c1915; --ink-rev:#f3ead9; --focus:#0d5550;
+    --a-trk:#164a45; --a-rim:#fffaf0; --a-n-sun:#c05a1e; --a-n-gold:#8a5a10; --a-n-red:#a8321e; --a-n-deep:#164a45;
 }
 html[data-comfort="bright"]{
   --paper:#f3ead9; --panel:#fbf6ec; --chip:#e8dcc5; --edge:#b9a888;
   --ink:#1c1915; --ink2:#2e2924; --teal:#0d5550;
   --a-sky:#f1e4cc; --a-h1:#9fbcb3; --a-h2:#5f8f86; --a-h3:#2f6660; --a-h4:#164a45; --a-path:#f7efe0; --a-page:#fffaf0; --a-water:#4f8fa0;
+    --line:#1c1915; --slab:#1c1915; --ink-rev:#f3ead9; --focus:#0d5550;
+    --a-trk:#164a45; --a-rim:#fffaf0; --a-n-sun:#c05a1e; --a-n-gold:#8a5a10; --a-n-red:#a8321e; --a-n-deep:#164a45;
 }
 html[data-comfort="dim"]{
   --paper:#d9cdb7; --panel:#e6dcc9; --chip:#cdbfa5; --edge:#9c8b6c;
   --ink:#1a1713; --ink2:#29241f; --teal:#0b4a46;
   --a-sky:#d6c6a8; --a-h1:#8aa79e; --a-h2:#557f77; --a-h3:#2a5b55; --a-h4:#13413d; --a-path:#e7dcc6; --a-page:#efe6d4; --a-water:#467f8f;
+    --line:#1a1713; --slab:#1a1713; --ink-rev:#d9cdb7; --focus:#0b4a46;
+    --a-trk:#164a45; --a-rim:#fffaf0; --a-n-sun:#9a4515; --a-n-gold:#7d520e; --a-n-red:#a8321e; --a-n-deep:#164a45;
 }
 html[data-comfort="night"]{
   --paper:#14181a; --panel:#1e2427; --chip:#2a3135; --edge:#4a555b;
   --ink:#eef1f0; --ink2:#d8dfdd; --teal:#8fd6cc;
   --a-sky:#1b2226; --a-h1:#2c4a47; --a-h2:#22403c; --a-h3:#183430; --a-h4:#0f2623; --a-path:#3a3f3d; --a-page:#d9d3c4; --a-water:#2d5d6a;
+    --line:#eef1f0; --slab:#eef1f0; --ink-rev:#14181a; --focus:#8fd6cc;
+    --a-trk:#9cc9bf; --a-rim:#1b2226; --a-n-sun:#e8834a; --a-n-gold:#e9b85a; --a-n-red:#ec6f58; --a-n-deep:#cfeee6;
 }
 /* DARK HOST LAW: a dark-preferring device never sees a light palette. Every stop forks dark, spaced by lightness. */
 @media (prefers-color-scheme: dark){
@@ -47,19 +56,25 @@ html[data-comfort="night"]{
     --paper:#262e33; --panel:#313a40; --chip:#3b454c; --edge:#5b6870;
     --ink:#eef1f0; --ink2:#dde3e1; --teal:#9adcd2;
     --a-sky:#2c363c; --a-h1:#36564f; --a-h2:#2a4a45; --a-h3:#1f3d39; --a-h4:#15302d; --a-path:#4a504d; --a-page:#e1dbcc; --a-water:#336a78;
-  }
+    --line:#eef1f0; --slab:#eef1f0; --ink-rev:#262e33; --focus:#9adcd2;
+    --a-trk:#9cc9bf; --a-rim:#2c363c; --a-n-sun:#e8834a; --a-n-gold:#e9b85a; --a-n-red:#ec6f58; --a-n-deep:#cfeee6;
+}
   html[data-comfort="dim"]{
     color-scheme:dark;
     --paper:#191e21; --panel:#232a2e; --chip:#2e363b; --edge:#4c575d;
     --ink:#eef1f0; --ink2:#d8dfdd; --teal:#8fd6cc;
     --a-sky:#1f272b; --a-h1:#2e4b47; --a-h2:#23403c; --a-h3:#193531; --a-h4:#102824; --a-path:#3c413f; --a-page:#d9d3c4; --a-water:#2d5d6a;
-  }
+    --line:#eef1f0; --slab:#eef1f0; --ink-rev:#191e21; --focus:#8fd6cc;
+    --a-trk:#9cc9bf; --a-rim:#1f272b; --a-n-sun:#e8834a; --a-n-gold:#e9b85a; --a-n-red:#ec6f58; --a-n-deep:#cfeee6;
+}
   html[data-comfort="night"]{
     color-scheme:dark;
     --paper:#0d1012; --panel:#161b1e; --chip:#20272b; --edge:#3f494f;
     --ink:#e9eceb; --ink2:#d3d9d7; --teal:#86cfc5;
     --a-sky:#12181b; --a-h1:#24403c; --a-h2:#1b3632; --a-h3:#132c28; --a-h4:#0b201d; --a-path:#303533; --a-page:#cfc9bb; --a-water:#264f5a;
-  }
+    --line:#e9eceb; --slab:#e9eceb; --ink-rev:#0d1012; --focus:#86cfc5;
+    --a-trk:#9cc9bf; --a-rim:#12181b; --a-n-sun:#e8834a; --a-n-gold:#e9b85a; --a-n-red:#ec6f58; --a-n-deep:#cfeee6;
+}
 }
 
 *{box-sizing:border-box}
@@ -71,11 +86,16 @@ body{margin:0; color:var(--ink); background:var(--paper); font-family:"Atkinson 
 h1,h2,h3{font-family:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif; line-height:1.15; color:var(--ink); margin:0 0 .5em}
 h1{font-size:clamp(2.2rem,6vw,3.6rem); letter-spacing:-.01em}
 h2{font-size:clamp(1.7rem,4vw,2.4rem)}
+/* 200% text: grid children may shrink, long words and addresses may break */
+h1,h2,h3,p,li,dd,dt,a,.kicker{overflow-wrap:break-word; hyphens:auto}
+.split>*,.hero>*,.shops>*,.facts>*,.verbs>*,.growth>*,.tiles>*,.games>*,.help>*{min-width:0}
+p a,dd a,li a{overflow-wrap:anywhere}
+.rules{grid-template-columns:minmax(0,1fr)} .tasks li>*{min-width:0; overflow-wrap:anywhere}
 h3{font-size:1.3rem}
 p{margin:0 0 1em; max-width:38em}
 a{color:var(--teal); text-underline-offset:.18em; text-decoration-thickness:.08em}
-a:focus-visible, button:focus-visible{outline:4px solid var(--teal); outline-offset:3px}
-.link-line{display:block; margin:.15em 0 1em; font-weight:700}
+a:focus-visible, button:focus-visible{outline:4px solid var(--focus); outline-offset:3px}
+.link-line{display:flex; align-items:center; min-height:44px; margin:.15em 0 1em; font-weight:700}
 .wrap{max-width:1180px; margin:0 auto; padding:0 1.1rem}
 section{padding:3.2rem 0; border-top:2px dashed var(--edge)}
 .kicker{font-weight:700; letter-spacing:.06em; text-transform:uppercase; font-size:.9rem; color:var(--teal); margin-bottom:.5em}
@@ -87,8 +107,8 @@ section{padding:3.2rem 0; border-top:2px dashed var(--edge)}
 .se-links{display:flex; gap:.3rem}
 .se-home{display:inline-flex; align-items:center; min-height:44px; padding:0 .8rem; border:2px solid var(--edge); border-radius:6px; background:var(--panel); color:var(--ink); font-weight:700; font-size:.9rem; text-decoration:none}
 .modebtn{min-width:48px; min-height:48px; display:inline-grid; place-items:center; border:2px solid var(--edge); border-radius:50%; background:var(--panel); color:var(--ink); cursor:pointer}
-.tsp-labchip{display:inline-flex; align-items:center; min-height:30px; padding:0 .45rem; border:2px dashed var(--ink); border-radius:5px; color:var(--ink); font-size:.9rem; font-weight:700}
-.ver{display:inline-block; vertical-align:middle; font-family:"Atkinson Hyperlegible",system-ui,sans-serif; font-size:1rem; font-weight:700; border:2px solid var(--ink); color:var(--ink); border-radius:5px; padding:.05rem .45rem; margin-left:.3rem; white-space:nowrap}
+.tsp-labchip{display:inline-flex; align-items:center; min-height:30px; padding:0 .45rem; border:2px dashed var(--line); border-radius:5px; color:var(--ink); font-size:.9rem; font-weight:700}
+.ver{display:inline-block; vertical-align:middle; font-family:"Atkinson Hyperlegible",system-ui,sans-serif; font-size:1rem; font-weight:700; border:2px solid var(--line); color:var(--ink); border-radius:5px; padding:.05rem .45rem; margin-left:.3rem; white-space:nowrap}
 .se-rail{display:flex; gap:.6rem; justify-content:center; padding:1.2rem; border-top:2px dashed var(--edge)}
 .se-rail a,.se-rail button{display:inline-flex; align-items:center; min-height:48px; padding:0 1.2rem; border:2px solid var(--edge); border-radius:6px; background:var(--panel); color:var(--ink); font:inherit; font-weight:700; text-decoration:none; cursor:pointer}
 .brand{display:flex; align-items:center; gap:.5rem; font-weight:700; color:var(--ink); text-decoration:none; font-size:.9rem; letter-spacing:.05em}
@@ -112,8 +132,8 @@ section{padding:3.2rem 0; border-top:2px dashed var(--edge)}
 .pull{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; font-size:1.35rem; font-style:italic; border-left:6px solid var(--a-sun); padding:.2rem 0 .2rem 1rem; margin:1.2rem 0}
 .pull cite{display:block; font-style:normal; font-size:.9rem; font-family:inherit; margin-top:.3rem}
 .btns{display:flex; flex-wrap:wrap; gap:.7rem; margin:1.2rem 0}
-.btn{display:inline-flex; align-items:center; min-height:48px; padding:0 1.1rem; border-radius:8px; font-weight:700; text-decoration:none; border:2px solid var(--ink); color:var(--ink); background:var(--panel)}
-.btn.primary{background:var(--ink); color:var(--paper)}
+.btn{display:inline-flex; align-items:center; min-height:48px; padding:0 1.1rem; border-radius:8px; font-weight:700; text-decoration:none; border:2px solid var(--line); color:var(--ink); background:var(--panel)}
+.btn.primary{background:var(--slab); color:var(--ink-rev)}
 .meta-line{font-size:.95rem}
 
 /* facts */
@@ -141,7 +161,7 @@ section{padding:3.2rem 0; border-top:2px dashed var(--edge)}
 /* workshop rules */
 .rules{counter-reset:r; list-style:none; padding:0; margin:0; display:grid; gap:.7rem}
 .rules li{counter-increment:r; padding:.75rem 1rem .75rem 3.4rem; position:relative}
-.rules li::before{content:counter(r); position:absolute; left:.8rem; top:.6rem; width:1.9rem; height:1.9rem; border-radius:50%; background:var(--ink); color:var(--paper); display:grid; place-items:center; font-weight:700; font-size:.95rem}
+.rules li::before{content:counter(r); position:absolute; left:.8rem; top:.6rem; width:1.9rem; height:1.9rem; border-radius:50%; background:var(--slab); color:var(--ink-rev); display:grid; place-items:center; font-weight:700; font-size:.95rem}
 .rules b{display:block}
 .growth{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:.8rem; margin-top:1rem}
 .growth div{padding:.9rem 1rem}
@@ -150,11 +170,11 @@ section{padding:3.2rem 0; border-top:2px dashed var(--edge)}
 /* semester map */
 .weekbar{display:flex; flex-wrap:wrap; gap:.45rem; margin:1.2rem 0 1rem; padding:0; list-style:none}
 .weekbar button{min-width:3rem; min-height:48px; padding:.2rem .6rem; font:inherit; font-weight:700; font-size:.95rem; color:var(--ink); background:var(--panel); border:2px solid var(--edge); border-radius:8px 8px 3px 3px; cursor:pointer; position:relative}
-.weekbar button[aria-pressed="true"]{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+.weekbar button[aria-pressed="true"]{background:var(--slab); color:var(--ink-rev); border-color:var(--line)}
 .weekbar button.now::after{content:""; position:absolute; left:50%; bottom:-9px; transform:translateX(-50%); width:10px; height:10px; border-radius:50%; background:var(--a-sun)}
 .weekpanel{padding:1.2rem 1.3rem}
 .weekpanel h3{margin-bottom:.2rem}
-.weekpanel .stamp{display:inline-block; font-weight:700; font-size:.9rem; border:2px solid var(--ink); border-radius:5px; padding:.05rem .45rem; margin-left:.4rem; vertical-align:middle; transform:rotate(-2deg)}
+.weekpanel .stamp{display:inline-block; font-weight:700; font-size:.9rem; border:2px solid var(--line); border-radius:5px; padding:.05rem .45rem; margin-left:.4rem; vertical-align:middle; transform:rotate(-2deg)}
 .day{margin-top:1rem}
 .day h4{margin:0 0 .35rem; font-size:1rem}
 .tasks{list-style:none; padding:0; margin:0; display:grid; gap:.4rem}
@@ -200,13 +220,14 @@ footer{border-top:2px dashed var(--edge); padding:2.4rem 0 2rem}
 /* art classes: fills only */
 .s-sky{fill:var(--a-sky)} .s-sun{fill:var(--a-sun)} .s-h1{fill:var(--a-h1)} .s-h2{fill:var(--a-h2)} .s-h3{fill:var(--a-h3)} .s-h4{fill:var(--a-h4)}
 .s-path{fill:var(--a-path)} .s-wood{fill:var(--a-wood)} .s-red{fill:var(--a-red)} .s-gold{fill:var(--a-gold)} .s-water{fill:var(--a-water)} .s-page{fill:var(--a-page)}
+.n-stop{stroke:var(--a-rim); stroke-width:6}
 .s-line{fill:none; stroke:var(--a-h4); stroke-width:3; stroke-linecap:round}
 .s-ink{fill:var(--a-shadow)}
 .cut{filter:url(#cut)}
 
 /* the frog: hidden crossover constant. No points, no counter. */
 .frog{cursor:pointer}
-.frog:focus-visible{outline:3px solid var(--teal)}
+.frog:focus-visible{outline:3px solid var(--focus)}
 .frog.hop{animation:hop .7s ease-out forwards}
 @keyframes hop{0%{transform:translate(0,0)} 40%{transform:translate(18px,-38px) rotate(-12deg)} 100%{transform:translate(46px,10px) scale(.2); opacity:0}}
 .sway{animation:sway 6s ease-in-out infinite alternate; transform-origin:50% 100%}
@@ -311,7 +332,7 @@ footer{border-top:2px dashed var(--edge); padding:2.4rem 0 2rem}
   </div>
   <div>
     <p class="kicker">MassBay Community College · English</p>
-    <h1 id="h-title">EN195<br>Creative Writing <span class="ver">v1.0</span></h1>
+    <h1 id="h-title">EN195<br>Creative Writing <span class="ver">v1.1</span></h1>
     <p class="lede">Four genres, four workshops, one portfolio. You write every week, you read your classmates closely, and you finish with a body of work you revised yourself.</p>
     <blockquote class="pull">“This is a <em>you</em> class.”<cite>From the course syllabus</cite></blockquote>
     <div class="btns">
@@ -346,16 +367,16 @@ footer{border-top:2px dashed var(--edge); padding:2.4rem 0 2rem}
 <div class="wrap">
 <section class="split flip" aria-labelledby="h-spiral">
   <div class="art">
-    <svg viewBox="0 0 600 560" role="img" aria-labelledby="spiral-t">
+    <svg viewBox="0 0 600 560" role="img" aria-labelledby="spiral-t" data-graphic="diagram">
       <title id="spiral-t">A paper spiral with four turns, one for each workshop. Six verbs repeat around every turn: read, watch, respond, discuss, write, workshop.</title>
       <rect class="s-sky" width="600" height="560" rx="14"/>
-      <path class="s-line cut" style="stroke-width:16;stroke:var(--a-h2)" d="M300 290 m0 -18 a18 18 0 1 1 -18 18 a50 50 0 0 1 50 -50 a84 84 0 0 1 84 84 a118 118 0 0 1 -118 118 a152 152 0 0 1 -152 -152 a186 186 0 0 1 186 -186 a220 220 0 0 1 220 220"/>
+      <path class="s-line cut" style="stroke-width:16;stroke:var(--a-trk)" d="M300 290 m0 -18 a18 18 0 1 1 -18 18 a50 50 0 0 1 50 -50 a84 84 0 0 1 84 84 a118 118 0 0 1 -118 118 a152 152 0 0 1 -152 -152 a186 186 0 0 1 186 -186 a220 220 0 0 1 220 220"/>
       <g class="cut">
-        <circle class="s-sun" cx="300" cy="290" r="12"/>
-        <circle class="s-gold" cx="384" cy="306" r="14"/>
-        <circle class="s-red" cx="232" cy="406" r="16"/>
-        <circle class="s-h4" cx="148" cy="226" r="18"/>
-        <circle class="s-sun" cx="520" cy="300" r="20"/>
+        <circle class="n-stop" style="fill:var(--a-n-sun)" cx="300" cy="290" r="13"/>
+        <circle class="n-stop" style="fill:var(--a-n-gold)" cx="384" cy="306" r="15"/>
+        <circle class="n-stop" style="fill:var(--a-n-red)" cx="232" cy="406" r="17"/>
+        <circle class="n-stop" style="fill:var(--a-n-deep)" cx="148" cy="226" r="19"/>
+        <circle class="n-stop" style="fill:var(--a-n-sun)" cx="520" cy="300" r="21"/>
       </g>
     </svg>
   </div>
@@ -412,7 +433,7 @@ footer{border-top:2px dashed var(--edge); padding:2.4rem 0 2rem}
 
     <article class="shop paper" aria-labelledby="w2">
       <div class="art">
-        <svg viewBox="0 0 520 250" role="img" aria-label="A paper pond with lily pads and reeds. Rings spread across the water.">
+        <svg viewBox="0 0 520 250" role="img" data-graphic="scene" aria-label="A paper pond with lily pads and reeds. Rings spread across the water.">
           <rect class="s-sky" width="520" height="250"/>
           <path class="s-h2 cut" d="M0 120 C130 96 300 110 520 92 L520 250 L0 250Z"/>
           <ellipse class="s-water cut" cx="260" cy="180" rx="210" ry="52"/>
@@ -855,9 +876,12 @@ footer{border-top:2px dashed var(--edge); padding:2.4rem 0 2rem}
   if (g) {
     g.removeAttribute('hidden');
     g.innerHTML = '<g transform="translate('+pick.x+' '+pick.y+') scale('+pick.s+')"><g class="frog" tabindex="0" role="button" aria-label="A small frog">'
-      + '<g class="cut"><ellipse cx="0" cy="0" rx="14" ry="9" fill="#4d7a3a"/><circle cx="-7" cy="-8" r="4.5" fill="#4d7a3a"/><circle cx="7" cy="-8" r="4.5" fill="#4d7a3a"/>'
+      + '<circle r="24" fill="transparent"/><g class="cut"><ellipse cx="0" cy="0" rx="14" ry="9" fill="#4d7a3a"/><circle cx="-7" cy="-8" r="4.5" fill="#4d7a3a"/><circle cx="7" cy="-8" r="4.5" fill="#4d7a3a"/>'
       + '<circle cx="-7" cy="-8.5" r="1.8" fill="#1c1915"/><circle cx="7" cy="-8.5" r="1.8" fill="#1c1915"/></g></g></g>';
     var f = g.querySelector('.frog');
+    /* the hit circle is sized in SCREEN pixels: 52px across at any zoom, invisible */
+    var hit = f.querySelector('circle'), m = hit.getScreenCTM && hit.getScreenCTM();
+    if (m && m.a) hit.setAttribute('r', Math.max(24, 26 / m.a));
     function go(){ if (!f.classList.contains('hop')) { f.style.transformBox='fill-box'; f.classList.add('hop'); setTimeout(function(){ g.setAttribute('hidden',''); }, 750); } }
     f.addEventListener('click', go);
     f.addEventListener('keydown', function(e){ if (e.key==='Enter' || e.key===' ') { e.preventDefault(); go(); } });
