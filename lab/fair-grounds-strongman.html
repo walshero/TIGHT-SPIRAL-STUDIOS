@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" data-comfort="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Fair Grounds: Strongman v0.1</title>
+<meta name="audience" content="Founder playtest first; phone-first players, teens and college students learning to separate checkable claims from judgments. Lab build.">
+<!-- TSP build: Fair Grounds: Strongman v0.1 | LAB | 2026-11-09
+     Founder words (2026-11-09): "a fact/opinion sorter that gives you strength in a strongman/bell
+     game" ... "Let's call it Fair Grounds and start with strong man".
+     Fair Grounds is the midway of critical-thinking booths; Strongman is booth one.
+     Play: the barker tosses eight claims. Sort each one: Checkable (a fact claim you could look up
+     or measure, true or not), Judgment (an opinion, a value, a should), or Both (a checkable part
+     glued to a judgment). Every right call adds muscle and the hammer head grows. Then one swing:
+     muscle sets how high the puck can go, timing adds the last quarter. Only eight of eight can ring
+     the bell. A weak swing gets a bell that is not impressed.
+     Teaching line: checkable does not mean true. A false claim is still checkable.
+     Single file, offline, no external hosts. No emoji. Three modes on one button. -->
+<style>
+:root,html[data-comfort="dark"]{--chrome:#1b1328;--ink:#fbf6ea;--line:#ffd23f;--accent:#ffd23f;--glyph:#fbf6ea;--pipfill:#ffd23f;--tap:48px;--bg:#120c1e}
+html[data-comfort="light"]{--chrome:#fffaf0;--ink:#1b1328;--line:#1b1328;--accent:#7a1a12;--glyph:#1b1328;--pipfill:#7a1a12;--bg:#cfe6f5}
+html[data-comfort="sharp"]{--chrome:#0a0a0a;--ink:#f5f5f5;--line:#ffff3d;--accent:#ffff3d;--glyph:#f5f5f5;--pipfill:#ffff3d;--bg:#0a0a0a}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent;color:var(--ink)}
+#sky{position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;display:block}
+#stage{position:fixed;left:0;right:0;top:0;display:block;width:100vw}
+#stageSvg{width:100%;height:100%;display:block}
+button,a.nav{font:inherit;font-size:18px;font-weight:700;min-height:var(--tap);min-width:var(--tap);padding:8px 12px;border-radius:12px;border:2px solid var(--line);background:var(--chrome);color:var(--ink);cursor:pointer;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+button:focus-visible,a.nav:focus-visible{outline:3px solid var(--glyph);outline-offset:3px}
+button:disabled{opacity:.45;cursor:default}
+button.icon{padding:6px}
+button.icon svg{width:28px;height:28px;stroke:var(--glyph);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+button[aria-pressed="false"] svg .wave{display:none}
+svg .x{display:none}
+button[aria-pressed="false"] svg .x{display:inline}
+#corner{position:fixed;z-index:4;top:calc(8px + env(safe-area-inset-top));left:calc(8px + env(safe-area-inset-left));right:8px;display:flex;gap:8px;align-items:center;pointer-events:none}
+#corner>*{pointer-events:auto}
+#soundBtn{margin-left:auto;border-radius:24px}
+#menuBtn{border-radius:24px}
+#menuBtn svg{width:26px;height:26px;stroke:var(--glyph);stroke-width:2.6;stroke-linecap:round;fill:none}
+#hud{font-size:18px;line-height:1.2;padding:6px 12px;background:var(--chrome);border:2px solid var(--line);border-radius:24px;min-height:44px;box-sizing:border-box;display:flex;align-items:center;gap:10px;white-space:nowrap}
+#hud b{color:var(--accent)}
+.pips{display:inline-flex;gap:3px;vertical-align:middle}
+.pip{width:12px;height:18px;border-radius:4px;border:2px solid var(--line);box-sizing:border-box}
+.pip.on{background:var(--pipfill)}
+.se-chrome{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:calc(6px + env(safe-area-inset-top)) 8px 8px;background:var(--chrome);border-bottom:2px solid var(--line);transform:translateY(-110%);visibility:hidden;transition:transform .2s ease}
+.se-chrome.open{transform:none;visibility:visible}
+.se-chrome h1{margin:0 6px;font:800 22px/1.15 system-ui,sans-serif;display:flex;align-items:center;gap:8px;flex:1 1 220px;flex-wrap:wrap}
+.ver{font-size:20px;color:var(--accent)}
+.tsp-labchip{font:800 18px/1 system-ui,sans-serif;padding:4px 8px;border:2px solid var(--line);border-radius:6px}
+.se-rail{display:flex;gap:6px}
+#barker{position:fixed;z-index:2;left:calc(8px + env(safe-area-inset-left));max-width:min(300px,44vw);background:#fffdf6;color:#1b1328;border:3px solid #1b1328;border-radius:16px;padding:8px 12px;font-size:20px;font-weight:700;line-height:1.3;box-shadow:0 3px 0 rgba(27,19,40,.35);display:none}
+#barker::after{content:"";position:absolute;left:34px;bottom:-14px;border:12px solid transparent;border-top-color:#1b1328;border-bottom:0}
+#panel{position:fixed;z-index:3;left:0;right:0;bottom:0;background:var(--chrome);border-top:3px solid var(--line);padding:12px calc(12px + env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) calc(12px + env(safe-area-inset-left))}
+#panel .wrap{max-width:560px;margin:0 auto}
+#ticket{position:relative;background:#fbf3dc;color:#1b1328;border-radius:10px;padding:14px 16px;font-size:22px;font-weight:700;line-height:1.35;min-height:62px;box-shadow:0 3px 0 rgba(0,0,0,.35);touch-action:pan-y;transition:transform .18s ease,opacity .18s ease;outline-offset:3px}
+#ticket::before,#ticket::after{content:"";position:absolute;top:50%;width:18px;height:18px;margin-top:-9px;border-radius:50%;background:var(--chrome)}
+#ticket::before{left:-9px}#ticket::after{right:-9px}
+#ticket .lab{display:block;font-size:18px;font-weight:800;color:#7a1a12;letter-spacing:.04em;margin-bottom:2px}
+#ticket.flyL{transform:translateX(-120%) rotate(-12deg);opacity:0}
+#ticket.flyR{transform:translateX(120%) rotate(12deg);opacity:0}
+#ticket.flyU{transform:translateY(-140%) rotate(-4deg);opacity:0}
+#bins{display:grid;font-size:18px;grid-template-columns:repeat(auto-fit,minmax(6.2em,1fr));gap:8px;margin-top:10px}
+#bins button{flex-direction:column;line-height:1.15;padding:8px 6px;min-height:56px;min-width:0;overflow-wrap:anywhere}
+#bins small{font-size:18px;font-weight:500}
+#teach{font-size:20px;line-height:1.4;margin:10px 0 0}
+#teach b{color:var(--accent)}
+#teach .part{display:block;margin-top:4px}
+#nextBtn{width:100%;margin-top:10px;display:none}
+#swing{display:none;text-align:center}
+#swing p{font-size:20px;margin:0 0 8px;line-height:1.35}
+#meter{position:relative;height:44px;border:3px solid var(--line);border-radius:22px;overflow:hidden;background:#3a2a52}
+#meter .gold{position:absolute;top:0;bottom:0;right:0;width:12%;background:#ffd23f}
+#meter .mid{position:absolute;top:0;bottom:0;right:12%;width:30%;background:#c8342b}
+#needle{position:absolute;top:-4px;bottom:-4px;width:8px;margin-left:-4px;background:#fbf6ea;border:2px solid #1b1328;border-radius:4px}
+#swingBtn{width:100%;margin-top:10px;font-size:22px;min-height:60px}
+#result{display:none}
+#result h2{margin:0 0 4px;font-size:28px;color:var(--accent)}
+#result p{font-size:20px;line-height:1.4;margin:4px 0 8px}
+#result ul{margin:0 0 10px;padding-left:20px;font-size:18px;line-height:1.4;max-height:30vh;overflow:auto}
+#result li{margin-bottom:6px}
+#result .btns{display:flex;gap:8px;flex-wrap:wrap}
+#result .btns button{flex:1 1 140px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-height:700px){#ticket{font-size:20px;padding:10px 14px}#teach{font-size:18px}#bins button{min-height:50px}}
+@media (prefers-reduced-motion:reduce){#ticket{transition:none}}
+</style>
+</head>
+<body>
+<svg id="sky" viewBox="0 0 400 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+ <defs><linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop id="s0" offset="0" stop-color="#2a1747"/><stop id="s1" offset=".6" stop-color="#6c3a74"/><stop id="s2" offset="1" stop-color="#e0815a"/></linearGradient></defs>
+ <rect width="400" height="700" fill="url(#skyG)"/>
+ <g id="lights"></g>
+ <g fill="#000" opacity=".22"><path d="M-40 420 L40 330 L120 420Z"/><path d="M300 430 L370 345 L440 430Z"/><path d="M150 440 L210 370 L270 440Z"/></g>
+ <rect id="groundR" y="420" width="400" height="280" fill="#664530"/>
+</svg>
+
+<div id="stage" class="scene" aria-hidden="true">
+<svg id="stageSvg" viewBox="0 0 400 660" preserveAspectRatio="xMidYMax meet">
+ <defs>
+  <filter id="cut" x="-10%" y="-10%" width="130%" height="130%"><feDropShadow dx="0" dy="3" stdDeviation="2.4" flood-color="#190c1e" flood-opacity=".45"/></filter>
+  <linearGradient id="brass" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b8862a"/><stop offset=".45" stop-color="#ffd86a"/><stop offset="1" stop-color="#a87420"/></linearGradient>
+ </defs>
+ <!-- ground strip -->
+ <path d="M-20 600 L420 600 L420 660 L-20 660Z" fill="#7a5236"/>
+ <path id="torn" fill="#8a5e3d" filter="url(#cut)"/>
+ <g id="towerG" transform="translate(-73 0)">
+ <!-- tower -->
+ <g filter="url(#cut)">
+  <rect x="262" y="96" width="32" height="490" rx="6" fill="#fbf3dc" stroke="#1b1328" stroke-width="3"/>
+  <g id="bands"></g>
+  <line x1="278" y1="112" x2="278" y2="572" stroke="#1b1328" stroke-width="3"/>
+ </g>
+ <g id="plates"></g>
+ <!-- bell -->
+ <g id="bell" transform="translate(278 70)" filter="url(#cut)">
+  <g id="bellSwing">
+   <path d="M-30 22 C-30 -6 -20 -26 0 -26 C20 -26 30 -6 30 22 L36 30 L-36 30Z" fill="url(#brass)" stroke="#1b1328" stroke-width="3"/>
+   <circle cx="0" cy="-29" r="5" fill="#b8862a" stroke="#1b1328" stroke-width="2.5"/>
+   <circle cx="0" cy="34" r="6" fill="#7a5a20" stroke="#1b1328" stroke-width="2.5"/>
+   <g id="eyes"><circle id="eyeL" cx="-10" cy="4" r="5" fill="#1b1328"/><circle id="eyeR" cx="10" cy="4" r="5" fill="#1b1328"/>
+    <rect id="lidL" x="-17" y="-3" width="14" height="0" fill="#c99a3a"/><rect id="lidR" x="3" y="-3" width="14" height="0" fill="#c99a3a"/></g>
+  </g>
+ </g>
+ <g id="sparks"></g>
+ <!-- puck -->
+ <g id="puck" filter="url(#cut)"><rect x="-17" y="-11" width="34" height="22" rx="5" fill="#c8342b" stroke="#1b1328" stroke-width="3"/><rect x="-11" y="-5" width="22" height="4" rx="2" fill="#ffd23f"/></g>
+ <!-- base and striker pad -->
+ <g filter="url(#cut)">
+  <rect x="222" y="566" width="112" height="36" rx="5" fill="#8f5a34" stroke="#1b1328" stroke-width="3"/>
+  <rect x="232" y="574" width="44" height="20" rx="3" fill="#a8693d"/><rect x="280" y="574" width="44" height="20" rx="3" fill="#97603a"/>
+  <g id="pad"><rect x="244" y="552" width="56" height="16" rx="6" fill="#c8342b" stroke="#1b1328" stroke-width="3"/><circle cx="272" cy="560" r="4" fill="#ffd23f"/></g>
+ </g>
+ </g>
+ <!-- barker: an original character, on the left, facing the tower -->
+ <g id="barkerFig" transform="translate(64 600) scale(-1 1)" filter="url(#cut)">
+  <path d="M-18 0 L-14 -62 L-2 -62 L-4 0Z" fill="#2a2230" stroke="#1b1328" stroke-width="2.5"/>
+  <path d="M18 0 L14 -62 L2 -62 L4 0Z" fill="#2a2230" stroke="#1b1328" stroke-width="2.5"/>
+  <ellipse cx="-12" cy="0" rx="12" ry="5" fill="#1b1328"/><ellipse cx="12" cy="0" rx="12" ry="5" fill="#1b1328"/>
+  <path d="M-26 -60 Q-28 -118 0 -122 Q28 -118 26 -60Z" fill="#fbf6ea" stroke="#1b1328" stroke-width="2.5"/>
+  <path d="M-24 -62 Q-26 -112 -8 -120 L-8 -62Z" fill="#c8342b"/><path d="M24 -62 Q26 -112 8 -120 L8 -62Z" fill="#c8342b"/>
+  <path d="M-24 -62 Q-26 -112 -8 -120 M24 -62 Q26 -112 8 -120" fill="none" stroke="#1b1328" stroke-width="2"/>
+  <circle cx="0" cy="-100" r="2.6" fill="#ffd23f"/><circle cx="0" cy="-86" r="2.6" fill="#ffd23f"/><circle cx="0" cy="-72" r="2.6" fill="#ffd23f"/>
+  <path d="M-8 -120 L0 -112 L8 -120" fill="none" stroke="#1b1328" stroke-width="2"/>
+  <path d="M-6 -121 L-12 -126 L-12 -116Z M6 -121 L12 -126 L12 -116Z" fill="#2f6fb0" stroke="#1b1328" stroke-width="1.5"/>
+  <g id="barkArm"><path d="M-24 -108 Q-48 -100 -60 -124" fill="none" stroke="#1b1328" stroke-width="12" stroke-linecap="round"/><path d="M-24 -108 Q-48 -100 -60 -124" fill="none" stroke="#c8342b" stroke-width="8" stroke-linecap="round"/>
+   <circle cx="-62" cy="-127" r="6.5" fill="#f0c4a0" stroke="#1b1328" stroke-width="2.5"/><path d="M-62 -127 L-94 -168" stroke="#1b1328" stroke-width="7" stroke-linecap="round"/><path d="M-62 -127 L-94 -168" stroke="#e9e3f5" stroke-width="3.5" stroke-linecap="round"/><circle cx="-95" cy="-170" r="5" fill="#ffd23f" stroke="#1b1328" stroke-width="2"/></g>
+  <path d="M24 -108 Q34 -84 24 -64" fill="none" stroke="#1b1328" stroke-width="12" stroke-linecap="round"/><path d="M24 -108 Q34 -84 24 -64" fill="none" stroke="#c8342b" stroke-width="8" stroke-linecap="round"/><circle cx="23" cy="-62" r="6.5" fill="#f0c4a0" stroke="#1b1328" stroke-width="2.5"/>
+  <circle cx="0" cy="-142" r="20" fill="#f0c4a0" stroke="#1b1328" stroke-width="2.5"/>
+  <circle cx="-7" cy="-146" r="2.6" fill="#1b1328"/><circle cx="7" cy="-146" r="2.6" fill="#1b1328"/>
+  <path d="M-16 -134 Q-8 -140 0 -135 Q8 -140 16 -134 Q8 -130 0 -132 Q-8 -130 -16 -134Z" fill="#4a2a1a" stroke="#1b1328" stroke-width="1.5"/>
+  <path id="barkMouth" d="M-5 -127 Q0 -124 5 -127" fill="none" stroke="#1b1328" stroke-width="2.2" stroke-linecap="round"/>
+  <ellipse cx="0" cy="-160" rx="30" ry="6" fill="#e9c046" stroke="#1b1328" stroke-width="2.5"/>
+  <path d="M-18 -161 L-16 -178 L16 -178 L18 -161Z" fill="#e9c046" stroke="#1b1328" stroke-width="2.5"/>
+  <rect x="-17" y="-168" width="34" height="5" fill="#c8342b"/>
+ </g>
+ <!-- the hammer, held by the studio glove; pivot below the frame -->
+ <g id="hammer">
+  <rect id="handle" x="-7" y="-196" width="14" height="196" rx="6" fill="#c99a5b" stroke="#1b1328" stroke-width="3"/>
+  <g id="head" transform="translate(0 -196)"><rect id="headR" x="-34" y="-20" width="68" height="40" rx="8" fill="#5a4636" stroke="#1b1328" stroke-width="3"/><rect id="bandL" x="-26" y="-20" width="6" height="40" fill="#c8342b"/><rect id="bandR" x="20" y="-20" width="6" height="40" fill="#c8342b"/></g>
+  <g transform="translate(0 -118)"><ellipse cx="0" cy="8" rx="20" ry="16" fill="#fbf6ea" stroke="#1b1328" stroke-width="3"/>
+   <rect x="-20" y="-12" width="12" height="22" rx="6" fill="#fbf6ea" stroke="#1b1328" stroke-width="2.5"/><rect x="-7" y="-14" width="12" height="24" rx="6" fill="#fbf6ea" stroke="#1b1328" stroke-width="2.5"/><rect x="6" y="-12" width="12" height="22" rx="6" fill="#fbf6ea" stroke="#1b1328" stroke-width="2.5"/>
+   <rect x="-18" y="20" width="36" height="14" rx="5" fill="#ffffff" stroke="#1b1328" stroke-width="2.5"/><path d="M-12 21 L-6 33 M0 21 L6 33 M12 21 L16 28" stroke="#c8342b" stroke-width="4"/>
+   <path d="M-14 34 L-16 70 L16 70 L14 34Z" fill="#2f6fb0" stroke="#1b1328" stroke-width="3"/></g>
+ </g>
+</svg>
+</div>
+
+<header class="se-chrome" id="topbar">
+  <a class="nav" href="../index.html">Studio</a>
+  <a class="nav" href="../arcade.html">Cabinet</a>
+  <h1 class="se-brand">Fair Grounds: Strongman <span class="ver">v0.1</span> <span class="tsp-labchip">LAB</span></h1>
+  <button id="modeBtn" class="icon" aria-label="Mode: Dark. Switch to Light."><svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="8"/><path d="M14 6a8 8 0 0 0 0 16z" style="fill:var(--glyph)"/></svg></button>
+  <nav class="se-rail" aria-label="Page navigation"><a class="nav" id="backBtn" href="./index.html">Back</a><a class="nav" id="homeBtn" href="../index.html">Home</a></nav>
+  <button id="menuClose" type="button">Close menu</button>
+</header>
+<div id="corner"><button id="menuBtn" class="icon" type="button" aria-expanded="false" aria-controls="topbar" aria-label="Menu: Fair Grounds, Strongman, Lab build"><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M5 8h16M5 13h16M5 18h16"/></svg></button><div id="hud"></div><button id="soundBtn" class="icon" aria-pressed="true" aria-label="Sound on"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M5 11h4l6-5v16l-6-5H5z"/><path class="wave" d="M19 10a5 5 0 0 1 0 8M22 7a9 9 0 0 1 0 14"/><path class="x" d="M19 11l6 6M25 11l-6 6"/></svg></button></div>
+
+<div id="barker" role="status"></div>
+
+<div id="panel">
+ <div class="wrap">
+  <div id="sortBox" class="screen">
+   <div id="ticket" tabindex="0" aria-live="polite"><span class="lab" id="tLab">CLAIM 1 OF 8</span><span id="tText"></span></div>
+   <div id="bins" role="group" aria-label="Sort the claim">
+    <button id="bC" type="button" aria-keyshortcuts="ArrowLeft 1">Checkable<small>fact claim</small></button>
+    <button id="bB" type="button" aria-keyshortcuts="ArrowUp 2">Both<small>split it</small></button>
+    <button id="bJ" type="button" aria-keyshortcuts="ArrowRight 3">Judgment<small>opinion</small></button>
+   </div>
+   <p id="teach" aria-live="polite"></p>
+   <button id="nextBtn" type="button">Next claim</button>
+  </div>
+  <div id="swing" class="screen">
+   <p id="swingText">Grab the hammer. Swing when the marker hits the gold.</p>
+   <div id="meter" aria-hidden="true"><div class="mid"></div><div class="gold"></div><div id="needle"></div></div>
+   <button id="swingBtn" type="button">Swing</button>
+  </div>
+  <div id="result" class="screen" role="region" aria-label="Round over">
+   <h2 id="rTitle"></h2>
+   <p id="rText"></p>
+   <ul id="rList"></ul>
+   <div class="btns"><button id="againBtn" type="button">Step right up again</button></div>
+  </div>
+ </div>
+</div>
+<div id="live" class="sr" aria-live="polite"></div>
+
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+const NS='http://www.w3.org/2000/svg';
+const RM=(()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return false}})();
+const store={get(k,d){try{const v=localStorage.getItem('fg_'+k);return v===null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('fg_'+k,JSON.stringify(v))}catch(e){}}};
+
+/* ---------- the claims: town fair, no parties, no real people ----------
+   c = checkable (a fact claim: you could look it up, count or measure it, true or not)
+   j = judgment (opinion, taste, value, or a should)
+   b = both: a checkable part glued to a judgment. parts = [checkable, judgment] */
+const CLAIMS=[
+ {t:'c',s:'The Ferris wheel is 60 feet tall.',w:'Someone could measure it with a tape and a ladder.'},
+ {t:'c',s:'The fair first opened in 1952.',w:'The town records would settle it.'},
+ {t:'c',s:'Corn dogs cost six dollars this year.',w:'Walk to the stand and read the sign.'},
+ {t:'c',s:'More people came on Saturday than on Friday.',w:'Count the ticket stubs.'},
+ {t:'c',s:'The bumper cars run on electricity.',w:'Look at the pole on the back of each car.'},
+ {t:'c',s:'This ride has passed every inspection since 2019.',w:'The inspection reports would show it.'},
+ {t:'c',s:'Cotton candy is mostly sugar.',w:'A recipe or a lab could check it.'},
+ {t:'c',s:'The fairgrounds flood almost every spring.',w:'Weather and town records would show it.'},
+ {t:'c',s:'Nobody rang the bell at all last Saturday.',w:'Checkable even though it is hard to check: ask the operator, or watch the tape. Checkable does not mean easy.'},
+ {t:'c',s:'The carousel horses are carved from solid gold.',w:'Almost surely false, and still checkable. Checkable does not mean true.'},
+ {t:'c',s:'The pie contest had 41 entries.',w:'The judges kept a list.'},
+ {t:'c',s:'The haunted house is closed on Sundays.',w:'Read the schedule on the gate.'},
+ {t:'j',s:'The Ferris wheel is the best ride here.',w:'"Best" is a taste. No tape measure can settle it.'},
+ {t:'j',s:'Funnel cake beats cotton candy.',w:'A preference. People will always disagree, and nobody is wrong.'},
+ {t:'j',s:'The fair is way too loud.',w:'You could measure the noise, but "too loud" is a judgment about it.'},
+ {t:'j',s:'Clowns are creepy.',w:'A feeling about clowns, not something you could look up.'},
+ {t:'j',s:'Six dollars is a fair price for a corn dog.',w:'The price is checkable. Whether it is fair is a judgment.'},
+ {t:'j',s:'The old carousel had more charm.',w:'Charm lives in the eye of the rider.'},
+ {t:'j',s:'Everyone should enter the pie contest.',w:'"Should" is a value. Watch for should, best, worst, too, enough.'},
+ {t:'j',s:'The new lights are ugly.',w:'Taste. Somebody out there loves them.'},
+ {t:'j',s:'Saturday night is the most fun night of the fair.',w:'"Most fun" is a judgment. Attendance would be the checkable version.'},
+ {t:'j',s:'The town should keep the fair free.',w:'A should. You can argue for it with reasons, but you cannot look it up.'},
+ {t:'j',s:'The petting zoo is the heart of the fair.',w:'A value judgment dressed up nicely.'},
+ {t:'j',s:'Ticket lines are a waste of a good evening.',w:'"A waste" is a judgment about the wait.'},
+ {t:'b',s:'The new lights cost $40,000, which is a waste.',p:['The new lights cost $40,000','which is a waste']},
+ {t:'b',s:'The Ferris wheel is 60 feet tall and terrifying.',p:['The Ferris wheel is 60 feet tall','and terrifying']},
+ {t:'b',s:'Attendance doubled this year, so the new fair director is brilliant.',p:['Attendance doubled this year','so the new fair director is brilliant']},
+ {t:'b',s:'The pie contest has run since 1960 and is still the best part of the fair.',p:['The pie contest has run since 1960','and is still the best part of the fair']},
+ {t:'b',s:'Corn dogs went up two dollars. Total ripoff.',p:['Corn dogs went up two dollars','Total ripoff']},
+ {t:'b',s:'The carousel was built in 1921 and is the most beautiful ride in the state.',p:['The carousel was built in 1921','and is the most beautiful ride in the state']},
+ {t:'b',s:'Ticket lines ran 40 minutes on Saturday, which is unacceptable.',p:['Ticket lines ran 40 minutes on Saturday','which is unacceptable']},
+ {t:'b',s:'The fair raised $12,000 for the library, the best cause in town.',p:['The fair raised $12,000 for the library','the best cause in town']},
+ {t:'b',s:'The haunted house runs eight minutes, too long for little kids.',p:['The haunted house runs eight minutes','too long for little kids']},
+ {t:'b',s:'Three hundred volunteers work the fair, more than it needs.',p:['Three hundred volunteers work the fair','more than it needs']}
+];
+const TNAME={c:'Checkable',j:'Judgment',b:'Both'};
+
+/* barker lines (original voice) */
+const OPEN=['Step right up! Sort my claims, build your muscle, ring the bell!','Checkable or judgment? Get them right and the hammer gets heavy!','Eight claims, one swing. Brains first, brawn second!'];
+const RIGHT=['Right you are!','The hammer grows!','Sharp eyes, strong arms!','Ding! That is muscle.','Correct, my friend!'];
+const WRONG=['Ooh, not that one.','The hammer shrinks a little.','Close, but no corn dog.','Read it again, friend.'];
+const SWING=['Grab the hammer!','All that thinking, now the swing!','Show the bell what you know!'];
+const TIERS=[
+ {max:.25,name:'Wet noodle',lines:['The bell is not impressed.','The puck took a nap.','Even the bell looked away.']},
+ {max:.5,name:'Twig',lines:['A gentle tap. The bell yawned.','Halfway to somewhere!','The puck waved from down there.']},
+ {max:.75,name:'Contender',lines:['Now we are talking!','The bell felt that. Barely.','Respectable! Not legendary.']},
+ {max:.97,name:'Bruiser',lines:['So close the bell flinched!','One more right call and that rings!','The bell is sweating.']},
+ {max:9,name:'STRONGMAN',lines:['DING! A true Strongman!','Ring it loud! Brains and brawn!','The bell salutes you!']}];
+
+/* ---------- state ---------- */
+const ROUND=8;
+let deck=[],idx=0,muscle=0,answered=false,phase='sort',log=[],bags={};
+let mode=store.get('mode','dark');const MODES=['dark','light','sharp'],MN={dark:'Dark',light:'Light',sharp:'Sharp'};if(!MODES.includes(mode))mode='dark';
+let sound=store.get('sound',true);
+function bag(t){if(!bags[t]||!bags[t].length){bags[t]=shuffle(CLAIMS.filter(c=>c.t===t));}return bags[t].pop();}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+
+/* ---------- audio ---------- */
+let AC=null;
+function ac(){if(!sound)return null;if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){AC=null}}if(AC&&AC.state==='suspended')AC.resume();return AC;}
+function tone(f,d,type,v,to,delay){const a=ac();if(!a)return;const t0=a.currentTime+(delay||0),o=a.createOscillator(),g=a.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,t0);if(to)o.frequency.exponentialRampToValueAtTime(to,t0+d);g.gain.setValueAtTime(v||.1,t0);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g).connect(a.destination);o.start(t0);o.stop(t0+d+.02);}
+function noise(d,v,freq){const a=ac();if(!a)return;const n=Math.floor(a.sampleRate*d),b=a.createBuffer(1,n,a.sampleRate),x=b.getChannelData(0);for(let i=0;i<n;i++)x[i]=(Math.random()*2-1)*(1-i/n);const s=a.createBufferSource();s.buffer=b;const f=a.createBiquadFilter();f.type='lowpass';f.frequency.value=freq||800;const g=a.createGain();g.gain.value=v||.2;s.connect(f).connect(g).connect(a.destination);s.start();}
+const SFX={
+ right(){tone(660,.12,'triangle',.1);tone(990,.16,'triangle',.08,0,.08)},
+ wrong(){tone(220,.2,'square',.04,160)},
+ whoosh(){noise(.25,.12,1600)},
+ thunk(){tone(110,.25,'sine',.35,55);noise(.12,.3,500)},
+ rise(h){tone(300,.5+.6*h,'sawtooth',.03,300+900*h)},
+ bell(){[0,0.02].forEach((dl,i)=>{tone(1318,1.6,'sine',.18,0,dl);tone(1975,1.2,'sine',.08,0,dl);tone(659,1.8,'triangle',.08,0,dl)});},
+ clunk(){tone(180,.18,'triangle',.08,140)}};
+
+/* ---------- scene build ---------- */
+const TRACK_TOP=112,TRACK_BOT=572;const yOf=h=>TRACK_BOT-12-h*(TRACK_BOT-12-(TRACK_TOP+10));
+(function build(){
+ const bands=$('bands');for(let i=0;i<10;i++){const r=document.createElementNS(NS,'rect');r.setAttribute('x',264);r.setAttribute('width',28);r.setAttribute('y',100+i*48);r.setAttribute('height',24);r.setAttribute('fill',i%2?'#ffd23f':'#c8342b');r.setAttribute('opacity','.85');bands.appendChild(r);}
+ const plates=$('plates');TIERS.slice(0,4).forEach((T,i)=>{const h=[.13,.38,.62,.86][i],y=yOf(h);
+  const g=document.createElementNS(NS,'g');g.setAttribute('filter','url(#cut)');
+  g.innerHTML=`<path d="M432 ${y-17} L308 ${y-17} L296 ${y} L308 ${y+17} L432 ${y+17}Z" fill="#fbf3dc" stroke="#1b1328" stroke-width="2.5"/><text x="368" y="${y+8}" text-anchor="middle" font-size="23" font-weight="800" fill="#1b1328" font-family="system-ui,sans-serif">${T.name}</text>`;
+  plates.appendChild(g);});
+ const L=$('lights');for(let i=0;i<14;i++){const x=i*31+6,y=60+Math.sin(i/13*Math.PI)*34;const c=document.createElementNS(NS,'circle');c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',4.5);c.setAttribute('fill',['#ffd23f','#ff7a59','#7fd6ff','#b6ff8a'][i%4]);c.setAttribute('class','bulb');L.appendChild(c);}
+ const cord=document.createElementNS(NS,'path');let d='';for(let i=0;i<=40;i++){const x=i*10,y=60+Math.sin(i/40*Math.PI)*34;d+=(i?'L':'M')+x+' '+y;}cord.setAttribute('d',d);cord.setAttribute('stroke','#1b1328');cord.setAttribute('fill','none');cord.setAttribute('stroke-width','1.5');L.insertBefore(cord,L.firstChild);
+ let tp='M-20 660 L-20 604';for(let x=-20;x<=420;x+=12){tp+=` L${x} ${604+Math.sin(x*.37)*3+((x*7)%5)}`;}tp+=' L420 660Z';$('torn').setAttribute('d',tp);
+})();
+
+/* ---------- layout: the scene fills everything above the panel ---------- */
+function layout(){const ph=$('panel').getBoundingClientRect().height;$('stage').style.height=Math.max(160,innerHeight-ph)+'px';
+ const st=$('stage').getBoundingClientRect();const svgH=st.height,svgW=st.width,s=Math.min(svgW/400,svgH/660),offX=(svgW-400*s)/2,offY=svgH-660*s;
+ const by=offY+(600-182)*s;const b=$('barker');b.style.top=Math.max(64,by-b.offsetHeight-10)+'px';}
+addEventListener('resize',layout);
+if(window.ResizeObserver)new ResizeObserver(layout).observe($('panel'));
+
+/* ---------- modes ---------- */
+const SKY={dark:['#2a1747','#6c3a74','#e0815a','#664530'],light:['#7fc4ef','#bfe3f7','#ffe9c2','#b98a5c'],sharp:['#000000','#141414','#262626','#1f1f1f']};
+function applyMode(){document.documentElement.setAttribute('data-comfort',mode);const c=SKY[mode];$('s0').setAttribute('stop-color',c[0]);$('s1').setAttribute('stop-color',c[1]);$('s2').setAttribute('stop-color',c[2]);$('groundR').setAttribute('fill',c[3]);
+ const nx=MODES[(MODES.indexOf(mode)+1)%3];$('modeBtn').setAttribute('aria-label',`Mode: ${MN[mode]}. Switch to ${MN[nx]}.`);store.set('mode',mode);}
+function applySound(){$('soundBtn').setAttribute('aria-pressed',sound);$('soundBtn').setAttribute('aria-label',sound?'Sound on':'Sound off');store.set('sound',sound);}
+$('modeBtn').onclick=()=>{mode=MODES[(MODES.indexOf(mode)+1)%3];applyMode();};
+$('soundBtn').onclick=()=>{sound=!sound;applySound();};
+function menu(o){$('topbar').classList.toggle('open',o);$('menuBtn').setAttribute('aria-expanded',o);if(o)$('menuClose').focus();}
+$('menuBtn').onclick=()=>menu(!$('topbar').classList.contains('open'));$('menuClose').onclick=()=>{menu(false);$('menuBtn').focus();};
+addEventListener('keydown',e=>{if(e.key==='Escape'&&$('topbar').classList.contains('open')){menu(false);$('menuBtn').focus();}});
+
+/* ---------- barker ---------- */
+let barkT=0;
+function bark(txt,ms){const b=$('barker');b.textContent=txt;b.style.display='block';layout();clearTimeout(barkT);barkT=setTimeout(()=>{b.style.display='none';},ms||2600);
+ if(!RM){const m=$('barkMouth');m.setAttribute('d','M-6 -128 Q0 -120 6 -128');setTimeout(()=>m.setAttribute('d','M-5 -127 Q0 -124 5 -127'),380);}}
+const announce=t=>{$('live').textContent=t;};
+
+/* ---------- hammer pose ---------- */
+const PIV={x:300,y:746};let hamA=-36,headK=.7;
+function poseHammer(){const k=headK;$('head').setAttribute('transform',`translate(0 -196) scale(${k})`);$('hammer').setAttribute('transform',`translate(${PIV.x} ${PIV.y}) rotate(${-28-hamA})`);}
+/* rotate(-28) at hamA=0 lays the head on the pad; raising swings it back to the right */
+function setMuscle(){headK=.7+muscle*.075;poseHammer();hud();}
+function hud(){let p='';for(let i=0;i<ROUND;i++)p+=`<span class="pip${i<muscle?' on':''}"></span>`;
+ $('hud').innerHTML=`<span>Muscle <b>${muscle}</b></span><span class="pips" aria-hidden="true">${p}</span>`;
+ $('hud').setAttribute('aria-label',`Muscle ${muscle} of ${ROUND}`);}
+function puckAt(h){$('puck').setAttribute('transform',`translate(278 ${yOf(h)})`);}
+
+/* ---------- sorting ---------- */
+function deal(){const t=shuffle(['c','c','c','j','j','j','b','b']);deck=t.map(bag);idx=0;muscle=0;log=[];phase='sort';
+ $('sortBox').style.display='block';$('swing').style.display='none';$('result').style.display='none';
+ eyes(0);puckAt(0);setMuscle();showClaim();bark(pick(OPEN),3200);}
+function showClaim(){const c=deck[idx];answered=false;const tk=$('ticket');tk.className='';
+ $('tLab').textContent=`CLAIM ${idx+1} OF ${ROUND}`;$('tText').textContent=c.s;$('teach').innerHTML='';$('nextBtn').style.display='none';
+ $('bins').style.display='';layout();}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function answer(t){if(answered||phase!=='sort')return;answered=true;ac();const c=deck[idx],ok=t===c.t;
+ log.push({c,t,ok});$('bins').style.display='none';
+ const tk=$('ticket');if(!RM)tk.className=t==='c'?'flyL':t==='j'?'flyR':'flyU';
+ let why=c.t==='b'?`<span class="part">Checkable part: ${esc(c.p[0])}.</span><span class="part">Judgment part: ${esc(c.p[1])}.</span>`:esc(c.w);
+ if(ok){muscle++;SFX.right();setMuscle();bark(pick(RIGHT),1600);}else{SFX.wrong();bark(pick(WRONG),1600);}
+ $('teach').innerHTML=`<b>${ok?'Right.':'Not quite.'}</b> ${ok?'':'It is '+TNAME[c.t]+'. '}${why}`;
+ announce(`${ok?'Right':'Not quite'}. ${c.t==='b'?'Both. Checkable part: '+c.p[0]+'. Judgment part: '+c.p[1]+'.':TNAME[c.t]+'. '+c.w} Muscle ${muscle}.`);
+ setTimeout(()=>{if(!RM)tk.className='';$('nextBtn').textContent=idx===ROUND-1?'Grab the hammer':'Next claim';$('nextBtn').style.display='block';$('nextBtn').focus();layout();},RM?0:220);}
+$('bC').onclick=()=>answer('c');$('bJ').onclick=()=>answer('j');$('bB').onclick=()=>answer('b');
+$('nextBtn').onclick=()=>{if(idx<ROUND-1){idx++;showClaim();$('ticket').focus();}else startSwing();};
+// swipe the ticket: left checkable, right judgment, up both
+let sw=null;const tk=$('ticket');
+tk.addEventListener('pointerdown',e=>{if(answered)return;sw={x:e.clientX,y:e.clientY};tk.setPointerCapture(e.pointerId);});
+tk.addEventListener('pointermove',e=>{if(!sw||RM)return;const dx=e.clientX-sw.x,dy=Math.min(0,e.clientY-sw.y);tk.style.transform=`translate(${dx}px,${dy}px) rotate(${dx/20}deg)`;});
+tk.addEventListener('pointerup',e=>{if(!sw)return;const dx=e.clientX-sw.x,dy=e.clientY-sw.y;sw=null;tk.style.transform='';
+ if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy))answer(dx<0?'c':'j');else if(dy<-70)answer('b');});
+tk.addEventListener('pointercancel',()=>{sw=null;tk.style.transform='';});
+addEventListener('keydown',e=>{if($('topbar').classList.contains('open'))return;
+ if(phase==='sort'&&!answered){const m={ArrowLeft:'c','1':'c',ArrowUp:'b','2':'b',ArrowRight:'j','3':'j'}[e.key];if(m){e.preventDefault();answer(m);}}
+ else if(phase==='swing'&&(e.key===' '||e.key==='Enter')&&document.activeElement!==$('swingBtn')){e.preventDefault();swing();}});
+
+/* ---------- the swing ---------- */
+let needle=0,nT=0,raf=0;
+function startSwing(){phase='swing';$('sortBox').style.display='none';$('swing').style.display='block';
+ $('swingText').textContent=muscle===ROUND?'Eight for eight. Full strength. Swing when the marker hits the gold to ring it.':`Muscle ${muscle} of ${ROUND}. Swing when the marker hits the gold.`;
+ bark(pick(SWING),2200);layout();$('swingBtn').focus();hamA=-50;poseHammer();
+ const per=RM?3.2:1.7,t0=performance.now();
+ const run=now=>{if(phase!=='swing')return;nT=((now-t0)/1000)%per/per;needle=nT<.5?nT*2:2-nT*2;$('needle').style.left=(needle*100)+'%';raf=requestAnimationFrame(run);};raf=requestAnimationFrame(run);}
+$('swingBtn').onclick=()=>swing();
+$('stage').addEventListener('pointerdown',()=>{if(phase==='swing')swing();});
+function ease(t){return 1-Math.pow(1-t,3);}
+function anim(ms,f){return new Promise(r=>{const t0=performance.now();const st=now=>{const k=Math.min(1,(now-t0)/ms);f(k);if(k<1)requestAnimationFrame(st);else r();};requestAnimationFrame(st);});}
+async function swing(){if(phase!=='swing')return;phase='anim';cancelAnimationFrame(raf);ac();
+ const timing=.75+.25*needle,h=Math.min(1,(muscle/ROUND)*timing),ring=h>=.97;
+ SFX.whoosh();
+ await anim(RM?60:260,k=>{hamA=-50-40*ease(k);poseHammer();});
+ await anim(RM?60:120,k=>{hamA=-90+90*k*k;poseHammer();});
+ SFX.thunk();if(!RM){$('pad').setAttribute('transform','translate(0 4)');setTimeout(()=>$('pad').removeAttribute('transform'),140);}
+ SFX.rise(h);
+ await anim(RM?200:400+700*h,k=>puckAt(h*ease(k)));
+ const T=TIERS.find(x=>h<x.max)||TIERS[4];
+ if(ring){SFX.bell();ringBell();}else{SFX.clunk();if(h<.5)eyes(1);}
+ bark(pick(T.lines),3600);
+ await new Promise(r=>setTimeout(r,ring?1400:900));
+ await anim(RM?150:700,k=>puckAt(h*(1-k*k)));
+ hamA=-36;poseHammer();
+ const best=store.get('best',0);if(h>best)store.set('best',h);
+ showResult(T,h,timing,ring);}
+function eyes(sad){$('lidL').setAttribute('height',sad?6:0);$('lidR').setAttribute('height',sad?6:0);$('eyeL').setAttribute('cy',sad?7:4);$('eyeR').setAttribute('cy',sad?7:4);$('eyeL').setAttribute('cx',sad?-9:-10);$('eyeR').setAttribute('cx',sad?11:10);}
+function ringBell(){const g=$('bellSwing');if(!RM){anim(1200,k=>g.setAttribute('transform',`rotate(${Math.sin(k*30)*16*(1-k)})`));}
+ const sp=$('sparks');sp.innerHTML='';const cols=['#ffd23f','#c8342b','#2f6fb0','#fbf6ea'];
+ for(let i=0;i<(RM?8:26);i++){const a=Math.random()*Math.PI*2,d=30+Math.random()*60,r=document.createElementNS(NS,'rect');r.setAttribute('width',7);r.setAttribute('height',4);r.setAttribute('fill',cols[i%4]);sp.appendChild(r);
+  const x0=278,y0=70;anim(RM?10:900,k=>{r.setAttribute('x',x0+Math.cos(a)*d*k);r.setAttribute('y',y0+Math.sin(a)*d*k+40*k*k);r.setAttribute('opacity',1-k);});}}
+function showResult(T,h,timing,ring){phase='done';$('swing').style.display='none';$('result').style.display='block';
+ const missed=log.filter(x=>!x.ok);
+ $('rTitle').textContent=ring?'STRONGMAN! The bell rings.':T.name;
+ let txt=`You sorted ${muscle} of ${ROUND} claims right`;
+ txt+=ring?', and your timing finished the job.':muscle===ROUND?'. Full strength: a better-timed swing rings it.':'. Only eight of eight can ring the bell.';
+ $('rText').textContent=txt;
+ const ul=$('rList');ul.innerHTML='';
+ if(missed.length){missed.forEach(x=>{const li=document.createElement('li');li.innerHTML=`<b>${esc(x.c.s)}</b> You said ${TNAME[x.t]}; it is ${TNAME[x.c.t]}. ${x.c.t==='b'?'Checkable part: '+esc(x.c.p[0])+'. Judgment part: '+esc(x.c.p[1])+'.':esc(x.c.w)}`;ul.appendChild(li);});}
+ else{const li=document.createElement('li');li.textContent='No misses. Remember: checkable does not mean true. A false claim is still checkable.';ul.appendChild(li);}
+ layout();$('againBtn').focus();announce($('rTitle').textContent+'. '+txt);}
+$('againBtn').onclick=()=>{eyes(0);deal();$('ticket').focus();};
+
+/* ---------- go ---------- */
+applyMode();applySound();poseHammer();puckAt(0);
+if(!RM){const bulbs=[...document.querySelectorAll('.bulb')];setInterval(()=>bulbs.forEach((b,i)=>b.setAttribute('opacity',((Date.now()/400+i)|0)%3?1:.45)),400);}
+deal();layout();
+})();
+</script>
+</body>
+</html>
