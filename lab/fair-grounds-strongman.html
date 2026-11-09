@@ -3,9 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Fair Grounds: Strongman v0.1</title>
+<title>Fair Grounds: Strongman v0.2</title>
 <meta name="audience" content="Founder playtest first; phone-first players, teens and college students learning to separate checkable claims from judgments. Lab build.">
-<!-- TSP build: Fair Grounds: Strongman v0.1 | LAB | 2026-11-09
+<!-- TSP build: Fair Grounds: Strongman v0.2 | LAB | 2026-11-09
+     v0.2 (founder pushback, "Couldn't you check decibels and town ordinance"): "The fair is way too
+     loud" was arguable, so it splits into a judgment ("too loud to enjoy") and a checkable claim that
+     names the standard (the town 70-decibel limit). Four more items reworded so no judgment hides a
+     checkable standard. Muscle counter is plain words so the sound button never leaves the screen.
      Founder words (2026-11-09): "a fact/opinion sorter that gives you strength in a strongman/bell
      game" ... "Let's call it Fair Grounds and start with strong man".
      Fair Grounds is the midway of critical-thinking booths; Strongman is booth one.
@@ -35,10 +39,10 @@ svg .x{display:none}
 button[aria-pressed="false"] svg .x{display:inline}
 #corner{position:fixed;z-index:4;top:calc(8px + env(safe-area-inset-top));left:calc(8px + env(safe-area-inset-left));right:8px;display:flex;gap:8px;align-items:center;pointer-events:none}
 #corner>*{pointer-events:auto}
-#soundBtn{margin-left:auto;border-radius:24px}
+#soundBtn{margin-left:auto;border-radius:24px;flex:0 0 auto}
 #menuBtn{border-radius:24px}
 #menuBtn svg{width:26px;height:26px;stroke:var(--glyph);stroke-width:2.6;stroke-linecap:round;fill:none}
-#hud{font-size:18px;line-height:1.2;padding:6px 12px;background:var(--chrome);border:2px solid var(--line);border-radius:24px;min-height:44px;box-sizing:border-box;display:flex;align-items:center;gap:10px;white-space:nowrap}
+#hud{flex:0 1 auto;min-width:0;overflow:hidden;font-size:18px;line-height:1.2;padding:6px 12px;background:var(--chrome);border:2px solid var(--line);border-radius:24px;min-height:44px;box-sizing:border-box;display:flex;align-items:center;gap:10px;white-space:nowrap}
 #hud b{color:var(--accent)}
 .pips{display:inline-flex;gap:3px;vertical-align:middle}
 .pip{width:12px;height:18px;border-radius:4px;border:2px solid var(--line);box-sizing:border-box}
@@ -169,7 +173,7 @@ button[aria-pressed="false"] svg .x{display:inline}
 <header class="se-chrome" id="topbar">
   <a class="nav" href="../index.html">Studio</a>
   <a class="nav" href="../arcade.html">Cabinet</a>
-  <h1 class="se-brand">Fair Grounds: Strongman <span class="ver">v0.1</span> <span class="tsp-labchip">LAB</span></h1>
+  <h1 class="se-brand">Fair Grounds: Strongman <span class="ver">v0.2</span> <span class="tsp-labchip">LAB</span></h1>
   <button id="modeBtn" class="icon" aria-label="Mode: Dark. Switch to Light."><svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="8"/><path d="M14 6a8 8 0 0 0 0 16z" style="fill:var(--glyph)"/></svg></button>
   <nav class="se-rail" aria-label="Page navigation"><a class="nav" id="backBtn" href="./index.html">Back</a><a class="nav" id="homeBtn" href="../index.html">Home</a></nav>
   <button id="menuClose" type="button">Close menu</button>
@@ -231,9 +235,10 @@ const CLAIMS=[
  {t:'c',s:'The haunted house is closed on Sundays.',w:'Read the schedule on the gate.'},
  {t:'j',s:'The Ferris wheel is the best ride here.',w:'"Best" is a taste. No tape measure can settle it.'},
  {t:'j',s:'Funnel cake beats cotton candy.',w:'A preference. People will always disagree, and nobody is wrong.'},
- {t:'j',s:'The fair is way too loud.',w:'You could measure the noise, but "too loud" is a judgment about it.'},
+ {t:'j',s:'The fair is too loud to enjoy.',w:'"Too loud to enjoy" is about the listener. Name a standard instead, like the town noise limit, and it turns checkable.'},
+ {t:'c',s:'The fair breaks the town noise limit of 70 decibels after 10 p.m.',w:'A decibel meter and the town ordinance settle it. Naming a standard turns "too loud" into something you can check.'},
  {t:'j',s:'Clowns are creepy.',w:'A feeling about clowns, not something you could look up.'},
- {t:'j',s:'Six dollars is a fair price for a corn dog.',w:'The price is checkable. Whether it is fair is a judgment.'},
+ {t:'j',s:'Six dollars is worth it for a corn dog this good.',w:'The price is checkable. Whether it is worth it is a judgment.'},
  {t:'j',s:'The old carousel had more charm.',w:'Charm lives in the eye of the rider.'},
  {t:'j',s:'Everyone should enter the pie contest.',w:'"Should" is a value. Watch for should, best, worst, too, enough.'},
  {t:'j',s:'The new lights are ugly.',w:'Taste. Somebody out there loves them.'},
@@ -247,10 +252,10 @@ const CLAIMS=[
  {t:'b',s:'The pie contest has run since 1960 and is still the best part of the fair.',p:['The pie contest has run since 1960','and is still the best part of the fair']},
  {t:'b',s:'Corn dogs went up two dollars. Total ripoff.',p:['Corn dogs went up two dollars','Total ripoff']},
  {t:'b',s:'The carousel was built in 1921 and is the most beautiful ride in the state.',p:['The carousel was built in 1921','and is the most beautiful ride in the state']},
- {t:'b',s:'Ticket lines ran 40 minutes on Saturday, which is unacceptable.',p:['Ticket lines ran 40 minutes on Saturday','which is unacceptable']},
+ {t:'b',s:'Ticket lines ran 40 minutes on Saturday, which ruined my night.',p:['Ticket lines ran 40 minutes on Saturday','which ruined my night']},
  {t:'b',s:'The fair raised $12,000 for the library, the best cause in town.',p:['The fair raised $12,000 for the library','the best cause in town']},
- {t:'b',s:'The haunted house runs eight minutes, too long for little kids.',p:['The haunted house runs eight minutes','too long for little kids']},
- {t:'b',s:'Three hundred volunteers work the fair, more than it needs.',p:['Three hundred volunteers work the fair','more than it needs']}
+ {t:'b',s:'The haunted house runs eight minutes, the best eight minutes of the fair.',p:['The haunted house runs eight minutes','the best eight minutes of the fair']},
+ {t:'b',s:'Three hundred volunteers work the fair, and they are its real heroes.',p:['Three hundred volunteers work the fair','and they are its real heroes']}
 ];
 const TNAME={c:'Checkable',j:'Judgment',b:'Both'};
 
@@ -322,7 +327,7 @@ addEventListener('keydown',e=>{if(e.key==='Escape'&&$('topbar').classList.contai
 
 /* ---------- barker ---------- */
 let barkT=0;
-function bark(txt,ms){const b=$('barker');b.textContent=txt;b.style.display='block';layout();clearTimeout(barkT);barkT=setTimeout(()=>{b.style.display='none';},ms||2600);
+function bark(txt,ms){const b=$('barker');b.textContent=txt;if($('stage').getBoundingClientRect().height<340){b.style.display='none';return;}b.style.display='block';layout();clearTimeout(barkT);barkT=setTimeout(()=>{b.style.display='none';},ms||2600);
  if(!RM){const m=$('barkMouth');m.setAttribute('d','M-6 -128 Q0 -120 6 -128');setTimeout(()=>m.setAttribute('d','M-5 -127 Q0 -124 5 -127'),380);}}
 const announce=t=>{$('live').textContent=t;};
 
@@ -331,8 +336,7 @@ const PIV={x:300,y:746};let hamA=-36,headK=.7;
 function poseHammer(){const k=headK;$('head').setAttribute('transform',`translate(0 -196) scale(${k})`);$('hammer').setAttribute('transform',`translate(${PIV.x} ${PIV.y}) rotate(${-28-hamA})`);}
 /* rotate(-28) at hamA=0 lays the head on the pad; raising swings it back to the right */
 function setMuscle(){headK=.7+muscle*.075;poseHammer();hud();}
-function hud(){let p='';for(let i=0;i<ROUND;i++)p+=`<span class="pip${i<muscle?' on':''}"></span>`;
- $('hud').innerHTML=`<span>Muscle <b>${muscle}</b></span><span class="pips" aria-hidden="true">${p}</span>`;
+function hud(){$('hud').innerHTML=`<span>Muscle <b>${muscle}</b>/${ROUND}</span>`;
  $('hud').setAttribute('aria-label',`Muscle ${muscle} of ${ROUND}`);}
 function puckAt(h){$('puck').setAttribute('transform',`translate(278 ${yOf(h)})`);}
 
