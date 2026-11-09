@@ -3,9 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Fair Grounds: Strongman v0.3</title>
+<title>Fair Grounds: Strongman v0.4</title>
 <meta name="audience" content="Founder playtest first; phone-first players, teens and college students learning to separate checkable claims from judgments. Lab build.">
-<!-- TSP build: Fair Grounds: Strongman v0.3 | LAB | 2026-11-09
+<!-- TSP build: Fair Grounds: Strongman v0.4 | LAB | 2026-11-09
+     v0.4 (founder: "Now, let's create a set for college level"): a 36-claim College set beside the
+     Town fair set. Research findings, cause, prediction, what a source argues, interpretation. Bins
+     read look it up / split it / argue it. Switch from the menu (Claims) or the end of a round;
+     #college in the URL opens straight to it. Choice is remembered.
      v0.3 (founder: "Strong man fails the image to text open screen ratio. We don't need content on
      screen 1."): screen 1 is the booth alone. No claim, no counter, no bubble: the puck hops on its
      own and one button, Step right up, starts the round. Tapping the scene also starts it.
@@ -177,9 +181,10 @@ body.open #panel,body.open #hud{display:none}
 <header class="se-chrome" id="topbar">
   <a class="nav" href="../index.html">Studio</a>
   <a class="nav" href="../arcade.html">Cabinet</a>
-  <h1 class="se-brand">Fair Grounds: Strongman <span class="ver">v0.3</span> <span class="tsp-labchip">LAB</span></h1>
+  <h1 class="se-brand">Fair Grounds: Strongman <span class="ver">v0.4</span> <span class="tsp-labchip">LAB</span></h1>
   <button id="modeBtn" class="icon" aria-label="Mode: Dark. Switch to Light."><svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="8"/><path d="M14 6a8 8 0 0 0 0 16z" style="fill:var(--glyph)"/></svg></button>
   <nav class="se-rail" aria-label="Page navigation"><a class="nav" id="backBtn" href="./index.html">Back</a><a class="nav" id="homeBtn" href="../index.html">Home</a></nav>
+  <button id="setBtn" type="button">Claims: Town fair</button>
   <button id="menuClose" type="button">Close menu</button>
 </header>
 <div id="corner"><button id="menuBtn" class="icon" type="button" aria-expanded="false" aria-controls="topbar" aria-label="Menu: Fair Grounds, Strongman, Lab build"><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M5 8h16M5 13h16M5 18h16"/></svg></button><div id="hud"></div><button id="soundBtn" class="icon" aria-pressed="true" aria-label="Sound on"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M5 11h4l6-5v16l-6-5H5z"/><path class="wave" d="M19 10a5 5 0 0 1 0 8M22 7a9 9 0 0 1 0 14"/><path class="x" d="M19 11l6 6M25 11l-6 6"/></svg></button></div>
@@ -207,7 +212,7 @@ body.open #panel,body.open #hud{display:none}
    <h2 id="rTitle"></h2>
    <p id="rText"></p>
    <ul id="rList"></ul>
-   <div class="btns"><button id="againBtn" type="button">Step right up again</button></div>
+   <div class="btns"><button id="againBtn" type="button">Step right up again</button><button id="swapBtn" type="button">Try the college set</button></div>
   </div>
  </div>
 </div>
@@ -262,6 +267,51 @@ const CLAIMS=[
  {t:'b',s:'The haunted house runs eight minutes, the best eight minutes of the fair.',p:['The haunted house runs eight minutes','the best eight minutes of the fair']},
  {t:'b',s:'Three hundred volunteers work the fair, and they are its real heroes.',p:['Three hundred volunteers work the fair','and they are its real heroes']}
 ];
+/* ---------- College set (founder 2026-11-09: "Now, let's create a set for college level") ----------
+   Same three bins. Harder material: research findings, cause and effect, predictions, claims about
+   what a source argues, and interpretation. Writing rule (v0.2): no judgment may hide a standard a
+   sharp player could name; words like too, enough, unreasonable and worth are kept out of judgments. */
+const COLLEGE=[
+ {t:'c',s:'The college’s graduation rate rose from 28% to 34% over five years.',w:'The college’s own records, and the federal data it reports, settle it.'},
+ {t:'c',s:'Students who used the tutoring center passed calculus at higher rates.',w:'Compare the pass records of the two groups. Note what it does not claim: that tutoring caused the difference.'},
+ {t:'c',s:'The tutoring center caused the higher pass rates.',w:'A cause is still checkable, just harder: you need a study that rules out other explanations, like stronger students choosing to go.'},
+ {t:'c',s:'Tuition will rise next fall.',w:'A prediction. It becomes checkable when next fall arrives.'},
+ {t:'c',s:'The author argues that standardized tests measure privilege more than ability.',w:'Read the article. Whether that is her argument is checkable, even though her argument itself is a judgment.'},
+ {t:'c',s:'Some studies suggest that taking notes by hand improves recall.',w:'Do such studies exist? Look. Hedges like some and suggest make a claim smaller, not an opinion.'},
+ {t:'c',s:'The result was statistically significant at p < .05.',w:'Read the results section, or rerun the numbers.'},
+ {t:'c',s:'Shakespeare’s First Folio was printed in 1623.',w:'The historical record settles it.'},
+ {t:'c',s:'Most faculty who answered the survey said they have tried an AI detector.',w:'The survey results settle it, for the people who answered.'},
+ {t:'c',s:'The study had only 40 participants, all from one university.',w:'Read the methods section.'},
+ {t:'c',s:'Most climate scientists agree that human activity is warming the planet.',w:'A claim about what experts think. Surveys of scientists and their published papers settle it.'},
+ {t:'c',s:'The poem is a sonnet: fourteen lines of iambic pentameter.',w:'Count the lines and scan the meter.'},
+ {t:'j',s:'The green light is the most important symbol in The Great Gatsby.',w:'An interpretation. You argue it with evidence from the novel; no source can settle it for you.'},
+ {t:'j',s:'Every student should take a philosophy course.',w:'A should. You can give reasons, but you cannot look it up.'},
+ {t:'j',s:'Poetry is the highest form of writing.',w:'A ranking of values. Readers will always disagree.'},
+ {t:'j',s:'Ambition is the tragic flaw that drives Macbeth.',w:'An interpretation, argued from the play, not looked up.'},
+ {t:'j',s:'The film adaptation betrays the spirit of the book.',w:'"The spirit of the book" is a reading, and "betrays" is a verdict on it.'},
+ {t:'j',s:'Grades should reward effort, not just results.',w:'A should about what grades are for.'},
+ {t:'j',s:'Plagiarism is a worse offense than cheating on an exam.',w:'A moral ranking. Policies may punish them differently, but that would be a different, checkable claim.'},
+ {t:'j',s:'The museum’s new wing is beautiful.',w:'Taste. Somebody finds it ugly, and neither of you is wrong.'},
+ {t:'j',s:'The ending of the novel is a cop-out.',w:'A verdict on the author’s choice.'},
+ {t:'j',s:'Researchers have a duty to share their data.',w:'A duty is a value claim. You argue for it. A funder’s rule requiring it would be a different, checkable claim.'},
+ {t:'j',s:'History teaches us more about being human than any other subject.',w:'A value ranking dressed up as a fact. Note the confident tone: tone does not make a claim checkable.'},
+ {t:'j',s:'Jazz is America’s greatest art form.',w:'Greatest is a judgment, however often it is said.'},
+ {t:'b',s:'Graduation rates rose six points, a triumph for the college.',p:['Graduation rates rose six points','a triumph for the college']},
+ {t:'b',s:'The author argues that grades harm learning, and she is right.',p:['The author argues that grades harm learning','and she is right']},
+ {t:'b',s:'The college spent $2 million on the stadium, money that should have gone to the library.',p:['The college spent $2 million on the stadium','money that should have gone to the library']},
+ {t:'b',s:'The poem has fourteen lines, and its final couplet is breathtaking.',p:['The poem has fourteen lines','its final couplet is breathtaking']},
+ {t:'b',s:'Fewer than half the class read the assigned chapter, a sad sign of our times.',p:['Fewer than half the class read the assigned chapter','a sad sign of our times']},
+ {t:'b',s:'Attendance at the lecture series doubled, so it deserves more funding.',p:['Attendance at the lecture series doubled','so it deserves more funding']},
+ {t:'b',s:'The novel was pulled from three school libraries last year, which is a disgrace.',p:['The novel was pulled from three school libraries last year','which is a disgrace']},
+ {t:'b',s:'The First Folio was printed in 1623 and is the most precious book in English.',p:['The First Folio was printed in 1623','the most precious book in English']},
+ {t:'b',s:'The study found a statistically significant effect, and it is the most exciting finding of the year.',p:['The study found a statistically significant effect','the most exciting finding of the year']},
+ {t:'b',s:'Most students surveyed use AI to brainstorm, and that is a welcome change.',p:['Most students surveyed use AI to brainstorm','that is a welcome change']},
+ {t:'b',s:'The experiment was replicated twice, and its authors should be proud.',p:['The experiment was replicated twice','its authors should be proud']},
+ {t:'b',s:'The professor assigns 200 pages a week, and every page is a pleasure.',p:['The professor assigns 200 pages a week','every page is a pleasure']}
+];
+const SETS={fair:{name:'Town fair',claims:CLAIMS,sub:['fact claim','split it','opinion']},college:{name:'College',claims:COLLEGE,sub:['look it up','split it','argue it']}};
+let setKey=/#college/i.test(location.hash)?'college':store0('set','fair');if(!SETS[setKey])setKey='fair';
+function store0(k,d){try{const v=localStorage.getItem('fg_'+k);return v===null?d:JSON.parse(v)}catch(e){return d}}
 const TNAME={c:'Checkable',j:'Judgment',b:'Both'};
 
 /* barker lines (original voice) */
@@ -281,7 +331,11 @@ const ROUND=8;
 let deck=[],idx=0,muscle=0,answered=false,phase='sort',log=[],bags={};
 let mode=store.get('mode','dark');const MODES=['dark','light','sharp'],MN={dark:'Dark',light:'Light',sharp:'Sharp'};if(!MODES.includes(mode))mode='dark';
 let sound=store.get('sound',true);
-function bag(t){if(!bags[t]||!bags[t].length){bags[t]=shuffle(CLAIMS.filter(c=>c.t===t));}return bags[t].pop();}
+function bag(t){const k=setKey+t;if(!bags[k]||!bags[k].length){bags[k]=shuffle(SETS[setKey].claims.filter(c=>c.t===t));}return bags[k].pop();}
+function applySet(){const S=SETS[setKey];[['bC',0],['bB',1],['bJ',2]].forEach(([id,i])=>{$(id).querySelector('small').textContent=S.sub[i];});
+ $('setBtn').textContent='Claims: '+S.name;$('setBtn').setAttribute('aria-label',`Claim set: ${S.name}. Switch to ${SETS[setKey==='fair'?'college':'fair'].name}.`);
+ $('swapBtn').textContent=setKey==='fair'?'Try the college set':'Back to the town fair';store.set('set',setKey);}
+function switchSet(){setKey=setKey==='fair'?'college':'fair';applySet();}
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 
@@ -350,7 +404,7 @@ function deal(){const t=shuffle(['c','c','c','j','j','j','b','b']);deck=t.map(ba
  $('sortBox').style.display='block';$('swing').style.display='none';$('result').style.display='none';
  eyes(0);puckAt(0);setMuscle();showClaim();bark(pick(OPEN),3200);}
 function showClaim(){const c=deck[idx];answered=false;const tk=$('ticket');tk.className='';
- $('tLab').textContent=`CLAIM ${idx+1} OF ${ROUND}`;$('tText').textContent=c.s;$('teach').innerHTML='';$('nextBtn').style.display='none';
+ $('tLab').textContent=`CLAIM ${idx+1} OF ${ROUND}`+(setKey==='college'?' · COLLEGE':'');$('tText').textContent=c.s;$('teach').innerHTML='';$('nextBtn').style.display='none';
  $('bins').style.display='';layout();}
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
 function answer(t){if(answered||phase!=='sort')return;answered=true;ac();const c=deck[idx],ok=t===c.t;
@@ -417,6 +471,8 @@ function showResult(T,h,timing,ring){phase='done';$('swing').style.display='none
  else{const li=document.createElement('li');li.textContent='No misses. Remember: checkable does not mean true. A false claim is still checkable.';ul.appendChild(li);}
  layout();$('againBtn').focus();announce($('rTitle').textContent+'. '+txt);}
 $('againBtn').onclick=()=>{eyes(0);deal();$('ticket').focus();};
+$('swapBtn').onclick=()=>{switchSet();eyes(0);deal();$('ticket').focus();};
+$('setBtn').onclick=()=>{switchSet();menu(false);if(phase==='sort'||phase==='done'){eyes(0);deal();}else if(phase==='swing'){/* finish this swing; the next round uses the new set */}};
 
 /* ---------- screen 1: the booth, no content (founder 2026-11-09: "We don't need content on screen 1") ---------- */
 let idleT=0;
@@ -425,7 +481,7 @@ function openScreen(){phase='open';document.body.classList.add('open');$('barker
 function startGame(){if(phase!=='open')return;clearTimeout(idleT);ac();document.body.classList.remove('open');$('startBtn').style.display='none';deal();layout();$('ticket').focus();}
 $('startBtn').onclick=startGame;
 /* ---------- go ---------- */
-applyMode();applySound();poseHammer();puckAt(0);
+applyMode();applySound();applySet();poseHammer();puckAt(0);
 if(!RM){const bulbs=[...document.querySelectorAll('.bulb')];setInterval(()=>bulbs.forEach((b,i)=>b.setAttribute('opacity',((Date.now()/400+i)|0)%3?1:.45)),400);}
 openScreen();
 })();

@@ -36,3 +36,11 @@ Rule for every judgment item: if a sharp player could name a standard (an ordina
 ## Strongman v0.3 (2026-11-09): screen 1 is the booth
 Founder: "Strong man fails the image to text open screen ratio. We don't need content on screen 1."
 Screen 1 shows the booth alone (tower, bell, barker, hammer, the puck hopping on its own) and one button, Step right up. Measured on first paint: text and controls cover 9% of a 390x844 phone, 7% of a 1280x800 desktop, 16% at large-text zoom (260x560).
+
+## Strongman v0.4 (2026-11-09): College set
+Founder: "Ok, that's the basics of the game. Now, let's create a set for college level."
+- 36 claims (12 checkable, 12 judgment, 12 both) beside the 35-claim Town fair set. Same round: 3 / 3 / 2.
+- Material: research findings and statistics, correlation vs cause, predictions, hedged claims, expert consensus, claims about what a source argues, interpretation of literature, value rankings.
+- Bin subtitles in the College set: look it up / split it / argue it (the composition-class distinction between a fact and an arguable claim).
+- Switch: menu button "Claims: ..." or "Try the college set" at the end of a round. `#college` in the URL opens straight to it. The choice is remembered.
+- Rule pass: judgments avoid too, enough, unreasonable, worth, healthy; where a policy could exist (plagiarism penalties, data-sharing mandates) the feedback names it as a different, checkable claim.
