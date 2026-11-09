@@ -32,3 +32,7 @@ A midway of critical-thinking booths. Each booth teaches one skill with one carn
 ## Strongman v0.2 (2026-11-09): writing rule for the claim bank
 Founder, on "The fair is way too loud": "Couldn't you check decibels and town ordinance."
 Rule for every judgment item: if a sharp player could name a standard (an ordinance, a policy, a measure) that makes it checkable, the item is arguable and does not ship as scored. Split it: a judgment tied to the person ("too loud to enjoy") and a checkable claim that names the standard ("breaks the town noise limit of 70 decibels after 10 p.m.").
+
+## Strongman v0.3 (2026-11-09): screen 1 is the booth
+Founder: "Strong man fails the image to text open screen ratio. We don't need content on screen 1."
+Screen 1 shows the booth alone (tower, bell, barker, hammer, the puck hopping on its own) and one button, Step right up. Measured on first paint: text and controls cover 9% of a 390x844 phone, 7% of a 1280x800 desktop, 16% at large-text zoom (260x560).

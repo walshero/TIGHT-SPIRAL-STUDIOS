@@ -3,9 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Fair Grounds: Strongman v0.2</title>
+<title>Fair Grounds: Strongman v0.3</title>
 <meta name="audience" content="Founder playtest first; phone-first players, teens and college students learning to separate checkable claims from judgments. Lab build.">
-<!-- TSP build: Fair Grounds: Strongman v0.2 | LAB | 2026-11-09
+<!-- TSP build: Fair Grounds: Strongman v0.3 | LAB | 2026-11-09
+     v0.3 (founder: "Strong man fails the image to text open screen ratio. We don't need content on
+     screen 1."): screen 1 is the booth alone. No claim, no counter, no bubble: the puck hops on its
+     own and one button, Step right up, starts the round. Tapping the scene also starts it.
      v0.2 (founder pushback, "Couldn't you check decibels and town ordinance"): "The fair is way too
      loud" was arguable, so it splits into a judgment ("too loud to enjoy") and a checkable claim that
      names the standard (the town 70-decibel limit). Four more items reworded so no judgment hides a
@@ -28,7 +31,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent;color:var(--ink)}
 #sky{position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;display:block}
 #stage{position:fixed;left:0;right:0;top:0;display:block;width:100vw}
-#stageSvg{width:100%;height:100%;display:block}
+#stageSvg{width:100%;height:100%;display:block;overflow:visible}
 button,a.nav{font:inherit;font-size:18px;font-weight:700;min-height:var(--tap);min-width:var(--tap);padding:8px 12px;border-radius:12px;border:2px solid var(--line);background:var(--chrome);color:var(--ink);cursor:pointer;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
 button:focus-visible,a.nav:focus-visible{outline:3px solid var(--glyph);outline-offset:3px}
 button:disabled{opacity:.45;cursor:default}
@@ -79,6 +82,8 @@ button[aria-pressed="false"] svg .x{display:inline}
 #needle{position:absolute;top:-4px;bottom:-4px;width:8px;margin-left:-4px;background:#fbf6ea;border:2px solid #1b1328;border-radius:4px}
 #swingBtn{width:100%;margin-top:10px;font-size:22px;min-height:60px}
 #result{display:none}
+#startBtn{position:fixed;z-index:3;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom));font-size:22px;min-height:60px;padding:10px 28px;border-radius:30px;white-space:nowrap;background:#c8342b;color:#fffdf6;border:3px solid #fffdf6;box-shadow:0 4px 0 rgba(0,0,0,.4)}
+body.open #panel,body.open #hud{display:none}
 #result h2{margin:0 0 4px;font-size:28px;color:var(--accent)}
 #result p{font-size:20px;line-height:1.4;margin:4px 0 8px}
 #result ul{margin:0 0 10px;padding-left:20px;font-size:18px;line-height:1.4;max-height:30vh;overflow:auto}
@@ -95,8 +100,6 @@ button[aria-pressed="false"] svg .x{display:inline}
  <defs><linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop id="s0" offset="0" stop-color="#2a1747"/><stop id="s1" offset=".6" stop-color="#6c3a74"/><stop id="s2" offset="1" stop-color="#e0815a"/></linearGradient></defs>
  <rect width="400" height="700" fill="url(#skyG)"/>
  <g id="lights"></g>
- <g fill="#000" opacity=".22"><path d="M-40 420 L40 330 L120 420Z"/><path d="M300 430 L370 345 L440 430Z"/><path d="M150 440 L210 370 L270 440Z"/></g>
- <rect id="groundR" y="420" width="400" height="280" fill="#664530"/>
 </svg>
 
 <div id="stage" class="scene" aria-hidden="true">
@@ -105,8 +108,9 @@ button[aria-pressed="false"] svg .x{display:inline}
   <filter id="cut" x="-10%" y="-10%" width="130%" height="130%"><feDropShadow dx="0" dy="3" stdDeviation="2.4" flood-color="#190c1e" flood-opacity=".45"/></filter>
   <linearGradient id="brass" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b8862a"/><stop offset=".45" stop-color="#ffd86a"/><stop offset="1" stop-color="#a87420"/></linearGradient>
  </defs>
- <!-- ground strip -->
- <path d="M-20 600 L420 600 L420 660 L-20 660Z" fill="#7a5236"/>
+ <!-- far tents, then the ground: both run well past the frame so wide screens never show a seam -->
+ <g id="tents" fill="#000" opacity=".22"><path d="M-260 600 L-170 470 L-80 600Z"/><path d="M-120 600 L-30 500 L60 600Z"/><path d="M110 600 L170 520 L230 600Z"/><path d="M330 600 L420 480 L510 600Z"/><path d="M480 600 L560 510 L640 600Z"/></g>
+ <path id="groundR" d="M-2000 600 L2400 600 L2400 2000 L-2000 2000Z" fill="#7a5236"/>
  <path id="torn" fill="#8a5e3d" filter="url(#cut)"/>
  <g id="towerG" transform="translate(-73 0)">
  <!-- tower -->
@@ -173,7 +177,7 @@ button[aria-pressed="false"] svg .x{display:inline}
 <header class="se-chrome" id="topbar">
   <a class="nav" href="../index.html">Studio</a>
   <a class="nav" href="../arcade.html">Cabinet</a>
-  <h1 class="se-brand">Fair Grounds: Strongman <span class="ver">v0.2</span> <span class="tsp-labchip">LAB</span></h1>
+  <h1 class="se-brand">Fair Grounds: Strongman <span class="ver">v0.3</span> <span class="tsp-labchip">LAB</span></h1>
   <button id="modeBtn" class="icon" aria-label="Mode: Dark. Switch to Light."><svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="8"/><path d="M14 6a8 8 0 0 0 0 16z" style="fill:var(--glyph)"/></svg></button>
   <nav class="se-rail" aria-label="Page navigation"><a class="nav" id="backBtn" href="./index.html">Back</a><a class="nav" id="homeBtn" href="../index.html">Home</a></nav>
   <button id="menuClose" type="button">Close menu</button>
@@ -207,6 +211,7 @@ button[aria-pressed="false"] svg .x{display:inline}
   </div>
  </div>
 </div>
+<button id="startBtn" type="button">Step right up</button>
 <div id="live" class="sr" aria-live="polite"></div>
 
 <script>
@@ -304,7 +309,7 @@ const TRACK_TOP=112,TRACK_BOT=572;const yOf=h=>TRACK_BOT-12-h*(TRACK_BOT-12-(TRA
   plates.appendChild(g);});
  const L=$('lights');for(let i=0;i<14;i++){const x=i*31+6,y=60+Math.sin(i/13*Math.PI)*34;const c=document.createElementNS(NS,'circle');c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',4.5);c.setAttribute('fill',['#ffd23f','#ff7a59','#7fd6ff','#b6ff8a'][i%4]);c.setAttribute('class','bulb');L.appendChild(c);}
  const cord=document.createElementNS(NS,'path');let d='';for(let i=0;i<=40;i++){const x=i*10,y=60+Math.sin(i/40*Math.PI)*34;d+=(i?'L':'M')+x+' '+y;}cord.setAttribute('d',d);cord.setAttribute('stroke','#1b1328');cord.setAttribute('fill','none');cord.setAttribute('stroke-width','1.5');L.insertBefore(cord,L.firstChild);
- let tp='M-20 660 L-20 604';for(let x=-20;x<=420;x+=12){tp+=` L${x} ${604+Math.sin(x*.37)*3+((x*7)%5)}`;}tp+=' L420 660Z';$('torn').setAttribute('d',tp);
+ let tp='M-2000 2000 L-2000 604';for(let x=-2000;x<=2400;x+=12){tp+=` L${x} ${604+Math.sin(x*.37)*3+(((x%5)+5)%5)}`;}tp+=' L2400 2000Z';$('torn').setAttribute('d',tp);
 })();
 
 /* ---------- layout: the scene fills everything above the panel ---------- */
@@ -315,7 +320,7 @@ addEventListener('resize',layout);
 if(window.ResizeObserver)new ResizeObserver(layout).observe($('panel'));
 
 /* ---------- modes ---------- */
-const SKY={dark:['#2a1747','#6c3a74','#e0815a','#664530'],light:['#7fc4ef','#bfe3f7','#ffe9c2','#b98a5c'],sharp:['#000000','#141414','#262626','#1f1f1f']};
+const SKY={dark:['#2a1747','#6c3a74','#e0815a','#7a5236'],light:['#7fc4ef','#bfe3f7','#ffe9c2','#b98a5c'],sharp:['#000000','#141414','#262626','#2a2a2a']};
 function applyMode(){document.documentElement.setAttribute('data-comfort',mode);const c=SKY[mode];$('s0').setAttribute('stop-color',c[0]);$('s1').setAttribute('stop-color',c[1]);$('s2').setAttribute('stop-color',c[2]);$('groundR').setAttribute('fill',c[3]);
  const nx=MODES[(MODES.indexOf(mode)+1)%3];$('modeBtn').setAttribute('aria-label',`Mode: ${MN[mode]}. Switch to ${MN[nx]}.`);store.set('mode',mode);}
 function applySound(){$('soundBtn').setAttribute('aria-pressed',sound);$('soundBtn').setAttribute('aria-label',sound?'Sound on':'Sound off');store.set('sound',sound);}
@@ -377,7 +382,7 @@ function startSwing(){phase='swing';$('sortBox').style.display='none';$('swing')
  const per=RM?3.2:1.7,t0=performance.now();
  const run=now=>{if(phase!=='swing')return;nT=((now-t0)/1000)%per/per;needle=nT<.5?nT*2:2-nT*2;$('needle').style.left=(needle*100)+'%';raf=requestAnimationFrame(run);};raf=requestAnimationFrame(run);}
 $('swingBtn').onclick=()=>swing();
-$('stage').addEventListener('pointerdown',()=>{if(phase==='swing')swing();});
+$('stage').addEventListener('pointerdown',()=>{if(phase==='swing')swing();else if(phase==='open')startGame();});
 function ease(t){return 1-Math.pow(1-t,3);}
 function anim(ms,f){return new Promise(r=>{const t0=performance.now();const st=now=>{const k=Math.min(1,(now-t0)/ms);f(k);if(k<1)requestAnimationFrame(st);else r();};requestAnimationFrame(st);});}
 async function swing(){if(phase!=='swing')return;phase='anim';cancelAnimationFrame(raf);ac();
@@ -413,10 +418,16 @@ function showResult(T,h,timing,ring){phase='done';$('swing').style.display='none
  layout();$('againBtn').focus();announce($('rTitle').textContent+'. '+txt);}
 $('againBtn').onclick=()=>{eyes(0);deal();$('ticket').focus();};
 
+/* ---------- screen 1: the booth, no content (founder 2026-11-09: "We don't need content on screen 1") ---------- */
+let idleT=0;
+function openScreen(){phase='open';document.body.classList.add('open');$('barker').style.display='none';hamA=-36;headK=1.05;poseHammer();puckAt(0);layout();
+ if(!RM){const hop=()=>{if(phase!=='open')return;anim(500,k=>puckAt(.42*Math.sin(Math.PI*k)*(1-k*.3))).then(()=>{idleT=setTimeout(hop,2200);});};idleT=setTimeout(hop,900);}}
+function startGame(){if(phase!=='open')return;clearTimeout(idleT);ac();document.body.classList.remove('open');$('startBtn').style.display='none';deal();layout();$('ticket').focus();}
+$('startBtn').onclick=startGame;
 /* ---------- go ---------- */
 applyMode();applySound();poseHammer();puckAt(0);
 if(!RM){const bulbs=[...document.querySelectorAll('.bulb')];setInterval(()=>bulbs.forEach((b,i)=>b.setAttribute('opacity',((Date.now()/400+i)|0)%3?1:.45)),400);}
-deal();layout();
+openScreen();
 })();
 </script>
 </body>
