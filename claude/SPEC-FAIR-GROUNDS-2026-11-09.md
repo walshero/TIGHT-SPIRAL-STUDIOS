@@ -28,3 +28,7 @@ A midway of critical-thinking booths. Each booth teaches one skill with one carn
 ## PENDING (founder's call)
 - Whether Dunk-O-Rama's runoff is renamed into Fair Grounds (for example, Fair Grounds: Midway Gallery).
 - Booth order after Strongman.
+
+## Strongman v0.2 (2026-11-09): writing rule for the claim bank
+Founder, on "The fair is way too loud": "Couldn't you check decibels and town ordinance."
+Rule for every judgment item: if a sharp player could name a standard (an ordinance, a policy, a measure) that makes it checkable, the item is arguable and does not ship as scored. Split it: a judgment tied to the person ("too loud to enjoy") and a checkable claim that names the standard ("breaks the town noise limit of 70 decibels after 10 p.m.").
