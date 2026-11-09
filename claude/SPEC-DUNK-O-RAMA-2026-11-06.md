@@ -53,3 +53,15 @@ Founder: "Increase the curriculum and cut the repeats. Make the dialogue richer.
 Founder: "there should be two politicians in the dunk tank. You can aim at a target to the left of tank, right, and above will dunk both politicians. There can still be double no cheat but usually it's one or the other. Make candidates answer consistently so that this presents a kind of run off. Dryest candidate wins mayor."
 
 Five runoffs (Senator v Skip, Skip v Mayor, Mayor v Chet, Chet v Dale, Dale v Senator), each teaching its level's four moves. 50 questions, 200 answers; each candidate holds one platform throughout. Three targets: left, right, top (both). Driest candidate wins; the card reports cheat counts. Full record: `convening/DUNK-O-RAMA-CONVENING.md`.
+
+## v1.1 (2026-11-08): Midway Gallery skin
+
+Founder: "Rec 1. Ok. Build" (choosing the Midway Gallery option after the contempt concern: aim at the trick, not the person).
+
+- No water, no dunking. Candidates stand behind a carnival counter, behind the booth net.
+- Each hook shows a folded "?" card until the player calls it. After the call, a fallacy pops up as a paper prop; a fair answer shows a small FAIR tag. The top hook appears only when both candidates used a fallacy.
+- Knocking a prop down cuts its wires; it tumbles to the ground with confetti, and that candidate gives the fair answer. Fewest tricks knocked down wins.
+- Physics, throw, breathing, runoffs, curriculum and calls are unchanged.
+- Props made: the straw man (scarecrow on a pole, Runoff 2). Every other fallacy hangs as a lettered paper sign (scribbled on phone, where the name is too small to letter) until its prop is made.
+
+Open (founder's call): prop feel on the phone; the other 19 props; whether the marquee and title stay "Dunk-O-Rama" now that nobody gets dunked; the unused water reaction lines (still in the file, never spoken).
