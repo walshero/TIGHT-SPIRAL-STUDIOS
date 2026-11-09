@@ -3,10 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Dunk-O-Rama v1.0</title>
+<title>Dunk-O-Rama v1.1</title>
 <meta name="spec-source" content="convening/DUNK-O-RAMA-CONVENING.md">
 <meta name="audience" content="Founder playtest first; phone-first players, teens and college students learning to spot rhetorical cheats. Lab build.">
-<!-- TSP build: Dunk-O-Rama v1.0 | LAB | 2026-11-08
+<!-- TSP build: Dunk-O-Rama v1.1 | LAB | 2026-11-08
+     v1.1 (founder, 2026-11-08 22:42, "Rec 1. Ok. Build"): the Midway Gallery skin. Aim at the trick,
+     not the person. No water, no dunking: the candidates stand behind a carnival counter. A hook
+     holds a folded "?" card until the player calls it; then a fallacy pops up as a paper prop and a
+     fair answer shows a FAIR tag. Knocking the prop down makes that candidate give the fair answer.
+     Fewest props knocked down wins. First prop drawn: the straw man (a scarecrow, Runoff 2);
+     every other fallacy hangs as a lettered paper sign until its prop is made.
      v1.0 (founder, 2026-11-08): a fair answer cannot be dunked; targets open only for a fallacy, and
      only after the player calls it. Layman critical-thinking terms (fallacy, fair answer) replace
      "cheat". Senator becomes Councilman; Skip becomes Spencer; surnames are the short names.
@@ -134,12 +140,12 @@ a.nav:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-of
 </style>
 </head>
 <body>
-<canvas id="c" tabindex="0" aria-label="Carnival dunk tank with two candidates for mayor. Left target dunks the left candidate, right target the right, top target both. Touch the glove, pull back and let go to throw. Hold still to steady your breathing. Keyboard: arrow keys aim, space throws."></canvas>
+<canvas id="c" tabindex="0" aria-label="Carnival booth with two candidates for mayor behind a counter. When a candidate uses a fallacy, the trick hangs above them as a paper prop. Knock it down and they give the fair answer. Touch the glove, pull back and let go to throw. Hold still to steady your breathing. Keyboard: arrow keys aim, space throws."></canvas>
 
 <header class="se-chrome" id="topbar">
   <a class="nav" href="../index.html">Studio</a>
   <a class="nav" href="../arcade.html">Cabinet</a>
-  <h1 class="se-brand">Dunk-O-Rama <span class="ver">v1.0</span> <span class="tsp-labchip">LAB</span></h1>
+  <h1 class="se-brand">Dunk-O-Rama <span class="ver">v1.1</span> <span class="tsp-labchip">LAB</span></h1>
   <div class="sp">
     <button id="seatBtn" aria-haspopup="dialog">Runoffs</button>
     <button id="modeBtn" class="icon" aria-label="Mode: Dark. Switch to Light."><svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="8"/><path d="M14 6a8 8 0 0 0 0 16z" fill="currentColor" style="fill:var(--ink)"/></svg></button>
@@ -148,7 +154,7 @@ a.nav:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-of
   <nav class="se-rail" aria-label="Page navigation"><a class="nav" href="./index.html">Back</a><a class="nav" href="../index.html">Home</a></nav>
   <button id="menuClose" type="button">Close menu</button>
 </header>
-<div id="corner"><button id="menuBtn" class="icon" type="button" aria-expanded="false" aria-controls="topbar" aria-label="Menu: Dunk-O-Rama v1.0, Lab build"><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M5 8h16M5 13h16M5 18h16"/></svg></button><div id="hud" aria-hidden="true"></div></div>
+<div id="corner"><button id="menuBtn" class="icon" type="button" aria-expanded="false" aria-controls="topbar" aria-label="Menu: Dunk-O-Rama v1.1, Lab build"><svg viewBox="0 0 26 26" aria-hidden="true"><path d="M5 8h16M5 13h16M5 18h16"/></svg></button><div id="hud" aria-hidden="true"></div></div>
 
 <div id="seatSheet" class="panel sheet" role="dialog" aria-label="Pick a runoff">
   <h2>Pick a runoff</h2>
@@ -189,7 +195,7 @@ const RM=(()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches
 const G=9.8,R=0.11,BALLS=10;
 /* v0.8 runoff: two candidates share one wide tank. Left target dunks the left seat, right target
    the right seat, the top target (hung over the tank) dunks both. */
-const TANK={x0:-1.32,x1:1.32,zf:11.0,zb:13.4,water:1.62,glass:1.79,cage:3.58};
+const TANK={x0:-1.32,x1:1.32,zf:11.0,zb:13.4,water:1.62,glass:2.0,cage:3.58}; // v1.1: glass = counter top
 const SEATS=[{x:-0.64,y:2.3,z:12.2},{x:0.64,y:2.3,z:12.2}];
 const TGTS=[
  {px:-1.82,top:3.6,len:1.6,z:10.6,rk:1,pk:1,seats:[0],post:.42},
@@ -201,7 +207,7 @@ const LAUNCH={x:0.06,y:1.25,z:1.5};
 const CAST=[
  {id:'fil',name:'Councilman Lyle Droneon',title:'The Filibusterer',level:'Easy. Moves: red herring, appeal to tradition, Gish gallop. Light breeze.',
   suit:'#59647e',pants:'#454e63',tie:'#c8342b',skin:'#f0c4a0',bw:0.52,r:0.34,sway:0.5,tw:1,wind:0,
-  idle:['And another thing. Section four, paragraph nine...','I yield my time to... myself.','Point of order! That was a practice throw.','I have forty more pages. Single-spaced.','Let the record show I am perfectly dry.'],
+  idle:['And another thing. Section four, paragraph nine...','I yield my time to... myself.','Point of order! That was a practice throw.','I have forty more pages. Single-spaced.','Let the record show I am perfectly prepared.'],
   miss:['Noted. Tabled. Forgotten.','Motion to dismiss that throw. Seconded by me.','The chair recognizes your miss.'],
   bonk:['That net was in the budget for a reason.','Out of order! You hit the procedure.'],
   dunk:["I'll be entering this splash into the record.",'Glub. The councilman from the deep end yields.','Moist. Very moist. Moving on to page ten.']},
@@ -252,7 +258,7 @@ const LEVEL_MOVES={fil:['red','trad','gish','circ'],spin:['straw','dilemma','loa
 /* v0.7's single-seat exchanges (75) retired in v0.8 by the runoff; they live in git history at 88c193c. */
 MOVES.none={name:'Fair answer',def:'An answer with reasons you could check. You can disagree with it, but it plays fair.',spot:'Does it answer the question, with reasons you could check?',fair:'This is the fair version.'};
 /* dunking a straight answer gets noticed (panel: Gitlin, Turkle) */
-const LOCKED=['That answer was fair. The board stays up.','You cannot dunk a fair answer. House rules.','I gave reasons you could check. Board stays.','Fair answer, dry seat. That is the deal.'];
+const LOCKED=['That answer was fair. The board stays up.','You cannot knock down a fair answer. House rules.','I gave reasons you could check. Board stays.','Fair answer, nothing to knock down. That is the deal.'];
 const FAIRDUNK=['I told you the truth, plainly. And here I am, wet.','Honest answer, cold water. Lesson noted, folks.','Next time I will lie. That seems to work better.','Did anyone hear the answer? Anyone? Glub.','Fair answer. Unfair water.'];
 
 /* Verified against the University of Virginia list of Pudd'nhead Wilson's New Calendar epigraphs
@@ -270,7 +276,7 @@ CAST.push({id:'pun',name:'Dale Bluster',title:'The Pundit',level:'',
 const LEVELTXT={fil:'Level 1, easy. Dodging the question. Light breeze.',spin:'Level 2. Rewriting what you said. The target twists.',mayor:'Level 3. The crowd and the other guy. Gusts push the ball.',lob:'Level 4, hard. Who says so, and what they leave out. Small target.',pun:'Level 5, hardest. Blame and fog. Small target, gusts, the lot.'};
 const REACT={
  fil:{miss:['Noted. Tabled. Forgotten.','Motion to dismiss that throw. Seconded by me.','The chair recognizes your miss.','Let the record show the ball agreed with me.','That throw has been referred to committee, where it will live forever.'],
-      bonk:['That net was in the budget for a reason.','Out of order! You hit the procedure.','Nets have protected senators since 1789. Tradition.'],
+      bonk:['That net was in the budget for a reason.','Out of order! You hit the procedure.','Nets have protected councilmen since 1789. Tradition.'],
       dunk:["I'll be entering this splash into the record.",'Glub. The councilman from the deep end yields.','Moist. Very moist. Moving on to page ten.','I yield the floor. The floor is wet.','Glub. Point of order. Glub.']},
  spin:{miss:['That miss was a strategic success.','Sources close to the ball say it was tired.','Historic restraint on your part.','Missing is the new hitting. You heard it here first.','We will call that a soft launch.'],
       bonk:['The net and I are on message.','Hit the net? Bold choice. Wrong, but bold.','The net and I have a working relationship.'],
@@ -399,6 +405,7 @@ const newTg=()=>({phi:0,dphi:0,psi:0,dpsi:0});
 let tgs=[newTg(),newTg(),newTg()],gust=0,gustT=3;
 let breath={ph:0,calm:0,hold:0};
 let heck={active:false,cheat:[false,false],moves:[null,null],called:null},thrown=0,boostT=-1,calmLock=false,stats={asked:0,right:0,seen:{},fairDunks:0};
+let down=[false,false,false],knocked=[],revealK=0;
 let parts=[],rings=[],slosh=0,pop=null,bubble={text:'',t:0,who:0},sayQ=[],idleT=3;
 const allSit=()=>chs.every(h=>h.state==='sit');
 
@@ -466,10 +473,10 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){closeSheets();if($('topbar')
 function setCast(i){ci=i;const L=LEVELS[i];const src=CAST.find(k=>k.id===L.k);
  lv={k:L.k,sway:src.sway,tw:src.tw,wind:src.wind,r:src.r};cand=[CAST[L.a],CAST[L.b]];
  balls=BALLS;dunks=0;streak=0;roundOver=false;ball=null;anim=null;trail=[];lastPath=[];wet=[0,0];lies=[0,0];
- chs=[newCh(),newCh()];tgs=[newTg(),newTg(),newTg()];$('result').style.display='none';newWind();hud();
+ chs=[newCh(),newCh()];tgs=[newTg(),newTg(),newTg()];down=[false,false,false];knocked=[];revealK=0;$('result').style.display='none';newWind();hud();
  Object.keys(BAGS).forEach(k=>delete BAGS[k]);heck={active:false,cheat:[false,false],moves:[null,null],called:null};thrown=0;boostT=-1;calmLock=false;stats={asked:0,right:0,seen:{},fairDunks:0};
  $('callit').style.display='none';bubble.t=0;sayQ=[];
- announce(`Runoff for mayor: ${cand[0].name} on the left, ${cand[1].name} on the right. The left target dunks ${SHORT[cand[0].id]}, the right target dunks ${SHORT[cand[1].id]}, the top target dunks both. Only a candidate who used a fallacy can be dunked. Driest candidate wins. ${RUNTXT[lv.k]}`);}
+ announce(`Runoff for mayor: ${cand[0].name} on the left, ${cand[1].name} on the right. When ${SHORT[cand[0].id]} uses a fallacy, the trick hangs on the left as a paper prop; ${SHORT[cand[1].id]}'s hangs on the right; if both do, a sign for both hangs on top. Call it, then knock the trick down. Fewest tricks knocked down wins. ${RUNTXT[lv.k]}`);}
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function pastMoves(){const out=[];for(const L of LEVELS){if(L.k===lv.k)break;out.push(...LEVEL_MOVES[L.k]);}return out;}
 /* a verdict is 'none' (both straight), 'both' (both cheated) or 'side:move' (one cheated) */
@@ -485,7 +492,7 @@ function newHeckle(){
  /* founder 2026-11-08: a candidate who answered fairly cannot be dunked. A target opens only for a
     fallacy; the top target opens only when both used one. Nothing opens until the player calls it. */
  const open=[cheat[0],cheat[1],cheat[0]&&cheat[1]];
- heck={active:true,cheat,moves,called:null,q:Q,open};
+ heck={active:true,cheat,moves,called:null,q:Q,open};down=[false,false,false];revealK=0;
  bubble.t=0;bubble.parts=null;
  const esc=t=>t.replace(/&/g,'&amp;').replace(/</g,'&lt;');
  $('dlg').innerHTML=`<p class="crowd"><span class="who">Crowd:</span> ${esc(Q[0])}</p><p><span class="who">${SHORT[cand[0].id]}:</span> ${esc(ans[0])}</p><p><span class="who">${SHORT[cand[1].id]}:</span> ${esc(ans[1])}</p>`;
@@ -511,10 +518,10 @@ function newHeckle(){
 /* layman critical-thinking terms: a fallacy is a trick in reasoning; a fair answer is one you can check */
 const CALLQ=()=>stats.asked===0?'Who used a fallacy (a trick in reasoning)?':'Who used a fallacy?';
 function openLine(){const o=heck.open,nm=i=>SHORT[cand[i].id];
- if(o[2])return 'Both targets are open, and the top one dunks both.';
- if(o[0])return `${nm(0)}'s target, on the left, is open.`;
- if(o[1])return `${nm(1)}'s target, on the right, is open.`;
- return 'Both answers were fair, so no target opens.';}
+ if(o[2])return 'Both tricks are up, and the sign on top counts for both.';
+ if(o[0])return `${nm(0)}'s trick is up, on the left.`;
+ if(o[1])return `${nm(1)}'s trick is up, on the right.`;
+ return 'Both answers were fair, so nothing goes up.';}
 function callMove(id){
  if(heck.called!==null)return;stats.asked++;heck.moves.forEach(m=>{if(m)stats.seen[m]=1;});
  const v=verdictOf(heck),nm=i=>SHORT[cand[i].id];
@@ -596,33 +603,40 @@ function step(b,dt,live){
  b.x+=b.vx*dt;b.y+=b.vy*dt;b.z+=b.vz*dt;b.age+=dt;
  if(!live)return;
  const cross=(zp)=>pz<zp&&b.z>=zp,at=(zp)=>{const k=(zp-pz)/(b.z-pz);return[px+(b.x-px)*k,py+(b.y-py)*k];};
- for(let i=0;i<TGTS.length;i++){const TG=TGTS[i],s=tgs[i];if(b.hit>=0||b.rim||!cross(TG.z))continue;
+ for(let i=0;i<TGTS.length;i++){const TG=TGTS[i],s=tgs[i];if(down[i]||b.hit>=0||b.rim||!cross(TG.z))continue;if(i===2&&b.open&&!b.open[2])continue;
   const[cx,cy]=at(TG.z),T=tgtPos(i),cw=Math.max(.12,Math.abs(Math.cos(s.psi)));
   const tr=tgtR(i,b);const ex=(cx-T.x)/(tr*cw+R*.6),ey=(cy-T.y)/(tr+R*.6),e2=ex*ex+ey*ey;
   const rx=(cx-T.x)/(tr*cw+.07+R),ry=(cy-T.y)/(tr+.07+R),r2=rx*rx+ry*ry;
   if(b.open&&!b.open[i]&&(e2<1||r2<1)){b.rim=true;b.z=TG.z-.01;b.vz=-Math.abs(b.vz)*.3;b.vx+=(cx-T.x)*5;SFX.mesh();shakeIt(.15);
-   const w=i===2?(b.open[0]?1:0):i;say(bag('lk',LOCKED),2.6,w);announce(`That target is boarded up: ${cand[w].name} answered fairly.`);continue;}
+   const w=i===2?(b.open[0]?1:0):i;say(bag('lk',LOCKED),2.6,w);announce(`That hook holds a fair answer: ${cand[w].name} played fair, so there is nothing to knock down.`);continue;}
   if(e2<1){b.hit=i;b.z=TG.z-.01;b.vz=-Math.abs(b.vz)*.35;b.vy=b.vy*.5+1.5;b.vx+=(cx-T.x)*4;s.dphi+=b.vx*.25+(cx-T.x)*1.5;s.dpsi+=(cx-T.x)*12;dunk(i,T);}
   else if(r2<1){b.rim=true;b.z=TG.z-.01;b.vz=-Math.abs(b.vz)*.3;b.vx+=(cx-T.x)*6;b.vy+=(cy-T.y)*6;s.dpsi+=(cx-T.x)*16;s.dphi+=(cx-T.x)*2;SFX.rim();rings.push({x:cx,y:cy,z:TG.z,r:.05,a:1,k:i});
    const w=i===2?(Math.random()<.5?0:1):i;say(bagOr('r',RIM,'m'+cand[w].id,cand[w].miss),2.2,w);announce('Off the rim.');}}
  if(!b.front&&b.hit<0&&!b.rim&&cross(TANK.zf)){const[cx,cy]=at(TANK.zf);
   if(cx>TANK.x0-R&&cx<TANK.x1+R&&cy<TANK.cage+R){b.front=true;b.z=TANK.zf-.01;
    const glass=cy<TANK.glass;b.vz=-Math.abs(b.vz)*(glass?.32:.18);b.vx*=.7;b.vy*=glass?.8:.5;
-   if(glass){SFX.glass();glassWob=1;slosh=Math.max(slosh,.4);}else{const w=sideOf(cx);SFX.mesh();b.bonked=true;say(bagOr('b'+cand[w].id,cand[w].bonk,'m'+cand[w].id,cand[w].miss),2.6,w);announce('Hit the net.');}
+   if(glass){SFX.bounce(4);glassWob=.4;}else{const w=sideOf(cx);SFX.mesh();b.bonked=true;say(bagOr('b'+cand[w].id,cand[w].bonk,'m'+cand[w].id,cand[w].miss),2.6,w);announce('Hit the net.');}
    shakeIt(.25);}}
  if(b.z>14.2&&b.vz>0){b.z=14.2;b.vz=-b.vz*.3;SFX.bounce(2);}
  if(b.y<R){b.y=R;if(b.vy<0){const v=-b.vy;b.vy=v*.45;b.vx*=.78;b.vz*=.78;if(v>1.2)SFX.bounce(v);}}
 }
-function dunk(i,T){
+function dunk(i,T){// v1.1: knock the trick down. Nobody falls; the candidate gives the fair answer.
  const hitSeats=TGTS[i].seats.filter(s=>chs[s].state==='sit');
+ const mv=ball&&ball.moves?ball.moves.slice():[null,null];
  SFX.clang();tgtFlash[i]=1;rings.push({x:T.x,y:T.y,z:TGTS[i].z,r:.1,a:1,k:i});
- hitSeats.forEach(s=>{wet[s]++;dunks++;const h=chs[s];h.fair=!!(ball&&ball.cheat&&!ball.cheat[s]);h.straight=(ball&&ball.cheat&&ball.cheat[s]&&ball.q)?ball.q[s?4:1]:null;if(h.fair)stats.fairDunks++;});
- streak++;hud();shakeIt(.6);hitPause=RM?0:.07;if(!RM){slow=.25;slowT=.45;}
- setTimeout(()=>{SFX.drop();hitSeats.forEach(s=>{chs[s].state='fall';chs[s].vy=.6;chs[s].towel=0;});},90);
- pop={text:hitSeats.length>1?'DOUBLE DUNK!':streak>1?`DUNK! ${streak} in a row`:'DUNK!',t:1.4};
- const who=hitSeats.map(s=>cand[s].name).join(' and ');
- announce(`Dunk! ${who} ${hitSeats.length>1?'hit':'hits'} the water. ${SHORT[cand[0].id]} ${wet[0]}, ${SHORT[cand[1].id]} ${wet[1]}. ${balls} questions left.`);
+ knocked.push({i,x:T.x,y:T.y,z:TGTS[i].z,vx:(ball?ball.vx*.25:0)+(Math.random()-.5)*.6,vy:1.6,rot:-tgs[i].phi,vr:(Math.random()<.5?-1:1)*(5+Math.random()*3),life:2.8,moves:mv,r:tgtR(i,ball),ew:Math.max(.35,Math.abs(Math.cos(tgs[i].psi)))});
+ down[i]=true;
+ hitSeats.forEach(s=>{wet[s]++;dunks++;const h=chs[s];h.straight=(ball&&ball.cheat&&ball.cheat[s]&&ball.q)?ball.q[s?4:1]:null;h.state='caught';h.timer=1.4;});
+ streak++;hud();shakeIt(.4);hitPause=RM?0:.07;if(!RM){slow=.3;slowT=.4;}
+ confetti(T.x,T.y,TGTS[i].z);setTimeout(()=>SFX.cheer(),260);
+ const nameOf=m=>m?MOVES[m].name:'Trick';
+ pop={text:hitSeats.length>1?'BOTH DOWN!':(nameOf(mv[hitSeats[0]])+' down!').toUpperCase(),t:1.4};
+ const who=hitSeats.map(s=>`${SHORT[cand[s].id]}'s ${nameOf(mv[s]).toLowerCase()}`).join(' and ');
+ announce(`Knocked down: ${who}. Tricks knocked down: ${SHORT[cand[0].id]} ${wet[0]}, ${SHORT[cand[1].id]} ${wet[1]}. ${balls} questions left.`);
 }
+function confetti(x,y,z){const cols=['#ffd23f','#c8342b','#2f6fb0','#fbf6ea','#e9c046'];
+ for(let i=0;i<(RM?14:46);i++){const a=Math.random()*Math.PI*2,sp=.8+Math.random()*2.4;
+  parts.push({k:'conf',x,y,z:z-.05,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp+1.5,vz:-Math.random()*.6,life:1.4+Math.random(),r:.03+Math.random()*.03,rot:Math.random()*6,vr:(Math.random()-.5)*14,col:cols[i%cols.length]});}}
 function shakeIt(a){if(!RM)shake=Math.max(shake,a);}
 function splashAt(sx){
  SFX.splash();slosh=1.2;shakeIt(.4);const S=SEATS[sx];
@@ -639,11 +653,11 @@ function checkEnd(){if(ball||balls>0||roundOver)return;if(!allSit()||sayQ.length
  roundOver=true;const nm=i=>cand[i].name,sh=i=>SHORT[cand[i].id];
  const tie=wet[0]===wet[1],win=wet[0]<wet[1]?0:1,lose=1-win;
  if(tie){$('rTitle').textContent='Dead heat';
-  $('rText').textContent=`Both candidates were dunked ${wet[0]} time${wet[0]===1?'':'s'}. The town calls a recount.`;}
+  $('rText').textContent=`Both candidates had ${wet[0]} trick${wet[0]===1?'':'s'} knocked down. The town calls a recount.`;}
  else{store.set('elect_'+lv.k,nm(win));$('rTitle').textContent=cand[win].id==='mayor'?`Re-elected: ${nm(win)}`:`Mayor-elect: ${nm(win)}`;
-  $('rText').textContent=`${sh(win)} stayed driest: dunked ${wet[win]} time${wet[win]===1?'':'s'}, to ${sh(lose)}'s ${wet[lose]}.`;}
+  $('rText').textContent=`${sh(win)} wins with ${wet[win]} trick${wet[win]===1?'':'s'} knocked down, to ${sh(lose)}'s ${wet[lose]}.`;}
  $('rText').textContent+=` In this race, ${sh(0)} used ${lies[0]} fallac${lies[0]===1?'y':'ies'} and ${sh(1)} used ${lies[1]}.`;
- if(!tie&&lies[0]!==lies[1]){const honest=lies[0]<lies[1]?0:1;$('rText').textContent+=honest===win?' The fairer arguer stayed dry.':' The one who stayed dry used more fallacies.';}
+ if(!tie&&lies[0]!==lies[1]){const honest=lies[0]<lies[1]?0:1;$('rText').textContent+=honest===win?' The fairer arguer won.':' The winner used more fallacies. Some tricks stayed up.';}
  const g=$('rGuide');g.innerHTML='';LEVEL_MOVES[lv.k].forEach(id=>{const M=MOVES[id];const li=document.createElement('li');li.innerHTML=`<b>${M.name}.</b> ${M.def} <br>Spot it: ${M.spot} <br>Fair version: ${M.fair}`;g.appendChild(li);});
  $('rTwain').textContent='“'+TWAIN[lv.k].q+'”';$('rTwainSrc').textContent=TWAIN[lv.k].src;
  {const M=MOVES.none,li=document.createElement('li');li.innerHTML=`<b>Fair answer.</b> ${M.def} <br>Spot it: ${M.spot}`;g.appendChild(li);}
@@ -673,20 +687,14 @@ function frame(now){
   trail.push({x:ball.x,y:ball.y,z:ball.z});if(trail.length>200)trail.shift();
   const sp=Math.hypot(ball.vx,ball.vy,ball.vz);
   if((sp<.5&&ball.y<=R+.01)||(ball.vz<0&&ball.z<2.2)||ball.age>6||Math.abs(ball.x)>12)endBall();}
- chs.forEach((h,si)=>{const S=SEATS[si];
- if(h.state==='fall'){h.seatA=Math.min(1.25,h.seatA+dt*9);h.vy-=G*dt;h.yo+=h.vy*dt;h.rot=Math.max(-0.9,h.rot-dt*3.5);
-  if(S.y+h.yo<TANK.water+.05&&!h.splashed){h.splashed=true;splashAt(si);}
-  if(S.y+h.yo<0.3){h.yo=0.3-S.y;h.vy=0;h.state='under';h.timer=1.5;}}
- else if(h.state==='under'){h.timer-=dt;h.yo=0.3-S.y+Math.sin(t*3+si)*.04;if(Math.random()<dt*14)parts.push({k:'bub',x:S.x+(Math.random()-.5)*.3,y:1.0,z:S.z,vy:.8+Math.random(),life:1});
-  if(h.timer<=0){h.state='climb';h.timer=0;h.splashed=false;const k=cand[si];
-   if(h.fair){h.fair=false;say(bag('fd',FAIRDUNK),3.8,si);announce(`${k.name} gave a straight answer, and you dunked it anyway.`);}
-   else if(h.straight){const a=h.straight;h.straight=null;say(`Fine. Fair answer: ${a}`,4.2,si);announce(`${k.name}, dripping, gives the fair answer. ${a} Someone hands over a towel.`);}
-   else say(bag('d'+k.id,k.dunk),3.4,si);}}
- else if(h.state==='climb'){h.timer+=dt;const k=Math.min(1,h.timer/1.1);const e=1-Math.pow(1-k,3);h.yo=(0.3-S.y)*(1-e);h.rot=-0.9*(1-e);h.seatA=1.25*(1-Math.min(1,k*1.6));
-  if(k>=1){h.state='sit';h.yo=0;h.rot=0;h.seatA=0;h.towel=4.5;}}
- if(h.towel>0)h.towel=Math.max(0,h.towel-dt);});
- for(const p of parts){p.life-=dt;if(p.k==='drop'){p.vy-=G*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.z+=p.vz*dt;
-   const inTank=p.x>TANK.x0&&p.x<TANK.x1&&p.z>TANK.zf&&p.z<TANK.zb;if((inTank&&p.y<TANK.water&&p.vy<0)||p.y<0||p.z<1.5)p.life=0;}
+ chs.forEach((h,si)=>{// v1.1: caught, a beat of embarrassment, then the fair answer
+  if(h.state==='caught'){h.timer-=dt;if(h.timer<=0){h.state='sit';const k=cand[si];
+   if(h.straight){const a=h.straight;h.straight=null;say(`Fine. Fair answer: ${a}`,4.2,si);announce(`${k.name} gives the fair answer. ${a}`);}}}});
+ for(const k of knocked){k.life-=dt;k.vy-=G*dt;k.x+=k.vx*dt;k.y+=k.vy*dt;k.rot+=k.vr*dt;
+  if(k.y<k.r*.9){k.y=k.r*.9;if(k.vy<0){if(k.vy<-1.5)SFX.bounce(2);k.vy=-k.vy*.3;}k.vr*=.6;k.vx*=.6;}}
+ knocked=knocked.filter(k=>k.life>0);
+ if(heck.called!==null||ball)revealK=Math.min(1,revealK+rdt/.4);
+ for(const p of parts){p.life-=dt;if(p.k==='conf'){p.vy-=G*.35*dt;p.vx*=1-1.5*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.z+=p.vz*dt;p.rot+=p.vr*dt;if(p.y<0)p.life=0;}
   else{p.y+=p.vy*dt;if(p.y>TANK.water)p.life=0;}}
  parts=parts.filter(p=>p.life>0);
  for(const r of rings){r.r+=dt*1.6;r.a-=dt*1.8;}rings=rings.filter(r=>r.a>0);
@@ -779,33 +787,87 @@ function drawTarget(i){
   ctx.strokeStyle='#2a2230';ctx.lineWidth=Math.max(4,p.s*.1);ctx.beginPath();ctx.moveTo(lp.x,lp.y);ctx.lineTo(lt.x,lt.y);ctx.lineTo(rt2.x,rt2.y);ctx.lineTo(rp2.x,rp2.y);ctx.stroke();
   ctx.strokeStyle='#d9d4e3';ctx.lineWidth=Math.max(2,p.s*.05);ctx.stroke();
   ell(lp.x,lp.y,p.s*.16,p.s*.04,'rgba(0,0,0,.3)',false);ell(rp2.x,rp2.y,p.s*.16,p.s*.04,'rgba(0,0,0,.3)',false);}
- // two wires
+ // v1.1: what hangs on this hook right now
+ const src=ball?ball.open:(heck.active&&heck.called!==null?heck.open:null),mvs=ball?ball.moves:heck.moves;
+ const kind=!src?'ask':!src[i]?(i===2?'none':'fair'):i===2?'both':(mvs[i]==='straw'?'straw':'sign');
+ const att=kind==='straw'?[.22,.9]:kind==='fair'?[.55,.45]:[.82,.62];
+ // two wires (cut and dangling once the prop is knocked down)
  ctx.strokeStyle=mode==='light'?'#3a3340':'#e9e3f5';ctx.lineWidth=Math.max(1.5,p.s*.018);
- for(const sd of [-1,1]){const top=P(TG.px+sd*.24,TG.top+.15,z);const ax=T.x+up.x*cr*.82+rt.x*sd*cr*.5*cw,ay=T.y+up.y*cr*.82+rt.y*sd*cr*.5*cw;const a=P(ax,ay,z);
+ for(const sd of [-1,1]){const top=P(TG.px+sd*.24,TG.top+.15,z);
+  if(down[i]){const e=P(TG.px+sd*.24+Math.sin(t*2+sd)*.05,TG.top+.15-TG.len*.45,z);ctx.beginPath();ctx.moveTo(top.x,top.y);ctx.lineTo(e.x,e.y);ctx.stroke();continue;}
+  const ax=T.x+up.x*cr*att[0]+rt.x*sd*cr*att[1]*cw,ay=T.y+up.y*cr*att[0]+rt.y*sd*cr*att[1]*cw;const a=P(ax,ay,z);
   ctx.beginPath();ctx.moveTo(top.x,top.y);ctx.lineTo(a.x,a.y);ctx.stroke();}
- // slack trip cord to each seat it drops: the cord shows which target dunks whom
- const bot=P(T.x-up.x*cr,T.y-up.y*cr,z);
+ // slack cord to each candidate: shows whose trick hangs here
+ const bot=down[i]?P(TG.px,TG.top+.15-TG.len*.45,z):P(T.x-up.x*cr,T.y-up.y*cr,z);
  ctx.strokeStyle=mode==='sharp'?'rgba(255,255,0,.85)':'rgba(30,20,40,.85)';ctx.lineWidth=Math.max(1.5,p.s*.022);
  TG.seats.forEach(si=>{const S=SEATS[si];const latch=TG.arch?P(S.x+(si?.35:-.35),S.y+.05,TANK.zb-.05):P(si?TANK.x1:TANK.x0,2.0,TANK.zf);
   ctx.beginPath();ctx.moveTo(bot.x,bot.y);ctx.quadraticCurveTo((bot.x+latch.x)/2,Math.max(bot.y,latch.y)+p.s*.3,latch.x,latch.y);ctx.stroke();});
- paperOn(1.2);// disc: thickness then face
- const rpx=cr*p.s,ang=-s.phi,ew=Math.abs(cw);
- ctx.save();ctx.translate(p.x,p.y);ctx.rotate(ang);
- const th=Math.sin(s.psi)*p.s*.07;
- ctx.lineWidth=1;ctx.strokeStyle=OUT;
- ell(th,0,(rpx+p.s*.05)*ew,rpx+p.s*.05,'#3d414c');
- ell(0,0,(rpx+p.s*.05)*ew,rpx+p.s*.05,'#8d93a1',false);
- const src=ball?ball.open:(heck.active&&heck.called!==null?heck.open:null),shut=src&&!src[i];
- const face=cw>=0,ring=shut?'#7d7889':TG.arch?'#2f6fb0':'#c8342b';
- [['#ffffff',1],[ring,.8],['#ffffff',.58],[ring,.36],['#ffd23f',.15]].forEach(([col,k],j)=>{ell(0,0,rpx*k*ew,rpx*k,face||j===0?col:'#b9b3c4',false);});
- if(shut){// two crossed boards: this candidate answered fairly
-  for(const a of [.6,-.6]){ctx.save();ctx.rotate(a);rr(-rpx*1.15,-rpx*.2,rpx*2.3,rpx*.4,rpx*.06,'#a8743f');ctx.strokeStyle='rgba(60,35,15,.55)';ctx.lineWidth=Math.max(1,rpx*.04);ctx.beginPath();ctx.moveTo(-rpx,0);ctx.lineTo(rpx,0);ctx.stroke();ctx.restore();}
-  ctx.lineWidth=1;ctx.strokeStyle=OUT;}
- paperOff();if(tgtFlash[i]>.05){ctx.globalAlpha=tgtFlash[i]*.8;ell(0,0,(rpx+p.s*.06)*ew,rpx+p.s*.06,'#fff6c2',false);ctx.globalAlpha=1;}
- ctx.restore();
+ if(!down[i]&&kind!=='none'){const rk=kind==='ask'||kind==='fair'?1:revealK,ov=1.7;const sc=rk>=1?1:Math.max(.05,1+ov*Math.pow(rk-1,3)+ov*Math.pow(rk-1,2));
+  drawProp(kind,propNames(kind,mvs,i),p.x,p.y,cr*p.s,-s.phi,Math.max(.12,Math.abs(cw)),sc,1,tgtFlash[i]);}
  for(const r of rings){if(r.k!==i)continue;const q=P(r.x,r.y,r.z);ctx.strokeStyle=`rgba(255,240,180,${Math.max(0,r.a)})`;ctx.lineWidth=3;ctx.beginPath();ctx.arc(q.x,q.y,r.r*q.s+cr*q.s,0,7);ctx.stroke();}
 }
 
+const propNames=(kind,mvs,i)=>{const n=m=>m&&MOVES[m]?MOVES[m].name:'';return kind==='both'?[n(mvs[0]),n(mvs[1])]:[n(mvs[i])];};
+/* v1.1 Midway Gallery props. Local unit u = hit radius in px, so the art matches the hit zone. */
+function drawProp(kind,names,x,y,u,rot,ew,sc,alpha,flash){
+ ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.scale(ew*sc,sc);ctx.globalAlpha=alpha;
+ ctx.lineJoin='round';ctx.lineCap='round';ctx.strokeStyle=OUT;ctx.lineWidth=Math.max(1,u*.05);
+ paperOn(1.2);
+ if(kind==='straw')strawMan(u);
+ else if(kind==='ask'){rr(-u*.78,-u*.85,u*1.56,u*1.7,u*.14,'#fbf3dc',true);ctx.strokeStyle='#c8342b';ctx.lineWidth=Math.max(1,u*.07);rr(-u*.64,-u*.71,u*1.28,u*1.42,u*.1,null,true);
+  paperOff();ctx.fillStyle='#c8342b';ctx.font=`900 ${Math.round(u*1.25)}px system-ui,sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('?',0,u*.06);}
+ else if(kind==='fair'){ctx.save();ctx.rotate(.08);rr(-u*.62,-u*.38,u*1.24,u*.76,u*.12,'#e7efe1',true);paperOff();ctx.fillStyle='#24482c';fitText('FAIR',0,u*.02,u*1.05,u*.48,900);ctx.restore();}
+ else{// lettered paper sign: placeholder until this fallacy gets its own prop
+  rr(-u*1.0,-u*.66,u*2.0,u*1.32,u*.1,'#fbf3dc',true);ctx.strokeStyle='#c8342b';ctx.lineWidth=Math.max(1,u*.08);rr(-u*.86,-u*.52,u*1.72,u*1.04,u*.07,null,true);paperOff();
+  ctx.fillStyle='#1b1328';const fs=u*(names.length>1?.26:.34);
+  if(fs>=10){names.forEach((n,k)=>fitText(n,0,(names.length>1?(k?.2:-.2):0)*u,u*1.6,fs,900));}
+  else{ctx.strokeStyle='#1b1328';ctx.lineWidth=Math.max(1,u*.06);for(let k=-1;k<=1;k++){ctx.beginPath();for(let j=0;j<=10;j++){const xx=-u*.6+j*u*.12,yy=k*u*.24+Math.sin(j*1.7+k)*u*.05;j?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy);}ctx.stroke();}}}
+ paperOff();
+ if(flash>.05){ctx.globalAlpha=flash*.6;ell(0,0,u*1.1,u*1.1,'#fff6c2',false);}
+ ctx.restore();
+}
+/* The straw man: a scarecrow on a pole, the flimsy version you can knock down. */
+function strawMan(u){
+ const STRAW='#e9c046',ROPE='#b98a4e';
+ const tufts=(x,y,dx,dy,n)=>{ctx.save();ctx.strokeStyle=STRAW;ctx.lineWidth=Math.max(1,u*.045);for(let k=0;k<n;k++){const a=(k-(n-1)/2)*.32;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+(dx*Math.cos(a)-dy*Math.sin(a))*u,y+(dx*Math.sin(a)+dy*Math.cos(a))*u);ctx.stroke();}ctx.restore();};
+ const plaid=(x0,y0,w,h)=>{ctx.save();ctx.beginPath();ctx.rect(x0,y0,w,h);ctx.clip();ctx.strokeStyle='rgba(110,20,18,.75)';ctx.lineWidth=Math.max(1,u*.05);
+  for(let xx=x0+u*.1;xx<x0+w;xx+=u*.2){ctx.beginPath();ctx.moveTo(xx,y0);ctx.lineTo(xx,y0+h);ctx.stroke();}
+  for(let yy=y0+u*.1;yy<y0+h;yy+=u*.2){ctx.beginPath();ctx.moveTo(x0,yy);ctx.lineTo(x0+w,yy);ctx.stroke();}
+  ctx.strokeStyle='rgba(255,210,63,.6)';ctx.lineWidth=Math.max(.6,u*.02);for(let xx=x0+u*.2;xx<x0+w;xx+=u*.2){ctx.beginPath();ctx.moveTo(xx,y0);ctx.lineTo(xx,y0+h);ctx.stroke();}ctx.restore();};
+ const L=Math.max(1,u*.05);ctx.lineWidth=L;ctx.strokeStyle=OUT;
+ // pole and crossbar
+ rr(-u*.06,-u*.55,u*.12,u*1.65,u*.04,'#8a5a2b',true);
+ rr(-u*.98,-u*.3,u*1.96,u*.11,u*.04,'#8a5a2b',true);
+ // straw out of the cuffs and the hem
+ tufts(-u*.86,-u*.22,-.2,0,4);tufts(u*.86,-u*.22,.2,0,4);
+ tufts(-u*.2,u*.5,0,.2,3);tufts(u*.05,u*.52,0,.22,3);tufts(u*.28,u*.5,0,.18,3);
+ // sleeves along the crossbar, then the shirt
+ rr(-u*.88,-u*.37,u*.6,u*.27,u*.06,'#c8342b',true);plaid(-u*.88,-u*.37,u*.6,u*.27);
+ rr(u*.28,-u*.37,u*.6,u*.27,u*.06,'#c8342b',true);plaid(u*.28,-u*.37,u*.6,u*.27);
+ ctx.beginPath();ctx.moveTo(-u*.32,-u*.4);ctx.lineTo(u*.32,-u*.4);ctx.lineTo(u*.38,u*.52);ctx.lineTo(-u*.36,u*.5);ctx.closePath();ctx.fillStyle='#c8342b';ctx.fill();
+ ctx.save();ctx.clip();plaid(-u*.4,-u*.42,u*.8,u*.96);ctx.restore();ctx.lineWidth=L;ctx.strokeStyle=OUT;ctx.stroke();
+ // patch with stitches, rope belt
+ rr(u*.06,-u*.1,u*.2,u*.2,u*.02,'#2f6fb0',true);ctx.save();ctx.setLineDash([u*.04,u*.03]);ctx.strokeStyle='#fbf6ea';ctx.lineWidth=Math.max(.8,u*.025);ctx.strokeRect(u*.09,-u*.07,u*.14,u*.14);ctx.restore();
+ ctx.strokeStyle=ROPE;ctx.lineWidth=Math.max(1.5,u*.07);ctx.beginPath();ctx.moveTo(-u*.36,u*.3);ctx.quadraticCurveTo(0,u*.36,u*.37,u*.3);ctx.stroke();
+ ctx.strokeStyle=OUT;ctx.lineWidth=L;
+ // straw at the neck, burlap head
+ tufts(0,-u*.4,0,-.16,5);
+ circ(0,-u*.66,u*.29,'#d9b77a',true);
+ ctx.save();ctx.beginPath();ctx.arc(0,-u*.66,u*.29,0,7);ctx.clip();ctx.strokeStyle='rgba(120,85,40,.28)';ctx.lineWidth=Math.max(.6,u*.02);
+ for(let k=-4;k<=4;k++){ctx.beginPath();ctx.moveTo(k*u*.07,-u*.98);ctx.lineTo(k*u*.07,-u*.36);ctx.stroke();ctx.beginPath();ctx.moveTo(-u*.3,-u*.66+k*u*.07);ctx.lineTo(u*.3,-u*.66+k*u*.07);ctx.stroke();}ctx.restore();
+ ctx.strokeStyle=ROPE;ctx.lineWidth=Math.max(1.5,u*.06);ctx.beginPath();ctx.moveTo(-u*.17,-u*.42);ctx.lineTo(u*.17,-u*.42);ctx.stroke();ctx.strokeStyle=OUT;ctx.lineWidth=L;
+ // button eyes, stitched grin, triangle nose
+ circ(-u*.1,-u*.7,u*.055,'#1b1328',false);circ(u*.1,-u*.7,u*.055,'#1b1328',false);
+ circ(-u*.115,-u*.715,u*.016,'#fbf6ea',false);circ(u*.085,-u*.715,u*.016,'#fbf6ea',false);
+ ctx.fillStyle='#8a5a2b';ctx.beginPath();ctx.moveTo(0,-u*.64);ctx.lineTo(-u*.04,-u*.58);ctx.lineTo(u*.04,-u*.58);ctx.closePath();ctx.fill();
+ ctx.save();ctx.strokeStyle='#1b1328';ctx.lineWidth=Math.max(1,u*.03);ctx.beginPath();ctx.arc(0,-u*.6,u*.14,.35,Math.PI-.35);ctx.stroke();
+ for(let k=0;k<5;k++){const a=.45+k*(Math.PI-.9)/4,cx=Math.cos(a)*u*.14,cy=-u*.6+Math.sin(a)*u*.14;ctx.beginPath();ctx.moveTo(cx,cy-u*.035);ctx.lineTo(cx,cy+u*.035);ctx.stroke();}ctx.restore();
+ // straw hat
+ tufts(-u*.22,-u*.86,-.1,.06,2);tufts(u*.22,-u*.86,.1,.06,2);
+ ell(0,-u*.88,u*.42,u*.09,'#e3b84a',true);
+ ctx.beginPath();ctx.moveTo(-u*.2,-u*.88);ctx.lineTo(-u*.16,-u*1.1);ctx.quadraticCurveTo(0,-u*1.16,u*.16,-u*1.1);ctx.lineTo(u*.2,-u*.88);ctx.closePath();ctx.fillStyle='#e3b84a';ctx.fill();ctx.stroke();
+ ctx.fillStyle='#c8342b';ctx.fillRect(-u*.19,-u*.95,u*.38,u*.06);
+}
 function waterEdge(z,amp){const pts=[];for(let i=0;i<=24;i++){const x=TANK.x0+(TANK.x1-TANK.x0)*i/24;const y=TANK.water+Math.sin(i*.9+t*6)*.03*amp+Math.sin(i*.37-t*3.4)*.05*amp;pts.push(P(x,y,z));}return pts;}
 
 function drawTank(){
@@ -814,32 +876,22 @@ function drawTank(){
  const sideFill='#3a2a52';
  quad(P(TANK.x0,0,zf),P(TANK.x0,0,zb),P(TANK.x0,TANK.cage,zb),P(TANK.x0,TANK.cage,zf),sideFill);
  quad(P(TANK.x1,0,zf),P(TANK.x1,0,zb),P(TANK.x1,TANK.cage,zb),P(TANK.x1,TANK.cage,zf),sideFill);
- rectW(TANK.x0,TANK.x1,0,TANK.water,zb,'#1f5f8f');
- // a divider down the back wall: two seats, one tank
- {const d1=P(0,TANK.water,zb),d2=P(0,TANK.cage,zb);ctx.strokeStyle='rgba(255,210,63,.35)';ctx.lineWidth=Math.max(2,d1.s*.04);ctx.beginPath();ctx.moveTo(d1.x,d1.y);ctx.lineTo(d2.x,d2.y);ctx.stroke();}
- drawTarget(2);// the top target hangs behind the seats
- SEATS.forEach((S,si)=>{const h=chs[si],dir=si?1:-1;// planks hinge at the outer wall, so they drop away from the middle
-  const sh=P(S.x+dir*.42,S.y,S.z);ctx.save();ctx.translate(sh.x,sh.y);ctx.rotate(-dir*h.seatA);ctx.lineWidth=1.5;ctx.strokeStyle=OUT;rr(si?-sh.s*.84:0,-sh.s*.04,sh.s*.84,sh.s*.09,sh.s*.03,'#c99a5b');ctx.restore();
-  ctx.strokeStyle='#8c8799';ctx.lineWidth=Math.max(2,sh.s*.05);const bk=P(S.x+dir*.42,S.y,zb);ctx.beginPath();ctx.moveTo(bk.x,bk.y);ctx.lineTo(sh.x,sh.y);ctx.stroke();});
- SEATS.forEach((S,si)=>{const h=chs[si];const cp=P(S.x,S.y+h.yo,S.z);
-  const mood=h.state==='fall'?'fall':h.state==='under'?'under':h.state==='climb'?'wet':(bubble.t>0&&!bubble.hidden&&bubble.who===si?'talk':'idle');
-  paperOn(1);drawChar(cand[si],cp.x,cp.y,cp.s*CHS,h.rot*(si?-1:1),mood,t+si*1.3,h.towel||0);paperOff();});
- const amp=.3+slosh;const edge=waterEdge(zf,amp),edgeB=waterEdge(zb,amp*.6);
- ctx.fillStyle='rgba(110,190,240,.55)';ctx.beginPath();edge.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));for(let i=edgeB.length-1;i>=0;i--)ctx.lineTo(edgeB[i].x,edgeB[i].y);ctx.closePath();ctx.fill();
- const bot=P(TANK.x1,0,zf),bl=P(TANK.x0,0,zf);
- const wg=ctx.createLinearGradient(0,edge[0].y,0,bot.y);wg.addColorStop(0,'rgba(70,160,225,.62)');wg.addColorStop(1,'rgba(20,70,140,.85)');
- ctx.fillStyle=wg;ctx.beginPath();edge.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.lineTo(bot.x,bot.y);ctx.lineTo(bl.x,bl.y);ctx.closePath();ctx.fill();
- ctx.strokeStyle='rgba(230,248,255,.9)';ctx.lineWidth=2;ctx.beginPath();edge.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.stroke();
- for(const b of parts)if(b.k==='bub'){const q=P(b.x,b.y,b.z);ctx.strokeStyle='rgba(235,250,255,.8)';ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(q.x,q.y,q.s*.03,0,7);ctx.stroke();}
- const wob=Math.sin(t*40)*glassWob*3;const g1=P(TANK.x0,TANK.glass,zf),g2=P(TANK.x1,0,zf);
- ctx.fillStyle='rgba(200,235,255,.08)';ctx.fillRect(g1.x+wob,g1.y,g2.x-g1.x,g2.y-g1.y);
- ctx.strokeStyle='rgba(255,255,255,.35)';ctx.lineWidth=Math.max(2,g1.s*.05);
- for(const k of [.12,.18,.62,.8]){const a=P(TANK.x0+(TANK.x1-TANK.x0)*k,TANK.glass-.1,zf),b=P(TANK.x0+(TANK.x1-TANK.x0)*k-.25,.15,zf);ctx.beginPath();ctx.moveTo(a.x+wob,a.y);ctx.lineTo(b.x+wob,b.y);ctx.stroke();}
+ // v1.1 Midway booth: striped back curtain, then the candidates, then the counter in front of them
+ {const n=8,w=(TANK.x1-TANK.x0)/n;for(let k=0;k<n;k++)rectW(TANK.x0+k*w,TANK.x0+(k+1)*w,TANK.glass-.05,TANK.cage,zb,k%2?'#3a2a52':'#4a3466');}
+ {const d1=P(0,TANK.glass,zb),d2=P(0,TANK.cage,zb);ctx.strokeStyle='rgba(255,210,63,.35)';ctx.lineWidth=Math.max(2,d1.s*.04);ctx.beginPath();ctx.moveTo(d1.x,d1.y);ctx.lineTo(d2.x,d2.y);ctx.stroke();}
+ drawTarget(2);// the top sign hangs behind the candidates
+ SEATS.forEach((S,si)=>{const h=chs[si];const cp=P(S.x,S.y,S.z);
+  const mood=h.state==='caught'?'wet':(bubble.t>0&&!bubble.hidden&&bubble.who===si?'talk':'idle');
+  paperOn(1);drawChar(cand[si],cp.x,cp.y,cp.s*CHS,0,mood,t+si*1.3,0);paperOff();});
+ // the counter: painted boards, a top rail
+ {const a1=P(TANK.x0,TANK.glass,zf),a2=P(TANK.x1,0,zf);paperOn(1.2);rr(a1.x,a1.y,a2.x-a1.x,a2.y-a1.y,3,'#8f5a34');paperOff();
+  const n=9;for(let k=0;k<n;k++){const x0=a1.x+(a2.x-a1.x)*k/n;ctx.fillStyle=k%2?'#a8693d':'#97603a';ctx.fillRect(x0+1,a1.y+3,(a2.x-a1.x)/n-2,a2.y-a1.y-6);}
+  const top1=P(TANK.x0-.08,TANK.glass+.07,zf-.1),top2=P(TANK.x1+.08,TANK.glass-.04,zf-.1);paperOn(1.2);rr(top1.x,top1.y,top2.x-top1.x,top2.y-top1.y,3,'#ffd23f');paperOff();
+  const wob=Math.sin(t*40)*glassWob*2;if(glassWob>.02){ctx.strokeStyle='rgba(255,246,194,.6)';ctx.lineWidth=2;ctx.strokeRect(a1.x+wob,a1.y,a2.x-a1.x,a2.y-a1.y);}}
  const m1=P(TANK.x0,TANK.cage,zf),m2=P(TANK.x1,TANK.glass,zf);ctx.save();ctx.beginPath();ctx.rect(m1.x,m1.y,m2.x-m1.x,m2.y-m1.y);ctx.clip();
- ctx.strokeStyle='rgba(225,225,235,.28)';ctx.lineWidth=1;const step=m1.s*.22;for(let x=m1.x-(m2.y-m1.y);x<m2.x;x+=step){ctx.beginPath();ctx.moveTo(x,m2.y);ctx.lineTo(x+(m2.y-m1.y),m1.y);ctx.moveTo(x,m1.y);ctx.lineTo(x+(m2.y-m1.y),m2.y);ctx.stroke();}ctx.restore();
+ ctx.strokeStyle='rgba(225,225,235,.22)';ctx.lineWidth=1;const step=m1.s*.22;for(let x=m1.x-(m2.y-m1.y);x<m2.x;x+=step){ctx.beginPath();ctx.moveTo(x,m2.y);ctx.lineTo(x+(m2.y-m1.y),m1.y);ctx.moveTo(x,m1.y);ctx.lineTo(x+(m2.y-m1.y),m2.y);ctx.stroke();}ctx.restore();
  paperOn(1);ctx.strokeStyle='#c8342b';ctx.lineWidth=Math.max(3,m1.s*.09);ctx.lineJoin='round';
- const fA=P(TANK.x0,TANK.cage,zf),fB=P(TANK.x1,0,zf),gl=P(0,TANK.glass,zf);ctx.strokeRect(fA.x,fA.y,fB.x-fA.x,fB.y-fA.y);
- ctx.beginPath();ctx.moveTo(fA.x,gl.y);ctx.lineTo(fB.x,gl.y);ctx.stroke();
+ const fA=P(TANK.x0,TANK.cage,zf),fB=P(TANK.x1,TANK.glass,zf);ctx.strokeRect(fA.x,fA.y,fB.x-fA.x,fB.y-fA.y);
  const tb=P(TANK.x0,TANK.cage,zb),tb2=P(TANK.x1,TANK.cage,zb);ctx.lineWidth=Math.max(2,m1.s*.06);ctx.beginPath();ctx.moveTo(fA.x,fA.y);ctx.lineTo(tb.x,tb.y);ctx.lineTo(tb2.x,tb2.y);ctx.lineTo(fB.x,fA.y);ctx.stroke();
  // one name plate per seat
  [[TANK.x0+.18,-.08],[.08,TANK.x1-.18]].forEach(([a,b],si)=>{const pl1=P(a,1.05,zf),pl2=P(b,.66,zf);ctx.lineWidth=2;ctx.strokeStyle='#ffd23f';paperOn(1);rr(pl1.x,pl1.y,pl2.x-pl1.x,pl2.y-pl1.y,4,'#1b1328');paperOff();
@@ -903,7 +955,6 @@ function drawChar(c,X,Y,s,rot,mood,tm,towel){
  else if(c.id==='pun'){rr(-.075,my-.025,.15,.055,.02,'#ffffff');ctx.beginPath();ctx.moveTo(-.025,my-.025);ctx.lineTo(-.025,my+.03);ctx.moveTo(.025,my-.025);ctx.lineTo(.025,my+.03);ctx.stroke();}
  else{ctx.beginPath();if(c.id==='lob'){ctx.moveTo(-.04,my);ctx.quadraticCurveTo(.02,my+.03,.06,my-.015);}else if(c.id==='mayor'){ctx.moveTo(-.07,my-.01);ctx.quadraticCurveTo(0,my+.06,.07,my-.01);ctx.closePath();ctx.fillStyle='#ffffff';ctx.fill();}else{ctx.moveTo(-.05,my);ctx.quadraticCurveTo(0,my+.035,.05,my);}ctx.stroke();}
  if(c.id==='fil'&&mood!=='under'){ctx.fillStyle='#e6e6ea';ctx.beginPath();ctx.moveTo(0,hY+.05);ctx.quadraticCurveTo(-.08,hY+.04,-.12,hY+.09);ctx.quadraticCurveTo(-.06,hY+.08,0,hY+.075);ctx.quadraticCurveTo(.06,hY+.08,.12,hY+.09);ctx.quadraticCurveTo(.08,hY+.04,0,hY+.05);ctx.fill();ctx.stroke();}
- if(mood==='wet'){for(let i=0;i<4;i++){const ph=(tm*1.5+i*.25)%1;circ(-.15+i*.1,hY+hr*.5+ph*.6,.018,'#9fd8ff',false);}}
  if(towel>0){// founder 2026-11-07: after the straight answer, a towel. It drops onto the shoulders, then fades.
   const k=Math.min(1,(4.5-towel)/.35),e=1-Math.pow(1-k,3),dy=-(1-e)*.5;ctx.save();ctx.globalAlpha=Math.min(1,towel/.6);ctx.translate(0,dy);
   const tw=shX+.07,band=(x0,y0,w,h)=>{rr(x0,y0,w,h,.035,'#fbf6ea');ctx.save();ctx.beginPath();ctx.rect(x0,y0,w,h);ctx.clip();ctx.fillStyle='#c8342b';for(let y=y0+h*.18;y<y0+h;y+=h*.42)ctx.fillRect(x0,y,w,h*.12);ctx.restore();};
@@ -1002,7 +1053,8 @@ function draw(){
  ctx.save();if(shake>.01){ctx.translate((Math.random()-.5)*shake*24,(Math.random()-.5)*shake*24);}
  drawBackdrop();drawTank();drawTarget(0);drawTarget(1);
  if(!ball&&lastPath.length){ctx.fillStyle='rgba(255,255,255,.45)';lastPath.forEach((q,i)=>{if(i%4)return;const p=P(q.x,q.y,q.z);ctx.beginPath();ctx.arc(p.x,p.y,Math.max(1.5,R*p.s*.18),0,7);ctx.fill();});}
- for(const p of parts)if(p.k==='drop'){const q=P(p.x,p.y,p.z);ctx.fillStyle='rgba(170,225,255,.9)';ctx.beginPath();ctx.ellipse(q.x,q.y,Math.max(1.5,p.r*q.s),Math.max(2,p.r*q.s*1.4),0,0,7);ctx.fill();}
+ for(const k of knocked){const q=P(k.x,k.y,k.z);const kind=k.i===2?'both':(k.moves[k.i]==='straw'?'straw':'sign');drawProp(kind,propNames(kind,k.moves,k.i),q.x,q.y,k.r*q.s,k.rot,k.ew,1,Math.min(1,k.life/.6),0);}
+ for(const p of parts)if(p.k==='conf'){const q=P(p.x,p.y,p.z),w=Math.max(2,p.r*q.s*1.6);ctx.save();ctx.translate(q.x,q.y);ctx.rotate(p.rot);ctx.globalAlpha=Math.min(1,p.life*1.5);ctx.fillStyle=p.col;ctx.fillRect(-w/2,-w*.3,w,w*.6*Math.abs(Math.cos(p.rot*1.3))+1);ctx.restore();}
  if(ball){drawShadow(ball);trail.forEach((q,i)=>{if(i%2||i<trail.length-24)return;const p=P(q.x,q.y,q.z);ctx.fillStyle=`rgba(255,240,190,${.15+.5*i/trail.length})`;ctx.beginPath();ctx.arc(p.x,p.y,R*p.s*.5,0,7);ctx.fill();});drawBallAt(ball.x,ball.y,ball.z);}
  drawArm();
  ctx.restore();
