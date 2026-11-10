@@ -237,3 +237,55 @@ Founder, 14:37 ET: "Rename signal rider and push new updates version to repo and
 - The ride starts from the review screen.
 - t11 is updated: Ride is now tapped from the list, since it's hidden inside categories.
 - Contrast SHIP, Studio Eyes PASS, top floor PASS, no errors.
+
+## v0.15: holds together at page zoom (2026-11-09)
+
+**Founder, 18:52 ET:** he sent a phone screenshot at about 150% page zoom. The top bar buttons overlapped and ran off the edge, the steer hint was cut off, and the speed readout ran off the right.
+
+**Changes:**
+- One Menu button now holds Restart, Library and Settings.
+- The steer hint wraps.
+- On narrow screens the bottom readout keeps hits, balance and speed. The leg name and trip line go to screen readers only.
+- Messages follow the real heights of the top bar and bottom readout.
+- "Comfort" is renamed Settings (2026-10-13 ruling).
+- Back is renamed "Restart and load a week" to match its spoken label.
+
+**Result:** clean at x1.0, x1.5 and x2.0 (claude/signal-rider-build-v15.py). Artifact version 1794270201-c029.
+
+**Why the senses missed it:** studio-eyes escape_halts skipped every viewport escape above x1.0 as "Studio Fingers' question", and Fingers only measures at x1.0.
+- A repair that judges viewport escape at x1.5 passes the 30/30 self-test and catches all five v0.14 faults.
+- It is held, not pushed: with it, 9 of the 10 front-page rooms HALT, and whether those HALTs are new is not yet known. The repair is in git stash on the session clone.
+- Pushed in v0.16: only the closed-box skip, which removes a false positive (text inside a 1px screen-reader span or a closed drawer).
+
+## v0.16: survival shortcut, green surge, lock-and-key landing (2026-11-09)
+
+**Founder, 19:28 ET:** "Rebrand 'alarm road' - and let's make green boxes now act as accelerators and damaged bands or pink boxes slow you down. Also the white dot matching sequence is much too easy. Needs to be real work with slight quick puzzle element."
+
+**Founder, 19:31 ET:** "The green examples and pink example need to be randomized but sequenced so players see the rotation of greens before seeing 3 of the same green or pink."
+
+**Survival shortcut.** "Alarm road" is renamed "survival shortcut": LeDoux's low road, the fast protective route that skips the thinking cortex. Science terms such as "alarm center" stay.
+
+**Speed.**
+- A collected green surges the spark to 1.3x cruise, fading over 2 s. Measured: 4.05 to 5.70 units/s.
+- This reverses the 2026-11-05 "greens must not affect speed" ruling, at the founder's direction.
+- Reds and frayed bands keep their slowdown (speed x0.45, recovering over 0.9 s).
+
+**Lock-and-key landing.**
+- Each spine carries a receptor shape (circle, triangle, square, diamond, plus).
+- Each beat, the center shows a yellow messenger shape and plays its tone.
+- Only the spine with the matching receptor counts. Landing on the wrong receptor plays a low buzz.
+- There is no white target any more.
+- The beat runs 1.1 / 1.0 / 0.95 / 0.9 s by leg.
+- The first key never sits under the spark.
+
+**Rotation.** The week's examples are dealt from a shuffled deck for each color. Every green (and every pink) appears once before any repeats, and none appears twice in a row in draw order.
+
+**Calibration** (simulated players with an extra 0.3 s to find the shape, 4 trials each):
+
+| Player | Relay | Cortex |
+|---|---|---|
+| Quick (250 ms + search) | 4/4 fire | 4/4 fire |
+| Slow (450 ms + search) | 4/4 fire | 2/4 fire |
+| No steering | 0/4 | 0/4 |
+
+**Gates:** contrast SHIP; Studio Eyes PASS (with the closed-box skip); top floor PASS; zoom probe clean at x1.0, x1.5 and x2.0.

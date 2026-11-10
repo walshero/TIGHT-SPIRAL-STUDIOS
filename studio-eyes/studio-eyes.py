@@ -297,6 +297,15 @@ _ESCAPE_BODY = r"""
     const tr = range.getBoundingClientRect();
     if (tr.width < 1) continue;
     if (cs.textOverflow && cs.textOverflow !== 'clip') continue;
+    // 2026-11-09: text inside a closed clipping box (a drawer at max-height:0, a 1px
+    // screen-reader span) is not on screen at all, so it cannot escape anything.
+    // Signal Rider v0.16's sr-only "meters per second" was HALTed as escaping its box.
+    let shut = false;
+    for (let q = el; q && q !== document.body; q = q.parentElement) {
+      const qs = getComputedStyle(q);
+      if (qs.overflow !== 'visible' && (q.clientHeight <= 1 || q.clientWidth <= 1)) { shut = true; break; }
+    }
+    if (shut) continue;
     let box = el.parentElement, bcs = null;
     while (box && box !== document.body) { bcs = framed(box); if (bcs) break; box = box.parentElement; }
     if (!box || box === document.body) {
