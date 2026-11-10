@@ -311,3 +311,15 @@ Each beat now shows its result for 0.55 s, along with the existing sounds:
 **Builder:** claude/signal-rider-build-v17.py.
 
 **Gates:** contrast SHIP; Studio Eyes PASS (self-test 30/30); top floor PASS; zoom probe clean at x1.0, x1.5 and x2.0.
+
+## v0.18: distance and time count again (2026-11-10)
+
+**Founder, 16:04 ET:** "My end of game summary said I travelled 0 in 0."
+
+**Cause:** in v0.10 a `//` comment was appended mid-line after the speedometer. It commented out the distance and time counting on the same line. From v0.10 to v0.17 the trip readout showed 0.00 m and 0.0 ms all ride, and the end card said 0 in 0. Nothing checked those numbers.
+
+**Fix:** the comment moved to its own line.
+
+**Check:** 0.05 m and 0.6 ms after 3 s of riding. A full ride covers about 1.30 m and takes about 17 ms at 75 m/s.
+
+**Builder:** claude/signal-rider-build-v18.py.
