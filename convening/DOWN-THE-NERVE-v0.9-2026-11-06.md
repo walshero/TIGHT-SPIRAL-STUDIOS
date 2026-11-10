@@ -289,3 +289,25 @@ Founder, 14:37 ET: "Rename signal rider and push new updates version to repo and
 | No steering | 0/4 | 0/4 |
 
 **Gates:** contrast SHIP; Studio Eyes PASS (with the closed-box skip); top floor PASS; zoom probe clean at x1.0, x1.5 and x2.0.
+
+## v0.17: a clear verdict on every beat (2026-11-09)
+
+**Founder, 22:17 ET:** "The shapes at the cortex are good but it's not clear when you've correctly 'clicked' a shape or if you've failed to. This should be cleaner, crisper."
+
+Each beat now shows its result for 0.55 s, along with the existing sounds:
+
+| Result | What the player sees |
+|---|---|
+| Match | The spine you hit flashes green with an expanding ring and a green check. |
+| Half | Amber ring on the spine. |
+| Wrong shape | Pink X on the spine you landed on. |
+| Missed | The key dims and shakes. |
+
+**Also:**
+- A one-word label (Match, Half, Wrong shape, Missed) sits under the key.
+- A green progress arc around the key fills toward firing. The old threshold ring is hidden while the landing runs, so there is only one meter.
+- Each new key pops in.
+
+**Builder:** claude/signal-rider-build-v17.py.
+
+**Gates:** contrast SHIP; Studio Eyes PASS (self-test 30/30); top floor PASS; zoom probe clean at x1.0, x1.5 and x2.0.
