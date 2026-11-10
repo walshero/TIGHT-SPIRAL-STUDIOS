@@ -215,3 +215,35 @@ watch the sites answer each other. What moved is the player's standing against t
 Applied in v0.3. Welders can no longer restore shoved steel, and lifts return less often.
 
 SIGNED Coordinator, Osterweil seat, Stranger, Conductor, Studio Ears, Systems and ecology bench, 2026-11-09
+
+## RECONVENE on v0.4: the Artery, cars and live wire, smash sound, Mossback (2026-11-10)
+
+FOUNDER: "1. Expand the overhead highway and make it look more like Boston 93 before the big
+dig. 2. Player can destroy cars but not bicycles or people. If player tried to destroy a train
+or tram they get electrocuted and lose 1 unit of health. 3. The smash sound is annoying and it
+should sound satisfying. Research and replace. Beaver should have a friend they can tap out
+when low on energy. They are at the far right of dam. Another animal rewilder. Turtle or ???"
+
+- **Conductor.** The highway is twelve bays and five floors: green riveted steel, a concrete
+  deck with a rail, rust streaks, a crawling jam, a 93 NORTH sign, an off-ramp, a trolley in
+  its shadow. Source for the look: press accounts of the Central Artery as green-painted steel
+  and concrete, the "other Green Monster," six lanes, chronically jammed. Rendered on desktop.
+  Not rendered on phone.
+- **Studio Voice.** The rule of what may be smashed is the founder's and it carries a value:
+  cars break, people and bikes do not, and the wire bites back. The refusal line is "No
+  smashing people or bikes. Cars are fair game."
+- **Studio Ears.** Research first, then the sound: sources agree a satisfying hit stacks a
+  click for snap, a body, and a low thump, keeps the tail short for a sound that fires often,
+  and varies pitch a little each time. The old hit was one dull noise burst and one tone, the
+  same every time. The new hit, slam and car crunch are built that way, and quick hits in a
+  row step up in pitch. Nobody has listened to it; the founder's ear grades it.
+- **Osterweil seat.** The identities freedom is no longer empty. Mossback the snapping turtle
+  plays differently: slow, every bite heavy, rubble and steam bounce off her shell, live wire
+  still hurts. Tagging is offered only when energy is at two pips or less, and it happens by
+  itself at zero if the friend is rested.
+- **Coordinator.** The turtle was chosen over a moose or a heron because her difference is one
+  the player feels in the hands within seconds. Open: she has no ecological job yet. A real
+  second role would change what she can do for the sites, not only how she hits.
+- **Systems and ecology bench.** No new ecological claim. "Mossback" and her sapling are play.
+
+SIGNED Conductor, Studio Voice, Studio Ears, Osterweil seat, Coordinator, Systems and ecology bench, 2026-11-10
