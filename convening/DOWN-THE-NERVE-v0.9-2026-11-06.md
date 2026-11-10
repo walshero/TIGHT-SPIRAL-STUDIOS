@@ -349,3 +349,28 @@ Each beat now shows its result for 0.55 s, along with the existing sounds:
 - Contrast SHIP, Studio Eyes PASS, zoom probe clean at x1.0, x1.5 and x2.0.
 
 **Builder:** claude/signal-rider-build-v19.py.
+
+## v0.20: your week replayed; curves toned down (2026-11-10)
+
+**Founder, 16:32 ET:** "I thought I wanted more curve but that is almost unplayable. Too fast and sudden. Keep some of the fun curves when no blocks or bands are near, but tone this down big time."
+
+**Cause of the suddenness.** v0.19 scaled the tube's position by a closeness-to-events envelope. Events are dense, so the tube kept swinging back toward center: the bend rate spiked to 1.95 against v0.18's 0.007.
+
+**Fix: bend by turning, not by position.**
+- Curvature is switched on only in open stretches (9+ units from any block, band or landing) and integrated into the path, so near events the tube runs straight and never snaps back.
+- Max bend rate is 0.010 in open stretches (about 1.4x v0.18) and 0.003 near events.
+- Bank is halved (max about 5 degrees).
+
+**Your week, replayed.** The end card and the fade card list:
+- What the week set up: spines, shortcut pull, band width and red group size, each naming the categories that caused it.
+- What happened on the ride: greens collected and pinks hit by name, frayed bands, and match / half / wrong / missed at the gaps, plus stalls and leg-4 spines grown or lost.
+- One "Try next": the support category that answers the heaviest stress with no buffer.
+- This answers the 2026-11-07 worry that players can't see what their choices did.
+
+**Builder:** claude/signal-rider-build-v20.py.
+
+**Checks:**
+- The replay test rides a scripted run and reads the card.
+- Landing verdicts unchanged; trip counter running; messages against the ball 0 of 288.
+- Contrast SHIP, Studio Eyes PASS, zoom probe clean.
+- Builder slip, fixed before shipping: an apostrophe lost its escape and broke the script.
