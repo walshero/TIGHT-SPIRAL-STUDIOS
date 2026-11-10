@@ -323,3 +323,29 @@ Each beat now shows its result for 0.55 s, along with the existing sounds:
 **Check:** 0.05 m and 0.6 ms after 3 s of riding. A full ride covers about 1.30 m and takes about 17 ms at 75 m/s.
 
 **Builder:** claude/signal-rider-build-v18.py.
+
+## v0.19: curvier tube and real music (2026-11-10)
+
+**Founder, 16:09 ET:** "I feel like the tube can be curvier and the music catchier." **16:10:** "Okay. Rebuild so."
+
+**Curves.**
+- The bends are wider and tighter. The largest sideways swing is 10.7, up from 5.5.
+- The bends ease to half strength at frayed bands and landings. Blocks are too dense to straighten for.
+- The camera banks up to about 10 degrees into turns.
+- The backdrop's shift is soft-capped at the old maximum, so its edge never shows. A sweep of 18 positions along the course found no uncovered screen.
+
+**Music.** Before this there was only a speed hum.
+- A 112 BPM track in G built on the five receptor tones: kick, clap and hat; a bassline over Em-C-G-D; and a two-bar hook.
+- Greens bring the hook forward for 8 s and lift the tempo to 120.
+- Reds and frayed bands muffle the mix (low-pass sweep from 650 Hz back up over 2.2 s).
+- At a landing the beat locks to the landing beat (two music beats per landing beat), and each match plays the next note of the hook.
+- The music ducks under speech.
+
+**Settings:** Music (on/off) and Curves (winding/gentle; gentle under reduced motion).
+
+**Checks:**
+- Music scheduler: 7.5 sixteenth notes per second, and it keeps running through landings.
+- Landing verdicts unchanged; messages against the ball: 0 of 288 overlaps.
+- Contrast SHIP, Studio Eyes PASS, zoom probe clean at x1.0, x1.5 and x2.0.
+
+**Builder:** claude/signal-rider-build-v19.py.
