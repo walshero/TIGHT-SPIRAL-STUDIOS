@@ -278,3 +278,30 @@ has to be on bottom. 5. There has to be a periodic bad guy."
   check dams and berms. No sourced claim rides on it.
 
 SIGNED Studio Ears, Coordinator, Stranger, Osterweil seat, Conductor, Studio Voice, Systems and ecology bench, 2026-11-10
+
+## RECONVENE on v0.6: no steel, toppling, quiet steam, the down ramp, more gags (2026-11-10)
+
+FOUNDER: "1. Ok, let's remove the metal boxes that are just tedious to break, except in special
+design strategy situations. Forget about highlighting blocks in gold because now everything is
+breakable except the gold block. You can suffer damage from collapsing blocks if you dig under
+too far, but also you can topple buildings like a beaver toppled trees by undercutting. 2.
+Stop the loud steam sound unless we are on the building. It's too loud and obnoxious now
+through whole game. 3. The highway needs a down ramp at the far right. Looks weird now. 4.
+More amusement out of graphics."
+
+- **Coordinator.** Felling is the beaver's own verb, and it carries a real idea: where you cut
+  decides where the weight goes. Cut a notch from one edge through half a floor, with two or
+  more floors above, and the building falls toward the notch. Scattered holes pancake the
+  floor instead. Risk scales with greed: more floors above means a harder landing on you.
+- **Osterweil seat.** Three rules about steel are gone and nothing glows. The player now reads
+  the building, tries a cut, and watches it answer. Foundations (the two lowest floors) take
+  two more hits each so the fell is earned.
+- **Stranger.** "It falls toward the notch" appears once, with the lean, before the fall.
+- **Studio Ears.** Steam and spillway hiss sound only while the player is on that building,
+  and quieter. A creak announces a topple.
+- **Conductor.** Rendered on desktop: a toppling garage, the long down ramp with cars rolling
+  off, a sun and clouds with faces, cars with eyes, starbursts behind big sound words, a
+  daisy in the rubble. Not rendered: ducklings in line, the Baron's hat, phone.
+- **Systems and ecology bench.** No new ecological claim.
+
+SIGNED Coordinator, Osterweil seat, Stranger, Studio Ears, Conductor, Systems and ecology bench, 2026-11-10
