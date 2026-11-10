@@ -247,3 +247,34 @@ when low on energy. They are at the far right of dam. Another animal rewilder. T
 - **Systems and ecology bench.** No new ecological claim. "Mossback" and her sapling are play.
 
 SIGNED Conductor, Studio Voice, Studio Ears, Osterweil seat, Coordinator, Systems and ecology bench, 2026-11-10
+
+## RECONVENE on v0.5: music, the one block, physics, the friend, the Baron (2026-11-10)
+
+FOUNDER: "1. The game music includes a crashing cymbal sound that sounds like construction.
+It's not good music. Cut that. Keep funky music. Actual Construction sounds when a rebuild
+crew appears (even off screen) is needed. 2. Sometimes blocks that aren't the top blocks are
+highlighted for blocking. Should be top blocks. The moveable block idea isn't leveraged. There
+should only be one per building. A block that doesn't smash but can be pushed. This needs to
+be an actual obstacle for rebuild crews, water etc. 3. Climbing physics and smashing physics
+need variation and enhancement. 4. The turtle needs to be activated whenever you tap him so he
+has to be on bottom. 5. There has to be a periodic bad guy."
+
+- **Studio Ears.** The noise hi-hat and snare are gone; the loop is bass, kick, a rim knock, a
+  tick, and chord stabs. Noise now means work: a rebuild crew arrives with a backup beeper, a
+  jackhammer, and hammer blows, wherever the camera is. Pave crews beep. Nobody has listened.
+- **Coordinator.** One bronze block per building turns a pile of crates into a decision. Four
+  blocks, more than four jobs: a lift pad, a pave crew's road, the upstream side of a growing
+  site in a flood, the dam's mud, the blimp's anchor. Where a block sits is now a claim the
+  player makes about which flow matters most. That is the systems lesson in the hands.
+- **Stranger.** Steel breaks again, with taps, and only top-floor steel glows. The earlier
+  three-floor glow was the rule working as built; the founder's reading is the clearer rule.
+- **Osterweil seat.** Movement has more to try: a dive into a stomp, a slide you can catch, a
+  third tap that lands heavy, a slam that carries through. None is required.
+- **Conductor.** Rendered on desktop: the bronze block in place and on a lift pad, the blimp,
+  the parachute, the friend on the ground by a TAG sign. Not rendered on phone this round.
+- **Studio Voice.** Baron Blacktop is a studio invention. He is a machine to yank, not a
+  person to hit; he floats home under a parachute.
+- **Systems and ecology bench.** A block as a flood wall and a mud stop is play, loosely after
+  check dams and berms. No sourced claim rides on it.
+
+SIGNED Studio Ears, Coordinator, Stranger, Osterweil seat, Conductor, Studio Voice, Systems and ecology bench, 2026-11-10
