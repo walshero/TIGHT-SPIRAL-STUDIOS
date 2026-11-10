@@ -1,6 +1,6 @@
 # SPEC — Headwaters (working title) · 2026-11-10
 
-Status: **LAB**, v0.1 built same day. Build: `lab/headwaters.html`.
+Status: **LAB**, v0.2 (v0.1 built same day). Build: `lab/headwaters.html`.
 Source: founder spec given in chat, 2026-11-10. Founder words are quoted; everything else is machine fallback for Matt to edit.
 Not Rewilder. Founder: *"It's a new game."* (Rewilder is the Rampage-style smash game, `convening/REWILDER-CONVENING.md`.)
 
@@ -40,3 +40,9 @@ One icon-only button, three modes: Light (day), Dark (dusk), Sharp (high contras
 - Audience (EN195? general? younger?).
 - Number of mountains and how the gondola network branches beyond two.
 - Sound: v0.1 has quiet synth cues scaled to the event (crack small, smash larger, bloom chime, win largest) per the win-state research.
+
+## v0.2, founder playtest 2026-11-10
+Founder: *"The messages obscure gameplay 95% of time, graphics are mid, dying is too easy."*
+- **Messages:** one short line at the top under the status bar, gone in under two seconds; no message for checkpoints; camera puts the marble a third of the way down so the slope ahead is clear.
+- **Dying:** paths 18% wider; a banked lip on every edge; a soft bumper that soaks up sideways speed near a drop unless you are really flying; a small overhang before you fall; three gondola cabins per line and a wider catch. Measured with a scripted random player over 3 minutes, 3 seeds: v0.1 lost all three marbles in about 22 s; v0.2 lost none. A full-speed charge at an edge still goes over.
+- **Graphics:** smooth path edges (marching squares) with cliffs painted behind the ground; rivers painted as one continuous ribbon with banks, and moving glints once a river is freed; grass blades, tree shadows, scrub patches so the damaged slopes are not one flat brown; treelines on the far hills; valley mist and a soft vignette.
