@@ -185,3 +185,33 @@ went unasked.
 2. The name.
 3. Identities: which second role first (salmon, fungus, foreman).
 4. Whether the parking lot should be the suggested first target.
+
+## RECONVENE on v0.3: steel, pits, soundtrack, D-pad (2026-11-09)
+
+FOUNDER: "Rewilder is sysyphian right now. I understand player can't destroy steel, but should
+be able to push unobstructed steel blocks to use as barricade to reenforcements/ rebuilders.
+Also, let player dig down to make pits that trap vehicles etc. Add funky soundtrack" ...
+"Change movement arrows to classic Nintendo joystick directional"
+
+The change alters what the player does, so the seats answer it. The spine holds: smash, choose,
+watch the sites answer each other. What moved is the player's standing against the pushback.
+
+- **Coordinator.** The founder's word names the fault: v0.2 gave the player only one answer to
+  repair lifts and pave crews, which was to hit them again. Now the wreckage is a resource.
+  Steel leaves the frame as a crate, a crate stops a crew or blocks a lift, a pit holds a
+  crew. That is a second loop the player builds, and it is closer to the sentence than the
+  steel rule was.
+- **Osterweil seat.** More ways to experiment: where to drop a crate, where to dig. The three
+  steel rules are down to two (weight above, brace beside); a tap now shoves free steel.
+- **Stranger.** "Hold Down and press Smash to dig" is a two-thumb move that nothing on screen
+  shows until the first crew arrives. Open.
+- **Conductor.** Rendered on phone: the cross D-pad and round Smash button, a pit, a sunk
+  truck, a crate barricade. Not rendered: a blocked lift.
+- **Studio Ears.** A funk loop at 104 beats a minute: bass and drums from the start, chord
+  stabs after the first grown site, a lead line after the third. Checked that it starts and
+  steps; nobody has listened to it. The sound button mutes it with everything else.
+- **Systems and ecology bench.** Crates and pits are play, not ecology. No claim rides on them.
+
+Applied in v0.3. Welders can no longer restore shoved steel, and lifts return less often.
+
+SIGNED Coordinator, Osterweil seat, Stranger, Conductor, Studio Ears, Systems and ecology bench, 2026-11-09
