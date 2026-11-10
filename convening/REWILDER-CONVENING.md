@@ -305,3 +305,32 @@ More amusement out of graphics."
 - **Systems and ecology bench.** No new ecological claim.
 
 SIGNED Coordinator, Osterweil seat, Stranger, Studio Ears, Conductor, Systems and ecology bench, 2026-11-10
+
+## RECONVENE on v0.6.1 to v0.7: messages, free play, real physics, a living city, the zap (2026-11-10)
+
+FOUNDER: "Messages often cover player and movement. Either tap away or if timed, out of the
+way of character." ... "when the objectives are 'complete' don't end the world the player has
+just built. Let them altar and continue playing if they wish." ... "Pretty fun! Breaking the
+buildings down like a beaver is a little too easy now. Make the physics have to make sense to
+break and don't just do it after X hits. I love the little details like kites. Add dog walkers
+and foodcarts etc. Let the place keep evolving over time in fun ways. electrocute if we attack
+electric green infrastructure. But make it look better."
+
+- **Coordinator.** The building is now a small physical system the player can reason about:
+  weight above, what is left below, and where the centre of mass sits. A hit count is gone.
+  Three outcomes follow from one model: topple when the weight sits outside the support,
+  crush when the support cannot carry it, fall when a block is cut loose. Different buildings
+  answer differently for a reason the player can see (a thick dam base, a stack-heavy plant).
+- **Osterweil seat.** Completion no longer ends the world. The player keeps the city, can dig
+  up a grown site and plant the other choice, and the place keeps gaining life. That is the
+  strongest version of freedom to experiment the build has had.
+- **Stranger.** Messages now stay off the character and close on a tap.
+- **Conductor.** Rendered on desktop: the splash now fells the garage; the X-ray zap; a grown
+  boulevard with a market stall, string lights, a busker, a kid with a balloon. Not rendered
+  on phone this round; not every life prop was looked at one by one.
+- **Studio Voice.** One refusal line covers people, bikes, dogs and carts. One line covers
+  everything electric.
+- **Systems and ecology bench.** The physics is simplified statics, labelled as play. The life
+  props carry no ecological claim.
+
+SIGNED Coordinator, Osterweil seat, Stranger, Conductor, Studio Voice, Systems and ecology bench, 2026-11-10
