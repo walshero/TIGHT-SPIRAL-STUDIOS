@@ -358,3 +358,32 @@ crew WILL reassemble wind farm but first you have to take down data center etc."
   claim about data centers rides on this build; one would be needed before a field note.
 
 SIGNED Conductor, Coordinator, Osterweil seat, Studio Voice, Systems and ecology bench, 2026-11-10
+
+## RECONVENE v0.9 (2026-11-11)
+
+FOUNDER: "What's the next obvious expansion or improvement. Get Osterweil in."
+FOUNDER: "Okay. I like it. Improve on graphics, add a little something fun to vacation screen,
+and change world more dramatically and intricately. This is dystopia we are returning to."
+
+- **Osterweil seat.** The salmon is a second identity, and it cannot smash. It only carries.
+  That gives the player a role where the win comes from connecting two places, which the
+  smashing roles never ask for. The river has to be open at both ends before the role works.
+- **Systems and ecology bench.** Research came first this time. The salmon field note rests on
+  Quinn, Helfield, Austin, Hovel and Bunn (2018), Ecology, DOI 10.1002/ecy.2453: twenty years
+  of moving sockeye carcasses to one bank of Hansen Creek, Alaska. The note says what the
+  study found and nothing more. The culvert rule, the glow, and the amount a delivery adds
+  are studio inventions, and the banner says so. The dystopia makes no sourced claim.
+- **Conductor.** Level 2 is one dial: the share of Baron buildings still standing. The dial
+  drives the sky, the skyline, the pipes, the ash, the river color and the gray people, so
+  each building that falls visibly lifts the whole valley. Rendered on desktop and phone:
+  salmon swimming, leaping, carrying and feeding; the culvert stop; the beach ball, crab,
+  kite and sandcastle; the "Meanwhile" towers; four level 2 views; a felled billboard; the
+  valley at two buildings left.
+- **Coordinator.** Billboards feed drones, and a drone that spots the player calls the Baron
+  early. Pipes pulse only while both ends stand. Both are play rules, not claims.
+- **Studio Voice.** Every new message carries a verb. The vacation waits for Up, so nobody
+  loses the beach to a timer shorter than twenty seconds.
+- **Stranger.** The fish button is an icon with no word on it. Its label reads aloud, and the
+  first press explains it, but a sighted stranger may not guess it. Flagged, not fixed.
+
+SIGNED Osterweil seat, Systems and ecology bench, Conductor, Coordinator, Studio Voice, Stranger, 2026-11-11
