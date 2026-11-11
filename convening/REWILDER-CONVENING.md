@@ -419,3 +419,20 @@ the enemies harder. 6. I do not see a salmon to tag after I bust the dam."
   more than one Baron building stands.
 
 SIGNED Coordinator, Osterweil seat, Conductor, Systems and ecology bench, Studio Voice, Stranger, 2026-11-11
+
+## RECONVENE v0.11 (2026-11-11)
+
+FOUNDER (with an iPhone 16 Pro screenshot): "The title of the game should be cooler looking AND
+should be centered in the box"
+
+- **Coordinator.** The screenshot settled what v0.10 could not reproduce. The phone's serif
+  font sits high in its line box, so the word pressed against the top edge of the card. The
+  test browser falls back to a different font, which is why the fault never showed there.
+- **Conductor.** The title is now drawn on the stage: eight cut-paper tiles on threads, asphalt
+  with road stripes on the left, green with leaves and one flower on the right. Each letter
+  is placed by measuring its own ink, so no font can push it off center. Rendered at phone,
+  sideways phone and laptop sizes.
+- **Studio Voice.** The h1 stays in the page for screen readers.
+- **Stranger.** The fix has not been seen on the founder's phone. His next look is the test.
+
+SIGNED Coordinator, Conductor, Studio Voice, Stranger, Osterweil seat, 2026-11-11
