@@ -436,3 +436,32 @@ should be centered in the box"
 - **Stranger.** The fix has not been seen on the founder's phone. His next look is the test.
 
 SIGNED Coordinator, Conductor, Studio Voice, Stranger, Osterweil seat, 2026-11-11
+
+## RECONVENE v0.12 (2026-11-11)
+
+FOUNDER: "“Daylight the river” is a weird verb phrase . rewrite more clearly.  I don’t see how the
+salmon addition adds much. I anticipated switching to the salmon and the river being as expansive as
+above ground with different tasks to do. Turtle and beaver and salmon can all access water. So in
+level 2, start allowing players to use the river to circumvent steel walls etc."
+FOUNDER: "Forget the x boxes with honey and acorns. No crate game"
+
+- **Osterweil seat.** The founder's read was right: v0.9 gave the salmon a button and one
+  errand. The river is now a place. It runs under the whole street, every animal can enter
+  it, and each one is different down there: the salmon is fast and never needs air but cannot
+  smash; the turtle holds its breath longest and bites hardest; the beaver is the plain case.
+- **Coordinator.** Braces and hidden rewards came out whole, with their messages. The gold
+  block stays, because the founder asked for it in v0.4 and "x boxes" names the braces.
+  If "no crate game" also means the gold block, that is one more cut.
+- **Conductor.** Level 2 now asks for the river. Steel plate guards the bottom two floors of
+  the tower, the data center and the dam, and nothing on land breaks it. Two steel walls cut
+  the street. Footings and wall anchors stand in the water. Rendered on a 402 by 745 phone
+  screen: the grate, junk on the bed, steel plate, a wall, an anchor, footings, and the tower
+  going down after its last footing broke.
+- **Systems and ecology bench.** "Daylighting" is the trade word for uncovering a buried
+  stream, and the card now says "Uncover the buried river." Air limits, footings, anchors,
+  the grate and the eels are play rules with no sourced claim. The banner says so.
+- **Studio Voice.** New messages carry verbs.
+- **Stranger.** The d-pad covers the lower third of the water on a phone. Nobody has played
+  a full level 2 by hand through the river; the test drove it by script.
+
+SIGNED Osterweil seat, Coordinator, Conductor, Systems and ecology bench, Studio Voice, Stranger, 2026-11-11
