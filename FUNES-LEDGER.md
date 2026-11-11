@@ -201,3 +201,4 @@ highest-leverage unlanded item in the repo and it costs a click.
 | 2026-11-11T00:20Z | lab/headwaters.html | preship | SHIP | v0.3 five mountains, growing gondola network, 11 ecosystem chains, Watershed map, danger tuned (reckless 1.2/min, careful 0) | md5 862eb0be | 67989 B |
 | 2026-11-11T05:10Z | lab/headwaters.html | preship | SHIP | v0.4 longer courses, chute, glass pipe, speed, in-world gondola ride; danger reckless 0.8/min careful 0 | md5 3c1f0540 | 79599 B |
 | 2026-11-11T05:40Z | lab/headwaters.html | preship+player-clear | SHIP | v0.5 messages never cover the moving marble; new gate player-clear (v0.4 HALT, v0.5 PASS 150 samples) | md5 7852a3ea | 82298 B |
+| 2026-11-11T05:29Z | lab/edgars-spot-evening.html | preship | SHIP | v0.2 LAB: crowded 8:30, sun-dusk-lamp light rig, objects 1.4x for wide shots; belt PASS, contrast worst 12.30 | md5 527cbaca | 24725 B |
