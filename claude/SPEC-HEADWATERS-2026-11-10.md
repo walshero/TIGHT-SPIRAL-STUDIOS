@@ -1,6 +1,6 @@
 # SPEC — Headwaters (working title) · 2026-11-10
 
-Status: **LAB**, v0.3 (v0.1 and v0.2 built same day). Build: `lab/headwaters.html`.
+Status: **LAB**, v0.4 (v0.1 to v0.3 built 2026-11-10). Build: `lab/headwaters.html`.
 Source: founder spec given in chat, 2026-11-10. Founder words are quoted; everything else is machine fallback for Matt to edit.
 Not Rewilder. Founder: *"It's a new game."* (Rewilder is the Rampage-style smash game, `convening/REWILDER-CONVENING.md`.)
 
@@ -67,3 +67,22 @@ Founder: *"The messages obscure gameplay 95% of time, graphics are mid, dying is
 
 ## EV 103 / EV 104 source status
 Confirmed: EV 103 Environmental Studies I and EV 104 Environmental Studies II, 4 credits each, a two-semester lab sequence (MassBay curriculum sheets; WPI's 2025 transfer map counts the pair as BB 1002 Environmental Biology). **Not yet read: the catalog descriptions.** catalog.massbay.edu blocks automated reading and the PDF catalogs reached did not include the course descriptions. The chains above use the standard principles of a two-semester intro environmental science sequence (watershed connectivity, food webs and trophic levels, keystone species, point-source pollution, acid deposition, succession, eutrophication, habitat fragmentation). PENDING: check each chain against the real EV 103 / EV 104 descriptions (paste them in, or open the catalog page in a browser session). The *why* lines are machine fallback for the founder to edit.
+
+## Founder playtest, 2026-11-10 late (primary source)
+*"The gameplay isn't super fun. Landing in the gondola should be cool and should be animated and not cheap cut away graphic. Add pipes and chutes and make the levels much longer and potentially faster"*
+
+| # | Ruling |
+|---|---|
+| H19 | The core loop has to be more fun. |
+| H20 | The gondola landing is animated in the world, never a cutaway card. |
+| H21 | Pipes and chutes. |
+| H22 | Levels much longer, and faster. |
+
+## v0.4, built from H19 to H22
+- **Longer:** every mountain gains a lower course, about doubling its length (Kettle Ridge 62 to 116 units). A timber chute, then a split: a glass pipe shortcut or the open path past a new gondola edge, then a speed pad into the bottom station. Two new checkpoints.
+- **Chute:** a banked U-channel on a slope 1.75 times as steep, with walls that turn the marble instead of stopping it. Measured on all five mountains with no steering: the marble clears the 30-unit chute in about 4 seconds, peaking near 10.5 units/s, with no falls.
+- **Pipe:** a glass tube arching over the void. The marble is visible inside, speeds up to 14 units/s, and shoots out on the far side.
+- **Faster:** top speed 8.5 to 11 (15 in a chute); less friction; speed pads; the camera leads in the direction of travel and pulls back as you speed up; a motion trail above 6 units/s.
+- **Gondola, in the world:** the cabin catches the marble and swings; it climbs its cable while the camera follows and the mountain drops away into cloud; it crosses above the clouds; it comes down onto the next mountain's summit station (now drawn on every top) and the marble rolls out. No text card. Tap skips ahead.
+- **Fun (H19), machine choices for founder review:** seed trails along every path, collected with a rising chime when you chain them (each seed planted greens its spot, a glimpse now and full on the next run, per H10); a brief hit-stop on every crack and smash.
+- **Danger, re-measured after the speed-up** (H12), with a true per-minute count (marbles refilled so a game over cannot cap it): reckless 0.8 a minute on average (Kettle Ridge 0, Ash Fork 0, Wren Hollow 1, Fallow Lake 2, Larch Crown 1); careful 0. A summit back wall now stops the marble rolling off the top of a mountain (a bug found in the test).
