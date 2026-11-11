@@ -679,3 +679,35 @@ electrified lines and as you advance some are timed."
   nobody knows yet whether thirty floors feels high or just long.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, 2026-11-11
+
+## RECONVENE v0.17 (2026-11-11)
+
+FOUNDER: "There is way too much text in the game. Let’s get rid of what we don’t need, like the first
+two sentences of the intro. Also, put text at the very top of the game covering the dashboard and not
+gameplay"
+FOUNDER: "What does the sigh ”Gary, why” mean"
+FOUNDER: "The fortress concept is wrong. I’m not talking about going inside a building. The outside of
+the building has electrified elements requiring timing strategy. It’s TALL and there are tons of
+drones but all outside"
+FOUNDER: "The fortress itself should be harder to get to, I e further left on the level"
+
+- **Studio Voice.** About ninety messages now run one short line, and fifteen are gone. The
+  cause cards keep their title and their one-line chain and lose the paragraph. Every line
+  that remains still has a verb.
+- **Stranger.** Messages sit at the very top and cover the dashboard, so they never land on
+  the animal. A message can hide the Tag and Lens buttons for a few seconds; a tap clears it.
+- **AI Skeptic.** "GARY, WHY" was a joke about a name the game never tells the player. A gag
+  that needs a caption gets dropped, by this studio's own rule. It is dropped.
+- **Coordinator.** Twice I put the fortress climb on its own screen. The founder meant the
+  building in the street. The fortress is now the leftmost building, thirty-six floors tall,
+  climbed with the same climbing the player already knows.
+- **Hitchcock seat.** The player starts level 3 at the far right and can see the tower from
+  a long way off. Twenty drones circle it at every height.
+- **Osterweil seat.** The wires ask for timing, the drones ask for a swat, and both cost one
+  floor on a miss. The switch stands on the roof in the open air.
+- **Conductor.** A bot using real key presses climbed all thirty-six floors in 26 seconds
+  with one shock, swatted nine drones on the way and smashed the roof switch. Rendered at
+  phone size: the base, floors 10, 22 and 33, and the fall. The top message bar was rendered
+  on three screens.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-11
