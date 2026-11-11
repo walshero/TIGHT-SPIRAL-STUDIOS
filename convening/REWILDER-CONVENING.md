@@ -465,3 +465,41 @@ FOUNDER: "Forget the x boxes with honey and acorns. No crate game"
   a full level 2 by hand through the river; the test drove it by script.
 
 SIGNED Osterweil seat, Coordinator, Conductor, Systems and ecology bench, Studio Voice, Stranger, 2026-11-11
+
+## RECONVENE v0.13 (2026-11-11)
+
+FOUNDER: "The “sea glow” will be replaced With an egg. There will be a new screen to the left only
+accessible by river that leads to the ocean. After the salmon eats food and plays with another salmon
+an egg appears that works like the sea glow. The salmon has to bring the egg to the far right. After
+you destroy dam, it should turn into a waterfall. When you climb waterfall with salmon you can access
+a new screen to the far right where the salmon drops the eggs. Then dies. After a few beats baby
+salmon are born and player can play with baby salmon that will grow over time to be adult. The river
+back may be obstructed and need help from beaver or turtle either above ground or below"
+FOUNDER: "The 93 off ramp should curve around not just be a flat ramp. And there should be one on
+either side. Don’t add extra blocks to smash to make this happen, just reconfigure. Also. Cars can’t
+come from nowhere. If ramp is smashed cars can’t spawn. If ramp is gone and cars on top keep driving
+they fall off. The command at the start to “smash everything” is not accurate. Smashing while holding
+buttons should create different moves"
+
+- **Osterweil seat.** The salmon now has a life, and the player lives all of it: feed, pair,
+  carry, climb, spawn, die, hatch, grow, leave. The death is played, not skipped. The run home
+  cannot be finished by the salmon alone, so the three animals finally need each other.
+- **Systems and ecology bench.** Research came first. Sourced: Pacific salmon hatch in stream
+  gravel, grow at sea, return, spawn once and die (National Park Service, Olympic; Fisheries
+  and Oceans Canada), and the carcasses feed bank trees (Quinn and others 2018). One studio
+  compression follows the founder's design and is named in the banner: in the wild the pair
+  meets and the eggs are laid at the gravels; here the mate is met at sea and the eggs are
+  carried upriver. Krill counts, the hot outfall, the nets and the three-leap fall are play
+  rules with no sourced claim.
+- **Conductor.** Rendered on a 402 by 745 phone screen: the ocean, krill, the mate and the
+  dance, eggs on the belly, the waterfall from the river and from the street, the climb, the
+  gravels, the dying salmon, the fed bank, the fry. Rendered on a laptop screen: both curved
+  ramps with cars on them, and the highway with both ramps gone.
+- **Coordinator.** The ramps hang off the two end deck blocks that were already there, so no
+  block was added. Cars enter from the street by the left ramp and leave by the right one.
+  The causes are visible: no on-ramp, no new cars; no deck or off-ramp ahead, the car falls.
+- **Studio Voice.** The opening line now names what to smash and what to leave alone.
+- **Stranger.** A script drove the whole life cycle; no hand has played it end to end. The
+  growth from fry to adult takes about a minute with feeding, and nobody has judged that pace.
+
+SIGNED Osterweil seat, Systems and ecology bench, Conductor, Coordinator, Studio Voice, Stranger, 2026-11-11
