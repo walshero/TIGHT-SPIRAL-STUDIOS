@@ -503,3 +503,19 @@ buttons should create different moves"
   growth from fry to adult takes about a minute with feeding, and nobody has judged that pace.
 
 SIGNED Osterweil seat, Systems and ecology bench, Conductor, Coordinator, Studio Voice, Stranger, 2026-11-11
+
+## RECONVENE v0.13.1 (2026-11-11)
+
+FOUNDER: "Level 2 now seems impossible. The Data center is surrounded by steel with no way over it
+or up it. Yes?"
+
+- **Coordinator.** He is right about over and up. A play test with real key presses took the
+  data center down through the river: dive left of the wall, swim under, break three footings
+  in 29 smashes with air to spare. So the level can be won, and the game failed to show how.
+- **Stranger.** Two timed messages carried the whole lesson, and a player who misses them
+  sees a dead end. That is the fault.
+- **Conductor.** Chalk arrows marked UNDER now point down on every steel plate, above each
+  footing, and on both sides of each wall. The Swim button pulses once steel has stopped the
+  player, until the first dive. Rendered at phone size.
+
+SIGNED Coordinator, Stranger, Conductor, Osterweil seat, Studio Voice, 2026-11-11
