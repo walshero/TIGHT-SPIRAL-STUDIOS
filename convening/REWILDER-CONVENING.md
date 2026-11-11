@@ -658,3 +658,24 @@ written after the build, not before it. That is out of order under the convening
   all of it is invention.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Mamet seat, Hitchcock seat, 2026-11-11
+
+## RECONVENE v0.16 (2026-11-11)
+
+FOUNDER: "You don’t enter the fortress at ground floor. You climb super high but you have to avoid
+electrified lines and as you advance some are timed."
+
+- **Coordinator.** I misread the ask in v0.15 and built corridors behind a ground-floor door.
+  The founder's version is a climb up the outside, and it teaches in order: first read a
+  steady wire and go around it, then read a pulsing one and wait.
+- **Hitchcock seat.** Height has to be seen. The city now drops away behind the tower, the
+  sky darkens toward stars, and a counter reads the floor out of thirty.
+- **Osterweil seat.** A shock costs one floor and a little energy. The player can always try
+  the same wire again at once.
+- **Conductor.** A bot using real key presses climbed all thirty floors without a shock, so
+  the wall can be climbed clean. Rendered at phone size: the ladder at the base, floors 1,
+  10, 20, 28 and 30, and the Baron's room. Entering by the window and pulling the switch
+  were run by script.
+- **Stranger.** The lamp that shows a pulsing wire is small. A person has not climbed it, so
+  nobody knows yet whether thirty floors feels high or just long.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, 2026-11-11
