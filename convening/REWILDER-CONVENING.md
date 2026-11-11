@@ -387,3 +387,35 @@ and change world more dramatically and intricately. This is dystopia we are retu
   first press explains it, but a sighted stranger may not guess it. Flagged, not fixed.
 
 SIGNED Osterweil seat, Systems and ecology bench, Conductor, Coordinator, Studio Voice, Stranger, 2026-11-11
+
+## RECONVENE v0.10 (2026-11-11)
+
+FOUNDER: "1.  The rewilder title at the start is clipped. Make sure studio Ian always checking to see
+what screen size a game is being played on to behave optimally. For example I have an iPhone 16 pro
+and playtest primarily with that. But display should work optimally for everyone. 2. Some structures
+are too easy to destroy in the game. It shouldn't be tedious, but it could require more thinking or
+fun grinding with Easter egg rewards and more cause and effect along the way. 3. The vacation activity
+should change each level. 4. The music should change in level 2 to dark funky when it's dystopia and
+switch after restoration. 5. The dystopias should get worse each level, the fixes more challenging,
+the enemies harder. 6. I do not see a salmon to tag after I bust the dam."
+
+- **Coordinator.** The clipped title could not be reproduced in the test browser at 402 by 874
+  or at 402 by 745. The game now measures the screen and shrinks the title and Start button to
+  fit. The rule became a check: claude/screen-fit-check.py loads a game at twelve screens and
+  fails when a visible control leaves the viewport. Its first run caught a real fault: the HUD
+  overflowed at 375 and 320 points wide. That is fixed.
+- **Osterweil seat.** Braces turn a building into a small puzzle: the player has to find and
+  break them before weight and balance apply again. The game says "BRACED" when the physics
+  would have dropped the building, so the cause is visible. The salmon was a button, and a
+  button is not a character. It now leaps at a SWIM sign and answers a tap, like the turtle.
+- **Conductor.** Rendered on a 402 by 745 phone screen: braces on the garage, the SWIM sign
+  and salmon after a real dam collapse, the lake, the campfire, level 3 and level 4 skies with
+  searchlights. Rendered at twelve sizes: the opening screen and the play screen.
+- **Systems and ecology bench.** Braces, hidden rewards and level scaling are play rules.
+  None of them carries a sourced claim, and the banner says so.
+- **Studio Voice.** New messages carry verbs. "Swim" and "Land" replace the fish icon, which
+  answers the Stranger's flag from v0.9.
+- **Stranger.** Nobody has heard the dark funk. The threshold is a studio call: dark while
+  more than one Baron building stands.
+
+SIGNED Coordinator, Osterweil seat, Conductor, Systems and ecology bench, Studio Voice, Stranger, 2026-11-11
