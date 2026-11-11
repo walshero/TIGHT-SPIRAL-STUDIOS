@@ -627,3 +627,34 @@ FOUNDER (mid-build): "For now, add an in-game option to choose a level to help w
 - **Stranger.** The man is small on a phone. His "Morning." is 20 points in world space.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Mamet seat, Hitchcock seat, Cleese seat, 2026-11-11
+
+## RECONVENE v0.15 (2026-11-11)
+
+FOUNDER: "1. The second vacation was just skipped over.  2. The full salmon pond that was available
+before should return. It should be the big pond where babies can feed etc. 3. When we come back to
+level 3, it cant be like before. More dystopian. More smoke and oil and more drones. Fewer people more
+robots. This time it’s a tower and you have to climb super high to enter the barons fortress but
+there’s a maze with electifiwd walls to avoid."
+
+Process note: the fortress and maze are a new thing for the player to do, and the findings below were
+written after the build, not before it. That is out of order under the convening rule.
+
+- **Coordinator.** The skipped vacation was a bug, not a design gap: an Up press left over
+  from the walk ended the beach on its first frame. The beach now ignores input for its first
+  beat and a half.
+- **Hitchcock seat.** The pond is wide and deep again, with twelve nymph spots, reeds, lilies
+  and a line of pines. The camera follows the salmon past the old right edge of the world.
+- **Osterweil seat.** The maze changes the verb. For three levels the player breaks things;
+  here the player has to not touch things. Failure is cheap: a live wall costs a little
+  energy and sets the animal back to the middle of the corridor.
+- **Mamet seat.** The Baron finally has a room, a desk and one switch. The player ends his
+  fortress by pulling his own lever, and every wall, drone and steel plate lets go at once.
+- **Conductor.** Rendered at phone size: vacation 2 holding, the level 3 street with the
+  oil-black river, the fortress and its door, the maze at the bottom and mid-height, the top
+  floor, and the switch. Rendered on phone and laptop: the big pond with fry.
+- **Stranger.** The maze is dark and plain next to the street. Robots were in the build but
+  not in any render I looked at. The path through the first maze is 17 cells.
+- **Systems and ecology bench.** Nothing in level 3 carries a sourced claim. The banner says
+  all of it is invention.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Mamet seat, Hitchcock seat, 2026-11-11
