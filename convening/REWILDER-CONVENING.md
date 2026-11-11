@@ -605,3 +605,25 @@ that the salmon's climb home is the same story told by a smaller animal.
 5. Humor: the held beat with a "tink", a dry word after each collapse, Baron lines and an
    upside-down statue, one recurring man with a coffee, and new billboard wordplay.
 6. Story: three short turning-point lines, and no cards.
+
+## RECONVENE v0.14, build checked against the findings (2026-11-11)
+
+FOUNDER (mid-build): "For now, add an in-game option to choose a level to help w playtesting"
+
+| Decision | Met | Evidence |
+|---|---|---|
+| 1. Dig removed | Yes | Down plus Smash on open ground now smashes; the replant card still opens in free play |
+| 2. One fifth left, it falls | Yes | Scripted: the highway fell after 23 of 28 blocks; plated buildings stay exempt |
+| 3. Rare ladders | Yes | Level 1 has two (shore, past the garage); level 2 has five |
+| 4. Falls in this world | Yes | Rendered from the street and the water; three keyed leaps reached the pond; a bad leap said FLOP |
+| 5. Humor, four jobs | Yes, unjudged | "tink" beat, dry word after a crash, Baron lines, head-down statue, the man with the coffee in five places, billboard wordplay |
+| 6. Story by action | Yes | Three lines: the opening, first green, the river reaching the sea |
+| Playtest level buttons | Yes | Menu buttons start at level 1 to 4; level 3 start verified |
+
+- **Cleese seat.** The laugh is the founder's to judge. Nothing here has been heard or timed
+  by a person.
+- **Conductor.** Not rendered: the head-down statue, the Baron's line bubble, the lake and
+  campfire with the man in them.
+- **Stranger.** The man is small on a phone. His "Morning." is 20 points in world space.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Mamet seat, Hitchcock seat, Cleese seat, 2026-11-11
