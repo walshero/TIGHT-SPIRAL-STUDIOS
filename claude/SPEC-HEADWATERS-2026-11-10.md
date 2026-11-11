@@ -1,6 +1,6 @@
 # SPEC — Headwaters (working title) · 2026-11-10
 
-Status: **LAB**, v0.5 (v0.1 to v0.4 built 2026-11-10). Build: `lab/headwaters.html`.
+Status: **LAB**, v0.6 (v0.1 to v0.5 built 2026-11-10). Build: `lab/headwaters.html`.
 Source: founder spec given in chat, 2026-11-10. Founder words are quoted; everything else is machine fallback for Matt to edit.
 Not Rewilder. Founder: *"It's a new game."* (Rewilder is the Rampage-style smash game, `convening/REWILDER-CONVENING.md`.)
 
@@ -92,3 +92,20 @@ Confirmed: EV 103 Environmental Studies I and EV 104 Environmental Studies II, 4
 - The camera holds the marble (or the gondola cabin) inside a safe band below the status bar and message line and above the bottom buttons.
 - Every frame, a message that would touch the marble drops to the bottom slot, or steps aside if both slots are in the way; the entry invitation does the same.
 - Measured by the new gate `studio-senses/player-clear.py`: v0.4 with hooks added HALTed (a message over the marble at chute speed, t = 18 s); v0.5 PASSes across 144 moving samples in five stretches (summit, chute, pipe, lower course, gondola ride).
+
+## Founder playtest, 2026-11-11 (primary source)
+*"Make the gondolas round so the marble falls right into them and make it cool to see. Getting better on graphics but not yet. Having to hit a wall and go back at the start is a boring start. Hit wall, then add detour. Make everything much more perfectly thought out a la monument valley"*
+
+| # | Ruling |
+|---|---|
+| H23 | Gondolas are round; the marble falls right into them, and it is cool to see. |
+| H24 | Graphics: better, not yet there. |
+| H25 | No dead ends. A wall stops you, then a detour carries you on. |
+| H26 | Everything deliberate and finely made, Monument Valley standard. |
+
+## v0.6, built from H23 to H26
+- **Round gondolas:** open bowls on three cables. When the marble drops off an edge over a gondola line, the nearest bowl glides along the cable to meet it, the marble falls in between the back and front rims, the bowl springs and gold sparks ring out, then the bowl climbs its own cable.
+- **No dead ends, measured:** new check `lab/tests/headwaters-flow.py` (priority flood from the bottom station against a forward flood from the summit; a trap is any spot a rolling marble can reach that needs more than 1.0 height units of climbing to get out). Trapped share of reachable spots before, then after: Kettle Ridge 6.6% to 0, Ash Fork 8.7% to 0, Wren Hollow 4.2% to 0, Fallow Lake 0.6% to 0, Larch Crown 90.3% to 0 (its summit could not reach the bottom at all: the highway wall closed the only way down and the river was not joined to the top).
+- **Detours added:** Kettle Ridge, left ridge gate turns you into the river, and Kettle Dam's spillway sends you onto the right ridge toward the pylon; Ash Fork, Ash Dam spillway to the main path; Wren Hollow, a channel around the culvert; Larch Crown, a summit bridge to the river, a turn-off before the highway wall, and a bypass around the pump. Chutes no longer end in a hollow.
+- **Made with care (H26):** every path, river and pipe is now one continuous curve (smoothed), and river machines sit on the new line; cliffs are one smooth stone face shaded by the true edge direction, fading into mist per pixel column (no streaks or slits); quieter ground with no speckle or crack marks, lighting taken from a wider sample so banks read as smooth rails; seed trails sparser on main paths; the summit cable is short and fades.
+- **Danger, re-measured:** reckless 0.8 marbles a minute on average, careful 0.
