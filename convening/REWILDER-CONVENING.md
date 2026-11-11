@@ -519,3 +519,22 @@ or up it. Yes?"
   player, until the first dive. Rendered at phone size.
 
 SIGNED Coordinator, Stranger, Conductor, Osterweil seat, Studio Voice, 2026-11-11
+
+## RECONVENE v0.13.2 (2026-11-11)
+
+FOUNDER: "The swim button being up top is tricky. There should be obvious access points to water and
+the option to swim on screen not up top. Vacation 2 keep it like vacation 1 but now the salmon hits
+the ball from the ocean"
+
+- **Stranger.** A button in the top bar asks a low-vision player to hunt for it, and it says
+  nothing about where the water is. The founder's fix puts the choice in the world.
+- **Conductor.** Blue river ladders with a DIVE sign stand in every gap of the street, and on
+  both sides of a level 2 wall where there is room. Standing on one lights its sign, drops a
+  yellow arrow, and shows a Dive button above Smash. Down dives too. The top bar no longer
+  carries Swim. Rendered at phone size: a ladder, the Dive button, the dive, a level 3 ladder.
+- **Coordinator.** Vacation 2 is the beach with one change: Smash sends the ball out to sea
+  and a salmon leaps to head it back to the other animal. The lake and campfire move to
+  vacations 3 and 4. A scripted rally reached seven.
+- **Studio Voice.** Every message that said "Press Swim" now names the ladder.
+
+SIGNED Stranger, Conductor, Coordinator, Studio Voice, Osterweil seat, 2026-11-11
