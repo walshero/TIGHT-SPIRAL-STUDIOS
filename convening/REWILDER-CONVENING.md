@@ -538,3 +538,70 @@ the ball from the ocean"
 - **Studio Voice.** Every message that said "Press Swim" now names the ladder.
 
 SIGNED Stranger, Conductor, Coordinator, Studio Voice, Osterweil seat, 2026-11-11
+
+## CONVENE v0.14, full studio, findings before authoring (2026-11-11)
+
+FOUNDER: "1. The dig junction isn’t operative so scratch it altogether. When breaking down expressway
+etc don’t make player get every last block. 2. 80% destruction can be total. There are too many dive
+holes that can interfere. We just need one before an obstacle and one after it. Strategic and rare.
+3. Jumping up the falls is lame now. Don’t pull out — do it in current screen but make falls bigger.
+It’s okay to scroll up a level or two and to the right to get to the current win state pond. Don’t
+make it separate from the current world. Employ most likely effective humor elements to the next
+bulld. We are getting nowhere with funnybones factory so let’s use effective humor here when it
+works. Convene full studio for next build with attention to detail, surprise, humor, art, STORY and
+joy."
+
+Sentence for this build: the player takes the valley back one building at a time, and should notice
+that the salmon's climb home is the same story told by a smaller animal.
+
+### Findings by seat
+
+- **Coordinator (learning science).** Three leaps and a cut to another screen taught nothing
+  about a waterfall. A climb the player steers, pool by pool, lets failure teach: a short
+  leap lands on rock and slides back. Keep the ladders few, so each one marks an obstacle.
+- **Osterweil seat (freedom of play).** Freedom to fail needs a cheap failure. A missed leap
+  costs a few seconds and gets a laugh. The 80 percent rule removes the chore of the last
+  block, which was effort without a decision in it.
+- **Mamet seat (dramaturgy).** Story is what the characters do. The Baron should lose his
+  dignity through his own things: his statue, his hat, his billboards. No narration cards.
+  Two or three short lines at turning points, and the rest is action.
+- **Hitchcock seat (scene coherence).** The spawning pond must sit in the same picture as the
+  street. Put it on a rock terrace above the far right end, where the game already ends, so
+  the camera can travel there in one move. The audience should see the pond from the street
+  before they can reach it.
+- **Cleese seat (humor; the founder is the judge of the laugh).** Use the four jobs that
+  worked on paper in Funnybonies, but only where the game already has the player's eye:
+  a held beat before a fall (timing), a very small word after a very large crash
+  (understatement), the Baron's own property turning on him (reversal), and one man who is
+  always in the wrong place and always fine (running gag). The salmon's death stays straight.
+- **Stranger (comprehension).** Five ladders on one street read as clutter. One before and
+  one after each obstacle reads as a clue. Dig confused people, because Down already means
+  dive at a ladder.
+- **Aleph (canon).** Funnybonies stays parked; nothing here edits it. The humor types come
+  from funnybonies/SPEC-LINK-v17.md. The art bar is the handmade miniature set, and trees
+  are never balls on sticks.
+- **Studio Voice.** Every line carries a verb. Understatement lines stay short and dry.
+- **Conductor and Studio Eyes.** Render the terrace at phone size from the street and from
+  the water, each pool, a missed leap, the pond, and the man with the coffee in four places.
+- **Studio Fingers.** The Dive button and Down both stay. Leap is Up, the same button that
+  climbs out for the land animals, so the hand learns one rule: Up leaves the water.
+- **Studio Ears.** No new music. A small "tink" before a collapse, and a splash on each pool.
+  Nobody on this bench can hear them; the founder's ears are the test.
+- **Systems and ecology bench.** Salmon do leap falls and climb stepped pools; the game does
+  not claim a height. The sourced facts from v0.13 stand unchanged.
+- **AI Skeptic.** Jokes written by a model tend to explain themselves. Cut any line that
+  says why it is funny. If a gag needs a caption, drop the gag.
+- **TLDR Kids.** Smash most of it and it falls. Jump the waterfall yourself. A guy with a
+  coffee keeps showing up.
+
+### Decisions the build must meet
+
+1. Dig is removed. Down plus Smash on a grown site still opens the replant card in free play.
+2. A building with one fifth or less of its blocks left gives way. Steel-plated buildings are
+   exempt, because their route is the footings.
+3. Ladders: one at the shore, one past the garage, and one on each reachable side of a wall.
+4. The falls are a rock terrace beyond the dam: three pools, a channel, and the pond at the
+   top right. The salmon leaps with Up and travels on its own arc. A miss says FLOP.
+5. Humor: the held beat with a "tink", a dry word after each collapse, Baron lines and an
+   upside-down statue, one recurring man with a coffee, and new billboard wordplay.
+6. Story: three short turning-point lines, and no cards.
