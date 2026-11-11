@@ -334,3 +334,27 @@ electric green infrastructure. But make it look better."
   props carry no ecological claim.
 
 SIGNED Coordinator, Osterweil seat, Stranger, Conductor, Studio Voice, Systems and ecology bench, 2026-11-10
+
+## RECONVENE on v0.8: collapse straight down, the Super, vacation, level 2 (2026-11-10)
+
+FOUNDER: "The building collapse stages need to stop acting like trees falling over. More
+spectacular. But down. Make super moves be slow to recharge and take out multiple blocks.
+After the win state you Can exit to the far right and take a quick vacation. When you come
+back it's level 2. It's the same setup as when you left but taken over by the bad guy. Your
+crew WILL reassemble wind farm but first you have to take down data center etc."
+
+- **Conductor.** A failing building shudders, then pancakes from the bottom, faster each
+  floor, throwing dust and chunks sideways, and ends in one big cloud. Rendered on desktop:
+  the splash, a mid-collapse garage, the Super bite, the VACATION sign, the postcard, the
+  "Meanwhile" beat, level 2's tower, expressway and data center, the crew at work.
+- **Coordinator.** The physics still decides whether a building fails. Only the way it falls
+  changed. The danger zone is now under and beside the building, and riding the roof is safe.
+- **Osterweil seat.** The Super is a ten-second bar, not an energy tax. It rewards choosing
+  where one big bite does the most to the balance.
+- **Studio Voice.** Level 2 keeps the founder's line: your crew will put back what you grew,
+  but first the Baron's building has to come down. The player's choices carry over; no card
+  asks again.
+- **Systems and ecology bench.** The data center, tower and toll road are play. No sourced
+  claim about data centers rides on this build; one would be needed before a field note.
+
+SIGNED Conductor, Coordinator, Osterweil seat, Studio Voice, Systems and ecology bench, 2026-11-10
