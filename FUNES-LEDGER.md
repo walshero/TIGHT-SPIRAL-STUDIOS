@@ -200,3 +200,4 @@ highest-leverage unlanded item in the repo and it costs a click.
 | 2026-11-10T22:58Z | lab/headwaters.html | preship | SHIP | v0.2 founder playtest fixes (messages, dying, graphics), belt PASS, contrast worst 13.06 | md5 6f732829 | 48947 B |
 | 2026-11-11T00:20Z | lab/headwaters.html | preship | SHIP | v0.3 five mountains, growing gondola network, 11 ecosystem chains, Watershed map, danger tuned (reckless 1.2/min, careful 0) | md5 862eb0be | 67989 B |
 | 2026-11-11T05:10Z | lab/headwaters.html | preship | SHIP | v0.4 longer courses, chute, glass pipe, speed, in-world gondola ride; danger reckless 0.8/min careful 0 | md5 3c1f0540 | 79599 B |
+| 2026-11-11T05:40Z | lab/headwaters.html | preship+player-clear | SHIP | v0.5 messages never cover the moving marble; new gate player-clear (v0.4 HALT, v0.5 PASS 150 samples) | md5 7852a3ea | 82298 B |

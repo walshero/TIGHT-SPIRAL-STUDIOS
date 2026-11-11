@@ -1,6 +1,6 @@
 # SPEC — Headwaters (working title) · 2026-11-10
 
-Status: **LAB**, v0.4 (v0.1 to v0.3 built 2026-11-10). Build: `lab/headwaters.html`.
+Status: **LAB**, v0.5 (v0.1 to v0.4 built 2026-11-10). Build: `lab/headwaters.html`.
 Source: founder spec given in chat, 2026-11-10. Founder words are quoted; everything else is machine fallback for Matt to edit.
 Not Rewilder. Founder: *"It's a new game."* (Rewilder is the Rampage-style smash game, `convening/REWILDER-CONVENING.md`.)
 
@@ -86,3 +86,9 @@ Confirmed: EV 103 Environmental Studies I and EV 104 Environmental Studies II, 4
 - **Gondola, in the world:** the cabin catches the marble and swings; it climbs its cable while the camera follows and the mountain drops away into cloud; it crosses above the clouds; it comes down onto the next mountain's summit station (now drawn on every top) and the marble rolls out. No text card. Tap skips ahead.
 - **Fun (H19), machine choices for founder review:** seed trails along every path, collected with a rising chime when you chain them (each seed planted greens its spot, a glimpse now and full on the next run, per H10); a brief hit-stop on every crack and smash.
 - **Danger, re-measured after the speed-up** (H12), with a true per-minute count (marbles refilled so a game over cannot cap it): reckless 0.8 a minute on average (Kettle Ridge 0, Ash Fork 0, Wren Hollow 1, Fallow Lake 2, Larch Crown 1); careful 0. A summit back wall now stops the marble rolling off the top of a mountain (a bug found in the test).
+
+## v0.5, founder rule 2026-11-10 (studio-wide)
+*"Messages that block the character in movement are a no-no across games."* (CLAUDE.md, MESSAGES NEVER COVER THE MOVING CHARACTER.)
+- The camera holds the marble (or the gondola cabin) inside a safe band below the status bar and message line and above the bottom buttons.
+- Every frame, a message that would touch the marble drops to the bottom slot, or steps aside if both slots are in the way; the entry invitation does the same.
+- Measured by the new gate `studio-senses/player-clear.py`: v0.4 with hooks added HALTed (a message over the marble at chute speed, t = 18 s); v0.5 PASSes across 144 moving samples in five stretches (summit, chute, pipe, lower course, gondola ride).

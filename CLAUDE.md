@@ -333,6 +333,23 @@ studio wide no-no."*
   48 px). In senses-run.sh and belt tick 14 (every changed page). Known HALTs: the four cliche
   games ("Turn sideways" hint over the top; Cliche Cabinet's portrait wall).
 
+## MESSAGES NEVER COVER THE MOVING CHARACTER - founder rule, studio-wide (2026-11-10)
+Founder, playtesting Headwaters: *"Messages that block the character in movement are a no-no across games."*
+- No text (toast, hint, label, status pill, invitation) may sit over the player character while
+  it moves. Messages step out of the way (move or hide) on the frame they would touch it, and a
+  following camera keeps the character in a band clear of the bars and the message line.
+- Speed is the trap: a camera that leads the direction of travel pushes the character toward
+  the top of the screen, where messages live. Headwaters v0.4 passed ten seconds of slow play
+  and still failed at chute speed.
+- **The check:** `studio-senses/player-clear.py <build>`, step 3 of
+  `.claude/skills/tsp-game-build/preship.sh`. A game exposes `window.__tspPlayer()` (the
+  character's on-screen box), and should expose `window.__tspToast(text)` and
+  `window.__tspScenes` / `window.__tspScene(name)` for its fast stretches. The gate steers the
+  game at phone size, fires messages, and HALTs on any overlap while the character moves. A game
+  with no hook reads **NOT ARMED** by name, never clean. First armed game: Headwaters v0.5.
+- Existing games are not yet hooked (not swept on 2026-11-10, cost discipline); each gets its
+  hook the next time it is built.
+
 ## CHECKED IS NOT SHIPPED - standing, non-negotiable (2026-08-27)
 
 **Never report a push as landed on the strength of a connector's success message.**

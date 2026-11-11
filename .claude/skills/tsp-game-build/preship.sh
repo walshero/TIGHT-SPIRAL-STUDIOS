@@ -3,6 +3,8 @@
 # Owns no gates. Calls the hub's own scripts so there is one canon for each check.
 #   1. studio-belt.sh <file>         ticks 1-14, one-file preflight mode
 #   2. preship-contrast-gate.py      text-token contrast arithmetic (not in the belt)
+#   3. studio-senses/player-clear.py no text over the moving character (founder rule 2026-11-10);
+#      NOT ARMED (exit 0, named) for a game with no window.__tspPlayer hook yet
 # Exit 0 = SHIP. Exit 1 = HALT, does not ship. Exit 2 = refused (bad input / gate missing).
 # A gate that is missing is a HALT, never a skip: a blind gate must not read as clean.
 set -uo pipefail
@@ -26,7 +28,7 @@ for f in "$@"; do
   echo "PRESHIP  $f   md5 ${md5}   ${bytes} B"
   echo "======================================================================"
 
-  echo "-- 1/2 belt, one-file mode --"
+  echo "-- 1/3 belt, one-file mode --"
   bash studio-belt.sh "$f" > /tmp/preship-belt.$$ 2>&1; belt=$?
   # One line per tick: HALT or pass. Tick 12 STALE-HALT is "reported, not armed" per the
   # belt's own arming rule, so it is shown as REPORT, not counted as a refusal.
@@ -40,11 +42,14 @@ for f in "$@"; do
   echo "  (full belt detail: bash studio-belt.sh $f)"
   rm -f /tmp/preship-belt.$$
 
-  echo "-- 2/2 preship-contrast-gate --"
+  echo "-- 2/3 preship-contrast-gate --"
   python3 preship-contrast-gate.py "$f" 2>&1 | tail -4; contrast=${PIPESTATUS[0]}
 
-  if [ $belt -ne 0 ] || [ $contrast -ne 0 ]; then
-    echo "VERDICT  HALT  $f  (belt=$belt contrast=$contrast). Does not ship."
+  echo "-- 3/3 player-clear (messages never cover the moving character) --"
+  python3 studio-senses/player-clear.py "$f" 2>&1 | tail -8; clear=${PIPESTATUS[0]}
+
+  if [ $belt -ne 0 ] || [ $contrast -ne 0 ] || [ $clear -ne 0 ]; then
+    echo "VERDICT  HALT  $f  (belt=$belt contrast=$contrast player-clear=$clear). Does not ship."
     verdict=1
   else
     echo "VERDICT  SHIP  $f  md5 ${md5}"
