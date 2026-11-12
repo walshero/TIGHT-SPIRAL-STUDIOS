@@ -779,3 +779,24 @@ What changed, and only that:
   and diving, and the beaver swimming and striking. Thirteen older tests report no errors.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-11
+
+## RECONVENE v0.21 (2026-11-11)
+
+Founder, exact words: "Remove spillway action entirely. Water only comes out if you destroy a through line in the dam. In level 2, the hostile takeover is enough. Don’t utilize underground only destruction until level 3."
+
+What changed, and only that:
+
+- **Coordinator.** The dam fires no spillway jets. The foam, the jet, the knock-back and its
+  message are removed. The thin water marks on broken dam blocks are removed too.
+- **Osterweil seat.** Water bursts out only when a whole row of the dam is broken from one face
+  to the other. It pours through that row, down the face and along the street for about three
+  seconds. The blocks above then drop and close the gap, as the game's weight rule already did.
+- **Stranger.** Level 2 is the takeover alone: the dark city, the tougher blocks, the billboards
+  and the drones. Every building breaks from the street.
+- **Hitchcock seat.** Steel plate, underwater footings and steel walls now start at level 3,
+  with the fortress and the eels.
+- **Conductor.** Stood at the dam for nine seconds: no jet. Broke part of a row: no water. Broke
+  the whole row: water. Level 2 reports no plate, footing or wall; level 3 reports all three.
+  Fourteen tests report no errors; two were repointed from level 2 to level 3.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-11
