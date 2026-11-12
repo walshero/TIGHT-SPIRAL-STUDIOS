@@ -757,3 +757,25 @@ What changed, and only that:
   the choice card, and the texture before and after. Thirteen tests report no errors.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-11
+
+## RECONVENE v0.20 (2026-11-11)
+
+Founder, exact words: "I appear to have  nothing left to destroy / build in level 1 but it says 4 of 5. Also, improve turtle art, removing extra moss growth, and turtle physics. When beaver uses tail as motor underwater don’t show feet."
+
+What changed, and only that:
+
+- **Coordinator.** The stuck count was a bug from v0.19. A crew can pave over a growing site. On
+  the highway site, the new leg rule also caught that pavement and refused to let it break. The
+  leg rule now applies only to the road itself. A test paves the site, smashes the pavement with
+  real key presses, and sees it regrow.
+- **Stranger.** The turtle has shell plates, a dark rim, clawed feet, a saw-edged tail and a
+  hooked beak. The moss tufts and the sapling are gone.
+- **Osterweil seat.** The turtle is heavy. She starts and stops slowly, walks a little faster
+  than before, tucks into her shell in the air, and stomps on every landing from a jump.
+- **Hitchcock seat.** The swimming beaver shows no feet and no flat tail. The blades are the tail.
+- **AI Skeptic.** She stays a snapping turtle named Mossback. A first draft gave her painted-turtle
+  stripes; those were cut because nobody asked for a new species.
+- **Conductor.** Rendered at phone size: the turtle standing, walking, tucked, stomping, striking
+  and diving, and the beaver swimming and striking. Thirteen older tests report no errors.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-11
