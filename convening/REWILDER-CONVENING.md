@@ -873,3 +873,33 @@ What the studio built from them:
   one was changed to start with the keystone out.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
+
+## RECONVENE v0.24 (2026-11-12)
+
+Founder, exact words: "1. Remove Gary from game entirely. 2. Remove the lock on the dam and make the stones breakable again. 3. Make the cars look real going up and down ramps. Now it’s weird. 4. Make sure music doesn’t overlap. In Level 2 I heard overlap. 5. Cars don’t honk audibly unless you’re on top of the expressway. But change the honk sound to be less annoying."
+
+What changed, and only that:
+
+- **Coordinator.** Gary is removed from the street and from all four vacations, with his fishing
+  line and float. No code names him.
+- **Osterweil seat.** A keystone is one block again. Every other stone in the dam and the data
+  center breaks as it did before v0.23. The one keystone block still cracks only to the turtle's
+  lunge, and the level 1 tire jam still happens on her first lunge at it. A building can now fall
+  without its keystone being cracked. The keystone leg of the 93 at level 3 is unchanged.
+- **Hitchcock seat.** Cars on the ramps no longer tilt with the road. On the flyover they are
+  drawn from behind and grow as the road nears the viewer. On the corkscrew they stay level,
+  narrow as they turn, and show a back or a front at each end of a turn.
+- **Studio Voice.** Music: each voice (bass, dark lead, bright lead) ends a note before its next
+  one starts; before, bass notes a step apart rang over each other, and in the dark tune those
+  were a semitone apart. The dark bass is a triangle wave now. The dark and bright tunes change
+  only on a bar line. Only one scheduler has ever run at a time; that was checked, not changed.
+- **Stranger.** The horn sounds only while the player stands on the 93. Fallen cars and blocked
+  crew trucks are silent. The horn is two soft triangle notes with a small pitch change.
+- **AI Skeptic.** Nobody in the studio has heard the music or the horn. The overlap the founder
+  heard was not reproduced by ear; the fix targets the two causes found in the code.
+- **Conductor.** Rendered the cars at fourteen places on both ramps. A dam stone took damage from
+  the beaver; the keystone block did not. The scheduler ran 140 steps across both tunes. The horn
+  made no sound off the deck and two notes on it. All four vacations rendered. Seventeen older
+  tests report no errors.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
