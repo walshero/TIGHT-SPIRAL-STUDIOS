@@ -800,3 +800,28 @@ What changed, and only that:
   Fourteen tests report no errors; two were repointed from level 2 to level 3.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-11
+
+## RECONVENE v0.22 (2026-11-12)
+
+Founder, exact words: "Give me a mock up of a better looking on ramp for 93! This is just weird." Then, on the mock: "Make one side flyover and the other corkscrew. And make corkscrew look natural at the top joint." Then: "Also; the sound of hitting green cubes is awful. Make it satisfying not annoying. Research."
+
+What changed, and only that:
+
+- **Stranger.** The left end of the 93 is a flyover on-ramp. It swings toward the viewer and shows
+  its road surface. Cars grow as they come up it.
+- **Hitchcock seat.** The right end is a corkscrew off-ramp with two turns round three posts.
+  Cars on the far side of a turn pass behind the posts.
+- **Studio Voice.** The mock's corkscrew met the deck at the side of its circle, so the road
+  kinked. The deck now runs straight on to the middle of the circle, where the turn heads the
+  same way as the road, and the first part of the turn stays level before it starts down.
+- **Osterweil seat.** Green steel had a two-note square-wave beep, added with the legs in v0.19.
+  The research says a hit needs three layers (a sharp click, a body that carries the material,
+  a low thump) and a small pitch change on every hit so the ear does not tire. The new sound
+  has those three layers, turns the pitch by about seven percent each way, and cycles four base
+  pitches. Sources: gamejuice.pages.dev (sound as feedback; synthesis), violetrecording.com
+  (designing game sound effects).
+- **AI Skeptic.** Nobody in the studio has heard the new sound. The founder's ear decides.
+- **Conductor.** Rendered both ramps at phone size with cars placed on them, levels 1 and 2.
+  A real key press hit a green leg with the audio running. Fifteen older tests report no errors.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
