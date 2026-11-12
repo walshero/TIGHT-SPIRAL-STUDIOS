@@ -711,3 +711,24 @@ FOUNDER: "The fortress itself should be harder to get to, I e further left on th
   on three screens.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-11
+
+## RECONVENE v0.18 (2026-11-11)
+
+Founder, exact words: "When the beaver is under water the tail smashes things like a propellor. Make green blocks 2/3 as hard to break. The salmon and river underground  shouldn’t be visible in game until you break the dam."
+
+What changed, and only that:
+
+- **Stranger.** Level 1 now shows a street and nothing under it. The river, the DIVE ladders,
+  the SWIM sign and the salmon stay hidden until the dam falls. The Dive button stays hidden too.
+- **Osterweil seat.** Breaking the dam is now the cause that reveals the river. Levels 2 and up
+  start with the river open, because the player earned it in level 1.
+- **Hitchcock seat.** Underwater the beaver carries three tail blades that turn slowly. On a
+  strike the beaver turns tail-first and the blades spin fast inside a pale disc.
+- **Coordinator.** Green steel takes two thirds of the hits it took before. A low girder went
+  from nine hits to six; a deck block went from six to four.
+- **AI Skeptic.** An extra line announcing the river was written and then cut. The existing line
+  "The river reaches the sea again." already says it.
+- **Conductor.** Rendered at phone size: level 1 with no river, the river after the dam fell,
+  the beaver before and during a tail strike. Eleven older tests and the new one report no errors.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-11
