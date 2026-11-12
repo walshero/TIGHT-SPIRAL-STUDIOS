@@ -928,3 +928,22 @@ What changed, and only that:
   the plug. Seventeen older tests report no errors.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
+
+## RECONVENE v0.26 (2026-11-12)
+
+Founder, exact words: "You should be able to tag with any player on screen, not just the one you started with. I’ll be playing salmon by the waterfall and can’t switch to beaver next to the tag sign. Please fix."
+
+What changed, and only that:
+
+- **Osterweil seat.** A tap on the animal resting at the TAG sign makes the player that animal,
+  at the sign. It works from the salmon and from land. Before, the tap did nothing while the
+  player was the salmon, and from land it swapped the two animals in place.
+- **Hitchcock seat.** The animal left behind walks home to the sign. It hurries while off screen.
+- **Coordinator.** The Tag button and a Smash beside the sign still swap in place, as before.
+- **AI Skeptic.** While the other animal is still walking home, a tap on it does nothing. A
+  beaver or turtle that is underwater still cannot tap to switch; it has to climb out first.
+- **Conductor.** A test made the player the salmon in the pond with the beaver far to the left,
+  tapped the turtle at the sign, and the player became the turtle there. A second tap from land
+  made the player the beaver at the sign. Seven older tests report no errors.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
