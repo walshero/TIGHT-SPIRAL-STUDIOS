@@ -947,3 +947,52 @@ What changed, and only that:
   made the player the beaver at the sign. Seven older tests report no errors.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
+
+## CONVENE v0.27 (2026-11-12)
+
+Order of events, stated plainly: the founder asked by voice for the studio's game design voices
+to review the game. He heard their read, ruled item by item, and said "Ok build". This record and
+the panel file were written in the same turn as the build, after the rulings. The outside voices
+(Osterweil, Zimmerman, Stidwill, Gee, Turkle, McGonigal) were seats modeled on published work.
+None of those people took part. The founder asked for six months of play; a script read the four
+levels instead. Full review and forward plan: `claude/REWILDER-PANEL-AND-PLAN-2026-11-12.md`.
+
+Founder rulings, exact words as transcribed from the call:
+
+- "they really should have some limit to their energy, and and when they croak, they should have to, you should have to start as another player and the other player can tag and resuscitate."
+- "I want to remove the keystone entirely I thought it might be good to have but it's just confusing"
+- On the salmon hint: "No, I think the salmon can figure it out." On the grate hint: "No, they'll can figure it out." On the wire hint: "It's obvious if you get shocked, the electricity is going to shock you." On the tag-in line: "no, you don't need to say that." On the level 2 opener: "No, you don't need that." On the dry remarks: "No, I don't think it adds anything."
+- "when you let the beavers build a wetland, you also let the river run. So that's a false choice there"
+- "can those be different colors? Because right now they're all one color and kind of they should be variated."
+- "at the end of level one ... It seems like the default is to end your game instead of continue."
+- On level 3: "you should build up in like an ecotarium where people can live." On level 4: "There's a bridge to go over the ocean to an island ... where the billionaires used to be." Both are filed as plans, not built.
+
+What the studio built from them:
+
+- **Osterweil seat.** At zero energy an animal drops where it stands, on its back, under a HELP
+  card. The player becomes the other animal at the TAG sign with at least 60 energy, walks over
+  and smashes beside the fallen one to revive it. If the second drops before the first is
+  revived, the level restarts. Running out of air now costs the last of a swimmer's energy, and
+  the body lands at the nearest ladder.
+- **Coordinator.** Keystones are removed from every level, with the tire jam and their code.
+- **Stidwill seat.** Every one-time how-to hint is silenced, about 45 lines. The tag-in lines,
+  the level openers and the dry remarks are cut. Still spoken: the opening line, "The river
+  reaches the sea again.", results of the player's acts, Baron and crew warnings, and the
+  salmon's story lines. The Super move now has no teaching beyond its glowing meter.
+- **Zimmerman seat.** The dam grows a free river with no card. The wetland is parked as a
+  separate act for a later build.
+- **Studio Voice.** Shout words sit on a burst colored by meaning: rust for breaks, green for
+  growth, blue for water, red for harm to the player, dark with gold for the Baron.
+- **McGonigal seat.** The end card is one short paragraph and leads with a large "Level N"
+  button that starts the vacation and the next level. "Stay here" and "Start over" follow. The
+  title screen shows the best level cleared and the most smashes.
+- **Conductor.** A test knocked the beaver out, became the turtle, revived him with a real
+  smash, then dropped both and saw the level restart. A hint stayed silent and the river line
+  spoke. The dam grew with no card. A swimmer out of air landed at the ladder, out. The big
+  button led to level 2. In level 2 a real held Up climbed a leg onto the expressway deck.
+  Rendered: the fallen beaver, the five bursts, the end card, the title with the best line.
+  Twenty older tests report no errors; one was repointed to the "Stay here" button.
+- **AI Skeptic.** Unproven: whether a player without any hint finds the Super move, the salmon's
+  errand, or the way under level 3 steel. The founder's playtest decides which lines return.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
