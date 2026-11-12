@@ -996,3 +996,32 @@ What the studio built from them:
   errand, or the way under level 3 steel. The founder's playtest decides which lines return.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
+
+## RECONVENE v0.28 (2026-11-12)
+
+Founder, exact words: "The tower is impossible. Make far fewer shocks and make it a wider building so it’s easier to avoid. Make it fun and not a grind." Then: "On vacation when the salmon plays volleyball, the salmon should be way back in the ocean and the ball physics should work in a triangle with depth."
+
+What changed, and only that:
+
+- **Osterweil seat.** The fortress is seven blocks wide (364 units, up from 250) and 24 floors
+  (down from 36). Level 3 carries four wires in all: a steady band with a three-block gap, a
+  steady band with a two-block gap, one short upright wire, and one pulsing band near the top
+  that is dark more than half the time. Before, it carried about ten bands and eight uprights.
+- **Hitchcock seat.** Six drones circle the tower, down from twenty. A shock costs one floor
+  and 5 energy, down from 1.6 floors and 10.
+- **Coordinator.** The wider tower covers the leftmost highway leg, so that leg is left out
+  from level 3 on. A leg the player cannot see is a leg the player cannot cut.
+- **Stranger.** On the second vacation the salmon waits far out near the horizon, drawn at
+  half size. The ball goes beaver, salmon, turtle, beaver. It shrinks and rises on the way out
+  and grows on the way back, with its shadow on the water or the sand under it.
+- **Studio Voice.** The player presses Smash as the ball comes down to the beaver or the
+  turtle. The salmon returns it herself. A miss lets it drop, and the next Smash serves again.
+- **Conductor.** A bot with real key presses climbed all 24 floors in 10.5 seconds with no
+  shock; on v0.17 the same bot took 26 seconds and one shock on 36 floors. A second bot kept
+  an eight-pass rally going round the triangle, then missed on purpose and the count reset.
+  Rendered: the ball at five points of the triangle, and the tower at its base and partway
+  up. Nine older tests report no errors.
+- **AI Skeptic.** A bot that never misses says nothing about whether a person finds the climb
+  fun. The founder's hands decide.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
