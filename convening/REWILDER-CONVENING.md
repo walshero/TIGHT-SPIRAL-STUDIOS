@@ -732,3 +732,28 @@ What changed, and only that:
   the beaver before and during a tail strike. Eleven older tests and the new one report no errors.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-11
+
+## RECONVENE v0.19 (2026-11-11)
+
+Founder, exact words: "I want to improve the art texture and coherence. The 93 looks unrealistic now. Make it line the whole city like it used to and it falls once you remove all the legs"
+
+What changed, and only that:
+
+- **Stranger.** The 93 now runs as one road from the left of the garage to the far side of the
+  parking lot. It passes behind the garage and the coal plant. A curved ramp stands at each end.
+- **Osterweil seat.** Nine legs hold the road up: four under the middle stretch and five on the
+  street between buildings. A leg cut anywhere crumbles. The road stands until the last leg goes,
+  then the whole length drops straight down. A count of legs left pops up after each one.
+- **Hitchcock seat.** The long stretch behind the coal plant has no leg, so a truss carries it.
+  Cars use the whole road and fall when it drops.
+- **Coordinator.** Deck blocks in the middle stretch still break by hand and still drop cars
+  through the hole. Breaking deck no longer brings the road down. The two ramp messages are gone.
+- **Studio Voice.** The paper grain now belongs to the world and scrolls with it; before, it sat
+  on the screen like dust on a lens. A second sheet adds soft light and dark patches. Each wall
+  block has its own tone and a lit top edge.
+- **AI Skeptic.** The texture helper first took the name of the sound helper and silenced the
+  game. The test caught it before any push. A check for duplicate function names now runs.
+- **Conductor.** Rendered wide and at phone size: the road at three places, a leg stub, the fall,
+  the choice card, and the texture before and after. Thirteen tests report no errors.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-11
