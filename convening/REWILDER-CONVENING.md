@@ -825,3 +825,51 @@ What changed, and only that:
   A real key press hit a green leg with the audio running. Fifteen older tests report no errors.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
+
+## CONVENE v0.23 (2026-11-12)
+
+Order of events, stated plainly: the founder asked for a spoken round table on the game at v0.22.
+He heard the findings by voice, ruled on them, and ordered the build. This written record was made
+in the same turn as the build, after the rulings and not before them. The outside voices (Horvath,
+Osterweil, Turkle, Gee, Squire, Mamet) were seats modeled on what each has published. None of those
+people took part.
+
+Founder rulings, exact words as transcribed from the call:
+
+- "the turtle's move of just going forward like a beak, like a hungry, hungry hippo. When when done as a power move, that can be really effective to take out um, critical points. So there should be like one point on each level that like only the turtle can do. But when he tries to employ that in level one, He gets stuck on a tire."
+- "And needs help from, or some kind of debris, right? Um, and needs help from the beaver."
+- On the salmon scouting through the culvert grate so the beaver can open what blocks the river: "Yep. That sounds good."
+- "I don't think I even noticed Gary, and I'm not sure players will either."
+- "you're just repairing the stuff you've already created. So you're not re actually creating any more to the city. And that feels like a lack of expansion and you're just on defense."
+- "first you have to get, you do have to get Your land back, but after you do, you can expand."
+- "every level you add, you add two two ways to expand. Uh, all right, make sure you pay close attention to art and and cohesion and I'd like you to go forward with this build now."
+- Rejected on the call: making the two choices trade speed against safety ("Uh, no, I don't like that."). The idea that a choice should depend on its neighbors was discussed and not ruled on; it is not built.
+
+What the studio built from them:
+
+- **Osterweil seat.** One keystone a level: the dam in level 1, the data center in level 2, one leg
+  of the 93 from level 3. Nothing breaks that building (or that leg) until the turtle's lunge cracks
+  the keystone. The lunge is her forward move: hold a direction and press Smash.
+- **Hitchcock seat.** Her first lunge in level 1 jams her neck in a tire. Control passes to the
+  beaver at the tag spot. He walks over and knocks the tire off, control returns to her where she
+  stands, and he walks home.
+- **Stranger.** The salmon now passes the culvert grate. A plug of junk blocks the river under the
+  93. When she reaches it, a chalk arrow appears on the street above. The beaver or turtle dives
+  and breaks it.
+- **Studio Voice.** Gary is drawn larger, walks more slowly, stops, turns to face the player and
+  holds a "Morning." card for about four seconds.
+- **Coordinator.** From level 2, growing the five sites back opens two empty lots. The player
+  breaks the pavement and picks what grows. Level 3 opens two more. Lots carry into later levels
+  as paved lots to win back. Four lots fit on the street; from level 4 no more open.
+- **AI Skeptic.** Three things are unproven: whether a locked dam reads as a puzzle or as a wall,
+  whether the tire lands as a joke, and whether Gary is noticed now. The founder's playtest decides.
+  The level 2 opening line still told players to go under by the river after v0.21 removed that
+  need; it is corrected here.
+- **Conductor.** One test played the whole chain with real key presses: the beaver bounced off the
+  keystone, the turtle jammed, the beaver freed her, two lunges cracked it, the dam took damage.
+  The salmon found the plug and the beaver cleared it. Two lots opened at 5 of 7, both grew, and
+  the level closed at 7 of 7. Level 3 kept seven sites. Rendered at phone size: the jam, the lunge,
+  the plug, the chalk arrow, Gary, a lot, both keystones. Seventeen older tests report no errors;
+  one was changed to start with the keystone out.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
