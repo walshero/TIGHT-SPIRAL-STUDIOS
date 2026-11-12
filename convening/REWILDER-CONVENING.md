@@ -903,3 +903,28 @@ What changed, and only that:
   tests report no errors.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
+
+## RECONVENE v0.25 (2026-11-12)
+
+Founder, exact words: "In level 1 there’s still a key in the dam. Remove it. Also when the beaver goes to break the waterway for the salmon, the salmon is no longer there to switch to to complete the salmon mission. Make the salmon follow the player above ground. Also, let a swimming player on land when they swim up to a portal. Don’t make them touch a button to get out."
+
+What changed, and only that:
+
+- **Coordinator.** Level 1 has no keystone. The tire jam needed that keystone, so it no longer
+  happens; its code stays in the file, unused. Levels 2 and up keep one keystone block.
+- **Osterweil seat.** The salmon swims in the river under the player, a little behind. She stops
+  at the junk plug, at a steel wall, and at the dam or the falls. Tap her where she is to become
+  her. Before, she stayed wherever she was last left and nothing drew her there.
+- **Stranger.** The fixed SWIM sign at the far left is removed, since she no longer waits there.
+  The hint now reads "Tap the salmon in the river to become her."
+- **Hitchcock seat.** A beaver or turtle that swims up to a ladder while Up is held climbs out.
+  Before, the game wanted a fresh press of Up or the Land button at the surface.
+- **AI Skeptic.** The salmon does not follow while the player is underwater as the beaver or
+  turtle; she waits and catches up after. She also stays put if she was left in the pools, the
+  pond or the sea.
+- **Conductor.** A test walked the beaver right: the salmon followed, stopped 26 units short of
+  the plug, and a tap on her made the player the salmon there. The beaver dove, broke the plug,
+  held Up under the ladder and came out on land with no button. The salmon then followed past
+  the plug. Seventeen older tests report no errors.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
