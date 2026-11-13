@@ -121,3 +121,16 @@ field notes.
 - Level sizes came from a script reading the running game at v0.26.
 - No human played the game for this review. The founder's own playtests are the only human play on record.
 - Nothing here quotes the six named people. Their published ideas are named in brackets beside each seat.
+
+## Update, same evening: the founder replaced the dome plan (built in v0.30)
+
+Founder, exact words: "Building the dinky little lots into things feels like a chore not a reward after we’ve already built the first 5. Each level should expand the world. The fortress tower gets rebuild as an eco-residence. A green tower. the data center gets built back as an art center. Both are thoughtful playful beautiful spaces. The arts center is circular like the sphere in Las Vegas, and when it gets taken over in level 3 it has the eye or Sauron on it (changes periodically). This time when you restore level 3, the three characters chase the baron back to his island hideout, which is now swimmable at left"
+
+| Earlier plan in this file | What v0.30 built instead |
+|---|---|
+| Two empty lots after reclaiming | Removed. |
+| Level 3 dome on the lots, corrupted by the Baron | The data center regrows as a round arts center in level 2. In level 3 the Baron covers it in screens (an eye, a dollar sign, OBEY). Smashing the screens brings it back. |
+| The fortress replaced by the dome | The fortress stays as the level 3 climb and regrows as a green tower of homes. |
+| Level 4 island by bridge | The island opens when level 3 is grown. The animals swim to it and bring down the hideout. No bridge. |
+
+Still open: what level 4 and later should add once the island has been won, and whether the wetland returns.

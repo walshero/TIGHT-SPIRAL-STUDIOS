@@ -1056,3 +1056,42 @@ What changed, and only that:
   report no errors.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
+
+## CONVENE v0.30 (2026-11-12)
+
+Order of events, stated plainly: the founder wrote the design for this build himself, in one
+message. No findings went to him first; the studio built from his words and reports back here.
+
+Founder, exact words: "Building the dinky little lots into things feels like a chore not a reward after we’ve already built the first 5. Each level should expand the world. The fortress tower gets rebuild as an eco-residence. A green tower. the data center gets built back as an art center. Both are thoughtful playful beautiful spaces. The arts center is circular like the sphere in Las Vegas, and when it gets taken over in level 3 it has the eye or Sauron on it (changes periodically). This time when you restore level 3, the three characters chase the baron back to his island hideout, which is now swimmable at left"
+
+What the studio built:
+
+- **Coordinator.** The empty lots are removed. A level again ends when its five sites are grown.
+- **Studio Voice.** In level 2 the fallen data center regrows, with no card, as a round arts
+  center: a ball of colored panels that slowly change, a lit doorway, flags, people, and notes
+  rising from the roof.
+- **Hitchcock seat.** In level 3 the Baron's screens cover that ball. They show a burning eye
+  that follows the player and blinks, then a dollar sign, then OBEY, seven seconds each. The
+  screens are the blocks the player smashes; the dark ball shows through where they are gone.
+  When enough fall, the crew brings the arts center back. This site has no steel plate and no
+  underwater footings.
+- **Osterweil seat.** The fortress, once its roof switch is hit, regrows as a green tower: ten
+  floors of homes with planters, hanging vines, lit windows, people on the balconies, and trees
+  and a small wind spinner on the roof.
+- **Stranger.** When level 3 is grown the Baron shouts and runs. An island stands at the far
+  left of the sea with a gold hideout, two palms and a PRIVATE sign. A beaver or turtle dives at
+  the left ladder, swims left, and climbs out at the island's ladder. The salmon can swim there
+  too. Bringing down the hideout and growing something there ends the level.
+- **AI Skeptic.** The arts center, the green tower and the island are studio inventions with no
+  source. The round building is an original design; it copies no real venue. Whether these two
+  places read as "thoughtful, playful, beautiful" is the founder's call from the renders.
+  Level 2 gains a new building but no new ground; only level 3 widens the world.
+- **Conductor.** A bot felled the data center in level 2 and the arts center grew with no card.
+  In level 3 it smashed screens with real presses, felled the Eye, dropped the fortress, saw
+  both regrow, and the island opened at 5 of 6. It dove, held Left across the sea on one breath,
+  held Up at the island ladder and walked the island. The hideout fell and the end card offered
+  Level 4. Rendered: the arts center, the three faces of the Eye, the green tower, the island.
+  Twenty-one older tests report no errors; one was repointed to the dam's footings and one that
+  tested the data center's footings is retired.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
