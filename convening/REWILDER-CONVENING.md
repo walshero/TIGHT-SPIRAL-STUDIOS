@@ -1172,3 +1172,13 @@ Order note: the design was settled in the voice call before any code. This secti
 - **Conductor.** A bot walked into the lair with real keys, burst it in 5 smashes, felled the mast in 4, watched the bridge finish, walked home and reached the end card. Twenty older tests report no errors. The old island test was retired. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-13
+
+## RECONVENE v0.36 (2026-11-13)
+
+Founder, exact words: "Why is there a level 4?"
+
+- **Coordinator.** The menu still carried a "Level 4" jump button from before the game ended at level 3. It is removed. The menu now offers levels 1, 2 and 3.
+- **AI Skeptic.** The v0.33 work changed the end card and missed the menu. The bot tests never opened the menu, so they could not catch it. A search of the file now finds no "Level 4" text.
+- **Conductor.** Three tests rerun with no errors. Contrast pass, Studio Eyes 0 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, AI Skeptic, 2026-11-13
