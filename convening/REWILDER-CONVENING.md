@@ -1142,3 +1142,18 @@ Order note: the founder asked for recommendations before building and got five. 
 - **Conductor.** A bot regrew the island, watched the bridge finish, walked home with a real key press and reached the end card, then pressed Play again and got level 1. Twenty-two older tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-13
+
+## RECONVENE v0.34 (2026-11-13)
+
+Founder, by voice, exact words: "Does does anything, can you gain anything from the lookout? Like, can you see something you couldn't see before? That gives you insight into progressing the game in some way." "I've been I've been wanting to stop the pavement trucks forever, because they seem to spawn from nowhere and the gold blocks do nothing." "you should be able to convert the uh, the depot into like a trailside museum or something like that." "Leave it rare. And make sure that it's hitting with the nose sometimes and the tail other times." Then typed: "Go"
+
+Order note: the design was settled in the voice call before any code. This section was written after the build.
+
+- **Coordinator.** Pave crews now come from one place: the TAR CO asphalt plant, past the old east edge of the world. The edge stays closed until the player has seen the plant.
+- **Hitchcock seat.** Climbing to the top of anything regrown pulls the camera back, then sweeps it east to the plant and returns. One line says what it is. This happens once per level.
+- **Osterweil seat.** Smashing the plant ends pave crews for that level. Crews already driving turn around. The plant regrows in about seven seconds as a trailside museum: a timber lodge with a living roof, the last pave truck kept as a flower planter, a trail sign, an owl and visitors.
+- **Stranger.** Gold blocks are gone from every building. Trucks always arrive from the east side of the screen.
+- **AI Skeptic.** The plant and the museum are studio invention. Felling the plant takes 8 hits on level 1, 10 on level 2 and 12 on level 3; nobody has judged whether that is too few. With no crews, a level loses its main pressure, so levels may now be too easy. The Baron rebuilds the plant each level with no story reason. In the test the salmon struck 5 times in 40 hits and alternated tail, nose, tail, nose, tail.
+- **Conductor.** A bot found the east edge closed, climbed a wind port with real keys, saw the sweep, walked to the plant, felled it in 8 smashes and watched the museum finish. Twenty-two older tests report no errors. Two tests of the gold blocks were retired with the blocks. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-13
