@@ -1202,3 +1202,18 @@ Order note: the second and third rulings arrived while the first was being built
 - **Conductor.** Bots flung a car, took three shocks to a knockout, grabbed a wall in mid-air, saw the factory from a lookout, walked the extra screen, climbed the factory, grew the water works, watched hawks clear four drones, climbed the lair and the terraces, got the rebuild card after a pave-over, and walked the full island ending. Twenty-two older tests report no errors after five were repaired for the sixth site. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-13
+
+## RECONVENE v0.38 (2026-11-13)
+
+Founder, with a phone screenshot of tar blobs over the spawning lake, exact words: "Improve the art here. 1. Let the salmon spawning area be its own as it existed previously with no tar, but if you swim to the right you see  the tar factory and its pollutants  with better art than current. See World of goo physics for tar. This tarpit gets restored to lake and picnic etc"
+
+Order note: the message was cut off after item 1. This build covers item 1 only. This section was written after the code existed.
+
+- **Coordinator.** The spawning lake is back to its old size with no tar on it. The factory no longer stands in front of it. A berm with a floating boom divides the lake from a separate tar pit to the east.
+- **Hitchcock seat.** A salmon at the lake's east end now sees past the berm to the pit and the factory's west side. The pit is a black surface that behaves like a row of springs: drips from two feed pipes stretch, fall and send ripples out; bubbles swell and pop; oil sheen drifts.
+- **Osterweil seat.** Two towers of goo balls stand in the tar, built from balls joined by stretchy strands. They sway, sag and spring back, and their eyes follow the player. Five loose balls hop across the surface and squash when they land. This borrows the idea of World of Goo, a ball-and-spring truss; none of its art or characters is copied.
+- **Stranger.** The factory has taller stacks with soot, a flare with a glow, tar streaks down the walls, a glowing furnace mouth, two storage tanks with ladders, floodlights, a barbed fence, barrels and dead trees. When the water works grows, the pit turns to lake water with lily pads, ducks, a rowboat, a jumping fish and pines on the far bank. The ice cream truck and four picnics sit along the shore.
+- **AI Skeptic.** All of it is studio invention. The goo is for looking at; the player cannot touch it, swim in it or build with it. The salmon cannot enter the pit, before or after. The factory now stands about 1,000 units past the old east edge, so the walk there is two screens. Pave crews start from that far away, so they will arrive later than before. No phone has run it.
+- **Conductor.** A bot placed the salmon mid-lake and at the east end, walked the pit, felled the factory, and watched the pit turn to lake. Goo positions stayed finite. The test browser held about 29 frames a second at the pit. Twenty-five tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-13
