@@ -1217,3 +1217,25 @@ Order note: the message was cut off after item 1. This build covers item 1 only.
 - **Conductor.** A bot placed the salmon mid-lake and at the east end, walked the pit, felled the factory, and watched the pit turn to lake. Goo positions stayed finite. The test browser held about 29 frames a second at the pit. Twenty-five tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-13
+
+## RECONVENE v0.39 (2026-11-13)
+
+Founder, exact words: "Forget the lookouts. After the fish swims to the right and discovers the factory, the right wall becomes open for the other players. The graphics with oil are better but the weird source in the basement looks unfinished. Also, rethink repaving. It’s too confusing. Make players’ choices stick until the level is complete IF the level is out of balance then the crews destruction will then give options again."
+
+Founder, exact words: "The barons island has to meet paper cut standards Of the rest Of the game."
+
+Founder, exact words: "And…I want to cut the messages. Cut 75%. The extra"
+
+Founder, exact words: "Messages often affect gameplay. Literally interfering. Make sure it’s not so."
+
+Order note: four messages arrived in a row, two of them cut off. All ship together. This section was written after the code existed.
+
+- **Coordinator.** Lookouts are gone: no camera sweep and no pull-back. The east edge opens when the salmon reaches the east end of her lake and sees the factory.
+- **Osterweil seat.** No pave crew comes during a level, so a choice stays where the player put it. When all five sites are grown, the game checks the four chosen sites. If all four are nature or all four are services, one crew drives in from the factory and paves one of them. Prying that pavement up opens a card with both options. The level ends when the build is mixed, or when the factory is down.
+- **Stranger.** Seven messages remain out of thirty: the opening line, the salmon's generation line, the spawning line, the discovery line, the lopsided-crew line, the Baron's flight and the bridge. The rest are silenced. The Baron shouts MINE once and NO NO NO once. A message is now a slim strip under the status bar. It never takes a tap and never covers the status bar or menu.
+- **Hitchcock seat.** The factory base has a riveted boiler front with an arched firebox, grate bars, four moving flames, a pressure gauge and a valve wheel. The loose black pile is now a steel vat of bubbling tar with a ladder, and the conveyor carries buckets up from it.
+- **Cut-paper pass.** On the island, every flat canvas fill is now a cut shape with an ink edge: waterfalls, the monorail rail, the bridge deck, the band's steps, balloon panels, capsule shine, the earth house, the dome house and the thatch roof. Large pieces carry the paper shadow.
+- **AI Skeptic.** "The weird source in the basement" was read as the furnace and tar pile at the factory's base; the founder did not confirm that. The cut-paper pass changed how shapes are cut and shadowed, not what is drawn; if the island still looks off, a screenshot of the offending part is needed. A salmon run must reach the lake before the east opens, so a player who never plays the salmon never sees the factory. A crew can only come while the factory stands. No phone has run it.
+- **Conductor.** A bot checked the opening message sits below the status bar and passes taps through, confirmed three cut messages stay hidden, swam the salmon east to open the edge, found no trucks mid-level, grew an all-nature city, watched one crew pave the river site, got the two-option card, picked the transit hub and reached the end card. Twenty-six tests report no errors; one test of the old pave rule was retired. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-13
