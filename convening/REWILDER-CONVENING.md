@@ -1110,3 +1110,18 @@ Order note: the build was written before this section. The findings below were m
 - **Conductor.** A bot ran level 2 and 3, crossed the sea, landed, felled all five island sites and reached the end card. Twenty-two older tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
+
+## RECONVENE v0.32 (2026-11-12)
+
+Founder, exact words: "The final island buldimgs shouldn’t just be random. Put a tall tower hotel like a Honolulu monstrosity, then you enter the compound. Destroy the blimp in a comical fashion and then turn the compound into a green eco system. Leave the barons pool, which flora takes over. Make the baron become a farmer on the island. Also. All structures are climbable! The eco dome etc. Also one digital ball is taken over it goes non digital. A real sphere. Show it see through like Epcot center but transparent with loads of cool art and flora and fauna"
+
+Order note: the build was written before this section. The findings below were made from renders and a bot run after the code existed.
+
+- **Coordinator.** The island now reads in order from the ladder: the 18-floor Baron Grand hotel, then the BARON ESTATE gate and a wall that runs to the far shore, then the mansion, the pool, the blimp mast and the vault.
+- **Hitchcock seat.** When the mast falls the blimp tears loose, loops like a let-go balloon, and drops into the pool. The Baron bobs there in his top hat and spits water. When the farm has grown he works its rows in a straw hat, and the top hat floats in the pool.
+- **Osterweil seat.** The pool stays. Lily pads, reeds, a frog, a heron and ducks arrive as the island sites regrow. Ivy covers the wall, grass and flowers cover the gold road, and vines climb the statues.
+- **Stranger.** The restored arts center is a clear glass ball with a triangle frame. The skyline shows through it. Inside are trees, giant flowers, a waterfall and pond, three decks with paintings, sculptures and a mural, a hanging mobile, a deer, a heron, a frog, a fish, birds, parrots and butterflies. Pressing Up at any grown dome, tower, wood, wind port, park or farm starts a climb; Down returns to the ground.
+- **AI Skeptic.** All of it is studio invention with no source. The hotel is a plain grid with balcony rails; whether it reads as a Honolulu tower is the founder's call. Rain gardens and the free river have nothing tall to climb. Climbing a grown thing has no purpose yet beyond the view. The test browser ran at about 23 frames a second on the island; no phone has run it.
+- **Conductor.** A bot climbed the glass dome and the green tower with real key presses, felled the mast, watched the blimp land, regrew all five island sites and reached the end card. Twenty-three older tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
