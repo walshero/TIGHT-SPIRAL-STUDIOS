@@ -1095,3 +1095,18 @@ What the studio built:
   tested the data center's footings is retired.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
+
+## RECONVENE v0.31 (2026-11-12)
+
+Founder, exact words: "the signs in level 2 should say obey, consume, more tar, need more, get gas. In level 3 much larger and more dynamic dome. When it's bad and when it's good, better, more use of graphics. Same with the eco dwelling. That meets art and scale 1/10 of founder needs. Same goes for the island. It should be almost as Big as the rest of the world"
+
+Order note: the build was written before this section. The findings below were made from renders and a bot run after the code existed.
+
+- **Coordinator.** The four billboards now read OBEY, CONSUME, MORE TAR, NEED MORE and GET GAS, changing every five seconds. They stand above the 93 and draw in front of the buildings, because at the old height the highway and its legs hid the words.
+- **Hitchcock seat.** The level 3 dome is 496 wide, wider than the phone screen. It cycles four faces of six seconds each: an eye with flame rays, falling dollar signs, a flashing OBEY, and the five slogans scrolling. The restored arts center is 500 wide and plays three shows: waves and sun, flowers, sound bars.
+- **Osterweil seat.** The green tower has 16 stepped floors with planters, vines, garden decks, a waterfall, a lift, a rooftop greenhouse and birds.
+- **Stranger.** The island runs 3,040 wide against the mainland's 3,720. It holds five buildings: yacht club, gold tower, vault, hangar, hideout. Each regrows as a fixed thing with no card. The level ends at 10 of 10. The swim from the left ladder takes about nine seconds; holding Up near the island ladder lands the swimmer.
+- **AI Skeptic.** All of this is studio invention with no source. The island's standing buildings are still plain blocks, and the mainland skyline still shows behind the island. Frame rate in the test browser fell from about 26 on level 1 to about 18 to 20 at the dome and the tower; no phone has run it. Whether this meets the founder's bar for art is his call from the renders.
+- **Conductor.** A bot ran level 2 and 3, crossed the sea, landed, felled all five island sites and reached the end card. Twenty-two older tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
