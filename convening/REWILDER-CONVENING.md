@@ -1125,3 +1125,20 @@ Order note: the build was written before this section. The findings below were m
 - **Conductor.** A bot climbed the glass dome and the green tower with real key presses, felled the mast, watched the blimp land, regrew all five island sites and reached the end card. Twenty-three older tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
+
+## RECONVENE v0.33 (2026-11-13)
+
+Founder, exact words: "Yes, end at level 3. Make a bridge to the island, expand the farm, and let the people start trading and working and doing their thing in a unified world. Note: make the cracking of blocks more realistic. Now we have vertical lines dominate. Also, make the salmon bigger each generation with an added diamond on the tail marking progress. Salmon can get as big as beaver. When on vacation, salmon hits ball only 1 in 7 or so shots to make it special. Hits with nose or tail not side! Before building, any other rec from game design influences?"
+
+Founder, exact words: "The current island with small buildings to break feels lame. Maybe there’s a mansion that breaks down into 7 cool houses that people move into."
+
+Order note: the founder asked for recommendations before building and got five. He answered with the mansion ruling and did not rule on the five. The build took recommendations 1, 2, 4 and 5 and left out 3, the lookout view. This section was written after the code existed.
+
+- **Coordinator.** The game ends at level 3. The island has two things to break: the 18-floor hotel and one mansion 700 wide and seven floors high. The gate is now an arch you walk under.
+- **Osterweil seat.** The mansion regrows as seven different houses: an A-frame, an earth house, a stilt house, a three-color tower, a glass dome, a treehouse and a thatched cottage. Movers carry boxes in. The farm fills the west end with two plots, a barn, a silo and fruit trees.
+- **Hitchcock seat.** When both island sites regrow, a bridge builds itself from the island to the city in about three seconds. The end card waits until the player walks across. A market sits mid-bridge. One cart brings crops from the farm and another brings paintings from the city. Sixteen people walk the joined world.
+- **Stranger.** Cracks now start at one point in a block, spread outward and branch. Undamaged blocks show none. The salmon grows a quarter larger per generation and gains one gold diamond on her tail each time, up to three.
+- **AI Skeptic.** Real salmon do not grow each generation; that and everything else here is studio invention. In a 28-hit bot rally the salmon struck 3 times, nearer one in nine than one in seven. She is drawn small because she is far out at sea, so nose and tail may be hard to tell apart on a phone. The lookout view was not built, so climbing still has no purpose. No phone has run it.
+- **Conductor.** A bot regrew the island, watched the bridge finish, walked home with a real key press and reached the end card, then pressed Play again and got level 1. Twenty-two older tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-13
