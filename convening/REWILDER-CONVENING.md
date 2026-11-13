@@ -1182,3 +1182,23 @@ Founder, exact words: "Why is there a level 4?"
 - **Conductor.** Three tests rerun with no errors. Contrast pass, Studio Eyes 0 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, AI Skeptic, 2026-11-13
+
+## RECONVENE v0.37 (2026-11-13)
+
+Founder, exact words: "The turtle should be swimming roughly horizontally. Forget about the salmon getting bigger each level and having diamonds. Instead keep track of salmon generations in high score. Also, forget tracking total smashes as a high score. Track systems built. Next, rethink the design of the tar pit and the lake. Use an extra screen to go upstream of the salmon to get to the tar place, and make it a factory worth destroying. Convert it to a water treatment plant that actually looks cool on a lake with lots of birds and ice cream truck and picnics. Next, make the asphalt less mundane to break when cars are on it. Don’t let cars run interference. In win state with drones in the air, let hawks take down the drones one at at a time. Next, make hits hurt. A player shouldn’t be able to survive climbing up the electric building getting shocked every time. Next, improve climbing physics and make sure everything is climbable unless it’s not supposed to be (e,g steel wall making player go under to demolish."
+
+Founder, exact words: "If a player builds out of balance (all industry or all nature) the repaving should give them options."
+
+Founder, exact words: "The final mansion turning into eco village fails the design and art Reqs. This is supposed To be the biggest payout of the Game. The Island converts To a utopia. Make it so."
+
+Order note: the second and third rulings arrived while the first was being built. All three ship together. This section was written after the code existed.
+
+- **Coordinator.** The turtle swims level. The salmon stays one size with no diamonds. The best line now reads systems built and salmon generations; smashes are no longer counted there or on the end card.
+- **Hitchcock seat.** The tar factory is a real building of nine columns, up to nine floors, one screen upstream of the salmon lake. It has two smoking stacks, a flare, a conveyor and pipes that foul the lake. It is climbed and felled like any building. It regrows as a water works: a glass hall under a planted wave roof, two settling tanks with turning arms, a lookout tower, reed beds and jets, with a flock overhead, swallows, gulls, ducks and a heron. The road in becomes a meadow with an ice cream truck, a queue of children and three picnics.
+- **Osterweil seat.** A smash near a car now launches the car and still hits the road under it. The turtle's road rip throws every car on that road. When all five mainland sites are grown and drones remain, hawks arrive one at a time and each takes one drone down.
+- **Stranger.** Shocks cost about a third of the energy bar and throw the climber off the wall. Other hits cost 1.75 times what they did. Climbing is faster, and holding Up in the air beside a wall grabs it. The lair trunk, the island terraces and the water works can be climbed. After a pave-over, if the build is lopsided, prying up the pavement opens a card to pick what grows back.
+- **Utopia.** The lair now bursts into a hill of five terraces with the seven capsule homes at 1.3 size, eight cottages, three waterfalls, two windmills, a great tree with lanterns, neighbors on every level, a maypole dance, a band, string lights, three hot-air balloons, a second village of seven houses toward the dock, a playground, bicycles, orchards, flowers and butterflies. The sky clears and a rainbow holds.
+- **AI Skeptic.** All of it is studio invention. The factory is optional: a level still ends at five of five, so a player may never see it. Rain gardens, rivers and wetlands have nothing to climb. The turtle's shell still shrugs off bumps; only shocks hurt it. Three shocks now knock an animal out, which may be too harsh on the fortress. The lookout sweep from the island travels more than 6,000 units. The test browser ran the utopia at about 22 frames a second; no phone has run it.
+- **Conductor.** Bots flung a car, took three shocks to a knockout, grabbed a wall in mid-air, saw the factory from a lookout, walked the extra screen, climbed the factory, grew the water works, watched hawks clear four drones, climbed the lair and the terraces, got the rebuild card after a pave-over, and walked the full island ending. Twenty-two older tests report no errors after five were repaired for the sixth site. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-13
