@@ -1025,3 +1025,34 @@ What changed, and only that:
   fun. The founder's hands decide.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
+
+## RECONVENE v0.29 (2026-11-12)
+
+Founder, exact words: "We have to grind a bit less. Only four fits per green column to break. The turtle has a special power — tearing up asphalt and anything on it— a one shot asphalt removal power. Even if people and cars are on it. I have to be able to tag any other main character on screen just by tapping  them. I have a hard time switching to salmon someone’s and I hate unnecessary buttons." Then: "Blocks appear ineffective to stop bulldozers."
+
+What changed, and only that:
+
+- **Osterweil seat.** Every green leg of the 93 takes four plain hits, on every level. Before,
+  a street leg took six and grew tougher by level.
+- **Hitchcock seat.** One turtle strike on asphalt tears up the whole lot, with the cars on it.
+  This covers the parking lot, a site a crew paved over, and the empty lots.
+- **Stranger.** A tap on the beaver, the turtle or the salmon makes the player that animal. It
+  now works while the player is underwater as the beaver or turtle (the swimmer lands at the
+  nearest ladder first) and while the resting animal is still walking home. The salmon is drawn
+  wherever she is, the pools and pond included, so she can always be tapped.
+- **Coordinator.** The tap zone for the salmon ended ten units below her middle, so taps on her
+  lower half missed. That is the likely cause of the trouble switching to her. The zone is now
+  centered on her.
+- **Studio Voice.** The Tag button is removed. A Smash beside the TAG sign still swaps the two
+  land animals. The Dive button stays: it is the only on-screen way into the water besides
+  pressing Down at a ladder.
+- **Conductor (blocks).** A pave truck stopped only for a gold block lying straight ahead within
+  62 units. A block on the far side of the site did nothing. A truck now also stops at the edge
+  of any site with a gold block on or beside it, shows BLOCKED, and turns back after 1.4 seconds.
+  A test put a block on the far side of a growing site and the truck turned back at the edge.
+- **Conductor (rest).** A street leg fell in four smashes. One turtle strike cleared the lot.
+  Taps switched land to salmon (tapping low on her body), salmon to beaver, diver to salmon,
+  salmon to the turtle at the sign, and land to the salmon in the pond. Eleven older tests
+  report no errors.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-12
