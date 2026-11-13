@@ -1239,3 +1239,18 @@ Order note: four messages arrived in a row, two of them cut off. All ship togeth
 - **Conductor.** A bot checked the opening message sits below the status bar and passes taps through, confirmed three cut messages stay hidden, swam the salmon east to open the edge, found no trucks mid-level, grew an all-nature city, watched one crew pave the river site, got the two-option card, picked the transit hub and reached the end card. Twenty-six tests report no errors; one test of the old pave rule was retired. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-13
+
+## RECONVENE v0.40 (2026-11-13)
+
+Founder, by voice, exact words: "I want some ad advice or some feedback on this game in terms of its fun, its its replayability, its learning. It's engagement." "think about urban planning and systems and the outcomes and how we might make them more intuitive through gameplay by modifications to the current system." Then typed: "Ok, I’m onboard with necessary messaging as long as we can keep it crisp and OUT of gameplay"
+
+Order note: the design was proposed by voice in five parts. The founder agreed in general and set the rule on messaging; he did not rule on each part. This build takes parts 1, 2, 4 and 5 and leaves out part 3, sites affecting their neighbors. This section was written after the code existed.
+
+- **Coordinator.** Words about the systems now appear only while play is stopped: on the choice card and on the end card. During play the systems speak through pictures.
+- **Osterweil seat.** One in three townsfolk carries a small bubble with a drawn icon: a bus when travel is unmet, a dark bulb when power is unmet, waves during a flood, a leaf when the level is won and the city is mixed. In rain, brown water runs off every standing building and along the street; blue drops sink into anything grown that soaks.
+- **Hitchcock seat.** The pave crew's truck carries a sign: NEED TRANSIT, NEED POWER or NEED GREEN, matching the option the crew is pushing toward.
+- **Stranger.** The choice card adds one short line naming what the city lacks: transit, power, room for rain. The end card opens with a one-line verdict, then a five-row table of Floods, Good rains, Systems built, Salmon generations and Minutes, each beside last time's figure.
+- **AI Skeptic.** The pop-up card that used to stop play after a first flood or mud surge is gone; its line now sits on the end card. The truck sign is words on screen during play, read here as a sign in the world, not a message; the founder may see it otherwise. The need bubbles are small, about a quarter of the beaver's height, and may be hard to see for a low-vision player. Seven message strips still appear during play. Sites still do not affect their neighbors in any visible way. No phone has run it.
+- **Conductor.** A bot felled the garage and read the needs line on the card, found a bus bubble over a walker, ran a storm, sent a lopsided crew with its sign, and opened the end card with last time's figures beside it. Twenty-seven tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-13
