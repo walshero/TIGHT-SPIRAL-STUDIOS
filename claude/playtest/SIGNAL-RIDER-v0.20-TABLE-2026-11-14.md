@@ -54,10 +54,12 @@ When the system contradicts its own text, the player learns helplessness. That i
 - Lightning: obey reduced motion, cap at 3 per second, add a setting.
 - Move "Skip replay" into the thumb arc. The Studio link mid-ride needs a confirm.
 
-## Founder rulings needed
-1. Should stress cubes from the week count toward the 3 hits, or be "load" that is separate from player mistakes? (Trauma-access recommends "Load"; the current 3-bads ruling stands until you rule.)
-2. Should the speedometer separate science from feel (Tier 2 #7)?
-3. Is a one-tap prediction before ride 2 (retrieval practice) wanted, after Tier 1–2 land?
+## Founder rulings (2026-11-14 14:00: "1 idk. 2. Y. 3 y. And implement advised changes")
+1. Week stress: founder declined to choose, so the chair ruled per standing preference. **Week stress is LOAD, not hits.** Pink cubes slow you and widen frayed bands but never end the ride. Hits come from frayed bands and gaps that do not fire. Stress raises risk without being scored as the player's fault (SAMHSA 2014). Founder may reverse.
+2. Speedometer shows the science: **yes**. Built in v0.21.
+3. One-tap prediction before ride 2+: **yes**. Built in v0.21.
+
+Built as v0.21: `claude/signal-rider-build-v21.py`, notes in `claude/SIGNAL-RIDER-v0.21-BUILD-2026-11-14.md`.
 
 ## What already passed (keep)
 - Scene-first opening with one instruction; passes the 3-second test.
