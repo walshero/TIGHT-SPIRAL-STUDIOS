@@ -1301,3 +1301,19 @@ Order note: the founder's message came first. This section was written after the
 - **Aleph, correction.** The first push of v0.43 went out with Studio Eyes at HALT: the pressed Lens icon used a text color token as a stroke. The Conductor line above was wrong for that push. The icon now takes its color from the button's own text color, the gate reads 0 at HALT, and the corrected file replaced the first one in every lane.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-13
+
+## RECONVENE v0.44 (2026-11-13)
+
+Founder, typed, with a photo of a bubble house, exact words: "Ok, good, but the end island art still 3/10. In composition and finish.the main house should be asymmetrical gaudi esque but distinct and when it breaks apart it creates 10/10 art homes"
+
+Order note: the founder's message and photo came first. The photo set the family of form: poured, rounded, round-windowed. Nothing in it is copied; the house, the seven room shapes and the hill are studio invention. This section was written after the build.
+
+- **Finding.** The old lair was a straight concrete trunk with seven identical capsules set in mirror pairs. The old hill was a mirror-image step pyramid holding seven identical capsules and eight identical cottages. Both were symmetrical and both repeated one stamp.
+- **Hitchcock seat.** The Baron's house is now one lopsided poured mass: a long low wing on the left with a scaled ridge along its back, and a leaning tower on the right wound with gold bands. Bone-pale ribs lean on its front. Ten lidded openings glow amber, no two the same size. It is cold on purpose: dusk-purple stone, gold trim, red lamps, a dish and two searchlights. The glowing core still sits in the arched way in.
+- **Osterweil seat.** Seven rooms ride the mass and each has its own outline: a dome, an onion, a gourd, a mushroom, a shell, an egg and a lantern. When the core breaks they fly out, warm from cold lacquer to their true colors as they turn, and land as seven homes. Each home has a skirt of broken tile, pale-rimmed round windows lit from inside, a round door, a twisted chimney, a roof garden and a vine.
+- **Stranger.** The hill is no longer a mirror. It rises steeply on the left, where water steps down five falls to a pool, and sweeps out in wide ledges on the right, where the homes sit. A great tree and the onion home crown a summit set left of center. Each terrace has a coping of broken tile, stairs on its face, and round doors opening into the hill. The eight stamped cottages are gone.
+- **Coordinator.** Climbing follows the new outlines: the tower and the low mass while the house stands, the stepped hill after. The band moved to the foot of the hill and the maypole to the green in front of it.
+- **Conductor.** The finished hill is cut once to its own sheet; water, smoke, lights and people redraw each frame. The test browser ran the finished hill at about 21 frames a second at phone density, against 14 to 16 before. A bot climbed the house and the terraces, burst the house, and reached the end card. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
+- **AI Skeptic.** Whether this reaches the founder's ten is his call; the studio does not score its own art. The right foot of the hill sits close to the Baron's statue and the palms and reads crowded there. The mountain behind, the blimp mast, the pool and the far village were not redrawn. Flowers on the finished terraces hold still as a cost of the sheet. Only the island tests ran this round, not the full set. No phone has run this build and no one has heard its sound.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-13
