@@ -60,3 +60,15 @@ This build implements the Playtest Table report (`claude/playtest/SIGNAL-RIDER-v
 - **Dale's principle landing** (one messenger shape per synapse; learning seat F4) is not built. It would replace the founder-approved shape-match mechanic, so it waits for a founder ruling.
 - **Ghost spark, shareable week card, student playtest:** wishes, unchanged.
 - **Human difficulty is UNPROVEN.** The bots are perfect players. Only phone play can tell whether load-not-hits made the game too easy. If it did, the first lever is frayed-band density inside the sets.
+
+## v0.22 (same day): founder play feedback on v0.21
+Founder 15:21: "The game seems to teach very little. Maybe we can translate the blocks we've missed so at least the blocks are named even if missed... The matching section is now way too hard because the matching signs can be too far apart. This worked better many builds ago and just needed one more round."
+
+**Built** (`claude/signal-rider-build-v22.py`):
+- **Every unhit cube group is named** in a caption ("Missed: A walk or workout, A friend who listens" / "Dodged: Rent due Friday"). The message system places it away from the spark. A card's name is spoken the first time it appears, hit or missed.
+- **Matching reach is back to v0.20:** each target is the spine beside you, and the far-from-pull picks are gone.
+- **Relays need three matches in six beats** (was two in five). The next-shape preview stays.
+
+**Verified:** a caption appeared for a missed green group. Target moves measured 1.26 rad per beat, exactly one spine. The relay fired on 3 matches. No page errors. Contrast gate SHIP.
+
+**Panel lesson:** the Table recommended two-away targets from bot play (Hick/Fitts). Bots aim perfectly, so they can't feel reach. Human reach needs a founder phone check before it changes again.
