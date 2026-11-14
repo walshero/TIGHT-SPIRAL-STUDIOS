@@ -1332,3 +1332,46 @@ Order note: the founder's question and his go-ahead came first. This section was
 - **Conductor.** Four states were rendered at phone size and read: heat, seeds, joining, haze. Six mainland tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-13
+
+## RECONVENE v0.46 (2026-11-14)
+
+Founder, typed, exact words: "I do think the
+Sound could include more
+Variation. Other Improvements? Osterweil and Horvath lead analysis"
+
+Order note: the founder's message came first. The two lead seats are modeled on published ideas, not the people. Their analysis below rests on the code and on renders; neither seat ran a fresh playtest for this round. This section was written after the build.
+
+### Built in v0.46: sound variation
+
+- **Finding.** Twenty-nine sounds, and the four used most were identical every time: the grow chord (19 uses), the pop (15), the collapse (13) and the bump (11).
+- **Conductor.** The grow chord now climbs a five-note scale, one step per success, in one of three voicings, and each kind of place adds its own voice: water trickles, power rings bright, transit dings twice, habitat gets a bird call. The pop picks from six notes. The collapse has three forms and varies in pitch and length, with loose debris ticks. Floor, bump, pick, eat and zap vary in pitch. The hit cycles three bodies. A test called every sound three times and logged different pitches for each of these.
+- **Horvath seat.** The quiet now carries the state of the city: near grown habitat, birds call, more often as more land is grown; near open water, frogs. Near standing industry there is no birdsong. The sound reports the system without a word.
+- **AI Skeptic.** No one at the studio has heard any of this. Pitches were logged, not listened to. Whether it sounds good is the founder's ear alone.
+
+### Analysis: other improvements
+
+**Horvath seat: what a player believes after one level**
+- Correct: hard ground sheds rain and floods; soft ground soaks it.
+- Partly: "a mixed city holds." The player meets this only as a crew that arrives after the fact.
+- At risk of wrong: "people's needs are the enemy." Transit and power show up mostly as pave crews undoing the player's work, so need reads as punishment. And: "smashing is how cities get better," with no sign of where the garage's drivers went.
+- Hidden variable: the flood rule is one number, hard sites minus soak, against a line at 1.5. The player never sees that number move. Every other lesson hangs on it.
+
+**Osterweil seat: where play stops and telling starts**
+- The choice of what to grow arrives on a card that halts the game. It is the game's one real decision and it is made by reading.
+- A choice cannot be tried and taken back until a crew forces it. That is thin freedom to experiment.
+- Level 1 runs many systems at once: Baron, crews, crates, barrels, tar, drones, salmon. The core loop of smash, grow, rain is hard to find among them.
+- Leave alone: the smash feel, climbing, the cut-paper look, the rain itself, the end card.
+
+**Ranked, both seats**
+
+| # | Change | Why | Cost |
+|---|---|---|---|
+| 1 | A flood gauge in the street: a marked post whose waterline shows where the next rain will reach, moving as sites fall and grow | Makes the one hidden variable visible; the player can predict, then watch the rain confirm | S |
+| 2 | Needs met, shown as gain: when a tram or wind port grows, the people with bus and bulb bubbles ride, lights come on, bubbles turn to smiles | Turns need from punishment to purpose | S |
+| 3 | Choose by smashing: two seed crates drop on a cleared site, each showing its icon; the one the player smashes is planted | The decision becomes play; the card goes | M |
+| 4 | Re-choose freely: smash your own grown site to clear it and choose again | Freedom to experiment | S |
+| 5 | Level 1 holds only smash, grow, rain; Baron, tar and drones wait for levels 2 and 3 | One idea at a time | M |
+
+- **Coordinator.** The studio recommends 1 and 2 next. Both are small, wordless, and sit on the main loop.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-14
