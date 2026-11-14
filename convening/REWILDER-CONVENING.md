@@ -1298,5 +1298,6 @@ Order note: the founder's message came first. This section was written after the
 - **Coordinator.** The message strip sits 50 points higher than before, so more of the scene shows.
 - **Conductor.** The row was measured at 402, 393, 375 and 360 points wide and on a wide screen; nothing overflows and every button stays 48 points. Below 350 points wide the readout drops to its own row. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
 - **AI Skeptic.** The level number no longer shows during play; the menu's level buttons and the end card still name it. The icons are small, 17 points, and the heart, star and leaf carry meaning by shape alone; a low-vision player may not tell them apart at a glance. Screen readers get a spoken label on the Lens button; the readout itself stays hidden from them, as before. No phone has run this build.
+- **Aleph, correction.** The first push of v0.43 went out with Studio Eyes at HALT: the pressed Lens icon used a text color token as a stroke. The Conductor line above was wrong for that push. The icon now takes its color from the button's own text color, the gate reads 0 at HALT, and the corrected file replaced the first one in every lane.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-13
