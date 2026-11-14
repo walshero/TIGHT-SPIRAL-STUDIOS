@@ -1375,3 +1375,17 @@ Order note: the founder's message came first. The two lead seats are modeled on 
 - **Coordinator.** The studio recommends 1 and 2 next. Both are small, wordless, and sit on the main loop.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-14
+
+## RECONVENE v0.47 (2026-11-14)
+
+Founder, typed, choosing from the ranked list of five in the v0.46 analysis, exact words: "1 and 2."
+
+Order note: the founder's choice came first. This section was written after the build.
+
+- **Horvath seat, item 1.** Four flood gauge posts stand in the gaps between sites. Each is a marked staff with a red upper half. A float rides the post at the height the next rain will reach: it follows the game's own flood number, hard sites minus soak, and crosses into the red half exactly where the game floods. The float is red and restless when a flood is coming and blue and calm when it is not. When rain falls, water climbs the post to the float, brown for a flood and blue for a good rain, so the rain confirms what the post foretold. At the start of level 1 the float sits at the top; with four sites grown it sits at the foot.
+- **Osterweil seat, item 2.** Needs met now show as gain. When transit meets the need to get around, some townsfolk carry a bus bubble with a green tick; when power is met, a lit bulb with a green tick. At the moment a need first becomes met, everyone on the street hops, stars rise, and a three-note rise plays. Unmet needs still show the plain bus and the dark bulb as before.
+- **Stranger.** No words were added. The posts sit clear of the buildings at all four positions in the renders.
+- **AI Skeptic.** The post teaches only if the player notices it; nothing points to it. Whether a red float reads as "flood coming" without a word is untested. The float's scale is the studio's choice: the flood line sits at mid-post. Lights in windows do not yet come on when power is met, and no one visibly boards the tram; the gain shows in bubbles and the hop only. No phone has run this build and no one has heard its sound.
+- **Conductor.** Renders at phone size were read for the post at start, at four sites grown, and in rain, and for both ticked bubbles. Five mainland tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-14
