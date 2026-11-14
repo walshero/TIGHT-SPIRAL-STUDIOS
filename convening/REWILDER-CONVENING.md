@@ -1270,3 +1270,19 @@ Order note: sixteen close-ups were rendered and read before any code changed. Th
 - **Conductor.** Sixteen close-ups were re-rendered after the pass. Twenty-seven tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-13
+
+## RECONVENE v0.42 (2026-11-13)
+
+Founder, typed, with a phone screenshot of the level 3 green tower, exact words: "This is poor example of what we can do. Compare with Lumino city. We can imagine and build More beautifully here" Then: "Forget world of goo towers/shapes. Just goo balls and lots of dripping. In the parking lot, add a bunch of paving trucks for us to wreck."
+
+Order note: the founder's two messages came first. Lumino City was read about before any code changed: State of Play built it by hand from paper, card, wood, small lights and motors, and filmed the model. That method is the reference here; none of its art is copied. The tower design is studio invention. This section was written after the build.
+
+- **Finding.** The old green tower was sixteen identical floors of identical windows with a green blob in each. It repeated one stamp and told nothing.
+- **Osterweil seat.** The tower is now a vertical village on a timber frame. Seven levels each hold a different arrangement: a market hall and a cafe with an awning at the foot, then houses with pitched, curved and planted roofs, glasshouses, and open garden decks with trees, beehives, a parasol and a washing line. No two levels match.
+- **Hitchcock seat.** One story runs top to bottom: a funnel on the roof catches rain, a pipe carries it down, it turns a water wheel in the middle bay, and it ends in a reed pool at the foot. About six windows in ten are lit warm, some with a person in them. Lanterns hang across two levels. A basket lift rides the side, a windmill turns on top, a clock keeps time, a cat sits on a roof.
+- **Stranger.** The frame is a shade darker and sits behind the houses, with a stair crossing the gaps, so the tower reads as deep. The levels rise one at a time as the tower grows. The climbing shape is unchanged; a bot climbed 630 units up it.
+- **Coordinator.** The two goo towers and their springs are gone. The pit keeps eleven floating goo balls and nine hopping ones, each trailing a string of tar. Twelve pipe nozzles over the pit each drip at their own pace, between about half a second and a second and a half.
+- **Conductor.** Six paving trucks park in the lot west of the factory, under a P sign that replaces the fence. A smash wrecks any truck within reach with flying parts and the word WRECKED; parked trucks do not hurt the player. A bot wrecked five in eight swings and lost no energy. When the factory falls, any trucks left drive away. Twenty-seven tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
+- **AI Skeptic.** The finished tower is drawn once to its own sheet and reused each frame; only the wheel, clock, windmill, lift, smoke and birds redraw. Without that the test browser ran it at about 15 frames a second; with it, about 19. That is still below level 1's 25. The washing line and the bees hold still on the finished tower as a cost of the sheet. Wrecking a parked truck adds to the crews-stopped count. The slow v22 test did not run this round. No phone has run this build and no one has heard its sound.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-13
