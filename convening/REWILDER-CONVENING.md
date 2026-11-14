@@ -1286,3 +1286,17 @@ Order note: the founder's two messages came first. Lumino City was read about be
 - **AI Skeptic.** The finished tower is drawn once to its own sheet and reused each frame; only the wheel, clock, windmill, lift, smoke and birds redraw. Without that the test browser ran it at about 15 frames a second; with it, about 19. That is still below level 1's 25. The washing line and the bees hold still on the finished tower as a cost of the sheet. Wrecking a parked truck adds to the crews-stopped count. The slow v22 test did not run this round. No phone has run this build and no one has heard its sound.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-13
+
+## RECONVENE v0.43 (2026-11-13)
+
+Founder, typed, with a phone screenshot of the two top bars, exact words: "The top two bars needs to be one bar. Use icons net words."
+
+Order note: the founder's message came first. This section was written after the build.
+
+- **Stranger.** The screen had a row of three buttons and, under it, a second bar reading Energy, Super and Level. On a phone the two took 122 points of height. They are now one row 48 points tall: menu button, the readout, lens button, sound button.
+- **Studio Voice.** The readout uses three drawn icons and no words: a heart before the five energy pips, a star before the Super bar, a leaf before the count of sites grown out of five. The Lens button shows a magnifying glass. The count keeps its 18-point numerals.
+- **Coordinator.** The message strip sits 50 points higher than before, so more of the scene shows.
+- **Conductor.** The row was measured at 402, 393, 375 and 360 points wide and on a wide screen; nothing overflows and every button stays 48 points. Below 350 points wide the readout drops to its own row. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
+- **AI Skeptic.** The level number no longer shows during play; the menu's level buttons and the end card still name it. The icons are small, 17 points, and the heart, star and leaf carry meaning by shape alone; a low-vision player may not tell them apart at a glance. Screen readers get a spoken label on the Lens button; the readout itself stays hidden from them, as before. No phone has run this build.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-13
