@@ -1254,3 +1254,19 @@ Order note: the design was proposed by voice in five parts. The founder agreed i
 - **Conductor.** A bot felled the garage and read the needs line on the card, found a bus bubble over a walker, ran a storm, sent a lopsided crew with its sign, and opened the end card with last time's figures beside it. Twenty-seven tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-13
+
+## RECONVENE v0.41 (2026-11-13)
+
+Founder, by voice, exact words: "the art is not consistent across the game. Some of the new additions, you, clearly they look more like line drawings than than the paper cut treatment that some of the other stuff has gotten. Can you see the game now and verify that?" Then typed: "Look now" and "Yes. And do it intelligently. No random slop. This is storytelling through art."
+
+Order note: sixteen close-ups were rendered and read before any code changed. The founder's observation held. This section was written after the build.
+
+- **Finding.** The older art is built from solid cut pieces: each block has its own tone and a heavy ink edge, tree crowns are stacked in four greens, large pieces cast a shadow. The newer art was drawn with bare strokes and flat fills: the mast was a wire drawing, the lair's trunk one gray shape, the terraces one tan slab with ruled lines, the cottages a square and a triangle, pipes and beams strokes with no edge.
+- **Rule adopted.** A physical thing is cut from paper: it has a body, an ink edge, and a shadow if it is large. Bare strokes are kept for seams, strings, ripples and hair-thin detail.
+- **Stranger.** In eleven newer drawing routines, every stroke 3 wide or more is now a cut strip with an ink edge, and every dot 3.4 or more across is a cut disc. That covers pipes, beams, rails, fence posts, tower legs, ladders, stairs, flower heads and lamps on the factory, the pit, the island, the bridge, the water works, the village and the farm.
+- **Hitchcock seat.** The lair's trunk is eleven courses of concrete blocks in varied gray with lit window slits: the Baron's world is poured, hard and guarded. The mast is a solid tapered tower with cut braces. The mountain is six overlapping facets. Tar runs down the factory as cut drips.
+- **Osterweil seat.** The terraces are laid stone in three courses per level, each stone its own tone and about one in seven mossed: the people's world is built by hand from what fell. The cottages have a toned wall, an overhanging roof, a chimney, a four-pane lit window, a door and a flower box. The terrace bands now stack front to back the right way round.
+- **AI Skeptic.** This pass did not touch the glass arts dome, the green tower, the hawks, the goo balls, the need bubbles or the townsfolk, some of which still use bare strokes. Glows and smoke stay soft on purpose. The test browser at phone pixel density ran the finished hill at about 16 frames a second against about 25 on level 1; the stone walls account for about one frame of that. No phone has run it. Whether it now reads as one hand is the founder's call from the before-and-after sheet.
+- **Conductor.** Sixteen close-ups were re-rendered after the pass. Twenty-seven tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-13
