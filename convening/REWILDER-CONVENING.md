@@ -1423,3 +1423,17 @@ Order note: the founder's messages came first. A first ship of v0.49 was stopped
 - **Conductor.** Renders at phone size were read for the blast as beaver and as turtle, the cleanup at three stages, the win state at four positions, the blimp path, and the neighbor states with no heat or haze. Eight tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-14
+
+## RECONVENE v0.50 (2026-11-14)
+
+Founder, typed, exact words: "When you’re playing salmon if you hit land instead of smash you miss the whole sequence. Remove land button. We don’t need it."
+
+Order note: the founder's message came first. This section was written after the build.
+
+- **Finding.** One button read Dive on land and Land in the water, and on a phone it sat directly above Smash. A thumb reaching for Smash as the salmon could hit Land and end the whole salmon run.
+- **Coordinator.** The Land button is gone. The button now shows only on land beside a ladder, reads Dive, and disappears the moment the player is in the water, as a diver or as the salmon. Nothing sits above Smash while swimming.
+- **Stranger.** The ways out of the water that already existed still work: a diver swims up at a ladder, and the salmon player taps the animal waiting on land. Because that animal can be off screen when the salmon has swum far, the menu gains one item, Leave the river, which shows only while swimming. It is behind the menu button, so it cannot be hit by accident.
+- **AI Skeptic.** Leave the river is a new control, and the founder dislikes extra buttons; it is there so a touch player is never stuck in the water, and it is his to cut. Nothing on screen tells a salmon player that tapping the land animal brings them back. The F key still leaves the water on a keyboard. No phone has run this build.
+- **Conductor.** A test confirmed the button shows Dive at a ladder, hides as a diver and as the salmon, that tapping the land animal ends the swim, and that the menu item appears only while swimming and works. Four tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-14
