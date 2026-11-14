@@ -1389,3 +1389,21 @@ Order note: the founder's choice came first. This section was written after the 
 - **Conductor.** Renders at phone size were read for the post at start, at four sites grown, and in rain, and for both ticked bubbles. Five mainland tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-14
+
+## RECONVENE v0.48 (2026-11-14)
+
+Founder, typed, exact words: "1. After I’ve seen it, How can I get to tar pit WITHOUT going on vacation??
+2. When you clean everything out of the river, it should recover and change realistically but dramatically. 3. The temperature gauge doesn’t work. Remove. I don’t like the
+Speech bubbles either." Then, quoting the studio's last report: "And address this “	I did not build window lights coming on or people boarding the tram.” By doing those things"
+
+Order note: both founder messages came first. This section was written after the build.
+
+- **Ruling recorded.** The flood gauge posts are removed. The need bubbles over townsfolk are removed, all of them, ticked or not. The studio will not bring either back.
+- **Coordinator, item 1.** The vacation sign used to act as a tripwire at the east end of the street, so a player walking to the factory was sent on vacation. Once the factory has been seen, the sign is a door: the player walks past it freely, and goes on vacation only by pressing Up while standing at it. A bobbing arrow above the sign shows this. Before the factory is seen, the sign works as it always did. A test walked 235 units past the sign with no vacation, then pressed Up at the sign and went.
+- **Hitchcock seat, item 2.** The river now heals in the order a real one does. Each piece of junk taken out clears the water a little and lets some gravel, plants and minnows return. When the last piece comes out, a bright front of clean water sweeps down the channel, and over the next several seconds the murk lifts to clear blue-green, light reaches the bed, pale gravel covers the mud, tall eelgrass rises and flowers, mussels and crayfish settle, minnow schools gather, and two spotted trout arrive. The junk count already existed; nothing else about the river's rules changed.
+- **Osterweil seat, lights.** Two short rows of homes and six street lamps now stand on the street. Their windows are amber while the coal plant runs, go dark with one candle when the plant is down and nothing replaces it, and turn bright and warm when wind or sun meets the need.
+- **Osterweil seat, tram.** On a finished tram line, people wait at each of three stops, step aboard when the tram halts, ride with their heads showing in the windows, and others step off. At a finished hub, people walk in through the door.
+- **AI Skeptic.** Without the bubbles, an unmet need now shows only as dark windows, the pave crew's sign, the pick card and the Lens; whether that is enough is untested. The arrow over the vacation sign is the only hint that Up is needed there. On a phone the on-screen controls cover part of the river, so some of the recovery sits behind them. The river recovery covers the underground channel only; the surface river did not change. The street celebration from v0.47 stays. No phone has run this build and no one has heard its sound.
+- **Conductor.** A load-order fault was caught and fixed before ship: two new variables were read before they were declared, which stopped the game from starting. Renders at phone size were read for the river at four stages, the lights in three power states, the tram at four moments and the vacation sign. Seven tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-14
