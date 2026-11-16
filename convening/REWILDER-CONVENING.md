@@ -1496,3 +1496,38 @@ Twenty-three wide renders: the title, level 1 standing and grown both ways, the 
 - **Conductor.** Each new site was rendered at phone size, grown and half grown, and read close up. Five mainland tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-16
+
+## RECONVENE v0.53 (2026-11-16)
+
+Founder, exact words (the message ends mid-sentence):
+
+> "Dam and sea are okay but the new river once clean looks like line art. The whole clean water area
+> Is weak. Improve to 10/10 and stop dallying. The
+> Expectation is here. Also, vacation needs to be available on far right of that clean water
+> Zone or it disappears in game play.  Remove “clean water” and add a water drop icon. Triple deckers need paper craft love. The balloon was supposed to go in realisitc spirals but"
+
+**Order note.** The build was written and rendered before this section. The seats reviewed the renders after, not before. The founder's last sentence stops at "but", so the studio read it as: the balloon should fly in realistic spirals and does not yet.
+
+### What changed
+
+| Ask | What the build does |
+|---|---|
+| Clean river looks like line art | The recovered river is redrawn as layered cut shapes: cobbles with a lit side, mussels, river grass in two sheets with fish between them, minnow schools and trout as cut fish with fins and eyes, a crayfish, lily pads on stems, ringed bubbles. The water turns clear blue-green as it recovers. |
+| Clean water area is weak | The works are rebuilt: stone quay, pump house with a glass upper floor, blue mains and a red valve wheel, a mill wheel in a race, a splash court with children, reed beds in stone troughs, a lookout tower, bunting. The lake bank gains three planted stone terraces with water spilling ledge to ledge, a boardwalk, lamps, sailboats and a swim raft. |
+| Vacation on the far right | The Vacation sign stands at the far right of the zone. Walking past it starts the vacation. The Up press is gone. |
+| Remove "clean water", add a drop | The words are gone. A round sign carries a water drop. |
+| Triple deckers need paper craft love | Each house is built in layers that cast shadows: clapboard wall, a bay that stands proud, porch decks with rails and posts, window trim and curtains, a bracketed cornice, steps, a chimney, a picket fence, hedges and a clothesline. Windows still follow the power. |
+| Balloon in realistic spirals | The balloon flies tightening loops that drift toward the pool, then drops in. |
+
+### Findings by seat
+
+- **Coordinator.** Dam and sea leave the art list on the founder's word. Remaining: vacation scene, river choice, free river and wetland, hills and sky and soil, small props.
+- **Stranger.** The drop sign reads without words. The Vacation sign is the last thing on the right, where a walker ends up anyway.
+- **Osterweil seat.** Walking into the vacation removes a hidden button press. The player who has seen the factory can still reach it, because the sign sits past it.
+- **Aleph.** One file changed. The island stays frozen. No gauge, no speech bubbles, no heat marks returned.
+- **Studio Voice.** No new words on screen. One label was removed.
+- **Hitchcock seat.** The river now has a foreground and a background, so the fish pass between two sheets of grass. The triple-deckers read as three objects, not one printed strip.
+- **AI Skeptic.** "10/10" is the founder's call, not the studio's. The river under a standing building stays bare by design, so the test renders show less life than a cleared level will. The terrace band repeats along a long bank. On a phone the works are small beside the beaver. The balloon was checked as a path plot, not watched in motion on a phone. No sound was heard.
+- **Conductor.** Rendered at phone size: triple-deckers in three power states, seven views across the clean-water zone, the vacation walk, the river at full recovery. Vacation does not fire 120 units short of the east end and fires at the sign. Eight regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-16
