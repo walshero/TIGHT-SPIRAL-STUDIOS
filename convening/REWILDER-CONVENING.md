@@ -1451,3 +1451,48 @@ Order note: the founder's messages came first. This section was written after th
 - **Conductor.** The menu was opened in a test and lists two links: Cabinet and Back. The houses were rendered at phone size in three power states and at both rows. Two tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-16
+
+## RECONVENE v0.52 (2026-11-16)
+
+Founder, typed, exact words: "Ok, things are settled for now. Let’s work on improving all our art to top quality papercut. Through all levels — this should be ready to ship at top quality papercraft"
+
+Order note: the founder's message came first. The studio then rendered every level and judged each piece against the cut-paper rule before changing anything. This section was written after the build. This is pass one of several; the list of what remains is below.
+
+### The audit
+
+Twenty-three wide renders: the title, level 1 standing and grown both ways, the river and the sea, levels 2 and 3 standing, level 3 cleared, and vacation.
+
+| Standing | Verdict |
+|---|---|
+| Title, garage, highway, coal plant | Hold up |
+| Level 2 and 3 city: towers, billboards, viaduct, fortress | Hold up; the strongest art in the game |
+| Green tower, glass dome, woods, island, tar factory and its lake | Hold up; redrawn earlier |
+| Hub, park, tram, wind farm's building, rain garden, solar canopy | Weak: flat boxes and bare sticks. These are what the player earns, so they came first. |
+| Vacation scene | Weak: flat color, no paper grain, no shadows |
+| Dam, standing | Weak: plain grey blocks and one flat slab of water |
+| Sea | Weak: a blue field with a few weeds |
+| River choice, free river, wetland | Fair: small and plain beside the woods |
+| Hills, sky and the soil band under the street | Fair: flat shapes, little layering |
+
+### Built in v0.52: the six weakest grown sites
+
+- **Hub.** Was a cream box with a sign. Now a small station: a paved forecourt, a hall with ticket windows and a departures board that ticks, timber posts under three glass vaults planted along their ridges, a brick clock tower with moving hands and a vane, benches, a bike rack, and a bus with rounded ends pulling through.
+- **Park.** Was five trees on a strip. Now lawns in three layers with a pale winding path, two trees in blossom, a pond with a footbridge and ducks, a striped bandstand with three players and rising notes, swings with a child swinging, a slide, a fountain, lamps, benches, flower beds, a picnic, a kite and walkers.
+- **Tram.** Was a red box on two lines. Now a grassed track bed with sleepers and rails, poles with curved arms carrying the wire, three glass shelters with roofs and benches, and a tram with rounded ends, a window band, doors, a lamp and a pantograph. Boarding and riders are as before.
+- **Wind.** The white saw-tooth outline is now the old brick hall kept and reused, with lit north lights, an arched door, a row of battery cabinets, a line of poles carrying power off toward the houses, wildflowers, and three sheep grazing under the blades.
+- **Rain garden.** Was two planter boxes. Now a shed with a planted roof whose gutter fills a barrel, three stone-edged basins stepping down to a pond, each spilling into the next, with irises and broad leaves, and drops soaking into the ground beneath. That last part is the lesson shown.
+- **Solar canopy.** Was three panels on sticks. Now three framed arrays on timber legs shading a market stall with an awning and crates of produce, a table, a charging post with a cargo bike on its cable, strung lamps, and sunflowers behind.
+- **Coordinator.** Every new piece grows in stages as before. Climbing heights for the hub and canopy rose a little to match. All designs are studio invention.
+
+### What remains, in order
+
+1. Vacation scene.
+2. Dam, standing, and the free river and wetland that replace it.
+3. Sea, and the river choice.
+4. Hills, sky and the soil band, across all levels.
+5. Small things everywhere: townsfolk, cars, birds, ducks, frogs.
+
+- **AI Skeptic.** On a phone the camera sits far back, so these sites are about sixty units tall on screen and their fine detail is small; the gain is mostly in silhouette and color. "Top quality" is the founder's judgment, not the studio's. Five items remain, so the game is not yet at one standard throughout. No phone has run this build.
+- **Conductor.** Each new site was rendered at phone size, grown and half grown, and read close up. Five mainland tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-16
