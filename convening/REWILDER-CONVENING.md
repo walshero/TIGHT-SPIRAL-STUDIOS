@@ -1437,3 +1437,17 @@ Order note: the founder's message came first. This section was written after the
 - **Conductor.** A test confirmed the button shows Dive at a ladder, hides as a diver and as the salmon, that tapping the land animal ends the swim, and that the menu item appears only while swimming and works. Four tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-14
+
+## RECONVENE v0.51 (2026-11-16)
+
+Founder, typed, exact words: "Kill the link in the rewilder menu that says studio but goes to a cooking game. Keep the cabinet link." Then: "And make the little houses into dorchester like triple deckers"
+
+Order note: the founder's messages came first. This section was written after the build.
+
+- **Aleph, the link.** The menu's Studio link pointed one folder up to index.html. In the studio's home repo that file is the studio front page. In the playtest mirror, where the founder plays, the file at that address is Dessert Tray v11.1, a cooking game. The Studio link is removed. The menu's Home link pointed to the same address and so had the same fault; it is removed as well. Cabinet stays and still opens the arcade. Back stays and still opens the Lab.
+- **Hitchcock seat, the houses.** The two rows of small pitched-roof houses are now triple-deckers, the three-family wooden houses of Dorchester. Each has three stacked front porches with posts and rails on one side, a bay with a window on every floor running full height on the other, clapboard lines, a stone footing with front steps, and a deep flat cornice on brackets. The three in each row are cream with red trim, sage green and slate blue. One has a brick chimney with smoke. The drawing is studio invention from the common form of the type; no particular house or photograph was copied.
+- **Coordinator.** The windows still follow the city's power: amber while the coal plant runs, dark with one candle when nothing powers them, bright on wind or sun. Two street lamps moved a few steps to clear the wider rows.
+- **AI Skeptic.** Removing Home went one link beyond what the founder named; it is his to restore. The mirror's root page is still the cooking game, so any other studio page that links up one folder has the same fault; none was checked. At phone size each house is about fifty units wide, so the porch rails are fine marks. No phone has run this build.
+- **Conductor.** The menu was opened in a test and lists two links: Cabinet and Back. The houses were rendered at phone size in three power states and at both rows. Two tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-16
