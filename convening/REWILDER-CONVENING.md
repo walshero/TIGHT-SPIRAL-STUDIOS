@@ -1633,3 +1633,44 @@ Founder, exact words (with a photo of a level 3 site stuck as bare soil, and aft
 - **Conductor.** Rendered at phone size: the park in four views, the balloon filmstrip, the end-flight path plot. Five regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-17
+
+## RECONVENE v0.57 (2026-11-17)
+
+Founder, exact words (with a photo of the berm and float dots at the tar works):
+
+> "1. When you break the tractor, the yellow figures speech bubbles say “#*+?!&@!” Etc and they hop around mad for a few seconds before starting to repair the tractor (takes one minute to repair). 2. Before 93 comes crashing down, send a safety crew that escorts all vehicles from bridge. 3. Make smoke from trucks actually come from the smokestacks. 4. Make the hot air balloon look better when deflating. Research. Should be funny but also realistic pattern. 5. Remove the “found it” tag ambiguously associated with the underwater blockade. 6. Improve graphics of that blockade. 7 remove the yellow and white dots in the tar factory. 8. When vacuuming the lake add a line of red and white buoys across the edge of the receding oil. 9. In the cleaned lake, improve quality of all flying objects including flight pattern. No ovals as bees etc. 10. When the baby salmon are feeding just make the players salmon get bigger, not the others. 11. The TAR co should get larger and more challenging each level"
+
+**Order note.** The build was written and rendered before this section. The seats reviewed the renders after. The founder cut speech bubbles over townsfolk in v0.48; item 1 asks for them over the truck crew only, and the studio kept them there only.
+
+### What changed
+
+| Ask | What the build does |
+|---|---|
+| 1. Truck crew | A wrecked truck's two workers hop mad for about four and a half seconds under speech bubbles of cartoon cursing. They then spend a minute fixing it, with a toolbox, cones and sparks. The truck rights itself and drives on. |
+| 2. Safety crew on 93 | When the last leg goes, the road waits. Flaggers in orange vests wave red flags, cones close the lanes, a whistle blows, and the traffic drives off fast. The road falls when the last vehicle is clear, or after 14 seconds. |
+| 3. Smoke from stacks | The paving truck has a taller capped stack and its smoke starts at the cap. An 18-wheeler's smoke starts at its cab stack. |
+| 4. Deflating balloon | The Baron's balloon thins and wrinkles as it loses air, its nozzle flaps, it sputters puffs in bursts, then it goes limp and flutters down. Source below. |
+| 5. Found It tag | Gone. |
+| 6. The blockade | The river jam is now real junk: a concrete slab, an oil drum, a shopping cart, a tire, a pipe, a cone, weed. The wall between the salmon lake and the tar is now a dry-stone dam with a cap and reeds. |
+| 7. Dots in the tar works | Gone. |
+| 8. Buoys | Nine red and white buoys on a rope ring the edge of the oil as it recedes. |
+| 9. Lake flyers | Dragonflies have four wings and hover, then dart. Swallows swoop in figure-eights and bank. Ducks are the cut ducks used elsewhere. The leaping fish is a cut fish that turns along its arc and leaves a ring. |
+| 10. Baby salmon | Only the player's salmon grows. |
+| 11. TAR CO each level | Seven floors on level 1, nine on level 2, thirteen on level 3. On level 3 one block in three is a four-hit green column and every block takes one more hit. |
+
+### Research for item 4 (seat modeled on published ideas, not a person)
+
+A let-go balloon curves because its jet does not line up with its center of mass and drag (phytype physics blog, 2018). Its neck flaps open and shut as the air leaves, which makes the noise (Science Sparks). The build uses both: a curving path, a flapping nozzle, puffs in bursts.
+
+### Findings by seat
+
+- **Coordinator.** Eleven asks, eleven changes. The green tower redraw is still owed.
+- **Stranger.** The cursing reads at a glance and uses no real words.
+- **Osterweil seat.** A truck that comes back after a minute makes wrecking it a choice about time, not a permanent win. The safety crew makes the fall feel earned and nobody's harm.
+- **Aleph.** One file changed. Speech bubbles exist over the truck crew only. Gauge, heat marks and seeds stay out.
+- **Studio Voice.** One tag removed. The cursing is symbols only.
+- **Hitchcock seat.** The pause before 93 falls is the best new beat: whistle, flags, an empty road, then the drop.
+- **AI Skeptic.** The founder wrote "hot air balloon"; the studio read that as the Baron's balloon, since that is the one that deflates. The founder wrote "that blockade" beside a photo of the lake wall and after naming the river tag, so both were redrawn. The line-drawn V birds far behind the lake were not found in the code and were left. A repaired truck may meet a player who has moved on; nobody has played a full minute beside one. No sound was heard, the whistle included.
+- **Conductor.** Rendered at phone size: crew cursing, crew repairing, truck righted; the evacuation in three frames with the fall confirmed at zero vehicles; nine balloon frames; the junk jam, the stone dam, the buoys, the lake flyers, the level 3 works at thirteen floors. Eight regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-17
