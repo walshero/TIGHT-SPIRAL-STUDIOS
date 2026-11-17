@@ -1531,3 +1531,36 @@ Founder, exact words (the message ends mid-sentence):
 - **Conductor.** Rendered at phone size: triple-deckers in three power states, seven views across the clean-water zone, the vacation walk, the river at full recovery. Vacation does not fire 120 units short of the east end and fires at the sign. Eight regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-16
+
+## RECONVENE v0.54 (2026-11-16)
+
+Founder, exact words:
+
+> "The balloon only spirals at the end, not mid level. Make sure players see paving trucks out and about and we need to make 93 north look busier and dirtier with 18-wheelers and smog. It actually should be 93 south. Okay, major gap in game between papercraft and simple SVG. The assets we build are lame in terms of graphics. Even the utopian architecture is lame. The
+> Island too. This art needs lumino city magic and you can do it. Stop resisting and execute"
+
+**Order note.** The build was written and rendered before this section. The seats reviewed the renders after. Three earlier rulings meet this message, and the newer words govern: the island was frozen and the founder reopened it; mid-level pave crews were cut and the founder now asks to see paving trucks; coal haze clouds were cut and the founder now asks for smog on the highway.
+
+### What changed
+
+| Ask | What the build does |
+|---|---|
+| Gap between papercraft and simple SVG | The one helper that draws every shape changed. A shape no longer has an ink outline. It is a piece of card under one lamp: it casts a shadow down and right, shows a darker cut edge below, and catches light on its upper rim. This reaches every level, the utopian sites and the island. |
+| Lumino City magic | A warm lamp lights the stage from the upper left, and bright card bleeds a little light the way a lit model does under a lens. The corners fall to cool shade. |
+| Balloon spirals mid-level | The Baron's balloon, cut loose in the city, now loops like a let-go balloon and puffs air behind it. |
+| Paving trucks out and about | Two paving trucks drive the street while the old city stands. They puff exhaust. They do not pave. Smashing near one tips it. They leave when the city is rewilded or the tar works falls. |
+| 93 busier and dirtier | Thirty vehicles ride the deck, one in three an 18-wheeler with a grimy trailer and a smoking stack. Soot runs down the steel. Three sheets of brown smog hang over the road. |
+| 93 South | The sign reads 93 SOUTH. |
+
+### Findings by seat
+
+- **Coordinator.** One change to one helper moved the whole game off line art. Site-by-site redesign of the utopian architecture and the island is not in this build; it is the next pass if the founder still finds the forms lame under the new light.
+- **Stranger.** Edges now come from shadow. Small figures and signs still read at phone size in the renders.
+- **Osterweil seat.** The roaming trucks make the threat visible without adding a chore, since they never pave.
+- **Aleph.** One file changed. Gauge, speech bubbles and heat marks stay out. The smog is new and stays on the highway only.
+- **Studio Voice.** One word changed on screen: NORTH to SOUTH.
+- **Hitchcock seat.** The lamp gives every scene a lit side and a shaded side, so the eye finds the player first.
+- **AI Skeptic.** "Lumino City" is a game built from real card and photographed; this is drawn card under a painted lamp, and the claim stops there. The forms are the same forms. The test machine's frame rate fell from about 44 to about 24 with the lamp and bloom on; that machine has no graphics chip, and no phone has run the build. If a phone stutters, the bloom is the first thing to cut. No sound was heard.
+- **Conductor.** Rendered at phone size: title, six standing sites, ten grown sites, the highway, a roaming truck, the balloon filmstrip, the island. Eight regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-16
