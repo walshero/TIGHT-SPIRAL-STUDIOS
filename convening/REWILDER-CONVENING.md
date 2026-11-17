@@ -1601,3 +1601,35 @@ The founder asked for cut-paper art on everything the player builds. The studio 
 - **Conductor.** Rendered at phone size: drones at the tower and over the street, the globe from two positions. Five regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-16
+
+## RECONVENE v0.56 (2026-11-17)
+
+Founder, exact words (with a photo of a level 3 site stuck as bare soil, and after asking "What are these flying things"):
+
+> "1. Cut them. 2. Also, in level 3 this property never grows once cleared. 3. Make the oil vacuuming sequence much slower so we can see it. 4. There are weird bird or butterfly ovals in flight that don’t meet papercut standards. 5. Review the restored park scene for weirdness and add a small waterfall connecting the two bodies of water. 6. The balloon should spiral horizontally not vertically"
+
+**Order note.** The build was written and rendered before this section. The seats reviewed the renders after.
+
+### What changed
+
+| Ask | What the build does |
+|---|---|
+| 1. Cut them | The drifting seeds are gone. |
+| 2. Level 3 site never grows | Found the cause in the code. When the city was out of balance, a site was frozen until a paving truck reached it. If that truck was tipped, sunk or never came, the site stayed frozen. A site now freezes only while a truck is on its way to it. |
+| 3. Slower oil vacuuming | The cleanup crew now takes about three times as long to cross the lake. |
+| 4. Weird ovals in flight | Bees are redrawn as cut bees with stripes and two wings. Butterflies are redrawn with two pairs of rounded wings, a body and feelers. |
+| 5. Park review and waterfall | The fountain now stands on a stone terrace with plumes cut from paper, not drawn lines. A rill steps down three stone ledges from the fountain into the pond. One bench moved out of the rill's way. |
+| 6. Balloon spirals horizontally | Both balloon flights now loop flat: wide side to side, shallow up and down, growing as the balloon comes near and shrinking as it goes far. |
+
+### Findings by seat
+
+- **Coordinator.** Item 2 was a real bug, not a tuning issue. The green tower redraw promised last build is not in this one; these six came first.
+- **Stranger.** A bee now looks like a bee at phone size.
+- **Osterweil seat.** A site that silently refuses to grow breaks the player's trust in the rules. That is fixed at the cause.
+- **Aleph.** One file changed. The hedgerow and butterflies between grown neighbors stay.
+- **Studio Voice.** No words changed.
+- **Hitchcock seat.** The rill gives the park one line for the eye to follow, from fountain to pond.
+- **AI Skeptic.** The stuck site was fixed from reading the code; the studio did not reproduce the founder's exact stuck game. The park is still many small things at phone size and has not had the full redraw the globe got. The founder's photo does not show which flying ovals he meant beyond the seeds, so bees and butterflies were both redrawn. The white bird that perches on the player was left alone.
+- **Conductor.** Rendered at phone size: the park in four views, the balloon filmstrip, the end-flight path plot. Five regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-17
