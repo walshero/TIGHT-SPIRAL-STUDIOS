@@ -24,3 +24,13 @@ Signal Rider teaches mostly through words: captions, flashes, the Library. The m
 
 ## Chair recommendation
 Build #1 first, then #3. Hold #2 until the founder has played v0.22's three-match landing.
+
+## Founder pick, 2026-11-16 21:07: "5."
+Read as option 5 of the reply: the advanced set (the plan's moves #2, #3 and #4). All three are built as v0.23 (`claude/signal-rider-build-v23.py`, checks in `claude/signal-rider-v23-checks.py`):
+- **Bare stretch:** the first ride of each visit opens on 13 units of fiber with no insulation. The spark creeps at 0.4x and the readout says 1 m/s. Then the myelin wraps on, with a flash and full speed. A caption and the voice name it afterwards. The crawl does not count toward travel time.
+- **Leaky ring:** a beat with no match drains the charge (relays -0.5, the thinking cortex -0.4). The alarm's charge never leaks. The relay ring shows the live charge.
+- **Ghost spark:** the next ride shows a dashed ring where your last spark was.
+
+**Verified:** the readout fell to 1 in the bare stretch and returned to 75 after it. Both captions appeared. The charge went 1, 0.5, 0 across two missed beats. Ride 2 had no bare stretch and a 98-sample ghost. No page errors. Contrast gate SHIP.
+
+**Still open:** the live balance and spine preview (#1) and the misconception card (#5).
