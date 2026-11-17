@@ -1564,3 +1564,40 @@ Founder, exact words:
 - **Conductor.** Rendered at phone size: title, six standing sites, ten grown sites, the highway, a roaming truck, the balloon filmstrip, the island. Eight regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-16
+
+## RECONVENE v0.55 (2026-11-16)
+
+Founder, exact words, two messages:
+
+> "The drones on level 3 attacking the last building are too hard to see. Add red lights to drones"
+
+> "What’s with the papercut art request? For all the
+> Things
+> We build in the world???
+> Salmon on ocean 10/10. Papercut art. Utopian globe 3/10. Etx"
+
+**Order note.** The build was written and rendered before this section. The seats reviewed the renders after. The founder stopped the first ship step for the drone lights to send the second message, so both land in one build.
+
+### What the second message means, as the studio reads it
+
+The founder asked for cut-paper art on everything the player builds. The studio changed the light and the material across the game in v0.54 and did not redraw the built things themselves. The ocean scene works because it has few pieces, each large, each a clear cut shape. The old globe had a wire mesh and dozens of small props on a flat lawn. That is the gap.
+
+### What changed
+
+| Ask | What the build does |
+|---|---|
+| Drones too hard to see | Every level 3 drone carries two red wingtip lamps that blink in turn, a red belly lamp, a soft red halo and a pale rim. With reduced motion on, the lamps hold steady. |
+| Utopian globe 3/10 | The globe is rebuilt to the ocean standard: a night-teal interior, a glowing lantern sun, three hills, one great tree with a canopy of six big leaves of card, one waterfall off an ochre cliff into a pond, one ribbon walk with four walkers, three flowers the size of people, four paper lanterns, two cranes. The wire mesh is gone; the shell is cream card ribs with a sheen and a shaded side. A stone plinth and a coral arch door with a lit doorway hold it to the street. |
+
+### Findings by seat
+
+- **Coordinator.** The globe is the first built thing redrawn to the ocean standard. The rest of the built list follows the same rule, worst first: green tower, village, farm, hub, park, tram stop, wind hall, rain garden, solar canopy, woods, wetland, clean-water works, then the island homes.
+- **Stranger.** The globe now reads from across the screen as one object with one tree in it.
+- **Osterweil seat.** A reward the player earns on level 3 should look like the best thing in the city. It now competes.
+- **Aleph.** One file changed. The climb test for the globe is untouched. The level 3 screen version of the sphere is untouched.
+- **Studio Voice.** No words changed.
+- **Hitchcock seat.** The lantern is the brightest point and the tree is the largest mass, so the eye lands in the middle and travels out.
+- **AI Skeptic.** One building is redrawn, not all of them, and the score is the founder's to give. The old globe's galleries, easels and sculptures are gone, so it now reads as a garden more than an arts center. Checked in still renders at phone size, not in motion and not on a phone.
+- **Conductor.** Rendered at phone size: drones at the tower and over the street, the globe from two positions. Five regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-16
