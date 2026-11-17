@@ -1674,3 +1674,28 @@ A let-go balloon curves because its jet does not line up with its center of mass
 - **Conductor.** Rendered at phone size: crew cursing, crew repairing, truck righted; the evacuation in three frames with the fall confirmed at zero vehicles; nine balloon frames; the junk jam, the stone dam, the buoys, the lake flyers, the level 3 works at thirteen floors. Eight regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-17
+
+## RECONVENE v0.58 (2026-11-17)
+
+Founder, exact words:
+
+> "Vacation still shortcuts the tar go when you walk right. Vacation has to be to the far right of the tar co now. You can still leave the sign but don’t bypass tar co."
+
+**Order note.** The build was written and tested before this section. The seats reviewed the test after.
+
+### What changed
+
+The cause: the vacation fired at the east edge of the world, and that edge sat before TAR CO until the salmon had found the works. A player who had not found them walked right and went straight on vacation. Now the road east opens as soon as the level is done, and the vacation fires only at the far right, past TAR CO. A Vacation sign stays at the old city edge as a pointer, and a second one stands at the far right where the vacation starts.
+
+### Findings by seat
+
+- **Coordinator.** One rule changed, one ask.
+- **Stranger.** The first sign now means "this way", and the walk past the works is the way.
+- **Osterweil seat.** The player now sees the source of the tar before leaving, which is the point of the level.
+- **Aleph.** One file changed. The works can still be reached without a vacation, as ruled in v0.48.
+- **Studio Voice.** No words changed.
+- **Hitchcock seat.** The walk east now ends on the works, then the lake, then the sign.
+- **AI Skeptic.** Two signs with the same word may read as two doors; only the far one starts the vacation. Tested by placing the player at five points, not by walking the whole way.
+- **Conductor.** On levels 1 and 2, with the works not yet found: no vacation at the city edge, none beside the works, none 120 units short of the far right; vacation at the far right. Three regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-17
