@@ -1740,3 +1740,32 @@ Founder, exact words, three messages:
 - **Conductor.** Rendered at phone size: paved city, helper crew, the flood at four moments, the landing bounce in four frames, the clean city, the park in four views. Eight regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-17
+
+## RECONVENE v0.60 (2026-11-17)
+
+Founder, exact words (after the v0.59 report ended "Next up is the green tower, then the hub and tram."):
+
+> "Take those 2 now then"
+
+**Order note.** The build was written and rendered before this section. The seats reviewed the renders after. The report named three things; the founder wrote "2". The studio looked at all three and redrew two.
+
+### What changed
+
+| Scene | Verdict | What the build does |
+|---|---|---|
+| Green tower | Kept as it is | Looked at again at full size under the v0.54 light. It already reads as one idea, a village stacked in the sky, and its houses are large flat shapes. It is the strongest built scene in the game. No change. |
+| Transit hub | Redrawn | One hall under one great glass fan vault with card ribs and a warm glow inside. One brick clock tower with a working clock. One bus that arrives, opens its door, takes a queue of four, and leaves. One round sign with a bus on it, no word. One tree. |
+| Tram boulevard | Redrawn | One avenue of five great plane trees whose crowns meet overhead. One two-car tram, cream over red, that glides end to end and waits at the stop. One stop with a wave roof and a bench, where three people wait and step aboard. One wire on four bowed masts. One cyclist. |
+
+### Findings by seat
+
+- **Coordinator.** Four built scenes now follow the rule: globe, park, hub, tram. Still owed: wind, woods, rain garden, canopy, river, wetland, village, farm, clean-water works, island homes.
+- **Stranger.** The hub reads as a station from across the screen. The avenue reads as an avenue.
+- **Osterweil seat.** The bus and tram now show the thing the site is for: people getting around.
+- **Aleph.** One file changed. Climbing is untouched. The word HUB is gone from the sign.
+- **Studio Voice.** One word removed.
+- **Hitchcock seat.** The clock tower gives the hub a vertical the eye can find. The tree crowns give the boulevard a ceiling.
+- **AI Skeptic.** Leaving the tower alone is the studio's judgment; the founder asked for it and may still want it redone. The hub's queue stands in front of the tower door. The tram's waiting people vanish while it is away on its second leg, which may read as a glitch. All of this was judged from stills.
+- **Conductor.** Rendered at phone size: hub at three moments of the bus cycle, tram at four, both mid-growth. Five regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-17
