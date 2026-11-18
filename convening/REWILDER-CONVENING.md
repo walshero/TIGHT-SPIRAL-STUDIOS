@@ -1841,3 +1841,43 @@ Founder, exact words, three messages:
 - **Conductor.** Tested by script: tower builds at 34 floors with 14 drones; each breaker throws; the roof refuses with one breaker up and works with all three down; the tower topples, the house bursts, the tower leaves the world with no choice card. Rendered at phone size: the tower at four heights, the village with bridges and Lantern, the bubbles over traffic and crew, wind port and woodland grown and mid-growth. Eight regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-17
+
+## RECONVENE v0.63 (2026-11-17)
+
+Founder, exact words, two messages:
+
+> "Why still owed? Build now!"
+
+> "And change the honks to sound like 70s cars traffic just not high volume"
+
+**Order note.** The build was written and rendered before this section. The seats reviewed the renders after.
+
+### What changed
+
+Eight built scenes were redrawn by the rule of few pieces, each large, one idea each. With these, every scene the player can grow follows the rule.
+
+| Scene | What it is now |
+|---|---|
+| Uncovered river | One stream, one stone arch with a child fishing, one great willow, three ducks in a line. |
+| River set free | Three boulders, white water between them, salmon in the air, one heron that dips its head, one tall pine. |
+| Beaver wetland | One pond, one lodge built of sticks, one long leaking stick dam, one bare snag with a nest, two kits bobbing. |
+| Rain garden | One stone bowl that fills when it rains, one barrel and downspout, five tall flowers each its own kind. |
+| Solar canopy | One sweeping roof of dark panels on three tree-shaped columns, with a glint that crosses it, and one market under it. |
+| Village | Five tall houses leaning together, each its own color and roof, windows that follow the power, one chestnut tree, a cat on a roof. |
+| Farm | One red barn and its silo, one hill of striped fields, one row of sunflowers, one scarecrow with a crow on its arm, three hens. |
+| Clean-water works | One water tower shaped like a drop, carrying the drop sign. One long glass hall. Three round tanks with sweeping arms. One pipe pouring clear water back. One ice cream truck. |
+
+The horn: brassy two-note horns a major third apart, in three kinds. A long lean on a big sedan's horn, a double tap, and now and then a small car's meep. All at low volume, a little louder by the houses.
+
+### Findings by seat
+
+- **Coordinator.** The owed list is empty. Fourteen built scenes follow the rule; the green tower was judged to hold as it was.
+- **Stranger.** Each scene can be named from across the screen: willow, rapids, lodge, flowers, canopy, houses, barn, drop.
+- **Osterweil seat.** The rain garden filling in the rain shows what the site is for, with no words.
+- **Aleph.** One file changed. The drop sign survives on the water tower. Climbing rules are untouched.
+- **Studio Voice.** No words changed.
+- **Hitchcock seat.** Every scene now has one tallest thing and one brightest thing.
+- **AI Skeptic.** Eight redraws in one pass means each was judged from one or two stills, at phone size where they are small. The clean-water works lost its mill wheel, splash court and lookout. The farm and village sit on narrow sites and are tight. The horn was written from a description of 1970s horns and heard by nobody.
+- **Conductor.** Rendered at phone size: all eight scenes grown, plus zooms. Eight regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-17
