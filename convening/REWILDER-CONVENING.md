@@ -1881,3 +1881,33 @@ The horn: brassy two-note horns a major third apart, in three kinds. A long lean
 - **Conductor.** Rendered at phone size: all eight scenes grown, plus zooms. Eight regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-17
+
+## RECONVENE v0.64 (2026-11-17)
+
+Founder, exact words:
+
+> "Forget the middle finger and the honking. Remove both. And make the smog more artistic not a bunch of ovals"
+
+**Order note.** The build was written and rendered before this section. The seats reviewed the renders after. While removing the finger drawing the studio also deleted the village's bridge drawing, which sat next to it in the file. The island regression test caught it before ship and the studio put it back.
+
+### What changed
+
+| Ask | What the build does |
+|---|---|
+| Forget the middle finger | The drawing is deleted. It no longer appears over cars or crews. |
+| Forget the honking | The horn makes no sound. Cars show no bubbles. The truck crew keeps its "!!!". |
+| Smog, not ovals | The smog over 93 is three long sheets of cut paper, one behind another, each with a rolling upper edge and a pale lit lip. Scroll curls ride the sheets, cut as single spirals. Thin wisps rise from the road to feed them. The sheets drift at different speeds. They now cover the whole raised road, not one stretch of it. |
+| Puffs | Every puff of smoke, dust and steam in the game is now a three-lobed scrap of torn paper, with a curl cut into the large ones, not a circle. |
+
+### Findings by seat
+
+- **Coordinator.** Three asks, plus the puffs, which were the other ovals on screen.
+- **Stranger.** The smog reads as weather over the road, in the manner of a woodblock print.
+- **Osterweil seat.** 93 keeps its rust, drips, jam and smog as reasons to bring it down. It no longer needs the noise.
+- **Aleph.** One file changed. Car bubbles are gone; crew bubbles stay.
+- **Studio Voice.** No words changed.
+- **Hitchcock seat.** The bands give the sky over the road a horizon the eye can rest on.
+- **AI Skeptic.** The studio deleted working code by cutting too wide, and only a test caught it. The founder said "the honking"; the studio removed the car bubbles too, since they stood in for honks, and kept the crew's "!!!". If the founder meant only the sound, the bubbles can return. Judged from stills.
+- **Conductor.** Rendered at phone size: the smog at two spots, puffs from a tipped truck. Nine regression tests report no errors after the repair, the island tower run included. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-17
