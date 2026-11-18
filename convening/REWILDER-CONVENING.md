@@ -1803,3 +1803,41 @@ Founder, exact words:
 - **Conductor.** Tested by script: honks fire; the road falls after the trucks pass with no vehicle left on the deck; the vacation refuses with TAR CO standing and starts once it is down; a wrong hatch shocks and costs energy with no damage to the house; six right hatches burst it; the mast then takes damage. Rendered at phone size: 93 by the houses and away from them, the siren trucks, the hatches. Eight regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-17
+
+## RECONVENE v0.62 (2026-11-17)
+
+Founder, exact words, three messages:
+
+> "The final island should be a higher tower, harder to defeat than the last tower of level 3. Requires timing and smarts. Then it breaks down into a connected village in a more architecturallly unique way than now tho the pods are good. Also, remove honks. Replace with bubbles of “!!!” And the occasional middle finger icon because this is Boston. Same with angry crews. I can’t read their speech bubbles. Make them !!!"
+
+> "Also, don’t let the
+> Car smoke show through buildings. Check internal logic of effects to enforce realistic layering."
+
+> "Continue with schedules art improvements this build."
+
+**Order note.** The build was written, tested and rendered before this section. The seats reviewed after. The founder stopped two steps mid-run to add the second and third messages; one stop left a half-moved line that broke the file, and the studio found and repaired it before going on. The three-hatch fight shipped in v0.61 is retired in favor of the tower.
+
+### What changed
+
+| Ask | What the build does |
+|---|---|
+| A higher, harder tower | The Baron's tower stands on the island: 34 floors, about 1,560 units tall, against the level 3 fortress's 24 floors and 1,200. Its live wires come every four floors, not six, with narrower gaps and more that pulse. Fourteen drones circle it. |
+| Timing and smarts | Three breakers sit on the tower's face at a quarter, a half and three quarters of the way up, on alternating sides. Each one thrown turns green and starts an 80-second clock, shown as a shrinking ring. The roof switch works only while all three are down at once. A breaker that springs back says CLACK, and the roof says LOCKED. So the player must plan a route through the wire gaps and climb it fast enough. The mast still shocks until the tower falls, and is the last blow. |
+| A connected village | When the tower falls the house bursts into its pods, as before. Rope bridges now hang from home to home in one chain, strung with lamps, with people crossing. The stump becomes the Lantern: a round stair tower with a ramp wound about it, lit windows, a lookout and a windmill. |
+| Honks become !!! | Every car bubble reads "!!!" in large type. About one in four shows a raised middle finger cut from card. The horn sound stays. |
+| Crew bubbles | Both read "!!!" in larger type. One worker's bubble switches to the finger and back. |
+| Smoke through buildings | Exhaust from vehicles on the raised road is now drawn behind the buildings in front of the road. Bubbles are drawn above the smog, not under it. |
+| Scheduled art | Wind port redrawn: three great turbines of different heights, one long hall under a wave roof with glowing doors, one power line with a spark running to town. Woodland redrawn: a dark back row of firs, five great trees each of its own kind (pine, birch, oak with an owl, maple turning red, pine), one fallen log with mushrooms, one deer that lifts its head, shafts of light. |
+
+### Findings by seat
+
+- **Coordinator.** Six built scenes now follow the rule: globe, park, hub, tram, wind port, woodland. Still owed: rain garden, solar canopy, open river, wetland, village, farm, clean-water works.
+- **Stranger.** "!!!" reads from across the room. Green lever means done, red means not, and the ring says how long.
+- **Osterweil seat.** The breakers turn a climb into a plan. Failure costs time, not the game, so it invites another try.
+- **Aleph.** One file changed. The island tower reuses the fortress rules, so a fix to one reaches both. The island's tower no longer counts as hard ground in the city's flood sum.
+- **Studio Voice.** Three new lines: "Three breakers, then the switch on the roof. They spring back." "A breaker sprang back. All three must be down at once." "The tower powers the mast. Bring the tower down first." The honk words are gone.
+- **Hitchcock seat.** The village now has one tall thing, the Lantern, and lines that lead the eye from home to home.
+- **AI Skeptic.** The tower was tested by script that placed the player at each breaker and at the roof; nobody climbed it. Whether 80 seconds is fair is a guess. The tower stands in front of the Baron's house and covers part of it. The founder wrote "remove honks"; the studio kept the horn sound and removed the words, which may be the wrong half. The raised finger is rude by design and would not suit a classroom build. The layering review covered road exhaust, smog and bubbles; other effects were not audited one by one.
+- **Conductor.** Tested by script: tower builds at 34 floors with 14 drones; each breaker throws; the roof refuses with one breaker up and works with all three down; the tower topples, the house bursts, the tower leaves the world with no choice card. Rendered at phone size: the tower at four heights, the village with bridges and Lantern, the bubbles over traffic and crew, wind port and woodland grown and mid-growth. Eight regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-17
