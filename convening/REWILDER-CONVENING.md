@@ -1699,3 +1699,44 @@ The cause: the vacation fired at the east edge of the world, and that edge sat b
 - **Conductor.** On levels 1 and 2, with the works not yet found: no vacation at the city edge, none beside the works, none 120 units short of the far right; vacation at the far right. Three regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-17
+
+## RECONVENE v0.59 (2026-11-17)
+
+Founder, exact words, three messages:
+
+> "The flooding can be more artfully done and with more impact on the game. Is it worth distinguishing “good” bulldozers from bad ones?"
+
+> "What’s needed in terms of art if we want to try for award-winning?"
+
+> "Ok, let’s implement. 1-5 and 7 and I will provide human eye. Ready for next great build"
+
+**Order note.** The build was written and rendered before this section. The seats reviewed the renders after. The numbers refer to the studio's list: 1 one rule for every picture, 2 the transformation as the showpiece, 3 people with character, 4 motion with weight, 5 depth and light as a system, 7 sound and screens. Item 6, a human hand, is the founder's.
+
+### What changed, against the list
+
+| Item | In this build | Still owed |
+|---|---|---|
+| 1. One rule for every picture | The park is redrawn by the rule: two lawns, one pond, one rill, one fountain, one great oak with one swing, one bandstand, one kite. The globe was done in v0.55. | Hub, tram, wind, woods, rain garden, canopy, river, wetland, green tower, village, farm, clean-water works, island homes. A fixed palette is not yet enforced. |
+| 2. The transformation | A grey-brown pall lies over a paved city and lifts as sites grow. Each finished site sends a ring of warm light across the scene. | A staged, single-view turn from dirty to clean. |
+| 3. People with character | Every figure in the game is now one of a cast: four builds, four garments, six kinds of hair or hat, five skin tones, things carried, legs that step, arms that swing or wave. | Named characters and gestures beyond walk and wave. |
+| 4. Motion with weight | A finished site lands with a squash and settle. The flood rises, holds and recedes. | Collapse and growth still move as before. |
+| 5. Depth and light | The lamp's strength follows the city's health. | Three planes with their own focus and haze. |
+| 7. Screens and sound | Cards and sheets are lifted paper: no black border, a stacked card edge, a slight tilt, card buttons. | Title and menu. Sound, which the studio cannot hear. |
+
+### The two asks from the first message
+
+- **Flood.** Two sheets of cut-paper water rise against hard ground and stay low where the ground soaks. Foam curls ride the back sheet. Street junk floats toward the sea: a cone, a tire, a plank, a rubber duck, a crate, a leaf, a ball. Silt is left behind. Impact: a growing site next to a grown soaker is spared, and the game says which soaker drank it. A site hemmed in by two hard neighbors loses more. The flood muddies the river and sets its recovery back. The water pushes a walking player gently downstream.
+- **Good and bad bulldozers.** The studio's answer is yes, cheaply. Machines pave. Hands plant. The helper crew now wears green overalls and straw hats, digs with spades, and wheels a barrow of saplings. There is no good bulldozer.
+
+### Findings by seat
+
+- **Coordinator.** This is a first installment, not the whole list. The table says what is owed.
+- **Stranger.** Yellow hard hats on a machine mean trouble. Green overalls with a spade mean help. No words needed.
+- **Osterweil seat.** The flood now teaches placement: a rain garden beside young growth protects it. That is a rule a player can find by playing.
+- **Aleph.** One file changed. Speech bubbles stay with the truck crew only. Gauge, heat marks and seeds stay out.
+- **Studio Voice.** One new sentence: "The rain garden drank the flood before it reached the park." It names both sites by their short names.
+- **Hitchcock seat.** The park now has a centre: the oak. The eye lands there and reads outward to the fountain and the bandstand.
+- **AI Skeptic.** Two of about fifteen built scenes follow the rule. Calling the art award-level today would be false. The pall over the paved city darkens the hardest scenes for a low-vision player; it was cut from 0.42 to 0.2 after the first render for that reason, and the founder's eye should check it. The river setback from a flood is new balance and untested in play. The downstream push is small and may read as a bug. The old park's playground, benches and flower rows are gone.
+- **Conductor.** Rendered at phone size: paved city, helper crew, the flood at four moments, the landing bounce in four frames, the clean city, the park in four views. Eight regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-17
