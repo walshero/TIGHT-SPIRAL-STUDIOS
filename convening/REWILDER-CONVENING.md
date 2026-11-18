@@ -1769,3 +1769,37 @@ Founder, exact words (after the v0.59 report ended "Next up is the green tower, 
 - **Conductor.** Rendered at phone size: hub at three moments of the bus cycle, tram at four, both mid-growth. Five regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-17
+
+## RECONVENE v0.61 (2026-11-17)
+
+Founder, exact words:
+
+> "1. Let new locations take longer to grow 1-2 minutes, so the payoff is greater. 2. Make 93 more of an eyesore needing destruction by making it rusty, dripping, contested, and full of honking (bubbles and in-game. Volume of honking is medium unless you are standing next to houses and the volume and bubbles get louder. 3. When you destroy the bridge,
+> Don’t sent people up theee — send in yellow siren trucks that chase all the
+> Cars
+> Away and then the bridge tumbles. 4. Don’t allow vacation until tar company is destroyed. 5. Complicate the baron’s defeat by making a puzzle of some kind. Need a final battle it’s all anticlimactic."
+
+**Order note.** The build was written and tested before this section. The seats reviewed the tests and renders after. Three earlier rulings meet this message and the newer words govern: honking was limited to a player on the expressway and is now everywhere; the island was frozen and now gets a fight; speech bubbles were cut for townsfolk and are now asked for over honking cars. The studio read "contested" as "congested".
+
+### What changed
+
+| Ask | What the build does |
+|---|---|
+| 1. Slower growth | A site left alone takes about 100 seconds. With the player beside it, about 65. A helper crew still speeds it. |
+| 2. 93 as an eyesore | Rust patches on the steel. Rusty drops fall from the deck and leave puddles. Forty-six vehicles crawl bumper to bumper. Cars honk in speech bubbles and in sound. Away from the houses the honks are medium and the bubbles cream. Beside the triple-deckers they come more than twice as often, louder, in big yellow bubbles. |
+| 3. Siren trucks | The flaggers and cones are gone. Two yellow trucks with flashing red and blue lights and a two-tone siren sweep the deck and chase the cars off. Then the road falls. |
+| 4. Vacation lock | The vacation will not start while TAR CO stands. Reaching the far right early gives one line: "Bring down TAR CO first." |
+| 5. Final battle | Three round hatches stand at the foot of the Baron's house. One at a time opens, glows orange and vents steam. Strike that one. The other two crackle blue and throw the player back with a shock. Each good strike closes all three for a moment, then a different one opens, and the pace quickens. Six good strikes burst the house. Meanwhile the Baron drops tar barrels, each with a red mark on the ground where it will land. A humming cable runs from the house to the mast, and the mast shocks anyone who hits it while the house stands. So the mast is the last blow, and the balloon's spiral into the pool is the ending. |
+
+### Findings by seat
+
+- **Coordinator.** Five asks, five changes. The art list from v0.59 did not advance in this build.
+- **Stranger.** Orange and steaming means hit. Blue and crackling means do not. That reads without the hint line.
+- **Osterweil seat.** The fight now asks the player to watch, wait and move, which the rest of the game has taught. The barrel marks keep it fair. The slower growth makes each finished site an event.
+- **Aleph.** One file changed. The island's art is untouched apart from the hatches, the cable and the barrel mark. Speech bubbles now exist over the truck crew and over honking cars only.
+- **Studio Voice.** Three new lines, each one sentence: "Bring down TAR CO first." "Hit the hatch that vents steam. The blue ones bite." "The house powers the mast. Crack the house first."
+- **Hitchcock seat.** The fight has a shape now: learn the rule, speed up under fire, burst the house, then one clean last blow at the mast.
+- **AI Skeptic.** The puzzle is a pattern fight, not a logic puzzle; the founder may want something more cunning. It was tested by script, not played, so its difficulty is a guess: six strikes, windows from 3.8 seconds down to 1.9, barrels every 3.8 down to 2.1. The turtle shrugs off shocks and barrels, which may make the fight trivial as the turtle. Slower growth lengthens every level and may drag. Louder honking by the houses was not heard by anyone.
+- **Conductor.** Tested by script: honks fire; the road falls after the trucks pass with no vehicle left on the deck; the vacation refuses with TAR CO standing and starts once it is down; a wrong hatch shocks and costs energy with no damage to the house; six right hatches burst it; the mast then takes damage. Rendered at phone size: 93 by the houses and away from them, the siren trucks, the hatches. Eight regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-17
