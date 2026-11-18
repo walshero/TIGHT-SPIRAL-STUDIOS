@@ -22,3 +22,21 @@ One combined moment of about 6 s:
 4. Temple bell, then the end card.
 
 The alarm ending gets its own calm visual (the alarm glows and settles; "the body protecting you"), never a "lose" screen.
+
+## Founder pick, 2026-11-17 20:32: "1." Built as v0.24 (`claude/signal-rider-build-v24.py`)
+**The cortex ending runs about 6.5 s, and a tap skips it:**
+1. The camera rides the bright signal head and pulls back from 3x to the full route. The route draws as a five-strand Brainbow bundle, fingertip to cortex, and each relay flashes as it passes.
+2. Your neuron blooms in the cortex, with the temple bell at 2.4 s.
+3. A ripple at the fingertip is answered by the neuron's pulse.
+4. "You felt it." appears at 5.2 s and is spoken.
+
+**The alarm ending runs about 4.6 s:** the route lights to the sensory cortex, the alarm swells pink, then settles into a slow amber breath. "Your alarm answered first." appears at 3.6 s.
+
+**Throughout:** the HUD and messages hide during the ending. The end card shows your neuron. Reduced motion: no camera move, a 2.6 s version.
+
+**Verified:**
+- A full hard-week ride triggered the ending from the real finish (timeline 0 to 6.3 s, then the card).
+- Frame strips of both endings were checked for composition, fit and the hidden HUD.
+- No page errors. Contrast gate SHIP.
+
+**Held:** Osterweil's "a picture of what you felt" (a hand, fur) is a line of words, not a drawing. A drawn object would need its own art pass to clear the studio's no-uncanny bar.
