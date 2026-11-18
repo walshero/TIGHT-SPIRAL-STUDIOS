@@ -3,9 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Rewilder v0.66</title>
+<title>Rewilder v0.67</title>
 <meta name="audience" content="Founder playtest first; phone-first players, teens and college students. Lab build.">
-<!-- TSP build: Rewilder v0.66 | LAB | 2026-11-18
+<!-- TSP build: Rewilder v0.67 | LAB | 2026-11-18
+     v0.67 (founder thesis, voice 2026-11-18: "That thoughtful design can meet the needs of everybody." Then: "I think all three." and "Build it from here")
+       Needs as people, with no meters and no words. Each need runs a neglect clock. Way around: a bus stop with no bus by the first
+       triple-deckers, and a queue that grows; it shrinks as people board once a hub or tram grows. Power: dark windows, one candle on
+       the second block. Dry ground: storm water stands against the footings of the block nearest hard ground when rain falls on more
+       hard ground than soaking ground. Crews: the growth-timer crews were switched off (spawnTruck returned unless forced); a crew
+       now pulls out from the curb of the block whose need has gone unmet longest (over 10 s, only while TAR CO stands) and heads for
+       the nearest young site. The Baron: no longer on a timer. He comes only where a need has gone unmet too long (26 s in level 1,
+       21 s in level 2, 16 s in level 3) and sells it badly: a gas pump, a diesel generator, or a concrete flood wall. A bad fix stops
+       the queue, the candle and the crews, and counts as hard ground, so it makes floods worse. Three hits break it, or it falls
+       apart when he floats home.
      v0.66 (founder: "Ready for the buttons and ui improvement build.")
      v0.65 (founder: "Forget speech bubbles for workers too. Speech bubbles across the board look cheap and sloppy. Cut. Also the smog decor is too hard to see and doesn’t match game style. Rethink smog effect for the bridge in paper cut. Traffic should be bumper to bumper and the demolition safety crew should rush by the player, go properly up the ramp, and quickly sweep all traffic off. Whole thing less than 5 seconds.")
      v0.64 (founder: "Forget the middle finger and the honking. Remove both. And make the smog more artistic not a bunch of ovals")
@@ -556,7 +566,7 @@ body.touch .se-chrome p{display:none}
 
 <header class="se-chrome" id="topbar">
   <a class="nav" href="../arcade.html">Cabinet</a>
-  <h1>Rewilder <span class="ver">v0.66</span> <span class="tsp-labchip">LAB</span></h1>
+  <h1>Rewilder <span class="ver">v0.67</span> <span class="tsp-labchip">LAB</span></h1>
   <button id="modeBtn" class="icon" type="button" aria-label="Mode: Dark. Switch to Light."><svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="8"/><path d="M14 6a8 8 0 0 0 0 16z" style="fill:var(--glyph)"/></svg></button>
   <nav class="se-rail" aria-label="Page navigation"><a class="nav" href="./index.html">Back</a></nav>
   <button id="notesBtn" type="button">Field notes</button>
@@ -800,6 +810,9 @@ const cam={x:0,y:0};
 const P={x:120,y:GY,vx:0,vy:0,face:1,support:'ground',climb:null,punch:0,cool:0,energy:100,nap:0,bump:0,walk:0,charge:0,spin:0,squash:0,dizzy:0,cheer:0,tumble:0,idle:0,zap:0,singe:0,stuck:0,slide:null,dive:false,cmb:0,cmbT:0,sup:0};
 const stats={hits:0,crews:0,paved:0,start:0,floods:0,boosts:0,lifts:0,floors:0,cars:0,baron:0,topples:0};
 let F={hard:4,soak:0,tn:0,tm:0,pn:0,pm:0,unmet:0,links:0,haze:true};
+// v0.67 needs as people: each block's need runs a neglect clock; crews and the Baron come from neglect, not from a timer
+const DECKS=[1545,2512];let needs=null,needCrewT=20,badFix=[];
+function needsReset(){needs={go:{kind:'go',t:0,vis:0,ax:DECKS[0]},power:{kind:'power',t:0,vis:0,ax:DECKS[1]},dry:{kind:'dry',t:0,vis:0,ax:DECKS[0]}};needCrewT=20;badFix=[]}needsReset();
 const FLD=7,BRT=80,honks=[];let pulse=null,hl=0,roamT=3,rivRec=0,rivFl=-1,lightV=.5,level=1,vacT=0,life=[],lifeT=14,lifeI=0,done=false,hitstop=0,baron=null,baronT=40,baronHp=3,barrels=[],tar=[],crates=[],pits=[],folk=[],who='beaver',rest={energy:100},crewT=14,stormT=26,rain=0,flood=0,rainbow=0,sed=null,beach=0,toastT=0,lensT=0,gardeners=0,crewSeen=0,swim=null,bills=[],drones=[],fort=null,tdr=[],riverOn=false,via=null,plotsOpen=false,tireJam=null,restX=FRX,plug={x:1000,hp:0,max:1,seen:false},lungeOn=false,downed=null,restartT=0,isle=null,fishSave=null,run=null,REDX=3500,docks=[],junk=[],grate={x:0,hp:0,max:1},eels=[],walls=[],vb=null,vacEnd=0,DY=0;
 
 function buildSite(d,i){const rows=[];for(let f=0;f<d.floors;f++){const row=[];for(let c=0;c<d.cols;c++){let t=d.cell(c,f);const hp=t?Math.max(1,Math.round((HP[t]+(f<2&&t!=='k'&&d.floors>2?3:0)+(t!=='k'?(d.hpx||0):0))*(t==='s'?2/3:1))):0;row.push(t?{t,hp,max:hp,seed:i*1000+f*17+c*3,stack:d.id==='coal'&&f>=7}:null)}
@@ -1134,7 +1147,7 @@ function flows(){const f={hard:0,soak:0,tn:0,tm:0,pn:0,pm:0,links:0,haze:sites[2
   if(s.id==='garage'||s.id==='highway'||s.id==='lot')f.tn++;if(s.id==='coal')f.pn+=2;
   const c=CH[s.choice];if(!c)return;const k=s.state==='grown'?1:s.g,m=s.state==='grown'?1:.5;f.soak+=c.soak*k;f.tm+=(c.travel||0)*m;f.pm+=(c.power||0)*m});
  for(let i=0;i<4;i++){const a=sites[i],b=sites[i+1];if(a.state==='grown'&&b.state==='grown'&&CH[a.choice].hab&&CH[b.choice].hab)f.links++}
- f.tu=Math.max(0,f.tn-f.tm);f.pu=Math.max(0,f.pn-f.pm);f.unmet=f.tu+f.pu;return f}
+ f.hard+=badFix.filter(q=>q.down).length;f.tu=Math.max(0,f.tn-f.tm);f.pu=Math.max(0,f.pn-f.pm);f.unmet=f.tu+f.pu;return f}
 function rate(s){let m=1;s.why=[];
  if(F.haze){m*=.75;s.why.push('coal haze')}
  {const o=sites.slice().sort((a,b)=>a.x-b.x),k=o.indexOf(s);var nbs=[o[k-1],o[k+1]]}
@@ -1184,7 +1197,7 @@ function lensText(){const d=F.hard-F.soak,next=d>1.5?'The next rain will flood y
 /* ---------- actions ---------- */
 function target(s){const c=colOf(s,P.x),f=chestF(s),o=[[c,f],[c+P.face,f],[c,f+1],[c,f-1],[c-P.face,f]];for(const q of o)if(q[0]>=0&&alive(s,q[0],q[1]))return q;return null}
 function strike(power,mv){const tu=who==='turtle';if(mv==='fwd'&&!P.climb&&P.support==='ground'){const nx=P.x+P.face*52;if(!sites.some(s=>s.state==='standing'&&nx>s.x-26&&nx<s.x+s.w+26)&&!walls.some(wl=>wl.up&&Math.abs(wl.x-nx)<34)){P.x=xClamp(nx,P.x,60);P.px=P.x;dust(P.x-P.face*40,GY,3,20)}}
- billHit(power);if(lairHit(power))return;if(pierHit(power))return;if(tankHit(power))return;lungeOn=tu&&mv==='fwd';if(lungeOn){P.lunge=.42;word('CHOMP',P.x+P.face*80,P.y-120,'#ffd23f')}if(fort&&fortStrike())return;if(tu&&power<3)power=3;P.punch=.26;P.cool=tu?.6:power>1?.45:.26;if(power>=4){P.spin=.5;const rx0=P.x+P.face*48;trucks.forEach(t=>{if(t.state!=='tipped'&&Math.abs(t.x-rx0)<150&&P.y>GY-160)tipTruck(t)});stars(rx0,P.y-60,10);shake=RM?0:14;hitstop=.12;word('KABOOM',rx0,P.y-150,'#ffd23f');SFX.slam();SFX.collapse()}
+ billHit(power);if(fixHit(power))return;if(lairHit(power))return;if(pierHit(power))return;if(tankHit(power))return;lungeOn=tu&&mv==='fwd';if(lungeOn){P.lunge=.42;word('CHOMP',P.x+P.face*80,P.y-120,'#ffd23f')}if(fort&&fortStrike())return;if(tu&&power<3)power=3;P.punch=.26;P.cool=tu?.6:power>1?.45:.26;if(power>=4){P.spin=.5;const rx0=P.x+P.face*48;trucks.forEach(t=>{if(t.state!=='tipped'&&Math.abs(t.x-rx0)<150&&P.y>GY-160)tipTruck(t)});stars(rx0,P.y-60,10);shake=RM?0:14;hitstop=.12;word('KABOOM',rx0,P.y-150,'#ffd23f');SFX.slam();SFX.collapse()}
  if(power===1){P.cmb=(T-P.cmbT<.9)?P.cmb+1:1;P.cmbT=T;if(P.cmb>=3){power=2;P.cmb=0}}
  if(power<3&&mv){power=2;P.cool=Math.max(P.cool,.5);word(mv==='up'?'UPPERCUT':P.climb?'GNAW':'CHARGE',P.x+P.face*30,P.y-140,'#ffd23f')}
  if(stats.hits>8)once('moves','Hold a direction while you smash for a different move.',8);
@@ -1227,10 +1240,10 @@ function knockOut(){P.ko=false;P.gc=null;if(restartT>0)return;SFX.collapse();sha
  const x=clamp(P.x,60,WORLD-80);word('OUT',x,GY-170,'#ffd23f');downed={x,face:P.face};tagOut();rest.energy=0;if(P.energy<60)P.energy=60;
  Object.assign(P,{x:FRX,y:GY,vx:0,vy:0,face:-1,support:'ground',climb:null,slide:null,nap:0,tumble:0});P.px=P.x;restX=x;hudKey=''}
 function reviveFriend(){const x=downed.x;downed=null;rest.energy=60;SFX.grow();word('UP',x,GY-170,'#7cc35a');leaves(x,GY-60,10);hudKey=''}
-function spawnBaron(){const x=P.x<WORLD/2?cam.x+viewW+220:cam.x-220;baron={x,y:GY-310,hp:baronHp,state:'fly',life:0,hold:0,drop:1.2,snag:0,snagged:[],jolt:0,t:0,tx:null,dir:1};SFX.blimp();word(pick(['BEHOLD: PARKING','PROGRESS','ALL MINE']),clamp(x,cam.x+90,cam.x+viewW-90),GY-250,'#ffd23f');
+function spawnBaron(w){const x=w?w.ax+(w.ax<P.x?-1:1)*(viewW*.5+160):P.x<WORLD/2?cam.x+viewW+220:cam.x-220;baron={x,y:GY-310,hp:baronHp,state:'fly',life:0,hold:0,drop:1.2,snag:0,snagged:[],jolt:0,t:0,tx:w?w.ax+60:null,need:w?w.kind:null,dir:1};SFX.blimp();word(pick(['BEHOLD: PARKING','PROGRESS','ALL MINE']),clamp(x,cam.x+90,cam.x+viewW-90),GY-250,'#ffd23f');
  toast('The Baron is coming. Smash his anchor '+baronHp+' times.',4)}
 function yank(){const b=baron;b.hp--;b.jolt=.5;b.hat=1.6;word(b.hp<=0?'I MEANT TO DO THAT':pick(['MY HAT','UNHAND MY BLIMP','I SAY']),b.x,b.y-70,'#fbf3dc');puff(b.x,b.y+24,{kind:'chunk',vx:(Math.random()-.5)*220,vy:-300,g:700,r:8,c:'#1b1328',life:1.5,max:1.5,vr:9});SFX.slam();hitstop=.06;stars(b.x,GY-110,6);word('YANK',b.x,GY-170,'#ffd23f');shake=RM?0:7;
- if(b.hp<=0){b.state='out';b.t=0;b.dir=P.x<b.x?1:-1;b.px=b.x;b.py=b.y+60;SFX.pfft();stats.baron++;P.cheer=1.4;baronHp=Math.min(6,baronHp+1);toast('The Baron floats home.',5)}}
+ if(b.hp<=0){b.state='out';b.t=0;b.dir=P.x<b.x?1:-1;b.px=b.x;b.py=b.y+60;SFX.pfft();stats.baron++;badFix.forEach(q=>fixBreak(q));P.cheer=1.4;baronHp=Math.min(6,baronHp+1);toast('The Baron floats home.',5)}}
 function baronStep(dt){const b=baron;b.life+=dt;if(b.jolt>0)b.jolt-=dt;if(b.hat>0)b.hat-=dt;
  if(b.state==='out'){b.t+=dt;{const ph=b.t*(5.2+b.t*1.5),k=Math.max(.25,1-b.t/5),limp=b.t>3.7,vx=limp?Math.sin(b.t*5.4)*150:b.dir*40+Math.cos(ph)*420*k,vy=limp?95:-22+Math.sin(ph)*74*k;b.x+=vx*dt;b.y+=vy*dt;b.hd=limp?1.5708+Math.sin(b.t*5.4)*.7:Math.atan2(vy,vx*b.dir);b.dp=limp?0:Math.sin(ph);if(!limp&&Math.random()<dt*(18+16*Math.abs(Math.sin(b.t*9))))puff(b.x-Math.cos(b.hd)*b.dir*110,b.y-Math.sin(b.hd)*110,{kind:'steam',r:5,gr:16,c:'#f1ece2',life:.5,max:.5})}b.py=Math.min(GY,b.py+70*dt);if(b.py>=GY)b.px+=b.dir*60*dt;if(b.t>6.2||b.y>GY-20){dust(b.x,GY,5,40);baron=null;baronT=75}return}
  if(b.life>34&&b.state!=='leave'){b.state='leave';b.dir=b.x<P.x?-1:1}
@@ -1238,7 +1251,7 @@ function baronStep(dt){const b=baron;b.life+=dt;if(b.jolt>0)b.jolt-=dt;if(b.hat>
  if(b.state==='fly'){if(b.tx===null){const gr=sites.filter(s=>s.state==='growing');b.tx=gr.length?gr[Math.floor(Math.random()*gr.length)].cx:P.x}
   if(b.snag>0){b.snag-=dt}else{const d=b.tx-b.x;b.x+=Math.sign(d)*Math.min(Math.abs(d),95*dt);
    const c=crates.find(c=>c.g&&Math.abs(c.x-b.x)<26&&!b.snagged.includes(c));if(c){b.snagged.push(c);b.snag=4.5;b.jolt=.4;word('SNAG',b.x,GY-150,'#e8c25a');once('snag','His anchor caught on your block. Hit it.',4.5)}
-   if(Math.abs(d)<8){b.state='hover';b.hold=6}}}
+   if(Math.abs(d)<8){if(b.need&&!b.sold){b.sold=1;dropFix(b.need,b.x)}b.state='hover';b.hold=6}}}
  else if(b.state==='hover'){b.hold-=dt;b.drop-=dt;if(b.drop<=0){b.drop=1.6;barrels.push({x:b.x+(Math.random()-.5)*70,y:b.y+50,vy:0})}if(b.hold<=0){b.state='fly';b.tx=null}}}
 function dig(){const gs=done&&sites.find(s=>s.state==='grown'&&P.x>s.x&&P.x<s.x+s.w);if(gs)openPick(gs,true)}
 function crate(x,y,dir){if(crates.length>=10)crates.shift();crates.push({x,y,vx:dir*170,vy:-140,g:false,seed:Math.floor(x+y)});SFX.clang();word('SHOVE',x,y-34,'#e8c25a')}
@@ -1288,7 +1301,7 @@ function update(raw){if(state==='vacation'){vacT+=raw;T+=raw;vacStep(raw);return
  if(state!=='play'||paused()){P.walk+=dt;tick(dt);camFollow(dt);return}
  if(done&&depot&&!depot.seen)depot.seen=true; // the road east opens when the level is done, so the vacation always lies past TAR CO
  if(done&&P.support==='ground'&&P.x>WORLD+1720-52){if(tarUp())once('tarfirst','Bring down TAR CO first.',5);else{beginVacation();return}}
- F=flows();
+ F=flows();needStep(dt);
  hazards(dt);
  sites.forEach(s=>{
   if(s.state==='growing'&&!s.paving){const near=P.x>=s.x-30&&P.x<=s.x+s.w+30&&P.y>GY-140;s.tend=near;if(s.reopt&&!trucks.some(t=>t.target===s&&t.state==='drive'))s.reopt=false;const m=rate(s);
@@ -1314,7 +1327,7 @@ function update(raw){if(state==='vacation'){vacT+=raw;T+=raw;vacStep(raw);return
      if(s.id==='dam'&&!riverOn){riverOn=true;SFX.grow()}once('story2','The river reaches the sea again.',6)}
    if(s.state==='grown'&&level===1)once('story1','',5)}
   s.was=s.state});
- if(baron)baronStep(dt);else if(sites.some(s=>s.state==='growing'||s.state==='grown')){baronT-=dt;if(baronT<=0)spawnBaron()}
+ if(baron)baronStep(dt);else{const w=worstNeed();if(w&&w.t>Math.max(10,26-level*5)){baronT-=dt*4;if(baronT<=0)spawnBaron(w)}}
  for(let i=barrels.length-1;i>=0;i--){const q=barrels[i];q.vy+=700*dt;q.y+=q.vy*dt;
   if(Math.abs(q.x-P.x)<36&&q.y>P.y-125&&q.y<P.y-5&&P.tumble<=0){barrels.splice(i,1);hurt(8);P.stuck=1.4;SFX.splat();word('SPLAT',P.x,P.y-150);continue}
   if(q.y>=GY-8){barrels.splice(i,1);SFX.splat();tar.push({x:q.x,t:6});const s=sites.find(s=>s.state==='growing'&&q.x>s.x&&q.x<s.x+s.w);if(s){s.g=Math.max(0,s.g-.07);word('SPLAT',q.x,GY-60);once('tar','Tar sets growth back. Yank his anchor.',5)}}}
@@ -1879,7 +1892,7 @@ function drawOil(D){setWorld(.5);const base=cam.y*.5*.4+396,x0=cam.x*.5-80;ctx.g
 function beginVacation(){state='vacation';vacT=0;vacEnd=0;swim=null;upQ=smashQ=false;K.u=0;$('swimBtn').classList.remove('can');$('tagBtn').classList.remove('can');vb={x:268,y:548,vx:0,vy:0,rot:0,n:0,best:0,hop:0,hopT:0,kind:[0,0,1,2][(level-1)%4],sal:(level-1)%4===1,toSea:false,side:0,sl:0,st:null,fw:[]};setLens(false);K.l=K.r=K.u=K.d=0;$('toast').classList.remove('on');toastT=0;SFX.grow()}
 function startLevel(){level++;riverOn=true;sites=sites.slice(0,5).map(o=>{const d=Object.assign({},SITE_DEF[o.i],L2[o.id]);if(o.id==='coal'&&level>=3){d.name='Eye';d.eye=true;d.x=1597;d.cols=8;d.cw=62;d.floors=10;d.fh=50;d.cell=(c,f)=>Math.hypot((c+.5)*62-248,(f+.5)*50-250)<=250?'d':null}if(o.id==='garage'||o.id==='dam')d.floors=Math.min(13,d.floors+level-2);if(o.id==='garage'&&level>=3){d.floors=Math.min(34,24+(level-3)*4);d.name='fortress';d.x=150;d.cols=7;d.cw=52}d.hpx=Math.min(3,level-2);const s=buildSite(d,o.i);s.choice=o.choice;s.fed=o.fed;s.restore=true;s.l2=true;return s});if(level>=2)sites[2].choice='arts';if(level>=3)sites[0].choice='eco';
  swim=null;waterInit();bills=[0,1,2,3].map(i=>{const a=sites[i],b=sites[i+1];return{x:(a.x+a.w+(a.id==='highway'?300:0)+b.x)/2-10+(i===3?85:0),hp:1+level,t:0,jolt:0,i,msg:''}});drones=[];bills.forEach((b,i)=>{for(let q=0;q<(level>=3?2:1);q++)drones.push({b,x:b.x,y:GY-240,ph:i*1.7+q*3.1,spot:0,dead:0})});if(level>=3)bills.forEach((b,i)=>drones.push({b,x:b.x,y:GY-300,ph:i*2.3+1,spot:0,dead:0,wide:520}));
- trucks=[];props=[];crates=[];pits=[];life=[];barrels=[];tar=[];words=[];baron=null;baronT=Math.max(8,26-level*4);baronHp=Math.min(8,2+level);done=false;sed=null;rain=0;stormT=26;crewT=14;
+ trucks=[];props=[];crates=[];pits=[];life=[];barrels=[];tar=[];words=[];baron=null;needsReset();baronT=Math.max(8,26-level*4);baronHp=Math.min(8,2+level);done=false;sed=null;rain=0;stormT=26;crewT=14;
  Object.assign(P,{x:WORLD-130,y:GY,vx:0,vy:0,face:-1,support:'ground',climb:null,slide:null,dive:false,nap:0,energy:100,sup:0});rest.energy=100;stats.start=T;state='play';hudKey='';cam.x=WORLD;
 }
 function drawVacation(){const t=vacT;ctx.setTransform(DPR,0,0,DPR,0,0);const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#4a9be0');g.addColorStop(.55,'#cdeef6');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
@@ -2370,7 +2383,7 @@ function drawHomes(a,b){if(!F)return;const coal=sites[2].state==='standing'&&!si
     shape(rectPts(px,fy+4,pw,FH-4,sd+i+f+3,.2),mix(col,'#1b1328',.38),{lw:1.2});
     if(f===0){shape(rectPts(px+17,fy+10,10,FH-10,sd+i+4,.2),trim,{lw:1});shape(rectPts(px+18.4,fy+15,7.2,FH-15,sd+i+5,.2),h[3],{lw:1});shape(rectPts(px+18.4,fy+11,7.2,3,sd+i+6,.2),wc,{lw:.7});ctx.fillStyle='#ffd23f';ctx.beginPath();ctx.arc(px+24,fy+30,1.1,0,7);ctx.fill()}
     else{shape(rectPts(px+16,fy+10,11,17,sd+i+f+7,.2),trim,{lw:1});shape(rectPts(px+17.4,fy+11.4,8.2,14.2,sd+i+f+8,.2),wc,{lw:.8})}
-    shape(rectPts(px+3,fy+10,10,17,sd+i+f+9,.2),trim,{lw:1});shape(rectPts(px+4.4,fy+11.4,7.2,14.2,sd+i+f+10,.2),wc,{lw:.8});if(lit)shape(rectPts(px+4.4,fy+11.4,3,14.2,sd+i+f+11,.2),['#d9534a','#2f8f8a','#e8c25a'][(i+f)%3],{ln:false});
+    shape(rectPts(px+3,fy+10,10,17,sd+i+f+9,.2),trim,{lw:1});shape(rectPts(px+4.4,fy+11.4,7.2,14.2,sd+i+f+10,.2),wc,{lw:.8});if(lit)shape(rectPts(px+4.4,fy+11.4,3,14.2,sd+i+f+11,.2),['#d9534a','#2f8f8a','#e8c25a'][(i+f)%3],{ln:false});else if(needs&&F.pu>0&&cx===needs.power.ax&&f===(i+1)%3){const fl=RM?0:Math.sin(T*11+i*3)*.5+Math.sin(T*17+i)*.3;ctx.globalAlpha=.35;dot(px+8,fy+20,6+fl,'#e8a22a');ctx.globalAlpha=1;shape(rectPts(px+7,fy+20,2.2,5,i,.1),'#fbf6ea',{lw:.6});dot(px+8.1,fy+18.6+fl*.4,1.5,'#ffd23f')}
     // things people keep on a porch
     if(f===1&&i!==1){shape(rectPts(px+5,fy+FH-14,7,8,sd+i+12,.3),'#8a5a34',{lw:.9});strip(px+5,fy+FH-14,px+5,fy+FH-22,1.8,'#8a5a34',{lw:.5})}
     if(f===2&&i!==0){line(px+9,fy+5,px+9,fy+11,'#5b3a24',1);shape(blobPts(px+9,fy+15,5.4,4.6,sd+i+13,7),'#5fae50',{lw:.9});shape(ellPts(px+7,fy+13,1.6,1.6,1),'#f3b6c8',{ln:false})}
@@ -2397,7 +2410,7 @@ function drawHomes(a,b){if(!F)return;const coal=sites[2].state==='standing'&&!si
   [cx-104,cx-34,cx+32,cx+100].forEach((hx,m)=>shape(blobPts(hx,GY-10,9,8,sd+m+40,8),m%2?'#3f8443':'#4f9a48',{lw:1.2}))});
  [575,1408,1672,2085,2392,2614].forEach((x,i)=>{if(x<a-60||x>b+60)return;strip(x,GY-4,x,GY-92,4.5,'#3a3a40',{lw:1});strip(x,GY-92,x+14,GY-96,3.5,'#3a3a40',{lw:1});if(v>.2){ctx.globalAlpha=.17*v;shape([[x+14,GY-90],[x-24,GY-4],[x+52,GY-4]],'#ffe9b0',{ln:false});ctx.globalAlpha=1}shape(ellPts(x+14,GY-93,8,5.5,i+940),mix('#52525a',tg<.75?'#e8a22a':'#ffe9b0',clamp(v*1.15,0,1)),{lw:1.5})})}
 // what each site does to the one beside it, shown instead of said: seeds and crossings
-function drawNeighbors(){if(!F||state!=='play')return;const a=cam.x-80,b=cam.x+viewW+80;drawHomes(a,b);const o=sites.slice(0,5).sort((p,q)=>p.x-q.x),hard=s=>s.state==='standing'&&(s.id!=='dam'||s.paved),hab=s=>s.state==='grown'&&CH[s.choice]&&CH[s.choice].hab,young=s=>s.state==='growing';
+function drawNeighbors(){if(!F||state!=='play')return;const a=cam.x-80,b=cam.x+viewW+80;drawHomes(a,b);drawNeeds(a,b);const o=sites.slice(0,5).sort((p,q)=>p.x-q.x),hard=s=>s.state==='standing'&&(s.id!=='dam'||s.paved),hab=s=>s.state==='grown'&&CH[s.choice]&&CH[s.choice].hab,young=s=>s.state==='growing';
  for(let i=0;i<o.length-1;i++){const L=o[i],R=o[i+1],x0=L.x+L.w,x1=R.x;if(x1<a||x0>b)continue;
   [[L,R,1,x0,x1],[R,L,-1,x1,x0]].forEach(([src,dst,d,ex,tx])=>{if(!young(dst))return;
    });
@@ -2405,6 +2418,33 @@ function drawNeighbors(){if(!F||state!=='play')return;const a=cam.x-80,b=cam.x+v
    for(let x=x0+8;x<x1-6;x+=21){shape(blobPts(x,GY-13,14,12+hr(x)*6,x,9),hr(x*.3)<.5?'#3f8443':'#5fae50',{lw:1.6,sh:1});if(hr(x*.7)<.6)shape(ellPts(x-3+hr(x)*8,GY-20-hr(x*2)*6,3.6,3.4,x),['#f3b6c8','#ffd23f','#fbf6ea','#d9534a'][Math.floor(hr(x*.9)*4)],{lw:1})}
    for(let q=0;q<4;q++){const u=(Math.sin(T*.5+q*1.7)+1)/2,bx=x0-50+u*(x1-x0+100),by=GY-50-q*20+Math.sin(T*2.2+q)*10,fl=Math.abs(Math.sin(T*9+q))*10,c=['#f3b6c8','#ffd23f','#9fd8ee','#e8a22a'][q];flutter(bx,by,c,q*2.1,1.15)}}}
 }
+function worstNeed(){if(!needs)return null;let w=null;['go','power','dry'].forEach(k=>{const q=needs[k];if(badFix.some(f=>f.kind===k&&f.down))return;if(q.t>0&&(!w||q.t>w.t))w=q});return w}
+function needStep(dt){if(!needs)return;const wet=rain>0||flood>0,un={go:F.tu>0,power:F.pu>0,dry:wet&&F.hard>F.soak},part={go:F.tm>0,power:F.pm>0,dry:false};
+ {const hs=DECKS.map(hx=>sites.slice(0,5).filter(q=>(q.state==='standing'||q.paved)&&Math.abs(q.cx-hx)<700).length);needs.dry.ax=hs[1]>hs[0]?DECKS[1]:DECKS[0]}
+ ['go','power','dry'].forEach(k=>{const q=needs[k],sold=badFix.some(f=>f.kind===k&&f.down);
+  if(sold){q.t=Math.min(q.t,4)}else if(un[k])q.t+=dt*(part[k]?.35:1);else q.t=Math.max(0,q.t-dt*(k==='dry'&&!(F.soak>=F.hard)?.4:3));
+  const tg=sold?0:k==='go'?(un.go?Math.min(6,1+Math.floor(q.t/5)):0):clamp(q.t/8,0,1);q.vis+=clamp(tg-q.vis,-dt*(k==='go'?1.2:.5),dt*(k==='go'?2:.8))});
+ // a crew pulls out from the block whose people went without, and heads for the nearest young site
+ needCrewT-=dt;if(needCrewT<=0&&tarUp()){const w=worstNeed();if(w&&w.t>10&&!trucks.some(t=>t.state==='drive'&&t.from)){const grow=sites.filter(s=>s.x>0&&s.id!=='tar'&&s.state==='growing'&&!s.paving&&!trucks.some(t=>t.target===s&&t.state==='drive'));
+  if(grow.length){const s=grow.slice().sort((p,q)=>Math.abs(p.cx-w.ax)-Math.abs(q.cx-w.ax))[0],x=w.ax+(s.cx<w.ax?-110:110);trucks.push({x,dir:x<s.cx?1:-1,state:'drive',target:s,t:0,why:w.kind==='go'?'travel':w.kind==='power'?'power':'habit',from:w.kind});crewSeen++;SFX.beeps();dust(x,GY-4,10,60);needCrewT=Math.max(14,30-level*4)}else needCrewT=4}else needCrewT=3}
+ for(let i=badFix.length-1;i>=0;i--){const q=badFix[i];if(q.lock>0)q.lock-=dt;if(!q.down){q.vy+=900*dt;q.y+=q.vy*dt;if(q.y>=GY){q.y=GY;q.down=true;SFX.slam();shake=RM?0:5;dust(q.x,GY-4,12,70);word(q.kind==='go'?'GAS':q.kind==='power'?'DIESEL':'WALL',q.x,GY-150,'#ffd23f')}}
+  else if(!RM&&q.kind==='power'&&Math.random()<dt*1.4)puff(q.x+26,GY-104,{kind:'smoke',vx:-6+Math.random()*12,vy:-30,r:2.6,gr:4,c:'#3a3530',life:1.3,max:1.3});
+  if(q.gone){q.gone-=dt;if(q.gone<=0)badFix.splice(i,1)}}}
+function dropFix(kind,x){if(badFix.some(f=>f.kind===kind))return;const hx=needs[kind].ax;badFix.push({kind,x:clamp(kind==='dry'?hx-10:hx+(kind==='go'?250:-170),60,WORLD-80),y:GY-330,vy:0,down:false,hp:3,lock:0});SFX.blimp()}
+function fixBreak(q){if(q.gone)return;q.gone=.01;debris(q.x,GY-40,12,q.kind==='dry'?'#9a958a':'#c8342b');stars(q.x,GY-60,6);SFX.collapse();word('NO SALE',q.x,GY-140,'#7cc35a');q.down=false;needs[q.kind].t=Math.min(needs[q.kind].t,6)}
+function fixHit(power){const q=badFix.find(q=>q.down&&!q.gone&&Math.abs(q.x-P.x)<(q.kind==='dry'?190:84)&&P.y>GY-170);if(!q||q.lock>0)return false;q.lock=.22;q.hp-=Math.min(3,Math.max(1,power));P.punch=.26;P.cool=.26;stats.hits++;SFX.steel();debris(q.x,GY-40,5,'#8a8478');shake=RM?0:4;if(q.hp<=0)fixBreak(q);return true}
+function drawNeeds(a,b){if(!needs)return;
+ // the dry need: storm water stands against the footings of the block on hard ground
+ {const q=needs.dry,cx=q.ax;if(q.vis>.02&&cx+130>a&&cx-130<b){const h=4+q.vis*12;ctx.globalAlpha=.82;[-96,-30,36].forEach((o,i)=>{const x=cx+o-6,W=72,pts=[];for(let u=0;u<=W;u+=6)pts.push([x+u,GY-10-h+Math.sin(u*.25+T*2.4+i)*1.4]);pts.push([x+W,GY+2],[x,GY+2]);shape(pts,'#3f8fb6',{lw:1.4});line(x+4,GY-10-h+2,x+W-6,GY-10-h+2,'#9fd8ee',1.2)});ctx.globalAlpha=1}}
+ // the go need: a stop with no bus, and a queue that grows the longer nobody comes
+ {const q=needs.go,sx=q.ax+118;if(sx+120>a&&sx-60<b&&(q.vis>.05||F.tn>0)){strip(sx,GY-4,sx,GY-96,3,'#5b5560',{lw:1});shape(rectPts(sx-14,GY-118,28,24,7,.4),'#3b6ea8',{lw:1.6,sh:1});shape(rectPts(sx-9,GY-112,18,8,8,.2),'#e8a22a',{lw:1});dot(sx-5,GY-102,2,INK);dot(sx+5,GY-102,2,INK);
+  const n=Math.round(q.vis);for(let k=0;k<n;k++){const px=sx+20+k*17+(RM?0:Math.sin(T*.7+k*2)*1.5);person(px,GY-4,['#d9534a','#3f8443','#e8c25a','#7f9bb5','#8a3a2a','#2f8f8a'][k%6],70+k,k===0&&q.t>18)}}}
+ // what the Baron sold them
+ badFix.forEach(q=>{if(q.gone&&q.gone>0&&!q.down)return;const x=q.x,y=q.y;if(x+190<a||x-190>b)return;ctx.save();ctx.translate(x,y);ctx.scale(1.6,1.6);ctx.translate(-x,-y);
+  if(q.kind==='go'){shape(rectPts(x-40,y-4,80,8,3,.4),'#2b2730',{lw:1.4});shape(rectPts(x-14,y-62,28,58,4,.4),'#c8342b',{lw:2,sh:1});shape(rectPts(x-9,y-54,18,13,5,.2),'#fbf6ea',{lw:1});strip(x+14,y-40,x+24,y-14,2.2,'#1b1328',{lw:.5});shape(rectPts(x-16,y-70,32,9,6,.3),'#ffd23f',{lw:1.4})}
+  else if(q.kind==='power'){shape(rectPts(x-34,y-6,68,6,3,.3),'#2b2730',{lw:1.2});shape(rectPts(x-30,y-42,60,38,4,.4),'#d4a020',{lw:2.2,sh:1});shape(rectPts(x-26,y-36,30,26,5,.3),'#2b2730',{lw:1});for(let r=0;r<4;r++)line(x-23,y-31+r*6,x+1,y-31+r*6,'#6b6f60',1.4);dot(x+16,y-24,4,'#c8342b');strip(x+16,y-40,x+16,y-64,5,'#3a3a40',{lw:1});dot(x+16,y-64,3.4,'#2b2730')}
+  else{shape(rectPts(x-110,y-26,220,26,4,.5),'#9a958a',{lw:2,sh:1});for(let u=-100;u<110;u+=34)line(x+u,y-26,x+u,y,'#7a756a',1.4);for(let k=0;k<4;k++){const u=(T*.4+k/4)%1;dot(x-90+k*58,y-26+u*20,2.4,'#2b2730')}}
+  ctx.restore()})}
 function needIcon(x,y,kind){ctx.save();ctx.translate(x,y+13);ctx.scale(1.5,1.5);ctx.translate(-x,-y-13);shape(ellPts(x,y,16,13,3),'#fbf6ea',{lw:1.8,sh:1});shape([[x-5,y+11],[x-9,y+21],[x+2,y+12]],'#fbf6ea',{lw:1.4});
  if(kind==='busok'||kind==='bulbok'){if(kind==='busok'){shape(rectPts(x-11,y-7,20,10,1,.2),'#e8a22a',{lw:1.4});dot(x-6,y+4,2.6,INK);dot(x+4,y+4,2.6,INK);line(x-8,y-4,x+6,y-4,'#9fd8ee',2.4)}else{for(let r=0;r<6;r++){const an=r*1.047+T;line(x-2+Math.cos(an)*8,y-2+Math.sin(an)*8,x-2+Math.cos(an)*11,y-2+Math.sin(an)*11,'#e8a22a',1.6)}dot(x-2,y-2,6,'#ffd23f');shape(rectPts(x-5,y+3,6,4,2,.2),'#8a8a90',{lw:1})}shape(ellPts(x+9,y+6,6,6,4),'#3f8443',{lw:1.2});ctx.strokeStyle='#fbf6ea';ctx.lineWidth=2;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x+6,y+6);ctx.lineTo(x+8.4,y+8.6);ctx.lineTo(x+12,y+3.6);ctx.stroke()}
  else if(kind==='bus'){shape(rectPts(x-10,y-6,20,10,1,.2),'#e8a22a',{lw:1.4});dot(x-5,y+5,2.6,INK);dot(x+5,y+5,2.6,INK);line(x-7,y-3,x+7,y-3,'#9fd8ee',2.4)}
