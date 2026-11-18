@@ -1941,3 +1941,38 @@ Founder, exact words:
 - **Conductor.** Timed by script: trucks on the street at 0.7 seconds, on the deck by 1.4, deck empty by 3.2, road falling by 3.9. Rendered at phone size: traffic, smog, crew without bubbles, the run in five frames. Eight regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-17
+
+## RECONVENE v0.66 (2026-11-18)
+
+Founder, exact words:
+
+> "Ready for the buttons and ui improvement build."
+
+**Order note.** The build was written and rendered before this section. The seats reviewed after. The founder named no specific faults, so the Coordinator chose the scope: every control on screen, and two bugs found while looking.
+
+### What changed
+
+| Part | What the build does |
+|---|---|
+| Every button | Each button is now a piece of card: a face over a lip, corners cut by hand, a cast shadow. A press pushes the face down onto the lip. |
+| Smash | Smash is a red burst cut with scissors, with a cream ring. It sinks when pressed and its ring turns yellow when the Super is ready. |
+| The pad | The pad is a dark card cross over a yellow under-layer, with cream arrows. The arm in use turns yellow. The old grey ring in the middle is gone. |
+| The top bar | The hearts, star bar and leaf count sit on one card. The three round buttons tilt slightly, as cut pieces do. |
+| Start | Start is a green banner with a cream edge, tilted. |
+| The menu | The menu drops as one sheet. Close is now an X at the top, not a worded button. On a phone the paragraph about keys no longer shows, since a phone has no keys. |
+| Choice cards | Each option is its own slip of paper with a colored tab: green, blue, red. The question label is a red tab. |
+| Bug: Leave the river | A button marked hidden still showed in the menu on land. It now hides. |
+| Bug: empty Lens box | The Lens drew an empty box when it had nothing to say. It now draws nothing. |
+
+### Findings by seat
+
+- **Coordinator.** One ask with open scope. The build touches looks and two bugs, and changes no rule of play.
+- **Stranger.** The controls now look made of the same paper as the world. Smash reads as the thing to hit.
+- **Osterweil seat.** A button that visibly sinks tells the hand the press landed. The pad and Smash keep their places and sizes, so nothing a player has learned moves.
+- **Aleph.** One file changed. All of it sits in one style block plus two small markup edits. No game code changed.
+- **Studio Voice.** One wording change: "Close menu" became an X whose spoken label is still "Close menu". Three fewer lines of text show on a phone.
+- **Hitchcock seat.** The eye now has one loud control, the red burst, and the rest stay quiet.
+- **AI Skeptic.** The burst and pad use drop shadows drawn by the browser, and nobody has timed them on a phone. The X is smaller in meaning than a word for a first-time player; it keeps a 48-pixel target. On a laptop the menu buttons sit to the right with a gap on the left, which looks loose. The colored tabs on the choice slips carry no meaning beyond order. No real thumb has pressed any of this.
+- **Conductor.** Rendered at phone size in dark, light and sharp modes, and at laptop size: title, play, message, menu, choice card, Lens. Measured at 402 wide: top bar fits with 7 pixels each side, pad 156 by 162, Smash 104 by 104. Nine regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-18
