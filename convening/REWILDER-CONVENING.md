@@ -1911,3 +1911,33 @@ Founder, exact words:
 - **Conductor.** Rendered at phone size: the smog at two spots, puffs from a tipped truck. Nine regression tests report no errors after the repair, the island tower run included. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
 
 SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-17
+
+## RECONVENE v0.65 (2026-11-17)
+
+Founder, exact words:
+
+> "Forget speech bubbles for workers too. Speech bubbles across the board look cheap and sloppy. Cut. Also the smog decor is too hard to see and doesn’t match game style. Rethink smog effect for the bridge in paper cut. Traffic should be bumper to bumper and the demolition safety crew should rush by the player, go properly up the ramp, and quickly sweep all traffic off. Whole thing less than 5 seconds."
+
+**Order note.** The build was written, timed and rendered before this section. The seats reviewed after. Speech bubbles are now cut everywhere; that ruling stands with the earlier cut of bubbles over townsfolk.
+
+### What changed
+
+| Ask | What the build does |
+|---|---|
+| No speech bubbles | The truck crew still hops mad, with no bubble. The car bubble code is deleted. No speech bubble remains in the game. |
+| Smog in paper cut | The see-through bands are gone. The smog is now the game's own kind of cloud: opaque card with a scalloped top, hung on two threads, in two rows of sickly ochre, bobbing slowly. The front row wears a sour face, as the sky's clouds wear a sleepy one. |
+| Bumper to bumper | Sixty-four vehicles ride nose to tail along the ramps and the whole deck, and all stop and go together. Vehicles that reach the end rejoin at the start with no gap. |
+| The safety crew | Two yellow siren trucks tear past the player on the street with dust behind them, climb the on-ramp along the same path the traffic uses, and drive across the deck. The traffic bolts ahead of them and off the far ramp. The road falls just under four seconds after the last leg goes. |
+
+### Findings by seat
+
+- **Coordinator.** Four asks, four changes.
+- **Stranger.** The smog reads at a glance as dirty clouds over the road, in the same hand as the rest of the sky.
+- **Osterweil seat.** A four-second clearance keeps the fall the player earned close to the blow that earned it.
+- **Aleph.** One file changed. No speech bubble code is left. The smog keeps to the highway.
+- **Studio Voice.** No words changed.
+- **Hitchcock seat.** The trucks cross the player's own level first, so the eye follows them up to the deck.
+- **AI Skeptic.** The street pass lasts under a second and a slow eye may miss the trucks themselves and see only dust. When the player stands near the on-ramp the trucks have little street to cross. The traffic leaves faster than any real vehicle could; that is the cost of four seconds. A long line of vehicles all drawn at once was not timed on a phone. Judged from stills and a script's clock.
+- **Conductor.** Timed by script: trucks on the street at 0.7 seconds, on the deck by 1.4, deck empty by 3.2, road falling by 3.9. Rendered at phone size: traffic, smog, crew without bubbles, the run in five frames. Eight regression tests report no errors. Contrast worst pair 10.17, Studio Eyes 0 of 1 at HALT, screen fit pass.
+
+SIGNED Coordinator, Stranger, Osterweil seat, Aleph, Studio Voice, Conductor, Hitchcock seat, AI Skeptic, 2026-11-17
