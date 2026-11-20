@@ -3,9 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Rewilder v0.82</title>
+<title>Rewilder v0.83</title>
 <meta name="audience" content="Founder playtest first; phone-first players, teens and college students. Lab build.">
-<!-- TSP build: Rewilder v0.82 | LAB | 2026-11-20
+<!-- TSP build: Rewilder v0.83 | LAB | 2026-11-20
+     v0.83 (founder: "Use agents to play the last level. It doesn't work."): fixes from real-input playtests (keys and taps only) and a
+       code audit. Holding Up carries the climber on past a landing; drone hits knock down without draining energy (no knockout swaps mid
+       tower); landing and roof edges hold, so walking to the valve or the cleat can't drop you 24 or 40 floors; a smash anywhere on the
+       right part of the floor-24 landing turns the valve; the turtle handoff always happens and leaves the beaver on the plate (before, a
+       beaver who had wandered off made the quest unfinishable); Space no longer opens the menu after starting from it; the T key switches
+       animals the same way the Tag button does; the plate counts an animal standing at the very end of the landing; valve and drain pulse
+       white when they're next.
      v0.82 (founder: "The drone flights look like chains. I'd rather see a line of drones like in galaga, moving in patterns the player can
        identify and avoid. No flight patterns. It's not clear what the lever is at top of the building and if I've won when the building is
        all white but there's still a lever."): drones are a Galaga row of eight above the climber; three or four neighbours wiggle, then peel
@@ -697,7 +704,7 @@ body.touch .se-chrome p{display:none}
 
 <header class="se-chrome" id="topbar">
   <a class="nav" href="../arcade.html">Cabinet</a>
-  <h1>Rewilder <span class="ver">v0.82</span> <span class="tsp-labchip">LAB</span></h1>
+  <h1>Rewilder <span class="ver">v0.83</span> <span class="tsp-labchip">LAB</span></h1>
   <button id="modeBtn" class="icon" type="button" aria-label="Mode: Dark. Switch to Light."><svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="8"/><path d="M14 6a8 8 0 0 0 0 16z" style="fill:var(--glyph)"/></svg></button>
   <nav class="se-rail" aria-label="Page navigation"><a class="nav" href="./index.html">Back</a></nav>
   <button id="notesBtn" type="button">Field guide</button>
@@ -1204,7 +1211,7 @@ addEventListener('keydown',e=>{
  else if(isSmash(e.code)){if(!e.repeat)sDown();e.preventDefault()}
  else if(e.code==='KeyL'&&state==='play'){setLens(!lensOn)}
  else if(e.code==='KeyF'&&state==='play'){swimToggle()}
- else if(e.code==='KeyT'){if(canTag())tagOut()}});
+ else if(e.code==='KeyT'){$('tagBtn').onclick()}});
 addEventListener('keyup',e=>{const k=KM[e.code];if(k)K[k]=0;else if(isSmash(e.code))sUp()});
 addEventListener('blur',()=>{K.l=K.r=K.u=K.d=0;sHeld=false});
 const dp=$('dpad'),sb=$('smashBtn');let dpId=null;
@@ -1765,7 +1772,7 @@ function swimToggle(){dive(false)}
    skips right to both animals on the island for playtesting.") */
 function jumpIsland(){jumpLevel(3);sites.slice(0,5).forEach(s=>{s.rows=[];s.state='grown';s.g=1;s.choice=s.choice||(PICK[s.id]?PICK[s.id][0]:s.fix);s.was='grown'});if(!isle)openIsland();toastT=0;$('toast').classList.remove('on');
  setTimeout(()=>{const x=isleSpawn();swim=null;downed=null;Object.assign(P,{x,y:GY,vx:0,vy:0,face:-1,support:'ground',climb:null,slide:null,energy:100});P.px=x;rest.energy=100;restX=x+90;restY=GY;cam.x=x-viewW*.45;hudKey=''},60)}
-function jumpLevel(n){setMenu(false);startGame();if(n>1){sites.forEach(s=>{s.rows=[];s.state='grown';s.g=1;s.choice=PICK[s.id]?PICK[s.id][0]:s.fix;s.was='grown'});level=n-1;startLevel()}}
+function jumpLevel(n){setMenu(false);if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();startGame();if(n>1){sites.forEach(s=>{s.rows=[];s.state='grown';s.g=1;s.choice=PICK[s.id]?PICK[s.id][0]:s.fix;s.was='grown'});level=n-1;startLevel()}}
 function dive(fish){if(swim){surface();return}
  if(fish){if(!(riverOn&&state==='play'&&P.nap<=0&&!paused()))return;swim=fishSave||{fish:true,x:swimX(),y:WT+40,face:-1,carry:false,air:1,leap:0,t:0,hitT:0,reg:0,fly:false,vx:0,vy:0,spin:0};fishSave=null;
   once('fish','You are the salmon. Swim left to the sea.',9)}
@@ -2232,13 +2239,18 @@ function questStep(s,dt){const q=fort.tq,g=qGeo(s),fh=s.fh;
   if(!(P.ncl>T))for(const d of fort.decks){const py=q.py||P.y;if((py>d.y+1&&P.y<=d.y+1)||(py<d.y-1&&P.y>=d.y-1)){P.climb=null;P.slide=null;P.support=d;P.y=d.y;P.vy=0;P.ncl=T+.45;dust(P.x,d.y,4,30);break}}}
  if(dt>0&&q.py!==undefined){q.vy=(q.vy||0)+(((P.y-q.py)/dt)-(q.vy||0))*Math.min(1,dt*5);q.vx=(q.vx||0)+(((P.x-(q.px0??P.x))/dt)-(q.vx||0))*Math.min(1,dt*5)}q.px0=P.x;
  q.py=P.y;if(P.support&&P.support.deck&&!P.support.lift)fort.ck=P.support;if(q.hitT>0)q.hitT-=dt;
+ // the landings' railings hold: you can't walk off either end
+ if(P.support&&P.support.deck&&!P.support.lift){const d=P.support;P.x=clamp(P.x,d.x-d.w/2+12,d.x+d.w/2-12)}
+ if(P.support===s&&P.y<=g.roofY+2)P.x=clamp(P.x,s.x+12,s.x+s.w-12);
+ // holding Up carries you on past a landing once its catch pause is over
+ if(K.u&&P.support&&P.support.deck&&!P.support.lift&&!(P.ncl>T)&&!q.fish.on)upQ=true;
  // the drones: the row above you, and lines that peel off from it
  const tgt=q.fish.on?null:qOnTower(s);q.fy+=(clamp(P.y-56-240,g.roofY-120,GY-330)-q.fy)*Math.min(1,dt*1.8);
  q.dr.forEach(d=>{d.t+=dt;const sl=qSlot(s,d);
   if(d.st==='form'){d.x+=(sl[0]-d.x)*Math.min(1,dt*4);d.y+=(sl[1]-d.y)*Math.min(1,dt*4)}
   else if(d.st==='cue'){d.x=sl[0]+Math.sin(T*28+d.i)*4;d.y=sl[1];if(d.t>.7){d.st='fly';d.t=-d.k*.24;d.path=qPath([[d.x,d.y]].concat(d.pts,[sl]))}}
   else if(d.st==='fly'){if(d.t<0){d.x=sl[0];d.y=sl[1];return}const dur=d.path.len/300,u=clamp(d.t/dur,0,1),p=qAt(d.path,u);d.x=p[0];d.y=p[1];if(u>=1){d.st='back';d.t=0}
-   if(tgt&&q.hitT<=0&&Math.hypot(d.x-P.x,d.y-(P.y-56))<38){q.hitT=1.1;SFX.zap();sparks(P.x,P.y-60,10,'#9fd0ff');word('ZAP',P.x,P.y-150,'#9fd0ff');if(who!=='turtle')hurt(10);
+   if(tgt&&q.hitT<=0&&Math.hypot(d.x-P.x,d.y-(P.y-56))<38){q.hitT=1.1;SFX.zap();sparks(P.x,P.y-60,10,'#9fd0ff');word('ZAP',P.x,P.y-150,'#9fd0ff');
     P.climb=null;P.support=null;P.slide=null;P.vx=clamp((s.cx-P.x)*1.2,-90,90);P.vy=-140;P.tumble=.45;shake=RM?0:6}}
   else if(d.st==='back'){d.x+=(sl[0]-d.x)*Math.min(1,dt*3);d.y+=(sl[1]-d.y)*Math.min(1,dt*3);if(d.t>1)d.st='form'}
   else if(d.st==='fade'){d.y+=Math.sin(T*17+d.i)*d.t*2;d.x+=Math.sin(T*23+d.i)*d.t*3;if(d.t>1.5){d.st='fall';d.t=0;sparks(d.x,d.y,6,'#ffd23f')}}
@@ -2253,9 +2265,12 @@ function questStep(s,dt){const q=fort.tq,g=qGeo(s),fh=s.fh;
  if(q.drain){const u=T-q.drain;q.pool=Math.max(0,1-u/3);
   if(u>.6&&u<9&&Math.random()<dt*14){const f=QDC[0]+Math.random()*(QDC[1]-QDC[0]+1);puff(s.x+10+Math.random()*(s.w-20),GY-f*fh,{kind:'steam'});if(Math.random()<.35)sparks(s.x+Math.random()*s.w,GY-f*fh,3,'#ffd23f')}
   if(u>1.4)q.dr.forEach((d,i)=>{if(d.st!=='fade'&&d.st!=='fall'&&d.st!=='dead'&&u>1.4+i*.42){d.st='fade';d.t=0}});
-  if(!q.hand&&u>1.4+q.dr.length*.42+2){q.hand=1;q.fish.on=false;questRenovate(s,12,23);const L16=fort.decks.find(d=>d.k===QV);if(P.support===L16){tagSwap();word(who==='turtle'?'TURTLE':'BEAVER',P.x,P.y-170,'#ffd23f')}hudKey=''}}
+  if(!q.hand&&u>1.4+q.dr.length*.42+2){q.hand=1;q.fish.on=false;questRenovate(s,12,23);const LV=fort.decks.find(d=>d.k===QV);
+   // the beaver keeps the plate: wherever he wandered, he is on the floor-24 landing when the turtle takes over
+   if(P.support!==LV&&!(Math.abs(restY-LV.y)<3))Object.assign(P,{x:clamp(P.x,LV.x-LV.w/2+24,LV.x+LV.w/2-24),y:LV.y,support:LV,climb:null,slide:null,vx:0,vy:0,tumble:0});
+   if(P.support===LV){P.ncl=T+.6;tagSwap();word(who==='turtle'?'TURTLE':'BEAVER',P.x,P.y-170,'#ffd23f')}hudKey=''}}
  // the plate: two animals on the floor-16 landing open the roof door
- {const L=fort.decks.find(d=>d.k===QV),onP=P.support===L?1:0,onR=Math.abs(restY-L.y)<3&&Math.abs(restX-L.x)<L.w/2?1:0;q.weight=onP+onR;
+ {const L=fort.decks.find(d=>d.k===QV),onP=P.support===L?1:0,onR=Math.abs(restY-L.y)<3&&Math.abs(restX-L.x)<=L.w/2+4?1:0;q.weight=onP+onR;
   if(q.weight>=2&&!q.door){q.door=T;SFX.slam();SFX.grow();shake=RM?0:6;word('CLUNK',s.cx,g.roofY-40,'#ffd23f');questRenovate(s,24,31);P.energy=Math.min(100,P.energy+30);rest.energy=Math.min(100,rest.energy+30)}}
  // renovation sweeps
  for(let f=0;f<s.rows.length;f++)if(q.rs[f]!==undefined&&T>q.rs[f]&&q.ren[f]<1){const o=q.ren[f];q.ren[f]=Math.min(1,o+dt/1.1);if(o<.05&&q.ren[f]>=.05)leaves(s.x+Math.random()*s.w,GY-(f+.5)*fh,5)}
@@ -2280,7 +2295,7 @@ function questTap(wx,wy){if(!fort||!fort.tq||fort.s!==sites.find(z=>z.isle))retu
 function questFishOff(){if(fort&&fort.tq&&fort.tq.fish.on){fort.tq.fish.on=false;SFX.tag();hudKey='';return true}return false}
 function questStrike(s){const q=fort.tq,g=qGeo(s),sx=P.x+P.face*34,sy=P.y-52;
  // the water valve on the floor-16 landing
- if(!q.water&&Math.abs(sx-(g.pipeX+18))<62&&Math.abs(sy-g.valveY)<56){q.water=T;s.arm=false;SFX.steel();SFX.pick();stars(g.pipeX+18,g.valveY,6);word('WATER ON',g.pipeX+10,g.valveY-50,'#7cc4e0');questRenovate(s,0,11);return true}
+ const LVd=fort.decks.find(d=>d.k===QV);if(!q.water&&((P.support===LVd&&P.x>s.x+s.w-120)||(Math.abs(sx-(g.pipeX+18))<62&&Math.abs(sy-g.valveY)<56))){q.water=T;s.arm=false;SFX.steel();SFX.pick();stars(g.pipeX+18,g.valveY,6);word('WATER ON',g.pipeX+10,g.valveY-50,'#7cc4e0');questRenovate(s,0,11);return true}
  // the mooring post
  if((q.roof.ph==='run'||q.roof.ph==='climb')&&Math.abs(sx-g.post.x)<64&&Math.abs(sy-(g.roofY-34))<60){q.roof.post-=who==='turtle'?2:1;SFX.steel();debris(g.post.x,g.roofY-30,5,'#8a7a6a');
   if(q.roof.post<=0){q.roof.ph='cut';q.roof.t=0;q.roof.bt=0;SFX.pfft();shake=RM?0:7;word('SNAP',g.post.x,g.roofY-90,'#ffd23f');setTimeout(()=>word('NO NO NO',s.x+s.w-60,g.roofY-170,'#ffd23f'),600)}return true}
@@ -2318,7 +2333,7 @@ function questArt(s){const q=fort.tq,g=qGeo(s),fh=s.fh,lo=cam.y-300,hi=cam.y+100
  {const pt=g.pipeTop;ctx.lineCap='round';line(g.pipeX,GY+10,g.pipeX,pt,'#141016',22);line(g.pipeX,GY+10,g.pipeX,pt,'#e4f0f4',18);line(g.pipeX,pt,g.pool.x1-2,pt,'#141016',22);line(g.pipeX,pt,g.pool.x1-2,pt,'#e4f0f4',18);
   const wl=GY+6-(GY+6-pt)*q.fill;if(q.fill>0){line(g.pipeX,GY+6,g.pipeX,wl,q.drain?'rgba(95,180,216,.8)':'rgba(63,127,160,.9)',12);if(q.fill>=1)line(g.pipeX,pt,g.pool.x1-2,pt,'rgba(63,127,160,.9)',12);
    if(!RM)for(let m=0;m<12;m++){const u=((q.drain?-1:1)*T*.2+m/12+10)%1,yy=GY+6-(GY+6-wl)*u;if(inV(yy))dot(g.pipeX+Math.sin(u*40)*2,yy,2,'rgba(234,248,255,.8)')}}
-  [[g.valveY,q.water],[g.drainY,q.drain]].forEach(([vy,done])=>{if(!inV(vy))return;ctx.save();ctx.translate(g.pipeX+22,vy);ctx.rotate(done?.785:0);ctx.strokeStyle='#f4efe4';ctx.lineWidth=7;ctx.beginPath();ctx.arc(0,0,12,0,7);ctx.stroke();ctx.strokeStyle=done?'#3fbf5a':'#c8342b';ctx.lineWidth=4;ctx.beginPath();ctx.arc(0,0,12,0,7);ctx.moveTo(-12,0);ctx.lineTo(12,0);ctx.moveTo(0,-12);ctx.lineTo(0,12);ctx.stroke();ctx.restore();line(g.pipeX+10,vy,g.pipeX+14,vy,'#141016',5)})}
+  [[g.valveY,q.water,!q.water],[g.drainY,q.drain,q.fish.on&&!q.drain]].forEach(([vy,done,cue])=>{if(!inV(vy))return;if(cue&&!RM){const u=(T*1.1)%1;ctx.globalAlpha=(1-u)*.9;ctx.strokeStyle='#ffffff';ctx.lineWidth=3.4;ctx.beginPath();ctx.arc(g.pipeX+22,vy,18+u*22,0,7);ctx.stroke();ctx.globalAlpha=1}ctx.save();ctx.translate(g.pipeX+22,vy);ctx.rotate(done?.785:0);ctx.strokeStyle='#f4efe4';ctx.lineWidth=7;ctx.beginPath();ctx.arc(0,0,12,0,7);ctx.stroke();ctx.strokeStyle=done?'#3fbf5a':'#c8342b';ctx.lineWidth=4;ctx.beginPath();ctx.arc(0,0,12,0,7);ctx.moveTo(-12,0);ctx.lineTo(12,0);ctx.moveTo(0,-12);ctx.lineTo(0,12);ctx.stroke();ctx.restore();line(g.pipeX+10,vy,g.pipeX+14,vy,'#141016',5)})}
  // the salmon
  {const fi=q.fish,need=q.fill>=1&&!q.drain;if(inV(fi.y)){if(fi.on&&fi.y<GY+6){ctx.save();ctx.translate(fi.x,fi.y);ctx.rotate(fi.face>0?-Math.PI/2:Math.PI/2);ctx.translate(-fi.x,-fi.y);drawSalmon({x:fi.x,y:fi.y,face:1,z:.8,leap:0});ctx.restore()}
    else drawSalmon({x:fi.x,y:fi.y,face:fi.face,z:.8,leap:0});
