@@ -3,9 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Rewilder v0.79</title>
+<title>Rewilder v0.80</title>
 <meta name="audience" content="Founder playtest first; phone-first players, teens and college students. Lab build.">
-<!-- TSP build: Rewilder v0.79 | LAB | 2026-11-19
+<!-- TSP build: Rewilder v0.80 | LAB | 2026-11-20
+     v0.80 (founder voice session 2026-11-20, then "Build it."): the Baron's tower is a three-animal puzzle tower and is renovated, not
+       demolished. 25 floors in five stages; each stage's ceiling stays shut until its puzzle is solved, and solving it renovates that stage's
+       floors (lit windows, planted balconies, vines). Elevators cut. All three animals start at the tower; the salmon waits in a spring at
+       its foot and is tapped to ride the glass pipe. 1 lobby: salmon noses the branch valve, water floods the shutter motor. 2 kitchen:
+       chew the wedge and the bracing beam falls away; chew its top and it jams flat (four more chews). 3 vault: only the turtle's chomp
+       breaks the rivet, the beaver must swat its guard drone first, then tag. 4 pool: beaver dams the inflow, salmon opens the drain; the
+       pool runs home to the spring, the server racks it cooled steam, the drones flicker and drop one by one, the roof hatch lets go.
+       5 roof: the Baron runs for his blimp; smash the mooring post; the blimp tumbles away without him; a neighbour brings a hoe and he
+       farms the roof. The Baron's house renovates in place (no burst, no shuffle). Landings catch a climber; the partner keeps your
+       level and stands clear of each puzzle. Baron eye and steel lobby plate go as the tower changes hands.
      v0.79: menu "Island" playtest button (after Level 3) starts on the island with both animals there; the tag partner now stays on the
        island with you instead of walking back to the mainland. The far-right edge is an iron gate with a padlock hanging down in the salmon
        lake; the salmon noses it open (smash near the lock) and the road east to TAR CO opens. Reaching the factory by water no longer opens
@@ -670,7 +680,7 @@ body.touch .se-chrome p{display:none}
 
 <header class="se-chrome" id="topbar">
   <a class="nav" href="../arcade.html">Cabinet</a>
-  <h1>Rewilder <span class="ver">v0.79</span> <span class="tsp-labchip">LAB</span></h1>
+  <h1>Rewilder <span class="ver">v0.80</span> <span class="tsp-labchip">LAB</span></h1>
   <button id="modeBtn" class="icon" type="button" aria-label="Mode: Dark. Switch to Light."><svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="8"/><path d="M14 6a8 8 0 0 0 0 16z" style="fill:var(--glyph)"/></svg></button>
   <nav class="se-rail" aria-label="Page navigation"><a class="nav" href="./index.html">Back</a></nav>
   <button id="notesBtn" type="button">Field guide</button>
@@ -1007,7 +1017,7 @@ let lift93=0,F={hard:4,soak:0,tn:0,tm:0,pn:0,pm:0,unmet:0,links:0,haze:true};
 // v0.67 needs as people: each block's need runs a neglect clock; crews and the Baron come from neglect, not from a timer
 const DECKS=[1545,2512];let needs=null,needCrewT=20,badFix=[];
 function needsReset(){P.flip=0;needs={go:{kind:'go',t:0,vis:0,ax:DECKS[0]},power:{kind:'power',t:0,vis:0,ax:DECKS[1]},dry:{kind:'dry',t:0,vis:0,ax:DECKS[0]}};needCrewT=20;badFix=[]}needsReset();
-const FLD=7,BRT=80,honks=[];let pulse=null,hl=0,roamT=3,rivRec=0,rivFl=-1,lightV=.5,level=1,vacT=0,life=[],lifeT=14,lifeI=0,done=false,hitstop=0,baron=null,baronT=40,baronHp=3,barrels=[],tar=[],crates=[],pits=[],folk=[],who='beaver',rest={energy:100},crewT=14,stormT=26,rain=0,flood=0,rainbow=0,sed=null,beach=0,toastT=0,lensT=0,gardeners=0,crewSeen=0,swim=null,bills=[],drones=[],fort=null,tdr=[],riverOn=false,via=null,plotsOpen=false,tireJam=null,restX=FRX,plug={x:1000,hp:0,max:1,seen:false},lungeOn=false,downed=null,restartT=0,isle=null,fishSave=null,run=null,REDX=3500,docks=[],junk=[],grate={x:0,hp:0,max:1},eels=[],walls=[],vb=null,vacEnd=0,DY=0;
+const FLD=7,BRT=80,honks=[];let pulse=null,hl=0,roamT=3,rivRec=0,rivFl=-1,lightV=.5,level=1,vacT=0,life=[],lifeT=14,lifeI=0,done=false,hitstop=0,baron=null,baronT=40,baronHp=3,barrels=[],tar=[],crates=[],pits=[],folk=[],who='beaver',rest={energy:100},crewT=14,stormT=26,rain=0,flood=0,rainbow=0,sed=null,beach=0,toastT=0,lensT=0,gardeners=0,crewSeen=0,swim=null,bills=[],drones=[],fort=null,tdr=[],riverOn=false,via=null,plotsOpen=false,tireJam=null,restX=FRX,restY=GY,plug={x:1000,hp:0,max:1,seen:false},lungeOn=false,downed=null,restartT=0,isle=null,fishSave=null,run=null,REDX=3500,docks=[],junk=[],grate={x:0,hp:0,max:1},eels=[],walls=[],vb=null,vacEnd=0,DY=0;
 
 function buildSite(d,i){const rows=[];for(let f=0;f<d.floors;f++){const row=[];for(let c=0;c<d.cols;c++){let t=d.cell(c,f);const hp=t?Math.max(1,Math.round((HP[t]+(f<2&&t!=='k'&&d.floors>2?3:0)+(t!=='k'?(d.hpx||0):0))*(t==='s'?2/3:1))):0;row.push(t?{t,hp,max:hp,seed:i*1000+f*17+c*3,stack:d.id==='coal'&&f>=7}:null)}
   row.stack=d.id==='coal'&&f>=7;row.deck=d.id==='highway'&&f===4;rows.push(row)}
@@ -1151,7 +1161,7 @@ function closeNotes(){notesOpen=false;$('notesSheet').classList.remove('open');$
 $('notesBtn').onclick=()=>openNotes(false);
 function setLens(o){lensOn=o;$('lensBtn').setAttribute('aria-pressed',o);$('lens').classList.toggle('on',o);document.body.classList.toggle('lensOn',o);lensT=0;if(o)once('lens2','',3)}
 $('lensBtn').onclick=()=>setLens(!lensOn);
-$('tagBtn').onclick=()=>{if(canTag())tagOut()};$('swimBtn').onclick=()=>{if(!swim)swimToggle()};document.querySelectorAll('.lvBtn[data-l]').forEach(b=>b.onclick=()=>jumpLevel(+b.dataset.l));$('isleBtn').onclick=()=>jumpIsland();$('landBtn').onclick=()=>{setMenu(false);if(swim)landNow()};document.body.appendChild($('swimBtn'));
+$('tagBtn').onclick=()=>{if(questFishOff())return;if(canTag())tagOut()};$('swimBtn').onclick=()=>{if(!swim)swimToggle()};document.querySelectorAll('.lvBtn[data-l]').forEach(b=>b.onclick=()=>jumpLevel(+b.dataset.l));$('isleBtn').onclick=()=>jumpIsland();$('landBtn').onclick=()=>{setMenu(false);if(swim)landNow()};document.body.appendChild($('swimBtn'));
 function finish(){if(state!=='play'||done)return;done=true;setLens(false);SFX.grow();openNotes(true)}
 function bestLine(){const bq=store.get('best',null),el=$('bestLine');if(el)el.textContent=bq&&bq.sys?'Best: '+bq.sys+' systems built, '+(bq.gen||0)+' salmon generations':''}
 function startGame(){state='play';resetWorld();ac();musStart();document.body.classList.add('playing');resize();hudKey='';hud();cam.x=0}
@@ -1302,7 +1312,7 @@ function bridgeUp(){return !!(isle&&isle.fin&&isle.ft>=1)}
 function xClamp(v,from,pad){return bridgeUp()?clamp(v,ISX0+40,EAST()-pad):from<0?clamp(v,ISX0+40,ISX1-16):clamp(v,40,EAST()-pad)}
 function salmonGen(){return clamp(level-1,0,2)+(isle&&isle.fin?1:0)}
 /* after level 3 the Baron runs to an island at the far left of the sea */
-function openIsland(){setTimeout(()=>{if(!isle||sites.some(q=>q.isle))return;const L=isle.lair,tw=buildSite({id:'spire',x:L.x-140,cols:5,cw:56,floors:72,fh:46,name:"the Baron's tower",col:'#e6dac4',cell:(c,f)=>'c',fix:'treat'},6);tw.was='standing';tw.isle=true;sites.push(tw);fortInit(tw)},0);isle={t:0,gr:0,bl:null,lt:0,fin:0,ft:0,rant:3,lair:{x:-2600,hp:6,max:6,state:'up',t:0,g:0,jolt:0,lit:1,lt:3,gap:0},mast:{x:-3050,hp:4,max:4,state:'up',t:0,jolt:0}};docks.push(ISDOCK);
+function openIsland(){setTimeout(()=>{if(!isle||sites.some(q=>q.isle))return;const L=isle.lair,tw=buildSite({id:'spire',x:L.x-140,cols:5,cw:56,floors:25,fh:46,name:"the Baron's tower",col:'#e6dac4',cell:(c,f)=>'c',fix:'treat'},6);tw.was='standing';tw.isle=true;sites.push(tw);fortInit(tw)},0);isle={t:0,gr:0,bl:null,lt:0,fin:0,ft:0,rant:3,lair:{x:-2600,hp:6,max:6,state:'up',t:0,g:0,jolt:0,lit:1,lt:3,gap:0},mast:{x:-3050,hp:4,max:4,state:'gone',t:0,jolt:0}};docks.push(ISDOCK);
  hudKey='';SFX.blimp();baron=null;baronT=1e9;word('TO MY ISLAND',P.x,GY-260,'#ffd23f');setTimeout(()=>toast('The Baron ran for his island. Dive and swim left across the sea.',8),80)}
 function openPlots(){plotsOpen=true;const n=sites.length-5,add=PLOTS.slice(n,n+2);if(!add.length)return false;
  add.forEach(d=>{const q=buildSite(d,sites.length);q.was='standing';sites.push(q);dust(q.cx,GY,10,q.w);word('NEW GROUND',q.cx,GY-120,'#7cc35a')});hudKey='';SFX.grow();
@@ -1432,22 +1442,22 @@ function tagOut(){P.flip=0;const e=P.energy;P.energy=rest.energy;rest.energy=e;w
 }
 /* a tap on the resting animal: become it where it stands; the other one walks home */
 function landNow(){if(!swim)return;if(swim.fish){surface();return}const w=swim,dk=docks.slice().sort((a,b)=>Math.abs(a-w.x)-Math.abs(b-w.x))[0];FRX=dk<0?ISX1-110:3570;Object.assign(P,{x:dk===undefined?clamp(w.x,40,WORLD-60):dk,y:GY,vx:0,vy:0,support:'ground',climb:null});P.px=P.x;swim=null;SFX.pop();hudKey=''}
-function tapWorld(wx,wy){if(paused()||P.nap>0)return;if(critTap(wx,wy))return;const near=(x,y,rx,ry)=>Math.abs(wx-x)<rx&&Math.abs(wy-y)<ry;
- if(!tireJam&&!downed&&near(restX,GY-80,95,96)){landNow();tagSwap();return}
+function tapWorld(wx,wy){if(paused()||P.nap>0)return;if(critTap(wx,wy))return;if(questTap(wx,wy))return;const near=(x,y,rx,ry)=>Math.abs(wx-x)<rx&&Math.abs(wy-y)<ry;
+ if(!tireJam&&!downed&&near(restX,restY-80,95,96)){landNow();tagSwap();return}
  if(riverOn&&!(swim&&swim.fish)&&fishSave&&near(fishSave.x,fishSave.y,105,64)){landNow();dive(true);return}
  if(swim&&swim.fish&&near(P.x,GY-80,90,100))surface()}
-function tagSwap(){const ox=P.x;tagOut();Object.assign(P,{x:restX,y:GY,vx:0,vy:0,support:'ground',climb:null,slide:null,face:-1});P.px=P.x;restX=ox}
+function tagSwap(){const ox=P.x,oy=P.support&&P.support!=='ground'?P.y:GY,tw=fort&&fort.tq?sites.find(z=>z.isle):null,sp=tw&&restY<GY-2?questSupportAt(tw,restX,restY):null;tagOut();Object.assign(P,{x:restX,y:sp?restY:GY,vx:0,vy:0,support:sp||'ground',climb:null,slide:null,face:-1});P.px=P.x;restX=ox;restY=sp?oy:GY}
 /* zero energy: this animal is out; the other one has to come and smash beside it */
 /* v0.77: on the island a knockout stays on the island (founder: "When I win level 3 it just resets. No island."). Before, the body was clamped
    to the mainland's left edge and the partner sent to the far right, and a second knockout re-ran the whole level, island and all. */
 function onIsle(){return !!isle&&P.x<0}
-function isleSpawn(){const tw=sites.find(q=>q.isle);return clamp(tw?tw.x+tw.w+90:ISDOCK-200,ISX0+60,ISX1-60)}
+function isleSpawn(){const tw=sites.find(q=>q.isle);return clamp(tw?tw.x+tw.w+200:ISDOCK-200,ISX0+60,ISX1-60)}
 function knockOut(){P.ko=false;P.gc=null;if(restartT>0)return;SFX.collapse();shake=RM?0:10;P.climb=null;P.slide=null;
  if(downed){word('BOTH DOWN',P.x,GY-170,'#ffd23f');P.energy=1;restartT=1.6;return}
  const inI=onIsle(),x=inI?clamp(P.x,ISX0+60,ISX1-60):clamp(P.x,60,WORLD-80);word('OUT',x,GY-170,'#ffd23f');downed={x,face:P.face};tagOut();rest.energy=0;if(P.energy<60)P.energy=60;
- Object.assign(P,{x:inI?clamp(x+(x<isleSpawn()?150:-150),ISX0+60,ISX1-60):FRX,y:GY,vx:0,vy:0,face:-1,support:'ground',climb:null,slide:null,nap:0,tumble:0});P.px=P.x;restX=x;hudKey=''}
+ Object.assign(P,{x:inI?clamp(x+(x<isleSpawn()?150:-150),ISX0+60,ISX1-60):FRX,y:GY,vx:0,vy:0,face:-1,support:'ground',climb:null,slide:null,nap:0,tumble:0});P.px=P.x;restX=x;restY=GY;hudKey=''}
 /* both down after the Baron has run: nobody loses level 3. Both animals stand up at the tower's foot, the tower keeps its state. */
-function isleRevive(){const ck=fort&&!fort.down&&fort.ck,x=ck?ck.x:isleSpawn();downed=null;swim=null;P.energy=100;rest.energy=100;P.zap=0;P.dizzy=0;Object.assign(P,{x,y:ck?ck.y:GY,vx:0,vy:0,face:-1,support:ck||'ground',climb:null,slide:null,nap:0,tumble:0,flip:0});P.px=x;restX=x+70;if(fort)fort.hitT=0;SFX.grow();word('UP',x,GY-170,'#7cc35a');leaves(x,GY-60,12);hudKey=''}
+function isleRevive(){const ck=fort&&!fort.down&&fort.ck,x=ck?ck.x:isleSpawn();downed=null;swim=null;P.energy=100;rest.energy=100;P.zap=0;P.dizzy=0;Object.assign(P,{x,y:ck?ck.y:GY,vx:0,vy:0,face:-1,support:ck||'ground',climb:null,slide:null,nap:0,tumble:0,flip:0});P.px=x;restX=x+70;restY=P.y;if(fort)fort.hitT=0;SFX.grow();word('UP',x,GY-170,'#7cc35a');leaves(x,GY-60,12);hudKey=''}
 function reviveFriend(){const x=downed.x;downed=null;rest.energy=60;SFX.grow();word('UP',x,GY-170,'#7cc35a');leaves(x,GY-60,10);hudKey=''}
 function spawnBaron(w){const x=w?w.ax+(w.ax<P.x?-1:1)*(viewW*.5+160):P.x<WORLD/2?cam.x+viewW+220:cam.x-220;baron={x,y:GY-310,hp:baronHp,state:'fly',life:0,hold:0,drop:1.2,snag:0,snagged:[],jolt:0,t:0,tx:w?w.ax+60:null,need:w?w.kind:null,dir:1};SFX.blimp();word(pick(['BEHOLD: PARKING','PROGRESS','ALL MINE']),clamp(x,cam.x+90,cam.x+viewW-90),GY-250,'#ffd23f');
  toast('The Baron is coming. Smash his anchor '+baronHp+' times.',4)}
@@ -1644,7 +1654,7 @@ function metWatch(){if(!F||state!=='play')return;const now=(F.tn>0&&F.tu<=0&&F.t
 function ambient(dt){if(state!=='play'||rain>0||flood>0)return;ambT-=dt;if(ambT>0)return;ambT=2.2+Math.random()*4;const gr=sites.slice(0,5).filter(q=>q.state==='grown'&&CH[q.choice]&&CH[q.choice].hab),near=gr.filter(q=>Math.abs(q.cx-P.x)<520);if(!near.length)return;if(Math.random()<.25+gr.length*.15){if(near.some(q=>CH[q.choice].water||q.choice==='wet'||q.choice==='free')&&Math.random()<.35)SFX.frog();else SFX.bird()}}
 function tick(dt){ambient(dt);metWatch();if(P.support==='ground'&&(!trail.length||Math.abs(trail[trail.length-1]-P.x)>3)){trail.push(P.x);if(trail.length>90)trail.shift()}
  ['punch','cool','bump','spin','squash','dizzy','cheer','tumble','zap','stuck','singe'].forEach(k=>{if(P[k]>0)P[k]-=dt})}
-function player(dt){if(swim){P.walk+=dt;swimStep(dt);return}
+function player(dt){if(qFish()){questFish(dt);return}if(swim){P.walk+=dt;swimStep(dt);return}
  if(walls.length){const px=P.px===undefined?P.x:P.px,msg='A steel wall. Dive at a blue ladder and go under.';walls.forEach(wl=>{if(!wl.up||P.y<GY-262)return;if(px<=wl.x-30&&P.x>wl.x-30){P.x=wl.x-30;P.vx=0;hudKey='';once('wall',msg,8)}else if(px>=wl.x+30&&P.x<wl.x+30){P.x=wl.x+30;P.vx=0;hudKey='';once('wall',msg,8)}})}P.px=P.x;if(K.d&&!P.dWas&&!P.climb&&P.support==='ground'&&nearDock(P.x)&&canSwim()){P.dWas=true;dive(false);return}P.dWas=!!K.d;if(nearDock(P.x)&&toastT<=0)once('dock','Press Dive or Down.',6);tick(dt);P.walk+=dt;
  if(P.flip>0){P.flip-=dt;P.vx*=.9;gravity(dt);camFollow(dt);upQ=smashQ=slamQ=false;sHeld=false;P.charge=0;if(P.flip<=0){P.flip=0;P.vy=-240;P.support=null;SFX.pop();word('FLOP',P.x,P.y-140,'#7cc35a')}return}
  if(P.nap>0){P.nap-=dt;if(P.nap<=0)P.energy=45;P.vx=0;gravity(dt);camFollow(dt);upQ=smashQ=slamQ=false;sHeld=false;P.charge=0;return}
@@ -1652,7 +1662,7 @@ function player(dt){if(swim){P.walk+=dt;swimStep(dt);return}
  P.sup=Math.min(1,P.sup+dt/10);$('smashBtn').classList.toggle('sup',P.sup>=1);if(P.sup>=1)once('sup','Super is full. Hold Smash, then let go.',6);
  if(slamQ){slamQ=false;smashQ=false;if(P.sup>=1){P.sup=0;hudKey='';strike(4)}else once('supwait','Super is still charging.',3.5)}
  else if(smashQ&&P.cool<=0)strike(1,K.u?'up':(K.l||K.r)?'fwd':'');smashQ=false;
- if(P.lunge>0)P.lunge-=dt;fishFollow(dt);{const HOME=isle&&!swim&&P.x<ISX1?clamp(P.x+(P.x<isleSpawn()?110:-110),ISX0+60,ISX1-60):FRX;if(!tireJam&&!downed&&Math.abs(restX-HOME)>4&&(HOME!==FRX||restX!==FRX)){const dd=HOME-restX;restX+=Math.sign(dd)*Math.min(Math.abs(dd),(Math.abs(restX-(swim?swim.x:P.x))>viewW*1.1?1400:(HOME===FRX?170:240))*dt)}}const dir=(K.r?1:0)-(K.l?1:0);P.idle=(dir||K.u||K.d||P.punch>0||sHeld)?0:P.idle+dt;
+ if(P.lunge>0)P.lunge-=dt;fishFollow(dt);{const HOME=isle&&!swim&&P.x<ISX1?(restY<GY-2?restX:clamp(P.x+(P.x+110<ISX1-60?110:-110),ISX0+60,ISX1-60)):FRX;if(!tireJam&&!downed&&Math.abs(restX-HOME)>4&&(HOME!==FRX||restX!==FRX)){const dd=HOME-restX;restX+=Math.sign(dd)*Math.min(Math.abs(dd),(Math.abs(restX-(swim?swim.x:P.x))>viewW*1.1?1400:(HOME===FRX?170:240))*dt)}}const dir=(K.r?1:0)-(K.l?1:0);P.idle=(dir||K.u||K.d||P.punch>0||sHeld)?0:P.idle+dt;
  if(P.gc){const s=P.gc;if(s.state!=='grown'||P.tumble>0){P.gc=null;P.support=null}else{if(dir)P.face=dir;const sl=who==='turtle'?.62:1,nx=P.x+dir*155*sl*dt,ny=P.y+((K.d?1:0)-(K.u?1:0))*210*sl*dt;
    if(ny>=GY){P.y=GY;P.gc=null;P.support='ground'}else if(inG(s,nx,ny)){P.x=nx;P.y=ny}else if(inG(s,nx,P.y))P.x=nx;else if(inG(s,P.x,ny))P.y=ny;else if(!inG(s,P.x,P.y)){P.gc=null;P.support=null;P.vy=0}
    P.top=false;
@@ -1669,7 +1679,7 @@ function player(dt){if(swim){P.walk+=dt;swimStep(dt);return}
  P.vx+=(dir*230*(who==='turtle'?.72:1)*(P.stuck>0?.35:1)-P.vx)*Math.min(1,dt*(P.support?(who==='turtle'?5.5:14):4));if(dir)P.face=dir;
  if(dir&&P.support==='ground')for(const c of crates){if(c.g&&(c.x-P.x)*dir>0&&Math.abs(c.x-P.x)<52){c.x=clamp(c.x+dir*150*dt,30,WORLD-30);P.vx=dir*150;
    const pi=pits.findIndex(p=>Math.abs(p.x-c.x)<20);if(pi>=0){pits.splice(pi,1);word('THUNK',c.x,GY-50);dust(c.x,GY,5,30)}break}}
- const s=sites.find(s=>s.state==='standing'&&!s.isle&&s.rows.length*s.fh>40&&hold(s,P.x,P.support==='ground'?GY-6:P.y));
+ const s=P.ncl>T?null:sites.find(s=>s.state==='standing'&&s.rows.length*s.fh>40&&hold(s,P.x,P.support==='ground'?GY-6:P.y));
  if((upQ||(K.u&&P.slide)||(K.u&&!P.support&&P.vy>-200)||(K.d&&P.support&&P.support!=='ground'))&&(P.support||P.slide||K.u)&&s&&P.tumble<=0){upQ=false;P.climb=s;P.slide=null;P.dive=false;P.support=null;P.vx=0;P.vy=0;if(P.y>GY-6)P.y=GY-6;once('climb','Smash hits the block in front of you.',5);camFollow(dt);return}
  if(upQ&&P.support==='ground'&&P.tumble<=0){const q=(isle&&isle.lairS?sites.concat([isle.lairS]):sites).find(q=>inG(q,P.x,GY-6));if(q){upQ=false;P.gc=q;P.support=null;P.vx=0;P.vy=0;P.y=GY-6;camFollow(dt);return}}
  if(upQ){upQ=false;if(P.support&&!(P.support.lift&&P.support.mv)){P.vy=who==='turtle'?-480:-600;P.support=null}}
@@ -1689,8 +1699,9 @@ function gravity(dt){const prevY=P.y;if(P.support&&!standOK())P.support=null;
      if(P.support==='ground'){SFX.slam();trucks.forEach(t=>{if(t.state!=='tipped'&&Math.abs(t.x-P.x)<95)tipTruck(t)})}
      else if(!P.support.deck){lungeOn=false;hitCell(P.support,P.sc,P.sf,who==='turtle'?3:2)}}}}}
  P.x=xClamp(P.x+P.vx*dt,P.x,40);if(bridgeUp()&&!done&&P.x>70&&P.support==='ground'&&state==='play')finish();if(P.support&&Math.abs(P.vx)<5)P.vx=0}
-function camFollow(dt){let target=clamp((swim?swim.x:P.x)-viewW*.45,(swim||P.x<0)?(isle?ISX0-60:OC0-70):0,Math.max(0,(swim&&swim.fish?regs()[3].x1+470:EAST())-viewW));if(look){look.t+=dt;if(look.t<3.4)target=clamp(TARDEF.x+252-viewW*.5,0,EAST()-viewW);if(!look.said&&look.t>1.4){look.said=1;toast(tarUp()?'The tar factory, up past the salmon lake. The pave crews come from here.':'Clean water runs where the tar factory stood.',8)}if(look.t>4.4)look=null}cam.x+=(target-cam.x)*Math.min(1,dt*(look?2.6:5));if(WORLD<viewW)cam.x=(WORLD-viewW)/2;
- const up=!!(fort&&fort.lifts&&!fort.down&&P.x<0&&P.y<GY-40),ty=look&&look.t<3.4?0:swim?swim.y-GY+150:Math.min(0,P.y-(up?440:270)+OY/S);cam.y+=(ty-cam.y)*Math.min(1,dt*4)}
+function qFish(){return fort&&fort.tq&&fort.tq.fish.on&&fort.s&&fort.s.isle?fort.tq.fish:null}
+function camFollow(dt){let target=clamp((qFish()?qFish().x:swim?swim.x:P.x)-viewW*.45,(swim||P.x<0)?(isle?ISX0-60:OC0-70):0,Math.max(0,(swim&&swim.fish?regs()[3].x1+470:EAST())-viewW));if(look){look.t+=dt;if(look.t<3.4)target=clamp(TARDEF.x+252-viewW*.5,0,EAST()-viewW);if(!look.said&&look.t>1.4){look.said=1;toast(tarUp()?'The tar factory, up past the salmon lake. The pave crews come from here.':'Clean water runs where the tar factory stood.',8)}if(look.t>4.4)look=null}cam.x+=(target-cam.x)*Math.min(1,dt*(look?2.6:5));if(WORLD<viewW)cam.x=(WORLD-viewW)/2;
+ const up=!!(fort&&fort.lifts&&!fort.down&&P.x<0&&P.y<GY-40),ty=look&&look.t<3.4?0:qFish()?Math.min(0,qFish().y-330+OY/S):swim?swim.y-GY+150:Math.min(0,P.y-(up?440:270)+OY/S);cam.y+=(ty-cam.y)*Math.min(1,dt*4)}
 
 /* ---------- splash: the beaver shows the verb on beats ---------- */
 let demoT=0,demoI=0;
@@ -1723,7 +1734,7 @@ function fallX(){return sites[4].x+sites[4].w+10}
 function regs(){const f=fallX();return[null,{x0:f+30,x1:f+150,top:GY-90,bot:GY-34},{x0:f+180,x1:f+300,top:GY-200,bot:GY-144},{x0:f+330,x1:f+470+1180,top:GY-310,bot:GY-84,sx:f+470}]}
 function pick(a){return a[Math.floor(Math.random()*a.length)]}
 function mateXY(){return[OC0+640+Math.sin(T*.5)*250,WT+170+Math.sin(T*.9)*90]}
-function waterInit(){depot={seen:!!(depot&&depot.seen),look:0,down:0,lt:0};sites=sites.slice(0,5);{const lv=Math.max(1,Math.min(3,level)),fl=[7,9,13][lv-1],hts=[[7,7,4,4,6,6,6,3,5],[9,9,5,5,7,7,7,4,6],[13,13,8,8,11,11,10,6,9]][lv-1],q=buildSite(Object.assign({},TARDEF,{floors:fl,hpx:lv-2>0?1:0,cell:(c,f)=>f<hts[c]?((c*3+f)%(lv>=3?3:5)===0?'g':'c'):null}),5);q.was='standing';q.l2=true;sites.push(q)}flyers=[];hawks=[];goo=null;look=null;P.top=false;viaInit();plotsOpen=false;tireJam=null;downed=null;restartT=0;isle=null;FRX=3570;restX=FRX;plug={x:1000,hp:4+level,max:4+level,seen:false};keyInit();rivRec=0;rivFl=-1;junk=[];for(let i=0;i<7;i++)junk.push({x:360+i*330+hr(i+level*9)*150,y:WB-30-hr(i+2)*16,hp:2,k:i%3});
+function waterInit(){depot={seen:!!(depot&&depot.seen),look:0,down:0,lt:0};sites=sites.slice(0,5);{const lv=Math.max(1,Math.min(3,level)),fl=[7,9,13][lv-1],hts=[[7,7,4,4,6,6,6,3,5],[9,9,5,5,7,7,7,4,6],[13,13,8,8,11,11,10,6,9]][lv-1],q=buildSite(Object.assign({},TARDEF,{floors:fl,hpx:lv-2>0?1:0,cell:(c,f)=>f<hts[c]?((c*3+f)%(lv>=3?3:5)===0?'g':'c'):null}),5);q.was='standing';q.l2=true;sites.push(q)}flyers=[];hawks=[];goo=null;look=null;P.top=false;viaInit();plotsOpen=false;tireJam=null;downed=null;restartT=0;isle=null;FRX=3570;restX=FRX;restY=GY;plug={x:1000,hp:4+level,max:4+level,seen:false};keyInit();rivRec=0;rivFl=-1;junk=[];for(let i=0;i<7;i++)junk.push({x:360+i*330+hr(i+level*9)*150,y:WB-30-hr(i+2)*16,hp:2,k:i%3});
  fort=null;tdr=[];
  grate={x:sites[0].x-34,hp:4+level,max:4+level};eels=[];walls=[];P.px=undefined;sites.forEach(s=>{s.foot=null;s.arm=false});
  if(level>2){['garage','dam'].forEach(id=>{const s=sites.find(q=>q.id===id);s.arm=true;s.foot=(id==='dam'?[-.3,-.16,-.02]:[.2,.5,.8]).map(u=>({x:s.x+s.w*u,hp:3+level,max:3+level}))});
@@ -1736,7 +1747,7 @@ function swimToggle(){dive(false)}
 /* v0.79 playtest: start on the Baron's island with both animals there (founder: "Add a link to the menu after level 3 saying island that
    skips right to both animals on the island for playtesting.") */
 function jumpIsland(){jumpLevel(3);sites.slice(0,5).forEach(s=>{s.rows=[];s.state='grown';s.g=1;s.choice=s.choice||(PICK[s.id]?PICK[s.id][0]:s.fix);s.was='grown'});if(!isle)openIsland();toastT=0;$('toast').classList.remove('on');
- setTimeout(()=>{const x=isleSpawn();swim=null;downed=null;Object.assign(P,{x,y:GY,vx:0,vy:0,face:-1,support:'ground',climb:null,slide:null,energy:100});P.px=x;rest.energy=100;restX=x+90;cam.x=x-viewW*.45;hudKey=''},60)}
+ setTimeout(()=>{const x=isleSpawn();swim=null;downed=null;Object.assign(P,{x,y:GY,vx:0,vy:0,face:-1,support:'ground',climb:null,slide:null,energy:100});P.px=x;rest.energy=100;restX=x+90;restY=GY;cam.x=x-viewW*.45;hudKey=''},60)}
 function jumpLevel(n){setMenu(false);startGame();if(n>1){sites.forEach(s=>{s.rows=[];s.state='grown';s.g=1;s.choice=PICK[s.id]?PICK[s.id][0]:s.fix;s.was='grown'});level=n-1;startLevel()}}
 function dive(fish){if(swim){surface();return}
  if(fish){if(!(riverOn&&state==='play'&&P.nap<=0&&!paused()))return;swim=fishSave||{fish:true,x:swimX(),y:WT+40,face:-1,carry:false,air:1,leap:0,t:0,hitT:0,reg:0,fly:false,vx:0,vy:0,spin:0};fishSave=null;
@@ -2152,6 +2163,176 @@ function liftArt(s){const fh=s.fh,lo=cam.y-260,hi=cam.y+960,lamp=(x,y,st)=>{cons
   shape(rectPts(l0,d.y-2,r0-l0,12,d.b*3,.3),'#f1eadb',{lw:2,sh:1});line(l0+4,d.y-44,r0-4,d.y-44,'#f1eadb',3);for(let m=l0+10;m<r0-6;m+=14)line(m,d.y-2,m,d.y-44,'#f1eadb',2);
   const nearLeft=d.lx<d.nx;[[l0,gateOpen(d,nearLeft?'near':'far')],[r0,gateOpen(d,nearLeft?'far':'near')]].forEach(([gx,op])=>{
    const gx2=gx+(gx<d.x?-4:4);if(op){line(gx2,d.y-2,gx2,d.y-10,'#f4efe4',7);line(gx2,d.y-2,gx2,d.y-10,'#3fbf5a',4)}else{line(gx2,d.y-2,gx2,d.y-70,'#f4efe4',10);for(let m=0;m<5;m++)line(gx2,d.y-4-m*14,gx2,d.y-12-m*14,'#c8342b',6)}})})}
+/* v0.80: THE TOWER QUEST (founder, voice 2026-11-20: the elevator tower "is not a puzzle"; "a three-animal tower" where each floor needs a
+   different animal's skill and all three are needed; draining the pool cools nothing, so "the drones fade out over a few seconds"; "Cut the
+   elevators"; "all three players should be there" at the start; the roof ends with the Baron running for his blimp, the tether cut, the
+   blimp drifting off without him, and a hoe; and "Instead of demolishing the tower, I want to see it renovated" as a place people live).
+   Five stages, five floors each. A stage's ceiling is shut until its puzzle is solved; solving it renovates that stage's floors.
+     1 lobby   steel shutter. The salmon swims up the glass pipe and noses the branch valve; water floods the shutter motor; it rolls open.
+     2 kitchen a beam braces the hatch shut. Chew the wedge at its foot and it falls away. Chew the top first and it jams flat under the hatch.
+     3 vault   one rivet holds the plate; only the turtle's chomp breaks it, and a guard drone sits on it. The beaver swats the guard, then tag.
+     4 pool    the Baron's pool cools the servers that fly his drones. The beaver dams the inflow, the salmon opens the drain at the pipe top;
+               the water runs home to the spring, the racks steam, the drones flicker and drop one by one, and the roof hatch lets go.
+     5 roof    the Baron runs for his blimp. Smash the mooring post: the tether snaps, the blimp drifts off without him, a neighbour brings a hoe. */
+const QF=5;
+function qD(s,k){return GY-k*QF*s.fh}
+function qGeo(s){const fh=s.fh,R=s.x+s.w;return{pipeX:R+24,v1y:qD(s,1)+44,v4y:qD(s,3)+30,bx0:R+6,bx1:R+124,W:{x:s.x+46,y:qD(s,1)},Tp:{x:R-48,y:qD(s,2)+14},
+ riv:{x:R-58,y:qD(s,2)-42},spout:{x:R-14,y:qD(s,3)-56},post:{x:R-26,y:qD(s,5)},motor:{x:R-30,y:qD(s,1)+30},roofY:GY-s.rows.length*fh}}
+function questInit(s){const q=isleSpec(s,Math.random,null);fort.band=q.band;fort.spec=q.spec.map(()=>null);fort.lifts=[];fort.decks=[];fort.ck=null;
+ fort.tq={o:[1,0,0,0,0],ot:[0,0,0,0,0],ren:[],rs:[],sh:1,v1:0,v4:0,dam:0,damHp:3,drain:0,pool:1,fadeOn:0,beam:{st:'brace',t:0,hp:4},guard:{stun:0},
+  fish:{x:s.x+s.w+70,y:GY+14,on:false,face:-1,back:0,bub:0},roof:{ph:'wait',t:0,post:2,bt:-1},end:0};
+ tdr=[];for(let k=1;k<=4;k++){const n=k===4?2:1;for(let i=0;i<n;i++)tdr.push({h:((k-1)*QF+1.6+i*2.2)*s.fh,ph:Math.random()*6.283,v:.35+Math.random()*.25,amp:70+Math.random()*70,dead:0,x:s.cx,y:0})}}
+function questOpen(s,k){const q=fort.tq;if(q.o[k])return;q.o[k]=1;q.ot[k]=T;if(k===1)s.arm=false;SFX.grow();hudKey='';
+ const d={deck:1,x:s.cx,w:s.w+44,y:qD(s,k),k};fort.decks.push(d);questRenovate(s,k);
+ word(['','OPEN','OPEN','OPEN','OPEN'][k],s.cx,qD(s,k)-60,'#7cc35a');leaves(s.cx,qD(s,k)-10,14);rest.energy=Math.min(100,rest.energy+30);P.energy=Math.min(100,P.energy+25)}
+function questRenovate(s,k){const q=fort.tq;for(let i=0;i<QF;i++){const f=(k-1)*QF+i;if(f>=s.rows.length||q.rs[f]!==undefined)continue;q.rs[f]=T+.4+i*.38;q.ren[f]=0}}
+function questSupportAt(s,x,y){if(Math.abs(y-GY)<3)return'ground';const d=fort.decks.find(d=>Math.abs(d.y-y)<3);if(d)return d;const g=qGeo(s);if(Math.abs(y-g.roofY)<3)return s;return null}
+function questStep(s,dt){const q=fort.tq,g=qGeo(s),fh=s.fh;
+ // climbing: the lowest shut ceiling stops you; an open landing catches you as you pass it
+ let lock=0;for(let k=1;k<=4;k++)if(!q.o[k]){lock=k;break}
+ if(P.climb===s){if(lock)P.y=Math.max(P.y,qD(s,lock)+106);
+  if(!(P.ncl>T))for(const d of fort.decks){const py=q.py||P.y;if((py>d.y+1&&P.y<=d.y+1)||(py<d.y-1&&P.y>=d.y-1)){P.climb=null;P.slide=null;P.support=d;P.y=d.y;P.vy=0;P.ncl=T+.45;dust(P.x,d.y,4,30);break}}}
+ q.py=P.y;if(P.support&&P.support.deck&&!P.support.lift)fort.ck=P.support;
+ // the partner keeps your level
+ if(!swim&&P.support&&!q.fish.on){const ny=P.support==='ground'?GY:P.y;restY=ny;if(ny<GY-2){const sp=P.support===s?{x:s.cx,w:s.w,k:5}:P.support;restX=sp.k===1?sp.x+sp.w/2-26:sp.x-sp.w/2+26}}
+ // 1: the flooded motor lifts the shutter
+ if(q.v1&&!q.o[1]){const u=T-q.v1;if(u>.9){q.sh=Math.max(0,q.sh-dt/1.5);if(Math.random()<dt*18)sparks(g.motor.x,g.motor.y,2,'#9fd0ff')}if(q.sh<=0)questOpen(s,1)}
+ // 2: the beam
+ const b=q.beam;if(b.st==='fall'||b.st==='slam'){b.t+=dt;if(b.st==='slam'&&b.t>.5){b.st='jam';b.t=0;SFX.slam();shake=RM?0:8;dust(s.cx,qD(s,2)+18,10,s.w)}
+  if(b.st==='fall'&&b.t>1.15){b.st='gone';debris(g.W.x+40,qD(s,1)-10,10,'#9a6a3a');questOpen(s,2)}}
+ if(q.guard.stun>0)q.guard.stun-=dt;
+ // 4: dam plus drain empties the pool; the servers cook; the drones go out one by one
+ if(q.dam&&q.v4&&!q.drain){q.drain=T;SFX.pfft();word('GLUG',g.spout.x-60,g.spout.y-20,'#9fd8ee')}
+ if(q.drain){const u=T-q.drain;q.pool=Math.max(0,1-u/3);if(u>.8&&u<7&&Math.random()<dt*10)puff(s.x+20+Math.random()*(s.w*.45),qD(s,3)-70,{kind:'steam'});
+  if(u>1.6&&!q.fadeOn){q.fadeOn=1;tdr.filter(d=>!d.dead).forEach((d,i)=>d.fadeT=T+i*.7)}
+  if(u>2&&!q.o[4]&&tdr.every(d=>d.dead||!d.fadeT)&&(tdr.length===0||u>3.4+tdr.length*.8))questOpen(s,4)}
+ // renovation sweeps floor by floor
+ for(let f=0;f<s.rows.length;f++)if(q.rs[f]!==undefined&&T>q.rs[f]&&q.ren[f]<1){const o=q.ren[f];q.ren[f]=Math.min(1,o+dt/1.1);if(o<.05&&q.ren[f]>=.05){leaves(s.x+Math.random()*s.w,GY-(f+.5)*fh,5);SFX.pick&&Math.random()<.4&&SFX.pick()}}
+ // 5: the roof
+ const r=q.roof;if(r.ph!=='wait')r.t+=dt;if(r.bt>=0)r.bt+=dt;
+ if(r.ph==='wait'&&q.o[4]&&P.support===s&&P.y<=g.roofY+2){r.ph='run';r.t=0;word('MY BLIMP',s.x+70,g.roofY-150,'#ffd23f')}
+ if(r.ph==='run'&&r.t>2.2){r.ph='climb';r.t=0}
+ if(r.ph==='cut'&&r.t>2.6){r.ph='hoe';r.t=0}
+ if(r.ph==='hoe'&&r.t>2.2){r.ph='farm';r.t=0;q.end=1;questRenovate(s,5);SFX.grow();word('FARMER',s.cx,g.roofY-140,'#7cc35a');isle.qend=T;
+  const L=isle.lair;if(L.state==='up'){L.state='village';L.inplace=1;L.g=0}}
+ // the salmon idles in the spring when you aren't her
+ const fi=q.fish;if(!fi.on){fi.back=0;if(fi.y<GY+10){fi.y=Math.min(GY+14,fi.y+260*dt);fi.x+=(g.pipeX-fi.x)*Math.min(1,dt*6);fi.face=-1}else{const tx=(g.bx0+g.bx1)/2+Math.sin(T*.6)*44;fi.face=tx>fi.x?1:-1;fi.x+=(tx-fi.x)*Math.min(1,dt*1.5);fi.y=GY+14+Math.sin(T*2)*2}}}
+function questFish(dt){const s=fort.s,q=fort.tq,f=q.fish,g=qGeo(s);P.walk+=0;upQ=false;
+ const top=g.spout.y+8;f.x+=(g.pipeX-f.x)*Math.min(1,dt*8);f.y=clamp(f.y+((K.d?1:0)-(K.u?1:0))*175*dt,top,GY+14);if(K.u||K.d)f.face=K.u?1:-1;
+ if(Math.random()<dt*4)f.bub=1;
+ if(smashQ){smashQ=false;sHeld=false;let hit=false;
+  if(!q.v1&&Math.abs(f.y-g.v1y)<42){q.v1=T;hit=true;SFX.steel();SFX.pop();stars(g.pipeX,g.v1y,6);word('VALVE',g.pipeX+40,g.v1y-30,'#7cc4e0')}
+  else if(!q.v4&&Math.abs(f.y-g.v4y)<42){q.v4=T;hit=true;SFX.steel();SFX.pop();stars(g.pipeX,g.v4y,6);word('DRAIN',g.pipeX+40,g.v4y-30,'#7cc4e0')}
+  else{SFX.bump&&SFX.bump();word('BOOP',g.pipeX+30,f.y-30,'#9fd8ee')}
+  if(hit)f.back=1.3}
+ if(f.back>0){f.back-=dt;if(f.back<=0){f.on=false;hudKey=''}}
+ camFollow(dt)}
+function questTap(wx,wy){if(!fort||!fort.tq||fort.s!==sites.find(z=>z.isle))return false;const q=fort.tq,f=q.fish;
+ if(!f.on&&Math.abs(wx-f.x)<80&&Math.abs(wy-f.y)<70&&!swim){f.on=true;f.back=0;SFX.tag();word('SALMON',f.x,f.y-60,'#ffd23f');hudKey='';return true}
+ if(f.on&&Math.abs(wx-P.x)<90&&Math.abs(wy-(P.y-70))<100){f.on=false;SFX.tag();hudKey='';return true}return false}
+function questFishOff(){if(fort&&fort.tq&&fort.tq.fish.on){fort.tq.fish.on=false;SFX.tag();hudKey='';return true}return false}
+function questStrike(s){const q=fort.tq,g=qGeo(s),tu=who==='turtle',sx=P.x+P.face*34,sy=P.y-52,near=(x,y,rx,ry)=>Math.abs(sx-x)<rx&&Math.abs(sy-y)<ry;
+ const tink=(x,y)=>{SFX.clang();word('TINK',x,y-40,'#c9d2de');return true};
+ const d=tdr.find(d=>!d.dead&&Math.abs(d.x-sx)<74&&Math.abs(d.y-sy)<70);if(d){d.dead=.01;SFX.crunch();stars(d.x,d.y,6);word('SWAT',d.x,d.y-30,'#ffd23f');return true}
+ // 3: the guard and the rivet
+ if(!q.o[3]&&q.o[2]){const gx=g.riv.x-4,gy=g.riv.y-56+Math.sin(T*2)*4;
+  if(q.guard.stun<=0&&near(gx,gy,58,50)){if(tu){SFX.zap();hurt(6);P.vx=-P.face*200;word('ZAP',gx,gy-30,'#9fd0ff');return true}q.guard.stun=5.5;SFX.crunch();stars(gx,gy,6);word('SWAT',gx,gy-30,'#ffd23f');return true}
+  if(near(g.riv.x,g.riv.y,56,54)){if(!tu)return tink(g.riv.x,g.riv.y);if(q.guard.stun<=0){SFX.zap();hurt(8);P.vx=-P.face*220;sparks(g.riv.x,g.riv.y,8,'#9fd0ff');word('ZAP',g.riv.x,g.riv.y-40,'#9fd0ff');return true}
+   SFX.crunch();SFX.slam();shake=RM?0:9;debris(g.riv.x,g.riv.y,8,'#c9d2de');word('CHOMP',g.riv.x,g.riv.y-46,'#ffd23f');questOpen(s,3);return true}}
+ // 2: the beam
+ if(!q.o[2]&&q.o[1]){const b=q.beam;
+  if(b.st==='brace'&&near(g.W.x,g.W.y-16,60,46)){if(tu)return tink(g.W.x,g.W.y);b.st='fall';b.t=0;SFX.crunch();word('CHOMP',g.W.x,g.W.y-60,'#ffd23f');return true}
+  if(b.st==='brace'&&near(g.Tp.x,g.Tp.y+12,64,60)){if(tu)return tink(g.Tp.x,g.Tp.y);b.st='slam';b.t=0;SFX.crunch();word('UH OH',g.Tp.x-40,g.Tp.y+40,'#ff8a7a');return true}
+  if(b.st==='jam'&&Math.abs(sy-(qD(s,2)+18))<80&&sx>s.x-10&&sx<s.x+s.w+10){if(tu)return tink(sx,qD(s,2)+18);b.hp--;SFX.crunch();debris(sx,qD(s,2)+18,5,'#9a6a3a');if(b.hp<=0){b.st='fall';b.t=0}return true}}
+ // 4: the beaver dams the pool's inflow
+ if(q.o[3]&&!q.dam&&near(g.spout.x,g.spout.y,62,56)){if(tu)return tink(g.spout.x,g.spout.y);q.damHp--;SFX.crunch();debris(g.spout.x,g.spout.y,5,'#8a5a34');if(q.damHp<=0){q.dam=1;SFX.grow();word('DAMMED',g.spout.x-30,g.spout.y-40,'#ffd23f')}return true}
+ // 5: the mooring post
+ if((q.roof.ph==='run'||q.roof.ph==='climb')&&near(g.post.x,g.post.y-34,64,60)){q.roof.post-=tu?2:1;SFX.steel();debris(g.post.x,g.post.y-30,5,'#8a7a6a');
+  if(q.roof.post<=0){q.roof.ph='cut';q.roof.t=0;q.roof.bt=0;SFX.pfft();shake=RM?0:7;word('SNAP',g.post.x,g.post.y-90,'#ffd23f');setTimeout(()=>word('NO NO NO',s.x+s.w-60,g.roofY-170,'#ffd23f'),600)}return true}
+ return false}
+/* ---- art ---- */
+function qLeaf(x,y,l,a,c){ctx.save();ctx.translate(x,y);ctx.rotate(a);ctx.fillStyle=c;ctx.beginPath();ctx.moveTo(0,0);ctx.quadraticCurveTo(l*.5,-l*.32,l,0);ctx.quadraticCurveTo(l*.5,l*.32,0,0);ctx.fill();ctx.strokeStyle='rgba(20,30,10,.55)';ctx.lineWidth=.8;ctx.stroke();ctx.restore()}
+function qBush(x,y,r,k){const pal=['#2f5a2a','#3f7a34','#5f9a44','#86b24e'];for(let i=0;i<7;i++){const a=-Math.PI+i/6*Math.PI+(hr(k+i)-.5)*.4;qLeaf(x,y,r*(.8+hr(k*3+i)*.5),a,pal[(i+k)%4])}}
+const QREN=[['#e8d3b0','#cfe0b8'],['#efc9a0','#f4dcb8'],['#e6d2e2','#d8cbe8'],['#cfdcc4','#bcd8c8'],['#e9dca8','#d8e4a8']];
+function questCell(s,c,f,x,y,cw,fh,r){const st=Math.min(4,Math.floor(f/QF)),pal=QREN[st],sd=f*7+c;ctx.save();ctx.globalAlpha=r;
+ shape(rectPts(x,y,cw,fh,sd+900,.5),cardTone(pal[(c+f)%2],sd),{lw:1.8});
+ // the window: lit, with what this floor became behind it
+ const wx=x+cw*.18,wy=y+fh*.14,ww=cw*.64,wh=fh*.5;const gw=ctx.createLinearGradient(0,wy,0,wy+wh);gw.addColorStop(0,'#fff0c4');gw.addColorStop(1,'#f0b860');ctx.fillStyle=gw;ctx.fillRect(wx,wy,ww,wh);
+ ctx.fillStyle='rgba(60,40,30,.6)';
+ if(st===0){qBush(wx+ww*.3,wy+wh,5,sd);qBush(wx+ww*.75,wy+wh,4,sd+3)}
+ else if(st===1){ctx.fillRect(wx+ww*.2,wy+wh*.55,ww*.6,wh*.12);ctx.beginPath();ctx.arc(wx+ww*.38,wy+wh*.5,3.6,Math.PI,0);ctx.fill();if(!RM&&(c+f)%2){ctx.globalAlpha=r*.5;dot(wx+ww*.38,wy+wh*.3-Math.sin(T*2+c)*2,2,'#ffffff');ctx.globalAlpha=r}}
+ else if(st===2){for(let m=0;m<3;m++)ctx.fillRect(wx+ww*.12,wy+wh*(.2+m*.28),ww*.76,1.6);for(let m=0;m<6;m++)ctx.fillRect(wx+ww*(.16+m*.12),wy+wh*(.04+(m%3)*.28),ww*.07,wh*.15)}
+ else if(st===3){qBush(wx+ww*.5,wy+wh,6,sd+1);ctx.fillRect(wx+ww*.5-1,wy,2,wh)}
+ else{ctx.fillRect(wx,wy+wh*.7,ww,wh*.3);for(let m=0;m<3;m++)qLeaf(wx+ww*(.25+m*.25),wy+wh*.72,6,-1.9+m*.2,'#3f7a34')}
+ line(wx-1,wy-1,wx+ww+1,wy-1,'#5a4030',2);line(wx+ww/2,wy,wx+ww/2,wy+wh,'rgba(90,64,48,.7)',1.4);
+ // a planted balcony on every other floor, vines on the corners
+ if(f%2===0){shape(rectPts(x+2,y+fh-9,cw-4,7,sd+901,.3),'#b98a5a',{lw:1.2});qBush(x+cw*.3,y+fh-9,6,sd+5);qBush(x+cw*.72,y+fh-9,5,sd+8);if(hr(sd)>.5)dot(x+cw*.5,y+fh-14,2.6,['#f3b6c8','#ffd23f','#d9534a'][f%3])}
+ if(c===0||c===s.cols-1){const vx=c===0?x+3:x+cw-3;for(let m=0;m<fh;m+=5)qLeaf(vx,y+m,5,(c===0?.4:Math.PI-.4)+Math.sin(m+f)*.3,['#2f5a2a','#3f7a34','#5f9a44'][(m/5+f)%3|0])}
+ ctx.restore()}
+function questArt(s){const q=fort.tq,g=qGeo(s),fh=s.fh,lo=cam.y-300,hi=cam.y+1000,inV=y=>y>lo&&y<hi;
+ // the spring and the glass pipe the Baron stole it with
+ {const by=GY;shape([[g.bx0,by-2],[g.bx1,by-2],[g.bx1-8,by+34],[g.bx0+8,by+34]],'#5a6a72',{lw:2.2});shape([[g.bx0+6,by+2],[g.bx1-6,by+2],[g.bx1-12,by+30],[g.bx0+12,by+30]],q.drain?'#5fb4d8':'#3f7fa0',{lw:1.4});
+  for(let m=0;m<3;m++){const u=(T*.5+m/3)%1;ctx.globalAlpha=1-u;ctx.strokeStyle='#eaf8ff';ctx.lineWidth=1.4;ctx.beginPath();ctx.ellipse((g.bx0+g.bx1)/2+(m-1)*24,by+8,6+u*16,2+u*3,0,0,7);ctx.stroke()}ctx.globalAlpha=1}
+ const pt=g.spout.y-6;if(inV(pt)||inV(GY)){ctx.lineCap='round';line(g.pipeX,GY+10,g.pipeX,pt,'#141016',22);line(g.pipeX,GY+10,g.pipeX,pt,'#cfe8f0',18);line(g.pipeX,GY+10,g.pipeX,pt,q.drain?'rgba(95,180,216,.75)':'rgba(63,127,160,.85)',12);
+  line(g.pipeX,pt,g.spout.x+4,pt,'#141016',22);line(g.pipeX,pt,g.spout.x+4,pt,'#cfe8f0',18);line(g.pipeX,pt,g.spout.x+4,pt,'rgba(63,127,160,.85)',12);
+  if(!RM)for(let m=0;m<10;m++){const u=((q.drain?-1:1)*T*.18+m/10+10)%1,yy=GY+6-(GY+6-pt)*u;if(inV(yy))dot(g.pipeX+Math.sin(u*40)*2,yy,2,'rgba(234,248,255,.8)')}
+  [[g.v1y,q.v1,'#c8342b'],[g.v4y,q.v4,'#c8342b']].forEach(([vy,done,col])=>{if(!inV(vy))return;const sp=done?T*3:0;ctx.save();ctx.translate(g.pipeX+22,vy);ctx.rotate(sp);ctx.strokeStyle='#f4efe4';ctx.lineWidth=7;ctx.beginPath();ctx.arc(0,0,12,0,7);ctx.stroke();ctx.strokeStyle=done?'#3fbf5a':col;ctx.lineWidth=4;ctx.beginPath();ctx.arc(0,0,12,0,7);ctx.moveTo(-12,0);ctx.lineTo(12,0);ctx.moveTo(0,-12);ctx.lineTo(0,12);ctx.stroke();ctx.restore();line(g.pipeX+10,vy,g.pipeX+14,vy,'#141016',5)})}
+ // the salmon: in the spring, or nosing up the pipe
+ {const fi=q.fish,need=!q.v1||(q.o[3]&&!q.v4);if(inV(fi.y)){if(fi.on&&fi.y<GY+6){ctx.save();ctx.translate(fi.x,fi.y);ctx.rotate(fi.face>0?-Math.PI/2:Math.PI/2);ctx.translate(-fi.x,-fi.y);drawSalmon({x:fi.x,y:fi.y,face:1,z:.8,leap:0});ctx.restore()}
+   else drawSalmon({x:fi.x,y:fi.y,face:fi.face,z:.8,leap:0});
+   if(!fi.on&&need&&!RM){const u=(T*.9)%1;ctx.globalAlpha=(1-u)*.8;ctx.strokeStyle='#ffffff';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(fi.x,fi.y,26+u*22,12+u*10,0,0,7);ctx.stroke();ctx.globalAlpha=1}}}
+ // open landings: a light slab and a rail, so you can see where to stand
+ fort.decks.forEach(d=>{if(!inV(d.y))return;const l0=d.x-d.w/2,r0=d.x+d.w/2;shape(rectPts(l0,d.y-2,r0-l0,12,d.k*5+700,.3),'#f1eadb',{lw:2,sh:1});for(let m=l0+8;m<r0-4;m+=16)line(m,d.y-2,m,d.y-36,'#f1eadb',2);line(l0+4,d.y-36,r0-4,d.y-36,'#f1eadb',3)});
+ // 1: the shutter, its motor, and the branch pipe that floods it
+ {const y=qD(s,1);if(inV(y)){const mx=g.motor.x,my=g.motor.y;line(g.pipeX,g.v1y,mx+14,my,'#141016',9);line(g.pipeX,g.v1y,mx+14,my,'#cfe8f0',6);
+   shape(rectPts(mx-18,my-16,36,30,71,.3),q.v1?'#4a5560':'#6b7480',{lw:2,sh:1});ctx.save();ctx.translate(mx,my-1);ctx.rotate(q.v1?0:T*4);ctx.strokeStyle='#f4efe4';ctx.lineWidth=3;ctx.beginPath();for(let k=0;k<6;k++){const a=k/6*6.283;ctx.moveTo(0,0);ctx.lineTo(Math.cos(a)*9,Math.sin(a)*9)}ctx.stroke();ctx.restore();
+   if(q.v1&&T-q.v1<3){for(let k=0;k<4;k++){const u=((T-q.v1)*2+k/4)%1;dot(mx+10-u*20,my-14+u*u*30,3,'rgba(124,196,224,.9)')}}
+   const w=s.w*q.sh;if(w>4){shape(rectPts(s.x-6,y-12,w+12,22,72,.2),'#5a626c',{lw:2.4,sh:1});for(let k=0;k<w/10;k++)line(s.x-4+k*10,y-10,s.x-4+k*10,y+8,'rgba(255,255,255,.18)',1.4);line(s.x-6,y-12,s.x+w+6,y-12,'#f4efe4',2.4)}
+   shape(rectPts(s.x-24,y-16,20,30,73,.2),'#3a3440',{lw:2})}}
+ // 2: the braced hatch
+ {const y2=qD(s,2);if(inV(y2)||inV(qD(s,1))){const op=q.o[2]?ease(clamp((T-q.ot[2])/1,0,1)):0;
+   if(op<1){ctx.save();ctx.translate(s.x+8,y2);ctx.rotate(-op*1.2);shape(rectPts(-2,-10,s.w-12,18,74,.4),'#8a5a34',{lw:2.4,sh:1});for(let k=1;k<6;k++)line(k*(s.w-12)/6,-9,k*(s.w-12)/6,7,'rgba(40,20,10,.5)',1.6);ctx.restore()}
+   const b=q.beam,W=g.W,Tp=g.Tp;let A=[W.x,W.y-6],B=[Tp.x,Tp.y];
+   if(b.st==='slam'||b.st==='jam'){const u=b.st==='jam'?1:ease(clamp(b.t/.5,0,1));A=[W.x+(s.x+20-W.x)*u,W.y-6+(y2+18-(W.y-6))*u];B=[Tp.x+(s.x+s.w-20-Tp.x)*u,Tp.y+(y2+18-Tp.y)*u]}
+   if(b.st==='fall'){const u=ease(clamp(b.t/1.1,0,1));A=[A[0]+60*u,A[1]+(GY-A[1]-6)*u*u];B=[B[0]+30*u,B[1]+(GY-B[1]-20)*u*u]}
+   if(b.st!=='gone'){strip(A[0],A[1],B[0],B[1],15,'#a06a3a',{lw:2.2,sh:1});line(A[0],A[1]-3,B[0],B[1]-3,'rgba(255,230,190,.35)',2);if(b.st==='jam'&&b.hp<4)for(let k=0;k<4-b.hp;k++)line(s.x+60+k*50,y2+12,s.x+66+k*50,y2+24,'#2a1a10',2.4)}
+   if(b.st==='brace')shape([[W.x-22,W.y],[W.x+18,W.y],[W.x+18,W.y-18]],'#c99a5a',{lw:2,sh:1})}}
+ // 3: the vault plate, its rod, the rivet and its guard
+ {const y3=qD(s,3);if(inV(y3)||inV(qD(s,2))){const op=q.o[3]?ease(clamp((T-q.ot[3])/.9,0,1)):0;
+   if(op<1){shape(rectPts(s.x-6+op*s.w*.9,y3-12,s.w+12-op*s.w*.9,22,75,.2),'#7a828c',{lw:2.4,sh:1});[.15,.5,.85].forEach(u=>dot(s.x+s.w*u+op*s.w*.45,y3-1,3.4,'#c9d2de'))}
+   if(!q.o[3]){line(g.riv.x,y3+10,g.riv.x,g.riv.y-10,'#3a3440',6);shape(rectPts(g.riv.x-20,g.riv.y-12,40,26,76,.2),'#5a626c',{lw:2,sh:1});shape(ellPts(g.riv.x,g.riv.y,11,11,77),'#c9d2de',{lw:2.4});dot(g.riv.x-3,g.riv.y-3,3,'#ffffff');
+    if(q.o[2]){const st=q.guard.stun,gx=g.riv.x-4+(st>0?Math.sin(T*3)*40:0),gy=g.riv.y-56+(st>0?-70-Math.sin(T*2)*10:Math.sin(T*2)*4);ctx.save();ctx.translate(gx,gy);if(st>0)ctx.rotate(Math.sin(T*9)*.5);
+     shape(ellPts(0,0,18,9,78),'#2b2a33',{lw:2});line(-24,-7,-9,-7,INK,2.6);line(9,-7,24,-7,INK,2.6);dot(0,3,5.4,st>0&&(T*8|0)%2?'#5a1a16':'#ff3b2e');if(st<=0){ctx.globalAlpha=.25+.15*Math.sin(T*6);dot(0,30,16,'#9fd0ff');ctx.globalAlpha=1}ctx.restore()}}}}
+ // 4: the pool, the server racks it cools, the spout, the roof hatch
+ {const y4=qD(s,3),y5=qD(s,4);if(inV(y4)||inV(y5)){const px0=s.cx-6,px1=s.x+s.w-8,ph=52,lvl=q.pool;
+   const rx0=s.x+8,rx1=s.cx-26,hot=q.drain?clamp((T-q.drain-.6)/2,0,1):0;shape(rectPts(rx0,y4-84,rx1-rx0,84,79,.3),mix('#2a2832','#5a2a1a',hot),{lw:2.2,sh:1});
+   for(let r=0;r<4;r++)for(let k=0;k<5;k++){const on=hot<.8?((T*3+r*1.7+k*2.3)|0)%3:-1;dot(rx0+12+k*((rx1-rx0-20)/4),y4-70+r*18,2.6,on===0?'#3fbf5a':on===1?'#ffd23f':hot>.5?'#5a1a16':'#4a5a4a')}
+   line(px0,y4-12,rx1,y4-12,'#141016',7);line(px0,y4-12,rx1,y4-12,lvl>.1?'#3f7fa0':'#6a6a72',4);
+   shape(rectPts(px0,y4-ph,px1-px0,ph,80,.2),'rgba(200,232,244,.35)',{lw:2.4});if(lvl>0){const wy=y4-4-(ph-8)*lvl;ctx.fillStyle='rgba(63,150,200,.75)';ctx.fillRect(px0+3,wy,px1-px0-6,y4-3-wy);line(px0+3,wy,px1-3,wy,'#eaf8ff',2)}
+   if(!q.dam&&!q.drain&&!RM)for(let k=0;k<5;k++){const u=(T*1.6+k/5)%1;dot(g.spout.x-4-u*8,g.spout.y+u*u*40,2.6,'rgba(124,196,224,.9)')}
+   if(q.damHp<3||q.dam){for(let k=0;k<(3-q.damHp)*3;k++)strip(g.spout.x-16+k*3,g.spout.y-10+(k%3)*6,g.spout.x+6-k*2,g.spout.y+6-(k%2)*8,4,'#8a5a34',{lw:1})}
+   const op=q.o[4]?ease(clamp((T-q.ot[4])/1,0,1)):0;if(op<1){shape(rectPts(s.x-6,y5-12,(s.w+12)*(1-op),22,81,.2),'#3a3440',{lw:2.4,sh:1});dot(s.x+12,y5-1,5,q.drain&&T-q.drain>2?'#3fbf5a':'#ff3b2e')}}}
+ // 5: the roof: penthouse, mooring post, blimp, the Baron
+ {const ry=g.roofY;if(inV(ry)){const r=q.roof,pxL=s.x+16;
+   if(!q.end){shape(rectPts(pxL,ry-62,86,62,82,.3),'#1b1328',{lw:2.4,sh:1});line(pxL,ry-62,pxL+86,ry-62,'#c9a84a',4);shape(rectPts(pxL+30,ry-40,24,40,83,.2),'#c9a84a',{lw:1.6})}
+   else{const u=clamp((T-isle.qend)/2,0,1);for(let k=0;k<4;k++){const bx=s.x+20+k*62;shape(rectPts(bx,ry-10,50,10,84+k,.3),'#6a4a2a',{lw:1.4});if(u>.3)for(let m=0;m<4;m++)qLeaf(bx+8+m*11,ry-10,9*u,-1.7+(m%2)*.4,'#5f9a44')}}
+   const post=g.post;if(r.ph!=='cut'&&r.ph!=='hoe'&&r.ph!=='farm'||r.post>0){strip(post.x,ry,post.x,ry-46,9,'#6a5a4a',{lw:1.6,sh:1});if(r.post<2)line(post.x-5,ry-24,post.x+5,ry-30,'#2a1a10',2.4)}else shape(rectPts(post.x-8,ry-12,16,12,85,.3),'#6a5a4a',{lw:1.4});
+   let bx=post.x+70,by=ry-170,rot=Math.sin(T*.7)*.04,sc=.62;
+   if(r.bt>=0){const u=clamp(r.bt/7,0,1),ph=u*15;bx=post.x+70-820*u+150*(1-u)*Math.cos(ph);by=ry-170-110*Math.sin(u*Math.PI)+380*u*u+30*(1-u)*Math.sin(ph);rot=ph+Math.PI*.5*Math.sin(ph);sc=.62*(1-u*.55)*(1+.18*Math.sin(ph*1.3));if(!RM&&Math.random()<.5)puff(bx+Math.cos(rot)*60*sc,by+Math.sin(rot)*60*sc,{kind:'steam'})}
+   if(r.bt<0||r.bt<7.2){if(r.bt<0){line(post.x,ry-44,bx-10,by+30,'rgba(251,246,234,.9)',2);line(bx-6,by+36,bx-30,ry-4,'#c9a84a',2);for(let k=1;k<6;k++)line(bx-6-k*4,by+36+(ry-4-by-36)*k/6,bx+4-k*4,by+36+(ry-4-by-36)*k/6,'#c9a84a',1.6)}
+    blimpArt(bx,by,rot,sc,r.bt>=0)}
+   if(r.ph!=='wait'){let x=pxL+44,face=1,pose='stand',straw=false;const ladder=post.x+28;
+    if(r.ph==='run'){x=pxL+44+(ladder-pxL-44)*ease(clamp(r.t/2.2,0,1));pose='run'}else if(r.ph==='climb'){x=ladder;pose='slip'}else if(r.ph==='cut'){x=ladder-30*ease(clamp(r.t/.6,0,1));pose=r.t<.7?'fall':'sit'}
+    else if(r.ph==='hoe'){x=ladder-30;pose='sit';const hx=s.x+s.w*.4+(x-24-s.x-s.w*.4)*ease(clamp(r.t/1.6,0,1));person(hx,ry,'#7cc35a',611,r.t<1.6);if(r.t<1.8)line(hx+8,ry-30,hx+20,ry-62,'#8a5a34',3)}
+    else{x=s.x+80+((T*20)%(s.w-140));straw=true;pose='hoe';face=1}
+    questBaron(x,ry,face,pose,straw)}}}}
+function questBaron(x,y,face,pose,straw){const t=T;let lift=0,lean=0;if(pose==='run'){lift=Math.abs(Math.sin(t*14))*4;lean=.15}if(pose==='slip')lift=Math.abs(Math.sin(t*5))*16;
+ ctx.save();ctx.translate(x,y-lift);if(pose==='sit'){ctx.translate(0,10)}if(pose==='fall')ctx.rotate(-.6);ctx.rotate(lean*face);
+ const lg=pose==='run'?Math.sin(t*14)*8:pose==='slip'?Math.sin(t*10)*10:0;if(pose!=='sit'){line(-4,-20,-4-lg,0,'#1b1328',4);line(4,-20,4+lg,0,'#1b1328',4)}else{line(-4,-12,-18,-6,'#1b1328',4);line(4,-12,14,-4,'#1b1328',4)}
+ shape([[-10,-48],[10,-48],[12,-18],[-12,-18]],straw?'#5a7a3e':'#1b1328',{lw:1.8});if(!straw){line(-2,-46,0,-26,'#c8342b',3)}
+ if(pose==='slip'){line(-8,-44,-14,-70,'#1b1328',3.4);line(8,-44,14,-72,'#1b1328',3.4)}else if(pose==='hoe'){const sw=Math.sin(t*4)*.5;ctx.save();ctx.translate(8,-40);ctx.rotate(.6+sw);line(0,0,0,40,'#8a5a34',3);line(-6,40,6,40,'#6a6a72',4);ctx.restore()}else{line(-8,-44,-16,-28,'#1b1328',3.4);line(8,-44,16,pose==='sit'?-40:-28,'#1b1328',3.4)}
+ baronHead(0,-48,.85,straw);if(pose==='sit'&&!RM)for(let k=0;k<2;k++){const u=(t*1.2+k*.5)%1;dot(-4+k*8,-60+u*20,1.8,'#9fd8ee')}ctx.restore()}
+
 function fortPipeX(s,b){return b.sd<0?s.x-20:s.x+s.w+20}
 function repStep(s,dt){const br=fort.br;if(!br)return;const w=br[0];if(w.t>0&&w.lvl>0)w.lvl=Math.max(0,w.lvl-dt/3);if(w.t<=0&&w.lvl<1)w.lvl=Math.min(1,w.lvl+dt/2);
  const nOn=br.filter(b=>b.t>0).length;if(nOn===2){if(fort.rep){fort.rep.dead=.01}if(!fort.fail){fort.fail=1.4;SFX.collapse&&SFX.collapse()}fort.fail-=dt;if(fort.fail<=0&&!fort.down)fortDown();return}
@@ -2161,19 +2342,20 @@ function repStep(s,dt){const br=fort.br;if(!br)return;const w=br[0];if(w.t>0&&w.
   if(d<10){b.t=0;fort.rep=null;SFX.clang();word('UNDONE',tx,ty-20,'#ff8a7a');fortShuffle(s,false);once('rerouted','He turned it back and moved both lines. Find them again.',6)}else{fort.rep.x+=dx/d*sp*dt;fort.rep.y+=dy/d*sp*dt}}}
 function fortInit(s0){const s=s0||sites[0],Rn=s.rows.length,hd=!!s.isle;let sd=level*97+13;const rnd=()=>{sd=(sd*9301+49297)%233280;return sd/233280};
  s.fort=true;s.arm=true;s.foot=null;fort={down:false,spec:fortSpec(s,sd),hitT:0,s,br:null,ord:[0,1,2],k:0,rw:0};
- if(hd){fort.rep=null;fort.repT=0;fort.fail=0}tdr=[];const n=hd?10:Math.min(12,6+(level-3)*2);for(let i=0;i<n;i++)tdr.push({h:(4+(Rn-6)*((i+.5)/n))*s.fh,ph:rnd()*6.283,v:.5+rnd()*.7,amp:150+rnd()*170,dead:0,x:s.cx,y:0});if(hd)liftInit(s)}
+ if(hd){fort.rep=null;fort.repT=0;fort.fail=0}tdr=[];const n=hd?10:Math.min(12,6+(level-3)*2);for(let i=0;i<n;i++)tdr.push({h:(4+(Rn-6)*((i+.5)/n))*s.fh,ph:rnd()*6.283,v:.5+rnd()*.7,amp:150+rnd()*170,dead:0,x:s.cx,y:0});if(hd)questInit(s)}
 function wireAt(s,c,f){if(!fort||fort.s!==s)return 0;if(fort.br&&fort.br[1]&&fort.br[1].kind==='power'&&fort.br[1].t>0)return 0;const q=fort.spec[f];if(!q)return 0;if(q.isle){const g=q.segs.find(g=>c>=g.c0&&c<g.c1);return g&&isleLive(f,g.col)?2:0}const z=f/s.rows.length,on=ph=>((T*.3+ph)%1)<.4;
  if(q.v!==undefined)return c===q.v&&(q.t===2||on(q.ph))?q.t:0;if(q.t===3)return on(q.ph)?3:0;if(c>=q.g&&c<q.g+q.gw)return q.gt&&on(q.ph)?3:0;return 2}
 function fortShock(msg){const s=fort.s||sites[0];if(fort.hitT>0)return;fort.hitT=1.4;P.energy=Math.max(0,P.energy-30);if(P.energy<=0)P.ko=true;hudKey='';P.zap=.9;P.singe=2;SFX.zap();shake=RM?0:9;word('ZAP',P.x,P.y-140,'#ffd23f');sparks(P.x,P.y-60,14,'#9fd0ff');if(s.isle&&fort.lifts){P.vx=-P.face*60;once('live',msg,5);return}P.climb=null;P.support=null;P.slide=null;P.vx=-P.face*200;P.vy=-160;P.tumble=.8;once('live',msg,5)}
 function fortStep(dt){const s=fort.s||sites[0];if(fort.hitT>0)fort.hitT-=dt;if(fort.keyT>0)fort.keyT-=dt;if(fort.down||s.state!=='standing')return;
- if(fort.rw>0)fort.rw-=dt;if(s.isle)repStep(s,dt);if(s.isle&&fort.lifts)liftStep(s,dt);
- const on=P.climb===s&&state==='play',onD=on||(!!s.isle&&state==='play'&&!swim&&P.x>s.x-220&&P.x<s.x+s.w+220&&P.y<GY-20);
+ if(fort.rw>0)fort.rw-=dt;if(s.isle)repStep(s,dt);if(s.isle&&fort.lifts&&fort.lifts.length)liftStep(s,dt);if(s.isle&&fort.tq)questStep(s,dt);
+ const on=P.climb===s&&state==='play',onD=on||(!!s.isle&&state==='play'&&!swim&&!(fort.tq&&fort.tq.fish.on)&&P.x>s.x-220&&P.x<s.x+s.w+220&&P.y<GY-20);
  if(on){const c=colOf(s,P.x),f=chestF(s);if(c>=0&&wireAt(s,c,f)){if(s.isle&&fort.hitT<=0){fort.keyT=2.6;fort.keyF=f}fortShock('A shock drops you a floor. Go around a steady wire. Wait out a pulsing one.')}
   if(f>3)once('fortclimb','Yellow wires are live. Steady ones have a gap. Pulsing ones go dark.',6)}
  for(let i=tdr.length-1;i>=0;i--){const d=tdr[i];if(d.dead){d.dead+=dt;d.y+=560*d.dead*dt;if(d.y>GY-8){dust(d.x,GY,4,30);tdr.splice(i,1)}continue}
-  d.x=s.cx+Math.sin(T*d.v+d.ph)*(s.w/2+d.amp);d.y=GY-d.h+Math.sin(T*1.3+d.ph)*12;
-  if(onD&&Math.abs(d.x-P.x)<36&&Math.abs(d.y-(P.y-46))<44)fortShock('A drone shocked you. Smash drones that come close.')}}
-function fortStrike(){const s=fort.s||sites[0];if(fort.down||s.state!=='standing')return false;
+  const fk=d.fadeT&&T>d.fadeT?T-d.fadeT:0;if(fk>1.5){d.dead=.01;sparks(d.x,d.y,5,'#ffd23f');continue}
+  d.x=s.cx+Math.sin(T*d.v+d.ph)*(s.w/2+d.amp)+Math.sin(T*23+d.ph)*fk*12;d.y=GY-d.h+Math.sin(T*1.3+d.ph)*12+Math.sin(T*17)*fk*8+fk*fk*24;
+  if(!fk&&onD&&Math.abs(d.x-P.x)<36&&Math.abs(d.y-(P.y-46))<44)fortShock('A drone shocked you. Smash drones that come close.')}}
+function fortStrike(){const s=fort.s||sites[0];if(fort.down||s.state!=='standing')return false;if(fort.tq&&s.isle)return questStrike(s);
  if(fort.br&&P.climb===s){const f=chestF(s),b=fort.br.find(b=>Math.abs(b.f-f)<=1&&(P.x<s.cx?-1:1)===b.sd);if(b){const bx=fortPipeX(s,b),by=GY-(b.f+.5)*s.fh;if(b.t>0)return true;b.t=1;fort.repT=fort.br.some(q=>q!==b&&q.t>0)?0:1.5;SFX.steel();SFX.pick();stars(bx,by,6);
   if(b.kind==='water'){word('VALVE',bx,by-34,'#7cc4e0');once('valve','The water goes back to the village. His pool drains.',5)}else{word('SWITCH',bx,by-34,'#ffd23f');SFX.zap();once('switch','The power goes back to the village. His lights and wires go dead.',5)}
   return true}}
@@ -2221,12 +2403,12 @@ function fortArt(s){if(!fort||fort.down)return;const fh=s.fh,cw=s.cw,Rn=s.rows.l
   if(fort.rep){const r=fort.rep,bob=RM?0:Math.sin(T*8)*2;ctx.save();ctx.translate(r.x,r.y+bob);if(r.dead)ctx.rotate(r.dead*5);shape(ellPts(0,0,16,9,901),'#e8862a',{lw:1.8,sh:1});[-14,14].forEach(o=>{line(o,-6,o,-11,INK,1.4);shape(ellPts(o,-12,10,2.2,902),'rgba(240,248,255,.8)',{lw:.8})});
    line(0,8,6,18,'#8a8a90',2.4);shape(ellPts(7,20,3.4,3.4,903),'#8a8a90',{lw:1});dot(0,-2,3,(Math.floor(T*4)%2)?'#ff3a2a':'#7a1a10');ctx.restore();
    if(!r.dead){ctx.save();ctx.globalCompositeOperation='lighter';const g2=ctx.createRadialGradient(r.x,r.y,0,r.x,r.y,40);g2.addColorStop(0,'rgba(255,80,60,.3)');g2.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g2;ctx.fillRect(r.x-40,r.y-40,80,80);ctx.restore()}}}
- if(fort.lifts&&fort.s===s)liftArt(s);
+ if(fort.lifts&&fort.lifts.length&&fort.s===s)liftArt(s);if(fort.tq&&fort.s===s)questArt(s);
  for(let f=0;f<Rn;f++){const q=fort.spec[f];if(!q)continue;const y=GY-(f+.5)*fh;if(y<cam.y-200||y>cam.y+900)continue;if(q.isle){isleWire(s,q,f,y);continue}
   if(q.v!==undefined){const x=s.x+(q.v+.5)*cw;wire(x,y+fh*.45,x,y-fh*.45,q.t,!!wireAt(s,q.v,f),f*13)}
   else if(q.t===3)wire(s.x+4,y,s.x+s.w-4,y,3,!!wireAt(s,0,f),f*17)
   else{if(q.g>0)wire(s.x+4,y,s.x+q.g*cw-4,y,2,true,f*17);if(q.g+q.gw<s.cols)wire(s.x+(q.g+q.gw)*cw+4,y,s.x+s.w-4,y,2,true,f*17+3);if(q.gt)wire(s.x+q.g*cw+4,y,s.x+(q.g+q.gw)*cw-4,y,3,!!wireAt(s,q.g,f),f*17+7)}}
- shape(ellPts(s.cx,top+fh*2.5,30,15,5),'#fbf3dc',{lw:2.2});{const ex=clamp((P.x-s.cx)/30,-16,16);dot(s.cx+ex,top+fh*2.5,8,'#c8342b');dot(s.cx+ex,top+fh*2.5,3.2,INK)}
+ if(!(fort.tq&&fort.tq.end)){shape(ellPts(s.cx,top+fh*2.5,30,15,5),'#fbf3dc',{lw:2.2});{const ex=clamp((P.x-s.cx)/30,-16,16);dot(s.cx+ex,top+fh*2.5,8,'#c8342b');dot(s.cx+ex,top+fh*2.5,3.2,INK)}}
  shape(rectPts(s.cx-20,top-24,40,24,14,.4),'#55505f',{lw:2});line(s.cx,top-20,s.cx-26,top-58,INK,8);dot(s.cx-27,top-60,10,'#c8342b');if(!s.isle){shape(rectPts(s.cx+26,top-50,84,26,80,.5),'#1b1328',{lw:2,st:'#ffd23f'});paperText('TAR PUMP',s.cx+68,top-37,17,'#ffd23f',0)}
  line(s.x+12,top,s.x+12,top-90,'#3a3040',5);if(Math.sin(T*3)>0)dot(s.x+12,top-92,4,'#ff5a4a');
  if(P.climb===s||P.support===s){const lab='Floor '+Math.max(1,Math.min(Rn,Math.round((GY-P.y)/fh)))+' of '+Rn;paperText(lab,s.cx,P.y-178,20,'#fbf3dc',0)}}
@@ -2252,7 +2434,7 @@ function droneLights(ph,dead){if(dead)return;const on=RM?1:.55+.45*Math.sin(T*9+
  ctx.save();ctx.globalCompositeOperation='lighter';[[-23,-6,on],[23,-6,on2],[0,5,1]].forEach(q=>{const g=ctx.createRadialGradient(q[0],q[1],0,q[0],q[1],26);g.addColorStop(0,'rgba(255,60,44,'+(.6*q[2]).toFixed(2)+')');g.addColorStop(1,'rgba(255,60,44,0)');ctx.fillStyle=g;ctx.fillRect(q[0]-26,q[1]-26,52,52)});ctx.restore();
  ctx.strokeStyle='rgba(255,214,206,.85)';ctx.lineWidth=1.6;ctx.beginPath();ctx.ellipse(0,0,18,9,0,0,7);ctx.stroke();
  [[-23,-6,on],[23,-6,on2]].forEach(q=>{ctx.fillStyle=q[2]>.7?'#ff3b2e':'#b3261e';ctx.beginPath();ctx.arc(q[0],q[1],4.6,0,7);ctx.fill();ctx.fillStyle='rgba(255,236,230,'+q[2].toFixed(2)+')';ctx.beginPath();ctx.arc(q[0]-1,q[1]-1.2,1.5,0,7);ctx.fill()})}
-function drawTowerDrones(){tdr.forEach(d=>{ctx.save();ctx.translate(d.x,d.y);if(d.dead)ctx.rotate(d.dead*6);shape(ellPts(0,0,16,8,d.ph),'#2b2a33',{lw:1.8});line(-21,-6,-8,-6,INK,2.4);line(8,-6,21,-6,INK,2.4);if(!d.dead&&!RM){const r=Math.sin(T*40+d.ph)*10;line(-15-r,-9,-15+r,-9,'#c9d2de',2);line(15-r,-9,15+r,-9,'#c9d2de',2)}dot(0,3,4.6,'#ff3b2e');droneLights(d.ph,d.dead);ctx.restore()})}
+function drawTowerDrones(){tdr.forEach(d=>{ctx.save();if(d.fadeT&&T>d.fadeT&&!d.dead)ctx.globalAlpha=(T*14|0)%2?.3:1;ctx.translate(d.x,d.y);if(d.dead)ctx.rotate(d.dead*6);shape(ellPts(0,0,16,8,d.ph),'#2b2a33',{lw:1.8});line(-21,-6,-8,-6,INK,2.4);line(8,-6,21,-6,INK,2.4);if(!d.dead&&!RM){const r=Math.sin(T*40+d.ph)*10;line(-15-r,-9,-15+r,-9,'#c9d2de',2);line(15-r,-9,15+r,-9,'#c9d2de',2)}dot(0,3,4.6,'#ff3b2e');droneLights(d.ph,d.dead);ctx.restore()})}
 function robot(x,by,seed,hop){const bob=RM?0:Math.abs(Math.sin(T*6+seed))*1.5,y=by-bob-(hop>0?Math.sin(hop/.5*Math.PI)*8:0);dot(x,by-4,5,'#22202a');shape(rectPts(x-7,y-24,14,16,seed,.4),'#7a808c',{lw:1.6});shape(rectPts(x-6,y-36,12,10,seed+1,.3),'#9aa0ac',{lw:1.4});dot(x+(Math.sin(T*2+seed)>0?2:-2),y-31,2.2,'#ff5a4a');line(x,y-36,x,y-43,INK,1.4);dot(x,y-44,1.8,'#ffd23f');line(x-7,y-18,x-11,y-12,INK,1.6);line(x+7,y-18,x+11,y-12,INK,1.6)}
 function drawOil(D){setWorld(.5);const base=cam.y*.5*.4+396,x0=cam.x*.5-80;ctx.globalAlpha=Math.min(1,D*1.4);
  for(let i=Math.floor(x0/310);i*310<x0+viewW+200;i++){const x=i*310+hr(i+90)*120,a=RM?0:Math.sin(T*1.4+i)*.32;
@@ -2364,7 +2546,7 @@ function render(){if(state==='vacation'){drawVacation();return}
  critDraw();
  if(baron)drawBaron();
  {const sv=Object.assign({},P,{tire:false}),w0=who;
-  Object.assign(P,{x:restX,y:GY,face:downed?downed.face:tireJam?tireJam.face:restX<FRX-1?1:-1,vx:restX!==FRX&&!tireJam&&!downed?170:0,walk:T,vy:0,climb:null,support:'ground',punch:tireJam?.13:0,lunge:0,tire:!!tireJam,charge:0,spin:0,squash:0,cheer:0,tumble:0,nap:tireJam||downed||restX!==FRX?0:rest.energy<100?1:0,idle:0,zap:0,dizzy:downed?1:0});who=w0==='beaver'?'turtle':'beaver';
+  Object.assign(P,{x:restX,y:restY,face:downed?downed.face:tireJam?tireJam.face:restX<FRX-1?1:-1,vx:restX!==FRX&&!tireJam&&!downed?170:0,walk:T,vy:0,climb:null,support:'ground',punch:tireJam?.13:0,lunge:0,tire:!!tireJam,charge:0,spin:0,squash:0,cheer:0,tumble:0,nap:tireJam||downed||restX!==FRX?0:rest.energy<100?1:0,idle:0,zap:0,dizzy:downed?1:0});who=w0==='beaver'?'turtle':'beaver';
   if(state!=='title'){if(downed){ctx.save();ctx.translate(restX,GY-6);ctx.rotate(-1.4*downed.face);ctx.translate(-restX,-GY);drawHero();ctx.restore();const hy=GY-150-Math.abs(Math.sin(T*3))*8;shape(rectPts(restX-40,hy-18,80,36,8,.6),'#fbf3dc',{lw:2.2,sh:1});paperText('HELP',restX,hy,22,'#b3261e',0)}else drawHero();if(!tireJam){line(FRX-104,GY,FRX-104,GY-92,'#5b3a24',4);shape(rectPts(FRX-137,GY-126,66,36,4,.7),'#1b1328',{lw:2.2,sh:1,st:'#ffd23f'});paperText('TAG',FRX-104,GY-107,22,'#ffd23f',0)}}
   who=w0;Object.assign(P,sv)}
  if(state==='play'&&P.y>GY-12&&sites.some(q=>q.state==='grown'&&['river','free','wet','rain'].includes(q.choice)))for(let i=1;i<=3;i++){const tx=trail[trail.length-1-i*13];if(tx!==undefined)duck(tx,GY-9-Math.abs(Math.sin(T*9+i))*3,i+20,P.face)}
@@ -2473,7 +2655,7 @@ function hotelCell(s,c,f,x,y,cw,fh,k,d){const n=s.rows.length,band=f<n*.38?0:f<n
   shape(rectPts(x,y,cw,fh,sd,.5),cardTone(base,sd),{lw:1.8});ctx.save();ctx.beginPath();ctx.rect(x+1,y+1,cw-2,fh-2);ctx.clip();ctx.strokeStyle=bd?'rgba(255,255,255,.11)':'rgba(255,255,255,.07)';ctx.lineWidth=1.6;ctx.beginPath();
   if(bd){for(let u=x+7;u<x+cw;u+=12){ctx.moveTo(u,y);ctx.lineTo(u,y+fh)}}else{for(let v=y+7;v<y+fh;v+=9){ctx.moveTo(x,v);ctx.lineTo(x+cw,v)}}ctx.stroke();ctx.restore();
   const lit=!dark&&hr(sd*1.7)<.4;ctx.fillStyle=lit?(bd?"#c46a4c":"#5e4640"):(bd?"#5a1414":"#2a2430");ctx.fillRect(x+cw*.3,y+fh*.22,cw*.4,fh*.38);
-  ctx.fillStyle=bd?'#6a1212':'#2c2630';ctx.fillRect(x-1,y+fh-5,cw+2,5);cracks(x,y,cw,fh,d,sd);return}
+  ctx.fillStyle=bd?'#6a1212':'#2c2630';ctx.fillRect(x-1,y+fh-5,cw+2,5);cracks(x,y,cw,fh,d,sd);if(fort.tq&&fort.tq.ren[f]>0)questCell(s,c,f,x,y,cw,fh,fort.tq.ren[f]);return}
  if(c===2){shape(rectPts(x,y,cw,fh,sd,.5),'#2a4a58',{lw:1.6});ctx.fillStyle=dark?'#1b2830':'#3f7a8c';ctx.fillRect(x+6,y+3,cw-12,fh-6);ctx.fillStyle='rgba(251,246,234,.18)';ctx.fillRect(x+8,y+3,5,fh-6);ctx.fillStyle='#c9a84a';ctx.fillRect(x+1,y,3,fh);ctx.fillRect(x+cw-4,y,3,fh);cracks(x,y,cw,fh,d,sd);return}
  shape(rectPts(x,y,cw,fh,sd,.6),k.tc||(k.tc=cardTone('#e6dac4',sd)),{lw:1.8});
  const lit=!dark&&hr(sd*1.7)<.7,cur=['#f06bd8','#4fd0ff','#ffd23f','#ff9f43'][(f+c)%4];
@@ -2604,6 +2786,15 @@ function pod(kind,x,y,sc,col,i,w,rot,home){const K=PODS[kind],cold=mix(col,'#3a3
  else if(K.ch){const c=K.ch;line(c[0],c[1]+4,c[0],c[1]-22,'#52525a',2.4);ctx.fillStyle=Math.sin(T*4+i)>0?'#c8342b':'#52525a';ctx.beginPath();ctx.arc(c[0],c[1]-24,2.6,0,7);ctx.fill()}
  if(kind===1||kind===6){const t=K.top;shape(ellPts(t[0],t[1]-5,4.6,4.6,i+48),w>.5?'#ffd23f':'#c9a84a',{lw:1.3});if(kind===6&&w>.5){line(t[0],t[1]-9,t[0],t[1]-24,'#5b3a24',1.8);shape([[t[0]-12,t[1]-22],[t[0]+9,t[1]-26],[t[0]+9,t[1]-18]],'#c9a84a',{lw:1.2})}}
  ctx.restore()}
+/* v0.80: the Baron's house is renovated where it stands, as the tower was: no burst, no shuffle (founder: the village "seems like a random
+   ambiguous shuffle"). The mass warms, its gold bands turn to vines, every opening lights, planters ride the ridge, the core becomes a garden door. */
+function lairRenov(cx,g){if(g<=0)return;ctx.save();ctx.globalAlpha=Math.min(1,g*1.4);
+ [[-232,-64,25,15],[-160,-74,19,13],[-84,-150,18,12],[-36,-166,14,11],[76,-196,14,19],[92,-272,12,17],[94,-350,11,15],[196,-146,21,14],[214,-74,19,13],[130,-96,15,11]].forEach((q,m)=>{ctx.globalAlpha=Math.min(1,g*1.4)*(.35+.15*Math.sin(T*1.3+m));dot(cx+q[0],GY+q[1],q[2]*1.3,'#ffe0a0')});ctx.globalAlpha=Math.min(1,g*1.4);
+ [[-286,-92],[-268,-112],[-215,-130],[-170,-124],[-140,-172],[-100,-217],[-50,-227],[-10,-212],[36,-330],[82,-438],[142,-378],[176,-240],[250,-150]].forEach((q,m)=>{qBush(cx+q[0],GY+q[1],7+hr(m)*4,m+40);if(m%3===0)for(let k=0;k<26*g;k+=5)qLeaf(cx+q[0]+Math.sin(k*.3+m)*2,GY+q[1]+k,5,1.2+Math.sin(k+m)*.4,['#2f5a2a','#3f7a34','#5f9a44'][(k/5+m)%3|0])});
+ shape(arcPts(cx,GY-84,58,56,Math.PI,2*Math.PI,14).concat([[cx+58,GY-14],[cx-58,GY-14]]),'#8a6a48',{lw:2.4});shape(arcPts(cx,GY-80,48,48,Math.PI,2*Math.PI,14).concat([[cx+48,GY-14],[cx-48,GY-14]]),'#ffe9b8',{lw:2});
+ qBush(cx-40,GY-14,10,7);qBush(cx+40,GY-14,10,9);for(let k=0;k<5;k++)dot(cx-34+k*17,GY-70+Math.abs(k-2)*8,3,['#f3b6c8','#ffd23f','#d9534a','#9fd8ee','#e8a22a'][k]);
+ if(g>.6)for(let i=0;i<5;i++){const px=cx-260+i*120+Math.sin(T*.4+i)*30;person(px,GY-10,['#e8c25a','#9fd8ee','#f3b6c8','#7cc35a','#e8a22a'][i],i+620,Math.sin(T*.7+i)>0)}
+ ctx.restore()}
 function drawLair(a,b,gr){const line=cutLine,dot=cutDot;const L=isle.lair,cx=L.x;if(cx+700<a||cx-600>b)return;const up=L.state==='up',j=L.jolt>0&&!RM?(Math.random()-.5)*7:0,dm=1-L.hp/L.max;
  // the mountain behind: vents and smoke first, then green with a waterfall
  {const pts=[[cx-540,GY+4],[cx-420,GY-150],[cx-300,GY-210],[cx-210,GY-330],[cx-90,GY-400],[cx+10,GY-470],[cx+100,GY-390],[cx+220,GY-300],[cx+330,GY-230],[cx+440,GY-120],[cx+540,GY+4]];shape(pts,mix('#2b2a33','#3f6b45',gr),{lw:2.6});
@@ -2617,16 +2808,16 @@ function drawLair(a,b,gr){const line=cutLine,dot=cutDot;const L=isle.lair,cx=L.x
    const u=(Math.sin(T*.35)+1)/2,px=x1+60+(x0-x1-120)*u;if(px>a-80&&px<b+80){shape(ellPts(px,y-22,44,19,77),gr>.5?'#f3b6c8':'#1b1328',{lw:2.4,sh:1});for(let k=-1;k<=1;k++)shape(rectPts(px+k*24-8,y-30,16,12,k+78,.3),gr>.5?'#ffe9b0':'#ffd23f',{lw:1.2});if(gr>.5){for(let k=0;k<5;k++)dot(px-30+k*15,y-40+(k%2)*3,3.4,['#ffd23f','#fbf6ea','#d9534a','#7cc35a','#9fd8ee'][k]);person(px,y-12,'#e8a22a',3,true)}}
    shape(rectPts(x0-10,y-6,70,10,79,.4),'#b8b2a4',{lw:2});for(let k=0;k<8;k++)line(x0+60+k*14,GY-6-k*0,x0+60+k*14,y-6+k*18>GY-6?GY-6:y-6+k*18,'rgba(0,0,0,0)',1);line(x0+60,y-2,x0+150,GY-6,'#b8b2a4',5)}}
  ctx.save();ctx.translate(j,0);
- if(L.state!=='village'){const fall=L.state==='burst'?ease(clamp(L.t/1.2,0,1)):0;
+ if(L.state!=='village'||L.inplace){const fall=L.state==='burst'?ease(clamp(L.t/1.2,0,1)):0;
   shape(blobPts(cx,GY-8,340,44,81,18),'#52525a',{lw:2.4,sh:1});
   if(fall<.96){ctx.save();ctx.translate(cx,GY-18);ctx.scale(1,1-fall);ctx.translate(0,18);
    // the Baron's house: one poured, lopsided mass. A long low wing to the left, a leaning tower to the right.
    const B=smoothPts([[-292,-14],[-304,-62],[-272,-108],[-215,-126],[-170,-120],[-140,-170],[-100,-214],[-50,-224],[-8,-208],[18,-250],[36,-330],[50,-398],[82,-438],[120,-428],[142,-378],[150,-300],[176,-240],[216,-198],[250,-150],[264,-88],[258,-14]],5);
-   shape(B,cardTone('#7a6672',3),{lw:3,sh:1});
+   shape(B,cardTone(mix('#7a6672','#e2cfa8',L.inplace?L.g:0),3),{lw:3,sh:1});
    // darker underside and a pale flank give the mass its roundness
    ctx.save();pathPts(B);ctx.clip();ctx.globalAlpha=.2;shape(blobPts(-40,-30,330,46,301,16),'#120816',{ln:false});shape(blobPts(-150,-150,120,40,302,12),'#fff4dc',{ln:false});shape(blobPts(70,-330,30,90,303,10),'#fff4dc',{ln:false});ctx.globalAlpha=1;
    // gold bands wind round the tower
-   for(let k=0;k<7;k++){const y=-250-k*27;strip(14,y,160,y-26,5,'#c9a84a',{lw:1})}ctx.restore();
+   for(let k=0;k<7;k++){const y=-250-k*27;strip(14,y,160,y-26,5,mix('#c9a84a','#5f9a44',L.inplace?L.g:0),{lw:1})}ctx.restore();
    // a scaled ridge runs along the low wing like a spine
    {const R=[[-286,-92],[-268,-112],[-215,-130],[-170,-124],[-140,-172],[-100,-217],[-50,-227],[-10,-212]];for(let s=0;s<R.length-1;s++){const A=R[s],C=R[s+1],n=Math.max(2,Math.round(Math.hypot(C[0]-A[0],C[1]-A[1])/13));for(let m=0;m<n;m++){const u=m/n,px=A[0]+(C[0]-A[0])*u,py=A[1]+(C[1]-A[1])*u;shape(arcPts(px,py+4,9,11,Math.PI,2*Math.PI,7),(s*5+m)%2?'#8a3a34':'#6e2a2e',{lw:1.3})}}}
    // bone-pale ribs lean against the front
@@ -2648,7 +2839,8 @@ function drawLair(a,b,gr){const line=cutLine,dot=cutDot;const L=isle.lair,cx=L.x
     if(dm>0)cracks(-34,-100,68,68,Math.ceil(dm*5),61)}
    ctx.restore()}
   // the seven rooms ride the mass, each a different shape
-  if(up)CAPS.forEach((c,i)=>{const wob=Math.sin(T*2+i)*dm*5;pod(c[3],cx+c[0],GY+c[1]+wob,c[4],c[2],i,0,Math.sin(T*2+i)*dm*.07,false)});
+  if(L.inplace)lairRenov(cx,L.g);
+  if(up||L.inplace)CAPS.forEach((c,i)=>{const wob=Math.sin(T*2+i)*dm*5;pod(c[3],cx+c[0],GY+c[1]+wob,c[4],c[2],i,L.inplace?L.g:0,Math.sin(T*2+i)*dm*.07,false)});
   if(L.state==='burst'){TIERS.map((t,k)=>[t,k]).reverse().forEach(([t,k])=>{const h=t[2]*ease(clamp((L.t-.25-k*.12)/1.6,0,1));if(h<3)return;shape(rectPts(cx+t[0],GY-10-h,t[1]-t[0],h,89+k,.6),'#c9a978',{lw:2.4,sh:1});shape(rectPts(cx+t[0]-5,GY-16-h,t[1]-t[0]+10,9,92+k,.5),'#7cb35a',{lw:1.8})});
    for(let i=0;i<12;i++)shape(blobPts(cx-230+hr(i+7)*460,GY-20-hr(i*3)*40*(1-fall),15,9,i,7),i%3?'#7a6672':'#d8cbb8',{lw:1.4})}}
  else{const g=L.g,k=S*DPR,CW=1000,CH=640;
@@ -2663,7 +2855,7 @@ function drawLair(a,b,gr){const line=cutLine,dot=cutDot;const L=isle.lair,cx=L.x
  if(L.state==='burst'){CAPS.forEach((c,i)=>{const h=HOMES[i],ord=SHARE[i],sx=cx+c[0],sy=GY+c[1],qx=cx-6+(ord-3)*64,qy=GY-390,tx=cx+h[0],ty=GY-15-h[1],a1=ease(clamp(L.t/1.1,0,1)),t0=1.3+ord*.45,u=clamp((L.t-t0)/1,0,1),e=ease(u);let px,py;
    if(u<=0){px=sx+(qx-sx)*a1;py=sy+(qy-sy)*a1-Math.sin(a1*3.1416)*40+(a1>=1&&!RM?Math.sin(T*2+i)*4:0)}else{px=qx+(tx-qx)*e;py=qy+(ty-qy)*e-Math.sin(u*3.1416)*60}
    pod(c[3],px,py,c[4]+(h[2]-c[4])*e,c[2],i,e,0,false);if(u>0&&u<1&&Math.random()<.2)puff(px,py-30,{kind:'steam'})});if(L.t>1.1)commonsArt(cx,L)}
- if(L.state==='village'){const g=L.g;commonsArt(cx,L);if(g>=1)shareArt(cx,L);
+ if(L.state==='village'&&!L.inplace){const g=L.g;commonsArt(cx,L);if(g>=1)shareArt(cx,L);
   // chimney smoke
   if(g>.4)CAPS.forEach((c,i)=>{const K=PODS[c[3]],h=HOMES[i];if(K.ch&&Math.sin(T*.7+i)>-.5)puffDraw(cx+h[0]+K.ch[0]*h[2],GY-15-h[1]+(K.ch[1]-24)*h[2])});
   if(g>=1){
@@ -2745,9 +2937,9 @@ function drawUtopia(a,b,gr){const line=cutLine,dot=cutDot;if(gr<.45)return;const
  for(let i=0;i<10;i++){const bx=ISX0+200+hr(i+370)*2800+Math.sin(T*.9+i*2)*24,by=GY-50-hr(i+371)*90+Math.cos(T*1.3+i)*12;if(bx<a||bx>b)continue;const fl=Math.abs(Math.sin(T*9+i))*6,c=['#f3b6c8','#ffd23f','#9fd8ee','#e8a22a'][i%4];flutter(bx,by,c,i*1.9,.9)}}
 function drawIsle(){const line=cutLine,dot=cutDot;const a=cam.x-80,b=cam.x+viewW+80,isl=sites.slice(5),up=q=>q&&(q.state==='standing'||q.state==='toppling');
  {const dt=Math.min(.05,Math.max(0,T-(isle.lt||T)));isle.lt=T;const L=isle.lair,M=isle.mast;{const ti=sites.findIndex(q=>q.isle),tw=sites[ti];if(tw){if(tw.state==='collapsing'&&L.state==='up'){L.state='burst';L.t=0;SFX.pop();shake=RM?0:18;dust(L.x,GY-40,30,180);word('POP',L.x,GY-260,'#f3b6c8')}if(tw.state!=='standing'&&tw.state!=='toppling'&&tw.state!=='collapsing')sites.splice(ti,1)}}isle.lairS={state:'grown',choice:L.state==='up'?'none':L.state==='village'&&L.g>=1?'terr':'none',cx:L.x,x:L.x-480,w:940};if(L.state==='up'&&state==='play'){L.lt-=dt;if(false&&L.lt<=0){if(L.gap||L.lit<0){L.gap=0;let n=Math.floor(Math.random()*3);if(n===L.prev)n=(n+1+Math.floor(Math.random()*2))%3;L.lit=n;L.prev=n;L.lt=Math.max(1.9,3.8-(L.max-L.hp)*.34);SFX.steam&&SFX.steam()}else{L.gap=1;L.lit=-1;L.lt=.7}}
-   if(!swim&&!P.climb&&P.support==='ground'&&Math.abs(P.x-L.x)<470){isle.bt=(isle.bt===undefined?3:isle.bt)-dt;if(isle.bt<=0){isle.bt=Math.max(2.1,3.8-(L.max-L.hp)*.3);const bx=P.x+P.vx*.5+(Math.random()-.5)*40;barrels.push({x:bx,y:GY-600,vy:0});isle.tg={x:bx,t:T}}}};const gn=((L.state==='village'?L.g:0)+(isle.bl&&isle.bl.sp?1:0))/2;isle.gr+=(gn-isle.gr)*Math.min(1,dt*.6);if(L.jolt>0)L.jolt-=dt;if(M.jolt>0)M.jolt-=dt;if(M.state==='down')M.t+=dt;if(L.state==='burst'){L.t+=dt;if(L.t>4.9){L.state='village';L.g=0;SFX.grow()}}else if(L.state==='village'&&L.g<1){L.g=Math.min(1,L.g+dt/6);if(L.g>=1){built++;SFX.grow();leaves(L.x,GY-120,30);word('HOME',L.x,GY-300,'#7cc35a');folk.forEach(f=>f.cheer=3.5)}}
+   if(!swim&&!P.climb&&P.support==='ground'&&Math.abs(P.x-L.x)<470){isle.bt=(isle.bt===undefined?3:isle.bt)-dt;if(isle.bt<=0){isle.bt=Math.max(2.1,3.8-(L.max-L.hp)*.3);const bx=P.x+P.vx*.5+(Math.random()-.5)*40;barrels.push({x:bx,y:GY-600,vy:0});isle.tg={x:bx,t:T}}}};const gn=((L.state==='village'?L.g:0)+(isle.bl&&isle.bl.sp||isle.qend?1:0))/2;isle.gr+=(gn-isle.gr)*Math.min(1,dt*.6);if(L.jolt>0)L.jolt-=dt;if(M.jolt>0)M.jolt-=dt;if(M.state==='down')M.t+=dt;if(L.state==='burst'){L.t+=dt;if(L.t>4.9){L.state='village';L.g=0;SFX.grow()}}else if(L.state==='village'&&L.g<1){L.g=Math.min(1,L.g+dt/6);if(L.g>=1){built++;SFX.grow();leaves(L.x,GY-120,30);word('HOME',L.x,GY-300,'#7cc35a');folk.forEach(f=>f.cheer=3.5)}}
   if(L.state==='village'&&L.g>=1){rainbow=Math.max(rainbow,4);L.sh=Math.min(1,(L.sh||0)+dt/10);isle.party=(isle.party||0)+dt;if(isle.party<10&&Math.random()<dt*6)leaves(L.x-620+Math.random()*1240,GY-40-Math.random()*340,7)}
-  if(!isle.fin&&L.state==='village'&&L.g>=1&&isle.bl&&isle.bl.t>6){isle.fin=1;isle.ft=0;SFX.grow();hudKey='';toast('A bridge joins the island to the city. Walk home.',9)}
+  if(!isle.fin&&L.state==='village'&&L.g>=1&&(isle.bl&&isle.bl.t>6||isle.qend&&T-isle.qend>8)){isle.fin=1;isle.ft=0;SFX.grow();hudKey='';toast('A bridge joins the island to the city. Walk home.',9)}
   if(M.state==='up'&&P.x<ISX1&&!swim){isle.rant-=dt;if(isle.rant<=0){isle.rant=1e9;const bx=M.x-70;if(isle.no||!isle.said){word(isle.no?'NO NO NO':'MINE',bx,GY-390,'#ffd23f');isle.said=1}isle.no=0}}
   if(!isle.bl&&isle.mast.state==='down'){isle.bl={t:0,sp:0};SFX.pfft();word('PFFFFT',isle.mast.x-70,GY-340,'#ffd23f')}if(isle.fin&&isle.ft<1)isle.ft=Math.min(1,isle.ft+dt/3.2);
   if(isle.bl){const o=isle.bl.t;isle.bl.t+=dt;const t=isle.bl.t;if(t<4){const q=blimpAt(t);if(Math.random()<dt*30)puff(q[0]+Math.cos(q[2])*90*q[3],q[1]+Math.sin(q[2])*90*q[3],{kind:'steam'});if(o<1.5&&t>=1.5)word('MY BLIMP',q[0],q[1]-60,'#ffd23f');if(o<2.6&&t>=2.6)SFX.pfft()}
@@ -3098,7 +3290,7 @@ function sirenTruck(q){const fl=RM?1:Math.floor(T*9+q.k)%2,bob=RM?0:Math.sin(T*2
  [-22,22].forEach(o=>{shape(ellPts(o,-3,6,6,o),'#1b1328',{lw:1.2});shape(ellPts(o,-3,2.2,2.2,o+1),'#b8b2a4',{ln:false})});ctx.restore();
  if(q.ph===0&&!RM&&Math.random()<.5)dust(q.x-q.d*40,GY-2,1,10)}
 function drawSirens(){for(let k=0;k<2;k++){const q=sirenAt(k);if(q&&q.ph<2)sirenTruck(q)}}
-function drawHatches(){const L=isle.lair;if(L.state==='village')drawLinks(L);if(L.state!=='up')return;const a=cam.x-120,b=cam.x+viewW+120;
+function drawHatches(){const L=isle.lair;if(L.state==='village'&&!L.inplace)drawLinks(L);if(L.state!=='up')return;const a=cam.x-120,b=cam.x+viewW+120;
  HATCH.forEach((o,i)=>{const x=L.x+o,y=GY-46;if(x<a||x>b)return;const lit=i===L.lit,j=L.jolt>0&&!RM?(Math.random()-.5)*4:0;
   shape(rectPts(x-40+j,GY-14,80,12,i+820,.4),'#52525a',{lw:2,sh:1});shape(ellPts(x+j,y,36,36,i+821),'#6b7a90',{lw:2.6,sh:1});for(let m=0;m<8;m++){const an=m*.785;shape(ellPts(x+j+Math.cos(an)*30,y+Math.sin(an)*30,2.4,2.4,m),'#c9d2de',{ln:false})}
   if(lit){const pu=RM?.7:.6+.4*Math.sin(T*8);ctx.save();ctx.globalCompositeOperation='lighter';const g2=ctx.createRadialGradient(x,y,0,x,y,84);g2.addColorStop(0,'rgba(255,150,50,'+(.6*pu).toFixed(2)+')');g2.addColorStop(1,'rgba(255,150,50,0)');ctx.fillStyle=g2;ctx.fillRect(x-84,y-84,168,168);ctx.restore();
@@ -3112,7 +3304,7 @@ function drawHatches(){const L=isle.lair;if(L.state==='village')drawLinks(L);if(
  {const M=isle.mast;if(M.state==='up'){ctx.strokeStyle='#2a2030';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(L.x-250,GY-6);ctx.lineTo(M.x+26,GY-6);ctx.stroke();if(!RM){const u=(T*.8)%1,sx=L.x-250+(M.x+26-(L.x-250))*u;ctx.fillStyle='#9fd0ff';ctx.beginPath();ctx.arc(sx,GY-6,4,0,7);ctx.fill()}}}
  // where the next barrel lands
  if(isle.tg){const u=(T-isle.tg.t)/1.3;if(u>=1)isle.tg=null;else{const x=isle.tg.x;ctx.strokeStyle='rgba(217,52,42,'+(.5+.5*Math.sin(T*24)).toFixed(2)+')';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(x,GY-3,34-u*14,7-u*2.4,0,0,6.2832);ctx.stroke();shape([[x-6,GY-22-(1-u)*18],[x+6,GY-22-(1-u)*18],[x,GY-10-(1-u)*18]],'#d9342a',{lw:1.2})}}}
-function drawIsleFront(){const line=cutLine,dot=cutDot;const a=cam.x-260,b=cam.x+viewW+260,M=isle.mast,L=isle.lair;if(M.x-200>b||M.x+200<a)return;
+function drawIsleFront(){const line=cutLine,dot=cutDot;const a=cam.x-260,b=cam.x+viewW+260,M=isle.mast,L=isle.lair;if(M.state==='gone'||M.x-200>b||M.x+200<a)return;
  if(M.state==='up'){const j=M.jolt>0&&!RM?(Math.random()-.5)*6:0,x=M.x+j,top=GY-190;shape([[x-24,GY-4],[x-9,top],[x+9,top],[x+24,GY-4]],'#6b7a90',{lw:2.2,sh:1});[-1,1].forEach(d=>line(x+d*26,GY-4,x+d*10,top,'#c9d2de',5));for(let k=0;k<5;k++){const y0=GY-4-k*37,y1=y0-37,w0=26-k*3.2,w1=26-(k+1)*3.2;line(x-w0,y0,x+w1,y1,'#c9d2de',3.2);line(x+w0,y0,x-w1,y1,'#c9d2de',3.2);line(x-w1,y1,x+w1,y1,'#c9d2de',3.2)}
   shape(rectPts(x-60,top-8,96,10,171,.4),'#6b6b72',{lw:2.2,sh:1});for(let k=0;k<5;k++)line(x-56+k*22,top-8,x-56+k*22,top-22,'#c9d2de',1.6);line(x-58,top-22,x+34,top-22,'#c9d2de',2);dot(x+30,top-30,5,Math.sin(T*6)>0?'#d9534a':'#5a1a16');
   if(M.hp<M.max)cracks(x-26,GY-120,52,116,Math.ceil((1-M.hp/M.max)*4),73);
