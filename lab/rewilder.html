@@ -3,9 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Rewilder v0.78</title>
+<title>Rewilder v0.79</title>
 <meta name="audience" content="Founder playtest first; phone-first players, teens and college students. Lab build.">
-<!-- TSP build: Rewilder v0.78 | LAB | 2026-11-19
+<!-- TSP build: Rewilder v0.79 | LAB | 2026-11-19
+     v0.79: menu "Island" playtest button (after Level 3) starts on the island with both animals there; the tag partner now stays on the
+       island with you instead of walking back to the mainland. The far-right edge is an iron gate with a padlock hanging down in the salmon
+       lake; the salmon noses it open (smash near the lock) and the road east to TAR CO opens. Reaching the factory by water no longer opens
+       the road by itself. Finishing a level still opens it, as before.
      v0.78 (founder: "Forget the pipes and switches. Make the final tower an elevator timing game. Make it tall! There are drones but you
        can whack them."): the Baron's tower is 72 floors. Valve, switch, repair drone, wires and the rule plaque are gone, and the face can't
        be climbed. Seven glass cars ride short runs up the front; each run ends at a landing where the next car starts one shaft over. Gates
@@ -666,11 +670,11 @@ body.touch .se-chrome p{display:none}
 
 <header class="se-chrome" id="topbar">
   <a class="nav" href="../arcade.html">Cabinet</a>
-  <h1>Rewilder <span class="ver">v0.78</span> <span class="tsp-labchip">LAB</span></h1>
+  <h1>Rewilder <span class="ver">v0.79</span> <span class="tsp-labchip">LAB</span></h1>
   <button id="modeBtn" class="icon" type="button" aria-label="Mode: Dark. Switch to Light."><svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="8"/><path d="M14 6a8 8 0 0 0 0 16z" style="fill:var(--glyph)"/></svg></button>
   <nav class="se-rail" aria-label="Page navigation"><a class="nav" href="./index.html">Back</a></nav>
   <button id="notesBtn" type="button">Field guide</button>
-  <button id="landBtn" class="lvBtn" type="button" hidden>Leave the river</button><span id="ptLab">Playtest: start at</span><button class="lvBtn" type="button" data-l="1">Level 1</button><button class="lvBtn" type="button" data-l="2">Level 2</button><button class="lvBtn" type="button" data-l="3">Level 3</button>
+  <button id="landBtn" class="lvBtn" type="button" hidden>Leave the river</button><span id="ptLab">Playtest: start at</span><button class="lvBtn" type="button" data-l="1">Level 1</button><button class="lvBtn" type="button" data-l="2">Level 2</button><button class="lvBtn" type="button" data-l="3">Level 3</button><button class="lvBtn" type="button" id="isleBtn">Island</button>
   <button id="menuClose" class="icon" type="button" aria-label="Close menu"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M7 7l14 14M21 7L7 21"/></svg></button>
   <p>Keys: arrows or WASD move, Up climbs or jumps, Space smashes. When the Super bar is full, hold Space and let go for a three-by-three bite. Press Down on a blue ladder to dive into the river. L opens the Lens. T tags in your friend. Hold Down and smash on a wall to dive.</p>
 </header>
@@ -1147,7 +1151,7 @@ function closeNotes(){notesOpen=false;$('notesSheet').classList.remove('open');$
 $('notesBtn').onclick=()=>openNotes(false);
 function setLens(o){lensOn=o;$('lensBtn').setAttribute('aria-pressed',o);$('lens').classList.toggle('on',o);document.body.classList.toggle('lensOn',o);lensT=0;if(o)once('lens2','',3)}
 $('lensBtn').onclick=()=>setLens(!lensOn);
-$('tagBtn').onclick=()=>{if(canTag())tagOut()};$('swimBtn').onclick=()=>{if(!swim)swimToggle()};document.querySelectorAll('.lvBtn[data-l]').forEach(b=>b.onclick=()=>jumpLevel(+b.dataset.l));$('landBtn').onclick=()=>{setMenu(false);if(swim)landNow()};document.body.appendChild($('swimBtn'));
+$('tagBtn').onclick=()=>{if(canTag())tagOut()};$('swimBtn').onclick=()=>{if(!swim)swimToggle()};document.querySelectorAll('.lvBtn[data-l]').forEach(b=>b.onclick=()=>jumpLevel(+b.dataset.l));$('isleBtn').onclick=()=>jumpIsland();$('landBtn').onclick=()=>{setMenu(false);if(swim)landNow()};document.body.appendChild($('swimBtn'));
 function finish(){if(state!=='play'||done)return;done=true;setLens(false);SFX.grow();openNotes(true)}
 function bestLine(){const bq=store.get('best',null),el=$('bestLine');if(el)el.textContent=bq&&bq.sys?'Best: '+bq.sys+' systems built, '+(bq.gen||0)+' salmon generations':''}
 function startGame(){state='play';resetWorld();ac();musStart();document.body.classList.add('playing');resize();hudKey='';hud();cam.x=0}
@@ -1648,7 +1652,7 @@ function player(dt){if(swim){P.walk+=dt;swimStep(dt);return}
  P.sup=Math.min(1,P.sup+dt/10);$('smashBtn').classList.toggle('sup',P.sup>=1);if(P.sup>=1)once('sup','Super is full. Hold Smash, then let go.',6);
  if(slamQ){slamQ=false;smashQ=false;if(P.sup>=1){P.sup=0;hudKey='';strike(4)}else once('supwait','Super is still charging.',3.5)}
  else if(smashQ&&P.cool<=0)strike(1,K.u?'up':(K.l||K.r)?'fwd':'');smashQ=false;
- if(P.lunge>0)P.lunge-=dt;fishFollow(dt);if(!tireJam&&!downed&&restX!==FRX){const dd=FRX-restX;restX+=Math.sign(dd)*Math.min(Math.abs(dd),(Math.abs(restX-(swim?swim.x:P.x))>viewW*1.1?1400:170)*dt)}const dir=(K.r?1:0)-(K.l?1:0);P.idle=(dir||K.u||K.d||P.punch>0||sHeld)?0:P.idle+dt;
+ if(P.lunge>0)P.lunge-=dt;fishFollow(dt);{const HOME=isle&&!swim&&P.x<ISX1?clamp(P.x+(P.x<isleSpawn()?110:-110),ISX0+60,ISX1-60):FRX;if(!tireJam&&!downed&&Math.abs(restX-HOME)>4&&(HOME!==FRX||restX!==FRX)){const dd=HOME-restX;restX+=Math.sign(dd)*Math.min(Math.abs(dd),(Math.abs(restX-(swim?swim.x:P.x))>viewW*1.1?1400:(HOME===FRX?170:240))*dt)}}const dir=(K.r?1:0)-(K.l?1:0);P.idle=(dir||K.u||K.d||P.punch>0||sHeld)?0:P.idle+dt;
  if(P.gc){const s=P.gc;if(s.state!=='grown'||P.tumble>0){P.gc=null;P.support=null}else{if(dir)P.face=dir;const sl=who==='turtle'?.62:1,nx=P.x+dir*155*sl*dt,ny=P.y+((K.d?1:0)-(K.u?1:0))*210*sl*dt;
    if(ny>=GY){P.y=GY;P.gc=null;P.support='ground'}else if(inG(s,nx,ny)){P.x=nx;P.y=ny}else if(inG(s,nx,P.y))P.x=nx;else if(inG(s,P.x,ny))P.y=ny;else if(!inG(s,P.x,P.y)){P.gc=null;P.support=null;P.vy=0}
    P.top=false;
@@ -1729,6 +1733,10 @@ function waterInit(){depot={seen:!!(depot&&depot.seen),look:0,down:0,lt:0};sites
  docks=[64,(sites[0].x+sites[0].w+sites[1].x)/2+10];walls.forEach(wl=>{const a=sites.find(q=>q.x+q.w<wl.x&&q.x+q.w>wl.x-90);if(!a)docks.push(wl.x-66);docks.push(wl.x+62)});
  REDX=fallX()+470+590}
 function swimToggle(){dive(false)}
+/* v0.79 playtest: start on the Baron's island with both animals there (founder: "Add a link to the menu after level 3 saying island that
+   skips right to both animals on the island for playtesting.") */
+function jumpIsland(){jumpLevel(3);sites.slice(0,5).forEach(s=>{s.rows=[];s.state='grown';s.g=1;s.choice=s.choice||(PICK[s.id]?PICK[s.id][0]:s.fix);s.was='grown'});if(!isle)openIsland();toastT=0;$('toast').classList.remove('on');
+ setTimeout(()=>{const x=isleSpawn();swim=null;downed=null;Object.assign(P,{x,y:GY,vx:0,vy:0,face:-1,support:'ground',climb:null,slide:null,energy:100});P.px=x;rest.energy=100;restX=x+90;cam.x=x-viewW*.45;hudKey=''},60)}
 function jumpLevel(n){setMenu(false);startGame();if(n>1){sites.forEach(s=>{s.rows=[];s.state='grown';s.g=1;s.choice=PICK[s.id]?PICK[s.id][0]:s.fix;s.was='grown'});level=n-1;startLevel()}}
 function dive(fish){if(swim){surface();return}
  if(fish){if(!(riverOn&&state==='play'&&P.nap<=0&&!paused()))return;swim=fishSave||{fish:true,x:swimX(),y:WT+40,face:-1,carry:false,air:1,leap:0,t:0,hitT:0,reg:0,fly:false,vx:0,vy:0,spin:0};fishSave=null;
@@ -1788,7 +1796,27 @@ function salmonLife(w,dt){
  if(run.t>2.2&&!run.fedBank){run.fedBank=true;SFX.grow();sites.forEach(s=>{if(s.state==='grown')s.fed=Math.min(6,(s.fed||0)+1)});if(!notes.has('salmon')){notes.add('salmon');toast('Her body feeds the stream and its trees.',6)}}
  if(run.t>6){run.body={x:w.x,y:w.y};run.phase='fry';run.age=0;run.t=0;run.laid=false;{const r3=regs()[3];run.kids=[0,1,2,3,4].map(i=>({x:REDX+i*14-28,y:r3.bot-20,f:1}));run.nymph=[0,1,2,3,4,5,6,7,8,9,10,11].map(i=>({x:r3.sx+40+i*(r3.x1-r3.sx-80)/11,y:r3.top+30+hr(i+9+run.gen)*150,t:0}));w.x=REDX;w.y=r3.bot-26;w.face=1;w.reg=3;w.fly=false}SFX.tag();
   toast('The eggs hatch. You are one of the young.',9)}}
-function fishAct(w){if(w.reg===3&&w.carry&&Math.abs(w.x-REDX)<90){w.carry=false;run.laid=true;run.phase='dying';run.t=0;SFX.pick();word('EGGS LAID',REDX,regs()[3].top-30,'#f08a3c');toast('A salmon spawns once, and then it dies.',6);return}
+/* v0.79: the road east is shut by an iron gate at the world's edge (founder: "add a padlocked gate to the far right screen. When salmon
+   ventures upstream let salmon unlock padlock w nose to let players in to tar co."). The padlock hangs on the gate's top bar, down in the
+   salmon lake where only a fish can reach it; a nose bump springs it and the gate swings open for the walkers. */
+const LOCKX=WORLD-34,LOCKY=GY-112;
+function lockHit(w){if(!depot||depot.seen||w.reg!==3)return false;if(Math.abs(w.x+(w.face||1)*24-LOCKX)>70||Math.abs(w.y-LOCKY)>70)return false;
+ depot.seen=true;depot.gate=T;SFX.clang&&SFX.clang();SFX.grow();stars(LOCKX,LOCKY,8);word('CLICK',LOCKX,LOCKY-46,'#ffd23f');hudKey='';toast('The salmon found the tar factory. The east road is open.',8);return true}
+function drawGate(){if(!depot)return;const x=LOCKX,a=cam.x-120,b=cam.x+viewW+120;if(x<a||x>b)return;
+ const op=depot.seen?clamp((T-(depot.gate||-9))/1.2,0,1):0,o=ease(op),post=(px)=>{strip(px,GY,px,GY-150,9,'#2a2630',{lw:1.4,sh:1});dot(px,GY-154,6,'#2a2630')};
+ post(x-60);post(x+18);
+ // the leaf: iron bars that swing toward the viewer as it opens (drawn as a narrowing leaf)
+ const w=Math.max(10,74*(1-o*.82)),x0=x-58;ctx.save();ctx.lineCap='round';
+ line(x0,GY-8,x0+w,GY-8,'#f4efe4',8);line(x0,GY-8,x0+w,GY-8,'#2a2630',5);line(x0,GY-128,x0+w,GY-128,'#f4efe4',8);line(x0,GY-128,x0+w,GY-128,'#2a2630',5);
+ for(let m=0;m<=5;m++){const bx=x0+w*m/5;line(bx,GY-6,bx,GY-138,'#f4efe4',7);line(bx,GY-6,bx,GY-138,'#2a2630',4);dot(bx,GY-142,3.4,'#2a2630')}ctx.restore();
+ if(!depot.seen){// chain and padlock on the top bar, under the lake surface
+  const ly=LOCKY,sw=RM?0:Math.sin(T*1.6)*3;line(x-6,GY-128,x-6+sw,ly-12,'#cfc8bb',3);
+  shape(ellPts(x-6+sw,ly-16,9,10,4401),'rgba(0,0,0,0)',{lw:4});ctx.strokeStyle='#f4efe4';ctx.lineWidth=4;ctx.beginPath();ctx.arc(x-6+sw,ly-14,9,Math.PI,0);ctx.stroke();
+  shape(rectPts(x-20+sw,ly-12,28,24,4402,.3),'#ffc61a',{lw:2.4,sh:1});dot(x-6+sw,ly-2,3.6,INK);line(x-6+sw,ly-1,x-6+sw,ly+5,INK,2.4);
+  const nf=swim&&swim.fish&&swim.reg===3&&Math.abs(swim.x-LOCKX)<220;if(nf&&!RM){ctx.globalAlpha=.4+.3*Math.sin(T*5);ctx.strokeStyle='#ffffff';ctx.lineWidth=3;ctx.strokeRect(x-26+sw,ly-30,40,46);ctx.globalAlpha=1}}
+ else if(op<1||true){// the sprung lock lies on the road
+  shape(rectPts(x+30,GY-20,24,18,4403,.3),'#ffc61a',{lw:2});ctx.strokeStyle='#f4efe4';ctx.lineWidth=3.4;ctx.beginPath();ctx.arc(x+50,GY-22,7,Math.PI*1.1,Math.PI*1.9);ctx.stroke()}}
+function fishAct(w){if(lockHit(w))return;if(w.reg===3&&w.carry&&Math.abs(w.x-REDX)<90){w.carry=false;run.laid=true;run.phase='dying';run.t=0;SFX.pick();word('EGGS LAID',REDX,regs()[3].top-30,'#f08a3c');toast('A salmon spawns once, and then it dies.',6);return}
  w.spin=.5;SFX.pop();if(w.carry)once('carryhint','Your eggs belong in the pond, far right.',5);else if(run.phase==='adult')once('seahint','The sea lies at the far left.',5)}
 function waterStrike(w){const rx=w.x+w.face*36,pw=2,bub=(x,y)=>{for(let i=0;i<6;i++)puff(x,y,{kind:'dust',vx:(Math.random()-.5)*70,vy:-40-Math.random()*70,g:-60,r:3+Math.random()*4,c:'#eaf8ff',life:.9,max:.9})};w.punch=.18;w.prop=.42;
  if(plug.hp>0&&Math.abs(plug.x-rx)<60){plug.hp-=pw;SFX.crunch();bub(plug.x,w.y);if(plug.hp<=0){plug.hp=0;SFX.collapse();word('CLEAR',plug.x,w.y-60,'#9fd8ee');once('plugopen','The river runs clear.',5)}return}
@@ -2310,7 +2338,7 @@ function render(){if(state==='vacation'){drawVacation();return}
  if(beach>0){const b=ease(beach);shape([[-80,GY+6],[-80,GY-4-10*b],[60,GY-8-14*b],[180,GY-6],[230,GY+6]],'#e3cf9a',{lw:2});for(let i=0;i<3;i++)if(b>.5){const bx=20+i*50+Math.sin(T*2+i)*10;shape(ellPts(bx,GY-22,7,5,i),'#ece6dc',{lw:1.4});line(bx-2,GY-17,bx-2,GY-9,INK,1.4);line(bx+2,GY-17,bx+2,GY-9,INK,1.4);line(bx+6,GY-23,bx+13,GY-21,INK,1.6)}}
  pits.forEach(p=>{const w=26+p.d*6,h=10+p.d*12;shape([[p.x-w,GY-5],[p.x+w,GY-5],[p.x+w*.7,GY-5+h],[p.x-w*.7,GY-5+h]],'#2a1c14',{lw:2});shape(blobPts(p.x-w-12,GY-8,12+p.d*3,5+p.d*2,p.x,8),'#6b4a30',{lw:1.6});shape(blobPts(p.x+w+12,GY-8,12+p.d*3,5+p.d*2,p.x+3,8),'#6b4a30',{lw:1.6})});
  if(level>1)drawDystopia();
- if(isle)drawIsle();drawPit();drawVia();parts.forEach(q=>{if(q.bk)drawPart(q)});sites.forEach(q=>{if(q.state!=='grown')drawSite(q)});if(drawBillsLater){drawBillsLater=false;drawBills()}sites.forEach(q=>{if(q.state==='grown')drawSite(q)});drawRainFlow();drawNeighbors();drawSirens();if(isle){drawHatches();drawIsleFront()}drawDepot();
+ if(isle)drawIsle();drawPit();drawGate();drawVia();parts.forEach(q=>{if(q.bk)drawPart(q)});sites.forEach(q=>{if(q.state!=='grown')drawSite(q)});if(drawBillsLater){drawBillsLater=false;drawBills()}sites.forEach(q=>{if(q.state==='grown')drawSite(q)});drawRainFlow();drawNeighbors();drawSirens();if(isle){drawHatches();drawIsleFront()}drawDepot();
  if(riverOn&&plug.seen&&plug.hp>0&&!swim)chalk(plug.x,GY-58);
  drawTowerDrones();
  docks.forEach((d,i)=>{if(!riverOn||d<cam.x-80||d>cam.x+viewW+80)return;const on=state==='play'&&!swim&&nearDock(P.x)&&Math.abs(P.x-d)<36;
@@ -2880,7 +2908,6 @@ function gooStep(dt,tar){const g=goo,n=g.n;for(let i=1;i<n-1;i++)g.v[i]+=((g.h[i
 function gooBall(x,y,r,al){ctx.globalAlpha=al;dot(x,y,r,'#0b0810');ctx.strokeStyle='#2a2338';ctx.lineWidth=1.6;ctx.beginPath();ctx.arc(x,y,r-1,0,6.2832);ctx.stroke();dot(x-r*.36,y-r*.4,r*.2,'#7a7390');const px=clamp(((swim?swim.x:P.x)-x)/60,-1,1)*r*.12,py=clamp(((swim?swim.y:P.y-60)-y)/60,-1,1)*r*.1;[-1,1].forEach(e=>{dot(x+e*r*.36,y-r*.08,r*.3,'#fbf6ea');dot(x+e*r*.36+px,y-r*.08+py,r*.14,INK)});ctx.globalAlpha=1}
 function drawPit(){const line=cutLine,dot=cutDot;const t=tarS();if(!t||!depot)return;if(!goo)gooInit();const a=cam.x-80,b=cam.x+viewW+80,up=tarUp(),clean=t.state==='grown'?1:t.state==='growing'?t.g:0,cq=ease(clean),tarA=clean<.64?1:0,sw=PITX0+(PITX1-PITX0)*clamp(clean/.62,0,1),ahead=px=>px>sw;
  {const dt=Math.min(.033,Math.max(0,T-(goo.lt||T)));goo.lt=T;if(dt>0)gooStep(dt,tarA>0)}
- if(!depot.seen&&swim&&swim.fish&&swim.reg===3&&swim.x>regs()[3].x1-150){depot.seen=true;SFX.grow();hudKey='';word('UPSTREAM',swim.x,swim.y-70,'#ffd23f');toast('The salmon found the tar factory. The east road is open.',8)}
  if(b<PITX0-120)return;const g=goo,n=g.n,x=t.x,w=t.w;
  // far bank: dead sticks, then pines
  {const pts=[[PITX0-30,PITY+6]];for(let k=0;k<=14;k++)pts.push([PITX0-30+k*(PITX1-PITX0+60)/14,PITY-44-hr(k*2.7)*40]);pts.push([PITX1+30,PITY+6]);shape(pts,mix('#24222b','#3f6b45',cq),{lw:2.4});
