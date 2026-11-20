@@ -3,9 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Rewilder v0.83</title>
+<title>Rewilder v0.84</title>
 <meta name="audience" content="Founder playtest first; phone-first players, teens and college students. Lab build.">
-<!-- TSP build: Rewilder v0.83 | LAB | 2026-11-20
+<!-- TSP build: Rewilder v0.84 | LAB | 2026-11-20
+     v0.84 (second agent playtest): Space smashes even when a top-bar button still has focus (closing the menu mid-game no longer arms it);
+       the beaver is set down on the valve landing when the salmon takes over, never frozen in mid-air; the cleat answers a smash from either
+       side; the island hint clears once you reach the tower; the "walk home" hint is gone because the end screen opens on its own.
      v0.83 (founder: "Use agents to play the last level. It doesn't work."): fixes from real-input playtests (keys and taps only) and a
        code audit. Holding Up carries the climber on past a landing; drone hits knock down without draining energy (no knockout swaps mid
        tower); landing and roof edges hold, so walking to the valve or the cleat can't drop you 24 or 40 floors; a smash anywhere on the
@@ -704,7 +707,7 @@ body.touch .se-chrome p{display:none}
 
 <header class="se-chrome" id="topbar">
   <a class="nav" href="../arcade.html">Cabinet</a>
-  <h1>Rewilder <span class="ver">v0.83</span> <span class="tsp-labchip">LAB</span></h1>
+  <h1>Rewilder <span class="ver">v0.84</span> <span class="tsp-labchip">LAB</span></h1>
   <button id="modeBtn" class="icon" type="button" aria-label="Mode: Dark. Switch to Light."><svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="8"/><path d="M14 6a8 8 0 0 0 0 16z" style="fill:var(--glyph)"/></svg></button>
   <nav class="se-rail" aria-label="Page navigation"><a class="nav" href="./index.html">Back</a></nav>
   <button id="notesBtn" type="button">Field guide</button>
@@ -1205,7 +1208,7 @@ function sUp(){if(sHeld&&sT>=.45)slamQ=true;sHeld=false;sT=0}
 addEventListener('keydown',e=>{
  if(e.key==='Escape'){if(cardOpen)$('cardBtn').click();else if(notesOpen)closeNotes();else if(menuOpen)setMenu(false);else if(lensOn)setLens(false);return}
  if((state!=='play'&&state!=='vacation')||paused())return;
- if(e.target&&e.target.tagName==='BUTTON'&&(e.code==='Space'||e.code==='Enter'))return;
+ if(e.target&&e.target.tagName==='BUTTON'&&(e.code==='Space'||e.code==='Enter')){if(e.code==='Space'&&['menuBtn','soundBtn','lensBtn','tagBtn','modeBtn'].includes(e.target.id)){e.preventDefault();e.target.blur()}else return}
  const k=KM[e.code];
  if(k){if(k==='u'&&!K.u)upQ=true;K[k]=1;e.preventDefault()}
  else if(isSmash(e.code)){if(!e.repeat)sDown();e.preventDefault()}
@@ -2239,6 +2242,7 @@ function questStep(s,dt){const q=fort.tq,g=qGeo(s),fh=s.fh;
   if(!(P.ncl>T))for(const d of fort.decks){const py=q.py||P.y;if((py>d.y+1&&P.y<=d.y+1)||(py<d.y-1&&P.y>=d.y-1)){P.climb=null;P.slide=null;P.support=d;P.y=d.y;P.vy=0;P.ncl=T+.45;dust(P.x,d.y,4,30);break}}}
  if(dt>0&&q.py!==undefined){q.vy=(q.vy||0)+(((P.y-q.py)/dt)-(q.vy||0))*Math.min(1,dt*5);q.vx=(q.vx||0)+(((P.x-(q.px0??P.x))/dt)-(q.vx||0))*Math.min(1,dt*5)}q.px0=P.x;
  q.py=P.y;if(P.support&&P.support.deck&&!P.support.lift)fort.ck=P.support;if(q.hitT>0)q.hitT-=dt;
+ if(!q.toastGone&&(P.climb===s||(P.support&&P.support.deck))){q.toastGone=1;toastT=0;$('toast').classList.remove('on')}
  // the landings' railings hold: you can't walk off either end
  if(P.support&&P.support.deck&&!P.support.lift){const d=P.support;P.x=clamp(P.x,d.x-d.w/2+12,d.x+d.w/2-12)}
  if(P.support===s&&P.y<=g.roofY+2)P.x=clamp(P.x,s.x+12,s.x+s.w-12);
@@ -2260,7 +2264,7 @@ function questStep(s,dt){const q=fort.tq,g=qGeo(s),fh=s.fh;
    for(let k=0;k<n;k++){const d=q.dr[start+k];if(d.st!=='form')continue;d.st='cue';d.t=0;d.k=k;d.pts=pts}q.gt=fl>18?1.1:fl>8?1.3:1.6}}
  if(isle.fin&&!done){q.finT=(q.finT||0)+dt;if(q.finT>6)finish()}
  // water: the pipe fills, then the salmon takes over
- if(q.water&&q.fill<1){q.fill=Math.min(1,q.fill+dt/1.6);if(q.fill>=1&&!q.drain){q.fish.on=true;q.fish.back=0;SFX.tag();word('SALMON',q.fish.x,q.fish.y-60,'#ffd23f');hudKey=''}}
+ if(q.water&&q.fill<1){q.fill=Math.min(1,q.fill+dt/1.6);if(q.fill>=1&&!q.drain){{const LV=fort.decks.find(d=>d.k===QV);if(P.support!==LV&&!P.support)Object.assign(P,{x:clamp(P.x,LV.x-LV.w/2+24,LV.x+LV.w/2-24),y:LV.y,support:LV,climb:null,slide:null,vx:0,vy:0,tumble:0})}q.fish.on=true;q.fish.back=0;SFX.tag();word('SALMON',q.fish.x,q.fish.y-60,'#ffd23f');hudKey=''}}
  // drain: pool empties, the data center cooks, the drones go out one by one; then the turtle's turn
  if(q.drain){const u=T-q.drain;q.pool=Math.max(0,1-u/3);
   if(u>.6&&u<9&&Math.random()<dt*14){const f=QDC[0]+Math.random()*(QDC[1]-QDC[0]+1);puff(s.x+10+Math.random()*(s.w-20),GY-f*fh,{kind:'steam'});if(Math.random()<.35)sparks(s.x+Math.random()*s.w,GY-f*fh,3,'#ffd23f')}
@@ -2297,7 +2301,7 @@ function questStrike(s){const q=fort.tq,g=qGeo(s),sx=P.x+P.face*34,sy=P.y-52;
  // the water valve on the floor-16 landing
  const LVd=fort.decks.find(d=>d.k===QV);if(!q.water&&((P.support===LVd&&P.x>s.x+s.w-120)||(Math.abs(sx-(g.pipeX+18))<62&&Math.abs(sy-g.valveY)<56))){q.water=T;s.arm=false;SFX.steel();SFX.pick();stars(g.pipeX+18,g.valveY,6);word('WATER ON',g.pipeX+10,g.valveY-50,'#7cc4e0');questRenovate(s,0,11);return true}
  // the mooring post
- if((q.roof.ph==='run'||q.roof.ph==='climb')&&Math.abs(sx-g.post.x)<64&&Math.abs(sy-(g.roofY-34))<60){q.roof.post-=who==='turtle'?2:1;SFX.steel();debris(g.post.x,g.roofY-30,5,'#8a7a6a');
+ if((q.roof.ph==='run'||q.roof.ph==='climb')&&(Math.abs(P.x-g.post.x)<90||Math.abs(sx-g.post.x)<64)&&Math.abs(sy-(g.roofY-34))<60){q.roof.post-=who==='turtle'?2:1;SFX.steel();debris(g.post.x,g.roofY-30,5,'#8a7a6a');
   if(q.roof.post<=0){q.roof.ph='cut';q.roof.t=0;q.roof.bt=0;SFX.pfft();shake=RM?0:7;word('SNAP',g.post.x,g.roofY-90,'#ffd23f');setTimeout(()=>word('NO NO NO',s.x+s.w-60,g.roofY-170,'#ffd23f'),600)}return true}
  return false}
 /* ---- art ---- */
@@ -2982,7 +2986,7 @@ function drawIsle(){const line=cutLine,dot=cutDot;const a=cam.x-80,b=cam.x+viewW
  {const dt=Math.min(.05,Math.max(0,T-(isle.lt||T)));isle.lt=T;const L=isle.lair,M=isle.mast;{const ti=sites.findIndex(q=>q.isle),tw=sites[ti];if(tw){if(tw.state==='collapsing'&&L.state==='up'){L.state='burst';L.t=0;SFX.pop();shake=RM?0:18;dust(L.x,GY-40,30,180);word('POP',L.x,GY-260,'#f3b6c8')}if(tw.state!=='standing'&&tw.state!=='toppling'&&tw.state!=='collapsing')sites.splice(ti,1)}}isle.lairS={state:'grown',choice:L.state==='up'?'none':L.state==='village'&&L.g>=1?'terr':'none',cx:L.x,x:L.x-480,w:940};if(L.state==='up'&&state==='play'){L.lt-=dt;if(false&&L.lt<=0){if(L.gap||L.lit<0){L.gap=0;let n=Math.floor(Math.random()*3);if(n===L.prev)n=(n+1+Math.floor(Math.random()*2))%3;L.lit=n;L.prev=n;L.lt=Math.max(1.9,3.8-(L.max-L.hp)*.34);SFX.steam&&SFX.steam()}else{L.gap=1;L.lit=-1;L.lt=.7}}
    if(!swim&&!P.climb&&P.support==='ground'&&Math.abs(P.x-L.x)<470){isle.bt=(isle.bt===undefined?3:isle.bt)-dt;if(isle.bt<=0){isle.bt=Math.max(2.1,3.8-(L.max-L.hp)*.3);const bx=P.x+P.vx*.5+(Math.random()-.5)*40;barrels.push({x:bx,y:GY-600,vy:0});isle.tg={x:bx,t:T}}}};const gn=((L.state==='village'?L.g:0)+(isle.bl&&isle.bl.sp||isle.qend?1:0))/2;isle.gr+=(gn-isle.gr)*Math.min(1,dt*.6);if(L.jolt>0)L.jolt-=dt;if(M.jolt>0)M.jolt-=dt;if(M.state==='down')M.t+=dt;if(L.state==='burst'){L.t+=dt;if(L.t>4.9){L.state='village';L.g=0;SFX.grow()}}else if(L.state==='village'&&L.g<1){L.g=Math.min(1,L.g+dt/6);if(L.g>=1){built++;SFX.grow();leaves(L.x,GY-120,30);word('HOME',L.x,GY-300,'#7cc35a');folk.forEach(f=>f.cheer=3.5)}}
   if(L.state==='village'&&L.g>=1){rainbow=Math.max(rainbow,4);L.sh=Math.min(1,(L.sh||0)+dt/10);isle.party=(isle.party||0)+dt;if(isle.party<10&&Math.random()<dt*6)leaves(L.x-620+Math.random()*1240,GY-40-Math.random()*340,7)}
-  if(!isle.fin&&L.state==='village'&&L.g>=1&&(isle.bl&&isle.bl.t>6||isle.qend&&T-isle.qend>8)){isle.fin=1;isle.ft=0;SFX.grow();hudKey='';toast('A bridge joins the island to the city. Walk home.',9)}
+  if(!isle.fin&&L.state==='village'&&L.g>=1&&(isle.bl&&isle.bl.t>6||isle.qend&&T-isle.qend>8)){isle.fin=1;isle.ft=0;SFX.grow();hudKey=''}
   if(M.state==='up'&&P.x<ISX1&&!swim){isle.rant-=dt;if(isle.rant<=0){isle.rant=1e9;const bx=M.x-70;if(isle.no||!isle.said){word(isle.no?'NO NO NO':'MINE',bx,GY-390,'#ffd23f');isle.said=1}isle.no=0}}
   if(!isle.bl&&isle.mast.state==='down'){isle.bl={t:0,sp:0};SFX.pfft();word('PFFFFT',isle.mast.x-70,GY-340,'#ffd23f')}if(isle.fin&&isle.ft<1)isle.ft=Math.min(1,isle.ft+dt/3.2);
   if(isle.bl){const o=isle.bl.t;isle.bl.t+=dt;const t=isle.bl.t;if(t<4){const q=blimpAt(t);if(Math.random()<dt*30)puff(q[0]+Math.cos(q[2])*90*q[3],q[1]+Math.sin(q[2])*90*q[3],{kind:'steam'});if(o<1.5&&t>=1.5)word('MY BLIMP',q[0],q[1]-60,'#ffd23f');if(o<2.6&&t>=2.6)SFX.pfft()}
