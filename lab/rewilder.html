@@ -3,9 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Rewilder v0.76</title>
+<title>Rewilder v0.77</title>
 <meta name="audience" content="Founder playtest first; phone-first players, teens and college students. Lab build.">
-<!-- TSP build: Rewilder v0.76 | LAB | 2026-11-19
+<!-- TSP build: Rewilder v0.77 | LAB | 2026-11-19
+     v0.77 (founder: "When I win level 3 it just resets. No island."): a knockout on the island no longer throws the body to the mainland's
+       left edge and the partner to its far right; both stay on the island. Both down after the Baron runs revives both at the tower's foot
+       instead of re-running level 3 (which rebuilt the dystopia and erased the island).
      v0.76 (founder: "More architectural inspiration with the layout of the rooms in the eco tower. It looks like a lump, not an architectural
        wonder. Not a redo from scratch but a reconfiguration of the rooms"; "The final tower I can't tell what to do because no contrast on
        electric lines. There should be two different patterns to scale / avoid shock that change depending on the color of the building ...
@@ -656,7 +659,7 @@ body.touch .se-chrome p{display:none}
 
 <header class="se-chrome" id="topbar">
   <a class="nav" href="../arcade.html">Cabinet</a>
-  <h1>Rewilder <span class="ver">v0.76</span> <span class="tsp-labchip">LAB</span></h1>
+  <h1>Rewilder <span class="ver">v0.77</span> <span class="tsp-labchip">LAB</span></h1>
   <button id="modeBtn" class="icon" type="button" aria-label="Mode: Dark. Switch to Light."><svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="8"/><path d="M14 6a8 8 0 0 0 0 16z" style="fill:var(--glyph)"/></svg></button>
   <nav class="se-rail" aria-label="Page navigation"><a class="nav" href="./index.html">Back</a></nav>
   <button id="notesBtn" type="button">Field guide</button>
@@ -1424,10 +1427,16 @@ function tapWorld(wx,wy){if(paused()||P.nap>0)return;if(critTap(wx,wy))return;co
  if(swim&&swim.fish&&near(P.x,GY-80,90,100))surface()}
 function tagSwap(){const ox=P.x;tagOut();Object.assign(P,{x:restX,y:GY,vx:0,vy:0,support:'ground',climb:null,slide:null,face:-1});P.px=P.x;restX=ox}
 /* zero energy: this animal is out; the other one has to come and smash beside it */
+/* v0.77: on the island a knockout stays on the island (founder: "When I win level 3 it just resets. No island."). Before, the body was clamped
+   to the mainland's left edge and the partner sent to the far right, and a second knockout re-ran the whole level, island and all. */
+function onIsle(){return !!isle&&P.x<0}
+function isleSpawn(){const tw=sites.find(q=>q.isle);return clamp(tw?tw.x+tw.w+90:ISDOCK-200,ISX0+60,ISX1-60)}
 function knockOut(){P.ko=false;P.gc=null;if(restartT>0)return;SFX.collapse();shake=RM?0:10;P.climb=null;P.slide=null;
  if(downed){word('BOTH DOWN',P.x,GY-170,'#ffd23f');P.energy=1;restartT=1.6;return}
- const x=clamp(P.x,60,WORLD-80);word('OUT',x,GY-170,'#ffd23f');downed={x,face:P.face};tagOut();rest.energy=0;if(P.energy<60)P.energy=60;
- Object.assign(P,{x:FRX,y:GY,vx:0,vy:0,face:-1,support:'ground',climb:null,slide:null,nap:0,tumble:0});P.px=P.x;restX=x;hudKey=''}
+ const inI=onIsle(),x=inI?clamp(P.x,ISX0+60,ISX1-60):clamp(P.x,60,WORLD-80);word('OUT',x,GY-170,'#ffd23f');downed={x,face:P.face};tagOut();rest.energy=0;if(P.energy<60)P.energy=60;
+ Object.assign(P,{x:inI?clamp(x+(x<isleSpawn()?150:-150),ISX0+60,ISX1-60):FRX,y:GY,vx:0,vy:0,face:-1,support:'ground',climb:null,slide:null,nap:0,tumble:0});P.px=P.x;restX=x;hudKey=''}
+/* both down after the Baron has run: nobody loses level 3. Both animals stand up at the tower's foot, the tower keeps its state. */
+function isleRevive(){const x=isleSpawn();downed=null;swim=null;P.energy=100;rest.energy=100;P.zap=0;P.dizzy=0;Object.assign(P,{x,y:GY,vx:0,vy:0,face:-1,support:'ground',climb:null,slide:null,nap:0,tumble:0,flip:0});P.px=x;restX=x+70;if(fort)fort.hitT=0;SFX.grow();word('UP',x,GY-170,'#7cc35a');leaves(x,GY-60,12);hudKey=''}
 function reviveFriend(){const x=downed.x;downed=null;rest.energy=60;SFX.grow();word('UP',x,GY-170,'#7cc35a');leaves(x,GY-60,10);hudKey=''}
 function spawnBaron(w){const x=w?w.ax+(w.ax<P.x?-1:1)*(viewW*.5+160):P.x<WORLD/2?cam.x+viewW+220:cam.x-220;baron={x,y:GY-310,hp:baronHp,state:'fly',life:0,hold:0,drop:1.2,snag:0,snagged:[],jolt:0,t:0,tx:w?w.ax+60:null,need:w?w.kind:null,dir:1};SFX.blimp();word(pick(['BEHOLD: PARKING','PROGRESS','ALL MINE']),clamp(x,cam.x+90,cam.x+viewW-90),GY-250,'#ffd23f');
  toast('The Baron is coming. Smash his anchor '+baronHp+' times.',4)}
@@ -1541,7 +1550,7 @@ function update(raw){if(state==='vacation'){vacT+=raw;T+=raw;vacStep(raw);return
   if((t.state==='drive'||t.state==='leave')&&P.support==='ground'&&!P.climb&&Math.abs(t.x-P.x)<38&&P.bump<=0){hurt(8);P.vx=(P.x<t.x?-1:1)*320;P.vy=-280;P.support=null;P.bump=.8}}
  for(let i=sprigs.length-1;i>=0;i--){const g=sprigs[i];if(Math.abs(g.x-P.x)<34&&Math.abs(g.y-(P.y-30))<60){sprigs.splice(i,1);P.energy=Math.min(100,P.energy+18);SFX.eat();leaves(g.x,g.y,6)}}
  P.energy=Math.min(100,P.energy+dt*1.2);
- if(!downed)rest.energy=Math.min(100,rest.energy+dt*5);if(restartT>0){restartT-=dt;if(restartT<=0){const L=level;jumpLevel(L);return}}lifeStep(dt);if(P.singe>0&&Math.random()<dt*14)puff(P.x+P.face*10,P.y-120,{kind:'smoke',vx:(Math.random()-.5)*20,vy:-40,r:5,gr:9,c:'#3a3432',life:1.2,max:1.2});
+ if(!downed)rest.energy=Math.min(100,rest.energy+dt*5);if(restartT>0){restartT-=dt;if(restartT<=0){if(isle){isleRevive();return}const L=level;jumpLevel(L);return}}lifeStep(dt);if(P.singe>0&&Math.random()<dt*14)puff(P.x+P.face*10,P.y-120,{kind:'smoke',vx:(Math.random()-.5)*20,vy:-40,r:5,gr:9,c:'#3a3432',life:1.2,max:1.2});
  for(const f of folk){f.x+=f.dir*f.v*dt;if(f.hop>0)f.hop-=dt;if(f.cheer>0){f.cheer-=dt;if(f.hop<=0)f.hop=.5}if(f.x<70)f.dir=1;if(f.x>sites[4].x-50)f.dir=-1}
  if(P.energy<=40&&P.energy>0)once('taghint','Low on energy. Press Tag.',6);
  if(P.energy<=.6||P.ko){P.ko=false;knockOut()}
