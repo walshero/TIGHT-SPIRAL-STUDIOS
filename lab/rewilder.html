@@ -3,9 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Rewilder v0.75</title>
+<title>Rewilder v0.76</title>
 <meta name="audience" content="Founder playtest first; phone-first players, teens and college students. Lab build.">
-<!-- TSP build: Rewilder v0.75 | LAB | 2026-11-19
+<!-- TSP build: Rewilder v0.76 | LAB | 2026-11-19
+     v0.76 (founder: "More architectural inspiration with the layout of the rooms in the eco tower. It looks like a lump, not an architectural
+       wonder. Not a redo from scratch but a reconfiguration of the rooms"; "The final tower I can't tell what to do because no contrast on
+       electric lines. There should be two different patterns to scale / avoid shock that change depending on the color of the building ...
+       black and red with gold-blue electrics ... This must be a puzzle tower. Think zoombinis.")
+       Green tower: same twelve homes, scenes, trees, market and crown, restacked after Habitat 67 and the Interlace. Each home is its own
+       box with a depth side; boxes offset and cantilever over sky gaps around one glass lift core (a cab rides it); each roof is the garden
+       of the box above, trees sized to the headroom; two truss bridges cross the voids; pillars carry the long overhangs; rain runs roof to
+       roof and falls off the last cantilever into the pond. Climb outline is the union of the boxes (ECOB).
+       Baron's tower: painted in black and red bands (courses on black, ribs on red). Every wire floor carries gold wire (braided) and blue
+       (beaded) on white insulators. On black, blue holds and gold bites; on red, gold holds and blue bites. The rule is a picture on the
+       tower's foot (two tiles, tick and cross), never words. Layouts mix so "odd one out" fails; bands shorten near the top so the rule
+       flips faster. A shock flashes that floor's tile beside the player. A reroute repaints. Window glow dimmed, gold trim removed so
+       nothing else on the face looks like a wire. Valve, switch and repair drone unchanged.
      v0.75 (founder: "Rethink the final tower island puzzle. Too abstract." then, to the plan to cut off what the hotel takes from the island:
        "Water and power but not money.")
        The shape breakers and the order sign are gone. A thick blue water main climbs one side of the Baron's tower from the island's spring
@@ -643,7 +656,7 @@ body.touch .se-chrome p{display:none}
 
 <header class="se-chrome" id="topbar">
   <a class="nav" href="../arcade.html">Cabinet</a>
-  <h1>Rewilder <span class="ver">v0.75</span> <span class="tsp-labchip">LAB</span></h1>
+  <h1>Rewilder <span class="ver">v0.76</span> <span class="tsp-labchip">LAB</span></h1>
   <button id="modeBtn" class="icon" type="button" aria-label="Mode: Dark. Switch to Light."><svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="8"/><path d="M14 6a8 8 0 0 0 0 16z" style="fill:var(--glyph)"/></svg></button>
   <nav class="se-rail" aria-label="Page navigation"><a class="nav" href="./index.html">Back</a></nav>
   <button id="notesBtn" type="button">Field guide</button>
@@ -1190,12 +1203,13 @@ function lairHit(power){if(!isle||P.support!=='ground')return false;const rx=P.x
   l.hp-=1;l.jolt=.45;l.lit=-1;l.gap=1;l.lt=.9;l.prev=hi;stats.hits++;SFX.steel();SFX.pop();debris(hx,GY-60,10,'#ffd23f');shake=RM?0:9;word('CRACK',hx,GY-150,'#ffd23f');isle.rant=.6;isle.no=1;
   if(l.hp<=0){l.state='burst';l.t=0;SFX.collapse();SFX.pop();shake=RM?0:18;dust(l.x,GY-40,30,180);word('POP',l.x,GY-260,'#f3b6c8')}return true}
  return false}
-const ECOL=[[0,-210,210,54],[54,-178,178,48],[102,-152,152,48],[150,-128,128,48],[198,-106,106,48],[246,-86,86,48]],ECOR=294;
+/* v0.76: the green tower's twelve homes as stacked boxes [left, right, row] (row 0 sits on the market roof). Climb outline and art share it. */
+const ECOB=[[-198,-122,0],[-104,-26,0],[26,106,0],[124,198,0],[-172,-84,1],[44,154,1],[164,220,1],[-214,-136,2],[70,160,2],[-150,-50,3],[40,124,3],[-64,64,4]],ECOR=294;
 function inG(s,x,y){const k=s.choice,cx=s.cx,dx=Math.abs(x-cx),h=GY-(y-40);if(h<0||s.state!=='grown')return false;
  if(k==='lairup'){const rx=x-cx;return (rx>10&&rx<160&&h<452)||(rx>-300&&rx<265&&h<236)}
  if(k==='terr'){const rx=x-cx;let th=-99;TIERS.forEach(t=>{if(rx>t[0]&&rx<t[1])th=Math.max(th,t[2])});return h<th+52}
  if(k==='arts')return Math.hypot(x-cx,(y-40)-(GY-262))<244;
- if(k==='eco'){const rx=x-cx;let t=-1;ECOL.forEach((e,i)=>{if(rx>e[1]-12&&rx<e[2]+12)t=Math.max(t,(ECOL[i+1]?ECOL[i+1][0]:ECOR+60)+10)});return h<t}
+ if(k==='eco'){const rx=x-cx;let t=-1;if(rx>-222&&rx<222)t=64;if(rx>-24&&rx<24)t=Math.max(t,256);ECOB.forEach(e=>{if(rx>e[0]-12&&rx<e[1]+12)t=Math.max(t,54+48*(e[2]+1)+10)});if(rx>-98&&rx<98)t=Math.max(t,ECOR+70);return h<t}
  const H={woods:150,wind:300,park:90,farm:74,village:134,treat:150,hub:96,canopy:84,tram:60}[k]||0;return H>0&&x>s.x+6&&x<s.x+s.w-6&&h<H}
 function hold(s,x,y){const c=colOf(s,x);if(c<0)return false;const f=Math.floor((GY-(y-40))/s.fh);return alive(s,c,f)||alive(s,c-1,f)||alive(s,c+1,f)||alive(s,c,f+1)||alive(s,c,f-1)}
 function loadOn(s,f){let n=0;for(let i=f+1;i<s.rows.length;i++)if(s.rows[i].some(k=>k&&k.hp>0))n++;return n}
@@ -2025,8 +2039,24 @@ function fortSpec(s,sd0,skip){const Rn=s.rows.length,hd=!!s.isle,stp=hd?5:6;let 
    lights, the neon and every live wire go dead. After the first, a repair drone flies down to undo it; turn the second before it lands,
    or swat it. If it lands, he reroutes both lines to new floors and you go again. With both turned, the tower fails. */
 function fortShuffle(s,first){const Rn=s.rows.length,R=Math.random,ws=R()<.5?-1:1;fort.br=[{kind:'water',f:Math.round(Rn*(.2+R()*.45)),sd:ws,t:0,lvl:1},{kind:'power',f:Math.round(Rn*(.3+R()*.45)),sd:-ws,t:0}];
- fort.ord=[0,1];fort.k=0;fort.rep=null;fort.repT=0;fort.spec=fortSpec(s,Math.floor(R()*99999),fort.br.map(b=>b.f));if(!first){fort.hitT=1.2;fort.rw=1}}
+ fort.ord=[0,1];fort.k=0;fort.rep=null;fort.repT=0;{const q=isleSpec(s,R,fort.br.map(b=>b.f));fort.spec=q.spec;fort.band=q.band}if(!first){fort.hitT=1.2;fort.rw=1}}
 function fortRewire(s){}
+/* v0.76: the Baron's tower is a logic climb (founder: "I can't tell what to do because no contrast on electric lines. There should be two
+   different patterns to scale / avoid shock that change depending on the color of the building ... black and red with gold-blue electrics
+   ... This must be a puzzle tower. Think zoombinis."). The tower is painted in bands of black and red. Every wire floor carries gold wire
+   (braided) and blue wire (beaded). One rule, shown as a picture on the tower's foot and never in words: on black, blue holds and gold bites;
+   on red, gold holds and blue bites. So the safe colour flips with the paint, and the layouts are mixed so "pick the odd one out" fails.
+   Like Zoombinis, the rule is learned by trying, and every shock flashes the rule beside you for that floor. When he reroutes, he repaints. */
+function isleSpec(s,R,skip){const Rn=s.rows.length,C=s.cols,band=[],spec=[];let f=0,c=R()<.5?0:1;
+ while(f<Rn){const L=f>Rn*.6?2+Math.floor(R()*2):3+Math.floor(R()*3);for(let k=0;k<L&&f<Rn;k++)band[f++]=c;c=1-c}
+ for(let f=0;f<Rn;f++){spec[f]=null;if(f<4||f>Rn-3||(f-4)%4)continue;if(skip&&skip.some(f0=>Math.abs(f0-f)<=1))continue;
+  const live=band[f]===0?'g':'b',safe=live==='g'?'b':'g',pat=Math.floor(R()*3),segs=[];
+  if(pat===0){const sw=2+(R()<.5?0:1),sc=1+Math.floor(R()*(C-sw-1));segs.push({c0:0,c1:sc,col:live},{c0:sc,c1:sc+sw,col:safe},{c0:sc+sw,c1:C,col:live})}
+  else if(pat===1){const lc=1+Math.floor(R()*(C-2));segs.push({c0:0,c1:lc,col:safe},{c0:lc,c1:lc+1,col:live},{c0:lc+1,c1:C,col:safe})}
+  else{const sw=2+(R()<.5?0:1);if(R()<.5)segs.push({c0:0,c1:sw,col:safe},{c0:sw,c1:C,col:live});else segs.push({c0:0,c1:C-sw,col:live},{c0:C-sw,c1:C,col:safe})}
+  spec[f]={isle:1,segs}}
+ return {band,spec}}
+function isleLive(f,col){return (fort.band[f]===0)===(col==='g')}
 function fortPipeX(s,b){return b.sd<0?s.x-20:s.x+s.w+20}
 function repStep(s,dt){const br=fort.br;if(!br)return;const w=br[0];if(w.t>0&&w.lvl>0)w.lvl=Math.max(0,w.lvl-dt/3);if(w.t<=0&&w.lvl<1)w.lvl=Math.min(1,w.lvl+dt/2);
  const nOn=br.filter(b=>b.t>0).length;if(nOn===2){if(fort.rep){fort.rep.dead=.01}if(!fort.fail){fort.fail=1.4;SFX.collapse&&SFX.collapse()}fort.fail-=dt;if(fort.fail<=0&&!fort.down)fortDown();return}
@@ -2037,13 +2067,13 @@ function repStep(s,dt){const br=fort.br;if(!br)return;const w=br[0];if(w.t>0&&w.
 function fortInit(s0){const s=s0||sites[0],Rn=s.rows.length,hd=!!s.isle;let sd=level*97+13;const rnd=()=>{sd=(sd*9301+49297)%233280;return sd/233280};
  s.fort=true;s.arm=true;s.foot=null;fort={down:false,spec:fortSpec(s,sd),hitT:0,s,br:hd?[0,1,2].map(i=>({f:0,sd:1,t:0,band:i,sh:i})):null,ord:[0,1,2],k:0,rw:0};if(hd)fortShuffle(s,true);
  if(hd){fort.rep=null;fort.repT=0;fort.fail=0}tdr=[];const n=hd?10:Math.min(12,6+(level-3)*2);for(let i=0;i<n;i++)tdr.push({h:(4+(Rn-6)*((i+.5)/n))*s.fh,ph:rnd()*6.283,v:.5+rnd()*.7,amp:150+rnd()*170,dead:0,x:s.cx,y:0})}
-function wireAt(s,c,f){if(!fort||fort.s!==s)return 0;if(fort.br&&fort.br[1]&&fort.br[1].kind==='power'&&fort.br[1].t>0)return 0;const q=fort.spec[f];if(!q)return 0;const z=f/s.rows.length,on=ph=>((T*.3+ph)%1)<.4;
+function wireAt(s,c,f){if(!fort||fort.s!==s)return 0;if(fort.br&&fort.br[1]&&fort.br[1].kind==='power'&&fort.br[1].t>0)return 0;const q=fort.spec[f];if(!q)return 0;if(q.isle){const g=q.segs.find(g=>c>=g.c0&&c<g.c1);return g&&isleLive(f,g.col)?2:0}const z=f/s.rows.length,on=ph=>((T*.3+ph)%1)<.4;
  if(q.v!==undefined)return c===q.v&&(q.t===2||on(q.ph))?q.t:0;if(q.t===3)return on(q.ph)?3:0;if(c>=q.g&&c<q.g+q.gw)return q.gt&&on(q.ph)?3:0;return 2}
 function fortShock(msg){const s=fort.s||sites[0];if(fort.hitT>0)return;fort.hitT=1.4;P.energy=Math.max(0,P.energy-30);if(P.energy<=0)P.ko=true;hudKey='';P.zap=.9;P.singe=2;SFX.zap();shake=RM?0:9;word('ZAP',P.x,P.y-140,'#ffd23f');sparks(P.x,P.y-60,14,'#9fd0ff');P.climb=null;P.support=null;P.slide=null;P.vx=-P.face*200;P.vy=-160;P.tumble=.8;once('live',msg,5)}
-function fortStep(dt){const s=fort.s||sites[0];if(fort.hitT>0)fort.hitT-=dt;if(fort.down||s.state!=='standing')return;
+function fortStep(dt){const s=fort.s||sites[0];if(fort.hitT>0)fort.hitT-=dt;if(fort.keyT>0)fort.keyT-=dt;if(fort.down||s.state!=='standing')return;
  if(fort.rw>0)fort.rw-=dt;if(s.isle)repStep(s,dt);
  const on=P.climb===s&&state==='play';
- if(on){const c=colOf(s,P.x),f=chestF(s);if(c>=0&&wireAt(s,c,f))fortShock('A shock drops you a floor. Go around a steady wire. Wait out a pulsing one.');
+ if(on){const c=colOf(s,P.x),f=chestF(s);if(c>=0&&wireAt(s,c,f)){if(s.isle&&fort.hitT<=0){fort.keyT=2.6;fort.keyF=f}fortShock('A shock drops you a floor. Go around a steady wire. Wait out a pulsing one.')}
   if(f>3)once('fortclimb','Yellow wires are live. Steady ones have a gap. Pulsing ones go dark.',6)}
  for(let i=tdr.length-1;i>=0;i--){const d=tdr[i];if(d.dead){d.dead+=dt;d.y+=560*d.dead*dt;if(d.y>GY-8){dust(d.x,GY,4,30);tdr.splice(i,1)}continue}
   d.x=s.cx+Math.sin(T*d.v+d.ph)*(s.w/2+d.amp);d.y=GY-d.h+Math.sin(T*1.3+d.ph)*12;
@@ -2096,7 +2126,8 @@ function fortArt(s){if(!fort||fort.down)return;const fh=s.fh,cw=s.cw,Rn=s.rows.l
   if(fort.rep){const r=fort.rep,bob=RM?0:Math.sin(T*8)*2;ctx.save();ctx.translate(r.x,r.y+bob);if(r.dead)ctx.rotate(r.dead*5);shape(ellPts(0,0,16,9,901),'#e8862a',{lw:1.8,sh:1});[-14,14].forEach(o=>{line(o,-6,o,-11,INK,1.4);shape(ellPts(o,-12,10,2.2,902),'rgba(240,248,255,.8)',{lw:.8})});
    line(0,8,6,18,'#8a8a90',2.4);shape(ellPts(7,20,3.4,3.4,903),'#8a8a90',{lw:1});dot(0,-2,3,(Math.floor(T*4)%2)?'#ff3a2a':'#7a1a10');ctx.restore();
    if(!r.dead){ctx.save();ctx.globalCompositeOperation='lighter';const g2=ctx.createRadialGradient(r.x,r.y,0,r.x,r.y,40);g2.addColorStop(0,'rgba(255,80,60,.3)');g2.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g2;ctx.fillRect(r.x-40,r.y-40,80,80);ctx.restore()}}}
- for(let f=0;f<Rn;f++){const q=fort.spec[f];if(!q)continue;const y=GY-(f+.5)*fh;if(y<cam.y-200||y>cam.y+900)continue;
+ if(fort.band&&fort.s===s)isleKey(s);
+ for(let f=0;f<Rn;f++){const q=fort.spec[f];if(!q)continue;const y=GY-(f+.5)*fh;if(y<cam.y-200||y>cam.y+900)continue;if(q.isle){isleWire(s,q,f,y);continue}
   if(q.v!==undefined){const x=s.x+(q.v+.5)*cw;wire(x,y+fh*.45,x,y-fh*.45,q.t,!!wireAt(s,q.v,f),f*13)}
   else if(q.t===3)wire(s.x+4,y,s.x+s.w-4,y,3,!!wireAt(s,0,f),f*17)
   else{if(q.g>0)wire(s.x+4,y,s.x+q.g*cw-4,y,2,true,f*17);if(q.g+q.gw<s.cols)wire(s.x+(q.g+q.gw)*cw+4,y,s.x+s.w-4,y,2,true,f*17+3);if(q.gt)wire(s.x+q.g*cw+4,y,s.x+(q.g+q.gw)*cw-4,y,3,!!wireAt(s,q.g,f),f*17+7)}}
@@ -2104,6 +2135,23 @@ function fortArt(s){if(!fort||fort.down)return;const fh=s.fh,cw=s.cw,Rn=s.rows.l
  shape(rectPts(s.cx-20,top-24,40,24,14,.4),'#55505f',{lw:2});line(s.cx,top-20,s.cx-26,top-58,INK,8);dot(s.cx-27,top-60,10,'#c8342b');if(!s.isle){shape(rectPts(s.cx+26,top-50,84,26,80,.5),'#1b1328',{lw:2,st:'#ffd23f'});paperText('TAR PUMP',s.cx+68,top-37,17,'#ffd23f',0)}
  line(s.x+12,top,s.x+12,top-90,'#3a3040',5);if(Math.sin(T*3)>0)dot(s.x+12,top-92,4,'#ff5a4a');
  if(P.climb===s||P.support===s){const lab='Floor '+Math.max(1,Math.min(Rn,Math.round((GY-P.y)/fh)))+' of '+Rn;paperText(lab,s.cx,P.y-178,20,'#fbf3dc',0)}}
+/* v0.76: the two wires. Gold is braided (dark diagonal wraps), blue is beaded (white beads), so the pair differs in pattern as well as hue.
+   Both sit on white insulators. With the power sent home they go grey and flat. */
+const ISG='#ffc61a',ISB='#38c4ff',ISBK='#141016',ISRD='#a3201f';
+function isleRun(x0,x1,y,col,dead){ctx.lineCap='round';line(x0,y,x1,y,'#fbf6ea',13);line(x0,y,x1,y,INK,10);line(x0,y,x1,y,dead?'#6d6a72':col==='g'?ISG:ISB,6.4);
+ if(!dead){if(col==='g'){ctx.strokeStyle='rgba(60,36,0,.85)';ctx.lineWidth=1.8;ctx.beginPath();for(let x=x0+3;x<x1-2;x+=7){ctx.moveTo(x-2,y+3);ctx.lineTo(x+2,y-3)}ctx.stroke()}
+  else for(let x=x0+5;x<x1-3;x+=9){dot(x,y,2.2,'#ffffff')}}}
+function isleWire(s,q,f,y){const dead=fort.br&&fort.br[1]&&fort.br[1].t>0,cw=s.cw;
+ q.segs.forEach(g=>{const x0=s.x+g.c0*cw+(g.c0?5:-6),x1=s.x+g.c1*cw-(g.c1<s.cols?5:-6);isleRun(x0,x1,y,g.col,dead);[x0,x1].forEach(x=>{shape(rectPts(x-4,y-8,8,16,f*7+g.c0,.3),'#ece6dc',{lw:1.4});strip(x-4,y-3,x+4,y-3,1.2,'#9a948c',{ln:false});strip(x-4,y+3,x+4,y+3,1.2,'#9a948c',{ln:false})})})}
+/* the rule as a picture: a tile of each paint, each with its two wires, a tick on the one that holds and a cross on the one that bites */
+function isleTile(x,y,w,band){const h=w*.62;shape(rectPts(x,y,w,h,band+930,.4),band?ISRD:ISBK,{lw:2.4,sh:1});
+ ctx.save();ctx.beginPath();ctx.rect(x+2,y+2,w-4,h-4);ctx.clip();ctx.strokeStyle=band?'rgba(255,255,255,.12)':'rgba(255,255,255,.08)';ctx.lineWidth=2;ctx.beginPath();
+ if(band){for(let u=x+8;u<x+w;u+=12){ctx.moveTo(u,y);ctx.lineTo(u,y+h)}}else{for(let v=y+8;v<y+h;v+=10){ctx.moveTo(x,v);ctx.lineTo(x+w,v)}}ctx.stroke();ctx.restore();
+ const r=Math.min(16,w*.11),mk=(cx2,cy2,ok)=>{shape(ellPts(cx2,cy2,r,r,ok?940:941),ok?'#1f6a34':'#2a0a0a',{lw:2});ctx.save();ctx.strokeStyle='#ffffff';ctx.lineWidth=Math.max(2.6,r*.28);ctx.lineCap='round';ctx.beginPath();
+  if(ok){ctx.moveTo(cx2-r*.5,cy2);ctx.lineTo(cx2-r*.1,cy2+r*.42);ctx.lineTo(cx2+r*.52,cy2-r*.42)}else{ctx.moveTo(cx2-r*.42,cy2-r*.42);ctx.lineTo(cx2+r*.42,cy2+r*.42);ctx.moveTo(cx2+r*.42,cy2-r*.42);ctx.lineTo(cx2-r*.42,cy2+r*.42)}ctx.stroke();ctx.restore()};
+ [['b',.32],['g',.72]].forEach(([col,fy])=>{const yy=y+h*fy,holds=(band===0)===(col==='b');isleRun(x+10,x+w-r*2-16,yy,col,false);mk(x+w-r-8,yy,holds)})}
+function isleKey(s){const fh=s.fh,w=Math.min(132,(s.w-30)/2),y=GY-fh*3.3;isleTile(s.cx-w-6,y,w,0);isleTile(s.cx+6,y,w,1);
+ if(fort.keyT>0){const b=fort.band[fort.keyF]|0,kx=P.x+(P.x<s.cx?100:-100)-46,ky=P.y-112;ctx.save();ctx.globalAlpha=Math.min(1,fort.keyT*2);isleTile(kx,ky,92,b);ctx.restore()}}
 /* v0.55: red running lights so a dark drone reads against a dark tower. A soft red halo, a pale rim on the body, and two wingtip lamps that blink in turn. */
 function droneLights(ph,dead){if(dead)return;const on=RM?1:.55+.45*Math.sin(T*9+ph),on2=RM?1:.55+.45*Math.sin(T*9+ph+3.1);
  ctx.save();ctx.globalCompositeOperation='lighter';[[-23,-6,on],[23,-6,on2],[0,5,1]].forEach(q=>{const g=ctx.createRadialGradient(q[0],q[1],0,q[0],q[1],26);g.addColorStop(0,'rgba(255,60,44,'+(.6*q[2]).toFixed(2)+')');g.addColorStop(1,'rgba(255,60,44,0)');ctx.fillStyle=g;ctx.fillRect(q[0]-26,q[1]-26,52,52)});ctx.restore();
@@ -2325,6 +2373,12 @@ function lit(x,y,w){ctx.fillStyle='rgba(255,244,220,.17)';ctx.fillRect(x+3,y+2.6
 /* v0.72: the Baron's tower is his hotel: poured concrete, balconies with glass rails, gaudy curtains, a glass lift core with gold trim.
    Each section goes dark when its breaker drops. */
 function hotelCell(s,c,f,x,y,cw,fh,k,d){const n=s.rows.length,band=f<n*.38?0:f<n*.63?1:2,dark=fort&&fort.s===s&&fort.br&&fort.br[1]&&fort.br[1].t>0,sd=k.seed;
+ if(fort&&fort.s===s&&fort.band&&fort.band[f]!==undefined){const bd=fort.band[f],base=bd?ISRD:ISBK;
+  // v0.76: the paint carries the rule, so the face stays quiet: no gold trim, small dim windows, and a texture per paint (ribs on red, courses on black)
+  shape(rectPts(x,y,cw,fh,sd,.5),cardTone(base,sd),{lw:1.8});ctx.save();ctx.beginPath();ctx.rect(x+1,y+1,cw-2,fh-2);ctx.clip();ctx.strokeStyle=bd?'rgba(255,255,255,.11)':'rgba(255,255,255,.07)';ctx.lineWidth=1.6;ctx.beginPath();
+  if(bd){for(let u=x+7;u<x+cw;u+=12){ctx.moveTo(u,y);ctx.lineTo(u,y+fh)}}else{for(let v=y+7;v<y+fh;v+=9){ctx.moveTo(x,v);ctx.lineTo(x+cw,v)}}ctx.stroke();ctx.restore();
+  const lit=!dark&&hr(sd*1.7)<.4;ctx.fillStyle=lit?(bd?"#c46a4c":"#5e4640"):(bd?"#5a1414":"#2a2430");ctx.fillRect(x+cw*.3,y+fh*.22,cw*.4,fh*.38);
+  ctx.fillStyle=bd?'#6a1212':'#2c2630';ctx.fillRect(x-1,y+fh-5,cw+2,5);cracks(x,y,cw,fh,d,sd);return}
  if(c===2){shape(rectPts(x,y,cw,fh,sd,.5),'#2a4a58',{lw:1.6});ctx.fillStyle=dark?'#1b2830':'#3f7a8c';ctx.fillRect(x+6,y+3,cw-12,fh-6);ctx.fillStyle='rgba(251,246,234,.18)';ctx.fillRect(x+8,y+3,5,fh-6);ctx.fillStyle='#c9a84a';ctx.fillRect(x+1,y,3,fh);ctx.fillRect(x+cw-4,y,3,fh);cracks(x,y,cw,fh,d,sd);return}
  shape(rectPts(x,y,cw,fh,sd,.6),k.tc||(k.tc=cardTone('#e6dac4',sd)),{lw:1.8});
  const lit=!dark&&hr(sd*1.7)<.7,cur=['#f06bd8','#4fd0ff','#ffd23f','#ff9f43'][(f+c)%4];
@@ -3300,10 +3354,10 @@ const G={
   const FRAME=['arch','round','square','tall','arch','square','round','tall','arch','square','round','arch'],FCOL=['#2f6fae','#c8553e','#e7c04a','#5fa889','#7a3a6a','#efe2c4','#2f6fae','#c8553e','#e7c04a','#5fa889','#7a3a6a','#2a2a2a'];
   const NW=[3,3,2,2,2];let wi=0;
   const HOMEC=['#e9b8a0','#b8d0c8','#f0d890','#c8b8d8','#e8c8a8','#a8c0d8','#f0c0c8','#c8d8a0','#e0a888','#d8d0b8','#b0c8b0','#f0e0c0'];
-  const home=(cxw,yb,i)=>{const hw2=34,ht=44,x0=cxw-hw2;shape(arcPts(cxw,yb-ht+10,hw2,12,Math.PI,2*Math.PI,10).concat([[cxw+hw2,yb-1],[cxw-hw2,yb-1]]),cardTone(HOMEC[i],i*7),{lw:1.4,sh:1});
+  const home=(cxw,yb,i,nb)=>{const hw2=34,ht=44,x0=cxw-hw2;if(!nb)shape(arcPts(cxw,yb-ht+10,hw2,12,Math.PI,2*Math.PI,10).concat([[cxw+hw2,yb-1],[cxw-hw2,yb-1]]),cardTone(HOMEC[i],i*7),{lw:1.4,sh:1});
    const dx=i%2?cxw+hw2-9:cxw-hw2+9;shape(arcPts(dx,yb-13,4.6,5,Math.PI,2*Math.PI,6).concat([[dx+4.6,yb-1],[dx-4.6,yb-1]]),['#5a3e26','#2f6fae','#c8553e','#3f6b4a'][i%4],{lw:.9});dot(dx+(i%2?-2:2),yb-7,.9,'#ffd23f');
    shape(rectPts(cxw-12,yb-5,24,4,i+300,.2),'#8a5a34',{lw:.7});for(let m=0;m<4;m++)dot(cxw-9+m*6,yb-7,1.8,['#d9534a','#f0c23a','#f3b6c8','#fbf6ea'][(m+i)%4])};
-  const win=(cxw,yb,i)=>{home(cxw,yb,i);const t=FRAME[i],bw=t==='tall'?20:t==='round'?28:30,bh=t==='round'?28:t==='tall'?32:26,bx=cxw-bw/2,yt=yb-bh-8,lit=true;
+  const win=(cxw,yb,i,nb)=>{home(cxw,yb,i,nb);const t=FRAME[i],bw=t==='tall'?20:t==='round'?28:30,bh=t==='round'?28:t==='tall'?32:26,bx=cxw-bw/2,yt=yb-bh-8,lit=true;
    let pts;if(t==='arch'){pts=arcPts(cxw,yt+bw/2,bw/2,bw/2,Math.PI,2*Math.PI,10).concat([[bx+bw,yt+bh],[bx,yt+bh]])}else if(t==='round'){pts=ellPts(cxw,yt+bh/2,bw/2,bh/2,i)}else pts=rectPts(bx,yt,bw,bh,i,.4);
    const fr=pts.map(q=>[(q[0]-cxw)*1.24+cxw,(q[1]-(yt+bh/2))*1.2+yt+bh/2]);shape(fr,FCOL[i],{lw:1.4,sh:1});
    ctx.save();ctx.beginPath();pts.forEach((q,j)=>j?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.closePath();ctx.clip();const g2=ctx.createLinearGradient(0,yt,0,yt+bh);g2.addColorStop(0,'#ffe2a8');g2.addColorStop(1,'#d88a4e');ctx.fillStyle=g2;ctx.fillRect(bx-4,yt-4,bw+8,bh+8);SCN[i](bx,yt,bw,bh);ctx.restore();
@@ -3330,33 +3384,64 @@ const G={
   // the tram: slides in, waits, slides out
   if(LV&&q0>=.9){const cyc=still?6:(T%22),tx=cyc<4?-120+ease(cyc/4)*120:cyc<10?0:cyc<14?ease((cyc-10)/4)*130:999;if(tx<500){ctx.save();const tpts=arcPts(cx,py+22,44,18,Math.PI,2*Math.PI,12).concat([[X(44),by],[X(-44),by]]);ctx.beginPath();tpts.forEach((q,j)=>j?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.closePath();ctx.clip();
    const t0=X(-60)+tx;shape(rectPts(t0,by-30,120,24,51,.4),'#efe2c4',{lw:1.6});strip(t0,by-12,t0+120,by-12,4,'#c8553e',{ln:false});for(let m=0;m<5;m++){ctx.fillStyle='#ffdca0';ctx.fillRect(t0+6+m*23,by-27,16,10)}ctx.restore();glow(cx,by-20,40,.2)}}
-  // ---- terraces: face, homes with their windows, and courses of cut stone ----
-  for(let k=0;k<5;k++){const q=tq(k+1);if(q<=.02||!ST){wi+=NW[k];continue}const hw=HW[k],v=v0(k),yb=Y(v),h2=TH*q,nhw=HW[k+1]||hw-22;
-   shape([[X(-hw),yb],[X(hw),yb],[X(hw-6),yb-h2],[X(-hw+6),yb-h2]],cardTone(['#c98a5a','#e2c27a','#ead8b4','#d4a59a','#e0c49a'][k],seed+k),{lw:2,sh:1});if(q<.9){wi+=NW[k];continue}
-   ctx.save();ctx.strokeStyle='rgba(60,40,20,.14)';ctx.lineWidth=1;ctx.beginPath();for(let r=1;r<4;r++){ctx.moveTo(X(-hw+4),yb-r*12);ctx.lineTo(X(hw-4),yb-r*12)}ctx.stroke();ctx.restore();
-   const n=NW[k];for(let i=0;i<n;i++){const u=-hw+52+(2*hw-104)*(n===1?.5:i/(n-1));win(X(u),yb,wi++)}
-   // a door on every terrace, each a different colour, by the foot of its ramp
-   const dl=k%2?X(hw-22):X(-hw+22);shape(arcPts(dl,yb-16,6,7,Math.PI,2*Math.PI,8).concat([[dl+6,yb-1],[dl-6,yb-1]]),['#c8553e','#2f6fae','#e7c04a','#5fa889','#7a3a6a'][k],{lw:1.2})}
-  // ---- the switchback street: ramps climb from ledge to ledge, rail on the outside, the stream beside them ----
-  const RAMPS=[];for(let k=0;k<4;k++){const hw=HW[k],nhw=HW[k+1],left=k%2===0,xa=left?X(-hw+2):X(hw-2),xb=left?X(-nhw-4):X(nhw+4),ya=Y(v0(k)+TH)+1,yb2=Y(v0(k+1)+TH)+1;RAMPS.push([xa,ya,xb,yb2,k])}
-  if(ST)RAMPS.forEach(([xa,ya,xb,yb2,k])=>{if(tq(k+2)<.9)return;const dir=xb>xa?1:-1,sw=11;
-   // a stair cut into the step between two terraces, outside the faces: treads, a stringer, a rail
-   shape([[xa,ya],[xb,yb2],[xb+dir*sw,yb2],[xa+dir*sw,ya]],'#9a7450',{lw:1.2,sh:1});for(let m=1;m<9;m++){const t=m/9,sx=xa+(xb-xa)*t,sy=ya+(yb2-ya)*t;strip(sx,sy,sx+dir*sw,sy,1.6,'#c9a878',{ln:false})}
-   line(xa-dir*2,ya-10,xb-dir*2,yb2-10,'#3a2a20',1.3);for(let m=0;m<=3;m++){const t=m/3;line(xa-dir*2+(xb-xa)*t,ya+(yb2-ya)*t,xa-dir*2+(xb-xa)*t,ya+(yb2-ya)*t-10,'#3a2a20',1)}
-   if(k===1||k===2)person(xa+(xb-xa)*.5+dir*5,ya+(yb2-ya)*.5,['#8a3f3a','#e7c04a','#3f6b8a','#c86a8a'][k],60+k,k===2)});
-  // ---- the stream: along each ledge front, down each ramp edge, out through the plinth into the pond ----
-  const STREAM=[];for(let k=4;k>=0;k--){const hw=HW[k],ly=Y(v0(k)+TH)+2;if(k===4)STREAM.push([X(0),ly]);const left=(k-1)%2===0;if(k>0){const r=RAMPS[k-1],dir=r[2]>r[0]?1:-1;STREAM.push([r[2]+dir*12,ly],[r[0]+dir*12,r[1]])}else STREAM.push([X(-hw+6),ly])}
-  STREAM.push([X(-212),by-PL+6],[X(-226),by-2]);
-  if(tq(5)>=.9){if(ST){ctx.lineJoin='round';ctx.lineCap='round';ctx.strokeStyle='#2f5a7a';ctx.lineWidth=3.6;ctx.beginPath();STREAM.forEach((q,j)=>j?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();ctx.strokeStyle='#7cc4e0';ctx.lineWidth=2.2;ctx.stroke()}
-   if(LV&&!still){let tot=0;const seg=[];for(let j=1;j<STREAM.length;j++){const d=Math.hypot(STREAM[j][0]-STREAM[j-1][0],STREAM[j][1]-STREAM[j-1][1]);seg.push(d);tot+=d}for(let m=0;m<Math.ceil(tot/26);m++){let u=(T*34+m*26)%tot;for(let j=0;j<seg.length;j++){if(u<=seg[j]){const q=u/seg[j],px=STREAM[j][0]+(STREAM[j+1][0]-STREAM[j][0])*q,pyy=STREAM[j][1]+(STREAM[j+1][1]-STREAM[j][1])*q;line(px-2,pyy-.5,px+2,pyy-.5,'#eaf8ff',1.2);break}u-=seg[j]}}}}
-  // ---- ledges: soil, a tree species of their own, shrubs, herbs, vines over the edge ----
-  for(let k=0;k<5;k++){const q=tq(k+1);if(q<.9||!ST)continue;const hw=HW[k],ly=Y(v0(k)+TH);
-   shape(rectPts(X(-hw+4),ly-6,2*hw-8,8,seed+60+k,.4),'#5a7a3e',{lw:1.4,sh:1});
-   const up=k<4?(()=>{const n2=NW[k+1],h2=HW[k+1],us=[];for(let i=0;i<n2;i++)us.push(-h2+52+(2*h2-104)*(n2===1?.5:i/(n2-1)));return us})():[],gaps=[];if(k<4){const h2=HW[k+1];gaps.push((-hw+(-h2))/2+6);for(let i=0;i<up.length-1;i++)gaps.push((up[i]+up[i+1])/2);gaps.push((hw+h2)/2-6)}const nt=gaps.length;for(let t=0;t<nt;t++){const tx0=X(gaps[t])+(H(k*9+t)-.5)*6;ctx.save();ctx.translate(tx0,ly-5);ctx.scale(2,2);TREE[k](0,0,k*100+t*13);ctx.restore()}
-   for(let t=0;t<Math.round(hw/28);t++)clump(X(-hw+14+H(k*31+t)*(2*hw-28)),ly-8,5+H(k*7+t)*4,[['#3f7a34','#5f9a44','#86b24e'],['#4a6a28','#7a9a34','#b8c24a']][(t+k)%2],8,k*50+t*7);
-   for(let t=0;t<Math.round(hw/30);t++)if(H(k*13+t)<.6){const vx=X(-hw+16+H(k*17+t)*(2*hw-32)),len=10+H(k*19+t)*22;for(let m=0;m<len;m+=3.4){leaf(vx+Math.sin(m*.2)*1.6,ly+2+m,3.4,1+H(m+t)*1,['#2f5a2a','#3f7a34','#5f9a44'][(m/3.4|0)%3]);leaf(vx+Math.sin(m*.2)*1.6,ly+2+m,3.4,Math.PI-1-H(m+t+3),['#3f7a34','#5f9a44','#2f5a2a'][(m/3.4|0)%3])}}
-   // solar scales on two ledges only
-   if(k===1||k===3)for(let m=0;m<3;m++){const sx=X(hw-26-m*13),sy=ly-8;shape([[sx-6,sy+3],[sx,sy-8],[sx+6,sy+3]],'#2f4a6e',{lw:.9})}}
+  /* v0.76: the hill becomes a cluster (founder: "It looks like a lump, not an architectural wonder ... a reconfiguration of the rooms").
+     Same twelve homes, scenes, trees, crown and market; what changes is how the rooms are stacked. After Safdie's Habitat 67 (each home its
+     own box, each box's roof the garden of the home above, streets in the air, voids so light and air pass through) and Scheeren's
+     Interlace (blocks crossing over one another, multi-storey openings): twelve boxes, offset and cantilevered, around one glass lift core.
+     Sky shows through the gaps, two bridges cross them, and the rain runs from roof to roof and falls off the last cantilever into the pond. */
+  const BX=ECOB.map(b=>({u0:b[0],u1:b[1],r:b[2],v0:PL+b[2]*TH,v1:PL+(b[2]+1)*TH})),CORE=[-12,12,PL+4*TH];
+  const rowOK=r=>tq(r+1)>=.9;
+  // the glass lift core: one column of circulation, like Habitat's cores, from the market roof to the top home
+  if(ST&&rowOK(0)){const c0=X(CORE[0]),c1=X(CORE[1]),yt=Y(CORE[2]),yb0=Y(PL);shape(rectPts(c0-3,yt,c1-c0+6,yb0-yt,seed+90,.3),'#3a4048',{lw:1.8,sh:1});
+   const g3=ctx.createLinearGradient(c0,0,c1,0);g3.addColorStop(0,'#9fc4d4');g3.addColorStop(.5,'#d8ecf2');g3.addColorStop(1,'#7fa8bc');ctx.fillStyle=g3;ctx.fillRect(c0+1,yt+3,c1-c0-2,yb0-yt-3);
+   for(let r=1;r<4;r++)strip(c0,Y(PL+r*TH),c1,Y(PL+r*TH),2.4,'#3a4048',{ln:false});ctx.fillStyle='rgba(255,255,255,.45)';ctx.fillRect(c0+3,yt+4,2,yb0-yt-6)}
+  const shadowUnder=b=>{const x0=X(b.u0),x1=X(b.u1),y=Y(b.v0);const gs=ctx.createLinearGradient(0,y,0,y+12);gs.addColorStop(0,'rgba(12,10,22,.3)');gs.addColorStop(1,'rgba(12,10,22,0)');ctx.fillStyle=gs;ctx.fillRect(x0+2,y,x1-x0-4,12)};
+  const pillar=(u,va,vb)=>{strip(X(u),Y(va),X(u),Y(vb),5,'#d8ccb4',{lw:1});strip(X(u)-4,Y(vb)+3,X(u)+4,Y(vb)+3,3,'#b8ab92',{ln:false})};
+  const box=(b,i)=>{const x0=X(b.u0),x1=X(b.u1),yt=Y(b.v1),yb=Y(b.v0),bw=x1-x0,tone=cardTone(HOMEC[i],i*7+seed);
+   // the box's far side and roof edge, cut from darker card, so each home reads as a box set into the stack and not a flat face
+   shape([[x1,yb],[x1+7,yb-5],[x1+7,yt-5],[x1,yt]],cardTone('#6a5a4a',i+40),{lw:1.2});shape([[x0,yt],[x0+7,yt-5],[x1+7,yt-5],[x1,yt]],'#d9cfba',{lw:1});
+   shape(rectPts(x0,yt,bw,yb-yt,seed+i*11,.5),tone,{lw:2,sh:1});strip(x0+1,yt+3,x1-1,yt+3,5,'#efe6d4',{lw:.7});
+   ctx.save();ctx.strokeStyle='rgba(60,40,20,.12)';ctx.lineWidth=1;ctx.beginPath();for(let m=1;m<Math.floor(bw/26);m++){ctx.moveTo(x0+m*26,yt+7);ctx.lineTo(x0+m*26,yb-2)}ctx.stroke();ctx.restore();
+   const off=bw>96?(i%2?-1:1)*(bw/2-40):0,wx=(x0+x1)/2+off;win(wx,yb-1,i,true);
+   // a wide box gets a glass balcony door on its other side: no second scene, just a plant behind the rail
+   if(bw>96){const gx=(x0+x1)/2-off-9;shape(rectPts(gx,yb-38,18,36,i+500,.2),'#2a3440',{lw:1.2});const gg=ctx.createLinearGradient(0,yb-38,0,yb-2);gg.addColorStop(0,'#ffe2a8');gg.addColorStop(1,'#e0a060');ctx.fillStyle=gg;ctx.fillRect(gx+2,yb-36,14,32);
+    clump(gx+9,yb-12,5,['#2f5a2a','#3f7a34','#5f9a44'],7,i*31);strip(gx-4,yb-14,gx+22,yb-14,1.6,'#3a3030',{ln:false});for(let m=0;m<4;m++)line(gx-2+m*7.5,yb-14,gx-2+m*7.5,yb-3,'#3a3030',1)}};
+  const covers=b=>{const c=[];BX.forEach(o=>{if(o.r===b.r+1)c.push([o.u0,o.u1])});if(CORE[2]>b.v1&&b.u0<CORE[1]&&b.u1>CORE[0])c.push([CORE[0],CORE[1]]);return c};
+  const exposed=b=>{let sp=[[b.u0+3,b.u1-3]];covers(b).forEach(([a,z])=>{const n=[];sp.forEach(([p,q])=>{if(z<=p||a>=q){n.push([p,q]);return}if(a>p)n.push([p,a-2]);if(z<q)n.push([z+2,q])});sp=n});return sp.filter(([p,q])=>q-p>6)};
+  const headroom=(b,u)=>{let h=1e9;BX.forEach(o=>{if(o.v0>=b.v1&&u>o.u0-6&&u<o.u1+6)h=Math.min(h,o.v0-b.v1)});return h};
+  const garden=b=>{const ly=Y(b.v1)-5;shape(rectPts(X(b.u0)+2,ly-5,X(b.u1)-X(b.u0)-4,7,seed+70+b.u0,.4),'#5a7a3e',{lw:1.3,sh:1});
+   exposed(b).forEach(([p,q],t)=>{const w2=q-p,mid=(p+q)/2,hr2=headroom(b,mid);
+    if(w2>=24&&b.r>=0){const sc=Math.min(1.8,Math.max(.8,(hr2-4)/50));ctx.save();ctx.translate(X(mid)+(H(b.u0+t)-.5)*6,ly-3);ctx.scale(sc,sc);TREE[b.r](0,0,b.r*100+t*13+b.u0);ctx.restore()}
+    for(let m=0;m<Math.max(1,Math.round(w2/22));m++)clump(X(p+8+H(b.u0*3+m+t)*(w2-16)),ly-4,4+H(b.u0+m)*3,[['#3f7a34','#5f9a44','#86b24e'],['#4a6a28','#7a9a34','#b8c24a']][(m+b.r+2)%2],7,b.u0+m*7)});
+   // vines over the lip, longest where the box hangs out over air
+   [b.u0,b.u1].forEach((ue,e)=>{const hang=!BX.some(o=>o.r===b.r-1&&ue>o.u0+4&&ue<o.u1-4)&&b.r>0,vx=X(ue+(e?-8:8)),len=hang?26+H(ue)*20:8+H(ue)*8;
+    for(let m=0;m<len;m+=3.4){leaf(vx+Math.sin(m*.2)*1.6,ly+4+m,3.4,1+H(m+ue)*1,['#2f5a2a','#3f7a34','#5f9a44'][(m/3.4|0)%3]);leaf(vx+Math.sin(m*.2)*1.6,ly+4+m,3.4,Math.PI-1-H(m+ue+3),['#3f7a34','#5f9a44','#2f5a2a'][(m/3.4|0)%3])}})};
+  const bridge=(v,ua,ub)=>{const xa=X(ua),xb=X(ub),y=Y(v)-6;shape(rectPts(xa,y-1,xb-xa,6,seed+v,.2),'#c9b898',{lw:1.4,sh:1});
+   ctx.strokeStyle='#6a5a48';ctx.lineWidth=1.3;ctx.beginPath();const n=Math.max(3,Math.round((xb-xa)/14));for(let m=0;m<=n;m++){const px=xa+(xb-xa)*m/n;ctx.moveTo(px,y+5);ctx.lineTo(xa+(xb-xa)*(m+.5)/n,y+13)}ctx.moveTo(xa,y+13);ctx.lineTo(xb,y+13);ctx.stroke();
+   line(xa,y-11,xb,y-11,'#3a2a20',1.3);for(let m=0;m<=n;m++){const px=xa+(xb-xa)*m/n;line(px,y-1,px,y-11,'#3a2a20',1)}};
+  if(ST){
+   [0,1,2,3,4].forEach(r=>{if(!rowOK(r))return;
+    if(r===0)garden({u0:-210,u1:210,r:-1,v0:0,v1:PL});else BX.forEach(o=>{if(o.r===r-1)garden(o)});
+    BX.forEach((b,i)=>{if(b.r===r)box(b,i)});
+    BX.forEach(b=>{if(b.r===r&&r>0)shadowUnder(b)});
+    if(r===1)bridge(PL+TH,-26,26);if(r===2)bridge(PL+2*TH,-84,44);
+    if(r===2)pillar(-192,PL+TH,PL+2*TH);if(r===3){pillar(-90,PL+2*TH,PL+3*TH);pillar(48,PL+2*TH,PL+3*TH)}});
+   if(rowOK(4))BX.forEach(b=>{if(b.r===4)garden(b)});
+   [0,1,2,3].forEach(r=>{if(rowOK(r)&&!rowOK(r+1))BX.forEach(b=>{if(b.r===r)garden(b)})});
+   // solar scales on two roofs only
+   [[6,190],[10,82]].forEach(([bi,u])=>{const b=BX[bi];if(!b||!rowOK(b.r))return;for(let m=0;m<3;m++){const sx=X(u-13+m*13),sy=Y(b.v1)-10;shape([[sx-6,sy+3],[sx,sy-8],[sx+6,sy+3]],'#2f4a6e',{lw:.9})}})}
+  // the lift: a cab rides the core and pauses at each floor
+  if(LV&&rowOK(3)){const cyc=still?1.5:(T*.35)%8,st2=Math.floor(cyc),fr=cyc-st2,fl=st2<4?st2:7-st2,nx=st2<4?st2+1:6-st2,mv=fr<.6?0:ease((fr-.6)/.4),v=PL+4+(fl+(nx-fl)*mv)*TH*.9;
+   const cy2=Y(v);shape(rectPts(X(-9),cy2-22,18,20,seed+91,.2),'#c8553e',{lw:1.2});ctx.fillStyle='#ffdca0';ctx.fillRect(X(-6),cy2-19,12,9);person(X(0),cy2-3,'#3f6b8a',77,false);line(X(0),cy2-22,X(0),Y(CORE[2]),'rgba(40,40,48,.7)',1)}
+  // a neighbour crosses the upper bridge
+  if(LV&&rowOK(2)){const u=still?-30:-80+((T*14)%124);person(X(u),Y(PL+2*TH)-7,'#c86a8a',78,Math.floor(T*.11)%2===0)}
+  // ---- the stream: rain from the crown runs roof to roof and falls off the last cantilever into the pond ----
+  const STREAM=[[X(-6),Y(RF)-4],[X(-60),Y(RF)-4],[X(-66),Y(PL+4*TH)-4],[X(-146),Y(PL+4*TH)-4],[X(-150),Y(PL+3*TH)-4],[X(-210),Y(PL+3*TH)-4],[X(-217),Y(PL+3*TH)+2],[X(-218),by-4],[X(-232),by-1]];
+  if(tq(5)>=.9){if(ST){ctx.lineJoin='round';ctx.lineCap='round';ctx.strokeStyle='#2f5a7a';ctx.lineWidth=3.6;ctx.beginPath();STREAM.forEach((q,j)=>j?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.stroke();ctx.strokeStyle='#7cc4e0';ctx.lineWidth=2.2;ctx.stroke();
+    // the last fall is a real ribbon of water, wider than the runnels on the roofs
+    shape([[X(-219),Y(PL+3*TH)+2],[X(-213),Y(PL+3*TH)+2],[X(-214),by-6],[X(-222),by-6]],'rgba(124,196,224,.9)',{lw:1.2});for(let m=0;m<4;m++)line(X(-219+m*1.6),Y(PL+3*TH)+6,X(-220+m*1.8),by-8,'rgba(234,248,255,.7)',.8)}
+   if(LV&&!still){let tot=0;const seg=[];for(let j=1;j<STREAM.length;j++){const d=Math.hypot(STREAM[j][0]-STREAM[j-1][0],STREAM[j][1]-STREAM[j-1][1]);seg.push(d);tot+=d}for(let m=0;m<Math.ceil(tot/26);m++){let u=(T*34+m*26)%tot;for(let j=0;j<seg.length;j++){if(u<=seg[j]){const q=u/seg[j],px=STREAM[j][0]+(STREAM[j+1][0]-STREAM[j][0])*q,pyy=STREAM[j][1]+(STREAM[j+1][1]-STREAM[j][1])*q;line(px-2,pyy-.5,px+2,pyy-.5,'#eaf8ff',1.2);break}u-=seg[j]}}
+    for(let m=0;m<5;m++){const a=(T*2+m*.37)%1;dot(X(-218)+(m-2)*4*a,by-6-Math.sin(a*Math.PI)*10,1.4,'rgba(234,248,255,.85)')}}}
   // ---- the pond at the foot, reeds, and a heron who has noticed the water ----
   if(ST&&tq(1)>=.9){shape(ellPts(X(-246),by+1,36,6,seed+70),'#2f5a7a',{lw:1.4});for(let m=0;m<6;m++){const rx=X(-276+m*7);strip(rx,by+2,rx+Math.sin(m)*2,by-16-H(80+m)*14,2,'#3f8443',{lw:.6})}
    const hx=X(-232),hy=by-2;line(hx-1,hy,hx-2,hy-14,'#3a3a40',1.2);line(hx+2,hy,hx+2,hy-14,'#3a3a40',1.2);shape(ellPts(hx,hy-20,9,5,71),'#9aa4b0',{lw:1.2,sh:1});ctx.strokeStyle='#9aa4b0';ctx.lineWidth=2.4;ctx.beginPath();ctx.moveTo(hx+6,hy-22);ctx.quadraticCurveTo(hx+12,hy-32,hx+8,hy-38);ctx.stroke();shape(ellPts(hx+9,hy-39,3.4,2.6,72),'#c9d0d8',{lw:1});shape([[hx+12,hy-40],[hx+21,hy-38],[hx+12,hy-38]],'#e7c04a',{lw:.6});dot(hx+9,hy-40,.9,INK)}
