@@ -3,9 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Rewilder v0.81</title>
+<title>Rewilder v0.82</title>
 <meta name="audience" content="Founder playtest first; phone-first players, teens and college students. Lab build.">
-<!-- TSP build: Rewilder v0.81 | LAB | 2026-11-20
+<!-- TSP build: Rewilder v0.82 | LAB | 2026-11-20
+     v0.82 (founder: "The drone flights look like chains. I'd rather see a line of drones like in galaga, moving in patterns the player can
+       identify and avoid. No flight patterns. It's not clear what the lever is at top of the building and if I've won when the building is
+       all white but there's still a lever."): drones are a Galaga row of eight above the climber; three or four neighbours wiggle, then peel
+       off as a line flying one of four fixed shapes (sweep, loop, S, drop) at the climber's height, then rejoin. No path lines drawn. The roof
+       door slides into a housing; the old fortress roof-switch lever and antenna are gone from this tower; done valves sit still at a quarter turn; the mooring is a rope on a
+       cleat that pulses white while it's the thing to hit. The win is shown: fireworks, neighbours on every landing and the roof, and the end
+       screen opens on its own a few seconds after the island's village finishes.
      v0.81 (founder: "The beaver climbs (fastest) avoiding a pattern of drones. That attack sort of like Galaga ... the beaver turns on the
        water which allows the salmon to swim past the beaver and turn the pool drain valve, which causes data center section to smoke and
        sizzle and the drones drop. Now the turtle can climb safely because the weight of two characters is needed to open the door to the
@@ -690,7 +697,7 @@ body.touch .se-chrome p{display:none}
 
 <header class="se-chrome" id="topbar">
   <a class="nav" href="../arcade.html">Cabinet</a>
-  <h1>Rewilder <span class="ver">v0.81</span> <span class="tsp-labchip">LAB</span></h1>
+  <h1>Rewilder <span class="ver">v0.82</span> <span class="tsp-labchip">LAB</span></h1>
   <button id="modeBtn" class="icon" type="button" aria-label="Mode: Dark. Switch to Light."><svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="8"/><path d="M14 6a8 8 0 0 0 0 16z" style="fill:var(--glyph)"/></svg></button>
   <nav class="se-rail" aria-label="Page navigation"><a class="nav" href="./index.html">Back</a></nav>
   <button id="notesBtn" type="button">Field guide</button>
@@ -2193,8 +2200,8 @@ function qGeo(s){const R=s.x+s.w;return{pipeX:R+24,pipeTop:qD(s,QP)-40,valveY:qD
  pool:{x0:s.cx-10,x1:R-8},plateDeck:QV}}
 function questInit(s){const q=isleSpec(s,Math.random,null);fort.band=q.band;fort.spec=q.spec.map(()=>null);fort.lifts=[];fort.ck=null;tdr=[];
  fort.decks=QL.map(f=>({deck:1,x:s.cx,w:s.w+44,y:qD(s,f),k:f}));
- const dr=[];for(let i=0;i<6;i++)dr.push({i,side:i%2?-1:1,row:Math.floor(i/2),x:s.cx+(i%2?-1:1)*300,y:GY-400,st:'hold',t:0,pts:null,len:0,wob:Math.random()*6});
- fort.tq={water:0,fill:0,drain:0,pool:1,hand:0,door:0,weight:0,dr,gt:2.4,hitT:0,ren:[],rs:[],fish:{x:s.x+s.w+70,y:GY+14,on:false,face:-1,back:0},
+ const dr=[];for(let i=0;i<8;i++)dr.push({i,x:s.cx+(i-3.5)*48,y:GY-420,st:'form',t:0,path:null});
+ fort.tq={water:0,fill:0,drain:0,pool:1,hand:0,door:0,weight:0,dr,gt:1.2,fy:GY-420,pat:0,hitT:0,ren:[],rs:[],fish:{x:s.x+s.w+70,y:GY+14,on:false,face:-1,back:0},
   roof:{ph:'wait',t:0,post:2,bt:-1},end:0}}
 function questRenovate(s,f0,f1){const q=fort.tq;for(let f=f0;f<=f1&&f<s.rows.length;f++){if(q.rs[f]!==undefined)continue;q.rs[f]=T+.3+(f-f0)*.22;q.ren[f]=0}}
 function questSupportAt(s,x,y){if(Math.abs(y-GY)<3)return'ground';const d=fort.decks.find(d=>Math.abs(d.y-y)<3);if(d)return d;if(Math.abs(y-qGeo(s).roofY)<3)return s;return null}
@@ -2205,39 +2212,48 @@ function qPath(pts){const out=[];for(let i=0;i<pts.length-1;i++){const p0=pts[Ma
    .5*((2*p1[1])+(-p0[1]+p2[1])*t+(2*p0[1]-5*p1[1]+4*p2[1]-p3[1])*t2+(-p0[1]+3*p1[1]-3*p2[1]+p3[1])*t3)])}}out.push(pts[pts.length-1]);
  let len=0;const acc=[0];for(let i=1;i<out.length;i++){len+=Math.hypot(out[i][0]-out[i-1][0],out[i][1]-out[i-1][1]);acc.push(len)}return{p:out,acc,len}}
 function qAt(path,u){const L=u*path.len;let i=1;while(i<path.acc.length-1&&path.acc[i]<L)i++;const a=path.acc[i-1],b=path.acc[i],k=b>a?(L-a)/(b-a):0;return[path.p[i-1][0]+(path.p[i][0]-path.p[i-1][0])*k,path.p[i-1][1]+(path.p[i][1]-path.p[i-1][1])*k]}
-function qSwoop(s,d,delay){delay=delay||0;const q=fort.tq,dir=d.x<s.cx?1:-1,ty=Math.floor(Math.random()*4),hw=s.w/2;
- const build=A=>{let pts;if(ty===0)pts=[[d.x,d.y],[s.cx-dir*(hw+50),A[1]-70],A,[s.cx+dir*(hw+70),A[1]+50],[s.cx+dir*(hw+240),A[1]+20]];
-  else if(ty===1)pts=[[d.x,d.y],[A[0]+dir*30,A[1]-330],A,[A[0]-dir*20,A[1]+250]];else if(ty===2)pts=[[d.x,d.y],[A[0]-dir*40,A[1]+320],A,[A[0]+dir*20,A[1]-280]];
-  else pts=[[d.x,d.y],[A[0]-dir*230,A[1]-220],A,[A[0]+dir*240,A[1]+230]];return qPath(pts)};
- // aim where you will be when it crosses, from how you are moving now: keep climbing into a drawn line and it meets you
- let A=[P.x,P.y-56],path=build(A);for(let it=0;it<3;it++){const dur=Math.max(1.1,path.len/400),tA=.95+delay+path.acc[24]/(path.len/dur);A=[clamp(P.x+(q.vx||0)*tA,s.x+8,s.x+s.w-8),clamp(P.y-56+(q.vy||0)*tA,qGeo(s).roofY+60,GY-120)];path=build(A)}
- d.path=path;d.st='warn';d.t=0;q.nsw=(q.nsw||0)+1}
+/* v0.82: Galaga, as the founder asked ("a line of drones like in galaga, moving in patterns the player can identify and avoid. No flight
+   patterns"): eight drones hover in a row above the climber, shimmying, and every couple of seconds three or four neighbours wiggle and peel
+   off as a line flying one of four fixed shapes, then rejoin the row. No lines are drawn; you learn the shapes. The shapes are placed at
+   your height, centred on the tower, never aimed at you:
+     SWEEP  down the left side, straight across the face at your level, back up the right
+     LOOP   down the middle, a loop around your level, back up
+     S      side to side down across the face in an S, through your level
+     DROP   straight down one column past you, then back up  */
+function qSlot(s,d){return[s.cx+(d.i-3.5)*48+Math.sin(T*1.1)*30,fort.tq.fy+Math.sin(T*2+d.i)*4]}
+function qPattern(s,ay,kind,col){const L=s.x,R=s.x+s.w,C=s.cx;
+ if(kind===0)return[[L-60,ay-150],[L-50,ay],[R+50,ay],[R+60,ay-150]];
+ if(kind===1)return[[C-30,ay-170],[C-110,ay-10],[C,ay+80],[C+110,ay-10],[C+30,ay-170]];
+ if(kind===2)return[[L+10,ay-170],[R-10,ay-85],[L+10,ay],[R-10,ay+85],[R+90,ay+20]];
+ const x=L+s.cw*(col+.5);return[[x,ay-170],[x,ay+150],[x+40,ay+40]]}
 function questStep(s,dt){const q=fort.tq,g=qGeo(s),fh=s.fh;
  // the climb: the roof door stops you until the weight is on the plate; a landing catches you as you pass it
  if(P.climb===s){if(!q.door)P.y=Math.max(P.y,g.roofY+106);
   if(!(P.ncl>T))for(const d of fort.decks){const py=q.py||P.y;if((py>d.y+1&&P.y<=d.y+1)||(py<d.y-1&&P.y>=d.y-1)){P.climb=null;P.slide=null;P.support=d;P.y=d.y;P.vy=0;P.ncl=T+.45;dust(P.x,d.y,4,30);break}}}
  if(dt>0&&q.py!==undefined){q.vy=(q.vy||0)+(((P.y-q.py)/dt)-(q.vy||0))*Math.min(1,dt*5);q.vx=(q.vx||0)+(((P.x-(q.px0??P.x))/dt)-(q.vx||0))*Math.min(1,dt*5)}q.px0=P.x;
  q.py=P.y;if(P.support&&P.support.deck&&!P.support.lift)fort.ck=P.support;if(q.hitT>0)q.hitT-=dt;
- // the drones: formation, warning, swoop, return
- const tgt=q.fish.on?null:qOnTower(s);const fy=clamp(P.y-60,g.roofY,GY-160);
- q.dr.forEach(d=>{d.t+=dt;const sx=d.side>0?s.x+s.w+170:s.x-150,sy=fy-130-d.row*84+Math.sin(T*1.4+d.i)*8;
-  if(d.st==='hold'){d.x+=(sx-d.x)*Math.min(1,dt*2.2);d.y+=(sy-d.y)*Math.min(1,dt*2.2)}
-  else if(d.st==='warn'){d.x+=Math.sin(T*30)*.6;if(d.t>.95){d.st='dive';d.t=0;d.dur=Math.max(1.1,d.path.len/400)}}
-  else if(d.st==='dive'){const u=clamp(d.t/d.dur,0,1),p=qAt(d.path,u);d.x=p[0];d.y=p[1];if(u>=1){d.st='back';d.t=0}
-   if(tgt&&q.hitT<=0&&Math.hypot(d.x-P.x,d.y-(P.y-56))<40){q.hitT=1.1;SFX.zap();sparks(P.x,P.y-60,10,'#9fd0ff');word('ZAP',P.x,P.y-150,'#9fd0ff');if(who!=='turtle')hurt(10);
-    P.climb=null;P.support=null;P.slide=null;P.vx=clamp((s.cx-P.x)*1.2,-90,90);P.vy=-140;P.tumble=.45;P.kfall=1;shake=RM?0:6}}
-  else if(d.st==='back'){d.x+=(sx-d.x)*Math.min(1,dt*2.6);d.y+=(sy-d.y)*Math.min(1,dt*2.6);if(d.t>1.1)d.st='hold'}
+ // the drones: the row above you, and lines that peel off from it
+ const tgt=q.fish.on?null:qOnTower(s);q.fy+=(clamp(P.y-56-240,g.roofY-120,GY-330)-q.fy)*Math.min(1,dt*1.8);
+ q.dr.forEach(d=>{d.t+=dt;const sl=qSlot(s,d);
+  if(d.st==='form'){d.x+=(sl[0]-d.x)*Math.min(1,dt*4);d.y+=(sl[1]-d.y)*Math.min(1,dt*4)}
+  else if(d.st==='cue'){d.x=sl[0]+Math.sin(T*28+d.i)*4;d.y=sl[1];if(d.t>.7){d.st='fly';d.t=-d.k*.24;d.path=qPath([[d.x,d.y]].concat(d.pts,[sl]))}}
+  else if(d.st==='fly'){if(d.t<0){d.x=sl[0];d.y=sl[1];return}const dur=d.path.len/300,u=clamp(d.t/dur,0,1),p=qAt(d.path,u);d.x=p[0];d.y=p[1];if(u>=1){d.st='back';d.t=0}
+   if(tgt&&q.hitT<=0&&Math.hypot(d.x-P.x,d.y-(P.y-56))<38){q.hitT=1.1;SFX.zap();sparks(P.x,P.y-60,10,'#9fd0ff');word('ZAP',P.x,P.y-150,'#9fd0ff');if(who!=='turtle')hurt(10);
+    P.climb=null;P.support=null;P.slide=null;P.vx=clamp((s.cx-P.x)*1.2,-90,90);P.vy=-140;P.tumble=.45;shake=RM?0:6}}
+  else if(d.st==='back'){d.x+=(sl[0]-d.x)*Math.min(1,dt*3);d.y+=(sl[1]-d.y)*Math.min(1,dt*3);if(d.t>1)d.st='form'}
   else if(d.st==='fade'){d.y+=Math.sin(T*17+d.i)*d.t*2;d.x+=Math.sin(T*23+d.i)*d.t*3;if(d.t>1.5){d.st='fall';d.t=0;sparks(d.x,d.y,6,'#ffd23f')}}
   else if(d.st==='fall'){d.vy=(d.vy||0)+900*dt;d.y+=d.vy*dt;if(d.y>GY-6){dust(d.x,GY,4,30);d.st='dead'}}});
- if(!q.drain&&tgt){q.gt-=dt;if(q.gt<=0){const free=q.dr.filter(d=>d.st==='hold'),fl=(GY-P.y)/fh,n=Math.min(free.length,fl>16?(Math.random()<.5?3:2):fl>6?(Math.random()<.5?2:1):1);
-   for(let k=0;k<n;k++){const d=free.splice(Math.floor(Math.random()*free.length),1)[0];qSwoop(s,d,k*.45);d.t=-k*.45}q.gt=fl>16?1.05:fl>6?.95:.85}}
+ if(!q.drain&&tgt){q.gt-=dt;const fl=(GY-P.y)/fh;const n=fl>18?5:4,starts=[];for(let st=0;st<=8-n;st++)if(q.dr.slice(st,st+n).every(d=>d.st==='form'))starts.push(st);if(q.gt<=0&&starts.length){const start=starts[Math.floor(Math.random()*starts.length)],kind=q.pat%4;q.pat+=1+(Math.random()<.4?1:0);
+   const ay=clamp(P.y-56+clamp((q.vy||0)*1.5,-330,60),g.roofY+100,GY-120),pts=qPattern(s,ay,kind,Math.floor(Math.random()*s.cols));
+   for(let k=0;k<n;k++){const d=q.dr[start+k];if(d.st!=='form')continue;d.st='cue';d.t=0;d.k=k;d.pts=pts}q.gt=fl>18?1.1:fl>8?1.3:1.6}}
+ if(isle.fin&&!done){q.finT=(q.finT||0)+dt;if(q.finT>6)finish()}
  // water: the pipe fills, then the salmon takes over
  if(q.water&&q.fill<1){q.fill=Math.min(1,q.fill+dt/1.6);if(q.fill>=1&&!q.drain){q.fish.on=true;q.fish.back=0;SFX.tag();word('SALMON',q.fish.x,q.fish.y-60,'#ffd23f');hudKey=''}}
  // drain: pool empties, the data center cooks, the drones go out one by one; then the turtle's turn
  if(q.drain){const u=T-q.drain;q.pool=Math.max(0,1-u/3);
   if(u>.6&&u<9&&Math.random()<dt*14){const f=QDC[0]+Math.random()*(QDC[1]-QDC[0]+1);puff(s.x+10+Math.random()*(s.w-20),GY-f*fh,{kind:'steam'});if(Math.random()<.35)sparks(s.x+Math.random()*s.w,GY-f*fh,3,'#ffd23f')}
-  if(u>1.4)q.dr.forEach((d,i)=>{if(d.st!=='fade'&&d.st!=='fall'&&d.st!=='dead'&&u>1.4+i*.6){d.st='fade';d.t=0}});
-  if(!q.hand&&u>1.4+q.dr.length*.6+2){q.hand=1;q.fish.on=false;questRenovate(s,12,23);const L16=fort.decks.find(d=>d.k===QV);if(P.support===L16){tagSwap();word(who==='turtle'?'TURTLE':'BEAVER',P.x,P.y-170,'#ffd23f')}hudKey=''}}
+  if(u>1.4)q.dr.forEach((d,i)=>{if(d.st!=='fade'&&d.st!=='fall'&&d.st!=='dead'&&u>1.4+i*.42){d.st='fade';d.t=0}});
+  if(!q.hand&&u>1.4+q.dr.length*.42+2){q.hand=1;q.fish.on=false;questRenovate(s,12,23);const L16=fort.decks.find(d=>d.k===QV);if(P.support===L16){tagSwap();word(who==='turtle'?'TURTLE':'BEAVER',P.x,P.y-170,'#ffd23f')}hudKey=''}}
  // the plate: two animals on the floor-16 landing open the roof door
  {const L=fort.decks.find(d=>d.k===QV),onP=P.support===L?1:0,onR=Math.abs(restY-L.y)<3&&Math.abs(restX-L.x)<L.w/2?1:0;q.weight=onP+onR;
   if(q.weight>=2&&!q.door){q.door=T;SFX.slam();SFX.grow();shake=RM?0:6;word('CLUNK',s.cx,g.roofY-40,'#ffd23f');questRenovate(s,24,31);P.energy=Math.min(100,P.energy+30);rest.energy=Math.min(100,rest.energy+30)}}
@@ -2292,9 +2308,9 @@ function questCell(s,c,f,x,y,cw,fh,r){const st=Math.min(4,Math.floor(f/8)),pal=Q
  if(f%2===0){shape(rectPts(x+2,y+fh-9,cw-4,7,sd+901,.3),'#b98a5a',{lw:1.2});qBush(x+cw*.3,y+fh-9,6,sd+5);qBush(x+cw*.72,y+fh-9,5,sd+8);if(hr(sd)>.5)dot(x+cw*.5,y+fh-14,2.6,['#f3b6c8','#ffd23f','#d9534a'][f%3])}
  if(c===0||c===s.cols-1){const vx=c===0?x+3:x+cw-3;for(let m=0;m<fh;m+=5)qLeaf(vx,y+m,5,(c===0?.4:Math.PI-.4)+Math.sin(m+f)*.3,['#2f5a2a','#3f7a34','#5f9a44'][(m/5+f)%3|0])}
  ctx.restore()}
-function qDrone(d,warn){ctx.save();ctx.translate(d.x,d.y);if(d.st==='fall')ctx.rotate(d.t*8);if(d.st==='fade')ctx.globalAlpha=(T*14|0)%2?.3:1;
+function qDrone(d,cue){ctx.save();ctx.translate(d.x,d.y);if(d.st==='fall')ctx.rotate(d.t*8);if(d.st==='fade')ctx.globalAlpha=(T*14|0)%2?.3:1;
  shape(ellPts(0,0,17,8.5,d.i+60),'#2b2a33',{lw:2});line(-22,-6,-8,-6,INK,2.6);line(8,-6,22,-6,INK,2.6);if(d.st!=='fall'&&!RM){const r=Math.sin(T*40+d.i)*10;line(-15-r,-9,-15+r,-9,'#c9d2de',2);line(15-r,-9,15+r,-9,'#c9d2de',2)}
- const lit=warn?(T*10|0)%2:1;dot(0,3,5,lit?'#ff3b2e':'#5a1a16');if(warn){ctx.strokeStyle='#ffffff';ctx.lineWidth=2.4;ctx.beginPath();ctx.arc(0,0,24+Math.sin(T*12)*3,0,7);ctx.stroke()}ctx.restore()}
+ const lit=cue?(T*12|0)%2:1;dot(0,3,5.6,lit?'#ff3b2e':'#5a1a16');ctx.restore()}
 function questArt(s){const q=fort.tq,g=qGeo(s),fh=s.fh,lo=cam.y-300,hi=cam.y+1000,inV=y=>y>lo&&y<hi;
  // the spring, and the glass pipe: dry until the water is turned on, then it fills from the bottom
  {const by=GY;shape([[g.bx0,by-2],[g.bx1,by-2],[g.bx1-8,by+34],[g.bx0+8,by+34]],'#5a6a72',{lw:2.2});shape([[g.bx0+6,by+2],[g.bx1-6,by+2],[g.bx1-12,by+30],[g.bx0+12,by+30]],'#3f7fa0',{lw:1.4});
@@ -2302,7 +2318,7 @@ function questArt(s){const q=fort.tq,g=qGeo(s),fh=s.fh,lo=cam.y-300,hi=cam.y+100
  {const pt=g.pipeTop;ctx.lineCap='round';line(g.pipeX,GY+10,g.pipeX,pt,'#141016',22);line(g.pipeX,GY+10,g.pipeX,pt,'#e4f0f4',18);line(g.pipeX,pt,g.pool.x1-2,pt,'#141016',22);line(g.pipeX,pt,g.pool.x1-2,pt,'#e4f0f4',18);
   const wl=GY+6-(GY+6-pt)*q.fill;if(q.fill>0){line(g.pipeX,GY+6,g.pipeX,wl,q.drain?'rgba(95,180,216,.8)':'rgba(63,127,160,.9)',12);if(q.fill>=1)line(g.pipeX,pt,g.pool.x1-2,pt,'rgba(63,127,160,.9)',12);
    if(!RM)for(let m=0;m<12;m++){const u=((q.drain?-1:1)*T*.2+m/12+10)%1,yy=GY+6-(GY+6-wl)*u;if(inV(yy))dot(g.pipeX+Math.sin(u*40)*2,yy,2,'rgba(234,248,255,.8)')}}
-  [[g.valveY,q.water],[g.drainY,q.drain]].forEach(([vy,done])=>{if(!inV(vy))return;ctx.save();ctx.translate(g.pipeX+22,vy);ctx.rotate(done?T*3:0);ctx.strokeStyle='#f4efe4';ctx.lineWidth=7;ctx.beginPath();ctx.arc(0,0,12,0,7);ctx.stroke();ctx.strokeStyle=done?'#3fbf5a':'#c8342b';ctx.lineWidth=4;ctx.beginPath();ctx.arc(0,0,12,0,7);ctx.moveTo(-12,0);ctx.lineTo(12,0);ctx.moveTo(0,-12);ctx.lineTo(0,12);ctx.stroke();ctx.restore();line(g.pipeX+10,vy,g.pipeX+14,vy,'#141016',5)})}
+  [[g.valveY,q.water],[g.drainY,q.drain]].forEach(([vy,done])=>{if(!inV(vy))return;ctx.save();ctx.translate(g.pipeX+22,vy);ctx.rotate(done?.785:0);ctx.strokeStyle='#f4efe4';ctx.lineWidth=7;ctx.beginPath();ctx.arc(0,0,12,0,7);ctx.stroke();ctx.strokeStyle=done?'#3fbf5a':'#c8342b';ctx.lineWidth=4;ctx.beginPath();ctx.arc(0,0,12,0,7);ctx.moveTo(-12,0);ctx.lineTo(12,0);ctx.moveTo(0,-12);ctx.lineTo(0,12);ctx.stroke();ctx.restore();line(g.pipeX+10,vy,g.pipeX+14,vy,'#141016',5)})}
  // the salmon
  {const fi=q.fish,need=q.fill>=1&&!q.drain;if(inV(fi.y)){if(fi.on&&fi.y<GY+6){ctx.save();ctx.translate(fi.x,fi.y);ctx.rotate(fi.face>0?-Math.PI/2:Math.PI/2);ctx.translate(-fi.x,-fi.y);drawSalmon({x:fi.x,y:fi.y,face:1,z:.8,leap:0});ctx.restore()}
    else drawSalmon({x:fi.x,y:fi.y,face:fi.face,z:.8,leap:0});
@@ -2313,22 +2329,25 @@ function questArt(s){const q=fort.tq,g=qGeo(s),fh=s.fh,lo=cam.y-300,hi=cam.y+100
  {const L=fort.decks.find(d=>d.k===QV),l0=L.x-L.w/2,cx0=s.x-14;if(inV(L.y)){for(let k=0;k<6;k++)shape(rectPts(l0+20+k*((L.w-40)/6),L.y-6,(L.w-40)/6-2,6,800+k,.2),k%2?'#1b1328':'#ffd23f',{lw:1});
    for(let k=0;k<2;k++){const on=q.weight>k||q.door;shape(ellPts(l0+12,L.y-60-k*22,9,9,810+k),on?'#3fbf5a':'#4a2020',{lw:2.2});if(on)dot(l0+10,L.y-62-k*22,2.6,'rgba(255,255,255,.8)')}}
   const top=g.roofY+8,sl=q.door?Math.min(1,(T-q.door)/1.2)*30:0;ctx.strokeStyle='#cfc8bb';ctx.lineWidth=3;ctx.setLineDash([5,4]);ctx.lineDashOffset=-sl;ctx.beginPath();ctx.moveTo(cx0,L.y-2);ctx.lineTo(cx0,top);ctx.stroke();ctx.setLineDash([]);
-  if(inV(g.roofY)){const op=q.door?ease(clamp((T-q.door)/1.2,0,1)):0;if(op<1){ctx.save();ctx.translate(s.x-6,g.roofY);ctx.rotate(-op*1.3);shape(rectPts(0,-8,s.w+12,16,820,.2),'#3a3440',{lw:2.4,sh:1});dot(s.w*.5,0,4,q.door?'#3fbf5a':'#ff3b2e');ctx.restore()}}}
+  if(inV(g.roofY)&&!q.end){const op=q.door?ease(clamp((T-q.door)/1.2,0,1)):0,w=(s.w+12)*(1-op);if(w>3){shape(rectPts(s.x-6,g.roofY-8,w,16,820,.2),'#3a3440',{lw:2.4,sh:1});dot(s.x-6+w*.5,g.roofY,4,q.door?'#3fbf5a':'#ff3b2e')}shape(rectPts(s.x-30,g.roofY-12,24,24,821,.2),'#2a2630',{lw:2})}}
  // the pool on floor 24, cooling the data center floors under it
  {const y=qD(s,QP);if(inV(y)){const p=g.pool,ph=50;shape(rectPts(p.x0,y-ph,p.x1-p.x0,ph,830,.2),'rgba(200,232,244,.35)',{lw:2.4});
    if(q.pool>0){const wy=y-4-(ph-8)*q.pool;ctx.fillStyle='rgba(63,150,200,.78)';ctx.fillRect(p.x0+3,wy,p.x1-p.x0-6,y-3-wy);line(p.x0+3,wy,p.x1-3,wy,'#eaf8ff',2)}
    line(p.x0-4,y-8,s.x+12,y-8,'#141016',7);line(p.x0-4,y-8,s.x+12,y-8,q.pool>.1?'#3f7fa0':'#6a6a72',4);line(s.x+12,y-8,s.x+12,y+4,'#141016',7)}}
- // drones, with the warning line through where they are going
- q.dr.forEach(d=>{if(d.st==='dead'||!inV(d.y))return;if(d.st==='warn'&&d.path){ctx.save();ctx.globalAlpha=.95;ctx.setLineDash([4,10]);ctx.lineCap='round';ctx.strokeStyle='#ffffff';ctx.lineWidth=8;ctx.beginPath();d.path.p.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.stroke();
-   ctx.strokeStyle='#c8342b';ctx.lineWidth=4.4;ctx.stroke();ctx.restore()}qDrone(d,d.st==='warn')});
+ // drones
+ q.dr.forEach(d=>{if(d.st==='dead'||!inV(d.y))return;qDrone(d,d.st==='cue')});
+ // the win, shown: fireworks over the tower, neighbours out on every landing and the roof
+ if(q.end){const u=T-isle.qend;if(u<9&&!RM&&Math.random()<.18){const fx=s.x+Math.random()*s.w,fy=g.roofY-120-Math.random()*200;sparks(fx,fy,14,['#ffd23f','#f3b6c8','#9fd8ee','#7cc35a'][(Math.random()*4)|0])}
+  fort.decks.concat([{x:s.cx,w:s.w,y:g.roofY,k:99}]).forEach(d=>{if(!inV(d.y))return;for(let i=0;i<3;i++){const px=d.x-d.w/2+40+i*((d.w-80)/2);if(d.k===99&&i===1)continue;person(px,d.y,['#e8c25a','#9fd8ee','#f3b6c8','#e8a22a','#7cc35a'][(i+d.k)%5],d.k*7+i,false);if((T*2+i+d.k)%3<1.4)line(px+6,d.y-34,px+12,d.y-50,'#6a4a3a',2.4)}})}
  // the roof: penthouse, mooring post, blimp, the Baron
  {const ry=g.roofY;if(inV(ry)){const r=q.roof,pxL=s.x+16;
    if(!q.end){shape(rectPts(pxL,ry-62,86,62,82,.3),'#1b1328',{lw:2.4,sh:1});line(pxL,ry-62,pxL+86,ry-62,'#c9a84a',4);shape(rectPts(pxL+30,ry-40,24,40,83,.2),'#c9a84a',{lw:1.6})}
    else{const u=clamp((T-isle.qend)/2,0,1);for(let k=0;k<4;k++){const bx=s.x+20+k*62;shape(rectPts(bx,ry-10,50,10,84+k,.3),'#6a4a2a',{lw:1.4});if(u>.3)for(let m=0;m<4;m++)qLeaf(bx+8+m*11,ry-10,9*u,-1.7+(m%2)*.4,'#5f9a44')}}
-   const post=g.post;if(r.post>0){strip(post.x,ry,post.x,ry-46,9,'#6a5a4a',{lw:1.6,sh:1});if(r.post<2)line(post.x-5,ry-24,post.x+5,ry-30,'#2a1a10',2.4)}else shape(rectPts(post.x-8,ry-12,16,12,85,.3),'#6a5a4a',{lw:1.4});
+   const post=g.post;if(!q.end){shape(rectPts(post.x-14,ry-18,28,18,85,.3),'#4a4450',{lw:2,sh:1});line(post.x-18,ry-20,post.x+18,ry-20,'#4a4450',5);if(r.post>0){shape(ellPts(post.x,ry-24,9,7,86),'#c9a46a',{lw:2});if(r.post<2)line(post.x-6,ry-28,post.x+4,ry-20,'#2a1a10',2.4)}
+    if((r.ph==='run'||r.ph==='climb')&&!RM){const u=(T*1.1)%1;ctx.globalAlpha=(1-u)*.9;ctx.strokeStyle='#ffffff';ctx.lineWidth=3.4;ctx.beginPath();ctx.ellipse(post.x,ry-22,26+u*24,16+u*14,0,0,7);ctx.stroke();ctx.globalAlpha=1}}
    let bx=post.x+70,by=ry-170,rot=Math.sin(T*.7)*.04,sc=.62;
    if(r.bt>=0){const u=clamp(r.bt/7,0,1),ph=u*15;bx=post.x+70-820*u+150*(1-u)*Math.cos(ph);by=ry-170-110*Math.sin(u*Math.PI)+380*u*u+30*(1-u)*Math.sin(ph);rot=ph+Math.PI*.5*Math.sin(ph);sc=.62*(1-u*.55)*(1+.18*Math.sin(ph*1.3));if(!RM&&Math.random()<.5)puff(bx+Math.cos(rot)*60*sc,by+Math.sin(rot)*60*sc,{kind:'steam'})}
-   if(r.bt<7.2){if(r.bt<0){line(post.x,ry-44,bx-10,by+30,'rgba(251,246,234,.9)',2);line(bx-6,by+36,bx-30,ry-4,'#c9a84a',2);for(let k=1;k<6;k++)line(bx-6-k*4,by+36+(ry-4-by-36)*k/6,bx+4-k*4,by+36+(ry-4-by-36)*k/6,'#c9a84a',1.6)}blimpArt(bx,by,rot,sc,r.bt>=0)}
+   if(r.bt<7.2){if(r.bt<0){line(post.x,ry-24,bx-10,by+30,'#141016',4.4);line(post.x,ry-24,bx-10,by+30,'#e8d8b0',2.6);line(bx-6,by+36,bx-30,ry-4,'#c9a84a',2);for(let k=1;k<6;k++)line(bx-6-k*4,by+36+(ry-4-by-36)*k/6,bx+4-k*4,by+36+(ry-4-by-36)*k/6,'#c9a84a',1.6)}blimpArt(bx,by,rot,sc,r.bt>=0)}
    if(r.ph!=='wait'){let x=pxL+44,pose='stand',straw=false;const ladder=post.x+28;
     if(r.ph==='run'){x=pxL+44+(ladder-pxL-44)*ease(clamp(r.t/2.2,0,1));pose='run'}else if(r.ph==='climb'){x=ladder;pose='slip'}else if(r.ph==='cut'){x=ladder-30*ease(clamp(r.t/.6,0,1));pose=r.t<.7?'fall':'sit'}
     else if(r.ph==='hoe'){x=ladder-30;pose='sit';const hx=s.x+s.w*.4+(x-24-s.x-s.w*.4)*ease(clamp(r.t/1.6,0,1));person(hx,ry,'#7cc35a',611,r.t<1.6);if(r.t<1.8)line(hx+8,ry-30,hx+20,ry-62,'#8a5a34',3)}
@@ -2418,8 +2437,8 @@ function fortArt(s){if(!fort||fort.down)return;const fh=s.fh,cw=s.cw,Rn=s.rows.l
   else if(q.t===3)wire(s.x+4,y,s.x+s.w-4,y,3,!!wireAt(s,0,f),f*17)
   else{if(q.g>0)wire(s.x+4,y,s.x+q.g*cw-4,y,2,true,f*17);if(q.g+q.gw<s.cols)wire(s.x+(q.g+q.gw)*cw+4,y,s.x+s.w-4,y,2,true,f*17+3);if(q.gt)wire(s.x+q.g*cw+4,y,s.x+(q.g+q.gw)*cw-4,y,3,!!wireAt(s,q.g,f),f*17+7)}}
  if(!(fort.tq&&fort.tq.end)){shape(ellPts(s.cx,top+fh*2.5,30,15,5),'#fbf3dc',{lw:2.2});{const ex=clamp((P.x-s.cx)/30,-16,16);dot(s.cx+ex,top+fh*2.5,8,'#c8342b');dot(s.cx+ex,top+fh*2.5,3.2,INK)}}
- shape(rectPts(s.cx-20,top-24,40,24,14,.4),'#55505f',{lw:2});line(s.cx,top-20,s.cx-26,top-58,INK,8);dot(s.cx-27,top-60,10,'#c8342b');if(!s.isle){shape(rectPts(s.cx+26,top-50,84,26,80,.5),'#1b1328',{lw:2,st:'#ffd23f'});paperText('TAR PUMP',s.cx+68,top-37,17,'#ffd23f',0)}
- line(s.x+12,top,s.x+12,top-90,'#3a3040',5);if(Math.sin(T*3)>0)dot(s.x+12,top-92,4,'#ff5a4a');
+ if(!fort.tq){shape(rectPts(s.cx-20,top-24,40,24,14,.4),'#55505f',{lw:2});line(s.cx,top-20,s.cx-26,top-58,INK,8);dot(s.cx-27,top-60,10,'#c8342b')}if(!s.isle){shape(rectPts(s.cx+26,top-50,84,26,80,.5),'#1b1328',{lw:2,st:'#ffd23f'});paperText('TAR PUMP',s.cx+68,top-37,17,'#ffd23f',0)}
+ if(!(fort.tq&&fort.tq.end)){line(s.x+12,top,s.x+12,top-90,'#3a3040',5);if(Math.sin(T*3)>0)dot(s.x+12,top-92,4,'#ff5a4a')}
  if(P.climb===s||P.support===s){const lab='Floor '+Math.max(1,Math.min(Rn,Math.round((GY-P.y)/fh)))+' of '+Rn;paperText(lab,s.cx,P.y-178,20,'#fbf3dc',0)}}
 /* v0.76: the two wires. Gold is braided (dark diagonal wraps), blue is beaded (white beads), so the pair differs in pattern as well as hue.
    Both sit on white insulators. With the power sent home they go grey and flat. */
