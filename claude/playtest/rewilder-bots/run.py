@@ -1,6 +1,9 @@
 import asyncio, json, sys, time
 from playwright.async_api import async_playwright
-SRC="/home/claude/tsp/lab/rewilder.html"; BOT=open("/home/claude/pt/bot.js").read()
+import os
+HERE=os.path.dirname(os.path.abspath(__file__))
+# the build under test: the repo's lab copy, never a stale clone (2026-11-22: a hard-coded /home/claude/tsp path silently tested v0.85)
+SRC=os.environ.get("REWILDER_SRC",os.path.join(HERE,"..","..","..","lab","rewilder.html")); BOT=open(os.path.join(HERE,"bot.js")).read()
 async def one(b,cfg):
     pg=await b.new_page(viewport={"width":844,"height":390}); errs=[]
     pg.on("pageerror",lambda e:errs.append(str(e)[:200]))

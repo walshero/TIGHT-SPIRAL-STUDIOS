@@ -67,7 +67,9 @@ window.__runL3 = function(cfg){
       if(notesOpen){ if(log.finishAt!==null) break; closeNotes(); }
       if(menuOpen)setMenu(false);
       const q=fort&&fort.tq;
-      if(q&&q.fish.on){ // the salmon in the pipe: up to the drain and turn it
+      if(q&&q.fish.on&&q.refill){ // bonus (v0.95): the salmon swims past the drain to the pool
+        setPhase('bonus: salmon up to the pool'); K.u=1;
+      } else if(q&&q.fish.on){ // the salmon in the pipe: up to the drain and turn it
         setPhase('island: salmon to the drain'); const g=qGeo(fort.s),f=q.fish;
         if(f.y>g.drainY+18)K.u=1; else if(f.y<g.drainY-18)K.d=1; else smash(0.3);
       } else if(isle && (P.x>=0||swim)) { // cross to the island
@@ -94,7 +96,14 @@ window.__runL3 = function(cfg){
           if(P.support===tw&&P.y<=g.roofY+2){ go(tw.cx) } else climbSite(tw, g.roofY+4);
         } else if(q.roof.ph==='run'||q.roof.ph==='climb'){
           setPhase('island: cut the blimp rope'); if(P.support===tw&&P.y<=g.roofY+2){ if(Math.abs(P.x-g.post.x)>40)go(g.post.x); else {P.face=g.post.x>P.x?1:-1;smash(0.3)} } else climbSite(tw,g.roofY+4);
-        } else setPhase('island: ending ('+q.roof.ph+')');
+        } else if(cfg.bonus&&q.end&&!q.party){ // bonus (v0.93-v0.95): water back on, then all three in the pool
+          const LV=fort.decks.find(d=>d.k===QV), PD=fort.decks.find(d=>d.k===QP);
+          if(!log.bonusAt){log.bonusAt=t0()}
+          const descendTo=d=>{ if(P.support===d) return true; if(P.y<=d.y+1){ K.d=1 } else { climbSite(tw, d.y-2) } return false };
+          if(!q.refill){ setPhase('bonus: down to the valve'); if(descendTo(LV)){ const vx=tw.x+tw.w-60; if(P.x<vx-10)K.r=1; else {P.face=1; smash(0.3)} } if(q.refill&&!log.refillAt)log.refillAt=t0() }
+          else if(q.pool<1){ setPhase('bonus: pool filling') }
+          else { setPhase('bonus: '+who+' to the pool'); if(descendTo(PD)){ if(Math.abs(P.x-tw.cx)>20)go(tw.cx) } }
+        } else { if(q.party&&!log.partyAt)log.partyAt=t0(); setPhase('island: ending ('+q.roof.ph+')') }
       } else if(swim){ // mainland underwater jobs
         const job=log.job;
         if(!job){ // nothing to do: climb out at a ladder
@@ -148,6 +157,7 @@ window.__runL3 = function(cfg){
       if(log.abort)break;
     }catch(e){log.errors.push(t0()+' '+e.message+' '+(e.stack||'').split('\n')[1]);if(log.errors.length>5)break}
   }
+  if(fort&&fort.tq){const q=fort.tq;log.bonus={refill:!!q.refill,fishPool:!!q.fish.pool,n:q.n||0,party:!!q.party}}
   log.end={T:t0(),phase,level,who,isle:!!isle,sites:sites.map(s=>s.id+':'+s.state),x:Math.round(P.x),y:Math.round(P.y),swim:!!swim,quest:fort&&fort.tq?{water:!!fort.tq.water,drain:!!fort.tq.drain,hand:fort.tq.hand,door:!!fort.tq.door,roof:fort.tq.roof.ph}:null};
   return log;
 };
