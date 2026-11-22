@@ -16,7 +16,7 @@ Measured in headless Chrome at phone size, landscape 844x390 and portrait 390x84
 | Area | Score (0–4) | Main finding |
 |---|---|---|
 | Accessibility | 3 | Labels, focus ring, reduced motion and live regions are all present. Minor: two h1s, no main landmark, and the canvas description never changes after level 1. |
-| Responsive | 2 | In landscape the beaver starts behind the d-pad. The title is cut off at the top right. |
+| Responsive | 2 | In landscape the beaver starts behind the d-pad (fixed in v0.86). |
 | Implementation | 4 | 4 detector prompts, all style checks; 3 fit the cut-paper look. |
 | Performance | not scored | Not profiled in this pass. |
 | Theming | not scored | Studio rule is a per-game palette; not assessed against tokens. |
@@ -26,7 +26,7 @@ Measured in headless Chrome at phone size, landscape 844x390 and portrait 390x84
 | Severity | Finding | Evidence | Suggested next step |
 |---|---|---|---|
 | P1 | **Landscape: the player starts hidden behind the d-pad.** The beaver spawns at world x 120, which on a landscape phone sits under the d-pad, and stays there until the player moves. A new player sees no character. | rewilder-v0.85-landscape-dpad.png (4 s after Start) | Start the camera or the beaver clear of the d-pad in landscape (adapt) |
-| P1 | **Landscape title clipped.** "Rewilder" runs off the top right; the last letters are cut. Founder reported the same on 2026-11-11 (v0.9). | rewilder-v0.85-landscape-title.png | Fit the hanging letters to the viewport width (adapt / typeset) |
+| ~~P1~~ | **Retracted 2026-11-22: not a defect.** The screenshot was taken at 1.2 s, mid-way through the letters' drop-in animation. Settled at 3.5 s, the title fits at 667, 844 and 932 px landscape. | rewilder-v0.85-landscape-title.png (mid-animation) | None |
 | P2 | Canvas description is fixed to the level 1 scene ("a parking garage, an elevated highway…") on every level. | aria-label on the canvas | Update the label on level change (harden) |
 | P3 | Two h1 elements and no main landmark. | DOM count | One h1, wrap the play area in main |
 | P3 | Detector: 3 hard offset shadows (buttons and bar). They match the cut-paper card look, so keep them. 1 torn-edge clip-path to check by eye. | impeccable detect | Founder's eye |
@@ -41,3 +41,7 @@ Measured in headless Chrome at phone size, landscape 844x390 and portrait 390x84
 ## How to rerun
 In a Claude Code session on this repo, ask for "impeccable audit lab/rewilder.html", or run
 `sh .claude/skills/impeccable/scripts/impeccable detect --json lab/rewilder.html` for the detector alone.
+
+## Follow-up (same day)
+- v0.86 fixes the d-pad finding: on a touch phone where the d-pad or Smash overlaps the ground band, the camera keeps the character clear of both. Measured after the fix: beaver at screen x 212, d-pad right edge 166, at 667x375 and 844x390; portrait unchanged (d-pad sits below the ground).
+- The title finding was retracted (screenshot timing).

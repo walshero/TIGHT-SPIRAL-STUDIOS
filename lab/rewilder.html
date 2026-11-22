@@ -3,9 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Rewilder v0.84</title>
+<title>Rewilder v0.86</title>
+<meta name="spec-source" content="claude/REWILDER-PANEL-AND-PLAN-2026-11-12.md">
 <meta name="audience" content="Founder playtest first; phone-first players, teens and college students. Lab build.">
-<!-- TSP build: Rewilder v0.84 | LAB | 2026-11-20
+<!-- TSP build: Rewilder v0.86 | LAB | 2026-11-22
+     v0.86 (founder 2026-11-22, "Ship w fixes" on the Impeccable audit): on a touch phone the camera keeps the character clear of
+       the d-pad and the Smash button, so the landscape start no longer hides the beaver under the d-pad.
+     v0.85 (founder on the bot playtest: "1. revive both with progress kept. 2. Allow salmon to revive other players 3. Don't let players
+       smashing good stuff have any effect. 4. Broken tractors disappear after 60 seconds. In a poof!"): both animals down now stand them
+       both up at the tag post with the city kept; the salmon's smash near a downed animal revives it; smashing a growing lot does nothing (no setback) —
+       but electric stuff still shocks (founder 2026-11-21: "Trying to Smash electric stuff SHOULD shock you."); a tipped pave truck vanishes in a dust poof at 60 s instead of being repaired;
+       Smash reaches the block under your feet on one-row sites (the parking-lot dead spot the bots found). The salmon revives from the
+       nearest water she can reach. A tag right after landing on the island no longer swaps you to the partner still on the mainland.
      v0.84 (second agent playtest): Space smashes even when a top-bar button still has focus (closing the menu mid-game no longer arms it);
        the beaver is set down on the valve landing when the salmon takes over, never frozen in mid-air; the cleat answers a smash from either
        side; the island hint clears once you reach the tower; the "walk home" hint is gone because the end screen opens on its own.
@@ -707,7 +716,7 @@ body.touch .se-chrome p{display:none}
 
 <header class="se-chrome" id="topbar">
   <a class="nav" href="../arcade.html">Cabinet</a>
-  <h1>Rewilder <span class="ver">v0.84</span> <span class="tsp-labchip">LAB</span></h1>
+  <h1>Rewilder <span class="ver">v0.86</span> <span class="tsp-labchip">LAB</span></h1>
   <button id="modeBtn" class="icon" type="button" aria-label="Mode: Dark. Switch to Light."><svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="8"/><path d="M14 6a8 8 0 0 0 0 16z" style="fill:var(--glyph)"/></svg></button>
   <nav class="se-rail" aria-label="Page navigation"><a class="nav" href="./index.html">Back</a></nav>
   <button id="notesBtn" type="button">Field guide</button>
@@ -1435,7 +1444,7 @@ function lensText(){const d=F.hard-F.soak,next=d>1.5?'The next rain will flood y
   '<p>This is a simplified model.</p>'}
 
 /* ---------- actions ---------- */
-function target(s){const c=colOf(s,P.x),f=chestF(s),o=[[c,f],[c+P.face,f],[c,f+1],[c,f-1],[c-P.face,f]];for(const q of o)if(q[0]>=0&&alive(s,q[0],q[1]))return q;return null}
+function target(s){const c=colOf(s,P.x),f=chestF(s),ft=Math.round((GY-P.y)/s.fh)-1,o=[[c,f],[c+P.face,f],[c,f+1],[c,f-1],[c-P.face,f],[c,ft],[c+P.face,ft]];for(const q of o)if(q[0]>=0&&alive(s,q[0],q[1]))return q;return null}
 function strike(power,mv){const tu=who==='turtle';if(mv==='fwd'&&!P.climb&&P.support==='ground'){const nx=P.x+P.face*52;if(!sites.some(s=>s.state==='standing'&&nx>s.x-26&&nx<s.x+s.w+26)&&!walls.some(wl=>wl.up&&Math.abs(wl.x-nx)<34)){P.x=xClamp(nx,P.x,60);P.px=P.x;dust(P.x-P.face*40,GY,3,20)}}
  billHit(power);if(fixHit(power))return;if(lairHit(power))return;if(pierHit(power))return;if(tankHit(power))return;lungeOn=tu&&mv==='fwd';if(lungeOn){P.lunge=.42;word('CHOMP',P.x+P.face*80,P.y-120,'#ffd23f');trucks.forEach(t=>{if(t.state!=='tipped'&&Math.abs(t.x-(P.x+P.face*60))<100&&P.y>GY-120)tipTruck(t)})}if(fort&&fortStrike())return;if(tu&&power<3)power=3;P.punch=.26;P.cool=tu?.6:power>1?.45:.26;if(power>=4){P.spin=.5;const rx0=P.x+P.face*48;trucks.forEach(t=>{if(t.state!=='tipped'&&Math.abs(t.x-rx0)<150&&P.y>GY-160)tipTruck(t)});stars(rx0,P.y-60,10);shake=RM?0:14;hitstop=.12;word('KABOOM',rx0,P.y-150,'#ffd23f');SFX.slam();SFX.collapse()}
  if(power===1){P.cmb=(T-P.cmbT<.9)?P.cmb+1:1;P.cmbT=T;if(P.cmb>=3){power=2;P.cmb=0}}
@@ -1457,9 +1466,8 @@ function strike(power,mv){const tu=who==='turtle';if(mv==='fwd'&&!P.climb&&P.sup
  const s=sites.find(s=>s.state==='standing'&&colOf(s,P.x)>=0);
  if(s){let q=target(s);if(q){if(mv==='up'){const r=s.rows[q[1]+1],k=r&&r[q[0]];if(k&&k.hp>0)q=[q[0],q[1]+1]}hitCell(s,q[0],q[1],power);return}}
  const es=sites.find(s=>(s.state==='growing'||s.state==='grown')&&s.g>.3&&((s.choice==='canopy'&&rx>s.x&&rx<s.x+s.w)||(s.choice==='wind'&&rx>s.x+140&&rx<s.x+s.w+10)));
+ /* founder 2026-11-21: "Trying to Smash electric stuff SHOULD shock you." Electric green sites and the tram still shock; other good stuff (growing lots) takes no setback (2026-11-20). */
  if(es&&!P.climb&&P.y>GY-140){zap();return}
- const g=sites.find(s=>s.state==='growing'&&P.x>=s.x-10&&P.x<=s.x+s.w+10&&P.y>GY-60);
- if(g){g.g=Math.max(0,g.g-.1);leaves(rx,GY-20,10);SFX.setback();once('setback','Smashing sets growth back.',4);return}
  SFX.whiff()}
 function fling(x,y,c){if(flyers.length<14)flyers.push({x,y,vx:(Math.random()-.5)*560,vy:-560-Math.random()*280,r:0,vr:(Math.random()<.5?-1:1)*(6+Math.random()*7),c});SFX.honk();stats.cars++;shake=RM?0:5}
 function crunch(x,y,c){debris(x,y,14,c);stars(x,y,5);word('CRUNCH',x,y-40,'#ffd23f');SFX.crunch();shake=RM?0:6;stats.cars++}
@@ -1473,7 +1481,7 @@ function tapWorld(wx,wy){if(paused()||P.nap>0)return;if(critTap(wx,wy))return;if
  if(!tireJam&&!downed&&near(restX,restY-80,95,96)){landNow();tagSwap();return}
  if(riverOn&&!(swim&&swim.fish)&&fishSave&&near(fishSave.x,fishSave.y,105,64)){landNow();dive(true);return}
  if(swim&&swim.fish&&near(P.x,GY-80,90,100))surface()}
-function tagSwap(){const ox=P.x,oy=P.support&&P.support!=='ground'?P.y:GY,tw=fort&&fort.tq?sites.find(z=>z.isle):null,sp=tw&&restY<GY-2?questSupportAt(tw,restX,restY):null;tagOut();Object.assign(P,{x:restX,y:sp?restY:GY,vx:0,vy:0,support:sp||'ground',climb:null,slide:null,face:-1});P.px=P.x;restX=ox;restY=oy}
+function tagSwap(){/* a partner still on the mainland catches up first, so a tag on the island never sends you back across */if(isle&&P.x<0&&restX>=0){restX=clamp(P.x+110,ISX0+60,ISX1-60);restY=GY}const ox=P.x,oy=P.support&&P.support!=='ground'?P.y:GY,tw=fort&&fort.tq?sites.find(z=>z.isle):null,sp=tw&&restY<GY-2?questSupportAt(tw,restX,restY):null;tagOut();Object.assign(P,{x:restX,y:sp?restY:GY,vx:0,vy:0,support:sp||'ground',climb:null,slide:null,face:-1});P.px=P.x;restX=ox;restY=oy}
 /* zero energy: this animal is out; the other one has to come and smash beside it */
 /* v0.77: on the island a knockout stays on the island (founder: "When I win level 3 it just resets. No island."). Before, the body was clamped
    to the mainland's left edge and the partner sent to the far right, and a second knockout re-ran the whole level, island and all. */
@@ -1485,7 +1493,7 @@ function knockOut(){P.ko=false;P.gc=null;if(restartT>0)return;SFX.collapse();sha
  Object.assign(P,{x:inI?clamp(x+(x<isleSpawn()?150:-150),ISX0+60,ISX1-60):FRX,y:GY,vx:0,vy:0,face:-1,support:'ground',climb:null,slide:null,nap:0,tumble:0});P.px=P.x;restX=x;restY=GY;hudKey=''}
 /* both down after the Baron has run: nobody loses level 3. Both animals stand up at the tower's foot, the tower keeps its state. */
 function isleRevive(){const ck=fort&&!fort.down&&fort.ck,x=ck?ck.x:isleSpawn();downed=null;swim=null;P.energy=100;rest.energy=100;P.zap=0;P.dizzy=0;Object.assign(P,{x,y:ck?ck.y:GY,vx:0,vy:0,face:-1,support:ck||'ground',climb:null,slide:null,nap:0,tumble:0,flip:0});P.px=x;restX=x+70;restY=P.y;if(fort)fort.hitT=0;SFX.grow();word('UP',x,GY-170,'#7cc35a');leaves(x,GY-60,12);hudKey=''}
-function reviveFriend(){const x=downed.x;downed=null;rest.energy=60;SFX.grow();word('UP',x,GY-170,'#7cc35a');leaves(x,GY-60,10);hudKey=''}
+/* founder 2026-11-20: "revive both with progress kept" — both animals stand up at the tag post; the city keeps its state. */ function landRevive(){const x=FRX;downed=null;swim=null;P.energy=100;rest.energy=100;P.zap=0;P.dizzy=0;P.ko=false;Object.assign(P,{x,y:GY,vx:0,vy:0,face:-1,support:'ground',climb:null,slide:null,nap:0,tumble:0,flip:0});P.px=x;restX=x+70;restY=GY;SFX.grow();word('UP',x,GY-170,'#7cc35a');leaves(x,GY-60,12);hudKey=''} function reviveFriend(){const x=downed.x;downed=null;rest.energy=60;SFX.grow();word('UP',x,GY-170,'#7cc35a');leaves(x,GY-60,10);hudKey=''}
 function spawnBaron(w){const x=w?w.ax+(w.ax<P.x?-1:1)*(viewW*.5+160):P.x<WORLD/2?cam.x+viewW+220:cam.x-220;baron={x,y:GY-310,hp:baronHp,state:'fly',life:0,hold:0,drop:1.2,snag:0,snagged:[],jolt:0,t:0,tx:w?w.ax+60:null,need:w?w.kind:null,dir:1};SFX.blimp();word(pick(['BEHOLD: PARKING','PROGRESS','ALL MINE']),clamp(x,cam.x+90,cam.x+viewW-90),GY-250,'#ffd23f');
  toast('The Baron is coming. Smash his anchor '+baronHp+' times.',4)}
 function yank(){const b=baron;b.hp--;b.jolt=.5;b.hat=1.6;word(b.hp<=0?'I MEANT TO DO THAT':pick(['MY HAT','UNHAND MY BLIMP','I SAY']),b.x,b.y-70,'#fbf3dc');puff(b.x,b.y+24,{kind:'chunk',vx:(Math.random()-.5)*220,vy:-300,g:700,r:8,c:'#1b1328',life:1.5,max:1.5,vr:9});SFX.slam();hitstop=.06;stars(b.x,GY-110,6);word('YANK',b.x,GY-170,'#ffd23f');shake=RM?0:7;
@@ -1593,12 +1601,12 @@ function update(raw){if(state==='vacation'){vacT+=raw;T+=raw;vacStep(raw);return
   else if(t.state==='leave'){t.x+=t.dir*110*dt;if(t.x<-140||t.x>WORLD+900)trucks.splice(i,1)}
   else if(t.state==='tipped'){if(t.sunk||t.gone){if(t.t>6)trucks.splice(i,1)}
    else{if(t.t>4.6&&t.t<64&&Math.abs(t.x-P.x)<viewW){if(Math.random()<dt*1.6){sparks(t.x+(Math.random()-.5)*30,GY-16,3,'#ffd23f');SFX.weld&&Math.random()<.3&&SFX.weld()}}
-    if(t.t>=65){t.state=t.was||'roam';t.t=0;if(t.state==='roam'&&(!sites.slice(0,5).some(q=>q.state==='standing')||(level>=2&&!tarUp()))){t.state='leave';t.dir=1}}}}
+    if(t.t>=60){/* founder 2026-11-20: broken tractors disappear after 60 seconds, in a poof */dust(t.x,GY-8,22,110);for(let j=0;j<12;j++)puff(t.x+(Math.random()-.5)*100,GY-14-Math.random()*44,{kind:'smoke',vx:(Math.random()-.5)*70,vy:-24-Math.random()*46,r:9,gr:26,c:'#e4ddcf',life:1.1,max:1.1});word('POOF',t.x,GY-96,'#ffd23f');SFX.pop();trucks.splice(i,1)}}}
   if(t.state==='drive'||t.state==='leave'){const pi=pits.findIndex(p=>p.d>=2&&Math.abs(p.x-t.x)<24);if(pi>=0){pits.splice(pi,1);tipTruck(t);t.sunk=1;word('PLONK',t.x,GY-70,'#ffd23f');once('trap','',3.5)}}
   if((t.state==='drive'||t.state==='leave')&&P.support==='ground'&&!P.climb&&Math.abs(t.x-P.x)<38&&P.bump<=0){hurt(8);P.vx=(P.x<t.x?-1:1)*320;P.vy=-280;P.support=null;P.bump=.8}}
  for(let i=sprigs.length-1;i>=0;i--){const g=sprigs[i];if(Math.abs(g.x-P.x)<34&&Math.abs(g.y-(P.y-30))<60){sprigs.splice(i,1);P.energy=Math.min(100,P.energy+18);SFX.eat();leaves(g.x,g.y,6)}}
  P.energy=Math.min(100,P.energy+dt*1.2);
- if(!downed)rest.energy=Math.min(100,rest.energy+dt*5);if(restartT>0){restartT-=dt;if(restartT<=0){if(isle){isleRevive();return}const L=level;jumpLevel(L);return}}lifeStep(dt);if(P.singe>0&&Math.random()<dt*14)puff(P.x+P.face*10,P.y-120,{kind:'smoke',vx:(Math.random()-.5)*20,vy:-40,r:5,gr:9,c:'#3a3432',life:1.2,max:1.2});
+ if(!downed)rest.energy=Math.min(100,rest.energy+dt*5);if(restartT>0){restartT-=dt;if(restartT<=0){if(isle){isleRevive();return}landRevive();return}}lifeStep(dt);if(P.singe>0&&Math.random()<dt*14)puff(P.x+P.face*10,P.y-120,{kind:'smoke',vx:(Math.random()-.5)*20,vy:-40,r:5,gr:9,c:'#3a3432',life:1.2,max:1.2});
  for(const f of folk){f.x+=f.dir*f.v*dt;if(f.hop>0)f.hop-=dt;if(f.cheer>0){f.cheer-=dt;if(f.hop<=0)f.hop=.5}if(f.x<70)f.dir=1;if(f.x>sites[4].x-50)f.dir=-1}
  if(P.energy<=40&&P.energy>0)once('taghint','Low on energy. Press Tag.',6);
  if(P.energy<=.6||P.ko){P.ko=false;knockOut()}
@@ -1727,7 +1735,9 @@ function gravity(dt){const prevY=P.y;if(P.support&&!standOK())P.support=null;
      else if(!P.support.deck){lungeOn=false;hitCell(P.support,P.sc,P.sf,who==='turtle'?3:2)}}}}}
  P.x=xClamp(P.x+P.vx*dt,P.x,40);if(bridgeUp()&&!done&&P.x>70&&P.support==='ground'&&state==='play')finish();if(P.support&&Math.abs(P.vx)<5)P.vx=0}
 function qFish(){return fort&&fort.tq&&fort.tq.fish.on&&fort.s&&fort.s.isle?fort.tq.fish:null}
-function camFollow(dt){let target=clamp((qFish()?qFish().x:swim?swim.x:P.x)-viewW*.45,(swim||P.x<0)?(isle?ISX0-60:OC0-70):0,Math.max(0,(swim&&swim.fish?regs()[3].x1+470:EAST())-viewW));if(look){look.t+=dt;if(look.t<3.4)target=clamp(TARDEF.x+252-viewW*.5,0,EAST()-viewW);if(!look.said&&look.t>1.4){look.said=1;toast(tarUp()?'The tar factory, up past the salmon lake. The pave crews come from here.':'Clean water runs where the tar factory stood.',8)}if(look.t>4.4)look=null}cam.x+=(target-cam.x)*Math.min(1,dt*(look?2.6:5));if(WORLD<viewW)cam.x=(WORLD-viewW)/2;
+/* v0.86 (impeccable audit 2026-11-22): on a touch phone the d-pad and Smash sit over the ground band, and at the left and right edges of the world the camera stopped and left the character under them (the landscape start hid the beaver under the d-pad). The camera now keeps the character clear of both. */let padK=-1,padV={l:0,r:0};function padSafe(){const k=(T*4)|0;if(k===padK)return padV;padK=k;padV={l:0,r:0};if(!document.body.classList.contains('touch'))return padV;const d=$('dpad'),m=$('smashBtn');const rd=d&&d.getBoundingClientRect(),rm=m&&m.getBoundingClientRect();const gy=OY+(GY-cam.y)*S;if(rd&&rd.width>0&&rd.top<gy)padV.l=rd.right+46;if(rm&&rm.width>0&&rm.top<gy)padV.r=W-rm.left+46;return padV}
+/* player-clear hooks (studio rule 2026-11-10): the character's on-screen box in CSS px, and a toast the gate can fire */window.__tspPlayer=()=>{if(state!=='play')return null;const f=swim||P,hw=swim?50:46,hh=swim?50:118,x=(f.x-hw-cam.x)*S,y=OY+(f.y-(swim?hh/2:hh)-cam.y)*S;return {x,y,w:hw*2*S,h:hh*S}};window.__tspToast=t=>toast(t,3);
+function camFollow(dt){let target=clamp((qFish()?qFish().x:swim?swim.x:P.x)-viewW*.45,(swim||P.x<0)?(isle?ISX0-60:OC0-70):0,Math.max(0,(swim&&swim.fish?regs()[3].x1+470:EAST())-viewW));if(look){look.t+=dt;if(look.t<3.4)target=clamp(TARDEF.x+252-viewW*.5,0,EAST()-viewW);if(!look.said&&look.t>1.4){look.said=1;toast(tarUp()?'The tar factory, up past the salmon lake. The pave crews come from here.':'Clean water runs where the tar factory stood.',8)}if(look.t>4.4)look=null}if(!swim&&!qFish()&&!look){const sf=padSafe(),sx=(P.x-target)*S;if(sf.l&&sx<sf.l)target=P.x-sf.l/S;else if(sf.r&&sx>W-sf.r)target=P.x-(W-sf.r)/S}cam.x+=(target-cam.x)*Math.min(1,dt*(look?2.6:5));if(WORLD<viewW&&!(padSafe().l&&(P.x-cam.x)*S<padSafe().l))cam.x=(WORLD-viewW)/2;
  const up=!!(fort&&fort.lifts&&!fort.down&&P.x<0&&P.y<GY-40),ty=look&&look.t<3.4?0:qFish()?Math.min(0,qFish().y-330+OY/S):swim?swim.y-GY+150:Math.min(0,P.y-(up?440:270)+OY/S);cam.y+=(ty-cam.y)*Math.min(1,dt*4)}
 
 /* ---------- splash: the beaver shows the verb on beats ---------- */
@@ -1854,7 +1864,7 @@ function drawGate(){if(!depot)return;const x=LOCKX,a=cam.x-120,b=cam.x+viewW+120
   const nf=swim&&swim.fish&&swim.reg===3&&Math.abs(swim.x-LOCKX)<220;if(nf&&!RM){ctx.globalAlpha=.4+.3*Math.sin(T*5);ctx.strokeStyle='#ffffff';ctx.lineWidth=3;ctx.strokeRect(x-26+sw,ly-30,40,46);ctx.globalAlpha=1}}
  else if(op<1||true){// the sprung lock lies on the road
   shape(rectPts(x+30,GY-20,24,18,4403,.3),'#ffc61a',{lw:2});ctx.strokeStyle='#f4efe4';ctx.lineWidth=3.4;ctx.beginPath();ctx.arc(x+50,GY-22,7,Math.PI*1.1,Math.PI*1.9);ctx.stroke()}}
-function fishAct(w){if(lockHit(w))return;if(w.reg===3&&w.carry&&Math.abs(w.x-REDX)<90){w.carry=false;run.laid=true;run.phase='dying';run.t=0;SFX.pick();word('EGGS LAID',REDX,regs()[3].top-30,'#f08a3c');toast('A salmon spawns once, and then it dies.',6);return}
+function fishAct(w){if(downed){/* the salmon revives from the nearest water she can reach */const rx=clamp(downed.x,isle?ISX1+12:OC0+40,damUp()?sites[4].x+14:fallX()-30);if(Math.abs(w.x-rx)<160&&!w.reg){reviveFriend();return}}if(lockHit(w))return;if(w.reg===3&&w.carry&&Math.abs(w.x-REDX)<90){w.carry=false;run.laid=true;run.phase='dying';run.t=0;SFX.pick();word('EGGS LAID',REDX,regs()[3].top-30,'#f08a3c');toast('A salmon spawns once, and then it dies.',6);return}
  w.spin=.5;SFX.pop();if(w.carry)once('carryhint','Your eggs belong in the pond, far right.',5);else if(run.phase==='adult')once('seahint','The sea lies at the far left.',5)}
 function waterStrike(w){const rx=w.x+w.face*36,pw=2,bub=(x,y)=>{for(let i=0;i<6;i++)puff(x,y,{kind:'dust',vx:(Math.random()-.5)*70,vy:-40-Math.random()*70,g:-60,r:3+Math.random()*4,c:'#eaf8ff',life:.9,max:.9})};w.punch=.18;w.prop=.42;
  if(plug.hp>0&&Math.abs(plug.x-rx)<60){plug.hp-=pw;SFX.crunch();bub(plug.x,w.y);if(plug.hp<=0){plug.hp=0;SFX.collapse();word('CLEAR',plug.x,w.y-60,'#9fd8ee');once('plugopen','The river runs clear.',5)}return}
