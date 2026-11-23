@@ -150,6 +150,7 @@ window.__runL3 = function(cfg){
       }
       if(downed&&!swim&&!(q&&q.fish.on)&&Math.abs(restX-P.x)<600&&phase.indexOf('island: ')!==0){ /* a downed partner nearby: go revive */ go(restX); if(Math.abs(restX-P.x)<80)smash() }
       if(cfg.style==='clumsy'&&R()<0.2){const r=R();K.l=r<.3?1:0;K.r=r>=.3&&r<.6?1:0;K.u=r>=.6&&r<.8?1:0;K.d=r>=.8?1:0}
+      if(state==='poolcut'){if(!log.cutAt)log.cutAt=t0();if(pcT>5)endPoolCut()} // v1.2: the pool party is a cut scene; the bot takes its bow after the review
       zoomStep(dt);update(dt);if(cfg.render===true)render();else if(isle){ctx.save();try{drawIsle()}catch(e){}ctx.restore()}
       for(let j=Q.length-1;j>=0;j--){if(T>=Q[j].at){const f=Q.splice(j,1)[0].fn;try{typeof f==='function'&&f()}catch(e){log.errors.push('timer '+e.message)}}}
       phaseT+=dt;
