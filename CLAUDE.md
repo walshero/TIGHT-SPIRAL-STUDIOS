@@ -175,8 +175,10 @@ build that does not exist, and "landed on main" has now been mistaken for "shipp
 enough times in this repo to have its own ledger entry.
 
 **THE PLAY LANE: `walshero/tss-playtest`, branch-mode Pages.**
-**https://walshero.github.io/tss-playtest/** and the root `index.html` there is always
-the current playable. Stood up 2026-08-29 because the main repo's Pages had been dead
+**https://walshero.github.io/tss-playtest/** and the root `index.html` there redirects to the
+Cabinet (`arcade.html`). Founder 2026-11-23: *"Make the cabinet self-contained. Links to the games but not studio
+or lab."* The old root (Dessert Tray v11.1) is buried: it stays at `funnybonies/index.html`, unlinked. The six
+cabinet games and Rewilder carry Cabinet links only (no Studio, Home or Lab), which amends the NAVIGATION rule for them. Stood up 2026-08-29 because the main repo's Pages had been dead
 since 08-12 and the founder had no way to open his own game.
 
 Why a second repo rather than fixing the first, which is the obvious objection:
