@@ -67,7 +67,9 @@ window.__runL3 = function(cfg){
       if(notesOpen){ if(log.finishAt!==null) break; closeNotes(); }
       if(menuOpen)setMenu(false);
       const q=fort&&fort.tq;
-      if(q&&q.fish.on&&q.refill){ // bonus (v0.95): the salmon swims past the drain to the pool
+      if(q&&q.jail&&who===q.jail.who&&!q.fish.on){ // v1.1: caught in the drone cage on floor 16: tag the partner (the badge, as a player would)
+        setPhase('jailed: tag partner'); const b=tagBadge(); if(b) tapWorld(b.x,b.y); else tagSwap();
+      } else if(q&&q.fish.on&&q.refill){ // bonus (v0.95): the salmon swims past the drain to the pool
         setPhase('bonus: salmon up to the pool'); K.u=1;
       } else if(q&&q.fish.on){ // the salmon in the pipe: up to the drain and turn it
         setPhase('island: salmon to the drain'); const g=qGeo(fort.s),f=q.fish;
@@ -80,7 +82,7 @@ window.__runL3 = function(cfg){
         if(!q){ setPhase('island: no quest?'); }
         else if(!q.water){
           setPhase('island: beaver climbs to the valve (floor 24)');
-          if(who!=='beaver'&&canTag()&&phaseT>1) tag();
+          if(who!=='beaver'&&!q.jail&&!q.jailDone&&canTag()&&phaseT>1) tag();
           const LV=fort.decks.find(d=>d.k===QV);
           if(P.support===LV){ const vx=tw.x+tw.w-60; if(P.x<vx-10)K.r=1; else {P.face=1; smash(0.3)} }
           else climbSite(tw, LV.y-2);
