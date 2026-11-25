@@ -1,9 +1,9 @@
-# Xenos Island rebuild: spec (updated 2026-11-25, 13:20 ET)
+# Xenos Island rebuild: spec (updated 2026-11-25, 17:45 ET)
 
 source: Xenos trailer (youtu.be/_Cmyn-eo4_o) + all 34 2013 LGN tutorial clips (Matt's copy: Drive 1bssnnrvJvIP9fMSVkk_nQURTUwSUbe7t, Mac ~/Downloads/Videos)
 feature dossier: claude/XENOS-FLASH-REFERENCE-2026-11-25.md; games spec: claude/SPEC-XENOS-THREE-GAMES-2026-11-25.md; island map: Xenos Isle.jpg (Drive 1030PAuz2b4j6sENzP6C0AXlWbqa46M4k); inventory: claude/XENOS-DRIVE-INVENTORY-2026-11-24.md
-current build: xenos-v0.9.html, 1,235,024 bytes, sha256 8825181147d3dd2789fd4f6547fa1b333bb2f312fb77d92cd834185d3f88e119
-lanes: Drive Claude_files id 1KiSHdCTQxl36eSMJJSb10CCFaW0oTM4s (size verified); public artifact https://claude.ai/artifact/AEwEFKBSEL12GBEk7x5Mxa version 1795630686-4fdf (sha256 verified). v0.8 kept in Drive as 1hyaS0MsEPCKUBP_DGp3CK-i9RRWmcE-f. Project shelf FULL for builds.
+current build: xenos-v0.12.html (repo lab/xenos.html, commit 2b27e34), 1,239,096 bytes, sha256 7c79dfd6d3190bff4322f2067a1fbc8a0933f6e66ca6ddd269efdf5b3d863461
+lanes: repo walshero/TIGHT-SPIRAL-STUDIOS lab/xenos.html (blob 34fafb4c verified on origin); Drive Claude_files id 1e3ZEApsUYBBubndnZa5yfaK7ZjCY47V8 (size verified); public artifact https://claude.ai/artifact/AEwEFKBSEL12GBEk7x5Mxa version 1795646613-f2a7 (sha256 verified). Earlier: v0.11 Drive 1AXzAmLGx_XBD3gSKa5_vC9NkWicBd4-p; v0.9 1KiSHdCTQxl36eSMJJSb10CCFaW0oTM4s; v0.8 1hyaS0MsEPCKUBP_DGp3CK-i9RRWmcE-f. Project shelf FULL for builds.
 audience: adult English learners (Spanish glosses), and the teachers and coaches who guide them. Carried from Xenos 2013 (LGN learning paths, coaches, Spanish glosses); founder to confirm for the rebuild.
 rights: Matt holds the rights personally. direction: 2012-13 FLASH era.
 
