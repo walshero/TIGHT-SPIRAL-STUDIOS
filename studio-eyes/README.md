@@ -71,3 +71,8 @@ nothing. The measurement itself is exported as `CLIP_PROBE` and run by
 `playthrough-agent.py` at **every state its crawler already visits** — which is where
 the real card was found, and where a regression in the first fix was caught the same
 afternoon. One canon writes, others read.
+
+
+## World gates (2026-11-25)
+
+Studio Eyes reads the DOM. Canvas worlds get `world-eyes.py` (smear, seams, empty ground across walked views) and `world-fingers.py` (kiosk tap size, player centring, taps, solid paths, depth). Founder-rejected builds in `founder-rejections.json` are fixtures the gates must HALT. Art provenance: `art-ledger.py`. Full record: `../os-block-world-gates.md`.

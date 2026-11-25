@@ -74,6 +74,8 @@ Build the smallest thing that does the named job. Mechanic Prototype: art minima
 
 Inner loop: agent pre-flight (CLEAN/HALT) → founder plays once holding two questions (*does it still do its job? did anything surprise me?*) → **the Drift Fork**: *does this surprise serve the objective, or audition to replace it?* Serves → fold in; replaces → park it, named. → Calibration ping (did the measurement behave?).
 
+**Canvas worlds (2026-11-25):** a walkable world also clears belt tick 15, World Eyes and World Fingers, and every art asset clears `art-ledger.py`. See `os-block-world-gates.md`. A founder rejection of a world build becomes a fixture the gates must fail.
+
 ### 6. Full work-up (Paper Craft)
 Once the mechanic is proven, graduate to ship quality. Must pass C1–C5 asset rules. Gated *behind* a proven mechanic — never run on an unproven loop.
 

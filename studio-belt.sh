@@ -19,6 +19,7 @@
 #  10  contrast, every route+mode    contrast-sweep.py       (flat, scoped to dark-mode pages, 2026-08-11)
 #  11  intent / spec + audience      intent-gate.py          (presence ratchet + contradiction flat, 2026-08-22)
 #  12  stored state that rotted     stale-fuse.py           (REPORT, not armed — arm it green, 2026-09-12)
+#  15  canvas worlds                world-eyes.py + world-fingers.py (flat, armed green, 2026-11-25)
 #
 # Tick 11 added 2026-08-22, and it is the first tick that grades the BELT'S OWN BLIND
 # SPOT rather than a surface. Ticks 1-10 are all artifact-quality checks. Seven wrong
@@ -605,6 +606,37 @@ elif ! python3 -c "import playwright" >/dev/null 2>&1; then
   echo "  SKIPPED LOUD — playwright absent, the top floor is BLIND. Not a pass."; reported=$((reported+1))
 elif python3 "$BELT_DIR/studio-senses/top-floor.py" $_pages >/tmp/tf14.out 2>&1; then echo "  pass  $(tail -1 /tmp/tf14.out)"
 else grep -E '^HALT|  HALT' /tmp/tf14.out | head -12 | sed 's/^/  /'; fail=1; fi
+
+# TICK 15 — canvas worlds (added 2026-11-25, Xenos rebuild).
+# Founder, on Xenos v0.8: "this landscape is blurry and glitchy and layers are off and
+# seams are noticeable." Studio Eyes and Studio Fingers both PASSED it: they read the DOM,
+# and the whole island is a <canvas>. Every tick above was blind to the thing he saw.
+#   world-eyes.py    renders the world at spawn + every Places walk, desktop and phone;
+#                    HALTs on smeared land (W-SMEAR) and straight plate seams (W-SEAM);
+#                    reports empty ground (W-EMPTY, not armed: a taste number).
+#   world-fingers.py phone, via the world's ?debug=1 hook: kiosk tap size, player kept in
+#                    the middle 60% (founder ruling), taps that find a walk, paths that
+#                    never cross a footprint, depth front edges that work.
+# Opt-in by declaration, so it costs nothing elsewhere: <meta name="tsp:world" content="canvas">.
+# Teeth: world-eyes --self-test must HALT every founder-rejected build in
+# studio-eyes/founder-rejections.json. A gate that passes a build the founder rejected is
+# broken, and this tick reports that loudly instead of saying pass.
+# Armed green: the one declared world (Xenos v0.11) passes both on the day it mounted.
+echo; echo "-- tick 15: canvas worlds (world eyes + world fingers) --"
+_worlds=""; for _f in $SURFACES; do grep -q 'name="tsp:world" content="canvas"' "$_f" 2>/dev/null && _worlds="$_worlds $_f"; done
+if [ -z "$_worlds" ]; then echo "  (no declared canvas worlds in this change — skipped)"
+elif ! python3 -c "import playwright, cv2" >/dev/null 2>&1; then
+  echo "  SKIPPED LOUD — playwright/opencv absent, the world gates are BLIND. Not a pass."; reported=$((reported+1))
+else
+  python3 "$BELT_DIR/studio-eyes/world-eyes.py" --self-test >/tmp/we15s.out 2>&1; _st=$?
+  if [ "$_st" -eq 3 ]; then echo "  REPORTED — world-eyes teeth BLIND: founder-rejected fixtures not mounted (they live in Drive, never in this public repo). Not a pass."; reported=$((reported+1))
+  elif [ "$_st" -ne 0 ]; then echo "  HALT  world-eyes self-test: it passes a founder-rejected build. The gate is broken."; tail -3 /tmp/we15s.out | sed 's/^/        /'; fail=1; fi
+  for _w in $_worlds; do
+    if python3 "$BELT_DIR/studio-eyes/world-eyes.py" "$_w" >/tmp/we15.out 2>&1 && python3 "$BELT_DIR/studio-eyes/world-fingers.py" "$_w" >/tmp/wf15.out 2>&1; then
+      echo "  pass  $_w"; grep -h 'warn ' /tmp/we15.out | head -4 | sed 's/^/      /'
+    else echo "  HALT  $_w"; grep -hE 'HALT |BLIND' /tmp/we15.out /tmp/wf15.out | head -10 | sed 's/^/        /'; fail=1; fi
+  done
+fi
 
 echo; echo "----------------------------------------------------------------------"
 if [ "$fail" -ne 0 ]; then
