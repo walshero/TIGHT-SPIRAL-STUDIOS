@@ -51,6 +51,15 @@ window.__runL3 = function(cfg){
       if(threat && cfg.style==='careful'){ if(P.support&&P.support.deck){K.u=0;return} }
     }
     if(P.y<=goalY+4){ return 'there' }
+    if(typeof mzLiveAt==='function'&&fort&&fort.mz&&!(fort.tq&&fort.tq.end)&&f<=MZ&&cfg.style!=='clumsy'){ // v1.11: route through the electric maze
+      const L=(cc,ff)=>ff>=1&&ff<=MZ&&mzLiveAt(cc,ff), key=(a,b)=>a+'_'+b, prev={}, Q=[[f,c]]; prev[key(f,c)]=null; let goal=null;
+      while(Q.length){const [ff,cc]=Q.shift(); if(ff>MZ){goal=[ff,cc];break}
+        [[ff+1,cc],[ff,cc+1],[ff,cc-1],[ff-1,cc]].forEach(([nf,nc])=>{if(nf<0||nc<0||nc>=s.cols||L(nc,nf)||key(nf,nc) in prev)return;prev[key(nf,nc)]=[ff,cc];Q.push([nf,nc])})}
+      if(goal){let n=goal;while(prev[key(n[0],n[1])]&&!(prev[key(n[0],n[1])][0]===f&&prev[key(n[0],n[1])][1]===c))n=prev[key(n[0],n[1])];
+        if(n[0]>f){ const cx=s.x+(c+.5)*s.cw; if(Math.abs(cx-P.x)>10){cx>P.x?K.r=1:K.l=1;return} K.u=1; return }
+        if(n[0]<f){ K.d=1; return }
+        const tx=s.x+(n[1]+.5)*s.cw; tx>P.x?K.r=1:K.l=1; return }
+      return }
     if((bad(c,f+1)||bad(c,f))&&!(cfg.style==='clumsy'&&R()<0.5)){ // move sideways to a safe column for the next floor
       let best=null,bd=99;for(let cc=0;cc<s.cols;cc++){if(!bad(cc,f+1)&&!bad(cc,f)){const d=Math.abs(cc-c);if(d<bd){bd=d;best=cc}}}
       if(best!==null&&best!==c){ const tx=s.x+(best+.5)*s.cw; tx>P.x?K.r=1:K.l=1; return }
