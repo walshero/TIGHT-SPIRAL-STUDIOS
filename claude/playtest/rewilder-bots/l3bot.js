@@ -148,14 +148,14 @@ window.__runL3 = function(cfg){
           else { if(tgt.lo>1&&R()<.1){upQ=true;K.u=1} else smash() }
         } else setPhase('waiting for growth');
       }
-      if(downed&&!swim&&!(q&&q.fish.on)&&Math.abs(restX-P.x)<600&&phase.indexOf('island: ')!==0){ /* a downed partner nearby: go revive */ go(restX); if(Math.abs(restX-P.x)<80)smash() }
+      if(downed&&!swim&&!(q&&q.fish.on)&&Math.abs(restX-P.x)<600&&phase.indexOf('island: ')!==0){ /* a downed partner nearby: go revive (drop any other move first, or the two cancel out) */ K.l=K.r=0;go(restX); if(Math.abs(restX-P.x)<80)smash() }
       if(cfg.style==='clumsy'&&R()<0.2){const r=R();K.l=r<.3?1:0;K.r=r>=.3&&r<.6?1:0;K.u=r>=.6&&r<.8?1:0;K.d=r>=.8?1:0}
       if(state==='poolcut'){if(!log.cutAt)log.cutAt=t0();if(pcT>5)endPoolCut()} // v1.2: the pool party is a cut scene; the bot takes its bow after the review
       zoomStep(dt);update(dt);if(cfg.render===true)render();else if(isle){ctx.save();try{drawIsle()}catch(e){}ctx.restore()}
       for(let j=Q.length-1;j>=0;j--){if(T>=Q[j].at){const f=Q.splice(j,1)[0].fn;try{typeof f==='function'&&f()}catch(e){log.errors.push('timer '+e.message)}}}
       phaseT+=dt;
       const pk=phase+'|'+sites.map(s=>s.state+s.rows.length).join(',')+'|'+(swim?Math.round(swim.x/200):Math.round(P.x/200))+'|'+Math.round(P.y/100);
-      if(pk!==progKey||/waiting for growth|ending|filling|dropping/.test(phase)){progKey=pk;sinceProg=0}else{sinceProg+=dt;if(sinceProg>60){sinceProg=-1e9;log.abort=true;log.stuck.push({t:t0(),phase,x:Math.round(swim?swim.x:P.x),y:Math.round(swim?swim.y:P.y),who,climb:!!P.climb,sup:P.support&&(P.support.id||(P.support.deck?'deck'+P.support.k:P.support))})}}
+      if(pk!==progKey||/waiting for growth|ending|filling|dropping/.test(phase)){progKey=pk;sinceProg=0}else{sinceProg+=dt;if(sinceProg>60){sinceProg=-1e9;log.abort=true;log.dbg={rx:restX,dx:downed&&downed.x,who,cells:sites[1].rows.slice(0,2).map(r=>r.map(c=>c?c.hp+c.t:"-").join(",")),downed:typeof downed!=="undefined"&&!!downed,tj:typeof tireJam!=="undefined"&&!!tireJam,trucks:trucks.map(t=>t.why+":"+t.state+":"+Math.round(t.x)),piers:via&&via.piers.map(p=>Math.round(p.x)+":"+p.hp),vd:via&&via.down,P:[Math.round(P.x),P.y,P.support&&P.support.id,P.climb&&P.climb.id],K:JSON.stringify(K),hw:sites[1].state,walls:typeof walls!=="undefined"?JSON.stringify(walls).slice(0,200):0};log.stuck.push({t:t0(),phase,x:Math.round(swim?swim.x:P.x),y:Math.round(swim?swim.y:P.y),who,climb:!!P.climb,sup:P.support&&(P.support.id||(P.support.deck?'deck'+P.support.k:P.support))})}}
       if(log.finishAt!==null&&T>log.finishAt+2)break;
       if(log.abort)break;
     }catch(e){log.errors.push(t0()+' '+e.message+' '+(e.stack||'').split('\n')[1]);if(log.errors.length>5)break}
