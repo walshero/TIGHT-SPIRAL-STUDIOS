@@ -14,6 +14,7 @@ rights: Matt holds the rights personally. direction: 2012-13 FLASH era.
 - 2026-11-25: republish the public artifact without asking, going forward.
 - 2026-11-25: next build focuses on crisp graphics and on layering; the player crosses over the setting often, so work out layers and physics.
 
+- 2026-11-25 17:45: grass, coast and water are "super lame, like no effort. This is a high art game."
 - 2026-11-25 17:23: phone feels like a laptop seen through a keyhole; player way too small; world size, navigation and art all need work; compare to successful similar games. (Reconciles with 11-24 "smaller characters": that was desktop. Phone gets its own camera.)
 - 2026-11-25 12:52: v0.8 landscape is blurry, glitchy, layers off, seams noticeable; wants game-design skills. 12:54: map out the whole island; needs a studio tool or skill for this.
 
@@ -69,3 +70,14 @@ Plan, ranked by return:
 2. Art: characters are 2013 video sprites at 2x; at phone zoom they render about 1.2x past source and read soft and thin. Redraw the six characters in house (Figma vector, 4x) with a thicker silhouette and outline so they read at 100 css px.
 3. Navigation: tap an NPC or kiosk to walk there and talk (Stardew pattern); a zoom-out button (not pinch, which misfires on touch) for tapping far points; Places stays the voice and keyboard route.
 4. Chrome: fold the say bar into a button that opens the keyboard on demand; the world then gets about 92% of the phone screen.
+
+## v0.13: painted ground (2026-11-25)
+Reference: the Xenos Isle map (painted turquoise shallows, deep mottled ocean, gold beaches, ink edges) and the native Pier frames (dark teal water with a cell ripple pattern, vivid painted grass, inked plants).
+| Layer | v0.12 | v0.13 |
+|---|---|---|
+| Sea | one flat colour, two strokes | painted depth field (pale glow at the shore to deep blue, ragged reef edge, brush drag); two drifting layers of the Pier cell pattern; three foam rings that roll in one after another; broken surf line; glints |
+| Coast | flat sand pattern | wet line at the water to warm dry beach, grain, ripples, shells and pebbles |
+| Turf | flat green fill, thin line | raised turf: earth face and soft shadow on front edges, inked lip, darker rim, scattered tufts breaking the edge |
+| Grass | flat procedural pattern | sunlit and shaded patches, blade-stroke detail, clumps of tufts, four flower colours, stones (1,022 decals, mirrored, scaled 0.55 to 1.25) |
+Method: paint fields at 1 px per 3 world px (smooth by nature) give colour; grayscale 2x detail tiles composited with overlay give crisp texture; edges stay vector, so nothing blurs at phone zoom. Generator: claude/xenos-pipeline/paint.py (writes paint.json, read by build13.py). Calm mode freezes the water.
+Still open: deep water shows the cell pattern everywhere (the map's open ocean is smoother); flowers are small at desktop zoom; empty grass remains on Windmill Hill.
