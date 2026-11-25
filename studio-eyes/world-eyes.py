@@ -93,8 +93,11 @@ def emptiness(g, dsf):
             if g[y:y + t, x:x + t].std() < 9 and e[y:y + t, x:x + t].mean() < 0.012: em += 1
     return em / max(1, n)
 
-HIDE = "(()=>{let s=document.getElementById('__we_hide');if(!s){s=document.createElement('style');s.id='__we_hide';document.head.appendChild(s)}s.textContent='#card,.panel,[role=dialog]{visibility:hidden!important}'})()"
-SHOW = "(()=>{const s=document.getElementById('__we_hide');if(s)s.textContent=''})()"
+# Measure the world, not the UI laid over it: every sibling of the canvas (popups, prompts, panels)
+# is hidden for the instant of the screenshot. Found 2026-11-25: an entry button's straight edges
+# read as W-SEAM. Hiding by sibling, not by a name list, so a new overlay can't slip in.
+HIDE = "(()=>{const c=document.querySelector('canvas');if(!c)return;window.__we=[];for(const e of c.parentElement.children){if(e!==c){window.__we.push([e,e.style.visibility]);e.style.visibility='hidden'}}})()"
+SHOW = "(()=>{for(const [e,v] of (window.__we||[]))e.style.visibility=v;window.__we=[]})()"
 async def snap(pg, cv, fn):
     await pg.evaluate(HIDE); await cv.screenshot(path=fn); await pg.evaluate(SHOW)
 

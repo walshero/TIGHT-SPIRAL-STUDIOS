@@ -55,7 +55,7 @@ contains** — it is canon for anything deployed. Funes reads it, never guesses 
 - File list: `git ls-tree` from a clone (the GitHub CONTENTS API is rate-limited and 403s from
   a sandbox — an audit built on it lies; git is authoritative).
 - **Standing CRITICAL:** the repo has been serving faculty/possible-student PII
-  (`confluence-TRUNK-2026-06-23.html`, and the undated trunk). No session can push from here;
+  (the 2026-06-23 Confluence trunk, which is not held in this repo, and the undated `confluence-TRUNK.html`). No session can push from here;
   the pull is Matt's or Josh's, via the GitHub web editor. Funes keeps this at the top of the
   board until it reads 404 by live probe.
 
