@@ -40,7 +40,7 @@ window.__runL3 = function(cfg){
     if(P.climb!==s){
       if(P.support&&P.support.deck){ // on a landing: step to the tower face and press Up
         upQ = phaseT%0.5<dt; K.u=1; return }
-      const ex=clamp(P.x,s.x+12,s.x+s.w-12); if(Math.abs(ex-P.x)>6){go(ex);return} upQ=true; K.u=1; return }
+      const ex=(typeof mzCur==='function'&&fort&&fort.mz&&fort.s===s&&!(fort.tq&&fort.tq.end)&&P.y>GY-10)?s.x+(mzCur().inC+.5)*s.cw:clamp(P.x,s.x+12,s.x+s.w-12); if(Math.abs(ex-P.x)>6){go(ex);return} upQ=true; K.u=1; return }
     const c=colOf(s,P.x), f=chestF(s);
     const bad=(cc,ff)=>cc<0||cc>=s.cols||wireAt(s,cc,ff);
     // swat a drone that is close
@@ -51,14 +51,14 @@ window.__runL3 = function(cfg){
       if(threat && cfg.style==='careful'){ if(P.support&&P.support.deck){K.u=0;return} }
     }
     if(P.y<=goalY+4){ return 'there' }
-    if(typeof mzLiveAt==='function'&&fort&&fort.mz&&!(fort.tq&&fort.tq.end)&&f<=MZ&&cfg.style!=='clumsy'){ // v1.11: route through the electric maze
-      const L=(cc,ff)=>ff>=1&&ff<=MZ&&mzLiveAt(cc,ff), key=(a,b)=>a+'_'+b, prev={}, Q=[[f,c]]; prev[key(f,c)]=null; let goal=null;
+    if(typeof mzWall==='function'&&fort&&fort.mz&&!(fort.tq&&fort.tq.end)&&f<=MZ&&cfg.style!=='clumsy'){ // v1.12: route through the wall maze
+      const M=mzCur(), key=(a,b)=>a+'_'+b, prev={}, Q=[[f,c]]; prev[key(f,c)]=null; let goal=null;
       while(Q.length){const [ff,cc]=Q.shift(); if(ff>MZ){goal=[ff,cc];break}
-        [[ff+1,cc],[ff,cc+1],[ff,cc-1],[ff-1,cc]].forEach(([nf,nc])=>{if(nf<0||nc<0||nc>=s.cols||L(nc,nf)||key(nf,nc) in prev)return;prev[key(nf,nc)]=[ff,cc];Q.push([nf,nc])})}
+        [[ff+1,cc],[ff,cc+1],[ff,cc-1],[ff-1,cc]].forEach(([nf,nc])=>{if(nf<0||nc<0||nc>=s.cols||key(nf,nc) in prev||mzWall(M,cc,ff,nc,nf))return;prev[key(nf,nc)]=[ff,cc];Q.push([nf,nc])})}
       if(goal){let n=goal;while(prev[key(n[0],n[1])]&&!(prev[key(n[0],n[1])][0]===f&&prev[key(n[0],n[1])][1]===c))n=prev[key(n[0],n[1])];
-        if(n[0]>f){ const cx=s.x+(c+.5)*s.cw; if(Math.abs(cx-P.x)>10){cx>P.x?K.r=1:K.l=1;return} K.u=1; return }
-        if(n[0]<f){ K.d=1; return }
-        const tx=s.x+(n[1]+.5)*s.cw; tx>P.x?K.r=1:K.l=1; return }
+        const cx=s.x+(c+.5)*s.cw;
+        if(n[0]!==f){ if(Math.abs(cx-P.x)>8){cx>P.x?K.r=1:K.l=1;return} n[0]>f?K.u=1:K.d=1; return }
+        const ty=P.y; const tx=s.x+(n[1]+.5)*s.cw; tx>P.x?K.r=1:K.l=1; return }
       return }
     if((bad(c,f+1)||bad(c,f))&&!(cfg.style==='clumsy'&&R()<0.5)){ // move sideways to a safe column for the next floor
       let best=null,bd=99;for(let cc=0;cc<s.cols;cc++){if(!bad(cc,f+1)&&!bad(cc,f)){const d=Math.abs(cc-c);if(d<bd){bd=d;best=cc}}}
