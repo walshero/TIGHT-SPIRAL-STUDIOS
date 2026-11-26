@@ -14,6 +14,7 @@ rights: Matt holds the rights personally. direction: 2012-13 FLASH era.
 - 2026-11-25: republish the public artifact without asking, going forward.
 - 2026-11-25: next build focuses on crisp graphics and on layering; the player crosses over the setting often, so work out layers and physics.
 
+- 2026-11-26 11:09: walking is comical; the world is a shadow of the original; avatars look nothing like the game; use the reference material on Drive.
 - 2026-11-26 10:09: water decent, other graphics need upgrades; players get lost behind trees, so keep trees out of walking paths and views; faded edges and imperfections everywhere; avatars not as good as the Flash ones; new Mail Drop kiosk that reads as the game (a recognizable mailbox); Glyphs is now Triangulate, reuse its art; Loteria gets tables, research Loteria art.
 - 2026-11-25 23:41: "Take 1. Rec": shrink the world about 40% and fill it.
 - 2026-11-25 17:45: grass, coast and water are "super lame, like no effort. This is a high art game."
@@ -108,3 +109,15 @@ Pipeline: claude/xenos-pipeline/ (layout.py, place.py, plaza.py, paint.py).
 Loteria art language (research): 4x4 tablas, beans as markers, a caller (cantor) who reads each card, often with a verse; the iconic Don Clemente images are a brand, so the studio draws its own cards in the layout, never copies theirs.
 Pipeline: claude/xenos-pipeline/inhouse-props.html (art, rendered by render-inhouse-props.py), addprops.py (repairs, cleanup, atlas), place.py (remap, tree rules), plaza.py, paint.py.
 Still open: news stand, planter and clock tower still carry chopped video edges; Windmill Hill has no landmark.
+
+## v0.16: the real Xenos avatars (2026-11-26)
+Source: "Xenos Avatar Concepts" (Google Slides by Filament Games, Drive 1-BWY9X71dMXj7bziYpzJCnIzHKWfRoPJYkscdOF0KNA): 29 painted walking figures, 3/4 view, slim bodies, large heads, cel shading, all outfits in placeholder blue. Cut cleanly (thin label strokes removed by morphological reconstruction); 8 chosen, outfits, hair and skin recoloured per character so the Marketplace crowd reads as different people. Figures with label arrows or white garments (0, 6, 8, 9, 11) skipped.
+Walk: the vector limb-swing walk read as comical. Now one painted stride pose; the legs close to a passing pose and reopen twice per 60 px stride, body lifts 1.6 px on the pass. Calm mode stands still.
+Pipeline: claude/xenos-pipeline/cutfig.py, avatars.py.
+
+## Next: closing the gap to the 2013 world (reference audit)
+| Lead | What it could give | Status |
+|---|---|---|
+| Triangulate-standalone.zip (Drive 0BzBgIBbOJVsUQ3d3VTFrX0Zjakk, 24.6 MB, folder Xenos Games) | the shipped Flash build: SWF with Filament's vector art, exportable to crisp SVG (JPEXS) | too big for the Drive connector (10 MB); needs the Mac bridge or a local download |
+| 34 tutorial clips, native 1056x720 | density map: plants, palms, ferns and lamps at every walkway edge; boardwalks; signage | used for layout and props so far, not yet for vegetation density |
+| Xenos Guide Screenshots (2016, Unity) | later 3D era; not the target look | skipped by design |
