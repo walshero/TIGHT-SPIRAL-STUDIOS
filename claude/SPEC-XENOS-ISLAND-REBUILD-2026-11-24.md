@@ -121,3 +121,9 @@ Pipeline: claude/xenos-pipeline/cutfig.py, avatars.py.
 | Triangulate-standalone.zip (Drive 0BzBgIBbOJVsUQ3d3VTFrX0Zjakk, 24.6 MB, folder Xenos Games) | the shipped Flash build: SWF with Filament's vector art, exportable to crisp SVG (JPEXS) | too big for the Drive connector (10 MB); needs the Mac bridge or a local download |
 | 34 tutorial clips, native 1056x720 | density map: plants, palms, ferns and lamps at every walkway edge; boardwalks; signage | used for layout and props so far, not yet for vegetation density |
 | Xenos Guide Screenshots (2016, Unity) | later 3D era; not the target look | skipped by design |
+
+## v0.17: planter beds from the 2013 plazas (2026-11-26)
+Reference: native Lobby frame (tutorial clip): raised stone-walled beds overflowing with ferns, lavender, grasses and small flowers line the plaza edges; string lights on posts; paving edge to edge; buildings tower over avatars.
+Shipped: in-house planter beds (two lengths each way, stone courses, dark soil, about 36 plants each) placed on the grass just outside each district's paving along its north-facing edges, so they frame the plaza from behind and never block a view; gaps where roads enter. 8 placed (claude/xenos-pipeline/beds.py).
+Also checked this session: the Mac's connected folders hold no Flash (.swf, .fla) files; access to Documents and Desktop was refused by the permission check, so any older LGN files there stay unsearched.
+Next: string lights between lamps; a snail-shell Lobby landmark (from the native frames); denser beds once district paving is widened.

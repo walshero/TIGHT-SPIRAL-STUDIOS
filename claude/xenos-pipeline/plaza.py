@@ -5,7 +5,7 @@ TW,TH=25.0,10.4
 def uv(x,y):return (x/TW+y/TH, y/TH-x/TW)
 def xy(u,v):return ((u-v)*TW/2,(u+v)*TH/2)
 G={'pagoda':('brick',4),'lampM1':('brick',2),'cartM':('brick',2),'crates':('brick',3),'board':('brick',2),'train':('brick',3),'emptyH':('brick',3),'lampS2':('brick',2),'treeS':(None,0),
-'news':('flag',3),'planter':('flag',2),'clock':('flag',4),'glyphs':('flag',4),'aquarium':('deck',3),'iowcart':('deck',3),'fishhouse':('deck',4),'bucket':('deck',1),'lampX':(None,0),'treeX1':(None,0),'treeX2':(None,0),'maildrop':('brick',2),'loteria':('brick',2)}
+'news':('flag',3),'planter':('flag',2),'clock':('flag',4),'glyphs':('flag',4),'aquarium':('deck',3),'iowcart':('deck',3),'fishhouse':('deck',4),'bucket':('deck',1),'lampX':(None,0),'treeX1':(None,0),'treeX2':(None,0),'maildrop':('brick',2),'loteria':('brick',2),'bedR1':(None,0),'bedR2':(None,0),'bedL1':(None,0),'bedL2':(None,0)}
 plz=[]
 for i in I['props']:
     kind,m=G[i['p']]

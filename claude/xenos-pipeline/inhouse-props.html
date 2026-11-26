@@ -142,6 +142,35 @@ function loteria(){const W=230,H=210;const [c,x]=mk(W,H);
   x.save();x.translate(sx+28,sy-8.5-28*K*.4);x.transform(1,-K*.4,0,1,0,0);x.fillStyle='#ffe28a';x.font='900 10px Georgia,serif';x.textAlign='center';x.textBaseline='middle';x.fillText('LOTERÍA',0,1);x.restore();
   OUT.loteria={c,fp:[[ox-96,oy-40],[ox+6,oy+6],[ox+96,oy-40],[ox-4,oy-84]]};}
 
+
+// ---------------- PLANTER BED: stone wall, dark soil, packed with ferns, lavender, grasses and small flowers (2013 plaza edges) ----------------
+function bed(name,dir,seed){const L=130,D=30,Hh=15;const W=dir>0?L+D+16:L+D+16,H=L*K+D*K+Hh+70;const [c,x]=mk(W,H);const r=rng(seed);
+  const a=dir>0?L:D,b=dir>0?D:L; const ox=dir>0?D+8:L+8, oy=H-6;
+  box(x,ox,oy,a,b,Hh,'#5a3f2a',lg(x,0,oy-30,0,oy,[[0,'#c9bba3'],[1,'#a8977c']]),lg(x,0,oy-30,0,oy,[[0,'#b3a389'],[1,'#8e7e64']]));
+  // stone courses
+  x.strokeStyle='rgba(60,45,30,.45)';x.lineWidth=.8;
+  for(let i=1;i<3;i++){const y=oy-Hh*i/3;x.beginPath();x.moveTo(ox-b,y-b*K);x.lineTo(ox,y);x.lineTo(ox+a,y-a*K);x.stroke()}
+  for(let t=.12;t<1;t+=.16){x.beginPath();x.moveTo(ox+a*t,oy-a*t*K);x.lineTo(ox+a*t,oy-a*t*K-Hh/3);x.moveTo(ox+a*(t+.08),oy-a*(t+.08)*K-Hh/3);x.lineTo(ox+a*(t+.08),oy-a*(t+.08)*K-2*Hh/3);x.stroke()}
+  for(let t=.15;t<1;t+=.3){x.beginPath();x.moveTo(ox-b*t,oy-b*t*K);x.lineTo(ox-b*t,oy-b*t*K-Hh/3);x.stroke()}
+  // plants, back to front along the bed
+  const n=Math.round(L/3.6);const pts=[];for(let i=0;i<n;i++){const u=(i+r()*.8)/n,v=.2+r()*.6;pts.push([u,v,r()])}
+  pts.sort((p,q)=>(p[1]-q[1]));
+  const P=(u,v)=>dir>0?[ox+u*a-v*b,oy-Hh-u*a*K-v*b*K]:[ox+v*a-u*b,oy-Hh-v*a*K-u*b*K];
+  for(const [u,v,k] of pts){const [px,py]=P(u,v);
+    if(k<.34){ // fern: arching fronds
+      for(let f=0;f<7;f++){const ang=-Math.PI/2+(f-3)*.38+(r()-.5)*.2,len=16+r()*8;x.strokeStyle=f%2?'#3f9a38':'#2f7f2c';x.lineWidth=1.6;x.beginPath();x.moveTo(px,py);const ex=px+Math.cos(ang)*len,ey=py+Math.sin(ang)*len*.9;x.quadraticCurveTo(px+Math.cos(ang)*len*.5,py+Math.sin(ang)*len*.9-5,ex,ey+3);x.stroke();
+        x.lineWidth=1;for(let q=.3;q<1;q+=.14){const qx=px+(ex-px)*q,qy=py+(ey-py)*q-4*Math.sin(q*Math.PI);x.strokeStyle='#58b246';x.beginPath();x.moveTo(qx,qy);x.lineTo(qx+3,qy-2.4);x.moveTo(qx,qy);x.lineTo(qx-3,qy-2.4);x.stroke()}}}
+    else if(k<.56){ // lavender spikes
+      for(let f=0;f<6;f++){const dx=(r()-.5)*10,len=14+r()*9;x.strokeStyle='#4f8a3a';x.lineWidth=1;x.beginPath();x.moveTo(px+dx*.3,py);x.lineTo(px+dx,py-len);x.stroke();
+        x.fillStyle=r()<.5?'#9a7ad8':'#b394e6';for(let q=0;q<5;q++){x.beginPath();x.ellipse(px+dx,py-len+q*2.2,1.6,1.4,0,0,7);x.fill()}x.strokeStyle='rgba(60,40,90,.6)';x.lineWidth=.5;x.beginPath();x.ellipse(px+dx,py-len+4,1.8,5.2,0,0,7);x.stroke()}}
+    else if(k<.8){ // tall grass clump
+      for(let f=0;f<9;f++){const dx=(f-4)*1.4,len=12+r()*10,lean=(r()-.5)*7;x.strokeStyle=['#3c8f32','#57a83f','#7cc251'][f%3];x.lineWidth=1.3;x.beginPath();x.moveTo(px+dx*.5,py);x.quadraticCurveTo(px+dx,py-len*.6,px+dx+lean,py-len);x.stroke()}}
+    else { // broad-leaf with small flowers
+      for(let f=0;f<5;f++){const ang=-Math.PI/2+(f-2)*.55;x.save();x.translate(px,py);x.rotate(ang+Math.PI/2);x.beginPath();x.moveTo(0,0);x.quadraticCurveTo(5,-7,0,-14);x.quadraticCurveTo(-5,-7,0,0);x.fillStyle=f%2?'#3f9a38':'#56ad44';x.fill();x.strokeStyle='#245f22';x.lineWidth=.7;x.stroke();x.restore()}
+      const fc=['#ffffff','#ffd84a','#ff8fb0','#ff7a4a'][Math.floor(r()*4)];for(let q=0;q<3;q++){const fx=px+(r()-.5)*10,fy=py-6-r()*8;x.fillStyle=fc;x.beginPath();x.arc(fx,fy,2.1,0,7);x.fill();x.strokeStyle='rgba(80,40,40,.7)';x.lineWidth=.5;x.stroke();x.fillStyle='#e8b020';x.beginPath();x.arc(fx,fy,.8,0,7);x.fill()}}}
+  OUT[name]={c,fp:[[ox,oy],[ox+a,oy-a*K],[ox+a-b,oy-(a+b)*K],[ox-b,oy-b*K]]};}
+
+Z=1;bed('bedR1',1,31);bed('bedR2',1,47);bed('bedL1',-1,53);bed('bedL2',-1,71);
 Z=1.15;tree('treeX1',3,180,210);tree('treeX2',8,180,210);Z=1;lamp();Z=1.55;maildrop();Z=1.6;loteria();Z=1;
 for(const v of Object.values(OUT)){const c=v.c,x=c.getContext('2d');x.setTransform(1,0,0,1,0,0);const id=x.getImageData(0,0,c.width,c.height),d=id.data;const r=rng(77);
   for(let i=0;i<d.length;i+=4){if(!d[i+3])continue;const n=(r()-.5)*14+Math.sin(i*.0007)*3;d[i]=Math.max(0,Math.min(255,d[i]+n));d[i+1]=Math.max(0,Math.min(255,d[i+1]+n));d[i+2]=Math.max(0,Math.min(255,d[i+2]+n*.8))}x.putImageData(id,0,0)}
