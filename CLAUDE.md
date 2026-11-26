@@ -352,6 +352,13 @@ Founder, playtesting Headwaters: *"Messages that block the character in movement
 - Existing games are not yet hooked (not swept on 2026-11-10, cost discipline); each gets its
   hook the next time it is built.
 
+## NO OVALS AS STAND-INS - founder rule, studio-wide (2026-11-26)
+Founder, on Rewilder v1.14: *"Remove the ovals at the bottom of the waterfall. Ovals are poor abstract subs. For anything."*
+- Never draw a plain oval, ellipse, disc or blob to stand in for a thing (foam, gravel, leaves, splash, a lake feature).
+  Draw the thing, or draw nothing. Removed so far: the cream redd disc, the falls foam scraps, the locust leaflet ovals.
+- Ovals that ARE the shape (an eye, a wheel, a body part built from cut paper) are not stand-ins.
+- Existing builds are not yet swept (cost discipline); each gets checked the next time it is built.
+
 ## CHECKED IS NOT SHIPPED - standing, non-negotiable (2026-08-27)
 
 **Never report a push as landed on the strength of a connector's success message.**
