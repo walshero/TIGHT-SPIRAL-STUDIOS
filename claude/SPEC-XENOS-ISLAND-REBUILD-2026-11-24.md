@@ -14,6 +14,7 @@ rights: Matt holds the rights personally. direction: 2012-13 FLASH era.
 - 2026-11-25: republish the public artifact without asking, going forward.
 - 2026-11-25: next build focuses on crisp graphics and on layering; the player crosses over the setting often, so work out layers and physics.
 
+- 2026-11-25 23:41: "Take 1. Rec": shrink the world about 40% and fill it.
 - 2026-11-25 17:45: grass, coast and water are "super lame, like no effort. This is a high art game."
 - 2026-11-25 17:23: phone feels like a laptop seen through a keyhole; player way too small; world size, navigation and art all need work; compare to successful similar games. (Reconciles with 11-24 "smaller characters": that was desktop. Phone gets its own camera.)
 - 2026-11-25 12:52: v0.8 landscape is blurry, glitchy, layers off, seams noticeable; wants game-design skills. 12:54: map out the whole island; needs a studio tool or skill for this.
@@ -81,3 +82,15 @@ Reference: the Xenos Isle map (painted turquoise shallows, deep mottled ocean, g
 | Grass | flat procedural pattern | sunlit and shaded patches, blade-stroke detail, clumps of tufts, four flower colours, stones (1,022 decals, mirrored, scaled 0.55 to 1.25) |
 Method: paint fields at 1 px per 3 world px (smooth by nature) give colour; grayscale 2x detail tiles composited with overlay give crisp texture; edges stay vector, so nothing blurs at phone zoom. Generator: claude/xenos-pipeline/paint.py (writes paint.json, read by build13.py). Calm mode freezes the water.
 Still open: deep water shows the cell pattern everywhere (the map's open ocean is smoother); flowers are small at desktop zoom; empty grass remains on Windmill Hill.
+
+## v0.14: smaller island, districts with their own ground (2026-11-25)
+| Measure | v0.13 | v0.14 |
+|---|---|---|
+| World | 3750 x 2500 (5 world px per map px) | 2250 x 1500 (3 per map px), buildings full size |
+| Walk from the Market (path px) | University 1012, Lobby 699, Pier 1389, Gardens 837, Windmill 1153 | 863, 596, 1046, 797, 782 (15 to 32% shorter; Gardens 5%) |
+| Longest walk | about 7.5 s | about 5.7 s |
+| Props | 20 | 27 (Gardens: 3 trees, 2 planters; Windmill Hill: 2 trees) |
+| Empty ground (World Eyes, worst view) | 38% desktop, 45% phone | 27% desktop (Gardens), 16% phone; most views 5 to 12% |
+A straight 40% shrink collided the University, Lobby and Market (plazas merged, the Market's train landed in the University). Fix: the Market moved into the empty NE lobe and the Gardens onto the south peninsula, which gave back part of the walking gain. A footprint packer (shapely) pulls each building toward its district centre and nudges it to the nearest clear spot on land, 22 px apart.
+Still open: University and Windmill Hill share one view (300 px apart; Windmill Hill has no windmill sprite yet); Gardens trees clump; open grass remains on the south peninsula and NE.
+Pipeline: claude/xenos-pipeline/ (layout.py, place.py, plaza.py, paint.py).

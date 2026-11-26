@@ -6,7 +6,7 @@ import json, io, base64, math, random
 import numpy as np, cv2
 from PIL import Image, ImageDraw, ImageFilter
 
-I = '/home/claude/isle/'
+I = '/home/claude/isle14/'
 D = json.load(open(I + 'isle_world.json'))
 W, H = D['W'], D['H']
 Q = 3                      # paint fields: 1 px = 3 world px
@@ -206,7 +206,7 @@ for _ in range(9000):
     x, y = R.uniform(0, W), R.uniform(0, H); ix, iy = int(x / Q2), int(y / Q2)
     if ix >= w2 or iy >= h2 or block[iy, ix]: continue
     if G2[iy, ix] and inG[iy, ix] > 30:
-        if R.random() > .18 + .5 * (dens[iy, ix] > .3) or not near_ok(x, y, 120): continue
+        if R.random() > .34 + .45 * (dens[iy, ix] > .3) or not near_ok(x, y, 78): continue
         grid.setdefault((int(x // 60), int(y // 60)), []).append((x, y))
         kind = R.random(); n = R.randint(2, 6)
         pool = ['tuftA', 'tuftB', 'tuftC'] if kind < .5 else [R.choice(['flowW', 'flowP', 'flowY', 'flowV'])] * 2 + ['tuftB'] if kind < .85 else ['stoneA', 'stoneB', 'tuftB']
