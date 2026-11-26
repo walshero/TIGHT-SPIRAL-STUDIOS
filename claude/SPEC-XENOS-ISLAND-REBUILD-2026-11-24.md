@@ -14,6 +14,7 @@ rights: Matt holds the rights personally. direction: 2012-13 FLASH era.
 - 2026-11-25: republish the public artifact without asking, going forward.
 - 2026-11-25: next build focuses on crisp graphics and on layering; the player crosses over the setting often, so work out layers and physics.
 
+- 2026-11-26 14:10: getting better; block walking paths behind objects or players get lost; layering still an issue; walking does not look great yet; asked what skills can be added.
 - 2026-11-26 13:55: not close to the texture, vibe and movement of the original; rebuild the world from the trailer and Drive with robust texture and feel; founder adds specific new stations afterwards.
 - 2026-11-26 11:09: walking is comical; the world is a shadow of the original; avatars look nothing like the game; use the reference material on Drive.
 - 2026-11-26 10:09: water decent, other graphics need upgrades; players get lost behind trees, so keep trees out of walking paths and views; faded edges and imperfections everywhere; avatars not as good as the Flash ones; new Mail Drop kiosk that reads as the game (a recognizable mailbox); Glyphs is now Triangulate, reuse its art; Loteria gets tables, research Loteria art.
@@ -139,3 +140,10 @@ Reference: clean Market plate (frame median, ch1 tutorial): the whole district i
 | Bay | Sailboats circle on routes checked to be open water; wakes; bobbing. |
 | Sky | Gulls circle with ground shadows; large soft cloud shadows drift across the island. Calm mode stills all of it. |
 Gates: contrast, comfort, voice, intent, World Fingers SHIP (110 routes), World Eyes SHIP.
+
+## v0.19: no hiding places, cutout walk (2026-11-26)
+| Item | Change |
+|---|---|
+| Hidden ground | hide.py tests every 8 px ground cell behind each prop's front edge: if the prop's sprite alpha covers more than 45% of an avatar-sized box (18 x 74 px) standing there, the cell is not walkable. 7,540 cells blocked; taps there walk to the nearest open spot. Removes most layering faults, because nobody can stand behind a building. |
+| Walk | Cutout rig on Filament's painted pose: legs cut just below the hands, pivoted at the hip, swing as pendulums in opposite phase (two steps per 68 px), body lifts on the pass. Skirts and robes swing less (christine 0.35, Mei 0.55, Rosa 0.9). |
+Gates: contrast, comfort, voice, intent, World Fingers SHIP (5 kiosks reachable, 110 routes), World Eyes SHIP.

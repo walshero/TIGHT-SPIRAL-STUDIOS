@@ -38,7 +38,13 @@ W=sum(t.width+4 for _,t in tiles);Hh=max(t.height for _,t in tiles);atl=Image.ne
 for name,t in tiles:
     atl.paste(t,(x,0));a=np.array(t)[...,3];ys,xs=np.where(a>40)
     foot=int(ys.max());fx=int(np.median(xs[ys>foot-10]))  # feet anchor
-    meta[name]=dict(x=x,y=0,w=t.width,h=t.height,ax=fx,ay=foot,hip=int(foot*.60));x+=t.width+4
+    hip=int(foot*.56);cut=int(foot*.64)
+    row=np.where(a[cut]>60)[0];runs=[];st=None
+    for i,v in enumerate(row):
+        if st is None:st=v
+        if i==len(row)-1 or row[i+1]!=v+1:runs.append((st,v));st=None
+    big=max(runs,key=lambda r:r[1]-r[0]) if runs else (fx,fx);hx=int((big[0]+big[1])/2)
+    meta[name]=dict(x=x,y=0,w=t.width,h=t.height,ax=fx,ay=foot,hip=hip,cut=cut,hx=hx,amp={'christine':.35,'Mei':.55,'Rosa':.9}.get(name,1.0));x+=t.width+4
 atl.save('avatar_atlas.png');b=io.BytesIO();atl.save(b,'WEBP',quality=92,method=6)
 json.dump({'meta':meta,'png':'data:image/webp;base64,'+base64.b64encode(b.getvalue()).decode()},open('avatars.json','w'))
 c=Image.new('RGBA',atl.size,(120,190,90,255));c.alpha_composite(atl);c.convert('RGB').resize((atl.width*2,atl.height*2),Image.NEAREST).save('/tmp/avatars.jpg',quality=90)
