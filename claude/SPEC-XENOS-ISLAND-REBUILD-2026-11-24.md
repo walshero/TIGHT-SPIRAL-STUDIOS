@@ -14,6 +14,7 @@ rights: Matt holds the rights personally. direction: 2012-13 FLASH era.
 - 2026-11-25: republish the public artifact without asking, going forward.
 - 2026-11-25: next build focuses on crisp graphics and on layering; the player crosses over the setting often, so work out layers and physics.
 
+- 2026-11-26 13:55: not close to the texture, vibe and movement of the original; rebuild the world from the trailer and Drive with robust texture and feel; founder adds specific new stations afterwards.
 - 2026-11-26 11:09: walking is comical; the world is a shadow of the original; avatars look nothing like the game; use the reference material on Drive.
 - 2026-11-26 10:09: water decent, other graphics need upgrades; players get lost behind trees, so keep trees out of walking paths and views; faded edges and imperfections everywhere; avatars not as good as the Flash ones; new Mail Drop kiosk that reads as the game (a recognizable mailbox); Glyphs is now Triangulate, reuse its art; Loteria gets tables, research Loteria art.
 - 2026-11-25 23:41: "Take 1. Rec": shrink the world about 40% and fill it.
@@ -127,3 +128,14 @@ Reference: native Lobby frame (tutorial clip): raised stone-walled beds overflow
 Shipped: in-house planter beds (two lengths each way, stone courses, dark soil, about 36 plants each) placed on the grass just outside each district's paving along its north-facing edges, so they frame the plaza from behind and never block a view; gaps where roads enter. 8 placed (claude/xenos-pipeline/beds.py).
 Also checked this session: the Mac's connected folders hold no Flash (.swf, .fla) files; access to Documents and Desktop was refused by the permission check, so any older LGN files there stay unsearched.
 Next: string lights between lamps; a snail-shell Lobby landmark (from the native frames); denser beds once district paving is widened.
+
+## v0.18: 2013 ground and movement (2026-11-26)
+Reference: clean Market plate (frame median, ch1 tutorial): the whole district is one cobbled square of iso stones in ochre-tan with pink and sage strays, dark grout, moss in the joints, stains and cracks; soft painted grass; palm sprouts by buildings.
+| Layer | Change |
+|---|---|
+| Paving | Every district plaza and lane merged into one continuous cobbled surface with organic edges (pave.py); seamless 2x cobble tile painted to the sampled palette (cobble.py: 8 stone tones, bevels lit upper left, grout, moss, stains, cracks); mossy broken edge into the grass, soft drop at the rim. Pier boardwalk stays deck. |
+| Crowd | NPCs stroll the Market (walks up to 280 px, pauses 1 to 4 s) instead of shuffling in place. |
+| Trees | Canopies sway (shear about the trunk line, phase by position). |
+| Bay | Sailboats circle on routes checked to be open water; wakes; bobbing. |
+| Sky | Gulls circle with ground shadows; large soft cloud shadows drift across the island. Calm mode stills all of it. |
+Gates: contrast, comfort, voice, intent, World Fingers SHIP (110 routes), World Eyes SHIP.
