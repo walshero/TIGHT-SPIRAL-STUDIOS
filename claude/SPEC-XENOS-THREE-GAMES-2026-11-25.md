@@ -56,3 +56,14 @@ name collision: the studio already ships a different Mail Drop (EN195 Lab, clich
 
 ## Open question for Matt
 Pictogram art for Loteria and Triangulate. Recommendation: one in-studio pictogram set in the Xenos painted style, built once and used by both games.
+
+## Triangulate 2013 source recovered (2026-11-26)
+Triangulate-standalone.zip (Drive 0BzBgIBbOJVsUQ3d3VTFrX0Zjakk, 24.6 MB, uploaded 2013-11-07, folder Xenos Games) is the shipped HTML5 build, not Flash: index.html, js/script.js (22.7 KB game logic) plus audio, deck, scroll, timer and triangle modules, css, 19 word-set XML files (spoken word, text, GLO id per item), 85 images, 1,163 word recordings.
+Extracted through a Zapier code action (zip_subset_to_drive: range reads, no full download, batches under 1 MB because larger uploads return 413) into Drive Claude_files:
+| Batch | Drive id | Contents |
+|---|---|---|
+| tri2013-b2.zip | 1Vb-GbYjHjnux1QOAT-wUnvwDqGvrt99g | 64 images: picture cards banana to train, highlights, options panels, play and replay buttons, scroll parts |
+| tri2013-b3.zip | 1nIILZsIvb9mJibWFigz-T9j1GFAJ1vr6 | tri-background.png, triangle.png, triangle-down.png (cracked stone tiles) |
+| tri2013-b4a.zip | 1JRjL8RntGjRVbH8jK3NXkRbsob5Jv9vg | index.html and the seven game scripts |
+Not yet extracted (batches failed in Zapier without detail; the single-file extractor works for text at about 30 s per file): css/style.css, the XML word sets (AtoK.xml read once), 15 images (continent and nationality cards, airplane, alarm clock, apple, truck, word panels, SummaryScreen, back.png), two photo backgrounds, all audio.
+Picture cards are small (45 to 73 px) clip art; the Triangulate rebuild can use them as is or redraw them in the Xenos style.
