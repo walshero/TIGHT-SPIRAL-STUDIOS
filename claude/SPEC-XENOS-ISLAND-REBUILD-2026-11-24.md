@@ -14,6 +14,7 @@ rights: Matt holds the rights personally. direction: 2012-13 FLASH era.
 - 2026-11-25: republish the public artifact without asking, going forward.
 - 2026-11-25: next build focuses on crisp graphics and on layering; the player crosses over the setting often, so work out layers and physics.
 
+- 2026-11-26 10:09: water decent, other graphics need upgrades; players get lost behind trees, so keep trees out of walking paths and views; faded edges and imperfections everywhere; avatars not as good as the Flash ones; new Mail Drop kiosk that reads as the game (a recognizable mailbox); Glyphs is now Triangulate, reuse its art; Loteria gets tables, research Loteria art.
 - 2026-11-25 23:41: "Take 1. Rec": shrink the world about 40% and fill it.
 - 2026-11-25 17:45: grass, coast and water are "super lame, like no effort. This is a high art game."
 - 2026-11-25 17:23: phone feels like a laptop seen through a keyhole; player way too small; world size, navigation and art all need work; compare to successful similar games. (Reconciles with 11-24 "smaller characters": that was desktop. Phone gets its own camera.)
@@ -94,3 +95,16 @@ Still open: deep water shows the cell pattern everywhere (the map's open ocean i
 A straight 40% shrink collided the University, Lobby and Market (plazas merged, the Market's train landed in the University). Fix: the Market moved into the empty NE lobe and the Gardens onto the south peninsula, which gave back part of the walking gain. A footprint packer (shapely) pulls each building toward its district centre and nudges it to the nearest clear spot on land, 22 px apart.
 Still open: University and Windmill Hill share one view (300 px apart; Windmill Hill has no windmill sprite yet); Gardens trees clump; open grass remains on the south peninsula and NE.
 Pipeline: claude/xenos-pipeline/ (layout.py, place.py, plaza.py, paint.py).
+
+## v0.15: kiosks that read as their games, clean edges, vector avatars (2026-11-26)
+| Item | Change |
+|---|---|
+| Mail Drop kiosk | In-house: blue collection mailbox with slot, envelope emblem and letters dropping in; behind it a sorting rack with the four Level 1 roles (chef hat, doctor's cross, briefcase, shopping bag); red MAIL DROP sign. East side of the Market. |
+| Loteria kiosk | In-house: two oilcloth tables with 4x4 tablas and bean markers, stools, a bean bowl, the caller's easel showing a card in lotería layout (number top left, black frame, picture, name below), papel picado on a line, LOTERÍA sign. SW side of the Market, its own ground. |
+| Triangulate | The Glyphs ruin is the Triangulate kiosk; the carved word is replaced by five carved stone triangles; ragged top instead of a straight cut. Pagoda is a building, no kiosk. |
+| Trees | In-house painted trees (two variants), smaller, slender trunk, raised canopy; placement keeps them 94 px off roads, 150 px off district centres and out of the 260 px view in front of every kiosk. Anything covering the player draws at 34% opacity. |
+| Edges | Every remaining video sprite: alpha hardened, edge colour defringed, 2 px ink outline. Fish house: chopped door and keyhole gap rebuilt as a side wall. Crates: tarp and ground scraps removed. Lamps and bucket replaced or dropped (new in-house lamp). |
+| Avatars | Vector, drawn every frame: slim Flash-era proportions, inked, shaded torso and head, face when walking toward the viewer, hair styles (short, long, pony, bob, cap), dresses, two-joint walk cycle. Eight looks (You plus seven Marketplace NPCs). |
+Loteria art language (research): 4x4 tablas, beans as markers, a caller (cantor) who reads each card, often with a verse; the iconic Don Clemente images are a brand, so the studio draws its own cards in the layout, never copies theirs.
+Pipeline: claude/xenos-pipeline/inhouse-props.html (art, rendered by render-inhouse-props.py), addprops.py (repairs, cleanup, atlas), place.py (remap, tree rules), plaza.py, paint.py.
+Still open: news stand, planter and clock tower still carry chopped video edges; Windmill Hill has no landmark.

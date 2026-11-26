@@ -1,5 +1,5 @@
 import json,numpy as np,cv2
-I=json.load(open('isle.json'));D=json.load(open('props.json'))
+I=json.load(open('isle.json'));D=json.load(open('props_orig.json'));DN=json.load(open('props.json'))
 TW,TH=25.0,10.4   # brick lattice: one iso step = 12.5 x 5.2
 OLD={'M':(1700,420),'U':(620,420),'P':(760,1130)}
 def off(k,dx,dy,c=None,kc=1.0,**kw):
@@ -19,7 +19,7 @@ inst=[off('pagoda',*M,c='M',kc=0.9),off('lampM1',*M,c='M',kc=0.9),off('cartM',*M
  off('news',*U,c='U',kc=0.62),off('planter',*U,c='U',kc=0.62),off('clock',*U,c='U',kc=0.62),dict(p='glyphs',x=un[0]+340,y=un[1]-250),dict(p='lampM1',x=un[0]-160,y=un[1]-300,flip=1),
  off('aquarium',*P,c='P',kc=0.55),off('iowcart',*P,c='P',kc=0.55),off('fishhouse',*P,c='P',kc=0.55),off('bucket',*P,c='P',kc=0.55),
  dict(p='treeS',x=lb[0]-330,y=lb[1]-40,flip=1),dict(p='treeS',x=lb[0]+230,y=lb[1]-380)]
-DIS=['Market']*9+['University']*5+['Pier']*4+['Lobby']*2+['Palace gardens']*5+['Windmill Hill']*2
+
 K=0.6   # v0.14: spacing shrinks with the world; buildings keep their size
 from shapely.geometry import Polygon, Point
 from shapely.ops import unary_union
@@ -27,6 +27,25 @@ pg=DC['Palace gardens'];wh=DC['Windmill Hill']
 inst+=[dict(p='treeS',x=pg[0]-260,y=pg[1]-180),dict(p='treeS',x=pg[0]+60,y=pg[1]-260,flip=1),dict(p='treeS',x=pg[0]-120,y=pg[1]+20),
        off('planter',pg[0]-60-D['planter']['src'][0],pg[1]-90-D['planter']['src'][1]),off('planter',pg[0]+120-D['planter']['src'][0],pg[1]-30-D['planter']['src'][1]),
        dict(p='treeS',x=wh[0]-240,y=wh[1]-120),dict(p='treeS',x=wh[0]+40,y=wh[1]-160,flip=1)]
+# v0.15: swap video props for in-house ones, keeping each footprint centre where it was
+def _c(d,flip):
+    fx=sum(p[0] for p in d['fp'])/len(d['fp']);fy=sum(p[1] for p in d['fp'])/len(d['fp'])
+    return ((d['w']-fx) if flip else fx,fy)
+_tc=0;_keep=[];_dis=[]
+DIS0=['Market']*9+['University']*5+['Pier']*4+['Lobby']*2+['Palace gardens']*5+['Windmill Hill']*2
+for _i,_d in zip(inst,DIS0):
+    k=_i['p']
+    if k=='bucket':continue
+    new={'board':'maildrop','lampM1':'lampX','lampS2':'lampX'}.get(k)
+    if k=='treeS':
+        if _d=='Market':new='loteria'
+        else:new='treeX1' if _tc%2==0 else 'treeX2';_tc+=1
+    if new:
+        fl=bool(_i.get('flip')) and new.startswith('tree')
+        oc=_c(D[k],bool(_i.get('flip')));nc=_c(DN[new],fl)
+        _i=dict(p=new,x=round(_i['x']+oc[0]-nc[0],1),y=round(_i['y']+oc[1]-nc[1],1),**({'flip':1} if fl else {}))
+    _keep.append(_i);_dis.append(_d)
+inst=_keep;D=DN;DIS=_dis
 def fpw(i):
     d=D[i['p']];pts=[]
     for x,y in d['fp']:
@@ -42,20 +61,33 @@ for i in inst:
 print('footprint corners on sea:',bad)
 # v0.14 packer: pull each building toward its district centre by K, then nudge to the nearest clear spot on land
 landpoly=unary_union([Polygon(p).buffer(0) for p in I['land']]).buffer(-36)
+from shapely.geometry import LineString, MultiPoint
+from shapely import affinity
+ROADS=unary_union([LineString(r).buffer(64) for r in I['roads'] if len(r)>1])
+CENT=unary_union([Point(*DC[k]).buffer(150) for k in DC])
+KIOSKS={'maildrop','loteria','glyphs','aquarium','clock'};VIEW=[]   # trees stay off paths and out of the view in front of kiosks
+
 placed=[]
 import math
 for idx,i in enumerate(inst):
     c=DC[DIS[idx]];fp=fpw(i);fx=sum(p[0] for p in fp)/len(fp);fy=sum(p[1] for p in fp)/len(fp)
-    tx,ty=c[0]+(fx-c[0])*K,c[1]+(fy-c[1])*K;i['x']+=tx-fx;i['y']+=ty-fy
+    tx,ty=c[0]+(fx-c[0])*K,c[1]+(fy-c[1])*K;
+    if i['p']=='loteria':tx,ty=c[0]-270,c[1]+215   # its own ground, clear of Mail Drop
+    if i['p']=='maildrop':tx,ty=c[0]+250,c[1]+30
+    i['x']+=tx-fx;i['y']+=ty-fy
     best=None
-    for r in range(0,520,10):
+    for r in range(0,900,10):
         for k in range(max(1,int(2*math.pi*r/14))):
             a_=k/max(1,int(2*math.pi*r/14))*2*math.pi;dx,dy=r*math.cos(a_),r*math.sin(a_)*.6
             P=Polygon([(x+dx,y+dy) for x,y in fpw(i)]);G=P.buffer(22)
+            if i['p'].startswith('tree') and (P.buffer(30).intersects(ROADS) or P.intersects(CENT) or any(P.buffer(40).intersects(v) for v in VIEW)):continue
             if landpoly.contains(P) and all(not G.intersects(q) for q in placed):best=(dx,dy,G);break
         if best:break
     if not best:print('NO SPOT',i['p']);continue
     i['x']=round(i['x']+best[0],1);i['y']=round(i['y']+best[1],1);placed.append(best[2])
+    if i['p'] in KIOSKS:
+        fpp=[(x+best[0],y+best[1]) for x,y in fpw(dict(i,x=i['x']-best[0],y=i['y']-best[1]))]
+        VIEW.append(MultiPoint(fpp+[(x,y+260) for x,y in fpp]).convex_hull)
     if abs(best[0])+abs(best[1])>0:print('nudged',i['p'],round(best[0]),round(best[1]))
 for i in inst:i['fp']=fpw(i)
 

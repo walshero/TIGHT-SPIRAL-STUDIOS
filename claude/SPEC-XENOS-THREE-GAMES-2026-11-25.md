@@ -30,6 +30,7 @@ name collision: the studio already ships a different Mail Drop (EN195 Lab, clich
 - Fix: Spanish translations are empty in the 2012 sheet. Draft them in-studio and flag them for Matt to review.
 
 ## Triangulate
+- Founder 2026-11-26: "Glyphs is actually now triangulate so steal those graphics." The world kiosk is the Glyphs ruin; the game's stone triangles take their look (carved grey stone, moss, torchlight) from Glyphs.
 - 3 rows of stone triangles hide a photo. Tap a triangle to hear a word. Catch its match on the moving belt (tap, no drag). Clearing 3 or more touching triangles reveals the picture beneath.
 - Level 1: spoken word to picture or written word. Level 2: spoken definition to word. Spanish tool tip on belt items.
 - Timer: 10 minutes; 20 was "really long" in playtests. The belt slows while you hover or touch.
