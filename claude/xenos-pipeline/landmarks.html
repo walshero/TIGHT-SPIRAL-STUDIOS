@@ -1,0 +1,147 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Xenos landmarks</title></head><body><script>
+
+// Xenos in-house props. Painted, inked, iso (axis slope 0.42, matching the brick lattice 25x10.4).
+// Each prop draws in world units at 2x into its own canvas; fp = footprint in sprite-local world units.
+const INK='#2b2018',K=0.42;
+function rng(s){return()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+let Z=1;function mk(w,h){const c=document.createElement('canvas');c.width=Math.ceil(w*2*Z);c.height=Math.ceil(h*2*Z);c.dataset.w=w*Z;c.dataset.h=h*Z;c.dataset.z=Z;const x=c.getContext('2d');x.scale(2*Z,2*Z);x.lineJoin='round';x.lineCap='round';document.body.appendChild(c);return [c,x]}
+function poly(x,pts,fill,ink=INK,lw=1.4){x.beginPath();pts.forEach(([a,b],i)=>i?x.lineTo(a,b):x.moveTo(a,b));x.closePath();if(fill){x.fillStyle=fill;x.fill()}if(ink){x.strokeStyle=ink;x.lineWidth=lw;x.stroke()}}
+function lg(x,x0,y0,x1,y1,stops){const g=x.createLinearGradient(x0,y0,x1,y1);stops.forEach(([o,c])=>g.addColorStop(o,c));return g}
+// iso box: origin = front-bottom corner (cx,cy); a = length along +x axis (right-up), b = along -x axis (left-up), h = height
+function box(x,cx,cy,a,b,h,top,left,right,lw=1.4){
+  const R=[cx+a,cy-a*K],L=[cx-b,cy-b*K],B=[cx+a-b,cy-(a+b)*K];
+  poly(x,[[cx,cy],[R[0],R[1]],[R[0],R[1]-h],[cx,cy-h]],right,INK,lw);
+  poly(x,[[cx,cy],[L[0],L[1]],[L[0],L[1]-h],[cx,cy-h]],left,INK,lw);
+  poly(x,[[cx,cy-h],[R[0],R[1]-h],[B[0],B[1]-h],[L[0],L[1]-h]],top,INK,lw);}
+const OUT={};// Xenos 2013 landmarks, drawn in house (painted, inked, iso slope 0.42). After the tutorial frames and the Xenos Isle map.
+function grain(c){const x=c.getContext('2d');x.setTransform(1,0,0,1,0,0);const id=x.getImageData(0,0,c.width,c.height),d=id.data;const r=rng(91);
+  for(let i=0;i<d.length;i+=4){if(!d[i+3])continue;const n=(r()-.5)*12;d[i]=Math.max(0,Math.min(255,d[i]+n));d[i+1]=Math.max(0,Math.min(255,d[i+1]+n));d[i+2]=Math.max(0,Math.min(255,d[i+2]+n*.8))}x.putImageData(id,0,0)}
+function ell(x,cx_,cy_,rx,ry,fill,ink=INK,lw=1.4){x.beginPath();x.ellipse(cx_,cy_,rx,ry,0,0,7);if(fill){x.fillStyle=fill;x.fill()}if(ink){x.strokeStyle=ink;x.lineWidth=lw;x.stroke()}}
+const META={};
+
+// ---------------- SNAIL-SHELL LOBBY ----------------
+function snail(){const W=440,H=380;const [c,x]=mk(W,H);const ox=220,oy=360;
+  x.fillStyle='rgba(30,30,10,.25)';x.beginPath();x.ellipse(ox+10,oy-50,200,62,0,0,7);x.fill();
+  // cream stone body (the snail's foot) running front-left to back-right
+  const body=[[ox-190,oy-70],[ox-60,oy-8],[ox+60,oy-30],[ox+190,oy-96],[ox+150,oy-150],[ox-160,oy-150]];
+  poly(x,body,lg(x,0,oy-150,0,oy,[[0,'#e8d9a8'],[1,'#c9b37a']]));
+  // front wall face
+  poly(x,[[ox-190,oy-70],[ox-60,oy-8],[ox-60,oy-56],[ox-190,oy-118]],lg(x,ox-190,0,ox-60,0,[[0,'#d8c48c'],[1,'#c4ad72']]));
+  poly(x,[[ox-60,oy-8],[ox+60,oy-30],[ox+60,oy-80],[ox-60,oy-56]],lg(x,0,oy-80,0,oy,[[0,'#bfa86c'],[1,'#a99158']]));
+  // stone courses on the wall
+  x.strokeStyle='rgba(90,70,30,.35)';x.lineWidth=1;for(let i=1;i<4;i++){const t=i/4;x.beginPath();x.moveTo(ox-190,oy-70-48*t);x.lineTo(ox-60,oy-8-48*t);x.lineTo(ox+60,oy-30-50*t);x.stroke()}
+  // the shell: big spiral, lime to olive, rising from the body
+  const sx=ox+30,sy=oy-200,R=150;
+  const g=x.createRadialGradient(sx-50,sy-60,20,sx,sy,R*1.1);g.addColorStop(0,'#b9e05a');g.addColorStop(.45,'#7fb83a');g.addColorStop(1,'#3f7a2a');
+  x.beginPath();x.ellipse(sx,sy,R,R*.92,-.15,0,7);x.fillStyle=g;x.fill();x.strokeStyle=INK;x.lineWidth=2;x.stroke();
+  // spiral grooves (logarithmic), painted light edge then ink line
+  { const r=rng(23);for(let i=0;i<260;i++){const t=r()*Math.PI*2,d=Math.sqrt(r())*R*.95;const px=sx+Math.cos(t)*d,py=sy+Math.sin(t)*d*.92;x.fillStyle=r()<.5?'rgba(230,255,170,.18)':'rgba(30,70,20,.14)';x.beginPath();x.ellipse(px,py,3+r()*6,2+r()*4,r()*3,0,7);x.fill()} }
+  for(const [col,lw,off] of [['rgba(25,60,15,.38)',16,5],['rgba(235,255,180,.5)',9,-6],['rgba(220,245,150,.55)',4,-2],[INK,1.8,0]]){x.strokeStyle=col;x.lineWidth=lw;x.beginPath();
+    for(let t=0;t<=4.3*Math.PI;t+=.05){const r=R*.95*Math.exp(-.21*t);const px=sx+Math.cos(t+2.3)*r+off,py=sy+Math.sin(t+2.3)*r*.92+off;t?x.lineTo(px,py):x.moveTo(px,py)}x.stroke()}
+  // growth ridges
+  x.strokeStyle='rgba(40,80,20,.35)';x.lineWidth=1.2;for(let k=0;k<26;k++){const t=k*.45;const r0=R*.95*Math.exp(-.21*t),r1=R*.95*Math.exp(-.21*(t+2*Math.PI));
+    x.beginPath();x.moveTo(sx+Math.cos(t+2.3)*r0,sy+Math.sin(t+2.3)*r0*.92);x.lineTo(sx+Math.cos(t+2.3)*r1,sy+Math.sin(t+2.3)*r1*.92);x.stroke()}
+  // shell lip highlight
+  x.strokeStyle='rgba(255,255,220,.5)';x.lineWidth=6;x.beginPath();x.ellipse(sx,sy,R-6,R*.92-6,-.15,3.6,4.9);x.stroke();
+  // arched red door in the front wall, with a stone frame
+  const dx=ox-120,dy=oy-36;x.beginPath();x.moveTo(dx-15,dy+8);x.lineTo(dx-15,dy-30);x.quadraticCurveTo(dx,dy-58,dx+15,dy-40);x.lineTo(dx+15,dy+14);x.closePath();
+  x.fillStyle='#b23a3a';x.fill();x.strokeStyle='#7a5a2a';x.lineWidth=4;x.stroke();x.strokeStyle=INK;x.lineWidth=1.4;x.stroke();
+  x.fillStyle='#f0c050';x.beginPath();x.arc(dx+9,dy-6,1.8,0,7);x.fill();
+  // round windows along the wall
+  for(const [wx,wy] of [[ox-30,oy-48],[ox+28,oy-60]]){ell(x,wx,wy,8,9,'#2d4a5a');x.strokeStyle='#e8d9a8';x.lineWidth=2;x.beginPath();x.arc(wx,wy,6,3.8,5.6);x.stroke()}
+  // sign
+  poly(x,[[ox-80,oy-12],[ox-44,oy-27],[ox-44,oy-43],[ox-80,oy-28]],'#7a5230');
+  x.save();x.translate(ox-62,oy-27);x.transform(1,-.42,0,1,0,0);x.fillStyle='#ffe9b0';x.font='900 8px Georgia,serif';x.textAlign='center';x.fillText('LOBBY',0,2);x.restore();
+  META.snail={fp:[[ox-190,oy-70],[ox-60,oy-8],[ox+190,oy-96],[ox+150,oy-150],[ox-160,oy-150]]};OUT.snail={c};}
+
+// ---------------- WINDMILL (blades drawn live by the engine) ----------------
+function windmill(){const W=150,H=230;const [c,x]=mk(W,H);const ox=75,oy=222;
+  x.fillStyle='rgba(30,30,10,.25)';x.beginPath();x.ellipse(ox,oy-6,52,16,0,0,7);x.fill();
+  // tapered white tower
+  x.beginPath();x.moveTo(ox-40,oy-10);x.lineTo(ox-26,oy-150);x.lineTo(ox+26,oy-150);x.lineTo(ox+40,oy-10);x.quadraticCurveTo(ox,oy+4,ox-40,oy-10);
+  x.fillStyle=lg(x,ox-40,0,ox+40,0,[[0,'#fbf6ea'],[.6,'#e6dcc6'],[1,'#c4b79c']]);x.fill();x.strokeStyle=INK;x.lineWidth=1.6;x.stroke();
+  x.strokeStyle='rgba(120,100,70,.35)';x.lineWidth=1;for(let i=1;i<6;i++){const y=oy-10-i*24,w=40-i*2.4;x.beginPath();x.moveTo(ox-w,y);x.quadraticCurveTo(ox,y+5,ox+w,y);x.stroke()}
+  // door and window
+  x.beginPath();x.moveTo(ox-9,oy-4);x.lineTo(ox-9,oy-26);x.quadraticCurveTo(ox,oy-36,ox+9,oy-26);x.lineTo(ox+9,oy-4);x.fillStyle='#7a4a2a';x.fill();x.strokeStyle=INK;x.stroke();
+  ell(x,ox,oy-96,7,8,'#3a5a6a');
+  // brown cap
+  x.beginPath();x.moveTo(ox-32,oy-148);x.quadraticCurveTo(ox,oy-200,ox+32,oy-148);x.closePath();x.fillStyle=lg(x,ox-30,0,ox+30,0,[[0,'#a8673a'],[1,'#6e3e20']]);x.fill();x.strokeStyle=INK;x.lineWidth=1.6;x.stroke();
+  ell(x,ox,oy-162,5,5,'#4a3020');
+  META.windmill={fp:[[ox-40,oy-8],[ox,oy+6],[ox+40,oy-8],[ox,oy-22]],hub:[ox,oy-162],blade:78};OUT.windmill={c};}
+
+// ---------------- WIND TURBINE (rotor drawn live) ----------------
+function turbine(){const W=60,H=240;const [c,x]=mk(W,H);const ox=30,oy=234;
+  x.fillStyle='rgba(30,30,10,.2)';x.beginPath();x.ellipse(ox,oy-3,12,4,0,0,7);x.fill();
+  x.beginPath();x.moveTo(ox-5,oy-2);x.lineTo(ox-2.2,oy-196);x.lineTo(ox+2.2,oy-196);x.lineTo(ox+5,oy-2);x.closePath();x.fillStyle=lg(x,ox-5,0,ox+5,0,[[0,'#ffffff'],[1,'#c9ced3']]);x.fill();x.strokeStyle=INK;x.lineWidth=1.1;x.stroke();
+  x.beginPath();x.moveTo(ox-3,oy-196);x.lineTo(ox+10,oy-198);x.lineTo(ox+10,oy-206);x.lineTo(ox-3,oy-204);x.closePath();x.fillStyle='#e6eaee';x.fill();x.stroke();
+  META.turbine={fp:[[ox-6,oy-1],[ox,oy+2],[ox+6,oy-1],[ox,oy-4]],hub:[ox-4,oy-200],blade:52};OUT.turbine={c};}
+
+// ---------------- STONE FORT ----------------
+function fort(){const W=300,H=260;const [c,x]=mk(W,H);const ox=150,oy=250;const r=rng(17);
+  x.fillStyle='rgba(30,30,10,.25)';x.beginPath();x.ellipse(ox,oy-30,140,44,0,0,7);x.fill();
+  const stone=(x0,y0,w,h)=>lg(x,x0,0,x0+w,0,[[0,'#e4dfd2'],[.6,'#c8c1b0'],[1,'#a39c8a']]);
+  // curtain wall
+  box(x,ox-30,oy-14,110,90,70,'#b9b19c',stone(ox-120,0,90),'#a59d88');
+  // crenellations along the wall top
+  for(let i=0;i<9;i++){const t=i/9;const bx=ox-30-90*t,by=oy-14-70-90*t*K;poly(x,[[bx-6,by],[bx-1,by-2],[bx-1,by-10],[bx-6,by-8]],'#d6cfbd',INK,1)}
+  for(let i=0;i<10;i++){const t=i/10;const bx=ox-30+110*t,by=oy-14-70-110*t*K;poly(x,[[bx,by],[bx+6,by-2.5],[bx+6,by-10.5],[bx,by-8]],'#b9b19c',INK,1)}
+  // round towers
+  const tower=(tx,ty,rw,th)=>{x.beginPath();x.moveTo(tx-rw,ty);x.lineTo(tx-rw,ty-th);x.ellipse(tx,ty-th,rw,rw*.42,0,Math.PI,0,true);x.lineTo(tx+rw,ty);x.ellipse(tx,ty,rw,rw*.42,0,0,Math.PI);x.closePath();
+    x.fillStyle=lg(x,tx-rw,0,tx+rw,0,[[0,'#ece7da'],[.55,'#cfc8b6'],[1,'#9d9682']]);x.fill();x.strokeStyle=INK;x.lineWidth=1.5;x.stroke();
+    ell(x,tx,ty-th,rw,rw*.42,'#bdb59f');
+    for(let k=0;k<8;k++){const a=Math.PI+k/7*Math.PI;const px=tx+Math.cos(a)*rw,py=ty-th+Math.sin(a)*rw*.42;poly(x,[[px-3,py],[px+3,py],[px+3,py-8],[px-3,py-8]],'#e0dacb',INK,.9)}
+    x.strokeStyle='rgba(90,80,60,.35)';x.lineWidth=1;for(let k=1;k<6;k++){x.beginPath();x.ellipse(tx,ty-th*k/6,rw,rw*.42,0,0,Math.PI);x.stroke()}
+    x.fillStyle='#2f3a40';x.fillRect(tx-3,ty-th*.6,6,12);x.strokeRect(tx-3,ty-th*.6,6,12)};
+  tower(ox-120,oy-58,30,130);tower(ox+80,oy-60,26,110);tower(ox-30,oy-14,34,150);
+  // flag
+  x.strokeStyle=INK;x.lineWidth=1.3;x.beginPath();x.moveTo(ox-30,oy-14-150-14);x.lineTo(ox-30,oy-14-150-44);x.stroke();
+  poly(x,[[ox-30,oy-208],[ox-6,oy-202],[ox-30,oy-194]],'#d8443a',INK,1);
+  META.fort={fp:[[ox-150,oy-58],[ox-30,oy+4],[ox+106,oy-60],[ox-30,oy-110]]};OUT.fort={c};}
+
+// ---------------- STILT HUT (purple roof, over the lagoon) ----------------
+function stilt(name,seed){const W=110,H=170;const [c,x]=mk(W,H);const ox=55,oy=164;const r=rng(seed);
+  for(const [lx,ly] of [[ox-26,oy-6],[ox+26,oy-6],[ox-12,oy-18],[ox+14,oy-20]]){x.fillStyle='#5a3f26';x.fillRect(lx-2,ly-46,4,46);x.strokeStyle=INK;x.lineWidth=.9;x.strokeRect(lx-2,ly-46,4,46);x.strokeStyle='rgba(255,255,255,.5)';x.beginPath();x.ellipse(lx,ly,5,1.8,0,0,7);x.stroke()}
+  ell(x,ox,oy-56,40,15,'#8a6038');x.strokeStyle='rgba(43,32,24,.4)';for(let i=-3;i<=3;i++){x.beginPath();x.moveTo(ox+i*10,oy-70);x.lineTo(ox+i*10+4,oy-42);x.stroke()}
+  x.beginPath();x.moveTo(ox-28,oy-58);x.lineTo(ox-28,oy-96);x.ellipse(ox,oy-96,28,10,0,Math.PI,0,true);x.lineTo(ox+28,oy-58);x.ellipse(ox,oy-58,28,10,0,0,Math.PI);x.closePath();
+  x.fillStyle=lg(x,ox-28,0,ox+28,0,[[0,'#f4e6c8'],[1,'#c8b48a']]);x.fill();x.strokeStyle=INK;x.lineWidth=1.4;x.stroke();
+  x.fillStyle='#4a3020';x.beginPath();x.moveTo(ox-6,oy-50);x.lineTo(ox-6,oy-74);x.quadraticCurveTo(ox,oy-80,ox+6,oy-74);x.lineTo(ox+6,oy-50);x.fill();x.stroke();
+  x.beginPath();x.moveTo(ox-38,oy-94);x.quadraticCurveTo(ox-10,oy-118,ox,oy-150);x.quadraticCurveTo(ox+10,oy-118,ox+38,oy-94);x.quadraticCurveTo(ox,oy-80,ox-38,oy-94);
+  x.fillStyle=lg(x,ox-38,0,ox+38,0,[[0,'#b07ad8'],[.55,'#8a4fc0'],[1,'#5e2f92']]);x.fill();x.strokeStyle=INK;x.lineWidth=1.5;x.stroke();
+  x.strokeStyle='rgba(255,230,255,.45)';x.lineWidth=2;x.beginPath();x.moveTo(ox-26,oy-98);x.quadraticCurveTo(ox-8,oy-116,ox-2,oy-140);x.stroke();
+  META[name]={fp:[[ox-40,oy-56],[ox,oy-40],[ox+40,oy-56],[ox,oy-72]]};OUT[name]={c};}
+
+// ---------------- GREEN-ROOFED PALACE ----------------
+function palace(){const W=340,H=300;const [c,x]=mk(W,H);const ox=170,oy=290;
+  x.fillStyle='rgba(30,30,10,.25)';x.beginPath();x.ellipse(ox,oy-40,160,50,0,0,7);x.fill();
+  const wall=(x0,w)=>lg(x,x0,0,x0+w,0,[[0,'#f2e8cf'],[1,'#cdbf9c']]);
+  box(x,ox,oy-10,120,120,80,'#d9cba8',wall(ox-120,120),lg(x,ox,0,ox+120,0,[[0,'#d6c8a2'],[1,'#b8a87e']]));
+  // arched windows on both faces
+  for(let i=0;i<4;i++){const t=(i+.6)/4.4;for(const s of [-1,1]){const wx=ox+s*120*t,wy=oy-10-120*t*K-26;x.beginPath();x.moveTo(wx-6,wy+16);x.lineTo(wx-6,wy);x.quadraticCurveTo(wx,wy-9,wx+6,wy);x.lineTo(wx+6,wy+16);x.closePath();x.fillStyle='#3f5a4a';x.fill();x.strokeStyle=INK;x.lineWidth=1.1;x.stroke()}}
+  // green tiled roof (pyramid) and domes
+  const T=[ox,oy-90],Rr=[ox+124,oy-90-124*K],Bk=[ox,oy-90-248*K],Lf=[ox-124,oy-90-124*K],Pk=[ox,oy-90-124*K-70];
+  poly(x,[Lf,T,Pk],lg(x,Lf[0],0,T[0],0,[[0,'#7ac46a'],[1,'#4f9a48']]));poly(x,[T,Rr,Pk],lg(x,T[0],0,Rr[0],0,[[0,'#3f8a3c'],[1,'#2d6e2e']]));
+  x.strokeStyle='rgba(20,60,20,.4)';x.lineWidth=1;for(let i=1;i<6;i++){const t=i/6;x.beginPath();x.moveTo(Lf[0]+(Pk[0]-Lf[0])*t,Lf[1]+(Pk[1]-Lf[1])*t);x.lineTo(T[0]+(Pk[0]-T[0])*t,T[1]+(Pk[1]-T[1])*t);x.lineTo(Rr[0]+(Pk[0]-Rr[0])*t,Rr[1]+(Pk[1]-Rr[1])*t);x.stroke()}
+  const dome=(dx,dy,r)=>{x.beginPath();x.moveTo(dx-r,dy);x.quadraticCurveTo(dx-r,dy-r*1.3,dx,dy-r*1.5);x.quadraticCurveTo(dx+r,dy-r*1.3,dx+r,dy);x.closePath();
+    x.fillStyle=lg(x,dx-r,0,dx+r,0,[[0,'#8fd27a'],[.5,'#58a84c'],[1,'#2f7a32']]);x.fill();x.strokeStyle=INK;x.lineWidth=1.4;x.stroke();x.fillStyle='#e8c048';x.beginPath();x.arc(dx,dy-r*1.55,2.4,0,7);x.fill();x.stroke()};
+  dome(Pk[0],Pk[1]+8,34);dome(Lf[0]+18,Lf[1]-2,16);dome(Rr[0]-18,Rr[1]-2,16);
+  // steps and door
+  poly(x,[[ox-22,oy-6],[ox+22,oy-6],[ox+16,oy-14],[ox-16,oy-14]],'#e0d4b4');poly(x,[[ox-10,oy-14],[ox+10,oy-14],[ox+10,oy-46],[ox-10,oy-46]],'#5a3a22');
+  META.palace={fp:[[ox-124,oy-62],[ox,oy-8],[ox+124,oy-62],[ox,oy-112]]};OUT.palace={c};}
+
+// ---------------- PALM SPROUT and STRING-LIGHT POST ----------------
+function palm(name,seed){const W=46,H=40;const [c,x]=mk(W,H);const r=rng(seed);const ox=23,oy=37;
+  x.fillStyle='rgba(30,40,20,.22)';x.beginPath();x.ellipse(ox,oy,12,4,0,0,7);x.fill();
+  for(let i=0;i<9;i++){const a=-Math.PI/2+(i-4)*.36+(r()-.5)*.1,L=14+r()*8;x.save();x.translate(ox,oy-2);x.rotate(a+Math.PI/2);
+    x.beginPath();x.moveTo(0,0);x.quadraticCurveTo(4,-L*.5,0,-L);x.quadraticCurveTo(-4,-L*.5,0,0);x.fillStyle=i%2?'#4fa83c':'#3a8a30';x.fill();x.strokeStyle='#235a20';x.lineWidth=.8;x.stroke();
+    x.strokeStyle='rgba(200,240,150,.5)';x.lineWidth=.6;x.beginPath();x.moveTo(0,-2);x.lineTo(0,-L+2);x.stroke();x.restore()}
+  META[name]={};OUT[name]={c};}
+function lightpost(){const W=24,H=110;const [c,x]=mk(W,H);const ox=12,oy=106;
+  x.fillStyle='rgba(30,30,10,.22)';x.beginPath();x.ellipse(ox,oy,7,2.5,0,0,7);x.fill();
+  x.fillStyle=lg(x,ox-2,0,ox+2,0,[[0,'#4a5a5c'],[1,'#1f2a2b']]);x.fillRect(ox-1.8,10,3.6,oy-10);x.strokeStyle=INK;x.lineWidth=1;x.strokeRect(ox-1.8,10,3.6,oy-10);
+  ell(x,ox,10,3.4,3.4,'#2a3536');
+  META.lightpost={fp:[[ox-5,oy],[ox,oy-2],[ox+5,oy],[ox,oy+2]],top:[ox,12]};OUT.lightpost={c};}
+
+snail();windmill();turbine();fort();stilt('stilt1',5);stilt('stilt2',9);palace();palm('palmA',3);palm('palmB',7);lightpost();
+for(const k in OUT)grain(OUT[k].c);
+window.__OUT=Object.fromEntries(Object.entries(OUT).map(([k,v])=>[k,Object.assign({png:v.c.toDataURL('image/png'),w:+v.c.dataset.w,h:+v.c.dataset.h},META[k]||{})]));
+</script></body></html>

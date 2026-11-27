@@ -147,3 +147,23 @@ Gates: contrast, comfort, voice, intent, World Fingers SHIP (110 routes), World 
 | Hidden ground | hide.py tests every 8 px ground cell behind each prop's front edge: if the prop's sprite alpha covers more than 45% of an avatar-sized box (18 x 74 px) standing there, the cell is not walkable. 7,540 cells blocked; taps there walk to the nearest open spot. Removes most layering faults, because nobody can stand behind a building. |
 | Walk | Cutout rig on Filament's painted pose: legs cut just below the hands, pivoted at the hip, swing as pendulums in opposite phase (two steps per 68 px), body lifts on the pass. Skirts and robes swing less (christine 0.35, Mei 0.55, Rosa 0.9). |
 Gates: contrast, comfort, voice, intent, World Fingers SHIP (5 kiosks reachable, 110 routes), World Eyes SHIP.
+
+## v0.20: the 2013 skyline (2026-11-27)
+Founder took option 5: landmarks, height, sound and density in one pass. sha256 492289fca4dd7187..., 2032635 bytes.
+
+| Gap from 2013 | v0.20 |
+|---|---|
+| Landmarks | Snail-shell Lobby, University fort, windmill with turning sails, three turbines with turning rotors, palace, stilt huts off the Pier, palms. All in-house art (claude/xenos-pipeline/landmarks.js). |
+| Height | Stone retaining walls under every south-facing district edge (7 walls, 2,570 px, 18 px high), coursed and capped; steps where lanes leave. Wall faces are unwalkable. |
+| Lamps | Green cast-iron lantern posts after the 2013 Lobby; warm string lights between posts, only where the span is not behind a building (sprite-alpha test). |
+| Sound | Synthesized, no files: sea wash, gulls, Market murmur by distance, soft pentatonic music box, footsteps (stone on paving, soft on grass), chime at a kiosk. Starts on first touch. Comfort: "Sound" checkbox. |
+| Scale | Desktop camera 1100 to 900 world px across; tablets 600 to 560. Phones unchanged (320). |
+
+Rules added as checks, not prose:
+- Tree canopies may not hang over lanes or district centres; trees keep 110 px from landmarks (place.py). This removed the tree fence that sealed Windmill Hill (World Fingers caught it: 20 unreachable pairs).
+- No sealed pockets: the engine floods the walk grid from the Market at load and closes ground it cannot reach (19 cells), so no tap strands a player.
+- World Eyes W-SEAM now tells thin painted objects (poles, masts: paired edges or one solid side) from pasted-plate seams. Self-test against the founder-rejected v0.8 still HALTs.
+
+Gates: contrast SHIP 10.05, v4 SHIP, comfort pass, voice SHIP, intent clean, World Fingers SHIP x3 (110 routes, 61 objects), World Eyes SHIP. Offline, no emoji.
+
+Still open: 2013 stairs are wide and many-stepped (ours: 3 treads); Market's north lamp row sits behind the pagoda so it carries no lights; back-facing walk; speech bubbles; kiosk hover glow.

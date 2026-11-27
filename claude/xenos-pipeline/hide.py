@@ -33,6 +33,26 @@ for q in W['props']:
             if X1<=X0 or Y1<=Y0:continue
             cov=spr[Y0:Y1,X0:X1].sum()/max(1,(x1-x0)*(y1-y0))
             if cov>.45:mask[j,i]=True
+# terrace walls: the wall face (edge down to edge + wall height) is not walkable
+from PIL import ImageDraw
+wm=Image.new('L',(GW,GH),0);dw=ImageDraw.Draw(wm);WHt=W.get('wallH',18)
+for wl in W.get('walls',[]):
+    poly=[(x/CELL,y/CELL) for x,y in wl]+[(x/CELL,(y+WHt)/CELL) for x,y in reversed(wl)]
+    dw.polygon(poly,fill=255)
+mask|=np.array(wm)>0
+# v0.20: no sealed pockets. Any walkable patch the main island cannot reach (a gap in a roof's shadow,
+# a corner between a wall and a building) is closed, so a tap can never land somewhere with no way back.
+from scipy import ndimage
+from shapely.geometry import Polygon
+LANDg=np.zeros((GH,GW),bool);_l=np.array([c=='1' for c in W['LAND']]).reshape(W['gh'],W['gw']);LANDg[:_l.shape[0],:_l.shape[1]]=_l[:GH,:GW]
+fm=Image.new('L',(GW,GH),0);df=ImageDraw.Draw(fm)
+for q in W['props']:
+    g=Polygon(q['fp']).buffer(7)
+    if not g.is_empty:df.polygon([(x/CELL,y/CELL) for x,y in g.exterior.coords],fill=255)
+walk=LANDg&~mask&~(np.array(fm)>0)
+lab,n=ndimage.label(walk);sz=ndimage.sum(walk,lab,range(1,n+1))
+keep=1+int(np.argmax(sz));pock=walk&(lab!=keep);mask|=pock
+print('sealed pockets closed',n-1,'cells',int(pock.sum()))
 bits=np.packbits(mask.ravel());W['hide']=base64.b64encode(bits.tobytes()).decode();W['hideDim']=[GW,GH,CELL]
 json.dump(W,open('isle_world.json','w'));print('hidden cells',int(mask.sum()),'of',mask.size)
 Image.fromarray((mask*255).astype(np.uint8)).save('/tmp/hide.png')

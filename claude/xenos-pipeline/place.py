@@ -28,6 +28,16 @@ inst+=[dict(p='treeS',x=pg[0]-260,y=pg[1]-180),dict(p='treeS',x=pg[0]+60,y=pg[1]
        off('planter',pg[0]-60-D['planter']['src'][0],pg[1]-90-D['planter']['src'][1]),off('planter',pg[0]+120-D['planter']['src'][0],pg[1]-30-D['planter']['src'][1]),
        dict(p='treeS',x=wh[0]-240,y=wh[1]-120),dict(p='treeS',x=wh[0]+40,y=wh[1]-160,flip=1)]
 # v0.15: swap video props for in-house ones, keeping each footprint centre where it was
+# v0.20 landmarks from the Xenos Isle map and the tutorial frames
+_lb=DC['Lobby'];_un=DC['University'];_wh=DC['Windmill Hill'];_pg=DC['Palace gardens'];_pi=DC['Pier'];_mk=DC['Market']
+LANDMARKS=[('snail',_lb[0],_lb[1]-40,'Lobby'),('fort',_un[0]-230,_un[1]-60,'University'),('windmill',_wh[0]+100,_wh[1]+40,'Windmill Hill'),
+  ('turbine',_wh[0]+250,_wh[1]+100,'Windmill Hill'),('turbine',_wh[0]+340,_wh[1]+140,'Windmill Hill'),('turbine',_wh[0]+430,_wh[1]+180,'Windmill Hill'),
+  ('palace',_pg[0]+40,_pg[1]-20,'Palace gardens'),
+  ('stilt1',_pi[0]-210,_pi[1]+70,'Pier'),('stilt2',_pi[0]-300,_pi[1]+20,'Pier'),('stilt1',_pi[0]-150,_pi[1]+150,'Pier'),
+  ('lightpost',_mk[0]-230,_mk[1]-40,'Market'),('lightpost',_mk[0]-90,_mk[1]-110,'Market'),('lightpost',_mk[0]+60,_mk[1]-150,'Market'),
+  ('lightpost',_mk[0]-210,_mk[1]+110,'Market'),('lightpost',_mk[0]-60,_mk[1]+150,'Market'),('lightpost',_mk[0]+90,_mk[1]+120,'Market'),
+  ('lightpost',_lb[0]-150,_lb[1]+120,'Lobby'),('lightpost',_lb[0],_lb[1]+150,'Lobby'),('lightpost',_lb[0]+150,_lb[1]+110,'Lobby'),
+  ('palmA',_pi[0]+90,_pi[1]+120,'Pier'),('palmB',_pi[0]-60,_pi[1]+190,'Pier'),('palmA',_pg[0]-170,_pg[1]+90,'Palace gardens'),('palmB',_pg[0]+190,_pg[1]+70,'Palace gardens'),('palmA',_mk[0]+260,_mk[1]+170,'Market'),('palmB',_lb[0]-260,_lb[1]+40,'Lobby')]
 def _c(d,flip):
     fx=sum(p[0] for p in d['fp'])/len(d['fp']);fy=sum(p[1] for p in d['fp'])/len(d['fp'])
     return ((d['w']-fx) if flip else fx,fy)
@@ -46,6 +56,9 @@ for _i,_d in zip(inst,DIS0):
         _i=dict(p=new,x=round(_i['x']+oc[0]-nc[0],1),y=round(_i['y']+oc[1]-nc[1],1),**({'flip':1} if fl else {}))
     _keep.append(_i);_dis.append(_d)
 inst=_keep;D=DN;DIS=_dis
+for _k,_x,_y,_d in LANDMARKS:
+    _f=DN[_k]['fp'];_fx=sum(q[0] for q in _f)/len(_f);_fy=sum(q[1] for q in _f)/len(_f)
+    inst.append(dict(p=_k,x=round(_x-_fx,1),y=round(_y-_fy,1),fixed=1));DIS.append(_d)
 def fpw(i):
     d=D[i['p']];pts=[]
     for x,y in d['fp']:
@@ -65,13 +78,15 @@ from shapely.geometry import LineString, MultiPoint
 from shapely import affinity
 ROADS=unary_union([LineString(r).buffer(64) for r in I['roads'] if len(r)>1])
 CENT=unary_union([Point(*DC[k]).buffer(150) for k in DC])
+LANES=unary_union([LineString(r).buffer(22) for r in I['roads'] if len(r)>1])   # v0.20: canopies may not hang over lanes or district centres
 KIOSKS={'maildrop','loteria','glyphs','aquarium','clock'};VIEW=[]   # trees stay off paths and out of the view in front of kiosks
 
 placed=[]
+FIXEDP=[Polygon(fpw(i)).buffer(22) for i in inst if i.get('fixed') and i['p']!='lightpost' and not i['p'].startswith('palm')]
 import math
 for idx,i in enumerate(inst):
     c=DC[DIS[idx]];fp=fpw(i);fx=sum(p[0] for p in fp)/len(fp);fy=sum(p[1] for p in fp)/len(fp)
-    tx,ty=c[0]+(fx-c[0])*K,c[1]+(fy-c[1])*K;
+    tx,ty=(fx,fy) if i.get('fixed') else (c[0]+(fx-c[0])*K,c[1]+(fy-c[1])*K);
     if i['p']=='loteria':tx,ty=c[0]-270,c[1]+215   # its own ground, clear of Mail Drop
     if i['p']=='maildrop':tx,ty=c[0]+250,c[1]+30
     i['x']+=tx-fx;i['y']+=ty-fy
@@ -80,8 +95,14 @@ for idx,i in enumerate(inst):
         for k in range(max(1,int(2*math.pi*r/14))):
             a_=k/max(1,int(2*math.pi*r/14))*2*math.pi;dx,dy=r*math.cos(a_),r*math.sin(a_)*.6
             P=Polygon([(x+dx,y+dy) for x,y in fpw(i)]);G=P.buffer(22)
+            if i['p'].startswith('tree') or i['p'].startswith('palm'):
+                _w,_h=D[i['p']]['w'],D[i['p']]['h'];_c=P.centroid;_b=P.bounds[3]
+                CAN=Polygon([(_c.x-_w*.4,_b-_h*.95),(_c.x+_w*.4,_b-_h*.95),(_c.x+_w*.4,_b-_h*.3),(_c.x-_w*.4,_b-_h*.3)])
+                if CAN.intersects(CENT) or CAN.intersects(LANES):continue
+                if any(P.distance(q)<110 for q in FIXEDP):continue   # v0.20: no tree fences beside landmarks
             if i['p'].startswith('tree') and (P.buffer(30).intersects(ROADS) or P.intersects(CENT) or any(P.buffer(40).intersects(v) for v in VIEW)):continue
-            if landpoly.contains(P) and all(not G.intersects(q) for q in placed):best=(dx,dy,G);break
+            onok=(not P.intersects(landpoly.buffer(30))) if i['p'].startswith('stilt') else landpoly.contains(P)
+            if onok and all(not G.intersects(q) for q in placed):best=(dx,dy,G);break
         if best:break
     if not best:print('NO SPOT',i['p']);continue
     i['x']=round(i['x']+best[0],1);i['y']=round(i['y']+best[1],1);placed.append(best[2])

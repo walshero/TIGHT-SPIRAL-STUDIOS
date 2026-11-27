@@ -82,7 +82,32 @@ def seams(g):
             x1, y1, x2, y2 = l; ang = abs(np.degrees(np.arctan2(y2 - y1, x2 - x1))) % 180
             if (horiz and (ang < 1.5 or ang > 178.5)) or (not horiz and abs(ang - 90) < 1.5):
                 out.append((int(x1), int(y1), int(x2), int(y2)))
-    return out
+    # 2026-11-27: a thin painted object (a sign pole, a turbine mast, a lamp post) gives TWO parallel
+    # edges 2 to 30 px apart (screenshot px); a pasted-plate seam gives one. Drop paired lines; keep lone breaks.
+    def pos(l): return (l[1] + l[3]) / 2 if abs(l[1] - l[3]) < abs(l[0] - l[2]) else (l[0] + l[2]) / 2
+    def span(l): return (min(l[0], l[2]), max(l[0], l[2])) if abs(l[1] - l[3]) < abs(l[0] - l[2]) else (min(l[1], l[3]), max(l[1], l[3]))
+    def horiz_(l): return abs(l[1] - l[3]) < abs(l[0] - l[2])
+    def paired(a):
+        for b in out:
+            if b is a or horiz_(a) != horiz_(b): continue
+            d = abs(pos(a) - pos(b)); sa, sb = span(a), span(b)
+            if 2 <= d <= 30 and min(sa[1], sb[1]) - max(sa[0], sb[0]) > 0.5 * (sa[1] - sa[0]): return True
+        return False
+    def solid_side(l):
+        # one side of the edge is a single painted object (pole, mast): its colour barely changes
+        # along the line, while the world on the other side does. Plate seams have texture both sides.
+        x1, y1, x2, y2 = l
+        if horiz_(l):
+            a, b = sorted((x1, x2)); y = (y1 + y2) // 2
+            if y - 12 < 0 or y + 12 >= H: return True
+            s1 = g[y - 9:y - 3, a:b].mean(axis=0); s2 = g[y + 3:y + 9, a:b].mean(axis=0)
+        else:
+            a, b = sorted((y1, y2)); x = (x1 + x2) // 2
+            if x - 12 < 0 or x + 12 >= W: return True   # a line hugging the frame edge is the frame cutting an object
+            s1 = g[a:b, x - 9:x - 3].mean(axis=1); s2 = g[a:b, x + 3:x + 9].mean(axis=1)
+        lo, hi = sorted((float(np.std(s1)), float(np.std(s2))))
+        return lo < 0.45 * hi
+    return [l for l in out if not paired(l) and not solid_side(l)]
 
 def emptiness(g, dsf):
     t = int(32 * dsf); H, W = g.shape; e = cv2.Canny(g.astype(np.uint8), 40, 120) > 0
